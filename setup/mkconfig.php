@@ -12,7 +12,7 @@
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mkconfig.php - Last Update: 05/09/2007 SVN 1 - Author: cooldude2k $
+    $FileInfo: mkconfig.php - Last Update: 05/10/2007 SVN 2 - Author: cooldude2k $
 */
 $File1Name = dirname($_SERVER['SCRIPT_NAME'])."/";
 $File2Name = $_SERVER['SCRIPT_NAME'];
@@ -94,7 +94,7 @@ $MyYear = GMTimeGet("Y",$YourOffSet,0,$AdminDST);
 $MyYear10 = $MyYear+10;
 $query = "INSERT INTO ".$_POST['tableprefix']."events VALUES (1, -1, 'Cool Dude 2k', 'Opening', 'This is the day the Board was made. ^_^', ".$YourDate.", ".$YourDate.")";
 mysql_query($query);
-$query = "INSERT INTO ".$_POST['tableprefix']."forums VALUES (1,1,'Test/Spam','yes','forum',0,0,'http://',0,'A Test Board.','off','yes',1,1)";
+$query = "INSERT INTO ".$_POST['tableprefix']."forums VALUES (1,1,'Test/Spam','yes','forum',0,'http://',0,0,'A Test Board.','off','yes',1,1)";
 mysql_query($query);
 $query = "INSERT INTO ".$_POST['tableprefix']."topics VALUES (1,1,1,-1,'Cool Dude 2k',".$YourDate.",".$YourDate.",'Welcome','Install was Successful',0,0,1,1)";
 mysql_query($query);
