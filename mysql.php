@@ -11,10 +11,10 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: mysql.php - Last Update: 05/09/2007 SVN 1 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 05/12/2007 SVN 3 - Author: cooldude2k $
 */
 @error_reporting(E_ALL ^ E_NOTICE);
-//@output_reset_rewrite_vars();
+@ini_set('session.use_trans_sid', false);
 $File1Name = dirname($_SERVER['SCRIPT_NAME'])."/";
 $File2Name = $_SERVER['SCRIPT_NAME'];
 $File3Name=str_replace($File1Name, null, $File2Name);
@@ -64,6 +64,7 @@ if($Settings['use_gzip']==true) {
 if($preact['idb']!="installing") {
 @session_name($Settings['sqltable']."sess");
 @session_start(); }
+@output_reset_rewrite_vars();
 if($Settings['hash_type']!="hmac-md5") {
 if($Settings['hash_type']!="hmac-sha1") {
 $Settings['hash_type']="hmac-sha1"; } }
