@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: functions.php - Last Update: 05/14/2007 SVN 5 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 05/14/2007 SVN 6 - Author: cooldude2k $
 */
 $File1Name = dirname($_SERVER['SCRIPT_NAME'])."/";
 $File2Name = $_SERVER['SCRIPT_NAME'];
@@ -57,7 +57,7 @@ if (!$StatBase) { return false; }
 return true; }
 	$Names['RS'] = "Renee Sabonis";
 define("_renee_", $Names['RS']);
-function change_title($new_title,$use_gzip,$gzip_type) {
+function change_title($new_title,$use_gzip="off",$gzip_type="gzip") {
 global $Settings;
 if($gzip_type!="gzip") { if($gzip_type!="deflate") { $gzip_type = "gzip"; } }
 $output = @ob_get_clean();
@@ -67,15 +67,15 @@ $SessName = @session_name();
 $output = preg_replace("/&PHPSESSID/", "&amp;PHPSESSID", $output);
 $qstrcode = htmlentities($Settings['qstr']);
 $output = str_replace($Settings['qstr'].$SessName, $qstrcode.$SessName, $output);
-if($use_gzip!=true) {
+if($use_gzip!="on") {
 	echo $output; }
-if($use_gzip==true) {
+if($use_gzip=="on") {
 	if($gzip_type=="gzip") {
 	$goutput = gzencode($output); }
 	if($gzip_type=="deflate") {
 	$goutput = gzcompress($output); }
 	echo $goutput; } }
-function fix_amp($use_gzip,$gzip_type) {
+function fix_amp($use_gzip="off",$gzip_type="gzip") {
 global $Settings;
 if($gzip_type!="gzip") { if($gzip_type!="deflate") { $gzip_type = "gzip"; } }
 $output = @ob_get_clean();
@@ -84,23 +84,23 @@ $SessName = @session_name();
 $output = preg_replace("/&PHPSESSID/", "&amp;PHPSESSID", $output);
 $qstrcode = htmlentities($Settings['qstr']);
 $output = str_replace($Settings['qstr'].$SessName, $qstrcode.$SessName, $output);
-if($use_gzip!=true) {
+if($use_gzip!="on") {
 	echo $output; }
-if($use_gzip==true) {
+if($use_gzip=="on") {
 	if($gzip_type=="gzip") {
 	$goutput = gzencode($output); }
 	if($gzip_type=="deflate") {
 	$goutput = gzcompress($output); }
 	echo $goutput; } }
-function gzip_page($use_gzip,$gzip_type) {
+function gzip_page($use_gzip="off",$gzip_type="gzip") {
 global $Settings;
 if($gzip_type!="gzip") { if($gzip_type!="deflate") { $gzip_type = "gzip"; } }
 $output = @ob_get_clean();
 	$Names['RJ'] = "René Johnson";
 define("_rene_", $Names['RJ']);
-if($use_gzip!=true) {
+if($use_gzip!="on") {
 	echo $output; }
-if($use_gzip==true) {
+if($use_gzip=="on") {
 	if($gzip_type=="gzip") {
 	$goutput = gzencode($output); }
 	if($gzip_type=="deflate") {

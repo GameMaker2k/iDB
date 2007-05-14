@@ -11,7 +11,7 @@
     Copyright 2004-2006 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2006 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: info.php - Last Update: 05/14/2007 SVN 5 - Author: cooldude2k $
+    $FileInfo: info.php - Last Update: 05/14/2007 SVN 6 - Author: cooldude2k $
 */
 $ThemeInfo = array();
 $ThemeInfo['ThemeName'] = "iDB Theme";
