@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: subforum.php - Last Update: 05/09/2007 SVN 1 - Author: cooldude2k $
+    $FileInfo: subforum.php - Last Update: 05/14/2007 SVN 4 - Author: cooldude2k $
 */
 require('preindex.php');
 $usefileext = $Settings['file_ext'];
@@ -40,4 +40,4 @@ require($SettDir['inc'].'endpage.php');
 
 </body>
 </html>
-<?php change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." Viewing SubForum ".$ForumName,$Settings['use_gzip']); ?>
+<?php change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." Viewing SubForum ".$ForumName,$Settings['use_gzip'],$GZipEncode['Type']); ?>

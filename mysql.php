@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: mysql.php - Last Update: 05/12/2007 SVN 3 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 05/14/2007 SVN 4 - Author: cooldude2k $
 */
 @error_reporting(E_ALL ^ E_NOTICE);
 @ini_set('session.use_trans_sid', false);
@@ -47,11 +47,24 @@ if ($File3Name=="mysql.php"||$File3Name=="/mysql.php") {
 	exit(); }
 //error_reporting(E_ERROR);
 if($Settings['use_gzip']==true) {
-if(strstr($_SERVER['HTTP_ACCEPT_ENCODING'], "gzip")) {
-	/* Do Nothing :P */ } else { $Settings['use_gzip'] = false; } }
+if(strstr($_SERVER['HTTP_ACCEPT_ENCODING'], "gzip")) { 
+	$GZipEncode['Type'] = "gzip"; } else { 
+	if(strstr($_SERVER['HTTP_ACCEPT_ENCODING'], "deflate")) { 
+	$GZipEncode['Type'] = "deflate"; } else { 
+		$Settings['use_gzip'] = false; $GZipEncode['Type'] = "none"; } } }
+if($Settings['use_gzip']=="gzip") {
+if(strstr($_SERVER['HTTP_ACCEPT_ENCODING'], "gzip")) { $Settings['use_gzip'] = true;
+	$GZipEncode['Type'] = "gzip"; } else { $Settings['use_gzip'] = false; } }
+if($Settings['use_gzip']=="deflate") {
+if(strstr($_SERVER['HTTP_ACCEPT_ENCODING'], "deflate")) { $Settings['use_gzip'] = true;
+	$GZipEncode['Type'] = "deflate"; } else { $Settings['use_gzip'] = false; } }
 @ob_start();
 if($Settings['use_gzip']==true) { 
+if($GZipEncode['Type']!="gzip") { if($GZipEncode['Type']!="deflate") { $GZipEncode['Type'] = "gzip"; } }
+	if($GZipEncode['Type']=="gzip") {
 	@header("Content-Encoding: gzip"); }
+	if($GZipEncode['Type']=="deflate") {
+	@header("Content-Encoding: deflate"); } }
 /* if(eregi("msie",$browser) && !eregi("opera",$browser)){
 @header('P3P: CP="NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM"'); } */
 @session_set_cookie_params(0, $basedir);
@@ -71,11 +84,11 @@ $Settings['hash_type']="hmac-sha1"; } }
 if($_GET['act']=="bsdl"||$_GET['act']=="BSDL") { $_GET['act']="bsd"; }
 if($_GET['act']=="bsd"||$_GET['act']=="bsd") {
 @header("Content-Type: text/plain; charset=".$Settings['charset']);
-require("LICENSE"); gzip_page($Settings['use_gzip']); die(); }
+require("LICENSE"); gzip_page($Settings['use_gzip'],$GZipEncode['Type']); die(); }
 if($_GET['act']=="README"||$_GET['act']=="ReadME") { $_GET['act']="readme"; }
 if($_GET['act']=="readme"||$_GET['act']=="ReadMe") {
 @header("Content-Type: text/plain; charset=".$Settings['charset']);
-require("README"); gzip_page($Settings['use_gzip']); die(); }
+require("README"); gzip_page($Settings['use_gzip'],$GZipEncode['Type']); die(); }
 if($_GET['act']=="js"||$_GET['act']=="javascript") {
 @header("Content-Script-Type: text/javascript");
 if(stristr($_SERVER["HTTP_ACCEPT"],"application/x-javascript") ) {

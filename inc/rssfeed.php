@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: rss2.php - Last Update: 05/09/2007 SVN 1 - Author: cooldude2k $
+    $FileInfo: rss2.php - Last Update: 05/14/2007 SVN 4 - Author: cooldude2k $
 */
 $File1Name = dirname($_SERVER['SCRIPT_NAME'])."/";
 $File2Name = $_SERVER['SCRIPT_NAME'];
@@ -126,4 +126,4 @@ if($Settings['showverinfo']==true) { ?>
  <?php echo "\n".$Atom."\n"; ?>
 </feed>
 <?php } mysql_close();
-gzip_page($Settings['use_gzip']); ?>
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); ?>
