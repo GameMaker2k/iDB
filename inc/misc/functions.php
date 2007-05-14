@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: functions.php - Last Update: 05/14/2007 SVN 4 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 05/14/2007 SVN 5 - Author: cooldude2k $
 */
 $File1Name = dirname($_SERVER['SCRIPT_NAME'])."/";
 $File2Name = $_SERVER['SCRIPT_NAME'];
@@ -68,16 +68,12 @@ $output = preg_replace("/&PHPSESSID/", "&amp;PHPSESSID", $output);
 $qstrcode = htmlentities($Settings['qstr']);
 $output = str_replace($Settings['qstr'].$SessName, $qstrcode.$SessName, $output);
 if($use_gzip!=true) {
-	if($Settings['send_pagesize']==true) {
-	/*Header("Content-Length: " . strlen($output)); }*/
 	echo $output; }
 if($use_gzip==true) {
 	if($gzip_type=="gzip") {
 	$goutput = gzencode($output); }
 	if($gzip_type=="deflate") {
 	$goutput = gzcompress($output); }
-/*	if($Settings['send_pagesize']==true) {
-	Header("Content-Length: " . strlen(gzencode($goutput))); }*/
 	echo $goutput; } }
 function fix_amp($use_gzip,$gzip_type) {
 global $Settings;
@@ -89,16 +85,12 @@ $output = preg_replace("/&PHPSESSID/", "&amp;PHPSESSID", $output);
 $qstrcode = htmlentities($Settings['qstr']);
 $output = str_replace($Settings['qstr'].$SessName, $qstrcode.$SessName, $output);
 if($use_gzip!=true) {
-	if($Settings['send_pagesize']==true) {
-	/*Header("Content-Length: " . strlen($output)); }*/
 	echo $output; }
 if($use_gzip==true) {
 	if($gzip_type=="gzip") {
 	$goutput = gzencode($output); }
 	if($gzip_type=="deflate") {
 	$goutput = gzcompress($output); }
-/*	if($Settings['send_pagesize']==true) {
-	Header("Content-Length: " . strlen(gzencode($goutput))); }*/
 	echo $goutput; } }
 function gzip_page($use_gzip,$gzip_type) {
 global $Settings;
@@ -107,16 +99,12 @@ $output = @ob_get_clean();
 	$Names['RJ'] = "René Johnson";
 define("_rene_", $Names['RJ']);
 if($use_gzip!=true) {
-	if($Settings['send_pagesize']==true) {
-	/*Header("Content-Length: " . strlen($output)); }*/
 	echo $output; }
 if($use_gzip==true) {
 	if($gzip_type=="gzip") {
 	$goutput = gzencode($output); }
 	if($gzip_type=="deflate") {
 	$goutput = gzcompress($output); }
-/*	if($Settings['send_pagesize']==true) {
-	Header("Content-Length: " . strlen(gzencode($goutput))); }*/
 	echo $goutput; } }
 $foo="bar"; $$foo="foo";
 // SafeSQL Lite Source Code by Cool Dude 2k
