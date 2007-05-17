@@ -9,7 +9,7 @@
 
     Copyright 2004-2006 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2006 Game Maker 2k - http://upload.idb.s1.jcink.com/
-    $ThemeInfo - Name: iDB Theme - Author: cooldude2k $
+    $ThemeInfo - Name: iDB Gray - Author: cooldude2k $
     $FileInfo: css.css - Last Update: 05/17/2007 SVN 7 - Author: cooldude2k $
 */
 html {
@@ -28,10 +28,10 @@ body {
 }
 a:link, a:visited, a:active { 
 text-decoration: none; 
-color: #465584; 
+color: #404040; 
 }
 a:hover { 
-color: #6665A4; 
+color: #606060;  
 text-decoration: none; 
 }
 .NavBar2 a:link, .NavBar2 a:visited, .NavBar2 a:active, .NavBar2 a:hover { 
@@ -64,33 +64,33 @@ img {
    display: inline;
 }
 .NavBar1 { 
-background-color: #a7b1bd; 
+background-color: #B0B0B0; 
 font-size: 11px;
 font-family: verdana, arial, sans-serif;
 color: #000000; 
 width: 100%;
-border: 1px solid #506070;
+border: 1px solid #606060;
 border-collapse: collapse; 
 }
 .NavBar2 { 
-background-color: #c7d1dd;
+background-color: #D8D8D8;
 font-size: 11px;
 text-align: center;
-border: 1px solid #506070;
+border: 1px solid #606060;
 }
 .NavBar3 { 
-background-color: #d7e1ed;
+background-color: #C8C8C8;
 font-size: 11px;
 text-align: left;
-border: 1px solid #506070;
+border: 1px solid #606060;
 }
 .Table1 { 
-background-color: #a7b1bd; 
+background-color: #B0B0B0; 
 font-size: 11px;
 font-family: verdana, arial, sans-serif;  
 color: #000000; 
 width: 100%;
-border: 1px solid #506070;
+border: 1px solid #606060;
 border-collapse: collapse; 
 }
 .Table2 { 
@@ -115,28 +115,27 @@ color: #000000;
 width: 100%;
 }
 .TableRow1 { 
-background-color: #c7d1dd; 
-background-image: url(grad.png);
-border: 1px solid #506070;
+background-color: #D8D8D8; 
+border: 1px solid #606060;
 }
 .TableRow2 { 
-background-color: #d7e1ed; 
-border: 1px solid #506070;
+background-color: #C8C8C8; 
+border: 1px solid #606060;
 }
 .TableRow3 { 
-background-color: #a7b1bd; 
-border: 1px solid #506070;
+background-color: #B0B0B0; 
+border: 1px solid #606060;
 }
 .TableRow4 { 
-background-color: #c7d1dd; 
-border: 1px solid #506070;
+background-color: #D8D8D8; 
+border: 1px solid #606060;
 }
 .TextBox { 
-background-color: #c7d1dd; 
+background-color: #D8D8D8; 
 font-size: 13px; 
 font-family: Courier, Courier New, Verdana, Arial;   
 color: #000000; 
-border: 1px solid #506070;
+border: 1px solid #606060;
 border-collapse: collapse; 
 }
 .HiddenTextBox {
@@ -186,11 +185,11 @@ font-family: Courier, Courier New, Verdana, Arial, serif;
 font-size: 15px; 
 }
 .Button { 
-background-color: #c7d1dd; 
+background-color: #D8D8D8; 
 font-size: 13px; 
 font-family: Courier, Courier New, Verdana, Arial;   
 color: #000000; 
-border: 1px solid #506070;
+border: 1px solid #606060;
 border-collapse: collapse; 
 }
 .TextBoxLabel, label {

@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: events.php - Last Update: 05/09/2007 SVN 1 - Author: cooldude2k $
+    $FileInfo: events.php - Last Update: 05/17/2007 SVN 7 - Author: cooldude2k $
 */
 $File1Name = dirname($_SERVER['SCRIPT_NAME'])."/";
 $File2Name = $_SERVER['SCRIPT_NAME'];
@@ -73,18 +73,18 @@ if($User1Name==null) { $User1Name="Guest"; } }
 $EventText = text2icons($EventText,$Settings['sqltable']); $User1Signature = text2icons($User1Signature,$Settings['sqltable']);
 ?>
 <tr class="TableRow1">
-<td class="TableRow1" colspan="2"><span style="font-weight: bold; float: left;"><?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['event'],$Settings['file_ext'],"act=view&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['event'],$exqstr['event']); ?>"><?php echo $EventName; ?></a></span><?php if($ThemeSet['TopicLayout']!="Type 2") { ?>
-<span style="float: right;">&nbsp;</span><?php } ?></td>
+<td class="TableRow1" colspan="2"><span style="font-weight: bold; float: left;"><?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['event'],$Settings['file_ext'],"act=view&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['event'],$exqstr['event']); ?>"><?php echo $EventName; ?></a></span>
+<span style="float: right;">&nbsp;</span></td>
 </tr>
 <tr class="TableRow2">
-<td class="TableRow2" style="vertical-align: middle; width: 20%;">
+<td class="TableRow2" style="vertical-align: middle; width: 160px;">
 &nbsp;<a href="<?php
 if($User1ID!="-1") {
 echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$User1ID,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); }
 if($User1ID=="-1") {
 echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); }
 ?>"><?php echo $User1Name; ?></a></td>
-<td class="TableRow2" style="vertical-align: middle; width: 80%;">
+<td class="TableRow2" style="vertical-align: middle;">
 <div style="text-align: left; float: left;">
 <span style="font-weight: bold;">Event Start: </span><?php echo $EventStart; ?><?php echo $ThemeSet['LineDividerTopic']; ?><span style="font-weight: bold;">Event End: </span><?php echo $EventEnd; ?>
 </div>

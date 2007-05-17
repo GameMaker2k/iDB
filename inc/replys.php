@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: replys.php - Last Update: 05/09/2007 SVN 1 - Author: cooldude2k $
+    $FileInfo: replys.php - Last Update: 05/17/2007 SVN 7 - Author: cooldude2k $
 */
 $File1Name = dirname($_SERVER['SCRIPT_NAME'])."/";
 $File2Name = $_SERVER['SCRIPT_NAME'];
@@ -30,16 +30,16 @@ $ViewTimes=mysql_result($preresult,$prei,"NumViews");
 ?>
 <table style="width: 100%;" class="Table2">
 <tr>
- <td style="width: 20%; text-align: left;">&nbsp;</td>
- <td style="width: 80%; text-align: right;"><a href="#Act/Reply"><?php echo $ThemeSet['AddReply']; ?></a><?php echo $ThemeSet['ButtonDivider']; ?><a href="#Act/Topic"><?php echo $ThemeSet['NewTopic']; ?></a></td>
+ <td style="width: 0%; text-align: left;">&nbsp;</td>
+ <td style="width: 100%; text-align: right;"><a href="#Act/Reply"><?php echo $ThemeSet['AddReply']; ?></a><?php echo $ThemeSet['ButtonDivider']; ?><a href="#Act/Topic"><?php echo $ThemeSet['NewTopic']; ?></a></td>
 </tr>
 </table>
 <div>&nbsp;</div>
 <div class="Table1Border">
 <table class="Table1">
 <tr class="TableRow1">
-<td class="TableRow1" colspan="2"><span style="font-weight: bold; float: left;"><?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a></span><?php if($ThemeSet['TopicLayout']!="Type 2") { ?>
-<span style="float: right;">&nbsp;</span><?php } ?></td>
+<td class="TableRow1" colspan="2"><span style="font-weight: bold; float: left;"><?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a></span>
+<span style="float: right;">&nbsp;</span></td>
 </tr>
 <?php
 $query = query("select * from ".$Settings['sqltable']."posts where TopicID=%i ORDER BY TimeStamp ASC", array($_GET['id']));
@@ -96,14 +96,14 @@ $MyPost = text2icons($MyPost,$Settings['sqltable']);
 $User1Signature = text2icons($User1Signature,$Settings['sqltable']);
 ?>
 <tr class="TableRow2">
-<td class="TableRow2" style="vertical-align: middle; width: 20%;">
+<td class="TableRow2" style="vertical-align: middle; width: 160px;">
 &nbsp;<a href="<?php
 if($User1ID!="-1") {
 echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$User1ID,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); }
 if($User1ID=="-1") {
 echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); }
 ?>"><?php echo $User1Name; ?></a></td>
-<td class="TableRow2" style="vertical-align: middle; width: 80%;">
+<td class="TableRow2" style="vertical-align: middle;">
 <div style="text-align: left; float: left;">
 <a style="vertical-align: middle;" id="post<?php echo $i+1; ?>">
 <span style="font-weight: bold;">Time Posted: </span><?php echo $MyTimeStamp; ?></a>
@@ -151,8 +151,8 @@ echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr
 <div>&nbsp;</div>
 <table class="Table2" style="width: 100%;">
 <tr>
- <td style="width: 20%; text-align: left;">&nbsp;</td>
- <td style="width: 80%; text-align: right;"><a href="#Act/Reply"><?php echo $ThemeSet['AddReply']; ?></a><?php echo $ThemeSet['ButtonDivider']; ?><a href="#Act/Reply"><?php echo $ThemeSet['FastReply']; ?></a><?php echo $ThemeSet['ButtonDivider']; ?><a href="#Act/Topic"><?php echo $ThemeSet['NewTopic']; ?></a></td>
+ <td style="width: 0%; text-align: left;">&nbsp;</td>
+ <td style="width: 100%; text-align: right;"><a href="#Act/Reply"><?php echo $ThemeSet['AddReply']; ?></a><?php echo $ThemeSet['ButtonDivider']; ?><a href="#Act/Reply"><?php echo $ThemeSet['FastReply']; ?></a><?php echo $ThemeSet['ButtonDivider']; ?><a href="#Act/Topic"><?php echo $ThemeSet['NewTopic']; ?></a></td>
 </tr>
 </table>
 <div>&nbsp;</div>

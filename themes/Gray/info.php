@@ -10,11 +10,11 @@
 
     Copyright 2004-2006 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2006 Game Maker 2k - http://upload.idb.s1.jcink.com/
-    $ThemeInfo - Name: iDB Theme - Author: cooldude2k $
+    $ThemeInfo - Name: iDB Gray - Author: cooldude2k $
     $FileInfo: info.php - Last Update: 05/17/2007 SVN 7 - Author: cooldude2k $
 */
 $ThemeInfo = array();
-$ThemeInfo['ThemeName'] = "iDB Theme";
+$ThemeInfo['ThemeName'] = "iDB Gray Theme";
 $ThemeInfo['ThemeMaker'] = "Cool Dude 2k";
 $ThemeInfo['ThemeVersion'] = "0.1.5";
 $ThemeInfo['ThemeVersionType'] = "Pre-Alpha";

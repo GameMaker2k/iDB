@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: topics.php - Last Update: 05/09/2007 SVN 1 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 05/17/2007 SVN 7 - Author: cooldude2k $
 */
 $File1Name = dirname($_SERVER['SCRIPT_NAME'])."/";
 $File2Name = $_SERVER['SCRIPT_NAME'];
@@ -22,8 +22,8 @@ if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
 ?>
 <table style="width: 100%;" class="Table2">
 <tr>
- <td style="width: 20%; text-align: left;">&nbsp;</td>
- <td style="width: 80%; text-align: right;"><a href="#Act/Topic"><?php echo $ThemeSet['NewTopic']; ?></a></td>
+ <td style="width: 0%; text-align: left;">&nbsp;</td>
+ <td style="width: 100%; text-align: right;"><a href="#Act/Topic"><?php echo $ThemeSet['NewTopic']; ?></a></td>
 </tr>
 </table>
 <div>&nbsp;</div>
@@ -185,8 +185,8 @@ echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr
 <div>&nbsp;</div>
 <table class="Table2" style="width: 100%;">
 <tr>
- <td style="width: 20%; text-align: left;">&nbsp;</td>
- <td style="width: 80%; text-align: right;"><a href="#Act/Topic"><?php echo $ThemeSet['NewTopic']; ?></a></td>
+ <td style="width: 0%; text-align: left;">&nbsp;</td>
+ <td style="width: 100%; text-align: right;"><a href="#Act/Topic"><?php echo $ThemeSet['NewTopic']; ?></a></td>
 </tr>
 </table>
 <div>&nbsp;</div>
