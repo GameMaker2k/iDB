@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: functions.php - Last Update: 05/14/2007 SVN 6 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 05/19/2007 SVN 8 - Author: cooldude2k $
 */
 $File1Name = dirname($_SERVER['SCRIPT_NAME'])."/";
 $File2Name = $_SERVER['SCRIPT_NAME'];
@@ -61,7 +61,7 @@ function change_title($new_title,$use_gzip="off",$gzip_type="gzip") {
 global $Settings;
 if($gzip_type!="gzip") { if($gzip_type!="deflate") { $gzip_type = "gzip"; } }
 $output = @ob_get_clean();
-$output = preg_replace("/<title>(.*?)<\/title>/", "<title>".$new_title."</title>", $output);
+$output = preg_replace("/<title>(.*?)<\/title>/i", "<title>".$new_title."</title>", $output);
 /* Change Some PHP Settings Fix the &PHPSESSID to &amp;PHPSESSID */
 $SessName = @session_name();
 $output = preg_replace("/&PHPSESSID/", "&amp;PHPSESSID", $output);
@@ -134,20 +134,28 @@ $varname = preg_replace("/(HTTP_GET_VARS|HTTP_POST_VARS|HTTP_POST_FILES)/i", nul
 	return $varname; }
 function text2icons($Text,$sqlt) {
 global $Settings;
-$renquery="SELECT * FROM ".$sqlt."smileys";
-$renresult=mysql_query($renquery);
-$rennum=mysql_num_rows($renresult);
-$reni=0;
-while ($reni < $rennum) {
-$FileName=mysql_result($renresult,$reni,"FileName");
-$SmileName=mysql_result($renresult,$reni,"SmileName");
-$SmileText=mysql_result($renresult,$reni,"SmileText");
-$SmileDirectory=mysql_result($renresult,$reni,"Directory");
-$ShowSmile=mysql_result($renresult,$reni,"Show");
-$Smile1 = array($SmileText);
-$Smile2 = array('<img src="'.$SmileDirectory.''.$FileName.'" style="vertical-align: middle; border: 0px;" title="'.$SmileName.'" alt="'.$SmileName.'" />');
-$Text=str_replace($Smile1, $Smile2, $Text);
-++$reni; } return $Text; }
+$reneequery="SELECT * FROM ".$sqlt."smileys";
+$reneeresult=mysql_query($reneequery);
+$reneenum=mysql_num_rows($reneeresult);
+$reneei=0;
+while ($reneei < $reneenum) {
+$FileName=mysql_result($reneeresult,$reneei,"FileName");
+$SmileName=mysql_result($reneeresult,$reneei,"SmileName");
+$SmileText=mysql_result($reneeresult,$reneei,"SmileText");
+$SmileDirectory=mysql_result($reneeresult,$reneei,"Directory");
+$ShowSmile=mysql_result($reneeresult,$reneei,"Show");
+$ReplaceType=mysql_result($reneeresult,$reneei,"ReplaceCI");
+if($ReplaceType=="on") { $ReplaceType = "yes"; }
+if($ReplaceType=="off") { $ReplaceType = "no"; }
+if($ReplaceType!="yes"||$ReplaceType!="no") { $ReplaceType = "no"; }
+$Smile1 = $SmileText;
+$Smile2 = '<img src="'.$SmileDirectory.''.$FileName.'" style="vertical-align: middle; border: 0px;" title="'.$SmileName.'" alt="'.$SmileName.'" />';
+if($ReplaceType=="no") {
+$Text = str_replace($Smile1, $Smile2, $Text); }
+if($ReplaceType=="yes") {
+	$Smile1 = preg_quote($SmileText,"/");
+$Text = preg_replace("/".$Smile1."/i",$Smile2,$Text); }
+++$reneei; } return $Text; }
 function remove_spaces($Text) {
 $Text = preg_replace("/(^\t+|\t+$)/","",$Text);
 $Text = preg_replace("/(^\n+|\n+$)/","",$Text);

@@ -12,7 +12,7 @@
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: setup.php - Last Update: 05/14/2007 SVN 6 - Author: cooldude2k $
+    $FileInfo: setup.php - Last Update: 05/19/2007 SVN 8 - Author: cooldude2k $
 */
 $File1Name = dirname($_SERVER['SCRIPT_NAME'])."/";
 $File2Name = $_SERVER['SCRIPT_NAME'];
@@ -151,7 +151,7 @@ echo "<option value=\"".$plusi."\">GMT + ".$plusi.":00 hours</option>\n"; }
 <option value="true">on</option>
 </select></td>
 </tr><tr>
-	<td style="width: 50%;"><label class="TextBoxLabel" for="unlink">Delete Installer When Done?(Might not work)</label></td>
+	<td style="width: 50%;"><label class="TextBoxLabel" title="Might not work" for="unlink">Delete Installer When Done? (Might not work)</label></td>
 	<td style="width: 50%;"><select id="unlink" name="unlink" class="TextBox">
 <option value="true">Yes</option>
 <option value="false">No</option>

@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: profilemain.php - Last Update: 05/09/2007 SVN 1 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 05/19/2007 SVN 8 - Author: cooldude2k $
 */
 $File1Name = dirname($_SERVER['SCRIPT_NAME'])."/";
 $File2Name = $_SERVER['SCRIPT_NAME'];
@@ -298,14 +298,19 @@ echo "<option value=\"".$plusi."\">GMT + ".$plusi.":00 hours</option>\n";
 $skindir = dirname(realpath("settings.php"))."/".$SettDir['themes'];
 if ($handle = opendir($skindir)) {
    while (false !== ($file = readdir($handle))) {
+	   if ($dirnum==null) { $dirnum = 0; }
 	   if (file_exists($skindir.$file."/info.php")) {
 		   if ($file != "." && $file != "..") {
 	   include($skindir.$file."/info.php");
-       echo "<option value=\"".$file."\">".$ThemeInfo['ThemeName']."</option>\n";
+       $themelist[$dirnum] =  "<option value=\"".$file."\">".$ThemeInfo['ThemeName']."</option>";
+	   ++$dirnum;
    } } }
-   closedir($handle);
-} ?>
-</select></td>
+   closedir($handle); asort($themelist);
+   $themenum=count($themelist); $themei=0; 
+   while ($themei < $themenum) {
+   echo $themelist[$themei]."\n";
+   ++$themei; }
+} ?></select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 40%;"><label class="TextBoxLabel" for="DST">Is <span title="Daylight Savings Time">DST</span> / <span title="Summer Time">ST</span> on or off:</label></td>
 	<td style="width: 60%;"><select id="DST" name="DST" class="TextBox"><?php echo "\n" ?>

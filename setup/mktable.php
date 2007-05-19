@@ -12,7 +12,7 @@
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mktable.php - Last Update: 05/09/2007 SVN 1 - Author: cooldude2k $
+    $FileInfo: mktable.php - Last Update: 05/19/2007 SVN 8 - Author: cooldude2k $
 */
 $File1Name = dirname($_SERVER['SCRIPT_NAME'])."/";
 $File2Name = $_SERVER['SCRIPT_NAME'];
@@ -34,7 +34,7 @@ $query="CREATE TABLE `".$_POST['tableprefix']."messenger` ( `id` int(15) NOT NUL
 mysql_query($query);
 $query="CREATE TABLE `".$_POST['tableprefix']."posts` ( `id` int(15) NOT NULL auto_increment, `TopicID` int(15) NOT NULL default '0', `ForumID` int(15) NOT NULL default '0', `CategoryID` int(15) NOT NULL default '0', `UserID` int(15) NOT NULL default '0', `GuestName` varchar(150) NOT NULL default '', `TimeStamp` int(15) NOT NULL default '0', `LastUpdate` int(15) NOT NULL default '0', `EditUser` int(15) NOT NULL default '0', `Post` text NOT NULL, `Description` text NOT NULL, `IP` varchar(20) NOT NULL default '', PRIMARY KEY  (`id`)) TYPE=MyISAM ;";
 mysql_query($query);
-$query="CREATE TABLE `".$_POST['tableprefix']."smileys` ( `id` int(15) NOT NULL auto_increment, `FileName` text NOT NULL, `SmileName` text NOT NULL, `SmileText` text NOT NULL, `Directory` text NOT NULL, `Show` varchar(15) NOT NULL default '', PRIMARY KEY  (`id`)) TYPE=MyISAM ;";
+$query="CREATE TABLE `".$_POST['tableprefix']."smileys` ( `id` int(15) NOT NULL auto_increment, `FileName` text NOT NULL, `SmileName` text NOT NULL, `SmileText` text NOT NULL, `Directory` text NOT NULL, `Show` varchar(5) NOT NULL default '', `ReplaceCI` varchar(5) NOT NULL default '', PRIMARY KEY  (`id`)) TYPE=MyISAM ;";
 mysql_query($query);
 /*
 $query="CREATE TABLE `".$_POST['tableprefix']."tagboard` ( `id` int(15) NOT NULL auto_increment, `UserID` int(15) NOT NULL default '0', `GuestName` varchar(150) NOT NULL default '', `TimeStamp` int(15) NOT NULL default '0', `Post` text NOT NULL, `IP` varchar(20) NOT NULL default '', PRIMARY KEY  (`id`)) TYPE=MyISAM ;";
@@ -55,6 +55,6 @@ $query = "INSERT INTO ".$_POST['tableprefix']."permissions VALUES (1, 1, 'Admin'
 mysql_query($query);
 $query = "INSERT INTO ".$_POST['tableprefix']."catpermissions VALUES (1, 1, 'Admin', 1, 'yes'), (2, 2, 'Moderator', 1, 'yes'), (3, 3, 'Member', 1, 'yes'), (4, 4, 'Guest', 1, 'yes'), (5, 5, 'Banned', 1, 'no'), (6, 6, 'Validate', 1, 'yes');"; 
 mysql_query($query);
-$query = "INSERT INTO ".$_POST['tableprefix']."smileys VALUES (1, 'smile.gif', 'Happy', ':)', 'smileys/', 'yes'), (2, 'tongue.gif', 'Tongue', ':P', 'smileys/', 'yes'), (3, 'tongue2.gif', 'Tongue', ':tongue:', 'smileys/', 'yes'), (4, 'sweat.gif', 'Sweat', ':sweat:', 'smileys/', 'yes'), (5, 'laugh.gif', 'lol', ':lol:', 'smileys/', 'yes'), (6, 'cool.gif', 'Cool', 'B)', 'smileys/', 'yes'), (7, 'sleep.gif', 'Sleep', '-_-', 'smileys/', 'yes'), (8, 'sad.gif', 'Sad', ':(', 'smileys/', 'yes'), (9, 'angry.gif', 'Angry', ':angry:', 'smileys/', 'yes'), (10, 'huh.gif', 'huh', ':huh:', 'smileys/', 'yes'), (11, 'ohmy.gif', 'ohmy', ':o', 'smileys/', 'yes'), (12, 'hmm.gif', 'hmm', ':unsure:', 'smileys/', 'yes'), (13, 'mad.gif', 'Mad', ':mad:', 'smileys/', 'yes'), (14, 'wub.gif', 'Wub', ':wub:', 'smileys/', 'yes'), (15, 'x.gif', 'X', ':x:', 'smileys/', 'yes');";
+$query = "INSERT INTO ".$_POST['tableprefix']."smileys VALUES (1, 'smile.gif', 'Happy', ':)', 'smileys/', 'yes', 'no'), (2, 'tongue.gif', 'Tongue', ':P', 'smileys/', 'yes', 'yes'), (3, 'tongue2.gif', 'Tongue', ':tongue:', 'smileys/', 'yes', 'yes'), (4, 'sweat.gif', 'Sweat', ':sweat:', 'smileys/', 'yes', 'yes'), (5, 'laugh.gif', 'lol', ':lol:', 'smileys/', 'yes', 'yes'), (6, 'cool.gif', 'Cool', 'B)', 'smileys/', 'yes', 'no'), (7, 'sleep.gif', 'Sleep', '-_-', 'smileys/', 'yes', 'no'), (8, 'sad.gif', 'Sad', ':(', 'smileys/', 'yes', 'no'), (9, 'angry.gif', 'Angry', ':angry:', 'smileys/', 'yes', 'yes'), (10, 'huh.gif', 'huh', ':huh:', 'smileys/', 'yes', 'yes'), (11, 'ohmy.gif', 'ohmy', ':o', 'smileys/', 'yes', 'yes'), (12, 'hmm.gif', 'hmm', ':unsure:', 'smileys/', 'yes', 'yes'), (13, 'mad.gif', 'Mad', ':mad:', 'smileys/', 'yes', 'yes'), (14, 'wub.gif', 'Wub', ':wub:', 'smileys/', 'yes', 'yes'), (15, 'x.gif', 'X', ':x:', 'smileys/', 'yes', 'yes');";
 mysql_query($query);
 ?>
