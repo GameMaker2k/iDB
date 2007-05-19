@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: setcheck.php - Last Update: 05/09/2007 SVN 1 - Author: cooldude2k $
+    $FileInfo: setcheck.php - Last Update: 05/19/2007 SVN 10 - Author: cooldude2k $
 */
 if($Settings['DefaultTheme']==null) {
 	$Settings['DefaultTheme'] = "iDB"; }
@@ -87,9 +87,6 @@ if($Settings['fixbasedir']==null) {
 	$Settings['fixbasedir'] = false; }
 if($Settings['html_type']=="html4") { 
 	$Settings['html_type'] = "html10"; }
-if ($_GET['act']=="iDBInfo") { @header('Location: http://developer.berlios.de/projects/idb/'); }
-if ($_GET['act']=="iDBSite") { @header('Location: http://intdb.sourceforge.net/'); }
-if ($_GET['act']=="GM2kSite") { @header('Location: http://upload.idb.s1.jcink.com/'); }
 /*if($_GET['debug']=="true"||$_GET['debug']=="on") {
 	output_add_rewrite_var("amp;debug",$_GET['debug']); }*/
 if ($_GET['act']==null&&$_GET['action']!=null) { $_GET['act']=$_GET['action']; }
@@ -99,4 +96,11 @@ if ($_GET['act']==null&&$_GET['mode']!=null) { $_GET['act']=$_GET['mode']; }
 if ($_GET['act']==null&&$_GET['show']!=null) { $_GET['act']=$_GET['show']; }
 if ($_GET['act']==null&&$_GET['do']!=null) { $_GET['act']=$_GET['do']; }
 if ($_GET['act']=="idx"||$_GET['act']=="View") { $_GET['act']="view"; }
+if ($_GET['act']=="iDBInfo") { @header('Location: http://sourceforge.net/projects/intdb/'); }
+if ($_GET['act']=="iDBSite") { @header('Location: http://intdb.sourceforge.net/'); }
+if ($_GET['act']=="OldiDBInfo") { @header('Location: http://developer.berlios.de/projects/idb/'); }
+if ($_GET['act']=="OldiDBSite") { @header('Location: http://idb.berlios.de/'); }
+if ($_GET['act']=="DF2kInfo") { @header('Location: http://developer.berlios.de/projects/df2k/'); }
+if ($_GET['act']=="DF2kSite") { @header('Location: http://df2k.berlios.de/'); }
+if ($_GET['act']=="GM2kSite") { @header('Location: http://upload.idb.s1.jcink.com/'); }
 ?>

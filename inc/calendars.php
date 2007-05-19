@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: calendars.php - Last Update: 05/09/2007 SVN 1 - Author: cooldude2k $
+    $FileInfo: calendars.php - Last Update: 05/19/2007 SVN 10 - Author: cooldude2k $
 */
 $File1Name = dirname($_SERVER['SCRIPT_NAME'])."/";
 $File2Name = $_SERVER['SCRIPT_NAME'];
@@ -82,7 +82,7 @@ foreach ($MyDays as $x => $y) {
 $WeekDays = "";
 $i = $FirstDayThisMouth + 1;
 if ($FirstDayThisMouth != "0") {
-    $WeekDays .= '<td class="TableRow3" align="center" colspan="' . $FirstDayThisMouth . '">&nbsp;</td>'."\r\n";
+    $WeekDays .= '<td class="TableRow3" style="height: 90px; text-align: center;" colspan="' . $FirstDayThisMouth . '">&nbsp;</td>'."\r\n";
 }
 $Day_i = "1";
 $ii = $i;
@@ -91,19 +91,20 @@ if ($ii == 8) {
 $WeekDays .= "</tr><tr class=\"TableRow3\">"."\r\n";
 $ii = 1; }
  if ($MyDay == $Day_i) {
-$Extra = 'class="TableRow3"'; }
+$Extra = 'CalTableRow1'; }
 else {
-$Extra = 'class="TableRow2"'; }
+$Extra = 'CalTableRow2'; }
 if ($Day_i != $_GET['HighligtDay']) {
+if($EventsName[$Day_i]!=null) { $EventsName[$Day_i] = "&nbsp;( ".$EventsName[$Day_i]." )"; }
 if ($Day_i != $MyDay) {
-$WeekDays .= '<td class="TableRow3" style="height: 60px; vertical-align: top;">' . $Day_i . '<div style="text-align: left;">' . $EventsName[$Day_i] . '</div></td>'."\r\n";	 }	}
+$WeekDays .= '<td class="'.$Extra.'" style="height: 90px; vertical-align: top;">' . $Day_i . $EventsName[$Day_i] . '</td>'."\r\n";	 }	}
 if ($Day_i == $MyDay) {
-$WeekDays .= '<td class="TableRow3" style="height: 60px; vertical-align: top;">' . $Day_i . '<div style="text-align: left;">' . $EventsName[$Day_i] . '</div></td>'."\r\n";	 }
+$WeekDays .= '<td class="'.$Extra.'" style="height: 90px; vertical-align: top;">' . $Day_i . $EventsName[$Day_i] . '</td>'."\r\n";	 }
 $Day_i++;
 $ii++;
 }
 if ((8 - $ii) >= "1") {
-$WeekDays .= '<td class="TableRow3" align="center" colspan="' . (8 - $ii) . '">&nbsp;</td>'."\r\n"; } ?>
+$WeekDays .= '<td class="TableRow3" style="height: 90px; text-align: center;" colspan="' . (8 - $ii) . '">&nbsp;</td>'."\r\n"; } ?>
 <div class="Table1Border">
 <table class="Table1"><tr class="TableRow1">
 <th class="TableRow1" colspan="7">

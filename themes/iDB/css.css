@@ -10,7 +10,7 @@
     Copyright 2004-2006 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2006 Game Maker 2k - http://upload.idb.s1.jcink.com/
     $ThemeInfo - Name: iDB Theme - Author: cooldude2k $
-    $FileInfo: css.css - Last Update: 05/17/2007 SVN 7 - Author: cooldude2k $
+    $FileInfo: css.css - Last Update: 05/19/2007 SVN 10 - Author: cooldude2k $
 */
 html {
 	font-family: verdana, arial, sans-serif;
@@ -129,6 +129,10 @@ border: 1px solid #506070;
 }
 .TableRow4 { 
 background-color: #c7d1dd; 
+border: 1px solid #506070;
+}
+.CalTableRow1, .CalTableRow2 { 
+background-color: #a7b1bd; 
 border: 1px solid #506070;
 }
 .TextBox { 
