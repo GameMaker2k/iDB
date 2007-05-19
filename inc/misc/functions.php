@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: functions.php - Last Update: 05/19/2007 SVN 8 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 05/19/2007 SVN 9 - Author: cooldude2k $
 */
 $File1Name = dirname($_SERVER['SCRIPT_NAME'])."/";
 $File2Name = $_SERVER['SCRIPT_NAME'];
@@ -137,14 +137,14 @@ global $Settings;
 $reneequery="SELECT * FROM ".$sqlt."smileys";
 $reneeresult=mysql_query($reneequery);
 $reneenum=mysql_num_rows($reneeresult);
-$reneei=0;
-while ($reneei < $reneenum) {
-$FileName=mysql_result($reneeresult,$reneei,"FileName");
-$SmileName=mysql_result($reneeresult,$reneei,"SmileName");
-$SmileText=mysql_result($reneeresult,$reneei,"SmileText");
-$SmileDirectory=mysql_result($reneeresult,$reneei,"Directory");
-$ShowSmile=mysql_result($reneeresult,$reneei,"Show");
-$ReplaceType=mysql_result($reneeresult,$reneei,"ReplaceCI");
+$renees=0;
+while ($renees < $reneenum) {
+$FileName=mysql_result($reneeresult,$renees,"FileName");
+$SmileName=mysql_result($reneeresult,$renees,"SmileName");
+$SmileText=mysql_result($reneeresult,$renees,"SmileText");
+$SmileDirectory=mysql_result($reneeresult,$renees,"Directory");
+$ShowSmile=mysql_result($reneeresult,$renees,"Show");
+$ReplaceType=mysql_result($reneeresult,$renees,"ReplaceCI");
 if($ReplaceType=="on") { $ReplaceType = "yes"; }
 if($ReplaceType=="off") { $ReplaceType = "no"; }
 if($ReplaceType!="yes"||$ReplaceType!="no") { $ReplaceType = "no"; }
@@ -155,7 +155,7 @@ $Text = str_replace($Smile1, $Smile2, $Text); }
 if($ReplaceType=="yes") {
 	$Smile1 = preg_quote($SmileText,"/");
 $Text = preg_replace("/".$Smile1."/i",$Smile2,$Text); }
-++$reneei; } return $Text; }
+++$renees; } return $Text; }
 function remove_spaces($Text) {
 $Text = preg_replace("/(^\t+|\t+$)/","",$Text);
 $Text = preg_replace("/(^\n+|\n+$)/","",$Text);
@@ -336,12 +336,26 @@ function cp($infile,$outfile,$mode="w") {
    fwrite($cpfp, $contents);
    fclose($cpfp);
    return true; }
-/* str_ireplace for PHP below ver. 5 // 
-// by René Johnson - Cool Dude 2k    */
+/* str_ireplace for PHP below ver. 5 updated // 
+//       by René Johnson - Cool Dude 2k      //
+//      and upaded by René Johnson again     */
 if(!function_exists('str_ireplace')) {
 function str_ireplace($search,$replace,$subject) {
+if(!is_array($search)&&is_array($replace)) {
+	$search = array($search); }
+if(is_array($search)&&!is_array($replace)) {
+	$replace = array($replace); }
+if(is_array($search)&&is_array($replace)) {
+	$sc=count($search); $rc=count($replace); $sn=0;
+	if($sc!=$rc) { return false; }
+while ($sc > $sn) {
+	$search[$sn] = preg_quote($search[$sn], "/");
+	$subject = preg_replace("/".$search[$sn]."/i", $replace[$sn], $subject);
+	++$sn; } }
+if(!is_array($search)&&!is_array($replace)) {
 $search = preg_quote($search, "/");
-return preg_replace("/".$search."/i", $replace, $subject); } }
+$subject = preg_replace("/".$search."/i", $replace, $subject); }
+return $subject; } }
 $foobar="fubar"; $$foobar="foobar";
 function dump_included_files() {	return var_dump(get_included_files()); }
 function count_included_files() {	return count(get_included_files()); }

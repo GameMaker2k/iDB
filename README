@@ -15,11 +15,13 @@
 //                      \\       (c) 2004-2007 Game Maker 2k      //
 //                       """"""""""""""""""""""""""""""""""""""""""
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+//        $FileInfo: README - Last Update: 05/19/2007 SVN 9 - Author: cooldude2k $            
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/ http://idb.berlios.net/
 // Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/ 
 // http://s1.jcink.com/s/host/idb/  http://idb.everywebhost.com/  http://cooldude2k.id.funpic.org/
 //  	        Game Maker 2k Copyright 2000-2007 Cool Dude 2k (René Johnson)
-// Emoticons made by Jcink for TextfileBB (http://tfbb.jcink.com/) Under TFBB License
+// Emoticons made by Jcink for TextfileBB (http://tfbb.jcink.com/) Under GPL License
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // iDB Installer made by Game Maker 2k - http://upload.idb.s1.jcink.com/
 // How to delete installer if error happens:
@@ -30,7 +32,7 @@
 // this license agreement. Information regarding its usage can be
 // found on textfileBB's Web site at http://tfbb.jcink.com/.
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// Emoticons made by Jcink for TextfileBB (http://tfbb.jcink.com/) Under TFBB License
+// Emoticons made by Jcink for TextfileBB (http://tfbb.jcink.com/) Under GPL License
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //                         ______________________________________
 //                        //     Also Get PHP-Quick-Arcade      \\
