@@ -11,7 +11,7 @@
     Copyright 2004-2006 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2006 Game Maker 2k - http://cooldude2k.co.funpic.org/
 
-    $FileInfo: index.php - Last Update: 05/17/2007 SVN 10 - Author: cooldude2k $
+    $FileInfo: index.php - Last Update: 05/22/2007 SVN 11 - Author: cooldude2k $
 */
 header('Location: ../index.php');
 ?>

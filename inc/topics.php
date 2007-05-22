@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: topics.php - Last Update: 05/17/2007 SVN 7 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 05/22/2007 SVN 11 - Author: cooldude2k $
 */
 $File1Name = dirname($_SERVER['SCRIPT_NAME'])."/";
 $File2Name = $_SERVER['SCRIPT_NAME'];
@@ -27,8 +27,6 @@ if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
 </tr>
 </table>
 <div>&nbsp;</div>
-<div class="Table1Border">
-<table class="Table1">
 <?php
 $prequery = query("select * from ".$Settings['sqltable']."forums where ID=%s", array($_GET['id']));
 $preresult=mysql_query($prequery);
@@ -60,34 +58,30 @@ redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"a
 if($ForumCheck!="skip") {
 if($ForumType=="subforum") {
 redirect("location",$basedir.url_maker($exfile['subforum'],$Settings['file_ext'],"act=".$_GET['act']."&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['subforum'],$exqstr['subforum'],FALSE)); } }
-$toggle=""; $togglecode = "<span style=\"float: right;\">&nbsp;</span>";
-if($ThemeSet['EnableToggle']==true) {
-/*	Toggle Code	*/
-$query2 = query("select * from ".$Settings['sqltable']."topics where ForumID=%s ORDER BY ID", array($_GET['id']));
-$result2=mysql_query($query2);
-$num2=mysql_num_rows($result2);
-$i2=0;
-$toggle="";
-while ($i2 < $num2) {
-$TopicID=mysql_result($result2,$i2,"id");
-$i3=$i2+1;
-if ($i3!=$num2) {
-$toggle=$toggle."toggletag('Topic".$TopicID."'),"; }
-if ($i3==$num2) {
-$toggle=$toggle."toggletag('Topic".$TopicID."'),"; }
-if ($i3==$num2) {
-$toggle=$toggle."toggletag('Forum".$_GET['id']."'),toggletag('ForumEnd');return false;"; }
-++$i2; }
-if($toggle==null) { $toggle="toggletag('Forum".$_GET['id']."'),toggletag('ForumEnd');return false;"; }
-@mysql_free_result($result2);
-$togglecode = "<span style=\"float: right;\"><a href=\"".$filewpath."#Toggle".$ForumID."\" onclick=\"".$toggle."\">".$ThemeSet['Toggle']."</a>".$ThemeSet['ToggleExt']."</span>"; }
-if($ThemeSet['EnableToggle']==false) { $toggle="";
-$togglecode = "<span style=\"float: right;\">&nbsp;</span>"; }
+$query = query("select * from ".$Settings['sqltable']."topics where ForumID=%i ORDER BY Pinned DESC, LastUpdate DESC", array($_GET['id']));
+$result=mysql_query($query);
+$num=mysql_num_rows($result);
+//Start Topic Page Code (Will be used at later time)
+if($_GET['page']==null) { $_GET['page'] = 1; } 
+if($_GET['page']<=0) { $_GET['page'] = 1; }
+$nums = $_GET['page'] * $Settings['max_topics'];
+if($nums>$num) { $nums = $num; }
+$numz = $nums - $Settings['max_topics'];
+if($numz<=0) { $numz = 0; }
+$i=$numz;
+if($nums<$num) { $nextpage = $_GET['page'] + 1; }
+if($nums>=$num) { $nextpage = $_GET['page']; }
+if($numz>=$Settings['max_topics']) { $backpage = $_GET['page'] - 1; }
+if($_GET['page']<=1) { $backpage = 1; }
+//End Topic Page Code (Its not used yet but its still good to have :P )
+$i=0;
 ?>
+<div class="Table1Border">
+<table class="Table1">
 <tr class="TableRow1">
 <td class="TableRow1" colspan="6"><span style="float: left;">
 <?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['forum'],$Settings['file_ext'],"act=view&id=".$ForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum']); ?>#<?php echo $ForumID; ?>" id="Toggle<?php echo $ForumID; ?>"><?php echo $ForumName; ?></a></span>
-<?php echo $togglecode; ?></td>
+<?php echo "<span style=\"float: right;\">&nbsp;</span>"; ?></td>
 </tr>
 <?php ++$prei; } @mysql_free_result($preresult); ?>
 <tr id="Forum<?php echo $ForumID; ?>" class="TableRow2">
@@ -99,10 +93,6 @@ $togglecode = "<span style=\"float: right;\">&nbsp;</span>"; }
 <th class="TableRow2" style="width: 25%;">Last Reply</th>
 </tr>
 <?php
-$query = query("select * from ".$Settings['sqltable']."topics where ForumID=%i ORDER BY Pinned DESC, LastUpdate DESC", array($_GET['id']));
-$result=mysql_query($query);
-$num=mysql_num_rows($result);
-$i=0;
 while ($i < $num) {
 $TopicID=mysql_result($result,$i,"id");
 $UsersID=mysql_result($result,$i,"UserID");
@@ -177,11 +167,15 @@ echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr
 <td class="TableRow3" style="text-align: center;"><?php echo $NumReply; ?></td>
 <td class="TableRow3"><?php echo $LastReply; ?></td>
 </tr>
-<?php ++$i; } @mysql_free_result($result); ?>
+<?php ++$i; }
+?>
 <tr id="ForumEnd" class="TableRow4">
 <td class="TableRow4" colspan="6">&nbsp;</td>
 </tr>
 </table></div>
+<?php
+@mysql_free_result($result);
+?>
 <div>&nbsp;</div>
 <table class="Table2" style="width: 100%;">
 <tr>

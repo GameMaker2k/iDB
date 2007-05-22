@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: categories.php - Last Update: 05/09/2007 SVN 1 - Author: cooldude2k $
+    $FileInfo: categories.php - Last Update: 05/22/2007 SVN 11 - Author: cooldude2k $
 */
 $File1Name = dirname($_SERVER['SCRIPT_NAME'])."/";
 $File2Name = $_SERVER['SCRIPT_NAME'];
@@ -35,44 +35,19 @@ $CategoryType = strtolower($CategoryType); $SubShowForums = strtolower($SubShowF
 if($CatCheck!="skip") {
 if($CategoryType=="subcategory") {
 redirect("location",$basedir.url_maker($exfile['subcategory'],$Settings['file_ext'],"act=".$_GET['act']."&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['subcategory'],$exqstr['subcategory'],FALSE)); } }
-$toggle=""; $togglecode = "<span style=\"float: right;\">&nbsp;</span>";
-if($ThemeSet['EnableToggle']==true) {
-/*	Toggle Code	*/
-$query2 = query("select * from ".$Settings['sqltable']."forums where ShowForum='yes' and CategoryID=%i and InSubForum='0' ORDER BY ID", array($CategoryID));
-$result2=mysql_query($query2);
-$num2=mysql_num_rows($result2);
-$i2=0;
-$toggle="";
-while ($i2 < $num2) {
-$ForumID=mysql_result($result2,$i2,"id");
-$i3=$i2+1;
-if ($i3!=$num2) {
-$toggle=$toggle."toggletag('Forum".$ForumID."'),"; }
-if ($i3==$num2) {
-$toggle=$toggle."toggletag('Forum".$ForumID."'),"; }
-if ($i3==$num2) {
-$toggle=$toggle."toggletag('Cat".$CategoryID."'),toggletag('CatEnd');return false;"; }
-++$i2; }
-if($toggle==null) { $toggle="toggletag('Cat".$CategoryID."'),toggletag('CatEnd');return false;"; }
-@mysql_free_result($result2);
-$togglecode = "<span style=\"float: right;\"><a href=\"".$filewpath."#Toggle".$CategoryID."\" onclick=\"".$toggle."\">".$ThemeSet['Toggle']."</a>".$ThemeSet['ToggleExt']."</span>"; }
-if($ThemeSet['EnableToggle']==false) { $toggle="";
-$togglecode = "<span style=\"float: right;\">&nbsp;</span>"; }
-?>
-<div class="Table1Border">
-<table class="Table1">
-<tr class="TableRow1">
-<td class="TableRow1" colspan="5"><span style="float: left;">
-<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile[$CategoryType],$Settings['file_ext'],"act=view&id=".$CategoryID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$CategoryType],$exqstr[$CategoryType]); ?>" id="Toggle<?php echo $CategoryID; ?>"><?php echo $CategoryName; ?></a></span>
-<?php echo $togglecode; ?></td>
-</tr>
-<?php
 $query = query("select * from ".$Settings['sqltable']."forums where ShowForum='yes' and CategoryID=%i and InSubForum=0 ORDER BY ID", array($CategoryID));
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
 $i=0;
 if($num>=1) {
 ?>
+<div class="Table1Border">
+<table class="Table1">
+<tr class="TableRow1">
+<td class="TableRow1" colspan="5"><span style="float: left;">
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile[$CategoryType],$Settings['file_ext'],"act=view&id=".$CategoryID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$CategoryType],$exqstr[$CategoryType]); ?>" id="Toggle<?php echo $CategoryID; ?>"><?php echo $CategoryName; ?></a></span>
+<?php echo "<span style=\"float: right;\">&nbsp;</span>"; ?></td>
+</tr>
 <tr id="Cat<?php echo $CategoryID; ?>" class="TableRow2">
 <th class="TableRow2" style="width: 4%;">&nbsp;</th>
 <th class="TableRow2" style="width: 58%;">Forum</th>
@@ -140,7 +115,7 @@ if($num>=1) { ?>
 <tr id="CatEnd" class="TableRow4">
 <td class="TableRow4" colspan="5">&nbsp;</td>
 </tr>
-<?php } ?>
 </table></div>
 <div>&nbsp;</div>
-<?php ++$prei; } @mysql_free_result($preresult); ?>
+<?php } ++$prei; }
+@mysql_free_result($preresult); ?>

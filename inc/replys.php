@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: replys.php - Last Update: 05/17/2007 SVN 7 - Author: cooldude2k $
+    $FileInfo: replys.php - Last Update: 05/22/2007 SVN 11 - Author: cooldude2k $
 */
 $File1Name = dirname($_SERVER['SCRIPT_NAME'])."/";
 $File2Name = $_SERVER['SCRIPT_NAME'];
@@ -35,16 +35,23 @@ $ViewTimes=mysql_result($preresult,$prei,"NumViews");
 </tr>
 </table>
 <div>&nbsp;</div>
-<div class="Table1Border">
-<table class="Table1">
-<tr class="TableRow1">
-<td class="TableRow1" colspan="2"><span style="font-weight: bold; float: left;"><?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a></span>
-<span style="float: right;">&nbsp;</span></td>
-</tr>
 <?php
 $query = query("select * from ".$Settings['sqltable']."posts where TopicID=%i ORDER BY TimeStamp ASC", array($_GET['id']));
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
+//Start Reply Page Code (Will be used at later time)
+if($_GET['page']==null) { $_GET['page'] = 1; } 
+if($_GET['page']<=0) { $_GET['page'] = 1; }
+$nums = $_GET['page'] * $Settings['max_posts'];
+if($nums>$num) { $nums = $num; }
+$numz = $nums - $Settings['max_posts'];
+if($numz<=0) { $numz = 0; }
+$i=$numz;
+if($nums<$num) { $nextpage = $_GET['page'] + 1; }
+if($nums>=$num) { $nextpage = $_GET['page']; }
+if($numz>=$Settings['max_posts']) { $backpage = $_GET['page'] - 1; }
+if($_GET['page']<=1) { $backpage = 1; }
+//End Reply Page Code (Its not used yet but its still good to have :P )
 $i=0;
 if($num==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); }
 if($num!=0) { 
@@ -95,6 +102,12 @@ if($User1Name==null) { $User1Name="Guest"; } }
 $MyPost = text2icons($MyPost,$Settings['sqltable']);
 $User1Signature = text2icons($User1Signature,$Settings['sqltable']);
 ?>
+<div class="Table1Border">
+<table class="Table1">
+<tr class="TableRow1">
+<td class="TableRow1" colspan="2"><span style="font-weight: bold; float: left;"><?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a></span>
+<span style="float: right;">&nbsp;</span></td>
+</tr>
 <tr class="TableRow2">
 <td class="TableRow2" style="vertical-align: middle; width: 160px;">
 &nbsp;<a href="<?php
@@ -146,9 +159,9 @@ echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr
 ?>"><?php echo $ThemeSet['Profile']; ?></a><?php echo $ThemeSet['LineDividerTopic']; ?><a href="<?php echo $User1Website; ?>" onclick="window.open(this.href);return false;"><?php echo $ThemeSet['WWW']; ?></a><?php echo $ThemeSet['LineDividerTopic']; ?><a href="#Act/PM"><?php echo $ThemeSet['PM']; ?></a></span>
 <span style="float: right;">&nbsp;</span></td>
 </tr>
-<?php ++$i; } @mysql_free_result($result); ?>
 </table></div>
 <div>&nbsp;</div>
+<?php ++$i; } @mysql_free_result($result); ?>
 <table class="Table2" style="width: 100%;">
 <tr>
  <td style="width: 0%; text-align: left;">&nbsp;</td>

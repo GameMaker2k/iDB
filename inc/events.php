@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: events.php - Last Update: 05/17/2007 SVN 7 - Author: cooldude2k $
+    $FileInfo: events.php - Last Update: 05/22/2007 SVN 11 - Author: cooldude2k $
 */
 $File1Name = dirname($_SERVER['SCRIPT_NAME'])."/";
 $File2Name = $_SERVER['SCRIPT_NAME'];
@@ -19,16 +19,16 @@ $File3Name=str_replace($File1Name, null, $File2Name);
 if ($File3Name=="events.php"||$File3Name=="/events.php") {
 	require('index.php');
 	exit(); }
-?>
-<div class="Table1Border">
-<table class="Table1">
-<?php
 if($_GET['act']=="view"||$_GET['act']==null) {
 $query = query("select * from ".$Settings['sqltable']."events where ID=%i", array($_GET['id']));
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
 $is=0;
 if($num==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); }
+?>
+<div class="Table1Border">
+<table class="Table1">
+<?php
 while ($is < $num) {
 $EventID=mysql_result($result,$is,"id");
 $EventUser=mysql_result($result,$is,"UserID");

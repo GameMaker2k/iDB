@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: members.php - Last Update: 05/09/2007 SVN 1 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 05/22/2007 SVN 11 - Author: cooldude2k $
 */
 $File1Name = dirname($_SERVER['SCRIPT_NAME'])."/";
 $File2Name = $_SERVER['SCRIPT_NAME'];
@@ -19,27 +19,7 @@ $File3Name=str_replace($File1Name, null, $File2Name);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
 	require('index.php');
 	exit(); }
-?>
-<div class="Table1Border">
-<table class="Table1">
-<?php
 if($_GET['act']=="list") {
-?>
-<tr class="TableRow1">
-<td class="TableRow1" colspan="7"><span style="float: left;">
-<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=list",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Member List</a>
-</span><span style="float: right;">&nbsp;</span></td>
-</tr>
-<tr id="Member" class="TableRow2">
-<th class="TableRow2" style="width: 5%;">ID</th>
-<th class="TableRow2" style="width: 28%;">Name</th>
-<th class="TableRow2" style="width: 10%;">Group</th>
-<th class="TableRow2" style="width: 10%;">Posts</th>
-<th class="TableRow2" style="width: 20%;">Joined</th>
-<th class="TableRow2" style="width: 20%;">Last Active</th>
-<th class="TableRow2" style="width: 7%;">Website</th>
-</tr>
-<?php
 $orderlist = null;
 $orderlist = "order by `ID` asc";
 if($_GET['orderby']==null) { 
@@ -65,13 +45,48 @@ if($_GET['ordertype']=="desc") { $orderlist .= " desc"; } }
 if(!is_numeric($_GET['gid'])) { $_GET['gid'] = null; }
 if($_GET['gid']!=null&&$_GET['groupid']==null) { $_GET['groupid'] = $_GET['gid']; }
 if(!is_numeric($_GET['groupid'])) { $_GET['groupid'] = null; }
+$ggquery = query("select * from ".$Settings['sqltable']."groups where Name='%s'", array($Settings['GuestGroup']));
+$ggresult=mysql_query($ggquery);
+$GGroup=mysql_result($ggresult,0,"ID");
+@mysql_free_result($ggresult);
 if($_GET['groupid']==null) {
-$query = query("select * from ".$Settings['sqltable']."members ".$orderlist, array(null)); }
+$query = query("select * from ".$Settings['sqltable']."members where GroupID<>%i ".$orderlist, array($GGroup)); }
 if($_GET['groupid']!=null) {
-$query = query("select * from ".$Settings['sqltable']."members where GroupID=%i ".$orderlist, array($_GET['groupid'])); }
+$query = query("select * from ".$Settings['sqltable']."members where GroupID=%i and GroupID<>%i ".$orderlist, array($_GET['groupid'],$GGroup)); }
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
+//Start MemberList Page Code (Will be used at later time)
+if($_GET['page']==null) { $_GET['page'] = 1; } 
+if($_GET['page']<=0) { $_GET['page'] = 1; }
+$nums = $_GET['page'] * $Settings['max_memlist'];
+if($nums>$num) { $nums = $num; }
+$numz = $nums - $Settings['max_memlist'];
+if($numz<=0) { $numz = 0; }
+$i=$numz;
+if($nums<$num) { $nextpage = $_GET['page'] + 1; }
+if($nums>=$num) { $nextpage = $_GET['page']; }
+if($numz>=$Settings['max_memlist']) { $backpage = $_GET['page'] - 1; }
+if($_GET['page']<=1) { $backpage = 1; }
+//End MemberList Page Code (Its not used yet but its still good to have :P )
 $i=0;
+?>
+<div class="Table1Border">
+<table class="Table1">
+<tr class="TableRow1">
+<td class="TableRow1" colspan="7"><span style="float: left;">
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=list",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Member List</a>
+</span><span style="float: right;">&nbsp;</span></td>
+</tr>
+<tr id="Member" class="TableRow2">
+<th class="TableRow2" style="width: 5%;">ID</th>
+<th class="TableRow2" style="width: 28%;">Name</th>
+<th class="TableRow2" style="width: 10%;">Group</th>
+<th class="TableRow2" style="width: 10%;">Posts</th>
+<th class="TableRow2" style="width: 20%;">Joined</th>
+<th class="TableRow2" style="width: 20%;">Last Active</th>
+<th class="TableRow2" style="width: 7%;">Website</th>
+</tr>
+<?php
 while ($i < $num) {
 $MemList['ID']=mysql_result($result,$i,"id");
 $MemList['Name']=mysql_result($result,$i,"Name");
@@ -109,21 +124,12 @@ if($MemList['Group']!=$Settings['GuestGroup']) {
 <?php }
 ++$i; } @mysql_free_result($result);
 ?>
-<tr id="CatEnd" class="TableRow4">
+<tr id="MemEnd" class="TableRow4">
 <td class="TableRow4" colspan="7">&nbsp;</td>
 </tr>
+</table></div>
 <?php }
-if($_GET['act']=="view") { ?>
-<tr class="TableRow1">
-<td class="TableRow1" colspan="2"><span style="float: left;">
-<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Viewing Profile</a>
-</span><span style="float: right;">&nbsp;</span></td>
-</tr>
-<tr id="Member" class="TableRow2">
-<th class="TableRow2" style="width: 50%;">Avatar</th>
-<th class="TableRow2" style="width: 50%;">User Info</th>
-</tr>
-<?php
+if($_GET['act']=="view") { 
 $query = query("select * from ".$Settings['sqltable']."members where ID=%i", array($_GET['id']));
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
@@ -182,6 +188,17 @@ if($_GET['view']=="website"||$_GET['view']=="homepage") {
 	@session_write_close();
 	@header("Location: ".$BoardURL."index.php?act=view"); } }
 ?>
+<div class="Table1Border">
+<table class="Table1">
+<tr class="TableRow1">
+<td class="TableRow1" colspan="2"><span style="float: left;">
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Viewing Profile</a>
+</span><span style="float: right;">&nbsp;</span></td>
+</tr>
+<tr id="Member" class="TableRow2">
+<th class="TableRow2" style="width: 50%;">Avatar</th>
+<th class="TableRow2" style="width: 50%;">User Info</th>
+</tr>
 <tr class="TableRow3" id="MemberProfile">
 <td class="TableRow3">
 <?php  /* Avatar Table Thanks For SeanJ's Help at http://seanj.jcink.com/ */  ?>
@@ -211,6 +228,7 @@ Title: <?php echo $ViewMem['Title']; ?></div>
 <tr class="TableRow4">
 <td class="TableRow4" colspan="2">&nbsp;</td>
 </tr>
+</table></div>
 <?php } @mysql_free_result($result);
 if($_GET['act']=="logout") {
 @session_unset();
@@ -229,6 +247,8 @@ if($_GET['act']=="login")
 {
 $membertitle = " ".$ThemeSet['TitleDivider']." Login";
 ?>
+<div class="Table1Border">
+<table class="Table1">
 <tr class="TableRow1">
 <td class="TableRow1"><span style="float: left;">
 <?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Log in</a>
@@ -266,13 +286,16 @@ $membertitle = " ".$ThemeSet['TitleDivider']." Login";
 <tr class="TableRow4">
 <td class="TableRow4">&nbsp;</td>
 </tr>
-<?php } if($_POST['act']=="loginmember") {
+</table></div>
+<?php } if($_POST['act']=="loginmember"&&$_GET['act']=="login_now") {
 $membertitle = " ".$ThemeSet['TitleDivider']." Login";
 $REFERERurl = parse_url($_SERVER['HTTP_REFERER']);
 $URL['REFERER'] = $REFERERurl['host'];
 $URL['HOST'] = $_SERVER["SERVER_NAME"];
 $REFERERurl = null; unset($REFERERurl);
 ?>
+<div class="Table1Border">
+<table class="Table1">
 <tr class="TableRow1">
 <td class="TableRow1">
 <span style="float: left;">&nbsp;<a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Log in</a></span>
@@ -386,10 +409,13 @@ setcookie("SessPass", $NewPassword, time() + (7 * 86400), $basedir); }
 <tr class="TableRow4">
 <td class="TableRow4">&nbsp;</td>
 </tr>
+</table></div>
 <?php }
 if($_GET['act']=="signup")
 { 
 $membertitle = " ".$ThemeSet['TitleDivider']." Signing up"; ?>
+<div class="Table1Border">
+<table class="Table1">
 <tr class="TableRow1">
 <td class="TableRow1"><span style="float: left;">
 <?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=signup",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Register</a>
@@ -482,6 +508,7 @@ echo "<option value=\"".$plusi."\">GMT + ".$plusi.":00 hours</option>\n"; }
 <tr class="TableRow4">
 <td class="TableRow4">&nbsp;</td>
 </tr>
+</table></div>
 <?php } if($_GET['act']=="makemember") {
 	if($_POST['act']=="makemembers") {
 $membertitle = " ".$ThemeSet['TitleDivider']." Signing up";
@@ -490,6 +517,8 @@ $URL['REFERER'] = $REFERERurl['host'];
 $URL['HOST'] = $_SERVER["SERVER_NAME"];
 $REFERERurl = null; unset($REFERERurl);
 ?>
+<div class="Table1Border">
+<table class="Table1">
 <tr class="TableRow1">
 <td class="TableRow1"><span style="float: right;">&nbsp;</span>
 &nbsp;<a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=signup",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>">Register</a></td>
@@ -660,5 +689,5 @@ if($_POST['storecookie']==true) {
 <tr class="TableRow4">
 <td class="TableRow4">&nbsp;</td>
 </tr>
-<?php } } ?>
 </table></div>
+<?php } } ?>
