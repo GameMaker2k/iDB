@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: subforums.php - Last Update: 05/22/2007 SVN 11 - Author: cooldude2k $
+    $FileInfo: subforums.php - Last Update: 05/24/2007 SVN 13 - Author: cooldude2k $
 */
 $File1Name = dirname($_SERVER['SCRIPT_NAME'])."/";
 $File2Name = $_SERVER['SCRIPT_NAME'];
@@ -64,13 +64,13 @@ $num=mysql_num_rows($result);
 $i=0;
 ?>
 <div class="Table1Border">
-<table class="Table1">
-<tr class="TableRow1">
+<table class="Table1" id="Cat<?php echo $CategoryID; ?>">
+<tr class="TableRow1" id="CatStart<?php echo $CategoryID; ?>">
 <td class="TableRow1" colspan="5"><span style="float: left;">
-<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['category'],$Settings['file_ext'],"act=view&id=".$CategoryID,$Settings['qstr'],$Settings['qsep'],$prexqstr['category'],$exqstr['category']); ?>" id="SubToggle<?php echo $CategoryID; ?>"><?php echo $CategoryName; ?></a></span>
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['category'],$Settings['file_ext'],"act=view&id=".$CategoryID,$Settings['qstr'],$Settings['qsep'],$prexqstr['category'],$exqstr['category']); ?>"><?php echo $CategoryName; ?></a></span>
 <?php echo "<span style=\"float: right;\">&nbsp;</span>"; ?></td>
 </tr>
-<tr id="Cat<?php echo $CategoryID; ?>" class="TableRow2">
+<tr id="ForumStatRow<?php echo $CategoryID; ?>" class="TableRow2">
 <th class="TableRow2" style="width: 4%;">&nbsp;</th>
 <th class="TableRow2" style="width: 58%;">Forum</th>
 <th class="TableRow2" style="width: 7%;">Topics</th>
@@ -117,7 +117,7 @@ if ($ForumType=="subforum") {
 if ($ForumType=="redirect") {
 	$PreForum=$ThemeSet['RedirectIcon']; }
 ?>
-<tr class="TableRow3" id="Forum<?php echo $ForumID; ?>">
+<tr class="TableRow3" id="SubForum<?php echo $ForumID; ?>">
 <td class="TableRow3"><div class="forumicon">
 <?php echo $PreForum; ?></div></td>
 <td class="TableRow3"><div class="forumname"><a href="<?php echo url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$ForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>"><?php echo $ForumName; ?></a></div>

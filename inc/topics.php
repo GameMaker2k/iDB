@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: topics.php - Last Update: 05/22/2007 SVN 11 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 05/24/2007 SVN 13 - Author: cooldude2k $
 */
 $File1Name = dirname($_SERVER['SCRIPT_NAME'])."/";
 $File2Name = $_SERVER['SCRIPT_NAME'];
@@ -77,14 +77,14 @@ if($_GET['page']<=1) { $backpage = 1; }
 $i=0;
 ?>
 <div class="Table1Border">
-<table class="Table1">
-<tr class="TableRow1">
+<table class="Table1" id="Forum<?php echo $ForumID; ?>">
+<tr id="ForumStart<?php echo $ForumID; ?>" class="TableRow1">
 <td class="TableRow1" colspan="6"><span style="float: left;">
-<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['forum'],$Settings['file_ext'],"act=view&id=".$ForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum']); ?>#<?php echo $ForumID; ?>" id="Toggle<?php echo $ForumID; ?>"><?php echo $ForumName; ?></a></span>
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['forum'],$Settings['file_ext'],"act=view&id=".$ForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum']); ?>#<?php echo $ForumID; ?>"><?php echo $ForumName; ?></a></span>
 <?php echo "<span style=\"float: right;\">&nbsp;</span>"; ?></td>
 </tr>
 <?php ++$prei; } @mysql_free_result($preresult); ?>
-<tr id="Forum<?php echo $ForumID; ?>" class="TableRow2">
+<tr id="TopicStatRow<?php echo $ForumID; ?>" class="TableRow2">
 <th class="TableRow2" style="width: 4%;">State</th>
 <th class="TableRow2" style="width: 36%;">Topic Name</th>
 <th class="TableRow2" style="width: 15%;">Author</th>
@@ -169,7 +169,7 @@ echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr
 </tr>
 <?php ++$i; }
 ?>
-<tr id="ForumEnd" class="TableRow4">
+<tr id="ForumEnd<?php echo $ForumID; ?>" class="TableRow4">
 <td class="TableRow4" colspan="6">&nbsp;</td>
 </tr>
 </table></div>

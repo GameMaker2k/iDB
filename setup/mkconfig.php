@@ -12,7 +12,7 @@
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mkconfig.php - Last Update: 05/22/2007 SVN 12 - Author: cooldude2k $
+    $FileInfo: mkconfig.php - Last Update: 05/24/2007 SVN 13 - Author: cooldude2k $
 */
 $File1Name = dirname($_SERVER['SCRIPT_NAME'])."/";
 $File2Name = $_SERVER['SCRIPT_NAME'];
@@ -96,9 +96,9 @@ $query = "INSERT INTO ".$_POST['tableprefix']."events VALUES (1, -1, 'Cool Dude 
 mysql_query($query);
 $query = "INSERT INTO ".$_POST['tableprefix']."forums VALUES (1,1,'Test/Spam','yes','forum',0,'http://',0,0,'A Test Board.','off','yes',1,1)";
 mysql_query($query);
-$query = "INSERT INTO ".$_POST['tableprefix']."topics VALUES (1,1,1,-1,'Cool Dude 2k',".$YourDate.",".$YourDate.",'Welcome','Install was Successful',0,0,1,1)";
+$query = "INSERT INTO ".$_POST['tableprefix']."topics VALUES (1,1,1,-1,'Cool Dude 2k',".$YourDate.",".$YourDate.",'Welcome','Install was successful',0,0,1,1)";
 mysql_query($query);
-$query = "INSERT INTO ".$_POST['tableprefix']."posts VALUES (1,1,1,1,-1,'Cool Dude 2k',".$YourDate.",".$YourDate.",0,'Welcome to Your Message Board.','Install was Successful','127.0.0.1')"; 
+$query = "INSERT INTO ".$_POST['tableprefix']."posts VALUES (1,1,1,1,-1,'Cool Dude 2k',".$YourDate.",".$YourDate.",0,'Welcome to Your Message Board. :) ','Install was successful','127.0.0.1')"; 
 mysql_query($query);
 $NewPassword = b64e_hmac($_POST['AdminPasswords'],$YourDate,$YourSalt,"sha1");
 //$Name = stripcslashes(htmlspecialchars($AdminUser, ENT_QUOTES));

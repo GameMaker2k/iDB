@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: subcategories.php - Last Update: 05/22/2007 SVN 11 - Author: cooldude2k $
+    $FileInfo: subcategories.php - Last Update: 05/24/2007 SVN 13 - Author: cooldude2k $
 */
 $File1Name = dirname($_SERVER['SCRIPT_NAME'])."/";
 $File2Name = $_SERVER['SCRIPT_NAME'];
@@ -53,13 +53,13 @@ $i=0;
 if($num>=1) {
 ?>
 <div class="Table1Border">
-<table class="Table1">
-<tr class="TableRow1">
+<table class="Table1" id="SubCat<?php echo $CategoryID; ?>">
+<tr id="SubCatStart<?php echo $CategoryID; ?>" class="TableRow1">
 <td class="TableRow1" colspan="5"><span style="float: left;">
-<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile[$CategoryType],$Settings['file_ext'],"act=view&id=".$CategoryID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$CategoryType],$exqstr[$CategoryType]); ?>" id="SubToggle<?php echo $CategoryID; ?>"><?php echo $CategoryName; ?></a></span>
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile[$CategoryType],$Settings['file_ext'],"act=view&id=".$CategoryID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$CategoryType],$exqstr[$CategoryType]); ?>"><?php echo $CategoryName; ?></a></span>
 <?php echo "<span style=\"float: right;\">&nbsp;</span>"; ?></td>
 </tr>
-<tr id="SubCat<?php echo $CategoryID; ?>" class="TableRow2">
+<tr id="ForumStatRow<?php echo $CategoryID; ?>" class="TableRow2">
 <th class="TableRow2" style="width: 4%;">&nbsp;</th>
 <th class="TableRow2" style="width: 58%;">Forum</th>
 <th class="TableRow2" style="width: 7%;">Topics</th>
