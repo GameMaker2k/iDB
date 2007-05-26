@@ -13,11 +13,9 @@
     GZip and Zlib by Jean-loup Gailly (compression) and Mark Adler (decompression) http://www.zlib.net/
 	BZip2 and libbzip2 by Julian Seward http://www.bzip.org/
 
-    $FileInfo: compression.php - Last Update: 05/09/2007 SVN 1 - Author: cooldude2k $
+    $FileInfo: compression.php - Last Update: 05/26/2007 SVN 15 - Author: cooldude2k $
 */
-$File1Name = dirname($_SERVER['SCRIPT_NAME'])."/";
-$File2Name = $_SERVER['SCRIPT_NAME'];
-$File3Name=str_replace($File1Name, null, $File2Name);
+$File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="compression.php"||$File3Name=="/compression.php") {
 	require('index.php');
 	exit(); }

@@ -11,11 +11,9 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: filename.php - Last Update: 05/26/2007 SVN 14 - Author: cooldude2k $
+    $FileInfo: filename.php - Last Update: 05/26/2007 SVN 15 - Author: cooldude2k $
 */
-$File1Name = dirname($_SERVER['SCRIPT_NAME'])."/";
-$File2Name = $_SERVER['SCRIPT_NAME'];
-$File3Name=str_replace($File1Name, null, $File2Name);
+$File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="filename.php"||$File3Name=="/filename.php") {
 	require('index.php');
 	exit(); }
@@ -45,7 +43,7 @@ function version_info($proname,$subver,$ver,$supver,$reltype,$svnver,$showsvn) {
 	if($showsvn!=true&&$showsvn!=null) { $return_var .= " ".$showsvn." ".$svnver; }
 	return $return_var; }
 $VER1[0] = 0; $VER1[1] = 1; $VER1[2] = 5; $VERFull[1] = $VER1[0].".".$VER1[1].".".$VER1[2];
-$VER2[0] = "Pre-Alpha"; $VER2[1] = "PA"; $VER2[2] = "SVN"; $SubVerN = 14; $RName = "iDB"; $SFName = "IntDB";
+$VER2[0] = "Pre-Alpha"; $VER2[1] = "PA"; $VER2[2] = "SVN"; $SubVerN = 15; $RName = "iDB"; $SFName = "IntDB";
 $SVNDay[0] = 5; $SVNDay[1] = 26; $SVNDay[2] = 2007; $SVNDay[3] = $SVNDay[0]."/".$SVNDay[1]."/".$SVNDay[2];
 $VerInfo['iDB_Ver'] = version_info($RName,$VER1[0],$VER1[1],$VER1[2],$VER2[1],$SubVerN,false);
 $VerInfo['iDB_Ver_SVN'] = version_info($RName,$VER1[0],$VER1[1],$VER1[2],$VER2[1],$SubVerN,true);

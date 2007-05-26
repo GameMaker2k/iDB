@@ -12,11 +12,9 @@
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mktable.php - Last Update: 05/19/2007 SVN 8 - Author: cooldude2k $
+    $FileInfo: mktable.php - Last Update: 05/26/2007 SVN 15 - Author: cooldude2k $
 */
-$File1Name = dirname($_SERVER['SCRIPT_NAME'])."/";
-$File2Name = $_SERVER['SCRIPT_NAME'];
-$File3Name=str_replace($File1Name, null, $File2Name);
+$File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mktable.php"||$File3Name=="/mktable.php") {
 	require('index.php');
 	exit(); }
@@ -43,13 +41,13 @@ $query="CREATE TABLE `".$_POST['tableprefix']."topics` ( `id` int(15) NOT NULL a
 mysql_query($query);
 $query="CREATE TABLE `".$_POST['tableprefix']."sessions` ( `SessionID` varchar(255) NOT NULL default '', `SessID` varchar(255) NOT NULL default '', `LastUpdated` int(15) NOT NULL default '0', `DataValue` text NOT NULL, PRIMARY KEY (`SessionID`)) TYPE=MyISAM ;";
 mysql_query($query);
-$query="CREATE TABLE `".$_POST['tableprefix']."groups` ( `id` int(15) NOT NULL auto_increment, `Name` varchar(150) NOT NULL default '', `PermissionID` int(15) NOT NULL default '0', `NamePrefix` varchar(150) NOT NULL default '', `NameSuffix` varchar(150) NOT NULL default '', `CanViewBoard` varchar(5) NOT NULL default '', `CanEditProfile` varchar(5) NOT NULL default '', `CanAddEvents` varchar(5) NOT NULL default '', `CanPM` varchar(5) NOT NULL default '', `PromoteTo` varchar(150) NOT NULL default '', `PromotePosts` int(15) NOT NULL default '0', `HasModCP` varchar(5) NOT NULL default '', `HasAdminCP` varchar(5) NOT NULL default '', `ViewDBInfo` varchar(5) NOT NULL default '', PRIMARY KEY  (`id`)) TYPE=MyISAM ;";
+$query="CREATE TABLE `".$_POST['tableprefix']."groups` ( `id` int(15) NOT NULL auto_increment, `Name` varchar(150) NOT NULL default '', `PermissionID` int(15) NOT NULL default '0', `NamePrefix` varchar(150) NOT NULL default '', `NameSuffix` varchar(150) NOT NULL default '', `CanViewBoard` varchar(5) NOT NULL default '', `CanEditProfile` varchar(5) NOT NULL default '', `CanAddEvents` varchar(5) NOT NULL default '', `CanPM` varchar(5) NOT NULL default '', `CanSearch` varchar(5) NOT NULL default '', `PromoteTo` varchar(150) NOT NULL default '', `PromotePosts` int(15) NOT NULL default '0', `HasModCP` varchar(5) NOT NULL default '', `HasAdminCP` varchar(5) NOT NULL default '', `ViewDBInfo` varchar(5) NOT NULL default '', PRIMARY KEY  (`id`)) TYPE=MyISAM ;";
 mysql_query($query);
 $query="CREATE TABLE `".$_POST['tableprefix']."permissions` ( `id` int(15) NOT NULL auto_increment, `PermissionID` int(15) NOT NULL default '0', `Name` varchar(150) NOT NULL default '', `ForumID` int(15) NOT NULL default '0', `CanViewForum` varchar(5) NOT NULL default '', `CanMakeTopics` varchar(5) NOT NULL default '', `CanMakeReplys` varchar(5) NOT NULL default '', `CanEditTopics` varchar(5) NOT NULL default '', `CanEditReplys` varchar(5) NOT NULL default '', `CanDeleteTopics` varchar(5) NOT NULL default '', `CanDeleteReplys` varchar(5) NOT NULL default '', `CanDohtml` varchar(5) NOT NULL default '', `CanUseBBags` varchar(5) NOT NULL default '', `CanModForum` varchar(5) NOT NULL default '', PRIMARY KEY  (`id`)) TYPE=MyISAM ;";
 mysql_query($query);
 $query="CREATE TABLE `".$_POST['tableprefix']."catpermissions` ( `id` int(15) NOT NULL auto_increment, `PermissionID` int(15) NOT NULL default '0', `Name` varchar(150) NOT NULL default '', `CategoryID` int(15) NOT NULL default '0', `CanViewCategory` varchar(5) NOT NULL default '', PRIMARY KEY  (`id`)) TYPE=MyISAM ;";
 mysql_query($query);
-$query = "INSERT INTO ".$_POST['tableprefix']."groups VALUES (1, 'Admin', 1, '', '', 'yes', 'yes', 'yes', 'yes', 'none', 0, 'yes', 'yes', 'no'), (2, 'Moderator', 2, '', '', 'yes', 'yes', 'yes', 'yes', 'none', 0, 'yes', 'no', 'no'), (3, 'Member', 3, '', '', 'yes', 'yes', 'yes', 'yes', 'none', 0, 'no', 'no', 'no'), (4, 'Guest', 4, '', '', 'yes', 'no', 'no', 'no', 'none', 0, 'no', 'no', 'no'), (5, 'Banned', 5, '', '', 'no', 'no', 'no', 'no', 'none', 0, 'no', 'no', 'no'), (6, 'Validate', 6, '', '', 'yes', 'yes', 'no', 'no', 'none', 0, 'no', 'no', 'no');"; 
+$query = "INSERT INTO ".$_POST['tableprefix']."groups VALUES (1, 'Admin', 1, '', '', 'yes', 'yes', 'yes', 'yes', 'yes', 'none', 0, 'yes', 'yes', 'no'), (2, 'Moderator', 2, '', '', 'yes', 'yes', 'yes', 'yes', 'yes', 'none', 0, 'yes', 'no', 'no'), (3, 'Member', 3, '', '', 'yes', 'yes', 'yes', 'yes', 'yes', 'none', 0, 'no', 'no', 'no'), (4, 'Guest', 4, '', '', 'yes', 'no', 'no', 'no', 'yes', 'none', 0, 'no', 'no', 'no'), (5, 'Banned', 5, '', '', 'no', 'no', 'no', 'no', 'no', 'none', 0, 'no', 'no', 'no'), (6, 'Validate', 6, '', '', 'yes', 'yes', 'no', 'no', 'yes', 'none', 0, 'no', 'no', 'no');"; 
 mysql_query($query);
 $query = "INSERT INTO ".$_POST['tableprefix']."permissions VALUES (1, 1, 'Admin', 1, 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes'), (2, 2, 'Moderator', 1, 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes'), (3, 3, 'Member', 1, 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'no', 'yes', 'no'), (4, 4, 'Guest', 1, 'yes', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no'), (5, 5, 'Banned', 1, 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no'), (6, 6, 'Validate', 1, 'yes', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no');"; 
 mysql_query($query);

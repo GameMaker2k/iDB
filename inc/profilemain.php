@@ -11,11 +11,9 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: profilemain.php - Last Update: 05/19/2007 SVN 8 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 05/26/2007 SVN 15 - Author: cooldude2k $
 */
-$File1Name = dirname($_SERVER['SCRIPT_NAME'])."/";
-$File2Name = $_SERVER['SCRIPT_NAME'];
-$File3Name=str_replace($File1Name, null, $File2Name);
+$File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
 	require('index.php');
 	exit(); }

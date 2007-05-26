@@ -11,8 +11,13 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: setcheck.php - Last Update: 05/22/2007 SVN 11 - Author: cooldude2k $
+    $FileInfo: setcheck.php - Last Update: 05/26/2007 SVN 15 - Author: cooldude2k $
 */
+$File3Name = basename($_SERVER['SCRIPT_NAME']);
+if ($File3Name=="setcheck.php"||$File3Name=="/setcheck.php") {
+	require('index.php');
+	exit(); }
+
 if($Settings['DefaultTheme']==null) {
 	$Settings['DefaultTheme'] = "iDB"; }
 if($Settings['DefaultTimeZone']==null) {

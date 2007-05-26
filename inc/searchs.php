@@ -11,14 +11,15 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: searchs.php - Last Update: 05/26/2007 SVN 14 - Author: cooldude2k $
+    $FileInfo: searchs.php - Last Update: 05/26/2007 SVN 15 - Author: cooldude2k $
 */
-$File1Name = dirname($_SERVER['SCRIPT_NAME'])."/";
-$File2Name = $_SERVER['SCRIPT_NAME'];
-$File3Name=str_replace($File1Name, null, $File2Name);
+$File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="searchs.php"||$File3Name=="/searchs.php") {
 	require('index.php');
 	exit(); }
+if($Settings['enable_search']!=true) {
+redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); }
+if($Settings['enable_search']==true) {
 if($_GET['act']=="topics") {
 	if($_GET['search']==null&&$_GET['type']==null) {
 	?>
@@ -40,7 +41,7 @@ if($_GET['act']=="topics") {
 	<td style="width: 30%;"><label class="TextBoxLabel" for="search">Enter SearchTerm: </label></td>
 	<td style="width: 70%;"><input class="TextBox" id="search" type="text" name="search" /></td>
 </tr><tr>
-	<td style="width: 30%;">Search Type (Wildcard is %): </td>
+	<td style="width: 30%;"><label class="TextBoxLabel" title="Wildcard is %" for="type">Search Type: </label></td>
 	<td style="width: 70%;"><select id="type" name="type" class="TextBox">
 <option value="normal">Normal Search</option>
 <option value="wildcard">Wildcard Search</option>
@@ -189,4 +190,4 @@ echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr
 </tr>
 </table>
 <div>&nbsp;</div>
-<?php } } ?>
+<?php } } } ?>
