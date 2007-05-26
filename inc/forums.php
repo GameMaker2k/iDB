@@ -11,12 +11,12 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: forums.php - Last Update: 05/24/2007 SVN 13 - Author: cooldude2k $
+    $FileInfo: forums.php - Last Update: 05/26/2007 SVN 14 - Author: cooldude2k $
 */
 $File1Name = dirname($_SERVER['SCRIPT_NAME'])."/";
 $File2Name = $_SERVER['SCRIPT_NAME'];
 $File3Name=str_replace($File1Name, null, $File2Name);
-if ($File3Name=="boards.php"||$File3Name=="/boards.php") {
+if ($File3Name=="forums.php"||$File3Name=="/forums.php") {
 	require('index.php');
 	exit(); }
 $prequery = query("select * from ".$Settings['sqltable']."categories where ShowCategory='yes' and InSubCategory=0", array());
