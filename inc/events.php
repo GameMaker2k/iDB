@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: events.php - Last Update: 05/26/2007 SVN 15 - Author: cooldude2k $
+    $FileInfo: events.php - Last Update: 05/27/2007 SVN 16 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="events.php"||$File3Name=="/events.php") {
@@ -76,12 +76,14 @@ $EventText = text2icons($EventText,$Settings['sqltable']); $User1Signature = tex
 </tr>
 <tr class="TableRow2">
 <td class="TableRow2" style="vertical-align: middle; width: 160px;">
-&nbsp;<a href="<?php
+&nbsp;<?php
 if($User1ID!="-1") {
-echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$User1ID,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); }
+echo "<a href=\"";
+echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$User1ID,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
+echo "\">".$User1Name."</a>"; }
 if($User1ID=="-1") {
-echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); }
-?>"><?php echo $User1Name; ?></a></td>
+echo "<span>".$User1Name."</span>"; }
+?></td>
 <td class="TableRow2" style="vertical-align: middle;">
 <div style="text-align: left; float: left;">
 <span style="font-weight: bold;">Event Start: </span><?php echo $EventStart; ?><?php echo $ThemeSet['LineDividerTopic']; ?><span style="font-weight: bold;">Event End: </span><?php echo $EventEnd; ?>

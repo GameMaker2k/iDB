@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: pm.php - Last Update: 05/26/2007 SVN 15 - Author: cooldude2k $
+    $FileInfo: pm.php - Last Update: 05/27/2007 SVN 16 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pm.php"||$File3Name=="/pm.php") {
@@ -85,12 +85,14 @@ if ($MessageStat==1) {
 <td class="TableRow3"><div class="messagename">
 <a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=read&id=".$PMID,$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>"><?php echo $MessageName; ?></a></div>
 <div class="messagedesc"><?php echo $MessageDesc; ?></div></td>
-<td class="TableRow3" style="text-align: center;"><a href="<?php
+<td class="TableRow3" style="text-align: center;"><?php
 if($SenderID!="-1") {
-echo url_maker($exfile['member'],$Settings['file_ext'],"act=read&id".$SenderID,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); }
+echo "<a href=\"";
+echo url_maker($exfile['member'],$Settings['file_ext'],"act=read&id".$SenderID,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
+echo "\">".$User1Name."</a>"; }
 if($SenderID=="-1") {
-echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); }
-?>"><?php echo $SenderName; ?></a></td>
+echo "<span>".$SenderName."</span>"; }
+?></td>
 <td class="TableRow3" style="text-align: center;"><?php echo $DateSend; ?></td>
 </tr>
 <?php ++$i; } @mysql_free_result($result); ?>
@@ -144,12 +146,14 @@ if ($MessageStat==1) {
 <td class="TableRow3"><div class="messagename">
 <a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=read&id=".$PMID,$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>"><?php echo $MessageName; ?></a></div>
 <div class="messagedesc"><?php echo $MessageDesc; ?></div></td>
-<td class="TableRow3" style="text-align: center;"><a href="<?php
+<td class="TableRow3" style="text-align: center;"><?php
 if($SentToID!="-1") {
-echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$SentToID,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); }
+echo "<a href=\"";
+echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$SentToID,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
+echo "\">".$User1Name."</a>"; }
 if($SentToID=="-1") {
-echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); }
-?>"><?php echo $SentToName; ?></a></td>
+echo "<span>".$SentToName."</span>"; }
+?></td>
 <td class="TableRow3" style="text-align: center;"><?php echo $DateSend; ?></td>
 </tr>
 <?php ++$i; } ?>
@@ -223,12 +227,14 @@ $User1Signature = text2icons($User1Signature,$Settings['sqltable']);
 </tr>
 <tr class="TableRow2">
 <td class="TableRow2" style="vertical-align: middle; width: 160px;">
-&nbsp;<a href="<?php
+&nbsp;<?php
 if($User1ID!="-1") {
-echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$User1ID,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); }
+echo "<a href=\"";
+echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$User1ID,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
+echo "\">".$User1Name."</a>"; }
 if($User1ID=="-1") {
-echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); }
-?>"><?php echo $User1Name; ?></a></td>
+echo "<span>".$User1Name."</span>"; }
+?></td>
 <td class="TableRow2" style="vertical-align: middle;">
 <div style="text-align: left; float: left;">
 <span style="font-weight: bold;">Time Sent: </span><?php echo $DateSend; ?>
