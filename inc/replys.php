@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: replys.php - Last Update: 05/27/2007 SVN 16 - Author: cooldude2k $
+    $FileInfo: replys.php - Last Update: 05/28/2007 SVN 17 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replys.php"||$File3Name=="/replys.php") {
@@ -65,6 +65,8 @@ $MyCategoryID=mysql_result($result,$i,"CategoryID");
 $MyUserID=mysql_result($result,$i,"UserID");
 $MyGuestName=mysql_result($result,$i,"GuestName");
 $MyTimeStamp=mysql_result($result,$i,"TimeStamp");
+$MyEditTime=mysql_result($result,$i,"LastUpdate");
+$MyEditUserID=mysql_result($result,$i,"EditUser");
 $MyTimeStamp=GMTimeChange("M j, Y, g:i a",$MyTimeStamp,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $MyPost=mysql_result($result,$i,"Post");
 $MyDescription=mysql_result($result,$i,"Description");
@@ -98,7 +100,19 @@ $User1IP=mysql_result($reresult,$rei,"IP");
 ++$rei; } @mysql_free_result($reresult);
 if($User1Name=="Guest") { $User1Name=$GuestName;
 if($User1Name==null) { $User1Name="Guest"; } }
+$MySubPost = null;
+if($MyEditTime!=$MyTimeStamp&&$MyEditUserID!=0) {
+$euquery = query("select * from ".$Settings['sqltable']."members where ID=%i", array($MyEditUserID));
+$euresult = mysql_query($euquery);
+$eunum = mysql_num_rows($euresult);
+$eui=0; while ($eui < $eunum) {
+	$EditUserID = $MyEditUserID;
+	$EditUserName = mysql_result($euresult,$eui,"Name");
+	++$eui; }
+	$MyEditTime = GMTimeChange("M j, Y, g:i a",$MyEditTime,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+	$MySubPost = "<div class=\"EditReply\"><br />This post has been edited by <b>".$EditUserName."</b> on ".$MyEditTime."</div>"; }
 $MyPost = text2icons($MyPost,$Settings['sqltable']);
+if($MySubPost!=null) { $MyPost = $MyPost."\n".$MySubPost; }
 $User1Signature = text2icons($User1Signature,$Settings['sqltable']);
 ?>
 <div class="Table1Border">

@@ -12,7 +12,7 @@
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mkconfig.php - Last Update: 05/26/2007 SVN 15 - Author: cooldude2k $
+    $FileInfo: mkconfig.php - Last Update: 05/28/2007 SVN 17 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mkconfig.php"||$File3Name=="/mkconfig.php") {
@@ -60,6 +60,7 @@ if($_POST['WebURL']=="https://localhost/"||$_POST['WebURL']=="https://localhost"
 	$_POST['WebURL'] = "localhost"; }
 $_POST['BoardURL'] = addslashes($_POST['BoardURL']);
 $YourDate = GMTimeStamp();
+$YourEditDate = $YourDate + 100;
 $GSalt = salt_hmac(); $YourSalt = salt_hmac();
 /* Fix The User Info for iDB */
 $_POST['NewBoardName'] = htmlentities($_POST['NewBoardName'], ENT_QUOTES);
@@ -96,7 +97,7 @@ $query = "INSERT INTO ".$_POST['tableprefix']."forums VALUES (1,1,'Test/Spam','y
 mysql_query($query);
 $query = "INSERT INTO ".$_POST['tableprefix']."topics VALUES (1,1,1,-1,'Cool Dude 2k',".$YourDate.",".$YourDate.",'Welcome','Install was successful',0,0,1,1)";
 mysql_query($query);
-$query = "INSERT INTO ".$_POST['tableprefix']."posts VALUES (1,1,1,1,-1,'Cool Dude 2k',".$YourDate.",".$YourDate.",0,'Welcome to Your Message Board. :) ','Install was successful','127.0.0.1')"; 
+$query = "INSERT INTO ".$_POST['tableprefix']."posts VALUES (1,1,1,1,-1,'Cool Dude 2k',".$YourDate.",".$YourEditDate.",1,'Welcome to Your Message Board. :) ','Install was successful','127.0.0.1')"; 
 mysql_query($query);
 $NewPassword = b64e_hmac($_POST['AdminPasswords'],$YourDate,$YourSalt,"sha1");
 //$Name = stripcslashes(htmlspecialchars($AdminUser, ENT_QUOTES));

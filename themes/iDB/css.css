@@ -10,7 +10,7 @@
     Copyright 2004-2006 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2006 Game Maker 2k - http://upload.idb.s1.jcink.com/
     $ThemeInfo - Name: iDB Theme - Author: cooldude2k $
-    $FileInfo: css.css - Last Update: 05/19/2007 SVN 10 - Author: cooldude2k $
+    $FileInfo: css.css - Last Update: 05/28/2007 SVN 17 - Author: cooldude2k $
 */
 html {
 	font-family: verdana, arial, sans-serif;
@@ -202,6 +202,10 @@ color: #000000;
 font-weight: bold; 
 cursor: pointer;
 font-size: 10px;
+}
+.EditReply {
+color: #000000;
+font-size: 9px; 
 }
 .TableMessage {
 color: #000000;
