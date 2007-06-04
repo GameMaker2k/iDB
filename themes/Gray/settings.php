@@ -11,7 +11,7 @@
     Copyright 2004-2006 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2006 Game Maker 2k - http://upload.idb.s1.jcink.com/
     $ThemeInfo - Name: iDB Gray - Author: cooldude2k $
-    $FileInfo: settings.php - Last Update: 05/28/2007 SVN 17 - Author: cooldude2k $
+    $FileInfo: settings.php - Last Update: 06/04/2007 SVN 18 - Author: cooldude2k $
 */
 $ThemeSet = array();
 $ThemeSet['ThemeName'] = "iDB Gray Theme";
