@@ -11,20 +11,20 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: function.php - Last Update: 05/26/2007 SVN 15 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 06/06/2007 SVN 19 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
 	require('index.php');
 	exit(); }
 require_once($SettDir['misc'].'functions.php');
-/* Change Some PHP Settings Fix the & to &amp; */
+/* Change Some PHP Settings Fix the & to &amp;
 if($Settings['use_iniset']==true&&$Settings['qstr']!="/") {
 @ini_set("arg_separator.output",htmlentities($Settings['qstr'], ENT_QUOTES));
 @ini_set("arg_separator.input",$Settings['qstr']);
 @ini_set("arg_separator",htmlentities($Settings['qstr'], ENT_QUOTES)); }
 //$basepath = pathinfo($_SERVER['REQUEST_URI']);
-/*if(dirname($_SERVER['REQUEST_URI'])!="."||
+if(dirname($_SERVER['REQUEST_URI'])!="."||
 	dirname($_SERVER['REQUEST_URI'])!=null) {
 $basedir = dirname($_SERVER['REQUEST_URI'])."/"; }*/
 if(dirname($_SERVER['SCRIPT_NAME'])!="."||
@@ -40,7 +40,9 @@ if($Settings['fixbasedir']!=null&&$Settings['fixbasedir']!="") {
 		$basedir = $Settings['fixbasedir']; }
 $BaseURL = $basedir;
 // Get our Host Name and Referer URL's Host Name
+if(!isset($_SERVER['HTTP_REFERER'])) { $_SERVER['HTTP_REFERER'] = null; }
 $REFERERurl = parse_url($_SERVER['HTTP_REFERER']);
+if(!isset($REFERERurl['host'])) { $REFERERurl['host'] = null; }
 $URL['REFERER'] = $REFERERurl['host'];
 $URL['HOST'] = $_SERVER["SERVER_NAME"];
 $REFERERurl = null; unset($REFERERurl);
@@ -95,6 +97,7 @@ if($type=="location") {
 header("Location: ".$file); }
 return true; }
 function url_maker($file,$ext,$qvarstr=null,$qstr=";",$qsep="=",$prexqstr=null,$exqstr=null,$fixhtml=true) {
+$fileurl = null;
 if($ext==null) { $ext = ".php"; } 
 if($ext=="noext"||$ext=="no ext"||$ext=="no+ext") { $ext = null; }
 $file = $file.$ext;

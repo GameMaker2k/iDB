@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: pm.php - Last Update: 05/27/2007 SVN 16 - Author: cooldude2k $
+    $FileInfo: pm.php - Last Update: 06/06/2007 SVN 19 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pm.php"||$File3Name=="/pm.php") {
@@ -178,7 +178,7 @@ $MessageName=mysql_result($result,$is,"MessageTitle");
 $DateSend=mysql_result($result,$is,"DateSend");
 $DateSend=GMTimeChange("F j, Y, g:i a",$DateSend,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $MessageText=mysql_result($result,$is,"MessageText");
-$MessageDesc=mysql_result($result,$i,"Description");
+$MessageDesc=mysql_result($result,$is,"Description");
 $requery = query("select * from ".$Settings['sqltable']."members where ID=%i", array($SenderID));
 $reresult=mysql_query($requery);
 $renum=mysql_num_rows($reresult);

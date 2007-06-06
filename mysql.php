@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: mysql.php - Last Update: 05/26/2007 SVN 15 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 06/06/2007 SVN 19 - Author: cooldude2k $
 */
 @error_reporting(E_ALL ^ E_NOTICE);
 @ini_set('session.use_trans_sid', false);
@@ -27,11 +27,17 @@ require_once('settings.php');
 if($Settings['fixpathinfo']==true) {
 	$_SERVER['PATH_INFO'] = $_SERVER['ORIG_PATH_INFO'];
 	@putenv("PATH_INFO=".$_SERVER['ORIG_PATH_INFO']); }
-if($SettDir['inc']==null) { $SettDir['inc'] = "inc/"; }
-if($SettDir['misc']==null) { $SettDir['misc'] = "inc/misc/"; }
-if($SettDir['admin']==null) { $SettDir['admin'] = "inc/admin/"; }
-if($SettDir['mod']==null) { $SettDir['mod'] = "inc/mod/"; }
-if($SettDir['themes']==null) { $SettDir['themes'] = "themes/"; }
+if(!isset($SettDir['inc'])) { $SettDir['inc'] = "inc/"; }
+if(!isset($SettDir['misc'])) { $SettDir['misc'] = "inc/misc/"; }
+if(!isset($SettDir['admin'])) { $SettDir['admin'] = "inc/admin/"; }
+if(!isset($SettDir['mod'])) { $SettDir['mod'] = "inc/mod/"; }
+if(!isset($SettDir['themes'])) { $SettDir['themes'] = "themes/"; }
+if(!isset($Settings['use_iniset'])) { $Settings['use_iniset'] = null; }
+if(!isset($_SERVER['PATH_INFO'])) { $_SERVER['PATH_INFO'] = null; }
+if(!isset($_GET['page'])) { $_GET['page'] = null; }
+if(!isset($_GET['act'])) { $_GET['act'] = null; }
+if(!isset($_POST['act'])) { $_POST['act'] = null; }
+if(!isset($_GET['id'])) { $_GET['id'] = null; }
 require_once($SettDir['inc'].'filename.php');
 require_once($SettDir['inc'].'function.php');
 @mrstring(); // Change Path info to Get Vars :P
@@ -101,13 +107,16 @@ if(CheckFiles("install.php")!=true) {
 @ConnectMysql($Settings['sqlhost'],$Settings['sqluser'],$Settings['sqlpass'],$Settings['sqldb']); }
 if(CheckFiles("install.php")==true) {
 	$Settings['board_name'] = "Installing iDB"; }
+if(isset($_SESSION['CheckCookie'])) {
 if($_SESSION['CheckCookie']!="done") {
 if($_COOKIE['SessPass']!=null&&
 $_COOKIE['MemberName']!=null) {
-require('inc/prelogin.php'); } }
+require('inc/prelogin.php'); } } }
+if(!isset($_SESSION['UserGroup'])) { $_SESSION['UserGroup'] = null; }
 if($_SESSION['UserGroup']==null) { 
 $_SESSION['UserGroup']=$Settings['GuestGroup']; }
 //Time Zone Set
+if(!isset($_SESSION['UserTimeZone'])) { $_SESSION['UserTimeZone'] = null; }
 if($_SESSION['UserTimeZone']==null||
 	!is_numeric($_SESSION['UserTimeZone'])) {
 	if($Settings['DefaultTimeZone']!=null&&
@@ -117,12 +126,22 @@ if($_SESSION['UserTimeZone']==null||
 	$_SESSION['UserTimeZone'] = SeverOffSet(); }
 	if(!is_numeric($Settings['DefaultTimeZone'])) {
 	$_SESSION['UserTimeZone'] = SeverOffSet(); } }
+if(!isset($_SESSION['UserDST'])) { $_SESSION['UserDST'] = null; }
 if($_SESSION['UserDST']==null) {
 if($Settings['DefaultDST']=="off") { 
 	$_SESSION['UserDST'] = "off"; }
 if($Settings['DefaultDST']=="on") { 
 	$_SESSION['UserDST'] = "on"; } }
 // Skin Stuff
+if(!isset($_SESSION['Theme'])) { $_SESSION['Theme'] = null; }
+if(!isset($_GET['theme'])) { $_GET['theme'] = null; }
+if(!isset($_POST['theme'])) { $_POST['theme'] = null; }
+if(!isset($_GET['skin'])) { $_GET['skin'] = null; }
+if(!isset($_POST['skin'])) { $_POST['skin'] = null; }
+if(!isset($_GET['style'])) { $_GET['style'] = null; }
+if(!isset($_POST['style'])) { $_POST['style'] = null; }
+if(!isset($_GET['css'])) { $_GET['css'] = null; }
+if(!isset($_POST['css'])) { $_POST['css'] = null; }
 if($_GET['theme']==null) {
 	if($_POST['theme']!=null) {
 		$_GET['theme'] = $_POST['theme']; }
@@ -161,6 +180,7 @@ $_GET['theme']=$Settings['DefaultTheme']; } }
 $PreSkin['skindir1'] = $_SESSION['Theme'];
 $PreSkin['skindir2'] = $SettDir['themes'].$_SESSION['Theme'];
 require($SettDir['themes'].$_GET['theme']."/settings.php");
+if(!isset($_SESSION['DBName'])) { $_SESSION['DBName'] = null; }
 if($_SESSION['DBName']==null) {
 	$_SESSION['DBName'] = $Settings['sqldb']; }
 if($_SESSION['DBName']!=null) {

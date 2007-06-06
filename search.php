@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: search.php - Last Update: 05/26/2007 SVN 15 - Author: cooldude2k $
+    $FileInfo: search.php - Last Update: 06/06/2007 SVN 19 - Author: cooldude2k $
 */
 require('preindex.php');
 $usefileext = $Settings['file_ext'];
@@ -24,12 +24,17 @@ $filewpath = $exfile['search'].$usefileext.$_SERVER['PATH_INFO'];
 <body>
 <?php require($SettDir['inc'].'navbar.php');
 
+if(!isset($_GET['search'])) { $_GET['search'] = null; }
+if(!isset($_POST['search'])) { $_POST['search'] = null; }
 if($_GET['search']==null&&
 	$_POST['search']!=null) { 
 		$_GET['search'] = $_POST['search']; }
+if(!isset($_GET['type'])) { $_GET['type'] = null; }
+if(!isset($_POST['type'])) { $_POST['type'] = null; }
 if($_GET['type']==null&&
 	$_POST['type']!=null) { 
 		$_GET['type'] = $_POST['type']; }
+if(!isset($_POST['act'])) { $_POST['act'] = null; }
 if($_GET['act']==null||$_GET['act']=="topic"||
 	$_POST['act']=="topic"||$_POST['act']=="topics")
 	{	$_GET['act']="topics";	}

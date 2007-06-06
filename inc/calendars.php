@@ -11,12 +11,13 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: calendars.php - Last Update: 05/26/2007 SVN 15 - Author: cooldude2k $
+    $FileInfo: calendars.php - Last Update: 06/06/2007 SVN 19 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="calendars.php"||$File3Name=="/calendars.php") {
 	require('index.php');
 	exit(); }
+if(!isset($_GET['HighligtDay'])) { $_GET['HighligtDay'] = null; }
 // Count the Days in this month
 $MyTimeStamp = GMTimeStamp();
 $CountDays = GMTimeGet("t",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
@@ -93,6 +94,7 @@ $Extra = 'CalTableRow1'; }
 else {
 $Extra = 'CalTableRow2'; }
 if ($Day_i != $_GET['HighligtDay']) {
+if(!isset($EventsName[$Day_i])) { $EventsName[$Day_i] = null; }
 if($EventsName[$Day_i]!=null) { $EventsName[$Day_i] = "&nbsp;( ".$EventsName[$Day_i]." )"; }
 if ($Day_i != $MyDay) {
 $WeekDays .= '<td class="'.$Extra.'" style="height: 90px; vertical-align: top;">' . $Day_i . $EventsName[$Day_i] . '</td>'."\r\n";	 }	}

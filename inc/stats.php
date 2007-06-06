@@ -11,19 +11,13 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: stats.php - Last Update: 05/26/2007 SVN 15 - Author: cooldude2k $
+    $FileInfo: stats.php - Last Update: 06/06/2007 SVN 19 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="stats.php"||$File3Name=="/stats.php") {
 	require('index.php');
 	exit(); }
-if($_GET['act']=="view"||$_GET['act']=="stats") { $toggle = null; 
-$togglecode = "<span style=\"float: right;\">&nbsp;</span>";
-if($ThemeSet['EnableToggle']==true) {
-$toggle = "toggletag('Stats1'),toggletag('Stats2'),toggletag('Stats3');return false;";
-$togglecode = "<span style=\"float: right;\"><a href=\"".$filewpath."#Toggle\" onclick=\"".$toggle."\">".$ThemeSet['Toggle']."</a>".$ThemeSet['ToggleExt']."</span>"; }
-if($ThemeSet['EnableToggle']==false) { $toggle = null;
-$togglecode = "<span style=\"float: right;\">&nbsp;</span>"; }
+if($_GET['act']=="view"||$_GET['act']=="stats") {
 $ntquery = query("select * from ".$Settings['sqltable']."topics", array(null));
 $ntresult = mysql_query($ntquery);
 $numtopics = mysql_num_rows($ntresult);
@@ -42,7 +36,7 @@ if($guest_check > 0) { $nummembers = $nummembers - 1; }
 <tr class="TableRow1">
 <td class="TableRow1" colspan="2"><span style="float: left;">
 <?php echo $ThemeSet['TitleIcon']; ?><a id="bstats" href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=stats",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>#bstats">Board Statistics</a></span>
-<?php echo $togglecode; ?></td>
+<?php echo "<span style=\"float: right;\">&nbsp;</span>"; ?></td>
 </tr>
 <tr id="Stats1" class="TableRow2">
 <td class="TableRow2" colspan="2" style="width: 100%; font-weight: bold;">Board Stats</td>

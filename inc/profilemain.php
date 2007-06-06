@@ -11,12 +11,13 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: profilemain.php - Last Update: 05/26/2007 SVN 15 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 06/06/2007 SVN 19 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
 	require('index.php');
 	exit(); }
+if(!isset($_POST['update'])) { $_POST['update'] = null; }
 ?>
 <table class="Table3">
 <tr style="width: 100%; vertical-align: top;">
@@ -81,7 +82,7 @@ $i=0;
 $YourID=mysql_result($result,$i,"id");
 $Notes=mysql_result($result,$i,"Notes");
 $noteact = url_maker($exfile['profile'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['profile'],$exqstr['profile']);
-$profiletitle = " ".$ThemeSet['TitleDivider']." NotePad";
+$notepadact = $noteact; $profiletitle = " ".$ThemeSet['TitleDivider']." NotePad";
 ?>
 <div class="Table1Border">
 <table class="Table1" style="width: 100%;">
@@ -521,13 +522,13 @@ if($OldHashType=="iDBH"&&$UpdateHash!=true) {
 	$YourPassword = b64e_hmac($_POST['OldPass'],$OldJoined,$OldSalt,"sha1");
 	$NewPassword = b64e_hmac($_POST['Password'],$OldJoined,$NewSalt,"sha1"); }
 if($YourPassword!=$OldPassword) { $Error="Yes"; ?>
-<div class="TableMessage">Your old Password did not match.<br />&nbsp;</div>
+<div class="TableMessage" style="text-align: center;">Your old Password did not match.<br />&nbsp;</div>
 <?php } if(strlen($_POST['Password'])=="30") { $Error="Yes"; ?>
-<div class="TableMessage">Your password is too big.<br />&nbsp;</div>
+<div class="TableMessage" style="text-align: center;">Your password is too big.<br />&nbsp;</div>
 <?php } if(strlen($_POST['OldPass'])=="30") { $Error="Yes"; ?>
-<div class="TableMessage">Your old password is too big.<br />&nbsp;</div>
+<div class="TableMessage" style="text-align: center;">Your old password is too big.<br />&nbsp;</div>
 <?php } if ($_POST['Password']!=$_POST['RePassword']) { $Error="Yes";  ?>
-<div class="TableMessage">Your passwords did not match.<br />&nbsp;</div>
+<div class="TableMessage" style="text-align: center;">Your passwords did not match.<br />&nbsp;</div>
 <?php }
 	$NewDay=GMTimeStamp();
 	$NewIP=$_SERVER['REMOTE_ADDR'];

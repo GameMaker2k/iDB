@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: members.php - Last Update: 05/26/2007 SVN 15 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 06/06/2007 SVN 19 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -20,6 +20,13 @@ if ($File3Name=="members.php"||$File3Name=="/members.php") {
 if($_GET['act']=="list") {
 $orderlist = null;
 $orderlist = "order by `ID` asc";
+if(!isset($_GET['orderby'])) { $_GET['orderby'] = null; }
+if(!isset($_GET['sorttype'])) { $_GET['sorttype'] = null; }
+if(!isset($_GET['ordertype'])) { $_GET['ordertype'] = null; }
+if(!isset($_GET['orderby'])) { $_GET['orderby'] = null; }
+if(!isset($_GET['sortby'])) { $_GET['sortby'] = null; }
+if(!isset($_GET['gid'])) { $_GET['gid'] = null; }
+if(!isset($_GET['groupid'])) { $_GET['groupid'] = null; }
 if($_GET['orderby']==null) { 
 	if($_GET['sortby']!=null) { 
 		$_GET['orderby'] = $_GET['sortby']; } }
@@ -514,6 +521,8 @@ $REFERERurl = parse_url($_SERVER['HTTP_REFERER']);
 $URL['REFERER'] = $REFERERurl['host'];
 $URL['HOST'] = $_SERVER["SERVER_NAME"];
 $REFERERurl = null; unset($REFERERurl);
+if(!isset($_POST['username'])) { $_POST['username'] = null; }
+if(!isset($_POST['TOS'])) { $_POST['TOS'] = null; }
 ?>
 <div class="Table1Border">
 <table class="Table1">
