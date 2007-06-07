@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: rss.php - Last Update: 05/09/2007 SVN 1 - Author: cooldude2k $
+    $FileInfo: rss.php - Last Update: 06/07/2007 SVN 20 - Author: cooldude2k $
 */
 @error_reporting(E_ALL ^ E_NOTICE);
 if(@ini_get("register_globals")) {
@@ -24,13 +24,8 @@ if($SettDir['mod']==null) { $SettDir['mod'] = "inc/mod/"; }
 if($SettDir['themes']==null) { $SettDir['themes'] = "themes/"; }
 if($Settings['enable_rss']==false) {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); }
-if($_GET['feed']!="rss"&&$_GET['feed']!="atom") {
-	$_GET['feed'] = "rss"; }
-if($_GET['feedtype']!="rss"&&$_GET['feedtype']!="atom") {
-	if($_GET['feed']=="rss"||$_GET['feed']=="atom") { $_GET['feedtype'] = $_GET['feed']; }
-	if($_GET['act']=="rss"||$_GET['act']=="atom") { $_GET['feedtype'] = $_GET['act']; }
-	if($_GET['feedtype']!="rss"&&$_GET['feedtype']!="atom") { $_GET['feedtype'] = "rss"; } }
-if($_GET['feed']=="rss"||$_GET['act']=="Feed"||$_GET['feed']=="atom") {
-	$_GET['feedtype'] = $_GET['feed']; $Feed['Feed']="Done";
+if($_GET['act']==null) { $_GET['act'] = "rss"; }
+if($_GET['act']=="rss"||$_GET['act']=="atom") {
+	$_GET['feedtype'] = $_GET['act']; $Feed['Feed']="Done";
 	require($SettDir['inc'].'rssfeed.php'); }
 ?>

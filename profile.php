@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: profile.php - Last Update: 05/14/2007 SVN 4 - Author: cooldude2k $
+    $FileInfo: profile.php - Last Update: 06/07/2007 SVN 20 - Author: cooldude2k $
 */
 require('preindex.php');
 $usefileext = $Settings['file_ext'];
@@ -35,7 +35,9 @@ $_GET['act']=="profile"||
 $_GET['act']=="userinfo")
 { require($SettDir['inc'].'profilemain.php'); } ?>
 <div>&nbsp;</div>
-<?php require($SettDir['inc'].'endpage.php'); ?>
+<?php require($SettDir['inc'].'endpage.php'); 
+if(!isset($profiletitle)) { $profiletitle = null; }
+?>
 
 </body>
 </html>

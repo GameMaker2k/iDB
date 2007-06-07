@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: search.php - Last Update: 06/06/2007 SVN 19 - Author: cooldude2k $
+    $FileInfo: search.php - Last Update: 06/07/2007 SVN 20 - Author: cooldude2k $
 */
 require('preindex.php');
 $usefileext = $Settings['file_ext'];
@@ -41,6 +41,7 @@ if($_GET['act']==null||$_GET['act']=="topic"||
 if($_GET['act']=="topics")
 { require($SettDir['inc'].'searchs.php'); }
 require($SettDir['inc'].'endpage.php');
+if(!isset($_GET['search'])) { $_GET['search'] = null; }
 ?>
 </body>
 </html>

@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: members.php - Last Update: 06/06/2007 SVN 19 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 06/07/2007 SVN 20 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -142,9 +142,9 @@ $i=0;
 if($num==0||$_GET['id']=="-1") { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); }
 $ViewMem['ID']=mysql_result($result,$i,"id");
 $ViewMem['Name']=mysql_result($result,$i,"Name");
-$ViewMem['Signature']=mysql_result($result,$rei,"Signature");
-$ViewMem['Avatar']=mysql_result($result,$rei,"Avatar");
-$ViewMem['AvatarSize']=mysql_result($result,$rei,"AvatarSize");
+$ViewMem['Signature']=mysql_result($result,$i,"Signature");
+$ViewMem['Avatar']=mysql_result($result,$i,"Avatar");
+$ViewMem['AvatarSize']=mysql_result($result,$i,"AvatarSize");
 $ViewMem['Email']=mysql_result($result,$i,"Email");
 $ViewMem['GroupID']=mysql_result($result,$i,"GroupID");
 $ViewMem['WarnLevel']=mysql_result($result,$i,"WarnLevel");

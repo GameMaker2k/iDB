@@ -11,13 +11,14 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: member.php - Last Update: 05/14/2007 SVN 4 - Author: cooldude2k $
+    $FileInfo: member.php - Last Update: 06/07/2007 SVN 20 - Author: cooldude2k $
 */
 require('preindex.php');
 $usefileext = $Settings['file_ext'];
 if($ext=="noext"||$ext=="no ext"||$ext=="no+ext") { $usefileext = ""; }
 $filewpath = $exfile['member'].$Settings['file_ext'].$_SERVER['PATH_INFO'];
 if($_GET['act']==null) { $_GET['act'] = "login"; }
+if(!isset($_GET['view'])) { $_GET['view'] = null; }
 ?>
 
 <title> <?php echo $Settings['board_name'].$idbpowertitle; ?> </title>
@@ -41,6 +42,7 @@ if($_POST['act']=="makemembers") {
 require($SettDir['inc'].'members.php'); } } ?>
 <div>&nbsp;</div>
 <?php require($SettDir['inc'].'endpage.php');
+if(!isset($membertitle)) { $membertitle = null; }
 ?>
 
 </body>
