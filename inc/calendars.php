@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: calendars.php - Last Update: 06/06/2007 SVN 19 - Author: cooldude2k $
+    $FileInfo: calendars.php - Last Update: 06/07/2007 SVN 21 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="calendars.php"||$File3Name=="/calendars.php") {
@@ -50,6 +50,7 @@ $oldeventname=$EventName;
 $EventName1 = substr($EventName,0,10);
 if (strlen($EventName)>10) { $EventName1 = $EventName1."..."; }
 $EventName=$EventName1;
+if(!isset($EventsName[$EventDay])) { $EventsName[$EventDay] = null; }
 if ($EventsName[$EventDay] != null) {
 	$EventsName[$EventDay] .= ",\n\r<a href=\"".url_maker($exfile['event'],$Settings['file_ext'],"act=event&id=".$EventID,$Settings['qstr'],$Settings['qsep'],$prexqstr['event'],$exqstr['event'])."\" style=\"font-size: 9px;\" title=\"View Event ".$oldeventname.".\">".$EventName."</a>";	 }
 if ($EventsName[$EventDay] == null) {
@@ -58,6 +59,7 @@ if ($EventDay<$EventDayEnd) {
 $NextDay = $EventDay+1;
 $EventDayEnd = $EventDayEnd+1;
 while ($NextDay < $EventDayEnd) {
+if(!isset($EventsName[$NextDay])) { $EventsName[$NextDay] = null; }
 if ($EventsName[$NextDay] != null) {
 	$EventsName[$NextDay] .= ",\n\r<a href=\"".url_maker($exfile['event'],$Settings['file_ext'],"act=event&id=".$EventID,$Settings['qstr'],$Settings['qsep'],$prexqstr['event'],$exqstr['event'])."\" style=\"font-size: 9px;\" title=\"View Event ".$oldeventname.".\">".$EventName."</a>";	 }
 if ($EventsName[$NextDay] == null) {
