@@ -12,7 +12,7 @@
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mkconfig.php - Last Update: 05/28/2007 SVN 17 - Author: cooldude2k $
+    $FileInfo: mkconfig.php - Last Update: 06/08/2007 SVN 22 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mkconfig.php"||$File3Name=="/mkconfig.php") {
@@ -28,6 +28,7 @@ $_POST['DatabasePassword'] = $Settings['sqlpass'];
 <tr class="TableRow3" style="text-align: center;">
 <td class="TableRow3" colspan="2">
 <?php
+$dayconv = array('second' => 1, 'minute' => 60, 'hour' => 3600, 'day' => 86400, 'week' => 604800, 'month' => 2630880, 'year' => 31570560, 'decade' => 15705600);
 $_POST['tableprefix'] = preg_replace("/[^A-Za-z0-9_$]/", "", $_POST['tableprefix']);
 if($_POST['tableprefix']==null) { $_POST['tableprefix']="idb_"; }
 if($_POST['sessprefix']==null) { $_POST['sessprefix']="idb_"; }
@@ -60,7 +61,7 @@ if($_POST['WebURL']=="https://localhost/"||$_POST['WebURL']=="https://localhost"
 	$_POST['WebURL'] = "localhost"; }
 $_POST['BoardURL'] = addslashes($_POST['BoardURL']);
 $YourDate = GMTimeStamp();
-$YourEditDate = $YourDate + 100;
+$YourEditDate = $YourDate + $dayconv['minute'];
 $GSalt = salt_hmac(); $YourSalt = salt_hmac();
 /* Fix The User Info for iDB */
 $_POST['NewBoardName'] = htmlentities($_POST['NewBoardName'], ENT_QUOTES);
@@ -91,7 +92,8 @@ $MyDay = GMTimeGet("d",$YourOffSet,0,$AdminDST);
 $MyMonth = GMTimeGet("m",$YourOffSet,0,$AdminDST);
 $MyYear = GMTimeGet("Y",$YourOffSet,0,$AdminDST);
 $MyYear10 = $MyYear+10;
-$query = "INSERT INTO ".$_POST['tableprefix']."events VALUES (1, -1, 'Cool Dude 2k', 'Opening', 'This is the day the Board was made. ^_^', ".$YourDate.", ".$YourDate.")";
+$YourDateEnd = $YourDate + $dayconv['month'];
+$query = "INSERT INTO ".$_POST['tableprefix']."events VALUES (1, -1, 'Cool Dude 2k', 'Opening', 'This is the day the Board was made. ^_^', ".$YourDate.", ".$YourDateEnd.")";
 mysql_query($query);
 $query = "INSERT INTO ".$_POST['tableprefix']."forums VALUES (1,1,'Test/Spam','yes','forum',0,'http://',0,0,'A Test Board.','off','yes',1,1)";
 mysql_query($query);
