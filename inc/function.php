@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: function.php - Last Update: 06/06/2007 SVN 19 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 06/14/2007 SVN 23 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -75,6 +75,8 @@ $urlvar = explode('/',$_SERVER['PATH_INFO']);
 $num=count($urlvar); $i=1;
 while ($i <= $num) {
 //$urlvar[$i] = urldecode($urlvar[$i]);
+if(!isset($_GET[$urlvar[$i]])) { $_GET[$urlvar[$i]] = null; }
+if(!isset($urlvar[$i])) { $urlvar[$i] = null; }
 if($_GET[$urlvar[$i]]==null&&$urlvar[$i]!=null) {
 $fix1 = array(" ",'$'); $fix2  = array("_","_");
 $urlvar[$i] = str_replace($fix1, $fix2, $urlvar[$i]);

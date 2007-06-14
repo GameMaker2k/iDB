@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: setcheck.php - Last Update: 06/06/2007 SVN 19 - Author: cooldude2k $
+    $FileInfo: setcheck.php - Last Update: 06/14/2007 SVN 23 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="setcheck.php"||$File3Name=="/setcheck.php") {
@@ -68,7 +68,12 @@ if($Settings['qstr']=="/"||
 	$Settings['qsep'] = "="; }
 if($Settings['qstr']!="&"&&
 	$Settings['qstr']!="/") {
-@qstring($Settings['qstr'],$Settings['qsep']); }
+@qstring($Settings['qstr'],$Settings['qsep']);
+if(!isset($_GET['page'])) { $_GET['page'] = null; }
+if(!isset($_GET['act'])) { $_GET['act'] = null; }
+if(!isset($_POST['act'])) { $_POST['act'] = null; }
+if(!isset($_GET['id'])) { $_GET['id'] = null; } 
+if(!isset($_GET['debug'])) { $_GET['debug'] = false; } }
 if($Settings['file_ext']==null) {
 	$Settings['file_ext'] = ".php"; }
 if($Settings['rss_ext']==null) {
