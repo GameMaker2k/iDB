@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: function.php - Last Update: 06/14/2007 SVN 23 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 06/15/2007 SVN 24 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -73,7 +73,7 @@ $mypathinfo = str_replace($myscript, "", $myphpath);
 function mrstring() {
 $urlvar = explode('/',$_SERVER['PATH_INFO']);
 $num=count($urlvar); $i=1;
-while ($i <= $num) {
+while ($i < $num) {
 //$urlvar[$i] = urldecode($urlvar[$i]);
 if(!isset($_GET[$urlvar[$i]])) { $_GET[$urlvar[$i]] = null; }
 if(!isset($urlvar[$i])) { $urlvar[$i] = null; }
@@ -98,8 +98,8 @@ if($type=="location") {
 @session_write_close();
 header("Location: ".$file); }
 return true; }
-function url_maker($file,$ext,$qvarstr=null,$qstr=";",$qsep="=",$prexqstr=null,$exqstr=null,$fixhtml=true) {
-$fileurl = null;
+function url_maker($file="index",$ext=".php",$qvarstr=null,$qstr=";",$qsep="=",$prexqstr=null,$exqstr=null,$fixhtml=true) {
+$fileurl = null; if(!isset($ext)) { $ext = null; }
 if($ext==null) { $ext = ".php"; } 
 if($ext=="noext"||$ext=="no ext"||$ext=="no+ext") { $ext = null; }
 $file = $file.$ext;
