@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: topics.php - Last Update: 05/27/2007 SVN 16 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 06/18/2007 SVN 26 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -26,7 +26,7 @@ if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
 </table>
 <div>&nbsp;</div>
 <?php
-$prequery = query("select * from ".$Settings['sqltable']."forums where ID=%s", array($_GET['id']));
+$prequery = query("select * from ".$Settings['sqltable']."forums where `id`=%s", array($_GET['id']));
 $preresult=mysql_query($prequery);
 $prenum=mysql_num_rows($preresult);
 $prei=0;
@@ -42,12 +42,12 @@ $ForumType = strtolower($ForumType);
 if($ForumType!="redirect") {
 if($NumberViews==0||$NumberViews==null) { $NewNumberViews = 1; }
 if($NumberViews!=0&&$NumberViews!=null) { $NewNumberViews = $NumberViews + 1; }
-$viewup = query("update ".$Settings['sqltable']."forums set NumViews='%s' WHERE id=%i", array($NewNumberViews,$_GET['id']));
+$viewup = query("update ".$Settings['sqltable']."forums set `NumViews`='%s' WHERE `id`=%i", array($NewNumberViews,$_GET['id']));
 mysql_query($viewup); }
 if($ForumType=="redirect") {
 if($RedirectTimes==0||$RedirectTimes==null) { $NewRedirTime = 1; }
 if($RedirectTimes!=0&&$RedirectTimes!=null) { $NewRedirTime = $RedirectTimes + 1; }
-$redirup = query("update ".$Settings['sqltable']."forums set Redirects='%s' WHERE id=%i", array($NewRedirTime,$_GET['id']));
+$redirup = query("update ".$Settings['sqltable']."forums set `Redirects`='%s' WHERE `id`=%i", array($NewRedirTime,$_GET['id']));
 mysql_query($redirup);
 if($RedirectURL!="http://"&&$RedirectURL!="") {
 redirect("location",$RedirectURL,0,null,false); }
@@ -56,7 +56,7 @@ redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"a
 if($ForumCheck!="skip") {
 if($ForumType=="subforum") {
 redirect("location",$basedir.url_maker($exfile['subforum'],$Settings['file_ext'],"act=".$_GET['act']."&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['subforum'],$exqstr['subforum'],FALSE)); } }
-$query = query("select * from ".$Settings['sqltable']."topics where ForumID=%i ORDER BY Pinned DESC, LastUpdate DESC", array($_GET['id']));
+$query = query("select * from ".$Settings['sqltable']."topics where `ForumID`=%i ORDER BY `Pinned` DESC, `LastUpdate` DESC", array($_GET['id']));
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
 //Start Topic Page Code (Will be used at later time)
@@ -105,7 +105,7 @@ $TopicStat=mysql_result($result,$i,"Closed");
 $UsersName = GetUserName($UsersID,$Settings['sqltable']);
 if($UsersName=="Guest") { $UsersName=$GuestName;
 if($UsersName==null) { $UsersName="Guest"; } }
-$glrquery = query("select * from ".$Settings['sqltable']."posts where ForumID=%i and TopicID=%i ORDER BY TimeStamp DESC", array($_GET['id'],$TopicID));
+$glrquery = query("select * from ".$Settings['sqltable']."posts where `ForumID`=%i and `TopicID`=%i ORDER BY `TimeStamp` DESC", array($_GET['id'],$TopicID));
 $glrresult=mysql_query($glrquery);
 $glrnum=mysql_num_rows($glrresult);
 if($glrnum>0){

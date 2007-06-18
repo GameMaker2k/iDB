@@ -12,7 +12,7 @@
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
     iDB Installer made by Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: install.php - Last Update: 05/09/2007 SVN 1 - Author: cooldude2k $
+    $FileInfo: install.php - Last Update: 06/18/2007 SVN 26 - Author: cooldude2k $
 */
 @error_reporting(E_ALL ^ E_NOTICE); unset($preact['idb']);
 if ($_GET['act']!="Part4"&&$_POST['act']!="Part4") {
@@ -45,11 +45,16 @@ unset($Error); ?>
 <?php
 if($_SERVER['HTTPS']=="on") { $prehost = "https://"; }
 if($_SERVER['HTTPS']!="on") { $prehost = "http://"; }
-if(dirname($_SERVER['SCRIPT_NAME'])!=".") {
+$this_dir = null;
+if(dirname($_SERVER['SCRIPT_NAME'])!="."||
+	dirname($_SERVER['SCRIPT_NAME'])!=null) {
 $this_dir = dirname($_SERVER['SCRIPT_NAME'])."/"; }
-if(dirname($_SERVER['SCRIPT_NAME'])==".") {
-$this_dir = dirname($_SERVER['PHP_SELF'])."/"; }
+if($this_dir==null||$this_dir==".") {
+if(dirname($_SERVER['SCRIPT_NAME'])=="."||
+	dirname($_SERVER['SCRIPT_NAME'])==null) {
+$this_dir = dirname($_SERVER['PHP_SELF'])."/"; } }
 if($this_dir=="\/") { $this_dir="/"; }
+$this_dir = str_replace("//", "/", $this_dir);
 $idbdir = addslashes(str_replace("\\","/",dirname(__FILE__)."/"));
 function sql_list_dbs() {
    $result = mysql_query("SHOW DATABASES;");

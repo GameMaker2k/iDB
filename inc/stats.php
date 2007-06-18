@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: stats.php - Last Update: 06/06/2007 SVN 19 - Author: cooldude2k $
+    $FileInfo: stats.php - Last Update: 06/18/2007 SVN 26 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="stats.php"||$File3Name=="/stats.php") {
@@ -27,7 +27,7 @@ $numposts = mysql_num_rows($npresult);
 $nmquery = query("select * from ".$Settings['sqltable']."members", array(null));
 $nmresult = mysql_query($nmquery);
 $nummembers = mysql_num_rows($nmresult);
-$sql_guest_check = mysql_query(query("select * from ".$Settings['sqltable']."members where id = '%s'", array("-1")));
+$sql_guest_check = mysql_query(query("select * from ".$Settings['sqltable']."members where `id` = '%s'", array("-1")));
 $guest_check = mysql_num_rows($sql_guest_check); @mysql_free_result($sql_guest_check);
 if($guest_check > 0) { $nummembers = $nummembers - 1; }
 ?>

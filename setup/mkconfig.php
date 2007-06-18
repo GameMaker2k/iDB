@@ -12,7 +12,7 @@
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mkconfig.php - Last Update: 06/15/2007 SVN 24 - Author: cooldude2k $
+    $FileInfo: mkconfig.php - Last Update: 06/18/2007 SVN 26 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mkconfig.php"||$File3Name=="/mkconfig.php") {
@@ -39,6 +39,8 @@ if (!is_writable($checkfile)) {
    @chmod("settingsbak.php",0755);
 } else { /* settings.php is writable install iDB. ^_^ */ }
 @session_name($_POST['tableprefix']."sess");
+@session_set_cookie_params(0, $basedir);
+@session_cache_limiter("private, must-revalidate");
 @session_start();
 if (strlen($_POST['AdminPasswords'])<="3") { $Error="Yes";
 echo "<br />Your password is too small."; }
@@ -143,11 +145,12 @@ $_SESSION['MemberName']=$_POST['AdminUser'];
 $_SESSION['UserID']=1;
 $_SESSION['UserGroup']="Admin";
 $_SESSION['UserTimeZone']=$AdminTime;
-$_SESSION['UserDST'] = "off";
+$_SESSION['UserDST'] = $AdminDST;
+$_SESSION['DBName'] = $_POST['DatabaseName'];
 if($_POST['storecookie']==true) {
-@setcookie("MemberName", $_POST['AdminUser'], time() + (7 * 86400), $basedir);
-@setcookie("UserID", 1, time() + (7 * 86400), $basedir);
-@setcookie("SessPass", $NewPassword, time() + (7 * 86400), $basedir); }
+@setcookie("MemberName", $_POST['AdminUser'], time() + (7 * 86400), $this_dir);
+@setcookie("UserID", 1, time() + (7 * 86400), $this_dir);
+@setcookie("SessPass", $NewPassword, time() + (7 * 86400), $this_dir); }
 @mysql_close(); $chdel = true;
 if($Error!="Yes") {
 if($_POST['unlink']==true) {

@@ -11,13 +11,13 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: subcategories.php - Last Update: 06/04/2007 SVN 18 - Author: cooldude2k $
+    $FileInfo: subcategories.php - Last Update: 06/18/2007 SVN 26 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="subcategories.php"||$File3Name=="/subcategories.php") {
 	require('index.php');
 	exit(); }
-$checkquery = query("select * from ".$Settings['sqltable']."categories where ID=%s", array($_GET['id']));
+$checkquery = query("select * from ".$Settings['sqltable']."categories where `id`=%s", array($_GET['id']));
 $checkresult=mysql_query($checkquery);
 $checknum=mysql_num_rows($checkresult);
 $checki=0;
@@ -32,7 +32,7 @@ $SCategoryName = $CategoryName;
 if($CategoryType=="category") {
 redirect("location",$basedir.url_maker($exfile['category'],$Settings['file_ext'],"act=".$_GET['act']."&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['category'],$exqstr['category'],FALSE)); }
 @mysql_free_result($checkresult);
-$prequery = query("select * from ".$Settings['sqltable']."categories where ShowCategory='yes' and InSubCategory=%i", array($_GET['id']));
+$prequery = query("select * from ".$Settings['sqltable']."categories where `ShowCategory`='yes' and `InSubCategory`=%i", array($_GET['id']));
 $preresult=mysql_query($prequery);
 $prenum=mysql_num_rows($preresult);
 $prei=0;
@@ -44,7 +44,7 @@ $CategoryType=mysql_result($preresult,$prei,"CategoryType");
 $SSubShowForums=mysql_result($preresult,$prei,"SubShowForums");
 $CategoryDescription=mysql_result($preresult,$prei,"Description");
 $CategoryType = strtolower($CategoryType); $SubShowForums = strtolower($SubShowForums);
-$query = query("select * from ".$Settings['sqltable']."forums where ShowForum='yes' and CategoryID=%i and InSubForum=0 ORDER BY ID", array($CategoryID));
+$query = query("select * from ".$Settings['sqltable']."forums where `ShowForum`='yes' and `CategoryID`=%i and `InSubForum`=0 ORDER BY `id`", array($CategoryID));
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
 $i=0;
@@ -75,7 +75,7 @@ $NumPosts=mysql_result($result,$i,"NumPosts");
 $ForumDescription=mysql_result($result,$i,"Description");
 $ForumType = strtolower($ForumType);
 unset($LastTopic);
-$gltquery = query("select * from ".$Settings['sqltable']."topics where CategoryID=%i and ForumID=%i ORDER BY LastUpdate DESC", array($CategoryID,$ForumID));
+$gltquery = query("select * from ".$Settings['sqltable']."topics where `CategoryID`=%i and `ForumID`=%i ORDER BY `LastUpdate` DESC", array($CategoryID,$ForumID));
 $gltresult=mysql_query($gltquery);
 $gltnum=mysql_num_rows($gltresult);
 if($gltnum>0){

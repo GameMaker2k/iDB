@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: mysql.php - Last Update: 06/15/2007 SVN 25 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 06/18/2007 SVN 26 - Author: cooldude2k $
 */
 @error_reporting(E_ALL ^ E_NOTICE);
 @ini_set('session.use_trans_sid', false);
@@ -85,7 +85,7 @@ if($GZipEncode['Type']!="gzip") { if($GZipEncode['Type']!="deflate") { $GZipEnco
 @header("Date: ".gmdate("D, d M Y H:i:s")." GMT");
 @header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
 @header("Expires: ".gmdate("D, d M Y H:i:s")." GMT");
-if($preact['idb']!="installing") {
+if(CheckFiles("install.php")!=true) {
 @session_name($Settings['sqltable']."sess");
 @session_start(); }
 @output_reset_rewrite_vars();
@@ -172,7 +172,7 @@ if (file_exists($SettDir['themes'].$_GET['theme']."/settings.php")) {
 $_SESSION['Theme'] = $_GET['theme'];
 if($_SESSION['UserGroup']!=$Settings['GuestGroup']) {
 $NewDay=GMTimeStamp();
-$qnewskin = query("update ".$Settings['sqltable']."members set UseTheme='%s',LastActive='%s' WHERE id=%i", array($_GET['theme'],$NewDay,$_SESSION['UserID']));
+$qnewskin = query("update ".$Settings['sqltable']."members set `UseTheme`='%s',`LastActive`='%s' WHERE `id`=%i", array($_GET['theme'],$NewDay,$_SESSION['UserID']));
 mysql_query($qnewskin); }
 /* The file Theme Exists */ }
 else { $_GET['theme'] = $Settings['DefaultTheme']; 

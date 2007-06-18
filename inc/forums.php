@@ -11,13 +11,13 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: forums.php - Last Update: 05/27/2007 SVN 16 - Author: cooldude2k $
+    $FileInfo: forums.php - Last Update: 06/18/2007 SVN 26 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="forums.php"||$File3Name=="/forums.php") {
 	require('index.php');
 	exit(); }
-$prequery = query("select * from ".$Settings['sqltable']."categories where ShowCategory='yes' and InSubCategory=0", array());
+$prequery = query("select * from ".$Settings['sqltable']."categories where `ShowCategory`='yes' and `InSubCategory`=0", array());
 $preresult=mysql_query($prequery);
 $prenum=mysql_num_rows($preresult);
 $prei=0;
@@ -29,7 +29,7 @@ $CategoryType=mysql_result($preresult,$prei,"CategoryType");
 $SubShowForums=mysql_result($preresult,$prei,"SubShowForums");
 $CategoryDescription=mysql_result($preresult,$prei,"Description");
 $CategoryType = strtolower($CategoryType); $SubShowForums = strtolower($SubShowForums);
-$query = query("select * from ".$Settings['sqltable']."forums where ShowForum='yes' and CategoryID=%i and InSubForum=0 ORDER BY ID", array($CategoryID));
+$query = query("select * from ".$Settings['sqltable']."forums where `ShowForum`='yes' and `CategoryID`=%i and `InSubForum`=0 ORDER BY `id`", array($CategoryID));
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
 $i=0;
