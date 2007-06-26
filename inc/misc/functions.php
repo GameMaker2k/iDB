@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: functions.php - Last Update: 06/18/2007 SVN 26 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 06/26/2007 SVN 28 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -201,13 +201,8 @@ unset($dstake); $dstake = null;
 if(!is_numeric($offset)) { $offset = 0; }
 if(!is_numeric($minoffset)) { $minoffset = 0; }
 if($dst!="on"&&$dst!="off") { $dst = "off"; }
-if($dst=="on") { 
-if($dstake!="done") {
-if($offset>=0) { $dstake = "done";
-	$offset = $offset-1; } }
-if($dstake!="done") {
-if($offset<0) { $dstake = "done";
-	$offset = $offset+1; } } }
+if($dst=="on") { if($dstake!="done") { 
+	$dstake = "done"; $offset = $offset+1; } }
 $TCHour = $TCHour + $offset;
 $TCMinute = $TCMinute + $minoffset;
 return date($format,mktime($TCHour,$TCMinute,$TCSecond,$TCMonth,$TCDay,$TCYear)); }
@@ -229,13 +224,8 @@ unset($dstake); $dstake = null;
 if(!is_numeric($offset)) { $offset = 0; }
 if(!is_numeric($minoffset)) { $minoffset = 0; }
 if($dst!="on"&&$dst!="off") { $dst = "off"; }
-if($dst=="on") { 
-if($dstake!="done") {
-if($offset>=0) { $dstake = "done";
-	$offset = $offset-1; } }
-if($dstake!="done") {
-if($offset<0) { $dstake = "done";
-	$offset = $offset+1; } } }
+if($dst=="on") { if($dstake!="done") { 
+	$dstake = "done"; $offset = $offset+1; } }
 return date($format,mktime(gmdate('h')+$offset,gmdate('i')+$minoffset,gmdate('s'),gmdate('n'),gmdate('j'),gmdate('Y'))); }
 function GetSeverZone() {
 $TestHour1 = date("H");

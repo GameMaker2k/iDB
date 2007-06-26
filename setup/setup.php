@@ -12,7 +12,7 @@
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: setup.php - Last Update: 05/26/2007 SVN 15 - Author: cooldude2k $
+    $FileInfo: setup.php - Last Update: 06/26/2007 SVN 28 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="setup.php"||$File3Name=="/setup.php") {
@@ -80,6 +80,7 @@ fclose($fp);
 </tr><tr>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="WebURL">Insert The WebSite URL:</label></td>
 	<td style="width: 50%;"><input type="text" class="TextBox" name="WebURL" size="20" id="WebURL" value="<?php echo $prehost.$_SERVER['HTTP_HOST']."/"; ?>" /></td>
+<?php /*
 </tr><tr>
 	<td style="width: 50%;"><label class="TextBoxLabel" title="Can save some bandwidth." for="UseGzip">Do you want to HTTP Content Compression:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="GZip" id="UseGzip">
@@ -88,6 +89,7 @@ fclose($fp);
 	<option value="gzip">Only GZip</option>
 	<option value="deflate">Only Deflate</option>
 	</select></td>
+*/ ?>
 </tr><tr>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="HTMLType">HTML Type to use:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="HTMLType" id="HTMLType">
@@ -115,7 +117,8 @@ fclose($fp);
 </tr><tr>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="YourOffSet">Your TimeZone:</label></td>
 	<td style="width: 50%;"><select id="YourOffSet" name="YourOffSet" class="TextBox"><?php
-$myofftime = SeverOffSet();
+if(date("I")!=1) { $myofftime = SeverOffSet(); $mydstime = "off"; }
+if(date("I")==1) { $myofftime = SeverOffSet()-1; $mydstime = "on"; }
 $plusi = 1; $minusi = 12;
 $plusnum = 13; $minusnum = 0;
 while ($minusi > $minusnum) {
@@ -138,10 +141,12 @@ echo "<option value=\"".$plusi."\">GMT + ".$plusi.":00 hours</option>\n"; }
 ?></select></td>
 </tr><tr>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="DST">Is <span title="Daylight Savings Time">DST</span> / <span title="Summer Time">ST</span> on or off:</label></td>
-	<td style="width: 50%;"><select id="DST" name="DST" class="TextBox">
-<option selected="selected" value="off">off</option>
-<option value="on">on</option>
-</select></td>
+	<td style="width: 50%;"><select id="DST" name="DST" class="TextBox"><?php echo "\n" ?>
+<?php if($mydstime=="off"||$mydstime!="on") { ?>
+<option selected="selected" value="off">off</option><?php echo "\n" ?><option value="on">on</option>
+<?php } if($mydstime=="on") { ?>
+<option selected="selected" value="on">on</option><?php echo "\n" ?><option value="off">off</option>
+<?php } echo "\n" ?></select></td>
 </tr><tr>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="TestReferer">Test Referering URL with host name:</label></td>
 	<td style="width: 50%;"><select id="TestReferer" name="TestReferer" class="TextBox">
@@ -158,6 +163,7 @@ echo "<option value=\"".$plusi."\">GMT + ".$plusi.":00 hours</option>\n"; }
 <table style="text-align: left;">
 <tr style="text-align: left;">
 <td style="width: 100%;">
+<input type="hidden" name="GZip" value="off" style="display: none;" />
 <input type="hidden" name="SetupType" value="install" style="display: none;" />
 <input type="hidden" name="act" value="Part4" style="display: none;" />
 <input type="submit" class="Button" value="Install Board" name="Install_Board" />
