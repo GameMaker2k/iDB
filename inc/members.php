@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: members.php - Last Update: 06/27/2007 SVN 29 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 06/27/2007 SVN 30 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -159,14 +159,6 @@ $ViewMem['Gender']=mysql_result($result,$i,"Gender");
 $ViewMem['PostCount']=mysql_result($result,$i,"PostCount");
 $ViewMem['TimeZone']=mysql_result($result,$i,"TimeZone");
 $ViewMem['DST']=mysql_result($result,$i,"DST");
-unset($dstake); $dstake = null;
-if($ViewMem['DST']=="on") { 
-if($dstake!="done") {
-if($ViewMem['TimeZone']>=0) { $dstake = "done";
-	$ViewMem['TimeZone'] = $ViewMem['TimeZone']-1; } }
-if($dstake!="done") {
-if($ViewMem['TimeZone']<0) { $dstake = "done";
-	$ViewMem['TimeZone'] = $ViewMem['TimeZone']+1; } } }
 $ViewMem['IP']=mysql_result($result,$i,"IP");
 $gquery = query("select * from ".$Settings['sqltable']."groups where `id`=%i", array($ViewMem['GroupID']));
 $gresult=mysql_query($gquery);
@@ -224,7 +216,7 @@ Title: <?php echo $ViewMem['Title']; ?></div>
 &nbsp;User Group: <?php echo $ViewMem['Group']; ?><br />
 &nbsp;User Joined: <?php echo $ViewMem['Joined']; ?><br />
 &nbsp;Last Active: <?php echo $ViewMem['LastActive']; ?><br />
-&nbsp;User Time: <?php echo GMTimeGet("M j Y, g:i a",$ViewMem['TimeZone']); ?><br />
+&nbsp;User Time: <?php echo GMTimeGet("M j Y, g:i a",$ViewMem['TimeZone'],$ViewMem['DST']); ?><br />
 &nbsp;User Website: <a href="<?php echo $ViewMem['Website']; ?>" onclick="window.open(this.href);return false;">Website</a><br />
 &nbsp;Post Count: <?php echo $ViewMem['PostCount']; ?><br />
 &nbsp;Interests: <?php echo $ViewMem['Interests']; ?><br />
