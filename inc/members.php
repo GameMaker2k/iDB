@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: members.php - Last Update: 06/27/2007 SVN 30 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 06/27/2007 SVN 31 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -216,7 +216,7 @@ Title: <?php echo $ViewMem['Title']; ?></div>
 &nbsp;User Group: <?php echo $ViewMem['Group']; ?><br />
 &nbsp;User Joined: <?php echo $ViewMem['Joined']; ?><br />
 &nbsp;Last Active: <?php echo $ViewMem['LastActive']; ?><br />
-&nbsp;User Time: <?php echo GMTimeGet("M j Y, g:i a",$ViewMem['TimeZone'],$ViewMem['DST']); ?><br />
+&nbsp;User Time: <?php echo GMTimeGet("M j Y, g:i a",$ViewMem['TimeZone'],0,$ViewMem['DST']); ?><br />
 &nbsp;User Website: <a href="<?php echo $ViewMem['Website']; ?>" onclick="window.open(this.href);return false;">Website</a><br />
 &nbsp;Post Count: <?php echo $ViewMem['PostCount']; ?><br />
 &nbsp;Interests: <?php echo $ViewMem['Interests']; ?><br />
