@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: mysql.php - Last Update: 06/18/2007 SVN 26 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 06/27/2007 SVN 29 - Author: cooldude2k $
 */
 @error_reporting(E_ALL ^ E_NOTICE);
 @ini_set('session.use_trans_sid', false);
@@ -123,16 +123,23 @@ if(!isset($_SESSION['UserGroup'])) { $_SESSION['UserGroup'] = null; }
 if($_SESSION['UserGroup']==null) { 
 $_SESSION['UserGroup']=$Settings['GuestGroup']; }
 //Time Zone Set
-if(!isset($_SESSION['UserTimeZone'])) { $_SESSION['UserTimeZone'] = null; }
-if($_SESSION['UserTimeZone']==null||
-	!is_numeric($_SESSION['UserTimeZone'])) {
-	if($Settings['DefaultTimeZone']!=null&&
-	is_numeric($Settings['DefaultTimeZone'])) {
-	$_SESSION['UserTimeZone'] = $Settings['DefaultTimeZone']; }
-	if($Settings['DefaultTimeZone']==null) {
-	$_SESSION['UserTimeZone'] = SeverOffSet(); }
-	if(!is_numeric($Settings['DefaultTimeZone'])) {
-	$_SESSION['UserTimeZone'] = SeverOffSet(); } }
+if(!isset($_SESSION['UserTimeZone'])) { 
+	if(isset($Settings['DefaultTimeZone'])) { 
+	$_SESSION['UserTimeZone'] = $Settings['DefaultTimeZone'];
+	if(!isset($Settings['DefaultTimeZone'])) { 
+	$_SESSION['UserTimeZone'] = SeverOffSet().":00"; } } }
+$checktime = explode(":",$_SESSION['UserTimeZone']);
+if(count($checktime)!=2) {
+	if(!isset($checktime[0])) { $checktime[0] = "0"; }
+	if(!isset($checktime[1])) { $checktime[1] = "00"; }
+	$_SESSION['UserTimeZone'] = $checktime[0].":".$checktime[1]; }
+if(!is_numeric($checktime[0])) { $checktime[0] = "0"; }
+if($checktime[0]>12) { $checktime[0] = "12"; $_SESSION['UserTimeZone'] = $checktime[0].":".$checktime[1]; }
+if($checktime[0]<-12) { $checktime[0] = "-12"; $_SESSION['UserTimeZone'] = $checktime[0].":".$checktime[1]; }
+if(!is_numeric($checktime[1])) { $checktime[1] = "00"; }
+if($checktime[1]>59) { $checktime[1] = "59"; $_SESSION['UserTimeZone'] = $checktime[0].":".$checktime[1]; }
+if($checktime[1]<0) { $checktime[1] = "00"; $_SESSION['UserTimeZone'] = $checktime[0].":".$checktime[1]; }
+$checktimea = array("offset" => $_SESSION['UserTimeZone'], "hour" => $checktime[0], "minute" => $checktime[1]);
 if(!isset($_SESSION['UserDST'])) { $_SESSION['UserDST'] = null; }
 if($_SESSION['UserDST']==null) {
 if($Settings['DefaultDST']=="off") { 

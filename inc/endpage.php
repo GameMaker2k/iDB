@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: endpage.php - Last Update: 06/26/2007 SVN 28 - Author: cooldude2k $
+    $FileInfo: endpage.php - Last Update: 06/27/2007 SVN 29 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="endpage.php"||$File3Name=="/endpage.php") {
@@ -19,10 +19,11 @@ if ($File3Name=="endpage.php"||$File3Name=="/endpage.php") {
 	exit(); }
 if(!isset($_GET['time'])) { $_GET['time'] = true; }
 if($_GET['time']=="show"||$_GET['time']==true) {
-if($_SESSION['UserDST']=="on") { $MyDST = $_SESSION['UserTimeZone']+1; }
-if($_SESSION['UserDST']=="off") { $MyDST = $_SESSION['UserTimeZone']; }
+if($_SESSION['UserDST']=="on") { $MyDST = $checktimea['hour']+1; }
+if($_SESSION['UserDST']=="off") { $MyDST = $checktimea['hour']; }
+$MyDST = $MyDST.":".$checktimea['minute'];
 $MyTimeNow = GMTimeGet('g:i a',$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$endpagevar=$endpagevar."<br />All times are GMT ".$MyDST.". The time now is ".$MyTimeNow; }
+$endpagevar=$endpagevar."<br />The time now is ".$MyTimeNow." ".$ThemeSet['LineDivider']." All times are GMT ".$MyDST; }
 if($_GET['debug']=="true"||$_GET['debug']=="on") {
 	$endpagevar=$endpagevar."<br />\nFiles included: ".count_included_files()." &amp; Extensions Enabled: ".count_extensions().$ThemeSet['LineDivider']."<a href=\"http://validator.w3.org/check/referer?verbose=1\" title=\"Validate HTML\" onclick=\"window.open(this.href);return false;\">HTML</a>".$ThemeSet['LineDivider']."<a href=\"http://jigsaw.w3.org/css-validator/check/referer?profile=css3\" title=\"Validate CSS\" onclick=\"window.open(this.href);return false;\">CSS</a>"; }
 	$endpagevar=$endpagevar."</div>\n";

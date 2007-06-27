@@ -12,7 +12,7 @@
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mkconfig.php - Last Update: 06/18/2007 SVN 26 - Author: cooldude2k $
+    $FileInfo: mkconfig.php - Last Update: 06/27/2007 SVN 29 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mkconfig.php"||$File3Name=="/mkconfig.php") {
@@ -88,7 +88,13 @@ $query = "INSERT INTO ".$_POST['tableprefix']."tagboard VALUES (1,-1,'Cool Dude 
 */
 $query = "INSERT INTO ".$_POST['tableprefix']."categories VALUES (1,'Main','yes','category','yes',0,'The Main Category.')";
 mysql_query($query);
-$YourOffSet = $_POST['YourOffSet'];
+if(!is_numeric($_POST['YourOffSet'])) { $_POST['YourOffSet'] = "0"; }
+if($_POST['YourOffSet']>12) { $_POST['YourOffSet'] = "12"; }
+if($_POST['YourOffSet']<-12) { $_POST['YourOffSet'] = "-12"; }
+if(!is_numeric($_POST['MinOffSet'])) { $_POST['MinOffSet'] = "00"; }
+if($_POST['MinOffSet']>59) { $_POST['MinOffSet'] = "59"; }
+if($_POST['MinOffSet']<0) { $_POST['MinOffSet'] = "00"; }
+$YourOffSet = $_POST['YourOffSet'].":".$_POST['MinOffSet'];
 $AdminDST = $_POST['DST'];
 $MyDay = GMTimeGet("d",$YourOffSet,0,$AdminDST);
 $MyMonth = GMTimeGet("m",$YourOffSet,0,$AdminDST);
@@ -109,7 +115,7 @@ $YourWebsite = "http://".$_SERVER['HTTP_HOST'].$this_dir."index.php?act=view";
 $UserIP = $_SERVER['REMOTE_ADDR'];
 $PostCount = 2;
 $Email = "admin@".$_SERVER['HTTP_HOST'];
-$AdminTime = $_POST['YourOffSet'];
+$AdminTime = $_POST['YourOffSet'].":".$_POST['MinOffSet'];
 $GEmail = "guest@".$_SERVER['HTTP_HOST'];
 $grand = rand(6,16); $i = 0; $gpass = "";
 while ($i < $grand) {

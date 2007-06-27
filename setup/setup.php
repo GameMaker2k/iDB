@@ -12,7 +12,7 @@
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: setup.php - Last Update: 06/26/2007 SVN 28 - Author: cooldude2k $
+    $FileInfo: setup.php - Last Update: 06/27/2007 SVN 29 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="setup.php"||$File3Name=="/setup.php") {
@@ -138,6 +138,19 @@ echo "<option selected=\"selected\" value=\"".$plusi."\">GMT + ".$plusi.":00 hou
 if($myofftime!=$plusi) {
 echo "<option value=\"".$plusi."\">GMT + ".$plusi.":00 hours</option>\n"; }
 ++$plusi; }
+?></select></td>
+</tr><tr>
+	<td style="width: 50%;"><label class="TextBoxLabel" for="MinOffSet">Minute OffSet:</label></td>
+	<td style="width: 50%;"><select id="MinOffSet" name="MinOffSet" class="TextBox"><?php
+$mini = 0; $minnum = 60;
+while ($mini < $minnum) {
+if(strlen($mini)==2) { $showmin = $mini; }
+if(strlen($mini)==1) { $showmin = "0".$mini; }
+if($mini==0) {
+echo "\n<option selected=\"selected\" value=\"".$showmin."\">0:".$showmin." minutes</option>\n"; }
+if($mini!=0) {
+echo "<option value=\"".$showmin."\">0:".$showmin." minutes</option>\n"; }
+++$mini; }
 ?></select></td>
 </tr><tr>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="DST">Is <span title="Daylight Savings Time">DST</span> / <span title="Summer Time">ST</span> on or off:</label></td>

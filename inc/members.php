@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: members.php - Last Update: 06/18/2007 SVN 26 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 06/27/2007 SVN 29 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -448,25 +448,40 @@ $membertitle = " ".$ThemeSet['TitleDivider']." Signing up"; ?>
 </tr><tr>
 	<td><label class="TextBoxLabel" for="YourOffSet">Your TimeZone:</label></td>
 	<td><select id="YourOffSet" name="YourOffSet" class="TextBox"><?php
+$tsa_mem = explode(":",$Settings['DefaultTimeZone']);
+$TimeZoneArray = array("offset" => $Settings['DefaultTimeZone'], "hour" => $tsa_mem[0], "minute" => $tsa_mem[1]);
 $plusi = 1; $minusi = 12;
 $plusnum = 13; $minusnum = 0;
 while ($minusi > $minusnum) {
-if($Settings['DefaultTimeZone']==-$minusi) {
+if($TimeZoneArray['hour']==-$minusi) {
 echo "<option selected=\"selected\" value=\"-".$minusi."\">GMT - ".$minusi.":00 hours</option>\n"; }
-if($Settings['DefaultTimeZone']!=-$minusi) {
+if($TimeZoneArray['hour']!=-$minusi) {
 echo "<option value=\"-".$minusi."\">GMT - ".$minusi.":00 hours</option>\n"; }
 --$minusi; }
-if($Settings['DefaultTimeZone']==0) { ?>
+if($TimeZoneArray['hour']==0) { ?>
 <option selected="selected" value="0">GMT +/- 0:00 hours</option>
-<?php } if($Settings['DefaultTimeZone']!=0) { ?>
+<?php } if($TimeZoneArray['hour']!=0) { ?>
 <option value="0">GMT +/- 0:00 hours</option>
 <?php }
 while ($plusi < $plusnum) {
-if($Settings['DefaultTimeZone']==$plusi) {
+if($TimeZoneArray['hour']==$plusi) {
 echo "<option selected=\"selected\" value=\"".$plusi."\">GMT + ".$plusi.":00 hours</option>\n"; }
-if($Settings['DefaultTimeZone']!=$plusi) {
+if($TimeZoneArray['hour']!=$plusi) {
 echo "<option value=\"".$plusi."\">GMT + ".$plusi.":00 hours</option>\n"; }
 ++$plusi; }
+?></select></td>
+</tr><tr>
+	<td style="width: 50%;"><label class="TextBoxLabel" for="MinOffSet">Minute OffSet:</label></td>
+	<td style="width: 50%;"><select id="MinOffSet" name="MinOffSet" class="TextBox"><?php
+$mini = 0; $minnum = 60;
+while ($mini < $minnum) {
+if(strlen($mini)==2) { $showmin = $mini; }
+if(strlen($mini)==1) { $showmin = "0".$mini; }
+if($mini==$TimeZoneArray['minute']) {
+echo "\n<option selected=\"selected\" value=\"".$showmin."\">0:".$showmin." minutes</option>\n"; }
+if($mini!=$TimeZoneArray['minute']) {
+echo "<option value=\"".$showmin."\">0:".$showmin." minutes</option>\n"; }
+++$mini; }
 ?></select></td>
 </tr><tr>
 	<td style="width: 40%;"><label class="TextBoxLabel" for="DST">Is <span title="Daylight Savings Time">DST</span> / <span title="Summer Time">ST</span> on or off:</label></td>
@@ -647,6 +662,13 @@ $yourid = getnextid($Settings['sqltable'],"members");
 $_POST['Interests'] = @remove_spaces($_POST['Interests']);
 $_POST['Title'] = @remove_spaces($_POST['Title']);
 $_POST['Email'] = @remove_spaces($_POST['Email']);
+if(!is_numeric($_POST['YourOffSet'])) { $_POST['YourOffSet'] = "0"; }
+if($_POST['YourOffSet']>12) { $_POST['YourOffSet'] = "12"; }
+if($_POST['YourOffSet']<-12) { $_POST['YourOffSet'] = "-12"; }
+if(!is_numeric($_POST['MinOffSet'])) { $_POST['MinOffSet'] = "00"; }
+if($_POST['MinOffSet']>59) { $_POST['MinOffSet'] = "59"; }
+if($_POST['MinOffSet']<0) { $_POST['MinOffSet'] = "00"; }
+$_POST['YourOffSet'] = $_POST['YourOffSet'].":".$_POST['MinOffSet'];
 $query = query("insert into ".$Settings['sqltable']."members values (".$yourid.",'%s','%s','%s','%s','%s','%s','%i','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')", array($Name,$NewPassword,"iDBH",$_POST['Email'],$yourgroup,$ValidateStats,"0",$_POST['Interests'],$_POST['Title'],$_POST['Joined'],$_POST['LastActive'],"0",$NewSignature,'Your Notes',$Avatar,"100x100",$Website,$_POST['YourGender'],$_POST['PostCount'],$_POST['YourOffSet'],$_POST['DST'],$Settings['DefaultTheme'],$_POST['UserIP'],$HashSalt));
 mysql_query($query);
 $querylogr = query("select * from ".$Settings['sqltable']."members where `Name`='%s' AND `Password`='%s'", array($Name,$NewPassword));

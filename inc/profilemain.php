@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: profilemain.php - Last Update: 06/18/2007 SVN 26 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 06/27/2007 SVN 29 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
@@ -256,6 +256,8 @@ $num=mysql_num_rows($result);
 $i=0;
 $YourID=mysql_result($result,$i,"id");
 $User1TimeZone=mysql_result($result,$i,"TimeZone"); 
+$tsa_mem = explode(":",$User1TimeZone);
+$TimeZoneArray = array("offset" => $User1TimeZone, "hour" => $tsa_mem[0], "minute" => $tsa_mem[1]);
 $User1DST=mysql_result($result,$i,"DST");
 $settingsact = url_maker($exfile['profile'],$Settings['file_ext'],"act=settings",$Settings['qstr'],$Settings['qsep'],$prexqstr['profile'],$exqstr['profile']);
 $profiletitle = " ".$ThemeSet['TitleDivider']." Board Settings"; ?>
@@ -276,7 +278,7 @@ $profiletitle = " ".$ThemeSet['TitleDivider']." Board Settings"; ?>
 <tr style="text-align: left;">
 	<td style="width: 40%;"><label class="TextBoxLabel" for="YourOffSet">Your TimeZone:</label></td>
 	<td style="width: 60%;"><select id="YourOffSet" name="YourOffSet" class="TextBox">
-<option selected="selected" value="<?php echo $User1TimeZone; ?>">Old Value (<?php echo $User1TimeZone.":00 hours"; ?>)</option>
+<option selected="selected" value="<?php echo $TimeZoneArray['hour']; ?>">Old Value (<?php echo $TimeZoneArray['hour'].":00 hours"; ?>)</option>
 <?php
 $plusi = 1; $minusi = 12;
 $plusnum = 13; $minusnum = 0;
@@ -289,6 +291,18 @@ echo "<option value=\"-".$minusi."\">GMT - ".$minusi.":00 hours</option>\n";
 while ($plusi < $plusnum) {
 echo "<option value=\"".$plusi."\">GMT + ".$plusi.":00 hours</option>\n";
 ++$plusi; }
+?></select></td>
+</tr><tr style="text-align: left;">
+	<td style="width: 40%;"><label class="TextBoxLabel" for="MinOffSet">Minute OffSet:</label></td>
+	<td style="width: 60%;"><select id="MinOffSet" name="MinOffSet" class="TextBox">
+<option selected="selected" value="<?php echo $TimeZoneArray['minute']; ?>">Old Value (<?php echo "0:".$TimeZoneArray['minute']." minutes"; ?>)</option>
+<?php
+$mini = 0; $minnum = 60;
+while ($mini < $minnum) {
+if(strlen($mini)==2) { $showmin = $mini; }
+if(strlen($mini)==1) { $showmin = "0".$mini; }
+echo "<option value=\"".$showmin."\">0:".$showmin." minutes</option>\n";
+++$mini; }
 ?></select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 40%;"><label class="TextBoxLabel" for="skin">Pick a CSS Theme</label></td>
@@ -340,6 +354,15 @@ if($_POST['act']=="settings"&&
 	$_SESSION['UserGroup']!=$Settings['GuestGroup']) {
 	$NewDay=GMTimeStamp();
 	$NewIP=$_SERVER['REMOTE_ADDR'];
+	if(!is_numeric($_POST['YourOffSet'])) { $_POST['YourOffSet'] = "0"; }
+	if($_POST['YourOffSet']>12) { $_POST['YourOffSet'] = "12"; }
+	if($_POST['YourOffSet']<-12) { $_POST['YourOffSet'] = "-12"; }
+	if(!is_numeric($_POST['MinOffSet'])) { $_POST['MinOffSet'] = "00"; }
+	if($_POST['MinOffSet']>59) { $_POST['MinOffSet'] = "59"; }
+	if($_POST['MinOffSet']<0) { $_POST['MinOffSet'] = "00"; }
+	$_POST['YourOffSet'] = $_POST['YourOffSet'].":".$_POST['MinOffSet'];
+	$_SESSION['UserTimeZone'] = $_POST['YourOffSet'];
+	$_SESSION['UserDST'] = $_POST['DST'];
 	$querynewskin = query("update ".$Settings['sqltable']."members set `UseTheme`='%s',`TimeZone`='%s',`DST`='%s',`LastActive`='%s',`IP`='%s' WHERE `id`=%i", array($_POST['skin'],$_POST['YourOffSet'],$_POST['DST'],$NewDay,$NewIP,$_SESSION['UserID']));
 	mysql_query($querynewskin); } } }
 if($_GET['act']=="profile") {
@@ -354,6 +377,8 @@ $User1Title=mysql_result($result,$i,"Title");
 $User1Website=mysql_result($result,$i,"Website"); 
 $User1Gender=mysql_result($result,$i,"Gender");
 $User1TimeZone=mysql_result($result,$i,"TimeZone"); 
+$tsa_mem = explode(":",$User1TimeZone);
+$TimeZoneArray = array("offset" => $User1TimeZone, "hour" => $tsa_mem[0], "minute" => $tsa_mem[1]);
 $User1DST=mysql_result($result,$i,"DST");
 $profileact = url_maker($exfile['profile'],$Settings['file_ext'],"act=profile",$Settings['qstr'],$Settings['qsep'],$prexqstr['profile'],$exqstr['profile']);
 $profiletitle = " ".$ThemeSet['TitleDivider']." Profile Editor";
@@ -384,7 +409,7 @@ $profiletitle = " ".$ThemeSet['TitleDivider']." Profile Editor";
 </tr><tr style="text-align: left;">
 	<td style="width: 40%;"><label class="TextBoxLabel" for="YourOffSet">Your TimeZone:</label></td>
 	<td style="width: 60%;"><select id="YourOffSet" name="YourOffSet" class="TextBox">
-<option selected="selected" value="<?php echo $User1TimeZone; ?>">Old Value (<?php echo $User1TimeZone.":00 hours"; ?>)</option>
+<option selected="selected" value="<?php echo $TimeZoneArray['hour']; ?>">Old Value (<?php echo $TimeZoneArray['hour'].":00 hours"; ?>)</option>
 <?php
 $plusi = 1; $minusi = 12;
 $plusnum = 13; $minusnum = 0;
@@ -397,6 +422,18 @@ echo "<option value=\"-".$minusi."\">GMT - ".$minusi.":00 hours</option>\n";
 while ($plusi < $plusnum) {
 echo "<option value=\"".$plusi."\">GMT + ".$plusi.":00 hours</option>\n";
 ++$plusi; }
+?></select></td>
+</tr><tr style="text-align: left;">
+	<td style="width: 40%;"><label class="TextBoxLabel" for="MinOffSet">Minute OffSet:</label></td>
+	<td style="width: 60%;"><select id="MinOffSet" name="MinOffSet" class="TextBox">
+<option selected="selected" value="<?php echo $TimeZoneArray['minute']; ?>">Old Value (<?php echo "0:".$TimeZoneArray['minute']." minutes"; ?>)</option>
+<?php
+$mini = 0; $minnum = 60;
+while ($mini < $minnum) {
+if(strlen($mini)==2) { $showmin = $mini; }
+if(strlen($mini)==1) { $showmin = "0".$mini; }
+echo "<option value=\"".$showmin."\">0:".$showmin." minutes</option>\n";
+++$mini; }
 ?></select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 40%;"><label class="TextBoxLabel" for="YourGender">Your Gender:</label></td>
@@ -440,6 +477,13 @@ if($_POST['act']=="profile"&&
 	$_POST['Title'] = @remove_spaces($_POST['Title']);
 	$_POST['Website'] = htmlentities($_POST['Website'], ENT_QUOTES);
 	$_POST['Website'] = @remove_spaces($_POST['Website']);
+	if(!is_numeric($_POST['YourOffSet'])) { $_POST['YourOffSet'] = "0"; }
+	if($_POST['YourOffSet']>12) { $_POST['YourOffSet'] = "12"; }
+	if($_POST['YourOffSet']<-12) { $_POST['YourOffSet'] = "-12"; }
+	if(!is_numeric($_POST['MinOffSet'])) { $_POST['MinOffSet'] = "00"; }
+	if($_POST['MinOffSet']>59) { $_POST['MinOffSet'] = "59"; }
+	if($_POST['MinOffSet']<0) { $_POST['MinOffSet'] = "00"; }
+	$_POST['YourOffSet'] = $_POST['YourOffSet'].":".$_POST['MinOffSet'];
 	$_SESSION['UserTimeZone'] = $_POST['YourOffSet'];
 	$_SESSION['UserDST'] = $_POST['DST'];
 	$NewDay=GMTimeStamp();
