@@ -12,7 +12,7 @@
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: setup.php - Last Update: 06/27/2007 SVN 29 - Author: cooldude2k $
+    $FileInfo: setup.php - Last Update: 06/28/2007 SVN 32 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="setup.php"||$File3Name=="/setup.php") {
@@ -80,7 +80,6 @@ fclose($fp);
 </tr><tr>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="WebURL">Insert The WebSite URL:</label></td>
 	<td style="width: 50%;"><input type="text" class="TextBox" name="WebURL" size="20" id="WebURL" value="<?php echo $prehost.$_SERVER['HTTP_HOST']."/"; ?>" /></td>
-<?php /*
 </tr><tr>
 	<td style="width: 50%;"><label class="TextBoxLabel" title="Can save some bandwidth." for="UseGzip">Do you want to HTTP Content Compression:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="GZip" id="UseGzip">
@@ -89,7 +88,6 @@ fclose($fp);
 	<option value="gzip">Only GZip</option>
 	<option value="deflate">Only Deflate</option>
 	</select></td>
-*/ ?>
 </tr><tr>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="HTMLType">HTML Type to use:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="HTMLType" id="HTMLType">
@@ -97,7 +95,7 @@ fclose($fp);
 	<option value="xhtml11">XHTML 1.1</option>
 	</select></td>
 </tr><tr>
-	<td style="width: 50%;"><label class="TextBoxLabel" for="HTMLLevel">HTML level only for XHTML 1.0/HTML 4.01:</label></td>
+	<td style="width: 50%;"><label class="TextBoxLabel" for="HTMLLevel">HTML level only for XHTML 1.0:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="HTMLLevel" id="HTMLLevel">
 	<option value="Transitional">Transitional</option>
 	<option value="Strict">Strict</option>
@@ -176,7 +174,6 @@ echo "<option value=\"".$showmin."\">0:".$showmin." minutes</option>\n"; }
 <table style="text-align: left;">
 <tr style="text-align: left;">
 <td style="width: 100%;">
-<input type="hidden" name="GZip" value="off" style="display: none;" />
 <input type="hidden" name="SetupType" value="install" style="display: none;" />
 <input type="hidden" name="act" value="Part4" style="display: none;" />
 <input type="submit" class="Button" value="Install Board" name="Install_Board" />

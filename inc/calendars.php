@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: calendars.php - Last Update: 06/24/2007 SVN 27 - Author: cooldude2k $
+    $FileInfo: calendars.php - Last Update: 06/28/2007 SVN 32 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="calendars.php"||$File3Name=="/calendars.php") {
@@ -47,6 +47,8 @@ $EventStart=mysql_result($result,$is,"TimeStamp");
 $EventEnd=mysql_result($result,$is,"TimeStampEnd");
 $EventDay = GMTimeChange("j",$EventStart,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $EventDayEnd = GMTimeChange("j",$EventEnd,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$EventMonthEnd = GMTimeChange("m",$EventEnd,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+if($EventMonthEnd!=$MyMonth) { $EventDayEnd = $CountDays; }
 $oldeventname=$EventName;
 $EventName1 = substr($EventName,0,10);
 if (strlen($EventName)>10) { $EventName1 = $EventName1."..."; }
