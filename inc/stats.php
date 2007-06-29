@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: stats.php - Last Update: 06/18/2007 SVN 26 - Author: cooldude2k $
+    $FileInfo: stats.php - Last Update: 06/29/2007 SVN 33 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="stats.php"||$File3Name=="/stats.php") {
@@ -27,6 +27,10 @@ $numposts = mysql_num_rows($npresult);
 $nmquery = query("select * from ".$Settings['sqltable']."members", array(null));
 $nmresult = mysql_query($nmquery);
 $nummembers = mysql_num_rows($nmresult);
+$NewestMem = array(null);
+$NewestMem['ID']=mysql_result($nmresult,$nummembers-1,"id");
+$NewestMem['Name']=mysql_result($nmresult,$nummembers-1,"Name");
+if($NewestMem['ID']=="-1") { $NewestMem['ID'] = "0"; $NewestMem['Name'] = "Cool Dude 2k"; }
 $sql_guest_check = mysql_query(query("select * from ".$Settings['sqltable']."members where `id` = '%s'", array("-1")));
 $guest_check = mysql_num_rows($sql_guest_check); @mysql_free_result($sql_guest_check);
 if($guest_check > 0) { $nummembers = $nummembers - 1; }
@@ -45,9 +49,10 @@ if($guest_check > 0) { $nummembers = $nummembers - 1; }
 <td style="width: 4%;" class="TableRow3"><div class="forumicon">
 <?php echo $ThemeSet['StatsIcon']; ?>&nbsp;</div></td>
 <td style="width: 96%;" class="TableRow3"><div class="forumname">
-&nbsp;Our members have made a total of <?php echo $numposts; ?> post(s)<br />
-&nbsp;We have a total of <?php echo $numtopics; ?> topic(s) made<br />
+&nbsp;Our members have made a total of <?php echo $numposts; ?> posts<br />
+&nbsp;We have a total of <?php echo $numtopics; ?> topics made<br />
 &nbsp;We have <?php echo $nummembers; ?> registered members<br />
+&nbsp;Our newest member is <a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$NewestMem['ID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>"><?php echo $NewestMem['Name']; ?></a>
 </div></td>
 </tr>
 <tr id="Stats3" class="TableRow4">
