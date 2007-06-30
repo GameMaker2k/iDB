@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: filename.php - Last Update: 06/29/2007 SVN 33 - Author: cooldude2k $
+    $FileInfo: filename.php - Last Update: 06/30/2007 SVN 34 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="filename.php"||$File3Name=="/filename.php") {
@@ -36,6 +36,10 @@ if($Settings['idburl']!="localhost"&&$Settings['idburl']!=null) {
 	$rssurlon = "on"; $rssurl = $Settings['idburl']; }
 if($Settings['rssurl']!=null&&$Settings['rssurl']!="") {
 	$rssurlon = "on"; $rssurl = $Settings['rssurl']; }
+/* In php 6 and up the function get_magic_quotes_gpc dose not exist. 
+   here we make a fake version that always sends false out. :P */
+if(!function_exists('get_magic_quotes_gpc')) {
+function get_magic_quotes_gpc() { return false; } }
 //Version info stuff. :P 
 function version_info($proname,$subver,$ver,$supver,$reltype,$svnver,$showsvn) {
 	$return_var = $proname." ".$reltype." ".$subver.".".$ver.".".$supver;
@@ -44,8 +48,8 @@ function version_info($proname,$subver,$ver,$supver,$reltype,$svnver,$showsvn) {
 	if($showsvn!=true&&$showsvn!=null) { $return_var .= " ".$showsvn." ".$svnver; }
 	return $return_var; }
 $VER1[0] = 0; $VER1[1] = 1; $VER1[2] = 5; $VERFull[1] = $VER1[0].".".$VER1[1].".".$VER1[2];
-$VER2[0] = "Pre-Alpha"; $VER2[1] = "PA"; $VER2[2] = "SVN"; $SubVerN = 33; $RName = "iDB"; $SFName = "IntDB";
-$SVNDay[0] = 06; $SVNDay[1] = 29; $SVNDay[2] = 2007; $SVNDay[3] = $SVNDay[0]."/".$SVNDay[1]."/".$SVNDay[2];
+$VER2[0] = "Pre-Alpha"; $VER2[1] = "PA"; $VER2[2] = "SVN"; $SubVerN = 34; $RName = "iDB"; $SFName = "IntDB";
+$SVNDay[0] = 06; $SVNDay[1] = 30; $SVNDay[2] = 2007; $SVNDay[3] = $SVNDay[0]."/".$SVNDay[1]."/".$SVNDay[2];
 $VerInfo['iDB_Ver'] = version_info($RName,$VER1[0],$VER1[1],$VER1[2],$VER2[1],$SubVerN,false);
 $VerInfo['iDB_Ver_SVN'] = version_info($RName,$VER1[0],$VER1[1],$VER1[2],$VER2[1],$SubVerN,true);
 $VerInfo['iDB_Full_Ver'] = version_info($RName,$VER1[0],$VER1[1],$VER1[2],$VER2[0],$SubVerN,false);
