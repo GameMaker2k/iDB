@@ -12,14 +12,14 @@
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: presetup.php - Last Update: 05/26/2007 SVN 15 - Author: cooldude2k $
+    $FileInfo: presetup.php - Last Update: 07/01/2007 SVN 35 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="presetup.php"||$File3Name=="/presetup.php") {
 	require('index.php');
 	exit(); }
-if($SetupDir['setup']==null) { $SetupDir['setup'] = "setup/"; }
-if($SetupDir['convert']==null) { $SetupDir['convert'] = "setup/convert/"; }
+if(!isset($SetupDir['setup'])) { $SetupDir['setup'] = "setup/"; }
+if(!isset($SetupDir['convert'])) { $SetupDir['convert'] = "setup/convert/"; }
 if ($_POST['License']!="Agree") { $Error="Yes";  ?>
 <tr class="TableRow3">
 <td class="TableRow3">

@@ -12,17 +12,28 @@
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
     iDB Installer made by Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: install.php - Last Update: 06/26/2007 SVN 28 - Author: cooldude2k $
+    $FileInfo: install.php - Last Update: 07/01/2007 SVN 35 - Author: cooldude2k $
 */
-@error_reporting(E_ALL ^ E_NOTICE); unset($preact['idb']);
-if ($_GET['act']!="Part4"&&$_POST['act']!="Part4") {
-	$preact['idb'] = "installing";	}
+@error_reporting(E_ALL ^ E_NOTICE);
+if(!isset($preact['idb'])) { $preact['idb'] = null; }
+if(!isset($_GET['act'])) { $_GET['act'] = null; }
+if(!isset($_POST['act'])) { $_POST['act'] = null; }
 if ($_GET['act']==null||$_GET['act']=="view") { $_GET['act']="Part1"; }
 if ($_POST['act']==null||$_POST['act']=="view") { $_POST['act']="Part1"; }
-require('preindex.php');
-$SetupDir['setup'] = "setup/"; $SetupDir['convert'] = "setup/convert/";
-$ConvertDir['setup'] = "setup/"; $ConvertDir['convert'] = "setup/convert/";
+$_TEG = array(null); $_TEG['part'] = preg_replace("/Part(1|2|3|4)/","\\1",$_GET['act']);
+$_GET['act'] = strtolower($_GET['act']); if(isset($_TEG['part'])) {
+if($_TEG['part']<=4&&$_TEG['part']>=1) { $_GET['act'] = "Part".$_TEG['part']; } }
+if ($_GET['act']!="Part4"&&$_POST['act']!="Part4") {
+	$preact['idb'] = "installing";	}
+$SetupDir['setup'] = "setup/"; $ConvertDir['setup'] = $SetupDir['setup'];
+$SetupDir['convert'] = "setup/convert/"; $ConvertDir['convert'] = $SetupDir['convert'];
+$Settings['output_type'] = "html"; $Settings['html_type'] = "xhtml10";
+$Settings['board_name'] = "Installing iDB";
+require($SetupDir['setup'].'preinstall.php');
+require_once($SettDir['inc'].'filename.php');
+require_once($SettDir['inc'].'function.php');
 require($SetupDir['convert'].'info.php');
+require($SettDir['inc'].'xhtml10.php');
 unset($Error); $_GET['time'] = false;
 ?>
 

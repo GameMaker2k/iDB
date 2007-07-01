@@ -12,15 +12,15 @@
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mkconfig.php - Last Update: 06/27/2007 SVN 29 - Author: cooldude2k $
+    $FileInfo: mkconfig.php - Last Update: 07/01/2007 SVN 35 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mkconfig.php"||$File3Name=="/mkconfig.php") {
 	require('index.php');
 	exit(); }
 require_once('settings.php');
-if($SetupDir['setup']==null) { $SetupDir['setup'] = "setup/"; }
-if($SetupDir['convert']==null) { $SetupDir['convert'] = "setup/convert/"; }
+if(!isset($SetupDir['setup'])) { $SetupDir['setup'] = "setup/"; }
+if(!isset($SetupDir['convert'])) { $SetupDir['convert'] = "setup/convert/"; }
 $_POST['DatabaseHost'] = $Settings['sqlhost'];
 $_POST['DatabaseUserName'] = $Settings['sqluser'];
 $_POST['DatabasePassword'] = $Settings['sqlpass'];
@@ -163,14 +163,14 @@ if($_POST['unlink']==true) {
 $chdel1 = @unlink($SetupDir['setup'].'presetup.php'); $chdel2 = @unlink($SetupDir['setup'].'setup.php');
 $chdel3 = @unlink($SetupDir['setup'].'mkconfig.php'); $chdel4 = @unlink($SetupDir['setup'].'mktable.php');
 $chdel5 = @unlink($SetupDir['setup'].'index.php'); $chdel6 = @unlink($SetupDir['setup'].'license.php');
-$chdel7 = @unlink($SetupDir['convert'].'index.php');
+$chdel7 = @unlink($SetupDir['setup'].'preinstall.php'); $chdel8 = @unlink($SetupDir['convert'].'index.php');
 if($ConvertInfo['ConvertFile']!=null) { $chdel0 = @unlink($ConvertInfo['ConvertFile']); }
-$chdel8 = @unlink($SetupDir['convert'].'info.php'); 
-$chdel9 = @rmdir($SetupDir['convert']); $chdel10 = @rmdir('setup');
-$chdel11 = @unlink('install.php'); } }
-if($chdel1==false||$chdel2==false||$chdel3==false) { $chdel = false; }
-if($chdel4==false||$chdel5==false||$chdel6==false||$chdel7==false) { $chdel = false; }
-if($chdel8==false||$chdel9==false||$chdel10==false||$chdel11==false) { $chdel = false; }
+$chdel9 = @unlink($SetupDir['convert'].'info.php'); 
+$chdel10 = @rmdir($SetupDir['convert']); $chdel11 = @rmdir('setup');
+$chdel12 = @unlink('install.php'); } }
+if($chdel1==false||$chdel2==false||$chdel3==false||$chdel4==false) { $chdel = false; }
+if($chdel5==false||$chdel6==false||$chdel7==false||$chdel8==false) { $chdel = false; }
+if($chdel9==false||$chdel10==false||$chdel11==false||$chdel12==false) { $chdel = false; }
 if($ConvertInfo['ConvertFile']!=null) { if($chdel0==false) { $chdel = false; } }
 ?><span class="TableMessage">
 <br />Install Finish <a href="index.php?act=view">Click here</a> to goto board. ^_^</span>

@@ -12,14 +12,14 @@
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mktable.php - Last Update: 06/18/2007 SVN 26 - Author: cooldude2k $
+    $FileInfo: mktable.php - Last Update: 07/01/2007 SVN 35 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mktable.php"||$File3Name=="/mktable.php") {
 	require('index.php');
 	exit(); }
-if($SetupDir['setup']==null) { $SetupDir['setup'] = "setup/"; }
-if($SetupDir['convert']==null) { $SetupDir['convert'] = "setup/convert/"; }
+if(!isset($SetupDir['setup'])) { $SetupDir['setup'] = "setup/"; }
+if(!isset($SetupDir['convert'])) { $SetupDir['convert'] = "setup/convert/"; }
 $query="CREATE TABLE `".$_POST['tableprefix']."categories` ( `id` int(15) NOT NULL auto_increment, `Name` varchar(150) NOT NULL default '', `ShowCategory` varchar(5) NOT NULL default '', `CategoryType` varchar(15) NOT NULL default '', `SubShowForums` varchar(5) NOT NULL default '', `InSubCategory` int(15) NOT NULL default '0', `Description` text NOT NULL, PRIMARY KEY  (`id`)) TYPE=`MyISAM` ;";
 mysql_query($query);
 $query="CREATE TABLE `".$_POST['tableprefix']."forums` ( `id` int(15) NOT NULL auto_increment, `CategoryID` int(15) NOT NULL default '0', `Name` varchar(150) NOT NULL default '', `ShowForum` varchar(5) NOT NULL default '', `ForumType` varchar(15) NOT NULL default '', `InSubForum` int(15) NOT NULL default '0', `RedirectURL` text NOT NULL, `Redirects` int(15) NOT NULL default '0', `NumViews` int(15) NOT NULL default '0', `Description` text NOT NULL, `PostCountAdd` varchar(15) NOT NULL default '', `CanHaveTopics` varchar(5) NOT NULL default '', `NumPosts` int(15) NOT NULL default '0', `NumTopics` int(15) NOT NULL default '0', PRIMARY KEY  (`id`)) TYPE=`MyISAM` ;";
