@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: xhtml10.php - Last Update: 05/26/2007 SVN 15 - Author: cooldude2k $
+    $FileInfo: xhtml10.php - Last Update: 07/02/2007 SVN 36 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="xhtml10.php"||$File3Name=="/xhtml10.php") {
@@ -19,22 +19,29 @@ if ($File3Name=="xhtml10.php"||$File3Name=="/xhtml10.php") {
 	exit(); }
 if($Settings['output_type']=="html") {
 	$ccstart = "//<!--"; $ccend = "//-->";
-@header("Content-Type: text/html; charset=iso-8859-15"); }
+@header("Content-Type: text/html; charset=".$Settings['charset']); }
 if($Settings['output_type']=="xhtml") {
 if(stristr($_SERVER["HTTP_ACCEPT"],"application/xhtml+xml")) {
 	$ccstart = "//<![CDATA["; $ccend = "//]]>";
-	@header("Content-Type: application/xhtml+xml; charset=iso-8859-15");
-	xml_doc_start("1.0","iso-8859-15"); }
+	@header("Content-Type: application/xhtml+xml; charset=".$Settings['charset']);
+	xml_doc_start("1.0",$Settings['charset']); }
 else { if (stristr($_SERVER["HTTP_USER_AGENT"],"W3C_Validator")) {
 	$ccstart = "//<![CDATA["; $ccend = "//]]>";
-   @header("Content-Type: application/xhtml+xml; charset=iso-8859-15");
-	xml_doc_start("1.0","iso-8859-15");
+   @header("Content-Type: application/xhtml+xml; charset=".$Settings['charset']);
+	xml_doc_start("1.0",$Settings['charset']);
 } else { $ccstart = "//<!--"; $ccend = "//-->";
-	@header("Content-Type: text/html; charset=iso-8859-15"); } } }
+	@header("Content-Type: text/html; charset=".$Settings['charset']); } } }
 if($Settings['output_type']!="xhtml") {
 	if($Settings['output_type']!="html") {
 		$ccstart = "//<!--"; $ccend = "//-->";
-@header("Content-Type: text/html; charset=iso-8859-15"); } }
+@header("Content-Type: text/html; charset=".$Settings['charset']); } }
+if($ThemeSet['CSSType']!="import"&&
+   $ThemeSet['CSSType']!="link"&&
+   $ThemeSet['CSSType']!="xml") { 
+   $ThemeSet['CSSType'] = "import"; }
+if($Settings['output_type']=="xhtml") {
+   xml_tag_make("xml-stylesheet","type=text/css&href=".$ThemeSet['CSS'); }
+if($Settings['output_type']!="xhtml") { $ThemeSet['CSSType'] = "import"; }
 @header("Content-Script-Type: text/javascript");
 if(isset($Settings['showverinfo'])) { $idbmisc['showverinfo'] = $Settings['showverinfo']; }
 if(!isset($Settings['showverinfo'])) { $idbmisc['showverinfo'] = false; }
@@ -93,12 +100,11 @@ if($Settings['html_level']!="Strict") {
 <?php } echo "\n"; ?>
 
 <script type="text/javascript" src="<?php echo url_maker($exfilejs['javascript'],$Settings['js_ext'],null,$Settings['qstr'],$Settings['qsep'],$prexqstrjs['javascript'],$exqstrjs['javascript']); ?>"></script>
-<?php if($ThemeSet['CSSType']!="import"&&$ThemeSet['CSSType']!="link") { 
-$ThemeSet['CSSType'] = "import"; } if($ThemeSet['CSSType']=="import") { ?>
+<?php if($ThemeSet['CSSType']=="import") { ?>
 <style type="text/css"><?php echo "\n@import url(\"".$ThemeSet['CSS']."\");\n"; ?></style>
 <?php } if($ThemeSet['CSSType']=="link") { ?>
-<link rel="prefetch alternate stylesheet" href="<?php echo $BoardURL.$ThemeSet['CSS']; ?>" />
-<link rel="stylesheet" type="text/css" href="<?php echo $BoardURL.$ThemeSet['CSS']; ?>" />
+<link rel="prefetch alternate stylesheet" href="<?php echo $ThemeSet['CSS']; ?>" />
+<link rel="stylesheet" type="text/css" href="<?php echo $ThemeSet['CSS']; ?>" />
 <?php } if($ThemeSet['FavIcon']!=null) { ?>
 <link rel="icon" href="<?php echo $ThemeSet['FavIcon']; ?>" />
 <link rel="shortcut icon" href="<?php echo $ThemeSet['FavIcon']; ?>" />

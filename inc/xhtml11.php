@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: xhtml11.php - Last Update: 05/26/2007 SVN 15 - Author: cooldude2k $
+    $FileInfo: xhtml11.php - Last Update: 07/02/2007 SVN 36 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="xhtml11.php"||$File3Name=="/xhtml11.php") {
@@ -38,6 +38,13 @@ if($Settings['output_type']!="xhtml") {
 	if($Settings['output_type']!="html") {
 		$ccstart = "//<!--"; $ccend = "//-->";
 @header("Content-Type: text/html; charset=".$Settings['charset']); } }
+if($ThemeSet['CSSType']!="import"&&
+   $ThemeSet['CSSType']!="link"&&
+   $ThemeSet['CSSType']!="xml") { 
+   $ThemeSet['CSSType'] = "import"; }
+if($Settings['output_type']=="xhtml") {
+   xml_tag_make("xml-stylesheet","type=text/css&href=".$ThemeSet['CSS'); }
+if($Settings['output_type']!="xhtml") { $ThemeSet['CSSType'] = "import"; }
 if(isset($Settings['showverinfo'])) { $idbmisc['showverinfo'] = $Settings['showverinfo']; }
 if(!isset($Settings['showverinfo'])) { $idbmisc['showverinfo'] = false; }
 if($Settings['showverinfo']!=true) {
@@ -84,12 +91,11 @@ if($Settings['idburl']!="localhost"&&$Settings['idburl']!=null) {
 <?php } echo "\n"; ?>
 
 <script type="text/javascript" src="<?php echo url_maker($exfilejs['javascript'],$Settings['js_ext'],null,$Settings['qstr'],$Settings['qsep'],$prexqstrjs['javascript'],$exqstrjs['javascript']); ?>"></script>
-<?php if($ThemeSet['CSSType']!="import"&&$ThemeSet['CSSType']!="link") { 
-$ThemeSet['CSSType'] = "import"; } if($ThemeSet['CSSType']=="import") { ?>
+<?php if($ThemeSet['CSSType']=="import") { ?>
 <style type="text/css"><?php echo "\n@import url(\"".$ThemeSet['CSS']."\");\n"; ?></style>
 <?php } if($ThemeSet['CSSType']=="link") { ?>
-<link rel="prefetch alternate stylesheet" href="<?php echo $BoardURL.$ThemeSet['CSS']; ?>" />
-<link rel="stylesheet" type="text/css" href="<?php echo $BoardURL.$ThemeSet['CSS']; ?>" />
+<link rel="prefetch alternate stylesheet" href="<?php echo $ThemeSet['CSS']; ?>" />
+<link rel="stylesheet" type="text/css" href="<?php echo $ThemeSet['CSS']; ?>" />
 <?php } if($ThemeSet['FavIcon']!=null) { ?>
 <link rel="icon" href="<?php echo $ThemeSet['FavIcon']; ?>" />
 <link rel="shortcut icon" href="<?php echo $ThemeSet['FavIcon']; ?>" />

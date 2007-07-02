@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: functions.php - Last Update: 06/27/2007 SVN 29 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 07/02/2007 SVN 36 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -29,20 +29,13 @@ if ($File3Name==$FileName||$File3Name=="/".$FileName) {
 	return true; } }
 CheckFile("functions.php");
 require($SettDir['misc']."compression.php");
-if ($_GET['act']=="DeleteSession") {
-	@session_destroy(); }
-if ($_GET['act']=="ResetSession") {
-	@session_unset(); }
-if ($_GET['act']=="NewSessionID") {
-	@session_regenerate_id(); }
-if ($_GET['act']=="PHPInfo") {
-	@phpinfo(); exit(); }
-if ($_GET['act']=="phpinfo") {
-	@phpinfo(); exit(); }
-if ($_GET['act']=="PHPCredits") {
-	@phpcredits(); exit(); }
-if ($_GET['act']=="phpcredits") {
-	@phpcredits(); exit(); }
+if ($_GET['act']=="DeleteSession") { @session_destroy(); }
+if ($_GET['act']=="ResetSession") { @session_unset(); }
+if ($_GET['act']=="NewSessionID") { @session_regenerate_id(); }
+if ($_GET['act']=="PHPInfo") { @phpinfo(); exit(); }
+if ($_GET['act']=="phpinfo") { @phpinfo(); exit(); }
+if ($_GET['act']=="PHPCredits") { @phpcredits(); exit(); }
+if ($_GET['act']=="phpcredits") { @phpcredits(); exit(); }
 function ConnectMysql($sqlhost,$sqluser,$sqlpass,$sqldb) {
 $StatSQL = @mysql_connect($sqlhost,$sqluser,$sqlpass);
 $StatBase = @mysql_select_db($sqldb);
@@ -86,12 +79,12 @@ if($use_gzip=="on") {
 	if($gzip_type=="deflate") {
 	$goutput = gzcompress($output); }
 	echo $goutput; } }
-function gzip_page($use_gzip="off",$gzip_type="gzip") {
-global $Settings;
-if($gzip_type!="gzip") { if($gzip_type!="deflate") { $gzip_type = "gzip"; } }
 $output = @ob_get_clean();
 	$Names['RJ'] = "René Johnson";
 define("_rene_", $Names['RJ']);
+function gzip_page($use_gzip="off",$gzip_type="gzip") {
+global $Settings;
+if($gzip_type!="gzip") { if($gzip_type!="deflate") { $gzip_type = "gzip"; } }
 if($use_gzip!="on") {
 	echo $output; }
 if($use_gzip=="on") {
@@ -184,12 +177,25 @@ header("Refresh: ".$time."; URL=".$url); }
 if($type=="location") {
 header("Location: ".$url); }
 return true; }
-function xml_doc_start($ver,$encode,$retval=false) {
+function xml_tag_make($type,$attbs,$retval=false) {
+	$renee1 = explode("&",$attbs);
+	$reneenum=count($renee1);
+	$reneei=0; $attblist = null;
+	while ($reneei < $reneenum) {
+	$renee2 = explode("=",$renee1[$reneei]);
+	if($renee2[0]!=null||$renee2[1]!=null) {
+	$attblist = $attblist.' '.$renee2[0].'="'.$renee2[1].'"'; }
+	++$reneei; }
 	if($retval!=false&&$retval!=true) { $retval=false; }
 	if($retval==false) {
-	echo '<?xml version="'.$ver.'" encoding="'.$encode.'"?>'."\n"; }
+	echo '<?'.$type.$attblist.'?>'."\n"; }
 	if($retval==true) {
-	return '<?xml version="'.$ver.'" encoding="'.$encode.'"?>'."\n"; } }
+	return '<?'.$type.$attblist.'?>'."\n"; } }
+function xml_doc_start($ver,$encode,$retval=false) {
+	if($retval==false) {
+	echo xml_tag_make('xml','version='.$ver.'&encoding='.$encode,true); }
+	if($retval==true) {
+	return xml_tag_make('xml','version='.$ver.'&encoding='.$encode,true); } }
 function GMTimeChange($format,$timestamp,$offset,$minoffset=null,$dst=null) {
 $TCHour = date("H",$timestamp);
 $TCMinute = date("i",$timestamp);
@@ -218,6 +224,8 @@ if($dst=="on") { if($dstake!="done") {
 $TCHour = $TCHour + $tsa['hour'];
 $TCMinute = $TCMinute + $tsa['minute'];
 return date($format,mktime($TCHour,$TCMinute,$TCSecond,$TCMonth,$TCDay,$TCYear)); }
+	$Names['CK'] = "Christine";
+define("_christine_", $Names['CK']);
 function TimeChange($format,$timestamp,$offset,$minoffset=null,$dst=null) {
 return GMTimeChange($format,$timestamp,$offset,$minoffset,$dst); }
 function GMTimeStamp() {
