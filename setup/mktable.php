@@ -12,7 +12,7 @@
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mktable.php - Last Update: 07/01/2007 SVN 35 - Author: cooldude2k $
+    $FileInfo: mktable.php - Last Update: 07/03/2007 SVN 37 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mktable.php"||$File3Name=="/mktable.php") {
@@ -53,6 +53,6 @@ $query = "INSERT INTO ".$_POST['tableprefix']."permissions VALUES (1, 1, 'Admin'
 mysql_query($query);
 $query = "INSERT INTO ".$_POST['tableprefix']."catpermissions VALUES (1, 1, 'Admin', 1, 'yes'), (2, 2, 'Moderator', 1, 'yes'), (3, 3, 'Member', 1, 'yes'), (4, 4, 'Guest', 1, 'yes'), (5, 5, 'Banned', 1, 'no'), (6, 6, 'Validate', 1, 'yes');"; 
 mysql_query($query);
-$query = "INSERT INTO ".$_POST['tableprefix']."smileys VALUES (1, 'smile.gif', 'Happy', ':)', 'smileys/', 'yes', 'no'), (2, 'tongue.gif', 'Tongue', ':P', 'smileys/', 'yes', 'yes'), (3, 'tongue2.gif', 'Tongue', ':tongue:', 'smileys/', 'yes', 'yes'), (4, 'sweat.gif', 'Sweat', ':sweat:', 'smileys/', 'yes', 'yes'), (5, 'laugh.gif', 'lol', ':lol:', 'smileys/', 'yes', 'yes'), (6, 'cool.gif', 'Cool', 'B)', 'smileys/', 'yes', 'no'), (7, 'sleep.gif', 'Sleep', '-_-', 'smileys/', 'yes', 'no'), (8, 'sad.gif', 'Sad', ':(', 'smileys/', 'yes', 'no'), (9, 'angry.gif', 'Angry', ':angry:', 'smileys/', 'yes', 'yes'), (10, 'huh.gif', 'huh', ':huh:', 'smileys/', 'yes', 'yes'), (11, 'ohmy.gif', 'ohmy', ':o', 'smileys/', 'yes', 'yes'), (12, 'hmm.gif', 'hmm', ':unsure:', 'smileys/', 'yes', 'yes'), (13, 'mad.gif', 'Mad', ':mad:', 'smileys/', 'yes', 'yes'), (14, 'wub.gif', 'Wub', ':wub:', 'smileys/', 'yes', 'yes'), (15, 'x.gif', 'X', ':x:', 'smileys/', 'yes', 'yes');";
+$query = "INSERT INTO ".$_POST['tableprefix']."smileys VALUES (1, 'smile.gif', 'Happy', ':)', 'smileys/', 'yes', 'no'), (2, 'tongue.gif', 'Tongue', ':P', 'smileys/', 'yes', 'yes'), (3, 'tongue2.gif', 'Tongue', ':tongue:', 'smileys/', 'yes', 'yes'), (4, 'sweat.gif', 'Sweat', ':sweat:', 'smileys/', 'yes', 'yes'), (5, 'sweat.gif', 'Sweat', '^_^', 'smileys/', 'no', 'yes'), (6, 'laugh.gif', 'lol', ':lol:', 'smileys/', 'yes', 'yes'), (7, 'cool.gif', 'Cool', 'B)', 'smileys/', 'yes', 'no'), (8, 'sleep.gif', 'Sleep', '-_-', 'smileys/', 'yes', 'no'), (9, 'sad.gif', 'Sad', ':(', 'smileys/', 'yes', 'no'), (10, 'angry.gif', 'Angry', ':angry:', 'smileys/', 'yes', 'yes'), (11, 'huh.gif', 'huh', ':huh:', 'smileys/', 'yes', 'yes'), (12, 'ohmy.gif', 'ohmy', ':o', 'smileys/', 'yes', 'yes'), (13, 'hmm.gif', 'hmm', ':unsure:', 'smileys/', 'yes', 'yes'), (14, 'mad.gif', 'Mad', ':mad:', 'smileys/', 'yes', 'yes'), (15, 'wub.gif', 'Wub', ':wub:', 'smileys/', 'yes', 'yes'), (16, 'x.gif', 'X', ':x:', 'smileys/', 'yes', 'yes');";
 mysql_query($query);
 ?>
