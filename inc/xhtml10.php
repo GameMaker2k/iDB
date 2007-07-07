@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: xhtml10.php - Last Update: 07/03/2007 SVN 37 - Author: cooldude2k $
+    $FileInfo: xhtml10.php - Last Update: 07/07/2007 SVN 38 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="xhtml10.php"||$File3Name=="/xhtml10.php") {
@@ -39,9 +39,9 @@ if($ThemeSet['CSSType']!="import"&&
    $ThemeSet['CSSType']!="link"&&
    $ThemeSet['CSSType']!="xml") { 
    $ThemeSet['CSSType'] = "import"; }
-if($Settings['output_type']=="xhtml") {
+if($ThemeSet['CSSType']=="xhtml") {
    xml_tag_make("xml-stylesheet","type=text/css&href=".$ThemeSet['CSS']); }
-if($Settings['output_type']!="xhtml") { $ThemeSet['CSSType'] = "import"; }
+if($ThemeSet['CSSType']!="xhtml") { $ThemeSet['CSSType'] = "import"; }
 @header("Content-Script-Type: text/javascript");
 if(isset($Settings['showverinfo'])) { $idbmisc['showverinfo'] = $Settings['showverinfo']; }
 if(!isset($Settings['showverinfo'])) { $idbmisc['showverinfo'] = false; }
