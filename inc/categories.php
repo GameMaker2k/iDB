@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: categories.php - Last Update: 06/18/2007 SVN 26 - Author: cooldude2k $
+    $FileInfo: categories.php - Last Update: 07/10/2007 SVN 39 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="categories.php"||$File3Name=="/categories.php") {
@@ -89,14 +89,10 @@ if($UsersID=="-1") {
 $LastTopic = "User: <span title=\"".$oldusername."\">".$UsersName."</span><br />\nTopic: <a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."#post".$ShowReply."\" title=\"".$oldtopicname."\">".$TopicName."</a>"; } }
 @mysql_free_result($gltresult);
 $ForumType = strtolower($ForumType);
-if ($ForumType=="forum") {
-	$PreForum=$ThemeSet['ForumIcon']; }
-if ($ForumType=="subforum") {
-	$PreForum=$ThemeSet['SubForumIcon']; }
-if ($ForumType=="subforum") {
-	$PreForum=$ThemeSet['SubForumIcon']; }
-if ($ForumType=="redirect") {
-	$PreForum=$ThemeSet['RedirectIcon']; }
+if ($ForumType=="forum") { $PreForum=$ThemeSet['ForumIcon']; }
+if ($ForumType=="subforum") { $PreForum=$ThemeSet['SubForumIcon']; }
+if ($ForumType=="subforum") { $PreForum=$ThemeSet['SubForumIcon']; }
+if ($ForumType=="redirect") { $PreForum=$ThemeSet['RedirectIcon']; }
 ?>
 <tr class="TableRow3" id="Forum<?php echo $ForumID; ?>">
 <td class="TableRow3"><div class="forumicon">

@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: mysql.php - Last Update: 06/27/2007 SVN 29 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 07/10/2007 SVN 39 - Author: cooldude2k $
 */
 @error_reporting(E_ALL ^ E_NOTICE);
 @ini_set('session.use_trans_sid', false);
@@ -27,6 +27,7 @@ require_once('settings.php');
 if($Settings['fixpathinfo']==true) {
 	$_SERVER['PATH_INFO'] = $_SERVER['ORIG_PATH_INFO'];
 	@putenv("PATH_INFO=".$_SERVER['ORIG_PATH_INFO']); }
+// Check to see if varubles are set
 if(!isset($SettDir['inc'])) { $SettDir['inc'] = "inc/"; }
 if(!isset($SettDir['misc'])) { $SettDir['misc'] = "inc/misc/"; }
 if(!isset($SettDir['admin'])) { $SettDir['admin'] = "inc/admin/"; }
@@ -38,16 +39,11 @@ if(!isset($_GET['page'])) { $_GET['page'] = null; }
 if(!isset($_GET['act'])) { $_GET['act'] = null; }
 if(!isset($_POST['act'])) { $_POST['act'] = null; }
 if(!isset($_GET['id'])) { $_GET['id'] = null; }
-$_TEG = array(null);
-$_TEG['part'] = preg_replace("/Part(1|2|3|4)/","\\1",$_GET['act']);
-$_GET['act'] = strtolower($_GET['act']);
-if(isset($_TEG['part'])) {
-if($_TEG['part']<=4&&$_TEG['part']>=1) {
-$_GET['act'] = "Part".$_TEG['part']; } }
 require_once($SettDir['inc'].'filename.php');
 require_once($SettDir['inc'].'function.php');
 if($Settings['enable_pathinfo']==true) { 
 	mrstring(); /* Change Path info to Get Vars :P */ }
+// Check to see if varubles are set
 require_once($SettDir['misc'].'setcheck.php');
 @ini_set("default_charset",$Settings['charset']);
 $File1Name = dirname($_SERVER['SCRIPT_NAME'])."/";
@@ -57,6 +53,7 @@ if ($File3Name=="mysql.php"||$File3Name=="/mysql.php") {
 	require($SettDir['inc'].'forbidden.php');
 	exit(); }
 //error_reporting(E_ERROR);
+// Check if gzip is on and if user's browser can accept gzip pages
 if($Settings['use_gzip']=="on") {
 if(strstr($_SERVER['HTTP_ACCEPT_ENCODING'], "gzip")) { 
 	$GZipEncode['Type'] = "gzip"; } else { 
@@ -78,6 +75,7 @@ if($GZipEncode['Type']!="gzip") { if($GZipEncode['Type']!="deflate") { $GZipEnco
 	@header("Content-Encoding: deflate"); } }
 /* if(eregi("msie",$browser) && !eregi("opera",$browser)){
 @header('P3P: CP="NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM"'); } */
+// Some http stuff
 @session_set_cookie_params(0, $basedir);
 @session_cache_limiter("private, must-revalidate");
 @header("Cache-Control: private, must-revalidate"); // IE 6 Fix
@@ -89,9 +87,6 @@ if(CheckFiles("install.php")!=true) {
 @session_name($Settings['sqltable']."sess");
 @session_start(); }
 @output_reset_rewrite_vars();
-if($Settings['hash_type']!="hmac-md5") {
-if($Settings['hash_type']!="hmac-sha1") {
-$Settings['hash_type']="hmac-sha1"; } }
 if($_GET['act']=="bsdl"||$_GET['act']=="BSDL") { $_GET['act']="bsd"; }
 if($_GET['act']=="bsd"||$_GET['act']=="bsd") {
 @header("Content-Type: text/plain; charset=".$Settings['charset']);

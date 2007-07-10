@@ -13,15 +13,16 @@
     GZip and Zlib by Jean-loup Gailly (compression) and Mark Adler (decompression) http://www.zlib.net/
 	BZip2 and libbzip2 by Julian Seward http://www.bzip.org/
 
-    $FileInfo: compression.php - Last Update: 06/04/2007 SVN 18 - Author: cooldude2k $
+    $FileInfo: compression.php - Last Update: 07/10/2007 SVN 39 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="compression.php"||$File3Name=="/compression.php") {
 	require('index.php');
 	exit(); }
-
+//Check if zlib is loaded
 if(@extension_loaded("zlib")) {
 function gunzip($infile, $outfile) {
+  $string = null;
   $zp = gzopen($infile, "r");
   while(!gzeof($zp))
        $string .= gzread($zp, 4096);
@@ -37,8 +38,7 @@ function gunzip2($infile, $outfile) {
  fwrite($fp, $string, strlen($string));
  fclose($fp);
 }
-function gzip($infile, $outfile, $param = 5)
-{
+function gzip($infile, $outfile, $param = 5) {
  $fp = fopen($infile, "r");
  $data = fread ($fp, filesize($infile));
  fclose($fp);
@@ -46,10 +46,9 @@ function gzip($infile, $outfile, $param = 5)
  gzwrite($zp, $data);
  gzclose($zp);
 } }
-
+//Check if bz2 is loaded
 if(@extension_loaded("bz2")) {
-function bzip($infile, $outfile)
-{
+function bzip($infile, $outfile) {
  $fp = fopen($infile, "r");
  $data = fread($fp, filesize($infile));
  fclose($fp);
@@ -59,6 +58,7 @@ function bzip($infile, $outfile)
 }
 
 function bunzip($infile, $outfile) {
+  $string = null;
   $zp = bzopen($infile, "r");
   while(!feof($zp))
        $string .= bzread($zp, 4096);
@@ -67,10 +67,10 @@ function bunzip($infile, $outfile) {
   fwrite($fp, $string, strlen($string));
   fclose($fp);
 } }
-
+//Check if zip is loaded
 if(@extension_loaded("zip")) {
 /* Nothing for now... :P */ }
-
+//Check if rar is loaded
 if(@extension_loaded("rar")) {
 /* Nothing for now... :P */ }
 

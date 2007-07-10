@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: function.php - Last Update: 06/15/2007 SVN 24 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 07/10/2007 SVN 39 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -27,6 +27,7 @@ if($Settings['use_iniset']==true&&$Settings['qstr']!="/") {
 if(dirname($_SERVER['REQUEST_URI'])!="."||
 	dirname($_SERVER['REQUEST_URI'])!=null) {
 $basedir = dirname($_SERVER['REQUEST_URI'])."/"; }*/
+// Get the base dir name
 if(dirname($_SERVER['SCRIPT_NAME'])!="."||
 	dirname($_SERVER['SCRIPT_NAME'])!=null) {
 $basedir = dirname($_SERVER['SCRIPT_NAME'])."/"; }
@@ -46,6 +47,7 @@ if(!isset($REFERERurl['host'])) { $REFERERurl['host'] = null; }
 $URL['REFERER'] = $REFERERurl['host'];
 $URL['HOST'] = $_SERVER["SERVER_NAME"];
 $REFERERurl = null; unset($REFERERurl);
+// Make the Query String if we are not useing &=
 function qstring($qstr=";",$qsep="=")
 { $_GET = null; $_GET = array();
 if (!isset($_SERVER['QUERY_STRING'])) {
@@ -70,6 +72,7 @@ $myscript = $_SERVER["SCRIPT_NAME"];
 $myphpath = $_SERVER["PHP_SELF"];
 $mypathinfo = str_replace($myscript, "", $myphpath);
 @putenv("PATH_INFO=".$mypathinfo); } }
+// Change Path info to Get Vars :
 function mrstring() {
 $urlvar = explode('/',$_SERVER['PATH_INFO']);
 $num=count($urlvar); $i=1;
@@ -83,8 +86,8 @@ $urlvar[$i] = str_replace($fix1, $fix2, $urlvar[$i]);
 $urlvar[$i] = killbadvars($urlvar[$i]);
 	$_GET[$urlvar[$i]] = $urlvar[$i+1]; }
 ++$i; ++$i; } return true; }
-function redirect($type,$file,$time=0,$url=null,$dbsr=true)
-{
+// Redirect to another file with ether timed or nontimed redirect
+function redirect($type,$file,$time=0,$url=null,$dbsr=true) {
 if($type!="location"&&
 	$type!="refresh") {
 	$type=="location"; }
@@ -98,6 +101,7 @@ if($type=="location") {
 @session_write_close();
 header("Location: ".$file); }
 return true; }
+// Make a url
 function url_maker($file="index",$ext=".php",$qvarstr=null,$qstr=";",$qsep="=",$prexqstr=null,$exqstr=null,$fixhtml=true) {
 $fileurl = null; if(!isset($ext)) { $ext = null; }
 if($ext==null) { $ext = ".php"; } 
@@ -170,6 +174,7 @@ while ($sandi < $sanum) {
 	++$sandi; } }
 return $fileurl; }
 $thisdir = dirname(realpath("Preindex.php"))."/";
+// Get the Query String
 function GetQueryStr($qstr=";",$qsep="=",$fixhtml=true)
 { $pregqstr = preg_quote($qstr,"/");
 $pregqsep = preg_quote($qsep,"/");

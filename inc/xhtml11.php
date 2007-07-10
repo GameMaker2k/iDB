@@ -11,12 +11,15 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: xhtml11.php - Last Update: 07/07/2007 SVN 38 - Author: cooldude2k $
+    $FileInfo: xhtml11.php - Last Update: 07/10/2007 SVN 39 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="xhtml11.php"||$File3Name=="/xhtml11.php") {
 	require('index.php');
 	exit(); }
+// Check to see if we serv the file as html or xhtml
+// if we do xhtml we also check to see if user's browser 
+// can dispay if or else fallback to html
 if($Settings['output_type']!="xhtml") {
 	$Settings['output_type'] = "xhtml"; }
 if($Settings['output_type']=="html") {
@@ -56,13 +59,15 @@ $csryear = "2004"; $cryear = date("Y"); if($cryear<=2004) { $cryear = "2005"; }
 $endpagevar = "<div class=\"copyright\">Powered by ".$iDBURL1."iDB</a> &copy; ".$GM2kURL." @ ".$csryear." - ".$cryear." <a href=\"".url_maker($exfile['index'],$Settings['file_ext'],"act=bsd",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'])."\" title=\"iDB is licensed under the Revised BSD License\">BSDL</a> <br />\n".$ThemeSet['CopyRight'];
 @header("Content-Language: en");
 @header("Vary: Accept");
+// Check if we are on a secure HTTP connection
 if($_SERVER['HTTPS']=="on") { $prehost = "https://"; }
 if($_SERVER['HTTPS']!="on") { $prehost = "http://"; }
+// Get the board's url
 if($Settings['idburl']=="localhost"||$Settings['idburl']==null) {
 	$BoardURL = $prehost.$_SERVER["HTTP_HOST"].$basedir; }
 if($Settings['idburl']!="localhost"&&$Settings['idburl']!=null) {
 	$BoardURL = $Settings['idburl']; }
-?>
+ // HTML Document Starts, HTML meta tags and other html, head tags ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" 
    "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
