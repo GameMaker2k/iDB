@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: mysql.php - Last Update: 07/10/2007 SVN 39 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 07/11/2007 SVN 40 - Author: cooldude2k $
 */
 @error_reporting(E_ALL ^ E_NOTICE);
 @ini_set('session.use_trans_sid', false);
@@ -27,7 +27,7 @@ require_once('settings.php');
 if($Settings['fixpathinfo']==true) {
 	$_SERVER['PATH_INFO'] = $_SERVER['ORIG_PATH_INFO'];
 	@putenv("PATH_INFO=".$_SERVER['ORIG_PATH_INFO']); }
-// Check to see if varubles are set
+// Check to see if variables are set
 if(!isset($SettDir['inc'])) { $SettDir['inc'] = "inc/"; }
 if(!isset($SettDir['misc'])) { $SettDir['misc'] = "inc/misc/"; }
 if(!isset($SettDir['admin'])) { $SettDir['admin'] = "inc/admin/"; }
@@ -43,7 +43,7 @@ require_once($SettDir['inc'].'filename.php');
 require_once($SettDir['inc'].'function.php');
 if($Settings['enable_pathinfo']==true) { 
 	mrstring(); /* Change Path info to Get Vars :P */ }
-// Check to see if varubles are set
+// Check to see if variables are set
 require_once($SettDir['misc'].'setcheck.php');
 @ini_set("default_charset",$Settings['charset']);
 $File1Name = dirname($_SERVER['SCRIPT_NAME'])."/";
