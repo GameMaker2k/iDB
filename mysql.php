@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: mysql.php - Last Update: 07/11/2007 SVN 40 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 07/12/2007 SVN 41 - Author: cooldude2k $
 */
 @error_reporting(E_ALL ^ E_NOTICE);
 @ini_set('session.use_trans_sid', false);
@@ -34,6 +34,7 @@ if(!isset($SettDir['admin'])) { $SettDir['admin'] = "inc/admin/"; }
 if(!isset($SettDir['mod'])) { $SettDir['mod'] = "inc/mod/"; }
 if(!isset($SettDir['themes'])) { $SettDir['themes'] = "themes/"; }
 if(!isset($Settings['use_iniset'])) { $Settings['use_iniset'] = null; }
+if(!isset($Settings['clean_ob'])) { $Settings['clean_ob'] = false; }
 if(!isset($_SERVER['PATH_INFO'])) { $_SERVER['PATH_INFO'] = null; }
 if(!isset($_GET['page'])) { $_GET['page'] = null; }
 if(!isset($_GET['act'])) { $_GET['act'] = null; }
@@ -66,7 +67,13 @@ if(strstr($_SERVER['HTTP_ACCEPT_ENCODING'], "gzip")) { $Settings['use_gzip'] = "
 if($Settings['use_gzip']=="deflate") {
 if(strstr($_SERVER['HTTP_ACCEPT_ENCODING'], "deflate")) { $Settings['use_gzip'] = "on";
 	$GZipEncode['Type'] = "deflate"; } else { $Settings['use_gzip'] = "off"; } }
-@ob_start();
+if($Settings['clean_ob']==true) {
+/* Check for other output handlers/buffers are open
+   and close and get the contents in an array */
+$numob = count(ob_list_handlers()); $iob = 0; 
+while ($iob < $numob) { 
+	$old_ob_var[$iob] = @ob_get_clean(); 
+	++$iob; } } @ob_start();
 if($Settings['use_gzip']=="on") { 
 if($GZipEncode['Type']!="gzip") { if($GZipEncode['Type']!="deflate") { $GZipEncode['Type'] = "gzip"; } }
 	if($GZipEncode['Type']=="gzip") {
