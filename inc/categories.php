@@ -11,13 +11,13 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: categories.php - Last Update: 07/10/2007 SVN 39 - Author: cooldude2k $
+    $FileInfo: categories.php - Last Update: 07/13/2007 SVN 42 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="categories.php"||$File3Name=="/categories.php") {
 	require('index.php');
 	exit(); }
-$prequery = query("select * from ".$Settings['sqltable']."categories where `id`=%i and `ShowCategory`='yes'", array($_GET['id']));
+$prequery = query("select * from `".$Settings['sqltable']."categories` where `id`=%i and `ShowCategory`='yes'", array($_GET['id']));
 $preresult=mysql_query($prequery);
 $prenum=mysql_num_rows($preresult);
 $prei=0;
@@ -33,7 +33,7 @@ $CategoryType = strtolower($CategoryType); $SubShowForums = strtolower($SubShowF
 if($CatCheck!="skip") {
 if($CategoryType=="subcategory") {
 redirect("location",$basedir.url_maker($exfile['subcategory'],$Settings['file_ext'],"act=".$_GET['act']."&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['subcategory'],$exqstr['subcategory'],FALSE)); } }
-$query = query("select * from ".$Settings['sqltable']."forums where `ShowForum`='yes' and `CategoryID`=%i and `InSubForum`=0 ORDER BY `id`", array($CategoryID));
+$query = query("select * from `".$Settings['sqltable']."forums` where `ShowForum`='yes' and `CategoryID`=%i and `InSubForum`=0 ORDER BY `id`", array($CategoryID));
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
 $i=0;
@@ -63,7 +63,7 @@ $NumTopics=mysql_result($result,$i,"NumTopics");
 $NumPosts=mysql_result($result,$i,"NumPosts");
 $ForumDescription=mysql_result($result,$i,"Description");
 unset($LastTopic);
-$gltquery = query("select * from ".$Settings['sqltable']."topics where (`CategoryID`=%i and `ForumID`=%i) ORDER BY `LastUpdate` DESC", array($CategoryID,$ForumID));
+$gltquery = query("select * from `".$Settings['sqltable']."topics` where `CategoryID`=%i and `ForumID`=%i ORDER BY `LastUpdate` DESC", array($CategoryID,$ForumID));
 $gltresult=mysql_query($gltquery);
 $gltnum=mysql_num_rows($gltresult);
 if($gltnum>0){

@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: profile.php - Last Update: 06/07/2007 SVN 20 - Author: cooldude2k $
+    $FileInfo: profile.php - Last Update: 07/13/2007 SVN 42 - Author: cooldude2k $
 */
 require('preindex.php');
 $usefileext = $Settings['file_ext'];
@@ -23,8 +23,10 @@ $filewpath = $exfile['profile'].$usefileext.$_SERVER['PATH_INFO'];
 </head>
 <body>
 <?php require($SettDir['inc'].'navbar.php');
-if($_SESSION['UserGroup']==$Settings['GuestGroup']) {
+if($_SESSION['UserGroup']==$Settings['GuestGroup']||$GroupInfo['CanEditProfile']=="no") {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); }
+if($_SESSION['UserGroup']!=$Settings['GuestGroup']||
+	$GroupInfo['CanEditProfile']=="yes") {
 if($_GET['act']==null||$_GET['act']=="notepad")
 { $_GET['act']="view"; }
 if($_GET['act']=="view"||
@@ -33,7 +35,7 @@ $_GET['act']=="avatar"||
 $_GET['act']=="settings"||
 $_GET['act']=="profile"||
 $_GET['act']=="userinfo")
-{ require($SettDir['inc'].'profilemain.php'); } ?>
+{ require($SettDir['inc'].'profilemain.php'); } } ?>
 <div>&nbsp;</div>
 <?php require($SettDir['inc'].'endpage.php'); 
 if(!isset($profiletitle)) { $profiletitle = null; }

@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: messenger.php - Last Update: 06/07/2007 SVN 20 - Author: cooldude2k $
+    $FileInfo: messenger.php - Last Update: 07/13/2007 SVN 42 - Author: cooldude2k $
 */
 require('preindex.php');
 $usefileext = $Settings['file_ext'];
@@ -23,17 +23,21 @@ $filewpath = $exfile['messenger'].$usefileext.$_SERVER['PATH_INFO'];
 </head>
 <body>
 <?php require($SettDir['inc'].'navbar.php');
-if($_SESSION['UserGroup']==$Settings['GuestGroup']) {
+if($_SESSION['UserGroup']==$Settings['GuestGroup']||$GroupInfo['CanPM']=="no") {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); } ?>
 
-<?php if($_GET['act']==null)
+<?php 
+if($_SESSION['UserGroup']!=$Settings['GuestGroup']||
+	$GroupInfo['CanPM']=="yes") {
+if($_GET['act']==null)
 { $_GET['act']="view"; }
 if(!is_numeric($_GET['id']))
 { $_GET['id']="1"; }
 if($_GET['act']=="view"||$_GET['act']=="viewsent")
 { require($SettDir['inc'].'pm.php'); }
 if($_GET['act']=="read")
-{ require($SettDir['inc'].'pm.php'); } ?>
+{ require($SettDir['inc'].'pm.php'); } }
+?>
 
 <div>&nbsp;</div>
 <?php require($SettDir['inc'].'endpage.php');

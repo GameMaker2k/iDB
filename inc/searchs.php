@@ -11,15 +11,17 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: searchs.php - Last Update: 06/18/2007 SVN 26 - Author: cooldude2k $
+    $FileInfo: searchs.php - Last Update: 07/13/2007 SVN 42 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="searchs.php"||$File3Name=="/searchs.php") {
 	require('index.php');
 	exit(); }
-if($Settings['enable_search']!=true) {
+if($Settings['enable_search']==false||
+	$GroupInfo['CanSearch']=="no") {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); }
-if($Settings['enable_search']==true) {
+if($Settings['enable_search']==true||
+	$GroupInfo['CanSearch']=="yes") {
 if($_GET['act']=="topics") {
 	if($_GET['search']==null&&$_GET['type']==null) {
 	?>
@@ -62,9 +64,9 @@ if($_GET['act']=="topics") {
 </table></div>
 <?php } if($_GET['search']!=null&&$_GET['type']!=null) {
 if($_GET['type']!="wildcard") {
-$query = query("select * from ".$Settings['sqltable']."topics where `TopicName`='%s' ORDER BY `Pinned` DESC, `LastUpdate` DESC", array($_GET['search'])); }
+$query = query("select * from `".$Settings['sqltable']."topics` where `TopicName`='%s' ORDER BY `Pinned` DESC, `LastUpdate` DESC", array($_GET['search'])); }
 if($_GET['type']=="wildcard") {
-$query = query("select * from ".$Settings['sqltable']."topics where `TopicName` LIKE '%s' ORDER BY `Pinned` DESC, `LastUpdate` DESC", array($_GET['search'])); }
+$query = query("select * from `".$Settings['sqltable']."topics` where `TopicName` LIKE '%s' ORDER BY `Pinned` DESC, `LastUpdate` DESC", array($_GET['search'])); }
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
 //Start Topic Page Code (Will be used at later time)
@@ -113,7 +115,7 @@ $TopicStat=mysql_result($result,$i,"Closed");
 $UsersName = GetUserName($UsersID,$Settings['sqltable']);
 if($UsersName=="Guest") { $UsersName=$GuestName;
 if($UsersName==null) { $UsersName="Guest"; } }
-$glrquery = query("select * from ".$Settings['sqltable']."posts where `ForumID`=%i and `TopicID`=%i ORDER BY `TimeStamp` DESC", array($ForumID,$TopicID));
+$glrquery = query("select * from `".$Settings['sqltable']."posts` where `ForumID`=%i and `TopicID`=%i ORDER BY `TimeStamp` DESC", array($ForumID,$TopicID));
 $glrresult=mysql_query($glrquery);
 $glrnum=mysql_num_rows($glrresult);
 if($glrnum>0){

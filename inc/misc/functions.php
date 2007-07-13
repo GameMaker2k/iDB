@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: functions.php - Last Update: 07/10/2007 SVN 39 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 07/13/2007 SVN 42 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -130,7 +130,7 @@ $varname = preg_replace("/(HTTP_GET_VARS|HTTP_POST_VARS|HTTP_POST_FILES)/i", nul
 // Change the text to icons(smileys)
 function text2icons($Text,$sqlt) {
 global $Settings;
-$reneequery="SELECT * FROM ".$sqlt."smileys";
+$reneequery=query("select * from `".$sqlt."smileys`", array(null));
 $reneeresult=mysql_query($reneequery);
 $reneenum=mysql_num_rows($reneeresult);
 $renees=0;
@@ -307,7 +307,7 @@ $phpsrcs = preg_replace("/\<font color=\"(.*?)\"\>/i", "<span style=\"color: \\1
 $phpsrcs = preg_replace("/\<\/font>/i", "</span>", $phpsrcs);
 return $phpsrcs; }
 function GetUserName($idu,$sqlt) {
-$gunquery = query("select * from ".$sqlt."members where `id`=%i", array($idu));
+$gunquery = query("select * from `".$sqlt."members` where `id`=%i", array($idu));
 $gunresult=mysql_query($gunquery);
 $gunnum=mysql_num_rows($gunresult);
 if($gunnum>0){

@@ -11,13 +11,13 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: subforums.php - Last Update: 06/18/2007 SVN 26 - Author: cooldude2k $
+    $FileInfo: subforums.php - Last Update: 07/13/2007 SVN 42 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="subforums.php"||$File3Name=="/subforums.php") {
 	require('index.php');
 	exit(); }
-$checkquery = query("select * from ".$Settings['sqltable']."forums where `id`=%s", array($_GET['id']));
+$checkquery = query("select * from `".$Settings['sqltable']."forums` where `id`=%s", array($_GET['id']));
 $checkresult=mysql_query($checkquery);
 $checknum=mysql_num_rows($checkresult);
 $checki=0;
@@ -33,12 +33,12 @@ $ForumType = strtolower($ForumType); $CanHaveTopics = strtolower($CanHaveTopics)
 if($CanHaveTopics!="yes"&&$ForumType!="redirect") {
 if($NumberViews==0||$NumberViews==null) { $NewNumberViews = 1; }
 if($NumberViews!=0&&$NumberViews!=null) { $NewNumberViews = $NumberViews + 1; }
-$viewup = query("update ".$Settings['sqltable']."forums set `NumViews`='%s' WHERE `id`=%i", array($NewNumberViews,$_GET['id']));
+$viewup = query("update `".$Settings['sqltable']."forums` set `NumViews`='%s' WHERE `id`=%i", array($NewNumberViews,$_GET['id']));
 mysql_query($viewup); }
 if($ForumType=="redirect") {
 if($RedirectTimes==0||$RedirectTimes==null) { $NewRedirTime = 1; }
 if($RedirectTimes!=0&&$RedirectTimes!=null) { $NewRedirTime = $RedirectTimes + 1; }
-$redirup = query("update ".$Settings['sqltable']."forums set `Redirects`='%s' WHERE `id`=%i", array($NewRedirTime,$_GET['id']));
+$redirup = query("update `".$Settings['sqltable']."forums` set `Redirects`='%s' WHERE `id`=%i", array($NewRedirTime,$_GET['id']));
 mysql_query($redirup);
 if($RedirectURL!="http://"&&$RedirectURL!="") {
 redirect("location",$RedirectURL,0,null,false); }
@@ -47,7 +47,7 @@ redirect("location",url_maker($exfile['index'],$Settings['file_ext'],"act=view",
 if($ForumType=="forum") {
 redirect("location",$basedir.url_maker($exfile['forum'],$Settings['file_ext'],"act=".$_GET['act']."&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum'],FALSE)); }
 @mysql_free_result($checkresult);
-$prequery = query("select * from ".$Settings['sqltable']."categories where `ShowCategory`='yes' and `id`=%i ORDER BY `id`", array($CategoryID));
+$prequery = query("select * from `".$Settings['sqltable']."categories` where `ShowCategory`='yes' and `id`=%i ORDER BY `id`", array($CategoryID));
 $preresult=mysql_query($prequery);
 $prenum=mysql_num_rows($preresult);
 $prei=0;
@@ -56,7 +56,7 @@ $CategoryID=mysql_result($preresult,$prei,"id");
 $CategoryName=mysql_result($preresult,$prei,"Name");
 $CategoryShow=mysql_result($preresult,$prei,"ShowCategory");
 $CategoryDescription=mysql_result($preresult,$prei,"Description");
-$query = query("select * from ".$Settings['sqltable']."forums where (`ShowForum`='yes' and `CategoryID`=%i and `InSubForum`=%i) ORDER BY `id`", array($CategoryID,$_GET['id']));
+$query = query("select * from `".$Settings['sqltable']."forums` where `ShowForum`='yes' and `CategoryID`=%i and `InSubForum`=%i ORDER BY `id`", array($CategoryID,$_GET['id']));
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
 $i=0;
@@ -85,7 +85,7 @@ $NumTopics=mysql_result($result,$i,"NumTopics");
 $NumPosts=mysql_result($result,$i,"NumPosts");
 $ForumDescription=mysql_result($result,$i,"Description");
 unset($LastTopic);
-$gltquery = query("select * from ".$Settings['sqltable']."topics where `ForumID`=%i ORDER BY `LastUpdate` DESC", array($ForumID));
+$gltquery = query("select * from `".$Settings['sqltable']."topics` where `ForumID`=%i ORDER BY `LastUpdate` DESC", array($ForumID));
 $gltresult=mysql_query($gltquery);
 $gltnum=mysql_num_rows($gltresult);
 if($gltnum>0){

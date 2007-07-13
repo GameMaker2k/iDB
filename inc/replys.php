@@ -11,13 +11,13 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: replys.php - Last Update: 06/18/2007 SVN 26 - Author: cooldude2k $
+    $FileInfo: replys.php - Last Update: 07/13/2007 SVN 42 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replys.php"||$File3Name=="/replys.php") {
 	require('index.php');
 	exit(); }
-$prequery = query("select * from ".$Settings['sqltable']."topics where `id`=%i", array($_GET['id']));
+$prequery = query("select * from `".$Settings['sqltable']."topics` where `id`=%i", array($_GET['id']));
 $preresult=mysql_query($prequery);
 $prenum=mysql_num_rows($preresult);
 $prei=0;
@@ -34,7 +34,7 @@ $ViewTimes=mysql_result($preresult,$prei,"NumViews");
 </table>
 <div>&nbsp;</div>
 <?php
-$query = query("select * from ".$Settings['sqltable']."posts where `TopicID`=%i ORDER BY `TimeStamp` ASC", array($_GET['id']));
+$query = query("select * from `".$Settings['sqltable']."posts` where `TopicID`=%i ORDER BY `TimeStamp` ASC", array($_GET['id']));
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
 //Start Reply Page Code (Will be used at later time)
@@ -55,7 +55,7 @@ if($num==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings[
 if($num!=0) { 
 if($ViewTimes==0||$ViewTimes==null) { $NewViewTimes = 1; }
 if($ViewTimes!=0&&$ViewTimes!=null) { $NewViewTimes = $ViewTimes + 1; }
-$viewsup = query("update ".$Settings['sqltable']."topics set `NumViews`='%s' WHERE `id`=%i", array($NewViewTimes,$_GET['id']));
+$viewsup = query("update `".$Settings['sqltable']."topics` set `NumViews`='%s' WHERE `id`=%i", array($NewViewTimes,$_GET['id']));
 mysql_query($viewsup); }
 while ($i < $num) {
 $MyPostID=mysql_result($result,$i,"id");
@@ -70,7 +70,7 @@ $MyEditUserID=mysql_result($result,$i,"EditUser");
 $MyTimeStamp=GMTimeChange("M j, Y, g:i a",$MyTimeStamp,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $MyPost=mysql_result($result,$i,"Post");
 $MyDescription=mysql_result($result,$i,"Description");
-$requery = query("select * from ".$Settings['sqltable']."members where `id`=%i", array($MyUserID));
+$requery = query("select * from `".$Settings['sqltable']."members` where `id`=%i", array($MyUserID));
 $reresult=mysql_query($requery);
 $renum=mysql_num_rows($reresult);
 $rei=0;
@@ -82,7 +82,7 @@ $User1Title=mysql_result($reresult,$rei,"Title");
 $User1Joined=mysql_result($reresult,$rei,"Joined");
 $User1Joined=GMTimeChange("M j Y",$User1Joined,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $User1GroupID=mysql_result($reresult,$rei,"GroupID");
-$gquery = query("select * from ".$Settings['sqltable']."groups where `id`=%i", array($User1GroupID));
+$gquery = query("select * from `".$Settings['sqltable']."groups` where `id`=%i", array($User1GroupID));
 $gresult=mysql_query($gquery);
 $User1Group=mysql_result($gresult,0,"Name");
 @mysql_free_result($gresult);
@@ -102,7 +102,7 @@ if($User1Name=="Guest") { $User1Name=$GuestName;
 if($User1Name==null) { $User1Name="Guest"; } }
 $MySubPost = null;
 if($MyEditTime!=$MyTimeStamp&&$MyEditUserID!=0) {
-$euquery = query("select * from ".$Settings['sqltable']."members where `id`=%i", array($MyEditUserID));
+$euquery = query("select * from `".$Settings['sqltable']."members` where `id`=%i", array($MyEditUserID));
 $euresult = mysql_query($euquery);
 $eunum = mysql_num_rows($euresult);
 $eui=0; while ($eui < $eunum) {
