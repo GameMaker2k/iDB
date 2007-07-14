@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: searchs.php - Last Update: 07/13/2007 SVN 42 - Author: cooldude2k $
+    $FileInfo: searchs.php - Last Update: 07/14/2007 SVN 43 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="searchs.php"||$File3Name=="/searchs.php") {
@@ -19,7 +19,9 @@ if ($File3Name=="searchs.php"||$File3Name=="/searchs.php") {
 	exit(); }
 if($Settings['enable_search']==false||
 	$GroupInfo['CanSearch']=="no") {
-redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); }
+redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
+ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); die(); }
 if($Settings['enable_search']==true||
 	$GroupInfo['CanSearch']=="yes") {
 if($_GET['act']=="topics") {

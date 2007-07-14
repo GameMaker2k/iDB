@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: subcategories.php - Last Update: 07/13/2007 SVN 42 - Author: cooldude2k $
+    $FileInfo: subcategories.php - Last Update: 07/14/2007 SVN 43 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="subcategories.php"||$File3Name=="/subcategories.php") {
@@ -21,7 +21,9 @@ $checkquery = query("select * from `".$Settings['sqltable']."categories` where `
 $checkresult=mysql_query($checkquery);
 $checknum=mysql_num_rows($checkresult);
 $checki=0;
-if($checknum===0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); }
+if($checknum===0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
+ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); die(); }
 $CategoryID=mysql_result($checkresult,$checki,"id");
 $CategoryName=mysql_result($checkresult,$checki,"Name");
 $CategoryShow=mysql_result($checkresult,$checki,"ShowCategory");
@@ -30,7 +32,9 @@ $SubShowForums=mysql_result($checkresult,$checki,"SubShowForums");
 $CategoryType = strtolower($CategoryType); $SubShowForums = strtolower($SubShowForums);
 $SCategoryName = $CategoryName;
 if($CategoryType=="category") {
-redirect("location",$basedir.url_maker($exfile['category'],$Settings['file_ext'],"act=".$_GET['act']."&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['category'],$exqstr['category'],FALSE)); }
+redirect("location",$basedir.url_maker($exfile['category'],$Settings['file_ext'],"act=".$_GET['act']."&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['category'],$exqstr['category'],FALSE));
+ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); die(); }
 @mysql_free_result($checkresult);
 $prequery = query("select * from `".$Settings['sqltable']."categories` where `ShowCategory`='yes' and `InSubCategory`=%i", array($_GET['id']));
 $preresult=mysql_query($prequery);

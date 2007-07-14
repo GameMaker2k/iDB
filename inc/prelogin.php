@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: prelogin.php - Last Update: 07/13/2007 SVN 42 - Author: cooldude2k $
+    $FileInfo: prelogin.php - Last Update: 07/14/2007 SVN 43 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="prelogin.php"||$File3Name=="/prelogin.php") {
@@ -47,5 +47,7 @@ setcookie("UserID", $YourIDAM, time() + (7 * 86400), $basedir);
 setcookie("SessPass", $YourPassAM, time() + (7 * 86400), $basedir);
 } if($numlog2<=0) {
 redirect("location",$basedir.url_maker($exfile['member'],$Settings['file_ext'],"act=logout",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],FALSE));
-} @mysql_free_result($resultlog2);
+ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); die(); }
+@mysql_free_result($resultlog2);
 ?>

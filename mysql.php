@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: mysql.php - Last Update: 07/13/2007 SVN 42 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 07/14/2007 SVN 43 - Author: cooldude2k $
 */
 @error_reporting(E_ALL ^ E_NOTICE);
 @ini_set('session.use_trans_sid', false);
@@ -109,7 +109,8 @@ if(stristr($_SERVER["HTTP_ACCEPT"],"application/x-javascript") ) {
 if(stristr($_SERVER["HTTP_ACCEPT"],"application/javascript") ) {
 @header("Content-Type: application/javascript; charset=".$Settings['charset']); } else {
 @header("Content-Type: text/javascript; charset=".$Settings['charset']); } }
-require("inc/javascript.php"); die(); }
+require("inc/javascript.php");
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); die(); }
 if(CheckFiles("install.php")!=true) {
 	if($Settings['sqldb']==null) {
 		redirect("location",$basedir."install.php"); }
@@ -144,8 +145,10 @@ $GroupInfo['HasModCP']=mysql_result($gruresult,0,"HasModCP");
 $GroupInfo['HasAdminCP']=mysql_result($gruresult,0,"HasAdminCP");
 $GroupInfo['ViewDBInfo']=mysql_result($gruresult,0,"ViewDBInfo");
 @mysql_free_result($gruresult);
-if($GroupInfo['CanViewBoard']=="no") { echo "Sorry you can not view the board.";
-@header("Content-Type: text/plain; charset=".$Settings['charset']); die(); }
+if($GroupInfo['CanViewBoard']=="no") { 
+@header("Content-Type: text/plain; charset=".$Settings['charset']); 
+ob_clean(); echo "Sorry you can not view the board."; 
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); die(); }
 //Time Zone Set
 if(!isset($_SESSION['UserTimeZone'])) { 
 	if(isset($Settings['DefaultTimeZone'])) { 

@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: search.php - Last Update: 07/13/2007 SVN 42 - Author: cooldude2k $
+    $FileInfo: search.php - Last Update: 07/14/2007 SVN 43 - Author: cooldude2k $
 */
 require('preindex.php');
 $usefileext = $Settings['file_ext'];
@@ -24,7 +24,9 @@ $filewpath = $exfile['search'].$usefileext.$_SERVER['PATH_INFO'];
 <body>
 <?php require($SettDir['inc'].'navbar.php');
 if($Settings['enable_search']==false||$GroupInfo['CanSearch']=="no") {
-redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); }
+redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
+ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); die(); }
 if($Settings['enable_search']==true||$GroupInfo['CanSearch']=="yes") {
 if(!isset($_GET['search'])) { $_GET['search'] = null; }
 if(!isset($_POST['search'])) { $_POST['search'] = null; }
