@@ -10,7 +10,7 @@
     Copyright 2004-2006 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2006 Game Maker 2k - http://upload.idb.s1.jcink.com/
     $ThemeInfo - Name: iDB Theme - Author: cooldude2k $
-    $FileInfo: css.css - Last Update: 06/04/2007 SVN 18 - Author: cooldude2k $
+    $FileInfo: css.css - Last Update: 07/15/2007 SVN 45 - Author: cooldude2k $
 */
 html {
 	font-family: verdana, arial, sans-serif;
@@ -211,4 +211,8 @@ font-size: 9px;
 color: #000000;
 font-weight: bold; 
 font-size: 10px;
+}
+.statsicon {
+text-align: center;
+vertical-align:  middle;
 }

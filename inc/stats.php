@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: stats.php - Last Update: 07/13/2007 SVN 42 - Author: cooldude2k $
+    $FileInfo: stats.php - Last Update: 07/15/2007 SVN 45 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="stats.php"||$File3Name=="/stats.php") {
@@ -46,9 +46,9 @@ if($guest_check > 0) { $nummembers = $nummembers - 1; }
 <td class="TableRow2" colspan="2" style="width: 100%; font-weight: bold;">Board Stats</td>
 </tr>
 <tr class="TableRow3" id="Stats2">
-<td style="width: 4%;" class="TableRow3"><div class="forumicon">
-<?php echo $ThemeSet['StatsIcon']; ?>&nbsp;</div></td>
-<td style="width: 96%;" class="TableRow3"><div class="forumname">
+<td style="width: 4%;" class="TableRow3"><div class="statsicon">
+<?php echo $ThemeSet['StatsIcon']; ?></div></td>
+<td style="width: 96%;" class="TableRow3"><div class="statsinfo">
 &nbsp;Our members have made a total of <?php echo $numposts; ?> posts<br />
 &nbsp;We have a total of <?php echo $numtopics; ?> topics made<br />
 &nbsp;We have <?php echo $nummembers; ?> registered members<br />
