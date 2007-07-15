@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: topics.php - Last Update: 07/14/2007 SVN 43 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 07/15/2007 SVN 44 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -32,15 +32,32 @@ $prenum=mysql_num_rows($preresult);
 $prei=0;
 if($prenum==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); die(); }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 while ($prei < $prenum) {
 $ForumID=mysql_result($preresult,$prei,"id");
+$ForumCatID=mysql_result($preresult,$prei,"CategoryID");
 $ForumName=mysql_result($preresult,$prei,"Name");
 $ForumType=mysql_result($preresult,$prei,"ForumType");
 $RedirectURL=mysql_result($preresult,$prei,"RedirectURL");
 $RedirectTimes=mysql_result($preresult,$prei,"Redirects");
 $NumberViews=mysql_result($preresult,$prei,"NumViews");
 $ForumType = strtolower($ForumType);
+if(!isset($CatPermissionInfo['CanViewCategory'][$ForumCatID])) {
+	$CatPermissionInfo['CanViewCategory'][$ForumCatID] = "no"; }
+if($CatPermissionInfo['CanViewCategory'][$ForumCatID]=="no"||
+	$CatPermissionInfo['CanViewCategory'][$ForumCatID]!="yes") { @mysql_free_result($preresult);
+redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
+ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+if(!isset($PermissionInfo['CanViewForum'][$ForumID])) {
+	$PermissionInfo['CanViewForum'][$ForumID] = "no"; }
+if($PermissionInfo['CanViewForum'][$ForumID]=="no"||
+	$PermissionInfo['CanViewForum'][$ForumID]!="yes") { @mysql_free_result($preresult);
+redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
+ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+if($CatPermissionInfo['CanViewCategory'][$ForumCatID]=="yes"&&
+	$PermissionInfo['CanViewForum'][$ForumID]=="yes") {
 if($ForumType!="redirect") {
 if($NumberViews==0||$NumberViews==null) { $NewNumberViews = 1; }
 if($NumberViews!=0&&$NumberViews!=null) { $NewNumberViews = $NumberViews + 1; }
@@ -54,16 +71,16 @@ mysql_query($redirup);
 if($RedirectURL!="http://"&&$RedirectURL!="") {
 redirect("location",$RedirectURL,0,null,false); ob_clean();
 @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); die(); }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 if($RedirectURL=="http://"||$RedirectURL=="") {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); die(); } }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); } }
 if($ForumCheck!="skip") {
 if($ForumType=="subforum") {
 redirect("location",$basedir.url_maker($exfile['subforum'],$Settings['file_ext'],"act=".$_GET['act']."&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['subforum'],$exqstr['subforum'],FALSE));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); die(); } }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); } }
 $query = query("select * from `".$Settings['sqltable']."topics` where `ForumID`=%i ORDER BY `Pinned` DESC, `LastUpdate` DESC", array($_GET['id']));
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
@@ -89,7 +106,6 @@ $i=0;
 <?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['forum'],$Settings['file_ext'],"act=view&id=".$ForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum']); ?>#<?php echo $ForumID; ?>"><?php echo $ForumName; ?></a></span>
 <?php echo "<span style=\"float: right;\">&nbsp;</span>"; ?></td>
 </tr>
-<?php ++$prei; } @mysql_free_result($preresult); ?>
 <tr id="TopicStatRow<?php echo $ForumID; ?>" class="TableRow2">
 <th class="TableRow2" style="width: 4%;">State</th>
 <th class="TableRow2" style="width: 36%;">Topic Name</th>
@@ -175,7 +191,7 @@ echo "<span>".$UsersName."</span>"; }
 <td class="TableRow3" style="text-align: center;"><?php echo $NumReply; ?></td>
 <td class="TableRow3"><?php echo $LastReply; ?></td>
 </tr>
-<?php ++$i; }
+<?php ++$i; } 
 ?>
 <tr id="ForumEnd<?php echo $ForumID; ?>" class="TableRow4">
 <td class="TableRow4" colspan="6">&nbsp;</td>
@@ -192,3 +208,6 @@ echo "<span>".$UsersName."</span>"; }
 </tr>
 </table>
 <div>&nbsp;</div>
+<?php } ++$prei; } 
+@mysql_free_result($preresult);
+?>

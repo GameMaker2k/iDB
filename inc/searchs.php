@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: searchs.php - Last Update: 07/14/2007 SVN 43 - Author: cooldude2k $
+    $FileInfo: searchs.php - Last Update: 07/15/2007 SVN 44 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="searchs.php"||$File3Name=="/searchs.php") {
@@ -21,7 +21,7 @@ if($Settings['enable_search']==false||
 	$GroupInfo['CanSearch']=="no") {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); die(); }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 if($Settings['enable_search']==true||
 	$GroupInfo['CanSearch']=="yes") {
 if($_GET['act']=="topics") {
@@ -105,6 +105,7 @@ $i=0;
 while ($i < $num) {
 $TopicID=mysql_result($result,$i,"id");
 $ForumID=mysql_result($result,$i,"ForumID");
+$CategoryID=mysql_result($result,$i,"CategoryID");
 $UsersID=mysql_result($result,$i,"UserID");
 $GuestName=mysql_result($result,$i,"GuestName");
 $TheTime=mysql_result($result,$i,"TimeStamp");
@@ -117,6 +118,10 @@ $TopicStat=mysql_result($result,$i,"Closed");
 $UsersName = GetUserName($UsersID,$Settings['sqltable']);
 if($UsersName=="Guest") { $UsersName=$GuestName;
 if($UsersName==null) { $UsersName="Guest"; } }
+if(isset($PermissionInfo['CanViewForum'][$ForumID])&&
+	$PermissionInfo['CanViewForum'][$ForumID]=="yes"&&
+	isset($CatPermissionInfo['CanViewCategory'][$CategoryID])&&
+	$CatPermissionInfo['CanViewCategory'][$CategoryID]=="yes") {
 $glrquery = query("select * from `".$Settings['sqltable']."posts` where `ForumID`=%i and `TopicID`=%i ORDER BY `TimeStamp` DESC", array($ForumID,$TopicID));
 $glrresult=mysql_query($glrquery);
 $glrnum=mysql_num_rows($glrresult);
@@ -180,7 +185,7 @@ echo "<span>".$UsersName."</span>"; }
 <td class="TableRow3" style="text-align: center;"><?php echo $NumReply; ?></td>
 <td class="TableRow3"><?php echo $LastReply; ?></td>
 </tr>
-<?php ++$i; }
+<?php } ++$i; }
 ?>
 <tr id="SearchEnd" class="TableRow4">
 <td class="TableRow4" colspan="6">&nbsp;</td>

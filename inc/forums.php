@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: forums.php - Last Update: 07/13/2007 SVN 42 - Author: cooldude2k $
+    $FileInfo: forums.php - Last Update: 07/15/2007 SVN 44 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="forums.php"||$File3Name=="/forums.php") {
@@ -29,6 +29,8 @@ $CategoryType=mysql_result($preresult,$prei,"CategoryType");
 $SubShowForums=mysql_result($preresult,$prei,"SubShowForums");
 $CategoryDescription=mysql_result($preresult,$prei,"Description");
 $CategoryType = strtolower($CategoryType); $SubShowForums = strtolower($SubShowForums);
+if(isset($CatPermissionInfo['CanViewCategory'][$CategoryID])&&
+	$CatPermissionInfo['CanViewCategory'][$CategoryID]=="yes") {
 $query = query("select * from `".$Settings['sqltable']."forums` where `ShowForum`='yes' and `CategoryID`=%i and `InSubForum`=0 ORDER BY `id`", array($CategoryID));
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
@@ -59,6 +61,8 @@ $NumTopics=mysql_result($result,$i,"NumTopics");
 $NumPosts=mysql_result($result,$i,"NumPosts");
 $ForumDescription=mysql_result($result,$i,"Description");
 $ForumType = strtolower($ForumType);
+if(isset($PermissionInfo['CanViewForum'][$ForumID])&&
+	$PermissionInfo['CanViewForum'][$ForumID]=="yes") {
 unset($LastTopic);
 $gltquery = query("select * from `".$Settings['sqltable']."topics` where `CategoryID`=%i and `ForumID`=%i ORDER BY `LastUpdate` DESC", array($CategoryID,$ForumID));
 $gltresult=mysql_query($gltquery);
@@ -100,8 +104,7 @@ if ($ForumType=="redirect") { $PreForum=$ThemeSet['RedirectIcon']; }
 <td class="TableRow3" style="text-align: center;"><?php echo $NumPosts; ?></td>
 <td class="TableRow3"><?php echo $LastTopic; ?></td>
 </tr>
-<?php
-++$i; } @mysql_free_result($result);
+<?php } ++$i; } @mysql_free_result($result);
 if($num>=1) {
 ?>
 <tr id="CatEnd<?php echo $CategoryID; ?>" class="TableRow4">
@@ -109,5 +112,5 @@ if($num>=1) {
 </tr>
 </table></div>
 <div>&nbsp;</div>
-<?php } ++$prei; }
+<?php } } ++$prei; }
 @mysql_free_result($preresult); ?>

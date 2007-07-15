@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: profile.php - Last Update: 07/14/2007 SVN 43 - Author: cooldude2k $
+    $FileInfo: profile.php - Last Update: 07/15/2007 SVN 44 - Author: cooldude2k $
 */
 require('preindex.php');
 $usefileext = $Settings['file_ext'];
@@ -26,7 +26,7 @@ $filewpath = $exfile['profile'].$usefileext.$_SERVER['PATH_INFO'];
 if($_SESSION['UserGroup']==$Settings['GuestGroup']||$GroupInfo['CanEditProfile']=="no") {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); die(); }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 if($_SESSION['UserGroup']!=$Settings['GuestGroup']||
 	$GroupInfo['CanEditProfile']=="yes") {
 if($_GET['act']==null||$_GET['act']=="notepad")

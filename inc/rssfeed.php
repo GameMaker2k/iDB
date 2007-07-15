@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: rss2.php - Last Update: 07/13/2007 SVN 42 - Author: cooldude2k $
+    $FileInfo: rss2.php - Last Update: 07/15/2007 SVN 44 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="rssfeed.php"||$File3Name=="/rssfeed.php") {
@@ -73,6 +73,7 @@ $num=mysql_num_rows($result);
 $Atom = null; $RSS = null; $i=0;
 while ($i < $num) {
 $TopicID=mysql_result($result,$i,"id");
+$ForumID=mysql_result($result,$i,"ForumID");
 $CategoryID=mysql_result($result,$i,"CategoryID");
 $UsersID=mysql_result($result,$i,"UserID");
 $GuestName=mysql_result($result,$i,"GuestName");
@@ -80,8 +81,12 @@ $TheTime=mysql_result($result,$i,"TimeStamp");
 $TheTime=GMTimeChange("D, j M Y G:i:s \G\M\T",$TheTime,0);
 $TopicName=mysql_result($result,$i,"TopicName");
 $ForumDescription=mysql_result($result,$i,"Description");
+if(isset($PermissionInfo['CanViewForum'][$ForumID])&&
+	$PermissionInfo['CanViewForum'][$ForumID]=="yes"&&
+	isset($CatPermissionInfo['CanViewCategory'][$CategoryID])&&
+	$CatPermissionInfo['CanViewCategory'][$CategoryID]=="yes") {
 $Atom .= '<entry>'."\n".'<title>'.htmlentities($TopicName).'</title>'."\n".'<summary>'.htmlentities($ForumDescription).'</summary>'."\n".'<link rel="alternate" href="'.$BoardURL.url_maker($exfilerss['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstrrss['topic'],$exqstrrss['topic']).'" />'."\n".'<id>'.$BoardURL.url_maker($exfilerss['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstrrss['topic'],$exqstrrss['topic']).'</id>'."\n".'<author>'."\n".'<name>'.$SettInfo['Author'].'</name>'."\n".'</author>'."\n".'<updated>'.gmdate("Y-m-d\TH:i:s\Z").'</updated>'."\n".'</entry>'."\n";
-$RSS .= '<item>'."\n".'<title>'.htmlentities($TopicName).'</title>'."\n".'<description>'.htmlentities($ForumDescription).'</description>'."\n".'<link>'.$BoardURL.url_maker($exfilerss['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstrrss['topic'],$exqstrrss['topic']).'</link>'."\n".'<guid>'.$BoardURL.url_maker($exfilerss['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstrrss['topic'],$exqstrrss['topic']).'</guid>'."\n".'</item>'."\n";
+$RSS .= '<item>'."\n".'<title>'.htmlentities($TopicName).'</title>'."\n".'<description>'.htmlentities($ForumDescription).'</description>'."\n".'<link>'.$BoardURL.url_maker($exfilerss['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstrrss['topic'],$exqstrrss['topic']).'</link>'."\n".'<guid>'.$BoardURL.url_maker($exfilerss['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstrrss['topic'],$exqstrrss['topic']).'</guid>'."\n".'</item>'."\n"; }
 ++$i; } @mysql_free_result($result);
 xml_doc_start("1.0",$Settings['charset']);
 if($Settings['showverinfo']==true) { ?>

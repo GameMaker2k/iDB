@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: replys.php - Last Update: 07/14/2007 SVN 43 - Author: cooldude2k $
+    $FileInfo: replys.php - Last Update: 07/15/2007 SVN 44 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replys.php"||$File3Name=="/replys.php") {
@@ -23,8 +23,25 @@ $prenum=mysql_num_rows($preresult);
 $prei=0;
 while ($prei < $prenum) {
 $TopicName=mysql_result($preresult,$prei,"TopicName");
+$TopicForumID=mysql_result($preresult,$prei,"ForumID");
+$TopicCatID=mysql_result($preresult,$prei,"CategoryID");
 $ViewTimes=mysql_result($preresult,$prei,"NumViews");
-++$prei; } @mysql_free_result($preresult);
+if(!isset($CatPermissionInfo['CanViewCategory'][$TopicCatID])) {
+	$CatPermissionInfo['CanViewCategory'][$TopicCatID] = "no"; }
+if($CatPermissionInfo['CanViewCategory'][$TopicCatID]=="no"||
+	$CatPermissionInfo['CanViewCategory'][$TopicCatID]!="yes") {
+redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
+ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+if(!isset($PermissionInfo['CanViewForum'][$TopicForumID])) {
+	$PermissionInfo['CanViewForum'][$TopicForumID] = "no"; }
+if($PermissionInfo['CanViewForum'][$TopicForumID]=="no"||
+	$PermissionInfo['CanViewForum'][$TopicForumID]!="yes") {
+redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
+ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+if($CatPermissionInfo['CanViewCategory'][$TopicCatID]=="yes"&&
+	$PermissionInfo['CanViewForum'][$TopicForumID]=="yes") {
 ?>
 <table style="width: 100%;" class="Table2">
 <tr>
@@ -53,7 +70,7 @@ if($_GET['page']<=1) { $backpage = 1; }
 $i=0;
 if($num==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); die(); }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 if($num!=0) { 
 if($ViewTimes==0||$ViewTimes==null) { $NewViewTimes = 1; }
 if($ViewTimes!=0&&$ViewTimes!=null) { $NewViewTimes = $ViewTimes + 1; }
@@ -186,3 +203,6 @@ echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr
 </tr>
 </table>
 <div>&nbsp;</div>
+<?php } ++$prei; } 
+@mysql_free_result($preresult);
+?>

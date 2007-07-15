@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: subforums.php - Last Update: 07/14/2007 SVN 43 - Author: cooldude2k $
+    $FileInfo: subforums.php - Last Update: 07/15/2007 SVN 44 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="subforums.php"||$File3Name=="/subforums.php") {
@@ -43,15 +43,15 @@ mysql_query($redirup);
 if($RedirectURL!="http://"&&$RedirectURL!="") {
 redirect("location",$RedirectURL,0,null,false); ob_clean();
 @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); die(); }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 if($RedirectURL=="http://"||$RedirectURL=="") {
 redirect("location",url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); die(); } }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); } }
 if($ForumType=="forum") {
 redirect("location",$basedir.url_maker($exfile['forum'],$Settings['file_ext'],"act=".$_GET['act']."&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum'],FALSE));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); die(); }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 @mysql_free_result($checkresult);
 $prequery = query("select * from `".$Settings['sqltable']."categories` where `ShowCategory`='yes' and `id`=%i ORDER BY `id`", array($CategoryID));
 $preresult=mysql_query($prequery);
@@ -62,6 +62,14 @@ $CategoryID=mysql_result($preresult,$prei,"id");
 $CategoryName=mysql_result($preresult,$prei,"Name");
 $CategoryShow=mysql_result($preresult,$prei,"ShowCategory");
 $CategoryDescription=mysql_result($preresult,$prei,"Description");
+if(!isset($CatPermissionInfo['CanViewCategory'][$CategoryID])) {
+	$CatPermissionInfo['CanViewCategory'][$CategoryID] = "no"; }
+if($CatPermissionInfo['CanViewCategory'][$CategoryID]=="no"||
+	$CatPermissionInfo['CanViewCategory'][$CategoryID]!="yes") {
+redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
+ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+if($CatPermissionInfo['CanViewCategory'][$CategoryID]=="yes") {
 $query = query("select * from `".$Settings['sqltable']."forums` where `ShowForum`='yes' and `CategoryID`=%i and `InSubForum`=%i ORDER BY `id`", array($CategoryID,$_GET['id']));
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
@@ -90,6 +98,8 @@ $ForumType=mysql_result($result,$i,"ForumType");
 $NumTopics=mysql_result($result,$i,"NumTopics");
 $NumPosts=mysql_result($result,$i,"NumPosts");
 $ForumDescription=mysql_result($result,$i,"Description");
+if(isset($PermissionInfo['CanViewForum'][$ForumID])&&
+	$PermissionInfo['CanViewForum'][$ForumID]=="yes") {
 unset($LastTopic);
 $gltquery = query("select * from `".$Settings['sqltable']."topics` where `ForumID`=%i ORDER BY `LastUpdate` DESC", array($ForumID));
 $gltresult=mysql_query($gltquery);
@@ -130,16 +140,14 @@ if ($ForumType=="redirect") {
 <td class="TableRow3" style="text-align: center;"><?php echo $NumPosts; ?></td>
 <td class="TableRow3"><?php echo $LastTopic; ?></td>
 </tr>
-<?php
-++$i; } @mysql_free_result($result);
+<?php } ++$i; } @mysql_free_result($result);
 ?>
 <tr id="CatEnd<?php echo $CategoryID; ?>" class="TableRow4">
 <td class="TableRow4" colspan="5">&nbsp;</td>
 </tr>
 </table></div>
 <div>&nbsp;</div>
-<?php
-++$prei; } @mysql_free_result($preresult);
+<?php } ++$prei; } @mysql_free_result($preresult);
 $ForumCheck = "skip";
 if($CanHaveTopics!="yes") { 
 	$ForumName = $SForumName; }

@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: mysql.php - Last Update: 07/14/2007 SVN 43 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 07/15/2007 SVN 44 - Author: cooldude2k $
 */
 @error_reporting(E_ALL ^ E_NOTICE);
 @ini_set('session.use_trans_sid', false);
@@ -109,7 +109,7 @@ if(stristr($_SERVER["HTTP_ACCEPT"],"application/x-javascript") ) {
 if(stristr($_SERVER["HTTP_ACCEPT"],"application/javascript") ) {
 @header("Content-Type: application/javascript; charset=".$Settings['charset']); } else {
 @header("Content-Type: text/javascript; charset=".$Settings['charset']); } }
-require("inc/javascript.php");
+require($SettDir['inc'].'javascript.php');
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); die(); }
 if(CheckFiles("install.php")!=true) {
 	if($Settings['sqldb']==null) {
@@ -121,34 +121,8 @@ if(isset($_SESSION['CheckCookie'])) {
 if($_SESSION['CheckCookie']!="done") {
 if($_COOKIE['SessPass']!=null&&
 $_COOKIE['MemberName']!=null) {
-require('inc/prelogin.php'); } } }
-// Member Group Setup
-if(!isset($_SESSION['UserGroup'])) { $_SESSION['UserGroup'] = null; }
-if($_SESSION['UserGroup']==null) { 
-$_SESSION['UserGroup']=$Settings['GuestGroup']; }
-$gruquery = query("select * from `".$Settings['sqltable']."groups` where `Name`='%s'", array($_SESSION['UserGroup']));
-$gruresult=mysql_query($gruquery);
-$grunum=mysql_num_rows($gruresult);
-$GroupInfo['ID']=mysql_result($gruresult,0,"id");
-$GroupInfo['Name']=mysql_result($gruresult,0,"Name");
-$GroupInfo['PermissionID']=mysql_result($gruresult,0,"PermissionID");
-$GroupInfo['NamePrefix']=mysql_result($gruresult,0,"NamePrefix");
-$GroupInfo['NameSuffix']=mysql_result($gruresult,0,"NameSuffix");
-$GroupInfo['CanViewBoard']=mysql_result($gruresult,0,"CanViewBoard");
-$GroupInfo['CanEditProfile']=mysql_result($gruresult,0,"CanEditProfile");
-$GroupInfo['CanAddEvents']=mysql_result($gruresult,0,"CanAddEvents");
-$GroupInfo['CanPM']=mysql_result($gruresult,0,"CanPM");
-$GroupInfo['CanSearch']=mysql_result($gruresult,0,"CanSearch");
-$GroupInfo['PromoteTo']=mysql_result($gruresult,0,"PromoteTo");
-$GroupInfo['PromotePosts']=mysql_result($gruresult,0,"PromotePosts");
-$GroupInfo['HasModCP']=mysql_result($gruresult,0,"HasModCP");
-$GroupInfo['HasAdminCP']=mysql_result($gruresult,0,"HasAdminCP");
-$GroupInfo['ViewDBInfo']=mysql_result($gruresult,0,"ViewDBInfo");
-@mysql_free_result($gruresult);
-if($GroupInfo['CanViewBoard']=="no") { 
-@header("Content-Type: text/plain; charset=".$Settings['charset']); 
-ob_clean(); echo "Sorry you can not view the board."; 
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); die(); }
+require($SettDir['inc'].'prelogin.php'); } } }
+require($SettDir['inc'].'groupsetup.php');
 //Time Zone Set
 if(!isset($_SESSION['UserTimeZone'])) { 
 	if(isset($Settings['DefaultTimeZone'])) { 

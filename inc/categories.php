@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: categories.php - Last Update: 07/14/2007 SVN 43 - Author: cooldude2k $
+    $FileInfo: categories.php - Last Update: 07/15/2007 SVN 44 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="categories.php"||$File3Name=="/categories.php") {
@@ -30,11 +30,19 @@ $CategoryType=mysql_result($preresult,$prei,"CategoryType");
 $SubShowForums=mysql_result($preresult,$prei,"SubShowForums");
 $CategoryDescription=mysql_result($preresult,$prei,"Description");
 $CategoryType = strtolower($CategoryType); $SubShowForums = strtolower($SubShowForums);
+if(!isset($CatPermissionInfo['CanViewCategory'][$CategoryID])) {
+	$CatPermissionInfo['CanViewCategory'][$CategoryID] = "no"; }
+if($CatPermissionInfo['CanViewCategory'][$CategoryID]=="no"||
+	$CatPermissionInfo['CanViewCategory'][$CategoryID]!="yes") {
+redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
+ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+if($CatPermissionInfo['CanViewCategory'][$CategoryID]=="yes") {
 if($CatCheck!="skip") {
 if($CategoryType=="subcategory") {
 redirect("location",$basedir.url_maker($exfile['subcategory'],$Settings['file_ext'],"act=".$_GET['act']."&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['subcategory'],$exqstr['subcategory'],FALSE));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); die(); } }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); } }
 $query = query("select * from `".$Settings['sqltable']."forums` where `ShowForum`='yes' and `CategoryID`=%i and `InSubForum`=0 ORDER BY `id`", array($CategoryID));
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
@@ -45,7 +53,7 @@ if($num>=1) {
 <table id="Cat<?php echo $CategoryID; ?>" class="Table1">
 <tr id="CatStart<?php echo $CategoryID; ?>" class="TableRow1">
 <td class="TableRow1" colspan="5"><span style="float: left;">
-<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile[$CategoryType],$Settings['file_ext'],"act=view&id=".$CategoryID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$CategoryType],$exqstr[$CategoryType]); ?>""><?php echo $CategoryName; ?></a></span>
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile[$CategoryType],$Settings['file_ext'],"act=view&id=".$CategoryID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$CategoryType],$exqstr[$CategoryType]); ?>"><?php echo $CategoryName; ?></a></span>
 <?php echo "<span style=\"float: right;\">&nbsp;</span>"; ?></td>
 </tr>
 <tr id="ForumStatRow<?php echo $CategoryID; ?>" class="TableRow2">
@@ -64,6 +72,8 @@ $ForumType=mysql_result($result,$i,"ForumType");
 $NumTopics=mysql_result($result,$i,"NumTopics");
 $NumPosts=mysql_result($result,$i,"NumPosts");
 $ForumDescription=mysql_result($result,$i,"Description");
+if(isset($PermissionInfo['CanViewForum'][$ForumID])&&
+	$PermissionInfo['CanViewForum'][$ForumID]=="yes") {
 unset($LastTopic);
 $gltquery = query("select * from `".$Settings['sqltable']."topics` where `CategoryID`=%i and `ForumID`=%i ORDER BY `LastUpdate` DESC", array($CategoryID,$ForumID));
 $gltresult=mysql_query($gltquery);
@@ -105,13 +115,12 @@ if ($ForumType=="redirect") { $PreForum=$ThemeSet['RedirectIcon']; }
 <td class="TableRow3" style="text-align: center;"><?php echo $NumPosts; ?></td>
 <td class="TableRow3"><?php echo $LastTopic; ?></td>
 </tr>
-<?php
-++$i; } @mysql_free_result($result);
+<?php } ++$i; } @mysql_free_result($result);
 if($num>=1) { ?>
 <tr id="CatEnd<?php echo $CategoryID; ?>" class="TableRow4">
 <td class="TableRow4" colspan="5">&nbsp;</td>
 </tr>
 </table></div>
 <div>&nbsp;</div>
-<?php } ++$prei; }
+<?php } } ++$prei; }
 @mysql_free_result($preresult); ?>
