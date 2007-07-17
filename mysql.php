@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: mysql.php - Last Update: 07/17/2007 SVN 47 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 07/17/2007 SVN 48 - Author: cooldude2k $
 */
 @error_reporting(E_ALL ^ E_NOTICE);
 @ini_set('session.use_trans_sid', false);
@@ -113,7 +113,12 @@ if(stristr($_SERVER["HTTP_ACCEPT"],"application/javascript") ) {
 @header("Content-Type: text/javascript; charset=".$Settings['charset']); } }
 require($SettDir['inc'].'javascript.php');
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); die(); }
-@ConnectMysql($Settings['sqlhost'],$Settings['sqluser'],$Settings['sqlpass'],$Settings['sqldb']);
+$SQLStat = @ConnectMysql($Settings['sqlhost'],$Settings['sqluser'],$Settings['sqlpass'],$Settings['sqldb']);
+if($SQLStat==false) {
+@header("Content-Type: text/plain; charset=".$Settings['charset']); @mysql_free_result($peresult);
+ob_clean(); echo "Sorry could not connect to mysql database.\nContact the board admin about error. Error log berlow.";
+echo "\n".mysql_errno().": ".mysql_error();
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 if(CheckFiles("install.php")==true) {
 	$Settings['board_name'] = "Installing iDB"; }
 if(isset($_SESSION['CheckCookie'])) {
