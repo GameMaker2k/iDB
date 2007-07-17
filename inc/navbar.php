@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: navbar.php - Last Update: 07/13/2007 SVN 42 - Author: cooldude2k $
+    $FileInfo: navbar.php - Last Update: 07/17/2007 SVN 46 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="navbar.php"||$File3Name=="/navbar.php") {
@@ -42,8 +42,12 @@ if($ThemeSet['LogoStyle']!=null) { $logostyle = "style=\"".$ThemeSet['LogoStyle'
 <span style="float: left;">&nbsp;<?php if($_SESSION['UserGroup']==$Settings['GuestGroup']) {?>Welcome Guest ( <a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Log in</a><?php echo $ThemeSet['LineDivider']; ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=signup",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Register</a> )
 <?php } if($_SESSION['UserGroup']!=$Settings['GuestGroup']) { ?>Logged as: <a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$_SESSION['UserID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>"><?php echo $_SESSION['MemberName']; ?></a> ( <a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=logout",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Log out</a> )<?php } ?></span>
 <span style="float: right;">
-<?php if($_SESSION['UserGroup']!=$Settings['GuestGroup']) {
-		if($GroupInfo['CanEditProfile']=="yes") { ?>
+<?php
+	if($Settings['enable_search']==true||
+	$GroupInfo['CanSearch']=="yes") { ?>
+<a href="<?php echo url_maker($exfile['search'],$Settings['file_ext'],"act=topics",$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search']); ?>">Search</a><?php echo $ThemeSet['LineDivider']; }
+	if($_SESSION['UserGroup']!=$Settings['GuestGroup']) { 
+	if($GroupInfo['CanEditProfile']=="yes") { ?>
 <a href="<?php echo url_maker($exfile['profile'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['profile'],$exqstr['profile']); ?>">Profile</a><?php echo $ThemeSet['LineDivider']; } 
 		if($GroupInfo['CanPM']=="yes") { ?>
 <a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>">MailBox&nbsp;(<?php echo $PMNumber; ?>)</a><?php echo $ThemeSet['LineDivider']; ?><?php } } ?>

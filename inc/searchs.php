@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: searchs.php - Last Update: 07/15/2007 SVN 44 - Author: cooldude2k $
+    $FileInfo: searchs.php - Last Update: 07/17/2007 SVN 46 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="searchs.php"||$File3Name=="/searchs.php") {
@@ -20,7 +20,8 @@ if ($File3Name=="searchs.php"||$File3Name=="/searchs.php") {
 if($Settings['enable_search']==false||
 	$GroupInfo['CanSearch']=="no") {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
-ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
+@header("Content-Type: text/plain; charset=".$Settings['charset']);
+ob_clean(); echo "Sorry you do not have permission to do a search."; 
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 if($Settings['enable_search']==true||
 	$GroupInfo['CanSearch']=="yes") {
@@ -71,6 +72,11 @@ if($_GET['type']=="wildcard") {
 $query = query("select * from `".$Settings['sqltable']."topics` where `TopicName` LIKE '%s' ORDER BY `Pinned` DESC, `LastUpdate` DESC", array($_GET['search'])); }
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
+if($num<=0) { 
+redirect("location",$basedir.url_maker($exfile['search'],$Settings['file_ext'],"act=topics",$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search'],false));
+@header("Content-Type: text/plain; charset=".$Settings['charset']);
+ob_clean(); echo "Sorry could not find any search results."; @mysql_free_result($result);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 //Start Topic Page Code (Will be used at later time)
 if($_GET['page']==null) { $_GET['page'] = 1; } 
 if($_GET['page']<=0) { $_GET['page'] = 1; }
@@ -194,12 +200,5 @@ echo "<span>".$UsersName."</span>"; }
 <?php
 @mysql_free_result($result);
 ?>
-<div>&nbsp;</div>
-<table class="Table2" style="width: 100%;">
-<tr>
- <td style="width: 0%; text-align: left;">&nbsp;</td>
- <td style="width: 100%; text-align: right;"><a href="#Act/Topic"><?php echo $ThemeSet['NewTopic']; ?></a></td>
-</tr>
-</table>
 <div>&nbsp;</div>
 <?php } } } ?>
