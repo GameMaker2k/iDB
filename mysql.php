@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: mysql.php - Last Update: 07/15/2007 SVN 44 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 07/17/2007 SVN 47 - Author: cooldude2k $
 */
 @error_reporting(E_ALL ^ E_NOTICE);
 @ini_set('session.use_trans_sid', false);
@@ -22,6 +22,8 @@ if ($File3Name=="mysql.php"||$File3Name=="/mysql.php") {
 if(@ini_get("register_globals")) { $PreDir['misc'] = "inc/misc/";
 	require_once($PreDir['misc'].'killglobals.php'); unset($PreDir); }
 require_once('settings.php');
+if(!isset($Settings['sqldb'])) { @header('Location: install.php'); die(); }
+if(!isset($Settings['sqlhost'])) { $Settings['sqlhost'] = "localhost"; }
 @ini_set("error_prepend_string","<span style='color: ff0000;'>");
 @ini_set("error_append_string","</span>");
 if($Settings['fixpathinfo']==true) {
@@ -111,10 +113,7 @@ if(stristr($_SERVER["HTTP_ACCEPT"],"application/javascript") ) {
 @header("Content-Type: text/javascript; charset=".$Settings['charset']); } }
 require($SettDir['inc'].'javascript.php');
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); die(); }
-if(CheckFiles("install.php")!=true) {
-	if($Settings['sqldb']==null) {
-		redirect("location",$basedir."install.php"); }
-@ConnectMysql($Settings['sqlhost'],$Settings['sqluser'],$Settings['sqlpass'],$Settings['sqldb']); }
+@ConnectMysql($Settings['sqlhost'],$Settings['sqluser'],$Settings['sqlpass'],$Settings['sqldb']);
 if(CheckFiles("install.php")==true) {
 	$Settings['board_name'] = "Installing iDB"; }
 if(isset($_SESSION['CheckCookie'])) {
