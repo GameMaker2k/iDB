@@ -11,14 +11,14 @@
     Copyright 2004-2006 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2006 Game Maker 2k - http://upload.idb.s1.jcink.com/
     $ThemeInfo - Name: iDB Gray - Author: cooldude2k $
-    $FileInfo: settings.php - Last Update: 07/15/2007 SVN 45 - Author: cooldude2k $
+    $FileInfo: settings.php - Last Update: 07/19/2007 SVN 49 - Author: cooldude2k $
 */
 $ThemeSet = array();
 $ThemeSet['ThemeName'] = "iDB Gray Theme";
 $ThemeSet['ThemeMaker'] = "Cool Dude 2k";
-$ThemeSet['ThemeVersion'] = "0.1.5";
+$ThemeSet['ThemeVersion'] = "0.1.6";
 $ThemeSet['ThemeVersionType'] = "Pre-Alpha";
-$ThemeSet['ThemeSubVersion'] = "SVN 45";
+$ThemeSet['ThemeSubVersion'] = "SVN 49";
 $ThemeSet['MakerURL'] = "http://upload.idb.s1.jcink.com/";
 $ThemeSet['CopyRight'] = $ThemeSet['ThemeName']." was made by <a href=\"".$ThemeSet['MakerURL']."\" title=\"".$ThemeSet['ThemeMaker']."\">".$ThemeSet['ThemeMaker']."</a>";
 $ThemeSet['CSS'] = "themes/Gray/css.css";
@@ -45,7 +45,9 @@ $ThemeSet['TopicLayout'] = "Type 1";
 $ThemeSet['AddReply'] = "<span style=\"color: white; font-size: 25px;\" title=\"Add Reply\">Add Reply</span>";
 $ThemeSet['FastReply'] = "<span style=\"color: white; font-size: 25px;\" title=\"Fast Reply\">Fast Reply</span>";
 $ThemeSet['NewTopic'] = "<span style=\"color: white; font-size: 25px;\" title=\"New Topic\">New Topic</span>";
-$ThemeSet['QuoteReply'] = "Quote Reply";
+$ThemeSet['QuoteReply'] = "Quote";
+$ThemeSet['EditReply'] = "Edit";
+$ThemeSet['DeleteReply'] = "Delete";
 $ThemeSet['Report'] = "Report";
 $ThemeSet['LineDivider'] = "&nbsp;|&nbsp;";
 $ThemeSet['ButtonDivider'] = "&nbsp;&nbsp;&nbsp;";

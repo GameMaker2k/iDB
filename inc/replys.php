@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: replys.php - Last Update: 07/15/2007 SVN 44 - Author: cooldude2k $
+    $FileInfo: replys.php - Last Update: 07/19/2007 SVN 49 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replys.php"||$File3Name=="/replys.php") {
@@ -133,6 +133,12 @@ $eui=0; while ($eui < $eunum) {
 $MyPost = text2icons($MyPost,$Settings['sqltable']);
 if($MySubPost!=null) { $MyPost = $MyPost."\n".$MySubPost; }
 $User1Signature = text2icons($User1Signature,$Settings['sqltable']);
+$CanEdit = false;
+if($PermissionInfo['CanEditReplys'][$MyForumID]=="yes"&&
+	$_SESSION['UserID']==$MyUserID) { $CanEditReply = true; }
+$CanDelete = false;
+if($PermissionInfo['CanDeleteReplys'][$MyForumID]=="yes"&&
+	$_SESSION['UserID']==$MyUserID) { $CanDeleteReply = true; }
 ?>
 <div class="Table1Border">
 <table class="Table1">
@@ -155,7 +161,7 @@ echo "<span>".$User1Name."</span>"; }
 <a style="vertical-align: middle;" id="post<?php echo $i+1; ?>">
 <span style="font-weight: bold;">Time Posted: </span><?php echo $MyTimeStamp; ?></a>
 </div>
-<div style="text-align: right;"><a href="#Act/Report"><?php echo $ThemeSet['Report']; ?></a><?php echo $ThemeSet['LineDividerTopic']; ?><a href="#Act/Quote"><?php echo $ThemeSet['QuoteReply']; ?></a>&nbsp;</div>
+<div style="text-align: right;"><a href="#Act/Report"><?php echo $ThemeSet['Report']; ?></a><?php echo $ThemeSet['LineDividerTopic']; if($CanEditReply==true) { echo "<a href=\"#Act/Edit\">".$ThemeSet['EditReply']; ?></a><?php echo $ThemeSet['LineDividerTopic']; } if($CanDeleteReply==true) { echo "<a href=\"#Act/Delete\">".$ThemeSet['DeleteReply']; ?></a><?php echo $ThemeSet['LineDividerTopic']; } ?><a href="#Act/Quote"><?php echo $ThemeSet['QuoteReply']; ?></a>&nbsp;</div>
 </td>
 </tr>
 <tr class="TableRow3">
