@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: mysql.php - Last Update: 07/17/2007 SVN 48 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 07/20/2007 SVN 50 - Author: cooldude2k $
 */
 @error_reporting(E_ALL ^ E_NOTICE);
 @ini_set('session.use_trans_sid', false);
@@ -22,7 +22,10 @@ if ($File3Name=="mysql.php"||$File3Name=="/mysql.php") {
 if(@ini_get("register_globals")) { $PreDir['misc'] = "inc/misc/";
 	require_once($PreDir['misc'].'killglobals.php'); unset($PreDir); }
 require_once('settings.php');
-if(!isset($Settings['sqldb'])) { @header('Location: install.php'); die(); }
+if(!isset($Settings['sqldb'])) { 
+if(file_exists("install.php")) { @header('Location: install.php'); die(); } 
+if(!file_exists("install.php")) { @header("Content-Type: text/plain; charset=UTF8");
+echo "403 Error: Sorry could not find install.php\nTry uploading files again and if that dose not work try download iDB again."; die(); } }
 if(!isset($Settings['sqlhost'])) { $Settings['sqlhost'] = "localhost"; }
 @ini_set("error_prepend_string","<span style='color: ff0000;'>");
 @ini_set("error_append_string","</span>");

@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: replys.php - Last Update: 07/19/2007 SVN 49 - Author: cooldude2k $
+    $FileInfo: replys.php - Last Update: 07/20/2007 SVN 50 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replys.php"||$File3Name=="/replys.php") {
@@ -134,11 +134,12 @@ $MyPost = text2icons($MyPost,$Settings['sqltable']);
 if($MySubPost!=null) { $MyPost = $MyPost."\n".$MySubPost; }
 $User1Signature = text2icons($User1Signature,$Settings['sqltable']);
 $CanEdit = false;
+if($_SESSION['UserGroup']!=$Settings['GuestGroup']) {
 if($PermissionInfo['CanEditReplys'][$MyForumID]=="yes"&&
 	$_SESSION['UserID']==$MyUserID) { $CanEditReply = true; }
 $CanDelete = false;
 if($PermissionInfo['CanDeleteReplys'][$MyForumID]=="yes"&&
-	$_SESSION['UserID']==$MyUserID) { $CanDeleteReply = true; }
+	$_SESSION['UserID']==$MyUserID) { $CanDeleteReply = true; } }
 ?>
 <div class="Table1Border">
 <table class="Table1">
