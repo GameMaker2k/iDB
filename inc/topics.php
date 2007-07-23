@@ -11,21 +11,12 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: topics.php - Last Update: 07/15/2007 SVN 44 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 07/23/2007 SVN 51 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
 	require('index.php');
 	exit(); }
-?>
-<table style="width: 100%;" class="Table2">
-<tr>
- <td style="width: 0%; text-align: left;">&nbsp;</td>
- <td style="width: 100%; text-align: right;"><a href="#Act/Topic"><?php echo $ThemeSet['NewTopic']; ?></a></td>
-</tr>
-</table>
-<div>&nbsp;</div>
-<?php
 $prequery = query("select * from `".$Settings['sqltable']."forums` where `id`=%s", array($_GET['id']));
 $preresult=mysql_query($prequery);
 $prenum=mysql_num_rows($preresult);
@@ -81,6 +72,18 @@ if($ForumType=="subforum") {
 redirect("location",$basedir.url_maker($exfile['subforum'],$Settings['file_ext'],"act=".$_GET['act']."&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['subforum'],$exqstr['subforum'],FALSE));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); } }
+?>
+<table style="width: 100%;" class="Table2">
+<tr>
+ <td style="width: 0%; text-align: left;">&nbsp;</td>
+ <td style="width: 100%; text-align: right;">
+ <?php if($PermissionInfo['CanMakeTopics'][$ForumID]=="yes") { ?>
+ <a href="#Act/Topic"><?php echo $ThemeSet['NewTopic']; ?></a>
+ <?php } ?></td>
+</tr>
+</table>
+<div>&nbsp;</div>
+<?php
 $query = query("select * from `".$Settings['sqltable']."topics` where `ForumID`=%i ORDER BY `Pinned` DESC, `LastUpdate` DESC", array($_GET['id']));
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
@@ -204,7 +207,10 @@ echo "<span>".$UsersName."</span>"; }
 <table class="Table2" style="width: 100%;">
 <tr>
  <td style="width: 0%; text-align: left;">&nbsp;</td>
- <td style="width: 100%; text-align: right;"><a href="#Act/Topic"><?php echo $ThemeSet['NewTopic']; ?></a></td>
+ <td style="width: 100%; text-align: right;">
+ <?php if($PermissionInfo['CanMakeTopics'][$ForumID]=="yes") { ?>
+ <a href="#Act/Topic"><?php echo $ThemeSet['NewTopic']; ?></a>
+ <?php } ?></td>
 </tr>
 </table>
 <div>&nbsp;</div>

@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: replys.php - Last Update: 07/20/2007 SVN 50 - Author: cooldude2k $
+    $FileInfo: replys.php - Last Update: 07/23/2007 SVN 51 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replys.php"||$File3Name=="/replys.php") {
@@ -46,7 +46,14 @@ if($CatPermissionInfo['CanViewCategory'][$TopicCatID]=="yes"&&
 <table style="width: 100%;" class="Table2">
 <tr>
  <td style="width: 0%; text-align: left;">&nbsp;</td>
- <td style="width: 100%; text-align: right;"><a href="#Act/Reply"><?php echo $ThemeSet['AddReply']; ?></a><?php echo $ThemeSet['ButtonDivider']; ?><a href="#Act/Topic"><?php echo $ThemeSet['NewTopic']; ?></a></td>
+ <td style="width: 100%; text-align: right;">
+ <?php if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes") { ?>
+ <a href="#Act/Reply"><?php echo $ThemeSet['AddReply']; ?></a>
+ <?php } if($PermissionInfo['CanMakeTopics'][$TopicForumID]=="yes") {
+	if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes") { ?>
+ <?php echo $ThemeSet['ButtonDivider']; } ?>
+ <a href="#Act/Topic"><?php echo $ThemeSet['NewTopic']; ?></a>
+ <?php } ?></td>
 </tr>
 </table>
 <div>&nbsp;</div>
@@ -206,7 +213,16 @@ echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr
 <table class="Table2" style="width: 100%;">
 <tr>
  <td style="width: 0%; text-align: left;">&nbsp;</td>
- <td style="width: 100%; text-align: right;"><a href="#Act/Reply"><?php echo $ThemeSet['AddReply']; ?></a><?php echo $ThemeSet['ButtonDivider']; ?><a href="#Act/Reply"><?php echo $ThemeSet['FastReply']; ?></a><?php echo $ThemeSet['ButtonDivider']; ?><a href="#Act/Topic"><?php echo $ThemeSet['NewTopic']; ?></a></td>
+ <td style="width: 100%; text-align: right;">
+ <?php if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes") { ?>
+ <a href="#Act/Reply"><?php echo $ThemeSet['AddReply']; ?></a>
+ <?php echo $ThemeSet['ButtonDivider']; ?>
+ <a href="#Act/Reply"><?php echo $ThemeSet['FastReply']; ?></a>
+ <?php } if($PermissionInfo['CanMakeTopics'][$TopicForumID]=="yes") {
+	if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes") { ?>
+ <?php echo $ThemeSet['ButtonDivider']; } ?>
+ <a href="#Act/Topic"><?php echo $ThemeSet['NewTopic']; ?></a>
+ <?php } ?></td>
 </tr>
 </table>
 <div>&nbsp;</div>
