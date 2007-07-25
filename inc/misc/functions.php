@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: functions.php - Last Update: 07/14/2007 SVN 43 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 07/24/2007 SVN 52 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -181,37 +181,6 @@ function getnextid($tablepre,$table) {
    @mysql_free_result($getnextidr); }
 	$Names['RSA'] = "Rachel Sabonis";
 define("_rachel_", $Names['RSA']);
-// Redirect to another file with ether timed or nontimed redirect
-function redirects($type,$url,$time=0) {
-if($type!="location"&&
-	$type!="refresh") {
-	$type=="location"; }
-if($type=="refresh") {
-header("Refresh: ".$time."; URL=".$url); }
-if($type=="location") {
-header("Location: ".$url); }
-return true; }
-// Start a xml document
-function xml_tag_make($type,$attbs,$retval=false) {
-	$renee1 = explode("&",$attbs);
-	$reneenum=count($renee1);
-	$reneei=0; $attblist = null;
-	while ($reneei < $reneenum) {
-	$renee2 = explode("=",$renee1[$reneei]);
-	if($renee2[0]!=null||$renee2[1]!=null) {
-	$attblist = $attblist.' '.$renee2[0].'="'.$renee2[1].'"'; }
-	++$reneei; }
-	if($retval!=false&&$retval!=true) { $retval=false; }
-	if($retval==false) {
-	echo '<?'.$type.$attblist.'?>'."\n"; }
-	if($retval==true) {
-	return '<?'.$type.$attblist.'?>'."\n"; } }
-// Start a xml document (old version)
-function xml_doc_start($ver,$encode,$retval=false) {
-	if($retval==false) {
-	echo xml_tag_make('xml','version='.$ver.'&encoding='.$encode,true); }
-	if($retval==true) {
-	return xml_tag_make('xml','version='.$ver.'&encoding='.$encode,true); } }
 // Change Time Stamp to a readable time
 function GMTimeChange($format,$timestamp,$offset,$minoffset=null,$dst=null) {
 $TCHour = date("H",$timestamp);

@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: function.php - Last Update: 07/10/2007 SVN 39 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 07/24/2007 SVN 52 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -88,19 +88,55 @@ $urlvar[$i] = killbadvars($urlvar[$i]);
 ++$i; ++$i; } return true; }
 // Redirect to another file with ether timed or nontimed redirect
 function redirect($type,$file,$time=0,$url=null,$dbsr=true) {
-if($type!="location"&&
-	$type!="refresh") {
-	$type=="location"; }
-if($url!=null) {
-$file = $url.$file; }
-if($dbsr==true) {
-$file = str_replace("//", "/", $file); }
-if($type=="refresh") {
-header("Refresh: ".$time."; URL=".$file); }
-if($type=="location") {
-@session_write_close();
-header("Location: ".$file); }
-return true; }
+if($type!="location"&&$type!="refresh") { $type=="location"; }
+if($url!=null) { $file = $url.$file; }
+if($dbsr==true) { $file = str_replace("//", "/", $file); }
+if($type=="refresh") { header("Refresh: ".$time."; URL=".$file); }
+if($type=="location") { @session_write_close(); 
+header("Location: ".$file); } return true; }
+function redirects($type,$url,$time=0) {
+if($type!="location"&&$type!="refresh") { $type=="location"; }
+if($type=="refresh") { header("Refresh: ".$time."; URL=".$url); }
+if($type=="location") { header("Location: ".$url); } return true; }
+// Make xhtml tags
+function html_tag_make($name="br",$emptytag=true,$attbvar=null,$attbval=null,$extratest=null) {
+	$var_num = count($attbvar); $value_num = count($attbval);
+	if($var_num!=$value_num) { 
+		echo "Erorr Number of Var and Values dont match!";
+	return false; } $i = 0;
+	while ($i < $var_num) {
+	if($i==0) { $mytag = "<".$name." ".$attbvar[$i]."=\"".$attbval[$i]."\""; }
+	if($i>=1) { $mytag = $mytag." ".$attbvar[$i]."=\"".$attbval[$i]."\""; }
+	if($i==$var_num-1) { 
+	if($emptytag==false) { $mytag = $mytag.">"; }
+	if($emptytag==true) { $mytag = $mytag." />"; } }	++$i; }
+	if($attbvar==null&&$attbval==null) { $mytag = "<".$name;
+	if($emptytag==true) { $mytag = $mytag." />"; }
+	if($emptytag==false) { $mytag = $mytag.">"; } }
+	if($emptytag==false&&$extratest!=null) { 
+	$mytag = $mytag.$extratest; $mytag = $mytag."</".$name.">"; } 
+	return $mytag; }
+// Start a xml document
+function xml_tag_make($type,$attbs,$retval=false) {
+	$renee1 = explode("&",$attbs);
+	$reneenum=count($renee1);
+	$reneei=0; $attblist = null;
+	while ($reneei < $reneenum) {
+	$renee2 = explode("=",$renee1[$reneei]);
+	if($renee2[0]!=null||$renee2[1]!=null) {
+	$attblist = $attblist.' '.$renee2[0].'="'.$renee2[1].'"'; }
+	++$reneei; }
+	if($retval!=false&&$retval!=true) { $retval=false; }
+	if($retval==false) {
+	echo '<?'.$type.$attblist.'?>'."\n"; }
+	if($retval==true) {
+	return '<?'.$type.$attblist.'?>'."\n"; } }
+// Start a xml document (old version)
+function xml_doc_start($ver,$encode,$retval=false) {
+	if($retval==false) {
+	echo xml_tag_make('xml','version='.$ver.'&encoding='.$encode,true); }
+	if($retval==true) {
+	return xml_tag_make('xml','version='.$ver.'&encoding='.$encode,true); } }
 // Make a url
 function url_maker($file="index",$ext=".php",$qvarstr=null,$qstr=";",$qsep="=",$prexqstr=null,$exqstr=null,$fixhtml=true) {
 $fileurl = null; if(!isset($ext)) { $ext = null; }
