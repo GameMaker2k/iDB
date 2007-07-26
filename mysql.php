@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: mysql.php - Last Update: 07/23/2007 SVN 51 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 07/25/2007 SVN 53 - Author: cooldude2k $
 */
 @error_reporting(E_ALL ^ E_NOTICE);
 @ini_set('session.use_trans_sid', false);
@@ -96,9 +96,9 @@ if($GZipEncode['Type']!="gzip") { if($GZipEncode['Type']!="deflate") { $GZipEnco
 @header("Date: ".gmdate("D, d M Y H:i:s")." GMT");
 @header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
 @header("Expires: ".gmdate("D, d M Y H:i:s")." GMT");
-if(CheckFiles("install.php")!=true) {
 @session_name($Settings['sqltable']."sess");
-@session_start(); }
+@session_start();
+//@header("Set-Cookie: PHPSESSID=" . session_id() . "; path=".$basedir);
 @output_reset_rewrite_vars();
 if($_GET['act']=="bsdl"||$_GET['act']=="BSDL") { $_GET['act']="bsd"; }
 if($_GET['act']=="bsd"||$_GET['act']=="bsd") {
@@ -123,8 +123,6 @@ if($SQLStat==false) {
 ob_clean(); echo "Sorry could not connect to mysql database.\nContact the board admin about error. Error log berlow.";
 echo "\n".mysql_errno().": ".mysql_error();
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
-if(CheckFiles("install.php")==true) {
-	$Settings['board_name'] = "Installing iDB"; }
 if(isset($_SESSION['CheckCookie'])) {
 if($_SESSION['CheckCookie']!="done") {
 if($_COOKIE['SessPass']!=null&&

@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: function.php - Last Update: 07/24/2007 SVN 52 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 07/25/2007 SVN 53 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -139,10 +139,15 @@ function xml_doc_start($ver,$encode,$retval=false) {
 	return xml_tag_make('xml','version='.$ver.'&encoding='.$encode,true); } }
 // Make a url
 function url_maker($file="index",$ext=".php",$qvarstr=null,$qstr=";",$qsep="=",$prexqstr=null,$exqstr=null,$fixhtml=true) {
+global $sidurls;
 $fileurl = null; if(!isset($ext)) { $ext = null; }
 if($ext==null) { $ext = ".php"; } 
 if($ext=="noext"||$ext=="no ext"||$ext=="no+ext") { $ext = null; }
 $file = $file.$ext;
+if($sidurls==true&&$qstr!="/") { 
+	if(defined('SID')) {
+if($qvarstr==null) { $qvarstr = SID; }
+if($qvarstr!=null) { $qvarstr = SID."&".$qvarstr; } } }
 if($qvarstr==null) { $fileurl = $file; }
 if($fixhtml==true) {
 $qstr = htmlentities($qstr, ENT_QUOTES);
