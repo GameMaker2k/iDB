@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: topics.php - Last Update: 07/31/2007 SVN 57 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 07/31/2007 SVN 58 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -364,6 +364,7 @@ $User1Title=mysql_result($reresult,$rei,"Title");
 $User1GroupID=mysql_result($reresult,$rei,"GroupID");
 $PostCount=mysql_result($reresult,$rei,"PostCount");
 if($PostCountAdd=="on") { $NewPostCount = $PostCount + 1; }
+if(!isset($NewPostCount)) { $NewPostCount = $PostCount; }
 $gquery = query("select * from `".$Settings['sqltable']."groups` where `id`=%i", array($User1GroupID));
 $gresult=mysql_query($gquery);
 $User1Group=mysql_result($gresult,0,"Name");

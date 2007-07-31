@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: replys.php - Last Update: 07/31/2007 SVN 57 - Author: cooldude2k $
+    $FileInfo: replys.php - Last Update: 07/31/2007 SVN 58 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replys.php"||$File3Name=="/replys.php") {
@@ -220,16 +220,16 @@ ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 ?>
 <div class="Table1Border">
-<table class="Table1" id="MakeReply<?php echo $ForumID; ?>">
-<tr class="TableRow1" id="ReplyStart<?php echo $ForumID; ?>">
+<table class="Table1" id="MakeReply<?php echo $TopicForumID; ?>">
+<tr class="TableRow1" id="ReplyStart<?php echo $TopicForumID; ?>">
 <td class="TableRow1" colspan="2"><span style="float: left;">
 <?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>#<?php echo $TopicID; ?>"><?php echo $TopicName; ?></a></span>
 <?php echo "<span style=\"float: right;\">&nbsp;</span>"; ?></td>
 </tr>
-<tr id="MakeReplyRow<?php echo $ForumID; ?>" class="TableRow2">
-<td class="TableRow2" colspan="2" style="width: 100%;">Making a Reply in <?php echo $ForumName; ?></td>
+<tr id="MakeReplyRow<?php echo $TopicForumID; ?>" class="TableRow2">
+<td class="TableRow2" colspan="2" style="width: 100%;">Making a Reply in Topic <?php echo $TopicName; ?></td>
 </tr>
-<tr class="TableRow3" id="MkReply<?php echo $ForumID; ?>">
+<tr class="TableRow3" id="MkReply<?php echo $TopicForumID; ?>">
 <td class="TableRow3">
 <form method="post" id="MkReplyForm" action="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=makereply&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>">
 <table style="text-align: left;">
@@ -254,7 +254,7 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 <input type="reset" value="Reset Form" class="Button" name="Reset_Form" />
 </td></tr></table>
 </form></td></tr>
-<tr id="MkReplyEnd<?php echo $ForumID; ?>" class="TableRow4">
+<tr id="MkReplyEnd<?php echo $TopicForumID; ?>" class="TableRow4">
 <td class="TableRow4" colspan="5">&nbsp;</td>
 </tr>
 </table></div>
@@ -357,6 +357,7 @@ $User1Title=mysql_result($reresult,$rei,"Title");
 $User1GroupID=mysql_result($reresult,$rei,"GroupID");
 $PostCount=mysql_result($reresult,$rei,"PostCount");
 if($PostCountAdd=="on") { $NewPostCount = $PostCount + 1; }
+if(!isset($NewPostCount)) { $NewPostCount = $PostCount; }
 $gquery = query("select * from `".$Settings['sqltable']."groups` where `id`=%i", array($User1GroupID));
 $gresult=mysql_query($gquery);
 $User1Group=mysql_result($gresult,0,"Name");
@@ -432,6 +433,7 @@ $dtquery = query("delete from `".$Settings['sqltable']."topics` where `id`=%i", 
 mysql_query($dtquery);
 $queryupd = query("update `".$Settings['sqltable']."forums` set `NumPosts`=%i,`NumTopics`=%i WHERE `id`=%i", array($NewNumPosts,$NewNumTopics,$ReplyForumID));
 mysql_query($queryupd); } }
+if($ReplyID!=$FReplyID) {
 $LReplyID=mysql_result($delresult,$delnum-1,"id");
 $SLReplyID=mysql_result($delresult,$delnum-2,"id");
 $NewLastUpdate=mysql_result($delresult,$delnum-2,"LastUpdate");
@@ -441,7 +443,7 @@ mysql_query($drquery);
 $queryupd = query("update `".$Settings['sqltable']."forums` set `NumPosts`=%i WHERE `id`=%i", array($NewNumPosts,$ReplyForumID));
 mysql_query($queryupd);
 $queryupd = query("update `".$Settings['sqltable']."topics` set `LastUpdate`=%i,`NumReply`=%i WHERE `id`=%i", array($NewLastUpdate,$NewNumReplies,$ReplyTopicID));
-mysql_query($queryupd); }
+mysql_query($queryupd); } }
 if($ReplyID!=$FReplyID&&$ReplyID!=$LReplyID) { $NewNumReplies = $NumberReplies - 1; $NewNumPosts = $NumberPosts - 1;
 $drquery = query("delete from `".$Settings['sqltable']."posts` where `id`=%i", array($ReplyID));
 mysql_query($drquery);
