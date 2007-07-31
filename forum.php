@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: forum.php - Last Update: 07/30/2007 SVN 54 - Author: cooldude2k $
+    $FileInfo: forum.php - Last Update: 07/30/2007 SVN 56 - Author: cooldude2k $
 */
 require('preindex.php');
 $usefileext = $Settings['file_ext'];

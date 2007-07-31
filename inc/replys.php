@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: replys.php - Last Update: 07/23/2007 SVN 51 - Author: cooldude2k $
+    $FileInfo: replys.php - Last Update: 07/30/2007 SVN 56 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replys.php"||$File3Name=="/replys.php") {
@@ -23,8 +23,11 @@ $prenum=mysql_num_rows($preresult);
 $prei=0;
 while ($prei < $prenum) {
 $TopicName=mysql_result($preresult,$prei,"TopicName");
+$TopicID=mysql_result($preresult,$prei,"id");
 $TopicForumID=mysql_result($preresult,$prei,"ForumID");
 $TopicCatID=mysql_result($preresult,$prei,"CategoryID");
+$TopicClosed=mysql_result($preresult,$prei,"Closed");
+$NumberReplies=mysql_result($preresult,$prei,"NumReply");
 $ViewTimes=mysql_result($preresult,$prei,"NumViews");
 if(!isset($CatPermissionInfo['CanViewCategory'][$TopicCatID])) {
 	$CatPermissionInfo['CanViewCategory'][$TopicCatID] = "no"; }
@@ -47,17 +50,18 @@ if($CatPermissionInfo['CanViewCategory'][$TopicCatID]=="yes"&&
 <tr>
  <td style="width: 0%; text-align: left;">&nbsp;</td>
  <td style="width: 100%; text-align: right;">
- <?php if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes") { ?>
- <a href="#Act/Reply"><?php echo $ThemeSet['AddReply']; ?></a>
+ <?php if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes"&&$TopicClosed==0) { ?>
+ <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=create&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $ThemeSet['AddReply']; ?></a>
  <?php } if($PermissionInfo['CanMakeTopics'][$TopicForumID]=="yes") {
-	if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes") { ?>
+	if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes"&&$TopicClosed==0) { ?>
  <?php echo $ThemeSet['ButtonDivider']; } ?>
- <a href="#Act/Topic"><?php echo $ThemeSet['NewTopic']; ?></a>
+ <a href="<?php echo url_maker($exfile['forum'],$Settings['file_ext'],"act=create&id=".$TopicForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum']); ?>"><?php echo $ThemeSet['NewTopic']; ?></a>
  <?php } ?></td>
 </tr>
 </table>
 <div>&nbsp;</div>
 <?php
+if($_GET['act']=="view") {
 $query = query("select * from `".$Settings['sqltable']."posts` where `TopicID`=%i ORDER BY `TimeStamp` ASC", array($_GET['id']));
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
@@ -95,6 +99,7 @@ $MyEditTime=mysql_result($result,$i,"LastUpdate");
 $MyEditUserID=mysql_result($result,$i,"EditUser");
 $MyTimeStamp=GMTimeChange("M j, Y, g:i a",$MyTimeStamp,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $MyPost=mysql_result($result,$i,"Post");
+$MyPost = preg_replace("/\<br\>/", "<br />\n", nl2br($MyPost));
 $MyDescription=mysql_result($result,$i,"Description");
 $requery = query("select * from `".$Settings['sqltable']."members` where `id`=%i", array($MyUserID));
 $reresult=mysql_query($requery);
@@ -209,19 +214,191 @@ echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr
 </tr>
 </table></div>
 <div>&nbsp;</div>
-<?php ++$i; } @mysql_free_result($result); ?>
+<?php ++$i; } @mysql_free_result($result); }
+if($_GET['act']=="create") {
+if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="no"||$TopicClosed==1) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
+ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+?>
+<div class="Table1Border">
+<table class="Table1" id="MakeReply<?php echo $ForumID; ?>">
+<tr class="TableRow1" id="ReplyStart<?php echo $ForumID; ?>">
+<td class="TableRow1" colspan="2"><span style="float: left;">
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>#<?php echo $TopicID; ?>"><?php echo $TopicName; ?></a></span>
+<?php echo "<span style=\"float: right;\">&nbsp;</span>"; ?></td>
+</tr>
+<tr id="MakeReplyRow<?php echo $ForumID; ?>" class="TableRow2">
+<td class="TableRow2" colspan="2" style="width: 100%;">Making a Reply in <?php echo $ForumName; ?></td>
+</tr>
+<tr class="TableRow3" id="MkReply<?php echo $ForumID; ?>">
+<td class="TableRow3">
+<form method="post" id="MkReplyForm" action="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=makereply&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>">
+<table style="text-align: left;">
+<tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="ReplyDesc">Insert Reply Description:</label></td>
+	<td style="width: 50%;"><input type="text" name="ReplyDesc" class="TextBox" id="ReplyDesc" size="20" /></td>
+</tr><?php if($_SESSION['UserGroup']==$Settings['GuestGroup']) { ?><tr>
+	<td style="width: 50%;"><label class="TextBoxLabel" for="GuestName">Insert Guest Name:</label></td>
+	<td style="width: 50%;"><input type="text" name="GuestName" class="TextBox" id="GuestName" size="20" /></td>
+</tr><?php } ?>
+</table>
+<table style="text-align: left;">
+<tr style="text-align: left;">
+<td style="width: 100%;">
+<label class="TextBoxLabel" for="ReplyPost">Insert Your Reply:</label><br />
+<textarea rows="10" name="ReplyPost" id="ReplyPost" cols="40" class="TextBox"></textarea><br />
+<input type="hidden" name="act" value="makereplies" style="display: none;" />
+<?php if($_SESSION['UserGroup']!=$Settings['GuestGroup']) { ?>
+<input type="hidden" name="GuestName" value="null" style="display: none;" />
+<?php } ?>
+<input type="submit" class="Button" value="Make Reply" name="make_reply" />
+<input type="reset" value="Reset Form" class="Button" name="Reset_Form" />
+</td></tr></table>
+</form></td></tr>
+<tr id="MkReplyEnd<?php echo $ForumID; ?>" class="TableRow4">
+<td class="TableRow4" colspan="5">&nbsp;</td>
+</tr>
+</table></div>
+<?php } if($_GET['act']=="makereply"||$_POST['act']=="makereplies") {
+if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="no"||$TopicClosed==1) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
+ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+$REFERERurl = parse_url($_SERVER['HTTP_REFERER']);
+$URL['REFERER'] = $REFERERurl['host'];
+$URL['HOST'] = $_SERVER["SERVER_NAME"];
+$REFERERurl = null; unset($REFERERurl);
+if(!isset($_POST['ReplyDesc'])) { $_POST['ReplyDesc'] = null; }
+if(!isset($_POST['ReplyPost'])) { $_POST['ReplyPost'] = null; }
+if(!isset($_POST['GuestName'])) { $_POST['GuestName'] = null; }
+?>
+<div class="Table1Border">
+<table class="Table1">
+<tr class="TableRow1">
+<td class="TableRow1"><span style="float: left;">
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>#<?php echo $TopicID; ?>"><?php echo $TopicName; ?></a></span>
+<?php echo "<span style=\"float: right;\">&nbsp;</span>"; ?></td>
+</tr>
+<tr class="TableRow2">
+<th class="TableRow2" style="width: 100%; text-align: left;">&nbsp;Make Reply Message: </th>
+</tr>
+<?php if (strlen($_POST['ReplyDesc'])=="30") { $Error="Yes";  ?>
+<tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage">
+	<br />Your Reply Description is too big.<br />
+	</span></td>
+</tr>
+<?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
+	strlen($_POST['GuestName'])=="30") { $Error="Yes"; ?>
+<tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage">
+	<br />You Guest Name is too big.<br />
+	</span></td>
+</tr>
+<?php } if ($Settings['TestReferer']==true) {
+	if ($URL['HOST']!=$URL['REFERER']) { $Error="Yes";  ?>
+<tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage">
+	<br />Sorry the referering url dose not match our host name.<br />
+	</span></td>
+</tr>
+<?php } }
+$_POST['ReplyDesc'] = stripcslashes(htmlspecialchars($_POST['ReplyDesc'], ENT_QUOTES));
+$_POST['ReplyDesc'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['ReplyDesc']);
+$_POST['ReplyDesc'] = @remove_spaces($_POST['ReplyDesc']);
+$_POST['GuestName'] = stripcslashes(htmlspecialchars($_POST['GuestName'], ENT_QUOTES));
+$_POST['GuestName'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['GuestName']);
+$_POST['GuestName'] = @remove_spaces($_POST['GuestName']);
+$_POST['ReplyPost'] = stripcslashes(htmlspecialchars($_POST['ReplyPost'], ENT_QUOTES));
+$_POST['ReplyPost'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['ReplyPost']);
+//$_POST['ReplyPost'] = @remove_spaces($_POST['ReplyPost']);
+if ($_POST['ReplyDesc']==null) { $Error="Yes"; ?>
+<tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage">
+	<br />You need to enter a Reply Description.<br />
+	</span></td>
+</tr>
+<?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
+	$_POST['GuestName']==null) { $Error="Yes"; ?>
+<tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage">
+	<br />You need to enter a Guest Name.<br />
+	</span></td>
+</tr>
+<?php } if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="no"||$TopicClosed==1) { $Error="Yes"; ?>
+<tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage">
+	<br />You do not have permission to make a reply here.<br />
+	</span></td>
+</tr>
+<?php } if ($_POST['ReplyPost']==null) { $Error="Yes"; ?>
+<tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage">
+	<br />You need to enter a Reply.<br />
+	</span></td>
+</tr>
+<?php } if ($Error=="Yes") {
+@redirect("refresh",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false),"4"); }
+if ($Error!="Yes") { $LastActive = GMTimeStamp();
+$gnrquery = query("select * from `".$Settings['sqltable']."forums` where `id`=%s", array($TopicForumID));
+$gnrresult=mysql_query($gnrquery); $gnrnum=mysql_num_rows($gnrresult);
+$NumberPosts=mysql_result($gnrresult,0,"NumPosts"); 
+$PostCountAdd=mysql_result($gnrresult,0,"PostCountAdd"); 
+@mysql_free_result($gnrresult);
+$postid = getnextid($Settings['sqltable'],"posts");
+$requery = query("select * from `".$Settings['sqltable']."members` where `id`=%i", array($_SESSION['UserID']));
+$reresult=mysql_query($requery);
+$renum=mysql_num_rows($reresult);
+$rei=0;
+while ($rei < $renum) {
+$User1ID=$_SESSION['UserID'];
+$User1Name=mysql_result($reresult,$rei,"Name");
+if($_SESSION['UserGroup']==$Settings['GuestGroup']) { $User1Name = $_POST['GuestName']; }
+$User1Email=mysql_result($reresult,$rei,"Email");
+$User1Title=mysql_result($reresult,$rei,"Title");
+$User1GroupID=mysql_result($reresult,$rei,"GroupID");
+$PostCount=mysql_result($reresult,$rei,"PostCount");
+if($PostCountAdd=="on") { $NewPostCount = $PostCount + 1; }
+$gquery = query("select * from `".$Settings['sqltable']."groups` where `id`=%i", array($User1GroupID));
+$gresult=mysql_query($gquery);
+$User1Group=mysql_result($gresult,0,"Name");
+@mysql_free_result($gresult);
+$User1IP=$_SERVER['REMOTE_ADDR'];
+++$rei; } @mysql_free_result($reresult);
+$query = query("insert into `".$Settings['sqltable']."posts` values (".$postid.",%i,%i,%i,%i,'%s',%i,%i,0,'%s','%s','%s')", array($TopicID,$TopicForumID,$TopicCatID,$User1ID,$User1Name,$LastActive,$LastActive,$_POST['ReplyPost'],$_POST['ReplyDesc'],$User1IP));
+mysql_query($query);
+$queryupd = query("update `".$Settings['sqltable']."members` set `LastActive`='%s',`IP`='%s',`PostCount`=%i WHERE `id`='%s'", array($LastActive,$User1IP,$NewPostCount,$User1ID));
+mysql_query($queryupd);
+$NewNumPosts = $NumberPosts + 1; $NewNumReplies = $NumberReplies + 1;
+$queryupd = query("update `".$Settings['sqltable']."forums` set `NumPosts`='%s' WHERE `id`='%s'", array($NewNumPosts,$TopicForumID));
+mysql_query($queryupd);
+$queryupd = query("update `".$Settings['sqltable']."topics` set `NumReply`='%s',LastUpdate=%i WHERE `id`='%s'", array($NewNumReplies,$LastActive,$TopicID));
+mysql_query($queryupd);
+@redirect("refresh",$basedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$topicid,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],FALSE),"3");
+$MyPostNum = $NewNumReplies + 1;
+?><tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage"><br />
+	Reply to Topic <?php echo $TopicName; ?> was posted.<br />
+	Click <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>#post<?php echo $MyPostNum; ?>">here</a> to view your reply.<br />&nbsp;
+	</span><br /></td>
+</tr>
+<?php } ?>
+<tr class="TableRow4">
+<td class="TableRow4">&nbsp;</td>
+</tr>
+</table></div>
+<?php } ?>
 <table class="Table2" style="width: 100%;">
 <tr>
  <td style="width: 0%; text-align: left;">&nbsp;</td>
  <td style="width: 100%; text-align: right;">
- <?php if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes") { ?>
- <a href="#Act/Reply"><?php echo $ThemeSet['AddReply']; ?></a>
+ <?php if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes"&&$TopicClosed==0) { ?>
+ <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=create&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $ThemeSet['AddReply']; ?></a>
  <?php echo $ThemeSet['ButtonDivider']; ?>
- <a href="#Act/Reply"><?php echo $ThemeSet['FastReply']; ?></a>
+ <a href="#Act/FastReply"><?php echo $ThemeSet['FastReply']; ?></a>
  <?php } if($PermissionInfo['CanMakeTopics'][$TopicForumID]=="yes") {
-	if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes") { ?>
+	if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes"&&$TopicClosed==0) { ?>
  <?php echo $ThemeSet['ButtonDivider']; } ?>
- <a href="#Act/Topic"><?php echo $ThemeSet['NewTopic']; ?></a>
+ <a href="<?php echo url_maker($exfile['forum'],$Settings['file_ext'],"act=create&id=".$TopicForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum']); ?>"><?php echo $ThemeSet['NewTopic']; ?></a>
  <?php } ?></td>
 </tr>
 </table>

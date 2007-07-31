@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: topics.php - Last Update: 07/30/2007 SVN 54 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 07/30/2007 SVN 56 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -34,7 +34,7 @@ $RedirectTimes=mysql_result($preresult,$prei,"Redirects");
 $NumberViews=mysql_result($preresult,$prei,"NumViews");
 $NumberPosts=mysql_result($preresult,$prei,"NumPosts");
 $NumberTopics=mysql_result($preresult,$prei,"NumTopics");
-$PostCountAdd=mysql_result($preresult,$prei,"NumTopics");
+$PostCountAdd=mysql_result($preresult,$prei,"PostCountAdd");
 $ForumType = strtolower($ForumType);
 if(!isset($CatPermissionInfo['CanViewCategory'][$ForumCatID])) {
 	$CatPermissionInfo['CanViewCategory'][$ForumCatID] = "no"; }
@@ -223,12 +223,15 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 </tr>
 <tr class="TableRow3" id="MkTopic<?php echo $ForumID; ?>">
 <td class="TableRow3">
-<form method="post" id="MkTopicForm" action="<?php echo url_maker($exfile['forum'],$Settings['file_ext'],"act=maketopic",$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum']); ?>">
+<form method="post" id="MkTopicForm" action="<?php echo url_maker($exfile['forum'],$Settings['file_ext'],"act=maketopic&id=".$ForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum']); ?>">
 <table style="text-align: left;">
 <tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="TopicName">Insert Topic Name:</label></td>
 	<td style="width: 50%;"><input type="text" name="TopicName" class="TextBox" id="TopicName" size="20" /></td>
-</tr><tr>
+</tr><?php if($_SESSION['UserGroup']==$Settings['GuestGroup']) { ?><tr>
+	<td style="width: 50%;"><label class="TextBoxLabel" for="GuestName">Insert Guest Name:</label></td>
+	<td style="width: 50%;"><input type="text" name="GuestName" class="TextBox" id="GuestName" size="20" /></td>
+</tr><?php } ?><tr>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="TopicDesc">Insert Topic Description:</label></td>
 	<td style="width: 50%;"><input type="text" name="TopicDesc" class="TextBox" id="TopicDesc" size="20" /></td>
 </tr>
@@ -239,6 +242,9 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 <label class="TextBoxLabel" for="TopicPost">Insert Your Post:</label><br />
 <textarea rows="10" name="TopicPost" id="TopicPost" cols="40" class="TextBox"></textarea><br />
 <input type="hidden" name="act" value="maketopics" style="display: none;" />
+<?php if($_SESSION['UserGroup']!=$Settings['GuestGroup']) { ?>
+<input type="hidden" name="GuestName" value="null" style="display: none;" />
+<?php } ?>
 <input type="submit" class="Button" value="Make Topic" name="make_topic" />
 <input type="reset" value="Reset Form" class="Button" name="Reset_Form" />
 </td></tr></table>
@@ -258,6 +264,7 @@ $REFERERurl = null; unset($REFERERurl);
 if(!isset($_POST['TopicName'])) { $_POST['TopicName'] = null; }
 if(!isset($_POST['TopicDesc'])) { $_POST['TopicDesc'] = null; }
 if(!isset($_POST['TopicPost'])) { $_POST['TopicPost'] = null; }
+if(!isset($_POST['GuestName'])) { $_POST['GuestName'] = null; }
 ?>
 <div class="Table1Border">
 <table class="Table1">
@@ -281,6 +288,13 @@ if(!isset($_POST['TopicPost'])) { $_POST['TopicPost'] = null; }
 	<br />Your Topic Description is too big.<br />
 	</span></td>
 </tr>
+<?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
+	strlen($_POST['GuestName'])=="30") { $Error="Yes"; ?>
+<tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage">
+	<br />You Guest Name is too big.<br />
+	</span></td>
+</tr>
 <?php } if ($Settings['TestReferer']==true) {
 	if ($URL['HOST']!=$URL['REFERER']) { $Error="Yes";  ?>
 <tr style="text-align: center;">
@@ -295,6 +309,9 @@ $_POST['TopicName'] = @remove_spaces($_POST['TopicName']);
 $_POST['TopicDesc'] = stripcslashes(htmlspecialchars($_POST['TopicDesc'], ENT_QUOTES));
 $_POST['TopicDesc'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['TopicDesc']);
 $_POST['TopicDesc'] = @remove_spaces($_POST['TopicDesc']);
+$_POST['GuestName'] = stripcslashes(htmlspecialchars($_POST['GuestName'], ENT_QUOTES));
+$_POST['GuestName'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['GuestName']);
+$_POST['GuestName'] = @remove_spaces($_POST['GuestName']);
 $_POST['TopicPost'] = stripcslashes(htmlspecialchars($_POST['TopicPost'], ENT_QUOTES));
 $_POST['TopicPost'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['TopicPost']);
 //$_POST['TopicPost'] = @remove_spaces($_POST['TopicPost']);
@@ -308,6 +325,13 @@ if ($_POST['TopicName']==null) { $Error="Yes"; ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />You need to enter a Topic Description.<br />
+	</span></td>
+</tr>
+<?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
+	$_POST['GuestName']==null) { $Error="Yes"; ?>
+<tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage">
+	<br />You need to enter a Guest Name.<br />
 	</span></td>
 </tr>
 <?php } if($PermissionInfo['CanMakeTopics'][$ForumID]=="no") { $Error="Yes"; ?>
@@ -324,8 +348,7 @@ if ($_POST['TopicName']==null) { $Error="Yes"; ?>
 </tr>
 <?php } if ($Error=="Yes") {
 @redirect("refresh",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false),"4"); }
-if ($Error!="Yes") {
-$LastActive = GMTimeStamp();
+if ($Error!="Yes") { $LastActive = GMTimeStamp();
 $topicid = getnextid($Settings['sqltable'],"topics");
 $postid = getnextid($Settings['sqltable'],"posts");
 $requery = query("select * from `".$Settings['sqltable']."members` where `id`=%i", array($_SESSION['UserID']));
@@ -335,6 +358,7 @@ $rei=0;
 while ($rei < $renum) {
 $User1ID=$_SESSION['UserID'];
 $User1Name=mysql_result($reresult,$rei,"Name");
+if($_SESSION['UserGroup']==$Settings['GuestGroup']) { $User1Name = $_POST['GuestName']; }
 $User1Email=mysql_result($reresult,$rei,"Email");
 $User1Title=mysql_result($reresult,$rei,"Title");
 $User1GroupID=mysql_result($reresult,$rei,"GroupID");
