@@ -216,14 +216,14 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 <tr class="TableRow1" id="TopicStart<?php echo $ForumID; ?>">
 <td class="TableRow1" colspan="2"><span style="float: left;">
 <?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['forum'],$Settings['file_ext'],"act=view&id=".$ForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum']); ?>#<?php echo $ForumID; ?>"><?php echo $ForumName; ?></a></span>
-<?php echo "<span style=\"float: right;\">&nbsp;</span>"; ?>
+<?php echo "<span style=\"float: right;\">&nbsp;</span>"; ?></td>
 </tr>
 <tr id="MakeTopicRow<?php echo $ForumID; ?>" class="TableRow2">
 <td class="TableRow2" colspan="2" style="width: 100%;">Making a Topic in <?php echo $ForumName; ?></td>
 </tr>
 <tr class="TableRow3" id="MkTopic<?php echo $ForumID; ?>">
 <td class="TableRow3">
-<form method="post" name="install" id="install" action="<?php echo url_maker($exfile['forum'],$Settings['file_ext'],"act=maketopic",$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum']); ?>">
+<form method="post" id="MkTopicForm" action="<?php echo url_maker($exfile['forum'],$Settings['file_ext'],"act=maketopic",$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum']); ?>">
 <table style="text-align: left;">
 <tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="TopicName">Insert Topic Name:</label></td>
@@ -243,10 +243,10 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 <input type="reset" value="Reset Form" class="Button" name="Reset_Form" />
 </td></tr></table>
 </form></td></tr>
-<tr id="MkTopic<?php echo $ForumID; ?>" class="TableRow4">
+<tr id="MkTopicEnd<?php echo $ForumID; ?>" class="TableRow4">
 <td class="TableRow4" colspan="5">&nbsp;</td>
 </tr>
-</table>
+</table></div>
 <?php } if($_GET['act']=="maketopic"&&$_POST['act']=="maketopics") {
 if($PermissionInfo['CanMakeTopics'][$ForumID]=="no") { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
@@ -270,21 +270,21 @@ if(!isset($_POST['TopicPost'])) { $_POST['TopicPost'] = null; }
 <th class="TableRow2" style="width: 100%; text-align: left;">&nbsp;Make Topic Message: </th>
 </tr>
 <?php if (strlen($_POST['TopicName'])=="30") { $Error="Yes";  ?>
-<tr>
-	<td><span class="TableMessage">
+<tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage">
 	<br />Your Topic Name is too big.<br />
 	</span></td>
 </tr>
 <?php } if (strlen($_POST['TopicDesc'])=="30") { $Error="Yes";  ?>
-<tr>
-	<td><span class="TableMessage">
+<tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage">
 	<br />Your Topic Description is too big.<br />
 	</span></td>
 </tr>
 <?php } if ($Settings['TestReferer']==true) {
 	if ($URL['HOST']!=$URL['REFERER']) { $Error="Yes";  ?>
-<tr>
-	<td><span class="TableMessage">
+<tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage">
 	<br />Sorry the referering url dose not match our host name.<br />
 	</span></td>
 </tr>
@@ -297,28 +297,28 @@ $_POST['TopicDesc'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_P
 $_POST['TopicDesc'] = @remove_spaces($_POST['TopicDesc']);
 $_POST['TopicPost'] = stripcslashes(htmlspecialchars($_POST['TopicPost'], ENT_QUOTES));
 $_POST['TopicPost'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['TopicPost']);
-$_POST['TopicPost'] = @remove_spaces($_POST['TopicPost']);
+//$_POST['TopicPost'] = @remove_spaces($_POST['TopicPost']);
 if ($_POST['TopicName']==null) { $Error="Yes"; ?>
-<tr>
-	<td><span class="TableMessage">
+<tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage">
 	<br />You need to enter a Topic Name.<br />
 	</span></td>
 </tr>
 <?php } if ($_POST['TopicDesc']==null) { $Error="Yes"; ?>
-<tr>
-	<td><span class="TableMessage">
+<tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage">
 	<br />You need to enter a Topic Description.<br />
 	</span></td>
 </tr>
 <?php } if($PermissionInfo['CanMakeTopics'][$ForumID]=="no") { $Error="Yes"; ?>
-<tr>
-	<td><span class="TableMessage">
+<tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage">
 	<br />You do not have permission to make a topic here.<br />
 	</span></td>
 </tr>
 <?php } if ($_POST['TopicPost']==null) { $Error="Yes"; ?>
-<tr>
-	<td><span class="TableMessage">
+<tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage">
 	<br />You need to enter a Topic Post.<br />
 	</span></td>
 </tr>
@@ -356,8 +356,8 @@ $NewNumPosts = $NumberPosts + 1; $NewNumTopics = $NumberTopics + 1;
 $queryupd = query("update `".$Settings['sqltable']."forums` set `NumPosts`='%s',`NumTopics`='%s' WHERE `id`='%s'", array($NewNumPosts,$NewNumTopics,$ForumID));
 mysql_query($queryupd);
 @redirect("refresh",$basedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$topicid,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],FALSE),"3");
-?><tr>
-	<td><span class="TableMessage"><br />
+?><tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage"><br />
 	Topic <?php echo $_POST['TopicName']; ?> was started.<br />
 	Click <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$topicid,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>">here</a> to continue to topic.<br />&nbsp;
 	</span><br /></td>
