@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: replys.php - Last Update: 07/30/2007 SVN 56 - Author: cooldude2k $
+    $FileInfo: replys.php - Last Update: 07/31/2007 SVN 57 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replys.php"||$File3Name=="/replys.php") {
@@ -145,11 +145,10 @@ $eui=0; while ($eui < $eunum) {
 $MyPost = text2icons($MyPost,$Settings['sqltable']);
 if($MySubPost!=null) { $MyPost = $MyPost."\n".$MySubPost; }
 $User1Signature = text2icons($User1Signature,$Settings['sqltable']);
-$CanEdit = false;
+$CanEditReply = false; $CanDeleteReply = false;
 if($_SESSION['UserGroup']!=$Settings['GuestGroup']) {
 if($PermissionInfo['CanEditReplys'][$MyForumID]=="yes"&&
 	$_SESSION['UserID']==$MyUserID) { $CanEditReply = true; }
-$CanDelete = false;
 if($PermissionInfo['CanDeleteReplys'][$MyForumID]=="yes"&&
 	$_SESSION['UserID']==$MyUserID) { $CanDeleteReply = true; } }
 ?>
@@ -174,7 +173,7 @@ echo "<span>".$User1Name."</span>"; }
 <a style="vertical-align: middle;" id="post<?php echo $i+1; ?>">
 <span style="font-weight: bold;">Time Posted: </span><?php echo $MyTimeStamp; ?></a>
 </div>
-<div style="text-align: right;"><a href="#Act/Report"><?php echo $ThemeSet['Report']; ?></a><?php echo $ThemeSet['LineDividerTopic']; if($CanEditReply==true) { echo "<a href=\"#Act/Edit\">".$ThemeSet['EditReply']; ?></a><?php echo $ThemeSet['LineDividerTopic']; } if($CanDeleteReply==true) { echo "<a href=\"#Act/Delete\">".$ThemeSet['DeleteReply']; ?></a><?php echo $ThemeSet['LineDividerTopic']; } ?><a href="#Act/Quote"><?php echo $ThemeSet['QuoteReply']; ?></a>&nbsp;</div>
+<div style="text-align: right;"><a href="#Act/Report"><?php echo $ThemeSet['Report']; ?></a><?php echo $ThemeSet['LineDividerTopic']; if($CanEditReply==true) { echo "<a href=\"#Act/Edit\">".$ThemeSet['EditReply']; ?></a><?php echo $ThemeSet['LineDividerTopic']; } if($CanDeleteReply==true) { echo "<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=delete&id=".$MyTopicID."&post=".$MyPostID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">".$ThemeSet['DeleteReply']; ?></a><?php echo $ThemeSet['LineDividerTopic']; } ?><a href="#Act/Quote"><?php echo $ThemeSet['QuoteReply']; ?></a>&nbsp;</div>
 </td>
 </tr>
 <tr class="TableRow3">
@@ -382,6 +381,93 @@ $MyPostNum = $NewNumReplies + 1;
 	</span><br /></td>
 </tr>
 <?php } ?>
+<tr class="TableRow4">
+<td class="TableRow4">&nbsp;</td>
+</tr>
+</table></div>
+<?php } 
+if($_GET['act']=="delete") {
+$predquery = query("select * from `".$Settings['sqltable']."posts` where `id`=%i", array($_GET['post']));
+$predresult=mysql_query($predquery);
+$prednum=mysql_num_rows($predresult);
+$ReplyID=mysql_result($predresult,0,"id");
+$ReplyTopicID=mysql_result($predresult,0,"TopicID");
+$ReplyForumID=mysql_result($predresult,0,"ForumID");
+$ReplyUserID=mysql_result($predresult,0,"UserID");
+@mysql_free_result($predresult);
+$CanDeleteReply = false;
+if($_SESSION['UserGroup']!=$Settings['GuestGroup']) {
+if($PermissionInfo['CanDeleteReplys'][$ReplyForumID]=="yes"&&
+	$_SESSION['UserID']==$ReplyUserID) { $CanDeleteReply = true; } }
+if($CanDeleteReply==false) {
+redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
+ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+$delquery = query("select * from `".$Settings['sqltable']."posts` where `TopicID`=%i ORDER BY `TimeStamp` ASC", array($_GET['id']));
+$delresult=mysql_query($delquery);
+$delnum=mysql_num_rows($delresult);
+$DelTopic = false;
+$gnrquery = query("select * from `".$Settings['sqltable']."forums` where `id`=%s", array($ReplyForumID));
+$gnrresult=mysql_query($gnrquery); $gnrnum=mysql_num_rows($gnrresult);
+$NumberPosts=mysql_result($gnrresult,0,"NumPosts"); $NumberTopics=mysql_result($gnrresult,0,"NumTopics"); 
+@mysql_free_result($gnrresult);
+$FReplyID=mysql_result($delresult,0,"id");
+if($ReplyID==$FReplyID) { $DelTopic = true;
+$gtsquery = query("select * from `".$Settings['sqltable']."topics` where `id`=%i", array($ReplyTopicID));
+$gtsresult=mysql_query($gtsquery);
+$gtsnum=mysql_num_rows($gtsresult);
+$TUsersID=mysql_result($gtsresult,0,"UserID");
+$CanDeleteTopics = false;
+if($_SESSION['UserGroup']!=$Settings['GuestGroup']) {
+if($PermissionInfo['CanDeleteTopics'][$ReplyForumID]=="yes"&&
+	$_SESSION['UserID']==$TUsersID) { $CanDeleteTopics = true; } }
+if($CanDeleteTopics==false) {
+redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); @mysql_free_result($delresult);
+ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+if($CanDeleteTopics==true) { $NewNumTopics = $NumberTopics - 1; $NewNumPosts = $NumberPosts - $delnum;
+$drquery = query("delete from `".$Settings['sqltable']."posts` where `TopicID`=%i", array($ReplyTopicID));
+mysql_query($drquery); 
+$dtquery = query("delete from `".$Settings['sqltable']."topics` where `id`=%i", array($ReplyTopicID));
+mysql_query($dtquery);
+$queryupd = query("update `".$Settings['sqltable']."forums` set `NumPosts`=%i,`NumTopics`=%i WHERE `id`=%i", array($NewNumPosts,$NewNumTopics,$ReplyForumID));
+mysql_query($queryupd); } }
+$LReplyID=mysql_result($delresult,$delnum-1,"id");
+$SLReplyID=mysql_result($delresult,$delnum-2,"id");
+$NewLastUpdate=mysql_result($delresult,$delnum-2,"LastUpdate");
+if($ReplyID==$LReplyID) { $NewNumReplies = $NumberReplies - 1; $NewNumPosts = $NumberPosts - 1;
+$drquery = query("delete from `".$Settings['sqltable']."posts` where `id`=%i", array($ReplyID));
+mysql_query($drquery); 
+$queryupd = query("update `".$Settings['sqltable']."forums` set `NumPosts`=%i WHERE `id`=%i", array($NewNumPosts,$ReplyForumID));
+mysql_query($queryupd);
+$queryupd = query("update `".$Settings['sqltable']."topics` set `LastUpdate`=%i,`NumReply`=%i WHERE `id`=%i", array($NewLastUpdate,$NewNumReplies,$ReplyTopicID));
+mysql_query($queryupd); }
+if($ReplyID!=$FReplyID&&$ReplyID!=$LReplyID) { $NewNumReplies = $NumberReplies - 1; $NewNumPosts = $NumberPosts - 1;
+$drquery = query("delete from `".$Settings['sqltable']."posts` where `id`=%i", array($ReplyID));
+mysql_query($drquery);
+$queryupd = query("update `".$Settings['sqltable']."forums` set `NumPosts`=%i WHERE `id`=%i", array($NewNumPosts,$ReplyForumID));
+mysql_query($queryupd);
+$queryupd = query("update `".$Settings['sqltable']."topics` set `NumReply`=%i WHERE `id`=%i", array($NewNumReplies,$ReplyTopicID));
+mysql_query($queryupd); }
+@redirect("refresh",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],FALSE),"3");
+@mysql_free_result($delresult);
+?>
+<div class="Table1Border">
+<table class="Table1">
+<tr class="TableRow1">
+<td class="TableRow1"><span style="float: left;">
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $TopicName; ?></a></span>
+<?php echo "<span style=\"float: right;\">&nbsp;</span>"; ?></td>
+</tr>
+<tr class="TableRow2">
+<th class="TableRow2" style="width: 100%; text-align: left;">&nbsp;Delete Reply Message: </th>
+</tr>
+<tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage"><br />
+	Reply was deleted successfully.<br />
+	Click <a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">here</a> to go back to index.<br />&nbsp;
+	</span><br /></td>
+</tr>
 <tr class="TableRow4">
 <td class="TableRow4">&nbsp;</td>
 </tr>

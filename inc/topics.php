@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: topics.php - Last Update: 07/30/2007 SVN 56 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 07/31/2007 SVN 57 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -374,10 +374,10 @@ $query = query("insert into `".$Settings['sqltable']."topics` values (".$topicid
 mysql_query($query);
 $query = query("insert into `".$Settings['sqltable']."posts` values (".$postid.",".$topicid.",%i,%i,%i,'%s',%i,%i,0,'%s','%s','%s')", array($ForumID,$ForumCatID,$User1ID,$User1Name,$LastActive,$LastActive,$_POST['TopicPost'],$_POST['TopicDesc'],$User1IP));
 mysql_query($query);
-$queryupd = query("update `".$Settings['sqltable']."members` set `LastActive`='%s',`IP`='%s',`PostCount`=%i WHERE `id`='%s'", array($LastActive,$User1IP,$NewPostCount,$User1ID));
+$queryupd = query("update `".$Settings['sqltable']."members` set `LastActive`=%i,`IP`='%s',`PostCount`=%i WHERE `id`=%i", array($LastActive,$User1IP,$NewPostCount,$User1ID));
 mysql_query($queryupd);
 $NewNumPosts = $NumberPosts + 1; $NewNumTopics = $NumberTopics + 1;
-$queryupd = query("update `".$Settings['sqltable']."forums` set `NumPosts`='%s',`NumTopics`='%s' WHERE `id`='%s'", array($NewNumPosts,$NewNumTopics,$ForumID));
+$queryupd = query("update `".$Settings['sqltable']."forums` set `NumPosts`=%i,`NumTopics`=%i WHERE `id`=%i", array($NewNumPosts,$NewNumTopics,$ForumID));
 mysql_query($queryupd);
 @redirect("refresh",$basedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$topicid,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],FALSE),"3");
 ?><tr style="text-align: center;">
