@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: categories.php - Last Update: 07/15/2007 SVN 44 - Author: cooldude2k $
+    $FileInfo: categories.php - Last Update: 07/31/2007 SVN 59 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="categories.php"||$File3Name=="/categories.php") {
@@ -38,6 +38,7 @@ redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"a
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 if($CatPermissionInfo['CanViewCategory'][$CategoryID]=="yes") {
+if(!isset($CatCheck)) { $CatCheck = null; } 
 if($CatCheck!="skip") {
 if($CategoryType=="subcategory") {
 redirect("location",$basedir.url_maker($exfile['subcategory'],$Settings['file_ext'],"act=".$_GET['act']."&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['subcategory'],$exqstr['subcategory'],FALSE));
@@ -74,7 +75,7 @@ $NumPosts=mysql_result($result,$i,"NumPosts");
 $ForumDescription=mysql_result($result,$i,"Description");
 if(isset($PermissionInfo['CanViewForum'][$ForumID])&&
 	$PermissionInfo['CanViewForum'][$ForumID]=="yes") {
-unset($LastTopic);
+unset($LastTopic); if(!isset($LastTopic)) { $LastTopic = null; }
 $gltquery = query("select * from `".$Settings['sqltable']."topics` where `CategoryID`=%i and `ForumID`=%i ORDER BY `LastUpdate` DESC", array($CategoryID,$ForumID));
 $gltresult=mysql_query($gltquery);
 $gltnum=mysql_num_rows($gltresult);

@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: groupsetup.php - Last Update: 07/15/2007 SVN 44 - Author: cooldude2k $
+    $FileInfo: groupsetup.php - Last Update: 07/31/2007 SVN 59 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="groupsetup.php"||$File3Name=="/groupsetup.php") {
@@ -74,7 +74,7 @@ if($GroupInfo['CanViewBoard']=="no") {
 ob_clean(); echo "Sorry you can not view the board."; 
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 // Member Group Permissions Setup
-$perquery = query("select * from `".$Settings['sqltable']."permissions` where `id`=%i ORDER BY `ForumID` ASC", array($GroupInfo['PermissionID']));
+$perquery = query("select * from `".$Settings['sqltable']."permissions` where `PermissionID`=%i ORDER BY `ForumID` ASC", array($GroupInfo['PermissionID']));
 $peresult=mysql_query($perquery);
 $pernum=mysql_num_rows($peresult);
 $peri=0; $PerError = null;

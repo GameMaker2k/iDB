@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: topics.php - Last Update: 07/31/2007 SVN 58 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 07/31/2007 SVN 59 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -155,6 +155,7 @@ $LastReply = "User: <a href=\"".$lul."\">".$UsersName1."</a><br />\nTime: ".$Tim
 if($UsersID1=="-1") {
 $LastReply = "User: <span>".$UsersName1."</span><br />\nTime: ".$TimeStamp1; } }
 @mysql_free_result($glrresult);
+if(!isset($TimeStamp1)) { $TimeStamp1 = null; } if(!isset($LastReply)) { $LastReply = null; }
 if($TimeStamp1==null) { $LastReply = "&nbsp;<br />&nbsp;"; }
 $PreTopic = $ThemeSet['TopicIcon'];
 if ($PinnedTopic==1) {

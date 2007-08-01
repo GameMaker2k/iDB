@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: forums.php - Last Update: 07/15/2007 SVN 44 - Author: cooldude2k $
+    $FileInfo: forums.php - Last Update: 07/31/2007 SVN 59 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="forums.php"||$File3Name=="/forums.php") {
@@ -63,7 +63,7 @@ $ForumDescription=mysql_result($result,$i,"Description");
 $ForumType = strtolower($ForumType);
 if(isset($PermissionInfo['CanViewForum'][$ForumID])&&
 	$PermissionInfo['CanViewForum'][$ForumID]=="yes") {
-unset($LastTopic);
+unset($LastTopic); if(!isset($LastTopic)) { $LastTopic = null; }
 $gltquery = query("select * from `".$Settings['sqltable']."topics` where `CategoryID`=%i and `ForumID`=%i ORDER BY `LastUpdate` DESC", array($CategoryID,$ForumID));
 $gltresult=mysql_query($gltquery);
 $gltnum=mysql_num_rows($gltresult);
