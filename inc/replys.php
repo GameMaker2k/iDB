@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: replys.php - Last Update: 07/31/2007 SVN 58 - Author: cooldude2k $
+    $FileInfo: replys.php - Last Update: 08/02/2007 SVN 61 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replys.php"||$File3Name=="/replys.php") {
@@ -29,6 +29,7 @@ $TopicCatID=mysql_result($preresult,$prei,"CategoryID");
 $TopicClosed=mysql_result($preresult,$prei,"Closed");
 $NumberReplies=mysql_result($preresult,$prei,"NumReply");
 $ViewTimes=mysql_result($preresult,$prei,"NumViews");
+++$prei; } @mysql_free_result($preresult);
 if(!isset($CatPermissionInfo['CanViewCategory'][$TopicCatID])) {
 	$CatPermissionInfo['CanViewCategory'][$TopicCatID] = "no"; }
 if($CatPermissionInfo['CanViewCategory'][$TopicCatID]=="no"||
@@ -208,7 +209,12 @@ if($User1ID!="-1") {
 echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$User1ID,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); }
 if($User1ID=="-1") {
 echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); }
-?>"><?php echo $ThemeSet['Profile']; ?></a><?php echo $ThemeSet['LineDividerTopic']; ?><a href="<?php echo $User1Website; ?>" onclick="window.open(this.href);return false;"><?php echo $ThemeSet['WWW']; ?></a><?php echo $ThemeSet['LineDividerTopic']; ?><a href="#Act/PM"><?php echo $ThemeSet['PM']; ?></a></span>
+?>"><?php echo $ThemeSet['Profile']; ?></a><?php echo $ThemeSet['LineDividerTopic']; ?><a href="<?php echo $User1Website; ?>" onclick="window.open(this.href);return false;"><?php echo $ThemeSet['WWW']; ?></a><?php echo $ThemeSet['LineDividerTopic']; ?><a href="<?php
+if($User1ID!="-1") {
+echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=create&id=".$User1ID,$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); }
+if($User1ID=="-1") {
+echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); }
+?>"><?php echo $ThemeSet['PM']; ?></a></span>
 <span style="float: right;">&nbsp;</span></td>
 </tr>
 </table></div>
@@ -258,7 +264,7 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 <td class="TableRow4" colspan="5">&nbsp;</td>
 </tr>
 </table></div>
-<?php } if($_GET['act']=="makereply"||$_POST['act']=="makereplies") {
+<?php } if($_GET['act']=="makereply"&&$_POST['act']=="makereplies") {
 if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="no"||$TopicClosed==1) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
@@ -287,7 +293,7 @@ if(!isset($_POST['GuestName'])) { $_POST['GuestName'] = null; }
 	</span></td>
 </tr>
 <?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
-	strlen($_POST['GuestName'])=="30") { $Error="Yes"; ?>
+	strlen($_POST['GuestName'])=="25") { $Error="Yes"; ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />You Guest Name is too big.<br />
@@ -491,6 +497,4 @@ mysql_query($queryupd); }
 </tr>
 </table>
 <div>&nbsp;</div>
-<?php } ++$prei; } 
-@mysql_free_result($preresult);
-?>
+<?php } ?>

@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: function.php - Last Update: 07/25/2007 SVN 53 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 08/02/2007 SVN 61 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -161,7 +161,9 @@ if($qstr!="/") { $fileurl = $file."?"; }
 if($qstr=="/") { $fileurl = $file."/"; }
 while ($renei < $renenum) {
 	$rene2 = explode("=",$rene1[$renei]);
-	$rene2[0] = urlencode($rene2[0]);
+	if(!isset($rene2[0])) { $rene2[0] = null; }
+	$rene2[1] = urlencode($rene2[1]);
+	if(!isset($rene2[0])) { $rene2[0] = null; }
 	$rene2[1] = urlencode($rene2[1]);
 	if($qstr!="/") {
 	$fileurl = $fileurl.$rene2[0].$qsep.$rene2[1]; }
@@ -182,7 +184,9 @@ $cindi=0;
 $cindqstr = "index.php?";
 while ($cindi < $cindnum) {
 	$cind2 = explode("=",$cind1[$cindi]);
+	if(!isset($cind2[0])) { $cind2[0] = null; }
 	$cind2[0] = urlencode($cind2[0]);
+	if(!isset($cind2[1])) { $cind2[1] = null; }
 	$cind2[1] = urlencode($cind2[1]);
 	if($qstr!="/") {
 	$fileurl = $fileurl.$cind2[0].$qsep.$cind2[1]; }
@@ -203,7 +207,9 @@ $sandi=0;
 $sandqstr = "index.php?";
 while ($sandi < $sanum) {
 	$sand2 = explode("=",$sand1[$sandi]);
+	if(!isset($sand2[0])) { $sand2[0] = null; }
 	$sand2[0] = urlencode($sand2[0]);
+	if(!isset($sand2[1])) { $sand2[1] = null; }
 	$sand2[1] = urlencode($sand2[1]);
 	if($qstr!="/") {
 	$fileurl = $fileurl.$sand2[0].$qsep.$sand2[1]; }

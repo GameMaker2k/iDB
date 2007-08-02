@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: messenger.php - Last Update: 07/15/2007 SVN 44 - Author: cooldude2k $
+    $FileInfo: messenger.php - Last Update: 08/02/2007 SVN 61 - Author: cooldude2k $
 */
 require('preindex.php');
 $usefileext = $Settings['file_ext'];
@@ -34,11 +34,12 @@ if($_SESSION['UserGroup']!=$Settings['GuestGroup']||
 	$GroupInfo['CanPM']=="yes") {
 if($_GET['act']==null)
 { $_GET['act']="view"; }
-if(!is_numeric($_GET['id']))
+if(!is_numeric($_GET['id'])&&$_GET['act']!="create")
 { $_GET['id']="1"; }
 if($_GET['act']=="view"||$_GET['act']=="viewsent")
 { require($SettDir['inc'].'pm.php'); }
-if($_GET['act']=="read")
+if($_GET['act']=="read"||$_GET['act']=="create"||
+	$_GET['act']=="sendmessage"||$_POST['act']=="sendmessages")
 { require($SettDir['inc'].'pm.php'); } }
 ?>
 
@@ -56,4 +57,8 @@ if($_GET['act']=="viewsent") {
 change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." Viewing Sent MailBox",$Settings['use_gzip'],$GZipEncode['Type']); }
 if($_GET['act']!="read"&&$_GET['act']!="viewsent") { 
 change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." Viewing MailBox",$Settings['use_gzip'],$GZipEncode['Type']); }
+if($_GET['act']=="create") { 
+change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." Making a Message",$Settings['use_gzip'],$GZipEncode['Type']); }
+if($_GET['act']=="sendmessage"&&$_POST['act']=="sendmessages") { 
+change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." Seanding a Message",$Settings['use_gzip'],$GZipEncode['Type']); }
 ?>

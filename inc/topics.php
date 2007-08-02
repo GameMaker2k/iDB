@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: topics.php - Last Update: 07/31/2007 SVN 59 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 08/02/2007 SVN 61 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -35,18 +35,23 @@ $NumberViews=mysql_result($preresult,$prei,"NumViews");
 $NumberPosts=mysql_result($preresult,$prei,"NumPosts");
 $NumberTopics=mysql_result($preresult,$prei,"NumTopics");
 $PostCountAdd=mysql_result($preresult,$prei,"PostCountAdd");
-$ForumType = strtolower($ForumType);
+$CanHaveTopics=mysql_result($preresult,$prei,"CanHaveTopics");
+++$prei; } @mysql_free_result($preresult);
+$ForumType = strtolower($ForumType); $CanHaveTopics = strtolower($CanHaveTopics);
+if($CanHaveTopics=="yes"&&$ForumType=="subforum") { 
+if($_GET['act']=="create"||$_GET['act']=="maketopic"||
+	$_POST['act']=="maketopics") { $ForumCheck = "skip"; } }
 if(!isset($CatPermissionInfo['CanViewCategory'][$ForumCatID])) {
 	$CatPermissionInfo['CanViewCategory'][$ForumCatID] = "no"; }
 if($CatPermissionInfo['CanViewCategory'][$ForumCatID]=="no"||
-	$CatPermissionInfo['CanViewCategory'][$ForumCatID]!="yes") { @mysql_free_result($preresult);
+	$CatPermissionInfo['CanViewCategory'][$ForumCatID]!="yes") {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 if(!isset($PermissionInfo['CanViewForum'][$ForumID])) {
 	$PermissionInfo['CanViewForum'][$ForumID] = "no"; }
 if($PermissionInfo['CanViewForum'][$ForumID]=="no"||
-	$PermissionInfo['CanViewForum'][$ForumID]!="yes") { @mysql_free_result($preresult);
+	$PermissionInfo['CanViewForum'][$ForumID]!="yes") {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
@@ -80,7 +85,7 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); } }
 <tr>
  <td style="width: 0%; text-align: left;">&nbsp;</td>
  <td style="width: 100%; text-align: right;">
- <?php if($PermissionInfo['CanMakeTopics'][$ForumID]=="yes") { ?>
+ <?php if($PermissionInfo['CanMakeTopics'][$ForumID]=="yes"&&$CanHaveTopics=="yes") { ?>
  <a href="<?php echo url_maker($exfile['forum'],$Settings['file_ext'],"act=create&id=".$ForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum']); ?>"><?php echo $ThemeSet['NewTopic']; ?></a>
  <?php } ?></td>
 </tr>
@@ -208,7 +213,7 @@ echo "<span>".$UsersName."</span>"; }
 <?php
 @mysql_free_result($result); }
 if($_GET['act']=="create") {
-if($PermissionInfo['CanMakeTopics'][$ForumID]=="no") { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
+if($PermissionInfo['CanMakeTopics'][$ForumID]=="no"||$CanHaveTopics=="no") { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 ?>
@@ -255,7 +260,7 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 </tr>
 </table></div>
 <?php } if($_GET['act']=="maketopic"&&$_POST['act']=="maketopics") {
-if($PermissionInfo['CanMakeTopics'][$ForumID]=="no") { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
+if($PermissionInfo['CanMakeTopics'][$ForumID]=="no"||$CanHaveTopics=="no") { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 $REFERERurl = parse_url($_SERVER['HTTP_REFERER']);
@@ -290,7 +295,7 @@ if(!isset($_POST['GuestName'])) { $_POST['GuestName'] = null; }
 	</span></td>
 </tr>
 <?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
-	strlen($_POST['GuestName'])=="30") { $Error="Yes"; ?>
+	strlen($_POST['GuestName'])=="25") { $Error="Yes"; ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />You Guest Name is too big.<br />
@@ -335,7 +340,7 @@ if ($_POST['TopicName']==null) { $Error="Yes"; ?>
 	<br />You need to enter a Guest Name.<br />
 	</span></td>
 </tr>
-<?php } if($PermissionInfo['CanMakeTopics'][$ForumID]=="no") { $Error="Yes"; ?>
+<?php } if($PermissionInfo['CanMakeTopics'][$ForumID]=="no"||$CanHaveTopics=="no") { $Error="Yes"; ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />You do not have permission to make a topic here.<br />
@@ -399,12 +404,10 @@ mysql_query($queryupd);
 <tr>
  <td style="width: 0%; text-align: left;">&nbsp;</td>
  <td style="width: 100%; text-align: right;">
- <?php if($PermissionInfo['CanMakeTopics'][$ForumID]=="yes") { ?>
+ <?php if($PermissionInfo['CanMakeTopics'][$ForumID]=="yes"&&$CanHaveTopics=="yes") { ?>
  <a href="<?php echo url_maker($exfile['forum'],$Settings['file_ext'],"act=create&id=".$ForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum']); ?>"><?php echo $ThemeSet['NewTopic']; ?></a>
  <?php } ?></td>
 </tr>
 </table>
 <div>&nbsp;</div>
-<?php } ++$prei; } 
-@mysql_free_result($preresult);
-?>
+<?php } ?>
