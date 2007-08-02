@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: members.php - Last Update: 07/15/2007 SVN 44 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 08/02/2007 SVN 62 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -50,14 +50,14 @@ if($_GET['ordertype']=="desc") { $orderlist .= " desc"; } }
 if(!is_numeric($_GET['gid'])) { $_GET['gid'] = null; }
 if($_GET['gid']!=null&&$_GET['groupid']==null) { $_GET['groupid'] = $_GET['gid']; }
 if(!is_numeric($_GET['groupid'])) { $_GET['groupid'] = null; }
-$ggquery = query("select * from `".$Settings['sqltable']."groups` where `Name`='%s'", array($Settings['GuestGroup']));
+$ggquery = query("select * from `".$Settings['sqltable']."groups` WHERE `Name`='%s'", array($Settings['GuestGroup']));
 $ggresult=mysql_query($ggquery);
 $GGroup=mysql_result($ggresult,0,"id");
 @mysql_free_result($ggresult);
 if($_GET['groupid']==null) {
-$query = query("select * from `".$Settings['sqltable']."members` where `GroupID`<>%i ".$orderlist, array($GGroup)); }
+$query = query("select * from `".$Settings['sqltable']."members` WHERE `GroupID`<>%i ".$orderlist, array($GGroup)); }
 if($_GET['groupid']!=null) {
-$query = query("select * from `".$Settings['sqltable']."members` where `GroupID`=%i and `GroupID`<>%i ".$orderlist, array($_GET['groupid'],$GGroup)); }
+$query = query("select * from `".$Settings['sqltable']."members` WHERE `GroupID`=%i AND `GroupID`<>%i ".$orderlist, array($_GET['groupid'],$GGroup)); }
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
 //Start MemberList Page Code (Will be used at later time)
@@ -110,7 +110,7 @@ $MemList['PostCount']=mysql_result($result,$i,"PostCount");
 $MemList['TimeZone']=mysql_result($result,$i,"TimeZone");
 $MemList['DST']=mysql_result($result,$i,"DST");
 $MemList['IP']=mysql_result($result,$i,"IP");
-$gquery = query("select * from `".$Settings['sqltable']."groups` where `id`=%i", array($MemList['GroupID']));
+$gquery = query("select * from `".$Settings['sqltable']."groups` WHERE `id`=%i", array($MemList['GroupID']));
 $gresult=mysql_query($gquery);
 $MemList['Group']=mysql_result($gresult,0,"Name");
 @mysql_free_result($gresult);
@@ -135,7 +135,7 @@ if($MemList['Group']!=$Settings['GuestGroup']) {
 </table></div>
 <?php }
 if($_GET['act']=="view") { 
-$query = query("select * from `".$Settings['sqltable']."members` where `id`=%i", array($_GET['id']));
+$query = query("select * from `".$Settings['sqltable']."members` WHERE `id`=%i", array($_GET['id']));
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
 $i=0;
@@ -162,7 +162,7 @@ $ViewMem['PostCount']=mysql_result($result,$i,"PostCount");
 $ViewMem['TimeZone']=mysql_result($result,$i,"TimeZone");
 $ViewMem['DST']=mysql_result($result,$i,"DST");
 $ViewMem['IP']=mysql_result($result,$i,"IP");
-$gquery = query("select * from `".$Settings['sqltable']."groups` where `id`=%i", array($ViewMem['GroupID']));
+$gquery = query("select * from `".$Settings['sqltable']."groups` WHERE `id`=%i", array($ViewMem['GroupID']));
 $gresult=mysql_query($gquery);
 $ViewMem['Group']=mysql_result($gresult,0,"Name");
 @mysql_free_result($gresult);
@@ -335,7 +335,7 @@ $YourName = stripcslashes(htmlspecialchars($_POST['username'], ENT_QUOTES));
 $YourName = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $YourName);
 $YourName = @remove_spaces($YourName);
 $passtype="ODFH";
-$querylog = query("select * from `".$Settings['sqltable']."members` where `Name` = '%s'", array($YourName));
+$querylog = query("select * from `".$Settings['sqltable']."members` WHERE `Name`='%s'", array($YourName));
 $resultlog=mysql_query($querylog);
 $numlog=mysql_num_rows($resultlog);
 if($numlog>=1) {
@@ -359,7 +359,7 @@ $YourIDM=mysql_result($resultlog,$i,"id");
 $YourNameM=mysql_result($resultlog,$i,"Name");
 $YourPassM=mysql_result($resultlog,$i,"Password");
 $YourGroupM=mysql_result($resultlog,$i,"GroupID");
-$gquery = query("select * from `".$Settings['sqltable']."groups` where `id`=%i", array($YourGroupM));
+$gquery = query("select * from `".$Settings['sqltable']."groups` WHERE `id`=%i", array($YourGroupM));
 $gresult=mysql_query($gquery);
 $YourGroupM=mysql_result($gresult,0,"Name");
 @mysql_free_result($gresult);
@@ -371,7 +371,7 @@ $NewHashSalt = salt_hmac();
 $NewPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$NewHashSalt,"sha1");
 $NewDay=GMTimeStamp();
 $NewIP=$_SERVER['REMOTE_ADDR'];
-$queryup = query("update `".$Settings['sqltable']."members` set `Password`='%s',`HashType`='iDBH',`LastActive`='%s',`IP`='%s',`Salt`='%s' WHERE `id`=%i", array($NewPassword,$NewDay,$NewIP,$NewHashSalt,$YourIDM));
+$queryup = query("update `".$Settings['sqltable']."members` set `Password`='%s',`HashType`='iDBH',`LastActive`=%i,`IP`='%s',`Salt`='%s' WHERE `id`=%i", array($NewPassword,$NewDay,$NewIP,$NewHashSalt,$YourIDM));
 mysql_query($queryup);
 @mysql_free_result($resultlog); @mysql_free_result($queryup);
 //session_regenerate_id();
@@ -575,8 +575,8 @@ if(!isset($_POST['TOS'])) { $_POST['TOS'] = null; }
 $Name = stripcslashes(htmlspecialchars($_POST['Name'], ENT_QUOTES));
 $Name = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $Name);
 $Name = @remove_spaces($Name);
-$sql_email_check = mysql_query(query("select `Email` from `".$Settings['sqltable']."members` where `Email` = '%s'", array($_POST['Email'])));
-$sql_username_check = mysql_query(query("select `Name` from `".$Settings['sqltable']."members` where `Name` = '%s'", array($Name)));
+$sql_email_check = mysql_query(query("select `Email` from `".$Settings['sqltable']."members` WHERE `Email`='%s'", array($_POST['Email'])));
+$sql_username_check = mysql_query(query("select `Name` from `".$Settings['sqltable']."members` WHERE `Name`='%s'", array($Name)));
 $email_check = mysql_num_rows($sql_email_check); 
 $username_check = mysql_num_rows($sql_username_check);
 @mysql_free_result($sql_email_check); @mysql_free_result($sql_username_check);
@@ -649,7 +649,7 @@ $Avatar = @remove_spaces($Avatar);
 $Website = stripcslashes(htmlspecialchars($_POST['Website'], ENT_QUOTES));
 $Website = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $Website);
 $Website = @remove_spaces($Website);
-$gquerys = query("select * from `".$Settings['sqltable']."groups` where `Name`='%s'", array($Settings['MemberGroup']));
+$gquerys = query("select * from `".$Settings['sqltable']."groups` WHERE `Name`='%s'", array($Settings['MemberGroup']));
 $gresults=mysql_query($gquerys);
 $yourgroup=mysql_result($gresults,0,"id");
 @mysql_free_result($gresults);
@@ -666,7 +666,7 @@ if($_POST['MinOffSet']<0) { $_POST['MinOffSet'] = "00"; }
 $_POST['YourOffSet'] = $_POST['YourOffSet'].":".$_POST['MinOffSet'];
 $query = query("insert into `".$Settings['sqltable']."members` values (".$yourid.",'%s','%s','%s','%s','%s','%s','%i','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')", array($Name,$NewPassword,"iDBH",$_POST['Email'],$yourgroup,$ValidateStats,"0",$_POST['Interests'],$_POST['Title'],$_POST['Joined'],$_POST['LastActive'],"0",$NewSignature,'Your Notes',$Avatar,"100x100",$Website,$_POST['YourGender'],$_POST['PostCount'],$_POST['YourOffSet'],$_POST['DST'],$Settings['DefaultTheme'],$_POST['UserIP'],$HashSalt));
 mysql_query($query);
-$querylogr = query("select * from `".$Settings['sqltable']."members` where `Name`='%s' AND `Password`='%s'", array($Name,$NewPassword));
+$querylogr = query("select * from `".$Settings['sqltable']."members` WHERE `Name`='%s' AND `Password`='%s'", array($Name,$NewPassword));
 $resultlogr=mysql_query($querylogr);
 $numlogr=mysql_num_rows($resultlogr);
 if($numlogr>=1) {
@@ -674,7 +674,7 @@ $ir=0;
 $YourIDMr=mysql_result($resultlogr,$ir,"id");
 $YourNameMr=mysql_result($resultlogr,$ir,"Name");
 $YourGroupMr=mysql_result($resultlogr,$ir,"GroupID");
-$gquery = query("select * from `".$Settings['sqltable']."groups` where `id`=%i", array($YourGroupMr));
+$gquery = query("select * from `".$Settings['sqltable']."groups` WHERE `id`=%i", array($YourGroupMr));
 $gresult=mysql_query($gquery);
 $YourGroupMr=mysql_result($gresult,0,"Name");
 @mysql_free_result($gresult);

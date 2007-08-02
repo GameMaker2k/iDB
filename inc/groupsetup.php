@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: groupsetup.php - Last Update: 07/31/2007 SVN 59 - Author: cooldude2k $
+    $FileInfo: groupsetup.php - Last Update: 08/02/2007 SVN 62 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="groupsetup.php"||$File3Name=="/groupsetup.php") {
@@ -21,7 +21,7 @@ if ($File3Name=="groupsetup.php"||$File3Name=="/groupsetup.php") {
 if(!isset($_SESSION['UserGroup'])) { $_SESSION['UserGroup'] = null; }
 if($_SESSION['UserGroup']==null) { 
 $_SESSION['UserGroup']=$Settings['GuestGroup']; } $GruError = null;
-$gruquery = query("select * from `".$Settings['sqltable']."groups` where `Name`='%s'", array($_SESSION['UserGroup']));
+$gruquery = query("select * from `".$Settings['sqltable']."groups` WHERE `Name`='%s'", array($_SESSION['UserGroup']));
 $gruresult=mysql_query($gruquery);
 $grunum=mysql_num_rows($gruresult);
 if($grunum<=0) { $GruError = true; @mysql_free_result($gruresult);
@@ -74,7 +74,7 @@ if($GroupInfo['CanViewBoard']=="no") {
 ob_clean(); echo "Sorry you can not view the board."; 
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 // Member Group Permissions Setup
-$perquery = query("select * from `".$Settings['sqltable']."permissions` where `PermissionID`=%i ORDER BY `ForumID` ASC", array($GroupInfo['PermissionID']));
+$perquery = query("select * from `".$Settings['sqltable']."permissions` WHERE `PermissionID`=%i ORDER BY `ForumID` ASC", array($GroupInfo['PermissionID']));
 $peresult=mysql_query($perquery);
 $pernum=mysql_num_rows($peresult);
 $peri=0; $PerError = null;
@@ -128,7 +128,7 @@ if($PerError==true) { $peri = $pernum; }
 ob_clean(); echo "Sorry could not load all permission data in database.\nContact the board admin about error."; 
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); } }
 @mysql_free_result($peresult);
-$per2query = query("select * from `".$Settings['sqltable']."catpermissions` where `PermissionID`=%i ORDER BY `CategoryID` ASC", array($GroupInfo['PermissionID']));
+$per2query = query("select * from `".$Settings['sqltable']."catpermissions` WHERE `PermissionID`=%i ORDER BY `CategoryID` ASC", array($GroupInfo['PermissionID']));
 $per2esult=mysql_query($per2query);
 $per2num=mysql_num_rows($per2esult);
 $per2i=0; $Per2Error = null;

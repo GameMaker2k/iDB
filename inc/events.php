@@ -11,14 +11,14 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: events.php - Last Update: 08/02/2007 SVN 61 - Author: cooldude2k $
+    $FileInfo: events.php - Last Update: 08/02/2007 SVN 62 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="events.php"||$File3Name=="/events.php") {
 	require('index.php');
 	exit(); }
 if($_GET['act']=="view"||$_GET['act']==null) {
-$query = query("select * from `".$Settings['sqltable']."events` where `id`=%i", array($_GET['id']));
+$query = query("select * from `".$Settings['sqltable']."events` WHERE `id`=%i", array($_GET['id']));
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
 $is=0;
@@ -39,7 +39,7 @@ $EventStart=mysql_result($result,$is,"TimeStamp");
 $EventEnd=mysql_result($result,$is,"TimeStampEnd");
 $EventStart = GMTimeChange("M. j Y",$EventStart,null);
 $EventEnd = GMTimeChange("M. j Y",$EventEnd,null);
-$requery = query("select * from `".$Settings['sqltable']."members` where `id`=%i", array($EventUser));
+$requery = query("select * from `".$Settings['sqltable']."members` WHERE `id`=%i", array($EventUser));
 $reresult=mysql_query($requery);
 $renum=mysql_num_rows($reresult);
 $rei=0;
@@ -51,7 +51,7 @@ $User1Title=mysql_result($reresult,$rei,"Title");
 $User1Joined=mysql_result($reresult,$rei,"Joined");
 $User1Joined=GMTimeChange("M j Y",$User1Joined,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $User1GroupID=mysql_result($reresult,$rei,"GroupID");
-$gquery = query("select * from `".$Settings['sqltable']."groups` where `id`=%i", array($User1GroupID));
+$gquery = query("select * from `".$Settings['sqltable']."groups` WHERE `id`=%i", array($User1GroupID));
 $gresult=mysql_query($gquery);
 $User1Group=mysql_result($gresult,0,"Name");
 @mysql_free_result($gresult);

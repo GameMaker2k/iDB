@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: functions.php - Last Update: 07/24/2007 SVN 52 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 08/02/2007 SVN 62 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -277,7 +277,7 @@ $phpsrcs = preg_replace("/\<font color=\"(.*?)\"\>/i", "<span style=\"color: \\1
 $phpsrcs = preg_replace("/\<\/font>/i", "</span>", $phpsrcs);
 return $phpsrcs; }
 function GetUserName($idu,$sqlt) {
-$gunquery = query("select * from `".$sqlt."members` where `id`=%i", array($idu));
+$gunquery = query("select * from `".$sqlt."members` WHERE `id`=%i", array($idu));
 $gunresult=mysql_query($gunquery);
 $gunnum=mysql_num_rows($gunresult);
 if($gunnum>0){

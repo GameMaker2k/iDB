@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: topic.php - Last Update: 07/31/2007 SVN 57 - Author: cooldude2k $
+    $FileInfo: topic.php - Last Update: 08/02/2007 SVN 62 - Author: cooldude2k $
 */
 require('preindex.php');
 $usefileext = $Settings['file_ext'];
@@ -28,7 +28,8 @@ if($_GET['act']==null)
 if(!is_numeric($_GET['id']))
 { $_GET['id']="1"; }
 if($_GET['act']=="view"||$_GET['act']=="create"||$_GET['act']=="delete"||
-	$_GET['act']=="makereply"||$_POST['act']=="makereplies")
+	$_GET['act']=="edit"||$_GET['act']=="makereply"||$_POST['act']=="makereplies"||
+	$_GET['act']=="editreply"||$_POST['act']=="editreplies")
 { require($SettDir['inc'].'replys.php'); }
 require($SettDir['inc'].'endpage.php');
 if(!isset($TopicName)) { $TopicName = null; }
@@ -41,8 +42,12 @@ if($_GET['act']=="view") {
 change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." Viewing Topic ".$TopicName,$Settings['use_gzip'],$GZipEncode['Type']); } 
 if($_GET['act']=="create") {
 change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." Making Reply in Topic ".$TopicName,$Settings['use_gzip'],$GZipEncode['Type']); }
-if($_GET['act']=="create") {
+if($_GET['act']=="delete") {
 change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." Deleting Reply in Topic ".$TopicName,$Settings['use_gzip'],$GZipEncode['Type']); }
-if($_GET['act']=="maketopic"&&$_POST['act']=="maketopics") {
+if($_GET['act']=="edit") {
+change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." Editing Reply in Topic ".$TopicName,$Settings['use_gzip'],$GZipEncode['Type']); }
+if($_GET['act']=="editreply"&&$_POST['act']=="editreplies") {
+change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." Editing Reply in Topic ".$TopicName,$Settings['use_gzip'],$GZipEncode['Type']); }
+if($_GET['act']=="makereply"&&$_POST['act']=="makereplies") {
 change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." Making Reply in Topic ".$TopicName,$Settings['use_gzip'],$GZipEncode['Type']); }
 ?>

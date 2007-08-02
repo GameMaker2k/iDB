@@ -11,13 +11,13 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: topics.php - Last Update: 08/02/2007 SVN 61 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 08/02/2007 SVN 62 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
 	require('index.php');
 	exit(); }
-$prequery = query("select * from `".$Settings['sqltable']."forums` where `id`=%s", array($_GET['id']));
+$prequery = query("select * from `".$Settings['sqltable']."forums` WHERE `id`=%i", array($_GET['id']));
 $preresult=mysql_query($prequery);
 $prenum=mysql_num_rows($preresult);
 $prei=0;
@@ -60,12 +60,12 @@ if($CatPermissionInfo['CanViewCategory'][$ForumCatID]=="yes"&&
 if($ForumType!="redirect") {
 if($NumberViews==0||$NumberViews==null) { $NewNumberViews = 1; }
 if($NumberViews!=0&&$NumberViews!=null) { $NewNumberViews = $NumberViews + 1; }
-$viewup = query("update `".$Settings['sqltable']."forums` set `NumViews`='%s' WHERE `id`=%i", array($NewNumberViews,$_GET['id']));
+$viewup = query("update `".$Settings['sqltable']."forums` set `NumViews`=%i WHERE `id`=%i", array($NewNumberViews,$_GET['id']));
 mysql_query($viewup); }
 if($ForumType=="redirect") {
 if($RedirectTimes==0||$RedirectTimes==null) { $NewRedirTime = 1; }
 if($RedirectTimes!=0&&$RedirectTimes!=null) { $NewRedirTime = $RedirectTimes + 1; }
-$redirup = query("update `".$Settings['sqltable']."forums` set `Redirects`='%s' WHERE `id`=%i", array($NewRedirTime,$_GET['id']));
+$redirup = query("update `".$Settings['sqltable']."forums` set `Redirects`=%i WHERE `id`=%i", array($NewRedirTime,$_GET['id']));
 mysql_query($redirup);
 if($RedirectURL!="http://"&&$RedirectURL!="") {
 redirect("location",$RedirectURL,0,null,false); ob_clean();
@@ -93,7 +93,7 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); } }
 <div>&nbsp;</div>
 <?php
 if($_GET['act']=="view") {
-$query = query("select * from `".$Settings['sqltable']."topics` where `ForumID`=%i ORDER BY `Pinned` DESC, `LastUpdate` DESC", array($_GET['id']));
+$query = query("select * from `".$Settings['sqltable']."topics` WHERE `ForumID`=%i ORDER BY `Pinned` DESC, `LastUpdate` DESC", array($_GET['id']));
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
 //Start Topic Page Code (Will be used at later time)
@@ -141,7 +141,7 @@ $TopicStat=mysql_result($result,$i,"Closed");
 $UsersName = GetUserName($UsersID,$Settings['sqltable']);
 if($UsersName=="Guest") { $UsersName=$GuestName;
 if($UsersName==null) { $UsersName="Guest"; } }
-$glrquery = query("select * from `".$Settings['sqltable']."posts` where `ForumID`=%i and `TopicID`=%i ORDER BY `TimeStamp` DESC", array($_GET['id'],$TopicID));
+$glrquery = query("select * from `".$Settings['sqltable']."posts` WHERE `ForumID`=%i AND `TopicID`=%i ORDER BY `TimeStamp` DESC", array($_GET['id'],$TopicID));
 $glrresult=mysql_query($glrquery);
 $glrnum=mysql_num_rows($glrresult);
 if($glrnum>0){
@@ -221,7 +221,7 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 <table class="Table1" id="MakeTopic<?php echo $ForumID; ?>">
 <tr class="TableRow1" id="TopicStart<?php echo $ForumID; ?>">
 <td class="TableRow1" colspan="2"><span style="float: left;">
-<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['forum'],$Settings['file_ext'],"act=view&id=".$ForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum']); ?>#<?php echo $ForumID; ?>"><?php echo $ForumName; ?></a></span>
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['forum'],$Settings['file_ext'],"act=view&id=".$ForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum']); ?>"><?php echo $ForumName; ?></a></span>
 <?php echo "<span style=\"float: right;\">&nbsp;</span>"; ?></td>
 </tr>
 <tr id="MakeTopicRow<?php echo $ForumID; ?>" class="TableRow2">
@@ -259,6 +259,7 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 <td class="TableRow4" colspan="5">&nbsp;</td>
 </tr>
 </table></div>
+<div>&nbsp;</div>
 <?php } if($_GET['act']=="maketopic"&&$_POST['act']=="maketopics") {
 if($PermissionInfo['CanMakeTopics'][$ForumID]=="no"||$CanHaveTopics=="no") { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
@@ -276,7 +277,7 @@ if(!isset($_POST['GuestName'])) { $_POST['GuestName'] = null; }
 <table class="Table1">
 <tr class="TableRow1">
 <td class="TableRow1"><span style="float: left;">
-<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['forum'],$Settings['file_ext'],"act=view&id=".$ForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum']); ?>#<?php echo $ForumID; ?>"><?php echo $ForumName; ?></a></span>
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['forum'],$Settings['file_ext'],"act=view&id=".$ForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum']); ?>"><?php echo $ForumName; ?></a></span>
 <?php echo "<span style=\"float: right;\">&nbsp;</span>"; ?></td>
 </tr>
 <tr class="TableRow2">
@@ -357,7 +358,7 @@ if ($_POST['TopicName']==null) { $Error="Yes"; ?>
 if ($Error!="Yes") { $LastActive = GMTimeStamp();
 $topicid = getnextid($Settings['sqltable'],"topics");
 $postid = getnextid($Settings['sqltable'],"posts");
-$requery = query("select * from `".$Settings['sqltable']."members` where `id`=%i", array($_SESSION['UserID']));
+$requery = query("select * from `".$Settings['sqltable']."members` WHERE `id`=%i", array($_SESSION['UserID']));
 $reresult=mysql_query($requery);
 $renum=mysql_num_rows($reresult);
 $rei=0;
@@ -371,7 +372,7 @@ $User1GroupID=mysql_result($reresult,$rei,"GroupID");
 $PostCount=mysql_result($reresult,$rei,"PostCount");
 if($PostCountAdd=="on") { $NewPostCount = $PostCount + 1; }
 if(!isset($NewPostCount)) { $NewPostCount = $PostCount; }
-$gquery = query("select * from `".$Settings['sqltable']."groups` where `id`=%i", array($User1GroupID));
+$gquery = query("select * from `".$Settings['sqltable']."groups` WHERE `id`=%i", array($User1GroupID));
 $gresult=mysql_query($gquery);
 $User1Group=mysql_result($gresult,0,"Name");
 @mysql_free_result($gresult);
@@ -398,6 +399,7 @@ mysql_query($queryupd);
 <td class="TableRow4">&nbsp;</td>
 </tr>
 </table></div>
+<div>&nbsp;</div>
 <?php } ?>
 <div>&nbsp;</div>
 <table class="Table2" style="width: 100%;">

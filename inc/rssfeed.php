@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: rss2.php - Last Update: 07/15/2007 SVN 44 - Author: cooldude2k $
+    $FileInfo: rss2.php - Last Update: 08/02/2007 SVN 62 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="rssfeed.php"||$File3Name=="/rssfeed.php") {
@@ -67,7 +67,7 @@ else { if (stristr($_SERVER["HTTP_USER_AGENT"],"FeedValidator")) {
 } else { @header("Content-Type: text/xml; charset=".$Settings['charset']); } } }
 @header("Content-Language: en");
 @header("Vary: Accept");
-$query = query("select * from `".$Settings['sqltable']."topics` where `ForumID`=%i ORDER BY `Pinned` DESC, `LastUpdate` DESC", array($_GET['id']));
+$query = query("select * from `".$Settings['sqltable']."topics` WHERE `ForumID`=%i ORDER BY `Pinned` DESC, `LastUpdate` DESC", array($_GET['id']));
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
 $Atom = null; $RSS = null; $i=0;

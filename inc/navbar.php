@@ -11,18 +11,18 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: navbar.php - Last Update: 07/17/2007 SVN 48 - Author: cooldude2k $
+    $FileInfo: navbar.php - Last Update: 08/02/2007 SVN 62 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="navbar.php"||$File3Name=="/navbar.php") {
 	require('index.php');
 	exit(); }
 if($_SESSION['UserGroup']!=$Settings['GuestGroup']||$GroupInfo['CanPM']=="yes") {
-$pmquery1 = query("select * from `".$Settings['sqltable']."messenger` where `PMSentID` = %i and `Read` = 0", array($_SESSION['UserID']));
+$pmquery1 = query("select * from `".$Settings['sqltable']."messenger` WHERE `PMSentID`=%i and `Read`=0", array($_SESSION['UserID']));
 $pmresult1=mysql_query($pmquery1);
 $PMNumber=mysql_num_rows($pmresult1);
 @mysql_free_result($pmresult1); /*
-$pmquery2 = query("select * from `".$Settings['sqltable']."messenger` where `SenderID` = %i and `Read` = 0", array($_SESSION['UserID']));
+$pmquery2 = query("select * from `".$Settings['sqltable']."messenger` WHERE `SenderID`=%i and `Read`=0", array($_SESSION['UserID']));
 $pmresult2=mysql_query($pmquery2);
 $SentPMNumber=mysql_num_rows($pmresult2);
 @mysql_free_result($pmresult2); */ }
