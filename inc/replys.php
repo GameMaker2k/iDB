@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: replys.php - Last Update: 08/02/2007 SVN 62 - Author: cooldude2k $
+    $FileInfo: replys.php - Last Update: 08/02/2007 SVN 63 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replys.php"||$File3Name=="/replys.php") {
@@ -86,7 +86,7 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 if($num!=0) { 
 if($ViewTimes==0||$ViewTimes==null) { $NewViewTimes = 1; }
 if($ViewTimes!=0&&$ViewTimes!=null) { $NewViewTimes = $ViewTimes + 1; }
-$viewsup = query("update `".$Settings['sqltable']."topics` set `NumViews`=%i WHERE `id`=%i", array($NewViewTimes,$_GET['id']));
+$viewsup = query("update `".$Settings['sqltable']."topics` set `NumViews`='%s' WHERE `id`=%i", array($NewViewTimes,$_GET['id']));
 mysql_query($viewsup); }
 while ($i < $num) {
 $MyPostID=mysql_result($result,$i,"id");
@@ -174,7 +174,7 @@ echo "<span>".$User1Name."</span>"; }
 <a style="vertical-align: middle;" id="post<?php echo $i+1; ?>">
 <span style="font-weight: bold;">Time Posted: </span><?php echo $MyTimeStamp; ?></a>
 </div>
-<div style="text-align: right;"><a href="#Act/Report"><?php echo $ThemeSet['Report']; ?></a><?php echo $ThemeSet['LineDividerTopic']; if($CanEditReply==true) { echo "<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=edit&id=".$MyTopicID."&post=".$MyPostID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">".$ThemeSet['EditReply']; ?></a><?php echo $ThemeSet['LineDividerTopic']; } if($CanDeleteReply==true) { echo "<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=delete&id=".$MyTopicID."&post=".$MyPostID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">".$ThemeSet['DeleteReply']; ?></a><?php echo $ThemeSet['LineDividerTopic']; } ?><a href="#Act/Quote"><?php echo $ThemeSet['QuoteReply']; ?></a>&nbsp;</div>
+<div style="text-align: right;"><a href="#Act/Report"><?php echo $ThemeSet['Report']; ?></a><?php echo $ThemeSet['LineDividerTopic']; if($CanEditReply==true) { echo "<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=edit&id=".$MyTopicID."&post=".$MyPostID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">".$ThemeSet['EditReply']; ?></a><?php echo $ThemeSet['LineDividerTopic']; } if($CanDeleteReply==true) { echo "<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=delete&id=".$MyTopicID."&post=".$MyPostID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">".$ThemeSet['DeleteReply']; ?></a><?php echo $ThemeSet['LineDividerTopic']; } ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=create&id=".$TopicID."&post=".$MyPostID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $ThemeSet['QuoteReply']; ?></a>&nbsp;</div>
 </td>
 </tr>
 <tr class="TableRow3">
@@ -224,6 +224,33 @@ if($_GET['act']=="create") {
 if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="no"||$TopicClosed==1) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+$QuoteReply = null; $QuoteDescription = null;
+if($_GET['post']!=null) {
+$query = query("select * from `".$Settings['sqltable']."posts` WHERE `id`=%i", array($_GET['post']));
+$result=mysql_query($query);
+$num=mysql_num_rows($result);
+$QuoteReplyID=mysql_result($result,0,"id");
+$QuoteUserID=mysql_result($result,0,"UserID");
+$QuoteReply=mysql_result($result,0,"Post");
+$QuoteDescription=mysql_result($result,0,"Description");
+$QuoteGuestName=mysql_result($result,0,"GuestName");
+$requery = query("select * from `".$Settings['sqltable']."members` WHERE `id`=%i", array($QuoteUserID));
+$reresult=mysql_query($requery);
+$renum=mysql_num_rows($reresult);
+$QuoteUserName=mysql_result($reresult,0,"Name");
+if($QuoteUserName=="Guest") { $QuoteUserName=$QuoteGuestName;
+if($QuoteUserName==null) { $QuoteUserName="Guest"; } }
+$QuoteUserName = stripcslashes(htmlspecialchars($QuoteUserName, ENT_QUOTES));
+$QuoteUserName = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $QuoteUserName);
+$QuoteUserName = @remove_spaces($QuoteUserName);
+$QuoteReply = stripcslashes(htmlspecialchars($QuoteReply, ENT_QUOTES));
+$QuoteReply = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $QuoteReply);
+//$QuoteReply = @remove_spaces($QuoteReply);
+$QuoteDescription = str_replace("Re: ","",$QuoteDescription);
+$QuoteDescription = "Re: ".$QuoteDescription;
+$QuoteReply = $QuoteUserName.":\n(&quot;".$QuoteReply."&quot;)"; }
+if($_GET['post']==null) {
+	$QuoteReply = null; $QuoteDescription = null; }
 ?>
 <div class="Table1Border">
 <table class="Table1" id="MakeReply<?php echo $TopicForumID; ?>">
@@ -241,7 +268,7 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 <table style="text-align: left;">
 <tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="ReplyDesc">Insert Reply Description:</label></td>
-	<td style="width: 50%;"><input type="text" name="ReplyDesc" class="TextBox" id="ReplyDesc" size="20" /></td>
+	<td style="width: 50%;"><input type="text" name="ReplyDesc" class="TextBox" id="ReplyDesc" size="20" value="<?php echo $QuoteDescription; ?>" /></td>
 </tr><?php if($_SESSION['UserGroup']==$Settings['GuestGroup']) { ?><tr>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="GuestName">Insert Guest Name:</label></td>
 	<td style="width: 50%;"><input type="text" name="GuestName" class="TextBox" id="GuestName" size="20" /></td>
@@ -251,7 +278,7 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 <tr style="text-align: left;">
 <td style="width: 100%;">
 <label class="TextBoxLabel" for="ReplyPost">Insert Your Reply:</label><br />
-<textarea rows="10" name="ReplyPost" id="ReplyPost" cols="40" class="TextBox"></textarea><br />
+<textarea rows="10" name="ReplyPost" id="ReplyPost" cols="40" class="TextBox"><?php echo $QuoteReply; ?></textarea><br />
 <input type="hidden" name="act" value="makereplies" style="display: none;" />
 <?php if($_SESSION['UserGroup']!=$Settings['GuestGroup']) { ?>
 <input type="hidden" name="GuestName" value="null" style="display: none;" />
@@ -435,25 +462,25 @@ redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"a
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 if($CanDeleteTopics==true) { $NewNumTopics = $NumberTopics - 1; $NewNumPosts = $NumberPosts - $delnum;
-$drquery = query("delete from `".$Settings['sqltable']."posts` WHERE `TopicID`=%i", array($ReplyTopicID));
+$drquery = query("delete from `".$Settings['sqltable']."posts` where `TopicID`=%i", array($ReplyTopicID));
 mysql_query($drquery); 
-$dtquery = query("delete from `".$Settings['sqltable']."topics` WHERE `id`=%i", array($ReplyTopicID));
+$dtquery = query("delete from `".$Settings['sqltable']."topics` where `id`=%i", array($ReplyTopicID));
 mysql_query($dtquery);
 $queryupd = query("update `".$Settings['sqltable']."forums` set `NumPosts`=%i,`NumTopics`=%i WHERE `id`=%i", array($NewNumPosts,$NewNumTopics,$ReplyForumID));
 mysql_query($queryupd); } }
 if($ReplyID!=$FReplyID) {
 $LReplyID=mysql_result($delresult,$delnum-1,"id");
 $SLReplyID=mysql_result($delresult,$delnum-2,"id");
-$NewLastUpdate=mysql_result($delresult,$delnum-2,"LastUpdate");
+$NewLastUpdate=mysql_result($delresult,$delnum-2,"TimeStamp");
 if($ReplyID==$LReplyID) { $NewNumReplies = $NumberReplies - 1; $NewNumPosts = $NumberPosts - 1;
-$drquery = query("delete from `".$Settings['sqltable']."posts` WHERE `id`=%i", array($ReplyID));
+$drquery = query("delete from `".$Settings['sqltable']."posts` where `id`=%i", array($ReplyID));
 mysql_query($drquery); 
 $queryupd = query("update `".$Settings['sqltable']."forums` set `NumPosts`=%i WHERE `id`=%i", array($NewNumPosts,$ReplyForumID));
 mysql_query($queryupd);
 $queryupd = query("update `".$Settings['sqltable']."topics` set `LastUpdate`=%i,`NumReply`=%i WHERE `id`=%i", array($NewLastUpdate,$NewNumReplies,$ReplyTopicID));
 mysql_query($queryupd); } }
 if($ReplyID!=$FReplyID&&$ReplyID!=$LReplyID) { $NewNumReplies = $NumberReplies - 1; $NewNumPosts = $NumberPosts - 1;
-$drquery = query("delete from `".$Settings['sqltable']."posts` WHERE `id`=%i", array($ReplyID));
+$drquery = query("delete from `".$Settings['sqltable']."posts` where `id`=%i", array($ReplyID));
 mysql_query($drquery);
 $queryupd = query("update `".$Settings['sqltable']."forums` set `NumPosts`=%i WHERE `id`=%i", array($NewNumPosts,$ReplyForumID));
 mysql_query($queryupd);
@@ -488,14 +515,14 @@ ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 $ShowEditTopic = null;
 if($PermissionInfo['CanEditTopics'][$TopicForumID]=="yes") {
-$editquery = query("select * from `".$Settings['sqltable']."posts` WHERE `TopicID`=%i ORDER BY `TimeStamp` ASC", array($TopicID));
+$editquery = query("select * from `".$Settings['sqltable']."posts` where `TopicID`=%i ORDER BY `TimeStamp` ASC", array($TopicID));
 $editresult=mysql_query($editquery);
 $editnum=mysql_num_rows($editresult);
 $FReplyID=mysql_result($editresult,0,"id");
 @mysql_free_result($editresult);
 if($_GET['post']==$FReplyID) { $ShowEditTopic = true; } }
 if($PermissionInfo['CanEditTopics'][$TopicForumID]=="no") { $ShowEditTopic = null; }
-$ersquery = query("select * from `".$Settings['sqltable']."posts` WHERE `id`=%i", array($_GET['post']));
+$ersquery = query("select * from `".$Settings['sqltable']."posts` where `id`=%i", array($_GET['post']));
 $ersresult=mysql_query($ersquery);
 $ersnum=mysql_num_rows($ersresult);
 if($ersnum==0) { @mysql_free_result($ersresult);
@@ -521,7 +548,7 @@ ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 @mysql_free_result($ersresult);
 if($ShowEditTopic==true) {
-$gtsquery = query("select * from `".$Settings['sqltable']."topics` WHERE `id`=%i", array($TopicID));
+$gtsquery = query("select * from `".$Settings['sqltable']."topics` where `id`=%i", array($TopicID));
 $gtsresult=mysql_query($gtsquery);
 $gtsnum=mysql_num_rows($gtsresult);
 $TUsersID=mysql_result($gtsresult,0,"UserID");
@@ -589,14 +616,14 @@ if(!isset($_POST['GuestName'])) { $_POST['GuestName'] = null; }
 if(!isset($_POST['TopicName'])) { $_POST['TopicName'] = null; }
 $ShowEditTopic = null;
 if($PermissionInfo['CanEditTopics'][$TopicForumID]=="yes") {
-$editquery = query("select * from `".$Settings['sqltable']."posts` WHERE `TopicID`=%i ORDER BY `TimeStamp` ASC", array($TopicID));
+$editquery = query("select * from `".$Settings['sqltable']."posts` where `TopicID`=%i ORDER BY `TimeStamp` ASC", array($TopicID));
 $editresult=mysql_query($editquery);
 $editnum=mysql_num_rows($editresult);
 $FReplyID=mysql_result($editresult,0,"id");
 @mysql_free_result($editresult);
 if($_GET['post']==$FReplyID) { $ShowEditTopic = true; } }
 if($PermissionInfo['CanEditTopics'][$TopicForumID]=="no") { $ShowEditTopic = null; }
-$ersquery = query("select * from `".$Settings['sqltable']."posts` WHERE `id`=%i", array($_GET['post']));
+$ersquery = query("select * from `".$Settings['sqltable']."posts` where `id`=%i", array($_GET['post']));
 $ersresult=mysql_query($ersquery);
 $ersnum=mysql_num_rows($ersresult);
 if($ersnum==0) { @mysql_free_result($ersresult);
@@ -610,7 +637,7 @@ ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 @mysql_free_result($ersresult); 
 if($ShowEditTopic==true) {
-$gtsquery = query("select * from `".$Settings['sqltable']."topics` WHERE `id`=%i", array($TopicID));
+$gtsquery = query("select * from `".$Settings['sqltable']."topics` where `id`=%i", array($TopicID));
 $gtsresult=mysql_query($gtsquery);
 $gtsnum=mysql_num_rows($gtsresult);
 $TUsersID=mysql_result($gtsresult,0,"UserID");
