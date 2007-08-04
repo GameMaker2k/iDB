@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: replys.php - Last Update: 08/02/2007 SVN 63 - Author: cooldude2k $
+    $FileInfo: replys.php - Last Update: 08/03/2007 SVN 66 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replys.php"||$File3Name=="/replys.php") {
@@ -151,7 +151,9 @@ if($_SESSION['UserGroup']!=$Settings['GuestGroup']) {
 if($PermissionInfo['CanEditReplys'][$MyForumID]=="yes"&&
 	$_SESSION['UserID']==$MyUserID) { $CanEditReply = true; }
 if($PermissionInfo['CanDeleteReplys'][$MyForumID]=="yes"&&
-	$_SESSION['UserID']==$MyUserID) { $CanDeleteReply = true; } }
+	$_SESSION['UserID']==$MyUserID) { $CanDeleteReply = true; }
+if($PermissionInfo['CanModForum'][$MyForumID]=="yes") { 
+	$CanEditReply = true; $CanDeleteReply = true; } }
 ?>
 <div class="Table1Border">
 <table class="Table1">
@@ -434,7 +436,10 @@ $ReplyUserID=mysql_result($predresult,0,"UserID");
 $CanDeleteReply = false;
 if($_SESSION['UserGroup']!=$Settings['GuestGroup']) {
 if($PermissionInfo['CanDeleteReplys'][$ReplyForumID]=="yes"&&
-	$_SESSION['UserID']==$ReplyUserID) { $CanDeleteReply = true; } }
+	$_SESSION['UserID']==$ReplyUserID) { $CanDeleteReply = true; } 
+if($PermissionInfo['CanDeleteReplys'][$ReplyForumID]=="yes"&&
+	$PermissionInfo['CanModForum'][$ReplyForumID]=="yes") { 
+	$CanDeleteReply = true; } }
 if($CanDeleteReply==false) {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
@@ -456,7 +461,10 @@ $TUsersID=mysql_result($gtsresult,0,"UserID");
 $CanDeleteTopics = false;
 if($_SESSION['UserGroup']!=$Settings['GuestGroup']) {
 if($PermissionInfo['CanDeleteTopics'][$ReplyForumID]=="yes"&&
-	$_SESSION['UserID']==$TUsersID) { $CanDeleteTopics = true; } }
+	$_SESSION['UserID']==$TUsersID) { $CanDeleteTopics = true; }
+if($PermissionInfo['CanDeleteTopics'][$ReplyForumID]=="yes"&&
+	$PermissionInfo['CanModForum'][$ReplyForumID]=="yes") { 
+	$CanDeleteTopics = true; } }
 if($CanDeleteTopics==false) {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); @mysql_free_result($delresult);
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
@@ -542,7 +550,7 @@ $ReplyGuestName = stripcslashes(htmlspecialchars($ReplyGuestName, ENT_QUOTES));
 $ReplyGuestName = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $ReplyGuestName);
 $ReplyGuestName = @remove_spaces($ReplyGuestName);
 $ReplyUser=mysql_result($ersresult,0,"UserID");
-if($_SESSION['UserID']!=$ReplyUser) {
+if($_SESSION['UserID']!=$ReplyUser&&$PermissionInfo['CanModForum'][$TopicForumID]=="no") {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
@@ -552,7 +560,10 @@ $gtsquery = query("select * from `".$Settings['sqltable']."topics` where `id`=%i
 $gtsresult=mysql_query($gtsquery);
 $gtsnum=mysql_num_rows($gtsresult);
 $TUsersID=mysql_result($gtsresult,0,"UserID");
-if($_SESSION['UserID']!=$TUsersID) { $ShowEditTopic = null; } }
+if($_SESSION['UserID']!=$TUsersID) { $ShowEditTopic = null; }
+if($PermissionInfo['CanModForum'][$TopicForumID]=="yes"&&
+	$PermissionInfo['CanEditTopics'][$TopicForumID]=="yes") { 
+	$ShowEditTopic = true; } }
 $TopicName = stripcslashes(htmlspecialchars($TopicName, ENT_QUOTES));
 $TopicName = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $TopicName);
 $TopicName = @remove_spaces($TopicName);
@@ -631,7 +642,7 @@ redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"a
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 $ReplyUser=mysql_result($ersresult,0,"UserID");
-if($_SESSION['UserID']!=$ReplyUser) {
+if($_SESSION['UserID']!=$ReplyUser&&$PermissionInfo['CanModForum'][$TopicForumID]=="no") {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
@@ -641,7 +652,10 @@ $gtsquery = query("select * from `".$Settings['sqltable']."topics` where `id`=%i
 $gtsresult=mysql_query($gtsquery);
 $gtsnum=mysql_num_rows($gtsresult);
 $TUsersID=mysql_result($gtsresult,0,"UserID");
-if($_SESSION['UserID']!=$TUsersID) { $ShowEditTopic = null; } }
+if($_SESSION['UserID']!=$TUsersID) { $ShowEditTopic = null; }
+if($PermissionInfo['CanModForum'][$TopicForumID]=="yes"&&
+	$PermissionInfo['CanEditTopics'][$TopicForumID]=="yes") { 
+	$ShowEditTopic = true; } }
 ?>
 <div class="Table1Border">
 <table class="Table1">
@@ -737,10 +751,10 @@ $User1Name=mysql_result($reresult,$rei,"Name");
 if($_SESSION['UserGroup']==$Settings['GuestGroup']) { $User1Name = $_POST['GuestName']; }
 ++$rei; }
 @mysql_free_result($reresult);
-$queryupd = query("update `".$Settings['sqltable']."posts` set `LastUpdate`=%i,`EditUser`=%i,`Post`='%s',`Description`='%s',GuestName='%s' WHERE `id`=%i", array($LastActive,$_SESSION['UserID'],$_POST['ReplyPost'],$_POST['ReplyDesc'],$User1Name,$_GET['post']));
+$queryupd = query("update `".$Settings['sqltable']."posts` set `LastUpdate`=%i,`EditUser`=%i,`Post`='%s',`Description`='%s' WHERE `id`=%i", array($LastActive,$_SESSION['UserID'],$_POST['ReplyPost'],$_POST['ReplyDesc'],$_GET['post']));
 mysql_query($queryupd);
 if($ShowEditTopic==true) {
-$queryupd = query("update `".$Settings['sqltable']."topics` set `TopicName`='%s',`Description`='%s',GuestName='%s' WHERE `id`=%i", array($_POST['TopicName'],$_POST['ReplyDesc'],$User1Name,$TopicID));
+$queryupd = query("update `".$Settings['sqltable']."topics` set `TopicName`='%s',`Description`='%s' WHERE `id`=%i", array($_POST['TopicName'],$_POST['ReplyDesc'],$TopicID));
 mysql_query($queryupd); } } 
 ?>
 <tr style="text-align: center;">
