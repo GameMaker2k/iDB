@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: forums.php - Last Update: 08/01/2007 SVN 60 - Author: cooldude2k $
+    $FileInfo: forums.php - Last Update: 08/03/2007 SVN 65 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="forums.php"||$File3Name=="/forums.php") {
@@ -69,7 +69,6 @@ $apcresult=mysql_query($apcquery);
 $apcnum=mysql_num_rows($apcresult);
 $apci=0; $apcl=0; if($apcnum>=1) {
 while ($apci < $apcnum) {
-$apcl = $apci + 1;
 $NumsTopics=mysql_result($apcresult,$apci,"NumTopics");
 $NumTopics = $NumsTopics + $NumTopics;
 $NumsPosts=mysql_result($apcresult,$apci,"NumPosts");
