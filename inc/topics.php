@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: topics.php - Last Update: 08/02/2007 SVN 62 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 08/05/2007 SVN 67 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -264,6 +264,7 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 if($PermissionInfo['CanMakeTopics'][$ForumID]=="no"||$CanHaveTopics=="no") { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+$MyUserID = $_SESSION['UserID']; if($MyUserID=="0"||$MyUserID==null) { $MyUserID = -1; }
 $REFERERurl = parse_url($_SERVER['HTTP_REFERER']);
 $URL['REFERER'] = $REFERERurl['host'];
 $URL['HOST'] = $_SERVER["SERVER_NAME"];
@@ -358,12 +359,12 @@ if ($_POST['TopicName']==null) { $Error="Yes"; ?>
 if ($Error!="Yes") { $LastActive = GMTimeStamp();
 $topicid = getnextid($Settings['sqltable'],"topics");
 $postid = getnextid($Settings['sqltable'],"posts");
-$requery = query("select * from `".$Settings['sqltable']."members` WHERE `id`=%i", array($_SESSION['UserID']));
+$requery = query("select * from `".$Settings['sqltable']."members` WHERE `id`=%i", array($MyUserID));
 $reresult=mysql_query($requery);
 $renum=mysql_num_rows($reresult);
 $rei=0;
 while ($rei < $renum) {
-$User1ID=$_SESSION['UserID'];
+$User1ID=$MyUserID;
 $User1Name=mysql_result($reresult,$rei,"Name");
 if($_SESSION['UserGroup']==$Settings['GuestGroup']) { $User1Name = $_POST['GuestName']; }
 $User1Email=mysql_result($reresult,$rei,"Email");
@@ -382,8 +383,9 @@ $query = query("insert into `".$Settings['sqltable']."topics` values (".$topicid
 mysql_query($query);
 $query = query("insert into `".$Settings['sqltable']."posts` values (".$postid.",".$topicid.",%i,%i,%i,'%s',%i,%i,0,'%s','%s','%s')", array($ForumID,$ForumCatID,$User1ID,$User1Name,$LastActive,$LastActive,$_POST['TopicPost'],$_POST['TopicDesc'],$User1IP));
 mysql_query($query);
+if($User1ID!=0&&$User1ID!=-1) {
 $queryupd = query("update `".$Settings['sqltable']."members` set `LastActive`=%i,`IP`='%s',`PostCount`=%i WHERE `id`=%i", array($LastActive,$User1IP,$NewPostCount,$User1ID));
-mysql_query($queryupd);
+mysql_query($queryupd); }
 $NewNumPosts = $NumberPosts + 1; $NewNumTopics = $NumberTopics + 1;
 $queryupd = query("update `".$Settings['sqltable']."forums` set `NumPosts`=%i,`NumTopics`=%i WHERE `id`=%i", array($NewNumPosts,$NewNumTopics,$ForumID));
 mysql_query($queryupd);

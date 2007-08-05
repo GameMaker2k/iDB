@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: replys.php - Last Update: 08/03/2007 SVN 66 - Author: cooldude2k $
+    $FileInfo: replys.php - Last Update: 08/05/2007 SVN 67 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replys.php"||$File3Name=="/replys.php") {
@@ -154,6 +154,8 @@ if($PermissionInfo['CanDeleteReplys'][$MyForumID]=="yes"&&
 	$_SESSION['UserID']==$MyUserID) { $CanDeleteReply = true; }
 if($PermissionInfo['CanModForum'][$MyForumID]=="yes") { 
 	$CanEditReply = true; $CanDeleteReply = true; } }
+if($_SESSION['UserID']==0) { 
+	$CanEditReply = false; $CanDeleteReply = false; }
 ?>
 <div class="Table1Border">
 <table class="Table1">
@@ -298,6 +300,7 @@ if($_GET['post']==null) {
 if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="no"||$TopicClosed==1) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+$MyUsersID = $_SESSION['UserID']; if($MyUsersID=="0"||$MyUsersID==null) { $MyUsersID = -1; }
 $REFERERurl = parse_url($_SERVER['HTTP_REFERER']);
 $URL['REFERER'] = $REFERERurl['host'];
 $URL['HOST'] = $_SERVER["SERVER_NAME"];
@@ -380,18 +383,19 @@ $NumberPosts=mysql_result($gnrresult,0,"NumPosts");
 $PostCountAdd=mysql_result($gnrresult,0,"PostCountAdd"); 
 @mysql_free_result($gnrresult);
 $postid = getnextid($Settings['sqltable'],"posts");
-$requery = query("select * from `".$Settings['sqltable']."members` WHERE `id`=%i", array($_SESSION['UserID']));
+$requery = query("select * from `".$Settings['sqltable']."members` WHERE `id`=%i", array($MyUsersID));
 $reresult=mysql_query($requery);
 $renum=mysql_num_rows($reresult);
 $rei=0;
 while ($rei < $renum) {
-$User1ID=$_SESSION['UserID'];
+$User1ID=$MyUsersID;
 $User1Name=mysql_result($reresult,$rei,"Name");
 if($_SESSION['UserGroup']==$Settings['GuestGroup']) { $User1Name = $_POST['GuestName']; }
 $User1Email=mysql_result($reresult,$rei,"Email");
 $User1Title=mysql_result($reresult,$rei,"Title");
 $User1GroupID=mysql_result($reresult,$rei,"GroupID");
 $PostCount=mysql_result($reresult,$rei,"PostCount");
+$NewPostCount = null;
 if($PostCountAdd=="on") { $NewPostCount = $PostCount + 1; }
 if(!isset($NewPostCount)) { $NewPostCount = $PostCount; }
 $gquery = query("select * from `".$Settings['sqltable']."groups` WHERE `id`=%i", array($User1GroupID));
@@ -402,8 +406,9 @@ $User1IP=$_SERVER['REMOTE_ADDR'];
 ++$rei; } @mysql_free_result($reresult);
 $query = query("insert into `".$Settings['sqltable']."posts` values (".$postid.",%i,%i,%i,%i,'%s',%i,%i,0,'%s','%s','%s')", array($TopicID,$TopicForumID,$TopicCatID,$User1ID,$User1Name,$LastActive,$LastActive,$_POST['ReplyPost'],$_POST['ReplyDesc'],$User1IP));
 mysql_query($query);
+if($User1ID!=0&&$User1ID!=-1) {
 $queryupd = query("update `".$Settings['sqltable']."members` set `LastActive`=%i,`IP`='%s',`PostCount`=%i WHERE `id`=%i", array($LastActive,$User1IP,$NewPostCount,$User1ID));
-mysql_query($queryupd);
+mysql_query($queryupd); }
 $NewNumPosts = $NumberPosts + 1; $NewNumReplies = $NumberReplies + 1;
 $queryupd = query("update `".$Settings['sqltable']."forums` set `NumPosts`=%i WHERE `id`=%i", array($NewNumPosts,$TopicForumID));
 mysql_query($queryupd);
@@ -423,8 +428,7 @@ $MyPostNum = $NewNumReplies + 1;
 </tr>
 </table></div>
 <div>&nbsp;</div>
-<?php } 
-if($_GET['act']=="delete") {
+<?php } if($_GET['act']=="delete") {
 $predquery = query("select * from `".$Settings['sqltable']."posts` where `id`=%i", array($_GET['post']));
 $predresult=mysql_query($predquery);
 $prednum=mysql_num_rows($predresult);
@@ -434,12 +438,14 @@ $ReplyForumID=mysql_result($predresult,0,"ForumID");
 $ReplyUserID=mysql_result($predresult,0,"UserID");
 @mysql_free_result($predresult);
 $CanDeleteReply = false;
+if($_SESSION['UserID']!=0) {
 if($_SESSION['UserGroup']!=$Settings['GuestGroup']) {
 if($PermissionInfo['CanDeleteReplys'][$ReplyForumID]=="yes"&&
 	$_SESSION['UserID']==$ReplyUserID) { $CanDeleteReply = true; } 
 if($PermissionInfo['CanDeleteReplys'][$ReplyForumID]=="yes"&&
 	$PermissionInfo['CanModForum'][$ReplyForumID]=="yes") { 
-	$CanDeleteReply = true; } }
+	$CanDeleteReply = true; } } }
+if($_SESSION['UserID']==0) { $CanDeleteReply = false; }
 if($CanDeleteReply==false) {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
@@ -465,6 +471,7 @@ if($PermissionInfo['CanDeleteTopics'][$ReplyForumID]=="yes"&&
 if($PermissionInfo['CanDeleteTopics'][$ReplyForumID]=="yes"&&
 	$PermissionInfo['CanModForum'][$ReplyForumID]=="yes") { 
 	$CanDeleteTopics = true; } }
+if($_SESSION['UserID']==0) { $CanDeleteTopics = false; }
 if($CanDeleteTopics==false) {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); @mysql_free_result($delresult);
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
@@ -518,7 +525,7 @@ mysql_query($queryupd); }
 </tr>
 </table></div>
 <?php } if($_GET['act']=="edit") {
-if($PermissionInfo['CanEditReplys'][$TopicForumID]=="no"||$TopicClosed==1) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
+if($PermissionInfo['CanEditReplys'][$TopicForumID]=="no"||$TopicClosed==1||$_SESSION['UserID']==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 $ShowEditTopic = null;
@@ -614,7 +621,7 @@ $TopicName = @remove_spaces($TopicName);
 </table></div>
 <div>&nbsp;</div>
 <?php } if($_GET['act']=="editreply"&&$_POST['act']=="editreplies") {
-if($PermissionInfo['CanEditReplys'][$TopicForumID]=="no"||$TopicClosed==1) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
+if($PermissionInfo['CanEditReplys'][$TopicForumID]=="no"||$TopicClosed==1||$_SESSION['UserID']==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 $REFERERurl = parse_url($_SERVER['HTTP_REFERER']);
