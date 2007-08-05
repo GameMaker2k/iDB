@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: functions.php - Last Update: 08/05/2007 SVN 68 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 08/05/2007 SVN 69 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -153,10 +153,36 @@ if($ReplaceType=="yes") {
 	$Smile1 = preg_quote($SmileText,"/");
 $Text = preg_replace("/".$Smile1."/i",$Smile2,$Text); }
 ++$renees; } return $Text; }
-// Remove the bad stuff
+// Removes the bad stuff
 function remove_bad_entities($Text) {
+//HTML Entities Dec Version
 $Text = preg_replace("/&#8238;/isU","",$Text);
+$Text = preg_replace("/&#8194;/isU","",$Text);
+$Text = preg_replace("/&#8195;/isU","",$Text);
+$Text = preg_replace("/&#8201;/isU","",$Text);
+$Text = preg_replace("/&#8204;/isU","",$Text);
+$Text = preg_replace("/&#8205;/isU","",$Text);
+$Text = preg_replace("/&#8206;/isU","",$Text);
+$Text = preg_replace("/&#8207;/isU","",$Text);
+//HTML Entities Hex Version
+$Text = preg_replace("/&#x202e;/isU","",$Text);
+$Text = preg_replace("/&#x2002;/isU","",$Text);
+$Text = preg_replace("/&#x2003;/isU","",$Text);
+$Text = preg_replace("/&#x2009;/isU","",$Text);
+$Text = preg_replace("/&#x200c;/isU","",$Text);
+$Text = preg_replace("/&#x200d;/isU","",$Text);
+$Text = preg_replace("/&#x200e;/isU","",$Text);
+$Text = preg_replace("/&#x200f;/isU","",$Text);
+//HTML Entities Name Version
+$Text = preg_replace("/&ensp;/isU","",$Text);
+$Text = preg_replace("/&emsp;/isU","",$Text);
+$Text = preg_replace("/&thinsp;/isU","",$Text);
+$Text = preg_replace("/&zwnj;/isU","",$Text);
+$Text = preg_replace("/&zwj;/isU","",$Text);
+$Text = preg_replace("/&lrm;/isU","",$Text);
+$Text = preg_replace("/&rlm;/isU","",$Text);
 return $Text; }
+// Remove the bad stuff
 function remove_spaces($Text) {
 $Text = preg_replace("/(^\t+|\t+$)/","",$Text);
 $Text = preg_replace("/(^\n+|\n+$)/","",$Text);
