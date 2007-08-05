@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: members.php - Last Update: 08/05/2007 SVN 68 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 08/05/2007 SVN 70 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -332,7 +332,7 @@ if ($Error=="Yes") {
 @redirect("refresh",$basedir.url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],false),"4"); }
 if($Error!="Yes"){
 $YourName = stripcslashes(htmlspecialchars($_POST['username'], ENT_QUOTES));
-$YourName = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $YourName);
+//$YourName = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $YourName);
 $YourName = @remove_spaces($YourName);
 $passtype="ODFH";
 $querylog = query("select * from `".$Settings['sqltable']."members` WHERE `Name`='%s'", array($YourName));
@@ -573,7 +573,7 @@ if(!isset($_POST['TOS'])) { $_POST['TOS'] = null; }
 </tr>
 <?php } }
 $Name = stripcslashes(htmlspecialchars($_POST['Name'], ENT_QUOTES));
-$Name = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $Name);
+//$Name = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $Name);
 $Name = @remove_spaces($Name);
 $sql_email_check = mysql_query(query("select `Email` from `".$Settings['sqltable']."members` WHERE `Email`='%s'", array($_POST['Email'])));
 $sql_username_check = mysql_query(query("select `Name` from `".$Settings['sqltable']."members` WHERE `Name`='%s'", array($Name)));

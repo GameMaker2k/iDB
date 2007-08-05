@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: replys.php - Last Update: 08/05/2007 SVN 68 - Author: cooldude2k $
+    $FileInfo: replys.php - Last Update: 08/05/2007 SVN 70 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replys.php"||$File3Name=="/replys.php") {
@@ -245,7 +245,7 @@ $QuoteUserName=mysql_result($reresult,0,"Name");
 if($QuoteUserName=="Guest") { $QuoteUserName=$QuoteGuestName;
 if($QuoteUserName==null) { $QuoteUserName="Guest"; } }
 $QuoteUserName = stripcslashes(htmlspecialchars($QuoteUserName, ENT_QUOTES));
-$QuoteUserName = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $QuoteUserName);
+//$QuoteUserName = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $QuoteUserName);
 $QuoteUserName = @remove_spaces($QuoteUserName);
 $QuoteReply = stripcslashes(htmlspecialchars($QuoteReply, ENT_QUOTES));
 $QuoteReply = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $QuoteReply);
@@ -345,7 +345,7 @@ $_POST['ReplyDesc'] = stripcslashes(htmlspecialchars($_POST['ReplyDesc'], ENT_QU
 $_POST['ReplyDesc'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['ReplyDesc']);
 $_POST['ReplyDesc'] = @remove_spaces($_POST['ReplyDesc']);
 $_POST['GuestName'] = stripcslashes(htmlspecialchars($_POST['GuestName'], ENT_QUOTES));
-$_POST['GuestName'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['GuestName']);
+//$_POST['GuestName'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['GuestName']);
 $_POST['GuestName'] = @remove_spaces($_POST['GuestName']);
 $_POST['ReplyPost'] = stripcslashes(htmlspecialchars($_POST['ReplyPost'], ENT_QUOTES));
 $_POST['ReplyPost'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['ReplyPost']);
@@ -557,7 +557,7 @@ $ReplyDescription = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $Repl
 $ReplyDescription = @remove_spaces($ReplyDescription);
 $ReplyGuestName=mysql_result($ersresult,0,"GuestName");
 $ReplyGuestName = stripcslashes(htmlspecialchars($ReplyGuestName, ENT_QUOTES));
-$ReplyGuestName = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $ReplyGuestName);
+//$ReplyGuestName = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $ReplyGuestName);
 $ReplyGuestName = @remove_spaces($ReplyGuestName);
 $ReplyUser=mysql_result($ersresult,0,"UserID");
 if($_SESSION['UserID']!=$ReplyUser&&$PermissionInfo['CanModForum'][$TopicForumID]=="no") {
@@ -709,7 +709,7 @@ $_POST['ReplyDesc'] = stripcslashes(htmlspecialchars($_POST['ReplyDesc'], ENT_QU
 $_POST['ReplyDesc'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['ReplyDesc']);
 $_POST['ReplyDesc'] = @remove_spaces($_POST['ReplyDesc']);
 $_POST['GuestName'] = stripcslashes(htmlspecialchars($_POST['GuestName'], ENT_QUOTES));
-$_POST['GuestName'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['GuestName']);
+//$_POST['GuestName'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['GuestName']);
 $_POST['GuestName'] = @remove_spaces($_POST['GuestName']);
 $_POST['ReplyPost'] = stripcslashes(htmlspecialchars($_POST['ReplyPost'], ENT_QUOTES));
 $_POST['ReplyPost'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['ReplyPost']);
