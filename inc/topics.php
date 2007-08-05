@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: topics.php - Last Update: 08/05/2007 SVN 67 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 08/05/2007 SVN 68 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -322,6 +322,7 @@ $_POST['GuestName'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_P
 $_POST['GuestName'] = @remove_spaces($_POST['GuestName']);
 $_POST['TopicPost'] = stripcslashes(htmlspecialchars($_POST['TopicPost'], ENT_QUOTES));
 $_POST['TopicPost'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['TopicPost']);
+$_POST['TopicPost'] = remove_bad_entities($_POST['TopicPost']);
 //$_POST['TopicPost'] = @remove_spaces($_POST['TopicPost']);
 if ($_POST['TopicName']==null) { $Error="Yes"; ?>
 <tr style="text-align: center;">

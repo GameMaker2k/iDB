@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: functions.php - Last Update: 08/02/2007 SVN 62 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 08/05/2007 SVN 68 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -154,6 +154,9 @@ if($ReplaceType=="yes") {
 $Text = preg_replace("/".$Smile1."/i",$Smile2,$Text); }
 ++$renees; } return $Text; }
 // Remove the bad stuff
+function remove_bad_entities($Text) {
+$Text = preg_replace("/&#8238;/isU","",$Text);
+return $Text; }
 function remove_spaces($Text) {
 $Text = preg_replace("/(^\t+|\t+$)/","",$Text);
 $Text = preg_replace("/(^\n+|\n+$)/","",$Text);
@@ -161,6 +164,7 @@ $Text = preg_replace("/(^\r+|\r+$)/","",$Text);
 $Text = preg_replace("/(\r|\n|\t)+/"," ",$Text);
 $Text = preg_replace("/\s\s+/"," ",$Text);
 $Text = preg_replace("/(^\s+|\s+$)/","",$Text);
+$Text = @remove_bad_entities($Text);
 return $Text; }
 // Fix some chars
 function fixbamps($text) {

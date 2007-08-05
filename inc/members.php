@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: members.php - Last Update: 08/02/2007 SVN 62 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 08/05/2007 SVN 68 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -643,6 +643,7 @@ $_GET['YourPost'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_GET
 $NewSignature = $_GET['YourPost'];
 $_GET['YourPost'] = preg_replace("/\t+/"," ",$_GET['YourPost']);
 $_GET['YourPost'] = preg_replace("/\s\s+/"," ",$_GET['YourPost']);
+$_GET['YourPost'] = remove_bad_entities($_GET['YourPost']);
 $Avatar = stripcslashes(htmlspecialchars($_POST['Avatar'], ENT_QUOTES));
 $Avatar = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $Avatar);
 $Avatar = @remove_spaces($Avatar);

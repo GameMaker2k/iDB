@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: replys.php - Last Update: 08/05/2007 SVN 67 - Author: cooldude2k $
+    $FileInfo: replys.php - Last Update: 08/05/2007 SVN 68 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replys.php"||$File3Name=="/replys.php") {
@@ -250,6 +250,7 @@ $QuoteUserName = @remove_spaces($QuoteUserName);
 $QuoteReply = stripcslashes(htmlspecialchars($QuoteReply, ENT_QUOTES));
 $QuoteReply = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $QuoteReply);
 //$QuoteReply = @remove_spaces($QuoteReply);
+$QuoteReply = remove_bad_entities($QuoteReply);
 $QuoteDescription = str_replace("Re: ","",$QuoteDescription);
 $QuoteDescription = "Re: ".$QuoteDescription;
 $QuoteReply = $QuoteUserName.":\n(&quot;".$QuoteReply."&quot;)"; }
@@ -349,6 +350,7 @@ $_POST['GuestName'] = @remove_spaces($_POST['GuestName']);
 $_POST['ReplyPost'] = stripcslashes(htmlspecialchars($_POST['ReplyPost'], ENT_QUOTES));
 $_POST['ReplyPost'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['ReplyPost']);
 //$_POST['ReplyPost'] = @remove_spaces($_POST['ReplyPost']);
+$_POST['ReplyPost'] = remove_bad_entities($_POST['ReplyPost']);
 if ($_POST['ReplyDesc']==null) { $Error="Yes"; ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
@@ -548,6 +550,7 @@ $ReplyPost=mysql_result($ersresult,0,"Post");
 $ReplyPost = stripcslashes(htmlspecialchars($ReplyPost, ENT_QUOTES));
 $ReplyPost = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $ReplyPost);
 //$ReplyPost = @remove_spaces($ReplyPost);
+$ReplyPost = remove_bad_entities($ReplyPost);
 $ReplyDescription=mysql_result($ersresult,0,"Description");
 $ReplyDescription = stripcslashes(htmlspecialchars($ReplyDescription, ENT_QUOTES));
 $ReplyDescription = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $ReplyDescription);
@@ -710,6 +713,7 @@ $_POST['GuestName'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_P
 $_POST['GuestName'] = @remove_spaces($_POST['GuestName']);
 $_POST['ReplyPost'] = stripcslashes(htmlspecialchars($_POST['ReplyPost'], ENT_QUOTES));
 $_POST['ReplyPost'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['ReplyPost']);
+$_POST['ReplyPost'] = remove_bad_entities($_POST['ReplyPost']);
 if($ShowEditTopic==true) {
 $_POST['TopicName'] = stripcslashes(htmlspecialchars($_POST['TopicName'], ENT_QUOTES));
 $_POST['TopicName'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['TopicName']);

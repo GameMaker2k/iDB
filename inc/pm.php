@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: pm.php - Last Update: 08/02/2007 SVN 62 - Author: cooldude2k $
+    $FileInfo: pm.php - Last Update: 08/05/2007 SVN 68 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pm.php"||$File3Name=="/pm.php") {
@@ -430,6 +430,7 @@ $_POST['GuestName'] = @remove_spaces($_POST['GuestName']);
 $_POST['Message'] = stripcslashes(htmlspecialchars($_POST['Message'], ENT_QUOTES));
 $_POST['Message'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['Message']);
 //$_POST['Message'] = @remove_spaces($_POST['Message']);
+$_POST['Message'] = remove_bad_entities($_POST['Message']);
 $requery = query("select * from `".$Settings['sqltable']."members` WHERE `Name`='%s'", array($_POST['SendMessageTo']));
 $reresult=mysql_query($requery);
 $renum=mysql_num_rows($reresult);

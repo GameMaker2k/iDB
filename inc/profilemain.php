@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: profilemain.php - Last Update: 08/02/2007 SVN 62 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 08/05/2007 SVN 68 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
@@ -120,6 +120,7 @@ if($_POST['update']=="now") {
 if($_POST['act']=="view"&&
 	$_SESSION['UserGroup']!=$Settings['GuestGroup']) {
 	$_POST['NotePad'] = htmlentities($_POST['NotePad'], ENT_QUOTES);
+	$_POST['NotePad'] = remove_bad_entities($_POST['NotePad']);
 	$NewDay=GMTimeStamp();
 	$NewIP=$_SERVER['REMOTE_ADDR'];
 	$querynewskin = query("update `".$Settings['sqltable']."members` set `Notes`='%s',`LastActive`=%i,`IP`='%s' WHERE `id`=%i", array($_POST['NotePad'],$NewDay,$NewIP,$_SESSION['UserID']));
@@ -167,6 +168,7 @@ if($_POST['act']=="signature"&&
 	$_POST['Signature'] = htmlentities($_POST['Signature'], ENT_QUOTES);
 	$_POST['Signature'] = preg_replace("/\t+/"," ",$_POST['Signature']);
 	$_POST['Signature'] = preg_replace("/\s\s+/"," ",$_POST['Signature']);
+	$_POST['Signature'] = remove_bad_entities($_POST['Signature']);
 	$NewDay=GMTimeStamp();
 	$NewIP=$_SERVER['REMOTE_ADDR'];
 	$querynewskin = query("update `".$Settings['sqltable']."members` set `Signature`='%s',`LastActive`=%i,`IP`='%s' WHERE `id`=%i", array($_POST['Signature'],$NewDay,$NewIP,$_SESSION['UserID']));
