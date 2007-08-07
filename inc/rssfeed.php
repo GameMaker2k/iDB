@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: rss2.php - Last Update: 08/02/2007 SVN 62 - Author: cooldude2k $
+    $FileInfo: rss2.php - Last Update: 08/07/2007 SVN 71 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="rssfeed.php"||$File3Name=="/rssfeed.php") {
@@ -20,8 +20,7 @@ if ($File3Name=="rssfeed.php"||$File3Name=="/rssfeed.php") {
 $boardsname = htmlentities($Settings['board_name']);
 $boardsname = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $boardsname);
 $_GET['feedtype'] = strtolower($_GET['feedtype']);
-if($_GET['feedtype']!="rss"&&
-$_GET['feedtype']!="atom") { $_GET['feedtype'] = "rss"; }
+if($_GET['feedtype']!="rss"&&$_GET['feedtype']!="atom") { $_GET['feedtype'] = "rss"; }
 //$basepath = pathinfo($_SERVER['REQUEST_URI']);
 /*if(dirname($_SERVER['REQUEST_URI'])!="."||
 	dirname($_SERVER['REQUEST_URI'])!=null) {
@@ -60,17 +59,54 @@ if($_GET['feedtype']=="rss") { $checkfeedtype = "application/rss+xml"; }
 if($_GET['feedtype']=="atom") { $checkfeedtype = "application/atom+xml"; }
 if(stristr($_SERVER["HTTP_ACCEPT"],$checkfeedtype) ) {
 @header("Content-Type: application/rss+xml; charset=".$Settings['charset']); }
-else{ if(stristr($_SERVER["HTTP_ACCEPT"],"application/xml") ) {
+else { if(stristr($_SERVER["HTTP_ACCEPT"],"application/xml") ) {
 @header("Content-Type: application/xml; charset=".$Settings['charset']); }
 else { if (stristr($_SERVER["HTTP_USER_AGENT"],"FeedValidator")) {
    @header("Content-Type: application/xml; charset=".$Settings['charset']);
 } else { @header("Content-Type: text/xml; charset=".$Settings['charset']); } } }
 @header("Content-Language: en");
 @header("Vary: Accept");
-$query = query("select * from `".$Settings['sqltable']."topics` WHERE `ForumID`=%i ORDER BY `Pinned` DESC, `LastUpdate` DESC", array($_GET['id']));
+$prequery = query("select * from `".$Settings['sqltable']."forums` WHERE `id`=%i", array($_GET['id']));
+$preresult=mysql_query($prequery);
+$prenum=mysql_num_rows($preresult);
+$prei=0;
+$ForumID=mysql_result($preresult,0,"id");
+$ForumName=mysql_result($preresult,0,"Name");
+$ForumName = htmlentities($ForumName);
+$ForumName = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $ForumName);
+$ForumCatID=mysql_result($preresult,0,"CategoryID");
+$ForumType=mysql_result($preresult,0,"ForumType");
+$ForumType = strtolower($ForumType);
+@mysql_free_result($preresult);
+if($PermissionInfo['CanViewForum'][$ForumID]=="no"||
+	$PermissionInfo['CanViewForum'][$ForumID]!="yes") {
+redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
+ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+if($CatPermissionInfo['CanViewCategory'][$ForumCatID]=="no"||
+	$CatPermissionInfo['CanViewCategory'][$ForumCatID]!="yes") {
+redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
+ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+$gltf = array(null); $gltf[0] = $ForumID;
+if ($ForumType=="subforum") { 
+$apcquery = query("select * from `".$Settings['sqltable']."forums` where `ShowForum`='yes' and `InSubForum`=%i ORDER BY `id`", array($ForumID));
+$apcresult=mysql_query($apcquery);
+$apcnum=mysql_num_rows($apcresult);
+$apci=0; $apcl=0; if($apcnum>=1) {
+while ($apci < $apcnum) {
+$SubsForumID=mysql_result($apcresult,$apci,"id");
+if(isset($PermissionInfo['CanViewForum'][$SubsForumID])&&
+	$PermissionInfo['CanViewForum'][$SubsForumID]=="yes") {
+$gltf[$apcl] = $SubsForumID; ++$apcl; }
+++$apci; }
+@mysql_free_result($apcresult); } }
+$Atom = null; $RSS = null; 
+$gltnum = count($gltf); $glti = 0; 
+while ($glti < $gltnum) {
+$query = query("select * from `".$Settings['sqltable']."topics` WHERE `ForumID`=%i ORDER BY `Pinned` DESC, `LastUpdate` DESC", array($gltf[$glti]));
 $result=mysql_query($query);
-$num=mysql_num_rows($result);
-$Atom = null; $RSS = null; $i=0;
+$num=mysql_num_rows($result); $i=0;
 while ($i < $num) {
 $TopicID=mysql_result($result,$i,"id");
 $ForumID=mysql_result($result,$i,"ForumID");
@@ -88,6 +124,7 @@ if(isset($PermissionInfo['CanViewForum'][$ForumID])&&
 $Atom .= '<entry>'."\n".'<title>'.htmlentities($TopicName).'</title>'."\n".'<summary>'.htmlentities($ForumDescription).'</summary>'."\n".'<link rel="alternate" href="'.$BoardURL.url_maker($exfilerss['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstrrss['topic'],$exqstrrss['topic']).'" />'."\n".'<id>'.$BoardURL.url_maker($exfilerss['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstrrss['topic'],$exqstrrss['topic']).'</id>'."\n".'<author>'."\n".'<name>'.$SettInfo['Author'].'</name>'."\n".'</author>'."\n".'<updated>'.gmdate("Y-m-d\TH:i:s\Z").'</updated>'."\n".'</entry>'."\n";
 $RSS .= '<item>'."\n".'<title>'.htmlentities($TopicName).'</title>'."\n".'<description>'.htmlentities($ForumDescription).'</description>'."\n".'<link>'.$BoardURL.url_maker($exfilerss['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstrrss['topic'],$exqstrrss['topic']).'</link>'."\n".'<guid>'.$BoardURL.url_maker($exfilerss['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstrrss['topic'],$exqstrrss['topic']).'</guid>'."\n".'</item>'."\n"; }
 ++$i; } @mysql_free_result($result);
+++$glti; }
 xml_doc_start("1.0",$Settings['charset']);
 if($Settings['showverinfo']==true) { ?>
 <!-- generator="<?php echo $VerInfo['iDB_Ver_Show']; ?>" -->
@@ -96,8 +133,8 @@ if($Settings['showverinfo']==true) { ?>
 <?php } echo "\n"; if($_GET['feedtype']=="rss") { ?>
 <rss version="2.0">
 <channel>
-   <title><?php echo $boardsname; ?></title>
-   <description>RSS Feed of the Topics in Board <?php echo $boardsname; ?></description>
+   <title><?php echo $boardsname." ".$ThemeSet['TitleDivider']; ?> Viewing Forum <?php echo $ForumName; ?></title>
+   <description>RSS Feed of the Topics in Forum <?php echo $ForumName; ?></description>
    <link><?php echo $BoardURL; ?></link>
    <language>en</language>
    <?php if($Settings['showverinfo']==true) { ?>
@@ -108,7 +145,7 @@ if($Settings['showverinfo']==true) { ?>
    <copyright><?php echo $SettInfo['Author']; ?></copyright>
    <ttl>120</ttl>
    <image>
-	<url><?php echo $BoardURL.$SettDir['rss']; ?>rss.gif</url>
+	<url><?php echo $BoardURL.$SettDir['inc']; ?>rss.gif</url>
 	<title><?php echo $boardsname; ?></title>
 	<link><?php echo $BoardURL; ?></link>
    </image>
@@ -116,9 +153,9 @@ if($Settings['showverinfo']==true) { ?>
 </rss>
 <?php } if($_GET['feedtype']=="atom") { ?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title><?php echo $boardsname; ?></title>
-   <subtitle>RSS Feed of the Topics in Board <?php echo $boardsname; ?></subtitle>
-   <link rel="self" href="<?php echo $feedsname; ?>" />
+  <title><?php echo $boardsname." ".$ThemeSet['TitleDivider']; ?> Viewing Forum <?php echo $ForumName; ?></title>
+   <subtitle>Atom Feed of the Topics in Forum <?php echo $ForumName; ?></subtitle>
+   <link rel="self" href="<?php echo $BoardURL.$feedsname; ?>" />
    <id><?php echo $BoardURL; ?></id>
    <updated><?php echo gmdate("Y-m-d\TH:i:s\Z"); ?></updated>
    <?php if($Settings['showverinfo']==true) { ?>
@@ -126,7 +163,7 @@ if($Settings['showverinfo']==true) { ?>
    <?php } if($Settings['showverinfo']!=true) { ?>
    <generator><?php echo $iDB; ?></generator>
    <?php } echo "\n"; ?>
-  <icon><?php echo $BoardURL; ?>inc/rss.gif</icon>
+  <icon><?php echo $BoardURL.$SettDir['inc']; ?>rss.gif</icon>
  <?php echo "\n".$Atom."\n"; ?>
 </feed>
 <?php } mysql_close();
