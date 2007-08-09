@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: subcategories.php - Last Update: 08/03/2007 SVN 65 - Author: cooldude2k $
+    $FileInfo: subcategories.php - Last Update: 08/09/2007 SVN 72 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="subcategories.php"||$File3Name=="/subcategories.php") {
@@ -20,15 +20,15 @@ if ($File3Name=="subcategories.php"||$File3Name=="/subcategories.php") {
 $checkquery = query("select * from `".$Settings['sqltable']."categories` where `id`=%s", array($_GET['id']));
 $checkresult=mysql_query($checkquery);
 $checknum=mysql_num_rows($checkresult);
-$checki=0;
-if($checknum==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
+if($checknum==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); @mysql_free_result($checkresult);
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
-$CategoryID=mysql_result($checkresult,$checki,"id");
-$CategoryName=mysql_result($checkresult,$checki,"Name");
-$CategoryShow=mysql_result($checkresult,$checki,"ShowCategory");
-$CategoryType=mysql_result($checkresult,$checki,"CategoryType");
-$SubShowForums=mysql_result($checkresult,$checki,"SubShowForums");
+if($checknum>=1) {
+$CategoryID=mysql_result($checkresult,0,"id");
+$CategoryName=mysql_result($checkresult,0,"Name");
+$CategoryShow=mysql_result($checkresult,0,"ShowCategory");
+$CategoryType=mysql_result($checkresult,0,"CategoryType");
+$SubShowForums=mysql_result($checkresult,0,"SubShowForums");
 $CategoryType = strtolower($CategoryType); $SubShowForums = strtolower($SubShowForums);
 $SCategoryName = $CategoryName;
 if(!isset($CatPermissionInfo['CanViewCategory'][$CategoryID])) {
@@ -180,5 +180,5 @@ $CatCheck = "skip";
 if($SubShowForums!="yes") { 
 	$CategoryName = $SCategoryName; }
 if($SubShowForums!="no") {
-require($SettDir['inc'].'categories.php'); }
+require($SettDir['inc'].'categories.php'); } }
 ?>

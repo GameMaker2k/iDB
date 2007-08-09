@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: topics.php - Last Update: 08/05/2007 SVN 70 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 08/09/2007 SVN 72 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -20,23 +20,22 @@ if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
 $prequery = query("select * from `".$Settings['sqltable']."forums` WHERE `id`=%i", array($_GET['id']));
 $preresult=mysql_query($prequery);
 $prenum=mysql_num_rows($preresult);
-$prei=0;
-if($prenum==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
+if($prenum==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); @mysql_free_result($preresult);
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
-while ($prei < $prenum) {
-$ForumID=mysql_result($preresult,$prei,"id");
-$ForumCatID=mysql_result($preresult,$prei,"CategoryID");
-$ForumName=mysql_result($preresult,$prei,"Name");
-$ForumType=mysql_result($preresult,$prei,"ForumType");
-$RedirectURL=mysql_result($preresult,$prei,"RedirectURL");
-$RedirectTimes=mysql_result($preresult,$prei,"Redirects");
-$NumberViews=mysql_result($preresult,$prei,"NumViews");
-$NumberPosts=mysql_result($preresult,$prei,"NumPosts");
-$NumberTopics=mysql_result($preresult,$prei,"NumTopics");
-$PostCountAdd=mysql_result($preresult,$prei,"PostCountAdd");
-$CanHaveTopics=mysql_result($preresult,$prei,"CanHaveTopics");
-++$prei; } @mysql_free_result($preresult);
+if($prenum>=1) {
+$ForumID=mysql_result($preresult,0,"id");
+$ForumCatID=mysql_result($preresult,0,"CategoryID");
+$ForumName=mysql_result($preresult,0,"Name");
+$ForumType=mysql_result($preresult,0,"ForumType");
+$RedirectURL=mysql_result($preresult,0,"RedirectURL");
+$RedirectTimes=mysql_result($preresult,0,"Redirects");
+$NumberViews=mysql_result($preresult,0,"NumViews");
+$NumberPosts=mysql_result($preresult,0,"NumPosts");
+$NumberTopics=mysql_result($preresult,0,"NumTopics");
+$PostCountAdd=mysql_result($preresult,0,"PostCountAdd");
+$CanHaveTopics=mysql_result($preresult,0,"CanHaveTopics");
+@mysql_free_result($preresult);
 $ForumType = strtolower($ForumType); $CanHaveTopics = strtolower($CanHaveTopics);
 if($CanHaveTopics=="yes"&&$ForumType=="subforum") { 
 if($_GET['act']=="create"||$_GET['act']=="maketopic"||
@@ -415,4 +414,4 @@ mysql_query($queryupd);
 </tr>
 </table>
 <div>&nbsp;</div>
-<?php } ?>
+<?php } } ?>

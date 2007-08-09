@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: subforums.php - Last Update: 08/03/2007 SVN 65 - Author: cooldude2k $
+    $FileInfo: subforums.php - Last Update: 08/09/2007 SVN 72 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="subforums.php"||$File3Name=="/subforums.php") {
@@ -20,14 +20,17 @@ if ($File3Name=="subforums.php"||$File3Name=="/subforums.php") {
 $checkquery = query("select * from `".$Settings['sqltable']."forums` where `id`=%s", array($_GET['id']));
 $checkresult=mysql_query($checkquery);
 $checknum=mysql_num_rows($checkresult);
-$checki=0;
-$ForumName=mysql_result($checkresult,$checki,"Name");
-$ForumType=mysql_result($checkresult,$checki,"ForumType");
-$CategoryID=mysql_result($checkresult,$checki,"CategoryID");
-$RedirectURL=mysql_result($checkresult,$checki,"RedirectURL");
-$RedirectTimes=mysql_result($checkresult,$checki,"Redirects");
-$CanHaveTopics=mysql_result($checkresult,$checki,"CanHaveTopics");
-$NumberViews=mysql_result($checkresult,$checki,"NumViews");
+if($checknum==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); @mysql_free_result($checkresult);
+ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+if($checknum>=1) {
+$ForumName=mysql_result($checkresult,0,"Name");
+$ForumType=mysql_result($checkresult,0,"ForumType");
+$CategoryID=mysql_result($checkresult,0,"CategoryID");
+$RedirectURL=mysql_result($checkresult,0,"RedirectURL");
+$RedirectTimes=mysql_result($checkresult,0,"Redirects");
+$CanHaveTopics=mysql_result($checkresult,0,"CanHaveTopics");
+$NumberViews=mysql_result($checkresult,0,"NumViews");
 $SForumName = $ForumName;
 $ForumType = strtolower($ForumType); $CanHaveTopics = strtolower($CanHaveTopics);
 if($CanHaveTopics!="yes"&&$ForumType!="redirect") {
@@ -185,5 +188,5 @@ $ForumCheck = "skip";
 if($CanHaveTopics!="yes") { 
 	$ForumName = $SForumName; }
 if($CanHaveTopics!="no") {
-require($SettDir['inc'].'topics.php'); }
+require($SettDir['inc'].'topics.php'); } }
 ?>

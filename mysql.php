@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: mysql.php - Last Update: 07/31/2007 SVN 58 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 08/09/2007 SVN 72 - Author: cooldude2k $
 */
 @error_reporting(E_ALL ^ E_NOTICE);
 @ini_set('session.use_trans_sid', false);
@@ -130,6 +130,11 @@ if($_COOKIE['SessPass']!=null&&
 $_COOKIE['MemberName']!=null) {
 require($SettDir['inc'].'prelogin.php'); } } }
 require($SettDir['inc'].'groupsetup.php');
+if($Settings['board_offline']==true) {
+@header("Content-Type: text/plain; charset=".$Settings['charset']); @mysql_free_result($peresult);
+ob_clean(); echo "Sorry the board is off line.\nIf you are a admin you can login by the admin cp.";
+echo "\n".mysql_errno().": ".mysql_error();
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 //Time Zone Set
 if(!isset($_SESSION['UserTimeZone'])) { 
 	if(isset($Settings['DefaultTimeZone'])) { 

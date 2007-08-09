@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: members.php - Last Update: 08/05/2007 SVN 70 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 08/09/2007 SVN 72 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -242,9 +242,7 @@ $_SESSION = array();
 @redirect("location",$basedir.url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
-
-if($_GET['act']=="login")
-{
+if($_GET['act']=="login") {
 $membertitle = " ".$ThemeSet['TitleDivider']." Login";
 ?>
 <div class="Table1Border">
@@ -345,16 +343,11 @@ $HashType=mysql_result($resultlog,$i,"HashType");
 $JoinedPass=mysql_result($resultlog,$i,"Joined");
 $HashSalt=mysql_result($resultlog,$i,"Salt");
 $UpdateHash = false;
-if($HashType=="ODFH") { 
-	$YourPassword = sha1(md5($_POST['userpass'])); }
-if($HashType=="DF4H") { 
-	$YourPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$HashSalt,"sha1"); }
-if($HashType=="iDBH"||$UpdateHash!=true) { 
-	$YourPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$HashSalt,"sha1"); }
-if($YourPassword==$YourPassTry) { 
-$passright = false;
-} if($YourPassword==$YourPassTry) {
-$passright = true;
+if($HashType=="ODFH") { $YourPassword = sha1(md5($_POST['userpass'])); }
+if($HashType=="DF4H") { $YourPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$HashSalt,"sha1"); }
+if($HashType=="iDBH"||$UpdateHash!=true) { $YourPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$HashSalt,"sha1"); }
+if($YourPassword==$YourPassTry) { $passright = false; } 
+if($YourPassword==$YourPassTry) { $passright = true;
 $YourIDM=mysql_result($resultlog,$i,"id");
 $YourNameM=mysql_result($resultlog,$i,"Name");
 $YourPassM=mysql_result($resultlog,$i,"Password");

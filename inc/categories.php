@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: categories.php - Last Update: 08/03/2007 SVN 65 - Author: cooldude2k $
+    $FileInfo: categories.php - Last Update: 08/09/2007 SVN 72 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="categories.php"||$File3Name=="/categories.php") {
@@ -20,15 +20,16 @@ if ($File3Name=="categories.php"||$File3Name=="/categories.php") {
 $prequery = query("select * from `".$Settings['sqltable']."categories` where `id`=%i and `ShowCategory`='yes'", array($_GET['id']));
 $preresult=mysql_query($prequery);
 $prenum=mysql_num_rows($preresult);
-$prei=0;
-if($prenum==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); }
-while ($prei < $prenum) {
-$CategoryID=mysql_result($preresult,$prei,"id");
-$CategoryName=mysql_result($preresult,$prei,"Name");
-$CategoryShow=mysql_result($preresult,$prei,"ShowCategory");
-$CategoryType=mysql_result($preresult,$prei,"CategoryType");
-$SubShowForums=mysql_result($preresult,$prei,"SubShowForums");
-$CategoryDescription=mysql_result($preresult,$prei,"Description");
+if($prenum==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); @mysql_free_result($preresult);
+ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+if($prenum>=1) {
+$CategoryID=mysql_result($preresult,0,"id");
+$CategoryName=mysql_result($preresult,0,"Name");
+$CategoryShow=mysql_result($preresult,0,"ShowCategory");
+$CategoryType=mysql_result($preresult,0,"CategoryType");
+$SubShowForums=mysql_result($preresult,0,"SubShowForums");
+$CategoryDescription=mysql_result($preresult,0,"Description");
 $CategoryType = strtolower($CategoryType); $SubShowForums = strtolower($SubShowForums);
 if(!isset($CatPermissionInfo['CanViewCategory'][$CategoryID])) {
 	$CatPermissionInfo['CanViewCategory'][$CategoryID] = "no"; }
@@ -159,5 +160,5 @@ if($num>=1) { ?>
 </tr>
 </table></div>
 <div>&nbsp;</div>
-<?php } } ++$prei; }
+<?php } } }
 @mysql_free_result($preresult); ?>

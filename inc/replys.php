@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: replys.php - Last Update: 08/05/2007 SVN 70 - Author: cooldude2k $
+    $FileInfo: replys.php - Last Update: 08/09/2007 SVN 72 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replys.php"||$File3Name=="/replys.php") {
@@ -20,16 +20,18 @@ if ($File3Name=="replys.php"||$File3Name=="/replys.php") {
 $prequery = query("select * from `".$Settings['sqltable']."topics` WHERE `id`=%i", array($_GET['id']));
 $preresult=mysql_query($prequery);
 $prenum=mysql_num_rows($preresult);
-$prei=0;
-while ($prei < $prenum) {
-$TopicName=mysql_result($preresult,$prei,"TopicName");
-$TopicID=mysql_result($preresult,$prei,"id");
-$TopicForumID=mysql_result($preresult,$prei,"ForumID");
-$TopicCatID=mysql_result($preresult,$prei,"CategoryID");
-$TopicClosed=mysql_result($preresult,$prei,"Closed");
-$NumberReplies=mysql_result($preresult,$prei,"NumReply");
-$ViewTimes=mysql_result($preresult,$prei,"NumViews");
-++$prei; } @mysql_free_result($preresult);
+if($prenum==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); @mysql_free_result($preresult);
+ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+if($prenum>=1) {
+$TopicName=mysql_result($preresult,0,"TopicName");
+$TopicID=mysql_result($preresult,0,"id");
+$TopicForumID=mysql_result($preresult,0,"ForumID");
+$TopicCatID=mysql_result($preresult,0,"CategoryID");
+$TopicClosed=mysql_result($preresult,0,"Closed");
+$NumberReplies=mysql_result($preresult,0,"NumReply");
+$ViewTimes=mysql_result($preresult,0,"NumViews");
+@mysql_free_result($preresult);
 if(!isset($CatPermissionInfo['CanViewCategory'][$TopicCatID])) {
 	$CatPermissionInfo['CanViewCategory'][$TopicCatID] = "no"; }
 if($CatPermissionInfo['CanViewCategory'][$TopicCatID]=="no"||
@@ -416,8 +418,8 @@ $queryupd = query("update `".$Settings['sqltable']."forums` set `NumPosts`=%i WH
 mysql_query($queryupd);
 $queryupd = query("update `".$Settings['sqltable']."topics` set `NumReply`=%i,LastUpdate=%i WHERE `id`=%i", array($NewNumReplies,$LastActive,$TopicID));
 mysql_query($queryupd);
-@redirect("refresh",$basedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$topicid,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],FALSE),"3");
 $MyPostNum = $NewNumReplies + 1;
+@redirect("refresh",$basedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],FALSE)."#post".$MyPostNum,"3");
 ?><tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage"><br />
 	Reply to Topic <?php echo $TopicName; ?> was posted.<br />
@@ -795,4 +797,4 @@ mysql_query($queryupd); } }
 </tr>
 </table>
 <div>&nbsp;</div>
-<?php } ?>
+<?php } } ?>
