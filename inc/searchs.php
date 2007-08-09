@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: searchs.php - Last Update: 08/02/2007 SVN 62 - Author: cooldude2k $
+    $FileInfo: searchs.php - Last Update: 08/09/2007 SVN 73 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="searchs.php"||$File3Name=="/searchs.php") {
@@ -67,9 +67,9 @@ if($_GET['act']=="topics") {
 </table></div>
 <?php } if($_GET['search']!=null&&$_GET['type']!=null) {
 if($_GET['type']!="wildcard") {
-$query = query("select * from `".$Settings['sqltable']."topics` WHERE `TopicName`='%s' ORDER BY `Pinned` DESC, `LastUpdate` DESC", array($_GET['search'])); }
+$query = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `TopicName`='%s' ORDER BY `Pinned` DESC, `LastUpdate` DESC", array($_GET['search'])); }
 if($_GET['type']=="wildcard") {
-$query = query("select * from `".$Settings['sqltable']."topics` WHERE `TopicName` LIKE '%s' ORDER BY `Pinned` DESC, `LastUpdate` DESC", array($_GET['search'])); }
+$query = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `TopicName` LIKE '%s' ORDER BY `Pinned` DESC, `LastUpdate` DESC", array($_GET['search'])); }
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
 if($num<=0) { 
@@ -128,7 +128,7 @@ if(isset($PermissionInfo['CanViewForum'][$ForumID])&&
 	$PermissionInfo['CanViewForum'][$ForumID]=="yes"&&
 	isset($CatPermissionInfo['CanViewCategory'][$CategoryID])&&
 	$CatPermissionInfo['CanViewCategory'][$CategoryID]=="yes") {
-$glrquery = query("select * from `".$Settings['sqltable']."posts` WHERE `ForumID`=%i AND `TopicID`=%i ORDER BY `TimeStamp` DESC", array($ForumID,$TopicID));
+$glrquery = query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `ForumID`=%i AND `TopicID`=%i ORDER BY `TimeStamp` DESC", array($ForumID,$TopicID));
 $glrresult=mysql_query($glrquery);
 $glrnum=mysql_num_rows($glrresult);
 if($glrnum>0){

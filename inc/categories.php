@@ -11,13 +11,13 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: categories.php - Last Update: 08/09/2007 SVN 72 - Author: cooldude2k $
+    $FileInfo: categories.php - Last Update: 08/09/2007 SVN 73 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="categories.php"||$File3Name=="/categories.php") {
 	require('index.php');
 	exit(); }
-$prequery = query("select * from `".$Settings['sqltable']."categories` where `id`=%i and `ShowCategory`='yes'", array($_GET['id']));
+$prequery = query("SELECT * FROM `".$Settings['sqltable']."categories` WHERE `id`=%i AND `ShowCategory`='yes'", array($_GET['id']));
 $preresult=mysql_query($prequery);
 $prenum=mysql_num_rows($preresult);
 if($prenum==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); @mysql_free_result($preresult);
@@ -45,7 +45,7 @@ if($CategoryType=="subcategory") {
 redirect("location",$basedir.url_maker($exfile['subcategory'],$Settings['file_ext'],"act=".$_GET['act']."&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['subcategory'],$exqstr['subcategory'],FALSE));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); } }
-$query = query("select * from `".$Settings['sqltable']."forums` where `ShowForum`='yes' and `CategoryID`=%i and `InSubForum`=0 ORDER BY `id`", array($CategoryID));
+$query = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `ShowForum`='yes' AND `CategoryID`=%i AND `InSubForum`=0 ORDER BY `id`", array($CategoryID));
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
 $i=0;
@@ -78,7 +78,7 @@ $ForumDescription=mysql_result($result,$i,"Description");
 $ForumType = strtolower($ForumType);
 $gltf = array(null); $gltf[0] = $ForumID;
 if ($ForumType=="subforum") { 
-$apcquery = query("select * from `".$Settings['sqltable']."forums` where `ShowForum`='yes' and `InSubForum`=%i ORDER BY `id`", array($ForumID));
+$apcquery = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `ShowForum`='yes' AND `InSubForum`=%i ORDER BY `id`", array($ForumID));
 $apcresult=mysql_query($apcquery);
 $apcnum=mysql_num_rows($apcresult);
 $apci=0; $apcl=0; if($apcnum>=1) {
@@ -100,7 +100,7 @@ $gltnum = count($gltf); $glti = 0;
 $OldUpdateTime = 0; $UseThisFonum = null;
 if ($ForumType=="subforum") { 
 while ($glti < $gltnum) {
-$gltfoquery = query("select * from `".$Settings['sqltable']."topics` where `CategoryID`=%i and `ForumID`=%i ORDER BY `LastUpdate` DESC", array($CategoryID,$gltf[$glti]));
+$gltfoquery = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `CategoryID`=%i AND `ForumID`=%i ORDER BY `LastUpdate` DESC", array($CategoryID,$gltf[$glti]));
 $gltforesult=mysql_query($gltfoquery);
 $gltfonum=mysql_num_rows($gltforesult);
 if($gltfonum>0) {
@@ -112,7 +112,7 @@ $OldUpdateTime = $NewUpdateTime; } }
 ++$glti; } }
 if ($ForumType!="subforum"&&$ForumType!="redirect") { $UseThisFonum = $gltf['0']; }
 if ($ForumType!="redirect") {
-$gltquery = query("select * from `".$Settings['sqltable']."topics` where `CategoryID`=%i and `ForumID`=%i ORDER BY `LastUpdate` DESC", array($CategoryID,$UseThisFonum));
+$gltquery = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `CategoryID`=%i AND `ForumID`=%i ORDER BY `LastUpdate` DESC", array($CategoryID,$UseThisFonum));
 $gltresult=mysql_query($gltquery);
 $gltnum=mysql_num_rows($gltresult);
 if($gltnum>0){

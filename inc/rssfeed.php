@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: rss2.php - Last Update: 08/07/2007 SVN 71 - Author: cooldude2k $
+    $FileInfo: rss2.php - Last Update: 08/09/2007 SVN 73 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="rssfeed.php"||$File3Name=="/rssfeed.php") {
@@ -66,7 +66,7 @@ else { if (stristr($_SERVER["HTTP_USER_AGENT"],"FeedValidator")) {
 } else { @header("Content-Type: text/xml; charset=".$Settings['charset']); } } }
 @header("Content-Language: en");
 @header("Vary: Accept");
-$prequery = query("select * from `".$Settings['sqltable']."forums` WHERE `id`=%i", array($_GET['id']));
+$prequery = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i", array($_GET['id']));
 $preresult=mysql_query($prequery);
 $prenum=mysql_num_rows($preresult);
 $prei=0;
@@ -90,7 +90,7 @@ ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 $gltf = array(null); $gltf[0] = $ForumID;
 if ($ForumType=="subforum") { 
-$apcquery = query("select * from `".$Settings['sqltable']."forums` where `ShowForum`='yes' and `InSubForum`=%i ORDER BY `id`", array($ForumID));
+$apcquery = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `ShowForum`='yes' AND `InSubForum`=%i ORDER BY `id`", array($ForumID));
 $apcresult=mysql_query($apcquery);
 $apcnum=mysql_num_rows($apcresult);
 $apci=0; $apcl=0; if($apcnum>=1) {
@@ -104,7 +104,7 @@ $gltf[$apcl] = $SubsForumID; ++$apcl; }
 $Atom = null; $RSS = null; 
 $gltnum = count($gltf); $glti = 0; 
 while ($glti < $gltnum) {
-$query = query("select * from `".$Settings['sqltable']."topics` WHERE `ForumID`=%i ORDER BY `Pinned` DESC, `LastUpdate` DESC", array($gltf[$glti]));
+$query = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `ForumID`=%i ORDER BY `Pinned` DESC, `LastUpdate` DESC", array($gltf[$glti]));
 $result=mysql_query($query);
 $num=mysql_num_rows($result); $i=0;
 while ($i < $num) {

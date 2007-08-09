@@ -12,7 +12,7 @@
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mkconfig.php - Last Update: 08/09/2007 SVN 72 - Author: cooldude2k $
+    $FileInfo: mkconfig.php - Last Update: 08/09/2007 SVN 73 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mkconfig.php"||$File3Name=="/mkconfig.php") {
@@ -101,13 +101,13 @@ $MyMonth = GMTimeGet("m",$YourOffSet,0,$AdminDST);
 $MyYear = GMTimeGet("Y",$YourOffSet,0,$AdminDST);
 $MyYear10 = $MyYear+10;
 $YourDateEnd = $YourDate + $dayconv['month'];
-$query = "INSERT INTO ".$_POST['tableprefix']."events VALUES (1, -1, 'Cool Dude 2k', 'Opening', 'This is the day the Board was made. ^_^', ".$YourDate.", ".$YourDateEnd.")";
+$query = query("INSERT INTO ".$_POST['tableprefix']."events VALUES (1, -1, 'Cool Dude 2k', 'Opening', 'This is the day the Board was made. ^_^', %i, %i)", array($YourDate,$YourDateEnd));
 mysql_query($query);
-$query = "INSERT INTO ".$_POST['tableprefix']."forums VALUES (1,1,'Test/Spam','yes','forum',0,'http://',0,0,'A Test Board.','off','yes',1,1)";
+$query = query("INSERT INTO ".$_POST['tableprefix']."forums VALUES (1,1,'Test/Spam','yes','forum',0,'http://',0,0,'A Test Board.','off','yes',1,1)", array(null));
 mysql_query($query);
-$query = "INSERT INTO ".$_POST['tableprefix']."topics VALUES (1,1,1,-1,'Cool Dude 2k',".$YourDate.",".$YourDate.",'Welcome','Install was successful',0,0,1,1)";
+$query = query("INSERT INTO ".$_POST['tableprefix']."topics VALUES (1,1,1,-1,'Cool Dude 2k',%i,%i,'Welcome','Install was successful',0,0,1,1)", array($YourDate,$YourDate));
 mysql_query($query);
-$query = "INSERT INTO ".$_POST['tableprefix']."posts VALUES (1,1,1,1,-1,'Cool Dude 2k',".$YourDate.",".$YourEditDate.",1,'Welcome to Your Message Board. :) ','Install was successful','127.0.0.1')"; 
+$query = query("INSERT INTO ".$_POST['tableprefix']."posts VALUES (1,1,1,1,-1,'Cool Dude 2k',%i,%i,1,'Welcome to Your Message Board. :) ','Install was successful','127.0.0.1')", array($YourDate,$YourEditDate)); 
 mysql_query($query);
 $NewPassword = b64e_hmac($_POST['AdminPasswords'],$YourDate,$YourSalt,"sha1");
 //$Name = stripcslashes(htmlspecialchars($AdminUser, ENT_QUOTES));
@@ -127,11 +127,11 @@ if($csrand==3) { $gpass .= chr(rand(97,122)); }
 ++$i; } $GuestPassword = b64e_hmac($gpass,$YourDate,$GSalt,"sha1");
 $url_this_dir = "http://".$_SERVER['HTTP_HOST'].$this_dir."index.php?act=view";
 $YourIP = $_SERVER['REMOTE_ADDR'];
-$query = "INSERT INTO ".$_POST['tableprefix']."members VALUES (-1,'Guest','".$GuestPassword."','iDBH','".$GEmail."',4,'no',0,'Guest Account','Guest',".$YourDate.",".$YourDate.",'0','[B]Test[/B] :)','Your Notes','http://','100x100','http://".$_SERVER['HTTP_HOST']."/','UnKnow',1,'".$AdminTime."','".$AdminDST."','iDB','127.0.0.1','".$GSalt."')";
+$query = query("INSERT INTO ".$_POST['tableprefix']."members VALUES (-1,'Guest','%s','iDBH','%s',4,'no',0,'Guest Account','Guest',%i,%i,'0','[B]Test[/B] :)','Your Notes','http://','100x100','%s','UnKnow',1,'%s','%s','iDB','127.0.0.1','%s')", array($GuestPassword,$GEmail,$YourDate,$YourDate,"http://".$_SERVER['HTTP_HOST']."/",$AdminTime,$AdminDST,$GSalt));
 mysql_query($query);
-$query = "INSERT INTO ".$_POST['tableprefix']."members VALUES (1,'".$_POST['AdminUser']."','".$NewPassword."','iDBH','".$Email."',1,'yes',0,'".$Interests."','Admin',".$YourDate.",".$YourDate.",'0','".$NewSignature."','Your Notes','".$Avatar."','100x100','".$YourWebsite."','UnKnow',0,'".$AdminTime."','".$AdminDST."','iDB','".$UserIP."','".$YourSalt."')";
+$query = query("INSERT INTO ".$_POST['tableprefix']."members VALUES (1,'".$_POST['AdminUser']."','%s','iDBH','%s',1,'yes',0,'%s','Admin',%i,%i,'0','%s','Your Notes','%s','100x100','%s','UnKnow',0,'%s','%s','iDB','%s','%s')", array($_POST['AdminUser'],$NewPassword,$Email,$Interests,$YourDate,$YourDate,$NewSignature,$Avatar,$YourWebsite,$AdminTime,$AdminDST,$UserIP,$YourSalt));
 mysql_query($query);
-$query = "INSERT INTO ".$_POST['tableprefix']."messenger VALUES (1,-1,1,'Cool Dude 2k','Test','Hello Welcome to your board.\n\rThis is a Test PM. :P ','Hello Welcome',".$YourDate.",0)";
+$query = query("INSERT INTO ".$_POST['tableprefix']."messenger VALUES (1,-1,1,'Cool Dude 2k','Test','Hello Welcome to your board.\n\rThis is a Test PM. :P ','Hello Welcome',%i,0)", array($YourDate));
 mysql_query($query);
 $CHMOD = $_SERVER['PHP_SELF'];
 $pretext = "<?php\n/*\n    This program is free software; you can redistribute it and/or modify\n    it under the terms of the GNU General Public License as published by\n    the Free Software Foundation; either version 2 of the License, or\n    (at your option) any later version.\n\n    This program is distributed in the hope that it will be useful,\n    but WITHOUT ANY WARRANTY; without even the implied warranty of\n    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n    Revised BSD License for more details.\n\n    Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/\n    Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/\n    iDB Installer made by Game Maker 2k - http://idb.berlios.net/\n\n    \$FileInfo: settings.php & settingsbak.php - Last Update: 05/22/2007 SVN 11 - Author: cooldude2k \$\n*/\n";

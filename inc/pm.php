@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: pm.php - Last Update: 08/05/2007 SVN 68 - Author: cooldude2k $
+    $FileInfo: pm.php - Last Update: 08/09/2007 SVN 73 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pm.php"||$File3Name=="/pm.php") {
@@ -61,7 +61,7 @@ if($_GET['act']=="view") {
 <th class="TableRow2" style="width: 25%;">Time</th>
 </tr>
 <?php
-$query = query("select * from `".$Settings['sqltable']."messenger` WHERE `PMSentID`=%i ORDER BY `DateSend` DESC", array($_SESSION['UserID']));
+$query = query("SELECT * FROM `".$Settings['sqltable']."messenger` WHERE `PMSentID`=%i ORDER BY `DateSend` DESC", array($_SESSION['UserID']));
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
 $i=0;
@@ -122,7 +122,7 @@ if($_GET['act']=="viewsent") {
 <th class="TableRow2" style="width: 25%;">Time</th>
 </tr>
 <?php
-$query = query("select * from `".$Settings['sqltable']."messenger` WHERE `SenderID`=%i ORDER BY `DateSend` DESC", array($_SESSION['UserID']));
+$query = query("SELECT * FROM `".$Settings['sqltable']."messenger` WHERE `SenderID`=%i ORDER BY `DateSend` DESC", array($_SESSION['UserID']));
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
 $i=0;
@@ -168,7 +168,7 @@ echo "<span>".$SentToName."</span>"; }
 </tr>
 <?php } @mysql_free_result($result);
 if($_GET['act']=="read") {
-$query = query("select * from `".$Settings['sqltable']."messenger` WHERE `id`=%i", array($_GET['id']));
+$query = query("SELECT * FROM `".$Settings['sqltable']."messenger` WHERE `id`=%i", array($_GET['id']));
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
 $is=0;
@@ -188,7 +188,7 @@ $DateSend=GMTimeChange("F j, Y, g:i a",$DateSend,$_SESSION['UserTimeZone'],0,$_S
 $MessageText=mysql_result($result,$is,"MessageText");
 $MessageText = preg_replace("/\<br\>/", "<br />\n", nl2br($MessageText));
 $MessageDesc=mysql_result($result,$is,"Description");
-$requery = query("select * from `".$Settings['sqltable']."members` WHERE `id`=%i", array($SenderID));
+$requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i", array($SenderID));
 $reresult=mysql_query($requery);
 $renum=mysql_num_rows($reresult);
 $rei=0;
@@ -205,7 +205,7 @@ $User1Title=mysql_result($reresult,$rei,"Title");
 $User1Joined=mysql_result($reresult,$rei,"Joined");
 $User1Joined=GMTimeChange("M j Y",$User1Joined,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $User1GroupID=mysql_result($reresult,$rei,"GroupID");
-$gquery = query("select * from `".$Settings['sqltable']."groups` WHERE `id`=%i", array($User1GroupID));
+$gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i", array($User1GroupID));
 $gresult=mysql_query($gquery);
 $User1Group=mysql_result($gresult,0,"Name");
 @mysql_free_result($gresult);
@@ -223,7 +223,7 @@ $User1IP=mysql_result($reresult,$rei,"IP");
 ++$rei; } @mysql_free_result($reresult);
 ++$is; } @mysql_free_result($result);
 if($_SESSION['UserID']==$SentToID) {
-$queryup = query("update `".$Settings['sqltable']."messenger` set `Read`=%i WHERE `id`=%i", array(1,$_GET['id']));
+$queryup = query("UPDATE `".$Settings['sqltable']."messenger` SET `Read`=%i WHERE `id`=%i", array(1,$_GET['id']));
 mysql_query($queryup); }
 if($User1Name=="Guest") { $User1Name=$PMGuest;
 if($User1Name==null) { $User1Name="Guest"; } }
@@ -299,7 +299,7 @@ echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr
 <?php } if($_GET['act']=="create") { 
 $SendMessageTo = null;
 if($_GET['id']!=null&&$_GET['id']!="-1") {
-$requery = query("select * from `".$Settings['sqltable']."members` WHERE `id`=%i", array($_GET['id']));
+$requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i", array($_GET['id']));
 $reresult=mysql_query($requery);
 $renum=mysql_num_rows($reresult);
 $rei=0;
@@ -431,14 +431,14 @@ $_POST['Message'] = stripcslashes(htmlspecialchars($_POST['Message'], ENT_QUOTES
 $_POST['Message'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['Message']);
 //$_POST['Message'] = @remove_spaces($_POST['Message']);
 $_POST['Message'] = remove_bad_entities($_POST['Message']);
-$requery = query("select * from `".$Settings['sqltable']."members` WHERE `Name`='%s'", array($_POST['SendMessageTo']));
+$requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `Name`='%s'", array($_POST['SendMessageTo']));
 $reresult=mysql_query($requery);
 $renum=mysql_num_rows($reresult);
 $rei=0;
 while ($rei < $renum) {
 $SendMessageToID = mysql_result($reresult,$rei,"id");
 $SendToGroupID = mysql_result($reresult,$rei,"GroupID");
-$gquery = query("select * from `".$Settings['sqltable']."groups` WHERE `id`=%i", array($SendToGroupID));
+$gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i", array($SendToGroupID));
 $gresult=mysql_query($gquery);
 $SendUserCanPM=mysql_result($gresult,0,"CanPM");
 $SendUserCanPM = strtolower($SendUserCanPM);
@@ -489,7 +489,7 @@ if ($Error!="Yes") { $LastActive = GMTimeStamp();
 $messageid = getnextid($Settings['sqltable'],"messenger");
 if($_SESSION['UserGroup']==$Settings['GuestGroup']) { $User1Name = $_POST['GuestName']; }
 if($_SESSION['UserGroup']!=$Settings['GuestGroup']) { $User1Name = $_SESSION['MemberName']; }
-$query = query("insert into `".$Settings['sqltable']."messenger` values (".$messageid.",%i,%i,'%s','%s','%s','%s',%i,%i)", array($_SESSION['UserID'],$SendMessageToID,$_SESSION['MemberName'],$_POST['MessageName'],$_POST['Message'],$_POST['MessageDesc'],$LastActive,0));
+$query = query("INSERT INTO `".$Settings['sqltable']."messenger` VALUES (".$messageid.",%i,%i,'%s','%s','%s','%s',%i,%i)", array($_SESSION['UserID'],$SendMessageToID,$_SESSION['MemberName'],$_POST['MessageName'],$_POST['Message'],$_POST['MessageDesc'],$LastActive,0));
 mysql_query($query);
 ?><tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage"><br />

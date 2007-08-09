@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: profilemain.php - Last Update: 08/05/2007 SVN 68 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 08/09/2007 SVN 73 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
@@ -81,7 +81,7 @@ $profiletitle = " ".$ThemeSet['TitleDivider']." NotePad";
 <br />Profile updated <a href="<?php echo $updateact; ?>">click here</a> to go back. ^_^<br />&nbsp;</div>
 <?php } if($_GET['act']=="view") {
 if($_POST['update']!="now") {
-$query = query("select * from `".$Settings['sqltable']."members` WHERE `id`=%i", array($_SESSION['UserID']));
+$query = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i", array($_SESSION['UserID']));
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
 $i=0;
@@ -123,11 +123,11 @@ if($_POST['act']=="view"&&
 	$_POST['NotePad'] = remove_bad_entities($_POST['NotePad']);
 	$NewDay=GMTimeStamp();
 	$NewIP=$_SERVER['REMOTE_ADDR'];
-	$querynewskin = query("update `".$Settings['sqltable']."members` set `Notes`='%s',`LastActive`=%i,`IP`='%s' WHERE `id`=%i", array($_POST['NotePad'],$NewDay,$NewIP,$_SESSION['UserID']));
+	$querynewskin = query("UPDATE `".$Settings['sqltable']."members` SET `Notes`='%s',`LastActive`=%i,`IP`='%s' WHERE `id`=%i", array($_POST['NotePad'],$NewDay,$NewIP,$_SESSION['UserID']));
 		mysql_query($querynewskin); } } }
 if($_GET['act']=="signature") {
 if($_POST['update']!="now") {
-$query = query("select * from `".$Settings['sqltable']."members` WHERE `id`=%i", array($_SESSION['UserID']));
+$query = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i", array($_SESSION['UserID']));
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
 $i=0;
@@ -171,11 +171,11 @@ if($_POST['act']=="signature"&&
 	$_POST['Signature'] = remove_bad_entities($_POST['Signature']);
 	$NewDay=GMTimeStamp();
 	$NewIP=$_SERVER['REMOTE_ADDR'];
-	$querynewskin = query("update `".$Settings['sqltable']."members` set `Signature`='%s',`LastActive`=%i,`IP`='%s' WHERE `id`=%i", array($_POST['Signature'],$NewDay,$NewIP,$_SESSION['UserID']));
+	$querynewskin = query("UPDATE `".$Settings['sqltable']."members` SET `Signature`='%s',`LastActive`=%i,`IP`='%s' WHERE `id`=%i", array($_POST['Signature'],$NewDay,$NewIP,$_SESSION['UserID']));
 	mysql_query($querynewskin); } } }
 if($_GET['act']=="avatar") {
 if($_POST['update']!="now") {
-$query = query("select * from `".$Settings['sqltable']."members` WHERE `id`=%i", array($_SESSION['UserID']));
+$query = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i", array($_SESSION['UserID']));
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
 $i=0;
@@ -254,11 +254,11 @@ if($_POST['Avatar']!=null&&$_POST['AvatarSizeW']!=null&&$_POST['AvatarSizeH']!=n
 	$NewDay=GMTimeStamp();
 	$NewIP=$_SERVER['REMOTE_ADDR'];
 	$_POST['Avatar'] = @remove_spaces($_POST['Avatar']);
-	$querynewskin = query("update `".$Settings['sqltable']."members` set `Avatar`='%s',`AvatarSize`='%s',`LastActive`=%i,`IP`='%s' WHERE `id`=%i", array($_POST['Avatar'],$fullavatarsize,$NewDay,$NewIP,$_SESSION['UserID']));
+	$querynewskin = query("UPDATE `".$Settings['sqltable']."members` SET `Avatar`='%s',`AvatarSize`='%s',`LastActive`=%i,`IP`='%s' WHERE `id`=%i", array($_POST['Avatar'],$fullavatarsize,$NewDay,$NewIP,$_SESSION['UserID']));
 	mysql_query($querynewskin); } } }
 if($_GET['act']=="settings") {
 if($_POST['update']!="now") {
-$query = query("select * from `".$Settings['sqltable']."members` WHERE `id`=%i", array($_SESSION['UserID']));
+$query = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i", array($_SESSION['UserID']));
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
 $i=0;
@@ -371,11 +371,11 @@ if($_POST['act']=="settings"&&
 	$_POST['YourOffSet'] = $_POST['YourOffSet'].":".$_POST['MinOffSet'];
 	$_SESSION['UserTimeZone'] = $_POST['YourOffSet'];
 	$_SESSION['UserDST'] = $_POST['DST'];
-	$querynewskin = query("update `".$Settings['sqltable']."members` set `UseTheme`='%s',`TimeZone`='%s',`DST`='%s',`LastActive`=%i,`IP`='%s' WHERE `id`=%i", array($_POST['skin'],$_POST['YourOffSet'],$_POST['DST'],$NewDay,$NewIP,$_SESSION['UserID']));
+	$querynewskin = query("UPDATE `".$Settings['sqltable']."members` SET `UseTheme`='%s',`TimeZone`='%s',`DST`='%s',`LastActive`=%i,`IP`='%s' WHERE `id`=%i", array($_POST['skin'],$_POST['YourOffSet'],$_POST['DST'],$NewDay,$NewIP,$_SESSION['UserID']));
 	mysql_query($querynewskin); } } }
 if($_GET['act']=="profile") {
 if($_POST['update']!="now") {
-$query = query("select * from `".$Settings['sqltable']."members` WHERE `id`=%i", array($_SESSION['UserID']));
+$query = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i", array($_SESSION['UserID']));
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
 $i=0;
@@ -496,11 +496,11 @@ if($_POST['act']=="profile"&&
 	$_SESSION['UserDST'] = $_POST['DST'];
 	$NewDay=GMTimeStamp();
 	$NewIP=$_SERVER['REMOTE_ADDR'];
-	$querynewprofile = query("update `".$Settings['sqltable']."members` set `Interests`='%s',`Title`='%s',`Website`='%s',`TimeZone`='%s',`Gender`='%s',`DST`='%s',`LastActive`=%i,`IP`='%s' WHERE `id`=%i", array($_POST['Interests'],$_POST['Title'],$_POST['Website'],$_POST['YourOffSet'],$_POST['YourGender'],$_POST['DST'],$NewDay,$NewIP,$_SESSION['UserID']));
+	$querynewprofile = query("UPDATE `".$Settings['sqltable']."members` SET `Interests`='%s',`Title`='%s',`Website`='%s',`TimeZone`='%s',`Gender`='%s',`DST`='%s',`LastActive`=%i,`IP`='%s' WHERE `id`=%i", array($_POST['Interests'],$_POST['Title'],$_POST['Website'],$_POST['YourOffSet'],$_POST['YourGender'],$_POST['DST'],$NewDay,$NewIP,$_SESSION['UserID']));
 	mysql_query($querynewprofile); } } }
 if($_GET['act']=="userinfo") {
 if($_POST['update']!="now") {
-$query = query("select * from `".$Settings['sqltable']."members` WHERE `id`=%i", array($_SESSION['UserID']));
+$query = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i", array($_SESSION['UserID']));
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
 $i=0;
@@ -555,7 +555,7 @@ $profiletitle = " ".$ThemeSet['TitleDivider']." User Info Editer";
 if($_POST['update']=="now") {
 if($_POST['act']=="userinfo"&&
 	$_SESSION['UserGroup']!=$Settings['GuestGroup']) {
-	$query = query("select * from `".$Settings['sqltable']."members` WHERE `id`=%i", array($_SESSION['UserID']));
+	$query = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i", array($_SESSION['UserID']));
 	$result=mysql_query($query);
 	$num=mysql_num_rows($result);
 	$i=0;
@@ -587,7 +587,7 @@ if($YourPassword!=$OldPassword) { $Error="Yes"; ?>
 	if ($Error!="Yes") {
 	setcookie("SessPass", $NewPassword, time() + (7 * 86400), $basedir);
 	$_POST['Email'] = @remove_spaces($_POST['Email']);
-	$querynewuserinfo = query("update `".$Settings['sqltable']."members` set `Password`='%s',`HashType`='iDBH',`Email`='%s',`LastActive`=%i,`IP`='%s',`Salt`='%s' WHERE `id`=%i", array($NewPassword,$_POST['Email'],$NewDay,$NewIP,$NewSalt,$_SESSION['UserID']));
+	$querynewuserinfo = query("UPDATE `".$Settings['sqltable']."members` SET `Password`='%s',`HashType`='iDBH',`Email`='%s',`LastActive`=%i,`IP`='%s',`Salt`='%s' WHERE `id`=%i", array($NewPassword,$_POST['Email'],$NewDay,$NewIP,$NewSalt,$_SESSION['UserID']));
 	mysql_query($querynewuserinfo); } } } }
 ?>
 <?php if($_POST['update']=="now"&&$_GET['act']!=null) {

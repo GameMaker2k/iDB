@@ -11,13 +11,13 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: topics.php - Last Update: 08/09/2007 SVN 72 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 08/09/2007 SVN 73 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
 	require('index.php');
 	exit(); }
-$prequery = query("select * from `".$Settings['sqltable']."forums` WHERE `id`=%i", array($_GET['id']));
+$prequery = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i", array($_GET['id']));
 $preresult=mysql_query($prequery);
 $prenum=mysql_num_rows($preresult);
 if($prenum==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); @mysql_free_result($preresult);
@@ -59,12 +59,12 @@ if($CatPermissionInfo['CanViewCategory'][$ForumCatID]=="yes"&&
 if($ForumType!="redirect") {
 if($NumberViews==0||$NumberViews==null) { $NewNumberViews = 1; }
 if($NumberViews!=0&&$NumberViews!=null) { $NewNumberViews = $NumberViews + 1; }
-$viewup = query("update `".$Settings['sqltable']."forums` set `NumViews`=%i WHERE `id`=%i", array($NewNumberViews,$_GET['id']));
+$viewup = query("UPDATE `".$Settings['sqltable']."forums` SET `NumViews`=%i WHERE `id`=%i", array($NewNumberViews,$_GET['id']));
 mysql_query($viewup); }
 if($ForumType=="redirect") {
 if($RedirectTimes==0||$RedirectTimes==null) { $NewRedirTime = 1; }
 if($RedirectTimes!=0&&$RedirectTimes!=null) { $NewRedirTime = $RedirectTimes + 1; }
-$redirup = query("update `".$Settings['sqltable']."forums` set `Redirects`=%i WHERE `id`=%i", array($NewRedirTime,$_GET['id']));
+$redirup = query("UPDATE `".$Settings['sqltable']."forums` SET `Redirects`=%i WHERE `id`=%i", array($NewRedirTime,$_GET['id']));
 mysql_query($redirup);
 if($RedirectURL!="http://"&&$RedirectURL!="") {
 redirect("location",$RedirectURL,0,null,false); ob_clean();
@@ -92,7 +92,7 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); } }
 <div>&nbsp;</div>
 <?php
 if($_GET['act']=="view") {
-$query = query("select * from `".$Settings['sqltable']."topics` WHERE `ForumID`=%i ORDER BY `Pinned` DESC, `LastUpdate` DESC", array($_GET['id']));
+$query = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `ForumID`=%i ORDER BY `Pinned` DESC, `LastUpdate` DESC", array($_GET['id']));
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
 //Start Topic Page Code (Will be used at later time)
@@ -140,7 +140,7 @@ $TopicStat=mysql_result($result,$i,"Closed");
 $UsersName = GetUserName($UsersID,$Settings['sqltable']);
 if($UsersName=="Guest") { $UsersName=$GuestName;
 if($UsersName==null) { $UsersName="Guest"; } }
-$glrquery = query("select * from `".$Settings['sqltable']."posts` WHERE `ForumID`=%i AND `TopicID`=%i ORDER BY `TimeStamp` DESC", array($_GET['id'],$TopicID));
+$glrquery = query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `ForumID`=%i AND `TopicID`=%i ORDER BY `TimeStamp` DESC", array($_GET['id'],$TopicID));
 $glrresult=mysql_query($glrquery);
 $glrnum=mysql_num_rows($glrresult);
 if($glrnum>0){
@@ -359,7 +359,7 @@ if ($_POST['TopicName']==null) { $Error="Yes"; ?>
 if ($Error!="Yes") { $LastActive = GMTimeStamp();
 $topicid = getnextid($Settings['sqltable'],"topics");
 $postid = getnextid($Settings['sqltable'],"posts");
-$requery = query("select * from `".$Settings['sqltable']."members` WHERE `id`=%i", array($MyUserID));
+$requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i", array($MyUserID));
 $reresult=mysql_query($requery);
 $renum=mysql_num_rows($reresult);
 $rei=0;
@@ -373,21 +373,21 @@ $User1GroupID=mysql_result($reresult,$rei,"GroupID");
 $PostCount=mysql_result($reresult,$rei,"PostCount");
 if($PostCountAdd=="on") { $NewPostCount = $PostCount + 1; }
 if(!isset($NewPostCount)) { $NewPostCount = $PostCount; }
-$gquery = query("select * from `".$Settings['sqltable']."groups` WHERE `id`=%i", array($User1GroupID));
+$gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i", array($User1GroupID));
 $gresult=mysql_query($gquery);
 $User1Group=mysql_result($gresult,0,"Name");
 @mysql_free_result($gresult);
 $User1IP=$_SERVER['REMOTE_ADDR'];
 ++$rei; } @mysql_free_result($reresult);
-$query = query("insert into `".$Settings['sqltable']."topics` values (".$topicid.",%i,%i,%i,'%s',%i,%i,'%s','%s',0,0,0,0)", array($ForumID,$ForumCatID,$User1ID,$User1Name,$LastActive,$LastActive,$_POST['TopicName'],$_POST['TopicDesc']));
+$query = query("INSERT INTO `".$Settings['sqltable']."topics` VALUES (".$topicid.",%i,%i,%i,'%s',%i,%i,'%s','%s',0,0,0,0)", array($ForumID,$ForumCatID,$User1ID,$User1Name,$LastActive,$LastActive,$_POST['TopicName'],$_POST['TopicDesc']));
 mysql_query($query);
-$query = query("insert into `".$Settings['sqltable']."posts` values (".$postid.",".$topicid.",%i,%i,%i,'%s',%i,%i,0,'%s','%s','%s')", array($ForumID,$ForumCatID,$User1ID,$User1Name,$LastActive,$LastActive,$_POST['TopicPost'],$_POST['TopicDesc'],$User1IP));
+$query = query("INSERT INTO `".$Settings['sqltable']."posts` VALUES (".$postid.",".$topicid.",%i,%i,%i,'%s',%i,%i,0,'%s','%s','%s')", array($ForumID,$ForumCatID,$User1ID,$User1Name,$LastActive,$LastActive,$_POST['TopicPost'],$_POST['TopicDesc'],$User1IP));
 mysql_query($query);
 if($User1ID!=0&&$User1ID!=-1) {
-$queryupd = query("update `".$Settings['sqltable']."members` set `LastActive`=%i,`IP`='%s',`PostCount`=%i WHERE `id`=%i", array($LastActive,$User1IP,$NewPostCount,$User1ID));
+$queryupd = query("UPDATE `".$Settings['sqltable']."members` SET `LastActive`=%i,`IP`='%s',`PostCount`=%i WHERE `id`=%i", array($LastActive,$User1IP,$NewPostCount,$User1ID));
 mysql_query($queryupd); }
 $NewNumPosts = $NumberPosts + 1; $NewNumTopics = $NumberTopics + 1;
-$queryupd = query("update `".$Settings['sqltable']."forums` set `NumPosts`=%i,`NumTopics`=%i WHERE `id`=%i", array($NewNumPosts,$NewNumTopics,$ForumID));
+$queryupd = query("UPDATE `".$Settings['sqltable']."forums` SET `NumPosts`=%i,`NumTopics`=%i WHERE `id`=%i", array($NewNumPosts,$NewNumTopics,$ForumID));
 mysql_query($queryupd);
 @redirect("refresh",$basedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$topicid,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],FALSE),"3");
 ?><tr style="text-align: center;">

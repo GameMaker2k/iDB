@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: calendars.php - Last Update: 07/13/2007 SVN 42 - Author: cooldude2k $
+    $FileInfo: calendars.php - Last Update: 08/09/2007 SVN 73 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="calendars.php"||$File3Name=="/calendars.php") {
@@ -32,8 +32,8 @@ $MyTimeStamp2 = mktime("24","59","59",$MyMonth,$CountDays,$MyYear);
 $MyMonthName = GMTimeGet("F",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $FirstDayThisMouth = date("w", mktime(0, 0, 0, $MyMonth, 1, $MyYear));
 $EventsName = array();
-//$query = query("select * from `".$Settings['sqltable']."events` where `TimeStamp`>=%i and `TimeStampEnd`<=%i", array($MyTimeStamp1,$MyTimeStamp2));
-$query = query("select * from `".$Settings['sqltable']."events`", array(null));
+//$query = query("SELECT * FROM `".$Settings['sqltable']."events` WHERE `TimeStamp`>=%i AND `TimeStampEnd`<=%i", array($MyTimeStamp1,$MyTimeStamp2));
+$query = query("SELECT * FROM `".$Settings['sqltable']."events`", array(null));
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
 $is=0;
