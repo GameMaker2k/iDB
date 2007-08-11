@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: forums.php - Last Update: 08/09/2007 SVN 73 - Author: cooldude2k $
+    $FileInfo: forums.php - Last Update: 08/11/2007 SVN 75 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="forums.php"||$File3Name=="/forums.php") {
@@ -119,9 +119,9 @@ $oldtopicname=$TopicName; $oldusername=$UsersName;
 $TopicName=$TopicName1; $UsersName=$UsersName1; } $lul = null;
 if($UsersID!="-1") {
 $lul = url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UsersID,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
-$LastTopic = "User: <a href=\"".$lul."\" title=\"".$oldusername."\">".$UsersName."</a><br />\nTopic: <a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."#post".$ShowReply."\" title=\"".$oldtopicname."\">".$TopicName."</a>"; }
+$LastTopic = "User: <a href=\"".$lul."\" title=\"".$oldusername."\">".$UsersName."</a><br />\nTopic: <a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."#reply".$ShowReply."\" title=\"".$oldtopicname."\">".$TopicName."</a>"; }
 if($UsersID=="-1") {
-$LastTopic = "User: <span title=\"".$oldusername."\">".$UsersName."</span><br />\nTopic: <a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."#post".$ShowReply."\" title=\"".$oldtopicname."\">".$TopicName."</a>"; } }
+$LastTopic = "User: <span title=\"".$oldusername."\">".$UsersName."</span><br />\nTopic: <a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."#reply".$ShowReply."\" title=\"".$oldtopicname."\">".$TopicName."</a>"; } }
 if($LastTopic==null) { $LastTopic="&nbsp;<br />&nbsp;"; } }
 @mysql_free_result($gltresult);
 if ($ForumType=="redirect") { $LastTopic="Redirects: ".$NumRedirects; }

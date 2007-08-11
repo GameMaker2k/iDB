@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: replys.php - Last Update: 08/09/2007 SVN 73 - Author: cooldude2k $
+    $FileInfo: replys.php - Last Update: 08/11/2007 SVN 75 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replys.php"||$File3Name=="/replys.php") {
@@ -158,11 +158,12 @@ if($PermissionInfo['CanModForum'][$MyForumID]=="yes") {
 	$CanEditReply = true; $CanDeleteReply = true; } }
 if($_SESSION['UserID']==0) { 
 	$CanEditReply = false; $CanDeleteReply = false; }
+$ReplyNum = $i + 1;
 ?>
 <div class="Table1Border">
 <table class="Table1">
 <tr class="TableRow1">
-<td class="TableRow1" colspan="2"><span style="font-weight: bold; float: left;"><?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a> ( <?php echo $MyDescription; ?> )</span>
+<td class="TableRow1" colspan="2"><span style="font-weight: bold; float: left;"><?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."#reply".$ReplyNum,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a> ( <?php echo $MyDescription; ?> )</span>
 <span style="float: right;">&nbsp;</span></td>
 </tr>
 <tr class="TableRow2">
@@ -176,8 +177,8 @@ if($User1ID=="-1") {
 echo "<span>".$User1Name."</span>"; }
 ?></td>
 <td class="TableRow2" style="vertical-align: middle;">
-<div style="text-align: left; float: left;">
-<a style="vertical-align: middle;" id="post<?php echo $i+1; ?>">
+<div style="text-align: left; float: left;" id="post<?php echo $MyPostID; ?>">
+<a style="vertical-align: middle;" id="reply<?php echo $ReplyNum; ?>">
 <span style="font-weight: bold;">Time Posted: </span><?php echo $MyTimeStamp; ?></a>
 </div>
 <div style="text-align: right;"><a href="#Act/Report"><?php echo $ThemeSet['Report']; ?></a><?php echo $ThemeSet['LineDividerTopic']; if($CanEditReply==true) { echo "<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=edit&id=".$MyTopicID."&post=".$MyPostID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">".$ThemeSet['EditReply']; ?></a><?php echo $ThemeSet['LineDividerTopic']; } if($CanDeleteReply==true) { echo "<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=delete&id=".$MyTopicID."&post=".$MyPostID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">".$ThemeSet['DeleteReply']; ?></a><?php echo $ThemeSet['LineDividerTopic']; } ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=create&id=".$TopicID."&post=".$MyPostID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $ThemeSet['QuoteReply']; ?></a>&nbsp;</div>
@@ -419,11 +420,11 @@ mysql_query($queryupd);
 $queryupd = query("UPDATE `".$Settings['sqltable']."topics` SET `NumReply`=%i,LastUpdate=%i WHERE `id`=%i", array($NewNumReplies,$LastActive,$TopicID));
 mysql_query($queryupd);
 $MyPostNum = $NewNumReplies + 1;
-@redirect("refresh",$basedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],FALSE)."#post".$MyPostNum,"3");
+@redirect("refresh",$basedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],FALSE)."#reply".$MyPostNum,"3");
 ?><tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage"><br />
 	Reply to Topic <?php echo $TopicName; ?> was posted.<br />
-	Click <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>#post<?php echo $MyPostNum; ?>">here</a> to view your reply.<br />&nbsp;
+	Click <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>#reply<?php echo $MyPostNum; ?>">here</a> to view your reply.<br />&nbsp;
 	</span><br /></td>
 </tr>
 <?php } ?>
@@ -752,7 +753,7 @@ if ($_POST['ReplyDesc']==null) { $Error="Yes"; ?>
 	</span></td>
 </tr>
 <?php } if ($Error=="Yes") {
-@redirect("refresh",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false),"4"); }
+@redirect("refresh",$basedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."#post".$_GET['post'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],false),"4"); }
 if ($Error!="Yes") { $LastActive = GMTimeStamp();
 $requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i", array($_SESSION['UserID']));
 $reresult=mysql_query($requery);
@@ -773,7 +774,7 @@ mysql_query($queryupd); } }
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage"><br />
 	Reply to Topic <?php echo $TopicName; ?> was edited.<br />
-	Click <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>">here</a> to view topic.<br />&nbsp;
+	Click <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."#post".$_GET['post'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>">here</a> to view topic.<br />&nbsp;
 	</span><br /></td>
 </tr>
 <tr class="TableRow4">

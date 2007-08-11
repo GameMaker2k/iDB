@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: profilemain.php - Last Update: 08/09/2007 SVN 73 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 08/11/2007 SVN 75 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
@@ -584,7 +584,7 @@ if($YourPassword!=$OldPassword) { $Error="Yes"; ?>
 <?php }
 	$NewDay=GMTimeStamp();
 	$NewIP=$_SERVER['REMOTE_ADDR'];
-	if ($Error!="Yes") {
+	if ($Error!="Yes") { $_SESSION['UserPass']=$NewPassword;
 	setcookie("SessPass", $NewPassword, time() + (7 * 86400), $basedir);
 	$_POST['Email'] = @remove_spaces($_POST['Email']);
 	$querynewuserinfo = query("UPDATE `".$Settings['sqltable']."members` SET `Password`='%s',`HashType`='iDBH',`Email`='%s',`LastActive`=%i,`IP`='%s',`Salt`='%s' WHERE `id`=%i", array($NewPassword,$_POST['Email'],$NewDay,$NewIP,$NewSalt,$_SESSION['UserID']));
