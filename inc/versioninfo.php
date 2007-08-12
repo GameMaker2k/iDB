@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: versioninfo.php - Last Update: 08/11/2007 SVN 76 - Author: cooldude2k $
+    $FileInfo: versioninfo.php - Last Update: 08/12/2007 SVN 77 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="versioninfo.php"||$File3Name=="/versioninfo.php") {
@@ -27,8 +27,8 @@ function version_info($proname,$subver,$ver,$supver,$reltype,$svnver,$showsvn) {
 	return $return_var; }
 // Version number and date stuff. :P
 $VER1[0] = 0; $VER1[1] = 1; $VER1[2] = 8; $VERFull[1] = $VER1[0].".".$VER1[1].".".$VER1[2];
-$VER2[0] = "Pre-Alpha"; $VER2[1] = "PA"; $VER2[2] = "SVN"; $SubVerN = 76; $RName = "iDB"; $SFName = "IntDB";
-$SVNDay[0] = 08; $SVNDay[1] = 11; $SVNDay[2] = 2007; $SVNDay[3] = $SVNDay[0]."/".$SVNDay[1]."/".$SVNDay[2];
+$VER2[0] = "Pre-Alpha"; $VER2[1] = "PA"; $VER2[2] = "SVN"; $SubVerN = 77; $RName = "iDB"; $SFName = "IntDB";
+$SVNDay[0] = 08; $SVNDay[1] = 12; $SVNDay[2] = 2007; $SVNDay[3] = $SVNDay[0]."/".$SVNDay[1]."/".$SVNDay[2];
 $VerInfo['iDB_Ver'] = version_info($RName,$VER1[0],$VER1[1],$VER1[2],$VER2[1],$SubVerN,false);
 $VerInfo['iDB_Ver_SVN'] = version_info($RName,$VER1[0],$VER1[1],$VER1[2],$VER2[1],$SubVerN,true);
 $VerInfo['iDB_Full_Ver'] = version_info($RName,$VER1[0],$VER1[1],$VER1[2],$VER2[0],$SubVerN,false);
@@ -48,10 +48,10 @@ if($OSType=="WINNT") { $OSType="Windows NT"; } if($OSType=="WIN32") { $OSType="W
 $OSType2 = $PHPV2." / ".$OSType; $ZENDV1 = @zend_version(); $ZENDV2 = "Zend engine ".$ZENDV1;
 // Show or hide the version number
 if($idbmisc['showverinfo']==true) {
-@header("X-iDB-Powered-By: ".$VerInfo['iDB_Ver_Show']);
+@header("X-".$RName."-Powered-By: ".$VerInfo['iDB_Ver_Show']);
 @header("Generator: ".$VerInfo['iDB_Ver_Show']); }
 if($idbmisc['showverinfo']!=true) {
-@header("X-iDB-Powered-By: iDB");
+@header("X-".$RName."-Powered-By: ".$RName);
 //@header("X-Powered-By: PHP");
-@header("Generator: iDB"); }
+@header("Generator: ".$iDB); }
 ?>

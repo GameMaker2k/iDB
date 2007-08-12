@@ -12,9 +12,12 @@
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
     iDB Installer made by Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: install.php - Last Update: 07/01/2007 SVN 35 - Author: cooldude2k $
+    $FileInfo: install.php - Last Update: 08/12/2007 SVN 77 - Author: cooldude2k $
 */
 @error_reporting(E_ALL ^ E_NOTICE);
+if(@ini_get("register_globals")) { 
+	if(!isset($SettDir['misc'])) { $SettDir['misc'] = "inc/misc/"; }
+	require_once($SettDir['misc'].'killglobals.php'); }
 if(!isset($preact['idb'])) { $preact['idb'] = null; }
 if(!isset($_GET['act'])) { $_GET['act'] = null; }
 if(!isset($_POST['act'])) { $_POST['act'] = null; }

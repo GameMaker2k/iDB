@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: searchs.php - Last Update: 08/09/2007 SVN 73 - Author: cooldude2k $
+    $FileInfo: searchs.php - Last Update: 08/12/2007 SVN 77 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="searchs.php"||$File3Name=="/searchs.php") {
@@ -143,35 +143,41 @@ if($UsersName1==null) { $UsersName1="Guest"; } }
 if($TimeStamp1!=null) { $lul = null;
 if($UsersID1!="-1") {
 $lul = url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UsersID1,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
-$LastReply = "User: <a href=\"".$lul."\">".$UsersName1."</a><br />\nTime: ".$TimeStamp1; }
+$luln = url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."#post".$ReplyID1;
+$LastReply = "User: <a href=\"".$lul."\">".$UsersName1."</a><br />\nTime: <a href=\"".$luln."\">".$TimeStamp1."</a>"; }
 if($UsersID1=="-1") {
 $lul = url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']);
-$LastReply = "User: <span>".$UsersName1."</span><br />\nTime: ".$TimeStamp1; } }
+$luln = url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."#post".$ReplyID1;
+$LastReply = "User: <span>".$UsersName1."</span><br />\nTime: <a href=\"".$luln."\">".$TimeStamp1."</a>"; } }
 @mysql_free_result($glrresult);
 if($TimeStamp1==null) { $LastReply = "&nbsp;<br />&nbsp;"; }
 $PreTopic = $ThemeSet['TopicIcon'];
-if ($PinnedTopic==1) {
+if ($PinnedTopic>1) { $PinnedTopic = 1; } 
+if ($PinnedTopic<0) { $PinnedTopic = 0; }
+if(!is_numeric($PinnedTopic)) { $PinnedTopic = 0; }
+if ($TopicStat>1) { $TopicStat = 1; } 
+if ($TopicStat<0) { $TopicStat = 0; }
+if(!is_numeric($TopicStat)) { $TopicStat = 1; }
+if ($PinnedTopic==1&&$TopicStat==0) {
 	if($NumReply>=$Settings['hot_topic_num']) {
 		$PreTopic=$ThemeSet['HotPinTopic']; }
 	if($NumReply<$Settings['hot_topic_num']) {
 		$PreTopic=$ThemeSet['PinTopic']; } }
-if ($TopicStat==1) {
+if ($TopicStat==1&&$PinnedTopic==0) {
 	if($NumReply>=$Settings['hot_topic_num']) {
 		$PreTopic=$ThemeSet['HotClosedTopic']; }
 	if($NumReply<$Settings['hot_topic_num']) {
 		$PreTopic=$ThemeSet['ClosedTopic']; } }
-if ($PinnedTopic==0) {
-	if ($TopicStat==0) {
+if ($PinnedTopic==0&&$TopicStat==0) {
 		if($NumReply>=$Settings['hot_topic_num']) {
 			$PreTopic=$ThemeSet['HotTopic']; }
 		if($NumReply<$Settings['hot_topic_num']) {
-			$PreTopic=$ThemeSet['TopicIcon']; } } }
-if ($PinnedTopic==1) {
-	if ($TopicStat==1) {
+			$PreTopic=$ThemeSet['TopicIcon']; } }
+if ($PinnedTopic==1&&$TopicStat==1) {
 		if($NumReply>=$Settings['hot_topic_num']) {
 			$PreTopic=$ThemeSet['HotPinClosedTopic']; }
 		if($NumReply<$Settings['hot_topic_num']) {
-			$PreTopic=$ThemeSet['PinClosedTopic']; } } }
+			$PreTopic=$ThemeSet['PinClosedTopic']; } }
 ?>
 <tr class="TableRow3" id="Topic<?php echo $TopicID; ?>">
 <td class="TableRow3"><div class="topicstate">
