@@ -12,7 +12,7 @@
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mkconfig.php - Last Update: 08/14/2007 SVN 79 - Author: cooldude2k $
+    $FileInfo: mkconfig.php - Last Update: 08/14/2007 SVN 80 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mkconfig.php"||$File3Name=="/mkconfig.php") {
@@ -106,7 +106,13 @@ $MyMonth = GMTimeGet("m",$YourOffSet,0,$AdminDST);
 $MyYear = GMTimeGet("Y",$YourOffSet,0,$AdminDST);
 $MyYear10 = $MyYear+10;
 $YourDateEnd = $YourDate + $dayconv['month'];
-$query = query("INSERT INTO ".$_POST['tableprefix']."events VALUES (1, -1, 'Cool Dude 2k', 'Opening', 'This is the day the Board was made. ^_^', %i, %i)", array($YourDate,$YourDateEnd));
+$EventMonth = GMTimeChange("m",$YourDate,0,0,$AdminDST);
+$EventMonthEnd = GMTimeChange("m",$YourDateEnd,0,0,$AdminDST);
+$EventDay = GMTimeChange("d",$YourDate,0,0,$AdminDST);
+$EventDayEnd = GMTimeChange("d",$YourDateEnd,0,0,$AdminDST);
+$EventYear = GMTimeChange("Y",$YourDate,0,0,$AdminDST);
+$EventYearEnd = GMTimeChange("Y",$YourDateEnd,0,0,$AdminDST);
+$query = query("INSERT INTO ".$_POST['tableprefix']."events VALUES (1, -1, 'Cool Dude 2k', 'Opening', 'This is the day the Board was made. ^_^', %i, %i, %i, %i, %i, %i, %i, %i)", array($YourDate,$YourDateEnd,$EventMonth,$EventMonthEnd,$EventDay,$EventDayEnd,$EventYear,$EventYearEnd));
 mysql_query($query);
 $query = query("INSERT INTO ".$_POST['tableprefix']."forums VALUES (1,1,'Test/Spam','yes','forum',0,'http://',0,0,'A Test Board.','off','yes',1,1)", array(null));
 mysql_query($query);
@@ -136,7 +142,7 @@ $query = query("INSERT INTO ".$_POST['tableprefix']."members VALUES (-1,'Guest',
 mysql_query($query);
 $query = query("INSERT INTO ".$_POST['tableprefix']."members VALUES (1,'%s','%s','iDBH','%s',1,'yes',0,'%s','Admin',%i,%i,'0','%s','Your Notes','%s','100x100','%s','UnKnow',0,'%s','%s','iDB','%s','%s')", array($_POST['AdminUser'],$NewPassword,$Email,$Interests,$YourDate,$YourDate,$NewSignature,$Avatar,$YourWebsite,$AdminTime,$AdminDST,$UserIP,$YourSalt));
 mysql_query($query);
-$query = query("INSERT INTO ".$_POST['tableprefix']."messenger VALUES (1,-1,1,'Cool Dude 2k','Test','Hello Welcome to your board.\n\rThis is a Test PM. :P ','Hello Welcome',%i,0)", array($YourDate));
+$query = query("INSERT INTO ".$_POST['tableprefix']."messenger VALUES (1,-1,1,'Cool Dude 2k','Test','Hello Welcome to your board.\r\nThis is a Test PM. :P ','Hello Welcome',%i,0)", array($YourDate));
 mysql_query($query);
 $CHMOD = $_SERVER['PHP_SELF'];
 $pretext = "<?php\n/*\n    This program is free software; you can redistribute it and/or modify\n    it under the terms of the GNU General Public License as published by\n    the Free Software Foundation; either version 2 of the License, or\n    (at your option) any later version.\n\n    This program is distributed in the hope that it will be useful,\n    but WITHOUT ANY WARRANTY; without even the implied warranty of\n    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n    Revised BSD License for more details.\n\n    Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/\n    Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/\n    iDB Installer made by Game Maker 2k - http://idb.berlios.net/\n\n    \$FileInfo: settings.php & settingsbak.php - Last Update: 05/22/2007 SVN 11 - Author: cooldude2k \$\n*/\n";

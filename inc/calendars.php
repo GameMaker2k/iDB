@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: calendars.php - Last Update: 08/09/2007 SVN 73 - Author: cooldude2k $
+    $FileInfo: calendars.php - Last Update: 08/14/2007 SVN 80 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="calendars.php"||$File3Name=="/calendars.php") {
@@ -23,6 +23,7 @@ $MyTimeStamp = GMTimeStamp();
 $CountDays = GMTimeGet("t",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $MyDay = GMTimeGet("j",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $MyDay2 = GMTimeGet("jS",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$MyDayNum = GMTimeGet("d",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $MyDayName = GMTimeGet("l",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $MyYear = GMTimeGet("Y",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $MyYear2 = GMTimeGet("y",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
@@ -30,10 +31,9 @@ $MyMonth = GMTimeGet("m",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $MyTimeStamp1 = mktime("0","0","0",$MyMonth,"1",$MyYear);
 $MyTimeStamp2 = mktime("24","59","59",$MyMonth,$CountDays,$MyYear);
 $MyMonthName = GMTimeGet("F",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$FirstDayThisMouth = date("w", mktime(0, 0, 0, $MyMonth, 1, $MyYear));
+$FirstDayThisMonth = date("w", mktime(0, 0, 0, $MyMonth, 1, $MyYear));
 $EventsName = array();
-//$query = query("SELECT * FROM `".$Settings['sqltable']."events` WHERE `TimeStamp`>=%i AND `TimeStampEnd`<=%i", array($MyTimeStamp1,$MyTimeStamp2));
-$query = query("SELECT * FROM `".$Settings['sqltable']."events`", array(null));
+$query = query("SELECT * FROM `".$Settings['sqltable']."events` WHERE (`EventMonth`>=%i) OR (`EventMonth`<=%i AND `EventMonthEnd`>=%i)", array($MyMonth,$MyMonth,$MyMonth));
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
 $is=0;
@@ -45,9 +45,12 @@ $EventName=mysql_result($result,$is,"EventName");
 $EventText=mysql_result($result,$is,"EventText");
 $EventStart=mysql_result($result,$is,"TimeStamp");
 $EventEnd=mysql_result($result,$is,"TimeStampEnd");
-$EventDay = GMTimeChange("j",$EventStart,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$EventDayEnd = GMTimeChange("j",$EventEnd,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$EventMonthEnd = GMTimeChange("m",$EventEnd,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$EventMonth=mysql_result($result,$is,"EventMonth");
+$EventMonthEnd=mysql_result($result,$is,"EventMonthEnd");
+$EventDay=mysql_result($result,$is,"EventDay");
+$EventDayEnd=mysql_result($result,$is,"EventDayEnd");
+$EventYear=mysql_result($result,$is,"EventYear");
+$EventYearEnd=mysql_result($result,$is,"EventYearEnd");
 if($EventMonthEnd!=$MyMonth) { $EventDayEnd = $CountDays; }
 $oldeventname=$EventName;
 $EventName1 = substr($EventName,0,10);
@@ -84,13 +87,13 @@ foreach ($MyDays as $x => $y) {
     $DayNames .= '<th class="TableRow2" style="width: 12%;">' . $y . '</th>'."\r\n";
 }
 $WeekDays = "";
-$i = $FirstDayThisMouth + 1;
-if ($FirstDayThisMouth != "0") {
-    $WeekDays .= '<td class="TableRow3" style="height: 90px; text-align: center;" colspan="' . $FirstDayThisMouth . '">&nbsp;</td>'."\r\n";
+$i = $FirstDayThisMonth + 1;
+if ($FirstDayThisMonth != "0") {
+    $WeekDays .= '<td class="TableRow3" style="height: 90px; text-align: center;" colspan="' . $FirstDayThisMonth . '">&nbsp;</td>'."\r\n";
 }
 $Day_i = "1";
 $ii = $i;
-for ($i; $i <= ($CountDays + $FirstDayThisMouth) ;$i++) {
+for ($i; $i <= ($CountDays + $FirstDayThisMonth) ;$i++) {
 if ($ii == 8) {
 $WeekDays .= "</tr><tr class=\"TableRow3\">"."\r\n";
 $ii = 1; }

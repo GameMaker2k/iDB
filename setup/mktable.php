@@ -12,7 +12,7 @@
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mktable.php - Last Update: 08/09/2007 SVN 73 - Author: cooldude2k $
+    $FileInfo: mktable.php - Last Update: 08/14/2007 SVN 80 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mktable.php"||$File3Name=="/mktable.php") {
@@ -24,7 +24,7 @@ $query=query("CREATE TABLE `".$_POST['tableprefix']."categories` ( `id` int(15) 
 mysql_query($query);
 $query=query("CREATE TABLE `".$_POST['tableprefix']."forums` ( `id` int(15) NOT NULL auto_increment, `CategoryID` int(15) NOT NULL default '0', `Name` varchar(150) NOT NULL default '', `ShowForum` varchar(5) NOT NULL default '', `ForumType` varchar(15) NOT NULL default '', `InSubForum` int(15) NOT NULL default '0', `RedirectURL` text NOT NULL, `Redirects` int(15) NOT NULL default '0', `NumViews` int(15) NOT NULL default '0', `Description` text NOT NULL, `PostCountAdd` varchar(15) NOT NULL default '', `CanHaveTopics` varchar(5) NOT NULL default '', `NumPosts` int(15) NOT NULL default '0', `NumTopics` int(15) NOT NULL default '0', PRIMARY KEY  (`id`)) TYPE=`MyISAM` ;", array(null));
 mysql_query($query);
-$query=query("CREATE TABLE `".$_POST['tableprefix']."events` ( `id` int(15) NOT NULL auto_increment, `UserID` int(15) NOT NULL default '0', `GuestName` varchar(150) NOT NULL default '', `EventName` varchar(150) NOT NULL default '', `EventText` text NOT NULL, `TimeStamp` int(15) NOT NULL default '0', `TimeStampEnd` int(15) NOT NULL default '0', PRIMARY KEY  (`id`)) TYPE=`MyISAM` ;", array(null));
+$query=query("CREATE TABLE `".$_POST['tableprefix']."events` ( `id` int(15) NOT NULL auto_increment, `UserID` int(15) NOT NULL default '0', `GuestName` varchar(150) NOT NULL default '', `EventName` varchar(150) NOT NULL default '', `EventText` text NOT NULL, `TimeStamp` int(15) NOT NULL default '0', `TimeStampEnd` int(15) NOT NULL default '0', `EventMonth` int(5) NOT NULL default '0', `EventMonthEnd` int(5) NOT NULL default '0', `EventDay` int(5) NOT NULL default '0', `EventDayEnd` int(5) NOT NULL default '0', `EventYear` int(5) NOT NULL default '0', `EventYearEnd` int(5) NOT NULL default '0', PRIMARY KEY  (`id`)) TYPE=`MyISAM` ;", array(null));
 mysql_query($query);
 $query=query("CREATE TABLE `".$_POST['tableprefix']."members` ( `id` int(15) NOT NULL auto_increment, `Name` varchar(150) NOT NULL default '', `Password` varchar(150) NOT NULL default '', `HashType` varchar(50) NOT NULL default '', `Email` varchar(150) NOT NULL default '', `GroupID` int(15) NOT NULL default '0', `Validated` varchar(20) NOT NULL default '', `WarnLevel` int(10) NOT NULL default '0', `Interests` varchar(150) NOT NULL default '', `Title` varchar(150) NOT NULL default '', `Joined` int(15) NOT NULL default '0', `LastActive` int(15) NOT NULL default '0', `BirthDay` int(15) NOT NULL default '0', `Signature` text NOT NULL, `Notes` text NOT NULL, `Avatar` varchar(150) NOT NULL default '', `AvatarSize` varchar(10) NOT NULL default '', `Website` varchar(150) NOT NULL default '', `Gender` varchar(15) NOT NULL default '', `PostCount` int(15) NOT NULL default '0', `TimeZone` varchar(5) NOT NULL default '0', `DST` varchar(5) NOT NULL default '0', `UseTheme` varchar(5) NOT NULL default '0', `IP` varchar(20) NOT NULL default '', `Salt` varchar(50) NOT NULL default '', PRIMARY KEY  (`id`)) TYPE=`MyISAM` ;", array(null));
 mysql_query($query);

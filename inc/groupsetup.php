@@ -11,13 +11,14 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: groupsetup.php - Last Update: 08/11/2007 SVN 75 - Author: cooldude2k $
+    $FileInfo: groupsetup.php - Last Update: 08/14/2007 SVN 80 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="groupsetup.php"||$File3Name=="/groupsetup.php") {
 	require('index.php');
 	exit(); }
 // Check to make sure MemberInfo is right
+if(!isset($_SESSION['UserID'])) { $_SESSION['UserID'] = 0; }
 if($_SESSION['UserID']!=0&&$_SESSION['UserID']!=null) {
 $kgbquerychkusr = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `Name`='%s' AND `Password`='%s' AND `id`=%i", array($_SESSION['MemberName'],$_SESSION['UserPass'],$_SESSION['UserID'])); 
 $resultchkusr=mysql_query($kgbquerychkusr);
