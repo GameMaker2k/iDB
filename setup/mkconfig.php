@@ -12,7 +12,7 @@
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mkconfig.php - Last Update: 08/13/2007 SVN 78 - Author: cooldude2k $
+    $FileInfo: mkconfig.php - Last Update: 08/14/2007 SVN 79 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mkconfig.php"||$File3Name=="/mkconfig.php") {
@@ -152,11 +152,13 @@ fclose($fp);
 $fp = fopen("settingsbak.php","w+");
 fwrite($fp, $BoardSettingsBak);
 fclose($fp);
+$_SESSION['Theme']="iDB";
 $_SESSION['MemberName']=$_POST['AdminUser'];
 $_SESSION['UserID']=1;
-$_SESSION['UserGroup']="Admin";
 $_SESSION['UserTimeZone']=$AdminTime;
+$_SESSION['UserGroup']="Admin";
 $_SESSION['UserDST'] = $AdminDST;
+$_SESSION['UserPass']=$NewPassword;
 $_SESSION['DBName'] = $_POST['DatabaseName'];
 if($_POST['storecookie']==true) {
 @setcookie("MemberName", $_POST['AdminUser'], time() + (7 * 86400), $this_dir);

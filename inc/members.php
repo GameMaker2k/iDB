@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: members.php - Last Update: 08/11/2007 SVN 75 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 08/14/2007 SVN 79 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -376,6 +376,7 @@ $_SESSION['UserTimeZone']=$YourTimeZoneM;
 $_SESSION['UserGroup']=$YourGroupM;
 $_SESSION['UserDST']=$YourDSTM;
 $_SESSION['UserPass']=$NewPassword;
+$_SESSION['DBName']=$Settings['sqldb'];
 if($_POST['storecookie']==true) {
 setcookie("MemberName", $YourNameM, time() + (7 * 86400), $basedir);
 setcookie("UserID", $YourIDM, time() + (7 * 86400), $basedir);
@@ -684,11 +685,12 @@ $_SESSION['UserID']=$YourIDMr;
 $_SESSION['UserTimeZone']=$YourTimeZoneMr;
 $_SESSION['UserDST']=$YourDSTMr;
 $_SESSION['UserGroup']=$YourGroupMr;
-$_SESSION['UserPass']=$YourPassM;
+$_SESSION['UserPass']=$NewPassword;
+$_SESSION['DBName']=$Settings['sqldb'];
 if($_POST['storecookie']==true) {
 @setcookie("MemberName", $YourNameM, time() + (7 * 86400), $basedir);
 @setcookie("UserID", $YourIDM, time() + (7 * 86400), $basedir);
-@setcookie("SessPass", $YourPassM, time() + (7 * 86400), $basedir); }
+@setcookie("SessPass", $NewPassword, time() + (7 * 86400), $basedir); }
 /*
 $SendPMtoID=$_SESSION['UserID'];
 $YourPMID = 1;
