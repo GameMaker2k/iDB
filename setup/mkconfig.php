@@ -12,7 +12,7 @@
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mkconfig.php - Last Update: 08/12/2007 SVN 77 - Author: cooldude2k $
+    $FileInfo: mkconfig.php - Last Update: 08/13/2007 SVN 78 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mkconfig.php"||$File3Name=="/mkconfig.php") {
@@ -89,9 +89,9 @@ echo "<br />".mysql_errno().": ".mysql_error()."\n"; }
 if ($Error!="Yes") {
 require($SetupDir['setup'].'mktable.php');
 /*
-$query = "INSERT INTO ".$_POST['tableprefix']."tagboard VALUES (1,-1,'Cool Dude 2k',".$YourDate.",'Welcome to Your New Tag Board. ^_^','127.0.0.1')"; 
+$query = query("INSERT INTO ".$_POST['tableprefix']."tagboard VALUES (1,-1,'Cool Dude 2k',".$YourDate.",'Welcome to Your New Tag Board. ^_^','127.0.0.1'), array(null)); 
 */
-$query = "INSERT INTO ".$_POST['tableprefix']."categories VALUES (1,'Main','yes','category','yes',0,'The Main Category.')";
+$query = query("INSERT INTO ".$_POST['tableprefix']."categories VALUES (1,'Main','yes','category','yes',0,'The Main Category.')", array(null));
 mysql_query($query);
 if(!is_numeric($_POST['YourOffSet'])) { $_POST['YourOffSet'] = "0"; }
 if($_POST['YourOffSet']>12) { $_POST['YourOffSet'] = "12"; }
