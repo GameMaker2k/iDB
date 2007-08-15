@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: calendars.php - Last Update: 08/14/2007 SVN 80 - Author: cooldude2k $
+    $FileInfo: calendars.php - Last Update: 08/15/2007 SVN 83 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="calendars.php"||$File3Name=="/calendars.php") {
@@ -52,13 +52,14 @@ $EventDayEnd=mysql_result($result,$is,"EventDayEnd");
 $EventYear=mysql_result($result,$is,"EventYear");
 $EventYearEnd=mysql_result($result,$is,"EventYearEnd");
 if($EventMonthEnd!=$MyMonth) { $EventDayEnd = $CountDays; }
+if($EventMonth<$MyMonth) { $EventDay = 1; }
 $oldeventname=$EventName;
 $EventName1 = substr($EventName,0,10);
 if (strlen($EventName)>10) { $EventName1 = $EventName1."..."; }
 $EventName=$EventName1;
 if(!isset($EventsName[$EventDay])) { $EventsName[$EventDay] = null; }
 if ($EventsName[$EventDay] != null) {
-	$EventsName[$EventDay] .= ",\n\r<a href=\"".url_maker($exfile['event'],$Settings['file_ext'],"act=event&id=".$EventID,$Settings['qstr'],$Settings['qsep'],$prexqstr['event'],$exqstr['event'])."\" style=\"font-size: 9px;\" title=\"View Event ".$oldeventname.".\">".$EventName."</a>";	 }
+	$EventsName[$EventDay] .= ", <a href=\"".url_maker($exfile['event'],$Settings['file_ext'],"act=event&id=".$EventID,$Settings['qstr'],$Settings['qsep'],$prexqstr['event'],$exqstr['event'])."\" style=\"font-size: 9px;\" title=\"View Event ".$oldeventname.".\">".$EventName."</a>";	 }
 if ($EventsName[$EventDay] == null) {
 	$EventsName[$EventDay] = "<a href=\"".url_maker($exfile['event'],$Settings['file_ext'],"act=event&id=".$EventID,$Settings['qstr'],$Settings['qsep'],$prexqstr['event'],$exqstr['event'])."\" style=\"font-size: 9px;\" title=\"View Event ".$oldeventname.".\">".$EventName."</a>"; }
 if ($EventDay<$EventDayEnd) {
@@ -67,13 +68,33 @@ $EventDayEnd = $EventDayEnd+1;
 while ($NextDay < $EventDayEnd) {
 if(!isset($EventsName[$NextDay])) { $EventsName[$NextDay] = null; }
 if ($EventsName[$NextDay] != null) {
-	$EventsName[$NextDay] .= ",\n\r<a href=\"".url_maker($exfile['event'],$Settings['file_ext'],"act=event&id=".$EventID,$Settings['qstr'],$Settings['qsep'],$prexqstr['event'],$exqstr['event'])."\" style=\"font-size: 9px;\" title=\"View Event ".$oldeventname.".\">".$EventName."</a>";	 }
+	$EventsName[$NextDay] .= ", <a href=\"".url_maker($exfile['event'],$Settings['file_ext'],"act=event&id=".$EventID,$Settings['qstr'],$Settings['qsep'],$prexqstr['event'],$exqstr['event'])."\" style=\"font-size: 9px;\" title=\"View Event ".$oldeventname.".\">".$EventName."</a>";	 }
 if ($EventsName[$NextDay] == null) {
 	$EventsName[$NextDay] = "<a href=\"".url_maker($exfile['event'],$Settings['file_ext'],"act=event&id=".$EventID,$Settings['qstr'],$Settings['qsep'],$prexqstr['event'],$exqstr['event'])."\" style=\"font-size: 9px;\" title=\"View Event ".$oldeventname.".\">".$EventName."</a>"; }
 $NextDay++; } }
 $EventsID[$EventDay] = $EventID;
-$is++;
-} @mysql_free_result($result);
+++$is; } 
+@mysql_free_result($result);
+$bdquery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `BirthMonth`=%i", array($MyMonth));
+$bdresult=mysql_query($bdquery);
+$bdnum=mysql_num_rows($bdresult);
+$bdi=0;
+while ($bdi < $bdnum) {
+$UserNamebd=mysql_result($bdresult,$bdi,"Name");
+$BirthDay=mysql_result($bdresult,$bdi,"BirthDay");
+$BirthMonth=mysql_result($bdresult,$bdi,"BirthMonth");
+$BirthYear=mysql_result($bdresult,$bdi,"BirthYear");
+$oldusername=$UserNamebd;
+$UserNamebd1 = substr($UserNamebd,0,10);
+if (strlen($UserNamebd)>10) { $UserNamebd1 = $UserNamebd1."..."; }
+$UserNamebd=$UserNamebd1;
+if(!isset($EventsName[$BirthDay])) { $EventsName[$BirthDay] = null; }
+if ($EventsName[$BirthDay] != null) {
+	$EventsName[$BirthDay] .= ", <span title=\"".$oldusername."'s birthday.\">".$UserNamebd1."</span>";	 }
+if ($EventsName[$BirthDay] == null) {
+	$EventsName[$BirthDay] = "<span title=\"".$oldusername."'s birthday.\">".$UserNamebd1."</span>"; }
+++$bdi; } 
+@mysql_free_result($bdresult);
 $MyDays = array();
 $MyDays[] = "Sunday";
 $MyDays[] = "Monday";
