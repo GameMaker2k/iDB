@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: events.php - Last Update: 08/09/2007 SVN 73 - Author: cooldude2k $
+    $FileInfo: events.php - Last Update: 08/16/2007 SVN 84 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="events.php"||$File3Name=="/events.php") {
@@ -22,7 +22,7 @@ $query = query("SELECT * FROM `".$Settings['sqltable']."events` WHERE `id`=%i", 
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
 $is=0;
-if($num==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
+if($num==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); @mysql_free_result($result);
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 ?>
@@ -133,5 +133,289 @@ echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr
 ?>"><?php echo $ThemeSet['PM']; ?></a></span>
 <span style="float: right;">&nbsp;</span></td>
 </tr>
-<?php } ?>
 </table></div>
+<?php } if($_GET['act']=="create") { 
+if($GroupInfo['CanAddEvents']=="no") { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
+ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }	
+?>
+<div class="Table1Border">
+<table class="Table1" id="MakeEvent">
+<tr class="TableRow1" id="EventStart">
+<td class="TableRow1" colspan="2"><span style="float: left;">
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['calendar'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['calendar'],$exqstr['calendar']); ?>">Making a Event</a></span>
+<?php echo "<span style=\"float: right;\">&nbsp;</span>"; ?></td>
+</tr>
+<tr id="MakeTopicRow<?php echo $ForumID; ?>" class="TableRow2">
+<td class="TableRow2" colspan="2" style="width: 100%;">Making a Topic in <?php echo $ForumName; ?></td>
+</tr>
+<tr class="TableRow3" id="MkTopic<?php echo $ForumID; ?>">
+<td class="TableRow3">
+<form method="post" id="MkTopicForm" action="<?php echo url_maker($exfile['event'],$Settings['file_ext'],"act=makeevent",$Settings['qstr'],$Settings['qsep'],$prexqstr['event'],$exqstr['event']); ?>">
+<table style="text-align: left;">
+<tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="EventName">Insert Event Name:</label></td>
+	<td style="width: 50%;"><input type="text" name="EventName" class="TextBox" id="EventName" size="20" /></td>
+</tr><?php if($_SESSION['UserGroup']==$Settings['GuestGroup']) { ?><tr>
+	<td style="width: 50%;"><label class="TextBoxLabel" for="GuestName">Insert Guest Name:</label></td>
+	<td style="width: 50%;"><input type="text" name="GuestName" class="TextBox" id="GuestName" size="20" /></td>
+</tr><?php } ?><tr>
+	<td style="width: 50%;"><label class="TextBoxLabel" for="EventStart">Insert Event Start:</label></td>
+	<td style="width: 50%;"><input type="text" name="EventStart" class="TextBox" id="EventStart" size="20" value="MM/DD/YYYY" /></td>
+</tr><tr>
+	<td style="width: 50%;"><label class="TextBoxLabel" for="EventEnd">Insert Event End:</label></td>
+	<td style="width: 50%;"><input type="text" name="EventEnd" class="TextBox" id="EventEnd" size="20" value="MM/DD/YYYY" /></td>
+</tr>
+</table>
+<table style="text-align: left;">
+<tr style="text-align: left;">
+<td style="width: 100%;">
+<label class="TextBoxLabel" for="EventText">Insert Event Text:</label><br />
+<textarea rows="10" name="EventText" id="EventText" cols="40" class="TextBox"></textarea><br />
+<input type="hidden" name="act" value="makeevents" style="display: none;" />
+<?php if($_SESSION['UserGroup']!=$Settings['GuestGroup']) { ?>
+<input type="hidden" name="GuestName" value="null" style="display: none;" />
+<?php } ?>
+<input type="submit" class="Button" value="Make Event" name="make_event" />
+<input type="reset" value="Reset Form" class="Button" name="Reset_Form" />
+</td></tr></table>
+</form></td></tr>
+<tr id="MkTopicEnd<?php echo $ForumID; ?>" class="TableRow4">
+<td class="TableRow4" colspan="5">&nbsp;</td>
+</tr>
+</table></div>
+<div>&nbsp;</div>
+<?php }  if($_GET['act']=="makeevent"&&$_POST['act']=="makeevents") {
+if($GroupInfo['CanAddEvents']=="no") { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
+ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+$MyUserID = $_SESSION['UserID']; if($MyUserID=="0"||$MyUserID==null) { $MyUserID = -1; }
+$REFERERurl = parse_url($_SERVER['HTTP_REFERER']);
+$URL['REFERER'] = $REFERERurl['host'];
+$URL['HOST'] = $_SERVER["SERVER_NAME"];
+$REFERERurl = null; unset($REFERERurl);
+if(!isset($_POST['EventName'])) { $_POST['EventName'] = null; }
+if(!isset($_POST['EventStart'])) { $_POST['EventStart'] = null; }
+if(!isset($_POST['EventEnd'])) { $_POST['EventEnd'] = null; }
+if(!isset($_POST['EventText'])) { $_POST['EventText'] = null; }
+if(!isset($_POST['GuestName'])) { $_POST['GuestName'] = null; }
+$TimeIn = explode("/",$_POST['EventStart']);
+$TimeOut = explode("/",$_POST['EventEnd']);
+?>
+<div class="Table1Border">
+<table class="Table1">
+<tr class="TableRow1">
+<td class="TableRow1"><span style="float: left;">
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['calendar'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['calendar'],$exqstr['calendar']); ?>">Making a Event</a></span>
+<?php echo "<span style=\"float: right;\">&nbsp;</span>"; ?></td>
+</tr>
+<tr class="TableRow2">
+<th class="TableRow2" style="width: 100%; text-align: left;">&nbsp;Make Event Message: </th>
+</tr>
+<?php if (strlen($_POST['EventName'])=="30") { $Error="Yes";  ?>
+<tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage">
+	<br />Your Event Name is too big.<br />
+	</span></td>
+</tr>
+<?php } if (strlen($TimeIn[0])<"2") { $Error="Yes";  ?>
+<tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage">
+	<br />Event Start Month is too small.<br />
+	</span></td>
+</tr>
+<?php } if (strlen($TimeIn[0])>"2") { $Error="Yes";  ?>
+<tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage">
+	<br />Event Start Month is too big.<br />
+	</span></td>
+</tr>
+<?php } if (strlen($TimeIn[1])<"2") { $Error="Yes";  ?>
+<tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage">
+	<br />Event Start Day is too small.<br />
+	</span></td>
+</tr>
+<?php } if (strlen($TimeIn[1])>"2") { $Error="Yes";  ?>
+<tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage">
+	<br />Event Start Day is too big.<br />
+	</span></td>
+</tr>
+<?php } if (strlen($TimeIn[2])<"4") { $Error="Yes";  ?>
+<tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage">
+	<br />Event Start Year is too small.<br />
+	</span></td>
+</tr>
+<?php } if (strlen($TimeIn[2])>"4") { $Error="Yes";  ?>
+<tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage">
+	<br />Event Start Year is too big.<br />
+	</span></td>
+</tr>
+<?php } if (strlen($TimeOut[0])<"2") { $Error="Yes";  ?>
+<tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage">
+	<br />Event End Month is too small.<br />
+	</span></td>
+</tr>
+<?php } if (strlen($TimeOut[0])>"2") { $Error="Yes";  ?>
+<tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage">
+	<br />Event End Month is too big.<br />
+	</span></td>
+</tr>
+<?php } if (strlen($TimeOut[1])<"2") { $Error="Yes";  ?>
+<tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage">
+	<br />Event End Day is too small.<br />
+	</span></td>
+</tr>
+<?php } if (strlen($TimeOut[1])>"2") { $Error="Yes";  ?>
+<tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage">
+	<br />Event End Day is too big.<br />
+	</span></td>
+</tr>
+<?php } if (strlen($TimeOut[2])<"4") { $Error="Yes";  ?>
+<tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage">
+	<br />Event End Year is too small.<br />
+	</span></td>
+</tr>
+<?php } if (strlen($TimeOut[2])>"4") { $Error="Yes";  ?>
+<tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage">
+	<br />Event End Year is too big.<br />
+	</span></td>
+</tr>
+<?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
+	strlen($_POST['GuestName'])=="25") { $Error="Yes"; ?>
+<tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage">
+	<br />You Guest Name is too big.<br />
+	</span></td>
+</tr>
+<?php } if ($Settings['TestReferer']==true) {
+	if ($URL['HOST']!=$URL['REFERER']) { $Error="Yes";  ?>
+<tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage">
+	<br />Sorry the referering url dose not match our host name.<br />
+	</span></td>
+</tr>
+<?php } }
+$_POST['EventName'] = stripcslashes(htmlspecialchars($_POST['EventName'], ENT_QUOTES));
+$_POST['EventName'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['EventName']);
+$_POST['EventName'] = @remove_spaces($_POST['EventName']);
+$_POST['GuestName'] = stripcslashes(htmlspecialchars($_POST['GuestName'], ENT_QUOTES));
+//$_POST['GuestName'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['GuestName']);
+$_POST['GuestName'] = @remove_spaces($_POST['GuestName']);
+$_POST['EventText'] = stripcslashes(htmlspecialchars($_POST['EventText'], ENT_QUOTES));
+$_POST['EventText'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['EventText']);
+$_POST['EventText'] = remove_bad_entities($_POST['EventText']);
+//$_POST['EventText'] = @remove_spaces($_POST['EventText']);
+if ($_POST['EventName']==null) { $Error="Yes"; ?>
+<tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage">
+	<br />You need to enter a Event Name.<br />
+	</span></td>
+</tr>
+<?php } if ($_POST['EventText']==null) { $Error="Yes"; ?>
+<tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage">
+	<br />You need to enter a Event Text.<br />
+	</span></td>
+</tr>
+<?php } if ($_POST['EventStart']==null) { $Error="Yes"; ?>
+<tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage">
+	<br />You need to enter date for event to start in MM/DD/YYYY format.<br />
+	</span></td>
+</tr>
+<?php } if ($_POST['EventEnd']==null) { $Error="Yes"; ?>
+<tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage">
+	<br />You need to enter date for event to end in MM/DD/YYYY format.<br />
+	</span></td>
+</tr>
+<?php } if (count($TimeIn)!="3") { $Error="Yes"; ?>
+<tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage">
+	<br />You need to enter valid date for event to start in MM/DD/YYYY format.<br />
+	</span></td>
+</tr>
+<?php } if (count($TimeOut)!="3") { $Error="Yes"; ?>
+<tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage">
+	<br />You need to enter valid date for event to end in MM/DD/YYYY format.<br />
+	</span></td>
+</tr>
+<?php } if (!is_numeric($TimeIn[0])||!is_numeric($TimeIn[1])||!is_numeric($TimeIn[2])) { $Error="Yes"; ?>
+<tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage">
+	<br />You need to enter valid date for event to start in MM/DD/YYYY format.<br />
+	</span></td>
+</tr>
+<?php } if (!is_numeric($TimeOut[0])||!is_numeric($TimeOut[1])||!is_numeric($TimeOut[2])) { $Error="Yes"; ?>
+<tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage">
+	<br />You need to enter valid date for event to end in MM/DD/YYYY format.<br />
+	</span></td>
+</tr>
+<?php } if (!isset($TimeIn[0])||!isset($TimeIn[1])||!isset($TimeIn[2])) { $Error="Yes"; ?>
+<tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage">
+	<br />You need to enter valid date for event to start in MM/DD/YYYY format.<br />
+	</span></td>
+</tr>
+<?php } if (!isset($TimeOut[0])||!isset($TimeOut[1])||!isset($TimeOut[2])) { $Error="Yes"; ?>
+<tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage">
+	<br />You need to enter valid date for event to end in MM/DD/YYYY format.<br />
+	</span></td>
+</tr>
+<?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
+	$_POST['GuestName']==null) { $Error="Yes"; ?>
+<tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage">
+	<br />You need to enter a Guest Name.<br />
+	</span></td>
+</tr>
+<?php } if($GroupInfo['CanAddEvents']=="no") { $Error="Yes"; ?>
+<tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage">
+	<br />You do not have permission to make a topic here.<br />
+	</span></td>
+</tr>
+<?php } if ($Error=="Yes") {
+@redirect("refresh",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false),"4"); }
+if ($Error!="Yes") { 
+$TimeSIn = mktime(0,0,0,$TimeIn[0],$TimeIn[1],$TimeIn[2]);
+$TimeSOut = mktime(23,59,59,$TimeOut[0],$TimeOut[1],$TimeOut[2]);
+$EventMonth=GMTimeChange("m",$TimeSIn,0,0,"off");
+$EventMonthEnd=GMTimeChange("m",$TimeSOut,0,0,"off");
+$EventDay=GMTimeChange("d",$TimeSIn,0,0,"off");
+$EventDayEnd=GMTimeChange("d",$TimeSOut,0,0,"off");
+$EventYear=GMTimeChange("Y",$TimeSIn,0,0,"off");
+$EventYearEnd=GMTimeChange("Y",$TimeSOut,0,0,"off");
+$eventid = getnextid($Settings['sqltable'],"events");
+$User1ID=$MyUserID;
+if($_SESSION['UserGroup']==$Settings['GuestGroup']) { $User1Name = $_POST['GuestName']; }
+if($_SESSION['UserGroup']!=$Settings['GuestGroup']) { $User1Name = $_SESSION['MemberName']; }
+$query = query("INSERT INTO ".$Settings['sqltable']."events VALUES (%i, %i, '%s', '%s', '%s', %i, %i, %i, %i, %i, %i, %i, %i)", array($eventid,$User1ID,$User1Name,$_POST['EventName'],$_POST['EventText'],$TimeSIn,$TimeSOut,$EventMonth,$EventMonthEnd,$EventDay,$EventDayEnd,$EventYear,$EventYearEnd));
+mysql_query($query);
+@redirect("refresh",$basedir.url_maker($exfile['event'],$Settings['file_ext'],"act=event&id=".$eventid,$Settings['qstr'],$Settings['qsep'],$prexqstr['event'],$exqstr['event'],FALSE),"3");
+?><tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage"><br />
+	Event <?php echo $_POST['TopicName']; ?> was started.<br />
+	Click <a href="<?php echo url_maker($exfile['event'],$Settings['file_ext'],"act=event&id=".$eventid,$Settings['qstr'],$Settings['qsep'],$prexqstr['event'],$exqstr['event']); ?>">here</a> to continue to event.<br />&nbsp;
+	</span><br /></td>
+</tr>
+<?php } ?>
+<tr class="TableRow4">
+<td class="TableRow4">&nbsp;</td>
+</tr>
+</table></div>
+<div>&nbsp;</div>
+<?php } ?>

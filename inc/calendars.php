@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: calendars.php - Last Update: 08/15/2007 SVN 83 - Author: cooldude2k $
+    $FileInfo: calendars.php - Last Update: 08/16/2007 SVN 84 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="calendars.php"||$File3Name=="/calendars.php") {
@@ -28,8 +28,8 @@ $MyDayName = GMTimeGet("l",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $MyYear = GMTimeGet("Y",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $MyYear2 = GMTimeGet("y",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $MyMonth = GMTimeGet("m",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$MyTimeStamp1 = mktime("0","0","0",$MyMonth,"1",$MyYear);
-$MyTimeStamp2 = mktime("24","59","59",$MyMonth,$CountDays,$MyYear);
+$MyTimeStamp1 = mktime(0,0,0,$MyMonth,1,$MyYear);
+$MyTimeStamp2 = mktime(23,59,59,$MyMonth,$CountDays,$MyYear);
 $MyMonthName = GMTimeGet("F",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $FirstDayThisMonth = date("w", mktime(0, 0, 0, $MyMonth, 1, $MyYear));
 $EventsName = array();

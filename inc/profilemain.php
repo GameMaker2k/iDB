@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: profilemain.php - Last Update: 08/11/2007 SVN 75 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 08/16/2007 SVN 84 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
@@ -384,7 +384,18 @@ $User1Interests=mysql_result($result,$i,"Interests");
 $User1Title=mysql_result($result,$i,"Title");
 $User1Website=mysql_result($result,$i,"Website"); 
 $User1Gender=mysql_result($result,$i,"Gender");
-$User1TimeZone=mysql_result($result,$i,"TimeZone"); 
+$User1TimeZone=mysql_result($result,$i,"TimeZone");
+$BirthDay=mysql_result($result,$i,"BirthDay");
+$BirthMonth=mysql_result($result,$i,"BirthMonth");
+$BirthYear=mysql_result($result,$i,"BirthYear");
+$User1Birthday = "MM/DD/YYYY";
+if($BirthMonth!=null&&$BirthDay!=null&&$BirthYear!=null) { 
+	if($BirthYear=="0") { $BirthYear = "YYYY"; }
+	if($BirthDay=="0") { $BirthDay = "DD"; }
+	if($BirthMonth=="0") { $BirthMonth = "MM"; }
+	if(strlen($BirthMonth)=="1") { $BirthMonth = "0".$BirthMonth; }
+	if(strlen($BirthDay)=="1") { $BirthDay = "0".$BirthDay; }
+	$User1Birthday = $BirthMonth."/".$BirthDay."/".$BirthYear; }
 $tsa_mem = explode(":",$User1TimeZone);
 $TimeZoneArray = array("offset" => $User1TimeZone, "hour" => $tsa_mem[0], "minute" => $tsa_mem[1]);
 $User1DST=mysql_result($result,$i,"DST");
@@ -414,6 +425,9 @@ $profiletitle = " ".$ThemeSet['TitleDivider']." Profile Editor";
 </tr><tr style="text-align: left;">
 	<td style="width: 40%;"><label class="TextBoxLabel" for="Website">Your Website</label></td>
 	<td style="width: 60%;"><input type="text" class="TextBox" name="Website" id="Website" value="<?php echo $User1Website; ?>" /></td>
+</tr><tr style="text-align: left;">
+	<td style="width: 40%;"><label class="TextBoxLabel" for="EventDay">Your Birthday</label></td>
+	<td style="width: 60%;"><input type="text" class="TextBox" name="EventDay" id="EventDay" value="<?php echo $User1Birthday; ?>" /></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 40%;"><label class="TextBoxLabel" for="YourOffSet">Your TimeZone:</label></td>
 	<td style="width: 60%;"><select id="YourOffSet" name="YourOffSet" class="TextBox">
@@ -485,6 +499,24 @@ if($_POST['act']=="profile"&&
 	$_POST['Title'] = @remove_spaces($_POST['Title']);
 	$_POST['Website'] = htmlentities($_POST['Website'], ENT_QUOTES);
 	$_POST['Website'] = @remove_spaces($_POST['Website']);
+	if(!isset($_POST['EventDay'])) { $_POST['EventDay'] = null; }
+	if($_POST['EventDay']!=null) {
+	$BirthExpl = explode("/",$_POST['EventDay']);
+	if(count($BirthExpl)=="3") {
+	if(is_numeric($BirthExpl[0])&&is_numeric($BirthExpl[1])&&is_numeric($BirthExpl[2])) {
+	if(strlen($BirthExpl[0])=="1") { $BirthExpl[0] = "0".$BirthExpl[0]; }
+	if(strlen($BirthExpl[1])=="1") { $BirthExpl[1] = "0".$BirthExpl[1]; }
+	if(strlen($BirthExpl[0])=="2"&&strlen($BirthExpl[1])=="2"&&strlen($BirthExpl[2])=="4") {
+	$BirthIn = mktime(12,12,12,$BirthExpl[0],$BirthExpl[1],$BirthExpl[2]);
+	$BirthMonth=GMTimeChange("m",$BirthIn,0,0,"off");
+	$BirthDay=GMTimeChange("d",$BirthIn,0,0,"off");
+	$BirthYear=GMTimeChange("Y",$BirthIn,0,0,"off"); }
+	if(strlen($BirthExpl[0])!="2"||strlen($BirthExpl[1])!="2"||strlen($BirthExpl[2])!="4") { 
+		$BirthMonth="0"; $BirthDay="0"; $BirthYear="0"; } }
+	if (!is_numeric($BirthExpl[0])||!is_numeric($BirthExpl[1])||!is_numeric($BirthExpl[2])) { 
+		$BirthMonth="0"; $BirthDay="0"; $BirthYear="0"; } }
+	if(count($BirthExpl)!="3") { $BirthMonth="0"; $BirthDay="0"; $BirthYear="0"; } }
+	if($_POST['EventDay']==null) { $BirthMonth="0"; $BirthDay="0"; $BirthYear="0"; }
 	if(!is_numeric($_POST['YourOffSet'])) { $_POST['YourOffSet'] = "0"; }
 	if($_POST['YourOffSet']>12) { $_POST['YourOffSet'] = "12"; }
 	if($_POST['YourOffSet']<-12) { $_POST['YourOffSet'] = "-12"; }
@@ -496,7 +528,7 @@ if($_POST['act']=="profile"&&
 	$_SESSION['UserDST'] = $_POST['DST'];
 	$NewDay=GMTimeStamp();
 	$NewIP=$_SERVER['REMOTE_ADDR'];
-	$querynewprofile = query("UPDATE `".$Settings['sqltable']."members` SET `Interests`='%s',`Title`='%s',`Website`='%s',`TimeZone`='%s',`Gender`='%s',`DST`='%s',`LastActive`=%i,`IP`='%s' WHERE `id`=%i", array($_POST['Interests'],$_POST['Title'],$_POST['Website'],$_POST['YourOffSet'],$_POST['YourGender'],$_POST['DST'],$NewDay,$NewIP,$_SESSION['UserID']));
+	$querynewprofile = query("UPDATE `".$Settings['sqltable']."members` SET `Interests`='%s',`Title`='%s',`Website`='%s',`TimeZone`='%s',`Gender`='%s',`DST`='%s',`LastActive`=%i,`BirthMonth`=%i,`BirthDay`=%i,`BirthYear`=%i,`IP`='%s' WHERE `id`=%i", array($_POST['Interests'],$_POST['Title'],$_POST['Website'],$_POST['YourOffSet'],$_POST['YourGender'],$_POST['DST'],$NewDay,$BirthMonth,$BirthDay,$BirthYear,$NewIP,$_SESSION['UserID']));
 	mysql_query($querynewprofile); } } }
 if($_GET['act']=="userinfo") {
 if($_POST['update']!="now") {
