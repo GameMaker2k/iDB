@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: javascript.php - Last Update: 05/26/2007 SVN 15 - Author: cooldude2k $
+    $FileInfo: javascript.php - Last Update: 08/17/2007 SVN 85 - Author: cooldude2k $
 */
 @header("Content-Language: en");
 @header("Vary: Accept");
@@ -40,5 +40,11 @@ usrname = document.getElementsByTagName(tag);
 for (var i = 0; i < usrname.length; i++) {
 if(usrname[i].innerHTML==text1) {
 usrname[i].innerHTML = text2; } } }
+
+function addsmiley(id,code) {
+var itm;
+itm = document.getElementById(id);
+var pretext = itm.value;
+itm.value = pretext + code; }
 
 <?php gzip_page($Settings['use_gzip']); ?>

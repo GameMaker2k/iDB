@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: replys.php - Last Update: 08/15/2007 SVN 82 - Author: cooldude2k $
+    $FileInfo: replys.php - Last Update: 08/17/2007 SVN 85 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replys.php"||$File3Name=="/replys.php") {
@@ -271,7 +271,28 @@ if($_GET['post']==null) {
 <td class="TableRow2" colspan="2" style="width: 100%;">Making a Reply in Topic <?php echo $TopicName; ?></td>
 </tr>
 <tr class="TableRow3" id="MkReply<?php echo $TopicForumID; ?>">
-<td class="TableRow3">
+<td class="TableRow3" style="width: 15%; vertical-align: middle; text-align: center;">
+<div style="width: 100%; height: 160px; overflow: auto;"><?php
+$renee_query=query("SELECT * FROM `".$Settings['sqltable']."smileys`", array(null));
+$renee_result=mysql_query($renee_query);
+$renee_num=mysql_num_rows($renee_result);
+$renee_s=0; $SmileRow=1;
+while ($renee_s < $renee_num) {
+$FileName=mysql_result($renee_result,$renee_s,"FileName");
+$SmileName=mysql_result($renee_result,$renee_s,"SmileName");
+$SmileText=mysql_result($renee_result,$renee_s,"SmileText");
+$SmileDirectory=mysql_result($renee_result,$renee_s,"Directory");
+$ShowSmile=mysql_result($renee_result,$renee_s,"Show");
+$ReplaceType=mysql_result($renee_result,$renee_s,"ReplaceCI");
+if($SmileRow<5) { ?>
+	<img src="<?php echo $SmileDirectory."".$FileName; ?>" style="vertical-align: middle; border: 0px; cursor: pointer;" title="<?php echo $SmileName; ?>" alt="<?php echo $SmileName; ?>" onclick="addsmiley('ReplyPost','&nbsp;<?php echo htmlspecialchars($SmileText); ?>&nbsp;')" />&nbsp;&nbsp;
+	<?php } if($SmileRow==5) { ?>
+	<img src="<?php echo $SmileDirectory."".$FileName; ?>" style="vertical-align: middle; border: 0px; cursor: pointer;" title="<?php echo $SmileName; ?>" alt="<?php echo $SmileName; ?>" onclick="addsmiley('ReplyPost','&nbsp;<?php echo htmlspecialchars($SmileText); ?>&nbsp;')" /><br />
+	<?php $SmileRow=1; }
+++$renee_s; ++$SmileRow; }
+@mysql_free_result($renee_result);
+?></div></td>
+<td class="TableRow3" style="width: 85%;">
 <form method="post" id="MkReplyForm" action="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=makereply&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>">
 <table style="text-align: left;">
 <tr style="text-align: left;">
@@ -593,7 +614,28 @@ $TopicName = @remove_spaces($TopicName);
 <td class="TableRow2" colspan="2" style="width: 100%;">Editing a Reply in Topic <?php echo $TopicName; ?></td>
 </tr>
 <tr class="TableRow3" id="EditReplies<?php echo $_GET['post']; ?>">
-<td class="TableRow3">
+<td class="TableRow3" style="width: 15%; vertical-align: middle; text-align: center;">
+<div style="width: 100%; height: 160px; overflow: auto;"><?php
+$renee_query=query("SELECT * FROM `".$Settings['sqltable']."smileys`", array(null));
+$renee_result=mysql_query($renee_query);
+$renee_num=mysql_num_rows($renee_result);
+$renee_s=0; $SmileRow=1;
+while ($renee_s < $renee_num) {
+$FileName=mysql_result($renee_result,$renee_s,"FileName");
+$SmileName=mysql_result($renee_result,$renee_s,"SmileName");
+$SmileText=mysql_result($renee_result,$renee_s,"SmileText");
+$SmileDirectory=mysql_result($renee_result,$renee_s,"Directory");
+$ShowSmile=mysql_result($renee_result,$renee_s,"Show");
+$ReplaceType=mysql_result($renee_result,$renee_s,"ReplaceCI");
+if($SmileRow<5) { ?>
+	<img src="<?php echo $SmileDirectory."".$FileName; ?>" style="vertical-align: middle; border: 0px; cursor: pointer;" title="<?php echo $SmileName; ?>" alt="<?php echo $SmileName; ?>" onclick="addsmiley('ReplyPost','&nbsp;<?php echo htmlspecialchars($SmileText); ?>&nbsp;')" />&nbsp;&nbsp;
+	<?php } if($SmileRow==5) { ?>
+	<img src="<?php echo $SmileDirectory."".$FileName; ?>" style="vertical-align: middle; border: 0px; cursor: pointer;" title="<?php echo $SmileName; ?>" alt="<?php echo $SmileName; ?>" onclick="addsmiley('ReplyPost','&nbsp;<?php echo htmlspecialchars($SmileText); ?>&nbsp;')" /><br />
+	<?php $SmileRow=1; }
+++$renee_s; ++$SmileRow; }
+@mysql_free_result($renee_result);
+?></div></td>
+<td class="TableRow3" style="width: 85%;">
 <form method="post" id="EditReplyForm" action="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=editreply&id=".$TopicID."&post=".$_GET['post'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>">
 <table style="text-align: left;">
 <tr style="text-align: left;">
