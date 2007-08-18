@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: topics.php - Last Update: 08/18/2007 SVN 86 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 08/18/2007 SVN 87 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -231,6 +231,7 @@ echo "<span>".$UsersName."</span>"; }
 <td class="TableRow4" colspan="6">&nbsp;</td>
 </tr>
 </table></div>
+<div>&nbsp;</div>
 <?php
 @mysql_free_result($result); }
 if($_GET['act']=="create") {
