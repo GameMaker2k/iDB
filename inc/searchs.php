@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: searchs.php - Last Update: 08/12/2007 SVN 77 - Author: cooldude2k $
+    $FileInfo: searchs.php - Last Update: 08/18/2007 SVN 86 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="searchs.php"||$File3Name=="/searchs.php") {
@@ -78,6 +78,7 @@ redirect("location",$basedir.url_maker($exfile['search'],$Settings['file_ext'],"
 ob_clean(); echo "Sorry could not find any search results."; @mysql_free_result($result);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 //Start Topic Page Code (Will be used at later time)
+if(!isset($Settings['max_topics'])) { $Settings['max_topics'] = 10; }
 if($_GET['page']==null) { $_GET['page'] = 1; } 
 if($_GET['page']<=0) { $_GET['page'] = 1; }
 $nums = $_GET['page'] * $Settings['max_topics'];
@@ -89,8 +90,21 @@ if($nums<$num) { $nextpage = $_GET['page'] + 1; }
 if($nums>=$num) { $nextpage = $_GET['page']; }
 if($numz>=$Settings['max_topics']) { $backpage = $_GET['page'] - 1; }
 if($_GET['page']<=1) { $backpage = 1; }
+$pnum = $num; $l = 1; $Pages = null;
+while ($pnum>0) {
+if($pnum>=$Settings['max_topics']) { 
+	$pnum = $pnum - $Settings['max_topics']; 
+	$Pages[$l] = $l; ++$l; }
+if($pnum<$Settings['max_topics']&&$pnum>0) { 
+	$pnum = $pnum - $pnum; 
+	$Pages[$l] = $l; ++$l; } }
 //End Topic Page Code (Its not used yet but its still good to have :P )
 $i=0;
+$pagenum=count($Pages);
+$pagei=1; $pstring = "<div class=\"PageList\">Pages: ";
+while ($pagei <= $pagenum) {
+$pstring = $pstring."<a href=\"".url_maker($exfile['search'],$Settings['file_ext'],"act=topics&search=".$_GET['search']."&type=".$_GET['type']."&page=".$Pages[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search'])."\">".$Pages[$pagei]."</a> ";
+	++$pagei; } $pstring = $pstring."</div>";
 ?>
 <div class="Table1Border">
 <table class="Table1" id="Search">

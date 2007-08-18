@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: replys.php - Last Update: 08/17/2007 SVN 85 - Author: cooldude2k $
+    $FileInfo: replys.php - Last Update: 08/18/2007 SVN 86 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replys.php"||$File3Name=="/replys.php") {
@@ -48,6 +48,8 @@ ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 if($CatPermissionInfo['CanViewCategory'][$TopicCatID]=="yes"&&
 	$PermissionInfo['CanViewForum'][$TopicForumID]=="yes") {
+if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes"||$PermissionInfo['CanMakeTopics'][$TopicForumID]=="yes") {
+if($TopicClosed==0) {
 ?>
 <table style="width: 100%;" class="Table2">
 <tr>
@@ -63,12 +65,13 @@ if($CatPermissionInfo['CanViewCategory'][$TopicCatID]=="yes"&&
 </tr>
 </table>
 <div>&nbsp;</div>
-<?php
+<?php } }
 if($_GET['act']=="view") {
 $query = query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `TopicID`=%i ORDER BY `TimeStamp` ASC", array($_GET['id']));
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
 //Start Reply Page Code (Will be used at later time)
+if(!isset($Settings['max_posts'])) { $Settings['max_posts'] = 10; }
 if($_GET['page']==null) { $_GET['page'] = 1; } 
 if($_GET['page']<=0) { $_GET['page'] = 1; }
 $nums = $_GET['page'] * $Settings['max_posts'];
@@ -80,6 +83,14 @@ if($nums<$num) { $nextpage = $_GET['page'] + 1; }
 if($nums>=$num) { $nextpage = $_GET['page']; }
 if($numz>=$Settings['max_posts']) { $backpage = $_GET['page'] - 1; }
 if($_GET['page']<=1) { $backpage = 1; }
+$pnum = $num; $l = 1; $Pages = null;
+while ($pnum>0) {
+if($pnum>=$Settings['max_posts']) { 
+	$pnum = $pnum - $Settings['max_posts']; 
+	$Pages[$l] = $l; ++$l; }
+if($pnum<$Settings['max_posts']&&$pnum>0) { 
+	$pnum = $pnum - $pnum; 
+	$Pages[$l] = $l; ++$l; } }
 //End Reply Page Code (Its not used yet but its still good to have :P )
 $i=0;
 if($num==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
@@ -90,6 +101,11 @@ if($ViewTimes==0||$ViewTimes==null) { $NewViewTimes = 1; }
 if($ViewTimes!=0&&$ViewTimes!=null) { $NewViewTimes = $ViewTimes + 1; }
 $viewsup = query("UPDATE `".$Settings['sqltable']."topics` SET `NumViews`='%s' WHERE `id`=%i", array($NewViewTimes,$_GET['id']));
 mysql_query($viewsup); }
+$pagenum=count($Pages);
+$pagei=1; $pstring = "<div class=\"PageList\">Pages: ";
+while ($pagei <= $pagenum) {
+$pstring = $pstring."<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$Pages[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">".$Pages[$pagei]."</a> ";
+	++$pagei; } $pstring = $pstring."</div>";
 while ($i < $num) {
 $MyPostID=mysql_result($result,$i,"id");
 $MyTopicID=mysql_result($result,$i,"TopicID");
@@ -825,7 +841,9 @@ mysql_query($queryupd); } }
 <td class="TableRow4">&nbsp;</td>
 </tr>
 </table></div>
-<?php } ?>
+<?php }
+if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes"||$PermissionInfo['CanMakeTopics'][$TopicForumID]=="yes") {
+if($TopicClosed==0) { ?>
 <table class="Table2" style="width: 100%;">
 <tr>
  <td style="width: 0%; text-align: left;">&nbsp;</td>
@@ -842,4 +860,4 @@ mysql_query($queryupd); } }
 </tr>
 </table>
 <div>&nbsp;</div>
-<?php } } ?>
+<?php } } } } ?>

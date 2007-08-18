@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: members.php - Last Update: 08/15/2007 SVN 82 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 08/18/2007 SVN 86 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -61,6 +61,7 @@ $query = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `GroupID`
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
 //Start MemberList Page Code (Will be used at later time)
+if(!isset($Settings['max_memlist'])) { $Settings['max_memlist'] = 10; }
 if($_GET['page']==null) { $_GET['page'] = 1; } 
 if($_GET['page']<=0) { $_GET['page'] = 1; }
 $nums = $_GET['page'] * $Settings['max_memlist'];
@@ -72,8 +73,21 @@ if($nums<$num) { $nextpage = $_GET['page'] + 1; }
 if($nums>=$num) { $nextpage = $_GET['page']; }
 if($numz>=$Settings['max_memlist']) { $backpage = $_GET['page'] - 1; }
 if($_GET['page']<=1) { $backpage = 1; }
+$pnum = $num; $l = 1; $Pages = null;
+while ($pnum>0) {
+if($pnum>=$Settings['max_memlist']) { 
+	$pnum = $pnum - $Settings['max_memlist']; 
+	$Pages[$l] = $l; ++$l; }
+if($pnum<$Settings['max_memlist']&&$pnum>0) { 
+	$pnum = $pnum - $pnum; 
+	$Pages[$l] = $l; ++$l; } }
 //End MemberList Page Code (Its not used yet but its still good to have :P )
 $i=0;
+$pagenum=count($Pages);
+$pagei=1; $pstring = "<div class=\"PageList\">Pages: ";
+while ($pagei <= $pagenum) {
+$pstring = $pstring."<a href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=list&page=".$Pages[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">".$Pages[$pagei]."</a> ";
+	++$pagei; } $pstring = $pstring."</div>";
 ?>
 <div class="Table1Border">
 <table class="Table1">

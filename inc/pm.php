@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: pm.php - Last Update: 08/09/2007 SVN 73 - Author: cooldude2k $
+    $FileInfo: pm.php - Last Update: 08/18/2007 SVN 86 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pm.php"||$File3Name=="/pm.php") {
@@ -46,6 +46,37 @@ if($_GET['act']=="view"||$_GET['act']=="viewsent"||$_GET['act']=="read") {
 	<td style="width: 85%; vertical-align: top;">
 <?php
 if($_GET['act']=="view") {
+$query = query("SELECT * FROM `".$Settings['sqltable']."messenger` WHERE `PMSentID`=%i ORDER BY `DateSend` DESC", array($_SESSION['UserID']));
+$result=mysql_query($query);
+$num=mysql_num_rows($result);
+//Start MessengerList Page Code (Will be used at later time)
+if(!isset($Settings['max_pmlist'])) { $Settings['max_pmlist'] = 10; }
+if($_GET['page']==null) { $_GET['page'] = 1; } 
+if($_GET['page']<=0) { $_GET['page'] = 1; }
+$nums = $_GET['page'] * $Settings['max_pmlist'];
+if($nums>$num) { $nums = $num; }
+$numz = $nums - $Settings['max_pmlist'];
+if($numz<=0) { $numz = 0; }
+$i=$numz;
+if($nums<$num) { $nextpage = $_GET['page'] + 1; }
+if($nums>=$num) { $nextpage = $_GET['page']; }
+if($numz>=$Settings['max_pmlist']) { $backpage = $_GET['page'] - 1; }
+if($_GET['page']<=1) { $backpage = 1; }
+$pnum = $num; $l = 1; $Pages = null;
+while ($pnum>0) {
+if($pnum>=$Settings['max_pmlist']) { 
+	$pnum = $pnum - $Settings['max_pmlist']; 
+	$Pages[$l] = $l; ++$l; }
+if($pnum<$Settings['max_pmlist']&&$pnum>0) { 
+	$pnum = $pnum - $pnum; 
+	$Pages[$l] = $l; ++$l; } }
+//End MessengerList Page Code (Its not used yet but its still good to have :P )
+$i=0;
+$pagenum=count($Pages);
+$pagei=1; $pstring = "<div class=\"PageList\">Pages: ";
+while ($pagei <= $pagenum) {
+$pstring = $pstring."<a href=\"".url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&page=".$Pages[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger'])."\">".$Pages[$pagei]."</a> ";
+	++$pagei; } $pstring = $pstring."</div>";
 ?>
 <div class="Table1Border">
 <table class="Table1" style="width: 100%;">
@@ -61,10 +92,6 @@ if($_GET['act']=="view") {
 <th class="TableRow2" style="width: 25%;">Time</th>
 </tr>
 <?php
-$query = query("SELECT * FROM `".$Settings['sqltable']."messenger` WHERE `PMSentID`=%i ORDER BY `DateSend` DESC", array($_SESSION['UserID']));
-$result=mysql_query($query);
-$num=mysql_num_rows($result);
-$i=0;
 while ($i < $num) {
 $PMID=mysql_result($result,$i,"id");
 $SenderID=mysql_result($result,$i,"SenderID");
@@ -107,6 +134,37 @@ echo "<span>".$SenderName."</span>"; }
 </tr>
 <?php } 
 if($_GET['act']=="viewsent") {
+$query = query("SELECT * FROM `".$Settings['sqltable']."messenger` WHERE `SenderID`=%i ORDER BY `DateSend` DESC", array($_SESSION['UserID']));
+$result=mysql_query($query);
+$num=mysql_num_rows($result);
+//Start MessengerList Page Code (Will be used at later time)
+if(!isset($Settings['max_pmlist'])) { $Settings['max_pmlist'] = 10; }
+if($_GET['page']==null) { $_GET['page'] = 1; } 
+if($_GET['page']<=0) { $_GET['page'] = 1; }
+$nums = $_GET['page'] * $Settings['max_pmlist'];
+if($nums>$num) { $nums = $num; }
+$numz = $nums - $Settings['max_pmlist'];
+if($numz<=0) { $numz = 0; }
+$i=$numz;
+if($nums<$num) { $nextpage = $_GET['page'] + 1; }
+if($nums>=$num) { $nextpage = $_GET['page']; }
+if($numz>=$Settings['max_pmlist']) { $backpage = $_GET['page'] - 1; }
+if($_GET['page']<=1) { $backpage = 1; }
+$pnum = $num; $l = 1; $Pages = null;
+while ($pnum>0) {
+if($pnum>=$Settings['max_pmlist']) { 
+	$pnum = $pnum - $Settings['max_pmlist']; 
+	$Pages[$l] = $l; ++$l; }
+if($pnum<$Settings['max_pmlist']&&$pnum>0) { 
+	$pnum = $pnum - $pnum; 
+	$Pages[$l] = $l; ++$l; } }
+//End MessengerList Page Code (Its not used yet but its still good to have :P )
+$i=0;
+$pagenum=count($Pages);
+$pagei=1; $pstring = "<div class=\"PageList\">Pages: ";
+while ($pagei <= $pagenum) {
+$pstring = $pstring."<a href=\"".url_maker($exfile['messenger'],$Settings['file_ext'],"act=viewsent&page=".$Pages[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger'])."\">".$Pages[$pagei]."</a> ";
+	++$pagei; } $pstring = $pstring."</div>";
 ?>
 <div class="Table1Border">
 <table class="Table1" style="width: 100%;">
@@ -122,10 +180,6 @@ if($_GET['act']=="viewsent") {
 <th class="TableRow2" style="width: 25%;">Time</th>
 </tr>
 <?php
-$query = query("SELECT * FROM `".$Settings['sqltable']."messenger` WHERE `SenderID`=%i ORDER BY `DateSend` DESC", array($_SESSION['UserID']));
-$result=mysql_query($query);
-$num=mysql_num_rows($result);
-$i=0;
 while ($i < $num) {
 $PMID=mysql_result($result,$i,"id");
 $SenderID=mysql_result($result,$i,"SenderID");
