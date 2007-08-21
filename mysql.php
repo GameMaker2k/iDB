@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: mysql.php - Last Update: 08/11/2007 SVN 76 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 08/21/2007 SVN 88 - Author: cooldude2k $
 */
 @error_reporting(E_ALL ^ E_NOTICE);
 @ini_set('session.use_trans_sid', false);
@@ -48,6 +48,7 @@ if(!isset($_GET['act'])) { $_GET['act'] = null; }
 if(!isset($_POST['act'])) { $_POST['act'] = null; }
 if(!isset($_GET['id'])) { $_GET['id'] = null; }
 if(!isset($_GET['post'])) { $_GET['post'] = null; }
+if(!isset($_POST['License'])) { $_POST['License'] = null; }
 require_once($SettDir['inc'].'filename.php');
 require_once($SettDir['inc'].'function.php');
 if($Settings['enable_pathinfo']==true) { 

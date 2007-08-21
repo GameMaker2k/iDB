@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: replys.php - Last Update: 08/18/2007 SVN 86 - Author: cooldude2k $
+    $FileInfo: replys.php - Last Update: 08/21/2007 SVN 88 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replys.php"||$File3Name=="/replys.php") {
@@ -242,8 +242,71 @@ echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr
 </tr>
 </table></div>
 <div>&nbsp;</div>
-<?php ++$i; } @mysql_free_result($result); }
-if($_GET['act']=="create") {
+<?php ++$i; } @mysql_free_result($result); 
+if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes"&&$TopicClosed==0) {  ?>
+<div class="Table1Border" style="display: none;" id="FastReply">
+<table class="Table1" id="MakeReply<?php echo $TopicForumID; ?>">
+<tr class="TableRow1" id="ReplyStart<?php echo $TopicForumID; ?>">
+<td class="TableRow1" colspan="2"><span style="float: left;">
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>#<?php echo $TopicID; ?>"><?php echo $TopicName; ?></a></span>
+<?php echo "<span style=\"float: right;\">&nbsp;</span>"; ?></td>
+</tr>
+<tr id="MakeReplyRow<?php echo $TopicForumID; ?>" class="TableRow2">
+<td class="TableRow2" colspan="2" style="width: 100%;">Making a Reply in Topic <?php echo $TopicName; ?></td>
+</tr>
+<tr class="TableRow3" id="MkReply<?php echo $TopicForumID; ?>">
+<td class="TableRow3" style="width: 15%; vertical-align: middle; text-align: center;">
+<div style="width: 100%; height: 160px; overflow: auto;"><?php
+$renee_query=query("SELECT * FROM `".$Settings['sqltable']."smileys`", array(null));
+$renee_result=mysql_query($renee_query);
+$renee_num=mysql_num_rows($renee_result);
+$renee_s=0; $SmileRow=1;
+while ($renee_s < $renee_num) {
+$FileName=mysql_result($renee_result,$renee_s,"FileName");
+$SmileName=mysql_result($renee_result,$renee_s,"SmileName");
+$SmileText=mysql_result($renee_result,$renee_s,"SmileText");
+$SmileDirectory=mysql_result($renee_result,$renee_s,"Directory");
+$ShowSmile=mysql_result($renee_result,$renee_s,"Show");
+$ReplaceType=mysql_result($renee_result,$renee_s,"ReplaceCI");
+if($SmileRow<5) { ?>
+	<img src="<?php echo $SmileDirectory."".$FileName; ?>" style="vertical-align: middle; border: 0px; cursor: pointer;" title="<?php echo $SmileName; ?>" alt="<?php echo $SmileName; ?>" onclick="addsmiley('ReplyPost','&nbsp;<?php echo htmlspecialchars($SmileText); ?>&nbsp;')" />&nbsp;&nbsp;
+	<?php } if($SmileRow==5) { ?>
+	<img src="<?php echo $SmileDirectory."".$FileName; ?>" style="vertical-align: middle; border: 0px; cursor: pointer;" title="<?php echo $SmileName; ?>" alt="<?php echo $SmileName; ?>" onclick="addsmiley('ReplyPost','&nbsp;<?php echo htmlspecialchars($SmileText); ?>&nbsp;')" /><br />
+	<?php $SmileRow=1; }
+++$renee_s; ++$SmileRow; }
+@mysql_free_result($renee_result);
+?></div></td>
+<td class="TableRow3" style="width: 85%;">
+<form method="post" id="MkReplyForm" action="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=makereply&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>">
+<table style="text-align: left;">
+<tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="ReplyDesc">Insert Reply Description:</label></td>
+	<td style="width: 50%;"><input type="text" name="ReplyDesc" class="TextBox" id="ReplyDesc" size="20" value="<?php echo $QuoteDescription; ?>" /></td>
+</tr><?php if($_SESSION['UserGroup']==$Settings['GuestGroup']) { ?><tr>
+	<td style="width: 50%;"><label class="TextBoxLabel" for="GuestName">Insert Guest Name:</label></td>
+	<td style="width: 50%;"><input type="text" name="GuestName" class="TextBox" id="GuestName" size="20" /></td>
+</tr><?php } ?>
+</table>
+<table style="text-align: left;">
+<tr style="text-align: left;">
+<td style="width: 100%;">
+<label class="TextBoxLabel" for="ReplyPost">Insert Your Reply:</label><br />
+<textarea rows="10" name="ReplyPost" id="ReplyPost" cols="40" class="TextBox"><?php echo $QuoteReply; ?></textarea><br />
+<input type="hidden" name="act" value="makereplies" style="display: none;" />
+<?php if($_SESSION['UserGroup']!=$Settings['GuestGroup']) { ?>
+<input type="hidden" name="GuestName" value="null" style="display: none;" />
+<?php } ?>
+<input type="submit" class="Button" value="Make Reply" name="make_reply" />
+<input type="reset" value="Reset Form" class="Button" name="Reset_Form" />
+</td></tr></table>
+</form></td></tr>
+<tr id="MkReplyEnd<?php echo $TopicForumID; ?>" class="TableRow4">
+<td class="TableRow4" colspan="5">&nbsp;</td>
+</tr>
+</table>
+<div>&nbsp;</div>
+</div>
+<?php } } if($_GET['act']=="create") {
 if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="no"||$TopicClosed==1) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
@@ -851,7 +914,7 @@ if($TopicClosed==0) { ?>
  <?php if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes"&&$TopicClosed==0) { ?>
  <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=create&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $ThemeSet['AddReply']; ?></a>
  <?php echo $ThemeSet['ButtonDivider']; ?>
- <a href="#Act/FastReply"><?php echo $ThemeSet['FastReply']; ?></a>
+ <a href="javascript:%20<?php echo urlencode("toggletag('FastReply');"); ?>"><?php echo $ThemeSet['FastReply']; ?></a>
  <?php } if($PermissionInfo['CanMakeTopics'][$TopicForumID]=="yes") {
 	if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes"&&$TopicClosed==0) { ?>
  <?php echo $ThemeSet['ButtonDivider']; } ?>
