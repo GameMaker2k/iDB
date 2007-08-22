@@ -11,13 +11,13 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: subforums.php - Last Update: 08/11/2007 SVN 75 - Author: cooldude2k $
+    $FileInfo: subforums.php - Last Update: 08/22/2007 SVN 89 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="subforums.php"||$File3Name=="/subforums.php") {
 	require('index.php');
 	exit(); }
-$checkquery = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%s", array($_GET['id']));
+$checkquery = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i", array($_GET['id']));
 $checkresult=mysql_query($checkquery);
 $checknum=mysql_num_rows($checkresult);
 if($checknum==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); @mysql_free_result($checkresult);
@@ -56,7 +56,7 @@ redirect("location",$basedir.url_maker($exfile['forum'],$Settings['file_ext'],"a
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 @mysql_free_result($checkresult);
-$prequery = query("SELECT * FROM `".$Settings['sqltable']."categories` WHERE `ShowCategory`='yes' AND `id`=%i ORDER BY `id`", array($CategoryID));
+$prequery = query("SELECT * FROM `".$Settings['sqltable']."categories` WHERE `ShowCategory`='yes' AND `id`=%i ORDER BY `OrderID` ASC, `id` ASC", array($CategoryID));
 $preresult=mysql_query($prequery);
 $prenum=mysql_num_rows($preresult);
 $prei=0;
@@ -73,7 +73,7 @@ redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"a
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 if($CatPermissionInfo['CanViewCategory'][$CategoryID]=="yes") {
-$query = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `ShowForum`='yes' AND `CategoryID`=%i AND `InSubForum`=%i ORDER BY `id`", array($CategoryID,$_GET['id']));
+$query = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `ShowForum`='yes' AND `CategoryID`=%i AND `InSubForum`=%i ORDER BY `OrderID` ASC, `id` ASC", array($CategoryID,$_GET['id']));
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
 $i=0;
@@ -105,7 +105,7 @@ $ForumDescription=mysql_result($result,$i,"Description");
 $ForumType = strtolower($ForumType);
 $gltf = array(null); $gltf[0] = $ForumID;
 if ($ForumType=="subforum") { 
-$apcquery = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `ShowForum`='yes' AND `InSubForum`=%i ORDER BY `id`", array($ForumID));
+$apcquery = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `ShowForum`='yes' AND `InSubForum`=%i ORDER BY `OrderID` ASC, `id` ASC", array($ForumID));
 $apcresult=mysql_query($apcquery);
 $apcnum=mysql_num_rows($apcresult);
 $apci=0; $apcl=0; if($apcnum>=1) {

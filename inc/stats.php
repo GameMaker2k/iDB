@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: stats.php - Last Update: 08/09/2007 SVN 73 - Author: cooldude2k $
+    $FileInfo: stats.php - Last Update: 08/22/2007 SVN 89 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="stats.php"||$File3Name=="/stats.php") {
@@ -24,7 +24,7 @@ $numtopics = mysql_num_rows($ntresult);
 $npquery = query("SELECT * FROM `".$Settings['sqltable']."posts`", array(null));
 $npresult = mysql_query($npquery);
 $numposts = mysql_num_rows($npresult);
-$nmquery = query("SELECT * FROM `".$Settings['sqltable']."members`", array(null));
+$nmquery = query("SELECT * FROM `".$Settings['sqltable']."members` order by `Joined`", array(null));
 $nmresult = mysql_query($nmquery);
 $nummembers = mysql_num_rows($nmresult);
 $NewestMem = array(null);
