@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: pm.php - Last Update: 08/18/2007 SVN 86 - Author: cooldude2k $
+    $FileInfo: pm.php - Last Update: 08/29/2007 SVN 91 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pm.php"||$File3Name=="/pm.php") {
@@ -375,7 +375,28 @@ if($renum==0) { $SendMessageTo = null; }
 <td class="TableRow2" colspan="2" style="width: 100%;">Making a Message</td>
 </tr>
 <tr class="TableRow3" id="MkMessage">
-<td class="TableRow3">
+<td class="TableRow3" style="width: 15%; vertical-align: middle; text-align: center;">
+<div style="width: 100%; height: 160px; overflow: auto;"><?php
+$renee_query=query("SELECT * FROM `".$Settings['sqltable']."smileys`", array(null));
+$renee_result=mysql_query($renee_query);
+$renee_num=mysql_num_rows($renee_result);
+$renee_s=0; $SmileRow=1;
+while ($renee_s < $renee_num) {
+$FileName=mysql_result($renee_result,$renee_s,"FileName");
+$SmileName=mysql_result($renee_result,$renee_s,"SmileName");
+$SmileText=mysql_result($renee_result,$renee_s,"SmileText");
+$SmileDirectory=mysql_result($renee_result,$renee_s,"Directory");
+$ShowSmile=mysql_result($renee_result,$renee_s,"Show");
+$ReplaceType=mysql_result($renee_result,$renee_s,"ReplaceCI");
+if($SmileRow<5) { ?>
+	<img src="<?php echo $SmileDirectory."".$FileName; ?>" style="vertical-align: middle; border: 0px; cursor: pointer;" title="<?php echo $SmileName; ?>" alt="<?php echo $SmileName; ?>" onclick="addsmiley('ReplyPost','&nbsp;<?php echo htmlspecialchars($SmileText); ?>&nbsp;')" />&nbsp;&nbsp;
+	<?php } if($SmileRow==5) { ?>
+	<img src="<?php echo $SmileDirectory."".$FileName; ?>" style="vertical-align: middle; border: 0px; cursor: pointer;" title="<?php echo $SmileName; ?>" alt="<?php echo $SmileName; ?>" onclick="addsmiley('ReplyPost','&nbsp;<?php echo htmlspecialchars($SmileText); ?>&nbsp;')" /><br />
+	<?php $SmileRow=1; }
+++$renee_s; ++$SmileRow; }
+@mysql_free_result($renee_result);
+?></div></td>
+<td class="TableRow3" style="width: 85%;">
 <form method="post" id="MkReplyForm" action="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=sendmessage",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>">
 <table style="text-align: left;">
 <tr style="text-align: left;">
