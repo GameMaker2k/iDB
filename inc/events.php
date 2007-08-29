@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: events.php - Last Update: 08/17/2007 SVN 85 - Author: cooldude2k $
+    $FileInfo: events.php - Last Update: 08/29/2007 SVN 90 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="events.php"||$File3Name=="/events.php") {
@@ -35,6 +35,7 @@ $EventUser=mysql_result($result,$is,"UserID");
 $EventGuest=mysql_result($result,$is,"GuestName");
 $EventName=mysql_result($result,$is,"EventName");
 $EventText=mysql_result($result,$is,"EventText");
+$EventText = preg_replace("/\<br\>/", "<br />\n", nl2br($EventText));
 $EventStart=mysql_result($result,$is,"TimeStamp");
 $EventEnd=mysql_result($result,$is,"TimeStampEnd");
 $EventStart = GMTimeChange("M. j Y",$EventStart,null);
