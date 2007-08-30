@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: mysql.php - Last Update: 08/21/2007 SVN 88 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 08/30/2007 SVN 92 - Author: cooldude2k $
 */
 @error_reporting(E_ALL ^ E_NOTICE);
 @ini_set('session.use_trans_sid', false);
@@ -47,14 +47,20 @@ if(!isset($_GET['page'])) { $_GET['page'] = null; }
 if(!isset($_GET['act'])) { $_GET['act'] = null; }
 if(!isset($_POST['act'])) { $_POST['act'] = null; }
 if(!isset($_GET['id'])) { $_GET['id'] = null; }
+if(!isset($_GET['debug'])) { $_GET['debug'] = false; }
 if(!isset($_GET['post'])) { $_GET['post'] = null; }
 if(!isset($_POST['License'])) { $_POST['License'] = null; }
+if(!isset($_SERVER['HTTPS'])) { $_SERVER['HTTPS'] = "off"; }
 require_once($SettDir['inc'].'filename.php');
 require_once($SettDir['inc'].'function.php');
 if($Settings['enable_pathinfo']==true) { 
 	mrstring(); /* Change Path info to Get Vars :P */ }
 // Check to see if variables are set
 require_once($SettDir['misc'].'setcheck.php');
+if($Settings['enable_https']==true&&$_SERVER['HTTPS']=="on") {
+if($Settings['idburl']!=null&&$Settings['idburl']!="localhost") {
+$HTTPsTest = parse_url($Settings['idburl']); if($HTTPsTest['scheme']=="http") {
+$Settings['idburl'] = preg_replace("/http\:\/\//i", "https://", $Settings['idburl']); } } }
 @ini_set("default_charset",$Settings['charset']);
 $File1Name = dirname($_SERVER['SCRIPT_NAME'])."/";
 $File2Name = $_SERVER['SCRIPT_NAME'];
@@ -137,6 +143,7 @@ if($Settings['board_offline']==true) {
 ob_clean(); echo "Sorry the board is off line.\nIf you are a admin you can login by the admin cp.";
 echo "\n".mysql_errno().": ".mysql_error();
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+$dayconv = array('second' => 1, 'minute' => 60, 'hour' => 3600, 'day' => 86400, 'week' => 604800, 'month' => 2630880, 'year' => 31570560, 'decade' => 15705600);
 //Time Zone Set
 if(!isset($_SESSION['UserTimeZone'])) { 
 	if(isset($Settings['DefaultTimeZone'])) { 

@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: filename.php - Last Update: 07/17/2007 SVN 47 - Author: cooldude2k $
+    $FileInfo: filename.php - Last Update: 08/30/2007 SVN 92 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="filename.php"||$File3Name=="/filename.php") {
@@ -72,6 +72,10 @@ $exfile['topic'] = 'topic';
 $prexqstr['topic'] = null; $exqstr['topic'] = null;
 $exfile['redirect'] = 'forum';
 $prexqstr['redirect'] = null; $exqstr['redirect'] = null;
+$exfile['admin'] = 'admin';
+$prexqstr['admin'] = null; $exqstr['admin'] = null;
+$exfile['modcp'] = 'modcp';
+$prexqstr['modcp'] = null; $exqstr['modcp'] = null;
 $exfilejs['javascript'] = 'javascript';
 $prexqstrjs['javascript'] = null; $exqstrjs['javascript'] = null;
 $exfilerss['forum'] = 'forum'; 

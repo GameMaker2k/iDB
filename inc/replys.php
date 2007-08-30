@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: replys.php - Last Update: 08/21/2007 SVN 88 - Author: cooldude2k $
+    $FileInfo: replys.php - Last Update: 08/30/2007 SVN 92 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replys.php"||$File3Name=="/replys.php") {
@@ -243,8 +243,14 @@ echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr
 </table></div>
 <div>&nbsp;</div>
 <?php ++$i; } @mysql_free_result($result); 
-if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes"&&$TopicClosed==0) {  ?>
-<div class="Table1Border" style="display: none;" id="FastReply">
+if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes"&&$TopicClosed==0) {  
+if(!isset($_GET['fastreply'])) { $_GET['fastreply'] = false; }
+if($_GET['fastreply']==true||
+	$_GET['fastreply']=="on") { $fps = " "; }
+if($_GET['fastreply']!=true&&
+	$_GET['fastreply']!="on") { $fps = " style=\"display: none;\" "; }
+?>
+<div class="Table1Border"<?php echo $fps; ?>id="FastReply">
 <table class="Table1" id="MakeReply<?php echo $TopicForumID; ?>">
 <tr class="TableRow1" id="ReplyStart<?php echo $TopicForumID; ?>">
 <td class="TableRow1" colspan="2"><span style="float: left;">
