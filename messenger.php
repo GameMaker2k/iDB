@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: messenger.php - Last Update: 08/02/2007 SVN 61 - Author: cooldude2k $
+    $FileInfo: messenger.php - Last Update: 08/31/2007 SVN 93 - Author: cooldude2k $
 */
 require('preindex.php');
 $usefileext = $Settings['file_ext'];
@@ -41,10 +41,7 @@ if($_GET['act']=="view"||$_GET['act']=="viewsent")
 if($_GET['act']=="read"||$_GET['act']=="create"||
 	$_GET['act']=="sendmessage"||$_POST['act']=="sendmessages")
 { require($SettDir['inc'].'pm.php'); } }
-?>
-
-<div>&nbsp;</div>
-<?php require($SettDir['inc'].'endpage.php');
+require($SettDir['inc'].'endpage.php');
 if(!isset($MessageName)) { $MessageName = null; }
 ?>
 

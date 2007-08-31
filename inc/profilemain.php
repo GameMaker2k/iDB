@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: profilemain.php - Last Update: 08/16/2007 SVN 84 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 08/31/2007 SVN 93 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
@@ -630,3 +630,4 @@ if($YourPassword!=$OldPassword) { $Error="Yes"; ?>
 </tr></table></div><?php } ?>
 </td></tr>
 </table>
+<div>&nbsp;</div>

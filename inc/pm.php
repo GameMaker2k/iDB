@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: pm.php - Last Update: 08/29/2007 SVN 91 - Author: cooldude2k $
+    $FileInfo: pm.php - Last Update: 08/31/2007 SVN 93 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pm.php"||$File3Name=="/pm.php") {
@@ -578,3 +578,4 @@ mysql_query($query);
 </tr>
 </table></div>
 <?php } ?>
+<div>&nbsp;</div>

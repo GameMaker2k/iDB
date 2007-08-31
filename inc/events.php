@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: events.php - Last Update: 08/29/2007 SVN 90 - Author: cooldude2k $
+    $FileInfo: events.php - Last Update: 08/31/2007 SVN 93 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="events.php"||$File3Name=="/events.php") {
@@ -206,7 +206,6 @@ if($SmileRow<5) { ?>
 <td class="TableRow4" colspan="5">&nbsp;</td>
 </tr>
 </table></div>
-<div>&nbsp;</div>
 <?php }  if($_GET['act']=="makeevent"&&$_POST['act']=="makeevents") {
 if($GroupInfo['CanAddEvents']=="no") { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
@@ -439,5 +438,5 @@ mysql_query($query);
 <td class="TableRow4">&nbsp;</td>
 </tr>
 </table></div>
-<div>&nbsp;</div>
 <?php } ?>
+<div>&nbsp;</div>

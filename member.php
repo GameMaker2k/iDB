@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: member.php - Last Update: 08/29/2007 SVN 91 - Author: cooldude2k $
+    $FileInfo: member.php - Last Update: 08/31/2007 SVN 93 - Author: cooldude2k $
 */
 require('preindex.php');
 $usefileext = $Settings['file_ext'];
@@ -43,9 +43,8 @@ $_GET['act']=="signup")
 { require($SettDir['inc'].'members.php'); } 
 if($_GET['act']=="makemember") {
 if($_POST['act']=="makemembers") {
-require($SettDir['inc'].'members.php'); } } ?>
-<div>&nbsp;</div>
-<?php require($SettDir['inc'].'endpage.php');
+require($SettDir['inc'].'members.php'); } } 
+require($SettDir['inc'].'endpage.php');
 if(!isset($membertitle)) { $membertitle = null; }
 ?>
 
