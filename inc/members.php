@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: members.php - Last Update: 08/31/2007 SVN 93 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 09/01/2007 SVN 94 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -320,13 +320,13 @@ $REFERERurl = null; unset($REFERERurl);
 <td class="TableRow3">
 <table style="width: 100%; height: 25%; text-align: center;">
 <?php
-if (strlen($_POST['userpass'])=="30") { $Error="Yes";  ?>
+if (strlen($_POST['userpass'])>="30") { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Your password is too big.<br />
 	</span></td>
 </tr>
-<?php } if (strlen($_POST['username'])=="20") { $Error="Yes";  ?>
+<?php } if (strlen($_POST['username'])>="20") { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Your user name is too big.<br />
@@ -556,13 +556,13 @@ if(!isset($_POST['TOS'])) { $_POST['TOS'] = null; }
 <tr class="TableRow3">
 <td class="TableRow3">
 <table style="width: 100%; height: 25%; text-align: center;">
-<?php if (strlen($_POST['Password'])=="30") { $Error="Yes";  ?>
+<?php if (strlen($_POST['Password'])>="30") { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Your password is too big.<br />
 	</span></td>
 </tr>
-<?php } if (strlen($_POST['username'])=="20") { $Error="Yes";  ?>
+<?php } if (strlen($_POST['username'])>="20") { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Your user name is too big.<br />

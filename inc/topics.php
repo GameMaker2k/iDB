@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: topics.php - Last Update: 08/18/2007 SVN 87 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 09/01/2007 SVN 94 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -327,20 +327,20 @@ if(!isset($_POST['GuestName'])) { $_POST['GuestName'] = null; }
 <tr class="TableRow2">
 <th class="TableRow2" style="width: 100%; text-align: left;">&nbsp;Make Topic Message: </th>
 </tr>
-<?php if (strlen($_POST['TopicName'])=="30") { $Error="Yes";  ?>
+<?php if (strlen($_POST['TopicName'])>="30") { $Error="Yes";  ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />Your Topic Name is too big.<br />
 	</span></td>
 </tr>
-<?php } if (strlen($_POST['TopicDesc'])=="30") { $Error="Yes";  ?>
+<?php } if (strlen($_POST['TopicDesc'])>="30") { $Error="Yes";  ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />Your Topic Description is too big.<br />
 	</span></td>
 </tr>
 <?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
-	strlen($_POST['GuestName'])=="25") { $Error="Yes"; ?>
+	strlen($_POST['GuestName'])>="25") { $Error="Yes"; ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />You Guest Name is too big.<br />

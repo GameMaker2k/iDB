@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: searchs.php - Last Update: 08/18/2007 SVN 86 - Author: cooldude2k $
+    $FileInfo: searchs.php - Last Update: 09/01/2007 SVN 94 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="searchs.php"||$File3Name=="/searchs.php") {
@@ -32,7 +32,7 @@ if($_GET['act']=="topics") {
 <table class="Table1">
 <tr class="TableRow1">
 <td class="TableRow1"><span style="float: left;">
-<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['search'],$Settings['file_ext'],"act=topics",$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search']); ?>">Topic Search</a>
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['search'],$Settings['file_ext'],"act=topics",$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search']); ?>">Topic Search</a>
 </span><span style="float: right;">&nbsp;</span></td>
 </tr>
 <tr class="TableRow2">
@@ -45,6 +45,9 @@ if($_GET['act']=="topics") {
 <tr style="text-align: left;">
 	<td style="width: 30%;"><label class="TextBoxLabel" for="search">Enter SearchTerm: </label></td>
 	<td style="width: 70%;"><input class="TextBox" id="search" type="text" name="search" /></td>
+</tr><tr>
+	<td style="width: 30%;"><label class="TextBoxLabel" for="msearch">Filter by Member (optional): </label></td>
+	<td style="width: 70%;"><input class="TextBox" id="msearch" type="text" name="msearch" /></td>
 </tr><tr>
 	<td style="width: 30%;"><label class="TextBoxLabel" title="Wildcard is %" for="type">Search Type: </label></td>
 	<td style="width: 70%;"><select id="type" name="type" class="TextBox">
@@ -66,10 +69,27 @@ if($_GET['act']=="topics") {
 </tr>
 </table></div>
 <?php } if($_GET['search']!=null&&$_GET['type']!=null) {
+if(strlen($_GET['msearch'])>="25") { 
+	$_GET['msearch'] = null; }
+if($_GET['msearch']!=null) {
+$memsiquery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `Name`='%s'", array($_GET['msearch']));
+$memsiresult=mysql_query($memsiquery);
+$memsinum=mysql_num_rows($memsiresult);
+$memsi=0;
+if($memsinum==0) { $_GET['msearch'] = null; }
+if($memsinum!=0) {
+$memsid=mysql_result($memsiresult,$memsi,"id"); 
+@mysql_free_result($memsiresult); } }
+if($_GET['msearch']==null) {
 if($_GET['type']!="wildcard") {
 $query = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `TopicName`='%s' ORDER BY `Pinned` DESC, `LastUpdate` DESC", array($_GET['search'])); }
 if($_GET['type']=="wildcard") {
-$query = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `TopicName` LIKE '%s' ORDER BY `Pinned` DESC, `LastUpdate` DESC", array($_GET['search'])); }
+$query = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `TopicName` LIKE '%s' ORDER BY `Pinned` DESC, `LastUpdate` DESC", array($_GET['search'])); } }
+if($_GET['msearch']!=null) {
+if($_GET['type']!="wildcard") {
+$query = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `TopicName`='%s' AND `UserID`=%i ORDER BY `Pinned` DESC, `LastUpdate` DESC", array($_GET['search'],$memsid)); }
+if($_GET['type']=="wildcard") {
+$query = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `TopicName` LIKE '%s' AND `UserID`=%i ORDER BY `Pinned` DESC, `LastUpdate` DESC", array($_GET['search'],$memsid)); } }
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
 if($num<=0) { 
@@ -110,7 +130,12 @@ $pstring = $pstring."<a href=\"".url_maker($exfile['search'],$Settings['file_ext
 <table class="Table1" id="Search">
 <tr id="SearchStart" class="TableRow1">
 <td class="TableRow1" colspan="6"><span style="float: left;">
-<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['search'],$Settings['file_ext'],"act=topics&search=".$_GET['search']."&type=".$_GET['type'],$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search']); ?>">Searching for <?php echo $_GET['search']; ?></a></span>
+<?php echo $ThemeSet['TitleIcon'];
+if($_GET['msearch']==null) { ?>
+<a href="<?php echo url_maker($exfile['search'],$Settings['file_ext'],"act=topics&search=".$_GET['search']."&type=".$_GET['type'],$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search']); ?>">Searching for <?php echo $_GET['search']; ?></a>
+<?php } if($_GET['msearch']!=null) { ?>
+<a href="<?php echo url_maker($exfile['search'],$Settings['file_ext'],"act=topics&search=".$_GET['search']."&type=".$_GET['type']."&msearch=".$_GET['msearch'],$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search']); ?>">Searching for <?php echo $_GET['search']; ?> by <?php echo $_GET['msearch']; ?></a>
+<?php } ?></span>
 <?php echo "<span style=\"float: right;\">&nbsp;</span>"; ?></td>
 </tr>
 <tr id="SearchStatRow" class="TableRow2">

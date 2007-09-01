@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: events.php - Last Update: 08/31/2007 SVN 93 - Author: cooldude2k $
+    $FileInfo: events.php - Last Update: 09/01/2007 SVN 94 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="events.php"||$File3Name=="/events.php") {
@@ -233,7 +233,7 @@ $TimeOut = explode("/",$_POST['EventEnd']);
 <tr class="TableRow2">
 <th class="TableRow2" style="width: 100%; text-align: left;">&nbsp;Make Event Message: </th>
 </tr>
-<?php if (strlen($_POST['EventName'])=="30") { $Error="Yes";  ?>
+<?php if (strlen($_POST['EventName'])>="30") { $Error="Yes";  ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />Your Event Name is too big.<br />
@@ -312,7 +312,7 @@ $TimeOut = explode("/",$_POST['EventEnd']);
 	</span></td>
 </tr>
 <?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
-	strlen($_POST['GuestName'])=="25") { $Error="Yes"; ?>
+	strlen($_POST['GuestName'])>="25") { $Error="Yes"; ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />You Guest Name is too big.<br />
