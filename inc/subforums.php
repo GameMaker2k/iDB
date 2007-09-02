@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: subforums.php - Last Update: 08/22/2007 SVN 89 - Author: cooldude2k $
+    $FileInfo: subforums.php - Last Update: 09/02/2007 SVN 96 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="subforums.php"||$File3Name=="/subforums.php") {
@@ -72,7 +72,15 @@ if($CatPermissionInfo['CanViewCategory'][$CategoryID]=="no"||
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
-if($CatPermissionInfo['CanViewCategory'][$CategoryID]=="yes") {
+if(!isset($PermissionInfo['CanViewForum'][$_GET['id']])) {
+	$PermissionInfo['CanViewForum'][$_GET['id']] = "no"; }
+if($PermissionInfo['CanViewForum'][$_GET['id']]=="no"||
+	$PermissionInfo['CanViewForum'][$_GET['id']]!="yes") {
+redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
+ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+if($CatPermissionInfo['CanViewCategory'][$CategoryID]=="yes"&&
+	$PermissionInfo['CanViewForum'][$_GET['id']]=="yes") {
 $query = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `ShowForum`='yes' AND `CategoryID`=%i AND `InSubForum`=%i ORDER BY `OrderID` ASC, `id` ASC", array($CategoryID,$_GET['id']));
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
