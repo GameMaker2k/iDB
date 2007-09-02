@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: replys.php - Last Update: 09/01/2007 SVN 94 - Author: cooldude2k $
+    $FileInfo: replys.php - Last Update: 09/01/2007 SVN 95 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replys.php"||$File3Name=="/replys.php") {
@@ -322,6 +322,8 @@ $query = query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `id`=%i", a
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
 $QuoteReplyID=mysql_result($result,0,"id");
+$QuoteReplyFID=mysql_result($result,0,"ForumID");
+$QuoteReplyCID=mysql_result($result,0,"CategoryID");
 $QuoteUserID=mysql_result($result,0,"UserID");
 $QuoteReply=mysql_result($result,0,"Post");
 $QuoteDescription=mysql_result($result,0,"Description");
@@ -341,9 +343,16 @@ $QuoteReply = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $QuoteReply
 $QuoteReply = remove_bad_entities($QuoteReply);
 $QuoteDescription = str_replace("Re: ","",$QuoteDescription);
 $QuoteDescription = "Re: ".$QuoteDescription;
-$QuoteReply = $QuoteUserName.":\n(&quot;".$QuoteReply."&quot;)"; }
-if($_GET['post']==null) {
+$QuoteReply = $QuoteUserName.":\n(&quot;".$QuoteReply."&quot;)"; 
+if(!isset($PermissionInfo['CanViewForum'][$QuoteReplyFID])) {
+	$PermissionInfo['CanViewForum'][$QuoteReplyFID] = "no"; }
+if($PermissionInfo['CanViewForum'][$QuoteReplyFID]=="no") {
 	$QuoteReply = null; $QuoteDescription = null; }
+if(!isset($CatPermissionInfo['CanViewCategory'][$QuoteReplyCID])) {
+	$CatPermissionInfo['CanViewCategory'][$QuoteReplyCID] = "no"; }
+if($CatPermissionInfo['CanViewCategory'][$QuoteReplyCID]=="no") {
+	$QuoteReply = null; $QuoteDescription = null; } }
+if($_GET['post']==null) { $QuoteReply = null; $QuoteDescription = null; }
 ?>
 <div class="Table1Border">
 <table class="Table1" id="MakeReply<?php echo $TopicForumID; ?>">
