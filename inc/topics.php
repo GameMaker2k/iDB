@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: topics.php - Last Update: 09/01/2007 SVN 94 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 09/02/2007 SVN 97 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -276,13 +276,13 @@ if($SmileRow<5) { ?>
 <table style="text-align: left;">
 <tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="TopicName">Insert Topic Name:</label></td>
-	<td style="width: 50%;"><input type="text" name="TopicName" class="TextBox" id="TopicName" size="20" /></td>
+	<td style="width: 50%;"><input maxlength="30" type="text" name="TopicName" class="TextBox" id="TopicName" size="20" /></td>
 </tr><?php if($_SESSION['UserGroup']==$Settings['GuestGroup']) { ?><tr>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="GuestName">Insert Guest Name:</label></td>
-	<td style="width: 50%;"><input type="text" name="GuestName" class="TextBox" id="GuestName" size="20" /></td>
+	<td style="width: 50%;"><input maxlength="25" type="text" name="GuestName" class="TextBox" id="GuestName" size="20" /></td>
 </tr><?php } ?><tr>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="TopicDesc">Insert Topic Description:</label></td>
-	<td style="width: 50%;"><input type="text" name="TopicDesc" class="TextBox" id="TopicDesc" size="20" /></td>
+	<td style="width: 50%;"><input maxlength="45" type="text" name="TopicDesc" class="TextBox" id="TopicDesc" size="20" /></td>
 </tr>
 </table>
 <table style="text-align: left;">
@@ -333,7 +333,7 @@ if(!isset($_POST['GuestName'])) { $_POST['GuestName'] = null; }
 	<br />Your Topic Name is too big.<br />
 	</span></td>
 </tr>
-<?php } if (strlen($_POST['TopicDesc'])>="30") { $Error="Yes";  ?>
+<?php } if (strlen($_POST['TopicDesc'])>="45") { $Error="Yes";  ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />Your Topic Description is too big.<br />

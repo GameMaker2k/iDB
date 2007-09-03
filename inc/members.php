@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: members.php - Last Update: 09/01/2007 SVN 94 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 09/02/2007 SVN 97 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -275,10 +275,10 @@ $membertitle = " ".$ThemeSet['TitleDivider']." Login";
 <table style="text-align: left;">
 <tr style="text-align: left;">
 	<td style="width: 30%;"><label class="TextBoxLabel" for="username">Enter UserName: </label></td>
-	<td style="width: 70%;"><input class="TextBox" id="username" type="text" name="username" /></td>
+	<td style="width: 70%;"><input maxlength="20" class="TextBox" id="username" type="text" name="username" /></td>
 </tr><tr>
 	<td style="width: 30%;"><label class="TextBoxLabel" for="userpass">Enter Password: </label></td>
-	<td style="width: 70%;"><input class="TextBox" id="userpass" type="password" name="userpass" maxlength="30" /></td>
+	<td style="width: 70%;"><input maxlength="30" class="TextBox" id="userpass" type="password" name="userpass" /></td>
 </tr><tr>
 	<td style="width: 30%;"><label class="TextBoxLabel" title="Store userinfo as a cookie so you dont need to login again." for="storecookie">Store as cookie?</label></td>
 	<td style="width: 70%;"><select id="storecookie" name="storecookie" class="TextBox">
@@ -440,19 +440,19 @@ $membertitle = " ".$ThemeSet['TitleDivider']." Signing up"; ?>
 <table style="text-align: left;">
 <tr style="text-align: left;">
 	<td style="width: 30%;"><label class="TextBoxLabel" for="Name">Insert a UserName:</label></td>
-	<td style="width: 70%;"><input type="text" class="TextBox" name="Name" size="20" id="Name" /></td>
+	<td style="width: 70%;"><input maxlength="20" type="text" class="TextBox" name="Name" size="20" id="Name" /></td>
 </tr><tr>
-	<td><label class="TextBoxLabel" for="Password">Insert a Password:</label></td>
-	<td><input type="password" class="TextBox" name="Password" size="20" id="Password" maxlength="30" /></td>
+	<td style="width: 30%;"><label class="TextBoxLabel" for="Password">Insert a Password:</label></td>
+	<td style="width: 70%;"><input maxlength="30" type="password" class="TextBox" name="Password" size="20" id="Password" /></td>
 </tr><tr>
-	<td><label class="TextBoxLabel" for="RePassword">ReInsert a Password:</label></td>
-	<td><input type="password" class="TextBox" name="RePassword" size="20" id="RePassword" maxlength="30" /></td>
+	<td style="width: 30%;"><label class="TextBoxLabel" for="RePassword">ReInsert a Password:</label></td>
+	<td style="width: 70%;"><input maxlength="30" type="password" class="TextBox" name="RePassword" size="20" id="RePassword" /></td>
 </tr><tr>
-	<td><label class="TextBoxLabel" for="Email">Insert Your Email:</label></td>
-	<td><input type="text" class="TextBox" name="Email" size="20" id="Email" /></td>
+	<td style="width: 30%;"><label class="TextBoxLabel" for="Email">Insert Your Email:</label></td>
+	<td style="width: 70%;"><input type="text" class="TextBox" name="Email" size="20" id="Email" /></td>
 </tr><tr>
-	<td><label class="TextBoxLabel" for="YourOffSet">Your TimeZone:</label></td>
-	<td><select id="YourOffSet" name="YourOffSet" class="TextBox"><?php
+	<td style="width: 30%;"><label class="TextBoxLabel" for="YourOffSet">Your TimeZone:</label></td>
+	<td style="width: 70%;"><select id="YourOffSet" name="YourOffSet" class="TextBox"><?php
 $tsa_mem = explode(":",$Settings['DefaultTimeZone']);
 $TimeZoneArray = array("offset" => $Settings['DefaultTimeZone'], "hour" => $tsa_mem[0], "minute" => $tsa_mem[1]);
 $plusi = 1; $minusi = 12;
@@ -489,26 +489,26 @@ echo "<option value=\"".$showmin."\">0:".$showmin." minutes</option>\n"; }
 ++$mini; }
 ?></select></td>
 </tr><tr>
-	<td style="width: 40%;"><label class="TextBoxLabel" for="DST">Is <span title="Daylight Savings Time">DST</span> / <span title="Summer Time">ST</span> on or off:</label></td>
-	<td style="width: 60%;"><select id="DST" name="DST" class="TextBox"><?php echo "\n" ?>
+	<td style="width: 30%;"><label class="TextBoxLabel" for="DST">Is <span title="Daylight Savings Time">DST</span> / <span title="Summer Time">ST</span> on or off:</label></td>
+	<td style="width: 70%;"><select id="DST" name="DST" class="TextBox"><?php echo "\n" ?>
 <?php if($Settings['DefaultDST']=="off"||$Settings['DefaultDST']!="on") { ?>
 <option selected="selected" value="off">off</option><?php echo "\n" ?><option value="on">on</option>
 <?php } if($Settings['DefaultDST']=="on") { ?>
 <option selected="selected" value="on">on</option><?php echo "\n" ?><option value="off">off</option>
 <?php } echo "\n" ?></select></td>
 </tr><tr>
-	<td><label class="TextBoxLabel" for="YourGender">Your Gender:</label></td>
-	<td><select id="YourGender" name="YourGender" class="TextBox">
+	<td style="width: 30%;"><label class="TextBoxLabel" for="YourGender">Your Gender:</label></td>
+	<td style="width: 70%;"><select id="YourGender" name="YourGender" class="TextBox">
 <option value="Male">Male</option>
 <option value="Female">Female</option>
 <option value="Unknow">Unknow</option>
 </select></td>
 </tr><tr>
-	<td><label class="TextBoxLabel" for="Website">Insert your Website:</label></td>
-	<td><input type="text" class="TextBox" name="Website" size="20" value="http://" id="Website" /></td>
+	<td style="width: 30%;"><label class="TextBoxLabel" for="Website">Insert your Website:</label></td>
+	<td style="width: 70%;"><input type="text" class="TextBox" name="Website" size="20" value="http://" id="Website" /></td>
 </tr><tr>
-	<td><label class="TextBoxLabel" for="Avatar">Insert a URL for Avatar:</label></td>
-	<td><input type="text" class="TextBox" name="Avatar" size="20" value="http://" id="Avatar" /></td>
+	<td style="width: 30%;"><label class="TextBoxLabel" for="Avatar">Insert a URL for Avatar:</label></td>
+	<td style="width: 70%;"><input type="text" class="TextBox" name="Avatar" size="20" value="http://" id="Avatar" /></td>
 </tr><tr>
 	<td style="width: 30%;"><label class="TextBoxLabel" title="Store userinfo as a cookie so you dont need to login again." for="storecookie">Store as cookie?</label></td>
 	<td style="width: 70%;"><select id="storecookie" name="storecookie" class="TextBox">

@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: events.php - Last Update: 09/01/2007 SVN 94 - Author: cooldude2k $
+    $FileInfo: events.php - Last Update: 09/02/2007 SVN 97 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="events.php"||$File3Name=="/events.php") {
@@ -177,16 +177,16 @@ if($SmileRow<5) { ?>
 <table style="text-align: left;">
 <tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="EventName">Insert Event Name:</label></td>
-	<td style="width: 50%;"><input type="text" name="EventName" class="TextBox" id="EventName" size="20" /></td>
+	<td style="width: 50%;"><input maxlength="30" type="text" name="EventName" class="TextBox" id="EventName" size="20" /></td>
 </tr><?php if($_SESSION['UserGroup']==$Settings['GuestGroup']) { ?><tr>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="GuestName">Insert Guest Name:</label></td>
-	<td style="width: 50%;"><input type="text" name="GuestName" class="TextBox" id="GuestName" size="20" /></td>
+	<td style="width: 50%;"><input maxlength="25" type="text" name="GuestName" class="TextBox" id="GuestName" size="20" /></td>
 </tr><?php } ?><tr>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="EventStart">Insert Event Start:</label></td>
-	<td style="width: 50%;"><input type="text" name="EventStart" class="TextBox" id="EventStart" size="20" value="MM/DD/YYYY" /></td>
+	<td style="width: 50%;"><input maxlength="10" type="text" name="EventStart" class="TextBox" id="EventStart" size="20" value="MM/DD/YYYY" /></td>
 </tr><tr>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="EventEnd">Insert Event End:</label></td>
-	<td style="width: 50%;"><input type="text" name="EventEnd" class="TextBox" id="EventEnd" size="20" value="MM/DD/YYYY" /></td>
+	<td style="width: 50%;"><input maxlength="10" type="text" name="EventEnd" class="TextBox" id="EventEnd" size="20" value="MM/DD/YYYY" /></td>
 </tr>
 </table>
 <table style="text-align: left;">

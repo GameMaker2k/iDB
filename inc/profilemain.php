@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: profilemain.php - Last Update: 08/31/2007 SVN 93 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 09/02/2007 SVN 97 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
@@ -427,7 +427,7 @@ $profiletitle = " ".$ThemeSet['TitleDivider']." Profile Editor";
 	<td style="width: 60%;"><input type="text" class="TextBox" name="Website" id="Website" value="<?php echo $User1Website; ?>" /></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 40%;"><label class="TextBoxLabel" for="EventDay">Your Birthday</label></td>
-	<td style="width: 60%;"><input type="text" class="TextBox" name="EventDay" id="EventDay" value="<?php echo $User1Birthday; ?>" /></td>
+	<td style="width: 60%;"><input maxlength="10" type="text" class="TextBox" name="EventDay" id="EventDay" value="<?php echo $User1Birthday; ?>" /></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 40%;"><label class="TextBoxLabel" for="YourOffSet">Your TimeZone:</label></td>
 	<td style="width: 60%;"><select id="YourOffSet" name="YourOffSet" class="TextBox">
@@ -557,13 +557,13 @@ $profiletitle = " ".$ThemeSet['TitleDivider']." User Info Editer";
 <table style="text-align: left;">
 <tr style="text-align: left;">
 	<td style="width: 40%;"><label class="TextBoxLabel" for="OldPass">Insert old Password:</label></td>
-	<td style="width: 60%;"><input type="password" class="TextBox" name="OldPass" size="20" id="OldPass" maxlength="30" /></td>
+	<td style="width: 60%;"><input maxlength="30" type="password" class="TextBox" name="OldPass" size="20" id="OldPass" /></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 40%;"><label class="TextBoxLabel" for="Password">Insert a Password:</label></td>
-	<td style="width: 60%;"><input type="password" class="TextBox" name="Password" size="20" id="Password" maxlength="30" /></td>
+	<td style="width: 60%;"><input maxlength="30" type="password" class="TextBox" name="Password" size="20" id="Password" /></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 40%;"><label class="TextBoxLabel" for="RePassword">ReInsert a Password:</label></td>
-	<td style="width: 60%;"><input type="password" class="TextBox" name="RePassword" size="20" id="RePassword" maxlength="30" /></td>
+	<td style="width: 60%;"><input maxlength="30" type="password" class="TextBox" name="RePassword" size="20" id="RePassword" /></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 40%;"><label class="TextBoxLabel" for="Email">Insert Your Email:</label></td>
 	<td style="width: 60%;"><input type="text" class="TextBox" name="Email" size="20" id="Email" value="<?php echo $User1Email; ?>" /></td>

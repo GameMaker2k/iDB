@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: replys.php - Last Update: 09/01/2007 SVN 95 - Author: cooldude2k $
+    $FileInfo: replys.php - Last Update: 09/02/2007 SVN 97 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replys.php"||$File3Name=="/replys.php") {
@@ -287,10 +287,10 @@ if($SmileRow<5) { ?>
 <table style="text-align: left;">
 <tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="ReplyDesc">Insert Reply Description:</label></td>
-	<td style="width: 50%;"><input type="text" name="ReplyDesc" class="TextBox" id="ReplyDesc" size="20" value="<?php echo $QuoteDescription; ?>" /></td>
+	<td style="width: 50%;"><input maxlength="45" type="text" name="ReplyDesc" class="TextBox" id="ReplyDesc" size="20" value="<?php echo $QuoteDescription; ?>" /></td>
 </tr><?php if($_SESSION['UserGroup']==$Settings['GuestGroup']) { ?><tr>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="GuestName">Insert Guest Name:</label></td>
-	<td style="width: 50%;"><input type="text" name="GuestName" class="TextBox" id="GuestName" size="20" /></td>
+	<td style="width: 50%;"><input maxlength="25" type="text" name="GuestName" class="TextBox" id="GuestName" size="20" /></td>
 </tr><?php } ?>
 </table>
 <table style="text-align: left;">
@@ -391,10 +391,10 @@ if($SmileRow<5) { ?>
 <table style="text-align: left;">
 <tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="ReplyDesc">Insert Reply Description:</label></td>
-	<td style="width: 50%;"><input type="text" name="ReplyDesc" class="TextBox" id="ReplyDesc" size="20" value="<?php echo $QuoteDescription; ?>" /></td>
+	<td style="width: 50%;"><input maxlength="45" type="text" name="ReplyDesc" class="TextBox" id="ReplyDesc" size="20" value="<?php echo $QuoteDescription; ?>" /></td>
 </tr><?php if($_SESSION['UserGroup']==$Settings['GuestGroup']) { ?><tr>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="GuestName">Insert Guest Name:</label></td>
-	<td style="width: 50%;"><input type="text" name="GuestName" class="TextBox" id="GuestName" size="20" /></td>
+	<td style="width: 50%;"><input maxlength="25" type="text" name="GuestName" class="TextBox" id="GuestName" size="20" /></td>
 </tr><?php } ?>
 </table>
 <table style="text-align: left;">
@@ -438,7 +438,7 @@ if(!isset($_POST['GuestName'])) { $_POST['GuestName'] = null; }
 <tr class="TableRow2">
 <th class="TableRow2" style="width: 100%; text-align: left;">&nbsp;Make Reply Message: </th>
 </tr>
-<?php if (strlen($_POST['ReplyDesc'])>="30") { $Error="Yes";  ?>
+<?php if (strlen($_POST['ReplyDesc'])>="45") { $Error="Yes";  ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />Your Reply Description is too big.<br />
@@ -735,13 +735,13 @@ if($SmileRow<5) { ?>
 <tr style="text-align: left;">
 <?php if($ShowEditTopic==true) { ?>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="TopicName">Insert Topic Name:</label></td>
-	<td style="width: 50%;"><input type="text" name="TopicName" class="TextBox" id="TopicName" size="20" value="<?php echo $TopicName; ?>" /></td>
+	<td style="width: 50%;"><input maxlength="30" type="text" name="TopicName" class="TextBox" id="TopicName" size="20" value="<?php echo $TopicName; ?>" /></td>
 </tr><tr><?php } ?>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="ReplyDesc">Insert Reply Description:</label></td>
-	<td style="width: 50%;"><input type="text" name="ReplyDesc" class="TextBox" id="ReplyDesc" size="20" value="<?php echo $ReplyDescription; ?>" /></td>
+	<td style="width: 50%;"><input maxlength="45" type="text" name="ReplyDesc" class="TextBox" id="ReplyDesc" size="20" value="<?php echo $ReplyDescription; ?>" /></td>
 </tr><?php if($_SESSION['UserGroup']==$Settings['GuestGroup']) { ?><tr>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="GuestName">Insert Guest Name:</label></td>
-	<td style="width: 50%;"><input type="text" name="GuestName" class="TextBox" id="GuestName" size="20" value="<?php echo $ReplyGuestName; ?>" /></td>
+	<td style="width: 50%;"><input maxlength="25" type="text" name="GuestName" class="TextBox" id="GuestName" size="20" value="<?php echo $ReplyGuestName; ?>" /></td>
 </tr><?php } ?>
 </table>
 <table style="text-align: left;">
@@ -816,7 +816,7 @@ if($PermissionInfo['CanModForum'][$TopicForumID]=="yes"&&
 <tr class="TableRow2">
 <th class="TableRow2" style="width: 100%; text-align: left;">&nbsp;Edit Reply Message: </th>
 </tr>
-<?php if (strlen($_POST['ReplyDesc'])>="30") { $Error="Yes";  ?>
+<?php if (strlen($_POST['ReplyDesc'])>="45") { $Error="Yes";  ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />Your Reply Description is too big.<br />
