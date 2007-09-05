@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: replys.php - Last Update: 09/02/2007 SVN 97 - Author: cooldude2k $
+    $FileInfo: replys.php - Last Update: 09/05/2007 SVN 98 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replys.php"||$File3Name=="/replys.php") {
@@ -313,7 +313,10 @@ if($SmileRow<5) { ?>
 <div>&nbsp;</div>
 </div>
 <?php } } if($_GET['act']=="create") {
-if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="no"||$TopicClosed==1) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
+if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="no") { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
+ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+if($PermissionInfo['CanMakeReplysClose'][$TopicForumID]=="no"&&$TopicClosed==1) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 $QuoteReply = null; $QuoteDescription = null;
@@ -416,7 +419,10 @@ if($SmileRow<5) { ?>
 </table></div>
 <div>&nbsp;</div>
 <?php } if($_GET['act']=="makereply"&&$_POST['act']=="makereplies") {
-if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="no"||$TopicClosed==1) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
+if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="no") { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
+ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+if($PermissionInfo['CanMakeReplysClose'][$TopicForumID]=="no"&&$TopicClosed==1) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 $MyUsersID = $_SESSION['UserID']; if($MyUsersID=="0"||$MyUsersID==null) { $MyUsersID = -1; }
@@ -482,7 +488,14 @@ if ($_POST['ReplyDesc']==null) { $Error="Yes"; ?>
 	<br />You need to enter a Guest Name.<br />
 	</span></td>
 </tr>
-<?php } if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="no"||$TopicClosed==1) { $Error="Yes"; ?>
+<?php } if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="no") { $Error="Yes"; ?>
+<tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage">
+	<br />You do not have permission to make a reply here.<br />
+	</span></td>
+</tr>
+<?php } if($PermissionInfo['CanMakeReplysClose'][$TopicForumID]=="no"&&
+	$TopicClosed==1) { $Error="Yes"; ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />You do not have permission to make a reply here.<br />
@@ -564,7 +577,9 @@ if($PermissionInfo['CanDeleteReplys'][$ReplyForumID]=="yes"&&
 	$_SESSION['UserID']==$ReplyUserID) { $CanDeleteReply = true; } 
 if($PermissionInfo['CanDeleteReplys'][$ReplyForumID]=="yes"&&
 	$PermissionInfo['CanModForum'][$ReplyForumID]=="yes") { 
-	$CanDeleteReply = true; } } }
+	$CanDeleteReply = true; } } 
+	if($PermissionInfo['CanDeleteReplysClose'][$TopicForumID]=="no"&&
+		$TopicClosed==1) { $CanDeleteReply = false; } }
 if($_SESSION['UserID']==0) { $CanDeleteReply = false; }
 if($CanDeleteReply==false) {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
@@ -590,7 +605,9 @@ if($PermissionInfo['CanDeleteTopics'][$ReplyForumID]=="yes"&&
 	$_SESSION['UserID']==$TUsersID) { $CanDeleteTopics = true; }
 if($PermissionInfo['CanDeleteTopics'][$ReplyForumID]=="yes"&&
 	$PermissionInfo['CanModForum'][$ReplyForumID]=="yes") { 
-	$CanDeleteTopics = true; } }
+	$CanDeleteTopics = true; }
+	if($PermissionInfo['CanDeleteTopicsClose'][$TopicForumID]=="no"&&
+		$TopicClosed==1) { $CanDeleteTopics = false; } }
 if($_SESSION['UserID']==0) { $CanDeleteTopics = false; }
 if($CanDeleteTopics==false) {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); @mysql_free_result($delresult);
@@ -645,7 +662,10 @@ mysql_query($queryupd); }
 </tr>
 </table></div>
 <?php } if($_GET['act']=="edit") {
-if($PermissionInfo['CanEditReplys'][$TopicForumID]=="no"||$TopicClosed==1||$_SESSION['UserID']==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
+if($PermissionInfo['CanEditReplys'][$TopicForumID]=="no"||$_SESSION['UserID']==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
+ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+if($PermissionInfo['CanEditReplysClose'][$TopicForumID]=="no"&&$TopicClosed==1) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 $ShowEditTopic = null;
@@ -691,7 +711,9 @@ $TUsersID=mysql_result($gtsresult,0,"UserID");
 if($_SESSION['UserID']!=$TUsersID) { $ShowEditTopic = null; }
 if($PermissionInfo['CanModForum'][$TopicForumID]=="yes"&&
 	$PermissionInfo['CanEditTopics'][$TopicForumID]=="yes") { 
-	$ShowEditTopic = true; } }
+	$ShowEditTopic = true; } 
+if($PermissionInfo['CanEditTopicsClose'][$TopicForumID]=="no"&&$TopicClosed==1) {
+	$ShowEditTopic = null; } }
 $TopicName = stripcslashes(htmlspecialchars($TopicName, ENT_QUOTES));
 $TopicName = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $TopicName);
 $TopicName = @remove_spaces($TopicName);
@@ -763,7 +785,10 @@ if($SmileRow<5) { ?>
 </table></div>
 <div>&nbsp;</div>
 <?php } if($_GET['act']=="editreply"&&$_POST['act']=="editreplies") {
-if($PermissionInfo['CanEditReplys'][$TopicForumID]=="no"||$TopicClosed==1||$_SESSION['UserID']==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
+if($PermissionInfo['CanEditReplys'][$TopicForumID]=="no"||$_SESSION['UserID']==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
+ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+if($PermissionInfo['CanEditReplysClose'][$TopicForumID]=="no"&&$TopicClosed==1) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 $REFERERurl = parse_url($_SERVER['HTTP_REFERER']);
@@ -804,7 +829,9 @@ $TUsersID=mysql_result($gtsresult,0,"UserID");
 if($_SESSION['UserID']!=$TUsersID) { $ShowEditTopic = null; }
 if($PermissionInfo['CanModForum'][$TopicForumID]=="yes"&&
 	$PermissionInfo['CanEditTopics'][$TopicForumID]=="yes") { 
-	$ShowEditTopic = true; } }
+	$ShowEditTopic = true; } 
+if($PermissionInfo['CanEditTopicsClose'][$TopicForumID]=="no"&&$TopicClosed==1) {
+	$ShowEditTopic = null; } }
 ?>
 <div class="Table1Border">
 <table class="Table1">
@@ -870,7 +897,13 @@ if ($_POST['ReplyDesc']==null) { $Error="Yes"; ?>
 	<br />You need to enter a Guest Name.<br />
 	</span></td>
 </tr>
-<?php } if($PermissionInfo['CanEditReplys'][$TopicForumID]=="no"||$TopicClosed==1) { $Error="Yes"; ?>
+<?php } if($PermissionInfo['CanEditReplys'][$TopicForumID]=="no") { $Error="Yes"; ?>
+<tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage">
+	<br />You do not have permission to edit a reply here.<br />
+	</span></td>
+</tr>
+<?php } if($PermissionInfo['CanEditReplysClose'][$TopicForumID]=="no"&&$TopicClosed==1) { $Error="Yes"; ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />You do not have permission to edit a reply here.<br />
