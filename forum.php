@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: forum.php - Last Update: 07/30/2007 SVN 56 - Author: cooldude2k $
+    $FileInfo: forum.php - Last Update: 09/06/2007 SVN 99 - Author: cooldude2k $
 */
 require('preindex.php');
 $usefileext = $Settings['file_ext'];
@@ -44,9 +44,9 @@ if(!isset($ForumName)) { $ForumName = null; }
 </html>
 <?php 
 if($_GET['act']=="view") {
-change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." Viewing Forum ".$ForumName,$Settings['use_gzip'],$GZipEncode['Type']); } 
+change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." ".$ForumName,$Settings['use_gzip'],$GZipEncode['Type']); } 
 if($_GET['act']=="create") {
-change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." Making Topic in Forum ".$ForumName,$Settings['use_gzip'],$GZipEncode['Type']); }
+change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." Making a Topic",$Settings['use_gzip'],$GZipEncode['Type']); }
 if($_GET['act']=="maketopic"&&$_POST['act']=="maketopics") {
-change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." Making Topic in Forum ".$ForumName,$Settings['use_gzip'],$GZipEncode['Type']); }
+change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." Making a Topic",$Settings['use_gzip'],$GZipEncode['Type']); }
 ?>

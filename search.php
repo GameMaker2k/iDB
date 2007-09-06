@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: search.php - Last Update: 09/01/2007 SVN 94 - Author: cooldude2k $
+    $FileInfo: search.php - Last Update: 09/06/2007 SVN 99 - Author: cooldude2k $
 */
 require('preindex.php');
 $usefileext = $Settings['file_ext'];
@@ -60,5 +60,5 @@ if(!isset($_GET['search'])) { $_GET['search'] = null; }
 if($_GET['search']==null&&$_GET['type']==null) {
 change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." Searching",$Settings['use_gzip'],$GZipEncode['Type']); }
 if($_GET['search']!=null&&$_GET['type']!=null) {
-change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." Searching for ".$_GET['search'],$Settings['use_gzip'],$GZipEncode['Type']); }
+change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." ".$_GET['search'],$Settings['use_gzip'],$GZipEncode['Type']); }
 ?>

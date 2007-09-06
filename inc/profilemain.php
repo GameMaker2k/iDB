@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: profilemain.php - Last Update: 09/02/2007 SVN 97 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 09/06/2007 SVN 99 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
@@ -60,7 +60,7 @@ if(!isset($_POST['update'])) { $_POST['update'] = null; }
 	<td style="width: 85%; vertical-align: top;">
 <?php if($_POST['update']=="now"&&$_GET['act']!=null) {
 $updateact = url_maker($exfile['profile'],$Settings['file_ext'],"act=".$_GET['act'],$Settings['qstr'],$Settings['qsep'],$prexqstr['profile'],$exqstr['profile']);
-$profiletitle = " - Updating Settings";
+$profiletitle = " ".$ThemeSet['TitleDivider']." Updating Settings";
 @redirect("refresh",$basedir.url_maker($exfile['profile'],$Settings['file_ext'],"act=".$_GET['act'],$Settings['qstr'],$Settings['qsep'],$prexqstr['profile'],$exqstr['profile'],FALSE),"3");
 $noteact = url_maker($exfile['profile'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['profile'],$exqstr['profile']);
 $profiletitle = " ".$ThemeSet['TitleDivider']." NotePad";
@@ -623,7 +623,7 @@ if($YourPassword!=$OldPassword) { $Error="Yes"; ?>
 	mysql_query($querynewuserinfo); } } } }
 ?>
 <?php if($_POST['update']=="now"&&$_GET['act']!=null) {
-	$profiletitle = " - Updating Settings"; ?>
+	$profiletitle = " ".$ThemeSet['TitleDivider']." Updating Settings"; ?>
 </td></tr>
 <tr id="ProfileTitleEnd" class="TableRow4">
 <td class="TableRow4">&nbsp;</td>

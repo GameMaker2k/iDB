@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: members.php - Last Update: 09/02/2007 SVN 97 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 09/06/2007 SVN 99 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -180,7 +180,7 @@ $gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i",
 $gresult=mysql_query($gquery);
 $ViewMem['Group']=mysql_result($gresult,0,"Name");
 @mysql_free_result($gresult);
-$membertitle = " ".$ThemeSet['TitleDivider']." Viewing Profile ".$ViewMem['Name'];	
+$membertitle = " ".$ThemeSet['TitleDivider']." ".$ViewMem['Name'];	
 if ($ViewMem['Avatar']=="http://"||$ViewMem['Avatar']==null) {
 $ViewMem['Avatar']=$ThemeSet['NoAvatar'];
 $ViewMem['AvatarSize']=$ThemeSet['NoAvatarSize']; }
