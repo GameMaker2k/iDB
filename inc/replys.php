@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: replys.php - Last Update: 09/05/2007 SVN 98 - Author: cooldude2k $
+    $FileInfo: replys.php - Last Update: 09/13/2007 SVN 100 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replys.php"||$File3Name=="/replys.php") {
@@ -249,6 +249,7 @@ if($_GET['fastreply']==true||
 	$_GET['fastreply']=="on") { $fps = " "; }
 if($_GET['fastreply']!=true&&
 	$_GET['fastreply']!="on") { $fps = " style=\"display: none;\" "; }
+$QuoteReply = null; $QuoteDescription = null;
 ?>
 <div class="Table1Border"<?php echo $fps; ?>id="FastReply">
 <table class="Table1" id="MakeReply<?php echo $TopicForumID; ?>">

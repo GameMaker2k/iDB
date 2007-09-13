@@ -11,19 +11,22 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: mysql.php - Last Update: 08/30/2007 SVN 92 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 09/13/2007 SVN 100 - Author: cooldude2k $
 */
+//@ini_set("display_errors", true); 
+//@ini_set("display_startup_errors", true);
 @error_reporting(E_ALL ^ E_NOTICE);
 @ini_set('session.use_trans_sid', false);
+@set_time_limit(30); @ignore_user_abort(true);
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mysql.php"||$File3Name=="/mysql.php") {
 	@header('Location: index.php');
 	exit(); }
-@set_time_limit(30); @ignore_user_abort(true);
 if(@ini_get("register_globals")) { require('settings.php');
 if(!isset($SettDir['misc'])) { $SettDir['misc'] = "inc/misc/"; }
 	require_once($SettDir['misc'].'killglobals.php'); }
 require('settings.php');
+//@session_save_path($SettDir['inc']."temp/");
 if(!isset($Settings['sqldb'])) { 
 if(file_exists("install.php")) { @header('Location: install.php'); die(); } 
 if(!file_exists("install.php")) { @header("Content-Type: text/plain; charset=UTF8");
@@ -43,6 +46,8 @@ if(!isset($SettDir['themes'])) { $SettDir['themes'] = "themes/"; }
 if(!isset($Settings['use_iniset'])) { $Settings['use_iniset'] = null; }
 if(!isset($Settings['clean_ob'])) { $Settings['clean_ob'] = false; }
 if(!isset($_SERVER['PATH_INFO'])) { $_SERVER['PATH_INFO'] = null; }
+if(!isset($_SERVER['HTTP_ACCEPT_ENCODING'])) { 
+	$_SERVER['HTTP_ACCEPT_ENCODING'] = null; }
 if(!isset($_GET['page'])) { $_GET['page'] = null; }
 if(!isset($_GET['act'])) { $_GET['act'] = null; }
 if(!isset($_POST['act'])) { $_POST['act'] = null; }

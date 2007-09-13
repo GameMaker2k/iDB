@@ -11,8 +11,10 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: rss.php - Last Update: 08/09/2007 SVN 73 - Author: cooldude2k $
+    $FileInfo: rss.php - Last Update: 09/13/2007 SVN 100 - Author: cooldude2k $
 */
+//@ini_set("display_errors", true); 
+//@ini_set("display_startup_errors", true);
 @error_reporting(E_ALL ^ E_NOTICE);
 require_once('mysql.php');
 if($Settings['enable_rss']==false) {
