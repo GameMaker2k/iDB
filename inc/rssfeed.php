@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: rss2.php - Last Update: 08/12/2007 SVN 77 - Author: cooldude2k $
+    $FileInfo: rssfeed.php - Last Update: 09/14/2007 SVN 102 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="rssfeed.php"||$File3Name=="/rssfeed.php") {
@@ -93,7 +93,7 @@ if ($ForumType=="subforum") {
 $apcquery = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `ShowForum`='yes' AND `InSubForum`=%i ORDER BY `id`", array($ForumID));
 $apcresult=mysql_query($apcquery);
 $apcnum=mysql_num_rows($apcresult);
-$apci=0; $apcl=0; if($apcnum>=1) {
+$apci=0; $apcl=1; if($apcnum>=1) {
 while ($apci < $apcnum) {
 $SubsForumID=mysql_result($apcresult,$apci,"id");
 if(isset($PermissionInfo['CanViewForum'][$SubsForumID])&&

@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: categories.php - Last Update: 08/22/2007 SVN 89 - Author: cooldude2k $
+    $FileInfo: categories.php - Last Update: 09/14/2007 SVN 102 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="categories.php"||$File3Name=="/categories.php") {
@@ -81,7 +81,7 @@ if ($ForumType=="subforum") {
 $apcquery = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `ShowForum`='yes' AND `InSubForum`=%i ORDER BY `OrderID` ASC, `id` ASC", array($ForumID));
 $apcresult=mysql_query($apcquery);
 $apcnum=mysql_num_rows($apcresult);
-$apci=0; $apcl=0; if($apcnum>=1) {
+$apci=0; $apcl=1; if($apcnum>=1) {
 while ($apci < $apcnum) {
 $NumsTopics=mysql_result($apcresult,$apci,"NumTopics");
 $NumTopics = $NumsTopics + $NumTopics;
@@ -110,7 +110,7 @@ if($NewUpdateTime>$OldUpdateTime) {
 $OldUpdateTime = $NewUpdateTime; } }
 @mysql_free_result($gltforesult);
 ++$glti; } }
-if ($ForumType!="subforum"&&$ForumType!="redirect") { $UseThisFonum = $gltf['0']; }
+if ($ForumType!="subforum"&&$ForumType!="redirect") { $UseThisFonum = $gltf[0]; }
 if ($ForumType!="redirect") {
 $gltquery = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `CategoryID`=%i AND `ForumID`=%i ORDER BY `LastUpdate` DESC", array($CategoryID,$UseThisFonum));
 $gltresult=mysql_query($gltquery);
