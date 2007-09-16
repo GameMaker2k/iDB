@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: groupsetup.php - Last Update: 09/05/2007 SVN 98 - Author: cooldude2k $
+    $FileInfo: groupsetup.php - Last Update: 09/16/2007 SVN 104 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="groupsetup.php"||$File3Name=="/groupsetup.php") {
@@ -42,10 +42,22 @@ $_SESSION['UserGroup']=$ChkUsrGroup;
 $_SESSION['UserDST']=$ChkUsrDST;
 $_SESSION['UserPass']=$ChkUsrPass; }
 if($numchkusr<=0||$numchkusr>1) { @session_unset();
+if($cookieDomain==null) {
 @setcookie("MemberName", null, GMTimeStamp() - 3600, $basedir);
 @setcookie("UserID", null, GMTimeStamp() - 3600, $basedir);
 @setcookie("SessPass", null, GMTimeStamp() - 3600, $basedir);
-@setcookie(session_name(), "", GMTimeStamp() - 3600, $basedir);
+@setcookie(session_name(), "", GMTimeStamp() - 3600, $basedir); }
+if($cookieDomain!=null) {
+if($cookieSecure==true) {
+@setcookie("MemberName", null, GMTimeStamp() - 3600, $basedir, $cookieDomain, 1);
+@setcookie("UserID", null, GMTimeStamp() - 3600, $basedir, $cookieDomain, 1);
+@setcookie("SessPass", null, GMTimeStamp() - 3600, $basedir, $cookieDomain, 1);
+@setcookie(session_name(), "", GMTimeStamp() - 3600, $basedir, $cookieDomain, 1); }
+if($cookieSecure==false) {
+@setcookie("MemberName", null, GMTimeStamp() - 3600, $basedir, $cookieDomain);
+@setcookie("UserID", null, GMTimeStamp() - 3600, $basedir, $cookieDomain);
+@setcookie("SessPass", null, GMTimeStamp() - 3600, $basedir, $cookieDomain);
+@setcookie(session_name(), "", GMTimeStamp() - 3600, $basedir, $cookieDomain); } }
 unset($_COOKIE[session_name()]);
 $_SESSION = array(); @session_unset(); @session_destroy();
 @redirect("location",$basedir.url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],false)); @mysql_free_result($numchkusr); @mysql_free_result($svrgresultkgb);

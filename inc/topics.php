@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: topics.php - Last Update: 09/02/2007 SVN 97 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 09/16/2007 SVN 104 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -448,7 +448,6 @@ mysql_query($queryupd);
 <div>&nbsp;</div>
 <?php }
 if($PermissionInfo['CanMakeTopics'][$ForumID]=="yes"&&$CanHaveTopics=="yes") { ?>
-<div>&nbsp;</div>
 <table class="Table2" style="width: 100%;">
 <tr>
  <td style="width: 0%; text-align: left;">&nbsp;</td>

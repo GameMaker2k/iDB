@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: profilemain.php - Last Update: 09/06/2007 SVN 99 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 09/16/2007 SVN 104 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
@@ -617,7 +617,13 @@ if($YourPassword!=$OldPassword) { $Error="Yes"; ?>
 	$NewDay=GMTimeStamp();
 	$NewIP=$_SERVER['REMOTE_ADDR'];
 	if ($Error!="Yes") { $_SESSION['UserPass']=$NewPassword;
-	setcookie("SessPass", $NewPassword, time() + (7 * 86400), $basedir);
+	if($cookieDomain==null) {
+	@setcookie("SessPass", $NewPassword, time() + (7 * 86400), $basedir); }
+	if($cookieDomain!=null) {
+	if($cookieSecure==true) {
+	@setcookie("SessPass", $NewPassword, time() + (7 * 86400), $basedir, $cookieDomain, 1); }
+	if($cookieSecure==false) {
+	@setcookie("SessPass", $NewPassword, time() + (7 * 86400), $basedir, $cookieDomain); } }
 	$_POST['Email'] = @remove_spaces($_POST['Email']);
 	$querynewuserinfo = query("UPDATE `".$Settings['sqltable']."members` SET `Password`='%s',`HashType`='iDBH',`Email`='%s',`LastActive`=%i,`IP`='%s',`Salt`='%s' WHERE `id`=%i", array($NewPassword,$_POST['Email'],$NewDay,$NewIP,$NewSalt,$_SESSION['UserID']));
 	mysql_query($querynewuserinfo); } } } }

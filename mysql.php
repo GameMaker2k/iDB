@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: mysql.php - Last Update: 09/14/2007 SVN 101 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 09/16/2007 SVN 104 - Author: cooldude2k $
 */
 //@ini_set("display_errors", true); 
 //@ini_set("display_startup_errors", true);
@@ -26,6 +26,11 @@ if(@ini_get("register_globals")) { require('settings.php');
 if(!isset($SettDir['misc'])) { $SettDir['misc'] = "inc/misc/"; }
 	require_once($SettDir['misc'].'killglobals.php'); }
 require('settings.php');
+if($Settings['fixbasedir']==true) {
+if($Settings['idburl']!=null&&$Settings['idburl']!="localhost") {
+$PathsTest = parse_url($Settings['idburl']);
+$Settings['fixbasedir'] = $PathsTest['path']."/"; 
+$Settings['fixbasedir'] = str_replace("//", "/", $Settings['fixbasedir']); } }
 //@session_save_path($SettDir['inc']."temp/");
 if(!isset($Settings['sqldb'])) { 
 if(file_exists("install.php")) { @header('Location: install.php'); die(); } 
@@ -68,6 +73,13 @@ if($Settings['enable_https']==true&&$_SERVER['HTTPS']=="on") {
 if($Settings['idburl']!=null&&$Settings['idburl']!="localhost") {
 $HTTPsTest = parse_url($Settings['idburl']); if($HTTPsTest['scheme']=="http") {
 $Settings['idburl'] = preg_replace("/http\:\/\//i", "https://", $Settings['idburl']); } } }
+$cookieDomain = null; $cookieSecure = false;
+if($Settings['idburl']!=null&&$Settings['idburl']!="localhost") {
+$URLsTest = parse_url($Settings['idburl']); 
+$cookieDomain = $URLsTest['host'];
+if($Settings['enable_https']==true) {
+ if($URLsTest['scheme']=="https") { $cookieSecure = true; }
+ if($URLsTest['scheme']!="https") { $cookieSecure = false; } } }
 @ini_set("default_charset",$Settings['charset']);
 $File1Name = dirname($_SERVER['SCRIPT_NAME'])."/";
 $File2Name = $_SERVER['SCRIPT_NAME'];
@@ -105,7 +117,13 @@ if($GZipEncode['Type']!="gzip") { if($GZipEncode['Type']!="deflate") { $GZipEnco
 /* if(eregi("msie",$browser) && !eregi("opera",$browser)){
 @header('P3P: CP="NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM"'); } */
 // Some http stuff
-@session_set_cookie_params(0, $basedir);
+if($cookieDomain==null) {
+@session_set_cookie_params(0, $basedir); }
+if($cookieDomain!=null) {
+if($cookieSecure==true) {
+@session_set_cookie_params(0, $basedir, $cookieDomain, 1); }
+if($cookieSecure==false) {
+@session_set_cookie_params(0, $basedir, $cookieDomain); } }
 @session_cache_limiter("private, must-revalidate");
 @header("Cache-Control: private, must-revalidate"); // IE 6 Fix
 @header("Pragma: private, must-revalidate");

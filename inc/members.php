@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: members.php - Last Update: 09/06/2007 SVN 99 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 09/16/2007 SVN 104 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -245,10 +245,22 @@ Title: <?php echo $ViewMem['Title']; ?></div>
 <?php } @mysql_free_result($result);
 if($_GET['act']=="logout") {
 @session_unset();
+if($cookieDomain==null) {
 @setcookie("MemberName", null, GMTimeStamp() - 3600, $basedir);
 @setcookie("UserID", null, GMTimeStamp() - 3600, $basedir);
 @setcookie("SessPass", null, GMTimeStamp() - 3600, $basedir);
-@setcookie(session_name(), "", GMTimeStamp() - 3600, $basedir);
+@setcookie(session_name(), "", GMTimeStamp() - 3600, $basedir); }
+if($cookieDomain!=null) {
+if($cookieSecure==true) {
+@setcookie("MemberName", null, GMTimeStamp() - 3600, $basedir, $cookieDomain, 1);
+@setcookie("UserID", null, GMTimeStamp() - 3600, $basedir, $cookieDomain, 1);
+@setcookie("SessPass", null, GMTimeStamp() - 3600, $basedir, $cookieDomain, 1);
+@setcookie(session_name(), "", GMTimeStamp() - 3600, $basedir, $cookieDomain, 1); }
+if($cookieSecure==false) {
+@setcookie("MemberName", null, GMTimeStamp() - 3600, $basedir, $cookieDomain);
+@setcookie("UserID", null, GMTimeStamp() - 3600, $basedir, $cookieDomain);
+@setcookie("SessPass", null, GMTimeStamp() - 3600, $basedir, $cookieDomain);
+@setcookie(session_name(), "", GMTimeStamp() - 3600, $basedir, $cookieDomain); } }
 unset($_COOKIE[session_name()]);
 $_SESSION = array();
 @session_unset();
@@ -392,9 +404,19 @@ $_SESSION['UserDST']=$YourDSTM;
 $_SESSION['UserPass']=$NewPassword;
 $_SESSION['DBName']=$Settings['sqldb'];
 if($_POST['storecookie']==true) {
-setcookie("MemberName", $YourNameM, time() + (7 * 86400), $basedir);
-setcookie("UserID", $YourIDM, time() + (7 * 86400), $basedir);
-setcookie("SessPass", $NewPassword, time() + (7 * 86400), $basedir); }
+if($cookieDomain==null) {
+@setcookie("MemberName", $YourNameM, time() + (7 * 86400), $basedir);
+@setcookie("UserID", $YourIDM, time() + (7 * 86400), $basedir);
+@setcookie("SessPass", $NewPassword, time() + (7 * 86400), $basedir); }
+if($cookieDomain!=null) {
+if($cookieSecure==true) {
+@setcookie("MemberName", $YourNameM, time() + (7 * 86400), $basedir, $cookieDomain, 1);
+@setcookie("UserID", $YourIDM, time() + (7 * 86400), $basedir, $cookieDomain, 1);
+@setcookie("SessPass", $NewPassword, time() + (7 * 86400), $basedir, $cookieDomain, 1); }
+if($cookieSecure==false) {
+@setcookie("MemberName", $YourNameM, time() + (7 * 86400), $basedir, $cookieDomain);
+@setcookie("UserID", $YourIDM, time() + (7 * 86400), $basedir, $cookieDomain);
+@setcookie("SessPass", $NewPassword, time() + (7 * 86400), $basedir, $cookieDomain); } } }
 } } if($numlog<=0) {
 //echo "Password was not right or user not found!! <_< ";
 } ?>
@@ -702,9 +724,19 @@ $_SESSION['UserGroup']=$YourGroupMr;
 $_SESSION['UserPass']=$NewPassword;
 $_SESSION['DBName']=$Settings['sqldb'];
 if($_POST['storecookie']==true) {
+if($cookieDomain==null) {
 @setcookie("MemberName", $YourNameM, time() + (7 * 86400), $basedir);
 @setcookie("UserID", $YourIDM, time() + (7 * 86400), $basedir);
 @setcookie("SessPass", $NewPassword, time() + (7 * 86400), $basedir); }
+if($cookieDomain!=null) {
+if($cookieSecure==true) {
+@setcookie("MemberName", $YourNameM, time() + (7 * 86400), $basedir, $cookieDomain, 1);
+@setcookie("UserID", $YourIDM, time() + (7 * 86400), $basedir, $cookieDomain, 1);
+@setcookie("SessPass", $NewPassword, time() + (7 * 86400), $basedir, $cookieDomain, 1); }
+if($cookieSecure==false) {
+@setcookie("MemberName", $YourNameM, time() + (7 * 86400), $basedir, $cookieDomain);
+@setcookie("UserID", $YourIDM, time() + (7 * 86400), $basedir, $cookieDomain);
+@setcookie("SessPass", $NewPassword, time() + (7 * 86400), $basedir, $cookieDomain); } } }
 /*
 $SendPMtoID=$_SESSION['UserID'];
 $YourPMID = 1;
