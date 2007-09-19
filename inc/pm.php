@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: pm.php - Last Update: 09/02/2007 SVN 97 - Author: cooldude2k $
+    $FileInfo: pm.php - Last Update: 09/19/2007 SVN 105 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pm.php"||$File3Name=="/pm.php") {
@@ -362,6 +362,7 @@ $SendMessageTo = mysql_result($reresult,$rei,"Name");
 $SendMessageTo = htmlspecialchars($SendMessageTo, ENT_QUOTES);
 $SendToGroupID = mysql_result($reresult,$rei,"GroupID");
 ++$rei; } } @mysql_free_result($reresult);
+if(!isset($renum)) { $renum = 0; }
 if($renum==0) { $SendMessageTo = null; }
 ?>
 <div class="Table1Border">

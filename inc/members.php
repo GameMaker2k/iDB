@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: members.php - Last Update: 09/16/2007 SVN 104 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 09/19/2007 SVN 105 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -351,7 +351,7 @@ if (strlen($_POST['userpass'])>="30") { $Error="Yes";  ?>
 	<br />Sorry the referering url dose not match our host name.<br />
 	<span></td>
 </tr>
-<?php } }
+<?php } } $BanError = null;
 if ($Error=="Yes") {
 @redirect("refresh",$basedir.url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],false),"4"); }
 if($Error!="Yes"){
@@ -379,6 +379,17 @@ $YourNameM=mysql_result($resultlog,$i,"Name");
 $YourPassM=mysql_result($resultlog,$i,"Password");
 $PostCount=mysql_result($resultlog,$i,"PostCount");
 $YourGroupM=mysql_result($resultlog,$i,"GroupID");
+$YourBanTime=mysql_result($resultlog,$i,"BanTime");
+if($YourBanTime!=0&&$YourBanTime!=null) {
+$CMonth = GMTimeGet("m",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$CDay = GMTimeGet("d",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$CYear = GMTimeGet("Y",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$BMonth = GMTimeChange("m",$YourBanTime,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$BDay = GMTimeChange("d",$YourBanTime,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$BYear = GMTimeChange("Y",$YourBanTime,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+if($BYear<$CYear) { $BanError = "yes"; }
+if($BYear<=$CYear&&$BMonth<$CMonth&&$BanError!="yes") { $BanError = "yes"; }
+if($BYear<=$CYear&&$BMonth<=$CMonth&&$BDay<=$CDay&&$BanError!="yes") { $BanError = "yes"; } }
 $gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i", array($YourGroupM));
 $gresult=mysql_query($gquery);
 $YourGroupM=mysql_result($gresult,0,"Name");
@@ -391,6 +402,7 @@ $NewHashSalt = salt_hmac();
 $NewPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$NewHashSalt,"sha1");
 $NewDay=GMTimeStamp();
 $NewIP=$_SERVER['REMOTE_ADDR'];
+if($BanError!="yes") {
 $queryup = query("UPDATE `".$Settings['sqltable']."members` SET `Password`='%s',`HashType`='iDBH',`LastActive`=%i,`IP`='%s',`Salt`='%s' WHERE `id`=%i", array($NewPassword,$NewDay,$NewIP,$NewHashSalt,$YourIDM));
 mysql_query($queryup);
 @mysql_free_result($resultlog); @mysql_free_result($queryup);
@@ -416,11 +428,11 @@ if($cookieSecure==true) {
 if($cookieSecure==false) {
 @setcookie("MemberName", $YourNameM, time() + (7 * 86400), $basedir, $cookieDomain);
 @setcookie("UserID", $YourIDM, time() + (7 * 86400), $basedir, $cookieDomain);
-@setcookie("SessPass", $NewPassword, time() + (7 * 86400), $basedir, $cookieDomain); } } }
+@setcookie("SessPass", $NewPassword, time() + (7 * 86400), $basedir, $cookieDomain); } } } }
 } } if($numlog<=0) {
 //echo "Password was not right or user not found!! <_< ";
 } ?>
-<?php if($passright==true) {
+<?php if($passright==true&&$BanError!="yes") {
 @redirect("refresh",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false),"3"); ?>
 <tr>
 	<td><span class="TableMessage">
@@ -428,10 +440,10 @@ if($cookieSecure==false) {
 	Click <a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">here</a> to continue to board.<br />&nbsp;
 	</span></td>
 </tr>
-<?php } if($passright==false) { ?>
+<?php } if($passright==false||$BanError=="yes") { ?>
 <tr>
 	<td><span class="TableMessage">
-	<br />Password was not right or user not found!! &lt;_&lt;<br />
+	<br />Password was not right or user not found or user is banned!! &lt;_&lt;<br />
 	Click <a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$exqstr['member'],$prexqstr['member']); ?>">here</a> to try again.<br />&nbsp;
 	</span></td>
 </tr>
@@ -697,7 +709,7 @@ if(!is_numeric($_POST['MinOffSet'])) { $_POST['MinOffSet'] = "00"; }
 if($_POST['MinOffSet']>59) { $_POST['MinOffSet'] = "59"; }
 if($_POST['MinOffSet']<0) { $_POST['MinOffSet'] = "00"; }
 $_POST['YourOffSet'] = $_POST['YourOffSet'].":".$_POST['MinOffSet'];
-$query = query("INSERT INTO `".$Settings['sqltable']."members` VALUES (".$yourid.",'%s','%s','%s','%s','%s','%s',%i,'%s','%s',%i,%i,'0','0','0','%s','%s','%s','%s','%s','%s',%i,'%s','%s','%s','%s','%s')", array($Name,$NewPassword,"iDBH",$_POST['Email'],$yourgroup,$ValidateStats,"0",$_POST['Interests'],$_POST['Title'],$_POST['Joined'],$_POST['LastActive'],$NewSignature,'Your Notes',$Avatar,"100x100",$Website,$_POST['YourGender'],$_POST['PostCount'],$_POST['YourOffSet'],$_POST['DST'],$Settings['DefaultTheme'],$_POST['UserIP'],$HashSalt));
+$query = query("INSERT INTO `".$Settings['sqltable']."members` VALUES (".$yourid.",'%s','%s','%s','%s','%s','%s',%i,'%s','%s',%i,%i,'0','0','0','0','%s','%s','%s','%s','%s','%s',%i,'%s','%s','%s','%s','%s')", array($Name,$NewPassword,"iDBH",$_POST['Email'],$yourgroup,$ValidateStats,"0",$_POST['Interests'],$_POST['Title'],$_POST['Joined'],$_POST['LastActive'],$NewSignature,'Your Notes',$Avatar,"100x100",$Website,$_POST['YourGender'],$_POST['PostCount'],$_POST['YourOffSet'],$_POST['DST'],$Settings['DefaultTheme'],$_POST['UserIP'],$HashSalt));
 mysql_query($query);
 $querylogr = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `Name`='%s' AND `Password`='%s'", array($Name,$NewPassword));
 $resultlogr=mysql_query($querylogr);
