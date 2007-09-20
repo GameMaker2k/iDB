@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: groupsetup.php - Last Update: 09/16/2007 SVN 104 - Author: cooldude2k $
+    $FileInfo: groupsetup.php - Last Update: 09/20/2007 SVN 107 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="groupsetup.php"||$File3Name=="/groupsetup.php") {
@@ -19,7 +19,7 @@ if ($File3Name=="groupsetup.php"||$File3Name=="/groupsetup.php") {
 	exit(); }
 // Check to make sure MemberInfo is right
 if(!isset($_SESSION['UserID'])) { $_SESSION['UserID'] = 0; }
-if($_SESSION['UserID']!=0&&$_SESSION['UserID']!=null) {
+if($_SESSION['UserID']!=0&&$_SESSION['UserID']!=null) { $BanError = null;
 $kgbquerychkusr = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `Name`='%s' AND `Password`='%s' AND `id`=%i", array($_SESSION['MemberName'],$_SESSION['UserPass'],$_SESSION['UserID'])); 
 $resultchkusr=mysql_query($kgbquerychkusr);
 $numchkusr=mysql_num_rows($resultchkusr);
@@ -34,14 +34,26 @@ $ChkUsrDST=mysql_result($resultchkusr,0,"DST");
 $svrquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i", array($ChkUsrGroup));
 $svrgresultkgb=mysql_query($svrquery);
 $ChkUsrGroup=mysql_result($svrgresultkgb,0,"Name"); 
+$ChkUsrBanTime=mysql_result($resultchkusr,0,"BanTime");
+if($ChkUsrBanTime!=0&&$ChkUsrBanTime!=null) {
+$CMonth = GMTimeGet("m",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$CDay = GMTimeGet("d",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$CYear = GMTimeGet("Y",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$BMonth = GMTimeChange("m",$ChkUsrBanTime,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$BDay = GMTimeChange("d",$ChkUsrBanTime,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$BYear = GMTimeChange("Y",$ChkUsrBanTime,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+if($BYear<$CYear) { $BanError = "yes"; }
+if($BYear<=$CYear&&$BMonth<$CMonth&&$BanError!="yes") { $BanError = "yes"; }
+if($BYear<=$CYear&&$BMonth<=$CMonth&&$BDay<=$CDay&&$BanError!="yes") { $BanError = "yes"; } }
+if($BanError!="yes") {
 $_SESSION['Theme']=$ChkUsrTheme;
 $_SESSION['MemberName']=$ChkUsrName;
 $_SESSION['UserID']=$ChkUsrID;
 $_SESSION['UserTimeZone']=$ChkUsrTimeZone;
 $_SESSION['UserGroup']=$ChkUsrGroup;
 $_SESSION['UserDST']=$ChkUsrDST;
-$_SESSION['UserPass']=$ChkUsrPass; }
-if($numchkusr<=0||$numchkusr>1) { @session_unset();
+$_SESSION['UserPass']=$ChkUsrPass; } }
+if($numchkusr<=0||$numchkusr>1||$BanError=="yes") { @session_unset();
 if($cookieDomain==null) {
 @setcookie("MemberName", null, GMTimeStamp() - 3600, $basedir);
 @setcookie("UserID", null, GMTimeStamp() - 3600, $basedir);
