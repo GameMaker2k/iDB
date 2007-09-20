@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: prelogin.php - Last Update: 09/16/2007 SVN 104 - Author: cooldude2k $
+    $FileInfo: prelogin.php - Last Update: 09/20/2007 SVN 106 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="prelogin.php"||$File3Name=="/prelogin.php") {
@@ -28,12 +28,24 @@ $YourPassAM=mysql_result($resultlog2,0,"Password");
 $gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i", array($YourGroupAM));
 $gresult=mysql_query($gquery);
 $YourGroupAM=mysql_result($gresult,0,"Name");
-@mysql_free_result($gresult);
+@mysql_free_result($gresult); $BanError = null;
 $YourTimeZoneAM=mysql_result($resultlog2,0,"TimeZone");
 $UseThemeAM=mysql_result($resultlog2,0,"UseTheme");
 $YourDSTAM=mysql_result($resultlog2,0,"DST");
+$YourBanTime=mysql_result($resultlog2,0,"BanTime");
+if($YourBanTime!=0&&$YourBanTime!=null) {
+$CMonth = GMTimeGet("m",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$CDay = GMTimeGet("d",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$CYear = GMTimeGet("Y",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$BMonth = GMTimeChange("m",$YourBanTime,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$BDay = GMTimeChange("d",$YourBanTime,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$BYear = GMTimeChange("Y",$YourBanTime,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+if($BYear<$CYear) { $BanError = "yes"; }
+if($BYear<=$CYear&&$BMonth<$CMonth&&$BanError!="yes") { $BanError = "yes"; }
+if($BYear<=$CYear&&$BMonth<=$CMonth&&$BDay<=$CDay&&$BanError!="yes") { $BanError = "yes"; } }
 $NewDay=GMTimeStamp();
 $NewIP=$_SERVER['REMOTE_ADDR'];
+if($BanError!="yes") {
 $queryup = query("UPDATE `".$Settings['sqltable']."members` SET `LastActive`=%i,`IP`='%s' WHERE `id`=%i", array($NewDay,$NewIP,$YourIDAM));
 $_SESSION['Theme']=$UseThemeAM;
 $_SESSION['MemberName']=$_COOKIE['MemberName'];
@@ -55,7 +67,7 @@ if($cookieSecure==false) {
 @setcookie("MemberName", $YourNameM, time() + (7 * 86400), $basedir, $cookieDomain);
 @setcookie("UserID", $YourIDAM, time() + (7 * 86400), $basedir, $cookieDomain);
 @setcookie("SessPass", $YourPassAM, time() + (7 * 86400), $basedir, $cookieDomain); } }
-} if($numlog2<=0||$numlog2>1) { @session_unset();
+} } if($numlog2<=0||$numlog2>1||$BanError=="yes") { @session_unset();
 if($cookieDomain==null) {
 @setcookie("MemberName", null, GMTimeStamp() - 3600, $basedir);
 @setcookie("UserID", null, GMTimeStamp() - 3600, $basedir);

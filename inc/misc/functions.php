@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: functions.php - Last Update: 08/09/2007 SVN 73 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 09/20/2007 SVN 106 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -377,6 +377,26 @@ if(!is_array($search)&&!is_array($replace)) {
 $search = preg_quote($search, "/");
 $subject = preg_replace("/".$search."/i", $replace, $subject); }
 return $subject; } }
+/*   Adds httponly to PHP below Ver. 5.2.0   // 
+//       by René Johnson - Cool Dude 2k      */
+function http_set_cookie($name,$value=null,$expire=null,$path=null,$domain=null,$secure=false,$httponly=false) {
+	$mkcookie = null; $expireGMT = null;
+	if(!isset($name)) { echo "Error: You need to enter a name for cookie."; return false; }
+	if(!isset($expire)) { echo "Error: You need to enter a time for cookie to expire."; return false; }
+	$expireGMT = gmdate("D, d-M-Y H:i:s \G\M\T", $expire);
+	if(!isset($value)) { $value = null; }
+	if(!isset($httponly)||$httponly==false) {
+	setcookie($name, $value, $expire, $path, $domain, $secure); return true; }
+	if(version_compare(PHP_VERSION,"5.2.0",">=")&&$httponly==true) {
+	setcookie($name, $value, $expire, $path, $domain, $secure, $httponly); return true; }
+	if(version_compare(PHP_VERSION,"5.2.0","<")&&$httponly==true) {
+	$mkcookie = "Set-Cookie: ".rawurlencode($name)."=".rawurlencode($value);
+	$mkcookie = $mkcookie."; expires=".$expireGMT;
+	if(isset($path)&&$path!=null) { $mkcookie = $mkcookie."; path=".$path; }
+	if(isset($domain)&&$domain!=null) { $mkcookie = $mkcookie."; domain=".$domain; }
+	if(isset($secure)&&$secure==true) { $mkcookie = $mkcookie."; secure"; }
+	if(isset($httponly)&&$httponly==true) { $mkcookie = $mkcookie."; HttpOnly"; }
+header($mkcookie, false); return true; } }
 $foobar="fubar"; $$foobar="foobar";
 // Debug info
 function dump_included_files() {	return var_dump(get_included_files()); }
