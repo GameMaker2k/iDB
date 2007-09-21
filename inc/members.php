@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: members.php - Last Update: 09/19/2007 SVN 105 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 09/21/2007 SVN 108 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -269,6 +269,11 @@ $_SESSION = array();
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 if($_GET['act']=="login") {
+if($_SESSION['UserID']!=0&&$_SESSION['UserID']!=null) { 
+redirect("location",$basedir.url_maker($exfile['member'],$Settings['file_ext'],"act=logout",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],false));
+ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+if($_SESSION['UserID']==0||$_SESSION['UserID']==null) {
 $membertitle = " ".$ThemeSet['TitleDivider']." Login";
 ?>
 <div class="Table1Border">
@@ -311,7 +316,12 @@ $membertitle = " ".$ThemeSet['TitleDivider']." Login";
 <td class="TableRow4">&nbsp;</td>
 </tr>
 </table></div>
-<?php } if($_POST['act']=="loginmember"&&$_GET['act']=="login_now") {
+<?php } } if($_POST['act']=="loginmember"&&$_GET['act']=="login_now") {
+if($_SESSION['UserID']!=0&&$_SESSION['UserID']!=null) { 
+redirect("location",$basedir.url_maker($exfile['member'],$Settings['file_ext'],"act=logout",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],false));
+ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+if($_SESSION['UserID']==0||$_SESSION['UserID']==null) {
 $membertitle = " ".$ThemeSet['TitleDivider']." Login";
 $REFERERurl = parse_url($_SERVER['HTTP_REFERER']);
 $URL['REFERER'] = $REFERERurl['host'];
@@ -380,16 +390,9 @@ $YourPassM=mysql_result($resultlog,$i,"Password");
 $PostCount=mysql_result($resultlog,$i,"PostCount");
 $YourGroupM=mysql_result($resultlog,$i,"GroupID");
 $YourBanTime=mysql_result($resultlog,$i,"BanTime");
+$CGMTime = GMTimeStamp();
 if($YourBanTime!=0&&$YourBanTime!=null) {
-$CMonth = GMTimeGet("m",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$CDay = GMTimeGet("d",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$CYear = GMTimeGet("Y",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$BMonth = GMTimeChange("m",$YourBanTime,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$BDay = GMTimeChange("d",$YourBanTime,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$BYear = GMTimeChange("Y",$YourBanTime,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-if($BYear<$CYear) { $BanError = "yes"; }
-if($BYear<=$CYear&&$BMonth<$CMonth&&$BanError!="yes") { $BanError = "yes"; }
-if($BYear<=$CYear&&$BMonth<=$CMonth&&$BDay<=$CDay&&$BanError!="yes") { $BanError = "yes"; } }
+if($YourBanTime>=$CGMTime) { $BanError = "yes"; } }
 $gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i", array($YourGroupM));
 $gresult=mysql_query($gquery);
 $YourGroupM=mysql_result($gresult,0,"Name");
@@ -454,10 +457,14 @@ if($cookieSecure==false) {
 <td class="TableRow4">&nbsp;</td>
 </tr>
 </table></div>
-<?php }
-if($_GET['act']=="signup")
-{ 
-$membertitle = " ".$ThemeSet['TitleDivider']." Signing up"; ?>
+<?php } } if($_GET['act']=="signup") { 
+$membertitle = " ".$ThemeSet['TitleDivider']." Signing up"; 
+if($_SESSION['UserID']!=0&&$_SESSION['UserID']!=null) { 
+redirect("location",$basedir.url_maker($exfile['member'],$Settings['file_ext'],"act=logout",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],false));
+ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+if($_SESSION['UserID']==0||$_SESSION['UserID']==null) {
+?>
 <div class="Table1Border">
 <table class="Table1">
 <tr class="TableRow1">
@@ -568,8 +575,13 @@ echo "<option value=\"".$showmin."\">0:".$showmin." minutes</option>\n"; }
 <td class="TableRow4">&nbsp;</td>
 </tr>
 </table></div>
-<?php } if($_GET['act']=="makemember") {
+<?php } } if($_GET['act']=="makemember") {
 	if($_POST['act']=="makemembers") {
+if($_SESSION['UserID']!=0&&$_SESSION['UserID']!=null) { 
+redirect("location",$basedir.url_maker($exfile['member'],$Settings['file_ext'],"act=logout",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],false));
+ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+if($_SESSION['UserID']==0||$_SESSION['UserID']==null) {
 $membertitle = " ".$ThemeSet['TitleDivider']." Signing up";
 $REFERERurl = parse_url($_SERVER['HTTP_REFERER']);
 $URL['REFERER'] = $REFERERurl['host'];
@@ -773,5 +785,5 @@ $query = query("INSERT INTO `".$Settings['sqltable']."messenger` VALUES (null,%i
 <td class="TableRow4">&nbsp;</td>
 </tr>
 </table></div>
-<?php } } ?>
+<?php } } } ?>
 <div>&nbsp;</div>

@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: groupsetup.php - Last Update: 09/20/2007 SVN 107 - Author: cooldude2k $
+    $FileInfo: groupsetup.php - Last Update: 09/21/2007 SVN 108 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="groupsetup.php"||$File3Name=="/groupsetup.php") {
@@ -35,16 +35,9 @@ $svrquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i
 $svrgresultkgb=mysql_query($svrquery);
 $ChkUsrGroup=mysql_result($svrgresultkgb,0,"Name"); 
 $ChkUsrBanTime=mysql_result($resultchkusr,0,"BanTime");
+$ChkUsrGMTime = GMTimeStamp();
 if($ChkUsrBanTime!=0&&$ChkUsrBanTime!=null) {
-$CMonth = GMTimeGet("m",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$CDay = GMTimeGet("d",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$CYear = GMTimeGet("Y",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$BMonth = GMTimeChange("m",$ChkUsrBanTime,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$BDay = GMTimeChange("d",$ChkUsrBanTime,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$BYear = GMTimeChange("Y",$ChkUsrBanTime,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-if($BYear<$CYear) { $BanError = "yes"; }
-if($BYear<=$CYear&&$BMonth<$CMonth&&$BanError!="yes") { $BanError = "yes"; }
-if($BYear<=$CYear&&$BMonth<=$CMonth&&$BDay<=$CDay&&$BanError!="yes") { $BanError = "yes"; } }
+if($ChkUsrBanTime>=$ChkUsrGMTime) { $BanError = "yes"; } }
 if($BanError!="yes") {
 $_SESSION['Theme']=$ChkUsrTheme;
 $_SESSION['MemberName']=$ChkUsrName;

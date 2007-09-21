@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: prelogin.php - Last Update: 09/20/2007 SVN 106 - Author: cooldude2k $
+    $FileInfo: prelogin.php - Last Update: 09/21/2007 SVN 108 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="prelogin.php"||$File3Name=="/prelogin.php") {
@@ -33,16 +33,9 @@ $YourTimeZoneAM=mysql_result($resultlog2,0,"TimeZone");
 $UseThemeAM=mysql_result($resultlog2,0,"UseTheme");
 $YourDSTAM=mysql_result($resultlog2,0,"DST");
 $YourBanTime=mysql_result($resultlog2,0,"BanTime");
+$CGMTime = GMTimeStamp();
 if($YourBanTime!=0&&$YourBanTime!=null) {
-$CMonth = GMTimeGet("m",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$CDay = GMTimeGet("d",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$CYear = GMTimeGet("Y",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$BMonth = GMTimeChange("m",$YourBanTime,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$BDay = GMTimeChange("d",$YourBanTime,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$BYear = GMTimeChange("Y",$YourBanTime,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-if($BYear<$CYear) { $BanError = "yes"; }
-if($BYear<=$CYear&&$BMonth<$CMonth&&$BanError!="yes") { $BanError = "yes"; }
-if($BYear<=$CYear&&$BMonth<=$CMonth&&$BDay<=$CDay&&$BanError!="yes") { $BanError = "yes"; } }
+if($YourBanTime>=$CGMTime) { $BanError = "yes"; } }
 $NewDay=GMTimeStamp();
 $NewIP=$_SERVER['REMOTE_ADDR'];
 if($BanError!="yes") {
