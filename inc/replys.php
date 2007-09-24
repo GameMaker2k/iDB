@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: replys.php - Last Update: 09/13/2007 SVN 100 - Author: cooldude2k $
+    $FileInfo: replys.php - Last Update: 09/24/2007 SVN 109 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replys.php"||$File3Name=="/replys.php") {
@@ -341,9 +341,9 @@ if($QuoteUserName==null) { $QuoteUserName="Guest"; } }
 $QuoteUserName = stripcslashes(htmlspecialchars($QuoteUserName, ENT_QUOTES));
 //$QuoteUserName = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $QuoteUserName);
 $QuoteUserName = @remove_spaces($QuoteUserName);
-$QuoteReply = stripcslashes(htmlspecialchars($QuoteReply, ENT_QUOTES));
+/*$QuoteReply = stripcslashes(htmlspecialchars($QuoteReply, ENT_QUOTES));
 $QuoteReply = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $QuoteReply);
-//$QuoteReply = @remove_spaces($QuoteReply);
+//$QuoteReply = @remove_spaces($QuoteReply);*/
 $QuoteReply = remove_bad_entities($QuoteReply);
 $QuoteDescription = str_replace("Re: ","",$QuoteDescription);
 $QuoteDescription = "Re: ".$QuoteDescription;
@@ -686,9 +686,9 @@ redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"a
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 $ReplyPost=mysql_result($ersresult,0,"Post");
-$ReplyPost = stripcslashes(htmlspecialchars($ReplyPost, ENT_QUOTES));
+/*$ReplyPost = stripcslashes(htmlspecialchars($ReplyPost, ENT_QUOTES));
 $ReplyPost = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $ReplyPost);
-//$ReplyPost = @remove_spaces($ReplyPost);
+//$ReplyPost = @remove_spaces($ReplyPost);*/
 $ReplyPost = remove_bad_entities($ReplyPost);
 $ReplyDescription=mysql_result($ersresult,0,"Description");
 $ReplyDescription = stripcslashes(htmlspecialchars($ReplyDescription, ENT_QUOTES));
