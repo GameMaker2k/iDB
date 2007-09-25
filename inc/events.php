@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: events.php - Last Update: 09/02/2007 SVN 97 - Author: cooldude2k $
+    $FileInfo: events.php - Last Update: 09/25/2007 SVN 110 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="events.php"||$File3Name=="/events.php") {
@@ -147,10 +147,10 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 <?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['calendar'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['calendar'],$exqstr['calendar']); ?>">Making a Event</a></span>
 <?php echo "<span style=\"float: right;\">&nbsp;</span>"; ?></td>
 </tr>
-<tr id="MakeTopicRow<?php echo $ForumID; ?>" class="TableRow2">
+<tr id="MakeEventRow" class="TableRow2">
 <td class="TableRow2" colspan="2" style="width: 100%;">Making a Event</td>
 </tr>
-<tr class="TableRow3" id="MkTopic<?php echo $ForumID; ?>">
+<tr class="TableRow3" id="MkEvent">
 <td class="TableRow3" style="width: 15%; vertical-align: middle; text-align: center;">
 <div style="width: 100%; height: 160px; overflow: auto;"><?php
 $renee_query=query("SELECT * FROM `".$Settings['sqltable']."smileys`", array(null));
@@ -173,7 +173,7 @@ if($SmileRow<5) { ?>
 @mysql_free_result($renee_result);
 ?></div></td>
 <td class="TableRow3" style="width: 85%;">
-<form method="post" id="MkTopicForm" action="<?php echo url_maker($exfile['event'],$Settings['file_ext'],"act=makeevent",$Settings['qstr'],$Settings['qsep'],$prexqstr['event'],$exqstr['event']); ?>">
+<form method="post" id="MkEventForm" action="<?php echo url_maker($exfile['event'],$Settings['file_ext'],"act=makeevent",$Settings['qstr'],$Settings['qsep'],$prexqstr['event'],$exqstr['event']); ?>">
 <table style="text-align: left;">
 <tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="EventName">Insert Event Name:</label></td>
@@ -202,7 +202,7 @@ if($SmileRow<5) { ?>
 <input type="reset" value="Reset Form" class="Button" name="Reset_Form" />
 </td></tr></table>
 </form></td></tr>
-<tr id="MkTopicEnd<?php echo $ForumID; ?>" class="TableRow4">
+<tr id="MkEventEnd" class="TableRow4">
 <td class="TableRow4" colspan="5">&nbsp;</td>
 </tr>
 </table></div>
@@ -406,7 +406,7 @@ if ($_POST['EventName']==null) { $Error="Yes"; ?>
 <?php } if($GroupInfo['CanAddEvents']=="no") { $Error="Yes"; ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
-	<br />You do not have permission to make a topic here.<br />
+	<br />You do not have permission to make a event here.<br />
 	</span></td>
 </tr>
 <?php } if ($Error=="Yes") {
@@ -429,7 +429,7 @@ mysql_query($query);
 @redirect("refresh",$basedir.url_maker($exfile['event'],$Settings['file_ext'],"act=event&id=".$eventid,$Settings['qstr'],$Settings['qsep'],$prexqstr['event'],$exqstr['event'],FALSE),"3");
 ?><tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage"><br />
-	Event <?php echo $_POST['TopicName']; ?> was started.<br />
+	Event <?php echo $_POST['EventName']; ?> was started.<br />
 	Click <a href="<?php echo url_maker($exfile['event'],$Settings['file_ext'],"act=event&id=".$eventid,$Settings['qstr'],$Settings['qsep'],$prexqstr['event'],$exqstr['event']); ?>">here</a> to continue to event.<br />&nbsp;
 	</span><br /></td>
 </tr>

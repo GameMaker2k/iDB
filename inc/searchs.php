@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: searchs.php - Last Update: 09/02/2007 SVN 97 - Author: cooldude2k $
+    $FileInfo: searchs.php - Last Update: 09/25/2007 SVN 110 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="searchs.php"||$File3Name=="/searchs.php") {
@@ -243,7 +243,6 @@ echo "<span>".$UsersName."</span>"; }
 </tr>
 </table></div>
 <?php
-@mysql_free_result($result);
+@mysql_free_result($result); } } } 
 ?>
 <div>&nbsp;</div>
-<?php } } } ?>
