@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: replys.php - Last Update: 09/24/2007 SVN 109 - Author: cooldude2k $
+    $FileInfo: replys.php - Last Update: 09/28/2007 SVN 111 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replys.php"||$File3Name=="/replys.php") {
@@ -49,16 +49,22 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 if($CatPermissionInfo['CanViewCategory'][$TopicCatID]=="yes"&&
 	$PermissionInfo['CanViewForum'][$TopicForumID]=="yes") {
 if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes"||$PermissionInfo['CanMakeTopics'][$TopicForumID]=="yes") {
-if($TopicClosed==0) {
+$CanMakeReply = "no";
+if($TopicClosed==0&&$PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes") {
+	$CanMakeReply = "yes"; }
+if($TopicClosed==1&&$PermissionInfo['CanMakeReplysClose'][$TopicForumID]=="yes"
+	&&$PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes") {
+		$CanMakeReply = "yes"; }
+if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes"||$PermissionInfo['CanMakeTopics'][$TopicForumID]=="yes") {
 ?>
 <table style="width: 100%;" class="Table2">
 <tr>
  <td style="width: 0%; text-align: left;">&nbsp;</td>
  <td style="width: 100%; text-align: right;">
- <?php if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes"&&$TopicClosed==0) { ?>
+ <?php if($CanMakeReply=="yes") { ?>
  <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=create&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $ThemeSet['AddReply']; ?></a>
  <?php } if($PermissionInfo['CanMakeTopics'][$TopicForumID]=="yes") {
-	if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes"&&$TopicClosed==0) { ?>
+	if($CanMakeReply=="yes") { ?>
  <?php echo $ThemeSet['ButtonDivider']; } ?>
  <a href="<?php echo url_maker($exfile['forum'],$Settings['file_ext'],"act=create&id=".$TopicForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum']); ?>"><?php echo $ThemeSet['NewTopic']; ?></a>
  <?php } ?></td>
@@ -243,7 +249,7 @@ echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr
 </table></div>
 <div>&nbsp;</div>
 <?php ++$i; } @mysql_free_result($result); 
-if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes"&&$TopicClosed==0) {  
+if($CanMakeReply=="yes") {  
 if(!isset($_GET['fastreply'])) { $_GET['fastreply'] = false; }
 if($_GET['fastreply']==true||
 	$_GET['fastreply']=="on") { $fps = " "; }
@@ -954,22 +960,21 @@ mysql_query($queryupd); } }
 </tr>
 </table></div>
 <?php }
-if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes"||$PermissionInfo['CanMakeTopics'][$TopicForumID]=="yes") {
-if($TopicClosed==0) { ?>
+if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes"||$PermissionInfo['CanMakeTopics'][$TopicForumID]=="yes") { ?>
 <table class="Table2" style="width: 100%;">
 <tr>
  <td style="width: 0%; text-align: left;">&nbsp;</td>
  <td style="width: 100%; text-align: right;">
- <?php if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes"&&$TopicClosed==0) { ?>
+ <?php if($CanMakeReply=="yes") { ?>
  <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=create&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $ThemeSet['AddReply']; ?></a>
  <?php echo $ThemeSet['ButtonDivider']; ?>
  <a href="javascript:%20<?php echo urlencode("toggletag('FastReply');"); ?>"><?php echo $ThemeSet['FastReply']; ?></a>
  <?php } if($PermissionInfo['CanMakeTopics'][$TopicForumID]=="yes") {
-	if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes"&&$TopicClosed==0) { ?>
+	if($CanMakeReply=="yes") { ?>
  <?php echo $ThemeSet['ButtonDivider']; } ?>
  <a href="<?php echo url_maker($exfile['forum'],$Settings['file_ext'],"act=create&id=".$TopicForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum']); ?>"><?php echo $ThemeSet['NewTopic']; ?></a>
  <?php } ?></td>
 </tr>
 </table>
 <div>&nbsp;</div>
-<?php } } } } ?>
+<?php } } } ?>
