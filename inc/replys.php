@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: replys.php - Last Update: 09/28/2007 SVN 111 - Author: cooldude2k $
+    $FileInfo: replys.php - Last Update: 09/29/2007 SVN 112 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replys.php"||$File3Name=="/replys.php") {
@@ -46,6 +46,7 @@ if($PermissionInfo['CanViewForum'][$TopicForumID]=="no"||
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+$CanMakeReply = null;
 if($CatPermissionInfo['CanViewCategory'][$TopicCatID]=="yes"&&
 	$PermissionInfo['CanViewForum'][$TopicForumID]=="yes") {
 if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes"||$PermissionInfo['CanMakeTopics'][$TopicForumID]=="yes") {
