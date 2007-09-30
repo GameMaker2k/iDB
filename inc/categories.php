@@ -11,13 +11,13 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: categories.php - Last Update: 09/14/2007 SVN 102 - Author: cooldude2k $
+    $FileInfo: categories.php - Last Update: 09/30/2007 SVN 113 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="categories.php"||$File3Name=="/categories.php") {
 	require('index.php');
 	exit(); }
-$prequery = query("SELECT * FROM `".$Settings['sqltable']."categories` WHERE `id`=%i AND `ShowCategory`='yes'", array($_GET['id']));
+$prequery = query("SELECT * FROM `".$Settings['sqltable']."categories` WHERE `id`=%i", array($_GET['id']));
 $preresult=mysql_query($prequery);
 $prenum=mysql_num_rows($preresult);
 if($prenum==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); @mysql_free_result($preresult);
