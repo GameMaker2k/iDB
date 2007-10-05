@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: members.php - Last Update: 09/21/2007 SVN 108 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 10/05/2007 SVN 115 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -246,21 +246,21 @@ Title: <?php echo $ViewMem['Title']; ?></div>
 if($_GET['act']=="logout") {
 @session_unset();
 if($cookieDomain==null) {
-@setcookie("MemberName", null, GMTimeStamp() - 3600, $basedir);
-@setcookie("UserID", null, GMTimeStamp() - 3600, $basedir);
-@setcookie("SessPass", null, GMTimeStamp() - 3600, $basedir);
-@setcookie(session_name(), "", GMTimeStamp() - 3600, $basedir); }
+@setcookie("MemberName", null, GMTimeStamp() - 3600, $cbasedir);
+@setcookie("UserID", null, GMTimeStamp() - 3600, $cbasedir);
+@setcookie("SessPass", null, GMTimeStamp() - 3600, $cbasedir);
+@setcookie(session_name(), "", GMTimeStamp() - 3600, $cbasedir); }
 if($cookieDomain!=null) {
 if($cookieSecure==true) {
-@setcookie("MemberName", null, GMTimeStamp() - 3600, $basedir, $cookieDomain, 1);
-@setcookie("UserID", null, GMTimeStamp() - 3600, $basedir, $cookieDomain, 1);
-@setcookie("SessPass", null, GMTimeStamp() - 3600, $basedir, $cookieDomain, 1);
-@setcookie(session_name(), "", GMTimeStamp() - 3600, $basedir, $cookieDomain, 1); }
+@setcookie("MemberName", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain, 1);
+@setcookie("UserID", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain, 1);
+@setcookie("SessPass", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain, 1);
+@setcookie(session_name(), "", GMTimeStamp() - 3600, $cbasedir, $cookieDomain, 1); }
 if($cookieSecure==false) {
-@setcookie("MemberName", null, GMTimeStamp() - 3600, $basedir, $cookieDomain);
-@setcookie("UserID", null, GMTimeStamp() - 3600, $basedir, $cookieDomain);
-@setcookie("SessPass", null, GMTimeStamp() - 3600, $basedir, $cookieDomain);
-@setcookie(session_name(), "", GMTimeStamp() - 3600, $basedir, $cookieDomain); } }
+@setcookie("MemberName", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain);
+@setcookie("UserID", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain);
+@setcookie("SessPass", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain);
+@setcookie(session_name(), "", GMTimeStamp() - 3600, $cbasedir, $cookieDomain); } }
 unset($_COOKIE[session_name()]);
 $_SESSION = array();
 @session_unset();
@@ -420,18 +420,18 @@ $_SESSION['UserPass']=$NewPassword;
 $_SESSION['DBName']=$Settings['sqldb'];
 if($_POST['storecookie']==true) {
 if($cookieDomain==null) {
-@setcookie("MemberName", $YourNameM, time() + (7 * 86400), $basedir);
-@setcookie("UserID", $YourIDM, time() + (7 * 86400), $basedir);
-@setcookie("SessPass", $NewPassword, time() + (7 * 86400), $basedir); }
+@setcookie("MemberName", $YourNameM, time() + (7 * 86400), $cbasedir);
+@setcookie("UserID", $YourIDM, time() + (7 * 86400), $cbasedir);
+@setcookie("SessPass", $NewPassword, time() + (7 * 86400), $cbasedir); }
 if($cookieDomain!=null) {
 if($cookieSecure==true) {
-@setcookie("MemberName", $YourNameM, time() + (7 * 86400), $basedir, $cookieDomain, 1);
-@setcookie("UserID", $YourIDM, time() + (7 * 86400), $basedir, $cookieDomain, 1);
-@setcookie("SessPass", $NewPassword, time() + (7 * 86400), $basedir, $cookieDomain, 1); }
+@setcookie("MemberName", $YourNameM, time() + (7 * 86400), $cbasedir, $cookieDomain, 1);
+@setcookie("UserID", $YourIDM, time() + (7 * 86400), $cbasedir, $cookieDomain, 1);
+@setcookie("SessPass", $NewPassword, time() + (7 * 86400), $cbasedir, $cookieDomain, 1); }
 if($cookieSecure==false) {
-@setcookie("MemberName", $YourNameM, time() + (7 * 86400), $basedir, $cookieDomain);
-@setcookie("UserID", $YourIDM, time() + (7 * 86400), $basedir, $cookieDomain);
-@setcookie("SessPass", $NewPassword, time() + (7 * 86400), $basedir, $cookieDomain); } } } }
+@setcookie("MemberName", $YourNameM, time() + (7 * 86400), $cbasedir, $cookieDomain);
+@setcookie("UserID", $YourIDM, time() + (7 * 86400), $cbasedir, $cookieDomain);
+@setcookie("SessPass", $NewPassword, time() + (7 * 86400), $cbasedir, $cookieDomain); } } } }
 } } if($numlog<=0) {
 //echo "Password was not right or user not found!! <_< ";
 } ?>
@@ -749,18 +749,18 @@ $_SESSION['UserPass']=$NewPassword;
 $_SESSION['DBName']=$Settings['sqldb'];
 if($_POST['storecookie']==true) {
 if($cookieDomain==null) {
-@setcookie("MemberName", $YourNameM, time() + (7 * 86400), $basedir);
-@setcookie("UserID", $YourIDM, time() + (7 * 86400), $basedir);
-@setcookie("SessPass", $NewPassword, time() + (7 * 86400), $basedir); }
+@setcookie("MemberName", $YourNameM, time() + (7 * 86400), $cbasedir);
+@setcookie("UserID", $YourIDM, time() + (7 * 86400), $cbasedir);
+@setcookie("SessPass", $NewPassword, time() + (7 * 86400), $cbasedir); }
 if($cookieDomain!=null) {
 if($cookieSecure==true) {
-@setcookie("MemberName", $YourNameM, time() + (7 * 86400), $basedir, $cookieDomain, 1);
-@setcookie("UserID", $YourIDM, time() + (7 * 86400), $basedir, $cookieDomain, 1);
-@setcookie("SessPass", $NewPassword, time() + (7 * 86400), $basedir, $cookieDomain, 1); }
+@setcookie("MemberName", $YourNameM, time() + (7 * 86400), $cbasedir, $cookieDomain, 1);
+@setcookie("UserID", $YourIDM, time() + (7 * 86400), $cbasedir, $cookieDomain, 1);
+@setcookie("SessPass", $NewPassword, time() + (7 * 86400), $cbasedir, $cookieDomain, 1); }
 if($cookieSecure==false) {
-@setcookie("MemberName", $YourNameM, time() + (7 * 86400), $basedir, $cookieDomain);
-@setcookie("UserID", $YourIDM, time() + (7 * 86400), $basedir, $cookieDomain);
-@setcookie("SessPass", $NewPassword, time() + (7 * 86400), $basedir, $cookieDomain); } } }
+@setcookie("MemberName", $YourNameM, time() + (7 * 86400), $cbasedir, $cookieDomain);
+@setcookie("UserID", $YourIDM, time() + (7 * 86400), $cbasedir, $cookieDomain);
+@setcookie("SessPass", $NewPassword, time() + (7 * 86400), $cbasedir, $cookieDomain); } } }
 /*
 $SendPMtoID=$_SESSION['UserID'];
 $YourPMID = 1;

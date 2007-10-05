@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: mysql.php - Last Update: 09/16/2007 SVN 104 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 10/05/2007 SVN 115 - Author: cooldude2k $
 */
 //@ini_set("display_errors", true); 
 //@ini_set("display_startup_errors", true);
@@ -31,6 +31,11 @@ if($Settings['idburl']!=null&&$Settings['idburl']!="localhost") {
 $PathsTest = parse_url($Settings['idburl']);
 $Settings['fixbasedir'] = $PathsTest['path']."/"; 
 $Settings['fixbasedir'] = str_replace("//", "/", $Settings['fixbasedir']); } }
+if($Settings['fixcookiedir']==true) {
+if($Settings['idburl']!=null&&$Settings['idburl']!="localhost") {
+$PathsTest = parse_url($Settings['idburl']);
+$Settings['fixcookiedir'] = $PathsTest['path']."/"; 
+$Settings['fixcookiedir'] = str_replace("//", "/", $Settings['fixcookiedir']); } }
 //@session_save_path($SettDir['inc']."temp/");
 if(!isset($Settings['sqldb'])) { 
 if(file_exists("install.php")) { @header('Location: install.php'); die(); } 
@@ -118,12 +123,12 @@ if($GZipEncode['Type']!="gzip") { if($GZipEncode['Type']!="deflate") { $GZipEnco
 @header('P3P: CP="NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM"'); } */
 // Some http stuff
 if($cookieDomain==null) {
-@session_set_cookie_params(0, $basedir); }
+@session_set_cookie_params(0, $cbasedir); }
 if($cookieDomain!=null) {
 if($cookieSecure==true) {
-@session_set_cookie_params(0, $basedir, $cookieDomain, 1); }
+@session_set_cookie_params(0, $cbasedir, $cookieDomain, 1); }
 if($cookieSecure==false) {
-@session_set_cookie_params(0, $basedir, $cookieDomain); } }
+@session_set_cookie_params(0, $cbasedir, $cookieDomain); } }
 @session_cache_limiter("private, must-revalidate");
 @header("Cache-Control: private, must-revalidate"); // IE 6 Fix
 @header("Pragma: private, must-revalidate");
@@ -132,7 +137,7 @@ if($cookieSecure==false) {
 @header("Expires: ".gmdate("D, d M Y H:i:s")." GMT");
 @session_name($Settings['sqltable']."sess");
 @session_start();
-//@header("Set-Cookie: PHPSESSID=" . session_id() . "; path=".$basedir);
+//@header("Set-Cookie: PHPSESSID=" . session_id() . "; path=".$cbasedir);
 @output_reset_rewrite_vars();
 if($_GET['act']=="bsdl"||$_GET['act']=="BSDL") { $_GET['act']="bsd"; }
 if($_GET['act']=="bsd"||$_GET['act']=="bsd") {

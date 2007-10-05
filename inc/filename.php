@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: filename.php - Last Update: 08/30/2007 SVN 92 - Author: cooldude2k $
+    $FileInfo: filename.php - Last Update: 10/05/2007 SVN 115 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="filename.php"||$File3Name=="/filename.php") {
@@ -24,8 +24,11 @@ if(dirname($_SERVER['SCRIPT_NAME'])==".") {
 $basedir = dirname($_SERVER['PHP_SELF'])."/"; }
 if($basedir=="\/") { $basedir="/"; }
 $basedir = str_replace("//", "/", $basedir);
-if($Settings['fixbasedir']!=null&&$Settings['fixbasedir']!="") {
+$cbasedir = $basedir;
+if($Settings['fixbasedir']!=null&&$Settings['fixbasedir']!=false) {
 		$basedir = $Settings['fixbasedir']; }
+if($Settings['fixcookiedir']!=null&&$Settings['fixcookiedir']!="") {
+		$cbasedir = $Settings['fixcookiedir']; }
 $BaseURL = $basedir;
 if(!isset($_SERVER['HTTPS'])) { $_SERVER['HTTPS'] = 'off'; }
 if($_SERVER['HTTPS']=="on") { $prehost = "https://"; }

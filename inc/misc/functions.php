@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: functions.php - Last Update: 09/20/2007 SVN 106 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 10/05/2007 SVN 115 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -30,10 +30,10 @@ if ($File3Name==$FileName||$File3Name=="/".$FileName) {
 	return true; } }
 CheckFile("functions.php");
 require($SettDir['misc']."compression.php");
+/* 
 if ($_GET['act']=="DeleteSession") { @session_destroy(); }
 if ($_GET['act']=="ResetSession") { @session_unset(); }
 if ($_GET['act']=="NewSessionID") { @session_regenerate_id(); }
-/* 
 if ($_GET['act']=="PHPInfo") { @phpinfo(); exit(); }
 if ($_GET['act']=="phpinfo") { @phpinfo(); exit(); }
 if ($_GET['act']=="PHPCredits") { @phpcredits(); exit(); }
@@ -209,8 +209,8 @@ function getnextid($tablepre,$table) {
    $getnextid = mysql_fetch_assoc($getnextidr);
    return $getnextid['Auto_increment'];
    @mysql_free_result($getnextidr); }
-	$Names['RSA'] = "Rachel Sabonis";
-define("_rachel_", $Names['RSA']);
+	$Names['K'] = "Katarzyna";
+define("_katarzyna_", $Names['K']);
 // Change Time Stamp to a readable time
 function GMTimeChange($format,$timestamp,$offset,$minoffset=null,$dst=null) {
 $TCHour = date("H",$timestamp);

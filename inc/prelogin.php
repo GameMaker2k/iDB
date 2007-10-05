@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: prelogin.php - Last Update: 09/21/2007 SVN 108 - Author: cooldude2k $
+    $FileInfo: prelogin.php - Last Update: 10/05/2007 SVN 115 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="prelogin.php"||$File3Name=="/prelogin.php") {
@@ -48,35 +48,35 @@ $_SESSION['UserGroup']=$YourGroupAM;
 $_SESSION['UserDST']=$YourDSTAM;
 $_SESSION['UserPass']=$YourPassAM;
 if($cookieDomain==null) {
-@setcookie("MemberName", $YourNameM, time() + (7 * 86400), $basedir);
-@setcookie("UserID", $YourIDAM, time() + (7 * 86400), $basedir);
-@setcookie("SessPass", $YourPassAM, time() + (7 * 86400), $basedir); }
+@setcookie("MemberName", $YourNameM, time() + (7 * 86400), $cbasedir);
+@setcookie("UserID", $YourIDAM, time() + (7 * 86400), $cbasedir);
+@setcookie("SessPass", $YourPassAM, time() + (7 * 86400), $cbasedir); }
 if($cookieDomain!=null) {
 if($cookieSecure==true) {
-@setcookie("MemberName", $YourNameM, time() + (7 * 86400), $basedir, $cookieDomain, 1);
-@setcookie("UserID", $YourIDAM, time() + (7 * 86400), $basedir, $cookieDomain, 1);
-@setcookie("SessPass", $YourPassAM, time() + (7 * 86400), $basedir, $cookieDomain, 1); }
+@setcookie("MemberName", $YourNameM, time() + (7 * 86400), $cbasedir, $cookieDomain, 1);
+@setcookie("UserID", $YourIDAM, time() + (7 * 86400), $cbasedir, $cookieDomain, 1);
+@setcookie("SessPass", $YourPassAM, time() + (7 * 86400), $cbasedir, $cookieDomain, 1); }
 if($cookieSecure==false) {
-@setcookie("MemberName", $YourNameM, time() + (7 * 86400), $basedir, $cookieDomain);
-@setcookie("UserID", $YourIDAM, time() + (7 * 86400), $basedir, $cookieDomain);
-@setcookie("SessPass", $YourPassAM, time() + (7 * 86400), $basedir, $cookieDomain); } }
+@setcookie("MemberName", $YourNameM, time() + (7 * 86400), $cbasedir, $cookieDomain);
+@setcookie("UserID", $YourIDAM, time() + (7 * 86400), $cbasedir, $cookieDomain);
+@setcookie("SessPass", $YourPassAM, time() + (7 * 86400), $cbasedir, $cookieDomain); } }
 } } if($numlog2<=0||$numlog2>1||$BanError=="yes") { @session_unset();
 if($cookieDomain==null) {
-@setcookie("MemberName", null, GMTimeStamp() - 3600, $basedir);
-@setcookie("UserID", null, GMTimeStamp() - 3600, $basedir);
-@setcookie("SessPass", null, GMTimeStamp() - 3600, $basedir);
-@setcookie(session_name(), "", GMTimeStamp() - 3600, $basedir); }
+@setcookie("MemberName", null, GMTimeStamp() - 3600, $cbasedir);
+@setcookie("UserID", null, GMTimeStamp() - 3600, $cbasedir);
+@setcookie("SessPass", null, GMTimeStamp() - 3600, $cbasedir);
+@setcookie(session_name(), "", GMTimeStamp() - 3600, $cbasedir); }
 if($cookieDomain!=null) {
 if($cookieSecure==true) {
-@setcookie("MemberName", null, GMTimeStamp() - 3600, $basedir, $cookieDomain, 1);
-@setcookie("UserID", null, GMTimeStamp() - 3600, $basedir, $cookieDomain, 1);
-@setcookie("SessPass", null, GMTimeStamp() - 3600, $basedir, $cookieDomain, 1);
-@setcookie(session_name(), "", GMTimeStamp() - 3600, $basedir, $cookieDomain, 1); }
+@setcookie("MemberName", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain, 1);
+@setcookie("UserID", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain, 1);
+@setcookie("SessPass", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain, 1);
+@setcookie(session_name(), "", GMTimeStamp() - 3600, $cbasedir, $cookieDomain, 1); }
 if($cookieSecure==false) {
-@setcookie("MemberName", null, GMTimeStamp() - 3600, $basedir, $cookieDomain);
-@setcookie("UserID", null, GMTimeStamp() - 3600, $basedir, $cookieDomain);
-@setcookie("SessPass", null, GMTimeStamp() - 3600, $basedir, $cookieDomain);
-@setcookie(session_name(), "", GMTimeStamp() - 3600, $basedir, $cookieDomain); } }
+@setcookie("MemberName", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain);
+@setcookie("UserID", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain);
+@setcookie("SessPass", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain);
+@setcookie(session_name(), "", GMTimeStamp() - 3600, $cbasedir, $cookieDomain); } }
 unset($_COOKIE[session_name()]);
 $_SESSION = array(); @session_unset(); @session_destroy();
 @redirect("location",$basedir.url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],false)); @mysql_free_result($resultlog2); @mysql_free_result($gresult);
