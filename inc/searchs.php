@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: searchs.php - Last Update: 09/25/2007 SVN 110 - Author: cooldude2k $
+    $FileInfo: searchs.php - Last Update: 10/14/2007 SVN 116 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="searchs.php"||$File3Name=="/searchs.php") {
@@ -97,7 +97,7 @@ redirect("location",$basedir.url_maker($exfile['search'],$Settings['file_ext'],"
 @header("Content-Type: text/plain; charset=".$Settings['charset']);
 ob_clean(); echo "Sorry could not find any search results."; @mysql_free_result($result);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
-//Start Topic Page Code (Will be used at later time)
+//Start Topic Page Code
 if(!isset($Settings['max_topics'])) { $Settings['max_topics'] = 10; }
 if($_GET['page']==null) { $_GET['page'] = 1; } 
 if($_GET['page']<=0) { $_GET['page'] = 1; }
@@ -118,13 +118,14 @@ if($pnum>=$Settings['max_topics']) {
 if($pnum<$Settings['max_topics']&&$pnum>0) { 
 	$pnum = $pnum - $pnum; 
 	$Pages[$l] = $l; ++$l; } }
-//End Topic Page Code (Its not used yet but its still good to have :P )
-$i=0;
+//End Topic Page Code
+//$i=0;
 $pagenum=count($Pages);
 $pagei=1; $pstring = "<div class=\"PageList\">Pages: ";
 while ($pagei <= $pagenum) {
 $pstring = $pstring."<a href=\"".url_maker($exfile['search'],$Settings['file_ext'],"act=topics&search=".$_GET['search']."&type=".$_GET['type']."&page=".$Pages[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search'])."\">".$Pages[$pagei]."</a> ";
 	++$pagei; } $pstring = $pstring."</div>";
+echo $pstring;
 ?>
 <div class="Table1Border">
 <table class="Table1" id="Search">
@@ -132,9 +133,9 @@ $pstring = $pstring."<a href=\"".url_maker($exfile['search'],$Settings['file_ext
 <td class="TableRow1" colspan="6"><span style="float: left;">
 <?php echo $ThemeSet['TitleIcon'];
 if($_GET['msearch']==null) { ?>
-<a href="<?php echo url_maker($exfile['search'],$Settings['file_ext'],"act=topics&search=".$_GET['search']."&type=".$_GET['type'],$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search']); ?>">Searching for <?php echo $_GET['search']; ?></a>
+<a href="<?php echo url_maker($exfile['search'],$Settings['file_ext'],"act=topics&search=".$_GET['search']."&type=".$_GET['type']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search']); ?>">Searching for <?php echo $_GET['search']; ?></a>
 <?php } if($_GET['msearch']!=null) { ?>
-<a href="<?php echo url_maker($exfile['search'],$Settings['file_ext'],"act=topics&search=".$_GET['search']."&type=".$_GET['type']."&msearch=".$_GET['msearch'],$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search']); ?>">Searching for <?php echo $_GET['search']; ?> by <?php echo $_GET['msearch']; ?></a>
+<a href="<?php echo url_maker($exfile['search'],$Settings['file_ext'],"act=topics&search=".$_GET['search']."&type=".$_GET['type']."&msearch=".$_GET['msearch']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search']); ?>">Searching for <?php echo $_GET['search']; ?> by <?php echo $_GET['msearch']; ?></a>
 <?php } ?></span>
 <?php echo "<span style=\"float: right;\">&nbsp;</span>"; ?></td>
 </tr>
@@ -147,7 +148,7 @@ if($_GET['msearch']==null) { ?>
 <th class="TableRow2" style="width: 25%;">Last Reply</th>
 </tr>
 <?php
-while ($i < $num) {
+while ($i < $nums) {
 $TopicID=mysql_result($result,$i,"id");
 $ForumID=mysql_result($result,$i,"ForumID");
 $CategoryID=mysql_result($result,$i,"CategoryID");
@@ -177,16 +178,22 @@ $GuestName1=mysql_result($glrresult,0,"GuestName");
 $TimeStamp1=mysql_result($glrresult,0,"TimeStamp");
 $TimeStamp1=GMTimeChange("F j, Y",$TimeStamp1,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $UsersName1 = GetUserName($UsersID1,$Settings['sqltable']); }
+$NumPages = null; $NumRPosts = $NumReplys + 1;
+if(!isset($Settings['max_posts'])) { $Settings['max_posts'] = 10; }
+if($NumRPosts>$Settings['max_posts']) {
+$NumPages = ceil($NumRPosts/$Settings['max_posts']); }
+if($NumRPosts<=$Settings['max_posts']) {
+$NumPages = 1; }
 if($UsersName1=="Guest") { $UsersName1=$GuestName1;
 if($UsersName1==null) { $UsersName1="Guest"; } }
 if($TimeStamp1!=null) { $lul = null;
 if($UsersID1!="-1") {
 $lul = url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UsersID1,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
-$luln = url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."#post".$ReplyID1;
+$luln = url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."&#35;reply".$NumReply;
 $LastReply = "User: <a href=\"".$lul."\">".$UsersName1."</a><br />\nTime: <a href=\"".$luln."\">".$TimeStamp1."</a>"; }
 if($UsersID1=="-1") {
 $lul = url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']);
-$luln = url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."#post".$ReplyID1;
+$luln = url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."&#35;reply".$NumReply;
 $LastReply = "User: <span>".$UsersName1."</span><br />\nTime: <a href=\"".$luln."\">".$TimeStamp1."</a>"; } }
 @mysql_free_result($glrresult);
 if($TimeStamp1==null) { $LastReply = "&nbsp;<br />&nbsp;"; }

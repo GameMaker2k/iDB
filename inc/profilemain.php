@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: profilemain.php - Last Update: 10/05/2007 SVN 115 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 10/14/2007 SVN 116 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
@@ -165,9 +165,9 @@ $profiletitle = " ".$ThemeSet['TitleDivider']." Signature Editor";
 if($_POST['update']=="now") {
 if($_POST['act']=="signature"&&
 	$_SESSION['UserGroup']!=$Settings['GuestGroup']) {
-	$_POST['Signature'] = htmlentities($_POST['Signature'], ENT_QUOTES);
-	$_POST['Signature'] = preg_replace("/\t+/"," ",$_POST['Signature']);
-	$_POST['Signature'] = preg_replace("/\s\s+/"," ",$_POST['Signature']);
+	$_POST['Signature'] = stripcslashes(htmlspecialchars($_POST['Signature'], ENT_QUOTES));
+	$_POST['Signature'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['Signature']);
+	//$_POST['Signature'] = @remove_spaces($_POST['Signature']);
 	$_POST['Signature'] = remove_bad_entities($_POST['Signature']);
 	$NewDay=GMTimeStamp();
 	$NewIP=$_SERVER['REMOTE_ADDR'];

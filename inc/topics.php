@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: topics.php - Last Update: 09/16/2007 SVN 104 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 10/14/2007 SVN 116 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -96,7 +96,7 @@ if($_GET['act']=="view") {
 $query = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `ForumID`=%i ORDER BY `Pinned` DESC, `LastUpdate` DESC", array($_GET['id']));
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
-//Start Topic Page Code (Will be used at later time)
+//Start Topic Page Code
 if(!isset($Settings['max_topics'])) { $Settings['max_topics'] = 10; }
 if($_GET['page']==null) { $_GET['page'] = 1; } 
 if($_GET['page']<=0) { $_GET['page'] = 1; }
@@ -117,19 +117,20 @@ if($pnum>=$Settings['max_topics']) {
 if($pnum<$Settings['max_topics']&&$pnum>0) { 
 	$pnum = $pnum - $pnum; 
 	$Pages[$l] = $l; ++$l; } }
-//End Topic Page Code (Its not used yet but its still good to have :P )
-$i=0;
+//End Topic Page Code
+//$i=0;
 $pagenum=count($Pages);
 $pagei=1; $pstring = "<div class=\"PageList\">Pages: ";
 while ($pagei <= $pagenum) {
 $pstring = $pstring."<a href=\"".url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$Pages[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType])."\">".$Pages[$pagei]."</a> ";
 	++$pagei; } $pstring = $pstring."</div>";
+echo $pstring;
 ?>
 <div class="Table1Border">
 <table class="Table1" id="Forum<?php echo $ForumID; ?>">
 <tr id="ForumStart<?php echo $ForumID; ?>" class="TableRow1">
 <td class="TableRow1" colspan="6"><span style="float: left;">
-<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['forum'],$Settings['file_ext'],"act=view&id=".$ForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum']); ?>#<?php echo $ForumID; ?>"><?php echo $ForumName; ?></a></span>
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['forum'],$Settings['file_ext'],"act=view&id=".$ForumID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum']); ?>#<?php echo $ForumID; ?>"><?php echo $ForumName; ?></a></span>
 <?php echo "<span style=\"float: right;\">&nbsp;</span>"; ?></td>
 </tr>
 <tr id="TopicStatRow<?php echo $ForumID; ?>" class="TableRow2">
@@ -141,7 +142,7 @@ $pstring = $pstring."<a href=\"".url_maker($exfile[$ForumType],$Settings['file_e
 <th class="TableRow2" style="width: 25%;">Last Reply</th>
 </tr>
 <?php
-while ($i < $num) {
+while ($i < $nums) {
 $TopicID=mysql_result($result,$i,"id");
 $UsersID=mysql_result($result,$i,"UserID");
 $GuestName=mysql_result($result,$i,"GuestName");
@@ -165,16 +166,22 @@ $GuestName1=mysql_result($glrresult,0,"GuestName");
 $TimeStamp1=mysql_result($glrresult,0,"TimeStamp");
 $TimeStamp1=GMTimeChange("F j, Y",$TimeStamp1,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $UsersName1 = GetUserName($UsersID1,$Settings['sqltable']); }
+$NumPages = null; $NumRPosts = $NumReplys + 1;
+if(!isset($Settings['max_posts'])) { $Settings['max_posts'] = 10; }
+if($NumRPosts>$Settings['max_posts']) {
+$NumPages = ceil($NumRPosts/$Settings['max_posts']); }
+if($NumRPosts<=$Settings['max_posts']) {
+$NumPages = 1; }
 if($UsersName1=="Guest") { $UsersName1=$GuestName1;
 if($UsersName1==null) { $UsersName1="Guest"; } }
 if($TimeStamp1!=null) { $lul = null;
 if($UsersID1!="-1") {
 $lul = url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UsersID1,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
-$luln = url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."#post".$ReplyID1;
+$luln = url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."&#35;reply".$NumReply;
 $LastReply = "User: <a href=\"".$lul."\">".$UsersName1."</a><br />\nTime: <a href=\"".$luln."\">".$TimeStamp1."</a>"; }
 if($UsersID1=="-1") {
 $lul = url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UsersID1,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
-$luln = url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."#post".$ReplyID1;
+$luln = url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."&#35;reply".$NumReply;
 $LastReply = "User: <span>".$UsersName1."</span><br />\nTime: <a href=\"".$luln."\">".$TimeStamp1."</a>"; } }
 @mysql_free_result($glrresult);
 if(!isset($TimeStamp1)) { $TimeStamp1 = null; } if(!isset($LastReply)) { $LastReply = null; }
@@ -211,7 +218,7 @@ if ($PinnedTopic==1&&$TopicStat==1) {
 <td class="TableRow3"><div class="topicstate">
 <?php echo $PreTopic; ?></div></td>
 <td class="TableRow3"><div class="topicname">
-<a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a></div>
+<a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a></div>
 <div class="topicdescription"><?php echo $TopicDescription; ?></div></td>
 <td class="TableRow3" style="text-align: center;"><?php
 if($UsersID!="-1") {
@@ -243,7 +250,7 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 <table class="Table1" id="MakeTopic<?php echo $ForumID; ?>">
 <tr class="TableRow1" id="TopicStart<?php echo $ForumID; ?>">
 <td class="TableRow1" colspan="2"><span style="float: left;">
-<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['forum'],$Settings['file_ext'],"act=view&id=".$ForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum']); ?>"><?php echo $ForumName; ?></a></span>
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['forum'],$Settings['file_ext'],"act=view&id=".$ForumID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum']); ?>"><?php echo $ForumName; ?></a></span>
 <?php echo "<span style=\"float: right;\">&nbsp;</span>"; ?></td>
 </tr>
 <tr id="MakeTopicRow<?php echo $ForumID; ?>" class="TableRow2">
@@ -321,7 +328,7 @@ if(!isset($_POST['GuestName'])) { $_POST['GuestName'] = null; }
 <table class="Table1">
 <tr class="TableRow1">
 <td class="TableRow1"><span style="float: left;">
-<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['forum'],$Settings['file_ext'],"act=view&id=".$ForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum']); ?>"><?php echo $ForumName; ?></a></span>
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['forum'],$Settings['file_ext'],"act=view&id=".$ForumID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum']); ?>"><?php echo $ForumName; ?></a></span>
 <?php echo "<span style=\"float: right;\">&nbsp;</span>"; ?></td>
 </tr>
 <tr class="TableRow2">
@@ -355,16 +362,16 @@ if(!isset($_POST['GuestName'])) { $_POST['GuestName'] = null; }
 </tr>
 <?php } }
 $_POST['TopicName'] = stripcslashes(htmlspecialchars($_POST['TopicName'], ENT_QUOTES));
-$_POST['TopicName'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['TopicName']);
+//$_POST['TopicName'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['TopicName']);
 $_POST['TopicName'] = @remove_spaces($_POST['TopicName']);
 $_POST['TopicDesc'] = stripcslashes(htmlspecialchars($_POST['TopicDesc'], ENT_QUOTES));
-$_POST['TopicDesc'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['TopicDesc']);
+//$_POST['TopicDesc'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['TopicDesc']);
 $_POST['TopicDesc'] = @remove_spaces($_POST['TopicDesc']);
 $_POST['GuestName'] = stripcslashes(htmlspecialchars($_POST['GuestName'], ENT_QUOTES));
 //$_POST['GuestName'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['GuestName']);
 $_POST['GuestName'] = @remove_spaces($_POST['GuestName']);
 $_POST['TopicPost'] = stripcslashes(htmlspecialchars($_POST['TopicPost'], ENT_QUOTES));
-$_POST['TopicPost'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['TopicPost']);
+//$_POST['TopicPost'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['TopicPost']);
 $_POST['TopicPost'] = remove_bad_entities($_POST['TopicPost']);
 //$_POST['TopicPost'] = @remove_spaces($_POST['TopicPost']);
 if ($_POST['TopicName']==null) { $Error="Yes"; ?>
@@ -433,11 +440,11 @@ mysql_query($queryupd); }
 $NewNumPosts = $NumberPosts + 1; $NewNumTopics = $NumberTopics + 1;
 $queryupd = query("UPDATE `".$Settings['sqltable']."forums` SET `NumPosts`=%i,`NumTopics`=%i WHERE `id`=%i", array($NewNumPosts,$NewNumTopics,$ForumID));
 mysql_query($queryupd);
-@redirect("refresh",$basedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$topicid,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],FALSE),"3");
+@redirect("refresh",$basedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$topicid."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],FALSE),"3");
 ?><tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage"><br />
 	Topic <?php echo $_POST['TopicName']; ?> was started.<br />
-	Click <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$topicid,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>">here</a> to continue to topic.<br />&nbsp;
+	Click <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$topicid."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>">here</a> to continue to topic.<br />&nbsp;
 	</span><br /></td>
 </tr>
 <?php } ?>

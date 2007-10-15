@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: replys.php - Last Update: 09/29/2007 SVN 112 - Author: cooldude2k $
+    $FileInfo: replys.php - Last Update: 10/14/2007 SVN 116 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replys.php"||$File3Name=="/replys.php") {
@@ -77,7 +77,7 @@ if($_GET['act']=="view") {
 $query = query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `TopicID`=%i ORDER BY `TimeStamp` ASC", array($_GET['id']));
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
-//Start Reply Page Code (Will be used at later time)
+//Start Reply Page Code
 if(!isset($Settings['max_posts'])) { $Settings['max_posts'] = 10; }
 if($_GET['page']==null) { $_GET['page'] = 1; } 
 if($_GET['page']<=0) { $_GET['page'] = 1; }
@@ -98,8 +98,8 @@ if($pnum>=$Settings['max_posts']) {
 if($pnum<$Settings['max_posts']&&$pnum>0) { 
 	$pnum = $pnum - $pnum; 
 	$Pages[$l] = $l; ++$l; } }
-//End Reply Page Code (Its not used yet but its still good to have :P )
-$i=0;
+//End Reply Page Code
+//$i=0;
 if($num==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
@@ -113,7 +113,8 @@ $pagei=1; $pstring = "<div class=\"PageList\">Pages: ";
 while ($pagei <= $pagenum) {
 $pstring = $pstring."<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$Pages[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">".$Pages[$pagei]."</a> ";
 	++$pagei; } $pstring = $pstring."</div>";
-while ($i < $num) {
+echo $pstring;
+while ($i < $nums) {
 $MyPostID=mysql_result($result,$i,"id");
 $MyTopicID=mysql_result($result,$i,"TopicID");
 $MyForumID=mysql_result($result,$i,"ForumID");
@@ -170,6 +171,7 @@ $eui=0; while ($eui < $eunum) {
 	$MySubPost = "<div class=\"EditReply\"><br />This post has been edited by <b>".$EditUserName."</b> on ".$MyEditTime."</div>"; }
 $MyPost = text2icons($MyPost,$Settings['sqltable']);
 if($MySubPost!=null) { $MyPost = $MyPost."\n".$MySubPost; }
+$User1Signature = preg_replace("/\<br\>/", "<br />\n", nl2br($User1Signature));
 $User1Signature = text2icons($User1Signature,$Settings['sqltable']);
 $CanEditReply = false; $CanDeleteReply = false;
 if($_SESSION['UserGroup']!=$Settings['GuestGroup']) {
@@ -186,7 +188,7 @@ $ReplyNum = $i + 1;
 <div class="Table1Border">
 <table class="Table1">
 <tr class="TableRow1">
-<td class="TableRow1" colspan="2"><span style="font-weight: bold; float: left;"><?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."#reply".$ReplyNum; ?>"><?php echo $TopicName; ?></a> ( <?php echo $MyDescription; ?> )</span>
+<td class="TableRow1" colspan="2"><span style="font-weight: bold; float: left;"><?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."&#35;reply".$ReplyNum; ?>"><?php echo $TopicName; ?></a> ( <?php echo $MyDescription; ?> )</span>
 <span style="float: right;">&nbsp;</span></td>
 </tr>
 <tr class="TableRow2">
@@ -262,7 +264,7 @@ $QuoteReply = null; $QuoteDescription = null;
 <table class="Table1" id="MakeReply<?php echo $TopicForumID; ?>">
 <tr class="TableRow1" id="ReplyStart<?php echo $TopicForumID; ?>">
 <td class="TableRow1" colspan="2"><span style="float: left;">
-<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>#<?php echo $TopicID; ?>"><?php echo $TopicName; ?></a></span>
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>#<?php echo $TopicID; ?>"><?php echo $TopicName; ?></a></span>
 <?php echo "<span style=\"float: right;\">&nbsp;</span>"; ?></td>
 </tr>
 <tr id="MakeReplyRow<?php echo $TopicForumID; ?>" class="TableRow2">
@@ -369,7 +371,7 @@ if($_GET['post']==null) { $QuoteReply = null; $QuoteDescription = null; }
 <table class="Table1" id="MakeReply<?php echo $TopicForumID; ?>">
 <tr class="TableRow1" id="ReplyStart<?php echo $TopicForumID; ?>">
 <td class="TableRow1" colspan="2"><span style="float: left;">
-<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>#<?php echo $TopicID; ?>"><?php echo $TopicName; ?></a></span>
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>#<?php echo $TopicID; ?>"><?php echo $TopicName; ?></a></span>
 <?php echo "<span style=\"float: right;\">&nbsp;</span>"; ?></td>
 </tr>
 <tr id="MakeReplyRow<?php echo $TopicForumID; ?>" class="TableRow2">
@@ -474,13 +476,13 @@ if(!isset($_POST['GuestName'])) { $_POST['GuestName'] = null; }
 </tr>
 <?php } }
 $_POST['ReplyDesc'] = stripcslashes(htmlspecialchars($_POST['ReplyDesc'], ENT_QUOTES));
-$_POST['ReplyDesc'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['ReplyDesc']);
+//$_POST['ReplyDesc'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['ReplyDesc']);
 $_POST['ReplyDesc'] = @remove_spaces($_POST['ReplyDesc']);
 $_POST['GuestName'] = stripcslashes(htmlspecialchars($_POST['GuestName'], ENT_QUOTES));
 //$_POST['GuestName'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['GuestName']);
 $_POST['GuestName'] = @remove_spaces($_POST['GuestName']);
 $_POST['ReplyPost'] = stripcslashes(htmlspecialchars($_POST['ReplyPost'], ENT_QUOTES));
-$_POST['ReplyPost'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['ReplyPost']);
+//$_POST['ReplyPost'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['ReplyPost']);
 //$_POST['ReplyPost'] = @remove_spaces($_POST['ReplyPost']);
 $_POST['ReplyPost'] = remove_bad_entities($_POST['ReplyPost']);
 if ($_POST['ReplyDesc']==null) { $Error="Yes"; ?>
@@ -555,12 +557,17 @@ $queryupd = query("UPDATE `".$Settings['sqltable']."forums` SET `NumPosts`=%i WH
 mysql_query($queryupd);
 $queryupd = query("UPDATE `".$Settings['sqltable']."topics` SET `NumReply`=%i,LastUpdate=%i WHERE `id`=%i", array($NewNumReplies,$LastActive,$TopicID));
 mysql_query($queryupd);
-$MyPostNum = $NewNumReplies + 1;
-@redirect("refresh",$basedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],FALSE)."#reply".$MyPostNum,"3");
+$MyPostNum = $NewNumReplies + 1; $NumPages = null;
+if(!isset($Settings['max_posts'])) { $Settings['max_posts'] = 10; }
+if($MyPostNum>$Settings['max_posts']) {
+$NumPages = ceil($MyPostNum/$Settings['max_posts']); }
+if($MyPostNum<=$Settings['max_posts']) {
+$NumPages = 1; }
+@redirect("refresh",$basedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],FALSE)."&#35;reply".$MyPostNum,"3");
 ?><tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage"><br />
 	Reply to Topic <?php echo $TopicName; ?> was posted.<br />
-	Click <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>#reply<?php echo $MyPostNum; ?>">here</a> to view your reply.<br />&nbsp;
+	Click <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>&#35;reply<?php echo $MyPostNum; ?>">here</a> to view your reply.<br />&nbsp;
 	</span><br /></td>
 </tr>
 <?php } ?>
@@ -699,7 +706,7 @@ $ReplyPost = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $ReplyPost);
 $ReplyPost = remove_bad_entities($ReplyPost);
 $ReplyDescription=mysql_result($ersresult,0,"Description");
 $ReplyDescription = stripcslashes(htmlspecialchars($ReplyDescription, ENT_QUOTES));
-$ReplyDescription = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $ReplyDescription);
+//$ReplyDescription = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $ReplyDescription);
 $ReplyDescription = @remove_spaces($ReplyDescription);
 $ReplyGuestName=mysql_result($ersresult,0,"GuestName");
 $ReplyGuestName = stripcslashes(htmlspecialchars($ReplyGuestName, ENT_QUOTES));
@@ -723,7 +730,7 @@ if($PermissionInfo['CanModForum'][$TopicForumID]=="yes"&&
 if($PermissionInfo['CanEditTopicsClose'][$TopicForumID]=="no"&&$TopicClosed==1) {
 	$ShowEditTopic = null; } }
 $TopicName = stripcslashes(htmlspecialchars($TopicName, ENT_QUOTES));
-$TopicName = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $TopicName);
+//$TopicName = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $TopicName);
 $TopicName = @remove_spaces($TopicName);
 @mysql_free_result($gtsresult);
 ?>
@@ -731,7 +738,7 @@ $TopicName = @remove_spaces($TopicName);
 <table class="Table1" id="EditReply<?php echo $_GET['post']; ?>">
 <tr class="TableRow1" id="ReplyEdit<?php echo $_GET['post']; ?>">
 <td class="TableRow1" colspan="2"><span style="float: left;">
-<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a></span>
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a></span>
 <?php echo "<span style=\"float: right;\">&nbsp;</span>"; ?></td>
 </tr>
 <tr id="EditReplyRow<?php echo $_GET['post']; ?>" class="TableRow2">
@@ -845,7 +852,7 @@ if($PermissionInfo['CanEditTopicsClose'][$TopicForumID]=="no"&&$TopicClosed==1) 
 <table class="Table1">
 <tr class="TableRow1">
 <td class="TableRow1"><span style="float: left;">
-<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a></span>
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a></span>
 <?php echo "<span style=\"float: right;\">&nbsp;</span>"; ?></td>
 </tr>
 <tr class="TableRow2">
@@ -880,17 +887,17 @@ if($PermissionInfo['CanEditTopicsClose'][$TopicForumID]=="no"&&$TopicClosed==1) 
 </tr>
 <?php } }
 $_POST['ReplyDesc'] = stripcslashes(htmlspecialchars($_POST['ReplyDesc'], ENT_QUOTES));
-$_POST['ReplyDesc'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['ReplyDesc']);
+//$_POST['ReplyDesc'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['ReplyDesc']);
 $_POST['ReplyDesc'] = @remove_spaces($_POST['ReplyDesc']);
 $_POST['GuestName'] = stripcslashes(htmlspecialchars($_POST['GuestName'], ENT_QUOTES));
 //$_POST['GuestName'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['GuestName']);
 $_POST['GuestName'] = @remove_spaces($_POST['GuestName']);
 $_POST['ReplyPost'] = stripcslashes(htmlspecialchars($_POST['ReplyPost'], ENT_QUOTES));
-$_POST['ReplyPost'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['ReplyPost']);
+//$_POST['ReplyPost'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['ReplyPost']);
 $_POST['ReplyPost'] = remove_bad_entities($_POST['ReplyPost']);
 if($ShowEditTopic==true) {
 $_POST['TopicName'] = stripcslashes(htmlspecialchars($_POST['TopicName'], ENT_QUOTES));
-$_POST['TopicName'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['TopicName']);
+//$_POST['TopicName'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['TopicName']);
 $_POST['TopicName'] = @remove_spaces($_POST['TopicName']); }
 if ($_POST['ReplyDesc']==null) { $Error="Yes"; ?>
 <tr style="text-align: center;">
@@ -930,7 +937,7 @@ if ($_POST['ReplyDesc']==null) { $Error="Yes"; ?>
 	</span></td>
 </tr>
 <?php } if ($Error=="Yes") {
-@redirect("refresh",$basedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],false)."#post".$_GET['post'],"4"); }
+@redirect("refresh",$basedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],false)."&#35;post".$_GET['post'],"4"); }
 if ($Error!="Yes") { $LastActive = GMTimeStamp();
 $requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i", array($_SESSION['UserID']));
 $reresult=mysql_query($requery);
@@ -948,12 +955,12 @@ mysql_query($queryupd);
 if($ShowEditTopic==true) {
 $queryupd = query("UPDATE `".$Settings['sqltable']."topics` SET `TopicName`='%s',`Description`='%s' WHERE `id`=%i", array($_POST['TopicName'],$_POST['ReplyDesc'],$TopicID));
 mysql_query($queryupd); } } 
-@redirect(url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."#post".$_GET['post'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],FALSE)."#post".$_GET['post'],"3");
+@redirect(url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],FALSE)."&#35;post".$_GET['post'],"3");
 ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage"><br />
 	Reply to Topic <?php echo $TopicName; ?> was edited.<br />
-	Click <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."#post".$_GET['post']; ?>">here</a> to view topic.<br />&nbsp;
+	Click <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."&#35;post".$_GET['post']; ?>">here</a> to view topic.<br />&nbsp;
 	</span><br /></td>
 </tr>
 <tr class="TableRow4">

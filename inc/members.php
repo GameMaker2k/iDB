@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: members.php - Last Update: 10/05/2007 SVN 115 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 10/14/2007 SVN 116 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -60,7 +60,7 @@ if($_GET['groupid']!=null) {
 $query = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `GroupID`=%i AND `GroupID`<>%i ".$orderlist, array($_GET['groupid'],$GGroup)); }
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
-//Start MemberList Page Code (Will be used at later time)
+//Start MemberList Page Code
 if(!isset($Settings['max_memlist'])) { $Settings['max_memlist'] = 10; }
 if($_GET['page']==null) { $_GET['page'] = 1; } 
 if($_GET['page']<=0) { $_GET['page'] = 1; }
@@ -81,19 +81,20 @@ if($pnum>=$Settings['max_memlist']) {
 if($pnum<$Settings['max_memlist']&&$pnum>0) { 
 	$pnum = $pnum - $pnum; 
 	$Pages[$l] = $l; ++$l; } }
-//End MemberList Page Code (Its not used yet but its still good to have :P )
-$i=0;
+//End MemberList Page Code
+//$i=0;
 $pagenum=count($Pages);
 $pagei=1; $pstring = "<div class=\"PageList\">Pages: ";
 while ($pagei <= $pagenum) {
 $pstring = $pstring."<a href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=list&page=".$Pages[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">".$Pages[$pagei]."</a> ";
 	++$pagei; } $pstring = $pstring."</div>";
+echo $pstring;
 ?>
 <div class="Table1Border">
 <table class="Table1">
 <tr class="TableRow1">
 <td class="TableRow1" colspan="7"><span style="float: left;">
-<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=list",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Member List</a>
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=list&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Member List</a>
 </span><span style="float: right;">&nbsp;</span></td>
 </tr>
 <tr id="Member" class="TableRow2">
@@ -106,7 +107,7 @@ $pstring = $pstring."<a href=\"".url_maker($exfile['member'],$Settings['file_ext
 <th class="TableRow2" style="width: 7%;">Website</th>
 </tr>
 <?php
-while ($i < $num) {
+while ($i < $nums) {
 $MemList['ID']=mysql_result($result,$i,"id");
 $MemList['Name']=mysql_result($result,$i,"Name");
 $MemList['Email']=mysql_result($result,$i,"Email");
@@ -134,7 +135,7 @@ if($MemList['Group']!=$Settings['GuestGroup']) {
 <tr class="TableRow3" id="Member<?php echo $MemList['ID']; ?>">
 <td class="TableRow3" style="text-align: center;"><?php echo $MemList['ID']; ?></td>
 <td class="TableRow3">&nbsp;<a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$MemList['ID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>"><?php echo $MemList['Name']; ?></a></td>
-<td class="TableRow3" style="text-align: center;"><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=list&gid=".$MemList['GroupID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>"><?php echo $MemList['Group']; ?></a></td>
+<td class="TableRow3" style="text-align: center;"><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=list&gid=".$MemList['GroupID']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>"><?php echo $MemList['Group']; ?></a></td>
 <td class="TableRow3" style="text-align: center;"><?php echo $MemList['PostCount']; ?></td>
 <td class="TableRow3" style="text-align: center;"><?php echo $MemList['Joined']; ?></td>
 <td class="TableRow3" style="text-align: center;"><?php echo $MemList['LastActive']; ?></td>
@@ -695,16 +696,16 @@ $NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$HashSalt,"sha1");
 $_GET['YourPost'] = $_POST['Signature'];
 //require( './'.$SettDir['misc'].'HTMLTags.php');
 $_GET['YourPost'] = htmlspecialchars($_GET['YourPost'], ENT_QUOTES);
-$_GET['YourPost'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_GET['YourPost']);
+//$_GET['YourPost'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_GET['YourPost']);
 $NewSignature = $_GET['YourPost'];
 $_GET['YourPost'] = preg_replace("/\t+/"," ",$_GET['YourPost']);
 $_GET['YourPost'] = preg_replace("/\s\s+/"," ",$_GET['YourPost']);
 $_GET['YourPost'] = remove_bad_entities($_GET['YourPost']);
 $Avatar = stripcslashes(htmlspecialchars($_POST['Avatar'], ENT_QUOTES));
-$Avatar = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $Avatar);
+//$Avatar = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $Avatar);
 $Avatar = @remove_spaces($Avatar);
 $Website = stripcslashes(htmlspecialchars($_POST['Website'], ENT_QUOTES));
-$Website = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $Website);
+//$Website = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $Website);
 $Website = @remove_spaces($Website);
 $gquerys = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `Name`='%s'", array($yourgroup));
 $gresults=mysql_query($gquerys);

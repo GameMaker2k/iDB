@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: pm.php - Last Update: 09/19/2007 SVN 105 - Author: cooldude2k $
+    $FileInfo: pm.php - Last Update: 10/14/2007 SVN 116 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pm.php"||$File3Name=="/pm.php") {
@@ -34,9 +34,9 @@ if($_GET['act']=="view"||$_GET['act']=="viewsent"||$_GET['act']=="read") {
 </tr><tr class="TableRow2">
 <td class="TableRow2">&nbsp;</td>
 </tr><tr class="TableRow3">
-<td class="TableRow3"><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>">View MailBox</a></td>
+<td class="TableRow3"><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>">View MailBox</a></td>
 </tr><tr class="TableRow3">
-<td class="TableRow3"><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=viewsent",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>">View SentBox</a></td>
+<td class="TableRow3"><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=viewsent&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>">View SentBox</a></td>
 </tr><tr class="TableRow3">
 <td class="TableRow3"><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=create",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>">Send Message</a></td>
 </tr><tr class="TableRow4">
@@ -49,7 +49,7 @@ if($_GET['act']=="view") {
 $query = query("SELECT * FROM `".$Settings['sqltable']."messenger` WHERE `PMSentID`=%i ORDER BY `DateSend` DESC", array($_SESSION['UserID']));
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
-//Start MessengerList Page Code (Will be used at later time)
+//Start MessengerList Page Code
 if(!isset($Settings['max_pmlist'])) { $Settings['max_pmlist'] = 10; }
 if($_GET['page']==null) { $_GET['page'] = 1; } 
 if($_GET['page']<=0) { $_GET['page'] = 1; }
@@ -70,19 +70,20 @@ if($pnum>=$Settings['max_pmlist']) {
 if($pnum<$Settings['max_pmlist']&&$pnum>0) { 
 	$pnum = $pnum - $pnum; 
 	$Pages[$l] = $l; ++$l; } }
-//End MessengerList Page Code (Its not used yet but its still good to have :P )
-$i=0;
+//End MessengerList Page Code
+//$i=0;
 $pagenum=count($Pages);
 $pagei=1; $pstring = "<div class=\"PageList\">Pages: ";
 while ($pagei <= $pagenum) {
 $pstring = $pstring."<a href=\"".url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&page=".$Pages[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger'])."\">".$Pages[$pagei]."</a> ";
 	++$pagei; } $pstring = $pstring."</div>";
+echo $pstring;
 ?>
 <div class="Table1Border">
 <table class="Table1" style="width: 100%;">
 <tr class="TableRow1">
 <td class="TableRow1" colspan="6"><span style="float: left;">
-<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>">MailBox&nbsp;(<?php echo $PMNumber; ?>)</a>
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>">MailBox&nbsp;(<?php echo $PMNumber; ?>)</a>
 </span><span style="float: right;">&nbsp;</span></td>
 </tr>
 <tr id="Messenger" class="TableRow2">
@@ -92,7 +93,7 @@ $pstring = $pstring."<a href=\"".url_maker($exfile['messenger'],$Settings['file_
 <th class="TableRow2" style="width: 25%;">Time</th>
 </tr>
 <?php
-while ($i < $num) {
+while ($i < $nums) {
 $PMID=mysql_result($result,$i,"id");
 $SenderID=mysql_result($result,$i,"SenderID");
 $SenderName = GetUserName($SenderID,$Settings['sqltable']);
@@ -165,12 +166,13 @@ $pagei=1; $pstring = "<div class=\"PageList\">Pages: ";
 while ($pagei <= $pagenum) {
 $pstring = $pstring."<a href=\"".url_maker($exfile['messenger'],$Settings['file_ext'],"act=viewsent&page=".$Pages[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger'])."\">".$Pages[$pagei]."</a> ";
 	++$pagei; } $pstring = $pstring."</div>";
+echo $pstring;
 ?>
 <div class="Table1Border">
 <table class="Table1" style="width: 100%;">
 <tr class="TableRow1">
 <td class="TableRow1" colspan="6"><span style="float: left;">
-<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>">MailBox&nbsp;(<?php echo $PMNumber; ?>)</a>
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>">MailBox&nbsp;(<?php echo $PMNumber; ?>)</a>
 </span><span style="float: right;">&nbsp;</span></td>
 </tr>
 <tr id="Messenger" class="TableRow2">
@@ -180,7 +182,7 @@ $pstring = $pstring."<a href=\"".url_maker($exfile['messenger'],$Settings['file_
 <th class="TableRow2" style="width: 25%;">Time</th>
 </tr>
 <?php
-while ($i < $num) {
+while ($i < $nums) {
 $PMID=mysql_result($result,$i,"id");
 $SenderID=mysql_result($result,$i,"SenderID");
 $SenderName = GetUserName($SenderID,$Settings['sqltable']);
@@ -282,6 +284,7 @@ mysql_query($queryup); }
 if($User1Name=="Guest") { $User1Name=$PMGuest;
 if($User1Name==null) { $User1Name="Guest"; } }
 $MessageText = text2icons($MessageText,$Settings['sqltable']);
+$User1Signature = preg_replace("/\<br\>/", "<br />\n", nl2br($User1Signature));
 $User1Signature = text2icons($User1Signature,$Settings['sqltable']);
 ?>
 <div class="Table1Border">
@@ -492,19 +495,19 @@ if(!isset($_POST['GuestName'])) { $_POST['GuestName'] = null; }
 </tr>
 <?php } }
 $_POST['MessageName'] = stripcslashes(htmlspecialchars($_POST['MessageName'], ENT_QUOTES));
-$_POST['MessageName'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['MessageName']);
+//$_POST['MessageName'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['MessageName']);
 $_POST['MessageName'] = @remove_spaces($_POST['MessageName']);
 $_POST['MessageDesc'] = stripcslashes(htmlspecialchars($_POST['MessageDesc'], ENT_QUOTES));
-$_POST['MessageDesc'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['MessageDesc']);
+//$_POST['MessageDesc'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['MessageDesc']);
 $_POST['MessageDesc'] = @remove_spaces($_POST['MessageDesc']);
 $_POST['SendMessageTo'] = stripcslashes(htmlspecialchars($_POST['SendMessageTo'], ENT_QUOTES));
-$_POST['SendMessageTo'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['SendMessageTo']);
+//$_POST['SendMessageTo'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['SendMessageTo']);
 $_POST['SendMessageTo'] = @remove_spaces($_POST['SendMessageTo']);
 $_POST['GuestName'] = stripcslashes(htmlspecialchars($_POST['GuestName'], ENT_QUOTES));
-$_POST['GuestName'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['GuestName']);
+//$_POST['GuestName'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['GuestName']);
 $_POST['GuestName'] = @remove_spaces($_POST['GuestName']);
 $_POST['Message'] = stripcslashes(htmlspecialchars($_POST['Message'], ENT_QUOTES));
-$_POST['Message'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['Message']);
+//$_POST['Message'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['Message']);
 //$_POST['Message'] = @remove_spaces($_POST['Message']);
 $_POST['Message'] = remove_bad_entities($_POST['Message']);
 $requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `Name`='%s'", array($_POST['SendMessageTo']));
