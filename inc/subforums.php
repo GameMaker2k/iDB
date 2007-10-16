@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: subforums.php - Last Update: 09/14/2007 SVN 102 - Author: cooldude2k $
+    $FileInfo: subforums.php - Last Update: 10/16/2007 SVN 117 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="subforums.php"||$File3Name=="/subforums.php") {
@@ -174,11 +174,12 @@ $PreForum = $ThemeSet['ForumIcon'];
 if ($ForumType=="forum") { $PreForum=$ThemeSet['ForumIcon']; }
 if ($ForumType=="subforum") { $PreForum=$ThemeSet['SubForumIcon']; }
 if ($ForumType=="redirect") { $PreForum=$ThemeSet['RedirectIcon']; }
+$ExStr = ""; if ($ForumType!="redirect") { $ExStr = "&page=1"; }
 ?>
 <tr class="TableRow3" id="SubForum<?php echo $ForumID; ?>">
 <td class="TableRow3"><div class="forumicon">
 <?php echo $PreForum; ?></div></td>
-<td class="TableRow3"><div class="forumname"><a href="<?php echo url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$ForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>"<?php if($ForumType=="redirect") { echo " onclick=\"window.open(this.href);return false;\""; } ?>><?php echo $ForumName; ?></a></div>
+<td class="TableRow3"><div class="forumname"><a href="<?php echo url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$ForumID.$ExStr,$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>"<?php if($ForumType=="redirect") { echo " onclick=\"window.open(this.href);return false;\""; } ?>><?php echo $ForumName; ?></a></div>
 <div class="forumdescription"><?php echo $ForumDescription; ?></div></td>
 <td class="TableRow3" style="text-align: center;"><?php echo $NumTopics; ?></td>
 <td class="TableRow3" style="text-align: center;"><?php echo $NumPosts; ?></td>
