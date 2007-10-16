@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: topics.php - Last Update: 10/14/2007 SVN 116 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 10/16/2007 SVN 118 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -279,7 +279,7 @@ if($SmileRow<5) { ?>
 @mysql_free_result($renee_result);
 ?></div></td>
 <td class="TableRow3" style="width: 85%;">
-<form method="post" id="MkTopicForm" action="<?php echo url_maker($exfile['forum'],$Settings['file_ext'],"act=maketopic&id=".$ForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum']); ?>">
+<form style="display: inline;" method="post" id="MkTopicForm" action="<?php echo url_maker($exfile['forum'],$Settings['file_ext'],"act=maketopic&id=".$ForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum']); ?>">
 <table style="text-align: left;">
 <tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="TopicName">Insert Topic Name:</label></td>
@@ -306,7 +306,7 @@ if($SmileRow<5) { ?>
 </td></tr></table>
 </form></td></tr>
 <tr id="MkTopicEnd<?php echo $ForumID; ?>" class="TableRow4">
-<td class="TableRow4" colspan="5">&nbsp;</td>
+<td class="TableRow4" colspan="2">&nbsp;</td>
 </tr>
 </table></div>
 <div>&nbsp;</div>

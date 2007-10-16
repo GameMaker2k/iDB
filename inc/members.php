@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: members.php - Last Update: 10/14/2007 SVN 116 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 10/16/2007 SVN 118 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -289,7 +289,7 @@ $membertitle = " ".$ThemeSet['TitleDivider']." Login";
 </tr>
 <tr class="TableRow3">
 <td class="TableRow3">
-<form method="post" action="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=login_now",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">
+<form style="display: inline;" method="post" action="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=login_now",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">
 <table style="text-align: left;">
 <tr style="text-align: left;">
 	<td style="width: 30%;"><label class="TextBoxLabel" for="username">Enter UserName: </label></td>
@@ -478,7 +478,7 @@ if($_SESSION['UserID']==0||$_SESSION['UserID']==null) {
 </tr>
 <tr class="TableRow3">
 <td class="TableRow3">
-<form method="post" action="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=makemember",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">
+<form style="display: inline;" method="post" action="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=makemember",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">
 <table style="text-align: left;">
 <tr style="text-align: left;">
 	<td style="width: 30%;"><label class="TextBoxLabel" for="Name">Insert a UserName:</label></td>

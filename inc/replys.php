@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: replys.php - Last Update: 10/16/2007 SVN 117 - Author: cooldude2k $
+    $FileInfo: replys.php - Last Update: 10/16/2007 SVN 118 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replys.php"||$File3Name=="/replys.php") {
@@ -293,7 +293,7 @@ if($SmileRow<5) { ?>
 @mysql_free_result($renee_result);
 ?></div></td>
 <td class="TableRow3" style="width: 85%;">
-<form method="post" id="MkReplyForm" action="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=makereply&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>">
+<form style="display: inline;" method="post" id="MkReplyForm" action="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=makereply&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>">
 <table style="text-align: left;">
 <tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="ReplyDesc">Insert Reply Description:</label></td>
@@ -317,7 +317,7 @@ if($SmileRow<5) { ?>
 </td></tr></table>
 </form></td></tr>
 <tr id="MkReplyEnd<?php echo $TopicForumID; ?>" class="TableRow4">
-<td class="TableRow4" colspan="5">&nbsp;</td>
+<td class="TableRow4" colspan="2">&nbsp;</td>
 </tr>
 </table>
 <div>&nbsp;</div>
@@ -400,7 +400,7 @@ if($SmileRow<5) { ?>
 @mysql_free_result($renee_result);
 ?></div></td>
 <td class="TableRow3" style="width: 85%;">
-<form method="post" id="MkReplyForm" action="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=makereply&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>">
+<form style="display: inline;" method="post" id="MkReplyForm" action="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=makereply&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>">
 <table style="text-align: left;">
 <tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="ReplyDesc">Insert Reply Description:</label></td>
@@ -424,7 +424,7 @@ if($SmileRow<5) { ?>
 </td></tr></table>
 </form></td></tr>
 <tr id="MkReplyEnd<?php echo $TopicForumID; ?>" class="TableRow4">
-<td class="TableRow4" colspan="5">&nbsp;</td>
+<td class="TableRow4" colspan="2">&nbsp;</td>
 </tr>
 </table></div>
 <div>&nbsp;</div>
@@ -767,7 +767,7 @@ if($SmileRow<5) { ?>
 @mysql_free_result($renee_result);
 ?></div></td>
 <td class="TableRow3" style="width: 85%;">
-<form method="post" id="EditReplyForm" action="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=editreply&id=".$TopicID."&post=".$_GET['post'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>">
+<form style="display: inline;" method="post" id="EditReplyForm" action="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=editreply&id=".$TopicID."&post=".$_GET['post'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>">
 <table style="text-align: left;">
 <tr style="text-align: left;">
 <?php if($ShowEditTopic==true) { ?>
@@ -795,7 +795,7 @@ if($SmileRow<5) { ?>
 </td></tr></table>
 </form></td></tr>
 <tr id="EditReplyEnd<?php echo $_GET['post']; ?>" class="TableRow4">
-<td class="TableRow4" colspan="5">&nbsp;</td>
+<td class="TableRow4" colspan="2">&nbsp;</td>
 </tr>
 </table></div>
 <div>&nbsp;</div>

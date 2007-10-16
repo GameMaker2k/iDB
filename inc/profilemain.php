@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: profilemain.php - Last Update: 10/14/2007 SVN 116 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 10/16/2007 SVN 118 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
@@ -102,7 +102,7 @@ $notepadact = $noteact; $profiletitle = " ".$ThemeSet['TitleDivider']." NotePad"
 </tr>
 <tr class="TableRow3" id="NotePadRow">
 <td class="TableRow3">
-<form method="post" action="<?php echo $notepadact; ?>"><div style="text-align: center;">
+<form style="display: inline;" method="post" action="<?php echo $notepadact; ?>"><div style="text-align: center;">
 <label class="TextBoxLabel" for="NotePad">Your NotePad</label><br />
 <textarea class="TextBox" name="NotePad" id="NotePad" style="width: 75%; height: 128px;" rows="10" cols="84"><?php echo $Notes; ?></textarea>
 <input type="hidden" name="act" value="view" style="display: none;" />
@@ -148,7 +148,7 @@ $profiletitle = " ".$ThemeSet['TitleDivider']." Signature Editor";
 </tr>
 <tr class="TableRow3" id="SignatureRow">
 <td class="TableRow3">
-<form method="post" action="<?php echo $signatureact; ?>"><div style="text-align: center;">
+<form style="display: inline;" method="post" action="<?php echo $signatureact; ?>"><div style="text-align: center;">
 <label class="TextBoxLabel" for="Signature">Your Signature</label><br />
 <textarea class="TextBox" name="Signature" id="Signature" style="width: 75%; height: 128px;" rows="10" cols="84"><?php echo $Signature; ?></textarea>
 <input type="hidden" name="act" value="signature" style="display: none;" />
@@ -204,7 +204,7 @@ $AvatarSize1W=$AvatarSize1[0]; $AvatarSize1H=$AvatarSize1[1];
 </tr>
 <tr class="TableRow3" id="AvatarEditor">
 <td class="TableRow3">
-<form method="post" action="<?php echo $avataract; ?>">
+<form style="display: inline;" method="post" action="<?php echo $avataract; ?>">
  <?php  /* Avatar Table Thanks For SeanJ's Help at http://seanj.jcink.com/ */  ?>
  <table class="AvatarTable" style="width: 100px; height: 100px; text-align: center;">
 	<tr class="AvatarRow" style="width: 100%; height: 100%;">
@@ -281,7 +281,7 @@ $profiletitle = " ".$ThemeSet['TitleDivider']." Board Settings"; ?>
 </tr>
 <tr class="TableRow3" id="BoardSettings">
 <td class="TableRow3">
-<form method="post" action="<?php echo $settingsact; ?>">
+<form style="display: inline;" method="post" action="<?php echo $settingsact; ?>">
 <table style="text-align: left;">
 <tr style="text-align: left;">
 	<td style="width: 40%;"><label class="TextBoxLabel" for="YourOffSet">Your TimeZone:</label></td>
@@ -414,7 +414,7 @@ $profiletitle = " ".$ThemeSet['TitleDivider']." Profile Editor";
 </tr>
 <tr class="TableRow3" id="ProfileEditor">
 <td class="TableRow3">
-<form method="post" action="<?php echo $profileact; ?>">
+<form style="display: inline;" method="post" action="<?php echo $profileact; ?>">
 <table style="text-align: left;">
 <tr style="text-align: left;">
 	<td style="width: 40%;"><label class="TextBoxLabel" for="Interests">Your Interests</label></td>
@@ -553,7 +553,7 @@ $profiletitle = " ".$ThemeSet['TitleDivider']." User Info Editer";
 </tr>
 <tr class="TableRow3" id="UserInfoEditor">
 <td class="TableRow3">
-<form method="post" action="<?php echo $userinfoact; ?>">
+<form style="display: inline;" method="post" action="<?php echo $userinfoact; ?>">
 <table style="text-align: left;">
 <tr style="text-align: left;">
 	<td style="width: 40%;"><label class="TextBoxLabel" for="OldPass">Insert old Password:</label></td>

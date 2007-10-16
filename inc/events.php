@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: events.php - Last Update: 10/16/2007 SVN 117 - Author: cooldude2k $
+    $FileInfo: events.php - Last Update: 10/16/2007 SVN 118 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="events.php"||$File3Name=="/events.php") {
@@ -173,7 +173,7 @@ if($SmileRow<5) { ?>
 @mysql_free_result($renee_result);
 ?></div></td>
 <td class="TableRow3" style="width: 85%;">
-<form method="post" id="MkEventForm" action="<?php echo url_maker($exfile['event'],$Settings['file_ext'],"act=makeevent",$Settings['qstr'],$Settings['qsep'],$prexqstr['event'],$exqstr['event']); ?>">
+<form style="display: inline;" method="post" id="MkEventForm" action="<?php echo url_maker($exfile['event'],$Settings['file_ext'],"act=makeevent",$Settings['qstr'],$Settings['qsep'],$prexqstr['event'],$exqstr['event']); ?>">
 <table style="text-align: left;">
 <tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="EventName">Insert Event Name:</label></td>
@@ -203,7 +203,7 @@ if($SmileRow<5) { ?>
 </td></tr></table>
 </form></td></tr>
 <tr id="MkEventEnd" class="TableRow4">
-<td class="TableRow4" colspan="5">&nbsp;</td>
+<td class="TableRow4" colspan="2">&nbsp;</td>
 </tr>
 </table></div>
 <?php }  if($_GET['act']=="makeevent"&&$_POST['act']=="makeevents") {

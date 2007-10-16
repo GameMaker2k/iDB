@@ -12,7 +12,7 @@
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: setup.php - Last Update: 07/01/2007 SVN 35 - Author: cooldude2k $
+    $FileInfo: setup.php - Last Update: 10/16/2007 SVN 118 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="setup.php"||$File3Name=="/setup.php") {
@@ -45,7 +45,7 @@ $fp = fopen("./settingsbak.php","w+");
 fwrite($fp, $BoardSettings);
 fclose($fp);
 ?>
-<form method="post" name="install" id="install" action="install.php?act=Part4">
+<form style="display: inline;" method="post" name="install" id="install" action="install.php?act=Part4">
 <table style="text-align: left;">
 <tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="NewBoardName">Insert Board Name:</label></td>

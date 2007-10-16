@@ -12,7 +12,7 @@
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
     iDB Installer made by Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: install.php - Last Update: 08/12/2007 SVN 77 - Author: cooldude2k $
+    $FileInfo: install.php - Last Update: 10/16/2007 SVN 118 - Author: cooldude2k $
 */
 @error_reporting(E_ALL ^ E_NOTICE);
 if(@ini_get("register_globals")) { 
@@ -103,7 +103,7 @@ if ($Error=="Yes") { ?>
 </tr>
 <?php } ?>
 <tr class="TableRow4">
-<td class="TableRow4" colspan="2">&nbsp;<a href="index.php?act=ReadMe">Readme.txt</a>&nbsp;</td>
+<td class="TableRow4">&nbsp;<a href="index.php?act=ReadMe">Readme.txt</a>&nbsp;</td>
 </tr>
 </table>
 <div>&nbsp;</div>

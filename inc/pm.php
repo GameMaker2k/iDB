@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: pm.php - Last Update: 10/16/2007 SVN 117 - Author: cooldude2k $
+    $FileInfo: pm.php - Last Update: 10/16/2007 SVN 118 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pm.php"||$File3Name=="/pm.php") {
@@ -82,7 +82,7 @@ echo $pstring;
 <div class="Table1Border">
 <table class="Table1" style="width: 100%;">
 <tr class="TableRow1">
-<td class="TableRow1" colspan="6"><span style="float: left;">
+<td class="TableRow1" colspan="4"><span style="float: left;">
 <?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>">MailBox&nbsp;(<?php echo $PMNumber; ?>)</a>
 </span><span style="float: right;">&nbsp;</span></td>
 </tr>
@@ -131,7 +131,7 @@ echo "<span>".$SenderName."</span>"; }
 </tr>
 <?php ++$i; } @mysql_free_result($result); ?>
 <tr id="MessengerEnd" class="TableRow4">
-<td class="TableRow4" colspan="6">&nbsp;</td>
+<td class="TableRow4" colspan="4">&nbsp;</td>
 </tr>
 <?php } 
 if($_GET['act']=="viewsent") {
@@ -171,7 +171,7 @@ echo $pstring;
 <div class="Table1Border">
 <table class="Table1" style="width: 100%;">
 <tr class="TableRow1">
-<td class="TableRow1" colspan="6"><span style="float: left;">
+<td class="TableRow1" colspan="4"><span style="float: left;">
 <?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>">MailBox&nbsp;(<?php echo $PMNumber; ?>)</a>
 </span><span style="float: right;">&nbsp;</span></td>
 </tr>
@@ -220,7 +220,7 @@ echo "<span>".$SentToName."</span>"; }
 </tr>
 <?php ++$i; } ?>
 <tr id="MessengerEnd" class="TableRow4">
-<td class="TableRow4" colspan="6">&nbsp;</td>
+<td class="TableRow4" colspan="4">&nbsp;</td>
 </tr>
 <?php } @mysql_free_result($result);
 if($_GET['act']=="read") {
@@ -401,7 +401,7 @@ if($SmileRow<5) { ?>
 @mysql_free_result($renee_result);
 ?></div></td>
 <td class="TableRow3" style="width: 85%;">
-<form method="post" id="MkReplyForm" action="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=sendmessage",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>">
+<form style="display: inline;" method="post" id="MkReplyForm" action="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=sendmessage",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>">
 <table style="text-align: left;">
 <tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="SendMessageTo">Insert UserName:</label></td>
@@ -431,7 +431,7 @@ if($SmileRow<5) { ?>
 </td></tr></table>
 </form></td></tr>
 <tr id="MkReplyEnd" class="TableRow4">
-<td class="TableRow4" colspan="5">&nbsp;</td>
+<td class="TableRow4" colspan="2">&nbsp;</td>
 </tr>
 </table></div>
 <?php } if($_GET['act']=="sendmessage"&&$_POST['act']=="sendmessages") {
