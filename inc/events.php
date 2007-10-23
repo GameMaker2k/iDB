@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: events.php - Last Update: 10/16/2007 SVN 118 - Author: cooldude2k $
+    $FileInfo: events.php - Last Update: 10/23/2007 SVN 119 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="events.php"||$File3Name=="/events.php") {
@@ -57,6 +57,7 @@ $gresult=mysql_query($gquery);
 $User1Group=mysql_result($gresult,0,"Name");
 @mysql_free_result($gresult);
 $User1Signature=mysql_result($reresult,$rei,"Signature");
+$User1Signature = preg_replace("/\<br\>/", "<br />\n", nl2br($User1Signature));
 $User1Avatar=mysql_result($reresult,$rei,"Avatar");
 $User1AvatarSize=mysql_result($reresult,$rei,"AvatarSize");
 if ($User1Avatar=="http://"||$User1Avatar==null) {
@@ -71,7 +72,8 @@ $User1IP=mysql_result($reresult,$rei,"IP");
 ++$is; } @mysql_free_result($result);
 if($User1Name=="Guest") { $User1Name=$EventGuest;
 if($User1Name==null) { $User1Name="Guest"; } }
-$EventText = text2icons($EventText,$Settings['sqltable']); $User1Signature = text2icons($User1Signature,$Settings['sqltable']);
+$EventText = text2icons($EventText,$Settings['sqltable']); 
+$User1Signature = text2icons($User1Signature,$Settings['sqltable']);
 ?>
 <tr class="TableRow1">
 <td class="TableRow1" colspan="2"><span style="font-weight: bold; float: left;"><?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['event'],$Settings['file_ext'],"act=view&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['event'],$exqstr['event']); ?>"><?php echo $EventName; ?></a></span>

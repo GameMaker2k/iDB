@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: searchs.php - Last Update: 10/16/2007 SVN 118 - Author: cooldude2k $
+    $FileInfo: searchs.php - Last Update: 10/23/2007 SVN 119 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="searchs.php"||$File3Name=="/searchs.php") {
@@ -122,8 +122,31 @@ if($pnum<$Settings['max_topics']&&$pnum>0) {
 //$i=0;
 $pagenum=count($Pages);
 $pagei=1; $pstring = "<div class=\"PageList\">Pages: ";
+$Pagez[1] = 1;
+if($pagenum>=2) { $Pagez[2] = 2; }
+if($pagenum>=3) { $Pagez[3] = 3; }
+if($pagenum>=4) { $Pagez[4] = 4; }
+if($pagenum>=5&&$_GET['page']>=4) {
+$page_back_one = $_GET['page']-1;
+$page_now = $_GET['page'];
+$page_up_one = $_GET['page']+1;
+$page_up_two = $_GET['page']+2;
+$page_up_three = $_GET['page']+3;
+if($pagenum>=$page_now&&$page_back_one>4) { 
+	$Pagez[5] = $page_back_one; }
+if($pagenum>=$page_now&&$page_back_one<=4) { 
+	$Pagez[5] = null; }
+if($pagenum>=$page_now&&$page_now>4) { 
+	$Pagez[6] = $page_now; }
+if($pagenum>=$page_now&&$page_now<=4) { 
+	$Pagez[6] = null; }
+if($pagenum>=$page_up_one) { $Pagez[7] = $page_up_one; }
+if($pagenum>=$page_up_two) { $Pagez[8] = $page_up_two; }
+if($pagenum>=$page_up_three) { $Pagez[9] = $page_up_three; } }
+$pagenum=count($Pagez);
 while ($pagei <= $pagenum) {
-$pstring = $pstring."<a href=\"".url_maker($exfile['search'],$Settings['file_ext'],"act=topics&search=".$_GET['search']."&type=".$_GET['type']."&page=".$Pages[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search'])."\">".$Pages[$pagei]."</a> ";
+if($Pagez[$pagei]!=null) {
+$pstring = $pstring."<a href=\"".url_maker($exfile['search'],$Settings['file_ext'],"act=topics&search=".$_GET['search']."&type=".$_GET['type']."&page=".$Pagez[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search'])."\">".$Pagez[$pagei]."</a> "; }
 	++$pagei; } $pstring = $pstring."</div>";
 echo $pstring;
 ?>
