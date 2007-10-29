@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: subcategories.php - Last Update: 10/16/2007 SVN 117 - Author: cooldude2k $
+    $FileInfo: subcategories.php - Last Update: 10/29/2007 SVN 120 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="subcategories.php"||$File3Name=="/subcategories.php") {
@@ -84,6 +84,8 @@ $ForumID=mysql_result($result,$i,"id");
 $ForumName=mysql_result($result,$i,"Name");
 $ForumShow=mysql_result($result,$i,"ShowForum");
 $ForumType=mysql_result($result,$i,"ForumType");
+$ForumShowTopics=mysql_result($result,$i,"CanHaveTopics");
+$ForumShowTopics = strtolower($ForumShowTopics);
 $NumTopics=mysql_result($result,$i,"NumTopics");
 $NumPosts=mysql_result($result,$i,"NumPosts");
 $NumRedirects=mysql_result($result,$i,"Redirects");
@@ -156,7 +158,8 @@ $PreForum = $ThemeSet['ForumIcon'];
 if ($ForumType=="forum") { $PreForum=$ThemeSet['ForumIcon']; }
 if ($ForumType=="subforum") { $PreForum=$ThemeSet['SubForumIcon']; }
 if ($ForumType=="redirect") { $PreForum=$ThemeSet['RedirectIcon']; }
-$ExStr = ""; if ($ForumType!="redirect") { $ExStr = "&page=1"; }
+$ExStr = ""; if ($ForumType!="redirect"&&
+	$ForumShowTopics!="no") { $ExStr = "&page=1"; }
 ?>
 <tr class="TableRow3" id="Forum<?php echo $ForumID; ?>">
 <td class="TableRow3"><div class="forumicon">

@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: events.php - Last Update: 10/23/2007 SVN 119 - Author: cooldude2k $
+    $FileInfo: events.php - Last Update: 10/29/2007 SVN 120 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="events.php"||$File3Name=="/events.php") {
@@ -154,24 +154,30 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 </tr>
 <tr class="TableRow3" id="MkEvent">
 <td class="TableRow3" style="width: 15%; vertical-align: middle; text-align: center;">
-<div style="width: 100%; height: 160px; overflow: auto;"><?php
-$renee_query=query("SELECT * FROM `".$Settings['sqltable']."smileys`", array(null));
+<div style="width: 100%; height: 160px; overflow: auto;">
+<table style="width: 100%; text-align: center;"><?php
+$renee_query=query("SELECT * FROM `".$Settings['sqltable']."smileys` WHERE `Show`='yes'", array(null));
 $renee_result=mysql_query($renee_query);
 $renee_num=mysql_num_rows($renee_result);
-$renee_s=0; $SmileRow=1;
-while ($renee_s < $renee_num) {
+$renee_s=0; $SmileRow=0; $SmileCRow=0;
+while ($renee_s < $renee_num) { ++$SmileRow;
 $FileName=mysql_result($renee_result,$renee_s,"FileName");
 $SmileName=mysql_result($renee_result,$renee_s,"SmileName");
 $SmileText=mysql_result($renee_result,$renee_s,"SmileText");
 $SmileDirectory=mysql_result($renee_result,$renee_s,"Directory");
 $ShowSmile=mysql_result($renee_result,$renee_s,"Show");
 $ReplaceType=mysql_result($renee_result,$renee_s,"ReplaceCI");
-if($SmileRow<5) { ?>
-	<img src="<?php echo $SmileDirectory."".$FileName; ?>" style="vertical-align: middle; border: 0px; cursor: pointer;" title="<?php echo $SmileName; ?>" alt="<?php echo $SmileName; ?>" onclick="addsmiley('EventText','&nbsp;<?php echo htmlspecialchars($SmileText); ?>&nbsp;')" />&nbsp;&nbsp;
-	<?php } if($SmileRow==5) { ?>
-	<img src="<?php echo $SmileDirectory."".$FileName; ?>" style="vertical-align: middle; border: 0px; cursor: pointer;" title="<?php echo $SmileName; ?>" alt="<?php echo $SmileName; ?>" onclick="addsmiley('EventText','&nbsp;<?php echo htmlspecialchars($SmileText); ?>&nbsp;')" /><br />
-	<?php $SmileRow=1; }
-++$renee_s; ++$SmileRow; }
+if($SmileRow==1) { ?><tr>
+	<?php } if($SmileRow<5) { ++$SmileCRow; ?>
+	<td><?php echo $SmileRow."-".$SmileCRow; ?>&nbsp;<img src="<?php echo $SmileDirectory."".$FileName; ?>" style="vertical-align: middle; border: 0px; cursor: pointer;" title="<?php echo $SmileName; ?>" alt="<?php echo $SmileName; ?>" onclick="addsmiley('ReplyPost','&nbsp;<?php echo htmlspecialchars($SmileText); ?>&nbsp;')" />&nbsp;</td>
+	<?php } if($SmileRow==5) { ++$SmileCRow; ?>
+	<td><?php echo $SmileRow."-".$SmileCRow; ?>&nbsp;<img src="<?php echo $SmileDirectory."".$FileName; ?>" style="vertical-align: middle; border: 0px; cursor: pointer;" title="<?php echo $SmileName; ?>" alt="<?php echo $SmileName; ?>" onclick="addsmiley('ReplyPost','&nbsp;<?php echo htmlspecialchars($SmileText); ?>&nbsp;')" />&nbsp;</td></tr>
+	<?php $SmileCRow=0; $SmileRow=0; }
+++$renee_s; }
+if($SmileCRow<5&&$SmileCRow!=0) {
+$SmileCRowL = 5 - $SmileCRow;
+echo "<td colspan=\"".$SmileCRowL."\">&nbsp;</td></tr>"; }
+echo "</table>";
 @mysql_free_result($renee_result);
 ?></div></td>
 <td class="TableRow3" style="width: 85%;">
