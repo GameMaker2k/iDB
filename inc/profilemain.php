@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: profilemain.php - Last Update: 10/16/2007 SVN 118 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 11/09/2007 SVN 123 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
@@ -317,15 +317,14 @@ echo "<option value=\"".$showmin."\">0:".$showmin." minutes</option>\n";
 	<td style="width: 60%;"><select id="skin" name="skin" class="TextBox">
 <option selected="selected" value="<?php echo $_SESSION['Theme']; ?>">Old Value (<?php echo $_SESSION['Theme']; ?>)</option><?php
 $skindir = dirname(realpath("settings.php"))."/".$SettDir['themes'];
-if ($handle = opendir($skindir)) {
+if ($handle = opendir($skindir)) { $dirnum = null;
    while (false !== ($file = readdir($handle))) {
 	   if ($dirnum==null) { $dirnum = 0; }
 	   if (file_exists($skindir.$file."/info.php")) {
 		   if ($file != "." && $file != "..") {
 	   include($skindir.$file."/info.php");
        $themelist[$dirnum] =  "<option value=\"".$file."\">".$ThemeInfo['ThemeName']."</option>";
-	   ++$dirnum;
-   } } }
+	   ++$dirnum; } } }
    closedir($handle); asort($themelist);
    $themenum=count($themelist); $themei=0; 
    while ($themei < $themenum) {
