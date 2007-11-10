@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: functions.php - Last Update: 10/05/2007 SVN 115 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 11/10/2007 SVN 124 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -56,7 +56,7 @@ $output = preg_replace("/<title>(.*?)<\/title>/i", "<title>".$new_title."</title
 /* Change Some PHP Settings Fix the &PHPSESSID to &amp;PHPSESSID */
 $SessName = @session_name();
 $output = preg_replace("/&PHPSESSID/", "&amp;PHPSESSID", $output);
-$qstrcode = htmlentities($Settings['qstr']);
+$qstrcode = htmlentities($Settings['qstr'], ENT_QUOTES, $Settings['charset']);
 $output = str_replace($Settings['qstr'].$SessName, $qstrcode.$SessName, $output);
 if($use_gzip!="on") {
 	echo $output; }
@@ -74,7 +74,7 @@ $output = @ob_get_clean();
 /* Change Some PHP Settings Fix the &PHPSESSID to &amp;PHPSESSID */
 $SessName = @session_name();
 $output = preg_replace("/&PHPSESSID/", "&amp;PHPSESSID", $output);
-$qstrcode = htmlentities($Settings['qstr']);
+$qstrcode = htmlentities($Settings['qstr'], ENT_QUOTES, $Settings['charset']);
 $output = str_replace($Settings['qstr'].$SessName, $qstrcode.$SessName, $output);
 if($use_gzip!="on") {
 	echo $output; }

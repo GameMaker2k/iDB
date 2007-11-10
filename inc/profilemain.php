@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: profilemain.php - Last Update: 11/09/2007 SVN 123 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 11/10/2007 SVN 124 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
@@ -119,7 +119,7 @@ $notepadact = $noteact; $profiletitle = " ".$ThemeSet['TitleDivider']." NotePad"
 if($_POST['update']=="now") {
 if($_POST['act']=="view"&&
 	$_SESSION['UserGroup']!=$Settings['GuestGroup']) {
-	$_POST['NotePad'] = htmlentities($_POST['NotePad'], ENT_QUOTES);
+	$_POST['NotePad'] = htmlspecialchars($_POST['NotePad'], ENT_QUOTES, $Settings['charset']);
 	$_POST['NotePad'] = remove_bad_entities($_POST['NotePad']);
 	$NewDay=GMTimeStamp();
 	$NewIP=$_SERVER['REMOTE_ADDR'];
@@ -166,7 +166,7 @@ if($_POST['update']=="now") {
 if($_POST['act']=="signature"&&
 	$_SESSION['UserGroup']!=$Settings['GuestGroup']) {
 	$_POST['Signature'] = stripcslashes(htmlspecialchars($_POST['Signature'], ENT_QUOTES));
-	$_POST['Signature'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['Signature']);
+	//$_POST['Signature'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['Signature']);
 	//$_POST['Signature'] = @remove_spaces($_POST['Signature']);
 	$_POST['Signature'] = remove_bad_entities($_POST['Signature']);
 	$NewDay=GMTimeStamp();
@@ -250,7 +250,7 @@ if($_POST['Avatar']!=null&&$_POST['AvatarSizeW']!=null&&$_POST['AvatarSizeH']!=n
 	if($_POST['AvatarSizeW']>=100) { $_POST['AvatarSizeW']=100; }
 	if($_POST['AvatarSizeH']>=100) { $_POST['AvatarSizeH']=100; }
 	$fullavatarsize = $_POST['AvatarSizeW']."x".$_POST['AvatarSizeH'];
-	$_POST['Avatar'] = htmlentities($_POST['Avatar'], ENT_QUOTES);
+	$_POST['Avatar'] = htmlentities($_POST['Avatar'], ENT_QUOTES, $Settings['charset']);
 	$NewDay=GMTimeStamp();
 	$NewIP=$_SERVER['REMOTE_ADDR'];
 	$_POST['Avatar'] = @remove_spaces($_POST['Avatar']);
@@ -492,11 +492,11 @@ echo "<option value=\"".$showmin."\">0:".$showmin." minutes</option>\n";
 if($_POST['update']=="now") {
 if($_POST['act']=="profile"&&
 	$_SESSION['UserGroup']!=$Settings['GuestGroup']) {
-	$_POST['Interests'] = htmlentities($_POST['Interests'], ENT_QUOTES);
+	$_POST['Interests'] = htmlspecialchars($_POST['Interests'], ENT_QUOTES, $Settings['charset']);
 	$_POST['Interests'] = @remove_spaces($_POST['Interests']);
-	$_POST['Title'] = htmlentities($_POST['Title'], ENT_QUOTES);
+	$_POST['Title'] = htmlspecialchars($_POST['Title'], ENT_QUOTES, $Settings['charset']);
 	$_POST['Title'] = @remove_spaces($_POST['Title']);
-	$_POST['Website'] = htmlentities($_POST['Website'], ENT_QUOTES);
+	$_POST['Website'] = htmlentities($_POST['Website'], ENT_QUOTES, $Settings['charset']);
 	$_POST['Website'] = @remove_spaces($_POST['Website']);
 	if(!isset($_POST['EventDay'])) { $_POST['EventDay'] = null; }
 	if($_POST['EventDay']!=null) {

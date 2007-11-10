@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: mysql.php - Last Update: 10/05/2007 SVN 115 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 11/10/2007 SVN 124 - Author: cooldude2k $
 */
 //@ini_set("display_errors", true); 
 //@ini_set("display_startup_errors", true);
@@ -36,10 +36,18 @@ if($Settings['idburl']!=null&&$Settings['idburl']!="localhost") {
 $PathsTest = parse_url($Settings['idburl']);
 $Settings['fixcookiedir'] = $PathsTest['path']."/"; 
 $Settings['fixcookiedir'] = str_replace("//", "/", $Settings['fixcookiedir']); } }
+if(!isset($Settings['charset'])) {
+	$Settings['charset'] = "ISO-8859-15"; }
+if(isset($Settings['charset'])) {
+if($Settings['charset']!="ISO-8859-15"&&
+	$Settings['charset']!="ISO-8859-1"&&
+	$Settings['charset']!="UTF-8") {
+	$Settings['charset'] = "ISO-8859-15"; } }
+@ini_set('default_charset', $Settings['charset']);
 //@session_save_path($SettDir['inc']."temp/");
 if(!isset($Settings['sqldb'])) { 
 if(file_exists("install.php")) { @header('Location: install.php'); die(); } 
-if(!file_exists("install.php")) { @header("Content-Type: text/plain; charset=UTF8");
+if(!file_exists("install.php")) { @header("Content-Type: text/plain; charset=UTF-8");
 echo "403 Error: Sorry could not find install.php\nTry uploading files again and if that dose not work try download iDB again."; die(); } }
 if(!isset($Settings['sqlhost'])) { $Settings['sqlhost'] = "localhost"; }
 @ini_set("error_prepend_string","<span style='color: ff0000;'>");

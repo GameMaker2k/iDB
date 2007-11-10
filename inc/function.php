@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: function.php - Last Update: 10/05/2007 SVN 115 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 11/10/2007 SVN 124 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -20,9 +20,9 @@ if ($File3Name=="function.php"||$File3Name=="/function.php") {
 require_once($SettDir['misc'].'functions.php');
 /* Change Some PHP Settings Fix the & to &amp;
 if($Settings['use_iniset']==true&&$Settings['qstr']!="/") {
-@ini_set("arg_separator.output",htmlentities($Settings['qstr'], ENT_QUOTES));
+@ini_set("arg_separator.output",htmlentities($Settings['qstr'], ENT_QUOTES, $Settings['charset']));
 @ini_set("arg_separator.input",$Settings['qstr']);
-@ini_set("arg_separator",htmlentities($Settings['qstr'], ENT_QUOTES)); }
+@ini_set("arg_separator",htmlentities($Settings['qstr'], ENT_QUOTES, $Settings['charset'])); }
 //$basepath = pathinfo($_SERVER['REQUEST_URI']);
 if(dirname($_SERVER['REQUEST_URI'])!="."||
 	dirname($_SERVER['REQUEST_URI'])!=null) {
@@ -153,8 +153,8 @@ if($qvarstr==null) { $qvarstr = SID; }
 if($qvarstr!=null) { $qvarstr = SID."&".$qvarstr; } } }
 if($qvarstr==null) { $fileurl = $file; }
 if($fixhtml==true) {
-$qstr = htmlentities($qstr, ENT_QUOTES);
-$qsep = htmlentities($qsep, ENT_QUOTES); }
+$qstr = htmlentities($qstr, ENT_QUOTES, $Settings['charset']);
+$qsep = htmlentities($qsep, ENT_QUOTES, $Settings['charset']); }
 if($prexqstr!=null) { 
 $rene1 = explode("&",$prexqstr);
 $renenum=count($rene1);
@@ -230,8 +230,8 @@ function GetQueryStr($qstr=";",$qsep="=",$fixhtml=true)
 $pregqsep = preg_quote($qsep,"/");
 $oqstr = $qstr; $oqsep = $qsep;
 if($fixhtml==true||$fixhtml==null) {
-$qstr = htmlentities($qstr, ENT_QUOTES);
-$qsep = htmlentities($qsep, ENT_QUOTES); }
+$qstr = htmlentities($qstr, ENT_QUOTES, $Settings['charset']);
+$qsep = htmlentities($qsep, ENT_QUOTES, $Settings['charset']); }
 $OldBoardQuery = preg_replace("/".$pregqstr."/isxS", $qstr, $_SERVER['QUERY_STRING']);
 $BoardQuery = "?".$OldBoardQuery;
 return $BoardQuery; }

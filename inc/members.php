@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: members.php - Last Update: 10/23/2007 SVN 119 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 11/10/2007 SVN 124 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -389,7 +389,7 @@ if (strlen($_POST['userpass'])>="30") { $Error="Yes";  ?>
 if ($Error=="Yes") {
 @redirect("refresh",$basedir.url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],false),"4"); }
 if($Error!="Yes"){
-$YourName = stripcslashes(htmlspecialchars($_POST['username'], ENT_QUOTES));
+$YourName = stripcslashes(htmlspecialchars($_POST['username'], ENT_QUOTES, $Settings['charset']));
 //$YourName = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $YourName);
 $YourName = @remove_spaces($YourName);
 $passtype="ODFH";
@@ -652,7 +652,7 @@ if(!isset($_POST['TOS'])) { $_POST['TOS'] = null; }
 	</span></td>
 </tr>
 <?php } }
-$Name = stripcslashes(htmlspecialchars($_POST['Name'], ENT_QUOTES));
+$Name = stripcslashes(htmlspecialchars($_POST['Name'], ENT_QUOTES, $Settings['charset']));
 //$Name = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $Name);
 $Name = @remove_spaces($Name);
 $sql_email_check = mysql_query(query("SELECT `Email` FROM `".$Settings['sqltable']."members` WHERE `Email`='%s'", array($_POST['Email'])));
@@ -718,16 +718,16 @@ $HashSalt = salt_hmac();
 $NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$HashSalt,"sha1");
 $_GET['YourPost'] = $_POST['Signature'];
 //require( './'.$SettDir['misc'].'HTMLTags.php');
-$_GET['YourPost'] = htmlspecialchars($_GET['YourPost'], ENT_QUOTES);
+$_GET['YourPost'] = htmlspecialchars($_GET['YourPost'], ENT_QUOTES, $Settings['charset']);
 //$_GET['YourPost'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_GET['YourPost']);
 $NewSignature = $_GET['YourPost'];
 $_GET['YourPost'] = preg_replace("/\t+/"," ",$_GET['YourPost']);
 $_GET['YourPost'] = preg_replace("/\s\s+/"," ",$_GET['YourPost']);
 $_GET['YourPost'] = remove_bad_entities($_GET['YourPost']);
-$Avatar = stripcslashes(htmlspecialchars($_POST['Avatar'], ENT_QUOTES));
+$Avatar = stripcslashes(htmlspecialchars($_POST['Avatar'], ENT_QUOTES, $Settings['charset']));
 //$Avatar = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $Avatar);
 $Avatar = @remove_spaces($Avatar);
-$Website = stripcslashes(htmlspecialchars($_POST['Website'], ENT_QUOTES));
+$Website = stripcslashes(htmlspecialchars($_POST['Website'], ENT_QUOTES, $Settings['charset']));
 //$Website = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $Website);
 $Website = @remove_spaces($Website);
 $gquerys = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `Name`='%s'", array($yourgroup));
