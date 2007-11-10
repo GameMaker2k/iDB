@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: functions.php - Last Update: 11/10/2007 SVN 124 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 11/10/2007 SVN 125 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -377,6 +377,11 @@ if(!is_array($search)&&!is_array($replace)) {
 $search = preg_quote($search, "/");
 $subject = preg_replace("/".$search."/i", $replace, $subject); }
 return $subject; } }
+/*   Adds mysql_set_charset to PHP below Ver. 5.2.3 - by: Janez R.      // 
+//   http://us.php.net/manual/en/function.mysql-set-charset.php#77565   */
+if (!function_exists('mysql_set_charset')) {
+  function mysql_set_charset($charset) {
+    return mysql_query("set names $charset"); } }
 /*   Adds httponly to PHP below Ver. 5.2.0   // 
 //       by René Johnson - Cool Dude 2k      */
 function http_set_cookie($name,$value=null,$expire=null,$path=null,$domain=null,$secure=false,$httponly=false) {
