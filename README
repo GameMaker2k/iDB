@@ -2,7 +2,7 @@
 //                       __________________________________________
 //                      //        Internet Discussion Boards      \\
 //                      ||          Made by Game Maker 2k:         ||
-//                      ||Cool Dude 2k http://intdb.sourceforge.net||
+//                      ||   Cool Dude 2k http://intdb.berlios.de  ||
 //                      || Help to make Internet Discussion Boards ||
 //                      ||        Jcink ( http://jcink.com/ )      ||
 //                      ||           Dubbs Rules ( unknown )       ||
@@ -15,13 +15,13 @@
 //                      \\       (c) 2004-2007 Game Maker 2k      //
 //                       """"""""""""""""""""""""""""""""""""""""""
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//        $FileInfo: README - Last Update: 08/18/2007 SVN 87 - Author: cooldude2k $            
+//        $FileInfo: README - Last Update: 11/10/2007 SVN 126 - Author: cooldude2k $            
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/ http://idb.berlios.net/
 // Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/ 
 // http://s1.jcink.com/s/host/idb/  http://idb.everywebhost.com/  http://cooldude2k.id.funpic.org/
 //  	        Game Maker 2k Copyright 2000-2007 Cool Dude 2k (René Johnson)
-// Emoticons made by Jcink for TextfileBB (http://tfbb.jcink.com/) Under GPL License
+// Emoticons made by Jcink for TextfileBB (https://launchpad.net/tfbb) Under GPL License
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // iDB Installer made by Game Maker 2k - http://upload.idb.s1.jcink.com/
 // How to delete installer if error happens:
@@ -30,16 +30,16 @@
 // Important Note: The Emoticons distributed with the Software were
 // created by Jcink; its usage is not governed under the terms of
 // this license agreement. Information regarding its usage can be
-// found on textfileBB's Web site at http://tfbb.jcink.com/.
+// found on textfileBB's Web site at https://launchpad.net/tfbb.
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// Emoticons made by Jcink for TextfileBB (http://tfbb.jcink.com/) Under GPL License
+// Emoticons made by Jcink for TextfileBB (https://launchpad.net/tfbb) Under GPL License
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //                         ______________________________________
 //                        //     Also Get PHP-Quick-Arcade      \\
 //                        ||          And TextFileBB             ||
-//                        ||Website: http://quickarcade.jcink.com||
-//                        ||Website: http://tfbb.jcink.com       ||
-//                        ||  by: Jcink ( http://jcink.com/ )  ||
+//                        ||Website:http://quickarcade.jcink.com ||
+//                        || Website:https://launchpad.net/tfbb  ||
+//                        ||   by: Jcink ( http://jcink.com/ )   ||
 //                        ||         (c) 2007 Jcink              ||
 //                        \\                                    //
 //                         """"""""""""""""""""""""""""""""""""""
