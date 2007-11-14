@@ -12,7 +12,7 @@
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mkconfig.php - Last Update: 11/10/2007 SVN 124 - Author: cooldude2k $
+    $FileInfo: mkconfig.php - Last Update: 11/14/2007 SVN 127 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mkconfig.php"||$File3Name=="/mkconfig.php") {
@@ -72,13 +72,13 @@ $YourDate = GMTimeStamp();
 $YourEditDate = $YourDate + $dayconv['minute'];
 $GSalt = salt_hmac(); $YourSalt = salt_hmac();
 /* Fix The User Info for iDB */
-$_POST['NewBoardName'] = htmlentities($_POST['NewBoardName'], ENT_QUOTES);
+$_POST['NewBoardName'] = htmlspecialchars($_POST['NewBoardName'], ENT_QUOTES, $Settings['charset']);
 $_POST['NewBoardName'] = fixbamps($_POST['NewBoardName']);
 $_POST['NewBoardName'] = @remove_spaces($_POST['NewBoardName']);
 $_POST['NewBoardName'] = str_replace("\'", "'", $_POST['NewBoardName']);
-//$_POST['AdminPassword'] = stripcslashes(htmlentities($_POST['AdminPassword'], ENT_QUOTES));
+//$_POST['AdminPassword'] = stripcslashes(htmlspecialchars($_POST['AdminPassword'], ENT_QUOTES, $Settings['charset']));
 //$_POST['AdminPassword'] = preg_replace("/\&amp;#(.*?);/is", "&#$1;", $_POST['AdminPassword']);
-$_POST['AdminUser'] = stripcslashes(htmlspecialchars($_POST['AdminUser'], ENT_QUOTES));
+$_POST['AdminUser'] = stripcslashes(htmlspecialchars($_POST['AdminUser'], ENT_QUOTES, $Settings['charset']));
 //$_POST['AdminUser'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['AdminUser']);
 $_POST['AdminUser'] = @remove_spaces($_POST['AdminUser']);
 if ($_POST['AdminUser']=="Guest") { $Error="Yes";
@@ -122,7 +122,7 @@ mysql_query($query);
 $query = query("INSERT INTO `".$_POST['tableprefix']."posts` VALUES (1,1,1,1,-1,'Cool Dude 2k',%i,%i,1,'Welcome to Your Message Board. :) ','Install was successful','127.0.0.1','127.0.0.1')", array($YourDate,$YourEditDate)); 
 mysql_query($query);
 $NewPassword = b64e_hmac($_POST['AdminPasswords'],$YourDate,$YourSalt,"sha1");
-//$Name = stripcslashes(htmlspecialchars($AdminUser, ENT_QUOTES));
+//$Name = stripcslashes(htmlspecialchars($AdminUser, ENT_QUOTES, $Settings['charset']));
 //$YourWebsite = "http://".$_SERVER['HTTP_HOST'].$this_dir."index.php?act=view";
 $YourWebsite = $_POST['WebURL'];
 $UserIP = $_SERVER['REMOTE_ADDR'];
@@ -140,7 +140,7 @@ if($csrand==3) { $gpass .= chr(rand(97,122)); }
 ++$i; } $GuestPassword = b64e_hmac($gpass,$YourDate,$GSalt,"sha1");
 $url_this_dir = "http://".$_SERVER['HTTP_HOST'].$this_dir."index.php?act=view";
 $YourIP = $_SERVER['REMOTE_ADDR'];
-$query = query("INSERT INTO `".$_POST['tableprefix']."members` VALUES (-1,'Guest','%s','iDBH','%s',4,'no',0,'Guest Account','Guest',%i,%i,'0','0','0','[B]Test[/B] :)','Your Notes','http://','100x100','%s','UnKnow',1,'%s','%s','iDB','127.0.0.1','%s')", array($GuestPassword,$GEmail,$YourDate,$YourDate,'0',$YourWebsite,$AdminTime,$AdminDST,$GSalt));
+$query = query("INSERT INTO `".$_POST['tableprefix']."members` VALUES (-1,'Guest','%s','iDBH','%s',4,'no',0,'Guest Account','Guest',%i,%i,'0','0','0','0','[B]Test[/B] :)','Your Notes','http://','100x100','%s','UnKnow',1,'%s','%s','iDB','127.0.0.1','%s')", array($GuestPassword,$GEmail,$YourDate,$YourDate,$YourWebsite,$AdminTime,$AdminDST,$GSalt));
 mysql_query($query);
 $query = query("INSERT INTO `".$_POST['tableprefix']."members` VALUES (1,'%s','%s','iDBH','%s',1,'yes',0,'%s','Admin',%i,%i,'0','0','0','0','%s','Your Notes','%s','100x100','%s','UnKnow',0,'%s','%s','iDB','%s','%s')", array($_POST['AdminUser'],$NewPassword,$Email,$Interests,$YourDate,$YourDate,$NewSignature,$Avatar,$YourWebsite,$AdminTime,$AdminDST,$UserIP,$YourSalt));
 mysql_query($query);
