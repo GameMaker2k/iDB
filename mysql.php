@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: mysql.php - Last Update: 11/10/2007 SVN 124 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 11/15/2007 SVN 128 - Author: cooldude2k $
 */
 //@ini_set("display_errors", true); 
 //@ini_set("display_startup_errors", true);
@@ -39,9 +39,12 @@ $Settings['fixcookiedir'] = str_replace("//", "/", $Settings['fixcookiedir']); }
 if(!isset($Settings['charset'])) {
 	$Settings['charset'] = "ISO-8859-15"; }
 if(isset($Settings['charset'])) {
-if($Settings['charset']!="ISO-8859-15"&&
-	$Settings['charset']!="ISO-8859-1"&&
-	$Settings['charset']!="UTF-8") {
+if($Settings['charset']!="ISO-8859-15"&&$Settings['charset']!="ISO-8859-1"&&
+	$Settings['charset']!="UTF-8"&&$Settings['charset']!="CP866"&&
+	$Settings['charset']!="Windows-1251"&&$Settings['charset']!="Windows-1252"&&
+	$Settings['charset']!="KOI8-R"&&$Settings['charset']!="BIG5"&&
+	$Settings['charset']!="GB2312"&&$Settings['charset']!="BIG5-HKSCS"&&
+	$Settings['charset']!="Shift_JIS"&&$Settings['charset']!="EUC-JP") {
 	$Settings['charset'] = "ISO-8859-15"; } }
 @ini_set('default_charset', $Settings['charset']);
 //@session_save_path($SettDir['inc']."temp/");

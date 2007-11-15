@@ -12,7 +12,7 @@
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
     iDB Installer made by Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: install.php - Last Update: 11/14/2007 SVN 127 - Author: cooldude2k $
+    $FileInfo: install.php - Last Update: 11/15/2007 SVN 128 - Author: cooldude2k $
 */
 @error_reporting(E_ALL ^ E_NOTICE);
 if(@ini_get("register_globals")) { 
@@ -35,9 +35,12 @@ $Settings['board_name'] = "Installing iDB";
 if(!isset($Settings['charset'])) {
 	$Settings['charset'] = "ISO-8859-15"; }
 if(isset($Settings['charset'])) {
-if($Settings['charset']!="ISO-8859-15"&&
-	$Settings['charset']!="ISO-8859-1"&&
-	$Settings['charset']!="UTF-8") {
+if($Settings['charset']!="ISO-8859-15"&&$Settings['charset']!="ISO-8859-1"&&
+	$Settings['charset']!="UTF-8"&&$Settings['charset']!="CP866"&&
+	$Settings['charset']!="Windows-1251"&&$Settings['charset']!="Windows-1252"&&
+	$Settings['charset']!="KOI8-R"&&$Settings['charset']!="BIG5"&&
+	$Settings['charset']!="GB2312"&&$Settings['charset']!="BIG5-HKSCS"&&
+	$Settings['charset']!="Shift_JIS"&&$Settings['charset']!="EUC-JP") {
 	$Settings['charset'] = "ISO-8859-15"; } }
 require($SetupDir['setup'].'preinstall.php');
 require_once($SettDir['inc'].'filename.php');
