@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: profilemain.php - Last Update: 11/10/2007 SVN 124 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 11/20/2007 SVN 129 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
@@ -307,8 +307,8 @@ echo "<option value=\"".$plusi."\">GMT + ".$plusi.":00 hours</option>\n";
 <?php
 $mini = 0; $minnum = 60;
 while ($mini < $minnum) {
-if(strlen($mini)==2) { $showmin = $mini; }
-if(strlen($mini)==1) { $showmin = "0".$mini; }
+if(pre_strlen($mini)==2) { $showmin = $mini; }
+if(pre_strlen($mini)==1) { $showmin = "0".$mini; }
 echo "<option value=\"".$showmin."\">0:".$showmin." minutes</option>\n";
 ++$mini; }
 ?></select></td>
@@ -392,8 +392,8 @@ if($BirthMonth!=null&&$BirthDay!=null&&$BirthYear!=null) {
 	if($BirthYear=="0") { $BirthYear = "YYYY"; }
 	if($BirthDay=="0") { $BirthDay = "DD"; }
 	if($BirthMonth=="0") { $BirthMonth = "MM"; }
-	if(strlen($BirthMonth)=="1") { $BirthMonth = "0".$BirthMonth; }
-	if(strlen($BirthDay)=="1") { $BirthDay = "0".$BirthDay; }
+	if(pre_strlen($BirthMonth)=="1") { $BirthMonth = "0".$BirthMonth; }
+	if(pre_strlen($BirthDay)=="1") { $BirthDay = "0".$BirthDay; }
 	$User1Birthday = $BirthMonth."/".$BirthDay."/".$BirthYear; }
 $tsa_mem = explode(":",$User1TimeZone);
 $TimeZoneArray = array("offset" => $User1TimeZone, "hour" => $tsa_mem[0], "minute" => $tsa_mem[1]);
@@ -451,8 +451,8 @@ echo "<option value=\"".$plusi."\">GMT + ".$plusi.":00 hours</option>\n";
 <?php
 $mini = 0; $minnum = 60;
 while ($mini < $minnum) {
-if(strlen($mini)==2) { $showmin = $mini; }
-if(strlen($mini)==1) { $showmin = "0".$mini; }
+if(pre_strlen($mini)==2) { $showmin = $mini; }
+if(pre_strlen($mini)==1) { $showmin = "0".$mini; }
 echo "<option value=\"".$showmin."\">0:".$showmin." minutes</option>\n";
 ++$mini; }
 ?></select></td>
@@ -503,14 +503,14 @@ if($_POST['act']=="profile"&&
 	$BirthExpl = explode("/",$_POST['EventDay']);
 	if(count($BirthExpl)=="3") {
 	if(is_numeric($BirthExpl[0])&&is_numeric($BirthExpl[1])&&is_numeric($BirthExpl[2])) {
-	if(strlen($BirthExpl[0])=="1") { $BirthExpl[0] = "0".$BirthExpl[0]; }
-	if(strlen($BirthExpl[1])=="1") { $BirthExpl[1] = "0".$BirthExpl[1]; }
-	if(strlen($BirthExpl[0])=="2"&&strlen($BirthExpl[1])=="2"&&strlen($BirthExpl[2])=="4") {
+	if(pre_strlen($BirthExpl[0])=="1") { $BirthExpl[0] = "0".$BirthExpl[0]; }
+	if(pre_strlen($BirthExpl[1])=="1") { $BirthExpl[1] = "0".$BirthExpl[1]; }
+	if(pre_strlen($BirthExpl[0])=="2"&&pre_strlen($BirthExpl[1])=="2"&&pre_strlen($BirthExpl[2])=="4") {
 	$BirthIn = mktime(12,12,12,$BirthExpl[0],$BirthExpl[1],$BirthExpl[2]);
 	$BirthMonth=GMTimeChange("m",$BirthIn,0,0,"off");
 	$BirthDay=GMTimeChange("d",$BirthIn,0,0,"off");
 	$BirthYear=GMTimeChange("Y",$BirthIn,0,0,"off"); }
-	if(strlen($BirthExpl[0])!="2"||strlen($BirthExpl[1])!="2"||strlen($BirthExpl[2])!="4") { 
+	if(pre_strlen($BirthExpl[0])!="2"||pre_strlen($BirthExpl[1])!="2"||pre_strlen($BirthExpl[2])!="4") { 
 		$BirthMonth="0"; $BirthDay="0"; $BirthYear="0"; } }
 	if (!is_numeric($BirthExpl[0])||!is_numeric($BirthExpl[1])||!is_numeric($BirthExpl[2])) { 
 		$BirthMonth="0"; $BirthDay="0"; $BirthYear="0"; } }
@@ -606,9 +606,9 @@ if($OldHashType=="iDBH"&&$UpdateHash!=true) {
 	$NewPassword = b64e_hmac($_POST['Password'],$OldJoined,$NewSalt,"sha1"); }
 if($YourPassword!=$OldPassword) { $Error="Yes"; ?>
 <div class="TableMessage" style="text-align: center;">Your old Password did not match.<br />&nbsp;</div>
-<?php } if(strlen($_POST['Password'])=="30") { $Error="Yes"; ?>
+<?php } if(pre_strlen($_POST['Password'])=="30") { $Error="Yes"; ?>
 <div class="TableMessage" style="text-align: center;">Your password is too big.<br />&nbsp;</div>
-<?php } if(strlen($_POST['OldPass'])=="30") { $Error="Yes"; ?>
+<?php } if(pre_strlen($_POST['OldPass'])=="30") { $Error="Yes"; ?>
 <div class="TableMessage" style="text-align: center;">Your old password is too big.<br />&nbsp;</div>
 <?php } if ($_POST['Password']!=$_POST['RePassword']) { $Error="Yes";  ?>
 <div class="TableMessage" style="text-align: center;">Your passwords did not match.<br />&nbsp;</div>

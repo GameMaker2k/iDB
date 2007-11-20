@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: members.php - Last Update: 11/10/2007 SVN 124 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 11/20/2007 SVN 129 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -366,13 +366,13 @@ $REFERERurl = null; unset($REFERERurl);
 <td class="TableRow3">
 <table style="width: 100%; height: 25%; text-align: center;">
 <?php
-if (strlen($_POST['userpass'])>="30") { $Error="Yes";  ?>
+if (pre_strlen($_POST['userpass'])>="30") { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Your password is too big.<br />
 	</span></td>
 </tr>
-<?php } if (strlen($_POST['username'])>="20") { $Error="Yes";  ?>
+<?php } if (pre_strlen($_POST['username'])>="20") { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Your user name is too big.<br />
@@ -545,8 +545,8 @@ echo "<option value=\"".$plusi."\">GMT + ".$plusi.":00 hours</option>\n"; }
 	<td style="width: 50%;"><select id="MinOffSet" name="MinOffSet" class="TextBox"><?php
 $mini = 0; $minnum = 60;
 while ($mini < $minnum) {
-if(strlen($mini)==2) { $showmin = $mini; }
-if(strlen($mini)==1) { $showmin = "0".$mini; }
+if(pre_strlen($mini)==2) { $showmin = $mini; }
+if(pre_strlen($mini)==1) { $showmin = "0".$mini; }
 if($mini==$TimeZoneArray['minute']) {
 echo "\n<option selected=\"selected\" value=\"".$showmin."\">0:".$showmin." minutes</option>\n"; }
 if($mini!=$TimeZoneArray['minute']) {
@@ -626,13 +626,13 @@ if(!isset($_POST['TOS'])) { $_POST['TOS'] = null; }
 <tr class="TableRow3">
 <td class="TableRow3">
 <table style="width: 100%; height: 25%; text-align: center;">
-<?php if (strlen($_POST['Password'])>="30") { $Error="Yes";  ?>
+<?php if (pre_strlen($_POST['Password'])>="30") { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Your password is too big.<br />
 	</span></td>
 </tr>
-<?php } if (strlen($_POST['username'])>="20") { $Error="Yes";  ?>
+<?php } if (pre_strlen($_POST['username'])>="20") { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Your user name is too big.<br />

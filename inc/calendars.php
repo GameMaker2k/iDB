@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: calendars.php - Last Update: 08/16/2007 SVN 84 - Author: cooldude2k $
+    $FileInfo: calendars.php - Last Update: 11/20/2007 SVN 129 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="calendars.php"||$File3Name=="/calendars.php") {
@@ -54,8 +54,8 @@ $EventYearEnd=mysql_result($result,$is,"EventYearEnd");
 if($EventMonthEnd!=$MyMonth) { $EventDayEnd = $CountDays; }
 if($EventMonth<$MyMonth) { $EventDay = 1; }
 $oldeventname=$EventName;
-$EventName1 = substr($EventName,0,10);
-if (strlen($EventName)>10) { $EventName1 = $EventName1."..."; }
+$EventName1 = pre_substr($EventName,0,10);
+if (pre_strlen($EventName)>10) { $EventName1 = $EventName1."..."; }
 $EventName=$EventName1;
 if(!isset($EventsName[$EventDay])) { $EventsName[$EventDay] = null; }
 if ($EventsName[$EventDay] != null) {
@@ -85,8 +85,8 @@ $BirthDay=mysql_result($bdresult,$bdi,"BirthDay");
 $BirthMonth=mysql_result($bdresult,$bdi,"BirthMonth");
 $BirthYear=mysql_result($bdresult,$bdi,"BirthYear");
 $oldusername=$UserNamebd;
-$UserNamebd1 = substr($UserNamebd,0,10);
-if (strlen($UserNamebd)>10) { $UserNamebd1 = $UserNamebd1."..."; }
+$UserNamebd1 = pre_substr($UserNamebd,0,10);
+if (pre_strlen($UserNamebd)>10) { $UserNamebd1 = $UserNamebd1."..."; }
 $UserNamebd=$UserNamebd1;
 if(!isset($EventsName[$BirthDay])) { $EventsName[$BirthDay] = null; }
 if ($EventsName[$BirthDay] != null) {

@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: replys.php - Last Update: 11/10/2007 SVN 124 - Author: cooldude2k $
+    $FileInfo: replys.php - Last Update: 11/20/2007 SVN 129 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replys.php"||$File3Name=="/replys.php") {
@@ -489,14 +489,14 @@ if(!isset($_POST['GuestName'])) { $_POST['GuestName'] = null; }
 <tr class="TableRow2">
 <th class="TableRow2" style="width: 100%; text-align: left;">&nbsp;Make Reply Message: </th>
 </tr>
-<?php if (strlen($_POST['ReplyDesc'])>="45") { $Error="Yes";  ?>
+<?php if (pre_strlen($_POST['ReplyDesc'])>="45") { $Error="Yes";  ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />Your Reply Description is too big.<br />
 	</span></td>
 </tr>
 <?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
-	strlen($_POST['GuestName'])>="25") { $Error="Yes"; ?>
+	pre_strlen($_POST['GuestName'])>="25") { $Error="Yes"; ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />You Guest Name is too big.<br />
@@ -893,21 +893,21 @@ if($PermissionInfo['CanEditTopicsClose'][$TopicForumID]=="no"&&$TopicClosed==1) 
 <tr class="TableRow2">
 <th class="TableRow2" style="width: 100%; text-align: left;">&nbsp;Edit Reply Message: </th>
 </tr>
-<?php if (strlen($_POST['ReplyDesc'])>="45") { $Error="Yes";  ?>
+<?php if (pre_strlen($_POST['ReplyDesc'])>="45") { $Error="Yes";  ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />Your Reply Description is too big.<br />
 	</span></td>
 </tr>
 <?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
-	strlen($_POST['GuestName'])>="25") { $Error="Yes"; ?>
+	pre_strlen($_POST['GuestName'])>="25") { $Error="Yes"; ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />You Guest Name is too big.<br />
 	</span></td>
 </tr>
 <?php } if($ShowEditTopic==true&&
-	strlen($_POST['TopicName'])>="30") { $Error="Yes"; ?>
+	pre_strlen($_POST['TopicName'])>="30") { $Error="Yes"; ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />You Topic Name is too big.<br />

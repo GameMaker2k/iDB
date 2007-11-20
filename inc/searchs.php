@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: searchs.php - Last Update: 10/23/2007 SVN 119 - Author: cooldude2k $
+    $FileInfo: searchs.php - Last Update: 11/20/2007 SVN 129 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="searchs.php"||$File3Name=="/searchs.php") {
@@ -69,7 +69,7 @@ if($_GET['act']=="topics") {
 </tr>
 </table></div>
 <?php } if($_GET['search']!=null&&$_GET['type']!=null) {
-if(strlen($_GET['msearch'])>="25") { 
+if(pre_strlen($_GET['msearch'])>="25") { 
 	$_GET['msearch'] = null; }
 if($_GET['msearch']!=null) {
 $memsiquery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `Name`='%s'", array($_GET['msearch']));

@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: events.php - Last Update: 11/10/2007 SVN 124 - Author: cooldude2k $
+    $FileInfo: events.php - Last Update: 11/20/2007 SVN 129 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="events.php"||$File3Name=="/events.php") {
@@ -241,86 +241,86 @@ $TimeOut = explode("/",$_POST['EventEnd']);
 <tr class="TableRow2">
 <th class="TableRow2" style="width: 100%; text-align: left;">&nbsp;Make Event Message: </th>
 </tr>
-<?php if (strlen($_POST['EventName'])>="30") { $Error="Yes";  ?>
+<?php if (pre_strlen($_POST['EventName'])>="30") { $Error="Yes";  ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />Your Event Name is too big.<br />
 	</span></td>
 </tr>
-<?php } if (strlen($TimeIn[0])<"2") { $Error="Yes";  ?>
+<?php } if (pre_strlen($TimeIn[0])<"2") { $Error="Yes";  ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />Event Start Month is too small.<br />
 	</span></td>
 </tr>
-<?php } if (strlen($TimeIn[0])>"2") { $Error="Yes";  ?>
+<?php } if (pre_strlen($TimeIn[0])>"2") { $Error="Yes";  ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />Event Start Month is too big.<br />
 	</span></td>
 </tr>
-<?php } if (strlen($TimeIn[1])<"2") { $Error="Yes";  ?>
+<?php } if (pre_strlen($TimeIn[1])<"2") { $Error="Yes";  ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />Event Start Day is too small.<br />
 	</span></td>
 </tr>
-<?php } if (strlen($TimeIn[1])>"2") { $Error="Yes";  ?>
+<?php } if (pre_strlen($TimeIn[1])>"2") { $Error="Yes";  ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />Event Start Day is too big.<br />
 	</span></td>
 </tr>
-<?php } if (strlen($TimeIn[2])<"4") { $Error="Yes";  ?>
+<?php } if (pre_strlen($TimeIn[2])<"4") { $Error="Yes";  ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />Event Start Year is too small.<br />
 	</span></td>
 </tr>
-<?php } if (strlen($TimeIn[2])>"4") { $Error="Yes";  ?>
+<?php } if (pre_strlen($TimeIn[2])>"4") { $Error="Yes";  ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />Event Start Year is too big.<br />
 	</span></td>
 </tr>
-<?php } if (strlen($TimeOut[0])<"2") { $Error="Yes";  ?>
+<?php } if (pre_strlen($TimeOut[0])<"2") { $Error="Yes";  ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />Event End Month is too small.<br />
 	</span></td>
 </tr>
-<?php } if (strlen($TimeOut[0])>"2") { $Error="Yes";  ?>
+<?php } if (pre_strlen($TimeOut[0])>"2") { $Error="Yes";  ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />Event End Month is too big.<br />
 	</span></td>
 </tr>
-<?php } if (strlen($TimeOut[1])<"2") { $Error="Yes";  ?>
+<?php } if (pre_strlen($TimeOut[1])<"2") { $Error="Yes";  ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />Event End Day is too small.<br />
 	</span></td>
 </tr>
-<?php } if (strlen($TimeOut[1])>"2") { $Error="Yes";  ?>
+<?php } if (pre_strlen($TimeOut[1])>"2") { $Error="Yes";  ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />Event End Day is too big.<br />
 	</span></td>
 </tr>
-<?php } if (strlen($TimeOut[2])<"4") { $Error="Yes";  ?>
+<?php } if (pre_strlen($TimeOut[2])<"4") { $Error="Yes";  ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />Event End Year is too small.<br />
 	</span></td>
 </tr>
-<?php } if (strlen($TimeOut[2])>"4") { $Error="Yes";  ?>
+<?php } if (pre_strlen($TimeOut[2])>"4") { $Error="Yes";  ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />Event End Year is too big.<br />
 	</span></td>
 </tr>
 <?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
-	strlen($_POST['GuestName'])>="25") { $Error="Yes"; ?>
+	pre_strlen($_POST['GuestName'])>="25") { $Error="Yes"; ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />You Guest Name is too big.<br />
