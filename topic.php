@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: topic.php - Last Update: 09/06/2007 SVN 99 - Author: cooldude2k $
+    $FileInfo: topic.php - Last Update: 11/28/2007 SVN 130 - Author: cooldude2k $
 */
 require('preindex.php');
 $usefileext = $Settings['file_ext'];
@@ -28,7 +28,10 @@ if($_GET['act']==null)
 if(!is_numeric($_GET['id']))
 { $_GET['id']="1"; }
 if($_GET['act']=="view"||$_GET['act']=="create"||$_GET['act']=="delete"||
-	$_GET['act']=="edit"||$_GET['act']=="makereply"||$_POST['act']=="makereplies"||
+	$_GET['act']=="pin"||$_GET['act']=="unpin"||
+	$_GET['act']=="open"||$_GET['act']=="close")
+{ require($SettDir['inc'].'replys.php'); }
+if($_GET['act']=="edit"||$_GET['act']=="makereply"||$_POST['act']=="makereplies"||
 	$_GET['act']=="editreply"||$_POST['act']=="editreplies")
 { require($SettDir['inc'].'replys.php'); }
 require($SettDir['inc'].'endpage.php');
@@ -48,6 +51,14 @@ if($_GET['act']=="edit") {
 change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." Editing a Post",$Settings['use_gzip'],$GZipEncode['Type']); }
 if($_GET['act']=="editreply"&&$_POST['act']=="editreplies") {
 change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." Editing a Post",$Settings['use_gzip'],$GZipEncode['Type']); }
+if($_GET['act']=="pin") {
+change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." Pinning a Topic",$Settings['use_gzip'],$GZipEncode['Type']); }
+if($_GET['act']=="unpin") {
+change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." Unpinning a Topic",$Settings['use_gzip'],$GZipEncode['Type']); }
+if($_GET['act']=="open") {
+change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." Opening a Topic",$Settings['use_gzip'],$GZipEncode['Type']); }
+if($_GET['act']=="close") {
+change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." Closing a Topic",$Settings['use_gzip'],$GZipEncode['Type']); }
 if($_GET['act']=="makereply"&&$_POST['act']=="makereplies") {
 change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." Replying to ".$TopicName,$Settings['use_gzip'],$GZipEncode['Type']); }
 ?>

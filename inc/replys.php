@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: replys.php - Last Update: 11/20/2007 SVN 129 - Author: cooldude2k $
+    $FileInfo: replys.php - Last Update: 11/28/2007 SVN 130 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replys.php"||$File3Name=="/replys.php") {
@@ -72,8 +72,7 @@ if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes"||$PermissionInfo['CanM
 </tr>
 </table>
 <div>&nbsp;</div>
-<?php } }
-if($_GET['act']=="view") {
+<?php } } if($_GET['act']=="view") {
 $query = query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `TopicID`=%i ORDER BY `TimeStamp` ASC", array($_GET['id']));
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
@@ -611,7 +610,111 @@ $NumPages = 1; }
 </tr>
 </table></div>
 <div>&nbsp;</div>
-<?php } if($_GET['act']=="delete") {
+<?php } if($_GET['act']=="pin"||$_GET['act']=="unpin") {
+$gtsquery = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `id`=%i", array($_GET['id']));
+$gtsresult=mysql_query($gtsquery);
+$gtsnum=mysql_num_rows($gtsresult);
+$TTopicID=mysql_result($gtsresult,0,"id");
+$TForumID=mysql_result($gtsresult,0,"ForumID");
+$TUsersID=mysql_result($gtsresult,0,"UserID");
+$TPinned=mysql_result($gtsresult,0,"Pinned");
+if ($TPinned>1) { $TPinned = 1; } 
+if ($TPinned<0) { $TPinned = 0; }
+$CanPinTopics = false;
+if($_SESSION['UserGroup']!=$Settings['GuestGroup']) {
+if($PermissionInfo['CanPinTopics'][$TForumID]=="yes"&&
+	$_SESSION['UserID']==$TUsersID) { $CanPinTopics = true; }
+if($PermissionInfo['CanPinTopics'][$TForumID]=="yes"&&
+	$PermissionInfo['CanModForum'][$TForumID]=="yes") { 
+	$CanPinTopics = true; }
+	if($PermissionInfo['CanPinTopics'][$TForumID]=="no"&&
+		$TopicClosed==1) { $CanPinTopics = false; } }
+if($_SESSION['UserID']==0) { $CanPinTopics = false; }
+if($CanPinTopics==false) {
+redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); @mysql_free_result($gtsresult);
+ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+@mysql_free_result($gtsresult);
+if($CanPinTopics==true) {
+	if($_GET['act']=="pin") {
+$queryupd = query("UPDATE `".$Settings['sqltable']."topics` SET `Pinned`=1 WHERE `id`=%i", array($TTopicID)); }
+	if($_GET['act']=="unpin") {
+$queryupd = query("UPDATE `".$Settings['sqltable']."topics` SET `Pinned`=0 WHERE `id`=%i", array($TTopicID)); } 
+mysql_query($queryupd); 
+@redirect("refresh",$basedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TTopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],false)."&#35;post".$_GET['post'],"4");
+?>
+<div class="Table1Border">
+<table class="Table1">
+<tr class="TableRow1">
+<td class="TableRow1"><span style="float: left;">
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TTopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a></span>
+<?php echo "<span style=\"float: right;\">&nbsp;</span>"; ?></td>
+</tr>
+<tr class="TableRow2">
+<th class="TableRow2" style="width: 100%; text-align: left;">&nbsp;Pin/Unpin Topic Message: </th>
+</tr>
+<tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage"><br />
+	Topic was successfully unpinned/pinned.<br />
+	Click <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TTopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>">here</a> to go back to topic.<br />&nbsp;
+	</span><br /></td>
+</tr>
+<tr class="TableRow4">
+<td class="TableRow4">&nbsp;</td>
+</tr>
+</table></div>
+<?php } } if($_GET['act']=="open"||$_GET['act']=="close") {
+$gtsquery = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `id`=%i", array($_GET['id']));
+$gtsresult=mysql_query($gtsquery);
+$gtsnum=mysql_num_rows($gtsresult);
+$TTopicID=mysql_result($gtsresult,0,"id");
+$TForumID=mysql_result($gtsresult,0,"ForumID");
+$TUsersID=mysql_result($gtsresult,0,"UserID");
+$TClosed=mysql_result($gtsresult,0,"Closed");
+if ($TClosed>1) { $TClosed = 1; } 
+if ($TClosed<0) { $TClosed = 0; }
+$CanCloseTopics = false;
+if($_SESSION['UserGroup']!=$Settings['GuestGroup']) {
+if($PermissionInfo['CanCloseTopics'][$TForumID]=="yes"&&
+	$_SESSION['UserID']==$TUsersID) { $CanCloseTopics = true; }
+if($PermissionInfo['CanCloseTopics'][$TForumID]=="yes"&&
+	$PermissionInfo['CanModForum'][$TForumID]=="yes") { 
+	$CanCloseTopics = true; } }
+if($_SESSION['UserID']==0) { $CanCloseTopics = false; }
+if($CanCloseTopics==false) {
+redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); @mysql_free_result($gtsresult);
+ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+@mysql_free_result($gtsresult);
+if($CanCloseTopics==true) {
+	if($_GET['act']=="close") {
+$queryupd = query("UPDATE `".$Settings['sqltable']."topics` SET `Closed`=1 WHERE `id`=%i", array($TTopicID)); }
+	if($_GET['act']=="open") {
+$queryupd = query("UPDATE `".$Settings['sqltable']."topics` SET `Closed`=0 WHERE `id`=%i", array($TTopicID)); } 
+mysql_query($queryupd); 
+@redirect("refresh",$basedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TTopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],false)."&#35;post".$_GET['post'],"4");
+?>
+<div class="Table1Border">
+<table class="Table1">
+<tr class="TableRow1">
+<td class="TableRow1"><span style="float: left;">
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TTopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a></span>
+<?php echo "<span style=\"float: right;\">&nbsp;</span>"; ?></td>
+</tr>
+<tr class="TableRow2">
+<th class="TableRow2" style="width: 100%; text-align: left;">&nbsp;Open/Close Topic Message: </th>
+</tr>
+<tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage"><br />
+	Topic was successfully opened/closed.<br />
+	Click <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TTopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>">here</a> to go back to topic.<br />&nbsp;
+	</span><br /></td>
+</tr>
+<tr class="TableRow4">
+<td class="TableRow4">&nbsp;</td>
+</tr>
+</table></div>
+<?php } } if($_GET['act']=="delete") {
 $predquery = query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `id`=%i", array($_GET['post']));
 $predresult=mysql_query($predquery);
 $prednum=mysql_num_rows($predresult);

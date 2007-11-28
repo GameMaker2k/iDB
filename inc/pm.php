@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: pm.php - Last Update: 11/20/2007 SVN 129 - Author: cooldude2k $
+    $FileInfo: pm.php - Last Update: 11/28/2007 SVN 130 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pm.php"||$File3Name=="/pm.php") {
@@ -100,14 +100,14 @@ while ($pagei <= $pagenum) {
 if($Pagez[$pagei]!=null) {
 $pstring = $pstring."<a href=\"".url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&page=".$Pagez[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger'])."\">".$Pagez[$pagei]."</a> "; }
 	++$pagei; } $pstring = $pstring."</div>";
-echo $pstring;
+//echo $pstring;
 ?>
 <div class="Table1Border">
 <table class="Table1" style="width: 100%;">
 <tr class="TableRow1">
 <td class="TableRow1" colspan="4"><span style="float: left;">
 <?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>">MailBox&nbsp;(<?php echo $PMNumber; ?>)</a>
-</span><span style="float: right;">&nbsp;</span></td>
+</span><span style="float: right;"><?php echo $pstring; ?></span></td>
 </tr>
 <tr id="Messenger" class="TableRow2">
 <th class="TableRow2" style="width: 4%;">State</th>
@@ -189,14 +189,14 @@ $pagei=1; $pstring = "<div class=\"PageList\">Pages: ";
 while ($pagei <= $pagenum) {
 $pstring = $pstring."<a href=\"".url_maker($exfile['messenger'],$Settings['file_ext'],"act=viewsent&page=".$Pages[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger'])."\">".$Pages[$pagei]."</a> ";
 	++$pagei; } $pstring = $pstring."</div>";
-echo $pstring;
+//echo $pstring;
 ?>
 <div class="Table1Border">
 <table class="Table1" style="width: 100%;">
 <tr class="TableRow1">
 <td class="TableRow1" colspan="4"><span style="float: left;">
 <?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>">MailBox&nbsp;(<?php echo $PMNumber; ?>)</a>
-</span><span style="float: right;">&nbsp;</span></td>
+</span><span style="float: right;"><?php echo $pstring; ?></span></td>
 </tr>
 <tr id="Messenger" class="TableRow2">
 <th class="TableRow2" style="width: 4%;">State</th>

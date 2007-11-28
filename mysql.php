@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: mysql.php - Last Update: 11/20/2007 SVN 129 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 11/28/2007 SVN 130 - Author: cooldude2k $
 */
 //@ini_set("display_errors", true); 
 //@ini_set("display_startup_errors", true);
@@ -75,6 +75,8 @@ if(!isset($_SERVER['HTTP_REFERER'])) { $_SERVER['HTTP_REFERER'] = null; }
 if(!isset($_GET['page'])) { $_GET['page'] = null; }
 if(!isset($_GET['act'])) { $_GET['act'] = null; }
 if(!isset($_POST['act'])) { $_POST['act'] = null; }
+if(!isset($_GET['modact'])) { $_GET['modact'] = null; }
+if(!isset($_POST['modact'])) { $_POST['modact'] = null; }
 if(!isset($_GET['id'])) { $_GET['id'] = null; }
 if(!isset($_GET['debug'])) { $_GET['debug'] = false; }
 if(!isset($_GET['post'])) { $_GET['post'] = null; }
