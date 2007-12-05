@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: members.php - Last Update: 11/20/2007 SVN 129 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 12/05/2007 SVN 131 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -376,14 +376,14 @@ if (pre_strlen($_POST['userpass'])>="30") { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Your user name is too big.<br />
-	<span></td>
+	</span></td>
 </tr>
 <?php } if ($Settings['TestReferer']==true) {
 	if ($URL['HOST']!=$URL['REFERER']) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Sorry the referering url dose not match our host name.<br />
-	<span></td>
+	</span></td>
 </tr>
 <?php } } $BanError = null;
 if ($Error=="Yes") {
