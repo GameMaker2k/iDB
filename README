@@ -15,7 +15,7 @@
 //                      \\       (c) 2004-2007 Game Maker 2k      //
 //                       """"""""""""""""""""""""""""""""""""""""""
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//        $FileInfo: README - Last Update: 11/10/2007 SVN 126 - Author: cooldude2k $            
+//        $FileInfo: README - Last Update: 12/09/2007 SVN 132 - Author: cooldude2k $            
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/ http://idb.berlios.net/
 // Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/ 
@@ -32,7 +32,9 @@
 // this license agreement. Information regarding its usage can be
 // found on textfileBB's Web site at https://launchpad.net/tfbb.
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// Emoticons made by Jcink for TextfileBB (https://launchpad.net/tfbb) Under GPL License
+// Emoticons made by Jcink for TextfileBB (https://launchpad.net/tfbb) under GPL License
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// utf8.php is made by Andreas Gohr under GPL 2 License (http://www.gnu.org/licenses/gpl-2.0.txt)
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //                         ______________________________________
 //                        //     Also Get PHP-Quick-Arcade      \\
