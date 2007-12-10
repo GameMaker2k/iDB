@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: topics.php - Last Update: 12/05/2007 SVN 131 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 12/10/2007 SVN 133 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -197,15 +197,17 @@ if($NumRPosts<=$Settings['max_posts']) {
 $NumPages = 1; }
 if($UsersName1=="Guest") { $UsersName1=$GuestName1;
 if($UsersName1==null) { $UsersName1="Guest"; } }
+if (pre_strlen($UsersName1)>15) { 
+	$oldusername=$UsersName1; $UsersName1 = $UsersName1."...";  } 
 if($TimeStamp1!=null) { $lul = null;
 if($UsersID1!="-1") {
 $lul = url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UsersID1,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
 $luln = url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."&#35;reply".$NumReply;
-$LastReply = "User: <a href=\"".$lul."\">".$UsersName1."</a><br />\nTime: <a href=\"".$luln."\">".$TimeStamp1."</a>"; }
+$LastReply = "User: <a href=\"".$lul."\" title=\"".$oldusername."\">".$UsersName1."</a><br />\nTime: <a href=\"".$luln."\">".$TimeStamp1."</a>"; }
 if($UsersID1=="-1") {
 $lul = url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UsersID1,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
 $luln = url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."&#35;reply".$NumReply;
-$LastReply = "User: <span>".$UsersName1."</span><br />\nTime: <a href=\"".$luln."\">".$TimeStamp1."</a>"; } }
+$LastReply = "User: <span title=\"".$oldusername.">".$UsersName1."</span><br />\nTime: <a href=\"".$luln."\">".$TimeStamp1."</a>"; } }
 @mysql_free_result($glrresult);
 if(!isset($TimeStamp1)) { $TimeStamp1 = null; } if(!isset($LastReply)) { $LastReply = null; }
 if($TimeStamp1==null) { $LastReply = "&nbsp;<br />&nbsp;"; }

@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: categories.php - Last Update: 11/20/2007 SVN 129 - Author: cooldude2k $
+    $FileInfo: categories.php - Last Update: 12/10/2007 SVN 133 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="categories.php"||$File3Name=="/categories.php") {
@@ -129,16 +129,16 @@ if($NumRPosts<=$Settings['max_posts']) {
 $NumPages = 1; }
 $ShowReply = $NumReplys + 1;
 $TopicName1 = pre_substr($TopicName,0,15);
-if (pre_strlen($TopicName)>12) { $TopicName1 = $TopicName1."..."; }
+if (pre_strlen($TopicName)>15) { $TopicName1 = $TopicName1."..."; 
+$oldtopicname=$TopicName; $TopicName=$TopicName1; }
 $UsersID=mysql_result($gltresult,0,"UserID");
 $GuestName=mysql_result($gltresult,0,"GuestName");
 $UsersName = GetUserName($UsersID,$Settings['sqltable']);
 if($UsersName=="Guest") { $UsersName=$GuestName;
 if($UsersName==null) { $UsersName="Guest"; } }
 $UsersName1 = pre_substr($UsersName,0,18);
-if (pre_strlen($UsersName)>15) { $UsersName1 = $UsersName1."...";
-$oldtopicname=$TopicName; $oldusername=$UsersName;
-$TopicName=$TopicName1; $UsersName=$UsersName1; } $lul = null;
+if (pre_strlen($UsersName)>18) { $UsersName1 = $UsersName1."...";
+$oldusername=$UsersName; $UsersName=$UsersName1; } $lul = null;
 if($UsersID!="-1") {
 $lul = url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UsersID,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
 $LastTopic = "User: <a href=\"".$lul."\" title=\"".$oldusername."\">".$UsersName."</a><br />\nTopic: <a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."&#35;reply".$ShowReply."\" title=\"".$oldtopicname."\">".$TopicName."</a>"; }
