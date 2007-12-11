@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: pm.php - Last Update: 11/28/2007 SVN 130 - Author: cooldude2k $
+    $FileInfo: pm.php - Last Update: 12/11/2007 SVN 134 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pm.php"||$File3Name=="/pm.php") {
@@ -484,41 +484,44 @@ if(!isset($_POST['GuestName'])) { $_POST['GuestName'] = null; }
 <tr class="TableRow2">
 <th class="TableRow2" style="width: 100%; text-align: left;">&nbsp;Make Message: </th>
 </tr>
+<tr class="TableRow3">
+<td class="TableRow3">
+<table style="width: 100%; height: 25%; text-align: center;">
 <?php if (pre_strlen($_POST['SendMessageTo'])>="25") { $Error="Yes";  ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />Send to user name too big.<br />
 	</span></td>
 </tr>
 <?php } if ($_POST['SendMessageTo']==null) { $Error="Yes";  ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />You need to enter a user name to send message to.<br />
 	</span></td>
 </tr>
 <?php } if (pre_strlen($_POST['MessageName'])>="30") { $Error="Yes";  ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />Message Name is too big.<br />
 	</span></td>
 </tr>
 <?php } if (pre_strlen($_POST['MessageDesc'])>="45") { $Error="Yes";  ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />Message Description is too big.<br />
 	</span></td>
 </tr>
 <?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
 	pre_strlen($_POST['GuestName'])>="25") { $Error="Yes"; ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />You Guest Name is too big.<br />
 	</span></td>
 </tr>
 <?php } if ($Settings['TestReferer']==true) {
 	if ($URL['HOST']!=$URL['REFERER']) { $Error="Yes";  ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />Sorry the referering url dose not match our host name.<br />
 	</span></td>
 </tr>
@@ -555,39 +558,39 @@ if($SendUserCanPM!="yes"&&$SendUserCanPM!="no") {
 @mysql_free_result($gresult);
 ++$rei; } @mysql_free_result($reresult);
 if($renum==0) { $Error="Yes"; ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />Cound not find users name.<br />
 	</span></td>
 </tr>
 <?php } if ($_POST['MessageName']==null) { $Error="Yes";  ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />You need to enter a Message Name.<br />
 	</span></td>
 </tr>
 <?php } if ($_POST['MessageDesc']==null) { $Error="Yes";  ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />You need to enter a Message Description.<br />
 	</span></td>
 </tr>
 <?php } if ($SendUserCanPM=="no") { $Error="Yes";  ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />User Name enter can not get messages.<br />
 	</span></td>
 </tr>
 <?php } if ($_POST['Message']==null) { $Error="Yes";  ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />You need to enter a Message.<br />
 	</span></td>
 </tr>
 <?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
 	$_POST['GuestName']==null) { $Error="Yes"; ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />You need to enter a Guest Name.<br />
 	</span></td>
 </tr>
@@ -599,13 +602,15 @@ if($_SESSION['UserGroup']==$Settings['GuestGroup']) { $User1Name = $_POST['Guest
 if($_SESSION['UserGroup']!=$Settings['GuestGroup']) { $User1Name = $_SESSION['MemberName']; }
 $query = query("INSERT INTO `".$Settings['sqltable']."messenger` VALUES (".$messageid.",%i,%i,'%s','%s','%s','%s',%i,%i)", array($_SESSION['UserID'],$SendMessageToID,$_SESSION['MemberName'],$_POST['MessageName'],$_POST['Message'],$_POST['MessageDesc'],$LastActive,0));
 mysql_query($query);
-?><tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage"><br />
+?><tr>
+	<td><span class="TableMessage"><br />
 	Message sent to user <?php echo $_POST['SendMessageTo']; ?>.<br />
 	Click <a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">here</a> to go back to index.<br />&nbsp;
 	</span><br /></td>
 </tr>
 <?php } ?>
+</table>
+</td></tr>
 <tr class="TableRow4">
 <td class="TableRow4">&nbsp;</td>
 </tr>

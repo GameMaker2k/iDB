@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: topics.php - Last Update: 12/10/2007 SVN 133 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 12/11/2007 SVN 134 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -365,29 +365,32 @@ if(!isset($_POST['GuestName'])) { $_POST['GuestName'] = null; }
 <tr class="TableRow2">
 <th class="TableRow2" style="width: 100%; text-align: left;">&nbsp;Make Topic Message: </th>
 </tr>
+<tr class="TableRow3">
+<td class="TableRow3">
+<table style="width: 100%; height: 25%; text-align: center;">
 <?php if (pre_strlen($_POST['TopicName'])>="30") { $Error="Yes";  ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />Your Topic Name is too big.<br />
 	</span></td>
 </tr>
 <?php } if (pre_strlen($_POST['TopicDesc'])>="45") { $Error="Yes";  ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />Your Topic Description is too big.<br />
 	</span></td>
 </tr>
 <?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
 	pre_strlen($_POST['GuestName'])>="25") { $Error="Yes"; ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />You Guest Name is too big.<br />
 	</span></td>
 </tr>
 <?php } if ($Settings['TestReferer']==true) {
 	if ($URL['HOST']!=$URL['REFERER']) { $Error="Yes";  ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />Sorry the referering url dose not match our host name.<br />
 	</span></td>
 </tr>
@@ -406,33 +409,33 @@ $_POST['TopicPost'] = stripcslashes(htmlspecialchars($_POST['TopicPost'], ENT_QU
 $_POST['TopicPost'] = remove_bad_entities($_POST['TopicPost']);
 //$_POST['TopicPost'] = @remove_spaces($_POST['TopicPost']);
 if ($_POST['TopicName']==null) { $Error="Yes"; ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />You need to enter a Topic Name.<br />
 	</span></td>
 </tr>
 <?php } if ($_POST['TopicDesc']==null) { $Error="Yes"; ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />You need to enter a Topic Description.<br />
 	</span></td>
 </tr>
 <?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
 	$_POST['GuestName']==null) { $Error="Yes"; ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />You need to enter a Guest Name.<br />
 	</span></td>
 </tr>
 <?php } if($PermissionInfo['CanMakeTopics'][$ForumID]=="no"||$CanHaveTopics=="no") { $Error="Yes"; ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />You do not have permission to make a topic here.<br />
 	</span></td>
 </tr>
 <?php } if ($_POST['TopicPost']==null) { $Error="Yes"; ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />You need to enter a Topic Post.<br />
 	</span></td>
 </tr>
@@ -472,13 +475,15 @@ $NewNumPosts = $NumberPosts + 1; $NewNumTopics = $NumberTopics + 1;
 $queryupd = query("UPDATE `".$Settings['sqltable']."forums` SET `NumPosts`=%i,`NumTopics`=%i WHERE `id`=%i", array($NewNumPosts,$NewNumTopics,$ForumID));
 mysql_query($queryupd);
 @redirect("refresh",$basedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$topicid."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],FALSE),"3");
-?><tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage"><br />
+?><tr>
+	<td><span class="TableMessage"><br />
 	Topic <?php echo $_POST['TopicName']; ?> was started.<br />
 	Click <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$topicid."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>">here</a> to continue to topic.<br />&nbsp;
 	</span><br /></td>
 </tr>
 <?php } ?>
+</table>
+</td></tr>
 <tr class="TableRow4">
 <td class="TableRow4">&nbsp;</td>
 </tr>

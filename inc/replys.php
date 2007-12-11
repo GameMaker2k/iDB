@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: replys.php - Last Update: 11/28/2007 SVN 130 - Author: cooldude2k $
+    $FileInfo: replys.php - Last Update: 12/11/2007 SVN 134 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replys.php"||$File3Name=="/replys.php") {
@@ -488,23 +488,26 @@ if(!isset($_POST['GuestName'])) { $_POST['GuestName'] = null; }
 <tr class="TableRow2">
 <th class="TableRow2" style="width: 100%; text-align: left;">&nbsp;Make Reply Message: </th>
 </tr>
+<tr class="TableRow3">
+<td class="TableRow3">
+<table style="width: 100%; height: 25%; text-align: center;">
 <?php if (pre_strlen($_POST['ReplyDesc'])>="45") { $Error="Yes";  ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />Your Reply Description is too big.<br />
 	</span></td>
 </tr>
 <?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
 	pre_strlen($_POST['GuestName'])>="25") { $Error="Yes"; ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />You Guest Name is too big.<br />
 	</span></td>
 </tr>
 <?php } if ($Settings['TestReferer']==true) {
 	if ($URL['HOST']!=$URL['REFERER']) { $Error="Yes";  ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />Sorry the referering url dose not match our host name.<br />
 	</span></td>
 </tr>
@@ -520,34 +523,34 @@ $_POST['ReplyPost'] = stripcslashes(htmlspecialchars($_POST['ReplyPost'], ENT_QU
 //$_POST['ReplyPost'] = @remove_spaces($_POST['ReplyPost']);
 $_POST['ReplyPost'] = remove_bad_entities($_POST['ReplyPost']);
 if ($_POST['ReplyDesc']==null) { $Error="Yes"; ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />You need to enter a Reply Description.<br />
 	</span></td>
 </tr>
 <?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
 	$_POST['GuestName']==null) { $Error="Yes"; ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />You need to enter a Guest Name.<br />
 	</span></td>
 </tr>
 <?php } if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="no") { $Error="Yes"; ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />You do not have permission to make a reply here.<br />
 	</span></td>
 </tr>
 <?php } if($PermissionInfo['CanMakeReplysClose'][$TopicForumID]=="no"&&
 	$TopicClosed==1) { $Error="Yes"; ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />You do not have permission to make a reply here.<br />
 	</span></td>
 </tr>
 <?php } if ($_POST['ReplyPost']==null) { $Error="Yes"; ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />You need to enter a Reply.<br />
 	</span></td>
 </tr>
@@ -598,13 +601,15 @@ $NumPages = ceil($MyPostNum/$Settings['max_posts']); }
 if($MyPostNum<=$Settings['max_posts']) {
 $NumPages = 1; }
 @redirect("refresh",$basedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],FALSE)."&#35;reply".$MyPostNum,"3");
-?><tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage"><br />
+?><tr>
+	<td><span class="TableMessage"><br />
 	Reply to Topic <?php echo $TopicName; ?> was posted.<br />
 	Click <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>&#35;reply<?php echo $MyPostNum; ?>">here</a> to view your reply.<br />&nbsp;
 	</span><br /></td>
 </tr>
 <?php } ?>
+</table>
+</td></tr>
 <tr class="TableRow4">
 <td class="TableRow4">&nbsp;</td>
 </tr>
@@ -653,8 +658,8 @@ mysql_query($queryupd);
 <tr class="TableRow2">
 <th class="TableRow2" style="width: 100%; text-align: left;">&nbsp;Pin/Unpin Topic Message: </th>
 </tr>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage"><br />
+<tr class="TableRow3" style="text-align: center;">
+	<td class="TableRow3" style="text-align: center;"><span class="TableMessage"><br />
 	Topic was successfully unpinned/pinned.<br />
 	Click <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TTopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>">here</a> to go back to topic.<br />&nbsp;
 	</span><br /></td>
@@ -704,8 +709,8 @@ mysql_query($queryupd);
 <tr class="TableRow2">
 <th class="TableRow2" style="width: 100%; text-align: left;">&nbsp;Open/Close Topic Message: </th>
 </tr>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage"><br />
+<tr class="TableRow3" style="text-align: center;">
+	<td class="TableRow3" style="text-align: center;"><span class="TableMessage"><br />
 	Topic was successfully opened/closed.<br />
 	Click <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TTopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>">here</a> to go back to topic.<br />&nbsp;
 	</span><br /></td>
@@ -804,8 +809,8 @@ mysql_query($queryupd); }
 <tr class="TableRow2">
 <th class="TableRow2" style="width: 100%; text-align: left;">&nbsp;Delete Reply Message: </th>
 </tr>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage"><br />
+<tr class="TableRow3" style="text-align: center;">
+	<td class="TableRow3" style="text-align: center;"><span class="TableMessage"><br />
 	Reply was deleted successfully.<br />
 	Click <a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">here</a> to go back to index.<br />&nbsp;
 	</span><br /></td>
@@ -996,30 +1001,33 @@ if($PermissionInfo['CanEditTopicsClose'][$TopicForumID]=="no"&&$TopicClosed==1) 
 <tr class="TableRow2">
 <th class="TableRow2" style="width: 100%; text-align: left;">&nbsp;Edit Reply Message: </th>
 </tr>
+<tr class="TableRow3">
+<td class="TableRow3">
+<table style="width: 100%; height: 25%; text-align: center;">
 <?php if (pre_strlen($_POST['ReplyDesc'])>="45") { $Error="Yes";  ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />Your Reply Description is too big.<br />
 	</span></td>
 </tr>
 <?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
 	pre_strlen($_POST['GuestName'])>="25") { $Error="Yes"; ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />You Guest Name is too big.<br />
 	</span></td>
 </tr>
 <?php } if($ShowEditTopic==true&&
 	pre_strlen($_POST['TopicName'])>="30") { $Error="Yes"; ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />You Topic Name is too big.<br />
 	</span></td>
 </tr>
 <?php } if ($Settings['TestReferer']==true) {
 	if ($URL['HOST']!=$URL['REFERER']) { $Error="Yes";  ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />Sorry the referering url dose not match our host name.<br />
 	</span></td>
 </tr>
@@ -1038,39 +1046,39 @@ $_POST['TopicName'] = stripcslashes(htmlspecialchars($_POST['TopicName'], ENT_QU
 //$_POST['TopicName'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['TopicName']);
 $_POST['TopicName'] = @remove_spaces($_POST['TopicName']); }
 if ($_POST['ReplyDesc']==null) { $Error="Yes"; ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />You need to enter a Reply Description.<br />
 	</span></td>
 </tr>
 <?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
 	$_POST['GuestName']==null) { $Error="Yes"; ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />You need to enter a Guest Name.<br />
 	</span></td>
 </tr>
 <?php } if($PermissionInfo['CanEditReplys'][$TopicForumID]=="no") { $Error="Yes"; ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />You do not have permission to edit a reply here.<br />
 	</span></td>
 </tr>
 <?php } if($PermissionInfo['CanEditReplysClose'][$TopicForumID]=="no"&&$TopicClosed==1) { $Error="Yes"; ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />You do not have permission to edit a reply here.<br />
 	</span></td>
 </tr>
 <?php } if($ShowEditTopic==true&&$_POST['TopicName']==null) { $Error="Yes"; ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />You need to enter a Topic Name.<br />
 	</span></td>
 </tr>
 <?php } if ($_POST['ReplyPost']==null) { $Error="Yes"; ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />You need to enter a Reply.<br />
 	</span></td>
 </tr>
@@ -1095,12 +1103,14 @@ $queryupd = query("UPDATE `".$Settings['sqltable']."topics` SET `TopicName`='%s'
 mysql_query($queryupd); } } 
 @redirect(url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],FALSE)."&#35;post".$_GET['post'],"3");
 ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage"><br />
+<tr>
+	<td><span class="TableMessage"><br />
 	Reply to Topic <?php echo $TopicName; ?> was edited.<br />
 	Click <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."&#35;post".$_GET['post']; ?>">here</a> to view topic.<br />&nbsp;
 	</span><br /></td>
 </tr>
+</table>
+</td></tr>
 <tr class="TableRow4">
 <td class="TableRow4">&nbsp;</td>
 </tr>
