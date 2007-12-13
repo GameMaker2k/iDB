@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: pm.php - Last Update: 12/11/2007 SVN 134 - Author: cooldude2k $
+    $FileInfo: pm.php - Last Update: 12/13/2007 SVN 135 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pm.php"||$File3Name=="/pm.php") {
@@ -542,6 +542,37 @@ $_POST['Message'] = stripcslashes(htmlspecialchars($_POST['Message'], ENT_QUOTES
 //$_POST['Message'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['Message']);
 //$_POST['Message'] = @remove_spaces($_POST['Message']);
 $_POST['Message'] = remove_bad_entities($_POST['Message']);
+/*    <_<  iWordFilter  >_>      
+   by René Johnson - Cool Dude 2k */
+$katarzynaqy=query("SELECT * FROM `".$Settings['sqltable']."wordfilter`", array(null));
+$katarzynart=mysql_query($katarzynaqy);
+$katarzynanm=mysql_num_rows($katarzynart);
+$katarzynas=0;
+while ($katarzynas < $katarzynanm) {
+$Filter=mysql_result($katarzynart,$katarzynas,"Filter");
+$Replace=mysql_result($katarzynart,$katarzynas,"Replace");
+$CaseInsensitive=mysql_result($katarzynart,$katarzynas,"CaseInsensitive");
+if($CaseInsensitive=="on") { $CaseInsensitive = "yes"; }
+if($CaseInsensitive=="off") { $CaseInsensitive = "no"; }
+if($CaseInsensitive!="yes"||$CaseInsensitive!="no") { $CaseInsensitive = "no"; }
+$WholeWord=mysql_result($katarzynart,$katarzynas,"WholeWord");
+if($WholeWord=="on") { $WholeWord = "yes"; }
+if($WholeWord=="off") { $WholeWord = "no"; }
+if($WholeWord!="yes"||$WholeWord!="no") { $WholeWord = "no"; }
+$Filter = preg_quote($Filter, "/");
+if($CaseInsensitive!="yes"&&$WholeWord=="yes") {
+$_POST['Message'] = preg_replace("/\b(".$Filter.")\b/", $Replace, $_POST['Message']);
+$_POST['MessageDesc'] = preg_replace("/\b(".$Filter.")\b/", $Replace, $_POST['MessageDesc']); }
+if($CaseInsensitive=="yes"&&$WholeWord=="yes") {
+$_POST['Message'] = preg_replace("/\b(".$Filter.")\b/i", $Replace, $_POST['Message']);
+$_POST['MessageDesc'] = preg_replace("/\b(".$Filter.")\b/i", $Replace, $_POST['MessageDesc']) }
+if($CaseInsensitive!="yes"&&$WholeWord!="yes") {
+$_POST['Message'] = preg_replace("/".$Filter."/", $Replace, $_POST['Message']);
+$_POST['MessageDesc'] = preg_replace("/".$Filter."/", $Replace, $_POST['MessageDesc']); }
+if($CaseInsensitive=="yes"&&$WholeWord!="yes") {
+$_POST['Message'] = preg_replace("/".$Filter."/i", $Replace, $_POST['Message']);
+$_POST['MessageDesc'] = preg_replace("/".$Filter."/i", $Replace, $_POST['MessageDesc']); }
+++$katarzynas; } @mysql_free_result($katarzynart);
 $requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `Name`='%s'", array($_POST['SendMessageTo']));
 $reresult=mysql_query($requery);
 $renum=mysql_num_rows($reresult);

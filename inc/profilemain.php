@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: profilemain.php - Last Update: 11/20/2007 SVN 129 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 12/13/2007 SVN 135 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
@@ -121,6 +121,36 @@ if($_POST['act']=="view"&&
 	$_SESSION['UserGroup']!=$Settings['GuestGroup']) {
 	$_POST['NotePad'] = htmlspecialchars($_POST['NotePad'], ENT_QUOTES, $Settings['charset']);
 	$_POST['NotePad'] = remove_bad_entities($_POST['NotePad']);
+	//$_POST['Signature'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['Signature']);
+	//$_POST['Signature'] = @remove_spaces($_POST['Signature']);
+	//$_POST['Signature'] = remove_bad_entities($_POST['Signature']);
+	/*    <_<  iWordFilter  >_>      
+    by René Johnson - Cool Dude 2k */
+	$katarzynaqy=query("SELECT * FROM `".$Settings['sqltable']."wordfilter`", array(null));
+	$katarzynart=mysql_query($katarzynaqy);
+	$katarzynanm=mysql_num_rows($katarzynart);
+	$katarzynas=0;
+	while ($katarzynas < $katarzynanm) {
+	$Filter=mysql_result($katarzynart,$katarzynas,"Filter");
+	$Replace=mysql_result($katarzynart,$katarzynas,"Replace");
+	$CaseInsensitive=mysql_result($katarzynart,$katarzynas,"CaseInsensitive");
+	if($CaseInsensitive=="on") { $CaseInsensitive = "yes"; }
+	if($CaseInsensitive=="off") { $CaseInsensitive = "no"; }
+	if($CaseInsensitive!="yes"||$CaseInsensitive!="no") { $CaseInsensitive = "no"; }
+	$WholeWord=mysql_result($katarzynart,$katarzynas,"WholeWord");
+	if($WholeWord=="on") { $WholeWord = "yes"; }
+	if($WholeWord=="off") { $WholeWord = "no"; }
+	if($WholeWord!="yes"||$WholeWord!="no") { $WholeWord = "no"; }
+	$Filter = preg_quote($Filter, "/");
+	if($CaseInsensitive!="yes"&&$WholeWord=="yes") {
+	$_POST['NotePad'] = preg_replace("/\b(".$Filter.")\b/", $Replace, $_POST['NotePad']); }
+	if($CaseInsensitive=="yes"&&$WholeWord=="yes") {
+	$_POST['NotePad'] = preg_replace("/\b(".$Filter.")\b/i", $Replace, $_POST['NotePad']); }
+	if($CaseInsensitive!="yes"&&$WholeWord!="yes") {
+	$_POST['NotePad'] = preg_replace("/".$Filter."/", $Replace, $_POST['NotePad']); }
+	if($CaseInsensitive=="yes"&&$WholeWord!="yes") {
+	$_POST['NotePad'] = preg_replace("/".$Filter."/i", $Replace, $_POST['NotePad']); }
+	++$katarzynas; } @mysql_free_result($katarzynart);
 	$NewDay=GMTimeStamp();
 	$NewIP=$_SERVER['REMOTE_ADDR'];
 	$querynewskin = query("UPDATE `".$Settings['sqltable']."members` SET `Notes`='%s',`LastActive`=%i,`IP`='%s' WHERE `id`=%i", array($_POST['NotePad'],$NewDay,$NewIP,$_SESSION['UserID']));
@@ -169,6 +199,33 @@ if($_POST['act']=="signature"&&
 	//$_POST['Signature'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['Signature']);
 	//$_POST['Signature'] = @remove_spaces($_POST['Signature']);
 	$_POST['Signature'] = remove_bad_entities($_POST['Signature']);
+	/*    <_<  iWordFilter  >_>      
+    by René Johnson - Cool Dude 2k */
+	$katarzynaqy=query("SELECT * FROM `".$Settings['sqltable']."wordfilter`", array(null));
+	$katarzynart=mysql_query($katarzynaqy);
+	$katarzynanm=mysql_num_rows($katarzynart);
+	$katarzynas=0;
+	while ($katarzynas < $katarzynanm) {
+	$Filter=mysql_result($katarzynart,$katarzynas,"Filter");
+	$Replace=mysql_result($katarzynart,$katarzynas,"Replace");
+	$CaseInsensitive=mysql_result($katarzynart,$katarzynas,"CaseInsensitive");
+	if($CaseInsensitive=="on") { $CaseInsensitive = "yes"; }
+	if($CaseInsensitive=="off") { $CaseInsensitive = "no"; }
+	if($CaseInsensitive!="yes"||$CaseInsensitive!="no") { $CaseInsensitive = "no"; }
+	$WholeWord=mysql_result($katarzynart,$katarzynas,"WholeWord");
+	if($WholeWord=="on") { $WholeWord = "yes"; }
+	if($WholeWord=="off") { $WholeWord = "no"; }
+	if($WholeWord!="yes"||$WholeWord!="no") { $WholeWord = "no"; }
+	$Filter = preg_quote($Filter, "/");
+	if($CaseInsensitive!="yes"&&$WholeWord=="yes") {
+	$_POST['Signature'] = preg_replace("/\b(".$Filter.")\b/", $Replace, $_POST['Signature']); }
+	if($CaseInsensitive=="yes"&&$WholeWord=="yes") {
+	$_POST['Signature'] = preg_replace("/\b(".$Filter.")\b/i", $Replace, $_POST['Signature']); }
+	if($CaseInsensitive!="yes"&&$WholeWord!="yes") {
+	$_POST['Signature'] = preg_replace("/".$Filter."/", $Replace, $_POST['Signature']); }
+	if($CaseInsensitive=="yes"&&$WholeWord!="yes") {
+	$_POST['Signature'] = preg_replace("/".$Filter."/i", $Replace, $_POST['Signature']); }
+	++$katarzynas; } @mysql_free_result($katarzynart);
 	$NewDay=GMTimeStamp();
 	$NewIP=$_SERVER['REMOTE_ADDR'];
 	$querynewskin = query("UPDATE `".$Settings['sqltable']."members` SET `Signature`='%s',`LastActive`=%i,`IP`='%s' WHERE `id`=%i", array($_POST['Signature'],$NewDay,$NewIP,$_SESSION['UserID']));
@@ -498,6 +555,40 @@ if($_POST['act']=="profile"&&
 	$_POST['Title'] = @remove_spaces($_POST['Title']);
 	$_POST['Website'] = htmlentities($_POST['Website'], ENT_QUOTES, $Settings['charset']);
 	$_POST['Website'] = @remove_spaces($_POST['Website']);
+	//$_POST['Signature'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['Signature']);
+	//$_POST['Signature'] = @remove_spaces($_POST['Signature']);
+	//$_POST['Signature'] = remove_bad_entities($_POST['Signature']);
+	/*    <_<  iWordFilter  >_>      
+    by René Johnson - Cool Dude 2k */
+	$katarzynaqy=query("SELECT * FROM `".$Settings['sqltable']."wordfilter`", array(null));
+	$katarzynart=mysql_query($katarzynaqy);
+	$katarzynanm=mysql_num_rows($katarzynart);
+	$katarzynas=0;
+	while ($katarzynas < $katarzynanm) {
+	$Filter=mysql_result($katarzynart,$katarzynas,"Filter");
+	$Replace=mysql_result($katarzynart,$katarzynas,"Replace");
+	$CaseInsensitive=mysql_result($katarzynart,$katarzynas,"CaseInsensitive");
+	if($CaseInsensitive=="on") { $CaseInsensitive = "yes"; }
+	if($CaseInsensitive=="off") { $CaseInsensitive = "no"; }
+	if($CaseInsensitive!="yes"||$CaseInsensitive!="no") { $CaseInsensitive = "no"; }
+	$WholeWord=mysql_result($katarzynart,$katarzynas,"WholeWord");
+	if($WholeWord=="on") { $WholeWord = "yes"; }
+	if($WholeWord=="off") { $WholeWord = "no"; }
+	if($WholeWord!="yes"||$WholeWord!="no") { $WholeWord = "no"; }
+	$Filter = preg_quote($Filter, "/");
+	if($CaseInsensitive!="yes"&&$WholeWord=="yes") {
+	$_POST['Interests'] = preg_replace("/\b(".$Filter.")\b/", $Replace, $_POST['Interests']);
+	$_POST['Title'] = preg_replace("/\b(".$Filter.")\b/", $Replace, $_POST['Title']); }
+	if($CaseInsensitive=="yes"&&$WholeWord=="yes") {
+	$_POST['Interests'] = preg_replace("/\b(".$Filter.")\b/i", $Replace, $_POST['Interests']);
+	$_POST['Title'] = preg_replace("/\b(".$Filter.")\b/i", $Replace, $_POST['Title']); }
+	if($CaseInsensitive!="yes"&&$WholeWord!="yes") {
+	$_POST['Interests'] = preg_replace("/".$Filter."/", $Replace, $_POST['Interests']);
+	$_POST['Title'] = preg_replace("/".$Filter."/", $Replace, $_POST['Title']); }
+	if($CaseInsensitive=="yes"&&$WholeWord!="yes") {
+	$_POST['Interests'] = preg_replace("/".$Filter."/i", $Replace, $_POST['Interests']); 
+	$_POST['Title'] = preg_replace("/".$Filter."/i", $Replace, $_POST['Title']); }
+	++$katarzynas; } @mysql_free_result($katarzynart);
 	if(!isset($_POST['EventDay'])) { $_POST['EventDay'] = null; }
 	if($_POST['EventDay']!=null) {
 	$BirthExpl = explode("/",$_POST['EventDay']);

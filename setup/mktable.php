@@ -12,7 +12,7 @@
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mktable.php - Last Update: 09/19/2007 SVN 105 - Author: cooldude2k $
+    $FileInfo: mktable.php - Last Update: 12/13/2007 SVN 135 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mktable.php"||$File3Name=="/mktable.php") {
@@ -46,6 +46,10 @@ mysql_query($query);
 $query=query("CREATE TABLE `".$_POST['tableprefix']."permissions` ( `id` int(15) NOT NULL auto_increment, `PermissionID` int(15) NOT NULL default '0', `Name` varchar(150) NOT NULL default '', `ForumID` int(15) NOT NULL default '0', `CanViewForum` varchar(5) NOT NULL default '', `CanMakeTopics` varchar(5) NOT NULL default '', `CanMakeReplys` varchar(5) NOT NULL default '', `CanMakeReplysCT` varchar(5) NOT NULL default '', `CanEditTopics` varchar(5) NOT NULL default '', `CanEditTopicsCT` varchar(5) NOT NULL default '', `CanEditReplys` varchar(5) NOT NULL default '', `CanEditReplysCT` varchar(5) NOT NULL default '', `CanDeleteTopics` varchar(5) NOT NULL default '', `CanDeleteTopicsCT` varchar(5) NOT NULL default '', `CanDeleteReplys` varchar(5) NOT NULL default '', `CanDeleteReplysCT` varchar(5) NOT NULL default '', `CanCloseTopics` varchar(5) NOT NULL default '', `CanPinTopics` varchar(5) NOT NULL default '', `CanDohtml` varchar(5) NOT NULL default '', `CanUseBBags` varchar(5) NOT NULL default '', `CanModForum` varchar(5) NOT NULL default '', PRIMARY KEY  (`id`)) TYPE=`MyISAM` ;", array(null));
 mysql_query($query);
 $query=query("CREATE TABLE `".$_POST['tableprefix']."catpermissions` ( `id` int(15) NOT NULL auto_increment, `PermissionID` int(15) NOT NULL default '0', `Name` varchar(150) NOT NULL default '', `CategoryID` int(15) NOT NULL default '0', `CanViewCategory` varchar(5) NOT NULL default '', PRIMARY KEY  (`id`)) TYPE=`MyISAM` ;", array(null));
+mysql_query($query);
+$query=query("CREATE TABLE `".$_POST['tableprefix']."wordfilter` ( `id` int(15) NOT NULL auto_increment, `Filter` text NOT NULL, `Replace` text NOT NULL, `CaseInsensitive` varchar(5) NOT NULL default '', `WholeWord` varchar(5) NOT NULL default '', PRIMARY KEY  (`id`)) TYPE=`MyISAM` ;", array(null));
+mysql_query($query);
+$query=query("CREATE TABLE `".$_POST['tableprefix']."restrictedwords` ( `id` int(15) NOT NULL auto_increment, `Word` text NOT NULL, `RestrictedUserName` varchar(5) NOT NULL default '', `RestrictedTopicName` varchar(5) NOT NULL default '', `RestrictedEventName` varchar(5) NOT NULL default '', `RestrictedMessageName` varchar(5) NOT NULL default '', `CaseInsensitive` varchar(5) NOT NULL default '', `WholeWord` varchar(5) NOT NULL default '', PRIMARY KEY  (`id`)) TYPE=`MyISAM` ;", array(null));
 mysql_query($query);
 $query = query("INSERT INTO `".$_POST['tableprefix']."groups` VALUES (1, 'Admin', 1, '', '', 'yes', 'yes', 'yes', 'yes', 'yes', 'none', 0, 'yes', 'yes', 'yes'), (2, 'Moderator', 2, '', '', 'yes', 'yes', 'yes', 'yes', 'yes', 'none', 0, 'yes', 'no', 'no'), (3, 'Member', 3, '', '', 'yes', 'yes', 'yes', 'yes', 'yes', 'none', 0, 'no', 'no', 'no'), (4, 'Guest', 4, '', '', 'yes', 'no', 'no', 'no', 'no', 'none', 0, 'no', 'no', 'no'), (5, 'Banned', 5, '', '', 'no', 'no', 'no', 'no', 'no', 'none', 0, 'no', 'no', 'no'), (6, 'Validate', 6, '', '', 'yes', 'yes', 'no', 'no', 'yes', 'none', 0, 'no', 'no', 'no');", array(null)); 
 mysql_query($query);
