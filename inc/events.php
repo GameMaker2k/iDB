@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: events.php - Last Update: 12/13/2007 SVN 135 - Author: cooldude2k $
+    $FileInfo: events.php - Last Update: 12/14/2007 SVN 136 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="events.php"||$File3Name=="/events.php") {
@@ -374,6 +374,50 @@ $_POST['EventText'] = preg_replace("/".$Filter."/", $Replace, $_POST['EventText'
 if($CaseInsensitive=="yes"&&$WholeWord!="yes") {
 $_POST['EventText'] = preg_replace("/".$Filter."/i", $Replace, $_POST['EventText']); }
 ++$katarzynas; } @mysql_free_result($katarzynart);
+$lonewolfqy=query("SELECT * FROM `".$Settings['sqltable']."restrictedwords` WHERE `RestrictedEventName`='yes' or `RestrictedUserName`='yes'", array(null));
+$lonewolfrt=mysql_query($lonewolfqy);
+$lonewolfnm=mysql_num_rows($lonewolfrt);
+$lonewolfs=0; $RMatches = null;
+while ($lonewolfs < $lonewolfnm) {
+$RWord=mysql_result($lonewolfrt,$lonewolfs,"Word");
+$RCaseInsensitive=mysql_result($lonewolfrt,$lonewolfs,"CaseInsensitive");
+if($RCaseInsensitive=="on") { $RCaseInsensitive = "yes"; }
+if($RCaseInsensitive=="off") { $RCaseInsensitive = "no"; }
+if($RCaseInsensitive!="yes"||$RCaseInsensitive!="no") { $RCaseInsensitive = "no"; }
+$RWholeWord=mysql_result($lonewolfrt,$lonewolfs,"WholeWord");
+if($RWholeWord=="on") { $RWholeWord = "yes"; }
+if($RWholeWord=="off") { $RWholeWord = "no"; }
+if($RWholeWord!="yes"||$RWholeWord!="no") { $RWholeWord = "no"; }
+$RestrictedEventName=mysql_result($lonewolfrt,$lonewolfs,"RestrictedEventName");
+if($RestrictedEventName=="on") { $RestrictedEventName = "yes"; }
+if($RestrictedEventName=="off") { $RestrictedEventName = "no"; }
+if($RestrictedEventName!="yes"||$RestrictedEventName!="no") { $RestrictedEventName = "no"; }
+$RestrictedUserName=mysql_result($lonewolfrt,$lonewolfs,"RestrictedUserName");
+if($RestrictedUserName=="on") { $RestrictedUserName = "yes"; }
+if($RestrictedUserName=="off") { $RestrictedUserName = "no"; }
+if($RestrictedUserName!="yes"||$RestrictedUserName!="no") { $RestrictedUserName = "no"; }
+$RWord = preg_quote($RWord, "/");
+if($RCaseInsensitive!="yes"&&$RWholeWord=="yes") {
+if($RestrictedEventName=="yes") {
+$RMatches = preg_match("/\b(".$RWord.")\b/", $_POST['EventName']); }
+if($RestrictedUserName=="yes") {
+$RGMatches = preg_match("/\b(".$RWord.")\b/", $_POST['GuestName']); } }
+if($RCaseInsensitive=="yes"&&$RWholeWord=="yes") {
+if($RestrictedEventName=="yes") {
+$RMatches = preg_match("/\b(".$RWord.")\b/i", $_POST['EventName']); }
+if($RestrictedUserName=="yes") {
+$RGMatches = preg_match("/\b(".$RWord.")\b/i", $_POST['GuestName']); } }
+if($RCaseInsensitive!="yes"&&$RWholeWord!="yes") {
+if($RestrictedEventName=="yes") {
+$RMatches = preg_match("/".$RWord."/", $_POST['EventName']); }
+if($RestrictedUserName=="yes") {
+$RGMatches = preg_match("/".$RWord."/", $_POST['GuestName']); } }
+if($RCaseInsensitive=="yes"&&$RWholeWord!="yes") {
+if($RestrictedEventName=="yes") {
+$RMatches = preg_match("/".$RWord."/i", $_POST['EventName']); }
+if($RestrictedUserName=="yes") {
+$RGMatches = preg_match("/".$RWord."/i", $_POST['GuestName']); } }
+++$lonewolfs; } @mysql_free_result($lonewolfrt);
 if ($_POST['EventName']==null) { $Error="Yes"; ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
@@ -441,10 +485,23 @@ if ($_POST['EventName']==null) { $Error="Yes"; ?>
 	<br />You need to enter a Guest Name.<br />
 	</span></td>
 </tr>
+<?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
+	$RGMatches==true) { $Error="Yes"; ?>
+<tr>
+	<td><span class="TableMessage">
+	<br />This Guest Name is restricted to use.<br />
+	</span></td>
+</tr>
 <?php } if($GroupInfo['CanAddEvents']=="no") { $Error="Yes"; ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />You do not have permission to make a event here.<br />
+	</span></td>
+</tr>
+<?php } if($RMatches==true) { $Error="Yes"; ?>
+<tr>
+	<td><span class="TableMessage">
+	<br />This User Name is restricted to use.<br />
 	</span></td>
 </tr>
 <?php } if ($Error=="Yes") {

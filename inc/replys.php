@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: replys.php - Last Update: 12/13/2007 SVN 135 - Author: cooldude2k $
+    $FileInfo: replys.php - Last Update: 12/14/2007 SVN 136 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replys.php"||$File3Name=="/replys.php") {
@@ -1107,6 +1107,50 @@ if($CaseInsensitive=="yes"&&$WholeWord!="yes") {
 $_POST['ReplyDesc'] = preg_replace("/".$Filter."/i", $Replace, $_POST['ReplyDesc']); 
 $_POST['ReplyPost'] = preg_replace("/".$Filter."/i", $Replace, $_POST['ReplyPost']); }
 ++$katarzynas; } @mysql_free_result($katarzynart);
+$lonewolfqy=query("SELECT * FROM `".$Settings['sqltable']."restrictedwords` WHERE `RestrictedTopicName`='yes' or `RestrictedUserName`='yes'", array(null));
+$lonewolfrt=mysql_query($lonewolfqy);
+$lonewolfnm=mysql_num_rows($lonewolfrt);
+$lonewolfs=0; $RMatches = null;
+while ($lonewolfs < $lonewolfnm) {
+$RWord=mysql_result($lonewolfrt,$lonewolfs,"Word");
+$RCaseInsensitive=mysql_result($lonewolfrt,$lonewolfs,"CaseInsensitive");
+if($RCaseInsensitive=="on") { $RCaseInsensitive = "yes"; }
+if($RCaseInsensitive=="off") { $RCaseInsensitive = "no"; }
+if($RCaseInsensitive!="yes"||$RCaseInsensitive!="no") { $RCaseInsensitive = "no"; }
+$RWholeWord=mysql_result($lonewolfrt,$lonewolfs,"WholeWord");
+if($RWholeWord=="on") { $RWholeWord = "yes"; }
+if($RWholeWord=="off") { $RWholeWord = "no"; }
+if($RWholeWord!="yes"||$RWholeWord!="no") { $RWholeWord = "no"; }
+$RestrictedTopicName=mysql_result($lonewolfrt,$lonewolfs,"RestrictedTopicName");
+if($RestrictedTopicName=="on") { $RestrictedTopicName = "yes"; }
+if($RestrictedTopicName=="off") { $RestrictedTopicName = "no"; }
+if($RestrictedTopicName!="yes"||$RestrictedTopicName!="no") { $RestrictedTopicName = "no"; }
+$RestrictedUserName=mysql_result($lonewolfrt,$lonewolfs,"RestrictedUserName");
+if($RestrictedUserName=="on") { $RestrictedUserName = "yes"; }
+if($RestrictedUserName=="off") { $RestrictedUserName = "no"; }
+if($RestrictedUserName!="yes"||$RestrictedUserName!="no") { $RestrictedUserName = "no"; }
+$RWord = preg_quote($RWord, "/");
+if($RCaseInsensitive!="yes"&&$RWholeWord=="yes") {
+if($RestrictedTopicName=="yes") {
+$RMatches = preg_match("/\b(".$RWord.")\b/", $_POST['TopicName']); }
+if($RestrictedUserName=="yes") {
+$RGMatches = preg_match("/\b(".$RWord.")\b/", $_POST['GuestName']); } }
+if($RCaseInsensitive=="yes"&&$RWholeWord=="yes") {
+if($RestrictedTopicName=="yes") {
+$RMatches = preg_match("/\b(".$RWord.")\b/i", $_POST['TopicName']); }
+if($RestrictedUserName=="yes") {
+$RGMatches = preg_match("/\b(".$RWord.")\b/i", $_POST['GuestName']); } }
+if($RCaseInsensitive!="yes"&&$RWholeWord!="yes") {
+if($RestrictedTopicName=="yes") {
+$RMatches = preg_match("/".$RWord."/", $_POST['TopicName']); }
+if($RestrictedUserName=="yes") {
+$RGMatches = preg_match("/".$RWord."/", $_POST['GuestName']); } }
+if($RCaseInsensitive=="yes"&&$RWholeWord!="yes") {
+if($RestrictedTopicName=="yes") {
+$RMatches = preg_match("/".$RWord."/i", $_POST['TopicName']); }
+if($RestrictedUserName=="yes") {
+$RGMatches = preg_match("/".$RWord."/i", $_POST['GuestName']); } }
+++$lonewolfs; } @mysql_free_result($lonewolfrt);
 if ($_POST['ReplyDesc']==null) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
@@ -1118,6 +1162,13 @@ if ($_POST['ReplyDesc']==null) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You need to enter a Guest Name.<br />
+	</span></td>
+</tr>
+<?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
+	$RGMatches==true) { $Error="Yes"; ?>
+<tr>
+	<td><span class="TableMessage">
+	<br />This Guest Name is restricted to use.<br />
 	</span></td>
 </tr>
 <?php } if($PermissionInfo['CanEditReplys'][$TopicForumID]=="no") { $Error="Yes"; ?>
@@ -1142,6 +1193,12 @@ if ($_POST['ReplyDesc']==null) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You need to enter a Reply.<br />
+	</span></td>
+</tr>
+<?php } if($RMatches==true) { $Error="Yes"; ?>
+<tr>
+	<td><span class="TableMessage">
+	<br />This Topic Name is restricted to use.<br />
 	</span></td>
 </tr>
 <?php } if ($Error=="Yes") {

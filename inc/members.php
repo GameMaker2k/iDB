@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: members.php - Last Update: 12/11/2007 SVN 134 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 12/14/2007 SVN 136 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -655,6 +655,30 @@ if(!isset($_POST['TOS'])) { $_POST['TOS'] = null; }
 $Name = stripcslashes(htmlspecialchars($_POST['Name'], ENT_QUOTES, $Settings['charset']));
 //$Name = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $Name);
 $Name = @remove_spaces($Name);
+$lonewolfqy=query("SELECT * FROM `".$Settings['sqltable']."restrictedwords` WHERE `RestrictedUserName`='yes'", array(null));
+$lonewolfrt=mysql_query($lonewolfqy);
+$lonewolfnm=mysql_num_rows($lonewolfrt);
+$lonewolfs=0; $RMatches = null;
+while ($lonewolfs < $lonewolfnm) {
+$RWord=mysql_result($lonewolfrt,$lonewolfs,"Word");
+$RCaseInsensitive=mysql_result($lonewolfrt,$lonewolfs,"CaseInsensitive");
+if($RCaseInsensitive=="on") { $RCaseInsensitive = "yes"; }
+if($RCaseInsensitive=="off") { $RCaseInsensitive = "no"; }
+if($RCaseInsensitive!="yes"||$RCaseInsensitive!="no") { $RCaseInsensitive = "no"; }
+$RWholeWord=mysql_result($lonewolfrt,$lonewolfs,"WholeWord");
+if($RWholeWord=="on") { $RWholeWord = "yes"; }
+if($RWholeWord=="off") { $RWholeWord = "no"; }
+if($RWholeWord!="yes"||$RWholeWord!="no") { $RWholeWord = "no"; }
+$RWord = preg_quote($RWord, "/");
+if($RCaseInsensitive!="yes"&&$RWholeWord=="yes") {
+$RMatches = preg_match("/\b(".$RWord.")\b/", $Name); }
+if($RCaseInsensitive=="yes"&&$RWholeWord=="yes") {
+$RMatches = preg_match("/\b(".$RWord.")\b/i", $Name); }
+if($RCaseInsensitive!="yes"&&$RWholeWord!="yes") {
+$RMatches = preg_match("/".$RWord."/", $Name); }
+if($RCaseInsensitive=="yes"&&$RWholeWord!="yes") {
+$RMatches = preg_match("/".$RWord."/i", $Name); }
+++$lonewolfs; } @mysql_free_result($lonewolfrt);
 $sql_email_check = mysql_query(query("SELECT `Email` FROM `".$Settings['sqltable']."members` WHERE `Email`='%s'", array($_POST['Email'])));
 $sql_username_check = mysql_query(query("SELECT `Name` FROM `".$Settings['sqltable']."members` WHERE `Name`='%s'", array($Name)));
 $email_check = mysql_num_rows($sql_email_check); 
@@ -699,7 +723,13 @@ if ($_POST['TOS']!="Agree") { $Error="Yes";  ?>
 <?php } if($username_check > 0) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
-	<br />UserName is already used.<br />
+	<br />User Name is already used.<br />
+	</span></td>
+</tr>
+<?php } if($RMatches==true) { $Error="Yes"; ?>
+<tr>
+	<td><span class="TableMessage">
+	<br />This User Name is restricted to use.<br />
 	</span></td>
 </tr>
 <?php } if ($Error=="Yes") {

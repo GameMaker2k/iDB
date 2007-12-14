@@ -12,12 +12,12 @@
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    Revised BSD License for more details.
+    GNU General Public License Version 2 for more details.
 
     Copyright Andreas Gohr - http://svn.wp-plugins.org/dokuwiki-markup/trunk/utf8.php
     GNU General Public License Version 2 - http://www.gnu.org/licenses/gpl-2.0.txt
 
-    $FileInfo: utf8.php - Last Update: 12/09/2007 SVN 132 - Author: Andreas Gohr $
+    $FileInfo: utf8.php - Last Update: 12/14/2007 SVN 136 - Author: Andreas Gohr $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="utf8.php"||$File3Name=="/utf8.php") {
