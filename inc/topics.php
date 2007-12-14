@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: topics.php - Last Update: 12/14/2007 SVN 136 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 12/14/2007 SVN 137 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -372,27 +372,27 @@ if(!isset($_POST['GuestName'])) { $_POST['GuestName'] = null; }
 <tr>
 	<td><span class="TableMessage">
 	<br />Your Topic Name is too big.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if (pre_strlen($_POST['TopicDesc'])>="45") { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Your Topic Description is too big.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
 	pre_strlen($_POST['GuestName'])>="25") { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You Guest Name is too big.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if ($Settings['TestReferer']==true) {
 	if ($URL['HOST']!=$URL['REFERER']) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Sorry the referering url dose not match our host name.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } }
 $_POST['TopicName'] = stripcslashes(htmlspecialchars($_POST['TopicName'], ENT_QUOTES, $Settings['charset']));
@@ -442,7 +442,7 @@ $_POST['TopicPost'] = preg_replace("/".$Filter."/i", $Replace, $_POST['TopicPost
 $lonewolfqy=query("SELECT * FROM `".$Settings['sqltable']."restrictedwords` WHERE `RestrictedTopicName`='yes' or `RestrictedUserName`='yes'", array(null));
 $lonewolfrt=mysql_query($lonewolfqy);
 $lonewolfnm=mysql_num_rows($lonewolfrt);
-$lonewolfs=0; $RMatches = null;
+$lonewolfs=0; $RMatches = null; $RGMatches = null;
 while ($lonewolfs < $lonewolfnm) {
 $RWord=mysql_result($lonewolfrt,$lonewolfs,"Word");
 $RCaseInsensitive=mysql_result($lonewolfrt,$lonewolfs,"CaseInsensitive");
@@ -464,72 +464,85 @@ if($RestrictedUserName!="yes"||$RestrictedUserName!="no") { $RestrictedUserName 
 $RWord = preg_quote($RWord, "/");
 if($RCaseInsensitive!="yes"&&$RWholeWord=="yes") {
 if($RestrictedTopicName=="yes") {
-$RMatches = preg_match("/\b(".$RWord.")\b/", $_POST['TopicName']); }
+$RMatches = preg_match("/\b(".$RWord.")\b/", $_POST['TopicName']);
+	if($RMatches==true) { break 1; } }
 if($RestrictedUserName=="yes") {
-$RGMatches = preg_match("/\b(".$RWord.")\b/", $_POST['GuestName']); } }
+$RGMatches = preg_match("/\b(".$RWord.")\b/", $_POST['GuestName']);
+	if($RGMatches==true) { break 1; } } }
 if($RCaseInsensitive=="yes"&&$RWholeWord=="yes") {
 if($RestrictedTopicName=="yes") {
-$RMatches = preg_match("/\b(".$RWord.")\b/i", $_POST['TopicName']); }
+$RMatches = preg_match("/\b(".$RWord.")\b/i", $_POST['TopicName']);
+	if($RMatches==true) { break 1; } }
 if($RestrictedUserName=="yes") {
-$RGMatches = preg_match("/\b(".$RWord.")\b/i", $_POST['GuestName']); } }
+$RGMatches = preg_match("/\b(".$RWord.")\b/i", $_POST['GuestName']);
+	if($RGMatches==true) { break 1; } } }
 if($RCaseInsensitive!="yes"&&$RWholeWord!="yes") {
 if($RestrictedTopicName=="yes") {
-$RMatches = preg_match("/".$RWord."/", $_POST['TopicName']); }
+$RMatches = preg_match("/".$RWord."/", $_POST['TopicName']);
+	if($RMatches==true) { break 1; } }
 if($RestrictedUserName=="yes") {
-$RGMatches = preg_match("/".$RWord."/", $_POST['GuestName']); } }
+$RGMatches = preg_match("/".$RWord."/", $_POST['GuestName']);
+	if($RGMatches==true) { break 1; } } }
 if($RCaseInsensitive=="yes"&&$RWholeWord!="yes") {
 if($RestrictedTopicName=="yes") {
-$RMatches = preg_match("/".$RWord."/i", $_POST['TopicName']); }
+$RMatches = preg_match("/".$RWord."/i", $_POST['TopicName']);
+	if($RMatches==true) { break 1; } }
 if($RestrictedUserName=="yes") {
-$RGMatches = preg_match("/".$RWord."/i", $_POST['GuestName']); } }
+$RGMatches = preg_match("/".$RWord."/i", $_POST['GuestName']);
+	if($RGMatches==true) { break 1; } } }
 ++$lonewolfs; } @mysql_free_result($lonewolfrt);
 if ($_POST['TopicName']==null) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You need to enter a Topic Name.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if ($_POST['TopicDesc']==null) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You need to enter a Topic Description.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
 	$_POST['GuestName']==null) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You need to enter a Guest Name.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
 	$RGMatches==true) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />This Guest Name is restricted to use.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if($PermissionInfo['CanMakeTopics'][$ForumID]=="no"||$CanHaveTopics=="no") { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You do not have permission to make a topic here.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if ($_POST['TopicPost']==null) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You need to enter a Topic Post.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if($RMatches==true) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />This Topic Name is restricted to use.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if ($Error=="Yes") {
-@redirect("refresh",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false),"4"); }
-if ($Error!="Yes") { $LastActive = GMTimeStamp();
+@redirect("refresh",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false),"4"); ?>
+<tr>
+	<td><span class="TableMessage">
+	<br />Click <a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">here</a> to goto index page.<br />&nbsp;
+	</span><br /></td>
+</tr>
+<?php } if ($Error!="Yes") { $LastActive = GMTimeStamp();
 $topicid = getnextid($Settings['sqltable'],"topics");
 $postid = getnextid($Settings['sqltable'],"posts");
 $requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i", array($MyUserID));

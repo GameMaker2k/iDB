@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: replys.php - Last Update: 12/14/2007 SVN 136 - Author: cooldude2k $
+    $FileInfo: replys.php - Last Update: 12/14/2007 SVN 137 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replys.php"||$File3Name=="/replys.php") {
@@ -495,21 +495,21 @@ if(!isset($_POST['GuestName'])) { $_POST['GuestName'] = null; }
 <tr>
 	<td><span class="TableMessage">
 	<br />Your Reply Description is too big.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
 	pre_strlen($_POST['GuestName'])>="25") { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You Guest Name is too big.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if ($Settings['TestReferer']==true) {
 	if ($URL['HOST']!=$URL['REFERER']) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Sorry the referering url dose not match our host name.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } }
 $_POST['ReplyDesc'] = stripcslashes(htmlspecialchars($_POST['ReplyDesc'], ENT_QUOTES, $Settings['charset']));
@@ -557,37 +557,42 @@ if ($_POST['ReplyDesc']==null) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You need to enter a Reply Description.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
 	$_POST['GuestName']==null) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You need to enter a Guest Name.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="no") { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You do not have permission to make a reply here.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if($PermissionInfo['CanMakeReplysClose'][$TopicForumID]=="no"&&
 	$TopicClosed==1) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You do not have permission to make a reply here.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if ($_POST['ReplyPost']==null) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You need to enter a Reply.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if ($Error=="Yes") {
-@redirect("refresh",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false),"4"); }
-if ($Error!="Yes") { $LastActive = GMTimeStamp();
+@redirect("refresh",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false),"4"); ?>
+<tr>
+	<td><span class="TableMessage">
+	<br />Click <a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">here</a> to goto index page.<br />&nbsp;
+	</span><br /></td>
+</tr>
+<?php } if ($Error!="Yes") { $LastActive = GMTimeStamp();
 $gnrquery = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i", array($TopicForumID));
 $gnrresult=mysql_query($gnrquery); $gnrnum=mysql_num_rows($gnrresult);
 $NumberPosts=mysql_result($gnrresult,0,"NumPosts"); 
@@ -1039,28 +1044,28 @@ if($PermissionInfo['CanEditTopicsClose'][$TopicForumID]=="no"&&$TopicClosed==1) 
 <tr>
 	<td><span class="TableMessage">
 	<br />Your Reply Description is too big.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
 	pre_strlen($_POST['GuestName'])>="25") { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You Guest Name is too big.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if($ShowEditTopic==true&&
 	pre_strlen($_POST['TopicName'])>="30") { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You Topic Name is too big.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if ($Settings['TestReferer']==true) {
 	if ($URL['HOST']!=$URL['REFERER']) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Sorry the referering url dose not match our host name.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } }
 $_POST['ReplyDesc'] = stripcslashes(htmlspecialchars($_POST['ReplyDesc'], ENT_QUOTES, $Settings['charset']));
@@ -1110,7 +1115,7 @@ $_POST['ReplyPost'] = preg_replace("/".$Filter."/i", $Replace, $_POST['ReplyPost
 $lonewolfqy=query("SELECT * FROM `".$Settings['sqltable']."restrictedwords` WHERE `RestrictedTopicName`='yes' or `RestrictedUserName`='yes'", array(null));
 $lonewolfrt=mysql_query($lonewolfqy);
 $lonewolfnm=mysql_num_rows($lonewolfrt);
-$lonewolfs=0; $RMatches = null;
+$lonewolfs=0; $RMatches = null; $RGMatches = null;
 while ($lonewolfs < $lonewolfnm) {
 $RWord=mysql_result($lonewolfrt,$lonewolfs,"Word");
 $RCaseInsensitive=mysql_result($lonewolfrt,$lonewolfs,"CaseInsensitive");
@@ -1132,78 +1137,91 @@ if($RestrictedUserName!="yes"||$RestrictedUserName!="no") { $RestrictedUserName 
 $RWord = preg_quote($RWord, "/");
 if($RCaseInsensitive!="yes"&&$RWholeWord=="yes") {
 if($RestrictedTopicName=="yes") {
-$RMatches = preg_match("/\b(".$RWord.")\b/", $_POST['TopicName']); }
+$RMatches = preg_match("/\b(".$RWord.")\b/", $_POST['TopicName']);
+	if($RMatches==true) { break 1; } }
 if($RestrictedUserName=="yes") {
-$RGMatches = preg_match("/\b(".$RWord.")\b/", $_POST['GuestName']); } }
+$RGMatches = preg_match("/\b(".$RWord.")\b/", $_POST['GuestName']);
+	if($RGMatches==true) { break 1; } } }
 if($RCaseInsensitive=="yes"&&$RWholeWord=="yes") {
 if($RestrictedTopicName=="yes") {
-$RMatches = preg_match("/\b(".$RWord.")\b/i", $_POST['TopicName']); }
+$RMatches = preg_match("/\b(".$RWord.")\b/i", $_POST['TopicName']);
+	if($RMatches==true) { break 1; } }
 if($RestrictedUserName=="yes") {
-$RGMatches = preg_match("/\b(".$RWord.")\b/i", $_POST['GuestName']); } }
+$RGMatches = preg_match("/\b(".$RWord.")\b/i", $_POST['GuestName']);
+	if($RGMatches==true) { break 1; } } }
 if($RCaseInsensitive!="yes"&&$RWholeWord!="yes") {
 if($RestrictedTopicName=="yes") {
-$RMatches = preg_match("/".$RWord."/", $_POST['TopicName']); }
+$RMatches = preg_match("/".$RWord."/", $_POST['TopicName']);
+	if($RMatches==true) { break 1; } }
 if($RestrictedUserName=="yes") {
-$RGMatches = preg_match("/".$RWord."/", $_POST['GuestName']); } }
+$RGMatches = preg_match("/".$RWord."/", $_POST['GuestName']);
+	if($RGMatches==true) { break 1; } } }
 if($RCaseInsensitive=="yes"&&$RWholeWord!="yes") {
 if($RestrictedTopicName=="yes") {
-$RMatches = preg_match("/".$RWord."/i", $_POST['TopicName']); }
+$RMatches = preg_match("/".$RWord."/i", $_POST['TopicName']);
+	if($RMatches==true) { break 1; } }
 if($RestrictedUserName=="yes") {
-$RGMatches = preg_match("/".$RWord."/i", $_POST['GuestName']); } }
+$RGMatches = preg_match("/".$RWord."/i", $_POST['GuestName']);
+	if($RGMatches==true) { break 1; } } }
 ++$lonewolfs; } @mysql_free_result($lonewolfrt);
 if ($_POST['ReplyDesc']==null) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You need to enter a Reply Description.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
 	$_POST['GuestName']==null) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You need to enter a Guest Name.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
 	$RGMatches==true) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />This Guest Name is restricted to use.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if($PermissionInfo['CanEditReplys'][$TopicForumID]=="no") { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You do not have permission to edit a reply here.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if($PermissionInfo['CanEditReplysClose'][$TopicForumID]=="no"&&$TopicClosed==1) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You do not have permission to edit a reply here.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if($ShowEditTopic==true&&$_POST['TopicName']==null) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You need to enter a Topic Name.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if ($_POST['ReplyPost']==null) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You need to enter a Reply.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if($RMatches==true) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />This Topic Name is restricted to use.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if ($Error=="Yes") {
-@redirect("refresh",$basedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],false)."&#35;post".$_GET['post'],"4"); }
-if ($Error!="Yes") { $LastActive = GMTimeStamp();
+@redirect("refresh",$basedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],false)."&#35;post".$_GET['post'],"4"); ?>
+<tr>
+	<td><span class="TableMessage">
+	<br />Click <a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">here</a> to goto index page.<br />&nbsp;
+	</span><br /></td>
+</tr>
+<?php } if ($Error!="Yes") { $LastActive = GMTimeStamp();
 $requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i", array($_SESSION['UserID']));
 $reresult=mysql_query($requery);
 $renum=mysql_num_rows($reresult);

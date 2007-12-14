@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: events.php - Last Update: 12/14/2007 SVN 136 - Author: cooldude2k $
+    $FileInfo: events.php - Last Update: 12/14/2007 SVN 137 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="events.php"||$File3Name=="/events.php") {
@@ -248,93 +248,93 @@ $TimeOut = explode("/",$_POST['EventEnd']);
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />Your Event Name is too big.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if (pre_strlen($TimeIn[0])<"2") { $Error="Yes";  ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />Event Start Month is too small.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if (pre_strlen($TimeIn[0])>"2") { $Error="Yes";  ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />Event Start Month is too big.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if (pre_strlen($TimeIn[1])<"2") { $Error="Yes";  ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />Event Start Day is too small.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if (pre_strlen($TimeIn[1])>"2") { $Error="Yes";  ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />Event Start Day is too big.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if (pre_strlen($TimeIn[2])<"4") { $Error="Yes";  ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />Event Start Year is too small.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if (pre_strlen($TimeIn[2])>"4") { $Error="Yes";  ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />Event Start Year is too big.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if (pre_strlen($TimeOut[0])<"2") { $Error="Yes";  ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />Event End Month is too small.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if (pre_strlen($TimeOut[0])>"2") { $Error="Yes";  ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />Event End Month is too big.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if (pre_strlen($TimeOut[1])<"2") { $Error="Yes";  ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />Event End Day is too small.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if (pre_strlen($TimeOut[1])>"2") { $Error="Yes";  ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />Event End Day is too big.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if (pre_strlen($TimeOut[2])<"4") { $Error="Yes";  ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />Event End Year is too small.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if (pre_strlen($TimeOut[2])>"4") { $Error="Yes";  ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />Event End Year is too big.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
 	pre_strlen($_POST['GuestName'])>="25") { $Error="Yes"; ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />You Guest Name is too big.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if ($Settings['TestReferer']==true) {
 	if ($URL['HOST']!=$URL['REFERER']) { $Error="Yes";  ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />Sorry the referering url dose not match our host name.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } }
 $_POST['EventName'] = stripcslashes(htmlspecialchars($_POST['EventName'], ENT_QUOTES, $Settings['charset']));
@@ -377,7 +377,7 @@ $_POST['EventText'] = preg_replace("/".$Filter."/i", $Replace, $_POST['EventText
 $lonewolfqy=query("SELECT * FROM `".$Settings['sqltable']."restrictedwords` WHERE `RestrictedEventName`='yes' or `RestrictedUserName`='yes'", array(null));
 $lonewolfrt=mysql_query($lonewolfqy);
 $lonewolfnm=mysql_num_rows($lonewolfrt);
-$lonewolfs=0; $RMatches = null;
+$lonewolfs=0; $RMatches = null; $RGMatches = null;
 while ($lonewolfs < $lonewolfnm) {
 $RWord=mysql_result($lonewolfrt,$lonewolfs,"Word");
 $RCaseInsensitive=mysql_result($lonewolfrt,$lonewolfs,"CaseInsensitive");
@@ -399,114 +399,127 @@ if($RestrictedUserName!="yes"||$RestrictedUserName!="no") { $RestrictedUserName 
 $RWord = preg_quote($RWord, "/");
 if($RCaseInsensitive!="yes"&&$RWholeWord=="yes") {
 if($RestrictedEventName=="yes") {
-$RMatches = preg_match("/\b(".$RWord.")\b/", $_POST['EventName']); }
+$RMatches = preg_match("/\b(".$RWord.")\b/", $_POST['EventName']);
+	if($RMatches==true) { break 1; } }
 if($RestrictedUserName=="yes") {
-$RGMatches = preg_match("/\b(".$RWord.")\b/", $_POST['GuestName']); } }
+$RGMatches = preg_match("/\b(".$RWord.")\b/", $_POST['GuestName']);
+	if($RGMatches==true) { break 1; } } }
 if($RCaseInsensitive=="yes"&&$RWholeWord=="yes") {
 if($RestrictedEventName=="yes") {
-$RMatches = preg_match("/\b(".$RWord.")\b/i", $_POST['EventName']); }
+$RMatches = preg_match("/\b(".$RWord.")\b/i", $_POST['EventName']);
+	if($RMatches==true) { break 1; } }
 if($RestrictedUserName=="yes") {
-$RGMatches = preg_match("/\b(".$RWord.")\b/i", $_POST['GuestName']); } }
+$RGMatches = preg_match("/\b(".$RWord.")\b/i", $_POST['GuestName']);
+	if($RGMatches==true) { break 1; } } }
 if($RCaseInsensitive!="yes"&&$RWholeWord!="yes") {
 if($RestrictedEventName=="yes") {
-$RMatches = preg_match("/".$RWord."/", $_POST['EventName']); }
+$RMatches = preg_match("/".$RWord."/", $_POST['EventName']);
+	if($RMatches==true) { break 1; } }
 if($RestrictedUserName=="yes") {
-$RGMatches = preg_match("/".$RWord."/", $_POST['GuestName']); } }
+$RGMatches = preg_match("/".$RWord."/", $_POST['GuestName']);
+	if($RGMatches==true) { break 1; } } }
 if($RCaseInsensitive=="yes"&&$RWholeWord!="yes") {
 if($RestrictedEventName=="yes") {
-$RMatches = preg_match("/".$RWord."/i", $_POST['EventName']); }
+$RMatches = preg_match("/".$RWord."/i", $_POST['EventName']);
+	if($RMatches==true) { break 1; } }
 if($RestrictedUserName=="yes") {
-$RGMatches = preg_match("/".$RWord."/i", $_POST['GuestName']); } }
+$RGMatches = preg_match("/".$RWord."/i", $_POST['GuestName']);
+	if($RGMatches==true) { break 1; } } }
 ++$lonewolfs; } @mysql_free_result($lonewolfrt);
 if ($_POST['EventName']==null) { $Error="Yes"; ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />You need to enter a Event Name.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if ($_POST['EventText']==null) { $Error="Yes"; ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />You need to enter a Event Text.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if ($_POST['EventStart']==null) { $Error="Yes"; ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />You need to enter date for event to start in MM/DD/YYYY format.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if ($_POST['EventEnd']==null) { $Error="Yes"; ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />You need to enter date for event to end in MM/DD/YYYY format.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if (count($TimeIn)!="3") { $Error="Yes"; ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />You need to enter valid date for event to start in MM/DD/YYYY format.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if (count($TimeOut)!="3") { $Error="Yes"; ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />You need to enter valid date for event to end in MM/DD/YYYY format.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if (!is_numeric($TimeIn[0])||!is_numeric($TimeIn[1])||!is_numeric($TimeIn[2])) { $Error="Yes"; ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />You need to enter valid date for event to start in MM/DD/YYYY format.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if (!is_numeric($TimeOut[0])||!is_numeric($TimeOut[1])||!is_numeric($TimeOut[2])) { $Error="Yes"; ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />You need to enter valid date for event to end in MM/DD/YYYY format.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if (!isset($TimeIn[0])||!isset($TimeIn[1])||!isset($TimeIn[2])) { $Error="Yes"; ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />You need to enter valid date for event to start in MM/DD/YYYY format.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if (!isset($TimeOut[0])||!isset($TimeOut[1])||!isset($TimeOut[2])) { $Error="Yes"; ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />You need to enter valid date for event to end in MM/DD/YYYY format.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
 	$_POST['GuestName']==null) { $Error="Yes"; ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />You need to enter a Guest Name.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
 	$RGMatches==true) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />This Guest Name is restricted to use.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if($GroupInfo['CanAddEvents']=="no") { $Error="Yes"; ?>
 <tr style="text-align: center;">
 	<td style="text-align: center;"><span class="TableMessage">
 	<br />You do not have permission to make a event here.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if($RMatches==true) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />This User Name is restricted to use.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if ($Error=="Yes") {
-@redirect("refresh",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false),"4"); }
-if ($Error!="Yes") { 
+@redirect("refresh",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false),"4"); ?>
+<tr>
+	<td><span class="TableMessage">
+	<br />Click <a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">here</a> to goto index page.<br />&nbsp;
+	</span><br /></td>
+</tr>
+<?php } if ($Error!="Yes") { 
 $TimeSIn = mktime(0,0,0,$TimeIn[0],$TimeIn[1],$TimeIn[2]);
 $TimeSOut = mktime(23,59,59,$TimeOut[0],$TimeOut[1],$TimeOut[2]);
 $EventMonth=GMTimeChange("m",$TimeSIn,0,0,"off");

@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: members.php - Last Update: 12/14/2007 SVN 136 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 12/14/2007 SVN 137 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -370,20 +370,20 @@ if (pre_strlen($_POST['userpass'])>="30") { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Your password is too big.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if (pre_strlen($_POST['username'])>="20") { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Your user name is too big.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if ($Settings['TestReferer']==true) {
 	if ($URL['HOST']!=$URL['REFERER']) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Sorry the referering url dose not match our host name.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } } $BanError = null;
 if ($Error=="Yes") {
@@ -465,14 +465,14 @@ if($cookieSecure==false) {
 	<td><span class="TableMessage">
 	<br />Welcome to the Board <?php echo $_SESSION['MemberName']; ?>. ^_^<br />
 	Click <a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">here</a> to continue to board.<br />&nbsp;
-	</span></td>
+	</span><br /></td>
 </tr>
 <?php } if($passright==false||$BanError=="yes") { ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Password was not right or user not found or user is banned!! &lt;_&lt;<br />
 	Click <a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$exqstr['member'],$prexqstr['member']); ?>">here</a> to try again.<br />&nbsp;
-	</span></td>
+	</span><br /></td>
 </tr>
 <?php } } ?>
 </table>
@@ -630,26 +630,26 @@ if(!isset($_POST['TOS'])) { $_POST['TOS'] = null; }
 <tr>
 	<td><span class="TableMessage">
 	<br />Your password is too big.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if (pre_strlen($_POST['username'])>="20") { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Your user name is too big.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if ($_POST['Password']!=$_POST['RePassword']) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Your passwords did not match.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if ($Settings['TestReferer']==true) {
 	if ($URL['HOST']!=$URL['REFERER']) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Sorry the referering url dose not match our host name.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } }
 $Name = stripcslashes(htmlspecialchars($_POST['Name'], ENT_QUOTES, $Settings['charset']));
@@ -671,13 +671,17 @@ if($RWholeWord=="off") { $RWholeWord = "no"; }
 if($RWholeWord!="yes"||$RWholeWord!="no") { $RWholeWord = "no"; }
 $RWord = preg_quote($RWord, "/");
 if($RCaseInsensitive!="yes"&&$RWholeWord=="yes") {
-$RMatches = preg_match("/\b(".$RWord.")\b/", $Name); }
+$RMatches = preg_match("/\b(".$RWord.")\b/", $Name);
+	if($RMatches==true) { break 1; } }
 if($RCaseInsensitive=="yes"&&$RWholeWord=="yes") {
-$RMatches = preg_match("/\b(".$RWord.")\b/i", $Name); }
+$RMatches = preg_match("/\b(".$RWord.")\b/i", $Name);
+	if($RMatches==true) { break 1; } }
 if($RCaseInsensitive!="yes"&&$RWholeWord!="yes") {
-$RMatches = preg_match("/".$RWord."/", $Name); }
+$RMatches = preg_match("/".$RWord."/", $Name);
+	if($RMatches==true) { break 1; } }
 if($RCaseInsensitive=="yes"&&$RWholeWord!="yes") {
-$RMatches = preg_match("/".$RWord."/i", $Name); }
+$RMatches = preg_match("/".$RWord."/i", $Name);
+	if($RMatches==true) { break 1; } }
 ++$lonewolfs; } @mysql_free_result($lonewolfrt);
 $sql_email_check = mysql_query(query("SELECT `Email` FROM `".$Settings['sqltable']."members` WHERE `Email`='%s'", array($_POST['Email'])));
 $sql_username_check = mysql_query(query("SELECT `Name` FROM `".$Settings['sqltable']."members` WHERE `Name`='%s'", array($Name)));
@@ -688,53 +692,58 @@ if ($_POST['TOS']!="Agree") { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You need to  agree to the tos.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if ($_POST['Name']==null) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You need to enter a name.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if ($_POST['Name']=="ShowMe") { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You need to enter a name.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if ($_POST['Password']==null) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You need to enter a password.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if ($_POST['Email']==null) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You need to enter a email.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if($email_check > 0) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Email address is already used.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if($username_check > 0) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />User Name is already used.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if($RMatches==true) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />This User Name is restricted to use.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if ($Error=="Yes") {
-@redirect("refresh",$basedir.url_maker($exfile['member'],$Settings['file_ext'],"act=signup",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],FALSE),"4"); }
-if ($Error!="Yes") {
+@redirect("refresh",$basedir.url_maker($exfile['member'],$Settings['file_ext'],"act=signup",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],FALSE),"4"); ?>
+<tr>
+	<td><span class="TableMessage">
+	<br />Click <a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=signup",$Settings['qstr'],$Settings['qsep'],$exqstr['member'],$prexqstr['member']); ?>">here</a> to try again.<br />&nbsp;
+	</span><br /></td>
+</tr>
+<?php } if ($Error!="Yes") {
 $_POST['UserIP'] = $_SERVER['REMOTE_ADDR'];
 $_POST['Group'] = $Settings['MemberGroup'];
 $_POST['Joined'] = GMTimeStamp(); $_POST['LastActive'] = GMTimeStamp();
@@ -830,7 +839,7 @@ $query = query("INSERT INTO `".$Settings['sqltable']."messenger` VALUES (null,%i
 	<td><span class="TableMessage">
 	<br />Welcome to the Board <?php echo $_SESSION['MemberName']; ?>. ^_^<br />
 	Click <a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">here</a> to continue to board.<br />&nbsp;
-	</span></td>
+	</span><br /></td>
 </tr>
 <?php } ?>
 </table>

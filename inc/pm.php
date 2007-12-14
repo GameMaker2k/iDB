@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: pm.php - Last Update: 12/14/2007 SVN 136 - Author: cooldude2k $
+    $FileInfo: pm.php - Last Update: 12/14/2007 SVN 137 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pm.php"||$File3Name=="/pm.php") {
@@ -491,39 +491,39 @@ if(!isset($_POST['GuestName'])) { $_POST['GuestName'] = null; }
 <tr>
 	<td><span class="TableMessage">
 	<br />Send to user name too big.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if ($_POST['SendMessageTo']==null) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You need to enter a user name to send message to.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if (pre_strlen($_POST['MessageName'])>="30") { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Message Name is too big.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if (pre_strlen($_POST['MessageDesc'])>="45") { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Message Description is too big.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
 	pre_strlen($_POST['GuestName'])>="25") { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You Guest Name is too big.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if ($Settings['TestReferer']==true) {
 	if ($URL['HOST']!=$URL['REFERER']) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Sorry the referering url dose not match our host name.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } }
 $_POST['MessageName'] = stripcslashes(htmlspecialchars($_POST['MessageName'], ENT_QUOTES, $Settings['charset']));
@@ -576,7 +576,7 @@ $_POST['MessageDesc'] = preg_replace("/".$Filter."/i", $Replace, $_POST['Message
 $lonewolfqy=query("SELECT * FROM `".$Settings['sqltable']."restrictedwords` WHERE `RestrictedMessageName`='yes' or `RestrictedUserName`='yes'", array(null));
 $lonewolfrt=mysql_query($lonewolfqy);
 $lonewolfnm=mysql_num_rows($lonewolfrt);
-$lonewolfs=0; $RMatches = null;
+$lonewolfs=0; $RMatches = null; $RGMatches = null;
 while ($lonewolfs < $lonewolfnm) {
 $RWord=mysql_result($lonewolfrt,$lonewolfs,"Word");
 $RCaseInsensitive=mysql_result($lonewolfrt,$lonewolfs,"CaseInsensitive");
@@ -598,24 +598,32 @@ if($RestrictedUserName!="yes"||$RestrictedUserName!="no") { $RestrictedUserName 
 $RWord = preg_quote($RWord, "/");
 if($RCaseInsensitive!="yes"&&$RWholeWord=="yes") {
 if($RestrictedMessageName=="yes") {
-$RMatches = preg_match("/\b(".$RWord.")\b/", $_POST['MessageName']); }
+$RMatches = preg_match("/\b(".$RWord.")\b/", $_POST['MessageName']);
+	if($RMatches==true) { break 1; } }
 if($RestrictedUserName=="yes") {
-$RGMatches = preg_match("/\b(".$RWord.")\b/", $_POST['GuestName']); } }
+$RGMatches = preg_match("/\b(".$RWord.")\b/", $_POST['GuestName']);
+	if($RGMatches==true) { break 1; } } }
 if($RCaseInsensitive=="yes"&&$RWholeWord=="yes") {
 if($RestrictedMessageName=="yes") {
-$RMatches = preg_match("/\b(".$RWord.")\b/i", $_POST['MessageName']); }
+$RMatches = preg_match("/\b(".$RWord.")\b/i", $_POST['MessageName']);
+	if($RMatches==true) { break 1; } }
 if($RestrictedUserName=="yes") {
-$RGMatches = preg_match("/\b(".$RWord.")\b/i", $_POST['GuestName']); } }
+$RGMatches = preg_match("/\b(".$RWord.")\b/i", $_POST['GuestName']);
+	if($RGMatches==true) { break 1; } } }
 if($RCaseInsensitive!="yes"&&$RWholeWord!="yes") {
 if($RestrictedMessageName=="yes") {
-$RMatches = preg_match("/".$RWord."/", $_POST['MessageName']); }
+$RMatches = preg_match("/".$RWord."/", $_POST['MessageName']);
+	if($RMatches==true) { break 1; } }
 if($RestrictedUserName=="yes") {
-$RGMatches = preg_match("/".$RWord."/", $_POST['GuestName']); } }
+$RGMatches = preg_match("/".$RWord."/", $_POST['GuestName']);
+	if($RGMatches==true) { break 1; } } }
 if($RCaseInsensitive=="yes"&&$RWholeWord!="yes") {
 if($RestrictedMessageName=="yes") {
-$RMatches = preg_match("/".$RWord."/i", $_POST['MessageName']); }
+$RMatches = preg_match("/".$RWord."/i", $_POST['MessageName']);
+	if($RMatches==true) { break 1; } }
 if($RestrictedUserName=="yes") {
-$RGMatches = preg_match("/".$RWord."/i", $_POST['GuestName']); } }
+$RGMatches = preg_match("/".$RWord."/i", $_POST['GuestName']);
+	if($RGMatches==true) { break 1; } } }
 ++$lonewolfs; } @mysql_free_result($lonewolfrt);
 $requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `Name`='%s'", array($_POST['SendMessageTo']));
 $reresult=mysql_query($requery);
@@ -636,55 +644,60 @@ if($renum==0) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Cound not find users name.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if ($_POST['MessageName']==null) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You need to enter a Message Name.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if ($_POST['MessageDesc']==null) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You need to enter a Message Description.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if ($SendUserCanPM=="no") { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />User Name enter can not get messages.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if ($_POST['Message']==null) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You need to enter a Message.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
 	$_POST['GuestName']==null) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You need to enter a Guest Name.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
 	$RGMatches==true) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />This Guest Name is restricted to use.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if($RMatches==true) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />This Message Name is restricted to use.<br />
-	</span></td>
+	</span>&nbsp;</td>
 </tr>
 <?php } if ($Error=="Yes") {
-@redirect("refresh",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false),"4"); }
-if ($Error!="Yes") { $LastActive = GMTimeStamp();
+@redirect("refresh",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false),"4"); ?>
+<tr>
+	<td><span class="TableMessage">
+	<br />Click <a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">here</a> to goto index page.<br />&nbsp;
+	</span><br /></td>
+</tr>
+<?php } if ($Error!="Yes") { $LastActive = GMTimeStamp();
 $messageid = getnextid($Settings['sqltable'],"messenger");
 if($_SESSION['UserGroup']==$Settings['GuestGroup']) { $User1Name = $_POST['GuestName']; }
 if($_SESSION['UserGroup']!=$Settings['GuestGroup']) { $User1Name = $_SESSION['MemberName']; }
