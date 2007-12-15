@@ -11,12 +11,16 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: replys.php - Last Update: 12/14/2007 SVN 138 - Author: cooldude2k $
+    $FileInfo: replys.php - Last Update: 12/15/2007 SVN 139 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replys.php"||$File3Name=="/replys.php") {
 	require('index.php');
 	exit(); }
+if(!isset($_GET['modact'])) { $_GET['modact'] = null; }
+if($_GET['modact']=="pin"||$_GET['modact']=="unpin"||$_GET['modact']=="open"||
+	$_GET['modact']=="close"||$_GET['modact']=="edit"||$_GET['modact']=="delete")
+		{ $_GET['act'] = $_GET['modact']; }
 $prequery = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `id`=%i", array($_GET['id']));
 $preresult=mysql_query($prequery);
 $prenum=mysql_num_rows($preresult);
