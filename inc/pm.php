@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: pm.php - Last Update: 12/14/2007 SVN 138 - Author: cooldude2k $
+    $FileInfo: pm.php - Last Update: 12/20/2007 SVN 140 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pm.php"||$File3Name=="/pm.php") {
@@ -565,7 +565,7 @@ $_POST['Message'] = preg_replace("/\b(".$Filter.")\b/", $Replace, $_POST['Messag
 $_POST['MessageDesc'] = preg_replace("/\b(".$Filter.")\b/", $Replace, $_POST['MessageDesc']); }
 if($CaseInsensitive=="yes"&&$WholeWord=="yes") {
 $_POST['Message'] = preg_replace("/\b(".$Filter.")\b/i", $Replace, $_POST['Message']);
-$_POST['MessageDesc'] = preg_replace("/\b(".$Filter.")\b/i", $Replace, $_POST['MessageDesc']) }
+$_POST['MessageDesc'] = preg_replace("/\b(".$Filter.")\b/i", $Replace, $_POST['MessageDesc']); }
 if($CaseInsensitive!="yes"&&$WholeWord!="yes") {
 $_POST['Message'] = preg_replace("/".$Filter."/", $Replace, $_POST['Message']);
 $_POST['MessageDesc'] = preg_replace("/".$Filter."/", $Replace, $_POST['MessageDesc']); }

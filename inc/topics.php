@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: topics.php - Last Update: 12/14/2007 SVN 138 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 12/20/2007 SVN 140 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -195,10 +195,11 @@ if($NumRPosts>$Settings['max_posts']) {
 $NumPages = ceil($NumRPosts/$Settings['max_posts']); }
 if($NumRPosts<=$Settings['max_posts']) {
 $NumPages = 1; }
-if($UsersName1=="Guest") { $UsersName1=$GuestName1;
+$Users_Name1 = pre_substr($UsersName1,0,20);
+if($UsersName1=="Guest") { $UsersName1=$GuestName;
 if($UsersName1==null) { $UsersName1="Guest"; } }
-if (pre_strlen($UsersName1)>15) { 
-	$oldusername=$UsersName1; $UsersName1 = $UsersName1."...";  } 
+if (pre_strlen($UsersName1)>20) { $Users_Name1 = $Users_Name1."...";
+$oldusername=$UsersName1; $UsersName1=$Users_Name1; } $lul = null;
 if($TimeStamp1!=null) { $lul = null;
 if($UsersID1!="-1") {
 $lul = url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UsersID1,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
