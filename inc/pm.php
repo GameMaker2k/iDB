@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: pm.php - Last Update: 12/20/2007 SVN 140 - Author: cooldude2k $
+    $FileInfo: pm.php - Last Update: 12/29/2007 SVN 142 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pm.php"||$File3Name=="/pm.php") {
@@ -291,7 +291,8 @@ $User1Group=mysql_result($gresult,0,"Name");
 $User1Signature=mysql_result($reresult,$rei,"Signature");
 $User1Avatar=mysql_result($reresult,$rei,"Avatar");
 $User1AvatarSize=mysql_result($reresult,$rei,"AvatarSize");
-if ($User1Avatar=="http://"||$User1Avatar==null) {
+if ($User1Avatar=="http://"||$User1Avatar==null||
+	strtolower($User1Avatar)=="noavatar") {
 $User1Avatar=$ThemeSet['NoAvatar'];
 $User1AvatarSize=$ThemeSet['NoAvatarSize']; }
 $AvatarSize1=explode("x", $User1AvatarSize);

@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: members.php - Last Update: 12/14/2007 SVN 138 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 12/29/2007 SVN 142 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -205,7 +205,8 @@ $gresult=mysql_query($gquery);
 $ViewMem['Group']=mysql_result($gresult,0,"Name");
 @mysql_free_result($gresult);
 $membertitle = " ".$ThemeSet['TitleDivider']." ".$ViewMem['Name'];	
-if ($ViewMem['Avatar']=="http://"||$ViewMem['Avatar']==null) {
+if ($ViewMem['Avatar']=="http://"||$ViewMem['Avatar']==null||
+	strtolower($ViewMem['Avatar'])=="noavatar") {
 $ViewMem['Avatar']=$ThemeSet['NoAvatar'];
 $ViewMem['AvatarSize']=$ThemeSet['NoAvatarSize']; }
 $AvatarSize1=explode("x", $ViewMem['AvatarSize']);
@@ -221,7 +222,8 @@ if($_GET['view']=="website"||$_GET['view']=="homepage") {
 	if ($ViewMem['Website']!="http://"&&$ViewMem['Website']!=null) {
 	@session_write_close();
 	@header("Location: ".$ViewMem['Website']); }
-	if ($ViewMem['Website']=="http://"||$ViewMem['Website']==null) {
+	if ($ViewMem['Website']=="http://"||$ViewMem['Website']==null||
+	strtolower($ViewMem['Avatar'])=="noavatar") {
 	@session_write_close();
 	@header("Location: ".$BoardURL."index.php?act=view"); } }
 ?>
@@ -838,7 +840,11 @@ $query = query("INSERT INTO `".$Settings['sqltable']."messenger` VALUES (null,%i
 <tr>
 	<td><span class="TableMessage">
 	<br />Welcome to the Board <?php echo $_SESSION['MemberName']; ?>. ^_^<br />
-	Click <a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">here</a> to continue to board.<br />&nbsp;
+	Click <a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">here</a> to continue to board.<?php echo "\n"; 
+	if($Settings['AdminValidate']==true||$Settings['AdminValidate']!=false) {
+	echo "<br />The admin has to validate your account befoure you can post.\n";
+	echo "<br />The admin has been notified of your registration.\n"; } ?>
+	<br />&nbsp;
 	</span><br /></td>
 </tr>
 <?php } ?>

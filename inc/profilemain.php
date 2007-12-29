@@ -11,7 +11,7 @@
     Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: profilemain.php - Last Update: 12/13/2007 SVN 135 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 12/29/2007 SVN 142 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
@@ -243,7 +243,8 @@ $avataract = url_maker($exfile['profile'],$Settings['file_ext'],"act=avatar",$Se
 $profiletitle = " ".$ThemeSet['TitleDivider']." Avatar Editor";
 $Pre1Avatar = $User1Avatar;
 if ($User1Avatar==null) { $User1Avatar="http://"; }
-if ($Pre1Avatar=="http://"||$Pre1Avatar==null) {
+if ($Pre1Avatar=="http://"||$Pre1Avatar==null||
+	strtolower($Pre1Avatar)=="noavatar") {
 $Pre1Avatar=$ThemeSet['NoAvatar'];
 $User1AvatarSize=$ThemeSet['NoAvatarSize']; }
 $AvatarSize1=explode("x", $User1AvatarSize);
