@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
-    Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
+    Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
+    Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: preinstall.php - Last Update: 08/21/2007 SVN 88 - Author: cooldude2k $
+    $FileInfo: preinstall.php - Last Update: 01/01/2008 SVN 144 - Author: cooldude2k $
 */
 @error_reporting(E_ALL ^ E_NOTICE);
 @ini_set('session.use_trans_sid', false);

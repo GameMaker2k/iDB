@@ -17,7 +17,7 @@
     Copyright Andreas Gohr - http://svn.wp-plugins.org/dokuwiki-markup/trunk/utf8.php
     GNU General Public License Version 2 - http://www.gnu.org/licenses/gpl-2.0.txt
 
-    $FileInfo: utf8.php - Last Update: 12/14/2007 SVN 136 - Author: Andreas Gohr $
+    $FileInfo: utf8.php - Last Update: 01/01/2008 SVN 144 - Author: Andreas Gohr $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="utf8.php"||$File3Name=="/utf8.php") {

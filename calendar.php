@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
-    Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
+    Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
+    Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: calendar.php - Last Update: 08/16/2007 SVN 84 - Author: cooldude2k $
+    $FileInfo: calendar.php - Last Update: 01/01/2008 SVN 144 - Author: cooldude2k $
 */
 require('preindex.php');
 $usefileext = $Settings['file_ext'];

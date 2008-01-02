@@ -8,17 +8,17 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2006 Cool Dude 2k - http://intdb.sourceforge.net/
-    Copyright 2004-2006 Game Maker 2k - http://upload.idb.s1.jcink.com/
+    Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
+    Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
     $ThemeInfo - Name: iDB Gray - Author: cooldude2k $
-    $FileInfo: settings.php - Last Update: 07/19/2007 SVN 49 - Author: cooldude2k $
+    $FileInfo: settings.php - Last Update: 01/01/2008 SVN 144 - Author: cooldude2k $
 */
 $ThemeSet = array();
 $ThemeSet['ThemeName'] = "iDB Gray Theme";
 $ThemeSet['ThemeMaker'] = "Cool Dude 2k";
-$ThemeSet['ThemeVersion'] = "0.1.6";
+$ThemeSet['ThemeVersion'] = "0.2.1";
 $ThemeSet['ThemeVersionType'] = "Pre-Alpha";
-$ThemeSet['ThemeSubVersion'] = "SVN 49";
+$ThemeSet['ThemeSubVersion'] = "SVN 144";
 $ThemeSet['MakerURL'] = "http://upload.idb.s1.jcink.com/";
 $ThemeSet['CopyRight'] = $ThemeSet['ThemeName']." was made by <a href=\"".$ThemeSet['MakerURL']."\" title=\"".$ThemeSet['ThemeMaker']."\">".$ThemeSet['ThemeMaker']."</a>";
 $ThemeSet['CSS'] = "themes/Gray/css.css";

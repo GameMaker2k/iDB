@@ -8,12 +8,12 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
-    Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
+    Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
+    Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
     GZip and Zlib by Jean-loup Gailly (compression) and Mark Adler (decompression) http://www.zlib.net/
 	BZip2 and libbzip2 by Julian Seward http://www.bzip.org/
 
-    $FileInfo: compression.php - Last Update: 07/10/2007 SVN 39 - Author: cooldude2k $
+    $FileInfo: compression.php - Last Update: 01/01/2008 SVN 144 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="compression.php"||$File3Name=="/compression.php") {

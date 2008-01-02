@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2007 Cool Dude 2k - http://intdb.sourceforge.net/
-    Copyright 2004-2007 Game Maker 2k - http://upload.idb.s1.jcink.com/
+    Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
+    Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: subcategories.php - Last Update: 12/20/2007 SVN 140 - Author: cooldude2k $
+    $FileInfo: subcategories.php - Last Update: 01/01/2008 SVN 144 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="subcategories.php"||$File3Name=="/subcategories.php") {
