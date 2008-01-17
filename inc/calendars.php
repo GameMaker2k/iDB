@@ -33,7 +33,7 @@ $MyTimeStamp2 = mktime(23,59,59,$MyMonth,$CountDays,$MyYear);
 $MyMonthName = GMTimeGet("F",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $FirstDayThisMonth = date("w", mktime(0, 0, 0, $MyMonth, 1, $MyYear));
 $EventsName = array();
-$query = query("SELECT * FROM `".$Settings['sqltable']."events` WHERE (`EventMonth`>=%i) OR (`EventMonth`<=%i AND `EventMonthEnd`>=%i)", array($MyMonth,$MyMonth,$MyMonth));
+$query = query("SELECT * FROM `".$Settings['sqltable']."events` WHERE (`EventMonth`>=%i AND `EventYear`<%i AND `EventYearEnd`>=%i) OR (`EventMonth`<=%i AND `EventMonthEnd`>=%i AND `EventYearEnd`>=%i)", array($MyMonth,$MyYear,$MyYear,$MyMonth,$MyMonth,$MyYear));
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
 $is=0;
