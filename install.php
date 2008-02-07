@@ -12,7 +12,7 @@
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
     iDB Installer made by Game Maker 2k - http://upload.idb.s1.jcink.com/
 
-    $FileInfo: install.php - Last Update: 01/01/2008 SVN 144 - Author: cooldude2k $
+    $FileInfo: install.php - Last Update: 02/07/2008 SVN 146 - Author: cooldude2k $
 */
 @error_reporting(E_ALL ^ E_NOTICE);
 if(@ini_get("register_globals")) { 
@@ -47,7 +47,7 @@ require_once($SettDir['inc'].'filename.php');
 require_once($SettDir['inc'].'function.php');
 require($SetupDir['convert'].'info.php');
 require($SettDir['inc'].'xhtml10.php');
-unset($Error); $_GET['time'] = false;
+$Error = null; $_GET['time'] = false;
 ?>
 
 <title> <?php echo "Installing ".$VerInfo['iDB_Ver_Show']." on ".$OSType2; ?> </title>

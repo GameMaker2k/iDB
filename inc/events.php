@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: events.php - Last Update: 01/01/2008 SVN 144 - Author: cooldude2k $
+    $FileInfo: events.php - Last Update: 02/07/2008 SVN 146 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="events.php"||$File3Name=="/events.php") {
@@ -223,7 +223,7 @@ $MyUserID = $_SESSION['UserID']; if($MyUserID=="0"||$MyUserID==null) { $MyUserID
 $REFERERurl = parse_url($_SERVER['HTTP_REFERER']);
 $URL['REFERER'] = $REFERERurl['host'];
 $URL['HOST'] = $_SERVER["SERVER_NAME"];
-$REFERERurl = null; unset($REFERERurl);
+$REFERERurl = null;
 if(!isset($_POST['EventName'])) { $_POST['EventName'] = null; }
 if(!isset($_POST['EventStart'])) { $_POST['EventStart'] = null; }
 if(!isset($_POST['EventEnd'])) { $_POST['EventEnd'] = null; }

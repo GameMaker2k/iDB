@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: function.php - Last Update: 01/01/2008 SVN 144 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 02/07/2008 SVN 146 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -49,7 +49,7 @@ $REFERERurl = parse_url($_SERVER['HTTP_REFERER']);
 if(!isset($REFERERurl['host'])) { $REFERERurl['host'] = null; }
 $URL['REFERER'] = $REFERERurl['host'];
 $URL['HOST'] = $_SERVER["SERVER_NAME"];
-$REFERERurl = null; unset($REFERERurl);
+$REFERERurl = null;
 // Make the Query String if we are not useing &=
 function qstring($qstr=";",$qsep="=")
 { $_GET = null; $_GET = array();

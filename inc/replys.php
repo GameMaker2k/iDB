@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: replys.php - Last Update: 01/01/2008 SVN 144 - Author: cooldude2k $
+    $FileInfo: replys.php - Last Update: 02/07/2008 SVN 146 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replys.php"||$File3Name=="/replys.php") {
@@ -478,7 +478,7 @@ $MyUsersID = $_SESSION['UserID']; if($MyUsersID=="0"||$MyUsersID==null) { $MyUse
 $REFERERurl = parse_url($_SERVER['HTTP_REFERER']);
 $URL['REFERER'] = $REFERERurl['host'];
 $URL['HOST'] = $_SERVER["SERVER_NAME"];
-$REFERERurl = null; unset($REFERERurl);
+$REFERERurl = null;
 if(!isset($_POST['ReplyDesc'])) { $_POST['ReplyDesc'] = null; }
 if(!isset($_POST['ReplyPost'])) { $_POST['ReplyPost'] = null; }
 if(!isset($_POST['GuestName'])) { $_POST['GuestName'] = null; }
@@ -993,7 +993,7 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 $REFERERurl = parse_url($_SERVER['HTTP_REFERER']);
 $URL['REFERER'] = $REFERERurl['host'];
 $URL['HOST'] = $_SERVER["SERVER_NAME"];
-$REFERERurl = null; unset($REFERERurl);
+$REFERERurl = null;
 if(!isset($_POST['ReplyDesc'])) { $_POST['ReplyDesc'] = null; }
 if(!isset($_POST['ReplyPost'])) { $_POST['ReplyPost'] = null; }
 if(!isset($_POST['GuestName'])) { $_POST['GuestName'] = null; }

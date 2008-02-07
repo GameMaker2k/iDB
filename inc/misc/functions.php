@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: functions.php - Last Update: 01/01/2008 SVN 144 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 02/07/2008 SVN 146 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -219,7 +219,7 @@ $TCSecond = date("s",$timestamp);
 $TCMonth = date("n",$timestamp);
 $TCDay = date("d",$timestamp);
 $TCYear = date("Y",$timestamp);
-unset($dstake); $dstake = null;
+$dstake = null;
 if(!is_numeric($minoffset)) { $minoffset = "00"; }
 $ts_array = explode(":",$offset);
 if(count($ts_array)!=2) {
@@ -258,7 +258,7 @@ function GMTimeStampS() { return time() - date('Z', time()); }
 function GMTimeGet($format,$offset,$minoffset=null,$dst=null) { 
 	return GMTimeChange($format,GMTimeStamp(),$offset,$minoffset,$dst); }
 function GMTimeGetS($format,$offset,$minoffset=null,$dst=null) {
-unset($dstake); $dstake = null;
+$dstake = null;
 if(!is_numeric($offset)) { $offset = "0"; }
 if(!is_numeric($minoffset)) { $minoffset = "00"; }
 $ts_array = explode(":",$offset);

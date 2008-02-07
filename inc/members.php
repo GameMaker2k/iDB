@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: members.php - Last Update: 01/01/2008 SVN 144 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 02/07/2008 SVN 146 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -352,7 +352,7 @@ $membertitle = " ".$ThemeSet['TitleDivider']." Login";
 $REFERERurl = parse_url($_SERVER['HTTP_REFERER']);
 $URL['REFERER'] = $REFERERurl['host'];
 $URL['HOST'] = $_SERVER["SERVER_NAME"];
-$REFERERurl = null; unset($REFERERurl);
+$REFERERurl = null;
 ?>
 <div class="Table1Border">
 <table class="Table1">
@@ -612,7 +612,7 @@ $membertitle = " ".$ThemeSet['TitleDivider']." Signing up";
 $REFERERurl = parse_url($_SERVER['HTTP_REFERER']);
 $URL['REFERER'] = $REFERERurl['host'];
 $URL['HOST'] = $_SERVER["SERVER_NAME"];
-$REFERERurl = null; unset($REFERERurl);
+$REFERERurl = null;
 if(!isset($_POST['username'])) { $_POST['username'] = null; }
 if(!isset($_POST['TOS'])) { $_POST['TOS'] = null; }
 ?>
