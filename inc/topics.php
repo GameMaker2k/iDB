@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: topics.php - Last Update: 02/07/2008 SVN 146 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 02/12/2008 SVN 147 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -119,35 +119,46 @@ if($pnum<$Settings['max_topics']&&$pnum>0) {
 	$Pages[$l] = $l; ++$l; } }
 //End Topic Page Code
 //$i=0;
+//List Page Number Code Start
 $pagenum=count($Pages);
-$pagei=1; $pstring = "<div class=\"PageList\">Pages: ";
-$Pagez[1] = 1;
-if($pagenum>=2) { $Pagez[2] = 2; }
-if($pagenum>=3) { $Pagez[3] = 3; }
-if($pagenum>=4) { $Pagez[4] = 4; }
-if($pagenum>=5&&$_GET['page']>=4) {
-$page_back_one = $_GET['page']-1;
-$page_now = $_GET['page'];
-$page_up_one = $_GET['page']+1;
-$page_up_two = $_GET['page']+2;
-$page_up_three = $_GET['page']+3;
-if($pagenum>=$page_now&&$page_back_one>4) { 
-	$Pagez[5] = $page_back_one; }
-if($pagenum>=$page_now&&$page_back_one<=4) { 
-	$Pagez[5] = null; }
-if($pagenum>=$page_now&&$page_now>4) { 
-	$Pagez[6] = $page_now; }
-if($pagenum>=$page_now&&$page_now<=4) { 
-	$Pagez[6] = null; }
-if($pagenum>=$page_up_one) { $Pagez[7] = $page_up_one; }
-if($pagenum>=$page_up_two) { $Pagez[8] = $page_up_two; }
-if($pagenum>=$page_up_three) { $Pagez[9] = $page_up_three; } }
-$pagenum=count($Pagez);
-while ($pagei <= $pagenum) {
-if($Pagez[$pagei]!=null) {
+if($_GET['page']>$pagenum) {
+	$_GET['page'] = $pagenum; }
+$pagei=0; $pstring = "<div class=\"PageList\">Pages: ";
+if($_GET['page']<4) { $Pagez[0] = null; }
+if($_GET['page']>=4) { $Pagez[0] = "First"; }
+if($_GET['page']>=3) {
+$Pagez[1] = $_GET['page'] - 2; }
+if($_GET['page']<3) {
+$Pagez[1] = null; }
+if($_GET['page']>=2) {
+$Pagez[2] = $_GET['page'] - 1; }
+if($_GET['page']<2) {
+$Pagez[2] = null; }
+$Pagez[3] = $_GET['page'];
+if($_GET['page']<$pagenum) {
+$Pagez[4] = $_GET['page'] + 1; }
+if($_GET['page']>=$pagenum) {
+$Pagez[4] = null; }
+$pagenext = $_GET['page'] + 1;
+if($pagenext<$pagenum) {
+$Pagez[5] = $_GET['page'] + 2; }
+if($pagenext>=$pagenum) {
+$Pagez[5] = null; }
+if($_GET['page']<$pagenum) { $Pagez[6] = "Last"; }
+if($_GET['page']>=$pagenum) { $Pagez[6] = null; }
+$pagenumi=count($Pagez);
+while ($pagei < $pagenumi) {
+if($Pagez[$pagei]!=null&&
+   $Pagez[$pagei]!="First"&&
+   $Pagez[$pagei]!="Last") {
 $pstring = $pstring."<a href=\"".url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$Pagez[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType])."\">".$Pagez[$pagei]."</a> "; }
+if($Pagez[$pagei]=="First") {
+$pstring = $pstring."<a href=\"".url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType])."\">&lt; First</a> ... "; }
+if($Pagez[$pagei]=="Last") {
+$pstring = $pstring."... <a href=\"".url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$pagenum,$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType])."\">Last &gt;</a> "; }
 	++$pagei; } $pstring = $pstring."</div>";
 echo $pstring;
+//List Page Number Code end
 ?>
 <div class="Table1Border">
 <table class="Table1" id="Forum<?php echo $ForumID; ?>">
