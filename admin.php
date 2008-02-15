@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: admin.php - Last Update: 01/01/2008 SVN 144 - Author: cooldude2k $
+    $FileInfo: admin.php - Last Update: 02/15/2008 SVN 148 - Author: cooldude2k $
 */
 require('preindex.php');
 $usefileext = $Settings['file_ext'];
@@ -31,13 +31,19 @@ ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 if($_GET['act']==null) {
 $_GET['act']="view"; }
-if($_GET['act']=="view")
+if($_GET['act']=="view"||
+	$_GET['act']=="settings"||
+	$_GET['act']=="mysql"||
+	$_GET['act']=="info")
 { require($SettDir['admin'].'main.php'); }
 require($SettDir['inc'].'endpage.php'); 
+if(!isset($admincptitle)) { $admincptitle = null; }
 ?>
 </body>
 </html>
 <?php
-if($_GET['act']=="view") {
+if($admincptitle==null) {
 change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." Admin CP",$Settings['use_gzip'],$GZipEncode['Type']); }
+if($admincptitle!=null) {
+change_title($Settings['board_name'].$admincptitle,$Settings['use_gzip'],$GZipEncode['Type']); }
 ?>

@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: topics.php - Last Update: 02/12/2008 SVN 147 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 02/15/2008 SVN 148 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -219,7 +219,7 @@ $LastReply = "User: <a href=\"".$lul."\" title=\"".$oldusername."\">".$UsersName
 if($UsersID1=="-1") {
 $lul = url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UsersID1,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
 $luln = url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."&#35;reply".$NumReply;
-$LastReply = "User: <span title=\"".$oldusername.">".$UsersName1."</span><br />\nTime: <a href=\"".$luln."\">".$TimeStamp1."</a>"; } }
+$LastReply = "User: <span title=\"".$oldusername."\">".$UsersName1."</span><br />\nTime: <a href=\"".$luln."\">".$TimeStamp1."</a>"; } }
 @mysql_free_result($glrresult);
 if(!isset($TimeStamp1)) { $TimeStamp1 = null; } if(!isset($LastReply)) { $LastReply = null; }
 if($TimeStamp1==null) { $LastReply = "&nbsp;<br />&nbsp;"; }

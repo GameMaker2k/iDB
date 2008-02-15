@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: table.php - Last Update: 01/01/2008 SVN 144 - Author: cooldude2k $
+    $FileInfo: table.php - Last Update: 02/15/2008 SVN 148 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="table.php"||$File3Name=="/table.php") {
@@ -26,7 +26,13 @@ if ($File3Name=="table.php"||$File3Name=="/table.php") {
 </tr><tr class="TableRow3">
 <td class="TableRow3"><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Main Page</a></td>
 </tr><tr class="TableRow3">
-<td class="TableRow3"><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=settinmgs",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Edit Settings</a></td>
+<td class="TableRow3"><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=settings",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Edit Settings</a></td>
+<?php if($GroupInfo['ViewDBInfo']=="yes") { ?>
+</tr><tr class="TableRow4">
+<td class="TableRow3"><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=mysql",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">MySQL Settings</a></td>
+<?php } ?>
+</tr><tr class="TableRow3">
+<td class="TableRow3"><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=info",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Edit Board Info</a></td>
 </tr><tr class="TableRow4">
 <td class="TableRow4">&nbsp;</td>
 </tr></table><div>&nbsp;</div>
@@ -38,7 +44,7 @@ if ($File3Name=="table.php"||$File3Name=="/table.php") {
 </tr><tr class="TableRow3">
 <td class="TableRow3"><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Main Page</a></td>
 </tr><tr class="TableRow3">
-<td class="TableRow3"><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=settinmgs",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Edit Settings</a></td>
+<td class="TableRow3"><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=settings",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Edit Settings</a></td>
 </tr><tr class="TableRow4">
 <td class="TableRow4">&nbsp;</td>
 </tr></table>
