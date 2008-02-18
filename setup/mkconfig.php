@@ -12,7 +12,7 @@
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mkconfig.php - Last Update: 02/15/2008 SVN 148 - Author: cooldude2k $
+    $FileInfo: mkconfig.php - Last Update: 02/18/2008 SVN 150 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mkconfig.php"||$File3Name=="/mkconfig.php") {
@@ -34,10 +34,12 @@ $_POST['tableprefix'] = preg_replace("/[^A-Za-z0-9_$]/", "", $_POST['tableprefix
 if($_POST['tableprefix']==null||$_POST['tableprefix']=="_") { $_POST['tableprefix']="idb_"; }
 if($_POST['sessprefix']==null||$_POST['sessprefix']=="_") { $_POST['sessprefix']="idb_"; }
 $checkfile="settings.php";
+@chmod("settings.php",0766);
+@chmod("settingsbak.php",0766);
 if (!is_writable($checkfile)) {
    echo "<br />Settings is not writable.";
-   @chmod("settings.php",0755); $Error="Yes";
-   @chmod("settingsbak.php",0755);
+   @chmod("settings.php",0766); $Error="Yes";
+   @chmod("settingsbak.php",0766);
 } else { /* settings.php is writable install iDB. ^_^ */ }
 @session_name($_POST['tableprefix']."sess");
 @session_set_cookie_params(0, $this_dir);
