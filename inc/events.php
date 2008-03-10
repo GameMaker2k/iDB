@@ -323,6 +323,18 @@ $TimeOut = explode("/",$_POST['EventEnd']);
 	<br />Event End Year is too big.<br />
 	</span>&nbsp;</td>
 </tr>
+<?php } if (checkdate($TimeIn[0],$TimeIn[1],$TimeIn[2])==false) { $Error="Yes";  ?>
+<tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage">
+	<br />Sorry the event start date is not valid.<br />
+	</span>&nbsp;</td>
+</tr>
+<?php } if (checkdate($TimeOut[0],$TimeOut[1],$TimeOut[2])==false) { $Error="Yes";  ?>
+<tr style="text-align: center;">
+	<td style="text-align: center;"><span class="TableMessage">
+	<br />Sorry the event end date is not valid.<br />
+	</span>&nbsp;</td>
+</tr>
 <?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
 	pre_strlen($_POST['GuestName'])>="25") { $Error="Yes"; ?>
 <tr style="text-align: center;">

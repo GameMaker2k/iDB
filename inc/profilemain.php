@@ -452,6 +452,8 @@ if($BirthMonth!=null&&$BirthDay!=null&&$BirthYear!=null) {
 	if($BirthMonth=="0") { $BirthMonth = "MM"; }
 	if(pre_strlen($BirthMonth)=="1") { $BirthMonth = "0".$BirthMonth; }
 	if(pre_strlen($BirthDay)=="1") { $BirthDay = "0".$BirthDay; }
+    if(checkdate($BirthMonth,$BirthDay,$BirthYear)==false) {
+	$BirthMonth = "MM"; $BirthDay = "DD"; $BirthYear = "YYYY"; }
 	$User1Birthday = $BirthMonth."/".$BirthDay."/".$BirthYear; }
 $tsa_mem = explode(":",$User1TimeZone);
 $TimeZoneArray = array("offset" => $User1TimeZone, "hour" => $tsa_mem[0], "minute" => $tsa_mem[1]);
@@ -593,7 +595,7 @@ if($_POST['act']=="profile"&&
 	if(!isset($_POST['EventDay'])) { $_POST['EventDay'] = null; }
 	if($_POST['EventDay']!=null) {
 	$BirthExpl = explode("/",$_POST['EventDay']);
-	if(count($BirthExpl)=="3") {
+	if(count($BirthExpl)=="3"&&checkdate($BirthExpl[0],$BirthExpl[1],$BirthExpl[2])==true) {
 	if(is_numeric($BirthExpl[0])&&is_numeric($BirthExpl[1])&&is_numeric($BirthExpl[2])) {
 	if(pre_strlen($BirthExpl[0])=="1") { $BirthExpl[0] = "0".$BirthExpl[0]; }
 	if(pre_strlen($BirthExpl[1])=="1") { $BirthExpl[1] = "0".$BirthExpl[1]; }
@@ -606,6 +608,9 @@ if($_POST['act']=="profile"&&
 		$BirthMonth="0"; $BirthDay="0"; $BirthYear="0"; } }
 	if (!is_numeric($BirthExpl[0])||!is_numeric($BirthExpl[1])||!is_numeric($BirthExpl[2])) { 
 		$BirthMonth="0"; $BirthDay="0"; $BirthYear="0"; } }
+	if(count($BirthExpl)=="3"&&
+	checkdate($BirthExpl[0],$BirthExpl[1],$BirthExpl[2])==false) {
+	$BirthMonth="0"; $BirthDay="0"; $BirthYear="0"; }
 	if(count($BirthExpl)!="3") { $BirthMonth="0"; $BirthDay="0"; $BirthYear="0"; } }
 	if($_POST['EventDay']==null) { $BirthMonth="0"; $BirthDay="0"; $BirthYear="0"; }
 	if(!is_numeric($_POST['YourOffSet'])) { $_POST['YourOffSet'] = "0"; }
