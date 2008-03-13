@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: profilemain.php - Last Update: 01/01/2008 SVN 144 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 03/12/2008 SVN 153 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
@@ -452,7 +452,8 @@ if($BirthMonth!=null&&$BirthDay!=null&&$BirthYear!=null) {
 	if($BirthMonth=="0") { $BirthMonth = "MM"; }
 	if(pre_strlen($BirthMonth)=="1") { $BirthMonth = "0".$BirthMonth; }
 	if(pre_strlen($BirthDay)=="1") { $BirthDay = "0".$BirthDay; }
-    if(checkdate($BirthMonth,$BirthDay,$BirthYear)==false) {
+    if($BirthYear!="MM"&&$BirthYear!="DD"&&$BirthYear!="YYYY"&&
+	checkdate($BirthMonth,$BirthDay,$BirthYear)==false) {
 	$BirthMonth = "MM"; $BirthDay = "DD"; $BirthYear = "YYYY"; }
 	$User1Birthday = $BirthMonth."/".$BirthDay."/".$BirthYear; }
 $tsa_mem = explode(":",$User1TimeZone);
