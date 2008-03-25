@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: searchs.php - Last Update: 02/15/2008 SVN 148 - Author: cooldude2k $
+    $FileInfo: searchs.php - Last Update: 03/25/2008 SVN 155 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="searchs.php"||$File3Name=="/searchs.php") {
@@ -72,7 +72,7 @@ if($_GET['act']=="topics") {
 if(pre_strlen($_GET['msearch'])>="25") { 
 	$_GET['msearch'] = null; }
 if($_GET['msearch']!=null) {
-$memsiquery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `Name`='%s'", array($_GET['msearch']));
+$memsiquery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `Name`='%s' LIMIT 1", array($_GET['msearch']));
 $memsiresult=mysql_query($memsiquery);
 $memsinum=mysql_num_rows($memsiresult);
 $memsi=0;
@@ -211,7 +211,7 @@ if(isset($PermissionInfo['CanViewForum'][$ForumID])&&
 	$PermissionInfo['CanViewForum'][$ForumID]=="yes"&&
 	isset($CatPermissionInfo['CanViewCategory'][$CategoryID])&&
 	$CatPermissionInfo['CanViewCategory'][$CategoryID]=="yes") {
-$glrquery = query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `ForumID`=%i AND `TopicID`=%i ORDER BY `TimeStamp` DESC", array($ForumID,$TopicID));
+$glrquery = query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `ForumID`=%i AND `TopicID`=%i ORDER BY `TimeStamp` DESC LIMIT 1", array($ForumID,$TopicID));
 $glrresult=mysql_query($glrquery);
 $glrnum=mysql_num_rows($glrresult);
 if($glrnum>0){

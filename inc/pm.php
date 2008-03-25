@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: pm.php - Last Update: 02/12/2008 SVN 147 - Author: cooldude2k $
+    $FileInfo: pm.php - Last Update: 03/25/2008 SVN 155 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pm.php"||$File3Name=="/pm.php") {
@@ -46,9 +46,10 @@ if($_GET['act']=="view"||$_GET['act']=="viewsent"||$_GET['act']=="read") {
 	<td style="width: 85%; vertical-align: top;">
 <?php
 if($_GET['act']=="view") {
-$query = query("SELECT * FROM `".$Settings['sqltable']."messenger` WHERE `PMSentID`=%i ORDER BY `DateSend` DESC", array($_SESSION['UserID']));
-$result=mysql_query($query);
-$num=mysql_num_rows($result);
+$NumberMessages = getnumrows($Settings['sqltable'],"messenger");
+if($NumberMessages==null) { 
+	$NumberMessages = 0; }
+$num = $NumberMessages;
 //Start MessengerList Page Code
 if(!isset($Settings['max_pmlist'])) { $Settings['max_pmlist'] = 10; }
 if($_GET['page']==null) { $_GET['page'] = 1; } 
@@ -57,7 +58,7 @@ $nums = $_GET['page'] * $Settings['max_pmlist'];
 if($nums>$num) { $nums = $num; }
 $numz = $nums - $Settings['max_pmlist'];
 if($numz<=0) { $numz = 0; }
-$i=$numz;
+//$i=$numz;
 if($nums<$num) { $nextpage = $_GET['page'] + 1; }
 if($nums>=$num) { $nextpage = $_GET['page']; }
 if($numz>=$Settings['max_pmlist']) { $backpage = $_GET['page'] - 1; }
@@ -70,8 +71,13 @@ if($pnum>=$Settings['max_pmlist']) {
 if($pnum<$Settings['max_pmlist']&&$pnum>0) { 
 	$pnum = $pnum - $pnum; 
 	$Pages[$l] = $l; ++$l; } }
+$PageLimit = $nums - $Settings['max_pmlist'];
+if($PageLimit<0) { $PageLimit = 0; }
 //End MessengerList Page Code
-//$i=0;
+$i=0;
+$query = query("SELECT * FROM `".$Settings['sqltable']."messenger` WHERE `PMSentID`=%i ORDER BY `DateSend` DESC LIMIT %i,%i", array($_SESSION['UserID'],$PageLimit,$Settings['max_pmlist']));
+$result=mysql_query($query);
+$num=mysql_num_rows($result);
 //List Page Number Code Start
 $pagenum=count($Pages);
 if($_GET['page']>$pagenum) {
@@ -127,7 +133,7 @@ $pstring = $pstring."... <a href=\"".url_maker($exfile['messenger'],$Settings['f
 <th class="TableRow2" style="width: 25%;">Time</th>
 </tr>
 <?php
-while ($i < $nums) {
+while ($i < $num) {
 $PMID=mysql_result($result,$i,"id");
 $SenderID=mysql_result($result,$i,"SenderID");
 $SenderName = GetUserName($SenderID,$Settings['sqltable']);
@@ -292,7 +298,7 @@ echo "<span>".$SentToName."</span>"; }
 </tr>
 <?php } @mysql_free_result($result);
 if($_GET['act']=="read") {
-$query = query("SELECT * FROM `".$Settings['sqltable']."messenger` WHERE `id`=%i", array($_GET['id']));
+$query = query("SELECT * FROM `".$Settings['sqltable']."messenger` WHERE `id`=%i LIMIT 1", array($_GET['id']));
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
 $is=0;
@@ -312,7 +318,7 @@ $DateSend=GMTimeChange("F j, Y, g:i a",$DateSend,$_SESSION['UserTimeZone'],0,$_S
 $MessageText=mysql_result($result,$is,"MessageText");
 $MessageText = preg_replace("/\<br\>/", "<br />\n", nl2br($MessageText));
 $MessageDesc=mysql_result($result,$is,"Description");
-$requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i", array($SenderID));
+$requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($SenderID));
 $reresult=mysql_query($requery);
 $renum=mysql_num_rows($reresult);
 $rei=0;
@@ -329,7 +335,7 @@ $User1Title=mysql_result($reresult,$rei,"Title");
 $User1Joined=mysql_result($reresult,$rei,"Joined");
 $User1Joined=GMTimeChange("M j Y",$User1Joined,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $User1GroupID=mysql_result($reresult,$rei,"GroupID");
-$gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i", array($User1GroupID));
+$gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($User1GroupID));
 $gresult=mysql_query($gquery);
 $User1Group=mysql_result($gresult,0,"Name");
 @mysql_free_result($gresult);
@@ -425,7 +431,7 @@ echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr
 <?php } if($_GET['act']=="create") { 
 $SendMessageTo = null;
 if($_GET['id']!=null&&$_GET['id']!="-1") {
-$requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i", array($_GET['id']));
+$requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($_GET['id']));
 $reresult=mysql_query($requery);
 $renum=mysql_num_rows($reresult);
 $rei=0;
@@ -671,14 +677,14 @@ if($RestrictedUserName=="yes") {
 $RGMatches = preg_match("/".$RWord."/i", $_POST['GuestName']);
 	if($RGMatches==true) { break 1; } } }
 ++$lonewolfs; } @mysql_free_result($lonewolfrt);
-$requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `Name`='%s'", array($_POST['SendMessageTo']));
+$requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `Name`='%s' LIMIT 1", array($_POST['SendMessageTo']));
 $reresult=mysql_query($requery);
 $renum=mysql_num_rows($reresult);
 $rei=0;
 while ($rei < $renum) {
 $SendMessageToID = mysql_result($reresult,$rei,"id");
 $SendToGroupID = mysql_result($reresult,$rei,"GroupID");
-$gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i", array($SendToGroupID));
+$gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($SendToGroupID));
 $gresult=mysql_query($gquery);
 $SendUserCanPM=mysql_result($gresult,0,"CanPM");
 $SendUserCanPM = strtolower($SendUserCanPM);

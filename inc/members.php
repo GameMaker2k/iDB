@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: members.php - Last Update: 02/12/2008 SVN 147 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 03/25/2008 SVN 155 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -50,16 +50,17 @@ if($_GET['ordertype']=="desc") { $orderlist .= " desc"; } }
 if(!is_numeric($_GET['gid'])) { $_GET['gid'] = null; }
 if($_GET['gid']!=null&&$_GET['groupid']==null) { $_GET['groupid'] = $_GET['gid']; }
 if(!is_numeric($_GET['groupid'])) { $_GET['groupid'] = null; }
-$ggquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `Name`='%s'", array($Settings['GuestGroup']));
+$ggquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `Name`='%s' LIMIT 1", array($Settings['GuestGroup']));
 $ggresult=mysql_query($ggquery);
 $GGroup=mysql_result($ggresult,0,"id");
 @mysql_free_result($ggresult);
-if($_GET['groupid']==null) {
-$query = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `GroupID`<>%i ".$orderlist, array($GGroup)); }
-if($_GET['groupid']!=null) {
-$query = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `GroupID`=%i AND `GroupID`<>%i ".$orderlist, array($_GET['groupid'],$GGroup)); }
-$result=mysql_query($query);
-$num=mysql_num_rows($result);
+$NumberMembers = getnumrows($Settings['sqltable'],"members");
+$sql_guest_check = mysql_query(query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array("-1")));
+$guest_check = mysql_num_rows($sql_guest_check); @mysql_free_result($sql_guest_check);
+if($guest_check > 0) { $NumberMembers = $NumberMembers - 1; }
+if($NumberMembers==null) { 
+	$NumberMembers = 0; }
+$num = $NumberMembers;
 //Start MemberList Page Code
 if(!isset($Settings['max_memlist'])) { $Settings['max_memlist'] = 10; }
 if($_GET['page']==null) { $_GET['page'] = 1; } 
@@ -68,7 +69,7 @@ $nums = $_GET['page'] * $Settings['max_memlist'];
 if($nums>$num) { $nums = $num; }
 $numz = $nums - $Settings['max_memlist'];
 if($numz<=0) { $numz = 0; }
-$i=$numz;
+//$i=$numz;
 if($nums<$num) { $nextpage = $_GET['page'] + 1; }
 if($nums>=$num) { $nextpage = $_GET['page']; }
 if($numz>=$Settings['max_memlist']) { $backpage = $_GET['page'] - 1; }
@@ -81,8 +82,16 @@ if($pnum>=$Settings['max_memlist']) {
 if($pnum<$Settings['max_memlist']&&$pnum>0) { 
 	$pnum = $pnum - $pnum; 
 	$Pages[$l] = $l; ++$l; } }
+$PageLimit = $nums - $Settings['max_memlist'];
+if($PageLimit<0) { $PageLimit = 0; }
 //End MemberList Page Code
-//$i=0;
+$i=0;
+if($_GET['groupid']==null) {
+$query = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `GroupID`<>%i ".$orderlist." LIMIT %i,%i", array($GGroup,$PageLimit,$Settings['max_memlist'])); }
+if($_GET['groupid']!=null) {
+$query = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `GroupID`=%i AND `GroupID`<>%i ".$orderlist." LIMIT %i,%i", array($_GET['groupid'],$GGroup,$PageLimit,$Settings['max_memlist'])); }
+$result=mysql_query($query);
+$num=mysql_num_rows($result);
 //List Page Number Code Start
 $pagenum=count($Pages);
 if($_GET['page']>$pagenum) {
@@ -141,7 +150,7 @@ echo $pstring;
 <th class="TableRow2" style="width: 7%;">Website</th>
 </tr>
 <?php
-while ($i < $nums) {
+while ($i < $num) {
 $MemList['ID']=mysql_result($result,$i,"id");
 $MemList['Name']=mysql_result($result,$i,"Name");
 $MemList['Email']=mysql_result($result,$i,"Email");
@@ -159,7 +168,7 @@ $MemList['PostCount']=mysql_result($result,$i,"PostCount");
 $MemList['TimeZone']=mysql_result($result,$i,"TimeZone");
 $MemList['DST']=mysql_result($result,$i,"DST");
 $MemList['IP']=mysql_result($result,$i,"IP");
-$gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i", array($MemList['GroupID']));
+$gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($MemList['GroupID']));
 $gresult=mysql_query($gquery);
 $MemList['Group']=mysql_result($gresult,0,"Name");
 @mysql_free_result($gresult);
@@ -184,7 +193,7 @@ if($MemList['Group']!=$Settings['GuestGroup']) {
 </table></div>
 <?php }
 if($_GET['act']=="view") { 
-$query = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i", array($_GET['id']));
+$query = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($_GET['id']));
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
 $i=0;
@@ -211,7 +220,7 @@ $ViewMem['PostCount']=mysql_result($result,$i,"PostCount");
 $ViewMem['TimeZone']=mysql_result($result,$i,"TimeZone");
 $ViewMem['DST']=mysql_result($result,$i,"DST");
 $ViewMem['IP']=mysql_result($result,$i,"IP");
-$gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i", array($ViewMem['GroupID']));
+$gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($ViewMem['GroupID']));
 $gresult=mysql_query($gquery);
 $ViewMem['Group']=mysql_result($gresult,0,"Name");
 @mysql_free_result($gresult);
@@ -406,7 +415,7 @@ $YourName = stripcslashes(htmlspecialchars($_POST['username'], ENT_QUOTES, $Sett
 //$YourName = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $YourName);
 $YourName = @remove_spaces($YourName);
 $passtype="ODFH";
-$querylog = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `Name`='%s'", array($YourName));
+$querylog = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `Name`='%s' LIMIT 1", array($YourName));
 $resultlog=mysql_query($querylog);
 $numlog=mysql_num_rows($resultlog);
 if($numlog>=1) {
@@ -430,7 +439,7 @@ $YourBanTime=mysql_result($resultlog,$i,"BanTime");
 $CGMTime = GMTimeStamp();
 if($YourBanTime!=0&&$YourBanTime!=null) {
 if($YourBanTime>=$CGMTime) { $BanError = "yes"; } }
-$gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i", array($YourGroupM));
+$gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($YourGroupM));
 $gresult=mysql_query($gquery);
 $YourGroupM=mysql_result($gresult,0,"Name");
 @mysql_free_result($gresult);
@@ -782,7 +791,7 @@ $Avatar = @remove_spaces($Avatar);
 $Website = stripcslashes(htmlspecialchars($_POST['Website'], ENT_QUOTES, $Settings['charset']));
 //$Website = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $Website);
 $Website = @remove_spaces($Website);
-$gquerys = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `Name`='%s'", array($yourgroup));
+$gquerys = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `Name`='%s' LIMIT 1", array($yourgroup));
 $gresults=mysql_query($gquerys);
 $yourgroup=mysql_result($gresults,0,"id");
 @mysql_free_result($gresults);
@@ -799,7 +808,7 @@ if($_POST['MinOffSet']<0) { $_POST['MinOffSet'] = "00"; }
 $_POST['YourOffSet'] = $_POST['YourOffSet'].":".$_POST['MinOffSet'];
 $query = query("INSERT INTO `".$Settings['sqltable']."members` VALUES (".$yourid.",'%s','%s','%s','%s','%s','%s',%i,'%s','%s',%i,%i,'0','0','0','0','%s','%s','%s','%s','%s','%s',%i,'%s','%s','%s','%s','%s')", array($Name,$NewPassword,"iDBH",$_POST['Email'],$yourgroup,$ValidateStats,"0",$_POST['Interests'],$_POST['Title'],$_POST['Joined'],$_POST['LastActive'],$NewSignature,'Your Notes',$Avatar,"100x100",$Website,$_POST['YourGender'],$_POST['PostCount'],$_POST['YourOffSet'],$_POST['DST'],$Settings['DefaultTheme'],$_POST['UserIP'],$HashSalt));
 mysql_query($query);
-$querylogr = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `Name`='%s' AND `Password`='%s'", array($Name,$NewPassword));
+$querylogr = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `Name`='%s' AND `Password`='%s' LIMIT 1", array($Name,$NewPassword));
 $resultlogr=mysql_query($querylogr);
 $numlogr=mysql_num_rows($resultlogr);
 if($numlogr>=1) {
@@ -807,7 +816,7 @@ $ir=0;
 $YourIDMr=mysql_result($resultlogr,$ir,"id");
 $YourNameMr=mysql_result($resultlogr,$ir,"Name");
 $YourGroupMr=mysql_result($resultlogr,$ir,"GroupID");
-$gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i", array($YourGroupMr));
+$gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($YourGroupMr));
 $gresult=mysql_query($gquery);
 $YourGroupMr=mysql_result($gresult,0,"Name");
 @mysql_free_result($gresult);

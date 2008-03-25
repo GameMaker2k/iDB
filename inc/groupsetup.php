@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: groupsetup.php - Last Update: 01/01/2008 SVN 144 - Author: cooldude2k $
+    $FileInfo: groupsetup.php - Last Update: 03/25/2008 SVN 155 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="groupsetup.php"||$File3Name=="/groupsetup.php") {
@@ -20,7 +20,7 @@ if ($File3Name=="groupsetup.php"||$File3Name=="/groupsetup.php") {
 // Check to make sure MemberInfo is right
 if(!isset($_SESSION['UserID'])) { $_SESSION['UserID'] = 0; }
 if($_SESSION['UserID']!=0&&$_SESSION['UserID']!=null) { $BanError = null;
-$kgbquerychkusr = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `Name`='%s' AND `Password`='%s' AND `id`=%i", array($_SESSION['MemberName'],$_SESSION['UserPass'],$_SESSION['UserID'])); 
+$kgbquerychkusr = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `Name`='%s' AND `Password`='%s' AND `id`=%i LIMIT 1", array($_SESSION['MemberName'],$_SESSION['UserPass'],$_SESSION['UserID'])); 
 $resultchkusr=mysql_query($kgbquerychkusr);
 $numchkusr=mysql_num_rows($resultchkusr);
 if($numchkusr==1) {
@@ -31,7 +31,7 @@ $ChkUsrPass=mysql_result($resultchkusr,0,"Password");
 $ChkUsrTimeZone=mysql_result($resultchkusr,0,"TimeZone");
 $ChkUsrTheme=mysql_result($resultchkusr,0,"UseTheme");
 $ChkUsrDST=mysql_result($resultchkusr,0,"DST");
-$svrquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i", array($ChkUsrGroup));
+$svrquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($ChkUsrGroup));
 $svrgresultkgb=mysql_query($svrquery);
 $ChkUsrGroup=mysql_result($svrgresultkgb,0,"Name"); 
 $ChkUsrBanTime=mysql_result($resultchkusr,0,"BanTime");
@@ -78,7 +78,7 @@ $_SESSION['UserGroup'] = $Settings['GuestGroup']; }
 if(!isset($_SESSION['UserGroup'])) { $_SESSION['UserGroup'] = null; }
 if($_SESSION['UserGroup']==null) { 
 $_SESSION['UserGroup']=$Settings['GuestGroup']; } $GruError = null;
-$gruquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `Name`='%s'", array($_SESSION['UserGroup']));
+$gruquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `Name`='%s' LIMIT 1", array($_SESSION['UserGroup']));
 $gruresult=mysql_query($gruquery);
 $grunum=mysql_num_rows($gruresult);
 if($grunum<=0) { $GruError = true; @mysql_free_result($gruresult);

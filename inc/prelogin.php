@@ -11,21 +11,21 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: prelogin.php - Last Update: 01/01/2008 SVN 144 - Author: cooldude2k $
+    $FileInfo: prelogin.php - Last Update: 03/25/2008 SVN 155 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="prelogin.php"||$File3Name=="/prelogin.php") {
 	require('index.php');
 	exit(); }
 $_SESSION['CheckCookie']="done";
-$querylog2 = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `Name`='%s' AND `Password`='%s' AND `id`=%i", array($_COOKIE['MemberName'],$_COOKIE['SessPass'],$_COOKIE['UserID']));
+$querylog2 = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `Name`='%s' AND `Password`='%s' AND `id`=%i LIMIT 1", array($_COOKIE['MemberName'],$_COOKIE['SessPass'],$_COOKIE['UserID']));
 $resultlog2=mysql_query($querylog2);
 $numlog2=mysql_num_rows($resultlog2);
 if($numlog2==1) {
 $YourIDAM=mysql_result($resultlog2,0,"id");
 $YourGroupAM=mysql_result($resultlog2,0,"GroupID");
 $YourPassAM=mysql_result($resultlog2,0,"Password");
-$gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i", array($YourGroupAM));
+$gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($YourGroupAM));
 $gresult=mysql_query($gquery);
 $YourGroupAM=mysql_result($gresult,0,"Name");
 @mysql_free_result($gresult); $BanError = null;
