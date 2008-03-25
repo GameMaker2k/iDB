@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: replys.php - Last Update: 02/12/2008 SVN 147 - Author: cooldude2k $
+    $FileInfo: replys.php - Last Update: 03/25/2008 SVN 154 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replys.php"||$File3Name=="/replys.php") {
@@ -77,9 +77,9 @@ if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes"||$PermissionInfo['CanM
 </table>
 <div>&nbsp;</div>
 <?php } } if($_GET['act']=="view") {
-$query = query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `TopicID`=%i ORDER BY `TimeStamp` ASC", array($_GET['id']));
-$result=mysql_query($query);
-$num=mysql_num_rows($result);
+if($NumberReplies==null) { 
+	$NumberReplies = 0; }
+$num=$NumberReplies+1;
 //Start Reply Page Code
 if(!isset($Settings['max_posts'])) { $Settings['max_posts'] = 10; }
 if($_GET['page']==null) { $_GET['page'] = 1; } 
@@ -88,7 +88,7 @@ $nums = $_GET['page'] * $Settings['max_posts'];
 if($nums>$num) { $nums = $num; }
 $numz = $nums - $Settings['max_posts'];
 if($numz<=0) { $numz = 0; }
-$i=$numz;
+//$i=$numz;
 if($nums<$num) { $nextpage = $_GET['page'] + 1; }
 if($nums>=$num) { $nextpage = $_GET['page']; }
 if($numz>=$Settings['max_posts']) { $backpage = $_GET['page'] - 1; }
@@ -101,8 +101,13 @@ if($pnum>=$Settings['max_posts']) {
 if($pnum<$Settings['max_posts']&&$pnum>0) { 
 	$pnum = $pnum - $pnum; 
 	$Pages[$l] = $l; ++$l; } }
+$PageLimit = $nums - $Settings['max_posts'];
+if($PageLimit<0) { $PageLimit = 0; }
 //End Reply Page Code
-//$i=0;
+$i=0;
+$query = query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `TopicID`=%i ORDER BY `TimeStamp` ASC LIMIT %i,%i", array($_GET['id'],$PageLimit,$Settings['max_posts']));
+$result=mysql_query($query);
+$num=mysql_num_rows($result);
 if($num==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
@@ -151,7 +156,7 @@ $pstring = $pstring."... <a href=\"".url_maker($exfile['topic'],$Settings['file_
 	++$pagei; } $pstring = $pstring."</div>";
 echo $pstring;
 //List Page Number Code end
-while ($i < $nums) {
+while ($i < $num) {
 $MyPostID=mysql_result($result,$i,"id");
 $MyTopicID=mysql_result($result,$i,"TopicID");
 $MyForumID=mysql_result($result,$i,"ForumID");
@@ -221,7 +226,7 @@ if($PermissionInfo['CanModForum'][$MyForumID]=="yes") {
 	$CanEditReply = true; $CanDeleteReply = true; } }
 if($_SESSION['UserID']==0) { 
 	$CanEditReply = false; $CanDeleteReply = false; }
-$ReplyNum = $i + 1;
+$ReplyNum = $i + $PageLimit + 1;
 ?>
 <div class="Table1Border">
 <table class="Table1">

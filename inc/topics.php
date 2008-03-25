@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: topics.php - Last Update: 02/15/2008 SVN 148 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 03/25/2008 SVN 154 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -93,9 +93,9 @@ if($PermissionInfo['CanMakeTopics'][$ForumID]=="yes"&&$CanHaveTopics=="yes") {
 <div>&nbsp;</div>
 <?php }
 if($_GET['act']=="view") {
-$query = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `ForumID`=%i ORDER BY `Pinned` DESC, `LastUpdate` DESC", array($_GET['id']));
-$result=mysql_query($query);
-$num=mysql_num_rows($result);
+if($NumberTopics==null) { 
+	$NumberTopics = 0; }
+$num=$NumberTopics;
 //Start Topic Page Code
 if(!isset($Settings['max_topics'])) { $Settings['max_topics'] = 10; }
 if($_GET['page']==null) { $_GET['page'] = 1; } 
@@ -104,7 +104,7 @@ $nums = $_GET['page'] * $Settings['max_topics'];
 if($nums>$num) { $nums = $num; }
 $numz = $nums - $Settings['max_topics'];
 if($numz<=0) { $numz = 0; }
-$i=$numz;
+//$i=$numz;
 if($nums<$num) { $nextpage = $_GET['page'] + 1; }
 if($nums>=$num) { $nextpage = $_GET['page']; }
 if($numz>=$Settings['max_topics']) { $backpage = $_GET['page'] - 1; }
@@ -117,8 +117,13 @@ if($pnum>=$Settings['max_topics']) {
 if($pnum<$Settings['max_topics']&&$pnum>0) { 
 	$pnum = $pnum - $pnum; 
 	$Pages[$l] = $l; ++$l; } }
+$PageLimit = $nums - $Settings['max_posts'];
+if($PageLimit<0) { $PageLimit = 0; }
 //End Topic Page Code
-//$i=0;
+$i=0;
+$query = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `ForumID`=%i ORDER BY `Pinned` DESC, `LastUpdate` DESC LIMIT %i,%i", array($_GET['id'],$PageLimit,$Settings['max_topics']));
+$result=mysql_query($query);
+$num=mysql_num_rows($result);
 //List Page Number Code Start
 $pagenum=count($Pages);
 if($_GET['page']>$pagenum) {
@@ -176,7 +181,7 @@ echo $pstring;
 <th class="TableRow2" style="width: 25%;">Last Reply</th>
 </tr>
 <?php
-while ($i < $nums) {
+while ($i < $num) {
 $TopicID=mysql_result($result,$i,"id");
 $UsersID=mysql_result($result,$i,"UserID");
 $GuestName=mysql_result($result,$i,"GuestName");
