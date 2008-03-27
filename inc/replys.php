@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: replys.php - Last Update: 03/25/2008 SVN 155 - Author: cooldude2k $
+    $FileInfo: replys.php - Last Update: 03/27/2008 SVN 156 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replys.php"||$File3Name=="/replys.php") {
@@ -144,6 +144,9 @@ $Pagez[5] = null; }
 if($_GET['page']<$pagenum) { $Pagez[6] = "Last"; }
 if($_GET['page']>=$pagenum) { $Pagez[6] = null; }
 $pagenumi=count($Pagez);
+if($num==0) {
+$pagenumi = 0;
+$pstring = $pstring."<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">1</a> "; }
 while ($pagei < $pagenumi) {
 if($Pagez[$pagei]!=null&&
    $Pagez[$pagei]!="First"&&

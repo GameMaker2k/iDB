@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: searchs.php - Last Update: 03/25/2008 SVN 155 - Author: cooldude2k $
+    $FileInfo: searchs.php - Last Update: 03/27/2008 SVN 156 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="searchs.php"||$File3Name=="/searchs.php") {
@@ -148,6 +148,13 @@ $Pagez[5] = null; }
 if($_GET['page']<$pagenum) { $Pagez[6] = "Last"; }
 if($_GET['page']>=$pagenum) { $Pagez[6] = null; }
 $pagenumi=count($Pagez);
+if($num==0) {
+$pagenumi = 0;
+if($_GET['msearch']==null) { 
+$pstring = $pstring."<a href=\"".url_maker($exfile['search'],$Settings['file_ext'],"act=topics&search=".$_GET['search']."&type=".$_GET['type']."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search'])."\">1</a> "; }
+if($_GET['msearch']!=null) {
+$pstring = $pstring."<a href=\"".url_maker($exfile['search'],$Settings['file_ext'],"act=topics&search=".$_GET['search']."&type=".$_GET['type']."&msearch=".$_GET['msearch']."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search'])."\">1</a> "; }
+}
 while ($pagei < $pagenumi) {
 if($Pagez[$pagei]!=null&&
    $Pagez[$pagei]!="First"&&

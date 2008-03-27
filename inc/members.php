@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: members.php - Last Update: 03/25/2008 SVN 155 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 03/27/2008 SVN 156 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -120,15 +120,18 @@ $Pagez[5] = null; }
 if($_GET['page']<$pagenum) { $Pagez[6] = "Last"; }
 if($_GET['page']>=$pagenum) { $Pagez[6] = null; }
 $pagenumi=count($Pagez);
+if($NumberTopics==0) {
+$pagenumi = 0;
+$pstring = $pstring."<a href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=list&orderby=".$_GET['orderby']."&ordertype=".$_GET['ordertype']."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">1</a> "; }
 while ($pagei < $pagenumi) {
 if($Pagez[$pagei]!=null&&
    $Pagez[$pagei]!="First"&&
    $Pagez[$pagei]!="Last") {
-$pstring = $pstring."<a href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=list&page=".$Pagez[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">".$Pagez[$pagei]."</a> "; }
+$pstring = $pstring."<a href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=list&orderby=".$_GET['orderby']."&ordertype=".$_GET['ordertype']."&page=".$Pagez[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">".$Pagez[$pagei]."</a> "; }
 if($Pagez[$pagei]=="First") {
-$pstring = $pstring."<a href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=list&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">&lt; First</a> ... "; }
+$pstring = $pstring."<a href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=list&orderby=".$_GET['orderby']."&ordertype=".$_GET['ordertype']."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">&lt; First</a> ... "; }
 if($Pagez[$pagei]=="Last") {
-$pstring = $pstring."... <a href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=list&page=".$pagenum,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">Last &gt;</a> "; }
+$pstring = $pstring."... <a href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=list&orderby=".$_GET['orderby']."&ordertype=".$_GET['ordertype']."&page=".$pagenum,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">Last &gt;</a> "; }
 	++$pagei; } $pstring = $pstring."</div>";
 echo $pstring;
 //List Page Number Code end
@@ -137,7 +140,7 @@ echo $pstring;
 <table class="Table1">
 <tr class="TableRow1">
 <td class="TableRow1" colspan="7"><span style="float: left;">
-<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=list&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Member List</a>
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=list&orderby=".$_GET['orderby']."&ordertype=".$_GET['ordertype']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Member List</a>
 </span><span style="float: right;">&nbsp;</span></td>
 </tr>
 <tr id="Member" class="TableRow2">
