@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: pm.php - Last Update: 03/27/2008 SVN 156 - Author: cooldude2k $
+    $FileInfo: pm.php - Last Update: 03/31/2008 SVN 157 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pm.php"||$File3Name=="/pm.php") {
@@ -46,8 +46,17 @@ if($_GET['act']=="view"||$_GET['act']=="viewsent"||$_GET['act']=="read") {
 	<td style="width: 85%; vertical-align: top;">
 <?php
 if($_GET['act']=="view") {
-$query = query("SELECT * FROM `".$Settings['sqltable']."messenger` WHERE `PMSentID`=%i ORDER BY `DateSend` DESC", array($_SESSION['UserID']));
+//Get SQL LIMIT Number
+$nums = $_GET['page'] * $Settings['max_pmlist'];
+$PageLimit = $nums - $Settings['max_pmlist'];
+$query = query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."messenger` WHERE `PMSentID`=%i ORDER BY `DateSend` DESC LIMIT %i,%i", array($_SESSION['UserID'],$PageLimit,$Settings['max_pmlist']));
+$rnquery = query("SELECT FOUND_ROWS();", array(null));
 $result=mysql_query($query);
+$rnresult=mysql_query($rnquery);
+$NumberMessage = mysql_result($rnresult,0);
+if($NumberMessage==null) { 
+	$NumberMessage = 0; }
+$num = $NumberMessage;
 $num=mysql_num_rows($result);
 //Start MessengerList Page Code
 if(!isset($Settings['max_pmlist'])) { $Settings['max_pmlist'] = 10; }
@@ -57,7 +66,7 @@ $nums = $_GET['page'] * $Settings['max_pmlist'];
 if($nums>$num) { $nums = $num; }
 $numz = $nums - $Settings['max_pmlist'];
 if($numz<=0) { $numz = 0; }
-$i=$numz;
+//$i=$numz;
 if($nums<$num) { $nextpage = $_GET['page'] + 1; }
 if($nums>=$num) { $nextpage = $_GET['page']; }
 if($numz>=$Settings['max_pmlist']) { $backpage = $_GET['page'] - 1; }
@@ -71,7 +80,8 @@ if($pnum<$Settings['max_pmlist']&&$pnum>0) {
 	$pnum = $pnum - $pnum; 
 	$Pages[$l] = $l; ++$l; } }
 //End MessengerList Page Code
-//$i=0;
+$num=mysql_num_rows($result);
+$i=0;
 //List Page Number Code Start
 $pagenum=count($Pages);
 if($_GET['page']>$pagenum) {
@@ -130,7 +140,7 @@ $pstring = $pstring."... <a href=\"".url_maker($exfile['messenger'],$Settings['f
 <th class="TableRow2" style="width: 25%;">Time</th>
 </tr>
 <?php
-while ($i < $nums) {
+while ($i < $num) {
 $PMID=mysql_result($result,$i,"id");
 $SenderID=mysql_result($result,$i,"SenderID");
 $SenderName = GetUserName($SenderID,$Settings['sqltable']);
@@ -172,9 +182,17 @@ echo "<span>".$SenderName."</span>"; }
 </tr>
 <?php } 
 if($_GET['act']=="viewsent") {
-$query = query("SELECT * FROM `".$Settings['sqltable']."messenger` WHERE `SenderID`=%i ORDER BY `DateSend` DESC", array($_SESSION['UserID']));
+//Get SQL LIMIT Number
+$nums = $_GET['page'] * $Settings['max_pmlist'];
+$PageLimit = $nums - $Settings['max_pmlist'];
+$query = query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."messenger` WHERE `SenderID`=%i ORDER BY `DateSend` DESC LIMIT %i,%i", array($_SESSION['UserID'],$PageLimit,$Settings['max_pmlist']));
+$rnquery = query("SELECT FOUND_ROWS();", array(null));
 $result=mysql_query($query);
-$num=mysql_num_rows($result);
+$rnresult=mysql_query($rnquery);
+$NumberTopics = mysql_result($rnresult,0);
+if($NumberTopics==null) { 
+	$NumberTopics = 0; }
+$num = $NumberTopics;
 //Start MessengerList Page Code
 if(!isset($Settings['max_pmlist'])) { $Settings['max_pmlist'] = 10; }
 if($_GET['page']==null) { $_GET['page'] = 1; } 
@@ -183,7 +201,7 @@ $nums = $_GET['page'] * $Settings['max_pmlist'];
 if($nums>$num) { $nums = $num; }
 $numz = $nums - $Settings['max_pmlist'];
 if($numz<=0) { $numz = 0; }
-$i=$numz;
+//$i=$numz;
 if($nums<$num) { $nextpage = $_GET['page'] + 1; }
 if($nums>=$num) { $nextpage = $_GET['page']; }
 if($numz>=$Settings['max_pmlist']) { $backpage = $_GET['page'] - 1; }
@@ -197,7 +215,8 @@ if($pnum<$Settings['max_pmlist']&&$pnum>0) {
 	$pnum = $pnum - $pnum; 
 	$Pages[$l] = $l; ++$l; } }
 //End MessengerList Page Code
-//$i=0;
+$num=mysql_num_rows($result);
+$i=0;
 //List Page Number Code Start
 $pagenum=count($Pages);
 if($_GET['page']>$pagenum) {
@@ -256,7 +275,7 @@ $pstring = $pstring."... <a href=\"".url_maker($exfile['messenger'],$Settings['f
 <th class="TableRow2" style="width: 25%;">Time</th>
 </tr>
 <?php
-while ($i < $nums) {
+while ($i < $num) {
 $PMID=mysql_result($result,$i,"id");
 $SenderID=mysql_result($result,$i,"SenderID");
 $SenderName = GetUserName($SenderID,$Settings['sqltable']);

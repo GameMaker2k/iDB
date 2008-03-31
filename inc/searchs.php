@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: searchs.php - Last Update: 03/27/2008 SVN 156 - Author: cooldude2k $
+    $FileInfo: searchs.php - Last Update: 03/31/2008 SVN 157 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="searchs.php"||$File3Name=="/searchs.php") {
@@ -80,23 +80,27 @@ if($memsinum==0) { $_GET['msearch'] = null; }
 if($memsinum!=0) {
 $memsid=mysql_result($memsiresult,$memsi,"id"); 
 @mysql_free_result($memsiresult); } }
+//Get SQL LIMIT Number
+$nums = $_GET['page'] * $Settings['max_topics'];
+$PageLimit = $nums - $Settings['max_topics'];
+if($PageLimit<0) { $PageLimit = 0; }
 if($_GET['msearch']==null) {
 if($_GET['type']!="wildcard") {
-$query = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `TopicName`='%s' ORDER BY `Pinned` DESC, `LastUpdate` DESC", array($_GET['search'])); }
+$query = query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."topics` WHERE `TopicName`='%s' ORDER BY `Pinned` DESC, `LastUpdate` DESC LIMIT %i,%i", array($_GET['search'],$PageLimit,$Settings['max_topics'])); }
 if($_GET['type']=="wildcard") {
-$query = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `TopicName` LIKE '%s' ORDER BY `Pinned` DESC, `LastUpdate` DESC", array($_GET['search'])); } }
+$query = query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."topics` WHERE `TopicName` LIKE '%s' ORDER BY `Pinned` DESC, `LastUpdate` DESC LIMIT %i,%i", array($_GET['search'],$PageLimit,$Settings['max_topics'])); } }
 if($_GET['msearch']!=null) {
 if($_GET['type']!="wildcard") {
-$query = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `TopicName`='%s' AND `UserID`=%i ORDER BY `Pinned` DESC, `LastUpdate` DESC", array($_GET['search'],$memsid)); }
+$query = query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."topics` WHERE `TopicName`='%s' AND `UserID`=%i ORDER BY `Pinned` DESC, `LastUpdate` DESC LIMIT %i,%i", array($_GET['search'],$memsid,$PageLimit,$Settings['max_topics'])); }
 if($_GET['type']=="wildcard") {
-$query = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `TopicName` LIKE '%s' AND `UserID`=%i ORDER BY `Pinned` DESC, `LastUpdate` DESC", array($_GET['search'],$memsid)); } }
+$query = query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."topics` WHERE `TopicName` LIKE '%s' AND `UserID`=%i ORDER BY `Pinned` DESC, `LastUpdate` DESC LIMIT %i,%i", array($_GET['search'],$memsid,$PageLimit,$Settings['max_topics'])); } }
+$rnquery = query("SELECT FOUND_ROWS();", array(null));
 $result=mysql_query($query);
-$num=mysql_num_rows($result);
-if($num<=0) { 
-redirect("location",$basedir.url_maker($exfile['search'],$Settings['file_ext'],"act=topics",$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search'],false));
-@header("Content-Type: text/plain; charset=".$Settings['charset']);
-ob_clean(); echo "Sorry could not find any search results."; @mysql_free_result($result);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+$rnresult=mysql_query($rnquery);
+$NumberTopics = mysql_result($rnresult,0);
+if($NumberTopics==null) { 
+	$NumberTopics = 0; }
+$num = $NumberTopics;
 //Start Topic Page Code
 if(!isset($Settings['max_topics'])) { $Settings['max_topics'] = 10; }
 if($_GET['page']==null) { $_GET['page'] = 1; } 
@@ -105,7 +109,7 @@ $nums = $_GET['page'] * $Settings['max_topics'];
 if($nums>$num) { $nums = $num; }
 $numz = $nums - $Settings['max_topics'];
 if($numz<=0) { $numz = 0; }
-$i=$numz;
+//$i=$numz;
 if($nums<$num) { $nextpage = $_GET['page'] + 1; }
 if($nums>=$num) { $nextpage = $_GET['page']; }
 if($numz>=$Settings['max_topics']) { $backpage = $_GET['page'] - 1; }
@@ -119,7 +123,13 @@ if($pnum<$Settings['max_topics']&&$pnum>0) {
 	$pnum = $pnum - $pnum; 
 	$Pages[$l] = $l; ++$l; } }
 //End Topic Page Code
-//$i=0;
+$num=mysql_num_rows($result);
+if($num<=0) { 
+redirect("location",$basedir.url_maker($exfile['search'],$Settings['file_ext'],"act=topics",$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search'],false));
+@header("Content-Type: text/plain; charset=".$Settings['charset']);
+ob_clean(); echo "Sorry could not find any search results."; @mysql_free_result($result);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+$i=0;
 //List Page Number Code Start
 $pagenum=count($Pages);
 if($_GET['page']>$pagenum) {
@@ -198,7 +208,7 @@ if($_GET['msearch']==null) { ?>
 <th class="TableRow2" style="width: 25%;">Last Reply</th>
 </tr>
 <?php
-while ($i < $nums) {
+while ($i < $num) {
 $TopicID=mysql_result($result,$i,"id");
 $ForumID=mysql_result($result,$i,"ForumID");
 $CategoryID=mysql_result($result,$i,"CategoryID");

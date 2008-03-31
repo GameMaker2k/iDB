@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: forums.php - Last Update: 03/12/2008 SVN 153 - Author: cooldude2k $
+    $FileInfo: forums.php - Last Update: 03/31/2008 SVN 157 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="forums.php"||$File3Name=="/forums.php") {
@@ -153,8 +153,8 @@ $_POST['ForumName'] = @remove_spaces($_POST['ForumName']);
 $_POST['ForumDesc'] = stripcslashes(htmlspecialchars($_POST['ForumDesc'], ENT_QUOTES, $Settings['charset']));
 //$_POST['ForumDesc'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['ForumDesc']);
 $_POST['ForumDesc'] = @remove_spaces($_POST['ForumDesc']);
-$sql_id_check = mysql_query(query("SELECT `id` FROM `".$Settings['sqltable']."forums` WHERE `id`=%i", array($_POST['ForumID'])));
-$sql_order_check = mysql_query(query("SELECT `OrderID` FROM `".$Settings['sqltable']."forums` WHERE `OrderID`=%i", array($_POST['OrderID'])));
+$sql_id_check = mysql_query(query("SELECT `id` FROM `".$Settings['sqltable']."forums` WHERE `id`=%i LIMIT 1", array($_POST['ForumID'])));
+$sql_order_check = mysql_query(query("SELECT `OrderID` FROM `".$Settings['sqltable']."forums` WHERE `OrderID`=%i LIMIT 1", array($_POST['OrderID'])));
 $id_check = mysql_num_rows($sql_id_check); $order_check = mysql_num_rows($sql_order_check);
 @mysql_free_result($sql_id_check); @mysql_free_result($sql_order_check);
 $errorstr = "";

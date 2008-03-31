@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: members.php - Last Update: 03/27/2008 SVN 156 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 03/31/2008 SVN 157 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -54,10 +54,19 @@ $ggquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `Name`='
 $ggresult=mysql_query($ggquery);
 $GGroup=mysql_result($ggresult,0,"id");
 @mysql_free_result($ggresult);
-$NumberMembers = getnumrows($Settings['sqltable'],"members");
-$sql_guest_check = mysql_query(query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array("-1")));
-$guest_check = mysql_num_rows($sql_guest_check); @mysql_free_result($sql_guest_check);
-if($guest_check > 0) { $NumberMembers = $NumberMembers - 1; }
+//Get SQL LIMIT Number
+$nums = $_GET['page'] * $Settings['max_memlist'];
+$PageLimit = $nums - $Settings['max_memlist'];
+if($PageLimit<0) { $PageLimit = 0; }
+$i=0;
+if($_GET['groupid']==null) {
+$query = query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."members` WHERE `GroupID`<>%i ".$orderlist." LIMIT %i,%i", array($GGroup,$PageLimit,$Settings['max_memlist'])); }
+if($_GET['groupid']!=null) {
+$query = query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."members` WHERE `GroupID`=%i AND `GroupID`<>%i ".$orderlist." LIMIT %i,%i", array($_GET['groupid'],$GGroup,$PageLimit,$Settings['max_memlist'])); }
+$rnquery = query("SELECT FOUND_ROWS();", array(null));
+$result=mysql_query($query);
+$rnresult=mysql_query($rnquery);
+$NumberMembers = mysql_result($rnresult,0);
 if($NumberMembers==null) { 
 	$NumberMembers = 0; }
 $num = $NumberMembers;
@@ -82,15 +91,8 @@ if($pnum>=$Settings['max_memlist']) {
 if($pnum<$Settings['max_memlist']&&$pnum>0) { 
 	$pnum = $pnum - $pnum; 
 	$Pages[$l] = $l; ++$l; } }
-$PageLimit = $nums - $Settings['max_memlist'];
-if($PageLimit<0) { $PageLimit = 0; }
+$nums = $_GET['page'] * $Settings['max_memlist'];
 //End MemberList Page Code
-$i=0;
-if($_GET['groupid']==null) {
-$query = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `GroupID`<>%i ".$orderlist." LIMIT %i,%i", array($GGroup,$PageLimit,$Settings['max_memlist'])); }
-if($_GET['groupid']!=null) {
-$query = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `GroupID`=%i AND `GroupID`<>%i ".$orderlist." LIMIT %i,%i", array($_GET['groupid'],$GGroup,$PageLimit,$Settings['max_memlist'])); }
-$result=mysql_query($query);
 $num=mysql_num_rows($result);
 //List Page Number Code Start
 $pagenum=count($Pages);
@@ -120,7 +122,7 @@ $Pagez[5] = null; }
 if($_GET['page']<$pagenum) { $Pagez[6] = "Last"; }
 if($_GET['page']>=$pagenum) { $Pagez[6] = null; }
 $pagenumi=count($Pagez);
-if($NumberTopics==0) {
+if($NumberMembers==0) {
 $pagenumi = 0;
 $pstring = $pstring."<a href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=list&orderby=".$_GET['orderby']."&ordertype=".$_GET['ordertype']."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">1</a> "; }
 while ($pagei < $pagenumi) {
