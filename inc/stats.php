@@ -11,22 +11,25 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: stats.php - Last Update: 03/25/2008 SVN 155 - Author: cooldude2k $
+    $FileInfo: stats.php - Last Update: 04/08/2008 SVN 158 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="stats.php"||$File3Name=="/stats.php") {
 	require('index.php');
 	exit(); }
 if($_GET['act']=="view"||$_GET['act']=="stats") {
-$ntquery = query("SELECT * FROM `".$Settings['sqltable']."topics`", array(null));
+$ntquery = query("SELECT COUNT(*) FROM `".$Settings['sqltable']."topics`", array(null));
 $ntresult = mysql_query($ntquery);
-$numtopics = mysql_num_rows($ntresult);
-$npquery = query("SELECT * FROM `".$Settings['sqltable']."posts`", array(null));
+$numtopics = mysql_result($ntresult,0);
+$npquery = query("SELECT COUNT(*) FROM `".$Settings['sqltable']."posts`", array(null));
 $npresult = mysql_query($npquery);
-$numposts = mysql_num_rows($npresult);
-$nmquery = query("SELECT * FROM `".$Settings['sqltable']."members` order by `Joined` DESC LIMIT 1", array(null));
+$numposts = mysql_result($npresult,0);
+$nmquery = query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."members` order by `Joined` DESC LIMIT 1", array(null));
+$rnmquery = query("SELECT FOUND_ROWS();", array(null));
 $nmresult = mysql_query($nmquery);
-$nummembers = mysql_num_rows($nmresult);
+$rnmresult = mysql_query($rnmquery);
+//$nummembers = mysql_num_rows($nmresult);
+$nummembers = mysql_result($rnmresult,0);
 $NewestMem = array(null);
 $NewestMem['ID']=mysql_result($nmresult,0,"id");
 $NewestMem['Name']=mysql_result($nmresult,0,"Name");
