@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: forums.php - Last Update: 03/31/2008 SVN 157 - Author: cooldude2k $
+    $FileInfo: forums.php - Last Update: 04/10/2008 SVN 159 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="forums.php"||$File3Name=="/forums.php") {
@@ -223,7 +223,111 @@ mysql_query($query);
 <tr id="ProfileTitleEnd" class="TableRow4">
 <td class="TableRow4">&nbsp;</td>
 </tr></table></div>
-<?php } } ?>
+<?php } } if($_GET['act']=="deleteforum"&&$_POST['update']!="now") { ?>
+<div class="Table1Border">
+<table class="Table1">
+<tr class="TableRow1">
+<td class="TableRow1"><span style="float: left;">
+&nbsp;<a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=addforum",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">iDB Forum Manager</a></span>
+<span style="float: right;">&nbsp;</span></td>
+</tr>
+<tr class="TableRow2">
+<th class="TableRow2" style="width: 100%; text-align: left;">
+<span style="float: left;">&nbsp;Deleting a Forum: </span>
+<span style="float: right;">&nbsp;</span>
+</th>
+</tr>
+<tr class="TableRow3">
+<td class="TableRow3">
+<form style="display: inline;" method="post" name="install" id="install" action="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=deleteforum",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">
+<table style="text-align: left;">
+<tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="DelID">Delete Forum:</label></td>
+	<td style="width: 50%;"><select size="1" class="TextBox" name="DelID" id="DelID">
+<?php 
+$fq = query("SELECT * FROM `".$Settings['sqltable']."forums` ORDER BY `OrderID` ASC, `id` ASC", array(null));
+$fr=mysql_query($fq);
+$ai=mysql_num_rows($fr);
+$fi=0;
+while ($fi < $ai) {
+$InForumID=mysql_result($fr,$fi,"id");
+$InForumName=mysql_result($fr,$fi,"Name");
+$InForumType=mysql_result($fr,$fi,"ForumType");
+$AiFiInSubForum=mysql_result($fr,$fi,"InSubForum");
+?>
+	<option value="<?php echo $InForumID; ?>"><?php echo $InForumName; ?></option>
+<?php ++$fi; }
+@mysql_free_result($fr); ?>
+	</select></td>
+</tr></table>
+<table style="text-align: left;">
+<tr style="text-align: left;">
+<td style="width: 100%;">
+<input type="hidden" name="act" value="deleteforum" style="display: none;" />
+<input type="hidden" name="update" value="now" style="display: none;" />
+<input type="submit" class="Button" value="Delete Forum" name="Apply_Changes" />
+<input type="reset" value="Reset Form" class="Button" name="Reset_Form" />
+</td></tr></table>
+</form>
+</td>
+</tr>
+<tr class="TableRow4">
+<td class="TableRow4">&nbsp;</td>
+</tr>
+</table>
+</div>
+<?php } if($_GET['act']=="deleteforum"&&$_POST['update']=="now"&&$_GET['act']=="deleteforum"&&
+	$_SESSION['UserGroup']!=$Settings['GuestGroup']&&$GroupInfo['HasAdminCP']=="yes") { 
+$prequery = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i LIMIT 1", array($_POST['DelID']));
+$preresult=mysql_query($prequery);
+$prenum=mysql_num_rows($preresult);
+if($prenum>0) {
+$dtquery = query("DELETE FROM `".$Settings['sqltable']."forums` WHERE `id`=%i", array($_POST['DelID']));
+mysql_query($dtquery);
+$dtquery = query("DELETE FROM `".$Settings['sqltable']."topics` WHERE `ForumID`=%i", array($_POST['DelID']));
+mysql_query($dtquery);
+$dtquery = query("DELETE FROM `".$Settings['sqltable']."posts` WHERE `ForumID`=%i", array($_POST['DelID']));
+mysql_query($dtquery);
+$dtquery = query("DELETE FROM `".$Settings['sqltable']."permissions` WHERE `ForumID`=%i", array($_POST['DelID']));
+mysql_query($dtquery);
+$apcquery = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `InSubForum`=%i ORDER BY `OrderID` ASC, `id` ASC", array($_POST['DelID']));
+$apcresult=mysql_query($apcquery);
+$apcnum=mysql_num_rows($apcresult);
+$apci=0; $apcl=1; if($apcnum>=1) {
+while ($apci < $apcnum) {
+$DelSubsForumID=mysql_result($apcresult,$apci,"id");
+$dtquery = query("DELETE FROM `".$Settings['sqltable']."topics` WHERE `ForumID`=%i", array($DelSubsForumID));
+mysql_query($dtquery);
+$dtquery = query("DELETE FROM `".$Settings['sqltable']."posts` WHERE `ForumID`=%i", array($DelSubsForumID));
+mysql_query($dtquery);
+$dtquery = query("DELETE FROM `".$Settings['sqltable']."permissions` WHERE `ForumID`=%i", array($DelSubsForumID));
+mysql_query($dtquery);
+$dtquery = query("DELETE FROM `".$Settings['sqltable']."forums` WHERE `id`=%i", array($DelSubsForumID));
+mysql_query($dtquery);
+++$apci; }
+@mysql_free_result($apcresult); }
+?>
+<div class="Table1Border">
+<table class="Table1" style="width: 100%;">
+<tr class="TableRow1">
+<td class="TableRow1"><span style="float: left;">
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Updating Settings</a>
+</span><span style="float: right;">&nbsp;</span></td>
+</tr>
+<tr id="ProfileTitle" class="TableRow2">
+<th class="TableRow2">Updating Settings</th>
+</tr>
+<tr class="TableRow3" id="ProfileUpdate">
+<td class="TableRow3">
+<div style="text-align: center;">
+	<br />The forum was deleted successfully. <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to go back. ^_^<br />&nbsp;
+	</div>
+</td></tr>
+<tr id="ProfileTitleEnd" class="TableRow4">
+<td class="TableRow4">&nbsp;</td>
+</tr></table></div>
+<?php
+} } ?>
 </td></tr>
 </table>
 <div>&nbsp;</div>

@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: profilemain.php - Last Update: 03/25/2008 SVN 155 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 04/10/2008 SVN 159 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
@@ -596,6 +596,11 @@ if($_POST['act']=="profile"&&
 	if(!isset($_POST['EventDay'])) { $_POST['EventDay'] = null; }
 	if($_POST['EventDay']!=null) {
 	$BirthExpl = explode("/",$_POST['EventDay']);
+	if(count($BirthExpl)!="3") { 
+	$BirthExpl[0] = "0"; $BirthExpl[1] = "0"; $BirthExpl[2] = "0"; }
+	if(!is_numeric($BirthExpl[0])) { $BirthExpl[0] = "0"; }
+	if(!is_numeric($BirthExpl[1])) { $BirthExpl[1] = "0"; }
+	if(!is_numeric($BirthExpl[2])) { $BirthExpl[2] = "0"; }
 	if(count($BirthExpl)=="3"&&checkdate($BirthExpl[0],$BirthExpl[1],$BirthExpl[2])==true) {
 	if(is_numeric($BirthExpl[0])&&is_numeric($BirthExpl[1])&&is_numeric($BirthExpl[2])) {
 	if(pre_strlen($BirthExpl[0])=="1") { $BirthExpl[0] = "0".$BirthExpl[0]; }

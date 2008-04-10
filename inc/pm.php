@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: pm.php - Last Update: 03/31/2008 SVN 157 - Author: cooldude2k $
+    $FileInfo: pm.php - Last Update: 04/10/2008 SVN 159 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pm.php"||$File3Name=="/pm.php") {
@@ -54,6 +54,7 @@ $rnquery = query("SELECT FOUND_ROWS();", array(null));
 $result=mysql_query($query);
 $rnresult=mysql_query($rnquery);
 $NumberMessage = mysql_result($rnresult,0);
+@mysql_free_result($rnresult);
 if($NumberMessage==null) { 
 	$NumberMessage = 0; }
 $num = $NumberMessage;
@@ -190,6 +191,7 @@ $rnquery = query("SELECT FOUND_ROWS();", array(null));
 $result=mysql_query($query);
 $rnresult=mysql_query($rnquery);
 $NumberTopics = mysql_result($rnresult,0);
+@mysql_free_result($rnresult);
 if($NumberTopics==null) { 
 	$NumberTopics = 0; }
 $num = $NumberTopics;

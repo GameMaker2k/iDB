@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: stats.php - Last Update: 04/08/2008 SVN 158 - Author: cooldude2k $
+    $FileInfo: stats.php - Last Update: 04/10/2008 SVN 159 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="stats.php"||$File3Name=="/stats.php") {
@@ -21,15 +21,18 @@ if($_GET['act']=="view"||$_GET['act']=="stats") {
 $ntquery = query("SELECT COUNT(*) FROM `".$Settings['sqltable']."topics`", array(null));
 $ntresult = mysql_query($ntquery);
 $numtopics = mysql_result($ntresult,0);
+@mysql_free_result($ntresult);
 $npquery = query("SELECT COUNT(*) FROM `".$Settings['sqltable']."posts`", array(null));
 $npresult = mysql_query($npquery);
 $numposts = mysql_result($npresult,0);
+@mysql_free_result($npresult);
 $nmquery = query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."members` order by `Joined` DESC LIMIT 1", array(null));
 $rnmquery = query("SELECT FOUND_ROWS();", array(null));
 $nmresult = mysql_query($nmquery);
 $rnmresult = mysql_query($rnmquery);
 //$nummembers = mysql_num_rows($nmresult);
 $nummembers = mysql_result($rnmresult,0);
+@mysql_free_result($rnmresult);
 $NewestMem = array(null);
 $NewestMem['ID']=mysql_result($nmresult,0,"id");
 $NewestMem['Name']=mysql_result($nmresult,0,"Name");
@@ -63,8 +66,4 @@ if($guest_check > 0) { $nummembers = $nummembers - 1; }
 </tr>
 </table></div>
 <div>&nbsp;</div>
-<?php
-@mysql_free_result($ntresult);
-@mysql_free_result($npresult);
-@mysql_free_result($nmresult); }
-?>
+<?php } ?>
