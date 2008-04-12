@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: events.php - Last Update: 03/25/2008 SVN 155 - Author: cooldude2k $
+    $FileInfo: events.php - Last Update: 04/12/2008 SVN 160 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="events.php"||$File3Name=="/events.php") {
@@ -187,13 +187,13 @@ echo "</table>";
 <tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="EventName">Insert Event Name:</label></td>
 	<td style="width: 50%;"><input maxlength="30" type="text" name="EventName" class="TextBox" id="EventName" size="20" /></td>
-</tr><?php if($_SESSION['UserGroup']==$Settings['GuestGroup']) { ?><tr>
+</tr><?php if($_SESSION['UserGroup']==$Settings['GuestGroup']) { ?><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="GuestName">Insert Guest Name:</label></td>
 	<td style="width: 50%;"><input maxlength="25" type="text" name="GuestName" class="TextBox" id="GuestName" size="20" /></td>
-</tr><?php } ?><tr>
+</tr><?php } ?><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="EventStart">Insert Event Start:</label></td>
 	<td style="width: 50%;"><input maxlength="10" type="text" name="EventStart" class="TextBox" id="EventStart" size="20" value="MM/DD/YYYY" /></td>
-</tr><tr>
+</tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="EventEnd">Insert Event End:</label></td>
 	<td style="width: 50%;"><input maxlength="10" type="text" name="EventEnd" class="TextBox" id="EventEnd" size="20" value="MM/DD/YYYY" /></td>
 </tr>
@@ -246,106 +246,106 @@ $TimeOut = explode("/",$_POST['EventEnd']);
 <td class="TableRow3">
 <table style="width: 100%; height: 25%; text-align: center;">
 <?php if (pre_strlen($_POST['EventName'])>="30") { $Error="Yes";  ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />Your Event Name is too big.<br />
 	</span>&nbsp;</td>
 </tr>
 <?php } if (pre_strlen($TimeIn[0])<"2") { $Error="Yes";  ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />Event Start Month is too small.<br />
 	</span>&nbsp;</td>
 </tr>
 <?php } if (pre_strlen($TimeIn[0])>"2") { $Error="Yes";  ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />Event Start Month is too big.<br />
 	</span>&nbsp;</td>
 </tr>
 <?php } if (pre_strlen($TimeIn[1])<"2") { $Error="Yes";  ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />Event Start Day is too small.<br />
 	</span>&nbsp;</td>
 </tr>
 <?php } if (pre_strlen($TimeIn[1])>"2") { $Error="Yes";  ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />Event Start Day is too big.<br />
 	</span>&nbsp;</td>
 </tr>
 <?php } if (pre_strlen($TimeIn[2])<"4") { $Error="Yes";  ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />Event Start Year is too small.<br />
 	</span>&nbsp;</td>
 </tr>
 <?php } if (pre_strlen($TimeIn[2])>"4") { $Error="Yes";  ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />Event Start Year is too big.<br />
 	</span>&nbsp;</td>
 </tr>
 <?php } if (pre_strlen($TimeOut[0])<"2") { $Error="Yes";  ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />Event End Month is too small.<br />
 	</span>&nbsp;</td>
 </tr>
 <?php } if (pre_strlen($TimeOut[0])>"2") { $Error="Yes";  ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />Event End Month is too big.<br />
 	</span>&nbsp;</td>
 </tr>
 <?php } if (pre_strlen($TimeOut[1])<"2") { $Error="Yes";  ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />Event End Day is too small.<br />
 	</span>&nbsp;</td>
 </tr>
 <?php } if (pre_strlen($TimeOut[1])>"2") { $Error="Yes";  ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />Event End Day is too big.<br />
 	</span>&nbsp;</td>
 </tr>
 <?php } if (pre_strlen($TimeOut[2])<"4") { $Error="Yes";  ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />Event End Year is too small.<br />
 	</span>&nbsp;</td>
 </tr>
 <?php } if (pre_strlen($TimeOut[2])>"4") { $Error="Yes";  ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />Event End Year is too big.<br />
 	</span>&nbsp;</td>
 </tr>
 <?php } if (checkdate($TimeIn[0],$TimeIn[1],$TimeIn[2])==false) { $Error="Yes";  ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />Sorry the event start date is not valid.<br />
 	</span>&nbsp;</td>
 </tr>
 <?php } if (checkdate($TimeOut[0],$TimeOut[1],$TimeOut[2])==false) { $Error="Yes";  ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />Sorry the event end date is not valid.<br />
 	</span>&nbsp;</td>
 </tr>
 <?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
 	pre_strlen($_POST['GuestName'])>="25") { $Error="Yes"; ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />You Guest Name is too big.<br />
 	</span>&nbsp;</td>
 </tr>
 <?php } if ($Settings['TestReferer']==true) {
 	if ($URL['HOST']!=$URL['REFERER']) { $Error="Yes";  ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />Sorry the referering url dose not match our host name.<br />
 	</span>&nbsp;</td>
 </tr>
@@ -440,69 +440,69 @@ $RGMatches = preg_match("/".$RWord."/i", $_POST['GuestName']);
 	if($RGMatches==true) { break 1; } } }
 ++$lonewolfs; } @mysql_free_result($lonewolfrt);
 if ($_POST['EventName']==null) { $Error="Yes"; ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />You need to enter a Event Name.<br />
 	</span>&nbsp;</td>
 </tr>
 <?php } if ($_POST['EventText']==null) { $Error="Yes"; ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />You need to enter a Event Text.<br />
 	</span>&nbsp;</td>
 </tr>
 <?php } if ($_POST['EventStart']==null) { $Error="Yes"; ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />You need to enter date for event to start in MM/DD/YYYY format.<br />
 	</span>&nbsp;</td>
 </tr>
 <?php } if ($_POST['EventEnd']==null) { $Error="Yes"; ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />You need to enter date for event to end in MM/DD/YYYY format.<br />
 	</span>&nbsp;</td>
 </tr>
 <?php } if (count($TimeIn)!="3") { $Error="Yes"; ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />You need to enter valid date for event to start in MM/DD/YYYY format.<br />
 	</span>&nbsp;</td>
 </tr>
 <?php } if (count($TimeOut)!="3") { $Error="Yes"; ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />You need to enter valid date for event to end in MM/DD/YYYY format.<br />
 	</span>&nbsp;</td>
 </tr>
 <?php } if (!is_numeric($TimeIn[0])||!is_numeric($TimeIn[1])||!is_numeric($TimeIn[2])) { $Error="Yes"; ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />You need to enter valid date for event to start in MM/DD/YYYY format.<br />
 	</span>&nbsp;</td>
 </tr>
 <?php } if (!is_numeric($TimeOut[0])||!is_numeric($TimeOut[1])||!is_numeric($TimeOut[2])) { $Error="Yes"; ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />You need to enter valid date for event to end in MM/DD/YYYY format.<br />
 	</span>&nbsp;</td>
 </tr>
 <?php } if (!isset($TimeIn[0])||!isset($TimeIn[1])||!isset($TimeIn[2])) { $Error="Yes"; ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />You need to enter valid date for event to start in MM/DD/YYYY format.<br />
 	</span>&nbsp;</td>
 </tr>
 <?php } if (!isset($TimeOut[0])||!isset($TimeOut[1])||!isset($TimeOut[2])) { $Error="Yes"; ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />You need to enter valid date for event to end in MM/DD/YYYY format.<br />
 	</span>&nbsp;</td>
 </tr>
 <?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
 	$_POST['GuestName']==null) { $Error="Yes"; ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />You need to enter a Guest Name.<br />
 	</span>&nbsp;</td>
 </tr>
@@ -514,8 +514,8 @@ if ($_POST['EventName']==null) { $Error="Yes"; ?>
 	</span>&nbsp;</td>
 </tr>
 <?php } if($GroupInfo['CanAddEvents']=="no") { $Error="Yes"; ?>
-<tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage">
+<tr>
+	<td><span class="TableMessage">
 	<br />You do not have permission to make a event here.<br />
 	</span>&nbsp;</td>
 </tr>
@@ -548,8 +548,8 @@ if($_SESSION['UserGroup']!=$Settings['GuestGroup']) { $User1Name = $_SESSION['Me
 $query = query("INSERT INTO ".$Settings['sqltable']."events VALUES (%i, %i, '%s', '%s', '%s', %i, %i, %i, %i, %i, %i, %i, %i)", array($eventid,$User1ID,$User1Name,$_POST['EventName'],$_POST['EventText'],$TimeSIn,$TimeSOut,$EventMonth,$EventMonthEnd,$EventDay,$EventDayEnd,$EventYear,$EventYearEnd));
 mysql_query($query);
 @redirect("refresh",$basedir.url_maker($exfile['event'],$Settings['file_ext'],"act=event&id=".$eventid,$Settings['qstr'],$Settings['qsep'],$prexqstr['event'],$exqstr['event'],FALSE),"3");
-?><tr style="text-align: center;">
-	<td style="text-align: center;"><span class="TableMessage"><br />
+?><tr>
+	<td><span class="TableMessage"><br />
 	Event <?php echo $_POST['EventName']; ?> was started.<br />
 	Click <a href="<?php echo url_maker($exfile['event'],$Settings['file_ext'],"act=event&id=".$eventid,$Settings['qstr'],$Settings['qsep'],$prexqstr['event'],$exqstr['event']); ?>">here</a> to continue to event.<br />&nbsp;
 	</span><br /></td>

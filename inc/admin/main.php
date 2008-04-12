@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: main.php - Last Update: 03/31/2008 SVN 157 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 04/12/2008 SVN 160 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -143,40 +143,40 @@ $tsa = array("offset" => $Settings['DefaultTimeZone'], "hour" => $ts_array[0], "
 <tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="BoardURL">Insert The Board URL or localhost to use any url:</label></td>
 	<td style="width: 50%;"><input type="text" class="TextBox" name="BoardURL" size="20" id="BoardURL" value="<?php echo $Settings['idburl']; ?>" /></td>
-</tr><tr>
+</tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="WebURL">Insert The WebSite URL:</label></td>
 	<td style="width: 50%;"><input type="text" class="TextBox" name="WebURL" size="20" id="WebURL" value="<?php echo $Settings['weburl']; ?>" /></td>
-</tr><tr>
+</tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="GuestGroup">Insert The Guest Group:</label></td>
 	<td style="width: 50%;"><input type="text" class="TextBox" name="GuestGroup" size="20" id="GuestGroup" value="<?php echo $Settings['GuestGroup']; ?>" /></td>
-</tr><tr>
+</tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="MemberGroup">Insert The Member Group:</label></td>
 	<td style="width: 50%;"><input type="text" class="TextBox" name="MemberGroup" size="20" id="MemberGroup" value="<?php echo $Settings['MemberGroup']; ?>" /></td>
-</tr><tr>
+</tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="ValidateGroup">Insert The Validate Group:</label></td>
 	<td style="width: 50%;"><input type="text" class="TextBox" name="ValidateGroup" size="20" id="ValidateGroup" value="<?php echo $Settings['ValidateGroup']; ?>" /></td>
-</tr><tr>
+</tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="AdminValidate">Do you want to validate new members:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="AdminValidate" id="AdminValidate">
 	<option<?php if($Settings['AdminValidate']==false) { echo " selected=\"selected\""; } ?> value="false">no</option>
 	<option<?php if($Settings['AdminValidate']==true) { echo " selected=\"selected\""; } ?> value="true">yes</option>
 	</select></td>
-</tr><tr>
+</tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="max_posts">Max replies per page:</label></td>
 	<td style="width: 50%;"><input type="text" class="TextBox" name="max_posts" size="20" id="max_posts" value="<?php echo $Settings['max_posts']; ?>" /></td>
-</tr><tr>
+</tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="max_topics">Max topics per page:</label></td>
 	<td style="width: 50%;"><input type="text" class="TextBox" name="max_topics" size="20" id="max_topics" value="<?php echo $Settings['max_topics']; ?>" /></td>
-</tr><tr>
+</tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="max_memlist">Max members per page:</label></td>
 	<td style="width: 50%;"><input type="text" class="TextBox" name="max_memlist" size="20" id="max_memlist" value="<?php echo $Settings['max_memlist']; ?>" /></td>
-</tr><tr>
+</tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="max_pmlist">Max pms per page:</label></td>
 	<td style="width: 50%;"><input type="text" class="TextBox" name="max_pmlist" size="20" id="max_pmlist" value="<?php echo $Settings['max_pmlist']; ?>" /></td>
-</tr><tr>
+</tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="hot_topic_num">Number of replies for hot topic:</label></td>
 	<td style="width: 50%;"><input type="text" class="TextBox" name="hot_topic_num" size="20" id="hot_topic_num" value="<?php echo $Settings['hot_topic_num']; ?>" /></td>
-</tr><tr>
+</tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" title="Can save some bandwidth." for="UseGzip">Do you want to HTTP Content Compression:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="UseGzip" id="UseGzip">
 	<option<?php if($Settings['use_gzip']=="off") { echo " selected=\"selected\""; } ?> value="off">No</option>
@@ -184,25 +184,25 @@ $tsa = array("offset" => $Settings['DefaultTimeZone'], "hour" => $ts_array[0], "
 	<option<?php if($Settings['use_gzip']=="gzip") { echo " selected=\"selected\""; } ?> value="gzip">Only GZip</option>
 	<option<?php if($Settings['use_gzip']=="deflate") { echo " selected=\"selected\""; } ?> value="deflate">Only Deflate</option>
 	</select></td>
-</tr><tr>
+</tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="HTMLType">HTML Type to use:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="HTMLType" id="HTMLType">
 	<option<?php if($Settings['html_type']=="xhtml10") { echo " selected=\"selected\""; } ?> value="xhtml10">XHTML 1.0</option>
 	<option<?php if($Settings['html_type']=="xhtml11") { echo " selected=\"selected\""; } ?> value="xhtml11">XHTML 1.1</option>
 	</select></td>
-</tr><tr>
+</tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="HTMLLevel">HTML level only for XHTML 1.0:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="HTMLLevel" id="HTMLLevel">
 	<option<?php if($Settings['html_level']=="Transitional") { echo " selected=\"selected\""; } ?> value="Transitional">Transitional</option>
 	<option<?php if($Settings['html_level']=="Strict") { echo " selected=\"selected\""; } ?> value="Strict">Strict</option>
 	</select></td>
-</tr><tr>
+</tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="OutPutType">Output file as:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="OutPutType" id="OutPutType">
 	<option<?php if($Settings['output_type']=="html") { echo " selected=\"selected\""; } ?> value="html">HTML</option>
 	<option<?php if($Settings['output_type']=="xhtml") { echo " selected=\"selected\""; } ?> value="xhtml">XHTML</option>
 	</select></td>
-</tr><tr>
+</tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="YourOffSet">Your TimeZone:</label></td>
 	<td style="width: 50%;"><select id="YourOffSet" name="YourOffSet" class="TextBox"><?php
 $myofftime = $tsa['hour']; $mydstime = "off";
@@ -226,7 +226,7 @@ if($myofftime!=$plusi) {
 echo "<option value=\"".$plusi."\">GMT + ".$plusi.":00 hours</option>\n"; }
 ++$plusi; }
 ?></select></td>
-</tr><tr>
+</tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="MinOffSet">Minute OffSet:</label></td>
 	<td style="width: 50%;"><select id="MinOffSet" name="MinOffSet" class="TextBox"><?php
 $mini = 0; $minnum = 60; $mymin = $tsa['minute'];
@@ -239,13 +239,13 @@ if($mini!=$mymin) {
 echo "<option value=\"".$showmin."\">0:".$showmin." minutes</option>\n"; }
 ++$mini; }
 ?></select></td>
-</tr><tr>
+</tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="DST">Is <span title="Daylight Savings Time">DST</span> / <span title="Summer Time">ST</span> on or off:</label></td>
 	<td style="width: 50%;"><select id="DST" name="DST" class="TextBox"><?php echo "\n" ?>
 <option<?php if($Settings['DefaultDST']=="off") { echo " selected=\"selected\""; } ?> value="off">off</option>
 <option<?php if($Settings['DefaultDST']=="on") { echo " selected=\"selected\""; } ?> value="on">on</option>
 </select></td>
-</tr><tr>
+</tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="DefaultTheme">Default CSS Theme for board:</label></td>
 	<td style="width: 50%;"><select id="DefaultTheme" name="DefaultTheme" class="TextBox"><?php
 $skindir = dirname(realpath("settings.php"))."/".$SettDir['themes'];
@@ -266,25 +266,25 @@ if ($handle = opendir($skindir)) { $dirnum = null;
    echo $themelist[$themei]."\n";
    ++$themei; }
 } ?></select></td>
-</tr><tr>
+</tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="enable_https">Enable https:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="enable_https" id="enable_https">
 	<option<?php if($Settings['enable_https']==true) { echo " selected=\"selected\""; } ?> value="true">on</option>
 	<option<?php if($Settings['enable_https']==false) { echo " selected=\"selected\""; } ?> value="false">off</option>
 	</select></td>
-</tr><tr>
+</tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="enable_rss">Enable RSS:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="enable_rss" id="enable_rss">
 	<option<?php if($Settings['enable_rss']==true) { echo " selected=\"selected\""; } ?> value="true">on</option>
 	<option<?php if($Settings['enable_rss']==false) { echo " selected=\"selected\""; } ?> value="false">off</option>
 	</select></td>
-</tr><tr>
+</tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="enable_search">Enable search:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="enable_search" id="enable_search">
 	<option<?php if($Settings['enable_search']==true) { echo " selected=\"selected\""; } ?> value="true">on</option>
 	<option<?php if($Settings['enable_search']==false) { echo " selected=\"selected\""; } ?> value="false">off</option>
 	</select></td>
-</tr><tr>
+</tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="TestReferer">Test Referering URL with host name:</label></td>
 	<td style="width: 50%;"><select id="TestReferer" name="TestReferer" class="TextBox">
 <option<?php if($Settings['TestReferer']==true) { echo " selected=\"selected\""; } ?> value="on">on</option>
@@ -354,16 +354,16 @@ require('settings.php'); $admincptitle = " ".$ThemeSet['TitleDivider']." Databas
 <tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="DatabaseUserName">Insert Database User Name:</label></td>
 	<td style="width: 50%;"><input type="text" name="DatabaseUserName" class="TextBox" id="DatabaseUserName" size="20" value="<?php echo $Settings['sqluser']; ?>" /></td>
-</tr><tr>
+</tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="DatabasePassword">Insert Database Password:</label></td>
 	<td style="width: 50%;"><input type="password" name="DatabasePassword" class="TextBox" id="DatabasePassword" size="20" value="<?php echo $Settings['sqlpass']; ?>" /></td>
-</tr><tr>
+</tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="DatabaseName">Insert Database Name:</label></td>
 	<td style="width: 50%;"><input type="text" name="DatabaseName" class="TextBox" id="DatabaseName" size="20" value="<?php echo $Settings['sqldb']; ?>" /></td>
-</tr><tr>
+</tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="DatabaseHost">Insert Database Host:</label></td>
 	<td style="width: 50%;"><input type="text" name="DatabaseHost" class="TextBox" id="DatabaseHost" size="20" value="<?php echo $Settings['sqlhost']; ?>" /></td>
-</tr><tr>
+</tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="tableprefix">Insert Table Prefix:<br /></label></td>
 	<td style="width: 50%;"><input type="text" name="tableprefix" class="TextBox" id="tableprefix" size="20" value="<?php echo $Settings['sqltable']; ?>" /></td>
 </tr></table>
@@ -431,13 +431,13 @@ require('settings.php'); $admincptitle = " ".$ThemeSet['TitleDivider']." Board I
 <tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="board_name">Insert board name:</label></td>
 	<td style="width: 50%;"><input type="text" name="board_name" class="TextBox" id="board_name" size="20" value="<?php echo $SettInfo['board_name']; ?>" /></td>
-</tr><tr>
+</tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="Author">Insert boards admin name:</label></td>
 	<td style="width: 50%;"><input type="text" name="Author" class="TextBox" id="Author" size="20" value="<?php echo $SettInfo['Author']; ?>" /></td>
-</tr><tr>
+</tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="Keywords">Insert keywords about this board:</label></td>
 	<td style="width: 50%;"><input type="text" name="Keywords" class="TextBox" id="Keywords" size="20" value="<?php echo $SettInfo['Keywords']; ?>" /></td>
-</tr><tr>
+</tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="Description">Insert description about this board:<br /></label></td>
 	<td style="width: 50%;"><input type="text" name="Description" class="TextBox" id="Description" size="20" value="<?php echo $SettInfo['Description']; ?>" /></td>
 </tr></table>

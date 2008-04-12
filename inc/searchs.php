@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: searchs.php - Last Update: 04/10/2008 SVN 159 - Author: cooldude2k $
+    $FileInfo: searchs.php - Last Update: 04/12/2008 SVN 160 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="searchs.php"||$File3Name=="/searchs.php") {
@@ -45,10 +45,10 @@ if($_GET['act']=="topics") {
 <tr style="text-align: left;">
 	<td style="width: 30%;"><label class="TextBoxLabel" for="search">Enter SearchTerm: </label></td>
 	<td style="width: 70%;"><input maxlength="35" class="TextBox" id="search" type="text" name="search" /></td>
-</tr><tr>
+</tr><tr style="text-align: left;">
 	<td style="width: 30%;"><label class="TextBoxLabel" for="msearch">Filter by Member (optional): </label></td>
 	<td style="width: 70%;"><input maxlength="25" class="TextBox" id="msearch" type="text" name="msearch" /></td>
-</tr><tr>
+</tr><tr style="text-align: left;">
 	<td style="width: 30%;"><label class="TextBoxLabel" title="Wildcard is %" for="type">Search Type: </label></td>
 	<td style="width: 70%;"><select id="type" name="type" class="TextBox">
 <option value="normal">Normal Search</option>

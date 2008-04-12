@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: members.php - Last Update: 04/10/2008 SVN 159 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 04/12/2008 SVN 160 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -345,10 +345,10 @@ $membertitle = " ".$ThemeSet['TitleDivider']." Login";
 <tr style="text-align: left;">
 	<td style="width: 30%;"><label class="TextBoxLabel" for="username">Enter UserName: </label></td>
 	<td style="width: 70%;"><input maxlength="24" class="TextBox" id="username" type="text" name="username" /></td>
-</tr><tr>
+</tr><tr style="text-align: left;">
 	<td style="width: 30%;"><label class="TextBoxLabel" for="userpass">Enter Password: </label></td>
 	<td style="width: 70%;"><input maxlength="30" class="TextBox" id="userpass" type="password" name="userpass" /></td>
-</tr><tr>
+</tr><tr style="text-align: left;">
 	<td style="width: 30%;"><label class="TextBoxLabel" title="Store userinfo as a cookie so you dont need to login again." for="storecookie">Store as cookie?</label></td>
 	<td style="width: 70%;"><select id="storecookie" name="storecookie" class="TextBox">
 <option value="true">Yes</option>
