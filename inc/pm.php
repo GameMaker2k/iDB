@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: pm.php - Last Update: 04/12/2008 SVN 160 - Author: cooldude2k $
+    $FileInfo: pm.php - Last Update: 05/28/2008 SVN 161 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pm.php"||$File3Name=="/pm.php") {
@@ -416,7 +416,7 @@ echo "<span>".$User1Name."</span>"; }
 		</td>
 	</tr>
  </table><br />
-User Title: <?php echo $User1Title; ?><br />
+<?php echo $User1Title; ?><br />
 Group: <?php echo $User1Group; ?><br />
 Member: <?php 
 if($User1ID!="-1") { echo $User1ID; }
