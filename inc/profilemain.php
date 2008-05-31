@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: profilemain.php - Last Update: 04/10/2008 SVN 159 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 05/31/2008 SVN 164 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
@@ -453,7 +453,7 @@ if($BirthMonth!=null&&$BirthDay!=null&&$BirthYear!=null) {
 	if(pre_strlen($BirthMonth)=="1") { $BirthMonth = "0".$BirthMonth; }
 	if(pre_strlen($BirthDay)=="1") { $BirthDay = "0".$BirthDay; }
     if($BirthYear!="MM"&&$BirthYear!="DD"&&$BirthYear!="YYYY"&&
-	checkdate($BirthMonth,$BirthDay,$BirthYear)==false) {
+	checkdate($BirthMonth,$BirthDay,$BirthYear)===false) {
 	$BirthMonth = "MM"; $BirthDay = "DD"; $BirthYear = "YYYY"; }
 	$User1Birthday = $BirthMonth."/".$BirthDay."/".$BirthYear; }
 $tsa_mem = explode(":",$User1TimeZone);
@@ -601,7 +601,7 @@ if($_POST['act']=="profile"&&
 	if(!is_numeric($BirthExpl[0])) { $BirthExpl[0] = "0"; }
 	if(!is_numeric($BirthExpl[1])) { $BirthExpl[1] = "0"; }
 	if(!is_numeric($BirthExpl[2])) { $BirthExpl[2] = "0"; }
-	if(count($BirthExpl)=="3"&&checkdate($BirthExpl[0],$BirthExpl[1],$BirthExpl[2])==true) {
+	if(count($BirthExpl)=="3"&&checkdate($BirthExpl[0],$BirthExpl[1],$BirthExpl[2])===true) {
 	if(is_numeric($BirthExpl[0])&&is_numeric($BirthExpl[1])&&is_numeric($BirthExpl[2])) {
 	if(pre_strlen($BirthExpl[0])=="1") { $BirthExpl[0] = "0".$BirthExpl[0]; }
 	if(pre_strlen($BirthExpl[1])=="1") { $BirthExpl[1] = "0".$BirthExpl[1]; }
@@ -615,7 +615,7 @@ if($_POST['act']=="profile"&&
 	if (!is_numeric($BirthExpl[0])||!is_numeric($BirthExpl[1])||!is_numeric($BirthExpl[2])) { 
 		$BirthMonth="0"; $BirthDay="0"; $BirthYear="0"; } }
 	if(count($BirthExpl)=="3"&&
-	checkdate($BirthExpl[0],$BirthExpl[1],$BirthExpl[2])==false) {
+	checkdate($BirthExpl[0],$BirthExpl[1],$BirthExpl[2])===false) {
 	$BirthMonth="0"; $BirthDay="0"; $BirthYear="0"; }
 	if(count($BirthExpl)!="3") { $BirthMonth="0"; $BirthDay="0"; $BirthYear="0"; } }
 	if($_POST['EventDay']==null) { $BirthMonth="0"; $BirthDay="0"; $BirthYear="0"; }
@@ -704,7 +704,7 @@ if($OldHashType=="ODFH") {
 if($OldHashType=="DF4H") { 
 	$YourPassword = b64e_hmac($_POST['OldPass'],$OldJoined,$OldSalt,"sha1");
 	$NewPassword = b64e_hmac($_POST['Password'],$OldJoined,$NewSalt,"sha1"); }
-if($OldHashType=="iDBH"&&$UpdateHash!=true) { 
+if($OldHashType=="iDBH"&&$UpdateHash!==true) { 
 	$YourPassword = b64e_hmac($_POST['OldPass'],$OldJoined,$OldSalt,"sha1");
 	$NewPassword = b64e_hmac($_POST['Password'],$OldJoined,$NewSalt,"sha1"); }
 if($YourPassword!=$OldPassword) { $Error="Yes"; ?>
@@ -722,9 +722,9 @@ if($YourPassword!=$OldPassword) { $Error="Yes"; ?>
 	if($cookieDomain==null) {
 	@setcookie("SessPass", $NewPassword, time() + (7 * 86400), $cbasedir); }
 	if($cookieDomain!=null) {
-	if($cookieSecure==true) {
+	if($cookieSecure===true) {
 	@setcookie("SessPass", $NewPassword, time() + (7 * 86400), $cbasedir, $cookieDomain, 1); }
-	if($cookieSecure==false) {
+	if($cookieSecure===false) {
 	@setcookie("SessPass", $NewPassword, time() + (7 * 86400), $cbasedir, $cookieDomain); } }
 	$_POST['Email'] = @remove_spaces($_POST['Email']);
 	$querynewuserinfo = query("UPDATE `".$Settings['sqltable']."members` SET `Password`='%s',`HashType`='iDBH',`Email`='%s',`LastActive`=%i,`IP`='%s',`Salt`='%s' WHERE `id`=%i", array($NewPassword,$_POST['Email'],$NewDay,$NewIP,$NewSalt,$_SESSION['UserID']));

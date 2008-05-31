@@ -11,19 +11,19 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: searchs.php - Last Update: 04/12/2008 SVN 160 - Author: cooldude2k $
+    $FileInfo: searchs.php - Last Update: 05/31/2008 SVN 164 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="searchs.php"||$File3Name=="/searchs.php") {
 	require('index.php');
 	exit(); }
-if($Settings['enable_search']==false||
+if($Settings['enable_search']===false||
 	$GroupInfo['CanSearch']=="no") {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 @header("Content-Type: text/plain; charset=".$Settings['charset']);
 ob_clean(); echo "Sorry you do not have permission to do a search."; 
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
-if($Settings['enable_search']==true||
+if($Settings['enable_search']===true||
 	$GroupInfo['CanSearch']=="yes") {
 if($_GET['act']=="topics") {
 	if($_GET['search']==null&&$_GET['type']==null) {

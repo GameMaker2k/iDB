@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: rssfeed.php - Last Update: 01/01/2008 SVN 144 - Author: cooldude2k $
+    $FileInfo: rssfeed.php - Last Update: 05/31/2008 SVN 164 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="rssfeed.php"||$File3Name=="/rssfeed.php") {
@@ -34,9 +34,9 @@ if(dirname($_SERVER['SCRIPT_NAME'])=="."||
 $basedir = dirname($_SERVER['PHP_SELF'])."/"; } }
 if($basedir=="\/") { $basedir="/"; }
 $basedir = str_replace("//", "/", $basedir);
-if($Settings['fixpathinfo']!=true&&
-	$Settings['fixpathinfo']!=false&&
-	$Settings['fixpathinfo']!=null) {
+if($Settings['fixpathinfo']!==true&&
+	$Settings['fixpathinfo']!==false&&
+	$Settings['fixpathinfo']!==null) {
 		$basedir = "/"; } $BaseURL = $basedir;
 if(isset($Settings['showverinfo'])) { $idbmisc['showverinfo'] = $Settings['showverinfo']; }
 if(!isset($Settings['showverinfo'])) { $idbmisc['showverinfo'] = false; }
@@ -48,7 +48,7 @@ if($Settings['idburl']=="localhost"||$Settings['idburl']==null) {
 if($Settings['idburl']!="localhost"&&$Settings['idburl']!=null) {
 	$BoardURL = $Settings['idburl']; }
 if ($_GET['id']==null) { $_GET['id']="1"; }
-if($rssurlon==true) { $BoardURL =  $rssurl; }
+if($rssurlon===true) { $BoardURL =  $rssurl; }
 $feedsname = basename($_SERVER['SCRIPT_NAME']);
 if($_SERVER['PATH_INFO']!=null) {
 $feedsname .= htmlentities($_SERVER['PATH_INFO'], ENT_QUOTES, $Settings['charset']); }
@@ -126,9 +126,9 @@ $RSS .= '<item>'."\n".'<title>'.htmlentities($TopicName, ENT_QUOTES, $Settings['
 ++$i; } @mysql_free_result($result);
 ++$glti; }
 xml_doc_start("1.0",$Settings['charset']);
-if($Settings['showverinfo']==true) { ?>
+if($Settings['showverinfo']===true) { ?>
 <!-- generator="<?php echo $VerInfo['iDB_Ver_Show']; ?>" -->
-<?php } if($Settings['showverinfo']!=true) { ?>
+<?php } if($Settings['showverinfo']!==true) { ?>
 <!-- generator="<?php echo $iDB; ?>" -->
 <?php } echo "\n"; if($_GET['feedtype']=="rss") { ?>
 <rss version="2.0">
@@ -137,9 +137,9 @@ if($Settings['showverinfo']==true) { ?>
    <description>RSS Feed of the Topics in Forum <?php echo $ForumName; ?></description>
    <link><?php echo $BoardURL; ?></link>
    <language>en</language>
-   <?php if($Settings['showverinfo']==true) { ?>
+   <?php if($Settings['showverinfo']===true) { ?>
    <generator><?php echo $VerInfo['iDB_Ver_Show']; ?></generator>
-   <?php } if($Settings['showverinfo']!=true) { ?>
+   <?php } if($Settings['showverinfo']!==true) { ?>
    <generator><?php echo $iDB; ?></generator>
    <?php } echo "\n"; ?>
    <copyright><?php echo $SettInfo['Author']; ?></copyright>
@@ -158,9 +158,9 @@ if($Settings['showverinfo']==true) { ?>
    <link rel="self" href="<?php echo $BoardURL.$feedsname; ?>" />
    <id><?php echo $BoardURL; ?></id>
    <updated><?php echo gmdate("Y-m-d\TH:i:s\Z"); ?></updated>
-   <?php if($Settings['showverinfo']==true) { ?>
+   <?php if($Settings['showverinfo']===true) { ?>
    <generator><?php echo $VerInfo['iDB_Ver_Show']; ?></generator>
-   <?php } if($Settings['showverinfo']!=true) { ?>
+   <?php } if($Settings['showverinfo']!==true) { ?>
    <generator><?php echo $iDB; ?></generator>
    <?php } echo "\n"; ?>
   <icon><?php echo $BoardURL.$SettDir['inc']; ?>rss.gif</icon>

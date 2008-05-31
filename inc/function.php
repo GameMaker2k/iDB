@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: function.php - Last Update: 02/07/2008 SVN 146 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 05/31/2008 SVN 164 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -38,7 +38,7 @@ $basedir = dirname($_SERVER['PHP_SELF'])."/"; } }
 if($basedir=="\/") { $basedir="/"; }
 $basedir = str_replace("//", "/", $basedir);
 $cbasedir = $basedir;
-if($Settings['fixbasedir']!=null&&$Settings['fixbasedir']!=false) {
+if($Settings['fixbasedir']!=null&&$Settings['fixbasedir']!==false) {
 		$basedir = $Settings['fixbasedir']; }
 if($Settings['fixcookiedir']!=null&&$Settings['fixcookiedir']!="") {
 		$cbasedir = $Settings['fixcookiedir']; }
@@ -93,7 +93,7 @@ $urlvar[$i] = killbadvars($urlvar[$i]);
 function redirect($type,$file,$time=0,$url=null,$dbsr=true) {
 if($type!="location"&&$type!="refresh") { $type=="location"; }
 if($url!=null) { $file = $url.$file; }
-if($dbsr==true) { $file = str_replace("//", "/", $file); }
+if($dbsr===true) { $file = str_replace("//", "/", $file); }
 if($type=="refresh") { header("Refresh: ".$time."; URL=".$file); }
 if($type=="location") { @session_write_close(); 
 header("Location: ".$file); } return true; }
@@ -111,12 +111,12 @@ function html_tag_make($name="br",$emptytag=true,$attbvar=null,$attbval=null,$ex
 	if($i==0) { $mytag = "<".$name." ".$attbvar[$i]."=\"".$attbval[$i]."\""; }
 	if($i>=1) { $mytag = $mytag." ".$attbvar[$i]."=\"".$attbval[$i]."\""; }
 	if($i==$var_num-1) { 
-	if($emptytag==false) { $mytag = $mytag.">"; }
-	if($emptytag==true) { $mytag = $mytag." />"; } }	++$i; }
+	if($emptytag===false) { $mytag = $mytag.">"; }
+	if($emptytag===true) { $mytag = $mytag." />"; } }	++$i; }
 	if($attbvar==null&&$attbval==null) { $mytag = "<".$name;
-	if($emptytag==true) { $mytag = $mytag." />"; }
-	if($emptytag==false) { $mytag = $mytag.">"; } }
-	if($emptytag==false&&$extratest!=null) { 
+	if($emptytag===true) { $mytag = $mytag." />"; }
+	if($emptytag===false) { $mytag = $mytag.">"; } }
+	if($emptytag===false&&$extratest!=null) { 
 	$mytag = $mytag.$extratest; $mytag = $mytag."</".$name.">"; } 
 	return $mytag; }
 // Start a xml document
@@ -129,16 +129,16 @@ function xml_tag_make($type,$attbs,$retval=false) {
 	if($renee2[0]!=null||$renee2[1]!=null) {
 	$attblist = $attblist.' '.$renee2[0].'="'.$renee2[1].'"'; }
 	++$reneei; }
-	if($retval!=false&&$retval!=true) { $retval=false; }
-	if($retval==false) {
+	if($retval!==false&&$retval!==true) { $retval=false; }
+	if($retval===false) {
 	echo '<?'.$type.$attblist.'?>'."\n"; }
-	if($retval==true) {
+	if($retval===true) {
 	return '<?'.$type.$attblist.'?>'."\n"; } }
 // Start a xml document (old version)
 function xml_doc_start($ver,$encode,$retval=false) {
-	if($retval==false) {
+	if($retval===false) {
 	echo xml_tag_make('xml','version='.$ver.'&encoding='.$encode,true); }
-	if($retval==true) {
+	if($retval===true) {
 	return xml_tag_make('xml','version='.$ver.'&encoding='.$encode,true); } }
 $icharset = $Settings['charset'];
 // Make a url
@@ -148,12 +148,12 @@ $fileurl = null; if(!isset($ext)) { $ext = null; }
 if($ext==null) { $ext = ".php"; } 
 if($ext=="noext"||$ext=="no ext"||$ext=="no+ext") { $ext = null; }
 $file = $file.$ext;
-if($sidurls==true&&$qstr!="/") { 
+if($sidurls===true&&$qstr!="/") { 
 	if(defined('SID')) {
 if($qvarstr==null) { $qvarstr = SID; }
 if($qvarstr!=null) { $qvarstr = SID."&".$qvarstr; } } }
 if($qvarstr==null) { $fileurl = $file; }
-if($fixhtml==true) {
+if($fixhtml===true) {
 $qstr = htmlentities($qstr, ENT_QUOTES, $icharset);
 $qsep = htmlentities($qsep, ENT_QUOTES, $icharset); }
 if($prexqstr!=null) { 
@@ -230,7 +230,7 @@ function GetQueryStr($qstr=";",$qsep="=",$fixhtml=true)
 { $pregqstr = preg_quote($qstr,"/");
 $pregqsep = preg_quote($qsep,"/");
 $oqstr = $qstr; $oqsep = $qsep;
-if($fixhtml==true||$fixhtml==null) {
+if($fixhtml===true||$fixhtml==null) {
 $qstr = htmlentities($qstr, ENT_QUOTES, $icharset);
 $qsep = htmlentities($qsep, ENT_QUOTES, $icharset); }
 $OldBoardQuery = preg_replace("/".$pregqstr."/isxS", $qstr, $_SERVER['QUERY_STRING']);

@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: groupsetup.php - Last Update: 03/25/2008 SVN 155 - Author: cooldude2k $
+    $FileInfo: groupsetup.php - Last Update: 05/31/2008 SVN 164 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="groupsetup.php"||$File3Name=="/groupsetup.php") {
@@ -53,12 +53,12 @@ if($cookieDomain==null) {
 @setcookie("SessPass", null, GMTimeStamp() - 3600, $cbasedir);
 @setcookie(session_name(), "", GMTimeStamp() - 3600, $cbasedir); }
 if($cookieDomain!=null) {
-if($cookieSecure==true) {
+if($cookieSecure===true) {
 @setcookie("MemberName", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain, 1);
 @setcookie("UserID", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain, 1);
 @setcookie("SessPass", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain, 1);
 @setcookie(session_name(), "", GMTimeStamp() - 3600, $cbasedir, $cookieDomain, 1); }
-if($cookieSecure==false) {
+if($cookieSecure===false) {
 @setcookie("MemberName", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain);
 @setcookie("UserID", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain);
 @setcookie("SessPass", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain);
@@ -200,8 +200,8 @@ if($PermissionInfo['CanUseBBags'][$PerForumID]!="yes"&&$PermissionInfo['CanUseBB
 $PermissionInfo['CanModForum'][$PerForumID]=mysql_result($peresult,$peri,"CanModForum");
 if($PermissionInfo['CanModForum'][$PerForumID]!="yes"&&$PermissionInfo['CanModForum'][$PerForumID]!="no") {
 	$PermissionInfo['CanModForum'][$PerForumID] = "no"; }
-if($PerError==true) { $peri = $pernum; }
-++$peri; } if($PerError==true) {
+if($PerError===true) { $peri = $pernum; }
+++$peri; } if($PerError===true) {
 @header("Content-Type: text/plain; charset=".$Settings['charset']); @mysql_free_result($peresult);
 ob_clean(); echo "Sorry could not load all permission data in database.\nContact the board admin about error."; 
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); } }
@@ -227,8 +227,8 @@ if(!is_numeric($CatPermissionInfo['CategoryID'][$PerCatID])) { $Per2Error = true
 $CatPermissionInfo['CanViewCategory'][$PerCatID]=mysql_result($per2esult,$per2i,"CanViewCategory");
 if($CatPermissionInfo['CanViewCategory'][$PerCatID]!="yes"&&$CatPermissionInfo['CanViewCategory'][$PerCatID]!="no") {
 		$Per2Error = true; }
-if($Per2Error==true) { $per2i = $per2num; }
-++$per2i; } if($Per2Error==true) {
+if($Per2Error===true) { $per2i = $per2num; }
+++$per2i; } if($Per2Error===true) {
 @header("Content-Type: text/plain; charset=".$Settings['charset']); @mysql_free_result($per2esult);
 ob_clean(); echo "Sorry could not load all permission data in database.\nContact the board admin about error."; 
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); } }

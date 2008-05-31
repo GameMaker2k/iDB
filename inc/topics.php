@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: topics.php - Last Update: 04/12/2008 SVN 160 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 05/31/2008 SVN 164 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -407,7 +407,7 @@ if(!isset($_POST['GuestName'])) { $_POST['GuestName'] = null; }
 	<br />You Guest Name is too big.<br />
 	</span>&nbsp;</td>
 </tr>
-<?php } if ($Settings['TestReferer']==true) {
+<?php } if ($Settings['TestReferer']===true) {
 	if ($URL['HOST']!=$URL['REFERER']) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">

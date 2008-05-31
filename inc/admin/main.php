@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: main.php - Last Update: 04/12/2008 SVN 160 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 05/31/2008 SVN 164 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -37,9 +37,9 @@ function bool_string($boolean) {
 if(!is_bool($boolean)) {
 return $boolean; }
 if(is_bool($boolean)) { 
-if($boolean==0||$boolean==false) { 
+if($boolean==0||$boolean===false) { 
 return "false"; }
-if($boolean==1||$boolean==true) { 
+if($boolean==1||$boolean===true) { 
 return "true"; } } }
 function rsq($string) {
 $string = str_replace("'", "\'", $string);
@@ -158,8 +158,8 @@ $tsa = array("offset" => $Settings['DefaultTimeZone'], "hour" => $ts_array[0], "
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="AdminValidate">Do you want to validate new members:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="AdminValidate" id="AdminValidate">
-	<option<?php if($Settings['AdminValidate']==false) { echo " selected=\"selected\""; } ?> value="false">no</option>
-	<option<?php if($Settings['AdminValidate']==true) { echo " selected=\"selected\""; } ?> value="true">yes</option>
+	<option<?php if($Settings['AdminValidate']===false) { echo " selected=\"selected\""; } ?> value="false">no</option>
+	<option<?php if($Settings['AdminValidate']===true) { echo " selected=\"selected\""; } ?> value="true">yes</option>
 	</select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="max_posts">Max replies per page:</label></td>
@@ -269,26 +269,26 @@ if ($handle = opendir($skindir)) { $dirnum = null;
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="enable_https">Enable https:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="enable_https" id="enable_https">
-	<option<?php if($Settings['enable_https']==true) { echo " selected=\"selected\""; } ?> value="true">on</option>
-	<option<?php if($Settings['enable_https']==false) { echo " selected=\"selected\""; } ?> value="false">off</option>
+	<option<?php if($Settings['enable_https']===true) { echo " selected=\"selected\""; } ?> value="true">on</option>
+	<option<?php if($Settings['enable_https']===false) { echo " selected=\"selected\""; } ?> value="false">off</option>
 	</select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="enable_rss">Enable RSS:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="enable_rss" id="enable_rss">
-	<option<?php if($Settings['enable_rss']==true) { echo " selected=\"selected\""; } ?> value="true">on</option>
-	<option<?php if($Settings['enable_rss']==false) { echo " selected=\"selected\""; } ?> value="false">off</option>
+	<option<?php if($Settings['enable_rss']===true) { echo " selected=\"selected\""; } ?> value="true">on</option>
+	<option<?php if($Settings['enable_rss']===false) { echo " selected=\"selected\""; } ?> value="false">off</option>
 	</select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="enable_search">Enable search:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="enable_search" id="enable_search">
-	<option<?php if($Settings['enable_search']==true) { echo " selected=\"selected\""; } ?> value="true">on</option>
-	<option<?php if($Settings['enable_search']==false) { echo " selected=\"selected\""; } ?> value="false">off</option>
+	<option<?php if($Settings['enable_search']===true) { echo " selected=\"selected\""; } ?> value="true">on</option>
+	<option<?php if($Settings['enable_search']===false) { echo " selected=\"selected\""; } ?> value="false">off</option>
 	</select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="TestReferer">Test Referering URL with host name:</label></td>
 	<td style="width: 50%;"><select id="TestReferer" name="TestReferer" class="TextBox">
-<option<?php if($Settings['TestReferer']==true) { echo " selected=\"selected\""; } ?> value="on">on</option>
-<option<?php if($Settings['TestReferer']==false) { echo " selected=\"selected\""; } ?> value="off">off</option>
+<option<?php if($Settings['TestReferer']===true) { echo " selected=\"selected\""; } ?> value="on">on</option>
+<option<?php if($Settings['TestReferer']===false) { echo " selected=\"selected\""; } ?> value="off">off</option>
 </select></td>
 </tr></table>
 <table style="text-align: left;">
@@ -321,6 +321,9 @@ if($Settings['fixcookiedir']!="true"&&$Settings['fixcookiedir']!="false") {
 $Settings['rssurl'] = bool_string($Settings['rssurl']);
 if($Settings['rssurl']!="true"&&$Settings['rssurl']!="false") {
    $Settings['rssurl']="'".$Settings['rssurl']."'"; }
+$Settings['showverinfo'] = bool_string($Settings['showverinfo']);
+if($Settings['showverinfo']!="true"&&$Settings['showverinfo']!="false") {
+   $Settings['showverinfo']="'".$Settings['showverinfo']."'"; }
 $_POST  = array_map("rsq", $_POST);
 $BoardSettings=$pretext2[0]."\n\$Settings['sqlhost'] = '".$Settings['sqlhost']."';\n\$Settings['sqldb'] = '".$Settings['sqldb']."';\n\$Settings['sqltable'] = '".$Settings['sqltable']."';\n\$Settings['sqluser'] = '".$Settings['sqluser']."';\n\$Settings['sqlpass'] = '".$Settings['sqlpass']."';\n\$Settings['board_name'] = '".$Settings['board_name']."';\n\$Settings['idbdir'] = '".$Settings['idbdir']."';\n\$Settings['idburl'] = '".$_POST['BoardURL']."';\n\$Settings['enable_https'] = ".bool_string($_POST['enable_https']).";\n\$Settings['weburl'] = '".$_POST['WebURL']."';\n\$Settings['use_gzip'] = '".$_POST['UseGzip']."';\n\$Settings['html_type'] = '".$_POST['HTMLType']."';\n\$Settings['html_level'] = '".$_POST['HTMLLevel']."';\n\$Settings['output_type'] = '".$_POST['OutPutType']."';\n\$Settings['GuestGroup'] = '".$_POST['GuestGroup']."';\n\$Settings['MemberGroup'] = '".$_POST['MemberGroup']."';\n\$Settings['ValidateGroup'] = '".$_POST['ValidateGroup']."';\n\$Settings['AdminValidate'] = ".bool_string($_POST['AdminValidate']).";\n\$Settings['TestReferer'] = '".$_POST['TestReferer']."';\n\$Settings['DefaultTheme'] = '".$_POST['DefaultTheme']."';\n\$Settings['DefaultTimeZone'] = '".$_POST['YourOffSet'].":".$_POST['MinOffSet']."';\n\$Settings['DefaultDST'] = '".$_POST['DST']."';\n\$Settings['charset'] = '".$Settings['charset']."';\n\$Settings['add_power_by'] = ".bool_string($Settings['add_power_by']).";\n\$Settings['send_pagesize'] = ".bool_string($Settings['send_pagesize']).";\n\$Settings['max_posts'] = '".$_POST['max_posts']."';\n\$Settings['max_topics'] = '".$_POST['max_topics']."';\n\$Settings['max_memlist'] = '".$_POST['max_memlist']."';\n\$Settings['max_pmlist'] = '".$_POST['max_pmlist']."';\n\$Settings['hot_topic_num'] = '".$_POST['hot_topic_num']."';\n\$Settings['qstr'] = '".$Settings['qstr']."';\n\$Settings['qsep'] = '".$Settings['qsep']."';\n\$Settings['file_ext'] = '".$Settings['file_ext']."';\n\$Settings['rss_ext'] = '".$Settings['rss_ext']."';\n\$Settings['js_ext'] = '".$Settings['js_ext']."';\n\$Settings['showverinfo'] = ".$Settings['showverinfo'].";\n\$Settings['enable_rss'] = ".bool_string($_POST['enable_rss']).";\n\$Settings['enable_search'] = ".bool_string($_POST['enable_search']).";\n\$Settings['sessionid_in_urls'] = ".bool_string($Settings['sessionid_in_urls']).";\n\$Settings['fixpathinfo'] = ".bool_string($Settings['fixpathinfo']).";\n\$Settings['fixbasedir'] = ".bool_string($Settings['fixbasedir']).";\n\$Settings['fixcookiedir'] = ".bool_string($Settings['fixcookiedir']).";\n\$Settings['enable_pathinfo'] = ".bool_string($Settings['enable_pathinfo']).";\n\$Settings['rssurl'] = ".bool_string($Settings['rssurl']).";\n\$Settings['board_offline'] = ".bool_string($Settings['board_offline']).";\n".$pretext2[1]."\n\$SettInfo['board_name'] = '".$SettInfo['board_name']."';\n\$SettInfo['Author'] = '".$SettInfo['Author']."';\n\$SettInfo['Keywords'] = '".$SettInfo['Keywords']."';\n\$SettInfo['Description'] = '".$SettInfo['Description']."';\n".$pretext2[2]."\n\$SettDir['maindir'] = '".$SettDir['maindir']."';\n\$SettDir['inc'] = '".$SettDir['inc']."';\n\$SettDir['misc'] = '".$SettDir['misc']."';\n\$SettDir['admin'] = '".$SettDir['admin']."';\n\$SettDir['mod'] = '".$SettDir['mod']."';\n\$SettDir['themes'] = '".$SettDir['themes']."';\n".$pretext2[3]."\n?>";
 $BoardSettingsBak = $pretext.$settcheck.$BoardSettings;
@@ -398,6 +401,9 @@ if($Settings['fixcookiedir']!="true"&&$Settings['fixcookiedir']!="false") {
 $Settings['rssurl'] = bool_string($Settings['rssurl']);
 if($Settings['rssurl']!="true"&&$Settings['rssurl']!="false") {
    $Settings['rssurl']="'".$Settings['rssurl']."'"; }
+$Settings['showverinfo'] = bool_string($Settings['showverinfo']);
+if($Settings['showverinfo']!="true"&&$Settings['showverinfo']!="false") {
+   $Settings['showverinfo']="'".$Settings['showverinfo']."'"; }
 $_POST  = array_map("rsq", $_POST);
 $BoardSettings=$pretext2[0]."\n\$Settings['sqlhost'] = '".$_POST['DatabaseHost']."';\n\$Settings['sqldb'] = '".$_POST['DatabaseName']."';\n\$Settings['sqltable'] = '".$_POST['tableprefix']."';\n\$Settings['sqluser'] = '".$_POST['DatabaseUserName']."';\n\$Settings['sqlpass'] = '".$_POST['DatabasePassword']."';\n\$Settings['board_name'] = '".$Settings['board_name']."';\n\$Settings['idbdir'] = '".$Settings['idbdir']."';\n\$Settings['idburl'] = '".$Settings['idburl']."';\n\$Settings['enable_https'] = ".bool_string($Settings['enable_https']).";\n\$Settings['weburl'] = '".$Settings['weburl']."';\n\$Settings['use_gzip'] = '".$Settings['use_gzip']."';\n\$Settings['html_type'] = '".$Settings['html_type']."';\n\$Settings['html_level'] = '".$Settings['html_level']."';\n\$Settings['output_type'] = '".$Settings['output_type']."';\n\$Settings['GuestGroup'] = '".$Settings['GuestGroup']."';\n\$Settings['MemberGroup'] = '".$Settings['MemberGroup']."';\n\$Settings['ValidateGroup'] = '".$Settings['ValidateGroup']."';\n\$Settings['AdminValidate'] = ".bool_string($Settings['AdminValidate']).";\n\$Settings['TestReferer'] = '".$Settings['TestReferer']."';\n\$Settings['DefaultTheme'] = '".$Settings['DefaultTheme']."';\n\$Settings['DefaultTimeZone'] = '".$Settings['DefaultTimeZone']."';\n\$Settings['DefaultDST'] = '".$Settings['DefaultDST']."';\n\$Settings['charset'] = '".$Settings['charset']."';\n\$Settings['add_power_by'] = ".bool_string($Settings['add_power_by']).";\n\$Settings['send_pagesize'] = ".bool_string($Settings['send_pagesize']).";\n\$Settings['max_posts'] = '".$Settings['max_posts']."';\n\$Settings['max_topics'] = '".$Settings['max_topics']."';\n\$Settings['max_memlist'] = '".$Settings['max_memlist']."';\n\$Settings['max_pmlist'] = '".$Settings['max_pmlist']."';\n\$Settings['hot_topic_num'] = '".$Settings['hot_topic_num']."';\n\$Settings['qstr'] = '".$Settings['qstr']."';\n\$Settings['qsep'] = '".$Settings['qsep']."';\n\$Settings['file_ext'] = '".$Settings['file_ext']."';\n\$Settings['rss_ext'] = '".$Settings['rss_ext']."';\n\$Settings['js_ext'] = '".$Settings['js_ext']."';\n\$Settings['showverinfo'] = ".$Settings['showverinfo'].";\n\$Settings['enable_rss'] = ".bool_string($Settings['enable_rss']).";\n\$Settings['enable_search'] = ".bool_string($Settings['enable_search']).";\n\$Settings['sessionid_in_urls'] = ".bool_string($Settings['sessionid_in_urls']).";\n\$Settings['fixpathinfo'] = ".bool_string($Settings['fixpathinfo']).";\n\$Settings['fixbasedir'] = ".bool_string($Settings['fixbasedir']).";\n\$Settings['fixcookiedir'] = ".bool_string($Settings['fixcookiedir']).";\n\$Settings['enable_pathinfo'] = ".bool_string($Settings['enable_pathinfo']).";\n\$Settings['rssurl'] = ".bool_string($Settings['rssurl']).";\n\$Settings['board_offline'] = ".bool_string($Settings['board_offline']).";\n".$pretext2[1]."\n\$SettInfo['board_name'] = '".$SettInfo['board_name']."';\n\$SettInfo['Author'] = '".$SettInfo['Author']."';\n\$SettInfo['Keywords'] = '".$SettInfo['Keywords']."';\n\$SettInfo['Description'] = '".$SettInfo['Description']."';\n".$pretext2[2]."\n\$SettDir['maindir'] = '".$SettDir['maindir']."';\n\$SettDir['inc'] = '".$SettDir['inc']."';\n\$SettDir['misc'] = '".$SettDir['misc']."';\n\$SettDir['admin'] = '".$SettDir['admin']."';\n\$SettDir['mod'] = '".$SettDir['mod']."';\n\$SettDir['themes'] = '".$SettDir['themes']."';\n".$pretext2[3]."\n?>";
 $BoardSettingsBak = $pretext.$settcheck.$BoardSettings;
@@ -471,6 +477,9 @@ if($Settings['fixcookiedir']!="true"&&$Settings['fixcookiedir']!="false") {
 $Settings['rssurl'] = bool_string($Settings['rssurl']);
 if($Settings['rssurl']!="true"&&$Settings['rssurl']!="false") {
    $Settings['rssurl']="'".$Settings['rssurl']."'"; }
+$Settings['showverinfo'] = bool_string($Settings['showverinfo']);
+if($Settings['showverinfo']!="true"&&$Settings['showverinfo']!="false") {
+   $Settings['showverinfo']="'".$Settings['showverinfo']."'"; }
 $_POST  = array_map("rsq", $_POST);
 $BoardSettings=$pretext2[0]."\n\$Settings['sqlhost'] = '".$Settings['sqlhost']."';\n\$Settings['sqldb'] = '".$Settings['sqldb']."';\n\$Settings['sqltable'] = '".$Settings['sqltable']."';\n\$Settings['sqluser'] = '".$Settings['sqluser']."';\n\$Settings['sqlpass'] = '".$Settings['sqlpass']."';\n\$Settings['board_name'] = '".$_POST['board_name']."';\n\$Settings['idbdir'] = '".$Settings['idbdir']."';\n\$Settings['idburl'] = '".$Settings['idburl']."';\n\$Settings['enable_https'] = ".bool_string($Settings['enable_https']).";\n\$Settings['weburl'] = '".$Settings['weburl']."';\n\$Settings['use_gzip'] = '".$Settings['use_gzip']."';\n\$Settings['html_type'] = '".$Settings['html_type']."';\n\$Settings['html_level'] = '".$Settings['html_level']."';\n\$Settings['output_type'] = '".$Settings['output_type']."';\n\$Settings['GuestGroup'] = '".$Settings['GuestGroup']."';\n\$Settings['MemberGroup'] = '".$Settings['MemberGroup']."';\n\$Settings['ValidateGroup'] = '".$Settings['ValidateGroup']."';\n\$Settings['AdminValidate'] = ".bool_string($Settings['AdminValidate']).";\n\$Settings['TestReferer'] = '".$Settings['TestReferer']."';\n\$Settings['DefaultTheme'] = '".$Settings['DefaultTheme']."';\n\$Settings['DefaultTimeZone'] = '".$Settings['DefaultTimeZone']."';\n\$Settings['DefaultDST'] = '".$Settings['DefaultDST']."';\n\$Settings['charset'] = '".$Settings['charset']."';\n\$Settings['add_power_by'] = ".bool_string($Settings['add_power_by']).";\n\$Settings['send_pagesize'] = ".bool_string($Settings['send_pagesize']).";\n\$Settings['max_posts'] = '".$Settings['max_posts']."';\n\$Settings['max_topics'] = '".$Settings['max_topics']."';\n\$Settings['max_memlist'] = '".$Settings['max_memlist']."';\n\$Settings['max_pmlist'] = '".$Settings['max_pmlist']."';\n\$Settings['hot_topic_num'] = '".$Settings['hot_topic_num']."';\n\$Settings['qstr'] = '".$Settings['qstr']."';\n\$Settings['qsep'] = '".$Settings['qsep']."';\n\$Settings['file_ext'] = '".$Settings['file_ext']."';\n\$Settings['rss_ext'] = '".$Settings['rss_ext']."';\n\$Settings['js_ext'] = '".$Settings['js_ext']."';\n\$Settings['showverinfo'] = ".$Settings['showverinfo'].";\n\$Settings['enable_rss'] = ".bool_string($Settings['enable_rss']).";\n\$Settings['enable_search'] = ".bool_string($Settings['enable_search']).";\n\$Settings['sessionid_in_urls'] = ".bool_string($Settings['sessionid_in_urls']).";\n\$Settings['fixpathinfo'] = ".bool_string($Settings['fixpathinfo']).";\n\$Settings['fixbasedir'] = ".bool_string($Settings['fixbasedir']).";\n\$Settings['fixcookiedir'] = ".bool_string($Settings['fixcookiedir']).";\n\$Settings['enable_pathinfo'] = ".bool_string($Settings['enable_pathinfo']).";\n\$Settings['rssurl'] = ".bool_string($Settings['rssurl']).";\n\$Settings['board_offline'] = ".bool_string($Settings['board_offline']).";\n".$pretext2[1]."\n\$SettInfo['board_name'] = '".$_POST['board_name']."';\n\$SettInfo['Author'] = '".$_POST['Author']."';\n\$SettInfo['Keywords'] = '".$_POST['Keywords']."';\n\$SettInfo['Description'] = '".$_POST['Description']."';\n".$pretext2[2]."\n\$SettDir['maindir'] = '".$SettDir['maindir']."';\n\$SettDir['inc'] = '".$SettDir['inc']."';\n\$SettDir['misc'] = '".$SettDir['misc']."';\n\$SettDir['admin'] = '".$SettDir['admin']."';\n\$SettDir['mod'] = '".$SettDir['mod']."';\n\$SettDir['themes'] = '".$SettDir['themes']."';\n".$pretext2[3]."\n?>";
 $BoardSettingsBak = $pretext.$settcheck.$BoardSettings;

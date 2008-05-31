@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: events.php - Last Update: 05/28/2008 SVN 161 - Author: cooldude2k $
+    $FileInfo: events.php - Last Update: 05/31/2008 SVN 164 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="events.php"||$File3Name=="/events.php") {
@@ -323,13 +323,13 @@ $TimeOut = explode("/",$_POST['EventEnd']);
 	<br />Event End Year is too big.<br />
 	</span>&nbsp;</td>
 </tr>
-<?php } if (checkdate($TimeIn[0],$TimeIn[1],$TimeIn[2])==false) { $Error="Yes";  ?>
+<?php } if (checkdate($TimeIn[0],$TimeIn[1],$TimeIn[2])===false) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Sorry the event start date is not valid.<br />
 	</span>&nbsp;</td>
 </tr>
-<?php } if (checkdate($TimeOut[0],$TimeOut[1],$TimeOut[2])==false) { $Error="Yes";  ?>
+<?php } if (checkdate($TimeOut[0],$TimeOut[1],$TimeOut[2])===false) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Sorry the event end date is not valid.<br />
@@ -342,7 +342,7 @@ $TimeOut = explode("/",$_POST['EventEnd']);
 	<br />You Guest Name is too big.<br />
 	</span>&nbsp;</td>
 </tr>
-<?php } if ($Settings['TestReferer']==true) {
+<?php } if ($Settings['TestReferer']===true) {
 	if ($URL['HOST']!=$URL['REFERER']) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">

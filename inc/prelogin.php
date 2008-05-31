@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: prelogin.php - Last Update: 03/25/2008 SVN 155 - Author: cooldude2k $
+    $FileInfo: prelogin.php - Last Update: 05/31/2008 SVN 164 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="prelogin.php"||$File3Name=="/prelogin.php") {
@@ -52,11 +52,11 @@ if($cookieDomain==null) {
 @setcookie("UserID", $YourIDAM, time() + (7 * 86400), $cbasedir);
 @setcookie("SessPass", $YourPassAM, time() + (7 * 86400), $cbasedir); }
 if($cookieDomain!=null) {
-if($cookieSecure==true) {
+if($cookieSecure===true) {
 @setcookie("MemberName", $YourNameM, time() + (7 * 86400), $cbasedir, $cookieDomain, 1);
 @setcookie("UserID", $YourIDAM, time() + (7 * 86400), $cbasedir, $cookieDomain, 1);
 @setcookie("SessPass", $YourPassAM, time() + (7 * 86400), $cbasedir, $cookieDomain, 1); }
-if($cookieSecure==false) {
+if($cookieSecure===false) {
 @setcookie("MemberName", $YourNameM, time() + (7 * 86400), $cbasedir, $cookieDomain);
 @setcookie("UserID", $YourIDAM, time() + (7 * 86400), $cbasedir, $cookieDomain);
 @setcookie("SessPass", $YourPassAM, time() + (7 * 86400), $cbasedir, $cookieDomain); } }
@@ -67,12 +67,12 @@ if($cookieDomain==null) {
 @setcookie("SessPass", null, GMTimeStamp() - 3600, $cbasedir);
 @setcookie(session_name(), "", GMTimeStamp() - 3600, $cbasedir); }
 if($cookieDomain!=null) {
-if($cookieSecure==true) {
+if($cookieSecure===true) {
 @setcookie("MemberName", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain, 1);
 @setcookie("UserID", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain, 1);
 @setcookie("SessPass", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain, 1);
 @setcookie(session_name(), "", GMTimeStamp() - 3600, $cbasedir, $cookieDomain, 1); }
-if($cookieSecure==false) {
+if($cookieSecure===false) {
 @setcookie("MemberName", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain);
 @setcookie("UserID", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain);
 @setcookie("SessPass", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain);

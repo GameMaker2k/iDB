@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: versioninfo.php - Last Update: 05/31/2008 SVN 163 - Author: cooldude2k $
+    $FileInfo: versioninfo.php - Last Update: 05/31/2008 SVN 164 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="versioninfo.php"||$File3Name=="/versioninfo.php") {
@@ -21,13 +21,13 @@ if ($File3Name=="versioninfo.php"||$File3Name=="/versioninfo.php") {
 // Version info stuff. :P 
 function version_info($proname,$subver,$ver,$supver,$reltype,$svnver,$showsvn) {
 	$return_var = $proname." ".$reltype." ".$subver.".".$ver.".".$supver;
-	if($showsvn==false) { $showsvn = null; }
-	if($showsvn==true) { $return_var .= " SVN ".$svnver; }
-	if($showsvn!=true&&$showsvn!=null) { $return_var .= " ".$showsvn." ".$svnver; }
+	if($showsvn===false) { $showsvn = null; }
+	if($showsvn===true) { $return_var .= " SVN ".$svnver; }
+	if($showsvn!==true&&$showsvn!=null) { $return_var .= " ".$showsvn." ".$svnver; }
 	return $return_var; }
 // Version number and date stuff. :P
 $VER1[0] = 0; $VER1[1] = 2; $VER1[2] = 2; $VERFull[1] = $VER1[0].".".$VER1[1].".".$VER1[2];
-$VER2[0] = "Pre-Alpha"; $VER2[1] = "PA"; $VER2[2] = "SVN"; $SubVerN = 163; $RName = "iDB"; $SFName = "IntDB";
+$VER2[0] = "Pre-Alpha"; $VER2[1] = "PA"; $VER2[2] = "SVN"; $SubVerN = 164; $RName = "iDB"; $SFName = "IntDB";
 $SVNDay[0] = 05; $SVNDay[1] = 31; $SVNDay[2] = 2008; $SVNDay[3] = $SVNDay[0]."/".$SVNDay[1]."/".$SVNDay[2];
 $VerInfo['iDB_Ver'] = version_info($RName,$VER1[0],$VER1[1],$VER1[2],$VER2[1],$SubVerN,false);
 $VerInfo['iDB_Ver_SVN'] = version_info($RName,$VER1[0],$VER1[1],$VER1[2],$VER2[1],$SubVerN,true);
@@ -47,10 +47,10 @@ $PHPQA = "PHP-Quick-Arcade"; $PHPV1 = @phpversion(); $PHPV2 = "PHP ".$PHPV1; $OS
 if($OSType=="WINNT") { $OSType="Windows NT"; } if($OSType=="WIN32") { $OSType="Windows 9x"; }
 $OSType2 = $PHPV2." / ".$OSType; $ZENDV1 = @zend_version(); $ZENDV2 = "Zend engine ".$ZENDV1;
 // Show or hide the version number
-if($idbmisc['showverinfo']==true) {
+if($idbmisc['showverinfo']===true) {
 @header("X-".$RName."-Powered-By: ".$VerInfo['iDB_Ver_Show']);
 @header("Generator: ".$VerInfo['iDB_Ver_Show']); }
-if($idbmisc['showverinfo']!=true) {
+if($idbmisc['showverinfo']!==true) {
 @header("X-".$RName."-Powered-By: ".$RName);
 //@header("X-Powered-By: PHP");
 @header("Generator: ".$iDB); }

@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: filename.php - Last Update: 01/01/2008 SVN 144 - Author: cooldude2k $
+    $FileInfo: filename.php - Last Update: 05/31/2008 SVN 164 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="filename.php"||$File3Name=="/filename.php") {
@@ -25,7 +25,7 @@ $basedir = dirname($_SERVER['PHP_SELF'])."/"; }
 if($basedir=="\/") { $basedir="/"; }
 $basedir = str_replace("//", "/", $basedir);
 $cbasedir = $basedir;
-if($Settings['fixbasedir']!=null&&$Settings['fixbasedir']!=false) {
+if($Settings['fixbasedir']!=null&&$Settings['fixbasedir']!==false) {
 		$basedir = $Settings['fixbasedir']; }
 if($Settings['fixcookiedir']!=null&&$Settings['fixcookiedir']!="") {
 		$cbasedir = $Settings['fixcookiedir']; }

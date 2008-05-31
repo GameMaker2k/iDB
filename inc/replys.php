@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: replys.php - Last Update: 05/31/2008 SVN 163 - Author: cooldude2k $
+    $FileInfo: replys.php - Last Update: 05/31/2008 SVN 164 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replys.php"||$File3Name=="/replys.php") {
@@ -252,7 +252,7 @@ echo "<span>".$User1Name."</span>"; }
 <a style="vertical-align: middle;" id="reply<?php echo $ReplyNum; ?>">
 <span style="font-weight: bold;">Time Posted: </span><?php echo $MyTimeStamp; ?></a>
 </div>
-<div style="text-align: right;"><a href="#Act/Report"><?php echo $ThemeSet['Report']; ?></a><?php if($CanEditReply==true) { echo $ThemeSet['LineDividerTopic']; echo "<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=edit&id=".$MyTopicID."&post=".$MyPostID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">".$ThemeSet['EditReply']; ?></a><?php } if($CanDeleteReply==true) { echo $ThemeSet['LineDividerTopic']; echo "<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=delete&id=".$MyTopicID."&post=".$MyPostID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">".$ThemeSet['DeleteReply']; ?></a><?php } if($CanMakeReply=="yes") { echo $ThemeSet['LineDividerTopic']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=create&id=".$TopicID."&post=".$MyPostID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $ThemeSet['QuoteReply']; ?></a><?php } ?>&nbsp;</div>
+<div style="text-align: right;"><a href="#Act/Report"><?php echo $ThemeSet['Report']; ?></a><?php if($CanEditReply===true) { echo $ThemeSet['LineDividerTopic']; echo "<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=edit&id=".$MyTopicID."&post=".$MyPostID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">".$ThemeSet['EditReply']; ?></a><?php } if($CanDeleteReply===true) { echo $ThemeSet['LineDividerTopic']; echo "<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=delete&id=".$MyTopicID."&post=".$MyPostID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">".$ThemeSet['DeleteReply']; ?></a><?php } if($CanMakeReply=="yes") { echo $ThemeSet['LineDividerTopic']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=create&id=".$TopicID."&post=".$MyPostID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $ThemeSet['QuoteReply']; ?></a><?php } ?>&nbsp;</div>
 </td>
 </tr>
 <tr class="TableRow3">
@@ -300,9 +300,9 @@ echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr
 <?php ++$i; } @mysql_free_result($result); 
 if($CanMakeReply=="yes") {  
 if(!isset($_GET['fastreply'])) { $_GET['fastreply'] = false; }
-if($_GET['fastreply']==true||
+if($_GET['fastreply']===true||
 	$_GET['fastreply']=="on") { $fps = " "; }
-if($_GET['fastreply']!=true&&
+if($_GET['fastreply']!==true&&
 	$_GET['fastreply']!="on") { $fps = " style=\"display: none;\" "; }
 $QuoteReply = null; $QuoteDescription = null;
 ?>
@@ -528,7 +528,7 @@ if(!isset($_POST['GuestName'])) { $_POST['GuestName'] = null; }
 	<br />You Guest Name is too big.<br />
 	</span>&nbsp;</td>
 </tr>
-<?php } if ($Settings['TestReferer']==true) {
+<?php } if ($Settings['TestReferer']===true) {
 	if ($URL['HOST']!=$URL['REFERER']) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
@@ -695,12 +695,12 @@ if($PermissionInfo['CanPinTopics'][$TForumID]=="yes"&&
 	if($PermissionInfo['CanPinTopics'][$TForumID]=="no"&&
 		$TopicClosed==1) { $CanPinTopics = false; } }
 if($_SESSION['UserID']==0) { $CanPinTopics = false; }
-if($CanPinTopics==false) {
+if($CanPinTopics===false) {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); @mysql_free_result($gtsresult);
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 @mysql_free_result($gtsresult);
-if($CanPinTopics==true) {
+if($CanPinTopics===true) {
 	if($_GET['act']=="pin") {
 $queryupd = query("UPDATE `".$Settings['sqltable']."topics` SET `Pinned`=1 WHERE `id`=%i", array($TTopicID)); }
 	if($_GET['act']=="unpin") {
@@ -746,12 +746,12 @@ if($PermissionInfo['CanCloseTopics'][$TForumID]=="yes"&&
 	$PermissionInfo['CanModForum'][$TForumID]=="yes") { 
 	$CanCloseTopics = true; } }
 if($_SESSION['UserID']==0) { $CanCloseTopics = false; }
-if($CanCloseTopics==false) {
+if($CanCloseTopics===false) {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); @mysql_free_result($gtsresult);
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 @mysql_free_result($gtsresult);
-if($CanCloseTopics==true) {
+if($CanCloseTopics===true) {
 	if($_GET['act']=="close") {
 $queryupd = query("UPDATE `".$Settings['sqltable']."topics` SET `Closed`=1 WHERE `id`=%i", array($TTopicID)); }
 	if($_GET['act']=="open") {
@@ -799,7 +799,7 @@ if($PermissionInfo['CanDeleteReplys'][$ReplyForumID]=="yes"&&
 	if($PermissionInfo['CanDeleteReplysClose'][$TopicForumID]=="no"&&
 		$TopicClosed==1) { $CanDeleteReply = false; } }
 if($_SESSION['UserID']==0) { $CanDeleteReply = false; }
-if($CanDeleteReply==false) {
+if($CanDeleteReply===false) {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
@@ -827,11 +827,11 @@ if($PermissionInfo['CanDeleteTopics'][$ReplyForumID]=="yes"&&
 	if($PermissionInfo['CanDeleteTopicsClose'][$TopicForumID]=="no"&&
 		$TopicClosed==1) { $CanDeleteTopics = false; } }
 if($_SESSION['UserID']==0) { $CanDeleteTopics = false; }
-if($CanDeleteTopics==false) {
+if($CanDeleteTopics===false) {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); @mysql_free_result($delresult);
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
-if($CanDeleteTopics==true) { $NewNumTopics = $NumberTopics - 1; $NewNumPosts = $NumberPosts - $delnum;
+if($CanDeleteTopics===true) { $NewNumTopics = $NumberTopics - 1; $NewNumPosts = $NumberPosts - $delnum;
 $drquery = query("DELETE FROM `".$Settings['sqltable']."posts` WHERE `TopicID`=%i", array($ReplyTopicID));
 mysql_query($drquery); 
 $dtquery = query("DELETE FROM `".$Settings['sqltable']."topics` WHERE `id`=%i", array($ReplyTopicID));
@@ -921,7 +921,7 @@ redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"a
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 @mysql_free_result($ersresult);
-if($ShowEditTopic==true) {
+if($ShowEditTopic===true) {
 $gtsquery = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `id`=%i LIMIT 1", array($TopicID));
 $gtsresult=mysql_query($gtsquery);
 $gtsnum=mysql_num_rows($gtsresult);
@@ -973,7 +973,7 @@ if($SmileRow<5) { ?>
 <form style="display: inline;" method="post" id="EditReplyForm" action="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=editreply&id=".$TopicID."&post=".$_GET['post'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>">
 <table style="text-align: left;">
 <tr style="text-align: left;">
-<?php if($ShowEditTopic==true) { ?>
+<?php if($ShowEditTopic===true) { ?>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="TopicName">Insert Topic Name:</label></td>
 	<td style="width: 50%;"><input maxlength="30" type="text" name="TopicName" class="TextBox" id="TopicName" size="20" value="<?php echo $TopicName; ?>" /></td>
 </tr><tr style="text-align: left;"><?php } ?>
@@ -1039,7 +1039,7 @@ redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"a
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 @mysql_free_result($ersresult); 
-if($ShowEditTopic==true) {
+if($ShowEditTopic===true) {
 $gtsquery = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `id`=%i LIMIT 1", array($TopicID));
 $gtsresult=mysql_query($gtsquery);
 $gtsnum=mysql_num_rows($gtsresult);
@@ -1077,14 +1077,14 @@ if($PermissionInfo['CanEditTopicsClose'][$TopicForumID]=="no"&&$TopicClosed==1) 
 	<br />You Guest Name is too big.<br />
 	</span>&nbsp;</td>
 </tr>
-<?php } if($ShowEditTopic==true&&
+<?php } if($ShowEditTopic===true&&
 	pre_strlen($_POST['TopicName'])>="30") { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You Topic Name is too big.<br />
 	</span>&nbsp;</td>
 </tr>
-<?php } if ($Settings['TestReferer']==true) {
+<?php } if ($Settings['TestReferer']===true) {
 	if ($URL['HOST']!=$URL['REFERER']) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
@@ -1101,7 +1101,7 @@ $_POST['GuestName'] = @remove_spaces($_POST['GuestName']);
 $_POST['ReplyPost'] = stripcslashes(htmlspecialchars($_POST['ReplyPost'], ENT_QUOTES, $Settings['charset']));
 //$_POST['ReplyPost'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['ReplyPost']);
 $_POST['ReplyPost'] = remove_bad_entities($_POST['ReplyPost']);
-if($ShowEditTopic==true) {
+if($ShowEditTopic===true) {
 $_POST['TopicName'] = stripcslashes(htmlspecialchars($_POST['TopicName'], ENT_QUOTES, $Settings['charset']));
 //$_POST['TopicName'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['TopicName']);
 $_POST['TopicName'] = @remove_spaces($_POST['TopicName']); }
@@ -1220,7 +1220,7 @@ if ($_POST['ReplyDesc']==null) { $Error="Yes"; ?>
 	<br />You do not have permission to edit a reply here.<br />
 	</span>&nbsp;</td>
 </tr>
-<?php } if($ShowEditTopic==true&&$_POST['TopicName']==null) { $Error="Yes"; ?>
+<?php } if($ShowEditTopic===true&&$_POST['TopicName']==null) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You need to enter a Topic Name.<br />
@@ -1259,7 +1259,7 @@ if($_SESSION['UserGroup']==$Settings['GuestGroup']) { $User1Name = $_POST['Guest
 $EditUserIP=$_SERVER['REMOTE_ADDR'];
 $queryupd = query("UPDATE `".$Settings['sqltable']."posts` SET `LastUpdate`=%i,`EditUser`=%i,`Post`='%s',`Description`='%s',`EditIP`='%s' WHERE `id`=%i", array($LastActive,$_SESSION['UserID'],$_POST['ReplyPost'],$_POST['ReplyDesc'],$EditUserIP,$_GET['post']));
 mysql_query($queryupd);
-if($ShowEditTopic==true) {
+if($ShowEditTopic===true) {
 $queryupd = query("UPDATE `".$Settings['sqltable']."topics` SET `TopicName`='%s',`Description`='%s' WHERE `id`=%i", array($_POST['TopicName'],$_POST['ReplyDesc'],$TopicID));
 mysql_query($queryupd); } } 
 @redirect(url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],FALSE)."&#35;post".$_GET['post'],"3");

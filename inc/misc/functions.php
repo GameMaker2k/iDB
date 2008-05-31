@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: functions.php - Last Update: 03/25/2008 SVN 155 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 05/31/2008 SVN 164 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -405,8 +405,8 @@ function http_set_cookie($name,$value=null,$expire=null,$path=null,$domain=null,
 	$mkcookie = $mkcookie."; expires=".$expireGMT;
 	if(isset($path)&&$path!=null) { $mkcookie = $mkcookie."; path=".$path; }
 	if(isset($domain)&&$domain!=null) { $mkcookie = $mkcookie."; domain=".$domain; }
-	if(isset($secure)&&$secure==true) { $mkcookie = $mkcookie."; secure"; }
-	if(isset($httponly)&&$httponly==true) { $mkcookie = $mkcookie."; HttpOnly"; }
+	if(isset($secure)&&$secure===true) { $mkcookie = $mkcookie."; secure"; }
+	if(isset($httponly)&&$httponly===true) { $mkcookie = $mkcookie."; HttpOnly"; }
 header($mkcookie, false); return true; } }
 $foobar="fubar"; $$foobar="foobar";
 // Debug info

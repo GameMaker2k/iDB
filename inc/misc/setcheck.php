@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: setcheck.php - Last Update: 01/01/2008 SVN 144 - Author: cooldude2k $
+    $FileInfo: setcheck.php - Last Update: 05/31/2008 SVN 164 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="setcheck.php"||$File3Name=="/setcheck.php") {
@@ -26,19 +26,19 @@ if(!isset($Error)) { $Error = null; }
 if(!isset($passright)) { $passright = null; }
 if(!isset($Settings['enable_pathinfo'])) {
   $Settings['enable_pathinfo'] = false;  }
-if($Settings['enable_pathinfo']!=true&&
-	$Settings['enable_pathinfo']!=false) {
+if($Settings['enable_pathinfo']!==true&&
+	$Settings['enable_pathinfo']!==false) {
   $Settings['enable_pathinfo'] = false;  }
 if(!isset($Settings['sessionid_in_urls'])) {
   $Settings['sessionid_in_urls'] = false;  }
-if($Settings['sessionid_in_urls']!=true&&
-	$Settings['sessionid_in_urls']!=false) {
+if($Settings['sessionid_in_urls']!==true&&
+	$Settings['sessionid_in_urls']!==false) {
   $Settings['sessionid_in_urls'] = false;  }
 $sidurls = $Settings['sessionid_in_urls'];
 if(!isset($Settings['board_offline'])) {
   $Settings['board_offline'] = false;  }
-if($Settings['board_offline']!=true&&
-	$Settings['board_offline']!=false) {
+if($Settings['board_offline']!==true&&
+	$Settings['board_offline']!==false) {
   $Settings['board_offline'] = false;  }
 $oldusername = null; $oldtopicname = null; $ext = null;
 if($Settings['DefaultTheme']==null) {
@@ -49,7 +49,7 @@ if($Settings['DefaultDST']!="on"&&
 	$Settings['DefaultDST']!="off") { 
 	$Settings['DefaultDST'] = "off"; }
 if($Settings['enable_rss']!="on"&&
-	$Settings['enable_rss']!=true) { 
+	$Settings['enable_rss']!==true) { 
 	$Settings['enable_rss'] = false; }
 if($Settings['enable_rss']=="on") { 
     $Settings['enable_rss'] = true; }
@@ -62,8 +62,8 @@ if (file_exists("themes/".$Settings['DefaultTheme']."/settings.php")) {
 /* The file Skin Exists */ }
 else { $Settings['DefaultTheme']=$FallBack['DefaultTheme'];
 /* The file Skin Dose Not Exists */ } }
-if($Settings['TestReferer']!=true&&
-	$Settings['TestReferer']!=false) {
+if($Settings['TestReferer']!==true&&
+	$Settings['TestReferer']!==false) {
 	$Settings['TestReferer'] = false; }
 if($Settings['charset']==null) {
 	$Settings['charset'] = "iso-8859-15"; }
@@ -93,8 +93,8 @@ if(!isset($_GET['post'])) { $_GET['post'] = null; }
 if(!isset($_POST['License'])) { $_POST['License'] = null; } }
 if(!isset($Settings['enable_https'])) {
   $Settings['enable_https'] = false;  }
-if($Settings['enable_https']!=true&&
-	$Settings['enable_https']!=false) {
+if($Settings['enable_https']!==true&&
+	$Settings['enable_https']!==false) {
   $Settings['enable_https'] = false;  }
 if(!isset($Settings['file_ext'])||
 	$Settings['file_ext']==null) {
@@ -107,10 +107,10 @@ if(!isset($Settings['js_ext'])||
 	$Settings['js_ext'] = ".js"; }
 if(!isset($Settings['add_power_by'])) {
   $Settings['add_power_by'] = false;  }
-if($Settings['add_power_by']==true) {
+if($Settings['add_power_by']===true) {
 $idbpowertitle = " (Powered by ".$iDB.")";
 $itbpowertitle = " (Powered by ".$iTB.")"; }
-if($Settings['add_power_by']!=true) {
+if($Settings['add_power_by']!==true) {
 $idbpowertitle = null;
 $itbpowertitle = null; }
 if($Settings['GuestGroup']==null) {
@@ -118,7 +118,7 @@ if($Settings['GuestGroup']==null) {
 if($Settings['MemberGroup']==null) {
 	$Settings['MemberGroup'] = "Member"; }
 if($Settings['ValidateGroup']==null&&
-	$Settings['AdminValidate']==true) {
+	$Settings['AdminValidate']===true) {
 $Settings['ValidateGroup'] = "Validate"; }
 if($Settings['fixpathinfo']==null) {
 	$Settings['fixpathinfo'] = false; }

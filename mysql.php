@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: mysql.php - Last Update: 01/01/2008 SVN 144 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 05/31/2008 SVN 164 - Author: cooldude2k $
 */
 //@ini_set("display_errors", true); 
 //@ini_set("display_startup_errors", true);
@@ -26,12 +26,12 @@ if(@ini_get("register_globals")) { require('settings.php');
 if(!isset($SettDir['misc'])) { $SettDir['misc'] = "inc/misc/"; }
 	require_once($SettDir['misc'].'killglobals.php'); }
 require('settings.php');
-if($Settings['fixbasedir']==true) {
+if($Settings['fixbasedir']===true) {
 if($Settings['idburl']!=null&&$Settings['idburl']!="localhost") {
 $PathsTest = parse_url($Settings['idburl']);
 $Settings['fixbasedir'] = $PathsTest['path']."/"; 
 $Settings['fixbasedir'] = str_replace("//", "/", $Settings['fixbasedir']); } }
-if($Settings['fixcookiedir']==true) {
+if($Settings['fixcookiedir']===true) {
 if($Settings['idburl']!=null&&$Settings['idburl']!="localhost") {
 $PathsTest = parse_url($Settings['idburl']);
 $Settings['fixcookiedir'] = $PathsTest['path']."/"; 
@@ -56,7 +56,7 @@ echo "403 Error: Sorry could not find install.php\nTry uploading files again and
 if(!isset($Settings['sqlhost'])) { $Settings['sqlhost'] = "localhost"; }
 @ini_set("error_prepend_string","<span style='color: ff0000;'>");
 @ini_set("error_append_string","</span>");
-if($Settings['fixpathinfo']==true) {
+if($Settings['fixpathinfo']===true) {
 	$_SERVER['PATH_INFO'] = $_SERVER['ORIG_PATH_INFO'];
 	@putenv("PATH_INFO=".$_SERVER['ORIG_PATH_INFO']); }
 // Check to see if variables are set
@@ -85,11 +85,11 @@ if(!isset($_SERVER['HTTPS'])) { $_SERVER['HTTPS'] = "off"; }
 require_once($SettDir['misc'].'utf8.php');
 require_once($SettDir['inc'].'filename.php');
 require_once($SettDir['inc'].'function.php');
-if($Settings['enable_pathinfo']==true) { 
+if($Settings['enable_pathinfo']===true) { 
 	mrstring(); /* Change Path info to Get Vars :P */ }
 // Check to see if variables are set
 require_once($SettDir['misc'].'setcheck.php');
-if($Settings['enable_https']==true&&$_SERVER['HTTPS']=="on") {
+if($Settings['enable_https']===true&&$_SERVER['HTTPS']=="on") {
 if($Settings['idburl']!=null&&$Settings['idburl']!="localhost") {
 $HTTPsTest = parse_url($Settings['idburl']); if($HTTPsTest['scheme']=="http") {
 $Settings['idburl'] = preg_replace("/http\:\/\//i", "https://", $Settings['idburl']); } } }
@@ -97,7 +97,7 @@ $cookieDomain = null; $cookieSecure = false;
 if($Settings['idburl']!=null&&$Settings['idburl']!="localhost") {
 $URLsTest = parse_url($Settings['idburl']); 
 $cookieDomain = $URLsTest['host'];
-if($Settings['enable_https']==true) {
+if($Settings['enable_https']===true) {
  if($URLsTest['scheme']=="https") { $cookieSecure = true; }
  if($URLsTest['scheme']!="https") { $cookieSecure = false; } } }
 @ini_set("default_charset",$Settings['charset']);
@@ -121,7 +121,7 @@ if(strstr($_SERVER['HTTP_ACCEPT_ENCODING'], "gzip")) { $Settings['use_gzip'] = "
 if($Settings['use_gzip']=="deflate") {
 if(strstr($_SERVER['HTTP_ACCEPT_ENCODING'], "deflate")) { $Settings['use_gzip'] = "on";
 	$GZipEncode['Type'] = "deflate"; } else { $Settings['use_gzip'] = "off"; } }
-if($Settings['clean_ob']==true) {
+if($Settings['clean_ob']===true) {
 /* Check for other output handlers/buffers are open
    and close and get the contents in an array */
 $numob = count(ob_list_handlers()); $iob = 0; 
@@ -140,9 +140,9 @@ if($GZipEncode['Type']!="gzip") { if($GZipEncode['Type']!="deflate") { $GZipEnco
 if($cookieDomain==null) {
 @session_set_cookie_params(0, $cbasedir); }
 if($cookieDomain!=null) {
-if($cookieSecure==true) {
+if($cookieSecure===true) {
 @session_set_cookie_params(0, $cbasedir, $cookieDomain, 1); }
-if($cookieSecure==false) {
+if($cookieSecure===false) {
 @session_set_cookie_params(0, $cbasedir, $cookieDomain); } }
 @session_cache_limiter("private, must-revalidate");
 @header("Cache-Control: private, must-revalidate"); // IE 6 Fix
@@ -172,7 +172,7 @@ if(stristr($_SERVER["HTTP_ACCEPT"],"application/javascript") ) {
 require($SettDir['inc'].'javascript.php');
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); die(); }
 $SQLStat = @ConnectMysql($Settings['sqlhost'],$Settings['sqluser'],$Settings['sqlpass'],$Settings['sqldb']);
-if($SQLStat==false) {
+if($SQLStat===false) {
 @header("Content-Type: text/plain; charset=".$Settings['charset']); @mysql_free_result($peresult);
 ob_clean(); echo "Sorry could not connect to mysql database.\nContact the board admin about error. Error log berlow.";
 echo "\n".mysql_errno().": ".mysql_error();
@@ -183,7 +183,7 @@ if($_COOKIE['SessPass']!=null&&
 $_COOKIE['MemberName']!=null) {
 require($SettDir['inc'].'prelogin.php'); } } }
 require($SettDir['inc'].'groupsetup.php');
-if($Settings['board_offline']==true) {
+if($Settings['board_offline']===true) {
 @header("Content-Type: text/plain; charset=".$Settings['charset']); @mysql_free_result($peresult);
 ob_clean(); echo "Sorry the board is off line.\nIf you are a admin you can login by the admin cp.";
 echo "\n".mysql_errno().": ".mysql_error();
