@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: replys.php - Last Update: 05/30/2008 SVN 162 - Author: cooldude2k $
+    $FileInfo: replys.php - Last Update: 05/31/2008 SVN 163 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replys.php"||$File3Name=="/replys.php") {
@@ -908,9 +908,9 @@ $ReplyPost = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $ReplyPost);
 //$ReplyPost = @remove_spaces($ReplyPost);*/
 $ReplyPost = remove_bad_entities($ReplyPost);
 $ReplyDescription=mysql_result($ersresult,0,"Description");
-$ReplyDescription = stripcslashes(htmlspecialchars($ReplyDescription, ENT_QUOTES, $Settings['charset']));
-//$ReplyDescription = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $ReplyDescription);
-$ReplyDescription = @remove_spaces($ReplyDescription);
+/*$ReplyDescription = stripcslashes(htmlspecialchars($ReplyDescription, ENT_QUOTES, $Settings['charset']));
+$ReplyDescription = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $ReplyDescription);
+//$ReplyDescription = @remove_spaces($ReplyDescription);*/
 $ReplyGuestName=mysql_result($ersresult,0,"GuestName");
 $ReplyGuestName = stripcslashes(htmlspecialchars($ReplyGuestName, ENT_QUOTES, $Settings['charset']));
 //$ReplyGuestName = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $ReplyGuestName);
