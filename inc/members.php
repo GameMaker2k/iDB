@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: members.php - Last Update: 05/31/2008 SVN 164 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 06/03/2008 SVN 165 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -434,7 +434,7 @@ $UpdateHash = false;
 if($HashType=="ODFH") { $YourPassword = sha1(md5($_POST['userpass'])); }
 if($HashType=="DF4H") { $YourPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$HashSalt,"sha1"); }
 if($HashType=="iDBH"||$UpdateHash!==true) { $YourPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$HashSalt,"sha1"); }
-if($YourPassword==$YourPassTry) { $passright = false; } 
+if($YourPassword!=$YourPassTry) { $passright = false; } 
 if($YourPassword==$YourPassTry) { $passright = true;
 $YourIDM=mysql_result($resultlog,$i,"id");
 $YourNameM=mysql_result($resultlog,$i,"Name");
