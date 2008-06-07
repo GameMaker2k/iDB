@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: stats.php - Last Update: 04/10/2008 SVN 159 - Author: cooldude2k $
+    $FileInfo: stats.php - Last Update: 06/07/2008 SVN 166 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="stats.php"||$File3Name=="/stats.php") {
@@ -26,7 +26,7 @@ $npquery = query("SELECT COUNT(*) FROM `".$Settings['sqltable']."posts`", array(
 $npresult = mysql_query($npquery);
 $numposts = mysql_result($npresult,0);
 @mysql_free_result($npresult);
-$nmquery = query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."members` order by `Joined` DESC LIMIT 1", array(null));
+$nmquery = query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."members` WHERE `id`<>%i ORDER BY `Joined` DESC LIMIT 1", array(-1));
 $rnmquery = query("SELECT FOUND_ROWS();", array(null));
 $nmresult = mysql_query($nmquery);
 $rnmresult = mysql_query($rnmquery);
@@ -37,9 +37,6 @@ $NewestMem = array(null);
 $NewestMem['ID']=mysql_result($nmresult,0,"id");
 $NewestMem['Name']=mysql_result($nmresult,0,"Name");
 if($NewestMem['ID']=="-1") { $NewestMem['ID'] = "0"; $NewestMem['Name'] = "Cool Dude 2k"; }
-$sql_guest_check = mysql_query(query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array("-1")));
-$guest_check = mysql_num_rows($sql_guest_check); @mysql_free_result($sql_guest_check);
-if($guest_check > 0) { $nummembers = $nummembers - 1; }
 ?>
 <div class="Table1Border">
 <table class="Table1">
