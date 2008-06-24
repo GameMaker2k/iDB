@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: categories.php - Last Update: 03/25/2008 SVN 155 - Author: cooldude2k $
+    $FileInfo: categories.php - Last Update: 06/24/2008 SVN 167 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="categories.php"||$File3Name=="/categories.php") {
@@ -144,7 +144,7 @@ if($UsersID!="-1") {
 $lul = url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UsersID,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
 $LastTopic = "User: <a href=\"".$lul."\" title=\"".$oldusername."\">".$UsersName."</a><br />\nTopic: <a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."&#35;reply".$ShowReply."\" title=\"".$oldtopicname."\">".$TopicName."</a>"; }
 if($UsersID=="-1") {
-$LastTopic = "User: <span title=\"".$oldusername."\">".$UsersName."</span><br />\nTopic: <a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."&#35;reply".$ShowReply."\" title=\"".$oldtopicname."\">".$TopicName."</a>"; } }
+$LastTopic = "Guest: <span title=\"".$oldusername."\">".$UsersName."</span><br />\nTopic: <a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."&#35;reply".$ShowReply."\" title=\"".$oldtopicname."\">".$TopicName."</a>"; } }
 if($LastTopic==null) { $LastTopic="&nbsp;<br />&nbsp;"; } }
 @mysql_free_result($gltresult);
 if ($ForumType=="redirect") { $LastTopic="Redirects: ".$NumRedirects; }

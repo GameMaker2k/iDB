@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: replys.php - Last Update: 05/31/2008 SVN 164 - Author: cooldude2k $
+    $FileInfo: replys.php - Last Update: 06/24/2008 SVN 167 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replys.php"||$File3Name=="/replys.php") {
@@ -547,7 +547,7 @@ $_POST['ReplyPost'] = stripcslashes(htmlspecialchars($_POST['ReplyPost'], ENT_QU
 //$_POST['ReplyPost'] = @remove_spaces($_POST['ReplyPost']);
 $_POST['ReplyPost'] = remove_bad_entities($_POST['ReplyPost']);
 /*    <_<  iWordFilter  >_>      
-   by René Johnson - Cool Dude 2k */
+   by Kazuki Przyborowski - Cool Dude 2k */
 $katarzynaqy=query("SELECT * FROM `".$Settings['sqltable']."wordfilter`", array(null));
 $katarzynart=mysql_query($katarzynaqy);
 $katarzynanm=mysql_num_rows($katarzynart);
@@ -1106,7 +1106,7 @@ $_POST['TopicName'] = stripcslashes(htmlspecialchars($_POST['TopicName'], ENT_QU
 //$_POST['TopicName'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['TopicName']);
 $_POST['TopicName'] = @remove_spaces($_POST['TopicName']); }
 /*    <_<  iWordFilter  >_>      
-   by René Johnson - Cool Dude 2k */
+   by Kazuki Przyborowski - Cool Dude 2k */
 $katarzynaqy=query("SELECT * FROM `".$Settings['sqltable']."wordfilter`", array(null));
 $katarzynart=mysql_query($katarzynaqy);
 $katarzynanm=mysql_num_rows($katarzynart);

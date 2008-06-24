@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: topics.php - Last Update: 06/03/2008 SVN 165 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 06/24/2008 SVN 167 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -227,7 +227,7 @@ $LastReply = "User: <a href=\"".$lul."\" title=\"".$oldusername."\">".$UsersName
 if($UsersID1=="-1") {
 $lul = url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UsersID1,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
 $luln = url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."&#35;reply".$NumRPosts;
-$LastReply = "User: <span title=\"".$oldusername."\">".$UsersName1."</span><br />\nTime: <a href=\"".$luln."\">".$TimeStamp1."</a>"; } }
+$LastReply = "Guest: <span title=\"".$oldusername."\">".$UsersName1."</span><br />\nTime: <a href=\"".$luln."\">".$TimeStamp1."</a>"; } }
 @mysql_free_result($glrresult);
 if(!isset($TimeStamp1)) { $TimeStamp1 = null; } if(!isset($LastReply)) { $LastReply = null; }
 if($TimeStamp1==null) { $LastReply = "&nbsp;<br />&nbsp;"; }
@@ -429,7 +429,7 @@ $_POST['TopicPost'] = stripcslashes(htmlspecialchars($_POST['TopicPost'], ENT_QU
 $_POST['TopicPost'] = remove_bad_entities($_POST['TopicPost']);
 //$_POST['TopicPost'] = @remove_spaces($_POST['TopicPost']);
 /*    <_<  iWordFilter  >_>      
-   by René Johnson - Cool Dude 2k */
+   by Kazuki Przyborowski - Cool Dude 2k */
 $katarzynaqy=query("SELECT * FROM `".$Settings['sqltable']."wordfilter`", array(null));
 $katarzynart=mysql_query($katarzynaqy);
 $katarzynanm=mysql_num_rows($katarzynart);

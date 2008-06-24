@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: functions.php - Last Update: 05/31/2008 SVN 164 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 06/24/2008 SVN 167 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -118,6 +118,8 @@ $query_val[$query_is] = $query_vars[$query_i];
 ++$query_i; }
    $query_val[0] = $query_string;
    return call_user_func_array("sprintf",$query_val); }
+	$Names['KP'] = "Kazuki Przyborowski";
+define("_kazuki_", $Names['KP']);
 // Kill bad vars for some functions
 function killbadvars($varname) {
 $badphp1 = array('$'); $badphp2 = array(null);

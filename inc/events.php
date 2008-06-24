@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: events.php - Last Update: 05/31/2008 SVN 164 - Author: cooldude2k $
+    $FileInfo: events.php - Last Update: 06/24/2008 SVN 167 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="events.php"||$File3Name=="/events.php") {
@@ -361,7 +361,7 @@ $_POST['EventText'] = stripcslashes(htmlspecialchars($_POST['EventText'], ENT_QU
 $_POST['EventText'] = remove_bad_entities($_POST['EventText']);
 //$_POST['EventText'] = @remove_spaces($_POST['EventText']);
 /*    <_<  iWordFilter  >_>      
-   by René Johnson - Cool Dude 2k */
+   by Kazuki Przyborowski - Cool Dude 2k */
 $katarzynaqy=query("SELECT * FROM `".$Settings['sqltable']."wordfilter`", array(null));
 $katarzynart=mysql_query($katarzynaqy);
 $katarzynanm=mysql_num_rows($katarzynart);
