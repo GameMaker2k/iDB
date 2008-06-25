@@ -45,6 +45,7 @@ if($ThemeSet['CSSType']!="import"&&
 if($ThemeSet['CSSType']=="xhtml") {
    xml_tag_make("xml-stylesheet","type=text/css&href=".$ThemeSet['CSS']); }
 if($ThemeSet['CSSType']!="xhtml") { $ThemeSet['CSSType'] = "import"; }
+@header("Content-Style-Type: text/css");
 @header("Content-Script-Type: text/javascript");
 if(isset($Settings['showverinfo'])) { $idbmisc['showverinfo'] = $Settings['showverinfo']; }
 if(!isset($Settings['showverinfo'])) { $idbmisc['showverinfo'] = false; }
@@ -84,6 +85,7 @@ if($Settings['html_level']=="Strict") { ?>
 <head>
 <meta http-equiv="Content-Language" content="en" />
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $Settings['charset']; ?>" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
 <meta http-equiv="Content-Script-Type" content="text/javascript" />
 <base href="<?php echo $BoardURL; ?>" />
 <?php if($Settings['showverinfo']===true) { ?>
