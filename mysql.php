@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: mysql.php - Last Update: 05/31/2008 SVN 164 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 07/20/2008 SVN 169 - Author: cooldude2k $
 */
 //@ini_set("display_errors", true); 
 //@ini_set("display_startup_errors", true);
@@ -183,10 +183,12 @@ if($_COOKIE['SessPass']!=null&&
 $_COOKIE['MemberName']!=null) {
 require($SettDir['inc'].'prelogin.php'); } } }
 require($SettDir['inc'].'groupsetup.php');
-if($Settings['board_offline']===true) {
+if($Settings['board_offline']===true&&$GroupInfo['HasAdminCP']!="yes") {
 @header("Content-Type: text/plain; charset=".$Settings['charset']); @mysql_free_result($peresult);
-ob_clean(); echo "Sorry the board is off line.\nIf you are a admin you can login by the admin cp.";
-echo "\n".mysql_errno().": ".mysql_error();
+ob_clean(); if(!isset($Settings['offline_text'])) {
+echo "Sorry the board is off line.\nIf you are a admin you can login by the admin cp."; }
+if(isset($Settings['offline_text'])) { echo $Settings['offline_text']; }
+//echo "\n".mysql_errno().": ".mysql_error();
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 $dayconv = array('second' => 1, 'minute' => 60, 'hour' => 3600, 'day' => 86400, 'week' => 604800, 'month' => 2630880, 'year' => 31570560, 'decade' => 15705600);
 //Time Zone Set
