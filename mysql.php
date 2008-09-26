@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: mysql.php - Last Update: 09/26/2008 SVN 171 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 09/26/2008 SVN 172 - Author: cooldude2k $
 */
 //@ini_set("display_errors", true); 
 //@ini_set("display_startup_errors", true);
@@ -187,7 +187,11 @@ if($_GET['act']=="MkCaptcha"||$_GET['act']=="Captcha") {
 	require($SettDir['inc']."captcha.php");
 	$aFonts = array('inc/fonts/DejaVuBd.ttf', 'inc/fonts/DejaVuIt.ttf', 'inc/fonts/DejaVu.ttf');
 	$oPhpCaptcha = new PhpCaptcha($aFonts, 200, 60);
-	$oPhpCaptcha->SetOwnerText("WebSite: ".$SettInfo['board_name']);
+	$RNumSize = rand(7,17); $i=0; $RandNum = null;
+	while ($i <= $RNumSize) {
+	$RandNum=$RandNum.dechex(rand(1,15)); ++$i; }
+	$RandNum=strtoupper($RandNum);
+	$oPhpCaptcha->SetOwnerText("Fake Code: ".$RandNum);
 	$oPhpCaptcha->UseColour(true);
 	$oPhpCaptcha->Create(); @mysql_close(); die(); } }
 if(isset($_SESSION['CheckCookie'])) {
