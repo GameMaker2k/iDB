@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: mysql.php - Last Update: 09/26/2008 SVN 170 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 09/26/2008 SVN 171 - Author: cooldude2k $
 */
 //@ini_set("display_errors", true); 
 //@ini_set("display_startup_errors", true);
@@ -26,7 +26,7 @@ if(@ini_get("register_globals")) { require('settings.php');
 if(!isset($SettDir['misc'])) { $SettDir['misc'] = "inc/misc/"; }
 	require_once($SettDir['misc'].'killglobals.php'); }
 require('settings.php');
-$Settings['use_captcha'] = "off";
+$Settings['use_captcha'] = "on";
 $Settings['captcha_clean'] = "off";
 if($Settings['fixbasedir']===true) {
 if($Settings['idburl']!=null&&$Settings['idburl']!="localhost") {
@@ -187,6 +187,7 @@ if($_GET['act']=="MkCaptcha"||$_GET['act']=="Captcha") {
 	require($SettDir['inc']."captcha.php");
 	$aFonts = array('inc/fonts/DejaVuBd.ttf', 'inc/fonts/DejaVuIt.ttf', 'inc/fonts/DejaVu.ttf');
 	$oPhpCaptcha = new PhpCaptcha($aFonts, 200, 60);
+	$oPhpCaptcha->SetOwnerText("WebSite: ".$SettInfo['board_name']);
 	$oPhpCaptcha->UseColour(true);
 	$oPhpCaptcha->Create(); @mysql_close(); die(); } }
 if(isset($_SESSION['CheckCookie'])) {
