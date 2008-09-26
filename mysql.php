@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: mysql.php - Last Update: 07/20/2008 SVN 169 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 09/26/2008 SVN 170 - Author: cooldude2k $
 */
 //@ini_set("display_errors", true); 
 //@ini_set("display_startup_errors", true);
@@ -26,6 +26,8 @@ if(@ini_get("register_globals")) { require('settings.php');
 if(!isset($SettDir['misc'])) { $SettDir['misc'] = "inc/misc/"; }
 	require_once($SettDir['misc'].'killglobals.php'); }
 require('settings.php');
+$Settings['use_captcha'] = "off";
+$Settings['captcha_clean'] = "off";
 if($Settings['fixbasedir']===true) {
 if($Settings['idburl']!=null&&$Settings['idburl']!="localhost") {
 $PathsTest = parse_url($Settings['idburl']);
@@ -109,6 +111,8 @@ if ($File3Name=="mysql.php"||$File3Name=="/mysql.php") {
 	exit(); }
 //error_reporting(E_ERROR);
 // Check if gzip is on and if user's browser can accept gzip pages
+if($_GET['act']=="MkCaptcha"||$_GET['act']=="Captcha") {
+	$Settings['use_gzip'] = 'off'; }
 if($Settings['use_gzip']=="on") {
 if(strstr($_SERVER['HTTP_ACCEPT_ENCODING'], "gzip")) { 
 	$GZipEncode['Type'] = "gzip"; } else { 
@@ -177,6 +181,14 @@ if($SQLStat===false) {
 ob_clean(); echo "Sorry could not connect to mysql database.\nContact the board admin about error. Error log berlow.";
 echo "\n".mysql_errno().": ".mysql_error();
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+if($Settings['use_captcha']=="on") {
+if($_GET['act']=="MkCaptcha"||$_GET['act']=="Captcha") {
+	if($Settings['captcha_clean']=="on") { @ob_clean(); }
+	require($SettDir['inc']."captcha.php");
+	$aFonts = array('inc/fonts/DejaVuBd.ttf', 'inc/fonts/DejaVuIt.ttf', 'inc/fonts/DejaVu.ttf');
+	$oPhpCaptcha = new PhpCaptcha($aFonts, 200, 60);
+	$oPhpCaptcha->UseColour(true);
+	$oPhpCaptcha->Create(); @mysql_close(); die(); } }
 if(isset($_SESSION['CheckCookie'])) {
 if($_SESSION['CheckCookie']!="done") {
 if($_COOKIE['SessPass']!=null&&

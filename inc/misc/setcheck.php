@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: setcheck.php - Last Update: 05/31/2008 SVN 164 - Author: cooldude2k $
+    $FileInfo: setcheck.php - Last Update: 09/26/2008 SVN 170 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="setcheck.php"||$File3Name=="/setcheck.php") {
@@ -48,6 +48,16 @@ if($Settings['DefaultTimeZone']==null) {
 if($Settings['DefaultDST']!="on"&&
 	$Settings['DefaultDST']!="off") { 
 	$Settings['DefaultDST'] = "off"; }
+if(!isset($Settings['use_captcha'])) {
+	$Settings['use_captcha'] = "off"; }
+if($Settings['use_captcha']!="on"&&
+	$Settings['use_captcha']!="off") { 
+	$Settings['use_captcha'] = "off"; }
+if(!isset($Settings['captcha_clean'])) {
+	$Settings['captcha_clean'] = "off"; }
+if($Settings['captcha_clean']!="on"&&
+	$Settings['captcha_clean']!="off") { 
+	$Settings['captcha_clean'] = "off"; }
 if($Settings['enable_rss']!="on"&&
 	$Settings['enable_rss']!==true) { 
 	$Settings['enable_rss'] = false; }

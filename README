@@ -27,6 +27,22 @@
 // How to delete installer if error happens:
 // Delete install.php file and the setup folder/dir and everyting inside it also.
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// DejaVu fonts 2.26 (c)2004-2008 DejaVu fonts team
+// The DejaVu fonts are a font family based on the Bitstream Vera Fonts
+// (http://gnome.org/fonts/). Its purpose is to provide a wider range of
+// characters (see status.txt for more information) while maintaining the
+// original look and feel.
+// DejaVu fonts are based on Bitstream Vera fonts version 1.10.
+// For more information go to http://dejavu.sourceforge.net/.
+// Characters from Arev fonts, Copyright (c) 2006 by Tavmjong Bah:
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// PhpCaptcha - A visual and audio CAPTCHA generation library
+// Software License Agreement (BSD License)
+// Copyright (C) 2005-2006, Edward Eliot.
+// All rights reserved.
+// Documentation is available at http://www.ejeliot.com/pages/2
+// WebSite is at http://www.ejeliot.com/pages/php-captcha
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Important Note: The Emoticons distributed with the Software were
 // created by Jcink; its usage is not governed under the terms of
 // this license agreement. Information regarding its usage can be

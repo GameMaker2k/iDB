@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: members.php - Last Update: 06/03/2008 SVN 165 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 09/26/2008 SVN 170 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -616,10 +616,18 @@ echo "<option value=\"".$showmin."\">0:".$showmin." minutes</option>\n"; }
 <label class="TextBoxLabel" for="TOSBox">TOS - Please read fully and check 'I agree' box ONLY if you agree to terms</label><br />
 <textarea rows="10" cols="58" id="TOSBox" name="TOSBox" class="TextBox" readonly="readonly" accesskey="T"><?php 
 	echo file_get_contents("TOS");	?></textarea><br />
-<input type="checkbox" class="TextBox" name="TOS" value="Agree" id="TOS" /><label class="TextBoxLabel" for="TOS">I Agree</label><br/>
+<input type="checkbox" class="TextBox" name="TOS" value="Agree" id="TOS" /><label class="TextBoxLabel" for="TOS">I Agree</label>
+<?php if($Settings['use_captcha']!="on") { ?><br />
+<?php } if($Settings['use_captcha']=="on") { ?>
+</td></tr>
+<tr style="text-align: left;">
+<td style="width: 100%;">
+<label class="TextBoxLabel" for="signcode"><img src="index.php?act=MkCaptcha" alt="CAPTCHA Code" title="CAPTCHA Code" /></label><br />
+<input maxlength="25" type="text" class="TextBox" name="signcode" size="20" id="signcode" value="Enter SignCode" /><br /><?php } ?>
 <input type="hidden" style="display: none;" name="act" value="makemembers" />
 <input type="submit" class="Button" value="Sign UP" />
-</td></tr></table>
+</td></tr>
+</table>
 </form>
 </td>
 </tr>
@@ -641,6 +649,8 @@ $URL['HOST'] = $_SERVER["SERVER_NAME"];
 $REFERERurl = null;
 if(!isset($_POST['username'])) { $_POST['username'] = null; }
 if(!isset($_POST['TOS'])) { $_POST['TOS'] = null; }
+ if($Settings['use_captcha']=="on") {
+require($SettDir['inc']."captcha.php"); }
 ?>
 <div class="Table1Border">
 <table class="Table1">
@@ -672,7 +682,16 @@ if(!isset($_POST['TOS'])) { $_POST['TOS'] = null; }
 	<br />Your passwords did not match.<br />
 	</span>&nbsp;</td>
 </tr>
-<?php } if ($Settings['TestReferer']===true) {
+<?php } if($Settings['use_captcha']=="on") {
+if (PhpCaptcha::Validate($_POST['signcode'])) {
+//echo 'Valid code entered';
+} else { $Error="Yes"; ?>
+<tr>
+	<td><span class="TableMessage">
+	<br />Invalid code entered<br />
+	</span>&nbsp;</td>
+</tr>
+<?php } } if ($Settings['TestReferer']===true) {
 	if ($URL['HOST']!=$URL['REFERER']) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
