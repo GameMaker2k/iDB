@@ -11,12 +11,13 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: subforums.php - Last Update: 03/25/2008 SVN 155 - Author: cooldude2k $
+    $FileInfo: subforums.php - Last Update: 10/10/2008 SVN 173 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="subforums.php"||$File3Name=="/subforums.php") {
 	require('index.php');
 	exit(); }
+if(!is_numeric($_GET['id'])) { $_GET['id'] = null; }
 $checkquery = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i LIMIT 1", array($_GET['id']));
 $checkresult=mysql_query($checkquery);
 $checknum=mysql_num_rows($checkresult);

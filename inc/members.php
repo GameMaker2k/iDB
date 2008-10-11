@@ -11,12 +11,14 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: members.php - Last Update: 09/26/2008 SVN 170 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 10/10/2008 SVN 173 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
 	require('index.php');
 	exit(); }
+if(!is_numeric($_GET['id'])) { $_GET['id'] = null; }
+if(!is_numeric($_GET['page'])) { $_GET['page'] = null; }
 if($_GET['act']=="list") {
 $orderlist = null;
 $orderlist = "order by `ID` asc";

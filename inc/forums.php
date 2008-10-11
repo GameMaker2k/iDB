@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: forums.php - Last Update: 06/24/2008 SVN 167 - Author: cooldude2k $
+    $FileInfo: forums.php - Last Update: 10/10/2008 SVN 173 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="forums.php"||$File3Name=="/forums.php") {
@@ -89,7 +89,7 @@ $gltnum = count($gltf); $glti = 0;
 $OldUpdateTime = 0; $UseThisFonum = null;
 if ($ForumType=="subforum") { 
 while ($glti < $gltnum) {
-$gltfoquery = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `CategoryID`=%i AND `ForumID`=%i ORDER BY `LastUpdate` DESC LIMIT 1", array($CategoryID,$gltf[$glti]));
+$gltfoquery = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `ForumID`=%i ORDER BY `LastUpdate` DESC LIMIT 1", array($gltf[$glti]));
 $gltforesult=mysql_query($gltfoquery);
 $gltfonum=mysql_num_rows($gltforesult);
 if($gltfonum>0) {

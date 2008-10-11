@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: searchs.php - Last Update: 06/24/2008 SVN 167 - Author: cooldude2k $
+    $FileInfo: searchs.php - Last Update: 10/10/2008 SVN 173 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="searchs.php"||$File3Name=="/searchs.php") {
@@ -229,7 +229,7 @@ if(isset($PermissionInfo['CanViewForum'][$ForumID])&&
 	$PermissionInfo['CanViewForum'][$ForumID]=="yes"&&
 	isset($CatPermissionInfo['CanViewCategory'][$CategoryID])&&
 	$CatPermissionInfo['CanViewCategory'][$CategoryID]=="yes") {
-$glrquery = query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `ForumID`=%i AND `TopicID`=%i ORDER BY `TimeStamp` DESC LIMIT 1", array($ForumID,$TopicID));
+$glrquery = query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `TopicID`=%i ORDER BY `TimeStamp` DESC LIMIT 1", array($TopicID));
 $glrresult=mysql_query($glrquery);
 $glrnum=mysql_num_rows($glrresult);
 if($glrnum>0){
@@ -246,7 +246,7 @@ $NumPages = ceil($NumRPosts/$Settings['max_posts']); }
 if($NumRPosts<=$Settings['max_posts']) {
 $NumPages = 1; }
 $Users_Name1 = pre_substr($UsersName1,0,20);
-if($UsersName1=="Guest") { $UsersName1=$GuestName;
+if($UsersName1=="Guest") { $UsersName1=$GuestName1;
 if($UsersName1==null) { $UsersName1="Guest"; } }
 if (pre_strlen($UsersName1)>20) { $Users_Name1 = $Users_Name1."...";
 $oldusername=$UsersName1; $UsersName1=$Users_Name1; } $lul = null;

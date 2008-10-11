@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: profilemain.php - Last Update: 05/31/2008 SVN 164 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 10/10/2008 SVN 173 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
@@ -140,7 +140,7 @@ if($_POST['act']=="view"&&
 	$WholeWord=mysql_result($katarzynart,$katarzynas,"WholeWord");
 	if($WholeWord=="on") { $WholeWord = "yes"; }
 	if($WholeWord=="off") { $WholeWord = "no"; }
-	if($WholeWord!="yes"||$WholeWord!="no") { $WholeWord = "no"; }
+	if($WholeWord!="yes"&&$WholeWord!="no") { $WholeWord = "no"; }
 	$Filter = preg_quote($Filter, "/");
 	if($CaseInsensitive!="yes"&&$WholeWord=="yes") {
 	$_POST['NotePad'] = preg_replace("/\b(".$Filter.")\b/", $Replace, $_POST['NotePad']); }
@@ -215,7 +215,7 @@ if($_POST['act']=="signature"&&
 	$WholeWord=mysql_result($katarzynart,$katarzynas,"WholeWord");
 	if($WholeWord=="on") { $WholeWord = "yes"; }
 	if($WholeWord=="off") { $WholeWord = "no"; }
-	if($WholeWord!="yes"||$WholeWord!="no") { $WholeWord = "no"; }
+	if($WholeWord!="yes"&&$WholeWord!="no") { $WholeWord = "no"; }
 	$Filter = preg_quote($Filter, "/");
 	if($CaseInsensitive!="yes"&&$WholeWord=="yes") {
 	$_POST['Signature'] = preg_replace("/\b(".$Filter.")\b/", $Replace, $_POST['Signature']); }
@@ -305,7 +305,9 @@ $AvatarSize1W=$AvatarSize1[0]; $AvatarSize1H=$AvatarSize1[1];
 if($_POST['update']=="now") {
 if($_POST['Avatar']!=null&&$_POST['AvatarSizeW']!=null&&$_POST['AvatarSizeH']!=null&&
 	$_SESSION['UserGroup']!=$Settings['GuestGroup']) {
+	if(!is_numeric($_POST['AvatarSizeW'])) { $_POST['AvatarSizeW'] = 100; }
 	if($_POST['AvatarSizeW']>=100) { $_POST['AvatarSizeW']=100; }
+	if(!is_numeric($_POST['AvatarSizeH'])) { $_POST['AvatarSizeH'] = 100; }
 	if($_POST['AvatarSizeH']>=100) { $_POST['AvatarSizeH']=100; }
 	$fullavatarsize = $_POST['AvatarSizeW']."x".$_POST['AvatarSizeH'];
 	$_POST['Avatar'] = htmlentities($_POST['Avatar'], ENT_QUOTES, $Settings['charset']);
@@ -578,7 +580,7 @@ if($_POST['act']=="profile"&&
 	$WholeWord=mysql_result($katarzynart,$katarzynas,"WholeWord");
 	if($WholeWord=="on") { $WholeWord = "yes"; }
 	if($WholeWord=="off") { $WholeWord = "no"; }
-	if($WholeWord!="yes"||$WholeWord!="no") { $WholeWord = "no"; }
+	if($WholeWord!="yes"&&$WholeWord!="no") { $WholeWord = "no"; }
 	$Filter = preg_quote($Filter, "/");
 	if($CaseInsensitive!="yes"&&$WholeWord=="yes") {
 	$_POST['Interests'] = preg_replace("/\b(".$Filter.")\b/", $Replace, $_POST['Interests']);

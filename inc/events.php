@@ -11,12 +11,13 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: events.php - Last Update: 06/24/2008 SVN 167 - Author: cooldude2k $
+    $FileInfo: events.php - Last Update: 10/10/2008 SVN 173 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="events.php"||$File3Name=="/events.php") {
 	require('index.php');
 	exit(); }
+if(!is_numeric($_GET['id'])) { $_GET['id'] = null; }
 if($_GET['act']=="view"||$_GET['act']==null) {
 $query = query("SELECT * FROM `".$Settings['sqltable']."events` WHERE `id`=%i LIMIT 1", array($_GET['id']));
 $result=mysql_query($query);
@@ -376,7 +377,7 @@ if($CaseInsensitive!="yes"||$CaseInsensitive!="no") { $CaseInsensitive = "no"; }
 $WholeWord=mysql_result($katarzynart,$katarzynas,"WholeWord");
 if($WholeWord=="on") { $WholeWord = "yes"; }
 if($WholeWord=="off") { $WholeWord = "no"; }
-if($WholeWord!="yes"||$WholeWord!="no") { $WholeWord = "no"; }
+if($WholeWord!="yes"&&$WholeWord!="no") { $WholeWord = "no"; }
 $Filter = preg_quote($Filter, "/");
 if($CaseInsensitive!="yes"&&$WholeWord=="yes") {
 $_POST['EventText'] = preg_replace("/\b(".$Filter.")\b/", $Replace, $_POST['EventText']); }

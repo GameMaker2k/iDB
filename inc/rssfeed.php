@@ -11,12 +11,13 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: rssfeed.php - Last Update: 05/31/2008 SVN 164 - Author: cooldude2k $
+    $FileInfo: rssfeed.php - Last Update: 10/10/2008 SVN 173 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="rssfeed.php"||$File3Name=="/rssfeed.php") {
 	require('index.php');
 	exit(); }
+if(!is_numeric($_GET['id'])) { $_GET['id'] = null; }
 $boardsname = htmlentities($Settings['board_name'], ENT_QUOTES, $Settings['charset']);
 $boardsname = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $boardsname);
 $_GET['feedtype'] = strtolower($_GET['feedtype']);

@@ -11,12 +11,14 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: pm.php - Last Update: 06/24/2008 SVN 167 - Author: cooldude2k $
+    $FileInfo: pm.php - Last Update: 10/10/2008 SVN 173 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pm.php"||$File3Name=="/pm.php") {
 	require('index.php');
 	exit(); }
+if(!is_numeric($_GET['id'])) { $_GET['id'] = null; }
+if(!is_numeric($_GET['page'])) { $_GET['page'] = null; }
 // Check if we can read/send PM
 if($_SESSION['UserGroup']==$Settings['GuestGroup']||$GroupInfo['CanPM']=="no") {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
@@ -631,7 +633,7 @@ if($CaseInsensitive!="yes"||$CaseInsensitive!="no") { $CaseInsensitive = "no"; }
 $WholeWord=mysql_result($katarzynart,$katarzynas,"WholeWord");
 if($WholeWord=="on") { $WholeWord = "yes"; }
 if($WholeWord=="off") { $WholeWord = "no"; }
-if($WholeWord!="yes"||$WholeWord!="no") { $WholeWord = "no"; }
+if($WholeWord!="yes"&&$WholeWord!="no") { $WholeWord = "no"; }
 $Filter = preg_quote($Filter, "/");
 if($CaseInsensitive!="yes"&&$WholeWord=="yes") {
 $_POST['Message'] = preg_replace("/\b(".$Filter.")\b/", $Replace, $_POST['Message']);
