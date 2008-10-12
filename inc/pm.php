@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: pm.php - Last Update: 10/10/2008 SVN 173 - Author: cooldude2k $
+    $FileInfo: pm.php - Last Update: 10/11/2008 SVN 174 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pm.php"||$File3Name=="/pm.php") {
@@ -518,12 +518,19 @@ echo "</table>";
 	<td style="width: 50%;"><input maxlength="45" type="text" name="MessageDesc" class="TextBox" id="MessageDesc" size="20" /></td>
 </tr><?php if($_SESSION['UserGroup']==$Settings['GuestGroup']) { ?><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="GuestName">Insert Guest Name:</label></td>
+	<?php if(!isset($_SESSION['GuestName'])) { ?>
 	<td style="width: 50%;"><input maxlength="25" type="text" name="GuestName" class="TextBox" id="GuestName" size="20" /></td>
-</tr><?php } ?>
+	<?php } if(isset($_SESSION['GuestName'])) { ?>
+	<td style="width: 50%;"><input maxlength="25" type="text" name="GuestName" class="TextBox" id="GuestName" size="20" value="<?php echo $_SESSION['GuestName']; ?>" /></td>
+</tr><?php } } ?>
 </table>
 <table style="text-align: left;">
 <tr style="text-align: left;">
 <td style="width: 100%;">
+<?php if($_SESSION['UserGroup']==$Settings['GuestGroup']&&$Settings['captcha_guest']=="on") { ?>
+<label class="TextBoxLabel" for="signcode"><img src="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=MkCaptcha",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>" alt="CAPTCHA Code" title="CAPTCHA Code" /></label><br />
+<input maxlength="25" type="text" class="TextBox" name="signcode" size="20" id="signcode" value="Enter SignCode" /><br />
+<?php } ?>
 <label class="TextBoxLabel" for="Message">Insert Your Message:</label><br />
 <textarea rows="10" name="Message" id="Message" cols="40" class="TextBox"></textarea><br />
 <input type="hidden" name="act" value="sendmessages" style="display: none;" />
@@ -548,6 +555,9 @@ if(!isset($_POST['MessageName'])) { $_POST['MessageName'] = null; }
 if(!isset($_POST['MessageDesc'])) { $_POST['MessageDesc'] = null; }
 if(!isset($_POST['Message'])) { $_POST['Message'] = null; }
 if(!isset($_POST['GuestName'])) { $_POST['GuestName'] = null; }
+if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
+	$Settings['captcha_guest']=="on") {
+require($SettDir['inc']."captcha.php"); }
 ?>
 <div class="Table1Border">
 <table class="Table1">
@@ -568,7 +578,17 @@ if(!isset($_POST['GuestName'])) { $_POST['GuestName'] = null; }
 	<br />Send to user name too big.<br />
 	</span>&nbsp;</td>
 </tr>
-<?php } if ($_POST['SendMessageTo']==null) { $Error="Yes";  ?>
+<?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
+	$Settings['captcha_guest']=="on") {
+if (PhpCaptcha::Validate($_POST['signcode'])) {
+//echo 'Valid code entered';
+} else { $Error="Yes"; ?>
+<tr>
+	<td><span class="TableMessage">
+	<br />Invalid code entered<br />
+	</span>&nbsp;</td>
+</tr>
+<?php } } if ($_POST['SendMessageTo']==null) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You need to enter a user name to send message to.<br />
@@ -617,6 +637,10 @@ $_POST['Message'] = stripcslashes(htmlspecialchars($_POST['Message'], ENT_QUOTES
 //$_POST['Message'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['Message']);
 //$_POST['Message'] = @remove_spaces($_POST['Message']);
 $_POST['Message'] = remove_bad_entities($_POST['Message']);
+if($_SESSION['UserGroup']==$Settings['GuestGroup']) {
+if(isset($_POST['GuestName'])&&$_POST['GuestName']!=null) {
+@setcookie("GuestName", $_POST['GuestName'], time() + (7 * 86400), $cbasedir);
+$_SESSION['GuestName']=$_POST['GuestName']; } }
 /*    <_<  iWordFilter  >_>      
    by Kazuki Przyborowski - Cool Dude 2k */
 $katarzynaqy=query("SELECT * FROM `".$Settings['sqltable']."wordfilter`", array(null));

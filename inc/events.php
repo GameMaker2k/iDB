@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: events.php - Last Update: 10/10/2008 SVN 173 - Author: cooldude2k $
+    $FileInfo: events.php - Last Update: 10/11/2008 SVN 174 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="events.php"||$File3Name=="/events.php") {
@@ -190,8 +190,11 @@ echo "</table>";
 	<td style="width: 50%;"><input maxlength="30" type="text" name="EventName" class="TextBox" id="EventName" size="20" /></td>
 </tr><?php if($_SESSION['UserGroup']==$Settings['GuestGroup']) { ?><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="GuestName">Insert Guest Name:</label></td>
+	<?php if(!isset($_SESSION['GuestName'])) { ?>
 	<td style="width: 50%;"><input maxlength="25" type="text" name="GuestName" class="TextBox" id="GuestName" size="20" /></td>
-</tr><?php } ?><tr style="text-align: left;">
+	<?php } if(isset($_SESSION['GuestName'])) { ?>
+	<td style="width: 50%;"><input maxlength="25" type="text" name="GuestName" class="TextBox" id="GuestName" size="20" value="<?php echo $_SESSION['GuestName']; ?>" /></td>
+</tr><?php } } ?><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="EventStart">Insert Event Start:</label></td>
 	<td style="width: 50%;"><input maxlength="10" type="text" name="EventStart" class="TextBox" id="EventStart" size="20" value="MM/DD/YYYY" /></td>
 </tr><tr style="text-align: left;">
@@ -202,6 +205,10 @@ echo "</table>";
 <table style="text-align: left;">
 <tr style="text-align: left;">
 <td style="width: 100%;">
+<?php if($_SESSION['UserGroup']==$Settings['GuestGroup']&&$Settings['captcha_guest']=="on") { ?>
+<label class="TextBoxLabel" for="signcode"><img src="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=MkCaptcha",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>" alt="CAPTCHA Code" title="CAPTCHA Code" /></label><br />
+<input maxlength="25" type="text" class="TextBox" name="signcode" size="20" id="signcode" value="Enter SignCode" /><br />
+<?php } ?>
 <label class="TextBoxLabel" for="EventText">Insert Event Text:</label><br />
 <textarea rows="10" name="EventText" id="EventText" cols="40" class="TextBox"></textarea><br />
 <input type="hidden" name="act" value="makeevents" style="display: none;" />
@@ -232,6 +239,9 @@ if(!isset($_POST['EventText'])) { $_POST['EventText'] = null; }
 if(!isset($_POST['GuestName'])) { $_POST['GuestName'] = null; }
 $TimeIn = explode("/",$_POST['EventStart']);
 $TimeOut = explode("/",$_POST['EventEnd']);
+if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
+	$Settings['captcha_guest']=="on") {
+require($SettDir['inc']."captcha.php"); }
 ?>
 <div class="Table1Border">
 <table class="Table1">
@@ -252,7 +262,17 @@ $TimeOut = explode("/",$_POST['EventEnd']);
 	<br />Your Event Name is too big.<br />
 	</span>&nbsp;</td>
 </tr>
-<?php } if (pre_strlen($TimeIn[0])<"2") { $Error="Yes";  ?>
+<?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
+	$Settings['captcha_guest']=="on") {
+if (PhpCaptcha::Validate($_POST['signcode'])) {
+//echo 'Valid code entered';
+} else { $Error="Yes"; ?>
+<tr>
+	<td><span class="TableMessage">
+	<br />Invalid code entered<br />
+	</span>&nbsp;</td>
+</tr>
+<?php } } if (pre_strlen($TimeIn[0])<"2") { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Event Start Month is too small.<br />
@@ -361,6 +381,10 @@ $_POST['EventText'] = stripcslashes(htmlspecialchars($_POST['EventText'], ENT_QU
 //$_POST['EventText'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['EventText']);
 $_POST['EventText'] = remove_bad_entities($_POST['EventText']);
 //$_POST['EventText'] = @remove_spaces($_POST['EventText']);
+if($_SESSION['UserGroup']==$Settings['GuestGroup']) {
+if(isset($_POST['GuestName'])&&$_POST['GuestName']!=null) {
+@setcookie("GuestName", $_POST['GuestName'], time() + (7 * 86400), $cbasedir);
+$_SESSION['GuestName']=$_POST['GuestName']; } }
 /*    <_<  iWordFilter  >_>      
    by Kazuki Przyborowski - Cool Dude 2k */
 $katarzynaqy=query("SELECT * FROM `".$Settings['sqltable']."wordfilter`", array(null));

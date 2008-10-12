@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: members.php - Last Update: 10/10/2008 SVN 173 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 10/11/2008 SVN 174 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -535,7 +535,11 @@ if($_SESSION['UserID']==0||$_SESSION['UserID']==null) {
 <table style="text-align: left;">
 <tr style="text-align: left;">
 	<td style="width: 30%;"><label class="TextBoxLabel" for="Name">Insert a UserName:</label></td>
+	<?php if(!isset($_SESSION['GuestName'])) { ?>
 	<td style="width: 70%;"><input maxlength="24" type="text" class="TextBox" name="Name" size="20" id="Name" /></td>
+	<?php } if(isset($_SESSION['GuestName'])) { ?>
+	<td style="width: 70%;"><input maxlength="24" type="text" class="TextBox" name="Name" size="20" id="Name" value="<?php echo $_SESSION['GuestName']; ?>" /></td>
+	<?php } ?>
 </tr><tr>
 	<td style="width: 30%;"><label class="TextBoxLabel" for="Password">Insert a Password:</label></td>
 	<td style="width: 70%;"><input maxlength="30" type="password" class="TextBox" name="Password" size="20" id="Password" /></td>
@@ -624,7 +628,7 @@ echo "<option value=\"".$showmin."\">0:".$showmin." minutes</option>\n"; }
 </td></tr>
 <tr style="text-align: left;">
 <td style="width: 100%;">
-<label class="TextBoxLabel" for="signcode"><img src="index.php?act=MkCaptcha" alt="CAPTCHA Code" title="CAPTCHA Code" /></label><br />
+<label class="TextBoxLabel" for="signcode"><img src="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=MkCaptcha",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>" alt="CAPTCHA Code" title="CAPTCHA Code" /></label><br />
 <input maxlength="25" type="text" class="TextBox" name="signcode" size="20" id="signcode" value="Enter SignCode" /><br /><?php } ?>
 <input type="hidden" style="display: none;" name="act" value="makemembers" />
 <input type="submit" class="Button" value="Sign UP" />
@@ -651,7 +655,7 @@ $URL['HOST'] = $_SERVER["SERVER_NAME"];
 $REFERERurl = null;
 if(!isset($_POST['username'])) { $_POST['username'] = null; }
 if(!isset($_POST['TOS'])) { $_POST['TOS'] = null; }
- if($Settings['use_captcha']=="on") {
+if($Settings['use_captcha']=="on") {
 require($SettDir['inc']."captcha.php"); }
 ?>
 <div class="Table1Border">

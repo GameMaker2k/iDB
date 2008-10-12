@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: mysql.php - Last Update: 09/26/2008 SVN 172 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 10/11/2008 SVN 174 - Author: cooldude2k $
 */
 //@ini_set("display_errors", true); 
 //@ini_set("display_startup_errors", true);
@@ -27,6 +27,7 @@ if(!isset($SettDir['misc'])) { $SettDir['misc'] = "inc/misc/"; }
 	require_once($SettDir['misc'].'killglobals.php'); }
 require('settings.php');
 $Settings['use_captcha'] = "on";
+$Settings['captcha_guest'] = "on";
 $Settings['captcha_clean'] = "off";
 if($Settings['fixbasedir']===true) {
 if($Settings['idburl']!=null&&$Settings['idburl']!="localhost") {
@@ -232,6 +233,14 @@ if($Settings['DefaultDST']=="off") {
 	$_SESSION['UserDST'] = "off"; }
 if($Settings['DefaultDST']=="on") { 
 	$_SESSION['UserDST'] = "on"; } }
+// Guest Stuff
+if(isset($_SESSION['MemberName'])||
+   isset($_COOKIE['MemberName'])) {
+	$_SESSION['GuestName'] = null;
+	$_COOKIE['GuestName'] = null; }
+if(!isset($_SESSION['MemberName'])&&!isset($_COOKIE['MemberName'])) {
+if(!isset($_SESSION['GuestName'])&&isset($_COOKIE['GuestName'])) {
+	$_SESSION['GuestName'] = $_COOKIE['GuestName']; } }
 // Skin Stuff
 if(!isset($_SESSION['Theme'])) { $_SESSION['Theme'] = null; }
 if(!isset($_GET['theme'])) { $_GET['theme'] = null; }

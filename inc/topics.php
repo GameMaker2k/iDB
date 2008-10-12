@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: topics.php - Last Update: 10/10/2008 SVN 173 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 10/11/2008 SVN 174 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -339,8 +339,11 @@ echo "</table>";
 	<td style="width: 50%;"><input maxlength="30" type="text" name="TopicName" class="TextBox" id="TopicName" size="20" /></td>
 </tr><?php if($_SESSION['UserGroup']==$Settings['GuestGroup']) { ?><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="GuestName">Insert Guest Name:</label></td>
+	<?php if(!isset($_SESSION['GuestName'])) { ?>
 	<td style="width: 50%;"><input maxlength="25" type="text" name="GuestName" class="TextBox" id="GuestName" size="20" /></td>
-</tr><?php } ?><tr style="text-align: left;">
+	<?php } if(isset($_SESSION['GuestName'])) { ?>
+	<td style="width: 50%;"><input maxlength="25" type="text" name="GuestName" class="TextBox" id="GuestName" size="20" value="<?php echo $_SESSION['GuestName']; ?>" /></td>
+</tr><?php } } ?><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="TopicDesc">Insert Topic Description:</label></td>
 	<td style="width: 50%;"><input maxlength="45" type="text" name="TopicDesc" class="TextBox" id="TopicDesc" size="20" /></td>
 </tr>
@@ -348,6 +351,10 @@ echo "</table>";
 <table style="text-align: left;">
 <tr style="text-align: left;">
 <td style="width: 100%;">
+<?php if($_SESSION['UserGroup']==$Settings['GuestGroup']&&$Settings['captcha_guest']=="on") { ?>
+<label class="TextBoxLabel" for="signcode"><img src="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=MkCaptcha",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>" alt="CAPTCHA Code" title="CAPTCHA Code" /></label><br />
+<input maxlength="25" type="text" class="TextBox" name="signcode" size="20" id="signcode" value="Enter SignCode" /><br />
+<?php } ?>
 <label class="TextBoxLabel" for="TopicPost">Insert Your Post:</label><br />
 <textarea rows="10" name="TopicPost" id="TopicPost" cols="40" class="TextBox"></textarea><br />
 <input type="hidden" name="act" value="maketopics" style="display: none;" />
@@ -376,6 +383,9 @@ if(!isset($_POST['TopicName'])) { $_POST['TopicName'] = null; }
 if(!isset($_POST['TopicDesc'])) { $_POST['TopicDesc'] = null; }
 if(!isset($_POST['TopicPost'])) { $_POST['TopicPost'] = null; }
 if(!isset($_POST['GuestName'])) { $_POST['GuestName'] = null; }
+if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
+	$Settings['captcha_guest']=="on") {
+require($SettDir['inc']."captcha.php"); }
 ?>
 <div class="Table1Border">
 <table class="Table1">
@@ -396,7 +406,17 @@ if(!isset($_POST['GuestName'])) { $_POST['GuestName'] = null; }
 	<br />Your Topic Name is too big.<br />
 	</span>&nbsp;</td>
 </tr>
-<?php } if (pre_strlen($_POST['TopicDesc'])>="45") { $Error="Yes";  ?>
+<?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
+	$Settings['captcha_guest']=="on") {
+if (PhpCaptcha::Validate($_POST['signcode'])) {
+//echo 'Valid code entered';
+} else { $Error="Yes"; ?>
+<tr>
+	<td><span class="TableMessage">
+	<br />Invalid code entered<br />
+	</span>&nbsp;</td>
+</tr>
+<?php } } if (pre_strlen($_POST['TopicDesc'])>="45") { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Your Topic Description is too big.<br />
@@ -430,6 +450,10 @@ $_POST['TopicPost'] = stripcslashes(htmlspecialchars($_POST['TopicPost'], ENT_QU
 //$_POST['TopicPost'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['TopicPost']);
 $_POST['TopicPost'] = remove_bad_entities($_POST['TopicPost']);
 //$_POST['TopicPost'] = @remove_spaces($_POST['TopicPost']);
+if($_SESSION['UserGroup']==$Settings['GuestGroup']) {
+if(isset($_POST['GuestName'])&&$_POST['GuestName']!=null) {
+@setcookie("GuestName", $_POST['GuestName'], time() + (7 * 86400), $cbasedir);
+$_SESSION['GuestName']=$_POST['GuestName']; } }
 /*    <_<  iWordFilter  >_>      
    by Kazuki Przyborowski - Cool Dude 2k */
 $katarzynaqy=query("SELECT * FROM `".$Settings['sqltable']."wordfilter`", array(null));
