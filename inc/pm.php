@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: pm.php - Last Update: 10/11/2008 SVN 174 - Author: cooldude2k $
+    $FileInfo: pm.php - Last Update: 10/11/2008 SVN 175 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pm.php"||$File3Name=="/pm.php") {
@@ -522,17 +522,17 @@ echo "</table>";
 	<td style="width: 50%;"><input maxlength="25" type="text" name="GuestName" class="TextBox" id="GuestName" size="20" /></td>
 	<?php } if(isset($_SESSION['GuestName'])) { ?>
 	<td style="width: 50%;"><input maxlength="25" type="text" name="GuestName" class="TextBox" id="GuestName" size="20" value="<?php echo $_SESSION['GuestName']; ?>" /></td>
-</tr><?php } } ?>
+<?php } ?></tr><?php } ?>
 </table>
 <table style="text-align: left;">
 <tr style="text-align: left;">
 <td style="width: 100%;">
+<label class="TextBoxLabel" for="Message">Insert Your Message:</label><br />
+<textarea rows="10" name="Message" id="Message" cols="40" class="TextBox"></textarea><br />
 <?php if($_SESSION['UserGroup']==$Settings['GuestGroup']&&$Settings['captcha_guest']=="on") { ?>
 <label class="TextBoxLabel" for="signcode"><img src="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=MkCaptcha",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>" alt="CAPTCHA Code" title="CAPTCHA Code" /></label><br />
 <input maxlength="25" type="text" class="TextBox" name="signcode" size="20" id="signcode" value="Enter SignCode" /><br />
 <?php } ?>
-<label class="TextBoxLabel" for="Message">Insert Your Message:</label><br />
-<textarea rows="10" name="Message" id="Message" cols="40" class="TextBox"></textarea><br />
 <input type="hidden" name="act" value="sendmessages" style="display: none;" />
 <?php if($_SESSION['UserGroup']!=$Settings['GuestGroup']) { ?>
 <input type="hidden" name="GuestName" value="null" style="display: none;" />

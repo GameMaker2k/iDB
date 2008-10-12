@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: replys.php - Last Update: 10/11/2008 SVN 174 - Author: cooldude2k $
+    $FileInfo: replys.php - Last Update: 10/11/2008 SVN 175 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replys.php"||$File3Name=="/replys.php") {
@@ -472,17 +472,17 @@ echo "</table>";
 	<td style="width: 50%;"><input maxlength="25" type="text" name="GuestName" class="TextBox" id="GuestName" size="20" /></td>
 	<?php } if(isset($_SESSION['GuestName'])) { ?>
 	<td style="width: 50%;"><input maxlength="25" type="text" name="GuestName" class="TextBox" id="GuestName" size="20" value="<?php echo $_SESSION['GuestName']; ?>" /></td>
-</tr><?php } } ?>
+<?php } ?></tr><?php } ?>
 </table>
 <table style="text-align: left;">
 <tr style="text-align: left;">
 <td style="width: 100%;">
+<label class="TextBoxLabel" for="ReplyPost">Insert Your Reply:</label><br />
+<textarea rows="10" name="ReplyPost" id="ReplyPost" cols="40" class="TextBox"><?php echo $QuoteReply; ?></textarea><br />
 <?php if($_SESSION['UserGroup']==$Settings['GuestGroup']&&$Settings['captcha_guest']=="on") { ?>
 <label class="TextBoxLabel" for="signcode"><img src="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=MkCaptcha",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>" alt="CAPTCHA Code" title="CAPTCHA Code" /></label><br />
 <input maxlength="25" type="text" class="TextBox" name="signcode" size="20" id="signcode" value="Enter SignCode" /><br />
 <?php } ?>
-<label class="TextBoxLabel" for="ReplyPost">Insert Your Reply:</label><br />
-<textarea rows="10" name="ReplyPost" id="ReplyPost" cols="40" class="TextBox"><?php echo $QuoteReply; ?></textarea><br />
 <input type="hidden" name="act" value="makereplies" style="display: none;" />
 <?php if($_SESSION['UserGroup']!=$Settings['GuestGroup']) { ?>
 <input type="hidden" name="GuestName" value="null" style="display: none;" />
@@ -1008,8 +1008,11 @@ if($SmileRow<5) { ?>
 	<td style="width: 50%;"><input maxlength="45" type="text" name="ReplyDesc" class="TextBox" id="ReplyDesc" size="20" value="<?php echo $ReplyDescription; ?>" /></td>
 </tr><?php if($_SESSION['UserGroup']==$Settings['GuestGroup']) { ?><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="GuestName">Insert Guest Name:</label></td>
-	<td style="width: 50%;"><input maxlength="25" type="text" name="GuestName" class="TextBox" id="GuestName" size="20" value="<?php echo $ReplyGuestName; ?>" /></td>
-</tr><?php } ?>
+	<?php if(!isset($_SESSION['GuestName'])) { ?>
+	<td style="width: 50%;"><input maxlength="25" type="text" name="GuestName" class="TextBox" id="GuestName" size="20" /></td>
+	<?php } if(isset($_SESSION['GuestName'])) { ?>
+	<td style="width: 50%;"><input maxlength="25" type="text" name="GuestName" class="TextBox" id="GuestName" size="20" value="<?php echo $_SESSION['GuestName']; ?>" /></td>
+<?php } ?></tr><?php } ?>
 </table>
 <table style="text-align: left;">
 <tr style="text-align: left;">
@@ -1044,6 +1047,9 @@ if(!isset($_POST['ReplyDesc'])) { $_POST['ReplyDesc'] = null; }
 if(!isset($_POST['ReplyPost'])) { $_POST['ReplyPost'] = null; }
 if(!isset($_POST['GuestName'])) { $_POST['GuestName'] = null; }
 if(!isset($_POST['TopicName'])) { $_POST['TopicName'] = null; }
+if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
+	$Settings['captcha_guest']=="on") {
+require($SettDir['inc']."captcha.php"); }
 $ShowEditTopic = null;
 if($PermissionInfo['CanEditTopics'][$TopicForumID]=="yes") {
 $editquery = query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `TopicID`=%i ORDER BY `TimeStamp` ASC", array($TopicID));
@@ -1098,6 +1104,16 @@ if($PermissionInfo['CanEditTopicsClose'][$TopicForumID]=="no"&&$TopicClosed==1) 
 	</span>&nbsp;</td>
 </tr>
 <?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
+	$Settings['captcha_guest']=="on") {
+if (PhpCaptcha::Validate($_POST['signcode'])) {
+//echo 'Valid code entered';
+} else { $Error="Yes"; ?>
+<tr>
+	<td><span class="TableMessage">
+	<br />Invalid code entered<br />
+	</span>&nbsp;</td>
+</tr>
+<?php } } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
 	pre_strlen($_POST['GuestName'])>="25") { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
