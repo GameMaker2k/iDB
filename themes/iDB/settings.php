@@ -11,14 +11,14 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
     $ThemeInfo - Name: iDB Theme - Author: cooldude2k $
-    $FileInfo: settings.php - Last Update: 01/01/2008 SVN 144 - Author: cooldude2k $
+    $FileInfo: settings.php - Last Update: 10/15/2008 SVN 177 - Author: cooldude2k $
 */
 $ThemeSet = array();
 $ThemeSet['ThemeName'] = "iDB Theme";
-$ThemeSet['ThemeMaker'] = "Cool Dude 2k";
-$ThemeSet['ThemeVersion'] = "0.2.1";
+$ThemeSet['ThemeMaker'] = "Kazuki";
+$ThemeSet['ThemeVersion'] = "0.2.3";
 $ThemeSet['ThemeVersionType'] = "Pre-Alpha";
-$ThemeSet['ThemeSubVersion'] = "SVN 144";
+$ThemeSet['ThemeSubVersion'] = "SVN 177";
 $ThemeSet['MakerURL'] = "http://upload.idb.s1.jcink.com/";
 $ThemeSet['CopyRight'] = $ThemeSet['ThemeName']." was made by <a href=\"".$ThemeSet['MakerURL']."\" title=\"".$ThemeSet['ThemeMaker']."\">".$ThemeSet['ThemeMaker']."</a>";
 $ThemeSet['CSS'] = "themes/iDB/css.css";

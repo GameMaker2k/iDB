@@ -34,6 +34,24 @@ if(!isset($Settings['sessionid_in_urls'])) {
 if($Settings['sessionid_in_urls']!==true&&
 	$Settings['sessionid_in_urls']!==false) {
   $Settings['sessionid_in_urls'] = false;  }
+if(!isset($Settings['use_captcha'])) {
+	$Settings['use_captcha'] = "on"; }
+if(isset($Settings['use_captcha'])) {
+	if($Settings['use_captcha']!="on"&&
+		$Settings['use_captcha']!="off") {
+	$Settings['use_captcha'] = "on"; } }
+if(!isset($Settings['captcha_guest'])) {
+	$Settings['captcha_guest'] = "on"; }
+if(isset($Settings['captcha_guest'])) {
+	if($Settings['captcha_guest']!="on"&&
+		$Settings['captcha_guest']!="off") {
+	$Settings['captcha_guest'] = "on"; } }
+if(!isset($Settings['captcha_clean'])) {
+	$Settings['captcha_clean'] = "off"; }
+if(isset($Settings['captcha_clean'])) {
+	if($Settings['captcha_clean']!="on"&&
+		$Settings['captcha_clean']!="off") {
+	$Settings['captcha_clean'] = "on"; } }
 $sidurls = $Settings['sessionid_in_urls'];
 if(!isset($Settings['board_offline'])) {
   $Settings['board_offline'] = false;  }

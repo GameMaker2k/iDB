@@ -26,9 +26,6 @@ if(@ini_get("register_globals")) { require('settings.php');
 if(!isset($SettDir['misc'])) { $SettDir['misc'] = "inc/misc/"; }
 	require_once($SettDir['misc'].'killglobals.php'); }
 require('settings.php');
-$Settings['use_captcha'] = "on";
-$Settings['captcha_guest'] = "on";
-$Settings['captcha_clean'] = "off";
 if($Settings['fixbasedir']===true) {
 if($Settings['idburl']!=null&&$Settings['idburl']!="localhost") {
 $PathsTest = parse_url($Settings['idburl']);
