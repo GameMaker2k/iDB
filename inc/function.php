@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: function.php - Last Update: 05/31/2008 SVN 164 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 10/18/2008 SVN 178 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -50,6 +50,27 @@ if(!isset($REFERERurl['host'])) { $REFERERurl['host'] = null; }
 $URL['REFERER'] = $REFERERurl['host'];
 $URL['HOST'] = $_SERVER["SERVER_NAME"];
 $REFERERurl = null;
+// http://www.ajaxray.com/blog/2008/02/06/php-uuid-generator-function/
+/**
+  * Generates an UUID
+  * 
+  * @author     Anis uddin Ahmad <admin@ajaxray.com>
+  * @param      string  an optional prefix
+  * @return     string  the formatted uuid
+  */
+  function uuid($useold = false,$more_entropy = false,$prefix = '') 
+  {
+    if($useold==true) {
+	$chars = uniqid(md5(rand()),$more_entropy); }
+    if($useold==false) {
+	$chars = md5(uniqid(rand(),$more_entropy)); }
+    $uuid  = substr($chars,0,8) . '-';
+    $uuid .= substr($chars,8,4) . '-';
+    $uuid .= substr($chars,12,4) . '-';
+    $uuid .= substr($chars,16,4) . '-';
+    $uuid .= substr($chars,20,12);    
+    return $prefix . $uuid;
+  }
 // Make the Query String if we are not useing &=
 function qstring($qstr=";",$qsep="=")
 { $_GET = null; $_GET = array();
