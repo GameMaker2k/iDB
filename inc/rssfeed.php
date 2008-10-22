@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: rssfeed.php - Last Update: 10/21/2008 SVN 179 - Author: cooldude2k $
+    $FileInfo: rssfeed.php - Last Update: 10/21/2008 SVN 180 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="rssfeed.php"||$File3Name=="/rssfeed.php") {
@@ -61,7 +61,7 @@ if($_GET['feedtype']=="oldrss") { $checkfeedtype = "application/xml"; }
 if($_GET['feedtype']=="rss") { $checkfeedtype = "application/rss+xml"; }
 if($_GET['feedtype']=="atom") { $checkfeedtype = "application/atom+xml"; }
 if(stristr($_SERVER["HTTP_ACCEPT"],$checkfeedtype) ) {
-@header("Content-Type: application/rss+xml; charset=".$Settings['charset']); }
+@header("Content-Type: ".$checkfeedtype."; charset=".$Settings['charset']); }
 else { if(stristr($_SERVER["HTTP_ACCEPT"],"application/xml") ) {
 @header("Content-Type: application/xml; charset=".$Settings['charset']); }
 else { if (stristr($_SERVER["HTTP_USER_AGENT"],"FeedValidator")) {
@@ -104,7 +104,7 @@ if(isset($PermissionInfo['CanViewForum'][$SubsForumID])&&
 $gltf[$apcl] = $SubsForumID; ++$apcl; }
 ++$apci; }
 @mysql_free_result($apcresult); } }
-$Atom = null; $RSS = null; 
+$Atom = null; $RSS = null; $PreRSS = null;
 $gltnum = count($gltf); $glti = 0; 
 while ($glti < $gltnum) {
 $query = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `ForumID`=%i ORDER BY `Pinned` DESC, `LastUpdate` DESC", array($gltf[$glti]));
