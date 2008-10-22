@@ -10,9 +10,9 @@
 
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
-    iDB Installer made by Game Maker 2k - http://upload.idb.s1.jcink.com/
+    iDB Installer made by Game Maker 2k - http://idb.berlios.de/support/category.php?act=view&id=2
 
-    $FileInfo: install.php - Last Update: 02/07/2008 SVN 146 - Author: cooldude2k $
+    $FileInfo: install.php - Last Update: 10/22/2008 SVN 182 - Author: cooldude2k $
 */
 @error_reporting(E_ALL ^ E_NOTICE);
 if(@ini_get("register_globals")) { 
