@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: xhtml10.php - Last Update: 05/31/2008 SVN 164 - Author: cooldude2k $
+    $FileInfo: xhtml10.php - Last Update: 10/21/2008 SVN 181 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="xhtml10.php"||$File3Name=="/xhtml10.php") {
@@ -108,6 +108,13 @@ if($Settings['html_level']=="Strict") { ?>
 <?php } echo "\n"; ?>
 
 <script type="text/javascript" src="<?php echo url_maker($exfilejs['javascript'],$Settings['js_ext'],null,$Settings['qstr'],$Settings['qsep'],$prexqstrjs['javascript'],$exqstrjs['javascript']); ?>"></script>
+<link rel="Start" href="<?php echo $BoardURL.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>" title="<?php echo $Settings['board_name'].$idbpowertitle; ?>" />
+<link rel="Copyright" href="<?php echo $BoardURL.url_maker($exfile['index'],$Settings['file_ext'],"act=bsd",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>" title="Copyright Notice" />
+<?php if($Settings['showverinfo']===true) { ?>
+<link rel="Generator" href="http://idb.berlios.de/" title="<?php echo $VerInfo['iDB_Ver_Show']; ?>" />
+<?php } if($Settings['showverinfo']!==true) { ?>
+<link rel="Generator" href="http://idb.berlios.de/" title="<?php echo $iDB; ?>" />
+<?php } echo "\n"; ?>
 <?php if($ThemeSet['CSSType']=="import") { ?>
 <style type="text/css"><?php echo "\n@import url(\"".$ThemeSet['CSS']."\");\n"; ?></style>
 <?php } if($ThemeSet['CSSType']=="link") { ?>

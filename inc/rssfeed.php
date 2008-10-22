@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: rssfeed.php - Last Update: 10/21/2008 SVN 180 - Author: cooldude2k $
+    $FileInfo: rssfeed.php - Last Update: 10/21/2008 SVN 181 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="rssfeed.php"||$File3Name=="/rssfeed.php") {
@@ -127,7 +127,7 @@ if(isset($PermissionInfo['CanViewForum'][$ForumID])&&
 if($_GET['feedtype']=="atom") {
 $Atom .= '<entry>'."\n".'<title>'.htmlentities($TopicName, ENT_QUOTES, $Settings['charset']).'</title>'."\n".'<summary>'.htmlentities($ForumDescription, ENT_QUOTES, $Settings['charset']).'</summary>'."\n".'<link rel="alternate" href="'.$BoardURL.url_maker($exfilerss['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstrrss['topic'],$exqstrrss['topic']).'" />'."\n".'<id>'.$BoardURL.url_maker($exfilerss['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstrrss['topic'],$exqstrrss['topic']).'</id>'."\n".'<author>'."\n".'<name>'.$SettInfo['Author'].'</name>'."\n".'</author>'."\n".'<updated>'.gmdate("Y-m-d\TH:i:s\Z").'</updated>'."\n".'</entry>'."\n"; }
 if($_GET['feedtype']=="oldrss") {
-$PreRSS .= '      <rdf:li rdf:resource="'.$BoardURL.url_maker($exfilerss['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstrrss['topic'],$exqstrrss['topic']).' />'."\n";
+$PreRSS .= '      <rdf:li rdf:resource="'.$BoardURL.url_maker($exfilerss['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstrrss['topic'],$exqstrrss['topic']).'" />'."\n";
 $RSS .= '<item rdf:about="'.$BoardURL.url_maker($exfilerss['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstrrss['topic'],$exqstrrss['topic']).'">'."\n".'<title>'.htmlentities($TopicName, ENT_QUOTES, $Settings['charset']).'</title>'."\n".'<description>'.htmlentities($ForumDescription, ENT_QUOTES, $Settings['charset']).'</description>'."\n".'</item>'."\n"; }
 if($_GET['feedtype']=="rss") {
 $RSS .= '<item>'."\n".'<title>'.htmlentities($TopicName, ENT_QUOTES, $Settings['charset']).'</title>'."\n".'<description>'.htmlentities($ForumDescription, ENT_QUOTES, $Settings['charset']).'</description>'."\n".'<link>'.$BoardURL.url_maker($exfilerss['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstrrss['topic'],$exqstrrss['topic']).'</link>'."\n".'<guid>'.$BoardURL.url_maker($exfilerss['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstrrss['topic'],$exqstrrss['topic']).'</guid>'."\n".'</item>'."\n"; } }
