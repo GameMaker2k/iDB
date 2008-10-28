@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: profilemain.php - Last Update: 10/10/2008 SVN 173 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 10/27/2008 SVN 184 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
@@ -125,7 +125,7 @@ if($_POST['act']=="view"&&
 	//$_POST['Signature'] = @remove_spaces($_POST['Signature']);
 	//$_POST['Signature'] = remove_bad_entities($_POST['Signature']);
 	/*    <_<  iWordFilter  >_>      
-    by René Johnson - Cool Dude 2k */
+    by Kazuki Przyborowski - Cool Dude 2k */
 	$katarzynaqy=query("SELECT * FROM `".$Settings['sqltable']."wordfilter`", array(null));
 	$katarzynart=mysql_query($katarzynaqy);
 	$katarzynanm=mysql_num_rows($katarzynart);
@@ -200,7 +200,7 @@ if($_POST['act']=="signature"&&
 	//$_POST['Signature'] = @remove_spaces($_POST['Signature']);
 	$_POST['Signature'] = remove_bad_entities($_POST['Signature']);
 	/*    <_<  iWordFilter  >_>      
-    by René Johnson - Cool Dude 2k */
+    by Kazuki Przyborowski - Cool Dude 2k */
 	$katarzynaqy=query("SELECT * FROM `".$Settings['sqltable']."wordfilter`", array(null));
 	$katarzynart=mysql_query($katarzynaqy);
 	$katarzynanm=mysql_num_rows($katarzynart);
@@ -565,7 +565,7 @@ if($_POST['act']=="profile"&&
 	//$_POST['Signature'] = @remove_spaces($_POST['Signature']);
 	//$_POST['Signature'] = remove_bad_entities($_POST['Signature']);
 	/*    <_<  iWordFilter  >_>      
-    by René Johnson - Cool Dude 2k */
+    by Kazuki Przyborowski - Cool Dude 2k */
 	$katarzynaqy=query("SELECT * FROM `".$Settings['sqltable']."wordfilter`", array(null));
 	$katarzynart=mysql_query($katarzynaqy);
 	$katarzynanm=mysql_num_rows($katarzynart);

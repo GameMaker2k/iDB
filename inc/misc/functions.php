@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: functions.php - Last Update: 06/24/2008 SVN 167 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 10/27/2008 SVN 184 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -85,7 +85,7 @@ if($use_gzip=="on") {
 	$goutput = gzcompress($output); }
 	echo $goutput; } }
 $output = @ob_get_clean();
-	$Names['RJ'] = "René Johnson";
+	$Names['RJ'] = "Kazuki Przyborowski";
 define("_rene_", $Names['RJ']);
 // GZip page for faster download
 function gzip_page($use_gzip="off",$gzip_type="gzip") {
@@ -366,8 +366,8 @@ function cp($infile,$outfile,$mode="w") {
    fclose($cpfp);
    return true; }
 /* str_ireplace for PHP below ver. 5 updated // 
-//       by René Johnson - Cool Dude 2k      //
-//      and upaded by René Johnson again     */
+//       by Kazuki Przyborowski - Cool Dude 2k      //
+//      and upaded by Kazuki Przyborowski again     */
 if(!function_exists('str_ireplace')) {
 function str_ireplace($search,$replace,$subject) {
 if(!is_array($search)&&is_array($replace)) {
@@ -391,7 +391,7 @@ if (!function_exists('mysql_set_charset')) {
   function mysql_set_charset($charset) {
     return mysql_query("set names $charset"); } }
 /*   Adds httponly to PHP below Ver. 5.2.0   // 
-//       by René Johnson - Cool Dude 2k      */
+//       by Kazuki Przyborowski - Cool Dude 2k      */
 function http_set_cookie($name,$value=null,$expire=null,$path=null,$domain=null,$secure=false,$httponly=false) {
 	$mkcookie = null; $expireGMT = null;
 	if(!isset($name)) { echo "Error: You need to enter a name for cookie."; return false; }
