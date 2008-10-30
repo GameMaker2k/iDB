@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: setcheck.php - Last Update: 09/26/2008 SVN 170 - Author: cooldude2k $
+    $FileInfo: setcheck.php - Last Update: 10/29/2008 SVN 185 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="setcheck.php"||$File3Name=="/setcheck.php") {
@@ -29,6 +29,7 @@ if(!isset($Settings['enable_pathinfo'])) {
 if($Settings['enable_pathinfo']!==true&&
 	$Settings['enable_pathinfo']!==false) {
   $Settings['enable_pathinfo'] = false;  }
+$Settings['sessionid_in_urls'] = false;
 if(!isset($Settings['sessionid_in_urls'])) {
   $Settings['sessionid_in_urls'] = false;  }
 if($Settings['sessionid_in_urls']!==true&&
