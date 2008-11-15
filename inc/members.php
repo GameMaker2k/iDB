@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: members.php - Last Update: 11/14/2008 SVN 186 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 11/14/2008 SVN 187 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -38,7 +38,9 @@ if($_GET['orderby']=="id") { $orderlist = "order by `ID`"; }
 if($_GET['orderby']=="name") { $orderlist = "order by `Name`"; }
 if($_GET['orderby']=="joined") { $orderlist = "order by `Joined`"; }
 if($_GET['orderby']=="active") { $orderlist = "order by `LastActive`"; }
+if($_GET['orderby']=="post") { $orderlist = "order by `PostCount`"; }
 if($_GET['orderby']=="posts") { $orderlist = "order by `PostCount`"; }
+if($_GET['orderby']=="karma") { $orderlist = "order by `Karma`"; }
 if($_GET['orderby']=="offset") { $orderlist = "order by `TimeZone`"; } }
 if($_GET['ordertype']==null) { 
 	if($_GET['sorttype']!=null) { 
@@ -152,7 +154,8 @@ echo $pstring;
 <th class="TableRow2" style="width: 5%;">ID</th>
 <th class="TableRow2" style="width: 28%;">Name</th>
 <th class="TableRow2" style="width: 10%;">Group</th>
-<th class="TableRow2" style="width: 10%;">Posts</th>
+<th class="TableRow2" style="width: 5%;">Posts</th>
+<th class="TableRow2" style="width: 5%;">Karma</th>
 <th class="TableRow2" style="width: 20%;">Joined</th>
 <th class="TableRow2" style="width: 20%;">Last Active</th>
 <th class="TableRow2" style="width: 7%;">Website</th>
@@ -173,6 +176,7 @@ $MemList['LastActive']=GMTimeChange("F j Y, g:i a",$MemList['LastActive'],$_SESS
 $MemList['Website']=mysql_result($result,$i,"Website");
 $MemList['Gender']=mysql_result($result,$i,"Gender");
 $MemList['PostCount']=mysql_result($result,$i,"PostCount");
+$MemList['Karma']=mysql_result($result,$i,"Karma");
 $MemList['TimeZone']=mysql_result($result,$i,"TimeZone");
 $MemList['DST']=mysql_result($result,$i,"DST");
 $MemList['IP']=mysql_result($result,$i,"IP");
@@ -188,6 +192,7 @@ if($MemList['Group']!=$Settings['GuestGroup']) {
 <td class="TableRow3">&nbsp;<a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$MemList['ID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>"><?php echo $MemList['Name']; ?></a></td>
 <td class="TableRow3" style="text-align: center;"><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=list&gid=".$MemList['GroupID']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>"><?php echo $MemList['Group']; ?></a></td>
 <td class="TableRow3" style="text-align: center;"><?php echo $MemList['PostCount']; ?></td>
+<td class="TableRow3" style="text-align: center;"><?php echo $MemList['Karma']; ?></td>
 <td class="TableRow3" style="text-align: center;"><?php echo $MemList['Joined']; ?></td>
 <td class="TableRow3" style="text-align: center;"><?php echo $MemList['LastActive']; ?></td>
 <td class="TableRow3" style="text-align: center;"><a href="<?php echo $MemList['Website']; ?>" onclick="window.open(this.href);return false;">Website</a></td>
@@ -225,6 +230,7 @@ $ViewMem['LastActive']=GMTimeChange("M j Y, g:i a",$ViewMem['LastActive'],$_SESS
 $ViewMem['Website']=mysql_result($result,$i,"Website");
 $ViewMem['Gender']=mysql_result($result,$i,"Gender");
 $ViewMem['PostCount']=mysql_result($result,$i,"PostCount");
+$ViewMem['Karma']=mysql_result($result,$i,"Karma");
 $ViewMem['TimeZone']=mysql_result($result,$i,"TimeZone");
 $ViewMem['DST']=mysql_result($result,$i,"DST");
 $ViewMem['IP']=mysql_result($result,$i,"IP");
@@ -289,6 +295,7 @@ Title: <?php echo $ViewMem['Title']; ?></div>
 &nbsp;User Time: <?php echo GMTimeGet("M j Y, g:i a",$ViewMem['TimeZone'],0,$ViewMem['DST']); ?><br />
 &nbsp;User Website: <a href="<?php echo $ViewMem['Website']; ?>" onclick="window.open(this.href);return false;">Website</a><br />
 &nbsp;Post Count: <?php echo $ViewMem['PostCount']; ?><br />
+&nbsp;Karma: <?php echo $ViewMem['Karma']; ?><br />
 &nbsp;Interests: <?php echo $ViewMem['Interests']; ?><br />
 </td>
 </tr>
@@ -837,7 +844,7 @@ if(!is_numeric($_POST['MinOffSet'])) { $_POST['MinOffSet'] = "00"; }
 if($_POST['MinOffSet']>59) { $_POST['MinOffSet'] = "59"; }
 if($_POST['MinOffSet']<0) { $_POST['MinOffSet'] = "00"; }
 $_POST['YourOffSet'] = $_POST['YourOffSet'].":".$_POST['MinOffSet'];
-$query = query("INSERT INTO `".$Settings['sqltable']."members` VALUES (".$yourid.",'%s','%s','%s','%s','%s','%s',%i,'%s','%s',%i,%i,'0','0','0','0','%s','%s','%s','%s','%s','%s',%i,10,10,10,'%s','%s','%s','%s','%s')", array($Name,$NewPassword,"iDBH",$_POST['Email'],$yourgroup,$ValidateStats,"0",$_POST['Interests'],$_POST['Title'],$_POST['Joined'],$_POST['LastActive'],$NewSignature,'Your Notes',$Avatar,"100x100",$Website,$_POST['YourGender'],$_POST['PostCount'],$_POST['YourOffSet'],$_POST['DST'],$Settings['DefaultTheme'],$_POST['UserIP'],$HashSalt));
+$query = query("INSERT INTO `".$Settings['sqltable']."members` VALUES (".$yourid.",'%s','%s','%s','%s','%s','%s',%i,'%s','%s',%i,%i,'0','0','0','0','%s','%s','%s','%s','%s','%s',%i,0,0,10,10,10,'%s','%s','%s','%s','%s')", array($Name,$NewPassword,"iDBH",$_POST['Email'],$yourgroup,$ValidateStats,"0",$_POST['Interests'],$_POST['Title'],$_POST['Joined'],$_POST['LastActive'],$NewSignature,'Your Notes',$Avatar,"100x100",$Website,$_POST['YourGender'],$_POST['PostCount'],$_POST['YourOffSet'],$_POST['DST'],$Settings['DefaultTheme'],$_POST['UserIP'],$HashSalt));
 mysql_query($query);
 $querylogr = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `Name`='%s' AND `Password`='%s' LIMIT 1", array($Name,$NewPassword));
 $resultlogr=mysql_query($querylogr);

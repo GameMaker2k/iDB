@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: replys.php - Last Update: 11/14/2008 SVN 186 - Author: cooldude2k $
+    $FileInfo: replys.php - Last Update: 11/14/2008 SVN 187 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replys.php"||$File3Name=="/replys.php") {
@@ -42,18 +42,23 @@ $ViewTimes=mysql_result($preresult,0,"NumViews");
 if($GroupInfo['HasAdminCP']!="yes"||$GroupInfo['HasModCP']!="yes") {
 $forumcheck = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i  LIMIT 1", array($TopicForumID));
 $fmckresult=mysql_query($forumcheck);
-$fmcknum=mysql_num_rows($fmckresult);
-$ForumPostCountView=mysql_result($fmcknum,0,"PostCountView");
-@mysql_free_result($fmcknum);
+$ForumPostCountView=mysql_result($fmckresult,0,"PostCountView");
+$ForumKarmaCountView=mysql_result($fmckresult,0,"KarmaCountView");
+@mysql_free_result($fmckresult);
 $catcheck = query("SELECT * FROM `".$Settings['sqltable']."categories` WHERE `id`=%i  LIMIT 1", array($TopicCatID));
 $catresult=mysql_query($catcheck);
-$catnum=mysql_num_rows($catresult);
-$CategoryPostCountView=mysql_result($catnum,0,"PostCountView");
-@mysql_free_result($catnum);
+$CategoryPostCountView=mysql_result($catresult,0,"PostCountView");
+$CategoryKarmaCountView=mysql_result($catresult,0,"KarmaCountView");
+@mysql_free_result($catresult);
 if($MyPostCountChk==null) { $MyPostCountChk = 0; }
+if($MyKarmaCount==null) { $MyKarmaCount = 0; }
 if($ForumPostCountView!=0&&$MyPostCountChk<$ForumPostCountView) {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); }
 if($CategoryPostCountView!=0&&$MyPostCountChk<$CategoryPostCountView) {
+redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); }
+if($ForumKarmaCountView!=0&&$MyKarmaCount<$ForumKarmaCountView) {
+redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); }
+if($CategoryKarmaCountView!=0&&$MyKarmaCount<$CategoryKarmaCountView) {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); } }
 if(!isset($CatPermissionInfo['CanViewCategory'][$TopicCatID])) {
 	$CatPermissionInfo['CanViewCategory'][$TopicCatID] = "no"; }
@@ -219,6 +224,7 @@ $AvatarSize1=explode("x", $User1AvatarSize);
 $AvatarSize1W=$AvatarSize1[0]; $AvatarSize1H=$AvatarSize1[1];
 $User1Website=mysql_result($reresult,$rei,"Website");
 $User1PostCount=mysql_result($reresult,$rei,"PostCount");
+$User1Karma=mysql_result($reresult,$rei,"Karma");
 $User1IP=mysql_result($reresult,$rei,"IP");
 ++$rei; } @mysql_free_result($reresult);
 if($User1Name=="Guest") { $User1Name=$GuestName;
@@ -291,6 +297,7 @@ if($User1ID!="-1") { echo $User1ID; }
 if($User1ID=="-1") { echo 0; }
 ?><br />
 Posts: <?php echo $User1PostCount; ?><br />
+Karma: <?php echo $User1Karma; ?><br />
 Joined: <?php echo $User1Joined; ?><br /><br />
 </td>
 <td class="TableRow3" style="vertical-align: middle;">
@@ -406,6 +413,10 @@ if($GroupInfo['HasAdminCP']!="yes"||$GroupInfo['HasModCP']!="yes") {
 if($ForumPostCountView!=0&&$MyPostCountChk<$ForumPostCountView) {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); }
 if($CategoryPostCountView!=0&&$MyPostCountChk<$CategoryPostCountView) {
+redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); }
+if($ForumKarmaCountView!=0&&$MyKarmaCount<$ForumKarmaCountView) {
+redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); }
+if($CategoryKarmaCountView!=0&&$MyKarmaCount<$CategoryKarmaCountView) {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); } }
 if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="no") { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
@@ -453,18 +464,22 @@ if($GroupInfo['HasAdminCP']!="yes"||$GroupInfo['HasModCP']!="yes") {
 if($_GET['post']!=null) {
 $rforumcheck = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i  LIMIT 1", array($QuoteReplyFID));
 $rfmckresult=mysql_query($rforumcheck);
-$rfmcknum=mysql_num_rows($rfmckresult);
-$rForumPostCountView=mysql_result($rfmcknum,0,"PostCountView");
-@mysql_free_result($rfmcknum);
+$rForumPostCountView=mysql_result($rfmckresult,0,"PostCountView");
+$rForumKarmaCountView=mysql_result($rfmckresult,0,"KarmaCountView");
+@mysql_free_result($rfmckresult);
 $rcatcheck = query("SELECT * FROM `".$Settings['sqltable']."categories` WHERE `id`=%i  LIMIT 1", array($QuoteReplyCID));
 $rcatresult=mysql_query($rcatcheck);
-$rcatnum=mysql_num_rows($rcatresult);
-$rCategoryPostCountView=mysql_result($catnum,0,"PostCountView");
-@mysql_free_result($rcatnum);
+$rCategoryPostCountView=mysql_result($rcatresult,0,"PostCountView");
+$rCategoryKarmaCountView=mysql_result($rcatresult,0,"KarmaCountView");
+@mysql_free_result($rcatresult);
 if($MyPostCountChk==null) { $MyPostCountChk = 0; }
 if($rForumPostCountView!=0&&$MyPostCountChk<$rForumPostCountView) {
 $QuoteReply = null; $QuoteDescription = null; }
 if($rCategoryPostCountView!=0&&$MyPostCountChk<$rCategoryPostCountView) {
+$QuoteReply = null; $QuoteDescription = null; }
+if($rForumKarmaCountView!=0&&$MyKarmaCount<$rForumKarmaCountView) {
+$QuoteReply = null; $QuoteDescription = null; }
+if($rCategoryKarmaCountView!=0&&$MyKarmaCount<$rCategoryKarmaCountView) {
 $QuoteReply = null; $QuoteDescription = null; } } }
 if($_GET['post']==null) { $QuoteReply = null; $QuoteDescription = null; }
 ?>
@@ -547,6 +562,10 @@ if($GroupInfo['HasAdminCP']!="yes"||$GroupInfo['HasModCP']!="yes") {
 if($ForumPostCountView!=0&&$MyPostCountChk<$ForumPostCountView) {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); }
 if($CategoryPostCountView!=0&&$MyPostCountChk<$CategoryPostCountView) {
+redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); }
+if($ForumKarmaCountView!=0&&$MyKarmaCount<$ForumKarmaCountView) {
+redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); }
+if($CategoryKarmaCountView!=0&&$MyKarmaCount<$CategoryKarmaCountView) {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); } }
 if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="no") { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);

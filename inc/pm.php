@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: pm.php - Last Update: 10/11/2008 SVN 175 - Author: cooldude2k $
+    $FileInfo: pm.php - Last Update: 11/14/2008 SVN 187 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pm.php"||$File3Name=="/pm.php") {
@@ -373,6 +373,7 @@ $AvatarSize1=explode("x", $User1AvatarSize);
 $AvatarSize1W=$AvatarSize1[0]; $AvatarSize1H=$AvatarSize1[1];
 $User1Website=mysql_result($reresult,$rei,"Website");
 $User1PostCount=mysql_result($reresult,$rei,"PostCount");
+$User1Karma=mysql_result($reresult,$rei,"Karma");
 $User1IP=mysql_result($reresult,$rei,"IP");
 ++$rei; } @mysql_free_result($reresult);
 ++$is; } @mysql_free_result($result);
@@ -425,6 +426,7 @@ if($User1ID!="-1") { echo $User1ID; }
 if($User1ID=="-1") { echo 0; }
 ?><br />
 Posts: <?php echo $User1PostCount; ?><br />
+Karma: <?php echo $User1Karma; ?><br />
 Joined: <?php echo $User1Joined; ?><br /><br />
 </td>
 <td class="TableRow3" style="vertical-align: middle;">
