@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: members.php - Last Update: 11/14/2008 SVN 187 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 11/14/2008 SVN 188 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -146,7 +146,7 @@ echo $pstring;
 <div class="Table1Border">
 <table class="Table1">
 <tr class="TableRow1">
-<td class="TableRow1" colspan="7"><span style="float: left;">
+<td class="TableRow1" colspan="8"><span style="float: left;">
 <?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=list&orderby=".$_GET['orderby']."&ordertype=".$_GET['ordertype']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Member List</a>
 </span><span style="float: right;">&nbsp;</span></td>
 </tr>
@@ -201,7 +201,7 @@ if($MemList['Group']!=$Settings['GuestGroup']) {
 ++$i; } @mysql_free_result($result);
 ?>
 <tr id="MemEnd" class="TableRow4">
-<td class="TableRow4" colspan="7">&nbsp;</td>
+<td class="TableRow4" colspan="8">&nbsp;</td>
 </tr>
 </table></div>
 <?php }
