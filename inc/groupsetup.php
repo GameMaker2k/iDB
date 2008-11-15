@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: groupsetup.php - Last Update: 11/14/2008 SVN 187 - Author: cooldude2k $
+    $FileInfo: groupsetup.php - Last Update: 11/15/2008 SVN 189 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="groupsetup.php"||$File3Name=="/groupsetup.php") {
@@ -126,11 +126,35 @@ if(!is_numeric($GroupInfo['PromotePosts'])) {
 $GroupInfo['PromoteKarma']=mysql_result($gruresult,0,"PromoteKarma");
 if(!is_numeric($GroupInfo['PromoteKarma'])) { 
 	$GroupInfo['PromoteKarma'] = 0; $GroupInfo['PromoteTo'] = 0; }
+if(!isset($Settings['KarmaBoostDay'])) {
+	$Settings['KarmaBoostDay'] = null; }
+if(!isset($Settings['KBoostPercent'])) {
+	$Settings['KBoostPercent'] = "6|10"; }
 //Update karma and group upgrade on post count or karma count.
-if($_SESSION['UserID']!=0) {
+if($_SESSION['UserID']!=0) { $BoostTotal = null;
 $NewKarmaUpdate = GMTimeGet("Ymd",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$ThisYearUpdate = GMTimeGet("Y",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 if($MyKarmaUpdate<$NewKarmaUpdate&&$MyPostCountChk>0) { 
-	$MyKarmaCount = $MyKarmaCount + 1;
+	$KarmaBoostDay = $Settings['KarmaBoostDay'];
+	$KBoostPercent = explode("|",$Settings['KBoostPercent']);
+	if(count($KBoostPercent)<1) { 
+	$KBoostPercent[0] = rand(1,4); }
+	if(!is_numeric($KBoostPercent[0])) {
+	$KBoostPercent[0] = 6; }
+	if(count($KBoostPercent)==1) { 
+	$KBoostPercent[1] = $KBoostPercent[0] + rand(3,6); }
+	if(!is_numeric($KBoostPercent[1])) {
+	$KBoostPercent[0] = 10; }
+	$KBoostPercent = rand($KBoostPercent[0],$KBoostPercent[1]);
+	if($ThisYearUpdate.$KarmaBoostDay==$NewKarmaUpdate&&
+	is_numeric($KarmaBoostDay)) {
+	$KBoostPercent = $KBoostPercent / 100;
+	$BoostTotal = $MyKarmaCount * $KBoostPercent;
+	$BoostTotal = round($BoostTotal,0); }
+	if($BoostTotal!=null) {
+	$MyKarmaCount = $MyKarmaCount + $BoostTotal; }
+	if($BoostTotal==null) {
+	$MyKarmaCount = $MyKarmaCount + 1; }
 	$querykarmaup = query("UPDATE `".$Settings['sqltable']."members` SET `Karma`=%i,`KarmaUpdate`=%i WHERE `id`=%i", array($MyKarmaCount,$NewKarmaUpdate,$_SESSION['UserID']));
 	mysql_query($querykarmaup); }
 if($GroupInfo['PromoteTo']!=0&&$MyPostCountChk>=$GroupInfo['PromotePosts']) {
