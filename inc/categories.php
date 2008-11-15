@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: categories.php - Last Update: 10/10/2008 SVN 173 - Author: cooldude2k $
+    $FileInfo: categories.php - Last Update: 11/14/2008 SVN 186 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="categories.php"||$File3Name=="/categories.php") {
@@ -32,6 +32,11 @@ $CategoryType=mysql_result($preresult,0,"CategoryType");
 $SubShowForums=mysql_result($preresult,0,"SubShowForums");
 $CategoryDescription=mysql_result($preresult,0,"Description");
 $CategoryType = strtolower($CategoryType); $SubShowForums = strtolower($SubShowForums);
+$CategoryPostCountView=mysql_result($preresult,0,"PostCountView");
+if($MyPostCountChk==null) { $MyPostCountChk = 0; }
+if($GroupInfo['HasAdminCP']!="yes"||$GroupInfo['HasModCP']!="yes") {
+if($CategoryPostCountView!=0&&$MyPostCountChk<$CategoryPostCountView) {
+redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); } }
 if(!isset($CatPermissionInfo['CanViewCategory'][$CategoryID])) {
 	$CatPermissionInfo['CanViewCategory'][$CategoryID] = "no"; }
 if($CatPermissionInfo['CanViewCategory'][$CategoryID]=="no"||

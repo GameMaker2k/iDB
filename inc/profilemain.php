@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: profilemain.php - Last Update: 10/27/2008 SVN 184 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 11/14/2008 SVN 186 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
@@ -392,6 +392,30 @@ if ($handle = opendir($skindir)) { $dirnum = null;
    ++$themei; }
 } ?></select></td>
 </tr><tr style="text-align: left;">
+	<td style="width: 40%;"><label class="TextBoxLabel" for="RepliesPerPage">Replies Per Page:</label></td>
+	<td style="width: 60%;"><select id="RepliesPerPage" name="RepliesPerPage" class="TextBox">
+<option selected="selected" value="<?php echo $Settings['max_posts']; ?>">Old Value (<?php echo $Settings['max_posts']; ?>)</option>
+<option value="10">10</option>
+<option value="20">20</option>
+<option value="30">30</option>
+</select></td>
+</tr><tr style="text-align: left;">
+	<td style="width: 40%;"><label class="TextBoxLabel" for="TopicsPerPage">Topics Per Page:</label></td>
+	<td style="width: 60%;"><select id="TopicsPerPage" name="TopicsPerPage" class="TextBox">
+<option selected="selected" value="<?php echo $Settings['max_topics']; ?>">Old Value (<?php echo $Settings['max_topics']; ?>)</option>
+<option value="10">10</option>
+<option value="20">20</option>
+<option value="30">30</option>
+</select></td>
+</tr><tr style="text-align: left;">
+	<td style="width: 40%;"><label class="TextBoxLabel" for="MessagesPerPage">Messages/Members Per Page:</label></td>
+	<td style="width: 60%;"><select id="MessagesPerPage" name="MessagesPerPage" class="TextBox">
+<option selected="selected" value="<?php echo $Settings['max_pmlist']; ?>">Old Value (<?php echo $Settings['max_pmlist']; ?>)</option>
+<option value="10">10</option>
+<option value="20">20</option>
+<option value="30">30</option>
+</select></td>
+</tr><tr style="text-align: left;">
 	<td style="width: 40%;"><label class="TextBoxLabel" for="DST">Is <span title="Daylight Savings Time">DST</span> / <span title="Summer Time">ST</span> on or off:</label></td>
 	<td style="width: 60%;"><select id="DST" name="DST" class="TextBox"><?php echo "\n" ?>
 <?php if($User1DST=="off"||$User1DST!="on") { ?>
@@ -430,7 +454,10 @@ if($_POST['act']=="settings"&&
 	$_POST['YourOffSet'] = $_POST['YourOffSet'].":".$_POST['MinOffSet'];
 	$_SESSION['UserTimeZone'] = $_POST['YourOffSet'];
 	$_SESSION['UserDST'] = $_POST['DST'];
-	$querynewskin = query("UPDATE `".$Settings['sqltable']."members` SET `UseTheme`='%s',`TimeZone`='%s',`DST`='%s',`LastActive`=%i,`IP`='%s' WHERE `id`=%i", array($_POST['skin'],$_POST['YourOffSet'],$_POST['DST'],$NewDay,$NewIP,$_SESSION['UserID']));
+	if(!is_numeric($_POST['RepliesPerPage'])) { $_POST['RepliesPerPage'] = "10"; }
+	if(!is_numeric($_POST['TopicsPerPage'])) { $_POST['TopicsPerPage'] = "10"; }
+	if(!is_numeric($_POST['MessagesPerPage'])) { $_POST['MessagesPerPage'] = "10"; }
+	$querynewskin = query("UPDATE `".$Settings['sqltable']."members` SET `UseTheme`='%s',`TimeZone`='%s',`DST`='%s',`LastActive`=%i,RepliesPerPage=%i,TopicsPerPage=%i,MessagesPerPage=%i,`IP`='%s' WHERE `id`=%i", array($_POST['skin'],$_POST['YourOffSet'],$_POST['DST'],$NewDay,$_POST['RepliesPerPage'],$_POST['TopicsPerPage'],$_POST['MessagesPerPage'],$NewIP,$_SESSION['UserID']));
 	mysql_query($querynewskin); } } }
 if($_GET['act']=="profile") {
 if($_POST['update']!="now") {
@@ -528,6 +555,30 @@ echo "<option value=\"".$showmin."\">0:".$showmin." minutes</option>\n";
 <option value="Unknow">Unknow</option>
 </select></td>
 </tr><tr style="text-align: left;">
+	<td style="width: 40%;"><label class="TextBoxLabel" for="RepliesPerPage">Replies Per Page:</label></td>
+	<td style="width: 60%;"><select id="RepliesPerPage" name="RepliesPerPage" class="TextBox">
+<option selected="selected" value="<?php echo $Settings['max_posts']; ?>">Old Value (<?php echo $Settings['max_posts']; ?>)</option>
+<option value="10">10</option>
+<option value="20">20</option>
+<option value="30">30</option>
+</select></td>
+</tr><tr style="text-align: left;">
+	<td style="width: 40%;"><label class="TextBoxLabel" for="TopicsPerPage">Topics Per Page:</label></td>
+	<td style="width: 60%;"><select id="TopicsPerPage" name="TopicsPerPage" class="TextBox">
+<option selected="selected" value="<?php echo $Settings['max_topics']; ?>">Old Value (<?php echo $Settings['max_topics']; ?>)</option>
+<option value="10">10</option>
+<option value="20">20</option>
+<option value="30">30</option>
+</select></td>
+</tr><tr style="text-align: left;">
+	<td style="width: 40%;"><label class="TextBoxLabel" for="MessagesPerPage">Messages/Members Per Page:</label></td>
+	<td style="width: 60%;"><select id="MessagesPerPage" name="MessagesPerPage" class="TextBox">
+<option selected="selected" value="<?php echo $Settings['max_pmlist']; ?>">Old Value (<?php echo $Settings['max_pmlist']; ?>)</option>
+<option value="10">10</option>
+<option value="20">20</option>
+<option value="30">30</option>
+</select></td>
+</tr><tr style="text-align: left;">
 	<td style="width: 40%;"><label class="TextBoxLabel" for="DST">Is <span title="Daylight Savings Time">DST</span> / <span title="Summer Time">ST</span> on or off:</label></td>
 	<td style="width: 60%;"><select id="DST" name="DST" class="TextBox"><?php echo "\n" ?>
 <?php if($User1DST=="off"||$User1DST!="on") { ?>
@@ -595,6 +646,9 @@ if($_POST['act']=="profile"&&
 	$_POST['Interests'] = preg_replace("/".$Filter."/i", $Replace, $_POST['Interests']); 
 	$_POST['Title'] = preg_replace("/".$Filter."/i", $Replace, $_POST['Title']); }
 	++$katarzynas; } @mysql_free_result($katarzynart);
+	if(!is_numeric($_POST['RepliesPerPage'])) { $_POST['RepliesPerPage'] = "10"; }
+	if(!is_numeric($_POST['TopicsPerPage'])) { $_POST['TopicsPerPage'] = "10"; }
+	if(!is_numeric($_POST['MessagesPerPage'])) { $_POST['MessagesPerPage'] = "10"; }
 	if(!isset($_POST['EventDay'])) { $_POST['EventDay'] = null; }
 	if($_POST['EventDay']!=null) {
 	$BirthExpl = explode("/",$_POST['EventDay']);
@@ -632,7 +686,7 @@ if($_POST['act']=="profile"&&
 	$_SESSION['UserDST'] = $_POST['DST'];
 	$NewDay=GMTimeStamp();
 	$NewIP=$_SERVER['REMOTE_ADDR'];
-	$querynewprofile = query("UPDATE `".$Settings['sqltable']."members` SET `Interests`='%s',`Title`='%s',`Website`='%s',`TimeZone`='%s',`Gender`='%s',`DST`='%s',`LastActive`=%i,`BirthMonth`=%i,`BirthDay`=%i,`BirthYear`=%i,`IP`='%s' WHERE `id`=%i", array($_POST['Interests'],$_POST['Title'],$_POST['Website'],$_POST['YourOffSet'],$_POST['YourGender'],$_POST['DST'],$NewDay,$BirthMonth,$BirthDay,$BirthYear,$NewIP,$_SESSION['UserID']));
+	$querynewprofile = query("UPDATE `".$Settings['sqltable']."members` SET `Interests`='%s',`Title`='%s',`Website`='%s',`TimeZone`='%s',`Gender`='%s',`DST`='%s',`LastActive`=%i,`BirthMonth`=%i,`BirthDay`=%i,`BirthYear`=%i,RepliesPerPage=%i,TopicsPerPage=%i,MessagesPerPage=%i,`IP`='%s' WHERE `id`=%i", array($_POST['Interests'],$_POST['Title'],$_POST['Website'],$_POST['YourOffSet'],$_POST['YourGender'],$_POST['DST'],$NewDay,$BirthMonth,$BirthDay,$BirthYear,$_POST['RepliesPerPage'],$_POST['TopicsPerPage'],$_POST['MessagesPerPage'],$NewIP,$_SESSION['UserID']));
 	mysql_query($querynewprofile); } } }
 if($_GET['act']=="userinfo") {
 if($_POST['update']!="now") {

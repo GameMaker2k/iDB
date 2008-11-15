@@ -11,13 +11,14 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: groupsetup.php - Last Update: 05/31/2008 SVN 164 - Author: cooldude2k $
+    $FileInfo: groupsetup.php - Last Update: 11/14/2008 SVN 186 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="groupsetup.php"||$File3Name=="/groupsetup.php") {
 	require('index.php');
 	exit(); }
 // Check to make sure MemberInfo is right
+$MyPostCountChk = null;
 if(!isset($_SESSION['UserID'])) { $_SESSION['UserID'] = 0; }
 if($_SESSION['UserID']!=0&&$_SESSION['UserID']!=null) { $BanError = null;
 $kgbquerychkusr = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `Name`='%s' AND `Password`='%s' AND `id`=%i LIMIT 1", array($_SESSION['MemberName'],$_SESSION['UserPass'],$_SESSION['UserID'])); 
@@ -30,6 +31,14 @@ $ChkUsrGroup=mysql_result($resultchkusr,0,"GroupID");
 $ChkUsrPass=mysql_result($resultchkusr,0,"Password");
 $ChkUsrTimeZone=mysql_result($resultchkusr,0,"TimeZone");
 $ChkUsrTheme=mysql_result($resultchkusr,0,"UseTheme");
+$MyPostCountChk=mysql_result($resultchkusr,0,"PostCount");
+$MyRepliesPerPage=mysql_result($resultchkusr,0,"RepliesPerPage");
+$Settings['max_posts'] = $MyRepliesPerPage;
+$MyTopicsPerPage=mysql_result($resultchkusr,0,"TopicsPerPage");
+$Settings['max_topics'] = $MyTopicsPerPage;
+$MyMessagesPerPage=mysql_result($resultchkusr,0,"MessagesPerPage");
+$Settings['max_memlist'] = $MyMessagesPerPage;
+$Settings['max_pmlist'] = $MyMessagesPerPage;
 $ChkUsrDST=mysql_result($resultchkusr,0,"DST");
 $svrquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($ChkUsrGroup));
 $svrgresultkgb=mysql_query($svrquery);
@@ -111,7 +120,14 @@ if($GroupInfo['CanSearch']!="yes"&&$GroupInfo['CanSearch']!="no") {
 $GroupInfo['PromoteTo']=mysql_result($gruresult,0,"PromoteTo");
 $GroupInfo['PromotePosts']=mysql_result($gruresult,0,"PromotePosts");
 if(!is_numeric($GroupInfo['PromotePosts'])) { 
-	$GroupInfo['PromotePosts'] = 0; $GroupInfo['PromoteTo'] = "none"; }
+	$GroupInfo['PromotePosts'] = 0; $GroupInfo['PromoteTo'] = 0; }
+if($GroupInfo['PromoteTo']!=0&&$MyPostCountChk>=$GroupInfo['PromotePosts']) {
+	$sql_group_check = mysql_query(query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($GroupInfo['PromoteTo'])));
+	$group_check = mysql_num_rows($sql_group_check);
+	@mysql_free_result($sql_group_check);
+	if($group_check > 0) {
+	$queryupgrade = query("UPDATE `".$Settings['sqltable']."members` SET `GroupID`=%i WHERE `id`=%i", array($GroupInfo['PromoteTo'],$_SESSION['UserID']));
+	mysql_query($queryupgrade); } }
 $GroupInfo['HasModCP']=mysql_result($gruresult,0,"HasModCP");
 if($GroupInfo['HasModCP']!="yes"&&$GroupInfo['HasModCP']!="no") {
 	$GroupInfo['HasModCP'] = "no"; }

@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: members.php - Last Update: 10/29/2008 SVN 185 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 11/14/2008 SVN 186 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -52,7 +52,7 @@ if($_GET['ordertype']=="desc") { $orderlist .= " desc"; } }
 if(!is_numeric($_GET['gid'])) { $_GET['gid'] = null; }
 if($_GET['gid']!=null&&$_GET['groupid']==null) { $_GET['groupid'] = $_GET['gid']; }
 if(!is_numeric($_GET['groupid'])) { $_GET['groupid'] = null; }
-$ggquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `Name`='%s'D", array($Settings['GuestGroup']));
+$ggquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `Name`='%s'", array($Settings['GuestGroup']));
 $ggresult=mysql_query($ggquery);
 $GGroup=mysql_result($ggresult,0,"id");
 @mysql_free_result($ggresult);
@@ -837,7 +837,7 @@ if(!is_numeric($_POST['MinOffSet'])) { $_POST['MinOffSet'] = "00"; }
 if($_POST['MinOffSet']>59) { $_POST['MinOffSet'] = "59"; }
 if($_POST['MinOffSet']<0) { $_POST['MinOffSet'] = "00"; }
 $_POST['YourOffSet'] = $_POST['YourOffSet'].":".$_POST['MinOffSet'];
-$query = query("INSERT INTO `".$Settings['sqltable']."members` VALUES (".$yourid.",'%s','%s','%s','%s','%s','%s',%i,'%s','%s',%i,%i,'0','0','0','0','%s','%s','%s','%s','%s','%s',%i,'%s','%s','%s','%s','%s')", array($Name,$NewPassword,"iDBH",$_POST['Email'],$yourgroup,$ValidateStats,"0",$_POST['Interests'],$_POST['Title'],$_POST['Joined'],$_POST['LastActive'],$NewSignature,'Your Notes',$Avatar,"100x100",$Website,$_POST['YourGender'],$_POST['PostCount'],$_POST['YourOffSet'],$_POST['DST'],$Settings['DefaultTheme'],$_POST['UserIP'],$HashSalt));
+$query = query("INSERT INTO `".$Settings['sqltable']."members` VALUES (".$yourid.",'%s','%s','%s','%s','%s','%s',%i,'%s','%s',%i,%i,'0','0','0','0','%s','%s','%s','%s','%s','%s',%i,10,10,10,'%s','%s','%s','%s','%s')", array($Name,$NewPassword,"iDBH",$_POST['Email'],$yourgroup,$ValidateStats,"0",$_POST['Interests'],$_POST['Title'],$_POST['Joined'],$_POST['LastActive'],$NewSignature,'Your Notes',$Avatar,"100x100",$Website,$_POST['YourGender'],$_POST['PostCount'],$_POST['YourOffSet'],$_POST['DST'],$Settings['DefaultTheme'],$_POST['UserIP'],$HashSalt));
 mysql_query($query);
 $querylogr = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `Name`='%s' AND `Password`='%s' LIMIT 1", array($Name,$NewPassword));
 $resultlogr=mysql_query($querylogr);

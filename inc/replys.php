@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: replys.php - Last Update: 10/12/2008 SVN 176 - Author: cooldude2k $
+    $FileInfo: replys.php - Last Update: 11/14/2008 SVN 186 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replys.php"||$File3Name=="/replys.php") {
@@ -39,6 +39,22 @@ $TopicClosed=mysql_result($preresult,0,"Closed");
 $NumberReplies=mysql_result($preresult,0,"NumReply");
 $ViewTimes=mysql_result($preresult,0,"NumViews");
 @mysql_free_result($preresult);
+if($GroupInfo['HasAdminCP']!="yes"||$GroupInfo['HasModCP']!="yes") {
+$forumcheck = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i  LIMIT 1", array($TopicForumID));
+$fmckresult=mysql_query($forumcheck);
+$fmcknum=mysql_num_rows($fmckresult);
+$ForumPostCountView=mysql_result($fmcknum,0,"PostCountView");
+@mysql_free_result($fmcknum);
+$catcheck = query("SELECT * FROM `".$Settings['sqltable']."categories` WHERE `id`=%i  LIMIT 1", array($TopicCatID));
+$catresult=mysql_query($catcheck);
+$catnum=mysql_num_rows($catresult);
+$CategoryPostCountView=mysql_result($catnum,0,"PostCountView");
+@mysql_free_result($catnum);
+if($MyPostCountChk==null) { $MyPostCountChk = 0; }
+if($ForumPostCountView!=0&&$MyPostCountChk<$ForumPostCountView) {
+redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); }
+if($CategoryPostCountView!=0&&$MyPostCountChk<$CategoryPostCountView) {
+redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); } }
 if(!isset($CatPermissionInfo['CanViewCategory'][$TopicCatID])) {
 	$CatPermissionInfo['CanViewCategory'][$TopicCatID] = "no"; }
 if($CatPermissionInfo['CanViewCategory'][$TopicCatID]=="no"||
@@ -386,6 +402,11 @@ echo "</table>";
 <div>&nbsp;</div>
 </div>
 <?php } } if($_GET['act']=="create") {
+if($GroupInfo['HasAdminCP']!="yes"||$GroupInfo['HasModCP']!="yes") {
+if($ForumPostCountView!=0&&$MyPostCountChk<$ForumPostCountView) {
+redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); }
+if($CategoryPostCountView!=0&&$MyPostCountChk<$CategoryPostCountView) {
+redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); } }
 if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="no") { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
@@ -428,6 +449,23 @@ if(!isset($CatPermissionInfo['CanViewCategory'][$QuoteReplyCID])) {
 	$CatPermissionInfo['CanViewCategory'][$QuoteReplyCID] = "no"; }
 if($CatPermissionInfo['CanViewCategory'][$QuoteReplyCID]=="no") {
 	$QuoteReply = null; $QuoteDescription = null; } }
+if($GroupInfo['HasAdminCP']!="yes"||$GroupInfo['HasModCP']!="yes") {
+if($_GET['post']!=null) {
+$rforumcheck = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i  LIMIT 1", array($QuoteReplyFID));
+$rfmckresult=mysql_query($rforumcheck);
+$rfmcknum=mysql_num_rows($rfmckresult);
+$rForumPostCountView=mysql_result($rfmcknum,0,"PostCountView");
+@mysql_free_result($rfmcknum);
+$rcatcheck = query("SELECT * FROM `".$Settings['sqltable']."categories` WHERE `id`=%i  LIMIT 1", array($QuoteReplyCID));
+$rcatresult=mysql_query($rcatcheck);
+$rcatnum=mysql_num_rows($rcatresult);
+$rCategoryPostCountView=mysql_result($catnum,0,"PostCountView");
+@mysql_free_result($rcatnum);
+if($MyPostCountChk==null) { $MyPostCountChk = 0; }
+if($rForumPostCountView!=0&&$MyPostCountChk<$rForumPostCountView) {
+$QuoteReply = null; $QuoteDescription = null; }
+if($rCategoryPostCountView!=0&&$MyPostCountChk<$rCategoryPostCountView) {
+$QuoteReply = null; $QuoteDescription = null; } } }
 if($_GET['post']==null) { $QuoteReply = null; $QuoteDescription = null; }
 ?>
 <div class="Table1Border">
@@ -505,6 +543,11 @@ echo "</table>";
 </table></div>
 <div>&nbsp;</div>
 <?php } if($_GET['act']=="makereply"&&$_POST['act']=="makereplies") {
+if($GroupInfo['HasAdminCP']!="yes"||$GroupInfo['HasModCP']!="yes") {
+if($ForumPostCountView!=0&&$MyPostCountChk<$ForumPostCountView) {
+redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); }
+if($CategoryPostCountView!=0&&$MyPostCountChk<$CategoryPostCountView) {
+redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); } }
 if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="no") { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }

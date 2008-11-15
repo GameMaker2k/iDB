@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: forums.php - Last Update: 10/10/2008 SVN 173 - Author: cooldude2k $
+    $FileInfo: forums.php - Last Update: 11/14/2008 SVN 186 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="forums.php"||$File3Name=="/forums.php") {
@@ -29,6 +29,11 @@ $CategoryType=mysql_result($preresult,$prei,"CategoryType");
 $SubShowForums=mysql_result($preresult,$prei,"SubShowForums");
 $CategoryDescription=mysql_result($preresult,$prei,"Description");
 $CategoryType = strtolower($CategoryType); $SubShowForums = strtolower($SubShowForums);
+$CategoryPostCountView=mysql_result($preresult,0,"PostCountView");
+if($MyPostCountChk==null) { $MyPostCountChk = 0; }
+if($GroupInfo['HasAdminCP']!="yes"||$GroupInfo['HasModCP']!="yes") {
+if($CategoryPostCountView!=0&&$MyPostCountChk<$CategoryPostCountView) {
+redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); } }
 if(isset($CatPermissionInfo['CanViewCategory'][$CategoryID])&&
 	$CatPermissionInfo['CanViewCategory'][$CategoryID]=="yes") {
 $query = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `ShowForum`='yes' AND `CategoryID`=%i AND `InSubForum`=0 ORDER BY `OrderID` ASC, `id` ASC", array($CategoryID));
