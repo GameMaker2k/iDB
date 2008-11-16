@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: searchs.php - Last Update: 10/10/2008 SVN 173 - Author: cooldude2k $
+    $FileInfo: searchs.php - Last Update: 11/15/2008 SVN 190 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="searchs.php"||$File3Name=="/searchs.php") {
@@ -212,6 +212,17 @@ if($_GET['msearch']==null) { ?>
 while ($i < $num) {
 $TopicID=mysql_result($result,$i,"id");
 $ForumID=mysql_result($result,$i,"ForumID");
+$prequery = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i LIMIT 1", array($ForumID));
+$preresult=mysql_query($prequery);
+$prenum=mysql_num_rows($preresult);
+$HotTopicPosts = $Settings['hot_topic_num'];
+if($prenum > 0) {
+$HotTopicPosts = mysql_result($preresult,0,"HotTopicPosts"); }
+@mysql_free_result($preresult);
+if($HotTopicPosts!=0&&is_numeric($HotTopicPosts)) {
+	$Settings['hot_topic_num'] = $HotTopicPosts; }
+if(!is_numeric($Settings['hot_topic_num'])) {
+	$Settings['hot_topic_num'] = 15; }
 $CategoryID=mysql_result($result,$i,"CategoryID");
 $UsersID=mysql_result($result,$i,"UserID");
 $GuestName=mysql_result($result,$i,"GuestName");

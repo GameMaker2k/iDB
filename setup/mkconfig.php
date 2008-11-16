@@ -12,7 +12,7 @@
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mkconfig.php - Last Update: 11/15/2008 SVN 189 - Author: cooldude2k $
+    $FileInfo: mkconfig.php - Last Update: 11/15/2008 SVN 190 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mkconfig.php"||$File3Name=="/mkconfig.php") {
@@ -118,7 +118,7 @@ $EventYearEnd = GMTimeChange("Y",$YourDateEnd,0,0,"off");
 $KarmaBoostDay = $EventMonth.$EventDay;
 $query = query("INSERT INTO `".$_POST['tableprefix']."events` VALUES (1, -1, '".$iDB_Author."', 'Opening', 'This is the day the Board was made. ^_^', %i, %i, %i, %i, %i, %i, %i, %i)", array($YourDate,$YourDateEnd,$EventMonth,$EventMonthEnd,$EventDay,$EventDayEnd,$EventYear,$EventYearEnd));
 mysql_query($query);
-$query = query("INSERT INTO `".$_POST['tableprefix']."forums` VALUES (1,1,1,'Test/Spam','yes','forum',0,'http://',0,0,0,'A Test Board.','off',0,'yes',1,1)", array(null));
+$query = query("INSERT INTO `".$_POST['tableprefix']."forums` VALUES (1,1,1,'Test/Spam','yes','forum',0,'http://',0,0,0,'A Test Board.','off',0,'yes',15,1,1)", array(null));
 mysql_query($query);
 $query = query("INSERT INTO `".$_POST['tableprefix']."topics` VALUES (1,1,1,-1,'".$iDB_Author."',%i,%i,'Welcome','Install was successful',0,0,1,1)", array($YourDate,$YourDate));
 mysql_query($query);

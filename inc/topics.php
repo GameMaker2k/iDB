@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: topics.php - Last Update: 11/14/2008 SVN 187 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 11/15/2008 SVN 190 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -37,6 +37,11 @@ $NumberPosts=mysql_result($preresult,0,"NumPosts");
 $NumberTopics=mysql_result($preresult,0,"NumTopics");
 $PostCountAdd=mysql_result($preresult,0,"PostCountAdd");
 $CanHaveTopics=mysql_result($preresult,0,"CanHaveTopics");
+$HotTopicPosts=mysql_result($preresult,0,"HotTopicPosts");
+if($HotTopicPosts!=0&&is_numeric($HotTopicPosts)) {
+	$Settings['hot_topic_num'] = $HotTopicPosts; }
+if(!is_numeric($Settings['hot_topic_num'])) {
+	$Settings['hot_topic_num'] = 15; }
 $ForumPostCountView=mysql_result($preresult,0,"PostCountView");
 $ForumKarmaCountView=mysql_result($preresult,0,"KarmaCountView");
 @mysql_free_result($preresult);
@@ -137,7 +142,7 @@ if($pnum>=$Settings['max_topics']) {
 if($pnum<$Settings['max_topics']&&$pnum>0) { 
 	$pnum = $pnum - $pnum; 
 	$Pages[$l] = $l; ++$l; } }
-$PageLimit = $nums - $Settings['max_posts'];
+$PageLimit = $nums - $Settings['max_topics'];
 if($PageLimit<0) { $PageLimit = 0; }
 //End Topic Page Code
 $i=0;

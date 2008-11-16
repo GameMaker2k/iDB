@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: profilemain.php - Last Update: 11/14/2008 SVN 186 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 11/15/2008 SVN 190 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
@@ -395,24 +395,33 @@ if ($handle = opendir($skindir)) { $dirnum = null;
 	<td style="width: 40%;"><label class="TextBoxLabel" for="RepliesPerPage">Replies Per Page:</label></td>
 	<td style="width: 60%;"><select id="RepliesPerPage" name="RepliesPerPage" class="TextBox">
 <option selected="selected" value="<?php echo $Settings['max_posts']; ?>">Old Value (<?php echo $Settings['max_posts']; ?>)</option>
+<option value="5">5</option>
 <option value="10">10</option>
+<option value="15">15</option>
 <option value="20">20</option>
+<option value="25">25</option>
 <option value="30">30</option>
 </select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 40%;"><label class="TextBoxLabel" for="TopicsPerPage">Topics Per Page:</label></td>
 	<td style="width: 60%;"><select id="TopicsPerPage" name="TopicsPerPage" class="TextBox">
 <option selected="selected" value="<?php echo $Settings['max_topics']; ?>">Old Value (<?php echo $Settings['max_topics']; ?>)</option>
+<option value="5">5</option>
 <option value="10">10</option>
+<option value="15">15</option>
 <option value="20">20</option>
+<option value="25">25</option>
 <option value="30">30</option>
 </select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 40%;"><label class="TextBoxLabel" for="MessagesPerPage">Messages/Members Per Page:</label></td>
 	<td style="width: 60%;"><select id="MessagesPerPage" name="MessagesPerPage" class="TextBox">
 <option selected="selected" value="<?php echo $Settings['max_pmlist']; ?>">Old Value (<?php echo $Settings['max_pmlist']; ?>)</option>
+<option value="5">5</option>
 <option value="10">10</option>
+<option value="15">15</option>
 <option value="20">20</option>
+<option value="25">25</option>
 <option value="30">30</option>
 </select></td>
 </tr><tr style="text-align: left;">
@@ -558,24 +567,33 @@ echo "<option value=\"".$showmin."\">0:".$showmin." minutes</option>\n";
 	<td style="width: 40%;"><label class="TextBoxLabel" for="RepliesPerPage">Replies Per Page:</label></td>
 	<td style="width: 60%;"><select id="RepliesPerPage" name="RepliesPerPage" class="TextBox">
 <option selected="selected" value="<?php echo $Settings['max_posts']; ?>">Old Value (<?php echo $Settings['max_posts']; ?>)</option>
+<option value="5">5</option>
 <option value="10">10</option>
+<option value="15">15</option>
 <option value="20">20</option>
+<option value="25">25</option>
 <option value="30">30</option>
 </select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 40%;"><label class="TextBoxLabel" for="TopicsPerPage">Topics Per Page:</label></td>
 	<td style="width: 60%;"><select id="TopicsPerPage" name="TopicsPerPage" class="TextBox">
 <option selected="selected" value="<?php echo $Settings['max_topics']; ?>">Old Value (<?php echo $Settings['max_topics']; ?>)</option>
+<option value="5">5</option>
 <option value="10">10</option>
+<option value="15">15</option>
 <option value="20">20</option>
+<option value="25">25</option>
 <option value="30">30</option>
 </select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 40%;"><label class="TextBoxLabel" for="MessagesPerPage">Messages/Members Per Page:</label></td>
 	<td style="width: 60%;"><select id="MessagesPerPage" name="MessagesPerPage" class="TextBox">
 <option selected="selected" value="<?php echo $Settings['max_pmlist']; ?>">Old Value (<?php echo $Settings['max_pmlist']; ?>)</option>
+<option value="5">5</option>
 <option value="10">10</option>
+<option value="15">15</option>
 <option value="20">20</option>
+<option value="25">25</option>
 <option value="30">30</option>
 </select></td>
 </tr><tr style="text-align: left;">
