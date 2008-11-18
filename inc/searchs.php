@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: searchs.php - Last Update: 11/15/2008 SVN 190 - Author: cooldude2k $
+    $FileInfo: searchs.php - Last Update: 11/18/2008 SVN 191 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="searchs.php"||$File3Name=="/searchs.php") {
@@ -28,7 +28,9 @@ if($Settings['enable_search']===true||
 if($_GET['act']=="topics") {
 	if($_GET['search']==null&&$_GET['type']==null) {
 	?>
-	<div class="Table1Border">
+<div class="NavLinks"><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $ThemeSet['NavLinkIcon']; ?>Board index</a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['search'],$Settings['file_ext'],"act=topics",$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search']); ?>">Search topics</a></div>
+<div>&nbsp;</div>
+<div class="Table1Border">
 <table class="Table1">
 <tr class="TableRow1">
 <td class="TableRow1"><span style="float: left;">
@@ -185,6 +187,10 @@ $pstring = $pstring."... <a href=\"".url_maker($exfile['search'],$Settings['file
 if($_GET['msearch']!=null) {
 $pstring = $pstring."... <a href=\"".url_maker($exfile['search'],$Settings['file_ext'],"act=topics&search=".$_GET['search']."&type=".$_GET['type']."&msearch=".$_GET['msearch']."&page=".$pagenum,$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search'])."\">Last &gt;</a> "; } }
 	++$pagei; } $pstring = $pstring."</div>";
+?>
+<div class="NavLinks"><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $ThemeSet['NavLinkIcon']; ?>Board index</a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['search'],$Settings['file_ext'],"act=topics",$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search']); ?>">Search topics</a></div>
+<div>&nbsp;</div>
+<?php
 echo $pstring;
 //List Page Number Code end
 ?>

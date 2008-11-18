@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: calendars.php - Last Update: 01/01/2008 SVN 144 - Author: cooldude2k $
+    $FileInfo: calendars.php - Last Update: 11/18/2008 SVN 191 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="calendars.php"||$File3Name=="/calendars.php") {
@@ -134,6 +134,8 @@ $ii++;
 }
 if ((8 - $ii) >= "1") {
 $WeekDays .= '<td class="TableRow3" style="height: 90px; text-align: center;" colspan="' . (8 - $ii) . '">&nbsp;</td>'."\r\n"; } ?>
+<div class="NavLinks"><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $ThemeSet['NavLinkIcon']; ?>Board index</a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['calendar'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['calendar'],$exqstr['calendar']); ?>">Calendar</a></div>
+<div>&nbsp;</div>
 <div class="Table1Border">
 <table class="Table1"><tr class="TableRow1">
 <th class="TableRow1" colspan="7">

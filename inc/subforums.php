@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: subforums.php - Last Update: 10/10/2008 SVN 173 - Author: cooldude2k $
+    $FileInfo: subforums.php - Last Update: 11/18/2008 SVN 191 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="subforums.php"||$File3Name=="/subforums.php") {
@@ -25,6 +25,7 @@ if($checknum==0) { redirect("location",$basedir.url_maker($exfile['index'],$Sett
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 if($checknum>=1) {
+$ForumID=mysql_result($checkresult,0,"id");
 $ForumName=mysql_result($checkresult,0,"Name");
 $ForumType=mysql_result($checkresult,0,"ForumType");
 $CategoryID=mysql_result($checkresult,0,"CategoryID");
@@ -61,11 +62,15 @@ $prequery = query("SELECT * FROM `".$Settings['sqltable']."categories` WHERE `Sh
 $preresult=mysql_query($prequery);
 $prenum=mysql_num_rows($preresult);
 $prei=0;
-while ($prei < $prenum) {
-$CategoryID=mysql_result($preresult,$prei,"id");
-$CategoryName=mysql_result($preresult,$prei,"Name");
-$CategoryShow=mysql_result($preresult,$prei,"ShowCategory");
-$CategoryDescription=mysql_result($preresult,$prei,"Description");
+$CategoryID=mysql_result($preresult,0,"id");
+$CategoryType=mysql_result($preresult,0,"CategoryType");
+$CategoryName=mysql_result($preresult,0,"Name");
+$CategoryShow=mysql_result($preresult,0,"ShowCategory");
+$CategoryDescription=mysql_result($preresult,0,"Description");
+?>
+<div class="NavLinks"><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $ThemeSet['NavLinkIcon']; ?>Board index</a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile[$CategoryType],$Settings['file_ext'],"act=view&id=".$CategoryID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$CategoryType],$exqstr[$CategoryType]); ?>"><?php echo $CategoryName; ?></a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$ForumID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>"><?php echo $ForumName; ?></a></div>
+<div>&nbsp;</div>
+<?php
 if(!isset($CatPermissionInfo['CanViewCategory'][$CategoryID])) {
 	$CatPermissionInfo['CanViewCategory'][$CategoryID] = "no"; }
 if($CatPermissionInfo['CanViewCategory'][$CategoryID]=="no"||
@@ -197,7 +202,7 @@ $ExStr = ""; if ($ForumType!="redirect"&&
 </tr>
 </table></div>
 <div>&nbsp;</div>
-<?php } ++$prei; } @mysql_free_result($preresult);
+<?php } @mysql_free_result($preresult);
 $ForumCheck = "skip";
 if($CanHaveTopics!="yes") { 
 	$ForumName = $SForumName; }
