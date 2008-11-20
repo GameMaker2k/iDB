@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: function.php - Last Update: 10/18/2008 SVN 178 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 11/19/2008 SVN 192 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -163,8 +163,13 @@ function xml_doc_start($ver,$encode,$retval=false) {
 	return xml_tag_make('xml','version='.$ver.'&encoding='.$encode,true); } }
 $icharset = $Settings['charset'];
 // Make a url
+$debug_on = false;
+if(isset($_GET['debug'])) {
+if($_GET['debug']=="true"||
+	$_GET['debug']=="on") {
+$debug_on = true; } }
 function url_maker($file="index",$ext=".php",$qvarstr=null,$qstr=";",$qsep="=",$prexqstr=null,$exqstr=null,$fixhtml=true) {
-global $sidurls, $icharset;
+global $sidurls, $icharset, $debug_on;
 $fileurl = null; if(!isset($ext)) { $ext = null; }
 if($ext==null) { $ext = ".php"; } 
 if($ext=="noext"||$ext=="no ext"||$ext=="no+ext") { $ext = null; }
@@ -173,6 +178,9 @@ if($sidurls===true&&$qstr!="/") {
 	if(defined('SID')) {
 if($qvarstr==null) { $qvarstr = SID; }
 if($qvarstr!=null) { $qvarstr = SID."&".$qvarstr; } } }
+if($debug_on===true) {
+if($qvarstr==null) { $qvarstr = "debug=on"; }
+if($qvarstr!=null) { $qvarstr = $qvarstr."&debug=on"; } }
 if($qvarstr==null) { $fileurl = $file; }
 if($fixhtml===true) {
 $qstr = htmlentities($qstr, ENT_QUOTES, $icharset);

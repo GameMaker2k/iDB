@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: endpage.php - Last Update: 01/01/2008 SVN 144 - Author: cooldude2k $
+    $FileInfo: endpage.php - Last Update: 11/19/2008 SVN 192 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="endpage.php"||$File3Name=="/endpage.php") {
@@ -24,8 +24,12 @@ if($_SESSION['UserDST']=="off") { $MyDST = $checktimea['hour']; }
 $MyDST = $MyDST.":".$checktimea['minute'];
 $MyTimeNow = GMTimeGet('g:i a',$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $endpagevar=$endpagevar."<br />The time now is ".$MyTimeNow." ".$ThemeSet['LineDivider']." All times are GMT ".$MyDST; }
+function execution_time($starttime) {
+list($uetime, $etime) = explode(" ", microtime());
+$endtime = $uetime + $etime;
+return bcsub($endtime, $starttime, 4); }
 if($_GET['debug']=="true"||$_GET['debug']=="on") {
-	$endpagevar=$endpagevar."<br />\nFiles included: ".count_included_files()." &amp; Extensions Enabled: ".count_extensions().$ThemeSet['LineDivider']."<a href=\"http://validator.w3.org/check/referer?verbose=1\" title=\"Validate HTML\" onclick=\"window.open(this.href);return false;\">HTML</a>".$ThemeSet['LineDivider']."<a href=\"http://jigsaw.w3.org/css-validator/check/referer?profile=css3\" title=\"Validate CSS\" onclick=\"window.open(this.href);return false;\">CSS</a>"; }
+	$endpagevar=$endpagevar."<br />\nFiles included: ".count_included_files()." ".$ThemeSet['LineDivider']." Execution Time: ".execution_time($starttime).$ThemeSet['LineDivider']."<a href=\"http://validator.w3.org/check/referer?verbose=1\" title=\"Validate HTML\" onclick=\"window.open(this.href);return false;\">HTML</a>".$ThemeSet['LineDivider']."<a href=\"http://jigsaw.w3.org/css-validator/check/referer?profile=css3\" title=\"Validate CSS\" onclick=\"window.open(this.href);return false;\">CSS</a>"; }
 	$endpagevar=$endpagevar."</div>\n";
 echo $endpagevar;
 @mysql_close();

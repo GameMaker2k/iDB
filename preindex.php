@@ -11,8 +11,12 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: preindex.php - Last Update: 01/01/2008 SVN 144 - Author: cooldude2k $
+    $FileInfo: preindex.php - Last Update: 11/19/2008 SVN 192 - Author: cooldude2k $
 */
+$pretime = explode(" ", microtime());
+$utime = $pretime[0];
+$time = $pretime[1];
+$_POST['starttime'] = $utime + $time;
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="preindex.php"||$File3Name=="/preindex.php") {
 	@header('Location: index.php');
