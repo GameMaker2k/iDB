@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: events.php - Last Update: 11/18/2008 SVN 191 - Author: cooldude2k $
+    $FileInfo: events.php - Last Update: 11/29/2008 SVN 193 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="events.php"||$File3Name=="/events.php") {
@@ -30,7 +30,6 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 <div class="NavLinks"><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $ThemeSet['NavLinkIcon']; ?>Board index</a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['event'],$Settings['file_ext'],"act=view&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['event'],$exqstr['event']); ?>">Viewing Event</a></div>
 <div>&nbsp;</div>
 <div class="Table1Border">
-<table class="Table1">
 <?php
 while ($is < $num) {
 $EventID=mysql_result($result,$is,"id");
@@ -79,12 +78,18 @@ if($User1Name==null) { $User1Name="Guest"; } }
 $EventText = text2icons($EventText,$Settings['sqltable']); 
 $User1Signature = text2icons($User1Signature,$Settings['sqltable']);
 ?>
+<?php if($ThemeSet['TableStyle']=="div") { ?>
+<div class="TableRow1">
+<span style="font-weight: bold; text-align: left;"><?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['event'],$Settings['file_ext'],"act=view&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['event'],$exqstr['event']); ?>"><?php echo $EventName; ?></a></span></div>
+<?php } ?>
+<table class="Table1">
+<?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableRow1">
-<td class="TableRow1" colspan="2"><span style="font-weight: bold; float: left;"><?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['event'],$Settings['file_ext'],"act=view&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['event'],$exqstr['event']); ?>"><?php echo $EventName; ?></a></span>
-<span style="float: right;">&nbsp;</span></td>
-</tr>
+<td class="TableColumn1" colspan="2"><span style="font-weight: bold; text-align: left;"><?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['event'],$Settings['file_ext'],"act=view&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['event'],$exqstr['event']); ?>"><?php echo $EventName; ?></a></span>
+</td>
+</tr><?php } ?>
 <tr class="TableRow2">
-<td class="TableRow2" style="vertical-align: middle; width: 160px;">
+<td class="TableColumn2" style="vertical-align: middle; width: 160px;">
 &nbsp;<?php
 if($User1ID!="-1") {
 echo "<a href=\"";
@@ -93,15 +98,15 @@ echo "\">".$User1Name."</a>"; }
 if($User1ID=="-1") {
 echo "<span>".$User1Name."</span>"; }
 ?></td>
-<td class="TableRow2" style="vertical-align: middle;">
-<div style="text-align: left; float: left;">
+<td class="TableColumn2" style="vertical-align: middle;">
+<div style="text-align: left; text-align: left;">
 <span style="font-weight: bold;">Event Start: </span><?php echo $EventStart; ?><?php echo $ThemeSet['LineDividerTopic']; ?><span style="font-weight: bold;">Event End: </span><?php echo $EventEnd; ?>
 </div>
 <div style="text-align: right;">&nbsp;</div>
 </td>
 </tr>
 <tr>
-<td class="TableRow3" style="vertical-align: top; width: 180px;">
+<td class="TableColumn3" style="vertical-align: top; width: 180px;">
  <?php  /* Avatar Table Thanks For SeanJ's Help at http://seanj.jcink.com/ */  ?>
  <table class="AvatarTable" style="width: 100px; height: 100px; text-align: center;">
 	<tr class="AvatarRow" style="width: 100%; height: 100%;">
@@ -119,15 +124,15 @@ if($User1ID=="-1") { echo 0; }
 Posts: <?php echo $User1PostCount; ?><br />
 Joined: <?php echo $User1Joined; ?><br /><br />
 </td>
-<td class="TableRow3" style="vertical-align: middle;">
+<td class="TableColumn3" style="vertical-align: middle;">
 <div class="eventpost"><?php echo $EventText; ?></div>
 <?php if(isset($User1Signature)) { ?> <br />--------------------
 <div class="signature"><?php echo $User1Signature; ?></div><?php } ?>
 </td>
 </tr>
 <tr class="TableRow4">
-<td class="TableRow4" colspan="2">
-<span style="float: left;">&nbsp;<a href="<?php
+<td class="TableColumn4" colspan="2">
+<span style="text-align: left;">&nbsp;<a href="<?php
 if($User1ID!="-1") {
 echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$User1ID,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); }
 if($User1ID=="-1") {
@@ -138,7 +143,7 @@ echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=create&id=".$User
 if($User1ID=="-1") {
 echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); }
 ?>"><?php echo $ThemeSet['PM']; ?></a></span>
-<span style="float: right;">&nbsp;</span></td>
+</td>
 </tr>
 </table></div>
 <?php } if($_GET['act']=="create") { 
@@ -149,17 +154,23 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 <div class="NavLinks"><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $ThemeSet['NavLinkIcon']; ?>Board index</a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['event'],$Settings['file_ext'],"act=create",$Settings['qstr'],$Settings['qsep'],$prexqstr['event'],$exqstr['event']); ?>">Making a Event</a></div>
 <div>&nbsp;</div>
 <div class="Table1Border">
+<?php if($ThemeSet['TableStyle']=="div") { ?>
+<div class="TableRow1">
+<span style="text-align: left;">
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['calendar'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['calendar'],$exqstr['calendar']); ?>">Making a Event</a></span></div>
+<?php } ?>
 <table class="Table1" id="MakeEvent">
+<?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableRow1" id="EventStart">
-<td class="TableRow1" colspan="2"><span style="float: left;">
+<td class="TableColumn1" colspan="2"><span style="text-align: left;">
 <?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['calendar'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['calendar'],$exqstr['calendar']); ?>">Making a Event</a></span>
-<?php echo "<span style=\"float: right;\">&nbsp;</span>"; ?></td>
-</tr>
+</td>
+</tr><?php } ?>
 <tr id="MakeEventRow" class="TableRow2">
-<td class="TableRow2" colspan="2" style="width: 100%;">Making a Event</td>
+<td class="TableColumn2" colspan="2" style="width: 100%;">Making a Event</td>
 </tr>
 <tr class="TableRow3" id="MkEvent">
-<td class="TableRow3" style="width: 15%; vertical-align: middle; text-align: center;">
+<td class="TableColumn3" style="width: 15%; vertical-align: middle; text-align: center;">
 <div style="width: 100%; height: 160px; overflow: auto;">
 <table style="width: 100%; text-align: center;"><?php
 $renee_query=query("SELECT * FROM `".$Settings['sqltable']."smileys` WHERE `Show`='yes'", array(null));
@@ -186,7 +197,7 @@ echo "<td colspan=\"".$SmileCRowL."\">&nbsp;</td></tr>"; }
 echo "</table>";
 @mysql_free_result($renee_result);
 ?></div></td>
-<td class="TableRow3" style="width: 85%;">
+<td class="TableColumn3" style="width: 85%;">
 <form style="display: inline;" method="post" id="MkEventForm" action="<?php echo url_maker($exfile['event'],$Settings['file_ext'],"act=makeevent",$Settings['qstr'],$Settings['qsep'],$prexqstr['event'],$exqstr['event']); ?>">
 <table style="text-align: left;">
 <tr style="text-align: left;">
@@ -224,7 +235,7 @@ echo "</table>";
 </td></tr></table>
 </form></td></tr>
 <tr id="MkEventEnd" class="TableRow4">
-<td class="TableRow4" colspan="2">&nbsp;</td>
+<td class="TableColumn4" colspan="2">&nbsp;</td>
 </tr>
 </table></div>
 <?php }  if($_GET['act']=="makeevent"&&$_POST['act']=="makeevents") {
@@ -248,17 +259,23 @@ if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
 require($SettDir['inc']."captcha.php"); }
 ?>
 <div class="Table1Border">
+<?php if($ThemeSet['TableStyle']=="div") { ?>
+<div class="TableRow1">
+<span style="text-align: left;">
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['calendar'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['calendar'],$exqstr['calendar']); ?>">Making a Event</a></span></div>
+<?php } ?>
 <table class="Table1">
+<?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableRow1">
-<td class="TableRow1"><span style="float: left;">
+<td class="TableColumn1"><span style="text-align: left;">
 <?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['calendar'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['calendar'],$exqstr['calendar']); ?>">Making a Event</a></span>
-<?php echo "<span style=\"float: right;\">&nbsp;</span>"; ?></td>
-</tr>
+</td>
+</tr><?php } ?>
 <tr class="TableRow2">
-<th class="TableRow2" style="width: 100%; text-align: left;">&nbsp;Make Event Message: </th>
+<th class="TableColumn2" style="width: 100%; text-align: left;">&nbsp;Make Event Message: </th>
 </tr>
 <tr class="TableRow3">
-<td class="TableRow3">
+<td class="TableColumn3">
 <table style="width: 100%; height: 25%; text-align: center;">
 <?php if (pre_strlen($_POST['EventName'])>="30") { $Error="Yes";  ?>
 <tr>
@@ -587,7 +604,7 @@ mysql_query($query);
 </table>
 </td></tr>
 <tr class="TableRow4">
-<td class="TableRow4">&nbsp;</td>
+<td class="TableColumn4">&nbsp;</td>
 </tr>
 </table></div>
 <?php } ?>

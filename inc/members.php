@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: members.php - Last Update: 11/18/2008 SVN 191 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 11/29/2008 SVN 193 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -148,21 +148,28 @@ echo $pstring;
 //List Page Number Code end
 ?>
 <div class="Table1Border">
-<table class="Table1">
-<tr class="TableRow1">
-<td class="TableRow1" colspan="8"><span style="float: left;">
+<?php if($ThemeSet['TableStyle']=="div") { ?>
+<div class="TableRow1">
+<span style="text-align: left;">
 <?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=list&orderby=".$_GET['orderby']."&ordertype=".$_GET['ordertype']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Member List</a>
-</span><span style="float: right;">&nbsp;</span></td>
-</tr>
+</span></div>
+<?php } ?>
+<table class="Table1">
+<?php if($ThemeSet['TableStyle']=="table") { ?>
+<tr class="TableRow1">
+<td class="TableColumn1" colspan="8"><span style="text-align: left;">
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=list&orderby=".$_GET['orderby']."&ordertype=".$_GET['ordertype']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Member List</a>
+</span></td>
+</tr><?php } ?>
 <tr id="Member" class="TableRow2">
-<th class="TableRow2" style="width: 5%;">ID</th>
-<th class="TableRow2" style="width: 28%;">Name</th>
-<th class="TableRow2" style="width: 10%;">Group</th>
-<th class="TableRow2" style="width: 5%;">Posts</th>
-<th class="TableRow2" style="width: 5%;">Karma</th>
-<th class="TableRow2" style="width: 20%;">Joined</th>
-<th class="TableRow2" style="width: 20%;">Last Active</th>
-<th class="TableRow2" style="width: 7%;">Website</th>
+<th class="TableColumn2" style="width: 5%;">ID</th>
+<th class="TableColumn2" style="width: 28%;">Name</th>
+<th class="TableColumn2" style="width: 10%;">Group</th>
+<th class="TableColumn2" style="width: 5%;">Posts</th>
+<th class="TableColumn2" style="width: 5%;">Karma</th>
+<th class="TableColumn2" style="width: 20%;">Joined</th>
+<th class="TableColumn2" style="width: 20%;">Last Active</th>
+<th class="TableColumn2" style="width: 7%;">Website</th>
 </tr>
 <?php
 while ($i < $num) {
@@ -192,20 +199,20 @@ $membertitle = " ".$ThemeSet['TitleDivider']." Member List";
 if($MemList['Group']!=$Settings['GuestGroup']) {
 ?>
 <tr class="TableRow3" id="Member<?php echo $MemList['ID']; ?>">
-<td class="TableRow3" style="text-align: center;"><?php echo $MemList['ID']; ?></td>
-<td class="TableRow3">&nbsp;<a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$MemList['ID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>"><?php echo $MemList['Name']; ?></a></td>
-<td class="TableRow3" style="text-align: center;"><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=list&gid=".$MemList['GroupID']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>"><?php echo $MemList['Group']; ?></a></td>
-<td class="TableRow3" style="text-align: center;"><?php echo $MemList['PostCount']; ?></td>
-<td class="TableRow3" style="text-align: center;"><?php echo $MemList['Karma']; ?></td>
-<td class="TableRow3" style="text-align: center;"><?php echo $MemList['Joined']; ?></td>
-<td class="TableRow3" style="text-align: center;"><?php echo $MemList['LastActive']; ?></td>
-<td class="TableRow3" style="text-align: center;"><a href="<?php echo $MemList['Website']; ?>" onclick="window.open(this.href);return false;">Website</a></td>
+<td class="TableColumn3" style="text-align: center;"><?php echo $MemList['ID']; ?></td>
+<td class="TableColumn3">&nbsp;<a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$MemList['ID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>"><?php echo $MemList['Name']; ?></a></td>
+<td class="TableColumn3" style="text-align: center;"><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=list&gid=".$MemList['GroupID']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>"><?php echo $MemList['Group']; ?></a></td>
+<td class="TableColumn3" style="text-align: center;"><?php echo $MemList['PostCount']; ?></td>
+<td class="TableColumn3" style="text-align: center;"><?php echo $MemList['Karma']; ?></td>
+<td class="TableColumn3" style="text-align: center;"><?php echo $MemList['Joined']; ?></td>
+<td class="TableColumn3" style="text-align: center;"><?php echo $MemList['LastActive']; ?></td>
+<td class="TableColumn3" style="text-align: center;"><a href="<?php echo $MemList['Website']; ?>" onclick="window.open(this.href);return false;">Website</a></td>
 </tr>
 <?php }
 ++$i; } @mysql_free_result($result);
 ?>
 <tr id="MemEnd" class="TableRow4">
-<td class="TableRow4" colspan="8">&nbsp;</td>
+<td class="TableColumn4" colspan="8">&nbsp;</td>
 </tr>
 </table></div>
 <?php }
@@ -268,18 +275,25 @@ if($_GET['view']=="website"||$_GET['view']=="homepage") {
 <div class="NavLinks"><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $ThemeSet['NavLinkIcon']; ?>Board index</a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Viewing profile</a></div>
 <div>&nbsp;</div>
 <div class="Table1Border">
-<table class="Table1">
-<tr class="TableRow1">
-<td class="TableRow1" colspan="2"><span style="float: left;">
+<?php if($ThemeSet['TableStyle']=="div") { ?>
+<div class="TableRow1">
+<span style="text-align: left;">
 <?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Viewing profile<?php echo $ThemeSet['NavLinkDivider']; ?><?php echo $ViewMem['Name']; ?></a>
-</span><span style="float: right;">&nbsp;</span></td>
-</tr>
+</span></div>
+<?php } ?>
+<table class="Table1">
+<?php if($ThemeSet['TableStyle']=="table") { ?>
+<tr class="TableRow1">
+<td class="TableColumn1" colspan="2"><span style="text-align: left;">
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Viewing profile<?php echo $ThemeSet['NavLinkDivider']; ?><?php echo $ViewMem['Name']; ?></a>
+</span></td>
+</tr><?php } ?>
 <tr id="Member" class="TableRow2">
-<th class="TableRow2" style="width: 50%;">Avatar</th>
-<th class="TableRow2" style="width: 50%;">User Info</th>
+<th class="TableColumn2" style="width: 50%;">Avatar</th>
+<th class="TableColumn2" style="width: 50%;">User Info</th>
 </tr>
 <tr class="TableRow3" id="MemberProfile">
-<td class="TableRow3">
+<td class="TableColumn3">
 <?php  /* Avatar Table Thanks For SeanJ's Help at http://seanj.jcink.com/ */  ?>
  <table class="AvatarTable" style="width: 100%; height: 100px; text-align: center;">
 	<tr class="AvatarRow" style="width: 100px; height: 100px;">
@@ -292,7 +306,7 @@ if($_GET['view']=="website"||$_GET['view']=="homepage") {
 Name: <?php echo $ViewMem['Name']; ?><br />
 Title: <?php echo $ViewMem['Title']; ?></div>
 </td>
-<td class="TableRow3">
+<td class="TableColumn3">
 &nbsp;User Name: <?php echo $ViewMem['Name']; ?><br />
 &nbsp;User Title: <?php echo $ViewMem['Title']; ?><br />
 &nbsp;User Group: <?php echo $ViewMem['Group']; ?><br />
@@ -306,7 +320,7 @@ Title: <?php echo $ViewMem['Title']; ?></div>
 </td>
 </tr>
 <tr class="TableRow4">
-<td class="TableRow4" colspan="2">&nbsp;</td>
+<td class="TableColumn4" colspan="2">&nbsp;</td>
 </tr>
 </table></div>
 <?php } @mysql_free_result($result);
@@ -346,17 +360,24 @@ $membertitle = " ".$ThemeSet['TitleDivider']." Login";
 <div class="NavLinks"><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $ThemeSet['NavLinkIcon']; ?>Board index</a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Login</a></div>
 <div>&nbsp;</div>
 <div class="Table1Border">
-<table class="Table1">
-<tr class="TableRow1">
-<td class="TableRow1"><span style="float: left;">
+<?php if($ThemeSet['TableStyle']=="div") { ?>
+<div class="TableRow1">
+<span style="text-align: left;">
 <?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Log in</a>
-</span><span style="float: right;">&nbsp;</span></td>
-</tr>
+</span></div>
+<?php } ?>
+<table class="Table1">
+<?php if($ThemeSet['TableStyle']=="table") { ?>
+<tr class="TableRow1">
+<td class="TableColumn1"><span style="text-align: left;">
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Log in</a>
+</span></td>
+</tr><?php } ?>
 <tr class="TableRow2">
-<th class="TableRow2" style="width: 100%; text-align: left;">&nbsp;Inert your login info: </th>
+<th class="TableColumn2" style="width: 100%; text-align: left;">&nbsp;Inert your login info: </th>
 </tr>
 <tr class="TableRow3">
-<td class="TableRow3">
+<td class="TableColumn3">
 <form style="display: inline;" method="post" action="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=login_now",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">
 <table style="text-align: left;">
 <tr style="text-align: left;">
@@ -382,7 +403,7 @@ $membertitle = " ".$ThemeSet['TitleDivider']." Login";
 </td>
 </tr>
 <tr class="TableRow4">
-<td class="TableRow4">&nbsp;</td>
+<td class="TableColumn4">&nbsp;</td>
 </tr>
 </table></div>
 <?php } } if($_POST['act']=="loginmember"&&$_GET['act']=="login_now") {
@@ -400,17 +421,23 @@ $REFERERurl = null;
 <div class="NavLinks"><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $ThemeSet['NavLinkIcon']; ?>Board index</a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Login</a></div>
 <div>&nbsp;</div>
 <div class="Table1Border">
+<?php if($ThemeSet['TableStyle']=="div") { ?>
+<div class="TableRow1">
+<span style="text-align: left;">&nbsp;<a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Log in</a></span>
+</div>
+<?php } ?>
 <table class="Table1">
+<?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableRow1">
-<td class="TableRow1">
-<span style="float: left;">&nbsp;<a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Log in</a></span>
-<span style="float: right;">&nbsp;</span></td>
-</tr>
+<td class="TableColumn1">
+<span style="text-align: left;">&nbsp;<a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Log in</a></span>
+</td>
+</tr><?php } ?>
 <tr class="TableRow2">
-<th class="TableRow2" style="width: 100%; text-align: left;">&nbsp;Login Message: </th>
+<th class="TableColumn2" style="width: 100%; text-align: left;">&nbsp;Login Message: </th>
 </tr>
 <tr class="TableRow3">
-<td class="TableRow3">
+<td class="TableColumn3">
 <table style="width: 100%; height: 25%; text-align: center;">
 <?php
 if (pre_strlen($_POST['userpass'])>="30") { $Error="Yes";  ?>
@@ -525,7 +552,7 @@ if($cookieSecure===false) {
 </table>
 </td></tr>
 <tr class="TableRow4">
-<td class="TableRow4">&nbsp;</td>
+<td class="TableColumn4">&nbsp;</td>
 </tr>
 </table></div>
 <?php } } if($_GET['act']=="signup") { 
@@ -539,17 +566,24 @@ if($_SESSION['UserID']==0||$_SESSION['UserID']==null) {
 <div class="NavLinks"><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $ThemeSet['NavLinkIcon']; ?>Board index</a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=signup",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Signup</a></div>
 <div>&nbsp;</div>
 <div class="Table1Border">
-<table class="Table1">
-<tr class="TableRow1">
-<td class="TableRow1"><span style="float: left;">
+<?php if($ThemeSet['TableStyle']=="div") { ?>
+<div class="TableRow1">
+<span style="text-align: left;">
 <?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=signup",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Register</a>
-</span><span style="float: right;">&nbsp;</span></td>
-</tr>
+</span></div>
+<?php } ?>
+<table class="Table1">
+<?php if($ThemeSet['TableStyle']=="table") { ?>
+<tr class="TableRow1">
+<td class="TableColumn1"><span style="text-align: left;">
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=signup",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Register</a>
+</span></td>
+</tr><?php } ?>
 <tr class="TableRow2">
-<th class="TableRow2" style="width: 100%; text-align: left;">&nbsp;Inert your user info: </th>
+<th class="TableColumn2" style="width: 100%; text-align: left;">&nbsp;Inert your user info: </th>
 </tr>
 <tr class="TableRow3">
-<td class="TableRow3">
+<td class="TableColumn3">
 <form style="display: inline;" method="post" action="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=makemember",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">
 <table style="text-align: left;">
 <tr style="text-align: left;">
@@ -657,7 +691,7 @@ echo "<option value=\"".$showmin."\">0:".$showmin." minutes</option>\n"; }
 </td>
 </tr>
 <tr class="TableRow4">
-<td class="TableRow4">&nbsp;</td>
+<td class="TableColumn4">&nbsp;</td>
 </tr>
 </table></div>
 <?php } } if($_GET['act']=="makemember") {
@@ -680,16 +714,22 @@ require($SettDir['inc']."captcha.php"); }
 <div class="NavLinks"><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $ThemeSet['NavLinkIcon']; ?>Board index</a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=signup",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Signup</a></div>
 <div>&nbsp;</div>
 <div class="Table1Border">
+<?php if($ThemeSet['TableStyle']=="div") { ?>
+<div class="TableRow1">
+<span style="text-align: left;">
+&nbsp;<a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=signup",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>">Register</a></span></div>
+<?php } ?>
 <table class="Table1">
+<?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableRow1">
-<td class="TableRow1"><span style="float: right;">&nbsp;</span>
-&nbsp;<a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=signup",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>">Register</a></td>
-</tr>
+<td class="TableColumn1"><span style="text-align: left;">
+&nbsp;<a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=signup",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>">Register</a></span></td>
+</tr><?php } ?>
 <tr class="TableRow2">
-<th class="TableRow2" style="width: 100%; text-align: left;">&nbsp;Signup Message: </th>
+<th class="TableColumn2" style="width: 100%; text-align: left;">&nbsp;Signup Message: </th>
 </tr>
 <tr class="TableRow3">
-<td class="TableRow3">
+<td class="TableColumn3">
 <table style="width: 100%; height: 25%; text-align: center;">
 <?php if (pre_strlen($_POST['Password'])>="30") { $Error="Yes";  ?>
 <tr>
@@ -923,7 +963,7 @@ $query = query("INSERT INTO `".$Settings['sqltable']."messenger` VALUES (null,%i
 </table>
 </td></tr>
 <tr class="TableRow4">
-<td class="TableRow4">&nbsp;</td>
+<td class="TableColumn4">&nbsp;</td>
 </tr>
 </table></div>
 <?php } } } ?>

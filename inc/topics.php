@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: topics.php - Last Update: 11/18/2008 SVN 191 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 11/29/2008 SVN 193 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -200,19 +200,25 @@ echo $pstring;
 //List Page Number Code end
 ?>
 <div class="Table1Border">
+<?php if($ThemeSet['TableStyle']=="div") { ?>
+<div class="TableRow1">
+<span style="text-align: left;">
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['forum'],$Settings['file_ext'],"act=view&id=".$ForumID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum']); ?>#<?php echo $ForumID; ?>"><?php echo $ForumName; ?></a></span></div>
+<?php } ?>
 <table class="Table1" id="Forum<?php echo $ForumID; ?>">
+<?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr id="ForumStart<?php echo $ForumID; ?>" class="TableRow1">
-<td class="TableRow1" colspan="6"><span style="float: left;">
+<td class="TableColumn1" colspan="6"><span style="text-align: left;">
 <?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['forum'],$Settings['file_ext'],"act=view&id=".$ForumID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum']); ?>#<?php echo $ForumID; ?>"><?php echo $ForumName; ?></a></span>
-<?php echo "<span style=\"float: right;\">&nbsp;</span>"; ?></td>
-</tr>
+</td>
+</tr><?php } ?>
 <tr id="TopicStatRow<?php echo $ForumID; ?>" class="TableRow2">
-<th class="TableRow2" style="width: 4%;">State</th>
-<th class="TableRow2" style="width: 36%;">Topic Name</th>
-<th class="TableRow2" style="width: 15%;">Author</th>
-<th class="TableRow2" style="width: 15%;">Time</th>
-<th class="TableRow2" style="width: 5%;">Replys</th>
-<th class="TableRow2" style="width: 25%;">Last Reply</th>
+<th class="TableColumn2" style="width: 4%;">State</th>
+<th class="TableColumn2" style="width: 36%;">Topic Name</th>
+<th class="TableColumn2" style="width: 15%;">Author</th>
+<th class="TableColumn2" style="width: 15%;">Time</th>
+<th class="TableColumn2" style="width: 5%;">Replys</th>
+<th class="TableColumn2" style="width: 25%;">Last Reply</th>
 </tr>
 <?php
 while ($i < $num) {
@@ -291,12 +297,12 @@ if ($PinnedTopic==1&&$TopicStat==1) {
 			$PreTopic=$ThemeSet['PinClosedTopic']; } }
 ?>
 <tr class="TableRow3" id="Topic<?php echo $TopicID; ?>">
-<td class="TableRow3"><div class="topicstate">
+<td class="TableColumn3"><div class="topicstate">
 <?php echo $PreTopic; ?></div></td>
-<td class="TableRow3"><div class="topicname">
+<td class="TableColumn3"><div class="topicname">
 <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a></div>
 <div class="topicdescription"><?php echo $TopicDescription; ?></div></td>
-<td class="TableRow3" style="text-align: center;"><?php
+<td class="TableColumn3" style="text-align: center;"><?php
 if($UsersID!="-1") {
 echo "<a href=\"";
 echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UsersID,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
@@ -304,14 +310,14 @@ echo "\">".$UsersName."</a>"; }
 if($UsersID=="-1") {
 echo "<span>".$UsersName."</span>"; }
 ?></td>
-<td class="TableRow3" style="text-align: center;"><?php echo $TheTime; ?></td>
-<td class="TableRow3" style="text-align: center;"><?php echo $NumReply; ?></td>
-<td class="TableRow3"><?php echo $LastReply; ?></td>
+<td class="TableColumn3" style="text-align: center;"><?php echo $TheTime; ?></td>
+<td class="TableColumn3" style="text-align: center;"><?php echo $NumReply; ?></td>
+<td class="TableColumn3"><?php echo $LastReply; ?></td>
 </tr>
 <?php ++$i; } 
 ?>
 <tr id="ForumEnd<?php echo $ForumID; ?>" class="TableRow4">
-<td class="TableRow4" colspan="6">&nbsp;</td>
+<td class="TableColumn4" colspan="6">&nbsp;</td>
 </tr>
 </table></div>
 <div>&nbsp;</div>
@@ -332,17 +338,23 @@ ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 ?>
 <div class="Table1Border">
+<?php if($ThemeSet['TableStyle']=="div") { ?>
+<div class="TableRow1">
+<span style="text-align: left;">
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['forum'],$Settings['file_ext'],"act=view&id=".$ForumID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum']); ?>"><?php echo $ForumName; ?></a></span></div>
+<?php } ?>
 <table class="Table1" id="MakeTopic<?php echo $ForumID; ?>">
+<?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableRow1" id="TopicStart<?php echo $ForumID; ?>">
-<td class="TableRow1" colspan="2"><span style="float: left;">
+<td class="TableColumn1" colspan="2"><span style="text-align: left;">
 <?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['forum'],$Settings['file_ext'],"act=view&id=".$ForumID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum']); ?>"><?php echo $ForumName; ?></a></span>
-<?php echo "<span style=\"float: right;\">&nbsp;</span>"; ?></td>
-</tr>
+</td>
+</tr><?php } ?>
 <tr id="MakeTopicRow<?php echo $ForumID; ?>" class="TableRow2">
-<td class="TableRow2" colspan="2" style="width: 100%;">Making a Topic in <?php echo $ForumName; ?></td>
+<td class="TableColumn2" colspan="2" style="width: 100%;">Making a Topic in <?php echo $ForumName; ?></td>
 </tr>
 <tr class="TableRow3" id="MkTopic<?php echo $ForumID; ?>">
-<td class="TableRow3" style="width: 15%; vertical-align: middle; text-align: center;">
+<td class="TableColumn3" style="width: 15%; vertical-align: middle; text-align: center;">
 <div style="width: 100%; height: 160px; overflow: auto;">
 <table style="width: 100%; text-align: center;"><?php
 $renee_query=query("SELECT * FROM `".$Settings['sqltable']."smileys` WHERE `Show`='yes'", array(null));
@@ -369,7 +381,7 @@ echo "<td colspan=\"".$SmileCRowL."\">&nbsp;</td></tr>"; }
 echo "</table>";
 @mysql_free_result($renee_result);
 ?></div></td>
-<td class="TableRow3" style="width: 85%;">
+<td class="TableColumn3" style="width: 85%;">
 <form style="display: inline;" method="post" id="MkTopicForm" action="<?php echo url_maker($exfile['forum'],$Settings['file_ext'],"act=maketopic&id=".$ForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum']); ?>">
 <table style="text-align: left;">
 <tr style="text-align: left;">
@@ -404,7 +416,7 @@ echo "</table>";
 </td></tr></table>
 </form></td></tr>
 <tr id="MkTopicEnd<?php echo $ForumID; ?>" class="TableRow4">
-<td class="TableRow4" colspan="2">&nbsp;</td>
+<td class="TableColumn4" colspan="2">&nbsp;</td>
 </tr>
 </table></div>
 <div>&nbsp;</div>
@@ -426,17 +438,23 @@ if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
 require($SettDir['inc']."captcha.php"); }
 ?>
 <div class="Table1Border">
+<?php if($ThemeSet['TableStyle']=="div") { ?>
+<div class="TableRow1">
+<span style="text-align: left;">
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['forum'],$Settings['file_ext'],"act=view&id=".$ForumID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum']); ?>"><?php echo $ForumName; ?></a></span></div>
+<?php } ?>
 <table class="Table1">
+<?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableRow1">
-<td class="TableRow1"><span style="float: left;">
+<td class="TableColumn1"><span style="text-align: left;">
 <?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['forum'],$Settings['file_ext'],"act=view&id=".$ForumID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum']); ?>"><?php echo $ForumName; ?></a></span>
-<?php echo "<span style=\"float: right;\">&nbsp;</span>"; ?></td>
-</tr>
+</td>
+</tr><?php } ?>
 <tr class="TableRow2">
-<th class="TableRow2" style="width: 100%; text-align: left;">&nbsp;Make Topic Message: </th>
+<th class="TableColumn2" style="width: 100%; text-align: left;">&nbsp;Make Topic Message: </th>
 </tr>
 <tr class="TableRow3">
-<td class="TableRow3">
+<td class="TableColumn3">
 <table style="width: 100%; height: 25%; text-align: center;">
 <?php if (pre_strlen($_POST['TopicName'])>="30") { $Error="Yes";  ?>
 <tr>
@@ -670,7 +688,7 @@ mysql_query($queryupd);
 </table>
 </td></tr>
 <tr class="TableRow4">
-<td class="TableRow4">&nbsp;</td>
+<td class="TableColumn4">&nbsp;</td>
 </tr>
 </table></div>
 <div>&nbsp;</div>

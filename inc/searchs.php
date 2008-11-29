@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: searchs.php - Last Update: 11/18/2008 SVN 191 - Author: cooldude2k $
+    $FileInfo: searchs.php - Last Update: 11/29/2008 SVN 193 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="searchs.php"||$File3Name=="/searchs.php") {
@@ -33,15 +33,15 @@ if($_GET['act']=="topics") {
 <div class="Table1Border">
 <table class="Table1">
 <tr class="TableRow1">
-<td class="TableRow1"><span style="float: left;">
+<td class="TableColumn1"><span style="text-align: left;">
 <?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['search'],$Settings['file_ext'],"act=topics",$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search']); ?>">Topic Search</a>
-</span><span style="float: right;">&nbsp;</span></td>
+</span></td>
 </tr>
 <tr class="TableRow2">
-<th class="TableRow2" style="width: 100%; text-align: left;">&nbsp;Search for topic: </th>
+<th class="TableColumn2" style="width: 100%; text-align: left;">&nbsp;Search for topic: </th>
 </tr>
 <tr class="TableRow3">
-<td class="TableRow3">
+<td class="TableColumn3">
 <form style="display: inline;" method="post" action="<?php echo url_maker($exfile['search'],$Settings['file_ext'],"act=topics",$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search']); ?>">
 <table style="text-align: left;">
 <tr style="text-align: left;">
@@ -67,7 +67,7 @@ if($_GET['act']=="topics") {
 </td>
 </tr>
 <tr class="TableRow4">
-<td class="TableRow4">&nbsp;</td>
+<td class="TableColumn4">&nbsp;</td>
 </tr>
 </table></div>
 <?php } if($_GET['search']!=null&&$_GET['type']!=null) {
@@ -197,22 +197,22 @@ echo $pstring;
 <div class="Table1Border">
 <table class="Table1" id="Search">
 <tr id="SearchStart" class="TableRow1">
-<td class="TableRow1" colspan="6"><span style="float: left;">
+<td class="TableColumn1" colspan="6"><span style="text-align: left;">
 <?php echo $ThemeSet['TitleIcon'];
 if($_GET['msearch']==null) { ?>
 <a href="<?php echo url_maker($exfile['search'],$Settings['file_ext'],"act=topics&search=".$_GET['search']."&type=".$_GET['type']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search']); ?>">Searching for <?php echo $_GET['search']; ?></a>
 <?php } if($_GET['msearch']!=null) { ?>
 <a href="<?php echo url_maker($exfile['search'],$Settings['file_ext'],"act=topics&search=".$_GET['search']."&type=".$_GET['type']."&msearch=".$_GET['msearch']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search']); ?>">Searching for <?php echo $_GET['search']; ?> by <?php echo $_GET['msearch']; ?></a>
 <?php } ?></span>
-<?php echo "<span style=\"float: right;\">&nbsp;</span>"; ?></td>
+</td>
 </tr>
 <tr id="SearchStatRow" class="TableRow2">
-<th class="TableRow2" style="width: 4%;">State</th>
-<th class="TableRow2" style="width: 36%;">Topic Name</th>
-<th class="TableRow2" style="width: 15%;">Author</th>
-<th class="TableRow2" style="width: 15%;">Time</th>
-<th class="TableRow2" style="width: 5%;">Replys</th>
-<th class="TableRow2" style="width: 25%;">Last Reply</th>
+<th class="TableColumn2" style="width: 4%;">State</th>
+<th class="TableColumn2" style="width: 36%;">Topic Name</th>
+<th class="TableColumn2" style="width: 15%;">Author</th>
+<th class="TableColumn2" style="width: 15%;">Time</th>
+<th class="TableColumn2" style="width: 5%;">Replys</th>
+<th class="TableColumn2" style="width: 25%;">Last Reply</th>
 </tr>
 <?php
 while ($i < $num) {
@@ -307,12 +307,12 @@ if ($PinnedTopic==1&&$TopicStat==1) {
 			$PreTopic=$ThemeSet['PinClosedTopic']; } }
 ?>
 <tr class="TableRow3" id="Topic<?php echo $TopicID; ?>">
-<td class="TableRow3"><div class="topicstate">
+<td class="TableColumn3"><div class="topicstate">
 <?php echo $PreTopic; ?></div></td>
-<td class="TableRow3"><div class="topicname">
+<td class="TableColumn3"><div class="topicname">
 <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a></div>
 <div class="topicdescription"><?php echo $TopicDescription; ?></div></td>
-<td class="TableRow3" style="text-align: center;"><?php
+<td class="TableColumn3" style="text-align: center;"><?php
 if($UsersID!="-1") {
 echo "<a href=\"";
 echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UsersID,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
@@ -320,14 +320,14 @@ echo "\">".$UsersName."</a>"; }
 if($UsersID=="-1") {
 echo "<span>".$UsersName."</span>"; }
 ?></td>
-<td class="TableRow3" style="text-align: center;"><?php echo $TheTime; ?></td>
-<td class="TableRow3" style="text-align: center;"><?php echo $NumReply; ?></td>
-<td class="TableRow3"><?php echo $LastReply; ?></td>
+<td class="TableColumn3" style="text-align: center;"><?php echo $TheTime; ?></td>
+<td class="TableColumn3" style="text-align: center;"><?php echo $NumReply; ?></td>
+<td class="TableColumn3"><?php echo $LastReply; ?></td>
 </tr>
 <?php } ++$i; }
 ?>
 <tr id="SearchEnd" class="TableRow4">
-<td class="TableRow4" colspan="6">&nbsp;</td>
+<td class="TableColumn4" colspan="6">&nbsp;</td>
 </tr>
 </table></div>
 <?php

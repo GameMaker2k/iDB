@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: forums.php - Last Update: 11/18/2008 SVN 191 - Author: cooldude2k $
+    $FileInfo: forums.php - Last Update: 11/29/2008 SVN 193 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="forums.php"||$File3Name=="/forums.php") {
@@ -51,18 +51,24 @@ $i=0;
 if($num>=1) {
 ?>
 <div class="Table1Border">
+<?php if($ThemeSet['TableStyle']=="div") { ?>
+<div class="TableRow1">
+<span style="text-align: left;">
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile[$CategoryType],$Settings['file_ext'],"act=view&id=".$CategoryID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$CategoryType],$exqstr[$CategoryType]); ?>"><?php echo $CategoryName; ?></a></span></div>
+<?php } ?>
 <table class="Table1" id="Cat<?php echo $CategoryID; ?>">
+<?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableRow1" id="CatStart<?php echo $CategoryID; ?>">
-<td class="TableRow1" colspan="5"><span style="float: left;">
+<td class="TableColumn1" colspan="5"><span style="text-align: left;">
 <?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile[$CategoryType],$Settings['file_ext'],"act=view&id=".$CategoryID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$CategoryType],$exqstr[$CategoryType]); ?>"><?php echo $CategoryName; ?></a></span>
-<?php echo "<span style=\"float: right;\">&nbsp;</span>"; ?></td>
-</tr>
+</td>
+</tr><?php } ?>
 <tr id="ForumStatRow<?php echo $CategoryID; ?>" class="TableRow2">
-<th class="TableRow2" style="width: 4%;">&nbsp;</th>
-<th class="TableRow2" style="width: 58%;">Forum</th>
-<th class="TableRow2" style="width: 7%;">Topics</th>
-<th class="TableRow2" style="width: 7%;">Posts</th>
-<th class="TableRow2" style="width: 24%;">Last Topic</th>
+<th class="TableColumn2" style="width: 4%;">&nbsp;</th>
+<th class="TableColumn2" style="width: 58%;">Forum</th>
+<th class="TableColumn2" style="width: 7%;">Topics</th>
+<th class="TableColumn2" style="width: 7%;">Posts</th>
+<th class="TableColumn2" style="width: 24%;">Last Topic</th>
 </tr>
 <?php }
 while ($i < $num) {
@@ -155,19 +161,19 @@ $ExStr = ""; if ($ForumType!="redirect"&&
 	$ForumShowTopics!="no") { $ExStr = "&page=1"; }
 ?>
 <tr class="TableRow3" id="Forum<?php echo $ForumID; ?>">
-<td class="TableRow3"><div class="forumicon">
+<td class="TableColumn3"><div class="forumicon">
 <?php echo $PreForum; ?></div></td>
-<td class="TableRow3"><div class="forumname"><a href="<?php echo url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$ForumID.$ExStr,$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>"<?php if($ForumType=="redirect") { echo " onclick=\"window.open(this.href);return false;\""; } ?>><?php echo $ForumName; ?></a></div>
+<td class="TableColumn3"><div class="forumname"><a href="<?php echo url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$ForumID.$ExStr,$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>"<?php if($ForumType=="redirect") { echo " onclick=\"window.open(this.href);return false;\""; } ?>><?php echo $ForumName; ?></a></div>
 <div class="forumdescription"><?php echo $ForumDescription; ?></div></td>
-<td class="TableRow3" style="text-align: center;"><?php echo $NumTopics; ?></td>
-<td class="TableRow3" style="text-align: center;"><?php echo $NumPosts; ?></td>
-<td class="TableRow3"><?php echo $LastTopic; ?></td>
+<td class="TableColumn3" style="text-align: center;"><?php echo $NumTopics; ?></td>
+<td class="TableColumn3" style="text-align: center;"><?php echo $NumPosts; ?></td>
+<td class="TableColumn3"><?php echo $LastTopic; ?></td>
 </tr>
 <?php } ++$i; } @mysql_free_result($result);
 if($num>=1) {
 ?>
 <tr id="CatEnd<?php echo $CategoryID; ?>" class="TableRow4">
-<td class="TableRow4" colspan="5">&nbsp;</td>
+<td class="TableColumn4" colspan="5">&nbsp;</td>
 </tr>
 </table></div>
 <div>&nbsp;</div>

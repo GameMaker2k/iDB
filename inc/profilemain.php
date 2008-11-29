@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: profilemain.php - Last Update: 11/18/2008 SVN 191 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 11/29/2008 SVN 193 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
@@ -30,34 +30,49 @@ if(!isset($_POST['update'])) { $_POST['update'] = null; }
 <table class="Table3">
 <tr style="width: 100%; vertical-align: top;">
 	<td style="width: 15%; vertical-align: top;">
-	<table id="ProfileLinks" class="Table1" style="width: 100%; float: left; vertical-align: top;">
+	<div class="Table1Border">
+<?php if($ThemeSet['TableStyle']=="div") { ?>
+<div class="TableRow1">
+<?php echo $ThemeSet['TitleIcon'] ?>Profile Settings</div>
+<?php } ?>
+<table id="ProfileLinks" class="Table1" style="width: 100%; text-align: left; vertical-align: top;">
+<?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableRow1">
-<td class="TableRow1"><?php echo $ThemeSet['TitleIcon'] ?>Profile Settings</td>
-</tr><tr class="TableRow2">
-<td class="TableRow2">&nbsp;</td>
+<td class="TableColumn1"><?php echo $ThemeSet['TitleIcon'] ?>Profile Settings</td>
+</tr><?php } ?>
+<tr class="TableRow2">
+<td class="TableColumn2">&nbsp;</td>
 </tr><tr class="TableRow3">
-<td class="TableRow3"><a href="<?php echo url_maker($exfile['profile'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['profile'],$exqstr['profile']); ?>">Edit NotePad</a></td>
+<td class="TableColumn3"><a href="<?php echo url_maker($exfile['profile'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['profile'],$exqstr['profile']); ?>">Edit NotePad</a></td>
 </tr><tr class="TableRow3">
-<td class="TableRow3"><a href="<?php echo url_maker($exfile['profile'],$Settings['file_ext'],"act=profile",$Settings['qstr'],$Settings['qsep'],$prexqstr['profile'],$exqstr['profile']); ?>">Edit Profile</a></td>
+<td class="TableColumn3"><a href="<?php echo url_maker($exfile['profile'],$Settings['file_ext'],"act=profile",$Settings['qstr'],$Settings['qsep'],$prexqstr['profile'],$exqstr['profile']); ?>">Edit Profile</a></td>
 </tr><tr class="TableRow3">
-<td class="TableRow3"><a href="<?php echo url_maker($exfile['profile'],$Settings['file_ext'],"act=signature",$Settings['qstr'],$Settings['qsep'],$prexqstr['profile'],$exqstr['profile']); ?>">Edit Signature</a></td>
+<td class="TableColumn3"><a href="<?php echo url_maker($exfile['profile'],$Settings['file_ext'],"act=signature",$Settings['qstr'],$Settings['qsep'],$prexqstr['profile'],$exqstr['profile']); ?>">Edit Signature</a></td>
 </tr><tr class="TableRow3">
-<td class="TableRow3"><a href="<?php echo url_maker($exfile['profile'],$Settings['file_ext'],"act=avatar",$Settings['qstr'],$Settings['qsep'],$prexqstr['profile'],$exqstr['profile']); ?>">Edit Avatar</a></td>
+<td class="TableColumn3"><a href="<?php echo url_maker($exfile['profile'],$Settings['file_ext'],"act=avatar",$Settings['qstr'],$Settings['qsep'],$prexqstr['profile'],$exqstr['profile']); ?>">Edit Avatar</a></td>
 </tr><tr class="TableRow4">
-<td class="TableRow4">&nbsp;</td>
-</tr></table><div>&nbsp;</div>
-<table class="Table1" style="width: 100%; float: left; vertical-align: top;">
+<td class="TableColumn4">&nbsp;</td>
+</tr></table><div>
+<div>&nbsp;</div>
+<div class="Table1Border">
+<?php if($ThemeSet['TableStyle']=="div") { ?>
+<div class="TableRow1">
+<?php echo $ThemeSet['TitleIcon'] ?>Board Settings</div>
+<?php } ?>
+<table class="Table1" style="width: 100%; text-align: left; vertical-align: top;">
+<?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableRow1">
-<td class="TableRow1"><?php echo $ThemeSet['TitleIcon'] ?>Board Settings</td>
-</tr><tr class="TableRow2">
-<td class="TableRow2">&nbsp;</td>
+<td class="TableColumn1"><?php echo $ThemeSet['TitleIcon'] ?>Board Settings</td>
+</tr><?php } ?>
+<tr class="TableRow2">
+<td class="TableColumn2">&nbsp;</td>
 </tr><tr class="TableRow3">
-<td class="TableRow3"><a href="<?php echo url_maker($exfile['profile'],$Settings['file_ext'],"act=settings",$Settings['qstr'],$Settings['qsep'],$prexqstr['profile'],$exqstr['profile']); ?>">Board Settings</a></td>
+<td class="TableColumn3"><a href="<?php echo url_maker($exfile['profile'],$Settings['file_ext'],"act=settings",$Settings['qstr'],$Settings['qsep'],$prexqstr['profile'],$exqstr['profile']); ?>">Board Settings</a></td>
 </tr><tr class="TableRow3">
-<td class="TableRow3"><a href="<?php echo url_maker($exfile['profile'],$Settings['file_ext'],"act=userinfo",$Settings['qstr'],$Settings['qsep'],$prexqstr['profile'],$exqstr['profile']); ?>">Change User Info</a></td>
+<td class="TableColumn3"><a href="<?php echo url_maker($exfile['profile'],$Settings['file_ext'],"act=userinfo",$Settings['qstr'],$Settings['qsep'],$prexqstr['profile'],$exqstr['profile']); ?>">Change User Info</a></td>
 </tr><tr class="TableRow4">
-<td class="TableRow4">&nbsp;</td>
-</tr></table>
+<td class="TableColumn4">&nbsp;</td>
+</tr></table></div>
 </td>
 	<td style="width: 85%; vertical-align: top;">
 <?php if($_POST['update']=="now"&&$_GET['act']!=null) {
@@ -68,17 +83,24 @@ $noteact = url_maker($exfile['profile'],$Settings['file_ext'],"act=view",$Settin
 $profiletitle = " ".$ThemeSet['TitleDivider']." NotePad";
 ?>
 <div class="Table1Border">
-<table class="Table1" style="width: 100%;">
-<tr class="TableRow1">
-<td class="TableRow1"><span style="float: left;">
+<?php if($ThemeSet['TableStyle']=="div") { ?>
+<div class="TableRow1">
+<span style="text-align: left;">
 <?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo $updateact; ?>">Updating Settings</a>
-</span><span style="float: right;">&nbsp;</span></td>
-</tr>
+</span></div>
+<?php } ?>
+<table class="Table1" style="width: 100%;">
+<?php if($ThemeSet['TableStyle']=="table") { ?>
+<tr class="TableRow1">
+<td class="TableColumn1"><span style="text-align: left;">
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo $updateact; ?>">Updating Settings</a>
+</span></td>
+</tr><?php } ?>
 <tr id="ProfileTitle" class="TableRow2">
-<th class="TableRow2">Updating Settings</th>
+<th class="TableColumn2">Updating Settings</th>
 </tr>
 <tr class="TableRow3" id="ProfileUpdate">
-<td class="TableRow3">
+<td class="TableColumn3">
 <div style="text-align: center;">
 <br />Profile updated <a href="<?php echo $updateact; ?>">click here</a> to go back. ^_^<br />&nbsp;</div>
 <?php } if($_GET['act']=="view") {
@@ -93,17 +115,24 @@ $noteact = url_maker($exfile['profile'],$Settings['file_ext'],"act=view",$Settin
 $notepadact = $noteact; $profiletitle = " ".$ThemeSet['TitleDivider']." NotePad";
 ?>
 <div class="Table1Border">
-<table class="Table1" style="width: 100%;">
-<tr class="TableRow1">
-<td class="TableRow1"><span style="float: left;">
+<?php if($ThemeSet['TableStyle']=="div") { ?>
+<div class="TableRow1">
+<span style="text-align: left;">
 <?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo $noteact; ?>">NotePad</a>
-</span><span style="float: right;">&nbsp;</span></td>
-</tr>
+</span></div>
+<?php } ?>
+<table class="Table1" style="width: 100%;">
+<?php if($ThemeSet['TableStyle']=="table") { ?>
+<tr class="TableRow1">
+<td class="TableColumn1"><span style="text-align: left;">
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo $noteact; ?>">NotePad</a>
+</span></td>
+</tr><?php } ?>
 <tr id="ProfileTitle" class="TableRow2">
-<th class="TableRow2">NotePad</th>
+<th class="TableColumn2">NotePad</th>
 </tr>
 <tr class="TableRow3" id="NotePadRow">
-<td class="TableRow3">
+<td class="TableColumn3">
 <form style="display: inline;" method="post" action="<?php echo $notepadact; ?>"><div style="text-align: center;">
 <label class="TextBoxLabel" for="NotePad">Your NotePad</label><br />
 <textarea class="TextBox" name="NotePad" id="NotePad" style="width: 75%; height: 128px;" rows="10" cols="84"><?php echo $Notes; ?></textarea>
@@ -113,7 +142,7 @@ $notepadact = $noteact; $profiletitle = " ".$ThemeSet['TitleDivider']." NotePad"
 </div></form></td>
 </tr>
 <tr id="ProfileEnd" class="TableRow4">
-<td class="TableRow4">&nbsp;</td>
+<td class="TableColumn4">&nbsp;</td>
 </tr>
 </table>
 </div>
@@ -169,17 +198,24 @@ $signatureact = url_maker($exfile['profile'],$Settings['file_ext'],"act=signatur
 $profiletitle = " ".$ThemeSet['TitleDivider']." Signature Editor";
 ?>
 <div class="Table1Border">
-<table class="Table1" style="width: 100%;">
-<tr class="TableRow1">
-<td class="TableRow1"><span style="float: left;">
+<?php if($ThemeSet['TableStyle']=="div") { ?>
+<div class="TableRow1">
+<span style="text-align: left;">
 <?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo $signatureact; ?>">Signature Editer</a>
-</span><span style="float: right;">&nbsp;</span></td>
-</tr>
+</span></div>
+<?php } ?>
+<table class="Table1" style="width: 100%;">
+<?php if($ThemeSet['TableStyle']=="table") { ?>
+<tr class="TableRow1">
+<td class="TableColumn1"><span style="text-align: left;">
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo $signatureact; ?>">Signature Editer</a>
+</span></td>
+</tr><?php } ?>
 <tr id="ProfileTitle" class="TableRow2">
-<th class="TableRow2">Signature Editor</th>
+<th class="TableColumn2">Signature Editor</th>
 </tr>
 <tr class="TableRow3" id="SignatureRow">
-<td class="TableRow3">
+<td class="TableColumn3">
 <form style="display: inline;" method="post" action="<?php echo $signatureact; ?>"><div style="text-align: center;">
 <label class="TextBoxLabel" for="Signature">Your Signature</label><br />
 <textarea class="TextBox" name="Signature" id="Signature" style="width: 75%; height: 128px;" rows="10" cols="84"><?php echo $Signature; ?></textarea>
@@ -189,7 +225,7 @@ $profiletitle = " ".$ThemeSet['TitleDivider']." Signature Editor";
 </div></form></td>
 </tr>
 <tr id="ProfileEnd" class="TableRow4">
-<td class="TableRow4">&nbsp;</td>
+<td class="TableColumn4">&nbsp;</td>
 </tr>
 </table>
 </div>
@@ -253,17 +289,24 @@ $AvatarSize1=explode("x", $User1AvatarSize);
 $AvatarSize1W=$AvatarSize1[0]; $AvatarSize1H=$AvatarSize1[1];
 ?>
 <div class="Table1Border">
-<table class="Table1" style="width: 100%;">
-<tr class="TableRow1">
-<td class="TableRow1"><span style="float: left;">
+<?php if($ThemeSet['TableStyle']=="div") { ?>
+<div class="TableRow1">
+<span style="text-align: left;">
 <?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo $avataract; ?>">Avatar Editer</a>
-</span><span style="float: right;">&nbsp;</span></td>
-</tr>
+</span></div>
+<?php } ?>
+<table class="Table1" style="width: 100%;">
+<?php if($ThemeSet['TableStyle']=="table") { ?>
+<tr class="TableRow1">
+<td class="TableColumn1"><span style="text-align: left;">
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo $avataract; ?>">Avatar Editer</a>
+</span></td>
+</tr><?php } ?>
 <tr id="ProfileTitle" class="TableRow2">
-<th class="TableRow2">Avatar Editor</th>
+<th class="TableColumn2">Avatar Editor</th>
 </tr>
 <tr class="TableRow3" id="AvatarEditor">
-<td class="TableRow3">
+<td class="TableColumn3">
 <form style="display: inline;" method="post" action="<?php echo $avataract; ?>">
  <?php  /* Avatar Table Thanks For SeanJ's Help at http://seanj.jcink.com/ */  ?>
  <table class="AvatarTable" style="width: 100px; height: 100px; text-align: center;">
@@ -299,7 +342,7 @@ $AvatarSize1W=$AvatarSize1[0]; $AvatarSize1H=$AvatarSize1[1];
 </form></td>
 </tr>
 <tr id="ProfileEnd" class="TableRow4">
-<td class="TableRow4">&nbsp;</td>
+<td class="TableColumn4">&nbsp;</td>
 </tr>
 </table>
 </div>
@@ -332,17 +375,24 @@ $User1DST=mysql_result($result,$i,"DST");
 $settingsact = url_maker($exfile['profile'],$Settings['file_ext'],"act=settings",$Settings['qstr'],$Settings['qsep'],$prexqstr['profile'],$exqstr['profile']);
 $profiletitle = " ".$ThemeSet['TitleDivider']." Board Settings"; ?>
 <div class="Table1Border">
-<table class="Table1" style="width: 100%;">
-<tr class="TableRow1">
-<td class="TableRow1"><span style="float: left;">
+<?php if($ThemeSet['TableStyle']=="div") { ?>
+<div class="TableRow1">
+<span style="text-align: left;">
 <?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo $settingsact; ?>">Board Settings</a>
-</span><span style="float: right;">&nbsp;</span></td>
-</tr>
+</span></div>
+<?php } ?>
+<table class="Table1" style="width: 100%;">
+<?php if($ThemeSet['TableStyle']=="table") { ?>
+<tr class="TableRow1">
+<td class="TableColumn1"><span style="text-align: left;">
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo $settingsact; ?>">Board Settings</a>
+</span></td>
+</tr><?php } ?>
 <tr id="ProfileTitle" class="TableRow2">
-<th class="TableRow2">Board Settings</th>
+<th class="TableColumn2">Board Settings</th>
 </tr>
 <tr class="TableRow3" id="BoardSettings">
-<td class="TableRow3">
+<td class="TableColumn3">
 <form style="display: inline;" method="post" action="<?php echo $settingsact; ?>">
 <table style="text-align: left;">
 <tr style="text-align: left;">
@@ -446,7 +496,7 @@ if ($handle = opendir($skindir)) { $dirnum = null;
 </form></td>
 </tr>
 <tr id="ProfileEnd" class="TableRow4">
-<td class="TableRow4">&nbsp;</td>
+<td class="TableColumn4">&nbsp;</td>
 </tr>
 </table>
 </div>
@@ -503,17 +553,24 @@ $profileact = url_maker($exfile['profile'],$Settings['file_ext'],"act=profile",$
 $profiletitle = " ".$ThemeSet['TitleDivider']." Profile Editor";
 ?>
 <div class="Table1Border">
-<table class="Table1" style="width: 100%;">
-<tr class="TableRow1">
-<td class="TableRow1"><span style="float: left;">
+<?php if($ThemeSet['TableStyle']=="div") { ?>
+<div class="TableRow1">
+<span style="text-align: left;">
 <?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo $profileact; ?>">Profile Editer</a>
-</span><span style="float: right;">&nbsp;</span></td>
-</tr>
+</span></div>
+<?php } ?>
+<table class="Table1" style="width: 100%;">
+<?php if($ThemeSet['TableStyle']=="table") { ?>
+<tr class="TableRow1">
+<td class="TableColumn1"><span style="text-align: left;">
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo $profileact; ?>">Profile Editer</a>
+</span></td>
+</tr><?php } ?>
 <tr id="ProfileTitle" class="TableRow2">
-<th class="TableRow2">Profile Editor</th>
+<th class="TableColumn2">Profile Editor</th>
 </tr>
 <tr class="TableRow3" id="ProfileEditor">
-<td class="TableRow3">
+<td class="TableColumn3">
 <form style="display: inline;" method="post" action="<?php echo $profileact; ?>">
 <table style="text-align: left;">
 <tr style="text-align: left;">
@@ -618,7 +675,7 @@ echo "<option value=\"".$showmin."\">0:".$showmin." minutes</option>\n";
 </form></td>
 </tr>
 <tr id="ProfileEnd" class="TableRow4">
-<td class="TableRow4">&nbsp;</td>
+<td class="TableColumn4">&nbsp;</td>
 </tr>
 </table>
 </div>
@@ -720,17 +777,24 @@ $userinfoact = url_maker($exfile['profile'],$Settings['file_ext'],"act=userinfo"
 $profiletitle = " ".$ThemeSet['TitleDivider']." User Info Editer";
 ?>
 <div class="Table1Border">
-<table class="Table1" style="width: 100%;">
-<tr class="TableRow1">
-<td class="TableRow1"><span style="float: left;">
+<?php if($ThemeSet['TableStyle']=="div") { ?>
+<div class="TableRow1">
+<span style="text-align: left;">
 <?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo $userinfoact; ?>">User Info Editer</a>
-</span><span style="float: right;">&nbsp;</span></td>
-</tr>
+</span></div>
+<?php } ?>
+<table class="Table1" style="width: 100%;">
+<?php if($ThemeSet['TableStyle']=="table") { ?>
+<tr class="TableRow1">
+<td class="TableColumn1"><span style="text-align: left;">
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo $userinfoact; ?>">User Info Editer</a>
+</span></td>
+</tr><?php } ?>
 <tr id="ProfileTitle" class="TableRow2">
-<th class="TableRow2">User Info Editer</th>
+<th class="TableColumn2">User Info Editer</th>
 </tr>
 <tr class="TableRow3" id="UserInfoEditor">
-<td class="TableRow3">
+<td class="TableColumn3">
 <form style="display: inline;" method="post" action="<?php echo $userinfoact; ?>">
 <table style="text-align: left;">
 <tr style="text-align: left;">
@@ -757,7 +821,7 @@ $profiletitle = " ".$ThemeSet['TitleDivider']." User Info Editer";
 </form></td>
 </tr>
 <tr id="ProfileEnd" class="TableRow4">
-<td class="TableRow4">&nbsp;</td>
+<td class="TableColumn4">&nbsp;</td>
 </tr>
 </table>
 </div>
@@ -810,7 +874,7 @@ if($YourPassword!=$OldPassword) { $Error="Yes"; ?>
 	$profiletitle = " ".$ThemeSet['TitleDivider']." Updating Settings"; ?>
 </td></tr>
 <tr id="ProfileTitleEnd" class="TableRow4">
-<td class="TableRow4">&nbsp;</td>
+<td class="TableColumn4">&nbsp;</td>
 </tr></table></div><?php } ?>
 </td></tr>
 </table>
