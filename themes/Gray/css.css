@@ -135,6 +135,7 @@ width: 100%;
 
 .TableRow1, .TableColumn1 {
 background-color: #d8d8d8;
+background-image: url(grad.png);
 border: 1px solid #606060;
 }
 
