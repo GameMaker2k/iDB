@@ -11,19 +11,20 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
     $ThemeInfo - Name: iDB Theme - Author: cooldude2k $
-    $FileInfo: settings.php - Last Update: 11/18/2008 SVN 191 - Author: cooldude2k $
+    $FileInfo: settings.php - Last Update: 12/01/2008 SVN 194 - Author: cooldude2k $
 */
 $ThemeSet = array();
 $ThemeSet['ThemeName'] = "iDB Theme";
 $ThemeSet['ThemeMaker'] = "Kazuki";
 $ThemeSet['ThemeVersion'] = "0.2.3";
 $ThemeSet['ThemeVersionType'] = "Pre-Alpha";
-$ThemeSet['ThemeSubVersion'] = "SVN 177";
+$ThemeSet['ThemeSubVersion'] = "SVN 194";
 $ThemeSet['MakerURL'] = "http://upload.idb.s1.jcink.com/";
 $ThemeSet['CopyRight'] = $ThemeSet['ThemeName']." was made by <a href=\"".$ThemeSet['MakerURL']."\" title=\"".$ThemeSet['ThemeMaker']."\">".$ThemeSet['ThemeMaker']."</a>";
 $ThemeSet['CSS'] = "themes/iDB/css.css";
 $ThemeSet['CSSType'] = "include";
 $ThemeSet['FavIcon'] = "themes/iDB/favicon.ico";
+$ThemeSet['TableStyle'] = "table";
 $ThemeSet['PreLogo'] = "<div style=\"text-align: center;\">";
 $ThemeSet['Logo'] = $Settings['board_name'];
 $ThemeSet['LogoStyle'] = "font-size: 40px; font-family: verdana, arial, sans-serif; color: black;";
@@ -53,12 +54,12 @@ $ThemeSet['LineDivider'] = "&nbsp;|&nbsp;";
 $ThemeSet['ButtonDivider'] = "&nbsp;&nbsp;&nbsp;";
 $ThemeSet['LineDividerTopic'] = "&nbsp;|&nbsp;";
 $ThemeSet['TitleDivider'] = "-&gt;";
-$ThemeSet['NavLinkIcon'] = null;
-$ThemeSet['NavLinkDivider'] = "&nbsp;-&gt;&nbsp;";
 $ThemeSet['ForumIcon'] = "<div style=\"text-align: center; font-size: 11px;\" title=\"Forum\">&nbsp;(F)&nbsp;</div>";
 $ThemeSet['SubForumIcon'] = "<div style=\"text-align: center; font-size: 11px;\" title=\"SubForum\">&nbsp;{SF}&nbsp;</div>";
 $ThemeSet['RedirectIcon'] = "<div style=\"text-align: center; font-size: 11px;\" title=\"Redirect Forum\">&nbsp;[RF]&nbsp;</div>";
 $ThemeSet['TitleIcon'] = null;
+$ThemeSet['NavLinkIcon'] = null;
+$ThemeSet['NavLinkDivider'] = "&nbsp;-&gt;&nbsp;";
 $ThemeSet['StatsIcon'] = "<div style=\"text-align: center; font-size: 11px;\" title=\"Board Stats\"><br />(S)<br /></div>&nbsp;";
 $ThemeSet['NoAvatar'] = "themes/iDB/noavatar.png";
 $ThemeSet['NoAvatarSize'] = "100x100";

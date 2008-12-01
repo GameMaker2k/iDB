@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
     $ThemeInfo - Name: iDB Gray - Author: cooldude2k $
-    $FileInfo: index.php - Last Update: 01/01/2008 SVN 144 - Author: cooldude2k $
+    $FileInfo: index.php - Last Update: 12/01/2008 SVN 194 - Author: cooldude2k $
 */
 header('Location: ../../index.php');
 ?>

@@ -10,208 +10,244 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
     $ThemeInfo - Name: iDB Gray - Author: cooldude2k $
-    $FileInfo: css.css - Last Update: 01/01/2008 SVN 144 - Author: cooldude2k $
+    $FileInfo: css.css - Last Update: 12/01/2008 SVN 194 - Author: cooldude2k $
 */
+
 html {
-	font-family: verdana, arial, sans-serif;
-	font-size: 11px;
-	width: 100%;
-	color: #FFFFFF;
-	background-color: #000000;
+font-family: verdana, arial, sans-serif;
+font-size: 11px;
+width: 100%;
+color: #ffffff;
+background-color: #000000;
 }
+
 body {
-	font-family: verdana, arial, sans-serif;
-	font-size: 11px;
-	margin: 5px 30px 5px 30px; 
-	color: #FFFFFF;
-	background-color: #000000;
+font-family: verdana, arial, sans-serif;
+font-size: 11px;
+margin: 5px 30px 5px 30px;
+color: #ffffff;
+background-color: #000000;
 }
-a:link, a:visited, a:active { 
-text-decoration: none; 
-color: #404040; 
+
+a:link, a:visited, a:active {
+text-decoration: none;
+color: #404040;
 }
-a:hover { 
-color: #606060;  
-text-decoration: none; 
+
+a:hover {
+color: #606060;
+text-decoration: none;
 }
-.NavBar2 a:link, .NavBar2 a:visited, .NavBar2 a:active, .NavBar2 a:hover { 
-text-decoration: none; 
+
+.NavBar2 a:link, .NavBar2 a:visited, .NavBar2 a:active, .NavBar2 a:hover {
+text-decoration: none;
 color: #000000;
 font-family: verdana, arial, sans-serif;
 font-size: 40px;
 }
-.copyright { 
+
+.copyright {
 text-align: center;
-font-family: Sans-Serif; 
-font-size: 12px; 
-line-height: 11px; 
-color: #FFFFFF; 
+font-family: Sans-Serif;
+font-size: 12px;
+line-height: 11px;
+color: #ffffff;
 }
-.copyright a:link, .copyright a:visited, .copyright a:active { 
-color: #DFDFDF; 
-text-decoration: none; 
+
+.copyright a:link, .copyright a:visited, .copyright a:active {
+color: #dfdfdf;
+text-decoration: none;
 }
-.copyright a:hover { 
-color: #FDFDFD; 
-text-decoration: none; 
+
+.copyright a:hover {
+color: #fdfdfd;
+text-decoration: none;
 }
-.noborder { 
-border: 0px;
+
+.noborder {
+border: 0;
 }
+
 img {
-   border: 0px;
-   vertical-align: middle;
-   display: inline;
+border: 0;
+vertical-align: middle;
+display: inline;
 }
-.NavBar1 { 
-background-color: #B0B0B0; 
+
+.NavBar {
+background-color: #b0b0b0;
 font-size: 11px;
 font-family: verdana, arial, sans-serif;
-color: #000000; 
+color: #000000;
 width: 100%;
 border: 1px solid #606060;
-border-collapse: collapse; 
+border-collapse: collapse;
 }
-.NavBar2 { 
-background-color: #D8D8D8;
+
+.NavBarRow1, .NavBarColumn1 {
+background-color: #d8d8d8;
 font-size: 11px;
 text-align: center;
 border: 1px solid #606060;
 }
-.NavBar3 { 
-background-color: #C8C8C8;
+
+.NavBarRow2, .NavBarColumn2 {
+background-color: #c8c8c8;
 font-size: 11px;
 text-align: left;
 border: 1px solid #606060;
 }
-.Table1 { 
-background-color: #B0B0B0; 
+
+.Table1 {
+background-color: #b0b0b0;
 font-size: 11px;
-font-family: verdana, arial, sans-serif;  
-color: #000000; 
+font-family: verdana, arial, sans-serif;
+color: #000000;
 width: 100%;
 border: 1px solid #606060;
-border-collapse: collapse; 
+border-collapse: collapse;
 }
-.Table2 { 
+
+.Table2 {
 background-color: #000000;
 font-size: 11px;
 font-family: verdana, arial, sans-serif;
 color: #000000;
 width: 100%;
 }
-.Table2 a:link, .Table2 a:visited, .Table2 a:active { 
-text-decoration: none; 
-color: #7675B4;
+
+.Table2 a:link, .Table2 a:visited, .Table2 a:active {
+text-decoration: none;
+color: #7675b4;
 }
-.Table2 a:hover { 
-color: #9695C4; 
-text-decoration: none; 
+
+.Table2 a:hover {
+color: #9695c4;
+text-decoration: none;
 }
-.Table3 { 
+
+.Table3 {
 font-size: 11px;
-font-family: verdana, arial, sans-serif;  
-color: #000000; 
+font-family: verdana, arial, sans-serif;
+color: #000000;
 width: 100%;
 }
-.TableRow1 { 
-background-color: #D8D8D8; 
+
+.TableRow1, .TableColumn1 {
+background-color: #d8d8d8;
 border: 1px solid #606060;
 }
-.TableRow2 { 
-background-color: #C8C8C8; 
+
+.TableRow2, .TableColumn2 {
+background-color: #c8c8c8;
 border: 1px solid #606060;
 }
-.TableRow3 { 
-background-color: #B0B0B0; 
+
+.TableRow3, .TableColumn3 {
+background-color: #b0b0b0;
 border: 1px solid #606060;
 }
-.TableRow4 { 
-background-color: #D8D8D8; 
+
+.TableRow4, .TableColumn4 {
+background-color: #d8d8d8;
 border: 1px solid #606060;
 }
-.CalTableRow1, .CalTableRow2 { 
-background-color: #B0B0B0; 
+
+.CalTableRow1, .CalTableRow2 {
+background-color: #b0b0b0;
 border: 1px solid #606060;
 }
-.TextBox { 
-background-color: #D8D8D8; 
-font-size: 13px; 
-font-family: Courier, Courier New, Verdana, Arial;   
-color: #000000; 
+
+.TextBox {
+background-color: #d8d8d8;
+font-size: 13px;
+font-family: Courier, Courier New, Verdana, Arial;
+color: #000000;
 border: 1px solid #606060;
-border-collapse: collapse; 
+border-collapse: collapse;
 }
+
 .HiddenTextBox {
 display: none;
 }
-.QuoteTop { 
+
+.QuoteTop {
 font-family: Verdana, Tahoma, Arial, sans-serif;
-font-size: 10px; 
-color: #A0A0A0; 
+font-size: 10px;
+color: #a0a0a0;
 }
-.QuoteBottom { 
-font-family: Courier, Courier New, Verdana, Arial, serif; 
-font-size: 12px; 
-color: #C0C0C0; 
-background-color: #000000; 
-border: 1px solid #000; 
+
+.QuoteBottom {
+font-family: Courier, Courier New, Verdana, Arial, serif;
+font-size: 12px;
+color: #c0c0c0;
+background-color: #000000;
+border: 1px solid #000;
 border-color: #808080;
-padding-top: 2px; 
-padding-right: 2px; 
-padding-bottom: 2px; 
-padding-left: 2px 
+padding-top: 2px;
+padding-right: 2px;
+padding-bottom: 2px;
+padding-left: 2px;
 }
-.CodeTop  { 
-font-family: Verdana, Tahoma, Arial, sans-serif; 
-font-size: 10px; 
-color: #A0A0A0; 
+
+.CodeTop {
+font-family: Verdana, Tahoma, Arial, sans-serif;
+font-size: 10px;
+color: #a0a0a0;
 }
-.CodeBottom { 
-font-family: Courier, Courier New, Verdana, Arial;  
-font-size: 12px; 
-color: #C0C0C0; 
-background-color: #000000; 
-border: 1px solid #000; 
+
+.CodeBottom {
+font-family: Courier, Courier New, Verdana, Arial;
+font-size: 12px;
+color: #c0c0c0;
+background-color: #000000;
+border: 1px solid #000;
 border-color: #808080;
-padding-top: 2px; 
-padding-right: 2px; 
-padding-bottom: 2px; 
-padding-left: 2px 
+padding-top: 2px;
+padding-right: 2px;
+padding-bottom: 2px;
+padding-left: 2px;
 }
-.CodeBox { 
-width:500px; 
-height:100px; 
-white-space:pre; 
-overflow:auto; 
-border:3px outset #000000; 
-font-family: Courier, Courier New, Verdana, Arial, serif; 
-font-size: 15px; 
+
+.CodeBox {
+width: 500px;
+height: 100px;
+white-space: pre;
+overflow: auto;
+border: 3px outset #000000;
+font-family: Courier, Courier New, Verdana, Arial, serif;
+font-size: 15px;
 }
-.Button { 
-background-color: #D8D8D8; 
-font-size: 13px; 
-font-family: Courier, Courier New, Verdana, Arial;   
-color: #000000; 
+
+.Button {
+background-color: #d8d8d8;
+font-size: 13px;
+font-family: Courier, Courier New, Verdana, Arial;
+color: #000000;
 border: 1px solid #606060;
-border-collapse: collapse; 
+border-collapse: collapse;
 }
+
 .TextBoxLabel, label {
 color: #000000;
-font-weight: bold; 
+font-weight: bold;
 cursor: pointer;
 font-size: 10px;
 }
+
 .EditReply {
 color: #000000;
-font-size: 9px; 
+font-size: 9px;
 }
+
 .TableMessage {
 color: #000000;
-font-weight: bold; 
+font-weight: bold;
 font-size: 10px;
 }
+
 .statsicon {
 text-align: center;
-vertical-align:  middle;
+vertical-align: middle;
 }
+
