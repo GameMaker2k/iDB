@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: navbar.php - Last Update: 11/29/2008 SVN 193 - Author: cooldude2k $
+    $FileInfo: navbar.php - Last Update: 12/02/2008 SVN 197 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="navbar.php"||$File3Name=="/navbar.php") {
@@ -30,13 +30,23 @@ if($ThemeSet['LogoStyle']==null) { $logostyle = ""; }
 if($ThemeSet['LogoStyle']!=null) { $logostyle = "style=\"".$ThemeSet['LogoStyle']."\" "; }
 ?>
 <div class="NavBorder">
+<?php if($ThemeSet['TableStyle']=="div") { ?>
+<div class="NavBarRow1">
+<span class="NavBarSpan1">
+<?php echo $ThemeSet['PreLogo']; ?>
+<a <?php echo $logostyle; ?>title="<?php echo $Settings['board_name'].$idbpowertitle; ?>" href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">
+<?php echo $ThemeSet['Logo']; ?></a>
+<?php echo $ThemeSet['SubLogo']; ?>
+</span></div>
+<?php } ?>
 <table id="NavBarTable" class="NavBar">
+<?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="NavBarRow1">
 <td id="NavBarLogo" class="NavBarColumn1"><?php echo $ThemeSet['PreLogo']; ?>
 <a <?php echo $logostyle; ?>title="<?php echo $Settings['board_name'].$idbpowertitle; ?>" href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">
 <?php echo $ThemeSet['Logo']; ?></a>
 <?php echo $ThemeSet['SubLogo']; ?></td>
-</tr>
+</tr><?php } ?>
 <tr class="NavBarRow2">
 <td id="NavBarLinks" class="NavBarColumn2">
 <span style="float: left;">&nbsp;<?php if($_SESSION['UserGroup']==$Settings['GuestGroup']) {?>Welcome Guest ( <a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Log in</a><?php echo $ThemeSet['LineDivider']; ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=signup",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Register</a> )

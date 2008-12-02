@@ -98,7 +98,7 @@ text-align: left;
 border: 1px solid #506070;
 }
 
-.Table1, .TableInfo1 {
+.Table1, .TableInfo1, .TableStats1 {
 background-color: #a7b1bd;
 font-size: 11px;
 font-family: verdana, arial, sans-serif;
@@ -145,12 +145,23 @@ background-image: url(grad.png);
 border: 1px solid #506070;
 }
 
+.TableStatsRow1, .TableStatsColumn1 {
+background-color: #c7d1dd;
+background-image: url(grad.png);
+border: 1px solid #506070;
+}
+
 .TableRow2, .TableColumn2 {
 background-color: #d7e1ed;
 border: 1px solid #506070;
 }
 
 .TableInfoRow2, .TableInfoColumn2 {
+background-color: #d7e1ed;
+border: 1px solid #506070;
+}
+
+.TableStatsRow2, .TableStatsColumn2 {
 background-color: #d7e1ed;
 border: 1px solid #506070;
 }
@@ -165,12 +176,22 @@ background-color: #a7b1bd;
 border: 1px solid #506070;
 }
 
+.TableStatsRow3, .TableStatsColumn3 {
+background-color: #a7b1bd;
+border: 1px solid #506070;
+}
+
 .TableRow4, .TableColumn4 {
 background-color: #c7d1dd;
 border: 1px solid #506070;
 }
 
 .TableInfoRow4, .TableInfoColumn4 {
+background-color: #c7d1dd;
+border: 1px solid #506070;
+}
+
+.TableStatsRow4, .TableStatsColumn4 {
 background-color: #c7d1dd;
 border: 1px solid #506070;
 }
@@ -272,4 +293,3 @@ font-size: 10px;
 text-align: center;
 vertical-align: middle;
 }
-
