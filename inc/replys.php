@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: replys.php - Last Update: 12/01/2008 SVN 194 - Author: cooldude2k $
+    $FileInfo: replys.php - Last Update: 12/01/2008 SVN 196 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replys.php"||$File3Name=="/replys.php") {
@@ -266,20 +266,20 @@ if($_SESSION['UserID']==0) {
 	$CanEditReply = false; $CanDeleteReply = false; }
 $ReplyNum = $i + $PageLimit + 1;
 ?>
-<div class="Table1Border">
+<div class="TableInfo1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
-<div class="TableRow1">
+<div class="TableInfoRow1">
 <span style="font-weight: bold; text-align: left;"><?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."&#35;reply".$ReplyNum; ?>"><?php echo $TopicName; ?></a> ( <?php echo $MyDescription; ?> )</span>
 </div>
 <?php } ?>
-<table class="Table1">
+<table class="TableInfo1">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
-<tr class="TableRow1">
-<td class="TableColumn1" colspan="2"><span style="font-weight: bold; text-align: left;"><?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."&#35;reply".$ReplyNum; ?>"><?php echo $TopicName; ?></a> ( <?php echo $MyDescription; ?> )</span>
+<tr class="TableInfoRow1">
+<td class="TableInfoColumn1" colspan="2"><span style="font-weight: bold; text-align: left;"><?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."&#35;reply".$ReplyNum; ?>"><?php echo $TopicName; ?></a> ( <?php echo $MyDescription; ?> )</span>
 </td>
 </tr><?php } ?>
-<tr class="TableRow2">
-<td class="TableColumn2" style="vertical-align: middle; width: 160px;">
+<tr class="TableInfoRow2">
+<td class="TableInfoColumn2" style="vertical-align: middle; width: 160px;">
 &nbsp;<?php
 if($User1ID!="-1") {
 echo "<a href=\"";
@@ -288,16 +288,16 @@ echo "\">".$User1Name."</a>"; }
 if($User1ID=="-1") {
 echo "<span>".$User1Name."</span>"; }
 ?></td>
-<td class="TableColumn2" style="vertical-align: middle;">
-<div style="text-align: left; text-align: left;" id="post<?php echo $MyPostID; ?>">
+<td class="TableInfoColumn2" style="vertical-align: middle;">
+<div style="float: left; text-align: left;" id="post<?php echo $MyPostID; ?>">
 <a style="vertical-align: middle;" id="reply<?php echo $ReplyNum; ?>">
 <span style="font-weight: bold;">Time Posted: </span><?php echo $MyTimeStamp; ?></a>
 </div>
-<div style="text-align: right;"><a href="#Act/Report"><?php echo $ThemeSet['Report']; ?></a><?php if($CanEditReply===true) { echo $ThemeSet['LineDividerTopic']; echo "<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=edit&id=".$MyTopicID."&post=".$MyPostID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">".$ThemeSet['EditReply']; ?></a><?php } if($CanDeleteReply===true) { echo $ThemeSet['LineDividerTopic']; echo "<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=delete&id=".$MyTopicID."&post=".$MyPostID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">".$ThemeSet['DeleteReply']; ?></a><?php } if($CanMakeReply=="yes") { echo $ThemeSet['LineDividerTopic']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=create&id=".$TopicID."&post=".$MyPostID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $ThemeSet['QuoteReply']; ?></a><?php } ?>&nbsp;</div>
+<div style="float: right;"><a href="#Act/Report"><?php echo $ThemeSet['Report']; ?></a><?php if($CanEditReply===true) { echo $ThemeSet['LineDividerTopic']; echo "<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=edit&id=".$MyTopicID."&post=".$MyPostID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">".$ThemeSet['EditReply']; ?></a><?php } if($CanDeleteReply===true) { echo $ThemeSet['LineDividerTopic']; echo "<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=delete&id=".$MyTopicID."&post=".$MyPostID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">".$ThemeSet['DeleteReply']; ?></a><?php } if($CanMakeReply=="yes") { echo $ThemeSet['LineDividerTopic']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=create&id=".$TopicID."&post=".$MyPostID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $ThemeSet['QuoteReply']; ?></a><?php } ?>&nbsp;</div>
 </td>
 </tr>
-<tr class="TableRow3">
-<td class="TableColumn3" style="vertical-align: top; width: 180px;">
+<tr class="TableInfoRow3">
+<td class="TableInfoColumn3" style="vertical-align: top; width: 180px;">
  <?php  /* Avatar Table Thanks For SeanJ's Help at http://seanj.jcink.com/ */  ?>
  <table class="AvatarTable" style="width: 100px; height: 100px; text-align: center;">
 	<tr class="AvatarRow" style="width: 100%; height: 100%;">
@@ -316,14 +316,14 @@ Posts: <?php echo $User1PostCount; ?><br />
 Karma: <?php echo $User1Karma; ?><br />
 Joined: <?php echo $User1Joined; ?><br /><br />
 </td>
-<td class="TableColumn3" style="vertical-align: middle;">
+<td class="TableInfoColumn3" style="vertical-align: middle;">
 <div class="replypost"><?php echo $MyPost; ?></div>
 <?php if(isset($User1Signature)) { ?> <br />--------------------
 <div class="signature"><?php echo $User1Signature; ?></div><?php } ?>
 </td>
 </tr>
-<tr class="TableRow4">
-<td class="TableColumn4" colspan="2">
+<tr class="TableInfoRow4">
+<td class="TableInfoColumn4" colspan="2">
 <span style="text-align: left;">&nbsp;<a href="<?php
 if($User1ID!="-1") {
 echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$User1ID,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); }
@@ -427,9 +427,8 @@ echo "</table>";
 <tr id="MkReplyEnd<?php echo $TopicForumID; ?>" class="TableRow4">
 <td class="TableColumn4" colspan="2">&nbsp;</td>
 </tr>
-</table>
+</table></div>
 <div>&nbsp;</div>
-</div>
 <?php } } if($_GET['act']=="create") {
 if($GroupInfo['HasAdminCP']!="yes"||$GroupInfo['HasModCP']!="yes") {
 if($ForumPostCountView!=0&&$MyPostCountChk<$ForumPostCountView) {

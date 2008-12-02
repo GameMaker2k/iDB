@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: events.php - Last Update: 12/01/2008 SVN 194 - Author: cooldude2k $
+    $FileInfo: events.php - Last Update: 12/01/2008 SVN 196 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="events.php"||$File3Name=="/events.php") {
@@ -29,7 +29,6 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 ?>
 <div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">Board index</a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['event'],$Settings['file_ext'],"act=view&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['event'],$exqstr['event']); ?>">Viewing Event</a></div>
 <div>&nbsp;</div>
-<div class="Table1Border">
 <?php
 while ($is < $num) {
 $EventID=mysql_result($result,$is,"id");
@@ -78,18 +77,19 @@ if($User1Name==null) { $User1Name="Guest"; } }
 $EventText = text2icons($EventText,$Settings['sqltable']); 
 $User1Signature = text2icons($User1Signature,$Settings['sqltable']);
 ?>
+<div class="TableInfo1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
-<div class="TableRow1">
+<div class="TableInfoRow1">
 <span style="font-weight: bold; text-align: left;"><?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['event'],$Settings['file_ext'],"act=view&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['event'],$exqstr['event']); ?>"><?php echo $EventName; ?></a></span></div>
 <?php } ?>
-<table class="Table1">
+<table class="TableInfo1">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
-<tr class="TableRow1">
-<td class="TableColumn1" colspan="2"><span style="font-weight: bold; text-align: left;"><?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['event'],$Settings['file_ext'],"act=view&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['event'],$exqstr['event']); ?>"><?php echo $EventName; ?></a></span>
+<tr class="TableInfoRow1">
+<td class="TableInfoColumn1" colspan="2"><span style="font-weight: bold; text-align: left;"><?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['event'],$Settings['file_ext'],"act=view&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['event'],$exqstr['event']); ?>"><?php echo $EventName; ?></a></span>
 </td>
 </tr><?php } ?>
-<tr class="TableRow2">
-<td class="TableColumn2" style="vertical-align: middle; width: 160px;">
+<tr class="TableInfoRow2">
+<td class="TableInfoColumn2" style="vertical-align: middle; width: 160px;">
 &nbsp;<?php
 if($User1ID!="-1") {
 echo "<a href=\"";
@@ -98,15 +98,15 @@ echo "\">".$User1Name."</a>"; }
 if($User1ID=="-1") {
 echo "<span>".$User1Name."</span>"; }
 ?></td>
-<td class="TableColumn2" style="vertical-align: middle;">
-<div style="text-align: left; text-align: left;">
+<td class="TableInfoColumn2" style="vertical-align: middle;">
+<div style="float: left; text-align: left;">
 <span style="font-weight: bold;">Event Start: </span><?php echo $EventStart; ?><?php echo $ThemeSet['LineDividerTopic']; ?><span style="font-weight: bold;">Event End: </span><?php echo $EventEnd; ?>
 </div>
 <div style="text-align: right;">&nbsp;</div>
 </td>
 </tr>
-<tr>
-<td class="TableColumn3" style="vertical-align: top; width: 180px;">
+<tr class="TableInfoRow3">
+<td class="TableInfoColumn3" style="vertical-align: top; width: 180px;">
  <?php  /* Avatar Table Thanks For SeanJ's Help at http://seanj.jcink.com/ */  ?>
  <table class="AvatarTable" style="width: 100px; height: 100px; text-align: center;">
 	<tr class="AvatarRow" style="width: 100%; height: 100%;">
@@ -124,14 +124,14 @@ if($User1ID=="-1") { echo 0; }
 Posts: <?php echo $User1PostCount; ?><br />
 Joined: <?php echo $User1Joined; ?><br /><br />
 </td>
-<td class="TableColumn3" style="vertical-align: middle;">
+<td class="TableInfoColumn3" style="vertical-align: middle;">
 <div class="eventpost"><?php echo $EventText; ?></div>
 <?php if(isset($User1Signature)) { ?> <br />--------------------
 <div class="signature"><?php echo $User1Signature; ?></div><?php } ?>
 </td>
 </tr>
-<tr class="TableRow4">
-<td class="TableColumn4" colspan="2">
+<tr class="TableInfoRow4">
+<td class="TableInfoColumn4" colspan="2">
 <span style="text-align: left;">&nbsp;<a href="<?php
 if($User1ID!="-1") {
 echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$User1ID,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); }

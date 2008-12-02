@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: profilemain.php - Last Update: 12/01/2008 SVN 194 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 12/01/2008 SVN 196 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
@@ -52,7 +52,7 @@ if(!isset($_POST['update'])) { $_POST['update'] = null; }
 <td class="TableColumn3"><a href="<?php echo url_maker($exfile['profile'],$Settings['file_ext'],"act=avatar",$Settings['qstr'],$Settings['qsep'],$prexqstr['profile'],$exqstr['profile']); ?>">Edit Avatar</a></td>
 </tr><tr class="TableRow4">
 <td class="TableColumn4">&nbsp;</td>
-</tr></table><div>
+</tr></table></div>
 <div>&nbsp;</div>
 <div class="Table1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>

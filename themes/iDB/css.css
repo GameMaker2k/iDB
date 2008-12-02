@@ -98,7 +98,7 @@ text-align: left;
 border: 1px solid #506070;
 }
 
-.Table1 {
+.Table1, .TableInfo1 {
 background-color: #a7b1bd;
 font-size: 11px;
 font-family: verdana, arial, sans-serif;
@@ -139,7 +139,18 @@ background-image: url(grad.png);
 border: 1px solid #506070;
 }
 
+.TableInfoRow1, .TableInfoColumn1 {
+background-color: #c7d1dd;
+background-image: url(grad.png);
+border: 1px solid #506070;
+}
+
 .TableRow2, .TableColumn2 {
+background-color: #d7e1ed;
+border: 1px solid #506070;
+}
+
+.TableInfoRow2, .TableInfoColumn2 {
 background-color: #d7e1ed;
 border: 1px solid #506070;
 }
@@ -149,7 +160,17 @@ background-color: #a7b1bd;
 border: 1px solid #506070;
 }
 
+.TableInfoRow3, .TableInfoColumn3 {
+background-color: #a7b1bd;
+border: 1px solid #506070;
+}
+
 .TableRow4, .TableColumn4 {
+background-color: #c7d1dd;
+border: 1px solid #506070;
+}
+
+.TableInfoRow4, .TableInfoColumn4 {
 background-color: #c7d1dd;
 border: 1px solid #506070;
 }

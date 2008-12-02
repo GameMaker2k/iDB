@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: pm.php - Last Update: 12/01/2008 SVN 194 - Author: cooldude2k $
+    $FileInfo: pm.php - Last Update: 12/01/2008 SVN 196 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pm.php"||$File3Name=="/pm.php") {
@@ -91,7 +91,7 @@ $i=0;
 $pagenum=count($Pages);
 if($_GET['page']>$pagenum) {
 	$_GET['page'] = $pagenum; }
-$pagei=0; $pstring = "<div class=\"PageList\">Pages: ";
+$pagei=0; $pstring = "<div style=\"float: right;\" class=\"PageList\">Pages: ";
 if($_GET['page']<4) { $Pagez[0] = null; }
 if($_GET['page']>=4) { $Pagez[0] = "First"; }
 if($_GET['page']>=3) {
@@ -136,14 +136,14 @@ $pstring = $pstring."... <a href=\"".url_maker($exfile['messenger'],$Settings['f
 <div class="TableRow1">
 <span style="float: left;">
 <?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>">MailBox&nbsp;(<?php echo $PMNumber; ?>)</a>
-</span><span style="float: right;"><?php echo $pstring; ?></span>&nbsp;</div>
+</span><?php echo $pstring; ?>&nbsp;</div>
 <?php } ?>
 <table class="Table1" style="width: 100%;">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableRow1">
 <td class="TableColumn1" colspan="4"><span style="float: left;">
 <?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>">MailBox&nbsp;(<?php echo $PMNumber; ?>)</a>
-</span><span style="float: right;"><?php echo $pstring; ?></span>&nbsp;</td>
+</span><?php echo $pstring; ?>&nbsp;</td>
 </tr><?php } ?>
 <tr id="Messenger" class="TableRow2">
 <th class="TableColumn2" style="width: 4%;">State</th>
@@ -234,7 +234,7 @@ $i=0;
 $pagenum=count($Pages);
 if($_GET['page']>$pagenum) {
 	$_GET['page'] = $pagenum; }
-$pagei=0; $pstring = "<div class=\"PageList\">Pages: ";
+$pagei=0; $pstring = "<div style=\"float: right;\" class=\"PageList\">Pages: ";
 if($_GET['page']<4) { $Pagez[0] = null; }
 if($_GET['page']>=4) { $Pagez[0] = "First"; }
 if($_GET['page']>=3) {
@@ -279,14 +279,14 @@ $pstring = $pstring."... <a href=\"".url_maker($exfile['messenger'],$Settings['f
 <div class="TableRow1">
 <span style="float: left;">
 <?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=viewsent&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>">MailBox&nbsp;(<?php echo $PMNumber; ?>)</a>
-</span><span style="float: right;"><?php echo $pstring; ?></span>&nbsp;</div>
+</span><?php echo $pstring; ?>&nbsp;</div>
 <?php } ?>
 <table class="Table1" style="width: 100%;">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableRow1">
 <td class="TableColumn1" colspan="4"><span style="float: left;">
 <?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=viewsent&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>">MailBox&nbsp;(<?php echo $PMNumber; ?>)</a>
-</span><span style="float: right;"><?php echo $pstring; ?></span>&nbsp;</td>
+</span><?php echo $pstring; ?>&nbsp;</td>
 </tr><?php } ?>
 <tr id="Messenger" class="TableRow2">
 <th class="TableColumn2" style="width: 4%;">State</th>
@@ -402,20 +402,20 @@ $MessageText = text2icons($MessageText,$Settings['sqltable']);
 $User1Signature = preg_replace("/\<br\>/", "<br />\n", nl2br($User1Signature));
 $User1Signature = text2icons($User1Signature,$Settings['sqltable']);
 ?>
-<div class="Table1Border">
+<div class="TableInfo1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
-<div class="TableRow1">
+<div class="TableInfoRow1">
 <span style="font-weight: bold; text-align: left;"><?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>"><?php echo $MessageName; ?></a> ( <?php echo $MessageDesc; ?> )</span>
 </div>
 <?php } ?>
-<table class="Table1" style="width: 100%;">
+<table class="TableInfo1" style="width: 100%;">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
-<tr class="TableRow1">
-<td class="TableColumn1" colspan="2"><span style="font-weight: bold; text-align: left;"><?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>"><?php echo $MessageName; ?></a> ( <?php echo $MessageDesc; ?> )</span>
+<tr class="TableInfoRow1">
+<td class="TableInfoColumn1" colspan="2"><span style="font-weight: bold; text-align: left;"><?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>"><?php echo $MessageName; ?></a> ( <?php echo $MessageDesc; ?> )</span>
 </td>
 </tr><?php } ?>
-<tr class="TableRow2">
-<td class="TableColumn2" style="vertical-align: middle; width: 160px;">
+<tr class="TableInfoRow2">
+<td class="TableInfoColumn2" style="vertical-align: middle; width: 160px;">
 &nbsp;<?php
 if($User1ID!="-1") {
 echo "<a href=\"";
@@ -424,15 +424,15 @@ echo "\">".$User1Name."</a>"; }
 if($User1ID=="-1") {
 echo "<span>".$User1Name."</span>"; }
 ?></td>
-<td class="TableColumn2" style="vertical-align: middle;">
-<div style="text-align: left; text-align: left;">
+<td class="TableInfoColumn2" style="vertical-align: middle;">
+<div style="float: left; text-align: left;">
 <span style="font-weight: bold;">Time Sent: </span><?php echo $DateSend; ?>
 </div>
 <div style="text-align: right;">&nbsp;</div>
 </td>
 </tr>
-<tr>
-<td class="TableColumn3" style="vertical-align: top; width: 180px;">
+<tr class="TableInfoRow2">
+<td class="TableInfoColumn3" style="vertical-align: top; width: 180px;">
  <?php  /* Avatar Table Thanks For SeanJ's Help at http://seanj.jcink.com/ */  ?>
  <table class="AvatarTable" style="width: 100px; height: 100px; text-align: center;">
 	<tr class="AvatarRow" style="width: 100%; height: 100%;">
@@ -451,14 +451,14 @@ Posts: <?php echo $User1PostCount; ?><br />
 Karma: <?php echo $User1Karma; ?><br />
 Joined: <?php echo $User1Joined; ?><br /><br />
 </td>
-<td class="TableColumn3" style="vertical-align: middle;">
+<td class="TableInfoColumn3" style="vertical-align: middle;">
 <div class="pmpost"><?php echo $MessageText; ?></div>
 <?php if(isset($User1Signature)) { ?> <br />--------------------
 <div class="signature"><?php echo $User1Signature; ?></div><?php } ?>
 </td>
 </tr>
-<tr class="TableRow4">
-<td class="TableColumn4" colspan="2">
+<tr class="TableInfoRow4">
+<td class="TableInfoColumn4" colspan="2">
 <span style="text-align: left;">&nbsp;<a href="<?php
 if($User1ID!="-1") {
 echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$User1ID,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); }
