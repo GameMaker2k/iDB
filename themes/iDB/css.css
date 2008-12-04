@@ -98,7 +98,7 @@ text-align: left;
 border: 1px solid #506070;
 }
 
-.Table1, .TableInfo1, .TableStats1 {
+.Table1, .TableInfo1, .TableInfoMini1, .TableStats1, .TableSMenu, .TableMenu {
 background-color: #a7b1bd;
 font-size: 11px;
 font-family: verdana, arial, sans-serif;
@@ -133,65 +133,31 @@ color: #000000;
 width: 100%;
 }
 
-.TableRow1, .TableColumn1 {
+.TableRow1, .TableColumn1, .TableInfoRow1, .TableInfoColumn1, 
+.TableStatsRow1, .TableStatsColumn1, .TableInfoMiniRow1, .TableInfoMiniColumn1,
+.TableSMenuRow1, .TableSMenuColumn1, .TableMenuRow1, .TableMenuColumn1 {
 background-color: #c7d1dd;
 background-image: url(grad.png);
 border: 1px solid #506070;
 }
 
-.TableInfoRow1, .TableInfoColumn1 {
-background-color: #c7d1dd;
-background-image: url(grad.png);
-border: 1px solid #506070;
-}
-
-.TableStatsRow1, .TableStatsColumn1 {
-background-color: #c7d1dd;
-background-image: url(grad.png);
-border: 1px solid #506070;
-}
-
-.TableRow2, .TableColumn2 {
+.TableRow2, .TableColumn2, .TableInfoRow2, .TableInfoColumn2, 
+.TableStatsRow2, .TableStatsColumn2, .TableInfoMiniRow2, .TableInfoMiniColumn2,
+.TableSMenuRow2, .TableSMenuColumn2, .TableMenuRow2, .TableMenuColumn2 {
 background-color: #d7e1ed;
 border: 1px solid #506070;
 }
 
-.TableInfoRow2, .TableInfoColumn2 {
-background-color: #d7e1ed;
-border: 1px solid #506070;
-}
-
-.TableStatsRow2, .TableStatsColumn2 {
-background-color: #d7e1ed;
-border: 1px solid #506070;
-}
-
-.TableRow3, .TableColumn3 {
+.TableRow3, .TableColumn3, .TableInfoRow3, .TableInfoColumn3, 
+.TableStatsRow3, .TableStatsColumn3, .TableInfoMiniRow3, .TableInfoMiniColumn3,
+.TableSMenuRow3, .TableSMenuColumn3, .TableMenuRow3, .TableMenuColumn3 {
 background-color: #a7b1bd;
 border: 1px solid #506070;
 }
 
-.TableInfoRow3, .TableInfoColumn3 {
-background-color: #a7b1bd;
-border: 1px solid #506070;
-}
-
-.TableStatsRow3, .TableStatsColumn3 {
-background-color: #a7b1bd;
-border: 1px solid #506070;
-}
-
-.TableRow4, .TableColumn4 {
-background-color: #c7d1dd;
-border: 1px solid #506070;
-}
-
-.TableInfoRow4, .TableInfoColumn4 {
-background-color: #c7d1dd;
-border: 1px solid #506070;
-}
-
-.TableStatsRow4, .TableStatsColumn4 {
+.TableRow4, .TableColumn4, .TableInfoRow4, .TableInfoColumn4, 
+.TableStatsRow4, .TableStatsColumn4, .TableInfoMiniRow4, .TableInfoMiniColumn4,
+.TableSMenuRow4, .TableSMenuColumn4, .TableMenuRow4, .TableMenuColumn4 {
 background-color: #c7d1dd;
 border: 1px solid #506070;
 }
