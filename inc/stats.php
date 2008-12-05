@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: stats.php - Last Update: 12/02/2008 SVN 197 - Author: cooldude2k $
+    $FileInfo: stats.php - Last Update: 12/05/2008 SVN 199 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="stats.php"||$File3Name=="/stats.php") {
@@ -68,5 +68,5 @@ if($NewestMem['ID']=="-1") { $NewestMem['ID'] = "0"; $NewestMem['Name'] = "Cool 
 <td class="TableStatsColumn4" colspan="2">&nbsp;</td>
 </tr>
 </table></div>
-<div>&nbsp;</div>
+<div class="DivStats">&nbsp;</div>
 <?php } ?>

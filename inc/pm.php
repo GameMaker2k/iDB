@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: pm.php - Last Update: 12/03/2008 SVN 198 - Author: cooldude2k $
+    $FileInfo: pm.php - Last Update: 12/05/2008 SVN 199 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pm.php"||$File3Name=="/pm.php") {
@@ -27,7 +27,7 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 if($_GET['act']=="view"||$_GET['act']=="viewsent"||$_GET['act']=="read") {
 ?>
 <div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">Board index</a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>">Mailbox</a></div>
-<div>&nbsp;</div>
+<div class="DivNavLinks">&nbsp;</div>
 <table class="Table3">
 <tr style="width: 100%; vertical-align: top;">
 	<td style="width: 15%; vertical-align: top;">
@@ -91,7 +91,7 @@ $i=0;
 $pagenum=count($Pages);
 if($_GET['page']>$pagenum) {
 	$_GET['page'] = $pagenum; }
-$pagei=0; $pstring = "<div style=\"float: right;\" class=\"PageList\">Pages: ";
+$pagei=0; $pstring = "<div class=\"PageList\"><span class=\"pagelink\">Pages:</span> ";
 if($_GET['page']<4) { $Pagez[0] = null; }
 if($_GET['page']>=4) { $Pagez[0] = "First"; }
 if($_GET['page']>=3) {
@@ -117,33 +117,45 @@ if($_GET['page']>=$pagenum) { $Pagez[6] = null; }
 $pagenumi=count($Pagez);
 if($num==0) {
 $pagenumi = 0;
-$pstring = $pstring."<a href=\"".url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger'])."\">1</a> "; }
+$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger'])."\">1</a></span> "; }
 while ($pagei < $pagenumi) {
 if($Pagez[$pagei]!=null&&
    $Pagez[$pagei]!="First"&&
    $Pagez[$pagei]!="Last") {
-$pstring = $pstring."<a href=\"".url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&page=".$Pagez[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger'])."\">".$Pagez[$pagei]."</a> "; }
+if($pagei==1&$Pagez[$pagei]!=null&&$Pagez[$pagei]>=2) {
+$Pback = $Pagez[$pagei] - 1;
+$pstring = $pstring."<span class=\"pagelink\">a href=\"".url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&page=".$Pback,$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger'])."\">&lt;</a></span> "; }
+if($pagei!=3) { 
+$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&page=".$Pagez[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger'])."\">".$Pagez[$pagei]."</a></span> "; }
+if($pagei==3) { 
+$pstring = $pstring."<span class=\"pagecurrent\"><a href=\"".url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&page=".$Pagez[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger'])."\">".$Pagez[$pagei]."</a></span> "; } }
 if($Pagez[$pagei]=="First") {
-$pstring = $pstring."<a href=\"".url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger'])."\">&lt; First</a> ... "; }
+$pstring = $pstring."<span class=\"pagelinklast\"><a href=\"".url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger'])."\">&laquo;</a></span> "; }
 if($Pagez[$pagei]=="Last") {
-$pstring = $pstring."... <a href=\"".url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&page=".$pagenum,$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger'])."\">Last &gt;</a> "; }
+$ptestnext = $pagenext + 1;
+if($ptestnext<$pagenum) {
+$paget = $pagei - 1;
+$Pnext = $Pagez[$paget] + 1;
+$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&page=".$Pnext,$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger'])."\">&gt;</a></span> "; }
+$pstring = $pstring."<span class=\"pagelinklast\"><a href=\"".url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&page=".$pagenum,$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger'])."\">&raquo;</a></span> "; }
 	++$pagei; } $pstring = $pstring."</div>";
 //echo $pstring;
 //List Page Number Code end
-?>
+echo $pstring; ?>
+<div class="DivPageLinks">&nbsp;</div>
 <div class="TableMenuBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableMenuRow1">
 <span style="float: left;">
 <?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>">MailBox&nbsp;(<?php echo $PMNumber; ?>)</a>
-</span><?php echo $pstring; ?>&nbsp;</div>
+</span>&nbsp;</div>
 <?php } ?>
 <table class="TableMenu" style="width: 100%;">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableMenuRow1">
 <td class="TableMenuColumn1" colspan="4"><span style="float: left;">
 <?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>">MailBox&nbsp;(<?php echo $PMNumber; ?>)</a>
-</span><?php echo $pstring; ?>&nbsp;</td>
+</span>&nbsp;</td>
 </tr><?php } ?>
 <tr id="Messenger" class="TableMenuRow2">
 <th class="TableMenuColumn2" style="width: 4%;">State</th>
@@ -234,7 +246,7 @@ $i=0;
 $pagenum=count($Pages);
 if($_GET['page']>$pagenum) {
 	$_GET['page'] = $pagenum; }
-$pagei=0; $pstring = "<div style=\"float: right;\" class=\"PageList\">Pages: ";
+$pagei=0; $pstring = "<div class=\"PageList\"><span class=\"pagelink\">Pages:</span> ";
 if($_GET['page']<4) { $Pagez[0] = null; }
 if($_GET['page']>=4) { $Pagez[0] = "First"; }
 if($_GET['page']>=3) {
@@ -260,33 +272,45 @@ if($_GET['page']>=$pagenum) { $Pagez[6] = null; }
 $pagenumi=count($Pagez);
 if($num==0) {
 $pagenumi = 0;
-$pstring = $pstring."<a href=\"".url_maker($exfile['messenger'],$Settings['file_ext'],"act=viewsent&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger'])."\">1</a> "; }
+$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['messenger'],$Settings['file_ext'],"act=viewsentsent&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger'])."\">1</a></span> "; }
 while ($pagei < $pagenumi) {
 if($Pagez[$pagei]!=null&&
    $Pagez[$pagei]!="First"&&
    $Pagez[$pagei]!="Last") {
-$pstring = $pstring."<a href=\"".url_maker($exfile['messenger'],$Settings['file_ext'],"act=viewsent&page=".$Pagez[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger'])."\">".$Pagez[$pagei]."</a> "; }
+if($pagei==1&$Pagez[$pagei]!=null&&$Pagez[$pagei]>=2) {
+$Pback = $Pagez[$pagei] - 1;
+$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['messenger'],$Settings['file_ext'],"act=viewsent&page=".$Pback,$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger'])."\">&lt;</a></span> "; }
+if($pagei!=3) { 
+$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['messenger'],$Settings['file_ext'],"act=viewsent&page=".$Pagez[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger'])."\">".$Pagez[$pagei]."</a></span> "; }
+if($pagei==3) { 
+$pstring = $pstring."<span class=\"pagecurrent\"><a href=\"".url_maker($exfile['messenger'],$Settings['file_ext'],"act=viewsent&page=".$Pagez[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger'])."\">".$Pagez[$pagei]."</a></span> "; } }
 if($Pagez[$pagei]=="First") {
-$pstring = $pstring."<a href=\"".url_maker($exfile['messenger'],$Settings['file_ext'],"act=viewsent&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger'])."\">&lt; First</a> ... "; }
+$pstring = $pstring."<span class=\"pagelinklast\"><a href=\"".url_maker($exfile['messenger'],$Settings['file_ext'],"act=viewsent&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger'])."\">&laquo;</a></span> "; }
 if($Pagez[$pagei]=="Last") {
-$pstring = $pstring."... <a href=\"".url_maker($exfile['messenger'],$Settings['file_ext'],"act=viewsent&page=".$pagenum,$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger'])."\">Last &gt;</a> "; }
+$ptestnext = $pagenext + 1;
+if($ptestnext<$pagenum) {
+$paget = $pagei - 1;
+$Pnext = $Pagez[$paget] + 1;
+$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['messenger'],$Settings['file_ext'],"act=viewsent&page=".$Pnext,$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger'])."\">&gt;</a></span> "; }
+$pstring = $pstring."<span class=\"pagelinklast\"><a href=\"".url_maker($exfile['messenger'],$Settings['file_ext'],"act=viewsent&page=".$pagenum,$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger'])."\">&raquo;</a></span> "; }
 	++$pagei; } $pstring = $pstring."</div>";
 //echo $pstring;
 //List Page Number Code end
-?>
+echo $pstring; ?>
+<div class="DivPageLinks">&nbsp;</div>
 <div class="TableMenuBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableMenuRow1">
 <span style="float: left;">
 <?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=viewsent&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>">MailBox&nbsp;(<?php echo $PMNumber; ?>)</a>
-</span><?php echo $pstring; ?>&nbsp;</div>
+</span>&nbsp;</div>
 <?php } ?>
 <table class="TableMenuMenu" style="width: 100%;">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableMenuRow1">
 <td class="TableMenuColumn1" colspan="4"><span style="float: left;">
 <?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=viewsent&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>">MailBox&nbsp;(<?php echo $PMNumber; ?>)</a>
-</span><?php echo $pstring; ?>&nbsp;</td>
+</span>&nbsp;</td>
 </tr><?php } ?>
 <tr id="Messenger" class="TableMenuRow2">
 <th class="TableMenuColumn2" style="width: 4%;">State</th>
@@ -852,4 +876,4 @@ mysql_query($query);
 </tr>
 </table></div>
 <?php } ?>
-<div>&nbsp;</div>
+<div class="DivMessages">&nbsp;</div>

@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: navbar.php - Last Update: 12/02/2008 SVN 197 - Author: cooldude2k $
+    $FileInfo: navbar.php - Last Update: 12/05/2008 SVN 199 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="navbar.php"||$File3Name=="/navbar.php") {
@@ -66,4 +66,4 @@ if($ThemeSet['LogoStyle']!=null) { $logostyle = "style=\"".$ThemeSet['LogoStyle'
 <a href="<?php echo $Settings['weburl']; ?>">Homepage</a><?php } ?>&nbsp;</span>
 </td></tr>
 </table></div>
-<div>&nbsp;</div>
+<div class="DivNavBar">&nbsp;</div>

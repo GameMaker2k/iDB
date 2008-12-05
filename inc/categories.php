@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: categories.php - Last Update: 12/01/2008 SVN 194 - Author: cooldude2k $
+    $FileInfo: categories.php - Last Update: 12/05/2008 SVN 199 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="categories.php"||$File3Name=="/categories.php") {
@@ -53,7 +53,7 @@ if(!isset($CatCheck)) { $CatCheck = null; }
 if($CatCheck!="skip") {
 ?>
 <div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">Board index</a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile[$CategoryType],$Settings['file_ext'],"act=view&id=".$CategoryID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$CategoryType],$exqstr[$CategoryType]); ?>"><?php echo $CategoryName; ?></a></div>
-<div>&nbsp;</div>
+<div class="DivNavLinks">&nbsp;</div>
 <?php
 if($CategoryType=="subcategory") {
 redirect("location",$basedir.url_maker($exfile['subcategory'],$Settings['file_ext'],"act=".$_GET['act']."&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['subcategory'],$exqstr['subcategory'],FALSE));
@@ -190,6 +190,6 @@ if($num>=1) { ?>
 <td class="TableColumn4" colspan="5">&nbsp;</td>
 </tr>
 </table></div>
-<div>&nbsp;</div>
+<div class="DivCategories">&nbsp;</div>
 <?php } } }
 @mysql_free_result($preresult); ?>

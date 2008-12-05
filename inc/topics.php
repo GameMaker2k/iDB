@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: topics.php - Last Update: 12/01/2008 SVN 194 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 12/05/2008 SVN 199 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -69,7 +69,7 @@ if($CategoryKarmaCountView!=0&&$MyKarmaCount<$CategoryKarmaCountView) {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); } }
 ?>
 <div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">Board index</a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile[$CategoryType],$Settings['file_ext'],"act=view&id=".$ForumCatID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$CategoryType],$exqstr[$CategoryType]); ?>"><?php echo $CategoryName; ?></a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$ForumID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>"><?php echo $ForumName; ?></a></div>
-<div>&nbsp;</div>
+<div class="DivNavLinks">&nbsp;</div>
 <?php
 if(!isset($CatPermissionInfo['CanViewCategory'][$ForumCatID])) {
 	$CatPermissionInfo['CanViewCategory'][$ForumCatID] = "no"; }
@@ -121,7 +121,7 @@ if($PermissionInfo['CanMakeTopics'][$ForumID]=="yes"&&$CanHaveTopics=="yes") {
  <?php } ?></td>
 </tr>
 </table>
-<div>&nbsp;</div>
+<div class="DivTable2">&nbsp;</div>
 <?php }
 if($_GET['act']=="view") {
 if($NumberTopics==null) { 
@@ -159,7 +159,7 @@ $num=mysql_num_rows($result);
 $pagenum=count($Pages);
 if($_GET['page']>$pagenum) {
 	$_GET['page'] = $pagenum; }
-$pagei=0; $pstring = "<div class=\"PageList\">Pages: ";
+$pagei=0; $pstring = "<div class=\"PageList\"><span class=\"pagelink\">Pages:</span> ";
 if($_GET['page']<4) { $Pagez[0] = null; }
 if($_GET['page']>=4) { $Pagez[0] = "First"; }
 if($_GET['page']>=3) {
@@ -185,20 +185,32 @@ if($_GET['page']>=$pagenum) { $Pagez[6] = null; }
 $pagenumi=count($Pagez);
 if($NumberTopics==0) {
 $pagenumi = 0;
-$pstring = $pstring."<a href=\"".url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType])."\">1</a> "; }
+$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType])."\">1</a></span> "; }
 while ($pagei < $pagenumi) {
 if($Pagez[$pagei]!=null&&
    $Pagez[$pagei]!="First"&&
    $Pagez[$pagei]!="Last") {
-$pstring = $pstring."<a href=\"".url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$Pagez[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType])."\">".$Pagez[$pagei]."</a> "; }
+if($pagei==1&$Pagez[$pagei]!=null&&$Pagez[$pagei]>=2) {
+$Pback = $Pagez[$pagei] - 1;
+$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$Pback,$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType])."\">&lt;</a></span> "; }
+if($pagei!=3) { 
+$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$Pagez[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType])."\">".$Pagez[$pagei]."</a></span> "; }
+if($pagei==3) { 
+$pstring = $pstring."<span class=\"pagecurrent\"><a href=\"".url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$Pagez[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType])."\">".$Pagez[$pagei]."</a></span> "; } }
 if($Pagez[$pagei]=="First") {
-$pstring = $pstring."<a href=\"".url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType])."\">&lt; First</a> ... "; }
+$pstring = $pstring."<span class=\"pagelinklast\"><a href=\"".url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType])."\">&laquo;</a></span> "; }
 if($Pagez[$pagei]=="Last") {
-$pstring = $pstring."... <a href=\"".url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$pagenum,$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType])."\">Last &gt;</a> "; }
+$ptestnext = $pagenext + 1;
+if($ptestnext<$pagenum) {
+$paget = $pagei - 1;
+$Pnext = $Pagez[$paget] + 1;
+$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$Pnext,$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType])."\">&gt;</a></span> "; }
+$pstring = $pstring."<span class=\"pagelinklast\"><a href=\"".url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$pagenum,$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType])."\">&raquo;</a></span> "; }
 	++$pagei; } $pstring = $pstring."</div>";
 echo $pstring;
 //List Page Number Code end
 ?>
+<div class="DivPageLinks">&nbsp;</div>
 <div class="Table1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableRow1">
@@ -320,7 +332,7 @@ echo "<span>".$UsersName."</span>"; }
 <td class="TableColumn4" colspan="6">&nbsp;</td>
 </tr>
 </table></div>
-<div>&nbsp;</div>
+<div class="DivTopics">&nbsp;</div>
 <?php
 @mysql_free_result($result); }
 if($_GET['act']=="create") {
@@ -419,7 +431,7 @@ echo "</table>";
 <td class="TableColumn4" colspan="2">&nbsp;</td>
 </tr>
 </table></div>
-<div>&nbsp;</div>
+<div class="DivMkTopics">&nbsp;</div>
 <?php } if($_GET['act']=="maketopic"&&$_POST['act']=="maketopics") {
 if($PermissionInfo['CanMakeTopics'][$ForumID]=="no"||$CanHaveTopics=="no") { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
@@ -691,7 +703,7 @@ mysql_query($queryupd);
 <td class="TableColumn4">&nbsp;</td>
 </tr>
 </table></div>
-<div>&nbsp;</div>
+<div class="DivMkTopics">&nbsp;</div>
 <?php }
 if($PermissionInfo['CanMakeTopics'][$ForumID]=="yes"&&$CanHaveTopics=="yes") { ?>
 <table class="Table2" style="width: 100%;">
@@ -703,5 +715,5 @@ if($PermissionInfo['CanMakeTopics'][$ForumID]=="yes"&&$CanHaveTopics=="yes") { ?
  <?php } ?></td>
 </tr>
 </table>
-<div>&nbsp;</div>
+<div class="DivTable2">&nbsp;</div>
 <?php } } } ?>

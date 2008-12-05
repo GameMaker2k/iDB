@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: forums.php - Last Update: 12/01/2008 SVN 194 - Author: cooldude2k $
+    $FileInfo: forums.php - Last Update: 12/05/2008 SVN 199 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="forums.php"||$File3Name=="/forums.php") {
@@ -23,7 +23,7 @@ $prenum=mysql_num_rows($preresult);
 $prei=0;
 ?>
 <div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">Board index</a></div>
-<div>&nbsp;</div>
+<div class="DivNavLinks">&nbsp;</div>
 <?php
 while ($prei < $prenum) {
 $CategoryID=mysql_result($preresult,$prei,"id");
@@ -176,6 +176,9 @@ if($num>=1) {
 <td class="TableColumn4" colspan="5">&nbsp;</td>
 </tr>
 </table></div>
-<div>&nbsp;</div>
-<?php } } ++$prei; }
+<?php if($prei < $prenum - 1) { ?>
+<div class="DivForums">&nbsp;</div>
+<?php } if($prei == $prenum - 1) { ?>
+<div class="DivStsts">&nbsp;</div>
+<?php } } } ++$prei; }
 @mysql_free_result($preresult); ?>

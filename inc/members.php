@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: members.php - Last Update: 12/01/2008 SVN 194 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 12/05/2008 SVN 199 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -103,7 +103,7 @@ $num=mysql_num_rows($result);
 $pagenum=count($Pages);
 if($_GET['page']>$pagenum) {
 	$_GET['page'] = $pagenum; }
-$pagei=0; $pstring = "<div class=\"PageList\">Pages: ";
+$pagei=0; $pstring = "<div class=\"PageList\"><span class=\"pagelink\">Pages:</span> ";
 if($_GET['page']<4) { $Pagez[0] = null; }
 if($_GET['page']>=4) { $Pagez[0] = "First"; }
 if($_GET['page']>=3) {
@@ -129,24 +129,36 @@ if($_GET['page']>=$pagenum) { $Pagez[6] = null; }
 $pagenumi=count($Pagez);
 if($NumberMembers==0) {
 $pagenumi = 0;
-$pstring = $pstring."<a href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=list&orderby=".$_GET['orderby']."&ordertype=".$_GET['ordertype']."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">1</a> "; }
+$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=list&orderby=".$_GET['orderby']."&ordertype=".$_GET['ordertype']."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">1</a></span> "; }
 while ($pagei < $pagenumi) {
 if($Pagez[$pagei]!=null&&
    $Pagez[$pagei]!="First"&&
    $Pagez[$pagei]!="Last") {
-$pstring = $pstring."<a href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=list&orderby=".$_GET['orderby']."&ordertype=".$_GET['ordertype']."&page=".$Pagez[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">".$Pagez[$pagei]."</a> "; }
+if($pagei==1&$Pagez[$pagei]!=null&&$Pagez[$pagei]>=2) {
+$Pback = $Pagez[$pagei] - 1;
+$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=list&orderby=".$_GET['orderby']."&ordertype=".$_GET['ordertype']."&page=".$Pback,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">&lt;</a></span> "; }
+if($pagei!=3) { 
+$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=list&orderby=".$_GET['orderby']."&ordertype=".$_GET['ordertype']."&page=".$Pagez[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">".$Pagez[$pagei]."</a></span> "; }
+if($pagei==3) { 
+$pstring = $pstring."<span class=\"pagecurrent\"><a href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=list&orderby=".$_GET['orderby']."&ordertype=".$_GET['ordertype']."&page=".$Pagez[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">".$Pagez[$pagei]."</a></span> "; } }
 if($Pagez[$pagei]=="First") {
-$pstring = $pstring."<a href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=list&orderby=".$_GET['orderby']."&ordertype=".$_GET['ordertype']."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">&lt; First</a> ... "; }
+$pstring = $pstring."<span class=\"pagelinklast\"><a href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=list&orderby=".$_GET['orderby']."&ordertype=".$_GET['ordertype']."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">&laquo;</a></span> "; }
 if($Pagez[$pagei]=="Last") {
-$pstring = $pstring."... <a href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=list&orderby=".$_GET['orderby']."&ordertype=".$_GET['ordertype']."&page=".$pagenum,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">Last &gt;</a> "; }
+$ptestnext = $pagenext + 1;
+if($ptestnext<$pagenum) {
+$paget = $pagei - 1;
+$Pnext = $Pagez[$paget] + 1;
+$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=list&orderby=".$_GET['orderby']."&ordertype=".$_GET['ordertype']."&page=".$Pnext,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">&gt;</a></span> "; }
+$pstring = $pstring."<span class=\"pagelinklast\"><a href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=list&orderby=".$_GET['orderby']."&ordertype=".$_GET['ordertype']."&page=".$pagenum,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">&raquo;</a></span> "; }
 	++$pagei; } $pstring = $pstring."</div>";
 ?>
 <div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">Board index</a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=list&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Member list</a></div>
-<div>&nbsp;</div>
+<div class="DivNavLinks">&nbsp;</div>
 <?php
 echo $pstring;
 //List Page Number Code end
 ?>
+<div class="DivPageLinks">&nbsp;</div>
 <div class="Table1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableRow1">
@@ -273,7 +285,7 @@ if($_GET['view']=="website"||$_GET['view']=="homepage") {
 	@header("Location: ".$BoardURL."index.php?act=view"); } }
 ?>
 <div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">Board index</a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Viewing profile</a></div>
-<div>&nbsp;</div>
+<div class="DivNavLinks">&nbsp;</div>
 <div class="Table1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableRow1">
@@ -358,7 +370,7 @@ if($_SESSION['UserID']==0||$_SESSION['UserID']==null) {
 $membertitle = " ".$ThemeSet['TitleDivider']." Login";
 ?>
 <div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">Board index</a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Login</a></div>
-<div>&nbsp;</div>
+<div class="DivNavLinks">&nbsp;</div>
 <div class="Table1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableRow1">
@@ -419,7 +431,7 @@ $URL['HOST'] = $_SERVER["SERVER_NAME"];
 $REFERERurl = null;
 ?>
 <div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">Board index</a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Login</a></div>
-<div>&nbsp;</div>
+<div class="DivNavLinks">&nbsp;</div>
 <div class="Table1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableRow1">
@@ -564,7 +576,7 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 if($_SESSION['UserID']==0||$_SESSION['UserID']==null) {
 ?>
 <div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">Board index</a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=signup",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Signup</a></div>
-<div>&nbsp;</div>
+<div class="DivNavLinks">&nbsp;</div>
 <div class="Table1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableRow1">
@@ -712,7 +724,7 @@ if($Settings['use_captcha']=="on") {
 require($SettDir['inc']."captcha.php"); }
 ?>
 <div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">Board index</a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=signup",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Signup</a></div>
-<div>&nbsp;</div>
+<div class="DivNavLinks">&nbsp;</div>
 <div class="Table1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableRow1">
@@ -967,4 +979,4 @@ $query = query("INSERT INTO `".$Settings['sqltable']."messenger` VALUES (null,%i
 </tr>
 </table></div>
 <?php } } } ?>
-<div>&nbsp;</div>
+<div class="DivMembers">&nbsp;</div>

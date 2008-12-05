@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: replys.php - Last Update: 12/01/2008 SVN 196 - Author: cooldude2k $
+    $FileInfo: replys.php - Last Update: 12/05/2008 SVN 199 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replys.php"||$File3Name=="/replys.php") {
@@ -68,7 +68,7 @@ redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"a
 if($ForumCheck!="skip") {
 ?>
 <div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">Board index</a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile[$CategoryType],$Settings['file_ext'],"act=view&id=".$TopicCatID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$CategoryType],$exqstr[$CategoryType]); ?>"><?php echo $CategoryName; ?></a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$TopicForumID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>"><?php echo $ForumName; ?></a></div>
-<div>&nbsp;</div>
+<div class="DivNavLinks">&nbsp;</div>
 <?php }
 if(!isset($CatPermissionInfo['CanViewCategory'][$TopicCatID])) {
 	$CatPermissionInfo['CanViewCategory'][$TopicCatID] = "no"; }
@@ -109,7 +109,7 @@ if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes"||$PermissionInfo['CanM
  <?php } ?></td>
 </tr>
 </table>
-<div>&nbsp;</div>
+<div class="DivTable2">&nbsp;</div>
 <?php } } if($_GET['act']=="view") {
 if($NumberReplies==null) { 
 	$NumberReplies = 0; }
@@ -154,7 +154,7 @@ mysql_query($viewsup); }
 $pagenum=count($Pages);
 if($_GET['page']>$pagenum) {
 	$_GET['page'] = $pagenum; }
-$pagei=0; $pstring = "<div class=\"PageList\">Pages: ";
+$pagei=0; $pstring = "<div class=\"PageList\"><span class=\"pagelink\">Pages:</span> ";
 if($_GET['page']<4) { $Pagez[0] = null; }
 if($_GET['page']>=4) { $Pagez[0] = "First"; }
 if($_GET['page']>=3) {
@@ -180,19 +180,33 @@ if($_GET['page']>=$pagenum) { $Pagez[6] = null; }
 $pagenumi=count($Pagez);
 if($num==0) {
 $pagenumi = 0;
-$pstring = $pstring."<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">1</a> "; }
+$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">1</a></span> "; }
 while ($pagei < $pagenumi) {
 if($Pagez[$pagei]!=null&&
    $Pagez[$pagei]!="First"&&
    $Pagez[$pagei]!="Last") {
-$pstring = $pstring."<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$Pagez[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">".$Pagez[$pagei]."</a> "; }
+if($pagei==1&$Pagez[$pagei]!=null&&$Pagez[$pagei]>=2) {
+$Pback = $Pagez[$pagei] - 1;
+$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$Pback,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">&lt;</a></span> "; }
+if($pagei!=3) { 
+$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$Pagez[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">".$Pagez[$pagei]."</a></span> "; }
+if($pagei==3) { 
+$pstring = $pstring."<span class=\"pagecurrent\"><a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$Pagez[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">".$Pagez[$pagei]."</a></span> "; } }
 if($Pagez[$pagei]=="First") {
-$pstring = $pstring."<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">&lt; First</a> ... "; }
+$pstring = $pstring."<span class=\"pagelinklast\"><a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">&laquo;</a></span> "; }
 if($Pagez[$pagei]=="Last") {
-$pstring = $pstring."... <a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$pagenum,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">Last &gt;</a> "; }
+$ptestnext = $pagenext + 1;
+if($ptestnext<$pagenum) {
+$paget = $pagei - 1;
+$Pnext = $Pagez[$paget] + 1;
+$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$Pnext,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">&gt;</a></span> "; }
+$pstring = $pstring."<span class=\"pagelinklast\"><a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$pagenum,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">&raquo;</a></span> "; }
 	++$pagei; } $pstring = $pstring."</div>";
 echo $pstring;
 //List Page Number Code end
+?>
+<div class="DivPageLinks">&nbsp;</div>
+<?php
 while ($i < $num) {
 $MyPostID=mysql_result($result,$i,"id");
 $MyTopicID=mysql_result($result,$i,"TopicID");
@@ -338,7 +352,7 @@ echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr
 </td>
 </tr>
 </table></div>
-<div>&nbsp;</div>
+<div class="DivReplies">&nbsp;</div>
 <?php ++$i; } @mysql_free_result($result); 
 if($CanMakeReply=="yes") {  
 if(!isset($_GET['fastreply'])) { $_GET['fastreply'] = false; }
@@ -428,7 +442,7 @@ echo "</table>";
 <td class="TableColumn4" colspan="2">&nbsp;</td>
 </tr>
 </table></div>
-<div>&nbsp;</div>
+<div class="MkFastReply">&nbsp;</div>
 <?php } } if($_GET['act']=="create") {
 if($GroupInfo['HasAdminCP']!="yes"||$GroupInfo['HasModCP']!="yes") {
 if($ForumPostCountView!=0&&$MyPostCountChk<$ForumPostCountView) {
@@ -583,7 +597,7 @@ echo "</table>";
 <td class="TableColumn4" colspan="2">&nbsp;</td>
 </tr>
 </table></div>
-<div>&nbsp;</div>
+<div class="DivMkReply">&nbsp;</div>
 <?php } if($_GET['act']=="makereply"&&$_POST['act']=="makereplies") {
 if($GroupInfo['HasAdminCP']!="yes"||$GroupInfo['HasModCP']!="yes") {
 if($ForumPostCountView!=0&&$MyPostCountChk<$ForumPostCountView) {
@@ -804,7 +818,7 @@ $NumPages = 1; }
 <td class="TableColumn4">&nbsp;</td>
 </tr>
 </table></div>
-<div>&nbsp;</div>
+<div class="DivMkReply">&nbsp;</div>
 <?php } if($_GET['act']=="pin"||$_GET['act']=="unpin") {
 $gtsquery = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `id`=%i LIMIT 1", array($_GET['id']));
 $gtsresult=mysql_query($gtsquery);
@@ -1158,7 +1172,7 @@ if($SmileRow<5) { ?>
 <td class="TableColumn4" colspan="2">&nbsp;</td>
 </tr>
 </table></div>
-<div>&nbsp;</div>
+<div class="DivMkReply">&nbsp;</div>
 <?php } if($_GET['act']=="editreply"&&$_POST['act']=="editreplies") {
 if($PermissionInfo['CanEditReplys'][$TopicForumID]=="no"||$_SESSION['UserID']==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
@@ -1469,5 +1483,5 @@ if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes"||$PermissionInfo['CanM
  <?php } ?></td>
 </tr>
 </table>
-<div>&nbsp;</div>
+<div class="DivTable2">&nbsp;</div>
 <?php } } } ?>
