@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: calendars.php - Last Update: 12/05/2008 SVN 199 - Author: cooldude2k $
+    $FileInfo: calendars.php - Last Update: 12/05/2008 SVN 200 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="calendars.php"||$File3Name=="/calendars.php") {
@@ -105,58 +105,58 @@ $MyDays[] = "Friday";
 $MyDays[] = "Saturday";
 $DayNames = "";
 foreach ($MyDays as $x => $y) {
-    $DayNames .= '<th class="TableColumn2" style="width: 12%;">' . $y . '</th>'."\r\n";
+    $DayNames .= '<th class="CalTableColumn2" style="width: 12%;">' . $y . '</th>'."\r\n";
 }
 $WeekDays = "";
 $i = $FirstDayThisMonth + 1;
 if ($FirstDayThisMonth != "0") {
-    $WeekDays .= '<td class="TableColumn3" style="height: 90px; text-align: center;" colspan="' . $FirstDayThisMonth . '">&nbsp;</td>'."\r\n";
+    $WeekDays .= '<td class="CalTableColumn3Blank" style="text-align: center;" colspan="' . $FirstDayThisMonth . '">&nbsp;</td>'."\r\n";
 }
 $Day_i = "1";
 $ii = $i;
 for ($i; $i <= ($CountDays + $FirstDayThisMonth) ;$i++) {
 if ($ii == 8) {
-$WeekDays .= "</tr><tr class=\"TableRow3\">"."\r\n";
+$WeekDays .= "</tr><tr class=\"CalTableRow3\">"."\r\n";
 $ii = 1; }
  if ($MyDay == $Day_i) {
-$Extra = 'CalTableColumn1'; }
+$Extra = 'CalTableColumn3Current'; }
 else {
-$Extra = 'CalTableColumn2'; }
+$Extra = 'CalTableColumn3'; }
 if ($Day_i != $_GET['HighligtDay']) {
 if(!isset($EventsName[$Day_i])) { $EventsName[$Day_i] = null; }
 if($EventsName[$Day_i]!=null) { $EventsName[$Day_i] = "&nbsp;( ".$EventsName[$Day_i]." )"; }
 if ($Day_i != $MyDay) {
-$WeekDays .= '<td class="'.$Extra.'" style="height: 90px; vertical-align: top;">' . $Day_i . $EventsName[$Day_i] . '</td>'."\r\n";	 }	}
+$WeekDays .= '<td class="'.$Extra.'" style="vertical-align: top;"><div class="CalDate">' . $Day_i . '</div>' . $EventsName[$Day_i] . '</td>'."\r\n";	 }	}
 if ($Day_i == $MyDay) {
-$WeekDays .= '<td class="'.$Extra.'" style="height: 90px; vertical-align: top;">' . $Day_i . $EventsName[$Day_i] . '</td>'."\r\n";	 }
+$WeekDays .= '<td class="'.$Extra.'" style="vertical-align: top;"><div class="CalDateCurrent">' . $Day_i  . '</div>' . $EventsName[$Day_i] . '</td>'."\r\n";	 }
 $Day_i++;
 $ii++;
 }
 if ((8 - $ii) >= "1") {
-$WeekDays .= '<td class="TableColumn3" style="height: 90px; text-align: center;" colspan="' . (8 - $ii) . '">&nbsp;</td>'."\r\n"; } ?>
+$WeekDays .= '<td class="CalTableColumn3Blank" style="text-align: center;" colspan="' . (8 - $ii) . '">&nbsp;</td>'."\r\n"; } ?>
 <div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">Board index</a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['calendar'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['calendar'],$exqstr['calendar']); ?>">Calendar</a></div>
 <div class="DivNavLinks">&nbsp;</div>
-<div class="Table1Border">
+<div class="CalTable1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
-<div class="TableRow1" style="font-weight: bold;">
+<div class="CalTableRow1" style="font-weight: bold;">
 <span style="float: left;"><?php echo $ThemeSet['TitleIcon']; ?><?php echo "Today is ".$MyDayName." the ".$MyDay2." of ".$MyMonthName.", ".$MyYear; ?></span>
 <span style="float: right;"><?php echo "The time is ".GMTimeGet('g:i a',$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']); ?>&nbsp;</span>&nbsp;</div>
 <?php } ?>
-<table class="Table1">
+<table class="CalTable1">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
-<tr class="TableRow1">
-<th class="TableColumn1" colspan="7">
+<tr class="CalTableRow1">
+<th class="CalTableColumn1" colspan="7">
 <span style="float: left;"><?php echo $ThemeSet['TitleIcon']; ?><?php echo "Today is ".$MyDayName." the ".$MyDay2." of ".$MyMonthName.", ".$MyYear; ?></span>
 <span style="float: right;"><?php echo "The time is ".GMTimeGet('g:i a',$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']); ?>&nbsp;</span>
 &nbsp;</th>
 </tr><?php } ?>
-<tr class="TableRow2">
+<tr class="CalTableRow2">
 <?php echo $DayNames; ?>
-</tr><tr class="TableRow3">
+</tr><tr class="CalTableRow3">
 <?php echo $WeekDays; ?>
 </tr>
-<tr class="TableRow4">
-<td class="TableColumn4" colspan="7">&nbsp;</td>
+<tr class="CalTableRow4">
+<td class="CalTableColumn4" colspan="7">&nbsp;</td>
 </tr>
 </table></div>
 <div class="DivCalendar">&nbsp;</div>
