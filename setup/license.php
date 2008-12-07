@@ -12,7 +12,7 @@
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: license.php - Last Update: 01/01/2008 SVN 144 - Author: cooldude2k $
+    $FileInfo: license.php - Last Update: 12/07/2008 SVN 202 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="presetup.php"||$File3Name=="/presetup.php") {
@@ -28,7 +28,9 @@ if(!isset($SetupDir['convert'])) { $SetupDir['convert'] = "setup/convert/"; }
 <tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="LicenseBox">License - Please read fully and check 'I agree' box ONLY if you agree to license</label><br />
 	<textarea rows="34" id="LicenseBox" name="LicenseBox" class="TextBox" cols="79" readonly="readonly" accesskey="L">
-	<?php echo file_get_contents("LICENSE"); ?></textarea><br />
+	<?php echo file_get_contents("LICENSE");
+	echo file_get_contents("BSDL");
+	echo file_get_contents("GPL"); ?></textarea><br />
 	<input type="checkbox" class="TextBox" name="License" value="Agree" id="License" /><label class="TextBoxLabel" for="License">I Agree</label><br/></td>
 </tr></table>
 <table style="text-align: left;">

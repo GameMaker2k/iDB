@@ -160,7 +160,12 @@ if($cookieSecure===false) {
 if($_GET['act']=="bsdl"||$_GET['act']=="BSDL") { $_GET['act']="bsd"; }
 if($_GET['act']=="bsd"||$_GET['act']=="bsd") {
 @header("Content-Type: text/plain; charset=".$Settings['charset']);
-require("LICENSE"); gzip_page($Settings['use_gzip'],$GZipEncode['Type']); die(); }
+require("BSDL"); gzip_page($Settings['use_gzip'],$GZipEncode['Type']); die(); }
+if($_GET['act']=="gnugpl"||$_GET['act']=="GnuGPL"||
+	$_GET['act']=="GNUGPL") { $_GET['act']="gpl"; }
+if($_GET['act']=="gpl"||$_GET['act']=="gpl") {
+@header("Content-Type: text/plain; charset=".$Settings['charset']);
+require("GPL"); gzip_page($Settings['use_gzip'],$GZipEncode['Type']); die(); }
 if($_GET['act']=="README"||$_GET['act']=="ReadME") { $_GET['act']="readme"; }
 if($_GET['act']=="readme"||$_GET['act']=="ReadMe") {
 @header("Content-Type: text/plain; charset=".$Settings['charset']);

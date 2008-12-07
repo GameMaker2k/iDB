@@ -1,38 +1,15 @@
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-Copyright (c) 2004-2008 Game Maker 2k
-All rights reserved.
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met:
+iDB is dual-licensed under the GNU GENERAL PUBLIC LICENSE and the
+Revised BSD License anything not listed below is licensed under the
+GNU GENERAL PUBLIC LICENSE anything else is under the Revised BSD License
+and the GNU GENERAL PUBLIC LICENSE:
 
-  1. Redistributions of source code must retain the above copyright notice,
-     this list of conditions and the following disclaimer.
-
-  2. Redistributions in binary form must reproduce the above copyright 
-     notice, this list of conditions and the following disclaimer in 
-     the documentation and/or other materials provided with the distribution.
-
-  3. Neither the name of Game Maker 2k nor the names of its contributors
-     may be used to endorse or promote products derived from this software
-     without specific prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
-AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
-ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE 
-LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
-CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
-SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
-INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
-CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
-ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
-THE POSSIBILITY OF SUCH DAMAGE.
-
-  Important Note: The Emoticons distributed with the Software were
-created by Jcink; its usage is not governed under the terms of this 
-license agreement. Information regarding its usage can be found on 
+The Emoticons distributed with the Software were
+created by Jcink; its usage is not governed under the terms of the 
+Revised BSD License. Information regarding its usage can be found on 
 textfileBB's Web site at https://launchpad.net/tfbb also utf8.php 
 distributed with the Software were created by Andreas Gohr; its usage 
-is not governed under the terms of this license agreement. Information 
+is not governed under the terms of thr Revised BSD License. Information 
 regarding its usage can be found at url below.
 GPL Ver. 2 (http://www.gnu.org/licenses/gpl-2.0.txt) or 
 Website (http://svn.wp-plugins.org/dokuwiki-markup/trunk/utf8.php)
