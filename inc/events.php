@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: events.php - Last Update: 12/05/2008 SVN 199 - Author: cooldude2k $
+    $FileInfo: events.php - Last Update: 12/06/2008 SVN 201 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="events.php"||$File3Name=="/events.php") {
@@ -48,6 +48,7 @@ $rei=0;
 while ($rei < $renum) {
 $User1ID=$EventUser;
 $User1Name=mysql_result($reresult,$rei,"Name");
+$User1IP=mysql_result($reresult,$rei,"IP");
 $User1Email=mysql_result($reresult,$rei,"Email");
 $User1Title=mysql_result($reresult,$rei,"Title");
 $User1Joined=mysql_result($reresult,$rei,"Joined");
@@ -56,6 +57,8 @@ $User1GroupID=mysql_result($reresult,$rei,"GroupID");
 $gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($User1GroupID));
 $gresult=mysql_query($gquery);
 $User1Group=mysql_result($gresult,0,"Name");
+$GroupNamePrefix=mysql_result($gresult,0,"NamePrefix");
+$GroupNameSuffix=mysql_result($gresult,0,"NameSuffix");
 @mysql_free_result($gresult);
 $User1Signature=mysql_result($reresult,$rei,"Signature");
 $User1Signature = preg_replace("/\<br\>/", "<br />\n", nl2br($User1Signature));
@@ -74,6 +77,10 @@ $User1IP=mysql_result($reresult,$rei,"IP");
 ++$is; } @mysql_free_result($result);
 if($User1Name=="Guest") { $User1Name=$EventGuest;
 if($User1Name==null) { $User1Name="Guest"; } }
+if(isset($GroupNamePrefix)&&$GroupNamePrefix!=null) {
+	$User1Name = $GroupNamePrefix.$User1Name; }
+if(isset($GroupNameSuffix)&&$GroupNameSuffix!=null) {
+	$User1Name = $User1Name.$GroupNameSuffix; }
 $EventText = text2icons($EventText,$Settings['sqltable']); 
 $User1Signature = text2icons($User1Signature,$Settings['sqltable']);
 ?>
@@ -122,7 +129,11 @@ if($User1ID!="-1") { echo $User1ID; }
 if($User1ID=="-1") { echo 0; }
 ?><br />
 Posts: <?php echo $User1PostCount; ?><br />
-Joined: <?php echo $User1Joined; ?><br /><br />
+Joined: <?php echo $User1Joined; ?><br />
+<?php if($GroupInfo['HasAdminCP']=="yes") { ?>
+User IP: <a onclick="window.open(this.href);return false;" href="http://ip-lookup.net/?<?php echo $User1IP; ?>">
+<?php echo $User1IP; ?></a><br />
+<?php } ?><br />
 </td>
 <td class="TableInfoColumn3" style="vertical-align: middle;">
 <div class="eventpost"><?php echo $EventText; ?></div>
@@ -135,12 +146,14 @@ Joined: <?php echo $User1Joined; ?><br /><br />
 <span style="text-align: left;">&nbsp;<a href="<?php
 if($User1ID!="-1") {
 echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$User1ID,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); }
-if($User1ID=="-1") {
+if($User1ID=="-1"&&isset($ThemeSet['Profile'])&&$ThemeSet['Profile']!=null) {
 echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); }
-?>"><?php echo $ThemeSet['Profile']; ?></a><?php echo $ThemeSet['LineDividerTopic']; ?><a href="<?php echo $User1Website; ?>" onclick="window.open(this.href);return false;"><?php echo $ThemeSet['WWW']; ?></a><?php echo $ThemeSet['LineDividerTopic']; ?><a href="<?php
-if($User1ID!="-1") {
+?>"><?php echo $ThemeSet['Profile']; ?></a>
+<?php if(isset($ThemeSet['WWW'])&&$ThemeSet['WWW']!=null) {
+echo $ThemeSet['LineDividerTopic']; ?><a href="<?php echo $User1Website; ?>" onclick="window.open(this.href);return false;"><?php echo $ThemeSet['WWW']; ?></a><?php } echo $ThemeSet['LineDividerTopic']; ?><a href="<?php
+if($User1ID!="-1"&&isset($ThemeSet['Profile'])&&$ThemeSet['Profile']!=null) {
 echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=create&id=".$User1ID,$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); }
-if($User1ID=="-1") {
+if($User1ID=="-1"&&isset($ThemeSet['PM'])&&$ThemeSet['PM']!=null) {
 echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); }
 ?>"><?php echo $ThemeSet['PM']; ?></a></span>
 </td>

@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: members.php - Last Update: 12/05/2008 SVN 199 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 12/06/2008 SVN 201 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -206,7 +206,13 @@ $MemList['IP']=mysql_result($result,$i,"IP");
 $gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($MemList['GroupID']));
 $gresult=mysql_query($gquery);
 $MemList['Group']=mysql_result($gresult,0,"Name");
+$GroupNamePrefix=mysql_result($gresult,0,"NamePrefix");
+$GroupNameSuffix=mysql_result($gresult,0,"NameSuffix");
 @mysql_free_result($gresult);
+if(isset($GroupNamePrefix)&&$GroupNamePrefix!=null) {
+	$MemList['Name'] = $GroupNamePrefix.$MemList['Name']; }
+if(isset($GroupNameSuffix)&&$GroupNameSuffix!=null) {
+	$MemList['Name'] = $MemList['Name'].$GroupNameSuffix; }
 $membertitle = " ".$ThemeSet['TitleDivider']." Member List";
 if($MemList['Group']!=$Settings['GuestGroup']) {
 ?>
@@ -260,7 +266,17 @@ $ViewMem['IP']=mysql_result($result,$i,"IP");
 $gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($ViewMem['GroupID']));
 $gresult=mysql_query($gquery);
 $ViewMem['Group']=mysql_result($gresult,0,"Name");
+/*
+$GroupNamePrefix=mysql_result($gresult,0,"NamePrefix");
+$GroupNameSuffix=mysql_result($gresult,0,"NameSuffix");
+*/
 @mysql_free_result($gresult);
+/*
+if(isset($GroupNamePrefix)&&$GroupNamePrefix!=null) {
+	$ViewMem['Name'] = $GroupNamePrefix.$ViewMem['Name']; }
+if(isset($GroupNameSuffix)&&$GroupNameSuffix!=null) {
+	$ViewMem['Name'] = $ViewMem['Name'].$GroupNameSuffix; }
+*/
 $membertitle = " ".$ThemeSet['TitleDivider']." ".$ViewMem['Name'];	
 if ($ViewMem['Avatar']=="http://"||$ViewMem['Avatar']==null||
 	strtolower($ViewMem['Avatar'])=="noavatar") {
@@ -316,7 +332,10 @@ if($_GET['view']=="website"||$_GET['view']=="homepage") {
  </table>
 <div style="text-align: center;">
 Name: <?php echo $ViewMem['Name']; ?><br />
-Title: <?php echo $ViewMem['Title']; ?></div>
+Title: <?php echo $ViewMem['Title']; ?>
+<?php if($GroupInfo['HasAdminCP']=="yes") { ?>
+<br />User IP: <a onclick="window.open(this.href);return false;" href="http://ip-lookup.net/?<?php echo $ViewMem['IP']; ?>">
+<?php echo $ViewMem['IP']; } ?></a></div>
 </td>
 <td class="TableColumn3">
 &nbsp;User Name: <?php echo $ViewMem['Name']; ?><br />

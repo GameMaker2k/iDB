@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: functions.php - Last Update: 10/27/2008 SVN 184 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 12/06/2008 SVN 201 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -39,12 +39,14 @@ if ($_GET['act']=="phpinfo") { @phpinfo(); exit(); }
 if ($_GET['act']=="PHPCredits") { @phpcredits(); exit(); }
 if ($_GET['act']=="phpcredits") { @phpcredits(); exit(); } 
 */// Connect to mysql database
-function ConnectMysql($sqlhost,$sqluser,$sqlpass,$sqldb) {
+function ConnectMysql($sqlhost,$sqluser,$sqlpass,$sqldb,$retlink=false) {
+if($retlink!==true) { $retlink = false; }
 $StatSQL = @mysql_connect($sqlhost,$sqluser,$sqlpass);
 $StatBase = @mysql_select_db($sqldb);
 if (!$StatSQL) { return false; }
 if (!$StatBase) { return false; }
-return true; }
+if($retlink===true) { return $StatSQL; }
+if($retlink===false) { return true; } }
 	$Names['RS'] = "Renee Sabonis";
 define("_renee_", $Names['RS']);
 // Change the title and gzip page

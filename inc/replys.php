@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: replys.php - Last Update: 12/05/2008 SVN 199 - Author: cooldude2k $
+    $FileInfo: replys.php - Last Update: 12/06/2008 SVN 201 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replys.php"||$File3Name=="/replys.php") {
@@ -210,6 +210,7 @@ echo $pstring;
 while ($i < $num) {
 $MyPostID=mysql_result($result,$i,"id");
 $MyTopicID=mysql_result($result,$i,"TopicID");
+$MyPostIP=mysql_result($result,$i,"IP");
 $MyForumID=mysql_result($result,$i,"ForumID");
 $MyCategoryID=mysql_result($result,$i,"CategoryID");
 $MyUserID=mysql_result($result,$i,"UserID");
@@ -224,10 +225,11 @@ $MyDescription=mysql_result($result,$i,"Description");
 $requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($MyUserID));
 $reresult=mysql_query($requery);
 $renum=mysql_num_rows($reresult);
-$rei=0;
-while ($rei < $renum) {
+$rei=0; $ipshow = "two";
 $User1ID=$MyUserID; $GuestName = $MyGuestName;
 $User1Name=mysql_result($reresult,$rei,"Name");
+$User1IP=mysql_result($reresult,$rei,"IP");
+if($User1IP==$MyPostIP) { $ipshow = "one"; }
 $User1Email=mysql_result($reresult,$rei,"Email");
 $User1Title=mysql_result($reresult,$rei,"Title");
 $User1Joined=mysql_result($reresult,$rei,"Joined");
@@ -236,6 +238,8 @@ $User1GroupID=mysql_result($reresult,$rei,"GroupID");
 $gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($User1GroupID));
 $gresult=mysql_query($gquery);
 $User1Group=mysql_result($gresult,0,"Name");
+$GroupNamePrefix=mysql_result($gresult,0,"NamePrefix");
+$GroupNameSuffix=mysql_result($gresult,0,"NameSuffix");
 @mysql_free_result($gresult);
 $User1Signature=mysql_result($reresult,$rei,"Signature");
 $User1Avatar=mysql_result($reresult,$rei,"Avatar");
@@ -250,9 +254,13 @@ $User1Website=mysql_result($reresult,$rei,"Website");
 $User1PostCount=mysql_result($reresult,$rei,"PostCount");
 $User1Karma=mysql_result($reresult,$rei,"Karma");
 $User1IP=mysql_result($reresult,$rei,"IP");
-++$rei; } @mysql_free_result($reresult);
+@mysql_free_result($reresult);
 if($User1Name=="Guest") { $User1Name=$GuestName;
 if($User1Name==null) { $User1Name="Guest"; } }
+if(isset($GroupNamePrefix)&&$GroupNamePrefix!=null) {
+	$User1Name = $GroupNamePrefix.$User1Name; }
+if(isset($GroupNameSuffix)&&$GroupNameSuffix!=null) {
+	$User1Name = $User1Name.$GroupNameSuffix; }
 $MySubPost = null;
 if($MyEditTime!=$MyTimeStamp&&$MyEditUserID!=0) {
 $euquery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($MyEditUserID));
@@ -307,7 +315,16 @@ echo "<span>".$User1Name."</span>"; }
 <a style="vertical-align: middle;" id="reply<?php echo $ReplyNum; ?>">
 <span style="font-weight: bold;">Time Posted: </span><?php echo $MyTimeStamp; ?></a>
 </div>
-<div style="float: right;"><a href="#Act/Report"><?php echo $ThemeSet['Report']; ?></a><?php if($CanEditReply===true) { echo $ThemeSet['LineDividerTopic']; echo "<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=edit&id=".$MyTopicID."&post=".$MyPostID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">".$ThemeSet['EditReply']; ?></a><?php } if($CanDeleteReply===true) { echo $ThemeSet['LineDividerTopic']; echo "<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=delete&id=".$MyTopicID."&post=".$MyPostID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">".$ThemeSet['DeleteReply']; ?></a><?php } if($CanMakeReply=="yes") { echo $ThemeSet['LineDividerTopic']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=create&id=".$TopicID."&post=".$MyPostID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $ThemeSet['QuoteReply']; ?></a><?php } ?>&nbsp;</div>
+<div style="float: right;">
+<?php if(isset($ThemeSet['Report'])&&$ThemeSet['Report']!=null) { ?>
+<a href="#Act/Report"><?php echo $ThemeSet['Report']; ?></a>
+<?php } if($CanEditReply===true&&isset($ThemeSet['EditReply'])&&$ThemeSet['EditReply']!=null) {
+echo $ThemeSet['LineDividerTopic']; echo "<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=edit&id=".$MyTopicID."&post=".$MyPostID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">".$ThemeSet['EditReply']; ?></a>
+<?php } if($CanDeleteReply===true&&isset($ThemeSet['DeleteReply'])&&$ThemeSet['DeleteReply']!=null) { 
+echo $ThemeSet['LineDividerTopic']; echo "<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=delete&id=".$MyTopicID."&post=".$MyPostID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">".$ThemeSet['DeleteReply']; ?></a>
+<?php } if($CanMakeReply=="yes"&&isset($ThemeSet['QuoteReply'])&&$ThemeSet['QuoteReply']!=null) { 
+echo $ThemeSet['LineDividerTopic']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=create&id=".$TopicID."&post=".$MyPostID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $ThemeSet['QuoteReply']; ?></a>
+<?php } ?>&nbsp;</div>
 </td>
 </tr>
 <tr class="TableInfoRow3">
@@ -328,7 +345,14 @@ if($User1ID=="-1") { echo 0; }
 ?><br />
 Posts: <?php echo $User1PostCount; ?><br />
 Karma: <?php echo $User1Karma; ?><br />
-Joined: <?php echo $User1Joined; ?><br /><br />
+Joined: <?php echo $User1Joined; ?><br />
+<?php if($GroupInfo['HasAdminCP']=="yes") { ?>
+User IP: <a onclick="window.open(this.href);return false;" href="http://ip-lookup.net/?<?php echo $User1IP; ?>">
+<?php echo $User1IP; ?></a><br />
+<?php if($ipshow=="two") { ?>
+Post IP: <a onclick="window.open(this.href);return false;" href="http://ip-lookup.net/?<?php echo $MyPostIP; ?>">
+<?php echo $MyPostIP; ?></a><br />
+<?php } } ?><br />
 </td>
 <td class="TableInfoColumn3" style="vertical-align: middle;">
 <div class="replypost"><?php echo $MyPost; ?></div>
@@ -341,12 +365,14 @@ Joined: <?php echo $User1Joined; ?><br /><br />
 <span style="text-align: left;">&nbsp;<a href="<?php
 if($User1ID!="-1") {
 echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$User1ID,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); }
-if($User1ID=="-1") {
+if($User1ID=="-1"&&isset($ThemeSet['Profile'])&&$ThemeSet['Profile']!=null) {
 echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); }
-?>"><?php echo $ThemeSet['Profile']; ?></a><?php echo $ThemeSet['LineDividerTopic']; ?><a href="<?php echo $User1Website; ?>" onclick="window.open(this.href);return false;"><?php echo $ThemeSet['WWW']; ?></a><?php echo $ThemeSet['LineDividerTopic']; ?><a href="<?php
-if($User1ID!="-1") {
+?>"><?php echo $ThemeSet['Profile']; ?></a>
+<?php if(isset($ThemeSet['WWW'])&&$ThemeSet['WWW']!=null) {
+echo $ThemeSet['LineDividerTopic']; ?><a href="<?php echo $User1Website; ?>" onclick="window.open(this.href);return false;"><?php echo $ThemeSet['WWW']; ?></a><?php } echo $ThemeSet['LineDividerTopic']; ?><a href="<?php
+if($User1ID!="-1"&&isset($ThemeSet['Profile'])&&$ThemeSet['Profile']!=null) {
 echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=create&id=".$User1ID,$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); }
-if($User1ID=="-1") {
+if($User1ID=="-1"&&isset($ThemeSet['PM'])&&$ThemeSet['PM']!=null) {
 echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); }
 ?>"><?php echo $ThemeSet['PM']; ?></a></span>
 </td>
@@ -1474,7 +1500,8 @@ if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes"||$PermissionInfo['CanM
  <td style="width: 100%; text-align: right;">
  <?php if($CanMakeReply=="yes") { ?>
  <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=create&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $ThemeSet['AddReply']; ?></a>
- <?php echo $ThemeSet['ButtonDivider']; ?>
+ <?php if(isset($ThemeSet['FastReply'])&&$ThemeSet['FastReply']!=null) { ?>
+ <?php echo $ThemeSet['ButtonDivider']; } ?>
  <a href="javascript:%20<?php echo urlencode("toggletag('FastReply');"); ?>"><?php echo $ThemeSet['FastReply']; ?></a>
  <?php } if($PermissionInfo['CanMakeTopics'][$TopicForumID]=="yes") {
 	if($CanMakeReply=="yes") { ?>

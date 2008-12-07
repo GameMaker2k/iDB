@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: topics.php - Last Update: 12/05/2008 SVN 199 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 12/06/2008 SVN 201 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -244,9 +244,24 @@ $TopicName=mysql_result($result,$i,"TopicName");
 $TopicDescription=mysql_result($result,$i,"Description");
 $PinnedTopic=mysql_result($result,$i,"Pinned");
 $TopicStat=mysql_result($result,$i,"Closed");
+$requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($UsersID));
+$reresult=mysql_query($requery);
+$renum=mysql_num_rows($reresult);
+$UserGroupID=mysql_result($reresult,0,"GroupID");
+@mysql_free_result($reresult);
+$gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($UserGroupID));
+$gresult=mysql_query($gquery);
+$User1Group=mysql_result($gresult,0,"Name");
+$GroupNamePrefix=mysql_result($gresult,0,"NamePrefix");
+$GroupNameSuffix=mysql_result($gresult,0,"NameSuffix");
+@mysql_free_result($gresult);
 $UsersName = GetUserName($UsersID,$Settings['sqltable']);
 if($UsersName=="Guest") { $UsersName=$GuestName;
 if($UsersName==null) { $UsersName="Guest"; } }
+if(isset($GroupNamePrefix)&&$GroupNamePrefix!=null) {
+	$UsersName = $GroupNamePrefix.$UsersName; }
+if(isset($GroupNameSuffix)&&$GroupNameSuffix!=null) {
+	$UsersName = $UsersName.$GroupNameSuffix; }
 $glrquery = query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `TopicID`=%i ORDER BY `TimeStamp` DESC LIMIT 1", array($TopicID));
 $glrresult=mysql_query($glrquery);
 $glrnum=mysql_num_rows($glrresult);
@@ -266,8 +281,9 @@ $NumPages = 1; }
 $Users_Name1 = pre_substr($UsersName1,0,20);
 if($UsersName1=="Guest") { $UsersName1=$GuestName1;
 if($UsersName1==null) { $UsersName1="Guest"; } }
-if (pre_strlen($UsersName1)>20) { $Users_Name1 = $Users_Name1."...";
-$oldusername=$UsersName1; $UsersName1=$Users_Name1; } $lul = null;
+$oldusername=$UsersName1;
+if (pre_strlen($UsersName1)>20) { 
+$Users_Name1 = $Users_Name1."..."; $UsersName1=$Users_Name1; } $lul = null;
 if($TimeStamp1!=null) { $lul = null;
 if($UsersID1!="-1") {
 $lul = url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UsersID1,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
