@@ -11,10 +11,10 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: replys.php - Last Update: 12/06/2008 SVN 201 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 12/08/2008 SVN 204 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
-if ($File3Name=="replys.php"||$File3Name=="/replys.php") {
+if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
 	require('index.php');
 	exit(); }
 if(!is_numeric($_GET['id'])) { $_GET['id'] = null; }

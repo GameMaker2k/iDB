@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: topic.php - Last Update: 01/01/2008 SVN 144 - Author: cooldude2k $
+    $FileInfo: topic.php - Last Update: 12/08/2008 SVN 204 - Author: cooldude2k $
 */
 require('preindex.php');
 $usefileext = $Settings['file_ext'];
@@ -30,10 +30,10 @@ if(!is_numeric($_GET['id']))
 if($_GET['act']=="view"||$_GET['act']=="create"||$_GET['act']=="delete"||
 	$_GET['act']=="pin"||$_GET['act']=="unpin"||
 	$_GET['act']=="open"||$_GET['act']=="close")
-{ require($SettDir['inc'].'replys.php'); }
+{ require($SettDir['inc'].'replies.php'); }
 if($_GET['act']=="edit"||$_GET['act']=="makereply"||$_POST['act']=="makereplies"||
 	$_GET['act']=="editreply"||$_POST['act']=="editreplies")
-{ require($SettDir['inc'].'replys.php'); }
+{ require($SettDir['inc'].'replies.php'); }
 require($SettDir['inc'].'endpage.php');
 if(!isset($TopicName)) { $TopicName = null; }
 ?>
