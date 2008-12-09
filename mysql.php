@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: mysql.php - Last Update: 11/29/2008 SVN 193 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 12/09/2008 SVN 206 - Author: cooldude2k $
 */
 //@ini_set("display_errors", true); 
 //@ini_set("display_startup_errors", true);
@@ -182,7 +182,7 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); die(); }
 $SQLStat = @ConnectMysql($Settings['sqlhost'],$Settings['sqluser'],$Settings['sqlpass'],$Settings['sqldb']);
 if($SQLStat===false) {
 @header("Content-Type: text/plain; charset=".$Settings['charset']); @mysql_free_result($peresult);
-ob_clean(); echo "Sorry could not connect to mysql database.\nContact the board admin about error. Error log berlow.";
+ob_clean(); echo "Sorry could not connect to mysql database.\nContact the board admin about error. Error log below.";
 echo "\n".mysql_errno().": ".mysql_error();
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 if($Settings['use_captcha']=="on") {

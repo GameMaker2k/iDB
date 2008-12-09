@@ -12,7 +12,7 @@
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mktable.php - Last Update: 12/05/2008 SVN 200 - Author: cooldude2k $
+    $FileInfo: mktable.php - Last Update: 12/09/2008 SVN 206 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mktable.php"||$File3Name=="/mktable.php") {
