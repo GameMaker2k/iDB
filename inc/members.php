@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: members.php - Last Update: 12/06/2008 SVN 201 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 12/08/2008 SVN 205 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -335,7 +335,7 @@ Name: <?php echo $ViewMem['Name']; ?><br />
 Title: <?php echo $ViewMem['Title']; ?>
 <?php if($GroupInfo['HasAdminCP']=="yes") { ?>
 <br />User IP: <a onclick="window.open(this.href);return false;" href="http://ip-lookup.net/?<?php echo $ViewMem['IP']; ?>">
-<?php echo $ViewMem['IP']; } ?></a></div>
+<?php echo $ViewMem['IP']; echo "</a>"; } ?></div>
 </td>
 <td class="TableColumn3">
 &nbsp;User Name: <?php echo $ViewMem['Name']; ?><br />

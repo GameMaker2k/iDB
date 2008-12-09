@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: topics.php - Last Update: 12/06/2008 SVN 201 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 12/08/2008 SVN 205 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -238,7 +238,7 @@ $TopicID=mysql_result($result,$i,"id");
 $UsersID=mysql_result($result,$i,"UserID");
 $GuestName=mysql_result($result,$i,"GuestName");
 $TheTime=mysql_result($result,$i,"TimeStamp");
-$TheTime=GMTimeChange("F j, Y",$TheTime,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$TheTime=GMTimeChange("F j Y, g:i a",$TheTime,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $NumReply=mysql_result($result,$i,"NumReply");
 $TopicName=mysql_result($result,$i,"TopicName");
 $TopicDescription=mysql_result($result,$i,"Description");
@@ -262,6 +262,7 @@ if(isset($GroupNamePrefix)&&$GroupNamePrefix!=null) {
 	$UsersName = $GroupNamePrefix.$UsersName; }
 if(isset($GroupNameSuffix)&&$GroupNameSuffix!=null) {
 	$UsersName = $UsersName.$GroupNameSuffix; }
+$LastReply = "&nbsp;<br />&nbsp;";
 $glrquery = query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `TopicID`=%i ORDER BY `TimeStamp` DESC LIMIT 1", array($TopicID));
 $glrresult=mysql_query($glrquery);
 $glrnum=mysql_num_rows($glrresult);
@@ -270,7 +271,7 @@ $ReplyID1=mysql_result($glrresult,0,"id");
 $UsersID1=mysql_result($glrresult,0,"UserID");
 $GuestName1=mysql_result($glrresult,0,"GuestName");
 $TimeStamp1=mysql_result($glrresult,0,"TimeStamp");
-$TimeStamp1=GMTimeChange("F j, Y",$TimeStamp1,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$TimeStamp1=GMTimeChange("F j Y, g:i a",$TimeStamp1,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $UsersName1 = GetUserName($UsersID1,$Settings['sqltable']); }
 $NumPages = null; $NumRPosts = $NumReply + 1;
 if(!isset($Settings['max_posts'])) { $Settings['max_posts'] = 10; }
@@ -288,13 +289,13 @@ if($TimeStamp1!=null) { $lul = null;
 if($UsersID1!="-1") {
 $lul = url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UsersID1,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
 $luln = url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."&#35;reply".$NumRPosts;
-$LastReply = "User: <a href=\"".$lul."\" title=\"".$oldusername."\">".$UsersName1."</a><br />\nTime: <a href=\"".$luln."\">".$TimeStamp1."</a>"; }
+$LastReply = "<a href=\"".$luln."\">".$TimeStamp1."</a><br />\nUser: <a href=\"".$lul."\" title=\"".$oldusername."\">".$UsersName1."</a>"; }
 if($UsersID1=="-1") {
 $lul = url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UsersID1,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
 $luln = url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."&#35;reply".$NumRPosts;
-$LastReply = "Guest: <span title=\"".$oldusername."\">".$UsersName1."</span><br />\nTime: <a href=\"".$luln."\">".$TimeStamp1."</a>"; } }
+$LastReply = "<a href=\"".$luln."\">".$TimeStamp1."</a><br />\nGuest: <span title=\"".$oldusername."\">".$UsersName1."</span>"; } }
 @mysql_free_result($glrresult);
-if(!isset($TimeStamp1)) { $TimeStamp1 = null; } if(!isset($LastReply)) { $LastReply = null; }
+if(!isset($TimeStamp1)) { $TimeStamp1 = null; } if(!isset($LastReply)) { $LastReply = "&nbsp;<br />&nbsp;"; }
 if($TimeStamp1==null) { $LastReply = "&nbsp;<br />&nbsp;"; }
 $PreTopic = $ThemeSet['TopicIcon'];
 if ($PinnedTopic>1) { $PinnedTopic = 1; } 

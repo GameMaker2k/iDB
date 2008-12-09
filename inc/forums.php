@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: forums.php - Last Update: 12/06/2008 SVN 201 - Author: cooldude2k $
+    $FileInfo: forums.php - Last Update: 12/08/2008 SVN 205 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="forums.php"||$File3Name=="/forums.php") {
@@ -82,7 +82,7 @@ $NumTopics=mysql_result($result,$i,"NumTopics");
 $NumPosts=mysql_result($result,$i,"NumPosts");
 $NumRedirects=mysql_result($result,$i,"Redirects");
 $ForumDescription=mysql_result($result,$i,"Description");
-$ForumType = strtolower($ForumType);
+$ForumType = strtolower($ForumType); $sflist = null;
 $gltf = array(null); $gltf[0] = $ForumID;
 if ($ForumType=="subforum") { 
 $apcquery = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `ShowForum`='yes' AND `InSubForum`=%i ORDER BY `OrderID` ASC, `id` ASC", array($ForumID));
@@ -95,14 +95,24 @@ $NumTopics = $NumsTopics + $NumTopics;
 $NumsPosts=mysql_result($apcresult,$apci,"NumPosts");
 $NumPosts = $NumsPosts + $NumPosts;
 $SubsForumID=mysql_result($apcresult,$apci,"id");
+$SubsForumName=mysql_result($apcresult,$apci,"Name");
+$SubsForumType=mysql_result($apcresult,$apci,"ForumType");
 if(isset($PermissionInfo['CanViewForum'][$SubsForumID])&&
 	$PermissionInfo['CanViewForum'][$SubsForumID]=="yes") {
+$sfurl = "<a href=\"";
+$sfurl = url_maker($exfile[$SubsForumType],$Settings['file_ext'],"act=view&id=".$SubsForumID.$ExStr,$Settings['qstr'],$Settings['qsep'],$prexqstr[$SubsForumType],$exqstr[$SubsForumType]);
+$sfurl = "<a href=\"".$sfurl."\">".$SubsForumName."</a>";
+if($apcl==1) {
+$sflist = "Subforums:";
+$sflist = $sflist." ".$sfurl; }
+if($apcl>1) {
+$sflist = $sflist.", ".$sfurl; }
 $gltf[$apcl] = $SubsForumID; ++$apcl; }
 ++$apci; }
 @mysql_free_result($apcresult); } }
 if(isset($PermissionInfo['CanViewForum'][$ForumID])&&
 	$PermissionInfo['CanViewForum'][$ForumID]=="yes") {
-$LastTopic = null; 
+$LastTopic = "&nbsp;<br />&nbsp;<br />&nbsp;";
 if(!isset($LastTopic)) { $LastTopic = null; }
 $gltnum = count($gltf); $glti = 0; 
 $OldUpdateTime = 0; $UseThisFonum = null;
@@ -133,28 +143,36 @@ if($NumRPosts>$Settings['max_posts']) {
 $NumPages = ceil($NumRPosts/$Settings['max_posts']); }
 if($NumRPosts<=$Settings['max_posts']) {
 $NumPages = 1; }
-$ShowReply = $NumReplys + 1;
 $TopicName1 = pre_substr($TopicName,0,20);
 $oldtopicname=$TopicName;
 if (pre_strlen($TopicName)>20) { 
 $TopicName1 = $TopicName1."..."; $TopicName=$TopicName1; }
-$UsersID=mysql_result($gltresult,0,"UserID");
-$GuestName=mysql_result($gltresult,0,"GuestName");
+$glrquery = query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `TopicID`=%i ORDER BY `TimeStamp` DESC LIMIT 1", array($TopicID));
+$glrresult=mysql_query($glrquery);
+$glrnum=mysql_num_rows($glrresult);
+if($glrnum>0){
+$ReplyID=mysql_result($glrresult,0,"id");
+$UsersID=mysql_result($glrresult,0,"UserID");
+$GuestName=mysql_result($glrresult,0,"GuestName");
+$TimeStamp=mysql_result($glrresult,0,"TimeStamp");
+$TimeStamp=GMTimeChange("F j Y, g:i a",$TimeStamp,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+@mysql_free_result($glrresult); }
 $UsersName = GetUserName($UsersID,$Settings['sqltable']);
 $UsersName1 = pre_substr($UsersName,0,20);
 if($UsersName=="Guest") { $UsersName=$GuestName;
 if($UsersName==null) { $UsersName="Guest"; } }
 $oldusername=$UsersName;
 if (pre_strlen($UsersName)>20) { 
-$UsersName1 = $UsersName1."..."; $UsersName=$UsersName1; } $lul = null;
+$UsersName1 = $UsersName1."..."; $UsersName=$UsersName1; } 
+$lul = null;
 if($UsersID!="-1") {
 $lul = url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UsersID,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
-$LastTopic = "User: <a href=\"".$lul."\" title=\"".$oldusername."\">".$UsersName."</a><br />\nTopic: <a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."&#35;reply".$ShowReply."\" title=\"".$oldtopicname."\">".$TopicName."</a>"; }
+$LastTopic = $TimeStamp."<br />\nTopic: <a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."&#35;post".$ReplyID."\" title=\"".$oldtopicname."\">".$TopicName."</a><br />\nUser: <a href=\"".$lul."\" title=\"".$oldusername."\">".$UsersName."</a>"; }
 if($UsersID=="-1") {
-$LastTopic = "Guest: <span title=\"".$oldusername."\">".$UsersName."</span><br />\nTopic: <a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."&#35;reply".$ShowReply."\" title=\"".$oldtopicname."\">".$TopicName."</a>"; } }
+$LastTopic = $TimeStamp."<br />\n<br />Topic: <a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."&#35;post".$ReplyID."\" title=\"".$oldtopicname."\">".$TopicName."</a>\nGuest: <span title=\"".$oldusername."\">".$UsersName."</span>"; } }
 if($LastTopic==null) { $LastTopic="&nbsp;<br />&nbsp;"; } }
 @mysql_free_result($gltresult);
-if ($ForumType=="redirect") { $LastTopic="Redirects: ".$NumRedirects; }
+if ($ForumType=="redirect") { $LastTopic="&nbsp;<br />Redirects: ".$NumRedirects."<br />&nbsp;"; }
 $PreForum = $ThemeSet['ForumIcon'];
 if ($ForumType=="forum") { $PreForum=$ThemeSet['ForumIcon']; }
 if ($ForumType=="subforum") { $PreForum=$ThemeSet['SubForumIcon']; }
@@ -166,7 +184,9 @@ $ExStr = ""; if ($ForumType!="redirect"&&
 <td class="TableColumn3"><div class="forumicon">
 <?php echo $PreForum; ?></div></td>
 <td class="TableColumn3"><div class="forumname"><a href="<?php echo url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$ForumID.$ExStr,$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>"<?php if($ForumType=="redirect") { echo " onclick=\"window.open(this.href);return false;\""; } ?>><?php echo $ForumName; ?></a></div>
-<div class="forumdescription"><?php echo $ForumDescription; ?></div></td>
+<div class="forumdescription">
+<?php echo $ForumDescription; ?><br />
+<?php echo $sflist; ?></div></td>
 <td class="TableColumn3" style="text-align: center;"><?php echo $NumTopics; ?></td>
 <td class="TableColumn3" style="text-align: center;"><?php echo $NumPosts; ?></td>
 <td class="TableColumn3"><?php echo $LastTopic; ?></td>
