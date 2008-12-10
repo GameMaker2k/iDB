@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: search.php - Last Update: 01/01/2008 SVN 144 - Author: cooldude2k $
+    $FileInfo: search.php - Last Update: 12/09/2008 SVN 207 - Author: cooldude2k $
 */
 require('preindex.php');
 $usefileext = $Settings['file_ext'];
@@ -23,13 +23,13 @@ $filewpath = $exfile['search'].$usefileext.$_SERVER['PATH_INFO'];
 </head>
 <body>
 <?php require($SettDir['inc'].'navbar.php');
-if($Settings['enable_search']==false||
+if($Settings['enable_search']=="off"||
 	$GroupInfo['CanSearch']=="no") {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 @header("Content-Type: text/plain; charset=".$Settings['charset']);
 ob_clean(); echo "Sorry you do not have permission to do a search."; 
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
-if($Settings['enable_search']==true||$GroupInfo['CanSearch']=="yes") {
+if($Settings['enable_search']=="on"||$GroupInfo['CanSearch']=="yes") {
 if(!isset($_GET['search'])) { $_GET['search'] = null; }
 if(!isset($_POST['search'])) { $_POST['search'] = null; }
 if($_GET['search']==null&&

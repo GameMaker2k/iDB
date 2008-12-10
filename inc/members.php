@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: members.php - Last Update: 12/08/2008 SVN 205 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 12/09/2008 SVN 207 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -483,7 +483,7 @@ if (pre_strlen($_POST['userpass'])>="30") { $Error="Yes";  ?>
 	<br />Your user name is too big.<br />
 	</span>&nbsp;</td>
 </tr>
-<?php } if ($Settings['TestReferer']===true) {
+<?php } if ($Settings['TestReferer']=="on") {
 	if ($URL['HOST']!=$URL['REFERER']) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
@@ -547,7 +547,7 @@ $_SESSION['UserGroup']=$YourGroupM;
 $_SESSION['UserDST']=$YourDSTM;
 $_SESSION['UserPass']=$NewPassword;
 $_SESSION['DBName']=$Settings['sqldb'];
-if($_POST['storecookie']===true) {
+if($_POST['storecookie']=="true") {
 if($cookieDomain==null) {
 @setcookie("MemberName", $YourNameM, time() + (7 * 86400), $cbasedir);
 @setcookie("UserID", $YourIDM, time() + (7 * 86400), $cbasedir);
@@ -789,7 +789,7 @@ if (PhpCaptcha::Validate($_POST['signcode'])) {
 	<br />Invalid code entered<br />
 	</span>&nbsp;</td>
 </tr>
-<?php } } if ($Settings['TestReferer']===true) {
+<?php } } if ($Settings['TestReferer']=="on") {
 	if ($URL['HOST']!=$URL['REFERER']) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
@@ -894,9 +894,9 @@ $_POST['Group'] = $Settings['MemberGroup'];
 $_POST['Joined'] = GMTimeStamp(); $_POST['LastActive'] = GMTimeStamp();
 $_POST['Signature'] = ""; $_POST['Interests'] = "";
 $_POST['Title'] = ""; $_POST['PostCount'] = "0";
-if($Settings['AdminValidate']===true||$Settings['AdminValidate']!==false)
+if($Settings['AdminValidate']=="on"||$Settings['AdminValidate']!="off")
 { $ValidateStats="no"; $yourgroup=$Settings['ValidateGroup']; }
-if($Settings['AdminValidate']===false)
+if($Settings['AdminValidate']=="on")
 { $ValidateStats="yes"; $yourgroup=$Settings['MemberGroup']; }
 $HashSalt = salt_hmac(); 
 $NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$HashSalt,"sha1");
@@ -955,7 +955,7 @@ $_SESSION['UserDST']=$YourDSTMr;
 $_SESSION['UserGroup']=$YourGroupMr;
 $_SESSION['UserPass']=$NewPassword;
 $_SESSION['DBName']=$Settings['sqldb'];
-if($_POST['storecookie']===true) {
+if($_POST['storecookie']=="true") {
 if($cookieDomain==null) {
 @setcookie("MemberName", $YourNameM, time() + (7 * 86400), $cbasedir);
 @setcookie("UserID", $YourIDM, time() + (7 * 86400), $cbasedir);
@@ -984,7 +984,7 @@ $query = query("INSERT INTO `".$Settings['sqltable']."messenger` VALUES (null,%i
 	<td><span class="TableMessage">
 	<br />Welcome to the Board <?php echo $_SESSION['MemberName']; ?>. ^_^<br />
 	Click <a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">here</a> to continue to board.<?php echo "\n"; 
-	if($Settings['AdminValidate']===true||$Settings['AdminValidate']!==false) {
+	if($Settings['AdminValidate']=="on"||$Settings['AdminValidate']!="off") {
 	echo "<br />The admin has to validate your account befoure you can post.\n";
 	echo "<br />The admin has been notified of your registration.\n"; } ?>
 	<br />&nbsp;

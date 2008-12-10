@@ -11,13 +11,13 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: rss.php - Last Update: 10/21/2008 SVN 179 - Author: cooldude2k $
+    $FileInfo: rss.php - Last Update: 12/09/2008 SVN 207 - Author: cooldude2k $
 */
 //@ini_set("display_errors", true); 
 //@ini_set("display_startup_errors", true);
 @error_reporting(E_ALL ^ E_NOTICE);
 require_once('mysql.php');
-if($Settings['enable_rss']==false) {
+if($Settings['enable_rss']=="off") {
 @header("Content-Type: text/plain; charset=".$Settings['charset']); 
 ob_clean(); echo "Sorry RSS Feeds are not enabled for this board."; 
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }

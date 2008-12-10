@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: xhtml10.php - Last Update: 12/07/2008 SVN 203 - Author: cooldude2k $
+    $FileInfo: xhtml10.php - Last Update: 12/09/2008 SVN 207 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="xhtml10.php"||$File3Name=="/xhtml10.php") {
@@ -48,10 +48,12 @@ if($ThemeSet['CSSType']!="xhtml") { $ThemeSet['CSSType'] = "import"; }
 @header("Content-Style-Type: text/css");
 @header("Content-Script-Type: text/javascript");
 if(isset($Settings['showverinfo'])) { $idbmisc['showverinfo'] = $Settings['showverinfo']; }
+if($Settings['showversioninfo']=="on") { $idbmisc['showversion'] = true; }
+if($Settings['showversioninfo']=="off") { $idbmisc['showversion'] = false; }
 if(!isset($Settings['showverinfo'])) { $idbmisc['showverinfo'] = false; }
-if($Settings['showverinfo']!==true) {
+if($Settings['showverinfo']!="on") {
 $iDBURL1 = "<a href=\"http://idb.berlios.de/\" title=\"".$iDB."\" onclick=\"window.open(this.href);return false;\">"; }
-if($Settings['showverinfo']===true) {
+if($Settings['showverinfo']=="on") {
 $iDBURL1 = "<a href=\"http://idb.berlios.de/\" title=\"".$VerInfo['iDB_Ver_Show']."\" onclick=\"window.open(this.href);return false;\">"; }
 $GM2kURL = "<a href=\"http://idb.berlios.de/support/category.php?act=view&amp;id=2\" title=\"".$GM2k."\" onclick=\"window.open(this.href);return false;\">".$GM2k."</a>";
 $csryear = "2004"; $cryear = date("Y"); if($cryear<=2004) { $cryear = "2005"; }
@@ -91,9 +93,9 @@ if($Settings['html_level']=="Strict") { ?>
 <meta http-equiv="Content-Style-Type" content="text/css" />
 <meta http-equiv="Content-Script-Type" content="text/javascript" />
 <base href="<?php echo $BoardURL; ?>" />
-<?php if($Settings['showverinfo']===true) { ?>
+<?php if($Settings['showverinfo']=="on") { ?>
 <meta name="Generator" content="<?php echo $VerInfo['iDB_Ver_Show']; ?>" />
-<?php } if($Settings['showverinfo']!==true) { ?>
+<?php } if($Settings['showverinfo']!="on") { ?>
 <meta name="Generator" content="<?php echo $iDB; ?>" />
 <?php } echo "\n"; ?>
 <meta name="Author" content="<?php echo $SettInfo['Author']; ?>" />
@@ -104,18 +106,18 @@ if($Settings['html_level']=="Strict") { ?>
 <meta name="GOOGLEBOT" content="Index, FOLLOW" />
 <meta name="resource-type" content="document" />
 <meta name="distribution" content="global" />
-<?php if($Settings['showverinfo']===true) { ?>
+<?php if($Settings['showverinfo']=="on") { ?>
 <!-- generator="<?php echo $VerInfo['iDB_Ver_Show']; ?>" -->
-<?php } if($Settings['showverinfo']!==true) { ?>
+<?php } if($Settings['showverinfo']!="on") { ?>
 <!-- generator="<?php echo $iDB; ?>" -->
 <?php } echo "\n"; ?>
 
 <script type="text/javascript" src="<?php echo url_maker($exfilejs['javascript'],$Settings['js_ext'],null,$Settings['qstr'],$Settings['qsep'],$prexqstrjs['javascript'],$exqstrjs['javascript']); ?>"></script>
 <link rel="Start" href="<?php echo $BoardURL.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>" title="<?php echo $Settings['board_name'].$idbpowertitle; ?>" />
 <link rel="Copyright" href="<?php echo $BoardURL.url_maker($exfile['index'],$Settings['file_ext'],"act=bsd",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>" title="Copyright Notice" />
-<?php if($Settings['showverinfo']===true) { ?>
+<?php if($Settings['showverinfo']=="on") { ?>
 <link rel="Generator" href="http://idb.berlios.de/" title="<?php echo $VerInfo['iDB_Ver_Show']; ?>" />
-<?php } if($Settings['showverinfo']!==true) { ?>
+<?php } if($Settings['showverinfo']!="on") { ?>
 <link rel="Generator" href="http://idb.berlios.de/" title="<?php echo $iDB; ?>" />
 <?php } echo "\n"; ?>
 <?php if($ThemeSet['CSSType']=="import") { ?>

@@ -11,13 +11,13 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: versioninfo.php - Last Update: 12/09/2008 SVN 206 - Author: cooldude2k $
+    $FileInfo: versioninfo.php - Last Update: 12/09/2008 SVN 207 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="versioninfo.php"||$File3Name=="/versioninfo.php") {
 	require('index.php');
 	exit(); }
-	$rssurlon = false;
+	$rssurlon = "off";
 // Version info stuff. :P 
 function version_info($proname,$subver,$ver,$supver,$reltype,$svnver,$showsvn) {
 	$return_var = $proname." ".$reltype." ".$subver.".".$ver.".".$supver;
@@ -27,7 +27,7 @@ function version_info($proname,$subver,$ver,$supver,$reltype,$svnver,$showsvn) {
 	return $return_var; }
 // Version number and date stuff. :P
 $VER1[0] = 0; $VER1[1] = 2; $VER1[2] = 4; $VERFull[1] = $VER1[0].".".$VER1[1].".".$VER1[2];
-$VER2[0] = "Pre-Alpha"; $VER2[1] = "PA"; $VER2[2] = "SVN"; $SubVerN = 206; $RName = "iDB"; $SFName = "IntDB";
+$VER2[0] = "Pre-Alpha"; $VER2[1] = "PA"; $VER2[2] = "SVN"; $SubVerN = 207; $RName = "iDB"; $SFName = "IntDB";
 $SVNDay[0] = 12; $SVNDay[1] = 09; $SVNDay[2] = 2008; $SVNDay[3] = $SVNDay[0]."/".$SVNDay[1]."/".$SVNDay[2];
 $VerInfo['iDB_Ver'] = version_info($RName,$VER1[0],$VER1[1],$VER1[2],$VER2[1],$SubVerN,false);
 $VerInfo['iDB_Ver_SVN'] = version_info($RName,$VER1[0],$VER1[1],$VER1[2],$VER2[1],$SubVerN,true);
@@ -35,6 +35,8 @@ $VerInfo['iDB_Full_Ver'] = version_info($RName,$VER1[0],$VER1[1],$VER1[2],$VER2[
 $VerInfo['iDB_Full_Ver_SVN'] = version_info($RName,$VER1[0],$VER1[1],$VER1[2],$VER2[0],$SubVerN,true);
 $VerInfo['iDB_Ver_Show'] = $VerInfo['iDB_Ver_SVN']; $VerInfo['iDB_Full_Ver_Show'] = $VerInfo['iDB_Full_Ver_SVN'];
 if(isset($Settings['showverinfo'])) { $idbmisc['showverinfo'] = $Settings['showverinfo']; }
+if($Settings['showversioninfo']=="on") { $idbmisc['showversion'] = true; }
+if($Settings['showversioninfo']=="off") { $idbmisc['showversion'] = false; }
 if(!isset($Settings['showverinfo'])) { $idbmisc['showverinfo'] = false; }
 // URLs and names and stuff. :P
 $CD2k = "Kazuki Przyborowski"; $GM2k = "Game Maker 2k"; $iDB_Author = "Kazuki";
@@ -47,10 +49,10 @@ $PHPQA = "PHP-Quick-Arcade"; $PHPV1 = @phpversion(); $PHPV2 = "PHP ".$PHPV1; $OS
 if($OSType=="WINNT") { $OSType="Windows NT"; } if($OSType=="WIN32") { $OSType="Windows 9x"; }
 $OSType2 = $PHPV2." / ".$OSType; $ZENDV1 = @zend_version(); $ZENDV2 = "Zend engine ".$ZENDV1;
 // Show or hide the version number
-if($idbmisc['showverinfo']===true) {
+if($idbmisc['showverinfo']=="on") {
 @header("X-".$RName."-Powered-By: ".$VerInfo['iDB_Ver_Show']);
 @header("Generator: ".$VerInfo['iDB_Ver_Show']); }
-if($idbmisc['showverinfo']!==true) {
+if($idbmisc['showverinfo']!="on") {
 @header("X-".$RName."-Powered-By: ".$RName);
 //@header("X-Powered-By: PHP");
 @header("Generator: ".$iDB); }

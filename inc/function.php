@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: function.php - Last Update: 11/19/2008 SVN 192 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 12/09/2008 SVN 207 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -38,7 +38,7 @@ $basedir = dirname($_SERVER['PHP_SELF'])."/"; } }
 if($basedir=="\/") { $basedir="/"; }
 $basedir = str_replace("//", "/", $basedir);
 $cbasedir = $basedir;
-if($Settings['fixbasedir']!=null&&$Settings['fixbasedir']!==false) {
+if($Settings['fixbasedir']!=null&&$Settings['fixbasedir']!="off") {
 		$basedir = $Settings['fixbasedir']; }
 if($Settings['fixcookiedir']!=null&&$Settings['fixcookiedir']!="") {
 		$cbasedir = $Settings['fixcookiedir']; }
@@ -174,7 +174,7 @@ $fileurl = null; if(!isset($ext)) { $ext = null; }
 if($ext==null) { $ext = ".php"; } 
 if($ext=="noext"||$ext=="no ext"||$ext=="no+ext") { $ext = null; }
 $file = $file.$ext;
-if($sidurls===true&&$qstr!="/") { 
+if($sidurls=="on"&&$qstr!="/") { 
 	if(defined('SID')) {
 if($qvarstr==null) { $qvarstr = SID; }
 if($qvarstr!=null) { $qvarstr = SID."&".$qvarstr; } } }

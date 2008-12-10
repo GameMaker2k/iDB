@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: forum.php - Last Update: 10/21/2008 SVN 180 - Author: cooldude2k $
+    $FileInfo: forum.php - Last Update: 12/09/2008 SVN 207 - Author: cooldude2k $
 */
 require('preindex.php');
 $usefileext = $Settings['file_ext'];
@@ -19,7 +19,7 @@ if($ext=="noext"||$ext=="no ext"||$ext=="no+ext") { $usefileext = ""; }
 $filewpath = $exfile['forum'].$usefileext.$_SERVER['PATH_INFO'];
 if(!is_numeric($_GET['id']))
 { $_GET['id']="1"; }
-if($Settings['enable_rss']==true) {
+if($Settings['enable_rss']=="on") {
 ?>
 <link rel="alternate" type="application/xml" title="Forum Topics RSS 1.0 Feed" href="<?php echo url_maker($exfile['rss'],$Settings['rss_ext'],"act=oldrss&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['rss'],$exqstr['rss']); ?>" />
 <link rel="alternate" type="application/rss+xml" title="Forum Topics RSS 2.0 Feed" href="<?php echo url_maker($exfile['rss'],$Settings['rss_ext'],"act=rss&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['rss'],$exqstr['rss']); ?>" />

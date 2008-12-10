@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: pm.php - Last Update: 12/06/2008 SVN 201 - Author: cooldude2k $
+    $FileInfo: pm.php - Last Update: 12/09/2008 SVN 207 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pm.php"||$File3Name=="/pm.php") {
@@ -686,7 +686,7 @@ if (PhpCaptcha::Validate($_POST['signcode'])) {
 	<br />You Guest Name is too big.<br />
 	</span>&nbsp;</td>
 </tr>
-<?php } if ($Settings['TestReferer']===true) {
+<?php } if ($Settings['TestReferer']=="on") {
 	if ($URL['HOST']!=$URL['REFERER']) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">

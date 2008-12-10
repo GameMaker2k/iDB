@@ -12,7 +12,7 @@
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: setup.php - Last Update: 10/22/2008 SVN 182 - Author: cooldude2k $
+    $FileInfo: setup.php - Last Update: 12/09/2008 SVN 207 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="setup.php"||$File3Name=="/setup.php") {
@@ -161,8 +161,8 @@ echo "<option value=\"".$showmin."\">0:".$showmin." minutes</option>\n"; }
 </tr><tr>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="TestReferer">Test Referering URL with host name:</label></td>
 	<td style="width: 50%;"><select id="TestReferer" name="TestReferer" class="TextBox">
-<option selected="selected" value="false">off</option>
-<option value="true">on</option>
+<option selected="selected" value="off">off</option>
+<option value="on">on</option>
 </select></td>
 </tr><tr>
 	<td style="width: 50%;"><label class="TextBoxLabel" title="Might not work" for="unlink">Delete Installer When Done? (Might not work)</label></td>

@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: mysql.php - Last Update: 12/09/2008 SVN 206 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 12/09/2008 SVN 207 - Author: cooldude2k $
 */
 //@ini_set("display_errors", true); 
 //@ini_set("display_startup_errors", true);
@@ -27,12 +27,18 @@ if(!isset($SettDir['misc'])) { $SettDir['misc'] = "inc/misc/"; }
 	require_once($SettDir['misc'].'killglobals.php'); }
 $starttime = $_POST['starttime'];
 require('settings.php');
-if($Settings['fixbasedir']===true) {
+if($Settings['fixpathinfo']=="off") {
+	$Settings['fixpathinfo'] = null; }
+if($Settings['fixbasedir']=="off") {
+	$Settings['fixbasedir'] = null; }
+if($Settings['fixcookiedir']=="off") {
+	$Settings['fixcookiedir'] = null; }
+if($Settings['fixbasedir']=="on") {
 if($Settings['idburl']!=null&&$Settings['idburl']!="localhost") {
 $PathsTest = parse_url($Settings['idburl']);
 $Settings['fixbasedir'] = $PathsTest['path']."/"; 
 $Settings['fixbasedir'] = str_replace("//", "/", $Settings['fixbasedir']); } }
-if($Settings['fixcookiedir']===true) {
+if($Settings['fixcookiedir']=="on") {
 if($Settings['idburl']!=null&&$Settings['idburl']!="localhost") {
 $PathsTest = parse_url($Settings['idburl']);
 $Settings['fixcookiedir'] = $PathsTest['path']."/"; 
@@ -57,7 +63,7 @@ echo "403 Error: Sorry could not find install.php\nTry uploading files again and
 if(!isset($Settings['sqlhost'])) { $Settings['sqlhost'] = "localhost"; }
 @ini_set("error_prepend_string","<span style='color: ff0000;'>");
 @ini_set("error_append_string","</span>");
-if($Settings['fixpathinfo']===true) {
+if($Settings['fixpathinfo']=="on") {
 	$_SERVER['PATH_INFO'] = $_SERVER['ORIG_PATH_INFO'];
 	@putenv("PATH_INFO=".$_SERVER['ORIG_PATH_INFO']); }
 // Check to see if variables are set
@@ -67,7 +73,7 @@ if(!isset($SettDir['admin'])) { $SettDir['admin'] = "inc/admin/"; }
 if(!isset($SettDir['mod'])) { $SettDir['mod'] = "inc/mod/"; }
 if(!isset($SettDir['themes'])) { $SettDir['themes'] = "themes/"; }
 if(!isset($Settings['use_iniset'])) { $Settings['use_iniset'] = null; }
-if(!isset($Settings['clean_ob'])) { $Settings['clean_ob'] = false; }
+if(!isset($Settings['clean_ob'])) { $Settings['clean_ob'] = "off"; }
 if(!isset($_SERVER['PATH_INFO'])) { $_SERVER['PATH_INFO'] = null; }
 if(!isset($_SERVER['HTTP_ACCEPT_ENCODING'])) { 
 	$_SERVER['HTTP_ACCEPT_ENCODING'] = null; }
@@ -79,18 +85,18 @@ if(!isset($_POST['act'])) { $_POST['act'] = null; }
 if(!isset($_GET['modact'])) { $_GET['modact'] = null; }
 if(!isset($_POST['modact'])) { $_POST['modact'] = null; }
 if(!isset($_GET['id'])) { $_GET['id'] = null; }
-if(!isset($_GET['debug'])) { $_GET['debug'] = false; }
+if(!isset($_GET['debug'])) { $_GET['debug'] = "off"; }
 if(!isset($_GET['post'])) { $_GET['post'] = null; }
 if(!isset($_POST['License'])) { $_POST['License'] = null; }
 if(!isset($_SERVER['HTTPS'])) { $_SERVER['HTTPS'] = "off"; }
 require_once($SettDir['misc'].'utf8.php');
 require_once($SettDir['inc'].'filename.php');
 require_once($SettDir['inc'].'function.php');
-if($Settings['enable_pathinfo']===true) { 
+if($Settings['enable_pathinfo']=="on") { 
 	mrstring(); /* Change Path info to Get Vars :P */ }
 // Check to see if variables are set
 require_once($SettDir['misc'].'setcheck.php');
-if($Settings['enable_https']===true&&$_SERVER['HTTPS']=="on") {
+if($Settings['enable_https']=="on"&&$_SERVER['HTTPS']=="on") {
 if($Settings['idburl']!=null&&$Settings['idburl']!="localhost") {
 $HTTPsTest = parse_url($Settings['idburl']); if($HTTPsTest['scheme']=="http") {
 $Settings['idburl'] = preg_replace("/http\:\/\//i", "https://", $Settings['idburl']); } } }
@@ -98,7 +104,7 @@ $cookieDomain = null; $cookieSecure = false;
 if($Settings['idburl']!=null&&$Settings['idburl']!="localhost") {
 $URLsTest = parse_url($Settings['idburl']); 
 $cookieDomain = $URLsTest['host'];
-if($Settings['enable_https']===true) {
+if($Settings['enable_https']=="on") {
  if($URLsTest['scheme']=="https") { $cookieSecure = true; }
  if($URLsTest['scheme']!="https") { $cookieSecure = false; } } }
 @ini_set("default_charset",$Settings['charset']);
@@ -124,7 +130,7 @@ if(strstr($_SERVER['HTTP_ACCEPT_ENCODING'], "gzip")) { $Settings['use_gzip'] = "
 if($Settings['use_gzip']=="deflate") {
 if(strstr($_SERVER['HTTP_ACCEPT_ENCODING'], "deflate")) { $Settings['use_gzip'] = "on";
 	$GZipEncode['Type'] = "deflate"; } else { $Settings['use_gzip'] = "off"; } }
-if($Settings['clean_ob']===true) {
+if($Settings['clean_ob']=="on") {
 /* Check for other output handlers/buffers are open
    and close and get the contents in an array */
 $numob = count(ob_list_handlers()); $iob = 0; 
@@ -204,7 +210,7 @@ if($_COOKIE['SessPass']!=null&&
 $_COOKIE['MemberName']!=null) {
 require($SettDir['inc'].'prelogin.php'); } } }
 require($SettDir['inc'].'groupsetup.php');
-if($Settings['board_offline']===true&&$GroupInfo['HasAdminCP']!="yes") {
+if($Settings['board_offline']=="on"&&$GroupInfo['HasAdminCP']!="yes") {
 @header("Content-Type: text/plain; charset=".$Settings['charset']); @mysql_free_result($peresult);
 ob_clean(); if(!isset($Settings['offline_text'])) {
 echo "Sorry the board is off line.\nIf you are a admin you can login by the admin cp."; }
