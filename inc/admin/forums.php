@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: forums.php - Last Update: 04/12/2008 SVN 160 - Author: cooldude2k $
+    $FileInfo: forums.php - Last Update: 12/10/2008 SVN 208 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="forums.php"||$File3Name=="/forums.php") {
@@ -36,21 +36,26 @@ require($SettDir['admin'].'table.php');
 <?php if($_GET['act']=="addforum"&&$_POST['update']!="now") { 
 $admincptitle = " ".$ThemeSet['TitleDivider']." Adding new Forum";
 ?>
-<div class="Table1Border">
-<table class="Table1">
-<tr class="TableRow1">
-<td class="TableRow1"><span style="float: left;">
-&nbsp;<a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=addforum",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">iDB Forum Manager</a></span>
-<span style="float: right;">&nbsp;</span></td>
-</tr>
-<tr class="TableRow2">
-<th class="TableRow2" style="width: 100%; text-align: left;">
+<div class="TableMenuBorder">
+<?php if($ThemeSet['TableStyle']=="div") { ?>
+<div class="TableSMenuRow1">
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=addforum",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">iDB Forum Manager</a></div>
+<?php } ?>
+<table class="TableMenu" style="width: 100%;">
+<?php if($ThemeSet['TableStyle']=="table") { ?>
+<tr class="TableMenuRow1">
+<td class="TableMenuColumn1"><span style="float: left;">
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=addforum",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">iDB Forum Manager</a>
+</span><span style="float: right;">&nbsp;</span></td>
+</tr><?php } ?>
+<tr class="TableMenuRow2">
+<th class="TableMenuColumn2" style="width: 100%; text-align: left;">
 <span style="float: left;">&nbsp;Adding new Forum: </span>
 <span style="float: right;">&nbsp;</span>
 </th>
 </tr>
-<tr class="TableRow3">
-<td class="TableRow3">
+<tr class="TableMenuRow3">
+<td class="TableMenuColumn3">
 <form style="display: inline;" method="post" name="install" id="install" action="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=addforum",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">
 <table style="text-align: left;">
 <tr style="text-align: left;">
@@ -142,8 +147,8 @@ if ($InForumType!="redirect"&&$AiFiInSubForum=="0") {
 </form>
 </td>
 </tr>
-<tr class="TableRow4">
-<td class="TableRow4">&nbsp;</td>
+<tr class="TableMenuRow4">
+<td class="TableMenuColumn4">&nbsp;</td>
 </tr>
 </table>
 </div>
@@ -182,43 +187,53 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Updating Settings";
 $query = query("INSERT INTO `".$Settings['sqltable']."forums` VALUES (%i,%i,%i,'%s','%s','%s',%i,'%s',0,0,'%s','%s','%s',0,0)", array($_POST['ForumID'],$_POST['ForumCatID'],$_POST['OrderID'],$_POST['ForumName'],$_POST['ShowForum'],$_POST['ForumType'],$_POST['InSubForum'],$_POST['RedirectURL'],$_POST['ForumDesc'],$_POST['PostCountAdd'],$_POST['CanHaveTopics']));
 mysql_query($query);
 ?>
-<div class="Table1Border">
-<table class="Table1" style="width: 100%;">
-<tr class="TableRow1">
-<td class="TableRow1"><span style="float: left;">
+<div class="TableMenuBorder">
+<?php if($ThemeSet['TableStyle']=="div") { ?>
+<div class="TableSMenuRow1">
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Updating Settings</a></div>
+<?php } ?>
+<table class="TableMenu" style="width: 100%;">
+<?php if($ThemeSet['TableStyle']=="table") { ?>
+<tr class="TableMenuRow1">
+<td class="TableMenuColumn1"><span style="float: left;">
 <?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Updating Settings</a>
 </span><span style="float: right;">&nbsp;</span></td>
+</tr><?php } ?>
+<tr id="ProfileTitle" class="TableMenuRow2">
+<th class="TableMenuColumn2">Updating Settings</th>
 </tr>
-<tr id="ProfileTitle" class="TableRow2">
-<th class="TableRow2">Updating Settings</th>
-</tr>
-<tr class="TableRow3" id="ProfileUpdate">
-<td class="TableRow3">
+<tr class="TableMenuRow3" id="ProfileUpdate">
+<td class="TableMenuColumn3">
 <div style="text-align: center;">
 	<br />The forum was created successfully. <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to go back. ^_^<br />&nbsp;
 	</div>
 </td></tr>
-<tr id="ProfileTitleEnd" class="TableRow4">
-<td class="TableRow4">&nbsp;</td>
+<tr id="ProfileTitleEnd" class="TableMenuRow4">
+<td class="TableMenuColumn4">&nbsp;</td>
 </tr></table></div>
 <?php } } if($_GET['act']=="deleteforum"&&$_POST['update']!="now") { 
 $admincptitle = " ".$ThemeSet['TitleDivider']." Deleting a Forum";
 ?>
-<div class="Table1Border">
-<table class="Table1">
-<tr class="TableRow1">
-<td class="TableRow1"><span style="float: left;">
-&nbsp;<a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=addforum",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">iDB Forum Manager</a></span>
-<span style="float: right;">&nbsp;</span></td>
-</tr>
-<tr class="TableRow2">
-<th class="TableRow2" style="width: 100%; text-align: left;">
+<div class="TableMenuBorder">
+<?php if($ThemeSet['TableStyle']=="div") { ?>
+<div class="TableSMenuRow1">
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=addforum",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">iDB Forum Manager</a></div>
+<?php } ?>
+<table class="TableMenu" style="width: 100%;">
+<?php if($ThemeSet['TableStyle']=="table") { ?>
+<tr class="TableMenuRow1">
+<td class="TableMenuColumn1"><span style="float: left;">
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=addforum",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">iDB Forum Manager</a>
+</span><span style="float: right;">&nbsp;</span></td>
+</tr><?php } ?>
+<tr class="TableMenuRow2">
+<th class="TableMenuColumn2" style="width: 100%; text-align: left;">
 <span style="float: left;">&nbsp;Deleting a Forum: </span>
 <span style="float: right;">&nbsp;</span>
 </th>
 </tr>
-<tr class="TableRow3">
-<td class="TableRow3">
+<tr class="TableMenuRow3">
+<td class="TableMenuColumn3">
 <form style="display: inline;" method="post" name="install" id="install" action="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=deleteforum",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">
 <table style="text-align: left;">
 <tr style="text-align: left;">
@@ -269,8 +284,8 @@ $AiFiInSubForum=mysql_result($fr,$fi,"InSubForum");
 </form>
 </td>
 </tr>
-<tr class="TableRow4">
-<td class="TableRow4">&nbsp;</td>
+<tr class="TableMenuRow4">
+<td class="TableMenuColumn4">&nbsp;</td>
 </tr>
 </table>
 </div>
@@ -314,44 +329,54 @@ mysql_query($dtquery);
 ++$apci; }
 @mysql_free_result($apcresult); } }
 ?>
-<div class="Table1Border">
-<table class="Table1" style="width: 100%;">
-<tr class="TableRow1">
-<td class="TableRow1"><span style="float: left;">
+<div class="TableMenuBorder">
+<?php if($ThemeSet['TableStyle']=="div") { ?>
+<div class="TableSMenuRow1">
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Updating Settings</a></div>
+<?php } ?>
+<table class="TableMenu" style="width: 100%;">
+<?php if($ThemeSet['TableStyle']=="table") { ?>
+<tr class="TableMenuRow1">
+<td class="TableMenuColumn1"><span style="float: left;">
 <?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Updating Settings</a>
 </span><span style="float: right;">&nbsp;</span></td>
+</tr><?php } ?>
+<tr id="ProfileTitle" class="TableMenuRow2">
+<th class="TableMenuColumn2">Updating Settings</th>
 </tr>
-<tr id="ProfileTitle" class="TableRow2">
-<th class="TableRow2">Updating Settings</th>
-</tr>
-<tr class="TableRow3" id="ProfileUpdate">
-<td class="TableRow3">
+<tr class="TableMenuRow3" id="ProfileUpdate">
+<td class="TableMenuColumn3">
 <div style="text-align: center;">
 	<br />The forum was deleted successfully. <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to go back. ^_^<br />&nbsp;
 	</div>
 </td></tr>
-<tr id="ProfileTitleEnd" class="TableRow4">
-<td class="TableRow4">&nbsp;</td>
+<tr id="ProfileTitleEnd" class="TableMenuRow4">
+<td class="TableMenuColumn4">&nbsp;</td>
 </tr></table></div>
 <?php } } if($_GET['act']=="editforum"&&$_POST['update']!="now") {
 $admincptitle = " ".$ThemeSet['TitleDivider']." Editing a Forum";
 if(!isset($_POST['id'])) {
 ?>
-<div class="Table1Border">
-<table class="Table1">
-<tr class="TableRow1">
-<td class="TableRow1"><span style="float: left;">
-&nbsp;<a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=editforum",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">iDB Forum Manager</a></span>
-<span style="float: right;">&nbsp;</span></td>
-</tr>
-<tr class="TableRow2">
-<th class="TableRow2" style="width: 100%; text-align: left;">
+<div class="TableMenuBorder">
+<?php if($ThemeSet['TableStyle']=="div") { ?>
+<div class="TableSMenuRow1">
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=editforum",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">iDB Forum Manager</a></div>
+<?php } ?>
+<table class="TableMenu" style="width: 100%;">
+<?php if($ThemeSet['TableStyle']=="table") { ?>
+<tr class="TableMenuRow1">
+<td class="TableMenuColumn1"><span style="float: left;">
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=editforum",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">iDB Forum Manager</a>
+</span><span style="float: right;">&nbsp;</span></td>
+</tr><?php } ?>
+<tr class="TableMenuRow2">
+<th class="TableMenuColumn2" style="width: 100%; text-align: left;">
 <span style="float: left;">&nbsp;Editing a Forum: </span>
 <span style="float: right;">&nbsp;</span>
 </th>
 </tr>
-<tr class="TableRow3">
-<td class="TableRow3">
+<tr class="TableMenuRow3">
+<td class="TableMenuColumn3">
 <form style="display: inline;" method="post" name="install" id="install" action="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=editforum",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">
 <table style="text-align: left;">
 <tr style="text-align: left;">
@@ -383,8 +408,8 @@ $AiFiInSubForum=mysql_result($fr,$fi,"InSubForum");
 </form>
 </td>
 </tr>
-<tr class="TableRow4">
-<td class="TableRow4">&nbsp;</td>
+<tr class="TableMenuRow4">
+<td class="TableMenuColumn4">&nbsp;</td>
 </tr>
 </table>
 </div>
@@ -414,21 +439,21 @@ $NumberTopics=mysql_result($preresult,0,"NumTopics");
 @mysql_free_result($preresult);
 $ForumType = strtolower($ForumType); $CanHaveTopics = strtolower($CanHaveTopics);
 ?>
-<div class="Table1Border">
-<table class="Table1">
-<tr class="TableRow1">
-<td class="TableRow1"><span style="float: left;">
+<div class="TableMenuBorder">
+<table class="TableMenu">
+<tr class="TableMenuRow1">
+<td class="TableMenuColumn1"><span style="float: left;">
 &nbsp;<a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=editforum",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">iDB Forum Manager</a></span>
 <span style="float: right;">&nbsp;</span></td>
 </tr>
-<tr class="TableRow2">
-<th class="TableRow2" style="width: 100%; text-align: left;">
+<tr class="TableMenuRow2">
+<th class="TableMenuColumn2" style="width: 100%; text-align: left;">
 <span style="float: left;">&nbsp;Editing a Forum: </span>
 <span style="float: right;">&nbsp;</span>
 </th>
 </tr>
-<tr class="TableRow3">
-<td class="TableRow3">
+<tr class="TableMenuRow3">
+<td class="TableMenuColumn3">
 <form style="display: inline;" method="post" name="install" id="install" action="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=editforum",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">
 <table style="text-align: left;">
 <tr style="text-align: left;">
@@ -527,8 +552,8 @@ if($InSubForum==$InForumID) {
 </form>
 </td>
 </tr>
-<tr class="TableRow4">
-<td class="TableRow4">&nbsp;</td>
+<tr class="TableMenuRow4">
+<td class="TableMenuColumn4">&nbsp;</td>
 </tr>
 </table>
 </div>
@@ -576,48 +601,58 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Updating Settings";
 $query = query("UPDATE `".$Settings['sqltable']."forums` SET `id`=%i,`CategoryID`=%i,`OrderID`=%i,`Name`='%s',`ShowForum`='%s',`ForumType`='%s',`InSubForum`=%i,`RedirectURL`='%s',`Description`='%s',`PostCountAdd`='%s',`CanHaveTopics`='%s' WHERE `id`=%i", array($_POST['ForumID'],$_POST['ForumCatID'],$_POST['OrderID'],$_POST['ForumName'],$_POST['ShowForum'],$_POST['ForumType'],$_POST['InSubForum'],$_POST['RedirectURL'],$_POST['ForumDesc'],$_POST['PostCountAdd'],$_POST['CanHaveTopics'],$_POST['id']));
 mysql_query($query);
 ?>
-<div class="Table1Border">
-<table class="Table1" style="width: 100%;">
-<tr class="TableRow1">
-<td class="TableRow1"><span style="float: left;">
+<div class="TableMenuBorder">
+<?php if($ThemeSet['TableStyle']=="div") { ?>
+<div class="TableSMenuRow1">
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Updating Settings</a></div>
+<?php } ?>
+<table class="TableMenu" style="width: 100%;">
+<?php if($ThemeSet['TableStyle']=="table") { ?>
+<tr class="TableMenuRow1">
+<td class="TableMenuColumn1"><span style="float: left;">
 <?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Updating Settings</a>
 </span><span style="float: right;">&nbsp;</span></td>
+</tr><?php } ?>
+<tr id="ProfileTitle" class="TableMenuRow2">
+<th class="TableMenuColumn2">Updating Settings</th>
 </tr>
-<tr id="ProfileTitle" class="TableRow2">
-<th class="TableRow2">Updating Settings</th>
-</tr>
-<tr class="TableRow3" id="ProfileUpdate">
-<td class="TableRow3">
+<tr class="TableMenuRow3" id="ProfileUpdate">
+<td class="TableMenuColumn3">
 <div style="text-align: center;">
 	<br />The forum was edited successfully. <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to go back. ^_^<br />&nbsp;
 	</div>
 </td></tr>
-<tr id="ProfileTitleEnd" class="TableRow4">
-<td class="TableRow4">&nbsp;</td>
+<tr id="ProfileTitleEnd" class="TableMenuRow4">
+<td class="TableMenuColumn4">&nbsp;</td>
 </tr></table></div>
 <?php } } } if ($_GET['act']!=null&&$Error=="Yes") {
 @redirect("refresh",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],FALSE),"4");
 $admincptitle = " ".$ThemeSet['TitleDivider']." Updating Settings";
 ?>
-<div class="Table1Border">
-<table class="Table1" style="width: 100%;">
-<tr class="TableRow1">
-<td class="TableRow1"><span style="float: left;">
+<div class="TableMenuBorder">
+<?php if($ThemeSet['TableStyle']=="div") { ?>
+<div class="TableSMenuRow1">
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Updating Settings</a></div>
+<?php } ?>
+<table class="TableMenu" style="width: 100%;">
+<?php if($ThemeSet['TableStyle']=="table") { ?>
+<tr class="TableMenuRow1">
+<td class="TableMenuColumn1"><span style="float: left;">
 <?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Updating Settings</a>
 </span><span style="float: right;">&nbsp;</span></td>
+</tr><?php } ?>
+<tr id="ProfileTitle" class="TableMenuRow2">
+<th class="TableMenuColumn2">Updating Settings</th>
 </tr>
-<tr id="ProfileTitle" class="TableRow2">
-<th class="TableRow2">Updating Settings</th>
-</tr>
-<tr class="TableRow3" id="ProfileUpdate">
-<td class="TableRow3">
+<tr class="TableMenuRow3" id="ProfileUpdate">
+<td class="TableMenuColumn3">
 <div style="text-align: center;">
 	<br /><?php echo $errorstr; ?>
 	Click <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">here</a> to back to admin cp.<br />&nbsp;
 	</div>
 </td></tr>
-<tr id="ProfileTitleEnd" class="TableRow4">
-<td class="TableRow4">&nbsp;</td>
+<tr id="ProfileTitleEnd" class="TableMenuRow4">
+<td class="TableMenuColumn4">&nbsp;</td>
 </tr></table></div>
 <?php } ?>
 </td></tr>
