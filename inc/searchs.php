@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: searchs.php - Last Update: 12/09/2008 SVN 207 - Author: cooldude2k $
+    $FileInfo: searchs.php - Last Update: 12/11/2008 SVN 211 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="searchs.php"||$File3Name=="/searchs.php") {
@@ -31,12 +31,18 @@ if($_GET['act']=="topics") {
 <div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">Board index</a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['search'],$Settings['file_ext'],"act=topics",$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search']); ?>">Search topics</a></div>
 <div class="DivNavLinks">&nbsp;</div>
 <div class="Table1Border">
+<?php if($ThemeSet['TableStyle']=="div") { ?>
+<div class="TableRow1">
+<span style="text-align: left;">
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['search'],$Settings['file_ext'],"act=topics",$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search']); ?>">Topic Search</a></span></div>
+<?php } ?>
 <table class="Table1">
-<tr class="TableRow1">
-<td class="TableColumn1"><span style="text-align: left;">
-<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['search'],$Settings['file_ext'],"act=topics",$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search']); ?>">Topic Search</a>
-</span></td>
-</tr>
+<?php if($ThemeSet['TableStyle']=="table") { ?>
+<tr id="ForumStart<?php echo $ForumID; ?>" class="TableRow1">
+<td class="TableColumn1" colspan="6"><span style="text-align: left;">
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['search'],$Settings['file_ext'],"act=topics",$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search']); ?>">Topic Search</a></span>
+</td>
+</tr><?php } ?>
 <tr class="TableRow2">
 <th class="TableColumn2" style="width: 100%; text-align: left;">&nbsp;Search for topic: </th>
 </tr>
@@ -218,8 +224,19 @@ echo $pstring;
 ?>
 <div class="DivPageLinks">&nbsp;</div>
 <div class="Table1Border">
-<table class="Table1" id="Search">
-<tr id="SearchStart" class="TableRow1">
+<?php if($ThemeSet['TableStyle']=="div") { ?>
+<div class="TableRow1">
+<span style="text-align: left;">
+<?php echo $ThemeSet['TitleIcon'];
+if($_GET['msearch']==null) { ?>
+<a href="<?php echo url_maker($exfile['search'],$Settings['file_ext'],"act=topics&search=".$_GET['search']."&type=".$_GET['type']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search']); ?>">Searching for <?php echo $_GET['search']; ?></a>
+<?php } if($_GET['msearch']!=null) { ?>
+<a href="<?php echo url_maker($exfile['search'],$Settings['file_ext'],"act=topics&search=".$_GET['search']."&type=".$_GET['type']."&msearch=".$_GET['msearch']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search']); ?>">Searching for <?php echo $_GET['search']; ?> by <?php echo $_GET['msearch']; ?></a>
+<?php } ?></span></div>
+<?php } ?>
+<table class="Table1">
+<?php if($ThemeSet['TableStyle']=="table") { ?>
+<tr id="ForumStart<?php echo $ForumID; ?>" class="TableRow1">
 <td class="TableColumn1" colspan="6"><span style="text-align: left;">
 <?php echo $ThemeSet['TitleIcon'];
 if($_GET['msearch']==null) { ?>
@@ -228,7 +245,7 @@ if($_GET['msearch']==null) { ?>
 <a href="<?php echo url_maker($exfile['search'],$Settings['file_ext'],"act=topics&search=".$_GET['search']."&type=".$_GET['type']."&msearch=".$_GET['msearch']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search']); ?>">Searching for <?php echo $_GET['search']; ?> by <?php echo $_GET['msearch']; ?></a>
 <?php } ?></span>
 </td>
-</tr>
+</tr><?php } ?>
 <tr id="SearchStatRow" class="TableRow2">
 <th class="TableColumn2" style="width: 4%;">State</th>
 <th class="TableColumn2" style="width: 36%;">Topic Name</th>
