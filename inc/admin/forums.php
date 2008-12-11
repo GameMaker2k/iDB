@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: forums.php - Last Update: 12/10/2008 SVN 208 - Author: cooldude2k $
+    $FileInfo: forums.php - Last Update: 12/11/2008 SVN 210 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="forums.php"||$File3Name=="/forums.php") {
@@ -38,7 +38,7 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Adding new Forum";
 ?>
 <div class="TableMenuBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
-<div class="TableSMenuRow1">
+<div class="TableMenuRow1">
 <?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=addforum",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">iDB Forum Manager</a></div>
 <?php } ?>
 <table class="TableMenu" style="width: 100%;">
@@ -130,11 +130,20 @@ if ($InForumType!="redirect"&&$AiFiInSubForum=="0") {
 	<option value="off">no</option>
 	</select></td>
 </tr><tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="NumPostView">Number of posts to view forum:</label></td>
+	<td style="width: 50%;"><input type="text" class="TextBox" size="20" name="NumPostView" id="NumPostView" /></td>
+</tr><tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="NumKarmaView">Amount of karma to view forum:</label></td>
+	<td style="width: 50%;"><input type="text" class="TextBox" size="20" name="NumKarmaView" id="NumKarmaView" /></td>
+</tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="CanHaveTopics">Allow topics in forum:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="CanHaveTopics" id="CanHaveTopics">
 	<option selected="selected" value="yes">yes</option>
 	<option value="no">no</option>
 	</select></td>
+</tr><tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="NumPostHotTopic">Number of posts for hot topic:</label></td>
+	<td style="width: 50%;"><input type="text" class="TextBox" size="20" name="NumPostHotTopic" id="NumPostHotTopic" /></td>
 </tr></table>
 <table style="text-align: left;">
 <tr style="text-align: left;">
@@ -165,6 +174,18 @@ $sql_order_check = mysql_query(query("SELECT `OrderID` FROM `".$Settings['sqltab
 $id_check = mysql_num_rows($sql_id_check); $order_check = mysql_num_rows($sql_order_check);
 @mysql_free_result($sql_id_check); @mysql_free_result($sql_order_check);
 $errorstr = "";
+if ($_POST['NumPostView']==null||
+	!is_numeric($_POST['NumPostView'])) {
+	$_POST['NumPostView'] = 0; }
+if ($_POST['NumKarmaView']==null||
+	!is_numeric($_POST['NumKarmaView'])) {
+	$_POST['NumKarmaView'] = 0; }
+if ($Settings['hot_topic_num']==null||
+	!is_numeric($Settings['hot_topic_num'])) {
+	$Settings['hot_topic_num'] = 10; }
+if ($_POST['NumPostHotTopic']==null||
+	!is_numeric($_POST['NumPostHotTopic'])) {
+	$_POST['NumPostHotTopic'] = $Settings['hot_topic_num']; }
 if ($_POST['ForumName']==null||
 	$_POST['ForumName']=="ShowMe") { $Error="Yes";
 $errorstr = $errorstr."You need to enter a forum name.<br />\n"; } 
@@ -184,12 +205,12 @@ $errorstr = $errorstr."Your Forum Description is too big.<br />\n"; }
 if ($Error!="Yes") {
 @redirect("refresh",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],FALSE),"4");
 $admincptitle = " ".$ThemeSet['TitleDivider']." Updating Settings";
-$query = query("INSERT INTO `".$Settings['sqltable']."forums` VALUES (%i,%i,%i,'%s','%s','%s',%i,'%s',0,0,'%s','%s','%s',0,0)", array($_POST['ForumID'],$_POST['ForumCatID'],$_POST['OrderID'],$_POST['ForumName'],$_POST['ShowForum'],$_POST['ForumType'],$_POST['InSubForum'],$_POST['RedirectURL'],$_POST['ForumDesc'],$_POST['PostCountAdd'],$_POST['CanHaveTopics']));
+echo $query = query("INSERT INTO `".$Settings['sqltable']."forums` VALUES (%i,%i,%i,'%s','%s','%s',%i,'%s',0,0,'%s','%s',%i,%i,'%s',%i,0,0)", array($_POST['ForumID'],$_POST['ForumCatID'],$_POST['OrderID'],$_POST['ForumName'],$_POST['ShowForum'],$_POST['ForumType'],$_POST['InSubForum'],$_POST['RedirectURL'],$_POST['ForumDesc'],$_POST['PostCountAdd'],$_POST['NumPostView'],$_POST['NumKarmaView'],$_POST['NumPostHotTopic'],$_POST['CanHaveTopics']));
 mysql_query($query);
 ?>
 <div class="TableMenuBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
-<div class="TableSMenuRow1">
+<div class="TableMenuRow1">
 <?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Updating Settings</a></div>
 <?php } ?>
 <table class="TableMenu" style="width: 100%;">
@@ -216,7 +237,7 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Deleting a Forum";
 ?>
 <div class="TableMenuBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
-<div class="TableSMenuRow1">
+<div class="TableMenuRow1">
 <?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=addforum",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">iDB Forum Manager</a></div>
 <?php } ?>
 <table class="TableMenu" style="width: 100%;">
@@ -331,7 +352,7 @@ mysql_query($dtquery);
 ?>
 <div class="TableMenuBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
-<div class="TableSMenuRow1">
+<div class="TableMenuRow1">
 <?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Updating Settings</a></div>
 <?php } ?>
 <table class="TableMenu" style="width: 100%;">
@@ -359,7 +380,7 @@ if(!isset($_POST['id'])) {
 ?>
 <div class="TableMenuBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
-<div class="TableSMenuRow1">
+<div class="TableMenuRow1">
 <?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=editforum",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">iDB Forum Manager</a></div>
 <?php } ?>
 <table class="TableMenu" style="width: 100%;">
@@ -433,7 +454,10 @@ $RedirectTimes=mysql_result($preresult,0,"Redirects");
 $NumberViews=mysql_result($preresult,0,"NumViews");
 $ForumDescription=mysql_result($preresult,0,"Description");
 $PostCountAdd=mysql_result($preresult,0,"PostCountAdd");
+$PostCountView=mysql_result($preresult,0,"PostCountView");
+$KarmaCountView=mysql_result($preresult,0,"KarmaCountView");
 $CanHaveTopics=mysql_result($preresult,0,"CanHaveTopics");
+$HotTopicPosts=mysql_result($preresult,0,"HotTopicPosts");
 $NumberPosts=mysql_result($preresult,0,"NumPosts");
 $NumberTopics=mysql_result($preresult,0,"NumTopics");
 @mysql_free_result($preresult);
@@ -534,11 +558,20 @@ if($InSubForum==$InForumID) {
 	<option <?php if($PostCountAdd=="off") { echo "selected=\"selected\" "; } ?>value="off">no</option>
 	</select></td>
 </tr><tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="NumPostView">Number of posts to view forum:</label></td>
+	<td style="width: 50%;"><input type="text" class="TextBox" size="20" name="NumPostView" id="NumPostView" value="<?php echo $PostCountView; ?>" /></td>
+</tr><tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="NumKarmaView">Amount of karma to view forum:</label></td>
+	<td style="width: 50%;"><input type="text" class="TextBox" size="20" name="NumKarmaView" id="NumKarmaView" value="<?php echo $KarmaCountView; ?>" /></td>
+</tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="CanHaveTopics">Allow topics in forum:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="CanHaveTopics" id="CanHaveTopics">
 	<option <?php if($CanHaveTopics=="yes") { echo "selected=\"selected\" "; } ?>value="yes">yes</option>
 	<option <?php if($CanHaveTopics=="no") { echo "selected=\"selected\" "; } ?>value="no">no</option>
 	</select></td>
+</tr><tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="NumPostHotTopic">Number of posts for hot topic:</label></td>
+	<td style="width: 50%;"><input type="text" class="TextBox" size="20" name="NumPostHotTopic" id="NumPostHotTopic" value="<?php echo $HotTopicPosts; ?>" /></td>
 </tr></table>
 <table style="text-align: left;">
 <tr style="text-align: left;">
@@ -579,6 +612,18 @@ $sql_id_check = mysql_query(query("SELECT `id` FROM `".$Settings['sqltable']."fo
 $sql_order_check = mysql_query(query("SELECT `OrderID` FROM `".$Settings['sqltable']."forums` WHERE `OrderID`=%i LIMIT 1", array($_POST['OrderID'])));
 $id_check = mysql_num_rows($sql_id_check); $order_check = mysql_num_rows($sql_order_check);
 @mysql_free_result($sql_id_check); @mysql_free_result($sql_order_check);
+if ($_POST['NumPostView']==null||
+	!is_numeric($_POST['NumPostView'])) {
+	$_POST['NumPostView'] = 0; }
+if ($_POST['NumKarmaView']==null||
+	!is_numeric($_POST['NumKarmaView'])) {
+	$_POST['NumKarmaView'] = 0; }
+if ($Settings['hot_topic_num']==null||
+	!is_numeric($Settings['hot_topic_num'])) {
+	$Settings['hot_topic_num'] = 10; }
+if ($_POST['NumPostHotTopic']==null||
+	!is_numeric($_POST['NumPostHotTopic'])) {
+	$_POST['NumPostHotTopic'] = $Settings['hot_topic_num']; }
 if ($_POST['ForumName']==null||
 	$_POST['ForumName']=="ShowMe") { $Error="Yes";
 $errorstr = $errorstr."You need to enter a forum name.<br />\n"; } 
@@ -598,12 +643,12 @@ $errorstr = $errorstr."Your Forum Description is too big.<br />\n"; }
 if ($Error!="Yes") {
 @redirect("refresh",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],FALSE),"4");
 $admincptitle = " ".$ThemeSet['TitleDivider']." Updating Settings";
-$query = query("UPDATE `".$Settings['sqltable']."forums` SET `id`=%i,`CategoryID`=%i,`OrderID`=%i,`Name`='%s',`ShowForum`='%s',`ForumType`='%s',`InSubForum`=%i,`RedirectURL`='%s',`Description`='%s',`PostCountAdd`='%s',`CanHaveTopics`='%s' WHERE `id`=%i", array($_POST['ForumID'],$_POST['ForumCatID'],$_POST['OrderID'],$_POST['ForumName'],$_POST['ShowForum'],$_POST['ForumType'],$_POST['InSubForum'],$_POST['RedirectURL'],$_POST['ForumDesc'],$_POST['PostCountAdd'],$_POST['CanHaveTopics'],$_POST['id']));
+$query = query("UPDATE `".$Settings['sqltable']."forums` SET `id`=%i,`CategoryID`=%i,`OrderID`=%i,`Name`='%s',`ShowForum`='%s',`ForumType`='%s',`InSubForum`=%i,`RedirectURL`='%s',`Description`='%s',`PostCountAdd`='%s',`PostCountView`=%i,`KarmaCountView`=%i,`CanHaveTopics`='%s',`HotTopicPosts`=%i WHERE `id`=%i", array($_POST['ForumID'],$_POST['ForumCatID'],$_POST['OrderID'],$_POST['ForumName'],$_POST['ShowForum'],$_POST['ForumType'],$_POST['InSubForum'],$_POST['RedirectURL'],$_POST['ForumDesc'],$_POST['PostCountAdd'],$_POST['NumPostView'],$_POST['NumKarmaView'],$_POST['CanHaveTopics'],$_POST['NumPostHotTopic'],$_POST['id']));
 mysql_query($query);
 ?>
 <div class="TableMenuBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
-<div class="TableSMenuRow1">
+<div class="TableMenuRow1">
 <?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Updating Settings</a></div>
 <?php } ?>
 <table class="TableMenu" style="width: 100%;">
@@ -631,7 +676,7 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Updating Settings";
 ?>
 <div class="TableMenuBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
-<div class="TableSMenuRow1">
+<div class="TableMenuRow1">
 <?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Updating Settings</a></div>
 <?php } ?>
 <table class="TableMenu" style="width: 100%;">

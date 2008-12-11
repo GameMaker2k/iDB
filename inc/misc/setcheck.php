@@ -11,16 +11,13 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: setcheck.php - Last Update: 12/10/2008 SVN 209 - Author: cooldude2k $
+    $FileInfo: setcheck.php - Last Update: 12/11/2008 SVN 210 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="setcheck.php"||$File3Name=="/setcheck.php") {
 	require('index.php');
 	exit(); }
-if(isset($Settings['showverinfo'])) {
-	$Settings['showversioninfo'] = $Settings['showverinfo']; }
-if(!isset($Settings['showverinfo'])&&!isset($Settings['showversioninfo'])) {
-	$Settings['showversioninfo'] = "off"; }
+if(!isset($Settings['showverinfo'])) { $Settings['showverinfo'] = "on"; }
 if(!isset($_GET['debug'])) { $_GET['debug'] = false; }
 if(!isset($GZipEncode)) { $GZipEncode = array("Type" => "none"); }
 if(!is_array($GZipEncode)) { $GZipEncode = array("Type" => "none"); }

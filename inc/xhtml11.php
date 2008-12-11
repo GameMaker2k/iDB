@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: xhtml11.php - Last Update: 12/09/2008 SVN 207 - Author: cooldude2k $
+    $FileInfo: xhtml11.php - Last Update: 12/11/2008 SVN 210 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="xhtml11.php"||$File3Name=="/xhtml11.php") {
@@ -49,10 +49,6 @@ if($ThemeSet['CSSType']=="xhtml") {
 if($ThemeSet['CSSType']!="xhtml") { $ThemeSet['CSSType'] = "import"; }
 @header("Content-Style-Type: text/css");
 @header("Content-Script-Type: text/javascript");
-if(isset($Settings['showverinfo'])) { $idbmisc['showverinfo'] = $Settings['showverinfo']; }
-if($Settings['showversioninfo']=="on") { $idbmisc['showversion'] = true; }
-if($Settings['showversioninfo']=="off") { $idbmisc['showversion'] = false; }
-if(!isset($Settings['showverinfo'])) { $idbmisc['showverinfo'] = false; }
 if($Settings['showverinfo']!="on") {
 $iDBURL1 = "<a href=\"http://idb.berlios.de/\" title=\"".$iDB."\" onclick=\"window.open(this.href);return false;\">"; }
 if($Settings['showverinfo']=="on") {

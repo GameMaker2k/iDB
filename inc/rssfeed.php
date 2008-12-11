@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: rssfeed.php - Last Update: 12/09/2008 SVN 207 - Author: cooldude2k $
+    $FileInfo: rssfeed.php - Last Update: 12/11/2008 SVN 210 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="rssfeed.php"||$File3Name=="/rssfeed.php") {
@@ -40,10 +40,6 @@ if($Settings['fixpathinfo']!="on"&&
 	$Settings['fixpathinfo']!="off"&&
 	$Settings['fixpathinfo']!==null) {
 		$basedir = "/"; } $BaseURL = $basedir;
-if(isset($Settings['showverinfo'])) { $idbmisc['showverinfo'] = $Settings['showverinfo']; }
-if($Settings['showversioninfo']=="on") { $idbmisc['showversion'] = true; }
-if($Settings['showversioninfo']=="off") { $idbmisc['showversion'] = false; }
-if(!isset($Settings['showverinfo'])) { $idbmisc['showverinfo'] = false; }
 if(!isset($_SERVER['HTTPS'])) { $_SERVER['HTTPS'] = 'off'; }
 if($_SERVER['HTTPS']=="on") { $prehost = "https://"; }
 if($_SERVER['HTTPS']!="on") { $prehost = "http://"; }
