@@ -11,8 +11,12 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: rss.php - Last Update: 12/10/2008 SVN 209 - Author: cooldude2k $
+    $FileInfo: rss.php - Last Update: 12/10/2008 SVN 212 - Author: cooldude2k $
 */
+$pretime = explode(" ", microtime());
+$utime = $pretime[0];
+$time = $pretime[1];
+$_POST['starttime'] = $utime + $time;
 require_once('mysql.php');
 if($Settings['enable_rss']=="off") {
 @header("Content-Type: text/plain; charset=".$Settings['charset']); 

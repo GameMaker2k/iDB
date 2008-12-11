@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: rssfeed.php - Last Update: 12/11/2008 SVN 210 - Author: cooldude2k $
+    $FileInfo: rssfeed.php - Last Update: 12/11/2008 SVN 212 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="rssfeed.php"||$File3Name=="/rssfeed.php") {
@@ -195,5 +195,10 @@ if($Settings['showverinfo']=="on") { ?>
   <icon><?php echo $BoardURL.$SettDir['inc']; ?>rss.gif</icon>
  <?php echo "\n".$Atom."\n"; ?>
 </feed>
-<?php } mysql_close();
+<?php }
+function execution_time($starttime) {
+list($uetime, $etime) = explode(" ", microtime());
+$endtime = $uetime + $etime;
+return bcsub($endtime, $starttime, 4); }
+echo "<!-- execution_time=\"".execution_time($starttime)."\" -->";
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); ?>
