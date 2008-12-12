@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: forums.php - Last Update: 12/11/2008 SVN 210 - Author: cooldude2k $
+    $FileInfo: forums.php - Last Update: 12/12/2008 SVN 213 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="forums.php"||$File3Name=="/forums.php") {
@@ -205,8 +205,25 @@ $errorstr = $errorstr."Your Forum Description is too big.<br />\n"; }
 if ($Error!="Yes") {
 @redirect("refresh",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],FALSE),"4");
 $admincptitle = " ".$ThemeSet['TitleDivider']." Updating Settings";
-echo $query = query("INSERT INTO `".$Settings['sqltable']."forums` VALUES (%i,%i,%i,'%s','%s','%s',%i,'%s',0,0,'%s','%s',%i,%i,'%s',%i,0,0)", array($_POST['ForumID'],$_POST['ForumCatID'],$_POST['OrderID'],$_POST['ForumName'],$_POST['ShowForum'],$_POST['ForumType'],$_POST['InSubForum'],$_POST['RedirectURL'],$_POST['ForumDesc'],$_POST['PostCountAdd'],$_POST['NumPostView'],$_POST['NumKarmaView'],$_POST['NumPostHotTopic'],$_POST['CanHaveTopics']));
+$query = query("INSERT INTO `".$Settings['sqltable']."forums` VALUES (%i,%i,%i,'%s','%s','%s',%i,'%s',0,0,'%s','%s',%i,%i,'%s',%i,0,0)", array($_POST['ForumID'],$_POST['ForumCatID'],$_POST['OrderID'],$_POST['ForumName'],$_POST['ShowForum'],$_POST['ForumType'],$_POST['InSubForum'],$_POST['RedirectURL'],$_POST['ForumDesc'],$_POST['PostCountAdd'],$_POST['NumPostView'],$_POST['NumKarmaView'],$_POST['NumPostHotTopic'],$_POST['CanHaveTopics']));
 mysql_query($query);
+$getperidq = query("SELECT DISTINCT `PermissionID` FROM `".$Settings['sqltable']."permissions` ORDER BY `PermissionID` ASC", array(null));
+$getperidr=mysql_query($getperidq);
+$getperidnum=mysql_num_rows($getperidr);
+$getperidi = 0; 
+$nextperid = getnextid($Settings['sqltable'],"permissions");
+while ($getperidi < $getperidnum) {
+$getperidID=mysql_result($getperidr,$getperidi,"PermissionID");
+$getperidq2 = query("SELECT * FROM `".$Settings['sqltable']."permissions` WHERE `PermissionID`=%i", array($getperidID));
+$getperidr2=mysql_query($getperidq2);
+$getperidnum2=mysql_num_rows($getperidr2);
+$getperidName=mysql_result($getperidr2,0,"Name");
+@mysql_free_result($getperidr2);
+$query = query("INSERT IGNORE INTO `".$Settings['sqltable']."permissions` VALUES (%i, %i, '%s', %i, 'yes', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no')", array($nextperid,$getperidID,$getperidName,$_POST['ForumID'])); 
+mysql_query($query);
+++$getperidi; ++$nextperid; }
+@mysql_free_result($getperidr);
+
 ?>
 <div class="TableMenuBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
@@ -699,7 +716,129 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Updating Settings";
 <tr id="ProfileTitleEnd" class="TableMenuRow4">
 <td class="TableMenuColumn4">&nbsp;</td>
 </tr></table></div>
+<?php } if($_GET['act']=="fpermissions"&&$_POST['update']!="now") {
+$admincptitle = " ".$ThemeSet['TitleDivider']." Forum Permissions Manager";
+if(!isset($_POST['id'])) {
+?>
+<div class="TableMenuBorder">
+<?php if($ThemeSet['TableStyle']=="div") { ?>
+<div class="TableMenuRow1">
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=fpermissions",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Forum Permissions Manager</a></div>
 <?php } ?>
+<table class="TableMenu" style="width: 100%;">
+<?php if($ThemeSet['TableStyle']=="table") { ?>
+<tr class="TableMenuRow1">
+<td class="TableMenuColumn1"><span style="float: left;">
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=fpermissions",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Forum Permissions Manager</a>
+</span><span style="float: right;">&nbsp;</span></td>
+</tr><?php } ?>
+<tr class="TableMenuRow2">
+<th class="TableMenuColumn2" style="width: 100%; text-align: left;">
+<span style="float: left;">&nbsp;Forum Permissions Manager: </span>
+<span style="float: right;">&nbsp;</span>
+</th>
+</tr>
+<tr class="TableMenuRow3">
+<td class="TableMenuColumn3">
+<form style="display: inline;" method="post" name="install" id="install" action="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=fpermissions",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">
+<table style="text-align: left;">
+<tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="id">Permission to view:</label></td>
+	<td style="width: 50%;"><select size="1" class="TextBox" name="id" id="id">
+<?php 
+$getperidq = query("SELECT DISTINCT `PermissionID` FROM `".$Settings['sqltable']."permissions`", array(null));
+$getperidr=mysql_query($getperidq);
+$getperidnum=mysql_num_rows($getperidr);
+$getperidi = 0;
+while ($getperidi < $getperidnum) {
+$getperidID=mysql_result($getperidr,$getperidi,"PermissionID");
+$getperidq2 = query("SELECT * FROM `".$Settings['sqltable']."permissions` WHERE `PermissionID`=%i ORDER BY `ForumID` ASC", array($getperidID));
+$getperidr2=mysql_query($getperidq2);
+$getperidnum2=mysql_num_rows($getperidr2);
+$getperidName=mysql_result($getperidr2,0,"Name");
+@mysql_free_result($getperidr2);
+?>
+	<option value="<?php echo $getperidID; ?>"><?php echo $getperidName; ?></option>
+<?php ++$getperidi; }
+@mysql_free_result($getperidr); ?>
+	</select></td>
+</tr></table>
+<table style="text-align: left;">
+<tr style="text-align: left;">
+<td style="width: 100%;">
+<input type="hidden" name="act" value="fpermissions" style="display: none;" />
+<input type="submit" class="Button" value="View Permission" name="Apply_Changes" />
+<input type="reset" value="Reset Form" class="Button" name="Reset_Form" />
+</td></tr></table>
+</form>
+</td>
+</tr>
+<tr class="TableMenuRow4">
+<td class="TableMenuColumn4">&nbsp;</td>
+</tr>
+</table>
+</div>
+<?php } if(isset($_POST['id'])) { ?>
+<div class="TableMenuBorder">
+<?php if($ThemeSet['TableStyle']=="div") { ?>
+<div class="TableMenuRow1">
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=fpermissions",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Forum Permissions Manager</a></div>
+<?php } ?>
+<table class="TableMenu" style="width: 100%;">
+<?php if($ThemeSet['TableStyle']=="table") { ?>
+<tr class="TableMenuRow1">
+<td class="TableMenuColumn1"><span style="float: left;">
+<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=fpermissions",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Forum Permissions Manager</a>
+</span><span style="float: right;">&nbsp;</span></td>
+</tr><?php } ?>
+<tr class="TableMenuRow2">
+<th class="TableMenuColumn2" style="width: 100%; text-align: left;">
+<span style="float: left;">&nbsp;Forum Permissions Manager: </span>
+<span style="float: right;">&nbsp;</span>
+</th>
+</tr>
+<tr class="TableMenuRow3">
+<td class="TableMenuColumn3">
+<?php 
+$fq = query("SELECT * FROM `".$Settings['sqltable']."forums` ORDER BY `id` ASC", array(null));
+$fr=mysql_query($fq);
+$ai=mysql_num_rows($fr);
+$fi=0;
+while ($fi < $ai) {
+$InForumID=mysql_result($fr,$fi,"id");
+$InForumName=mysql_result($fr,$fi,"Name");
+echo $getperidq = query("SELECT * FROM `".$Settings['sqltable']."permissions` WHERE `ForumID`=%i LIMIT 1", array($InForumID));
+$getperidr=mysql_query($getperidq);
+$getperidnum=mysql_num_rows($getperidr);
+$getperidID=mysql_result($getperidr,0,"PermissionID");
+?>
+<form style="display: inline;" method="post" action="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=fpermissions",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">
+<table style="text-align: left;">
+<tr style="text-align: left;">
+<td style="width: 100%;">
+<?php if($getperidnum>0) { ?>
+Permissions for <?php echo $InForumName; ?> are set: <br />
+<input type="hidden" name="act" value="fpermissions" style="display: none;" />
+<input type="submit" class="Button" value="Edit Permissions" name="Apply_Changes" />
+<?php } if($getperidnum<=0) { ?>
+Permissions for <?php echo $InForumName; ?> are not set: <br />
+<input type="hidden" name="act" value="fpermissions" style="display: none;" />
+<input type="submit" class="Button" value="Create Permissions" name="Apply_Changes" />
+<?php } ?>
+</td></tr></table>
+</form>
+<?php 
+@mysql_free_result($getperidr);
+++$fi; }
+@mysql_free_result($fr); ?>
+</td>
+</tr>
+<tr class="TableMenuRow4">
+<td class="TableMenuColumn4">&nbsp;</td>
+</tr>
+</table>
+</div>
+<?php } } ?>
 </td></tr>
 </table>
 <div>&nbsp;</div>
