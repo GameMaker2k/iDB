@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: profilemain.php - Last Update: 12/05/2008 SVN 199 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 12/12/2008 SVN 215 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
@@ -33,12 +33,12 @@ if(!isset($_POST['update'])) { $_POST['update'] = null; }
 	<div class="TableSMenuBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableSMenuRow1">
-<?php echo $ThemeSet['TitleIcon'] ?>Profile Settings</div>
+<?php echo $ThemeSet['TitleIcon']; ?>Profile Settings</div>
 <?php } ?>
 <table id="ProfileLinks" class="TableSMenu" style="width: 100%; text-align: left; vertical-align: top;">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableSMenuRow1">
-<td class="TableSMenuColumn1"><?php echo $ThemeSet['TitleIcon'] ?>Profile Settings</td>
+<td class="TableSMenuColumn1"><?php echo $ThemeSet['TitleIcon']; ?>Profile Settings</td>
 </tr><?php } ?>
 <tr class="TableSMenuRow2">
 <td class="TableSMenuColumn2">&nbsp;</td>
@@ -57,12 +57,12 @@ if(!isset($_POST['update'])) { $_POST['update'] = null; }
 <div class="TableSMenuBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableSMenuRow1">
-<?php echo $ThemeSet['TitleIcon'] ?>Board Settings</div>
+<?php echo $ThemeSet['TitleIcon']; ?>Board Settings</div>
 <?php } ?>
 <table class="TableSMenu" style="width: 100%; text-align: left; vertical-align: top;">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableSMenuRow1">
-<td class="TableSMenuColumn1"><?php echo $ThemeSet['TitleIcon'] ?>Board Settings</td>
+<td class="TableSMenuColumn1"><?php echo $ThemeSet['TitleIcon']; ?>Board Settings</td>
 </tr><?php } ?>
 <tr class="TableSMenuRow2">
 <td class="TableSMenuColumn2">&nbsp;</td>
@@ -86,14 +86,14 @@ $profiletitle = " ".$ThemeSet['TitleDivider']." NotePad";
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableMenuRow1">
 <span style="text-align: left;">
-<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo $updateact; ?>">Updating Settings</a>
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo $updateact; ?>">Updating Settings</a>
 </span></div>
 <?php } ?>
 <table class="TableMenu" style="width: 100%;">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableMenuRow1">
 <td class="TableMenuColumn1"><span style="text-align: left;">
-<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo $updateact; ?>">Updating Settings</a>
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo $updateact; ?>">Updating Settings</a>
 </span></td>
 </tr><?php } ?>
 <tr id="ProfileTitle" class="TableMenuRow2">
@@ -118,14 +118,14 @@ $notepadact = $noteact; $profiletitle = " ".$ThemeSet['TitleDivider']." NotePad"
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableMenuRow1">
 <span style="text-align: left;">
-<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo $noteact; ?>">NotePad</a>
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo $noteact; ?>">NotePad</a>
 </span></div>
 <?php } ?>
 <table class="TableMenu" style="width: 100%;">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableMenuRow1">
 <td class="TableMenuColumn1"><span style="text-align: left;">
-<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo $noteact; ?>">NotePad</a>
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo $noteact; ?>">NotePad</a>
 </span></td>
 </tr><?php } ?>
 <tr id="ProfileTitle" class="TableMenuRow2">
@@ -201,14 +201,14 @@ $profiletitle = " ".$ThemeSet['TitleDivider']." Signature Editor";
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableMenuRow1">
 <span style="text-align: left;">
-<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo $signatureact; ?>">Signature Editer</a>
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo $signatureact; ?>">Signature Editer</a>
 </span></div>
 <?php } ?>
 <table class="TableMenu" style="width: 100%;">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableMenuRow1">
 <td class="TableMenuColumn1"><span style="text-align: left;">
-<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo $signatureact; ?>">Signature Editer</a>
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo $signatureact; ?>">Signature Editer</a>
 </span></td>
 </tr><?php } ?>
 <tr id="ProfileTitle" class="TableMenuRow2">
@@ -292,14 +292,14 @@ $AvatarSize1W=$AvatarSize1[0]; $AvatarSize1H=$AvatarSize1[1];
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableMenuRow1">
 <span style="text-align: left;">
-<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo $avataract; ?>">Avatar Editer</a>
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo $avataract; ?>">Avatar Editer</a>
 </span></div>
 <?php } ?>
 <table class="TableMenu" style="width: 100%;">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableMenuRow1">
 <td class="TableMenuColumn1"><span style="text-align: left;">
-<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo $avataract; ?>">Avatar Editer</a>
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo $avataract; ?>">Avatar Editer</a>
 </span></td>
 </tr><?php } ?>
 <tr id="ProfileTitle" class="TableMenuRow2">
@@ -378,14 +378,14 @@ $profiletitle = " ".$ThemeSet['TitleDivider']." Board Settings"; ?>
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableMenuRow1">
 <span style="text-align: left;">
-<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo $settingsact; ?>">Board Settings</a>
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo $settingsact; ?>">Board Settings</a>
 </span></div>
 <?php } ?>
 <table class="TableMenu" style="width: 100%;">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableMenuRow1">
 <td class="TableMenuColumn1"><span style="text-align: left;">
-<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo $settingsact; ?>">Board Settings</a>
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo $settingsact; ?>">Board Settings</a>
 </span></td>
 </tr><?php } ?>
 <tr id="ProfileTitle" class="TableMenuRow2">
@@ -556,14 +556,14 @@ $profiletitle = " ".$ThemeSet['TitleDivider']." Profile Editor";
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableMenuRow1">
 <span style="text-align: left;">
-<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo $profileact; ?>">Profile Editer</a>
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo $profileact; ?>">Profile Editer</a>
 </span></div>
 <?php } ?>
 <table class="TableMenu" style="width: 100%;">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableMenuRow1">
 <td class="TableMenuColumn1"><span style="text-align: left;">
-<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo $profileact; ?>">Profile Editer</a>
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo $profileact; ?>">Profile Editer</a>
 </span></td>
 </tr><?php } ?>
 <tr id="ProfileTitle" class="TableMenuRow2">
@@ -780,14 +780,14 @@ $profiletitle = " ".$ThemeSet['TitleDivider']." User Info Editer";
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableMenuRow1">
 <span style="text-align: left;">
-<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo $userinfoact; ?>">User Info Editer</a>
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo $userinfoact; ?>">User Info Editer</a>
 </span></div>
 <?php } ?>
 <table class="TableMenu" style="width: 100%;">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableMenuRow1">
 <td class="TableMenuColumn1"><span style="text-align: left;">
-<?php echo $ThemeSet['TitleIcon'] ?><a href="<?php echo $userinfoact; ?>">User Info Editer</a>
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo $userinfoact; ?>">User Info Editer</a>
 </span></td>
 </tr><?php } ?>
 <tr id="ProfileTitle" class="TableMenuRow2">

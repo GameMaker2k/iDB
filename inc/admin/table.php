@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: table.php - Last Update: 12/10/2008 SVN 208 - Author: cooldude2k $
+    $FileInfo: table.php - Last Update: 12/12/2008 SVN 215 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="table.php"||$File3Name=="/table.php") {
@@ -20,12 +20,12 @@ if ($File3Name=="table.php"||$File3Name=="/table.php") {
 ?><div class="TableSMenuBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableSMenuRow1">
-<?php echo $ThemeSet['TitleIcon'] ?>Main Settings</div>
+<?php echo $ThemeSet['TitleIcon']; ?>Main Settings</div>
 <?php } ?>
 <table id="AdminLinks" class="TableSMenu" style="width: 100%; text-align: left; vertical-align: top;">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableSMenuRow1">
-<td class="TableSMenuColumn1"><?php echo $ThemeSet['TitleIcon'] ?>Main Settings</td>
+<td class="TableSMenuColumn1"><?php echo $ThemeSet['TitleIcon']; ?>Main Settings</td>
 </tr><?php } ?>
 <tr class="TableSMenuRow2">
 <td class="TableSMenuColumn2">&nbsp;</td>
@@ -46,12 +46,12 @@ if ($File3Name=="table.php"||$File3Name=="/table.php") {
 <div class="TableSMenuBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableSMenuRow1">
-<?php echo $ThemeSet['TitleIcon'] ?>Forum Tool</div>
+<?php echo $ThemeSet['TitleIcon']; ?>Forum Tool</div>
 <?php } ?>
 <table id="ForumTool" class="TableSMenu" style="width: 100%; text-align: left; vertical-align: top;">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableSMenuRow1">
-<td class="TableSMenuColumn1"><?php echo $ThemeSet['TitleIcon'] ?>Forum Tool</td>
+<td class="TableSMenuColumn1"><?php echo $ThemeSet['TitleIcon']; ?>Forum Tool</td>
 </tr><?php } ?><tr class="TableSMenuRow2">
 <td class="TableSMenuColumn2">&nbsp;</td>
 </tr><tr class="TableSMenuRow3">
