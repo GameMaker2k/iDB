@@ -12,7 +12,7 @@
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
     iDB Installer made by Game Maker 2k - http://idb.berlios.de/support/category.php?act=view&id=2
 
-    $FileInfo: install.php - Last Update: 10/22/2008 SVN 182 - Author: cooldude2k $
+    $FileInfo: install.php - Last Update: 12/12/2008 SVN 214 - Author: cooldude2k $
 */
 @error_reporting(E_ALL ^ E_NOTICE);
 if(@ini_get("register_globals")) { 
@@ -54,15 +54,20 @@ $Error = null; $_GET['time'] = false;
 </head>
 <body>
 <?php require($SettDir['inc'].'navbar.php'); ?>
-
+<div class="Table1Border">
+<?php if($ThemeSet['TableStyle']=="div") { ?>
+<div class="TableRow1">
+<span style="font-weight: bold; text-align: left;"><?php echo $ThemeSet['TitleIcon'] ?><a href="Install.php">Install <?php echo $VerInfo['iDB_Ver_Show']." on ".$OSType2; ?> </a></span>
+</div>
+<?php } ?>
 <table class="Table1">
+<?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableRow1">
-<td class="TableRow1"><span style="float: left;">
-&nbsp;<a href="Install.php">Install <?php echo $VerInfo['iDB_Ver_Show']." on ".$OSType2; ?> </a></span>
-<span style="float: right;">&nbsp;</span></td>
-</tr>
+<td class="TableColumn1" colspan="2"><span style="font-weight: bold; text-align: left;"><?php echo $ThemeSet['TitleIcon'] ?><a href="Install.php">Install <?php echo $VerInfo['iDB_Ver_Show']." on ".$OSType2; ?> </a></span>
+</td>
+</tr><?php } ?>
 <tr class="TableRow2">
-<th class="TableRow2" style="width: 100%; text-align: left;">
+<th class="TableColumn2" style="width: 100%; text-align: left;">
 <span style="float: left;">&nbsp;Inert your install info: </span>
 <span style="float: right;">&nbsp;</span>
 </th>
@@ -113,9 +118,9 @@ if ($Error=="Yes") { ?>
 </tr>
 <?php } ?>
 <tr class="TableRow4">
-<td class="TableRow4">&nbsp;<a href="index.php?act=ReadMe">Readme.txt</a>&nbsp;</td>
+<td class="TableColumn4">&nbsp;<a href="index.php?act=ReadMe">Readme.txt</a>&nbsp;</td>
 </tr>
-</table>
+</table></div>
 <div>&nbsp;</div>
 <?php require($SettDir['inc'].'endpage.php'); ?>
 </body>

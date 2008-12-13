@@ -12,7 +12,7 @@
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: license.php - Last Update: 12/07/2008 SVN 202 - Author: cooldude2k $
+    $FileInfo: license.php - Last Update: 12/12/2008 SVN 214 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="presetup.php"||$File3Name=="/presetup.php") {
@@ -22,7 +22,7 @@ if(!isset($SetupDir['setup'])) { $SetupDir['setup'] = "setup/"; }
 if(!isset($SetupDir['convert'])) { $SetupDir['convert'] = "setup/convert/"; }
 ?>
 <tr class="TableRow3">
-<td class="TableRow3">
+<td class="TableColumn3">
 <form style="display: inline;" method="post" name="install" id="install" action="install.php?act=Part2">
 <table style="text-align: left;">
 <tr style="text-align: left;">
