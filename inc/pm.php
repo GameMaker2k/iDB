@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: pm.php - Last Update: 12/12/2008 SVN 215 - Author: cooldude2k $
+    $FileInfo: pm.php - Last Update: 12/17/2008 SVN 216 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pm.php"||$File3Name=="/pm.php") {
@@ -91,7 +91,9 @@ $i=0;
 $pagenum=count($Pages);
 if($_GET['page']>$pagenum) {
 	$_GET['page'] = $pagenum; }
-$pagei=0; $pstring = "<div class=\"PageList\"><span class=\"pagelink\">Pages:</span> ";
+$pagei=0; $pstring = null;
+if($pagenum>1) {
+$pstring = "<div class=\"PageList\"><span class=\"pagelink\">Pages:</span> "; }
 if($_GET['page']<4) { $Pagez[0] = null; }
 if($_GET['page']>=4) { $Pagez[0] = "First"; }
 if($_GET['page']>=3) {
@@ -118,6 +120,7 @@ $pagenumi=count($Pagez);
 if($num==0) {
 $pagenumi = 0;
 $pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger'])."\">1</a></span> "; }
+if($pagenum>1) {
 while ($pagei < $pagenumi) {
 if($Pagez[$pagei]!=null&&
    $Pagez[$pagei]!="First"&&
@@ -138,11 +141,14 @@ $paget = $pagei - 1;
 $Pnext = $Pagez[$paget] + 1;
 $pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&page=".$Pnext,$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger'])."\">&gt;</a></span> "; }
 $pstring = $pstring."<span class=\"pagelinklast\"><a href=\"".url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&page=".$pagenum,$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger'])."\">&raquo;</a></span> "; }
-	++$pagei; } $pstring = $pstring."</div>";
+	++$pagei; } $pstring = $pstring."</div>"; }
 //echo $pstring;
 //List Page Number Code end
-echo $pstring; ?>
+echo $pstring; 
+if($pagenum>1) {
+?>
 <div class="DivPageLinks">&nbsp;</div>
+<?php } ?>
 <div class="TableMenuBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableMenuRow1">
@@ -246,7 +252,9 @@ $i=0;
 $pagenum=count($Pages);
 if($_GET['page']>$pagenum) {
 	$_GET['page'] = $pagenum; }
-$pagei=0; $pstring = "<div class=\"PageList\"><span class=\"pagelink\">Pages:</span> ";
+$pagei=0; $pstring = null;
+if($pagenum>1) {
+$pstring = "<div class=\"PageList\"><span class=\"pagelink\">Pages:</span> "; }
 if($_GET['page']<4) { $Pagez[0] = null; }
 if($_GET['page']>=4) { $Pagez[0] = "First"; }
 if($_GET['page']>=3) {
@@ -273,6 +281,7 @@ $pagenumi=count($Pagez);
 if($num==0) {
 $pagenumi = 0;
 $pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['messenger'],$Settings['file_ext'],"act=viewsentsent&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger'])."\">1</a></span> "; }
+if($pagenum>1) {
 while ($pagei < $pagenumi) {
 if($Pagez[$pagei]!=null&&
    $Pagez[$pagei]!="First"&&
@@ -293,11 +302,14 @@ $paget = $pagei - 1;
 $Pnext = $Pagez[$paget] + 1;
 $pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['messenger'],$Settings['file_ext'],"act=viewsent&page=".$Pnext,$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger'])."\">&gt;</a></span> "; }
 $pstring = $pstring."<span class=\"pagelinklast\"><a href=\"".url_maker($exfile['messenger'],$Settings['file_ext'],"act=viewsent&page=".$pagenum,$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger'])."\">&raquo;</a></span> "; }
-	++$pagei; } $pstring = $pstring."</div>";
+	++$pagei; } $pstring = $pstring."</div>"; }
 //echo $pstring;
 //List Page Number Code end
-echo $pstring; ?>
+echo $pstring; 
+if($pagenum>1) {
+?>
 <div class="DivPageLinks">&nbsp;</div>
+<?php } ?>
 <div class="TableMenuBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableMenuRow1">
