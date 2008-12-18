@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: groupsetup.php - Last Update: 11/15/2008 SVN 189 - Author: cooldude2k $
+    $FileInfo: groupsetup.php - Last Update: 12/18/2008 SVN 218 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="groupsetup.php"||$File3Name=="/groupsetup.php") {
@@ -126,8 +126,8 @@ if(!is_numeric($GroupInfo['PromotePosts'])) {
 $GroupInfo['PromoteKarma']=mysql_result($gruresult,0,"PromoteKarma");
 if(!is_numeric($GroupInfo['PromoteKarma'])) { 
 	$GroupInfo['PromoteKarma'] = 0; $GroupInfo['PromoteTo'] = 0; }
-if(!isset($Settings['KarmaBoostDay'])) {
-	$Settings['KarmaBoostDay'] = null; }
+if(!isset($Settings['KarmaBoostDays'])) {
+	$Settings['KarmaBoostDays'] = null; }
 if(!isset($Settings['KBoostPercent'])) {
 	$Settings['KBoostPercent'] = "6|10"; }
 //Update karma and group upgrade on post count or karma count.
@@ -135,7 +135,7 @@ if($_SESSION['UserID']!=0) { $BoostTotal = null;
 $NewKarmaUpdate = GMTimeGet("Ymd",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $ThisYearUpdate = GMTimeGet("Y",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 if($MyKarmaUpdate<$NewKarmaUpdate&&$MyPostCountChk>0) { 
-	$KarmaBoostDay = $Settings['KarmaBoostDay'];
+	$KarmaBoostDay = $Settings['KarmaBoostDays'];
 	$KBoostPercent = explode("|",$Settings['KBoostPercent']);
 	if(count($KBoostPercent)<1) { 
 	$KBoostPercent[0] = rand(1,4); }
