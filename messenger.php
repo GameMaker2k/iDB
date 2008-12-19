@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: messenger.php - Last Update: 01/01/2008 SVN 144 - Author: cooldude2k $
+    $FileInfo: messenger.php - Last Update: 12/19/2008 SVN 219 - Author: cooldude2k $
 */
 require('preindex.php');
 $usefileext = $Settings['file_ext'];
@@ -52,7 +52,7 @@ if($_GET['act']=="read") {
 change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." ".$MessageName,$Settings['use_gzip'],$GZipEncode['Type']); }
 if($_GET['act']=="viewsent") { 
 change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." Viewing Sent MailBox",$Settings['use_gzip'],$GZipEncode['Type']); }
-if($_GET['act']!="read"&&$_GET['act']!="viewsent") { 
+if($_GET['act']=="view") {
 change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." Viewing MailBox",$Settings['use_gzip'],$GZipEncode['Type']); }
 if($_GET['act']=="create") { 
 change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." Making a Message",$Settings['use_gzip'],$GZipEncode['Type']); }

@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: replies.php - Last Update: 12/18/2008 SVN 217 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 12/19/2008 SVN 219 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -135,7 +135,8 @@ if($pnum>=$Settings['max_posts']) {
 if($pnum<$Settings['max_posts']&&$pnum>0) { 
 	$pnum = $pnum - $pnum; 
 	$Pages[$l] = $l; ++$l; } }
-$PageLimit = $nums - $Settings['max_posts'];
+$snumber = $_GET['page'] - 1;
+$PageLimit = $Settings['max_posts'] * $snumber;
 if($PageLimit<0) { $PageLimit = 0; }
 //End Reply Page Code
 $i=0;
@@ -156,7 +157,7 @@ if($_GET['page']>$pagenum) {
 	$_GET['page'] = $pagenum; }
 $pagei=0; $pstring = null;
 if($pagenum>1) {
-$pstring = "<div class=\"PageList\"><span class=\"pagelink\">Pages:</span> "; }
+$pstring = "<div class=\"PageList\"><span class=\"pagelink\">".$pagenum." Pages:</span> "; }
 if($_GET['page']<4) { $Pagez[0] = null; }
 if($_GET['page']>=4) { $Pagez[0] = "First"; }
 if($_GET['page']>=3) {
@@ -185,12 +186,12 @@ $pagenumi = 0;
 $pstring = null; }
 if($pagenum>1) {
 while ($pagei < $pagenumi) {
+if($_GET['page']!=1&&$pagei==1) {
+$Pback = $_GET['page'] - 1;
+$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$Pback,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">&lt;</a></span> "; }
 if($Pagez[$pagei]!=null&&
    $Pagez[$pagei]!="First"&&
    $Pagez[$pagei]!="Last") {
-if($pagei==1&$Pagez[$pagei]!=null&&$Pagez[$pagei]>=2) {
-$Pback = $Pagez[$pagei] - 1;
-$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$Pback,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">&lt;</a></span> "; }
 if($pagei!=3) { 
 $pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$Pagez[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">".$Pagez[$pagei]."</a></span> "; }
 if($pagei==3) { 
@@ -199,11 +200,11 @@ if($Pagez[$pagei]=="First") {
 $pstring = $pstring."<span class=\"pagelinklast\"><a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">&laquo;</a></span> "; }
 if($Pagez[$pagei]=="Last") {
 $ptestnext = $pagenext + 1;
-if($ptestnext<$pagenum) {
 $paget = $pagei - 1;
-$Pnext = $Pagez[$paget] + 1;
-$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$Pnext,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">&gt;</a></span> "; }
-$pstring = $pstring."<span class=\"pagelinklast\"><a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$pagenum,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">&raquo;</a></span> "; }
+$Pnext = $_GET['page'] + 1;
+$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$Pnext,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">&gt;</a></span> ";
+if($ptestnext<$pagenum) {
+$pstring = $pstring."<span class=\"pagelinklast\"><a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$pagenum,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">&raquo;</a></span> "; } }
 	++$pagei; } $pstring = $pstring."</div>"; }
 echo $pstring;
 //List Page Number Code end
