@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: prelogin.php - Last Update: 05/31/2008 SVN 164 - Author: cooldude2k $
+    $FileInfo: prelogin.php - Last Update: 12/19/2008 SVN 220 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="prelogin.php"||$File3Name=="/prelogin.php") {
@@ -23,6 +23,7 @@ $resultlog2=mysql_query($querylog2);
 $numlog2=mysql_num_rows($resultlog2);
 if($numlog2==1) {
 $YourIDAM=mysql_result($resultlog2,0,"id");
+$YourNameAM=mysql_result($resultlog2,0,"Name");
 $YourGroupAM=mysql_result($resultlog2,0,"GroupID");
 $YourPassAM=mysql_result($resultlog2,0,"Password");
 $gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($YourGroupAM));
@@ -48,16 +49,16 @@ $_SESSION['UserGroup']=$YourGroupAM;
 $_SESSION['UserDST']=$YourDSTAM;
 $_SESSION['UserPass']=$YourPassAM;
 if($cookieDomain==null) {
-@setcookie("MemberName", $YourNameM, time() + (7 * 86400), $cbasedir);
+@setcookie("MemberName", $YourNameAM, time() + (7 * 86400), $cbasedir);
 @setcookie("UserID", $YourIDAM, time() + (7 * 86400), $cbasedir);
 @setcookie("SessPass", $YourPassAM, time() + (7 * 86400), $cbasedir); }
 if($cookieDomain!=null) {
 if($cookieSecure===true) {
-@setcookie("MemberName", $YourNameM, time() + (7 * 86400), $cbasedir, $cookieDomain, 1);
+@setcookie("MemberName", $YourNameAM, time() + (7 * 86400), $cbasedir, $cookieDomain, 1);
 @setcookie("UserID", $YourIDAM, time() + (7 * 86400), $cbasedir, $cookieDomain, 1);
 @setcookie("SessPass", $YourPassAM, time() + (7 * 86400), $cbasedir, $cookieDomain, 1); }
 if($cookieSecure===false) {
-@setcookie("MemberName", $YourNameM, time() + (7 * 86400), $cbasedir, $cookieDomain);
+@setcookie("MemberName", $YourNameAM, time() + (7 * 86400), $cbasedir, $cookieDomain);
 @setcookie("UserID", $YourIDAM, time() + (7 * 86400), $cbasedir, $cookieDomain);
 @setcookie("SessPass", $YourPassAM, time() + (7 * 86400), $cbasedir, $cookieDomain); } }
 } } if($numlog2<=0||$numlog2>1||$BanError=="yes") { @session_unset();

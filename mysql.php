@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: mysql.php - Last Update: 12/11/2008 SVN 210 - Author: cooldude2k $
+    $FileInfo: mysql.php -Last Update: 12/19/2008 SVN 220 - Author: cooldude2k $
 */
 //@ini_set("display_errors", true); 
 //@ini_set("display_startup_errors", true);
@@ -206,11 +206,9 @@ if($_GET['act']=="MkCaptcha"||$_GET['act']=="Captcha") {
 	$oPhpCaptcha->SetOwnerText("Fake Code: ".$RandNum);
 	$oPhpCaptcha->UseColour(true);
 	$oPhpCaptcha->Create(); @mysql_close(); die(); } }
-if(isset($_SESSION['CheckCookie'])) {
-if($_SESSION['CheckCookie']!="done") {
-if($_COOKIE['SessPass']!=null&&
-$_COOKIE['MemberName']!=null) {
-require($SettDir['inc'].'prelogin.php'); } } }
+if(!isset($_SESSION['CheckCookie'])) {
+if(isset($_COOKIE['SessPass'])&&isset($_COOKIE['MemberName'])) {
+require($SettDir['inc'].'prelogin.php'); } }
 require($SettDir['inc'].'groupsetup.php');
 if($Settings['board_offline']=="on"&&$GroupInfo['HasAdminCP']!="yes") {
 @header("Content-Type: text/plain; charset=".$Settings['charset']); @mysql_free_result($peresult);
