@@ -11,12 +11,13 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: members.php - Last Update: 12/19/2008 SVN 219 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 12/21/2008 SVN 223 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
 	require('index.php');
 	exit(); }
+$pagenum = null;
 if(!is_numeric($_GET['id'])) { $_GET['id'] = null; }
 if(!is_numeric($_GET['page'])) { $_GET['page'] = null; }
 if($_GET['act']=="list") {
@@ -238,7 +239,17 @@ if($MemList['Group']!=$Settings['GuestGroup']) {
 <td class="TableColumn4" colspan="8">&nbsp;</td>
 </tr>
 </table></div>
+<?php 
+if($pagenum>1) {
+?>
+<div class="DivMembers">&nbsp;</div>
 <?php }
+echo $pstring;
+//List Page Number Code end
+if($pagenum>1) {
+?>
+<div class="DivPageLinks">&nbsp;</div>
+<?php } }
 if($_GET['act']=="view") { 
 $query = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($_GET['id']));
 $result=mysql_query($query);
@@ -1002,5 +1013,7 @@ $query = query("INSERT INTO `".$Settings['sqltable']."messenger` VALUES (null,%i
 <td class="TableColumn4">&nbsp;</td>
 </tr>
 </table></div>
-<?php } } } ?>
+<?php } } }
+if($pagenum<=1) { ?>
 <div class="DivMembers">&nbsp;</div>
+<?php } ?>

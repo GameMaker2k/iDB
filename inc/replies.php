@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: replies.php - Last Update: 12/19/2008 SVN 221 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 12/21/2008 SVN 223 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -84,33 +84,7 @@ if($PermissionInfo['CanViewForum'][$TopicForumID]=="no"||
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
-$CanMakeReply = null;
-if($CatPermissionInfo['CanViewCategory'][$TopicCatID]=="yes"&&
-	$PermissionInfo['CanViewForum'][$TopicForumID]=="yes") {
-if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes"||$PermissionInfo['CanMakeTopics'][$TopicForumID]=="yes") {
-$CanMakeReply = "no";
-if($TopicClosed==0&&$PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes") {
-	$CanMakeReply = "yes"; }
-if($TopicClosed==1&&$PermissionInfo['CanMakeReplysClose'][$TopicForumID]=="yes"
-	&&$PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes") {
-		$CanMakeReply = "yes"; }
-if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes"||$PermissionInfo['CanMakeTopics'][$TopicForumID]=="yes") {
-?>
-<table style="width: 100%;" class="Table2">
-<tr>
- <td style="width: 0%; text-align: left;">&nbsp;</td>
- <td style="width: 100%; text-align: right;">
- <?php if($CanMakeReply=="yes") { ?>
- <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=create&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $ThemeSet['AddReply']; ?></a>
- <?php } if($PermissionInfo['CanMakeTopics'][$TopicForumID]=="yes") {
-	if($CanMakeReply=="yes") { ?>
- <?php echo $ThemeSet['ButtonDivider']; } ?>
- <a href="<?php echo url_maker($exfile['forum'],$Settings['file_ext'],"act=create&id=".$TopicForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum']); ?>"><?php echo $ThemeSet['NewTopic']; ?></a>
- <?php } ?></td>
-</tr>
-</table>
-<div class="DivTable2">&nbsp;</div>
-<?php } } if($_GET['act']=="view") {
+if($_GET['act']=="view") {
 if($NumberReplies==null) { 
 	$NumberReplies = 0; }
 $num=$NumberReplies+1;
@@ -206,11 +180,32 @@ $pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['top
 if($ptestnext<$pagenum) {
 $pstring = $pstring."<span class=\"pagelinklast\"><a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$pagenum,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">&raquo;</a></span> "; } }
 	++$pagei; } $pstring = $pstring."</div>"; }
-echo $pstring;
 //List Page Number Code end
-if($pagenum>1) {
+$CanMakeReply = "no";
+if($TopicClosed==0&&$PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes") {
+	$CanMakeReply = "yes"; }
+if($TopicClosed==1&&$PermissionInfo['CanMakeReplysClose'][$TopicForumID]=="yes"
+	&&$PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes") {
+		$CanMakeReply = "yes"; }
 ?>
-<div class="DivPageLinks">&nbsp;</div>
+<table style="width: 100%;" class="Table2">
+<tr>
+ <td style="width: 30%; text-align: left;"><?php echo $pstring; ?></td>
+ <td style="width: 70%; text-align: right;">
+ <?php if($CatPermissionInfo['CanViewCategory'][$TopicCatID]=="yes"&&$PermissionInfo['CanViewForum'][$TopicForumID]=="yes") {
+ if($CanMakeReply=="yes") { ?>
+ <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=create&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $ThemeSet['AddReply']; ?></a>
+ <?php } if($PermissionInfo['CanMakeTopics'][$TopicForumID]=="yes") {
+	if($CanMakeReply=="yes") { ?>
+ <?php echo $ThemeSet['ButtonDivider']; } ?>
+ <a href="<?php echo url_maker($exfile['forum'],$Settings['file_ext'],"act=create&id=".$TopicForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum']); ?>"><?php echo $ThemeSet['NewTopic']; ?></a>
+ <?php } ?></td>
+</tr>
+</table>
+<?php if($pagenum>1) {
+/* <div class="DivPageLinks">&nbsp;</div> */
+?>
+<div class="DivTable2">&nbsp;</div>
 <?php }
 while ($i < $num) {
 $MyPostID=mysql_result($result,$i,"id");
@@ -1500,12 +1495,11 @@ mysql_query($queryupd); } }
 <td class="TableColumn4">&nbsp;</td>
 </tr>
 </table></div>
-<?php }
-if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes"||$PermissionInfo['CanMakeTopics'][$TopicForumID]=="yes") { ?>
+<?php } ?>
 <table class="Table2" style="width: 100%;">
 <tr>
- <td style="width: 0%; text-align: left;">&nbsp;</td>
- <td style="width: 100%; text-align: right;">
+ <td style="width: 30%; text-align: left;"><?php echo $pstring; ?></td>
+ <td style="width: 70%; text-align: right;">
  <?php if($CanMakeReply=="yes") { ?>
  <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=create&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $ThemeSet['AddReply']; ?></a>
  <?php if(isset($ThemeSet['FastReply'])&&$ThemeSet['FastReply']!=null) { ?>
@@ -1519,4 +1513,4 @@ if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes"||$PermissionInfo['CanM
 </tr>
 </table>
 <div class="DivTable2">&nbsp;</div>
-<?php } } } ?>
+<?php } } ?>

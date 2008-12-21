@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: searchs.php - Last Update: 12/21/2008 SVN 222 - Author: cooldude2k $
+    $FileInfo: searchs.php - Last Update: 12/21/2008 SVN 223 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="searchs.php"||$File3Name=="/searchs.php") {
@@ -23,6 +23,7 @@ redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"a
 @header("Content-Type: text/plain; charset=".$Settings['charset']);
 ob_clean(); echo "Sorry you do not have permission to do a search."; 
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+$pagenum = null;
 if($Settings['enable_search']=="on"||
 	$GroupInfo['CanSearch']=="yes") {
 if($_GET['act']=="topics") {
@@ -435,7 +436,16 @@ echo "<span>".$UsersName."</span>"; }
 <td class="TableColumn4" colspan="6">&nbsp;</td>
 </tr>
 </table></div>
-<?php
-@mysql_free_result($result); } } } 
-?>
+<?php if($pagenum>1) { ?>
 <div class="DivSearch">&nbsp;</div>
+<?php }
+echo $pstring;
+//List Page Number Code end
+if($pagenum>1) {
+?>
+<div class="DivPageLinks">&nbsp;</div>
+<?php }
+@mysql_free_result($result); } } } 
+if($pagenum<=1) { ?>
+<div class="DivSearch">&nbsp;</div>
+<?php } ?>

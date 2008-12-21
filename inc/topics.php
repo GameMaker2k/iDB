@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: topics.php - Last Update: 12/21/2008 SVN 222 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 12/21/2008 SVN 223 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -110,19 +110,6 @@ if($ForumType=="subforum") {
 redirect("location",$basedir.url_maker($exfile['subforum'],$Settings['file_ext'],"act=".$_GET['act']."&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['subforum'],$exqstr['subforum'],FALSE));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); } }
-if($PermissionInfo['CanMakeTopics'][$ForumID]=="yes"&&$CanHaveTopics=="yes") {
-?>
-<table style="width: 100%;" class="Table2">
-<tr>
- <td style="width: 0%; text-align: left;">&nbsp;</td>
- <td style="width: 100%; text-align: right;">
- <?php if($PermissionInfo['CanMakeTopics'][$ForumID]=="yes"&&$CanHaveTopics=="yes") { ?>
- <a href="<?php echo url_maker($exfile['forum'],$Settings['file_ext'],"act=create&id=".$ForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum']); ?>"><?php echo $ThemeSet['NewTopic']; ?></a>
- <?php } ?></td>
-</tr>
-</table>
-<div class="DivTable2">&nbsp;</div>
-<?php }
 if($_GET['act']=="view") {
 if($NumberTopics==null) { 
 	$NumberTopics = 0; }
@@ -211,11 +198,23 @@ $pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile[$For
 if($ptestnext<$pagenum) {
 $pstring = $pstring."<span class=\"pagelinklast\"><a href=\"".url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$pagenum,$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType])."\">&raquo;</a></span> "; } }
 	++$pagei; } $pstring = $pstring."</div>"; }
-echo $pstring;
+//List Page Number Code end
+?>
+<table style="width: 100%;" class="Table2">
+<tr>
+ <td style="width: 30%; text-align: left;"><?php echo $pstring; ?></td>
+ <td style="width: 70%; text-align: right;">
+ <?php if($PermissionInfo['CanMakeTopics'][$ForumID]=="yes"&&$CanHaveTopics=="yes") { ?>
+ <a href="<?php echo url_maker($exfile['forum'],$Settings['file_ext'],"act=create&id=".$ForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum']); ?>"><?php echo $ThemeSet['NewTopic']; ?></a>
+ <?php } ?></td>
+</tr>
+</table>
+<?php
 //List Page Number Code end
 if($pagenum>1) {
 ?>
-<div class="DivPageLinks">&nbsp;</div>
+<?php /*<div class="DivPageLinks">&nbsp;</div>*/?>
+<div class="DivTable2">&nbsp;</div>
 <?php } ?>
 <div class="Table1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
@@ -785,16 +784,20 @@ mysql_query($queryupd);
 </tr>
 </table></div>
 <div class="DivMkTopics">&nbsp;</div>
-<?php }
-if($PermissionInfo['CanMakeTopics'][$ForumID]=="yes"&&$CanHaveTopics=="yes") { ?>
-<table class="Table2" style="width: 100%;">
+<?php } ?>
+<table style="width: 100%;" class="Table2">
 <tr>
- <td style="width: 0%; text-align: left;">&nbsp;</td>
- <td style="width: 100%; text-align: right;">
+ <td style="width: 30%; text-align: left;"><?php echo $pstring; ?></td>
+ <td style="width: 70%; text-align: right;">
  <?php if($PermissionInfo['CanMakeTopics'][$ForumID]=="yes"&&$CanHaveTopics=="yes") { ?>
  <a href="<?php echo url_maker($exfile['forum'],$Settings['file_ext'],"act=create&id=".$ForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum']); ?>"><?php echo $ThemeSet['NewTopic']; ?></a>
  <?php } ?></td>
 </tr>
 </table>
+<?php
+//List Page Number Code end
+if($pagenum>1) {
+?>
+<?php /*<div class="DivPageLinks">&nbsp;</div>*/ ?>
 <div class="DivTable2">&nbsp;</div>
 <?php } } } ?>
