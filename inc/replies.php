@@ -11,12 +11,13 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: replies.php - Last Update: 12/21/2008 SVN 223 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 12/27/2008 SVN 224 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
 	require('index.php');
 	exit(); }
+$pstring = null; $pagenum = null;
 if(!is_numeric($_GET['id'])) { $_GET['id'] = null; }
 if(!is_numeric($_GET['post'])) { $_GET['post'] = null; }
 if(!is_numeric($_GET['page'])) { $_GET['page'] = null; }
@@ -84,7 +85,29 @@ if($PermissionInfo['CanViewForum'][$TopicForumID]=="no"||
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
-if($_GET['act']=="view") {
+if($_GET['act']!="view") { 
+$CanMakeReply = "no";
+if($TopicClosed==0&&$PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes") {
+	$CanMakeReply = "yes"; }
+if($TopicClosed==1&&$PermissionInfo['CanMakeReplysClose'][$TopicForumID]=="yes"
+	&&$PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes") {
+		$CanMakeReply = "yes"; } ?>
+<table style="width: 100%;" class="Table2">
+<tr>
+ <td style="width: 30%; text-align: left;"><?php echo $pstring; ?></td>
+ <td style="width: 70%; text-align: right;">
+ <?php if($CatPermissionInfo['CanViewCategory'][$TopicCatID]=="yes"&&$PermissionInfo['CanViewForum'][$TopicForumID]=="yes") {
+ if($CanMakeReply=="yes") { ?>
+ <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=create&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $ThemeSet['AddReply']; ?></a>
+ <?php } if($PermissionInfo['CanMakeTopics'][$TopicForumID]=="yes") {
+	if($CanMakeReply=="yes") { ?>
+ <?php echo $ThemeSet['ButtonDivider']; } ?>
+ <a href="<?php echo url_maker($exfile['forum'],$Settings['file_ext'],"act=create&id=".$TopicForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum']); ?>"><?php echo $ThemeSet['NewTopic']; ?></a>
+ <?php } ?></td>
+</tr>
+</table>
+<div class="DivTable2">&nbsp;</div>
+<?php } } if($_GET['act']=="view") {
 if($NumberReplies==null) { 
 	$NumberReplies = 0; }
 $num=$NumberReplies+1;
@@ -202,7 +225,7 @@ if($TopicClosed==1&&$PermissionInfo['CanMakeReplysClose'][$TopicForumID]=="yes"
  <?php } ?></td>
 </tr>
 </table>
-<?php if($pagenum>1) {
+<?php
 /* <div class="DivPageLinks">&nbsp;</div> */
 ?>
 <div class="DivTable2">&nbsp;</div>
@@ -471,7 +494,7 @@ echo "</table>";
 <td class="TableColumn4" colspan="2">&nbsp;</td>
 </tr>
 </table></div>
-<div class="MkFastReply">&nbsp;</div>
+<div<?php echo $fps; ?>id="MkFastReply" class="MkFastReply">&nbsp;</div>
 <?php } } if($_GET['act']=="create") {
 if($GroupInfo['HasAdminCP']!="yes"||$GroupInfo['HasModCP']!="yes") {
 if($ForumPostCountView!=0&&$MyPostCountChk<$ForumPostCountView) {
@@ -1495,7 +1518,14 @@ mysql_query($queryupd); } }
 <td class="TableColumn4">&nbsp;</td>
 </tr>
 </table></div>
-<?php } ?>
+<?php } $frnext = "off";
+if(!isset($_GET['fastreply'])) {
+	$_GET['fastreply'] = "off"; }
+if($_GET['fastreply']=="on") {
+	$frnext = "off"; $extrafe = null; }
+if($_GET['fastreply']!="on") {
+	$frnext = "on"; $extrafe = "&#35;FastReply"; }
+?>
 <table class="Table2" style="width: 100%;">
 <tr>
  <td style="width: 30%; text-align: left;"><?php echo $pstring; ?></td>
@@ -1504,7 +1534,7 @@ mysql_query($queryupd); } }
  <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=create&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $ThemeSet['AddReply']; ?></a>
  <?php if(isset($ThemeSet['FastReply'])&&$ThemeSet['FastReply']!=null) { ?>
  <?php echo $ThemeSet['ButtonDivider']; } ?>
- <a href="javascript:%20<?php echo urlencode("toggletag('FastReply');"); ?>"><?php echo $ThemeSet['FastReply']; ?></a>
+ <a onclick="toggletag('FastReply'); toggletag('MkFastReply'); return false;" href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$_GET['page']."&fastreply=".$frnext,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']).$extrafe; ?>"><?php echo $ThemeSet['FastReply']; ?></a>
  <?php } if($PermissionInfo['CanMakeTopics'][$TopicForumID]=="yes") {
 	if($CanMakeReply=="yes") { ?>
  <?php echo $ThemeSet['ButtonDivider']; } ?>
@@ -1513,4 +1543,4 @@ mysql_query($queryupd); } }
 </tr>
 </table>
 <div class="DivTable2">&nbsp;</div>
-<?php } } ?>
+<?php } ?>
