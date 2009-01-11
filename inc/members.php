@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: members.php - Last Update: 12/21/2008 SVN 223 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 1/11/2008 SVN 226 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -910,9 +910,10 @@ $_POST['Group'] = $Settings['MemberGroup'];
 $_POST['Joined'] = GMTimeStamp(); $_POST['LastActive'] = GMTimeStamp();
 $_POST['Signature'] = ""; $_POST['Interests'] = "";
 $_POST['Title'] = ""; $_POST['PostCount'] = "0";
+if(!isset($Settings['AdminValidate'])) { $Settings['AdminValidate'] = "off"; }
 if($Settings['AdminValidate']=="on"||$Settings['AdminValidate']!="off")
 { $ValidateStats="no"; $yourgroup=$Settings['ValidateGroup']; }
-if($Settings['AdminValidate']=="on")
+if($Settings['AdminValidate']=="off"||$Settings['AdminValidate']!="on")
 { $ValidateStats="yes"; $yourgroup=$Settings['MemberGroup']; }
 $HashSalt = salt_hmac(); 
 $NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$HashSalt,"sha1");
@@ -985,16 +986,16 @@ if($cookieSecure===false) {
 @setcookie("MemberName", $YourNameM, time() + (7 * 86400), $cbasedir, $cookieDomain);
 @setcookie("UserID", $YourIDM, time() + (7 * 86400), $cbasedir, $cookieDomain);
 @setcookie("SessPass", $NewPassword, time() + (7 * 86400), $cbasedir, $cookieDomain); } } }
-/*
-$SendPMtoID=$_SESSION['UserID'];
+if(isset($Settings['PMNewMembers'])) {
+if($Settings['PMNewMembers']=="yes") {
+$SendPMtoID=$YourIDMr;
 $YourPMID = 1;
 $PMTitle = "Welcome ".$Name.".";
 $YourMessage = "Hello ".$Name.". Welcome to ".$Settings['board_name'].". I hope you enjoy your stay here. ^_^ ";
 $_POST['YourDate'] = $_POST['Joined'];
 $query = query("INSERT INTO `".$Settings['sqltable']."messenger` VALUES (null,%i,%i,'%s','%s','%s','%s',0)", array($YourPMID,$SendPMtoID,'',$PMTitle,$YourMessage,$_POST['YourDate']));
-//mysql_query($query);
+mysql_query($query); } }
 @redirect("refresh",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],FALSE),"3");
-*/
 ?>
 <tr>
 	<td><span class="TableMessage">
