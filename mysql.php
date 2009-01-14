@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: mysql.php -Last Update: 12/19/2008 SVN 220 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 1/13/2008 SVN 227 - Author: cooldude2k $
 */
 //@ini_set("display_errors", true); 
 //@ini_set("display_startup_errors", true);
@@ -165,15 +165,11 @@ if($cookieSecure===false) {
 @session_start();
 //@header("Set-Cookie: PHPSESSID=" . session_id() . "; path=".$cbasedir);
 @output_reset_rewrite_vars();
-if($_GET['act']=="bsdl"||$_GET['act']=="BSDL") { $_GET['act']="bsd"; }
-if($_GET['act']=="bsd"||$_GET['act']=="bsd") {
+if($_GET['act']=="bsdl"||$_GET['act']=="BSDL"||$_GET['act']=="license"||
+	$_GET['act']=="LICENSE"||$_GET['act']=="License") { $_GET['act']="bsd"; }
+if($_GET['act']=="bsd") {
 @header("Content-Type: text/plain; charset=".$Settings['charset']);
-require("BSDL"); gzip_page($Settings['use_gzip'],$GZipEncode['Type']); die(); }
-if($_GET['act']=="gnugpl"||$_GET['act']=="GnuGPL"||
-	$_GET['act']=="GNUGPL") { $_GET['act']="gpl"; }
-if($_GET['act']=="gpl"||$_GET['act']=="gpl") {
-@header("Content-Type: text/plain; charset=".$Settings['charset']);
-require("GPL"); gzip_page($Settings['use_gzip'],$GZipEncode['Type']); die(); }
+require("LICENSE"); gzip_page($Settings['use_gzip'],$GZipEncode['Type']); die(); }
 if($_GET['act']=="README"||$_GET['act']=="ReadME") { $_GET['act']="readme"; }
 if($_GET['act']=="readme"||$_GET['act']=="ReadMe") {
 @header("Content-Type: text/plain; charset=".$Settings['charset']);
