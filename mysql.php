@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: mysql.php - Last Update: 1/13/2008 SVN 227 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 2/9/2008 SVN 230 - Author: cooldude2k $
 */
 //@ini_set("display_errors", true); 
 //@ini_set("display_startup_errors", true);
@@ -193,7 +193,7 @@ if($Settings['use_captcha']=="on") {
 if($_GET['act']=="MkCaptcha"||$_GET['act']=="Captcha") {
 	if($Settings['captcha_clean']=="on") { @ob_clean(); }
 	require($SettDir['inc']."captcha.php");
-	$aFonts = array('inc/fonts/DejaVuBd.ttf', 'inc/fonts/DejaVuIt.ttf', 'inc/fonts/DejaVu.ttf');
+	$aFonts = array('inc/fonts/VeraBd.ttf', 'inc/fonts/VeraBI.ttf', 'inc/fonts/VeraIt.ttf', 'inc/fonts/Vera.ttf');
 	$oPhpCaptcha = new PhpCaptcha($aFonts, 200, 60);
 	$RNumSize = rand(7,17); $i=0; $RandNum = null;
 	while ($i <= $RNumSize) {
