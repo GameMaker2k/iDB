@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: topics.php - Last Update: 12/27/2008 SVN 224 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 2/9/2008 SVN 229 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -211,6 +211,7 @@ if($ptestnext<$pagenum) {
 $pstring = $pstring."<span class=\"pagelinklast\"><a href=\"".url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$pagenum,$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType])."\">&raquo;</a></span> "; } }
 	++$pagei; } $pstring = $pstring."</div>"; }
 //List Page Number Code end
+if($pstring!=null||$PermissionInfo['CanMakeTopics'][$ForumID]=="yes"&&$CanHaveTopics=="yes") {
 ?>
 <table style="width: 100%;" class="Table2">
 <tr>
@@ -226,6 +227,7 @@ $pstring = $pstring."<span class=\"pagelinklast\"><a href=\"".url_maker($exfile[
 ?>
 <?php /*<div class="DivPageLinks">&nbsp;</div>*/?>
 <div class="DivTable2">&nbsp;</div>
+<?php } ?>
 <div class="Table1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableRow1">
@@ -806,7 +808,8 @@ mysql_query($queryupd);
 </table>
 <?php
 //List Page Number Code end
-if($pagenum>1||$_GET['act']!="view") {
+if($pstring!=null||$_GET['act']!="view"||
+	$PermissionInfo['CanMakeTopics'][$ForumID]=="yes"&&$CanHaveTopics=="yes") {
 ?>
 <?php /*<div class="DivPageLinks">&nbsp;</div>*/ ?>
 <div class="DivTable2">&nbsp;</div>
