@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: replies.php - Last Update: 2/22/2008 SVN 232 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 2/22/2008 SVN 233 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -416,6 +416,13 @@ if($_GET['fastreply']===true||
 if($_GET['fastreply']!==true&&
 	$_GET['fastreply']!="on") { $fps = " style=\"display: none;\" "; }
 $QuoteReply = null; $QuoteDescription = null;
+$queryra = query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `TopicID`=%i ORDER BY `TimeStamp` ASC LIMIT 1", array($_GET['id']));
+$resultra=mysql_query($queryra);
+$numrose=mysql_num_rows($resultra);
+$QuoteDescription=mysql_result($resultra,0,"Description"); 
+$QuoteDescription = str_replace("Re: ","",$QuoteDescription);
+$QuoteDescription = "Re: ".$QuoteDescription;
+@mysql_free_result($resultra);
 ?>
 <div class="Table1Border"<?php echo $fps; ?>id="FastReply">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
