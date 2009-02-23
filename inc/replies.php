@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: replies.php - Last Update: 2/9/2008 SVN 229 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 2/22/2008 SVN 232 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -518,6 +518,14 @@ if($PermissionInfo['CanMakeReplysClose'][$TopicForumID]=="no"&&$TopicClosed==1) 
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 $QuoteReply = null; $QuoteDescription = null;
+if($_GET['post']==null) {
+$query = query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `TopicID`=%i ORDER BY `TimeStamp` ASC  LIMIT 1", array($_GET['id']));
+$result=mysql_query($query);
+$num=mysql_num_rows($result);
+$QuoteDescription=mysql_result($result,0,"Description"); 
+$QuoteDescription = str_replace("Re: ","",$QuoteDescription);
+$QuoteDescription = "Re: ".$QuoteDescription;
+@mysql_free_result($result); }
 if($_GET['post']!=null) {
 $query = query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `id`=%i LIMIT 1", array($_GET['post']));
 $result=mysql_query($query);
@@ -574,7 +582,7 @@ if($rForumKarmaCountView!=0&&$MyKarmaCount<$rForumKarmaCountView) {
 $QuoteReply = null; $QuoteDescription = null; }
 if($rCategoryKarmaCountView!=0&&$MyKarmaCount<$rCategoryKarmaCountView) {
 $QuoteReply = null; $QuoteDescription = null; } } }
-if($_GET['post']==null) { $QuoteReply = null; $QuoteDescription = null; }
+if($_GET['post']==null) { $QuoteReply = null; /*$QuoteDescription = null;*/ }
 ?>
 <div class="Table1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
@@ -599,7 +607,7 @@ if($_GET['post']==null) { $QuoteReply = null; $QuoteDescription = null; }
 $renee_query=query("SELECT * FROM `".$Settings['sqltable']."smileys` WHERE `Show`='yes'", array(null));
 $renee_result=mysql_query($renee_query);
 $renee_num=mysql_num_rows($renee_result);
-$renee_s=0; $SmileRow=0; $SmileCRow=0;
+$renee_s=0; $rose_a=0; $SmileRow=0; $SmileCRow=0;
 while ($renee_s < $renee_num) { ++$SmileRow;
 $FileName=mysql_result($renee_result,$renee_s,"FileName");
 $SmileName=mysql_result($renee_result,$renee_s,"SmileName");
@@ -610,7 +618,7 @@ $ReplaceType=mysql_result($renee_result,$renee_s,"ReplaceCI");
 if($SmileRow==1) { ?><tr>
 	<?php } if($SmileRow<5) { ++$SmileCRow; ?>
 	<td>&nbsp;<img src="<?php echo $SmileDirectory."".$FileName; ?>" style="vertical-align: middle; border: 0px; cursor: pointer;" title="<?php echo $SmileName; ?>" alt="<?php echo $SmileName; ?>" onclick="addsmiley('ReplyPost','&nbsp;<?php echo htmlspecialchars($SmileText, ENT_QUOTES, $Settings['charset']); ?>&nbsp;')" />&nbsp;</td>
-	<?php } if($SmileRow==5) { ++$SmileCRow; ?>
+	<?php ++$rose_a; } if($SmileRow==5) { ++$SmileCRow; $rose_a = 0; ?>
 	<td>&nbsp;<img src="<?php echo $SmileDirectory."".$FileName; ?>" style="vertical-align: middle; border: 0px; cursor: pointer;" title="<?php echo $SmileName; ?>" alt="<?php echo $SmileName; ?>" onclick="addsmiley('ReplyPost','&nbsp;<?php echo htmlspecialchars($SmileText, ENT_QUOTES, $Settings['charset']); ?>&nbsp;')" />&nbsp;</td></tr>
 	<?php $SmileCRow=0; $SmileRow=0; }
 ++$renee_s; }

@@ -11,13 +11,14 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: pm.php - Last Update: 12/19/2008 SVN 219 - Author: cooldude2k $
+    $FileInfo: pm.php - Last Update: 2/22/2008 SVN 232 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pm.php"||$File3Name=="/pm.php") {
 	require('index.php');
 	exit(); }
 if(!is_numeric($_GET['id'])) { $_GET['id'] = null; }
+if(!is_numeric($_GET['post'])) { $_GET['post'] = null; }
 if(!is_numeric($_GET['page'])) { $_GET['page'] = null; }
 // Check if we can read/send PM
 if($_SESSION['UserGroup']==$Settings['GuestGroup']||$GroupInfo['CanPM']=="no") {
@@ -471,7 +472,12 @@ echo "<span>".$User1Name."</span>"; }
 <div style="float: left; text-align: left;">
 <span style="font-weight: bold;">Time Sent: </span><?php echo $DateSend; ?>
 </div>
-<div style="text-align: right;">&nbsp;</div>
+<div style="text-align: right;">
+<?php if(isset($ThemeSet['Report'])&&$ThemeSet['Report']!=null) { ?>
+<a href="#Act/Report"><?php echo $ThemeSet['Report']; ?></a>
+<?php } if($GroupInfo['CanPM']=="yes"&&isset($ThemeSet['QuoteReply'])&&$ThemeSet['QuoteReply']!=null) { 
+echo $ThemeSet['LineDividerTopic']; ?><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=create&id=".$User1ID."&post=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>"><?php echo $ThemeSet['QuoteReply']; ?></a>
+<?php } ?>&nbsp;</div>
 </td>
 </tr>
 <tr class="TableInfoMiniRow3">
@@ -538,6 +544,27 @@ $SendToGroupID = mysql_result($reresult,$rei,"GroupID");
 ++$rei; } } @mysql_free_result($reresult);
 if(!isset($renum)) { $renum = 0; }
 if($renum==0) { $SendMessageTo = null; }
+$QuoteReply = null; $QuoteDescription = null; $QuoteTitle = null;
+if($_GET['post']!=null) {
+if(isset($SendMessageTo)) {
+$QuoteUserName = $SendMessageTo; }
+if(!isset($SendMessageTo)) {
+$QuoteUserName = "Unknown"; }
+$query = query("SELECT * FROM `".$Settings['sqltable']."messenger` WHERE `id`=%i", array($_GET['post']));
+$result=mysql_query($query);
+$num=mysql_num_rows($result);
+$QuoteTitle=mysql_result($result,0,"MessageTitle");
+$MessageText=mysql_result($result,0,"MessageText");
+$QuoteReply = preg_replace("/\<br\>/", "<br />\n", nl2br($MessageText));
+$QuoteDescription=mysql_result($result,0,"Description");
+$result=mysql_query($query);
+$num=mysql_num_rows($result);
+$QuoteReply = remove_bad_entities($QuoteReply);
+$QuoteDescription = str_replace("Re: ","",$QuoteDescription);
+$QuoteDescription = "Re: ".$QuoteDescription;
+$QuoteTitle = str_replace("Re: ","",$QuoteTitle);
+$QuoteTitle = "Re: ".$QuoteTitle;
+$QuoteReply = $QuoteUserName.":\n(&quot;".$QuoteReply."&quot;)"; }
 ?>
 <div class="Table1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
@@ -591,10 +618,10 @@ echo "</table>";
 	<td style="width: 50%;"><input maxlength="25" type="text" name="SendMessageTo" class="TextBox" id="SendMessageTo" size="20" value="<?php echo $SendMessageTo; ?>" /></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="MessageName">Insert Message Name:</label></td>
-	<td style="width: 50%;"><input maxlength="30" type="text" name="MessageName" class="TextBox" id="MessageName" size="20" /></td>
+	<td style="width: 50%;"><input maxlength="30" type="text" name="MessageName" class="TextBox" id="MessageName" size="20" value="<?php echo $QuoteTitle; ?>" /></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="MessageDesc">Insert Message Description:</label></td>
-	<td style="width: 50%;"><input maxlength="45" type="text" name="MessageDesc" class="TextBox" id="MessageDesc" size="20" /></td>
+	<td style="width: 50%;"><input maxlength="45" type="text" name="MessageDesc" class="TextBox" id="MessageDesc" size="20" value="<?php echo $QuoteDescription; ?>" /></td>
 </tr><?php if($_SESSION['UserGroup']==$Settings['GuestGroup']) { ?><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="GuestName">Insert Guest Name:</label></td>
 	<?php if(!isset($_SESSION['GuestName'])) { ?>
@@ -607,7 +634,8 @@ echo "</table>";
 <tr style="text-align: left;">
 <td style="width: 100%;">
 <label class="TextBoxLabel" for="Message">Insert Your Message:</label><br />
-<textarea rows="10" name="Message" id="Message" cols="40" class="TextBox"></textarea><br />
+<textarea rows="10" name="Message" id="Message" cols="40" class="TextBox">
+<?php echo $QuoteReply; ?></textarea><br />
 <?php if($_SESSION['UserGroup']==$Settings['GuestGroup']&&$Settings['captcha_guest']=="on") { ?>
 <label class="TextBoxLabel" for="signcode"><img src="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=MkCaptcha",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>" alt="CAPTCHA Code" title="CAPTCHA Code" /></label><br />
 <input maxlength="25" type="text" class="TextBox" name="signcode" size="20" id="signcode" value="Enter SignCode" /><br />

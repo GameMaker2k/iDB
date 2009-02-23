@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: members.php - Last Update: 1/11/2008 SVN 226 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 2/22/2008 SVN 232 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -700,7 +700,7 @@ echo "<option value=\"".$showmin."\">0:".$showmin." minutes</option>\n"; }
 	<td style="width: 70%;"><select id="YourGender" name="YourGender" class="TextBox">
 <option value="Male">Male</option>
 <option value="Female">Female</option>
-<option value="Unknow">Unknow</option>
+<option value="Unknow">Unknown</option>
 </select></td>
 </tr><tr>
 	<td style="width: 30%;"><label class="TextBoxLabel" for="Website">Insert your Website:</label></td>
