@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: pm.php - Last Update: 2/22/2008 SVN 232 - Author: cooldude2k $
+    $FileInfo: pm.php - Last Update: 2/24/2008 SVN 234 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pm.php"||$File3Name=="/pm.php") {
@@ -564,7 +564,7 @@ $QuoteDescription = str_replace("Re: ","",$QuoteDescription);
 $QuoteDescription = "Re: ".$QuoteDescription;
 $QuoteTitle = str_replace("Re: ","",$QuoteTitle);
 $QuoteTitle = "Re: ".$QuoteTitle;
-$QuoteReply = $QuoteUserName.":\n(&quot;".$QuoteReply."&quot;)"; }
+$QuoteReply = null; }
 ?>
 <div class="Table1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
@@ -634,8 +634,7 @@ echo "</table>";
 <tr style="text-align: left;">
 <td style="width: 100%;">
 <label class="TextBoxLabel" for="Message">Insert Your Message:</label><br />
-<textarea rows="10" name="Message" id="Message" cols="40" class="TextBox">
-<?php echo $QuoteReply; ?></textarea><br />
+<textarea rows="10" name="Message" id="Message" cols="40" class="TextBox"><?php echo $QuoteReply; ?></textarea><br />
 <?php if($_SESSION['UserGroup']==$Settings['GuestGroup']&&$Settings['captcha_guest']=="on") { ?>
 <label class="TextBoxLabel" for="signcode"><img src="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=MkCaptcha",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>" alt="CAPTCHA Code" title="CAPTCHA Code" /></label><br />
 <input maxlength="25" type="text" class="TextBox" name="signcode" size="20" id="signcode" value="Enter SignCode" /><br />
