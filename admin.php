@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: admin.php - Last Update: 02/17/2008 SVN 149 - Author: cooldude2k $
+    $FileInfo: admin.php - Last Update: 3/26/2009 SVN 237 - Author: cooldude2k $
 */
 require('preindex.php');
 $usefileext = $Settings['file_ext'];
@@ -24,6 +24,7 @@ $filewpath = $exfile['admin'].$usefileext.$_SERVER['PATH_INFO'];
 <body>
 <?php
 if(!isset($_GET['subact'])) { $_GET['subact'] = null; }
+if(!isset($_POST['subact'])) { $_POST['subact'] = null; }
 require($SettDir['inc'].'navbar.php');
 if($_SESSION['UserGroup']==$Settings['GuestGroup']||$GroupInfo['HasAdminCP']=="no") {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
