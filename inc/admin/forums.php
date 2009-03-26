@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: forums.php - Last Update: 3/26/2009 SVN 237 - Author: cooldude2k $
+    $FileInfo: forums.php - Last Update: 3/26/2009 SVN 238 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="forums.php"||$File3Name=="/forums.php") {
@@ -967,7 +967,7 @@ $PermissionName = stripcslashes(htmlspecialchars($PermissionName, ENT_QUOTES, $S
 	</select></td>
 </tr> 
 <tr style="text-align: left;">
-	<td style="width: 50%;"><label class="TextBoxLabel" for="Can delete other users topics">CanDeleteTopicsCT:</label></td>
+	<td style="width: 50%;"><label class="TextBoxLabel" for="Can delete other users topics">Can delete other users topics:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="CanDeleteTopicsCT" id="CanDeleteTopicsCT">
 	<option <?php if($CanDeleteTopicsCT=="yes") { echo "selected=\"selected\" "; } ?>value="yes">yes</option>
 	<option <?php if($CanDeleteTopicsCT=="no") { echo "selected=\"selected\" "; } ?>value="no">no</option>
