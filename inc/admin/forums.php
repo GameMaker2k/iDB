@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: forums.php - Last Update: 3/26/2009 SVN 238 - Author: cooldude2k $
+    $FileInfo: forums.php - Last Update: 3/26/2009 SVN 239 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="forums.php"||$File3Name=="/forums.php") {
@@ -805,18 +805,21 @@ $getperidName=mysql_result($getperidr2,0,"Name");
 <tr class="TableMenuRow3">
 <td class="TableMenuColumn3">
 <?php 
-$fq = query("SELECT * FROM `".$Settings['sqltable']."forums` ORDER BY `id` ASC", array(null));
+$fq = query("SELECT * FROM `".$Settings['sqltable']."forums` ORDER BY `OrderID` ASC, `id` ASC", array(null));
 $fr=mysql_query($fq);
 $ai=mysql_num_rows($fr);
 $fi=0;
 while ($fi < $ai) {
 $InForumID=mysql_result($fr,$fi,"id");
 $InForumName=mysql_result($fr,$fi,"Name");
-echo $getperidq = query("SELECT * FROM `".$Settings['sqltable']."permissions` WHERE PermissionID=%i AND `ForumID`=%i LIMIT 1", array($_POST['id'],$InForumID));
+$getperidq = query("SELECT * FROM `".$Settings['sqltable']."permissions` WHERE PermissionID=%i AND `ForumID`=%i LIMIT 1", array($_POST['id'],$InForumID));
 $getperidr=mysql_query($getperidq);
 $getperidnum=mysql_num_rows($getperidr);
+$getperidNumz = null;
+$getperidID = null;
+if($getperidnum>0) {
 $getperidNumz=mysql_result($getperidr,0,"id");
-$getperidID=mysql_result($getperidr,0,"PermissionID");
+$getperidID=mysql_result($getperidr,0,"PermissionID"); }
 ?>
 <form style="display: inline;" method="post" action="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=fpermissions",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">
 <table style="text-align: left;">
@@ -832,7 +835,8 @@ Permissions for <?php echo $InForumName; ?> are set: <br />
 Permissions for <?php echo $InForumName; ?> are not set: <br />
 <input type="hidden" name="act" value="fpermissions" style="display: none;" />
 <input type="hidden" name="subact" value="create" style="display: none;" />
-<input type="hidden" name="id" value="<?php echo $getperidNumz; ?>" style="display: none;" />
+<input type="hidden" name="permid" value="<?php echo $_POST['id']; ?>" style="display: none;" />
+<input type="hidden" name="id" value="<?php echo $InForumID; ?>" style="display: none;" />
 <input type="submit" class="Button" value="Create Permissions" name="Apply_Changes" />
 <?php } ?>
 </td></tr></table>
@@ -1042,13 +1046,187 @@ $PermissionName = stripcslashes(htmlspecialchars($PermissionName, ENT_QUOTES, $S
 <?php } if(isset($_POST['id'])&&$_POST['subact']=="editnow") {
 $admincptitle = " ".$ThemeSet['TitleDivider']." Updating Settings";
 $query = query("UPDATE `".$Settings['sqltable']."permissions` SET `CanViewForum`='%s', `CanMakeTopics`='%s', `CanMakeReplys`='%s', `CanMakeReplysCT`='%s', `CanEditTopics`='%s', `CanEditTopicsCT`='%s', `CanEditReplys`='%s', `CanEditReplysCT`='%s', `CanDeleteTopics`='%s', `CanDeleteTopicsCT`='%s', `CanDeleteReplys`='%s', `CanDeleteReplysCT`='%s', `CanCloseTopics`='%s', `CanPinTopics`='%s', `CanDohtml`='%s', `CanUseBBags`='%s', `CanModForum`='%s' WHERE `id`=%i", array($_POST['CanViewForum'], $_POST['CanMakeTopics'], $_POST['CanMakeReplys'], $_POST['CanMakeReplysCT'], $_POST['CanEditTopics'], $_POST['CanEditTopicsCT'], $_POST['CanEditReplys'], $_POST['CanEditReplysCT'], $_POST['CanDeleteTopics'], $_POST['CanDeleteTopicsCT'], $_POST['CanDeleteReplys'], $_POST['CanDeleteReplysCT'], $_POST['CanCloseTopics'], $_POST['CanPinTopics'], $_POST['CanDohtml'], $_POST['CanUseBBags'], $_POST['CanModForum'], $_POST['id']));
-mysql_query($query);
+mysql_query($query); } if(isset($_POST['id'])&&$_POST['subact']=="create") { 
 ?>
 <div class="TableMenuBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableMenuRow1">
-<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Updating Settings</a></div>
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=fpermissions",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Forum Permissions Manager</a></div>
 <?php } ?>
+<table class="TableMenu" style="width: 100%;">
+<?php if($ThemeSet['TableStyle']=="table") { ?>
+<tr class="TableMenuRow1">
+<td class="TableMenuColumn1"><span style="float: left;">
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=fpermissions",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Forum Permissions Manager</a>
+</span><span style="float: right;">&nbsp;</span></td>
+</tr><?php } ?>
+<tr class="TableMenuRow2">
+<th class="TableMenuColumn2" style="width: 100%; text-align: left;">
+<span style="float: left;">&nbsp;Editing Forum Permissions: </span>
+<span style="float: right;">&nbsp;</span>
+</th>
+</tr>
+<tr class="TableMenuRow3">
+<td class="TableMenuColumn3">
+<form style="display: inline;" method="post" name="install" id="install" action="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=fpermissions",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">
+<table style="text-align: left;">
+<tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="CanViewForum">Can view forum:</label></td>
+	<td style="width: 50%;"><select size="1" class="TextBox" name="CanViewForum" id="CanViewForum">
+	<option value="yes">yes</option>
+	<option value="no">no</option>
+	</select></td>
+</tr> 
+<tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="CanMakeTopics">Can make topics:</label></td>
+	<td style="width: 50%;"><select size="1" class="TextBox" name="CanMakeTopics" id="CanMakeTopics">
+	<option value="yes">yes</option>
+	<option value="no">no</option>
+	</select></td>
+</tr> 
+<tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="CanMakeReplys">Can make replys in own:</label></td>
+	<td style="width: 50%;"><select size="1" class="TextBox" name="CanMakeReplys" id="CanMakeReplys">
+	<option value="yes">yes</option>
+	<option value="no">no</option>
+	</select></td>
+</tr> 
+<tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="CanMakeReplysCT">Can make replys other users topic:</label></td>
+	<td style="width: 50%;"><select size="1" class="TextBox" name="CanMakeReplysCT" id="CanMakeReplysCT">
+	<option value="yes">yes</option>
+	<option value="no">no</option>
+	</select></td>
+</tr> 
+<tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="CanEditTopics">Can edit own topics:</label></td>
+	<td style="width: 50%;"><select size="1" class="TextBox" name="CanEditTopics" id="CanEditTopics">
+	<option value="yes">yes</option>
+	<option value="no">no</option>
+	</select></td>
+</tr> 
+<tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="CanEditTopicsCT">Can edit other users topics:</label></td>
+	<td style="width: 50%;"><select size="1" class="TextBox" name="CanEditTopicsCT" id="CanEditTopicsCT">
+	<option value="yes">yes</option>
+	<option value="no">no</option>
+	</select></td>
+</tr> 
+<tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="CanEditReplys">Can edit own replys:</label></td>
+	<td style="width: 50%;"><select size="1" class="TextBox" name="CanEditReplys" id="CanEditReplys">
+	<option value="yes">yes</option>
+	<option value="no">no</option>
+	</select></td>
+</tr> 
+<tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="CanEditReplysCT">Can edit other users replys:</label></td>
+	<td style="width: 50%;"><select size="1" class="TextBox" name="CanEditReplysCT" id="CanEditReplysCT">
+	<option value="yes">yes</option>
+	<option value="no">no</option>
+	</select></td>
+</tr> 
+<tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="CanDeleteTopics">Can delete own topics:</label></td>
+	<td style="width: 50%;"><select size="1" class="TextBox" name="CanDeleteTopics" id="CanDeleteTopics">
+	<option value="yes">yes</option>
+	<option value="no">no</option>
+	</select></td>
+</tr> 
+<tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="Can delete other users topics">Can delete other users topics:</label></td>
+	<td style="width: 50%;"><select size="1" class="TextBox" name="CanDeleteTopicsCT" id="CanDeleteTopicsCT">
+	<option value="yes">yes</option>
+	<option value="no">no</option>
+	</select></td>
+</tr> 
+<tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="CanDeleteReplys">Can delete own replys:</label></td>
+	<td style="width: 50%;"><select size="1" class="TextBox" name="CanDeleteReplys" id="CanDeleteReplys">
+	<option value="yes">yes</option>
+	<option value="no">no</option>
+	</select></td>
+</tr> 
+<tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="CanDeleteReplysCT">Can delete other users replys:</label></td>
+	<td style="width: 50%;"><select size="1" class="TextBox" name="CanDeleteReplysCT" id="CanDeleteReplysCT">
+	<option value="yes">yes</option>
+	<option value="no">no</option>
+	</select></td>
+</tr> 
+<tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="CanCloseTopics">Can close topics:</label></td>
+	<td style="width: 50%;"><select size="1" class="TextBox" name="CanCloseTopics" id="CanCloseTopics">
+	<option value="yes">yes</option>
+	<option value="no">no</option>
+	</select></td>
+</tr> 
+<tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="CanPinTopics">Can pin topics:</label></td>
+	<td style="width: 50%;"><select size="1" class="TextBox" name="CanPinTopics" id="CanPinTopics">
+	<option value="yes">yes</option>
+	<option value="no">no</option>
+	</select></td>
+</tr> 
+<tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="CanDohtml">Can DoHTML:</label></td>
+	<td style="width: 50%;"><select size="1" class="TextBox" name="CanDohtml" id="CanDohtml">
+	<option value="yes">yes</option>
+	<option value="no">no</option>
+	</select></td>
+</tr> 
+<tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="CanUseBBags">Can use BBags:</label></td>
+	<td style="width: 50%;"><select size="1" class="TextBox" name="CanUseBBags" id="CanUseBBags">
+	<option value="yes">yes</option>
+	<option value="no">no</option>
+	</select></td>
+</tr> 
+<tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="CanModForum">Can moderate forum:</label></td>
+	<td style="width: 50%;"><select size="1" class="TextBox" name="CanModForum" id="CanModForum">
+	<option value="yes">yes</option>
+	<option value="no">no</option>
+	</select></td>
+</tr></table>
+<table style="text-align: left;">
+<tr style="text-align: left;">
+<td style="width: 100%;">
+<input type="hidden" name="act" value="fpermissions" style="display: none;" />
+<input type="hidden" name="subact" value="makenow" style="display: none;" />
+<input type="hidden" name="id" value="<?php echo $_POST['id']; ?>" style="display: none;" />
+<input type="hidden" name="permid" value="<?php echo $_POST['permid']; ?>" style="display: none;" />
+<input type="submit" class="Button" value="Create Permissions" name="Apply_Changes" />
+<input type="reset" value="Reset Form" class="Button" name="Reset_Form" />
+</td></tr></table>
+</form>
+</td>
+</tr>
+<tr class="TableMenuRow4">
+<td class="TableMenuColumn4">&nbsp;</td>
+</tr>
+</table>
+</div>
+<?php } if(isset($_POST['id'])&&isset($_POST['permid'])&&$_POST['subact']=="makenow") {
+$admincptitle = " ".$ThemeSet['TitleDivider']." Updating Settings";
+$prequery = query("SELECT * FROM `".$Settings['sqltable']."permissions` WHERE `id`=%i LIMIT 1", array($_POST['permid']));
+$preresult=mysql_query($prequery);
+$prenum=mysql_num_rows($preresult);
+if($prenum==0) { redirect("location",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],false)); @mysql_free_result($preresult);
+ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+if($prenum>=1) {
+$PermissionName=mysql_result($preresult,0,"Name"); 
+@mysql_free_result($preresult); }
+$nextidnum = getnextid($Settings['sqltable'],"permissions");
+echo $query = query("INSERT INTO `".$Settings['sqltable']."permissions` VALUES (%i, %i, '%s', %i, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')", array($nextidnum, $_POST['permid'], $PermissionName, $_POST['id'], $_POST['CanViewForum'], $_POST['CanMakeTopics'], $_POST['CanMakeReplys'], $_POST['CanMakeReplysCT'], $_POST['CanEditTopics'], $_POST['CanEditTopicsCT'], $_POST['CanEditReplys'], $_POST['CanEditReplysCT'], $_POST['CanDeleteTopics'], $_POST['CanDeleteTopicsCT'], $_POST['CanDeleteReplys'], $_POST['CanDeleteReplysCT'], $_POST['CanCloseTopics'], $_POST['CanPinTopics'], $_POST['CanDohtml'], $_POST['CanUseBBags'], $_POST['CanModForum'])); 
+mysql_query($query); }
+?>
+<?php } if($_POST['subact']=="editnow"||$_POST['subact']=="makenow") { ?>
+<div class="TableMenuBorder">
+<?php if($ThemeSet['TableStyle']=="div") { ?>
+<div class="TableMenuRow1">
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Updating Settings</a></div>
 <table class="TableMenu" style="width: 100%;">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableMenuRow1">
@@ -1061,15 +1239,20 @@ mysql_query($query);
 </tr>
 <tr class="TableMenuRow3" id="ProfileUpdate">
 <td class="TableMenuColumn3">
+<?php if(isset($_POST['id'])&&$_POST['subact']=="editnow") { ?>
 <div style="text-align: center;">
 	<br />The permission was edited successfully. <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to go back. ^_^<br />&nbsp;
 	</div>
+<?php } if(isset($_POST['id'])&&isset($_POST['permid'])&&$_POST['subact']=="makenow") { ?>
+<div style="text-align: center;">
+	<br />The permission was created successfully. <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to go back. ^_^<br />&nbsp;
+	</div>
+<?php } ?>
 </td></tr>
 <tr id="ProfileTitleEnd" class="TableMenuRow4">
 <td class="TableMenuColumn4">&nbsp;</td>
 </tr></table></div> 
-<?php }
-if(isset($_POST['id'])&&$_POST['subact']=="create") { echo "create"; } } ?>
+<?php } } ?>
 </td></tr>
 </table>
 <div>&nbsp;</div>
