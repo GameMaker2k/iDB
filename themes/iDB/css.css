@@ -10,7 +10,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
     $ThemeInfo - Name: iDB Theme - Author: cooldude2k $
-    $FileInfo: css.css - Last Update: 12/21/2008 SVN 223 - Author: cooldude2k $
+    $FileInfo: css.css - Last Update: 3/26/2009 SVN 240 - Author: cooldude2k $
 */
 
 html {
@@ -66,6 +66,10 @@ text-decoration: none;
 
 .noborder {
 border: 0;
+}
+
+.CalDate, .CalDateCurrent {
+display: inline;
 }
 
 img {
