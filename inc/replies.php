@@ -11,7 +11,7 @@
     Copyright 2004-2009 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: replies.php - Last Update: 3/07/2009 SVN 236 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 3/27/2009 SVN 241 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -1147,7 +1147,7 @@ $ReplyDescription=mysql_result($ersresult,0,"Description");
 $ReplyDescription = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $ReplyDescription);
 //$ReplyDescription = @remove_spaces($ReplyDescription);*/
 $ReplyGuestName=mysql_result($ersresult,0,"GuestName");
-$ReplyGuestName = stripcslashes(htmlspecialchars($ReplyGuestName, ENT_QUOTES, $Settings['charset']));
+//$ReplyGuestName = stripcslashes(htmlspecialchars($ReplyGuestName, ENT_QUOTES, $Settings['charset']));
 //$ReplyGuestName = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $ReplyGuestName);
 $ReplyGuestName = @remove_spaces($ReplyGuestName);
 $ReplyUser=mysql_result($ersresult,0,"UserID");
@@ -1167,7 +1167,7 @@ if($PermissionInfo['CanModForum'][$TopicForumID]=="yes"&&
 	$ShowEditTopic = true; } 
 if($PermissionInfo['CanEditTopicsClose'][$TopicForumID]=="no"&&$TopicClosed==1) {
 	$ShowEditTopic = null; } }
-$TopicName = stripcslashes(htmlspecialchars($TopicName, ENT_QUOTES, $Settings['charset']));
+//$TopicName = stripcslashes(htmlspecialchars($TopicName, ENT_QUOTES, $Settings['charset']));
 //$TopicName = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $TopicName);
 $TopicName = @remove_spaces($TopicName);
 @mysql_free_result($gtsresult);
