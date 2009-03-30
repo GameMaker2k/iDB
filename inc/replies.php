@@ -11,7 +11,7 @@
     Copyright 2004-2009 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: replies.php - Last Update: 3/27/2009 SVN 241 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 3/29/2009 SVN 242 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -537,6 +537,7 @@ if($_GET['post']!=null) {
 $query = query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `id`=%i LIMIT 1", array($_GET['post']));
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
+if($num>=1) {
 $QuoteReplyID=mysql_result($result,0,"id");
 $QuoteReplyFID=mysql_result($result,0,"ForumID");
 $QuoteReplyCID=mysql_result($result,0,"CategoryID");
@@ -559,7 +560,7 @@ $QuoteReply = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $QuoteReply
 $QuoteReply = remove_bad_entities($QuoteReply);
 $QuoteDescription = str_replace("Re: ","",$QuoteDescription);
 $QuoteDescription = "Re: ".$QuoteDescription;
-$QuoteReply = $QuoteUserName.":\n(&quot;".$QuoteReply."&quot;)"; 
+$QuoteReply = $QuoteUserName.":\n(&quot;".$QuoteReply."&quot;)"; } 
 if(!isset($PermissionInfo['CanViewForum'][$QuoteReplyFID])) {
 	$PermissionInfo['CanViewForum'][$QuoteReplyFID] = "no"; }
 if($PermissionInfo['CanViewForum'][$QuoteReplyFID]=="no") {
@@ -569,7 +570,7 @@ if(!isset($CatPermissionInfo['CanViewCategory'][$QuoteReplyCID])) {
 if($CatPermissionInfo['CanViewCategory'][$QuoteReplyCID]=="no") {
 	$QuoteReply = null; $QuoteDescription = null; } }
 if($GroupInfo['HasAdminCP']!="yes"||$GroupInfo['HasModCP']!="yes") {
-if($_GET['post']!=null) {
+if($_GET['post']!=null&&$num>=1) {
 $rforumcheck = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i  LIMIT 1", array($QuoteReplyFID));
 $rfmckresult=mysql_query($rforumcheck);
 $rForumPostCountView=mysql_result($rfmckresult,0,"PostCountView");
@@ -589,7 +590,7 @@ if($rForumKarmaCountView!=0&&$MyKarmaCount<$rForumKarmaCountView) {
 $QuoteReply = null; $QuoteDescription = null; }
 if($rCategoryKarmaCountView!=0&&$MyKarmaCount<$rCategoryKarmaCountView) {
 $QuoteReply = null; $QuoteDescription = null; } } }
-if($_GET['post']==null) { $QuoteReply = null; /*$QuoteDescription = null;*/ }
+if($_GET['post']==null||$num<1) { $QuoteReply = null; /*$QuoteDescription = null;*/ }
 ?>
 <div class="Table1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
