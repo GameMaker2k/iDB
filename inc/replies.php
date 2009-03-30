@@ -11,7 +11,7 @@
     Copyright 2004-2009 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: replies.php - Last Update: 3/29/2009 SVN 242 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 3/29/2009 SVN 243 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -560,7 +560,7 @@ $QuoteReply = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $QuoteReply
 $QuoteReply = remove_bad_entities($QuoteReply);
 $QuoteDescription = str_replace("Re: ","",$QuoteDescription);
 $QuoteDescription = "Re: ".$QuoteDescription;
-$QuoteReply = $QuoteUserName.":\n(&quot;".$QuoteReply."&quot;)"; } 
+$QuoteReply = $QuoteUserName.":\n(&quot;".$QuoteReply."&quot;)";
 if(!isset($PermissionInfo['CanViewForum'][$QuoteReplyFID])) {
 	$PermissionInfo['CanViewForum'][$QuoteReplyFID] = "no"; }
 if($PermissionInfo['CanViewForum'][$QuoteReplyFID]=="no") {
@@ -568,7 +568,7 @@ if($PermissionInfo['CanViewForum'][$QuoteReplyFID]=="no") {
 if(!isset($CatPermissionInfo['CanViewCategory'][$QuoteReplyCID])) {
 	$CatPermissionInfo['CanViewCategory'][$QuoteReplyCID] = "no"; }
 if($CatPermissionInfo['CanViewCategory'][$QuoteReplyCID]=="no") {
-	$QuoteReply = null; $QuoteDescription = null; } }
+	$QuoteReply = null; $QuoteDescription = null; } } }
 if($GroupInfo['HasAdminCP']!="yes"||$GroupInfo['HasModCP']!="yes") {
 if($_GET['post']!=null&&$num>=1) {
 $rforumcheck = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i  LIMIT 1", array($QuoteReplyFID));
