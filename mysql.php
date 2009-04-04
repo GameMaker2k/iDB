@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
-    Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
+    Copyright 2004-2009 Cool Dude 2k - http://idb.berlios.de/
+    Copyright 2004-2009 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: mysql.php - Last Update: 2/9/2008 SVN 230 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 4/04/2009 SVN 244 - Author: cooldude2k $
 */
 //@ini_set("display_errors", true); 
 //@ini_set("display_startup_errors", true);
@@ -35,6 +35,8 @@ if($Settings['fixbasedir']=="off") {
 	$Settings['fixbasedir'] = null; }
 if($Settings['fixcookiedir']=="off") {
 	$Settings['fixcookiedir'] = null; }
+if($Settings['idburl']=="localhost") { @header("Content-Type: text/plain; charset=UTF-8");
+echo "500 Error: URL is malformed. Try reinstalling iDB."; die(); }
 if($Settings['fixbasedir']=="on") {
 if($Settings['idburl']!=null&&$Settings['idburl']!="localhost") {
 $PathsTest = parse_url($Settings['idburl']);
