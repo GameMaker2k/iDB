@@ -12,7 +12,7 @@
     Copyright 2004-2009 Game Maker 2k - http://intdb.sourceforge.net/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mkconfig.php - Last Update: 4/04/2009 SVN 244 - Author: cooldude2k $
+    $FileInfo: mkconfig.php - Last Update: 4/22/2009 SVN 245 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mkconfig.php"||$File3Name=="/mkconfig.php") {
@@ -113,7 +113,7 @@ $query = query("INSERT INTO `".$_POST['tableprefix']."events` VALUES (1, -1, '".
 mysql_query($query);
 $query = query("INSERT INTO `".$_POST['tableprefix']."forums` VALUES (1,1,1,'A Test Forum','yes','forum',0,'http://',0,0,'A Test Board.','off',0,0,'yes',15,1,1)", array(null));
 mysql_query($query);
-$query = query("INSERT INTO `".$_POST['tableprefix']."topics` VALUES (1,1,1,-1,'".$iDB_Author."',%i,%i,'Welcome','Install was successful',0,0,1,1)", array($YourDate,$YourDate));
+$query = query("INSERT INTO `".$_POST['tableprefix']."topics` VALUES (1,1,1,0,-1,'".$iDB_Author."',%i,%i,'Welcome','Install was successful',0,0,1,1)", array($YourDate,$YourDate));
 mysql_query($query);
 $query = query("INSERT INTO `".$_POST['tableprefix']."posts` VALUES (1,1,1,1,-1,'".$iDB_Author."',%i,%i,1,'Welcome to Your Message Board. :) ','Install was successful','127.0.0.1','127.0.0.1')", array($YourDate,$YourEditDate)); 
 mysql_query($query);

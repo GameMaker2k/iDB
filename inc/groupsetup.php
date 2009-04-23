@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: groupsetup.php - Last Update: 12/18/2008 SVN 218 - Author: cooldude2k $
+    $FileInfo: groupsetup.php - Last Update: 4/22/2009 SVN 245 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="groupsetup.php"||$File3Name=="/groupsetup.php") {
@@ -107,6 +107,10 @@ $GroupInfo['NameSuffix']=mysql_result($gruresult,0,"NameSuffix");
 $GroupInfo['CanViewBoard']=mysql_result($gruresult,0,"CanViewBoard");
 if($GroupInfo['CanViewBoard']!="yes"&&$GroupInfo['CanViewBoard']!="no") {
 		$GruError = true; }
+$GroupInfo['FloodControl']=mysql_result($gruresult,0,"FloodControl");
+if(!is_numeric($GroupInfo['FloodControl'])) { $GroupInfo['FloodControl'] = 30; }
+$GroupInfo['SearchFlood']=mysql_result($gruresult,0,"SearchFlood");
+if(!is_numeric($GroupInfo['SearchFlood'])) { $GroupInfo['SearchFlood'] = 30; }
 $GroupInfo['CanEditProfile']=mysql_result($gruresult,0,"CanEditProfile");
 if($GroupInfo['CanEditProfile']!="yes"&&$GroupInfo['CanEditProfile']!="no") {
 		$GruError = true; }
