@@ -11,8 +11,9 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: subforum.php - Last Update: 12/09/2008 SVN 207 - Author: cooldude2k $
+    $FileInfo: subforum.php - Last Update: 5/01/2009 SVN 246 - Author: cooldude2k $
 */
+$checklowview = true;
 require('preindex.php');
 $usefileext = $Settings['file_ext'];
 if($ext=="noext"||$ext=="no ext"||$ext=="no+ext") { $usefileext = ""; }
@@ -28,7 +29,8 @@ if($Settings['enable_rss']=="on") {
 <title> <?php echo $Settings['board_name'].$idbpowertitle; ?> </title>
 </head>
 <body>
-<?php require($SettDir['inc'].'navbar.php');
+<?php if($_GET['act']!="lowview") {
+require($SettDir['inc'].'navbar.php'); }
 $ForumCheck = null;
 if($_GET['act']==null)
 { $_GET['act']="view"; }
@@ -36,6 +38,8 @@ if(!is_numeric($_GET['id']))
 { $_GET['id']="1"; }
 if($_GET['act']=="view")
 { require($SettDir['inc'].'subforums.php'); }
+if($_GET['act']=="lowview")
+{ require($SettDir['inc'].'lowsubforums.php'); }
 require($SettDir['inc'].'endpage.php');
 if(!isset($ForumName)) { $ForumName = null; }
 ?>

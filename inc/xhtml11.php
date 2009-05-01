@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: xhtml11.php - Last Update: 12/11/2008 SVN 210 - Author: cooldude2k $
+    $FileInfo: xhtml11.php - Last Update: 5/01/2009 SVN 246 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="xhtml11.php"||$File3Name=="/xhtml11.php") {
@@ -40,13 +40,14 @@ if($Settings['output_type']!="xhtml") {
 	if($Settings['output_type']!="html") {
 		$ccstart = "//<!--"; $ccend = "//-->";
 @header("Content-Type: text/html; charset=".$Settings['charset']); } }
+if($checklowview===true) { $ThemeSet['CSSType'] = "lowview"; }
 if($ThemeSet['CSSType']!="import"&&
    $ThemeSet['CSSType']!="link"&&
+   $ThemeSet['CSSType']!="lowview"&&
    $ThemeSet['CSSType']!="xml") { 
    $ThemeSet['CSSType'] = "import"; }
 if($ThemeSet['CSSType']=="xhtml") {
    xml_tag_make("xml-stylesheet","type=text/css&href=".$ThemeSet['CSS']); }
-if($ThemeSet['CSSType']!="xhtml") { $ThemeSet['CSSType'] = "import"; }
 @header("Content-Style-Type: text/css");
 @header("Content-Script-Type: text/javascript");
 if($Settings['showverinfo']!="on") {
@@ -111,6 +112,24 @@ if($Settings['idburl']!="localhost"&&$Settings['idburl']!=null) {
 <?php } if($ThemeSet['CSSType']=="link") { ?>
 <link rel="prefetch alternate stylesheet" href="<?php echo $ThemeSet['CSS']; ?>" />
 <link rel="stylesheet" type="text/css" href="<?php echo $ThemeSet['CSS']; ?>" />
+<?php } if($ThemeSet['CSSType']=="lowview") { ?>
+<style type="text/css">
+body {
+background-color: #FFFFFF;
+color: #000000;
+font-family: Verdana, Tahoma, Arial, Trebuchet MS, Sans-Serif, Georgia, Courier, Times New Roman, Serif;
+font-size: 1em;
+margin: 20px;
+padding: 0px;
+}
+.copyright {
+text-align: center;
+font-family: Sans-Serif;
+font-size: 12px;
+line-height: 11px;
+color: #000000;
+}
+</style>
 <?php } if($ThemeSet['FavIcon']!=null) { ?>
 <link rel="icon" href="<?php echo $ThemeSet['FavIcon']; ?>" />
 <link rel="shortcut icon" href="<?php echo $ThemeSet['FavIcon']; ?>" />

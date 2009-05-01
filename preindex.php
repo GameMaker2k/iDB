@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: preindex.php - Last Update: 12/09/2008 SVN 207 - Author: cooldude2k $
+    $FileInfo: preindex.php - Last Update: 5/01/2009 SVN 246 - Author: cooldude2k $
 */
 $pretime = explode(" ", microtime());
 $utime = $pretime[0];
@@ -22,6 +22,12 @@ if ($File3Name=="preindex.php"||$File3Name=="/preindex.php") {
 	@header('Location: index.php');
 	exit(); }
 require('mysql.php');
+if(!isset($checklowview)) {
+	$checklowview = false; }
+if($checklowview!==false&&$checklowview!==true) {
+	$checklowview = false; }
+if($_GET['act']!="lowview") { 
+	$checklowview = false; }
 if($Settings['enable_rss']=="on") {
 if(!isset($_GET['feed'])) { $_GET['feed'] = null; }
 if($_GET['feed']=="rss"||$_GET['act']=="Feed"||$_GET['feed']=="atom") {
