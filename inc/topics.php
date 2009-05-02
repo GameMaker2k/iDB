@@ -8,8 +8,8 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
-    Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
+    Copyright 2004-2009 Cool Dude 2k - http://idb.berlios.de/
+    Copyright 2004-2009 Game Maker 2k - http://intdb.sourceforge.net/
 
     $FileInfo: topics.php - Last Update: 4/22/2009 SVN 245 - Author: cooldude2k $
 */
@@ -152,7 +152,7 @@ $PageLimit = $Settings['max_topics'] * $snumber;
 if($PageLimit<0) { $PageLimit = 0; }
 //End Topic Page Code
 $i=0;
-$query = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `ForumID`=%i ORDER BY `Pinned` DESC, `LastUpdate` DESC LIMIT %i,%i", array($_GET['id'],$PageLimit,$Settings['max_topics']));
+$query = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE (`ForumID`=%i) OR (`OldForumID`=%i) ORDER BY `Pinned` DESC, `LastUpdate` DESC LIMIT %i,%i", array($_GET['id'],$_GET['id'],$PageLimit,$Settings['max_topics']));
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
 //List Page Number Code Start

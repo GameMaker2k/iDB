@@ -8,12 +8,14 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
-    Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
+    Copyright 2004-2009 Cool Dude 2k - http://idb.berlios.de/
+    Copyright 2004-2009 Game Maker 2k - http://intdb.sourceforge.net/
     iDB Installer made by Game Maker 2k - http://idb.berlios.de/support/category.php?act=view&id=2
 
-    $FileInfo: install.php - Last Update: 12/12/2008 SVN 215 - Author: cooldude2k $
+    $FileInfo: install.php - Last Update: 5/01/2009 SVN 247 - Author: cooldude2k $
 */
+if(@ini_get("register_globals")) {
+require_once('inc/misc/killglobals.php'); }
 @error_reporting(E_ALL ^ E_NOTICE);
 if(@ini_get("register_globals")) { 
 	if(!isset($SettDir['misc'])) { $SettDir['misc'] = "inc/misc/"; }

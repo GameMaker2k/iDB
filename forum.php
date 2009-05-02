@@ -8,11 +8,13 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
-    Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
+    Copyright 2004-2009 Cool Dude 2k - http://idb.berlios.de/
+    Copyright 2004-2009 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: forum.php - Last Update: 5/01/2009 SVN 246 - Author: cooldude2k $
+    $FileInfo: forum.php - Last Update: 5/01/2009 SVN 247 - Author: cooldude2k $
 */
+if(@ini_get("register_globals")) {
+require_once('inc/misc/killglobals.php'); }
 $checklowview = true;
 require('preindex.php');
 $usefileext = $Settings['file_ext'];
@@ -48,7 +50,7 @@ if(!isset($ForumName)) { $ForumName = null; }
 </body>
 </html>
 <?php 
-if($_GET['act']=="view") {
+if($_GET['act']=="view"||$_GET['act']=="lowview") {
 change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." ".$ForumName,$Settings['use_gzip'],$GZipEncode['Type']); } 
 if($_GET['act']=="create") {
 change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." Making a Topic",$Settings['use_gzip'],$GZipEncode['Type']); }

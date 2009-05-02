@@ -11,7 +11,7 @@
     Copyright 2004-2009 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: mysql.php - Last Update: 4/04/2009 SVN 244 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 5/01/2009 SVN 247 - Author: cooldude2k $
 */
 //@ini_set("display_errors", true); 
 //@ini_set("display_startup_errors", true);
@@ -22,10 +22,6 @@ $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mysql.php"||$File3Name=="/mysql.php") {
 	@header('Location: index.php');
 	exit(); }
-if(@ini_get("register_globals")) { require('settings.php');
-if(!isset($SettDir['misc'])) { $SettDir['misc'] = "inc/misc/"; }
-	require_once($SettDir['misc'].'killglobals.php'); }
-$starttime = $_POST['starttime'];
 require('settings.php');
 if(!isset($Settings['showverinfo'])) { 
 	$Settings['showverinfo'] = "on"; }

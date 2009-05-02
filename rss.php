@@ -8,11 +8,13 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
-    Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
+    Copyright 2004-2009 Cool Dude 2k - http://idb.berlios.de/
+    Copyright 2004-2009 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: rss.php - Last Update: 12/10/2008 SVN 212 - Author: cooldude2k $
+    $FileInfo: rss.php - Last Update: 5/01/2009 SVN 247 - Author: cooldude2k $
 */
+if(@ini_get("register_globals")) {
+require_once('inc/misc/killglobals.php'); }
 $pretime = explode(" ", microtime());
 $utime = $pretime[0];
 $time = $pretime[1];
