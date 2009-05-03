@@ -11,10 +11,11 @@
     Copyright 2004-2009 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: subcategory.php - Last Update: 5/01/2009 SVN 247 - Author: cooldude2k $
+    $FileInfo: subcategory.php - Last Update: 5/03/2009 SVN 248 - Author: cooldude2k $
 */
 if(@ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }
+$checklowview = true;
 require('preindex.php');
 $usefileext = $Settings['file_ext'];
 if($ext=="noext"||$ext=="no ext"||$ext=="no+ext") { $usefileext = ""; }
@@ -26,13 +27,16 @@ if(!is_numeric($_GET['id']))
 <title> <?php echo $Settings['board_name'].$idbpowertitle; ?> </title>
 </head>
 <body>
-<?php require($SettDir['inc'].'navbar.php');
+<?php if($_GET['act']!="lowview") {
+require($SettDir['inc'].'navbar.php'); }
 if($_GET['act']==null)
 { $_GET['act']="view"; }
 if(!is_numeric($_GET['id']))
 { $_GET['id']="1"; }
 if($_GET['act']=="view")
 { require($SettDir['inc'].'subcategories.php'); }
+if($_GET['act']=="lowview")
+{ require($SettDir['inc'].'lowsubcategories.php'); }
 if($_GET['act']=="view"||$_GET['act']=="stats")
 { require($SettDir['inc'].'stats.php'); }
 require($SettDir['inc'].'endpage.php');

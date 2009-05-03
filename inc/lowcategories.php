@@ -11,30 +11,26 @@
     Copyright 2004-2009 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: lowforums.php - Last Update: 5/03/2009 SVN 248 - Author: cooldude2k $
+    $FileInfo: lowcategories.php - Last Update: 5/03/2009 SVN 248 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
-if ($File3Name=="lowforums.php"||$File3Name=="/lowforums.php") {
+if ($File3Name=="lowcategories.php"||$File3Name=="/lowcategories.php") {
 	require('index.php');
 	exit(); }
-$prequery = query("SELECT * FROM `".$Settings['sqltable']."categories` WHERE `ShowCategory`='yes' AND `InSubCategory`=0 ORDER BY `OrderID` ASC, `id` ASC", array());
+if(!is_numeric($_GET['id'])) { $_GET['id'] = null; }
+$prequery = query("SELECT * FROM `".$Settings['sqltable']."categories` WHERE `id`=%i LIMIT 1", array($_GET['id']));
 $preresult=mysql_query($prequery);
 $prenum=mysql_num_rows($preresult);
-$prei=0;
-?>
-<div style="font-size: 1.0em; font-weight: bold; margin-bottom: 10px; padding-top: 3px; width: auto;">Full Version: <a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $Settings['board_name']; ?></a></div>
-<div style="padding: 10px; border: 1px solid gray;"><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=lowview",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">Board index</a></div>
-<div>&nbsp;</div>
-<div style="padding: 10px; border: 1px solid gray;">
-<ul style="list-style-type: none;">
-<?php
-while ($prei < $prenum) {
-$CategoryID=mysql_result($preresult,$prei,"id");
-$CategoryName=mysql_result($preresult,$prei,"Name");
-$CategoryShow=mysql_result($preresult,$prei,"ShowCategory");
-$CategoryType=mysql_result($preresult,$prei,"CategoryType");
-$SubShowForums=mysql_result($preresult,$prei,"SubShowForums");
-$CategoryDescription=mysql_result($preresult,$prei,"Description");
+if($prenum==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=lowview",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); @mysql_free_result($preresult);
+ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+if($prenum>=1) {
+$CategoryID=mysql_result($preresult,0,"id");
+$CategoryName=mysql_result($preresult,0,"Name");
+$CategoryShow=mysql_result($preresult,0,"ShowCategory");
+$CategoryType=mysql_result($preresult,0,"CategoryType");
+$SubShowForums=mysql_result($preresult,0,"SubShowForums");
+$CategoryDescription=mysql_result($preresult,0,"Description");
 $CategoryType = strtolower($CategoryType); $SubShowForums = strtolower($SubShowForums);
 $CategoryPostCountView=mysql_result($preresult,0,"PostCountView");
 $CategoryKarmaCountView=mysql_result($preresult,0,"KarmaCountView");
@@ -45,8 +41,27 @@ if($CategoryPostCountView!=0&&$MyPostCountChk<$CategoryPostCountView) {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=lowview",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); }
 if($CategoryKarmaCountView!=0&&$MyKarmaCount<$CategoryKarmaCountView) {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=lowview",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); } }
-if(isset($CatPermissionInfo['CanViewCategory'][$CategoryID])&&
-	$CatPermissionInfo['CanViewCategory'][$CategoryID]=="yes") {
+if(!isset($CatPermissionInfo['CanViewCategory'][$CategoryID])) {
+	$CatPermissionInfo['CanViewCategory'][$CategoryID] = "no"; }
+if($CatPermissionInfo['CanViewCategory'][$CategoryID]=="no"||
+	$CatPermissionInfo['CanViewCategory'][$CategoryID]!="yes") {
+redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=lowview",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
+ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+if($CatPermissionInfo['CanViewCategory'][$CategoryID]=="yes") {
+if(!isset($CatCheck)) { $CatCheck = null; } 
+if($CatCheck!="skip") {
+?>
+<div style="font-size: 1.0em; font-weight: bold; margin-bottom: 10px; padding-top: 3px; width: auto;">Full Version: <a href="<?php echo url_maker($exfile[$CategoryType],$Settings['file_ext'],"act=view&id=".$CategoryID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$CategoryType],$exqstr[$CategoryType]); ?>"><?php echo $CategoryName; ?></a></div>
+<div style="padding: 10px; border: 1px solid gray;"><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=lowview",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">Board index</a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile[$CategoryType],$Settings['file_ext'],"act=lowview&id=".$CategoryID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$CategoryType],$exqstr[$CategoryType]); ?>"><?php echo $CategoryName; ?></a></div>
+<div>&nbsp;</div>
+<div style="padding: 10px; border: 1px solid gray;">
+<ul style="list-style-type: none;">
+<?php
+if($CategoryType=="subcategory") {
+redirect("location",$basedir.url_maker($exfile['subcategory'],$Settings['file_ext'],"act=".$_GET['act']."&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['subcategory'],$exqstr['subcategory'],FALSE));
+ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); } }
 $query = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `ShowForum`='yes' AND `CategoryID`=%i AND `InSubForum`=0 ORDER BY `OrderID` ASC, `id` ASC", array($CategoryID));
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
@@ -87,7 +102,6 @@ $sfurl = "<a href=\"";
 $sfurl = url_maker($exfile[$SubsForumType],$Settings['file_ext'],"act=lowview&id=".$SubsForumID.$ExStr,$Settings['qstr'],$Settings['qsep'],$prexqstr[$SubsForumType],$exqstr[$SubsForumType]);
 $sfurl = "<li><ul style=\"list-style-type: none;\"><li><a href=\"".$sfurl."\">".$SubsForumName."</a> (".$NumsPosts." posts)</li></ul></li>";
 if($apcl==1) {
-$sflist = null;
 $sflist = $sflist." ".$sfurl; }
 if($apcl>1) {
 $sflist = $sflist." ".$sfurl; }
@@ -98,21 +112,7 @@ if(isset($PermissionInfo['CanViewForum'][$ForumID])&&
 	$PermissionInfo['CanViewForum'][$ForumID]=="yes") {
 $LastTopic = "&nbsp;<br />&nbsp;<br />&nbsp;";
 if(!isset($LastTopic)) { $LastTopic = null; }
-$gltnum = count($gltf); $glti = 0; 
-$OldUpdateTime = 0; $UseThisFonum = null;
-if ($ForumType=="subforum") { 
-while ($glti < $gltnum) {
-$gltfoquery = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `ForumID`=%i ORDER BY `LastUpdate` DESC LIMIT 1", array($gltf[$glti]));
-$gltforesult=mysql_query($gltfoquery);
-$gltfonum=mysql_num_rows($gltforesult);
-if($gltfonum>0) {
-$NewUpdateTime=mysql_result($gltforesult,0,"LastUpdate");
-if($NewUpdateTime>$OldUpdateTime) { 
-	$UseThisFonum = $gltf[$glti]; 
-$OldUpdateTime = $NewUpdateTime; } }
-@mysql_free_result($gltforesult);
-++$glti; } }
-if ($ForumType=="redirect") { $LastTopic="&nbsp;<br />Redirects: ".$NumRedirects."<br />&nbsp;"; }
+if ($ForumType=="redirect") { $LastTopic="Redirects: ".$NumRedirects; }
 $PreForum = $ThemeSet['ForumIcon'];
 if ($ForumType=="forum") { $PreForum=$ThemeSet['ForumIcon']; }
 if ($ForumType=="subforum") { $PreForum=$ThemeSet['SubForumIcon']; }
@@ -124,11 +124,8 @@ $ExStr = ""; if ($ForumType!="redirect"&&
 <a href="<?php echo url_maker($exfile[$ForumType],$Settings['file_ext'],"act=lowview&id=".$ForumID.$ExStr,$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>"<?php if($ForumType=="redirect") { echo " onclick=\"window.open(this.href);return false;\""; } ?>><?php echo $ForumName; ?></a> (<?php echo $NumPosts; ?> posts)</li>
 <?php echo $sflist; ?></ul>
 <?php } ++$i; } @mysql_free_result($result);
-if($num>=1) {
-?>
-<?php } } 
-?></li><?php
-++$prei; }
-@mysql_free_result($preresult); ?>
-</ul></div>
+if($num>=1) { ?>
+</li></ul></div>
 <div>&nbsp;</div>
+<?php } } }
+@mysql_free_result($preresult); ?>
