@@ -11,7 +11,7 @@
     Copyright 2004-2009 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: index.php - Last Update: 5/01/2009 SVN 247 - Author: cooldude2k $
+    $FileInfo: index.php - Last Update: 5/04/2009 SVN 249 - Author: cooldude2k $
 */
 if(@ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }
@@ -25,8 +25,7 @@ $filewpath = $exfile['index'].$usefileext.$_SERVER['PATH_INFO'];
 <title> <?php echo $Settings['board_name'].$idbpowertitle; ?> </title>
 </head>
 <body>
-<?php 
-if($_GET['act']!="lowview") {
+<?php if($_GET['act']!="lowview") {
 require($SettDir['inc'].'navbar.php'); }
 
 if($_GET['act']==null)

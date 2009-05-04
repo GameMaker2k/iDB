@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
-    Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
+    Copyright 2004-2009 Cool Dude 2k - http://idb.berlios.de/
+    Copyright 2004-2009 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: setcheck.php - Last Update: 12/11/2008 SVN 210 - Author: cooldude2k $
+    $FileInfo: setcheck.php - Last Update: 5/04/2009 SVN 249 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="setcheck.php"||$File3Name=="/setcheck.php") {
@@ -167,6 +167,9 @@ if ($_GET['act']==null&&$_GET['mode']!=null) { $_GET['act']=$_GET['mode']; }
 if ($_GET['act']==null&&$_GET['show']!=null) { $_GET['act']=$_GET['show']; }
 if ($_GET['act']==null&&$_GET['do']!=null) { $_GET['act']=$_GET['do']; }
 if ($_GET['act']=="idx"||$_GET['act']=="View") { $_GET['act']="view"; }
+if ($_GET['act']=="Lo-Fi"||$_GET['act']=="lo-fi") { $_GET['act']="lowview"; }
+if ($_GET['act']=="Low-View"||$_GET['act']=="low-view") { $_GET['act']="lowview"; }
+if ($_GET['act']=="LowView"||$_GET['act']=="loview") { $_GET['act']="lowview"; }
 if ($_GET['act']=="iDBInfo") { @header('Location: http://sourceforge.net/projects/intdb/'); }
 if ($_GET['act']=="iDBSite") { @header('Location: http://intdb.sourceforge.net/'); }
 if ($_GET['act']=="OldiDBInfo") { @header('Location: http://developer.berlios.de/projects/idb/'); }
