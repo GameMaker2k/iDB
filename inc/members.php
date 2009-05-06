@@ -8,8 +8,8 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
-    Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
+    Copyright 2004-2009 Cool Dude 2k - http://idb.berlios.de/
+    Copyright 2004-2009 Game Maker 2k - http://intdb.sourceforge.net/
 
     $FileInfo: members.php - Last Update: 2/22/2008 SVN 232 - Author: cooldude2k $
 */
@@ -655,7 +655,7 @@ if($_SESSION['UserID']==0||$_SESSION['UserID']==null) {
 $tsa_mem = explode(":",$Settings['DefaultTimeZone']);
 $TimeZoneArray = array("offset" => $Settings['DefaultTimeZone'], "hour" => $tsa_mem[0], "minute" => $tsa_mem[1]);
 $plusi = 1; $minusi = 12;
-$plusnum = 13; $minusnum = 0;
+$plusnum = 15; $minusnum = 0;
 while ($minusi > $minusnum) {
 if($TimeZoneArray['hour']==-$minusi) {
 echo "<option selected=\"selected\" value=\"-".$minusi."\">GMT - ".$minusi.":00 hours</option>\n"; }

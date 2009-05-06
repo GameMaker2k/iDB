@@ -8,8 +8,8 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
-    Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
+    Copyright 2004-2009 Cool Dude 2k - http://idb.berlios.de/
+    Copyright 2004-2009 Game Maker 2k - http://intdb.sourceforge.net/
 
     $FileInfo: profilemain.php - Last Update: 2/22/2008 SVN 232 - Author: cooldude2k $
 */
@@ -401,7 +401,7 @@ $profiletitle = " ".$ThemeSet['TitleDivider']." Board Settings"; ?>
 <option selected="selected" value="<?php echo $TimeZoneArray['hour']; ?>">Old Value (<?php echo $TimeZoneArray['hour'].":00 hours"; ?>)</option>
 <?php
 $plusi = 1; $minusi = 12;
-$plusnum = 13; $minusnum = 0;
+$plusnum = 15; $minusnum = 0;
 while ($minusi > $minusnum) {
 echo "<option value=\"-".$minusi."\">GMT - ".$minusi.":00 hours</option>\n";
 --$minusi; }
@@ -591,7 +591,7 @@ $profiletitle = " ".$ThemeSet['TitleDivider']." Profile Editor";
 <option selected="selected" value="<?php echo $TimeZoneArray['hour']; ?>">Old Value (<?php echo $TimeZoneArray['hour'].":00 hours"; ?>)</option>
 <?php
 $plusi = 1; $minusi = 12;
-$plusnum = 13; $minusnum = 0;
+$plusnum = 15; $minusnum = 0;
 while ($minusi > $minusnum) {
 echo "<option value=\"-".$minusi."\">GMT - ".$minusi.":00 hours</option>\n";
 --$minusi; }

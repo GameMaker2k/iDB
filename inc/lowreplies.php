@@ -299,13 +299,4 @@ $ReplyNum = $i + $PageLimit + 1;
 </div>
 <div style="padding: 6px; font-size: 0.8em;"><?php echo $MyPost; ?></div>
 <?php ++$i; } @mysql_free_result($result); 
-?></div><div>&nbsp;</div><?php
-if($CanMakeReply=="yes") {  
-$QuoteReply = null; $QuoteDescription = null;
-$queryra = query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `TopicID`=%i ORDER BY `TimeStamp` ASC LIMIT 1", array($_GET['id']));
-$resultra=mysql_query($queryra);
-$numrose=mysql_num_rows($resultra);
-$QuoteDescription=mysql_result($resultra,0,"Description"); 
-$QuoteDescription = str_replace("Re: ","",$QuoteDescription);
-$QuoteDescription = "Re: ".$QuoteDescription;
-@mysql_free_result($resultra); } } } ?>
+?></div><div>&nbsp;</div><?php } } ?>

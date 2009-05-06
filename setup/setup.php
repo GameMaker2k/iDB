@@ -118,7 +118,7 @@ fclose($fp);
 if(date("I")!=1) { $myofftime = SeverOffSet(); $mydstime = "off"; }
 if(date("I")==1) { $myofftime = SeverOffSet()-1; $mydstime = "on"; }
 $plusi = 1; $minusi = 12;
-$plusnum = 13; $minusnum = 0;
+$plusnum = 15; $minusnum = 0;
 while ($minusi > $minusnum) {
 if($myofftime==-$minusi) {
 echo "<option selected=\"selected\" value=\"-".$minusi."\">GMT - ".$minusi.":00 hours</option>\n"; }

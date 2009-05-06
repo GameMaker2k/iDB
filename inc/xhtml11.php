@@ -41,6 +41,22 @@ if($Settings['output_type']!="xhtml") {
 		$ccstart = "//<!--"; $ccend = "//-->";
 @header("Content-Type: text/html; charset=".$Settings['charset']); } }
 if($checklowview===true) { $ThemeSet['CSSType'] = "lowview"; }
+if($checklowview===true&&$_GET['act']=="lowview") { 
+   $ThemeSet['CSSType'] = "lowview"; 
+   $ThemeSet['ThemeName'] = "iDB Low Theme";
+   $ThemeSet['ThemeMaker'] = "Kazuki";
+   $ThemeSet['ThemeVersion'] = "0.2.5";
+   $ThemeSet['ThemeVersionType'] = "Pre-Alpha";
+   $ThemeSet['ThemeSubVersion'] = "SVN 222";
+   $ThemeSet['MakerURL'] = "http://idb.berlios.de/support/?act=lowview";
+   $ThemeSet['CopyRight'] = $ThemeSet['ThemeName']." was made by <a href=\"".$ThemeSet['MakerURL']."\" title=\"".$ThemeSet['ThemeMaker']."\">".$ThemeSet['ThemeMaker']."</a>";
+   $ThemeInfo['ThemeName'] = $ThemeSet['ThemeName'];
+   $ThemeInfo['ThemeMaker'] = $ThemeSet['ThemeMaker'];
+   $ThemeInfo['ThemeVersion'] = $ThemeSet['ThemeVersion'];
+   $ThemeInfo['ThemeVersionType'] = $ThemeSet['ThemeVersionType'];
+   $ThemeInfo['ThemeSubVersion'] = $ThemeSet['ThemeSubVersion'];
+   $ThemeInfo['MakerURL'] = $ThemeSet['MakerURL'];
+   $ThemeInfo['CopyRight'] = $ThemeSet['CopyRight']; }
 if($ThemeSet['CSSType']!="import"&&
    $ThemeSet['CSSType']!="link"&&
    $ThemeSet['CSSType']!="lowview"&&
@@ -138,3 +154,4 @@ color: #000000;
 <link rel="icon" href="<?php echo $ThemeSet['FavIcon']; ?>" />
 <link rel="shortcut icon" href="<?php echo $ThemeSet['FavIcon']; ?>" />
 <?php } ?>
+<!-- Renee Sabonis ^_^ -->
