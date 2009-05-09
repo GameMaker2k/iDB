@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: functions.php - Last Update: 12/10/2008 SVN 209 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 5/08/2009 SVN 251 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -131,6 +131,28 @@ $varname = preg_replace("/(HTTP_SERVER_VARS|HTTP_ENV_VARS)/i", null, $varname);
 $varname = preg_replace("/(HTTP_COOKIE_VARS|HTTP_SESSION_VARS)/i", null, $varname);
 $varname = preg_replace("/(HTTP_GET_VARS|HTTP_POST_VARS|HTTP_POST_FILES)/i", null, $varname);
 	return $varname; }
+// Trying to fix this bug. ^_^
+// http://xforce.iss.net/xforce/xfdb/49697
+if(!isset($Settings['DefaultTheme'])) {
+	$Settings['DefaultTheme'] = "iDB"; }
+$BoardTheme = $Settings['DefaultTheme'];
+function chack_themes($theme) {
+global $BoardTheme;
+if(!isset($theme)) { $theme = null; }
+require('settings.php');
+$ckskindir = dirname(realpath("settings.php"))."/".$SettDir['themes'];
+if ($handle = opendir($ckskindir)) { $dirnum = null;
+   while (false !== ($ckfile = readdir($handle))) {
+	   if ($dirnum==null) { $dirnum = 0; }
+	   if (file_exists($ckskindir.$ckfile."/info.php")) {
+		   if ($ckfile != "." && $ckfile != "..") {
+	   include($ckskindir.$ckfile."/info.php");
+       $cktheme[$dirnum] =  $ckfile;
+	   ++$dirnum; } } }
+   closedir($handle); asort($cktheme); }
+$theme=preg_replace("/(.*?)\.\/(.*?)/", $BoardTheme, $theme);
+if(!in_array($theme,$cktheme)||strlen($theme)>26) {
+	$theme = $BoardTheme; } return $theme; }
 // Change the text to icons(smileys)
 function text2icons($Text,$sqlt) {
 global $Settings;

@@ -11,7 +11,7 @@
     Copyright 2004-2009 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: mysql.php - Last Update: 5/01/2009 SVN 247 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 5/08/2009 SVN 251 - Author: cooldude2k $
 */
 //@ini_set("display_errors", true); 
 //@ini_set("display_startup_errors", true);
@@ -270,7 +270,7 @@ if($_GET['theme']==null) {
 	if($_GET['css']!=null) {
 		$_GET['theme'] = $_GET['css']; } }
 if($_GET['theme']!=null) {
-$_GET['theme']=preg_replace("/(.*?)\.\/(.*?)/", "iDB", $_GET['theme']);
+$_GET['theme'] = chack_themes($_GET['theme']);
 if($_GET['theme']=="../"||$_GET['theme']=="./") {
 $_GET['theme']="iDB"; $_SESSION['Theme']="iDB"; }
 if (file_exists($SettDir['themes'].$_GET['theme']."/settings.php")) {
