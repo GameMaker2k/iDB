@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: rssfeed.php - Last Update: 12/11/2008 SVN 212 - Author: cooldude2k $
+    $FileInfo: rssfeed.php - Last Update: 5/13/2009 SVN 252 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="rssfeed.php"||$File3Name=="/rssfeed.php") {
@@ -123,12 +123,12 @@ if(isset($PermissionInfo['CanViewForum'][$ForumID])&&
 	isset($CatPermissionInfo['CanViewCategory'][$CategoryID])&&
 	$CatPermissionInfo['CanViewCategory'][$CategoryID]=="yes") {
 if($_GET['feedtype']=="atom") {
-$Atom .= '<entry>'."\n".'<title>'.htmlentities($TopicName, ENT_QUOTES, $Settings['charset']).'</title>'."\n".'<summary>'.htmlentities($ForumDescription, ENT_QUOTES, $Settings['charset']).'</summary>'."\n".'<link rel="alternate" href="'.$BoardURL.url_maker($exfilerss['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstrrss['topic'],$exqstrrss['topic']).'" />'."\n".'<id>'.$BoardURL.url_maker($exfilerss['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstrrss['topic'],$exqstrrss['topic']).'</id>'."\n".'<author>'."\n".'<name>'.$SettInfo['Author'].'</name>'."\n".'</author>'."\n".'<updated>'.gmdate("Y-m-d\TH:i:s\Z").'</updated>'."\n".'</entry>'."\n"; }
+$Atom .= '<entry>'."\n".'<title>'.$TopicName.'</title>'."\n".'<summary>'.$ForumDescription.'</summary>'."\n".'<link rel="alternate" href="'.$BoardURL.url_maker($exfilerss['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstrrss['topic'],$exqstrrss['topic']).'" />'."\n".'<id>'.$BoardURL.url_maker($exfilerss['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstrrss['topic'],$exqstrrss['topic']).'</id>'."\n".'<author>'."\n".'<name>'.$SettInfo['Author'].'</name>'."\n".'</author>'."\n".'<updated>'.gmdate("Y-m-d\TH:i:s\Z").'</updated>'."\n".'</entry>'."\n"; }
 if($_GET['feedtype']=="oldrss") {
 $PreRSS .= '      <rdf:li rdf:resource="'.$BoardURL.url_maker($exfilerss['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstrrss['topic'],$exqstrrss['topic']).'" />'."\n";
-$RSS .= '<item rdf:about="'.$BoardURL.url_maker($exfilerss['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstrrss['topic'],$exqstrrss['topic']).'">'."\n".'<title>'.htmlentities($TopicName, ENT_QUOTES, $Settings['charset']).'</title>'."\n".'<description>'.htmlentities($ForumDescription, ENT_QUOTES, $Settings['charset']).'</description>'."\n".'</item>'."\n"; }
+$RSS .= '<item rdf:about="'.$BoardURL.url_maker($exfilerss['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstrrss['topic'],$exqstrrss['topic']).'">'."\n".'<title>'.$TopicName.'</title>'."\n".'<description>'.$ForumDescription.'</description>'."\n".'</item>'."\n"; }
 if($_GET['feedtype']=="rss") {
-$RSS .= '<item>'."\n".'<title>'.htmlentities($TopicName, ENT_QUOTES, $Settings['charset']).'</title>'."\n".'<description>'.htmlentities($ForumDescription, ENT_QUOTES, $Settings['charset']).'</description>'."\n".'<link>'.$BoardURL.url_maker($exfilerss['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstrrss['topic'],$exqstrrss['topic']).'</link>'."\n".'<guid>'.$BoardURL.url_maker($exfilerss['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstrrss['topic'],$exqstrrss['topic']).'</guid>'."\n".'</item>'."\n"; } }
+$RSS .= '<item>'."\n".'<title>'.$TopicName.'</title>'."\n".'<description>'.$ForumDescription.'</description>'."\n".'<link>'.$BoardURL.url_maker($exfilerss['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstrrss['topic'],$exqstrrss['topic']).'</link>'."\n".'<guid>'.$BoardURL.url_maker($exfilerss['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstrrss['topic'],$exqstrrss['topic']).'</guid>'."\n".'</item>'."\n"; } }
 ++$i; } @mysql_free_result($result);
 ++$glti; }
 xml_doc_start("1.0",$Settings['charset']);
@@ -142,7 +142,7 @@ if($Settings['showverinfo']=="on") { ?>
  xmlns="http://purl.org/rss/1.0/">
 <channel rdf:about="<?php echo $BoardURL.$feedsname; ?>">
  <title><?php echo $boardsname." ".$ThemeSet['TitleDivider']; ?> Viewing Forum <?php echo $ForumName; ?></title>
-  <link><?php echo $BoardURL; ?></link>
+  <link><?php echo $BoardURL.url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$ForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?></link>
   <description>RSS Feed of the Topics in Forum <?php echo $ForumName; ?></description>
   <image rdf:resource="<?php echo $BoardURL.$SettDir['inc']; ?>rss.gif" />
  
@@ -155,16 +155,17 @@ if($Settings['showverinfo']=="on") { ?>
 
 <image rdf:about="<?php echo $BoardURL.$SettDir['inc']; ?>rss.gif">
   <title><?php echo $boardsname; ?></title>
-  <link><?php echo $BoardURL; ?></link>
+  <link><?php echo $BoardURL.url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$ForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?></link>
   <url><?php echo $BoardURL.$SettDir['inc']; ?>rss.gif</url>
 </image>
+<!-- Renee Sabonis ^_^ -->
 <?php echo "\n".$RSS."\n"; ?></rdf:RDF>
 <?php } if($_GET['feedtype']=="rss") { ?>
 <rss version="2.0">
 <channel>
    <title><?php echo $boardsname." ".$ThemeSet['TitleDivider']; ?> Viewing Forum <?php echo $ForumName; ?></title>
    <description>RSS Feed of the Topics in Forum <?php echo $ForumName; ?></description>
-   <link><?php echo $BoardURL; ?></link>
+   <link><?php echo $BoardURL.url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$ForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?></link>
    <language>en</language>
    <?php if($Settings['showverinfo']=="on") { ?>
    <generator><?php echo $VerInfo['iDB_Ver_Show']; ?></generator>
@@ -178,6 +179,7 @@ if($Settings['showverinfo']=="on") { ?>
 	<title><?php echo $boardsname; ?></title>
 	<link><?php echo $BoardURL; ?></link>
    </image>
+   <!-- Renee Sabonis ^_^ -->
  <?php echo "\n".$RSS."\n"; ?></channel>
 </rss>
 <?php } if($_GET['feedtype']=="atom") { ?>
@@ -185,14 +187,15 @@ if($Settings['showverinfo']=="on") { ?>
   <title><?php echo $boardsname." ".$ThemeSet['TitleDivider']; ?> Viewing Forum <?php echo $ForumName; ?></title>
    <subtitle>Atom Feed of the Topics in Forum <?php echo $ForumName; ?></subtitle>
    <link rel="self" href="<?php echo $BoardURL.$feedsname; ?>" />
-   <id><?php echo $BoardURL; ?></id>
+   <id><?php echo $BoardURL.url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$ForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?></id>
    <updated><?php echo gmdate("Y-m-d\TH:i:s\Z"); ?></updated>
    <?php if($Settings['showverinfo']=="on") { ?>
    <generator><?php echo $VerInfo['iDB_Ver_Show']; ?></generator>
    <?php } if($Settings['showverinfo']!="on") { ?>
    <generator><?php echo $iDB; ?></generator>
-   <?php } echo "\n"; ?>
+   <?php } ?>
   <icon><?php echo $BoardURL.$SettDir['inc']; ?>rss.gif</icon>
+  <!-- Renee Sabonis ^_^ -->
  <?php echo "\n".$Atom."\n"; ?>
 </feed>
 <?php }
