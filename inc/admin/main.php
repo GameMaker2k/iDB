@@ -8,8 +8,8 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
-    Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
+    Copyright 2004-2009 Cool Dude 2k - http://idb.berlios.de/
+    Copyright 2004-2009 Game Maker 2k - http://intdb.sourceforge.net/
 
     $FileInfo: main.php - Last Update: 12/12/2008 SVN 215 - Author: cooldude2k $
 */
@@ -29,7 +29,7 @@ redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"a
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 if(!isset($_POST['update'])) { $_POST['update'] = null; }
-$pretext = "<?php\n/*\n    This program is free software; you can redistribute it and/or modify\n    it under the terms of the GNU General Public License as published by\n    the Free Software Foundation; either version 2 of the License, or\n    (at your option) any later version.\n\n    This program is distributed in the hope that it will be useful,\n    but WITHOUT ANY WARRANTY; without even the implied warranty of\n    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n    Revised BSD License for more details.\n\n    Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/\n    Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/\n    iDB Installer made by Game Maker 2k - http://idb.berlios.net/\n\n    \$FileInfo: settings.php & settingsbak.php - Last Update: ".$SVNDay[0]."/".$SVNDay[1]."/".$SVNDay[2]." SVN ".$SubVerN." - Author: cooldude2k \$\n*/\n";
+$pretext = "<?php\n/*\n    This program is free software; you can redistribute it and/or modify\n    it under the terms of the GNU General Public License as published by\n    the Free Software Foundation; either version 2 of the License, or\n    (at your option) any later version.\n\n    This program is distributed in the hope that it will be useful,\n    but WITHOUT ANY WARRANTY; without even the implied warranty of\n    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n    Revised BSD License for more details.\n\n    Copyright 2004-2009 Cool Dude 2k - http://idb.berlios.de/\n    Copyright 2004-2009 Game Maker 2k - http://intdb.sourceforge.net/\n    iDB Installer made by Game Maker 2k - http://idb.berlios.net/\n\n    \$FileInfo: settings.php & settingsbak.php - Last Update: ".$SVNDay[0]."/".$SVNDay[1]."/".$SVNDay[2]." SVN ".$SubVerN." - Author: cooldude2k \$\n*/\n";
 $pretext2 = array("/*   Board Setting Section Begins   */\n\$Settings = array();","/*   Board Setting Section Ends  \n     Board Info Section Begins   */\n\$SettInfo = array();","/*   Board Setting Section Ends   \n     Board Dir Section Begins   */\n\$SettDir = array();","/*   Board Dir Section Ends   */");
 $settcheck = "\$File3Name = basename(\$_SERVER['SCRIPT_NAME']);\nif (\$File3Name==\"settings.php\"||\$File3Name==\"/settings.php\"||\n    \$File3Name==\"settingsbak.php\"||\$File3Name==\"/settingsbak.php\") {\n    @header('Location: index.php');\n    exit(); }\n";
 if(!isset($_POST['update'])) { $_POST['update'] = null; }
@@ -47,10 +47,10 @@ if(isset($string)) {
 if(!isset($string)) {
 	return "null"; } }
 function rsq($string) {
-$string = str_replace("'", "\'", $string);
+$string = preg_replace("/^(\')|$(\')/i","\'",$string);
 return $string; }
-if(!is_numeric($Settings['KarmaBoostDay'])) {
-$Settings['KarmaBoostDay'] = null; }
+if(!is_numeric($Settings['KarmaBoostDays'])) {
+$Settings['KarmaBoostDays'] = null; }
 $KBoostPercent = explode("|",$Settings['KBoostPercent']);
 if(count($KBoostPercent)<1) { 
 $Settings['KBoostPercent'] = "6|10"; }
@@ -479,6 +479,10 @@ require('settings.php'); $admincptitle = " ".$ThemeSet['TitleDivider']." Board I
 <?php } if($_POST['act']=="info"&&$_POST['update']=="now"&&$_GET['act']=="info"&&
 	$_SESSION['UserGroup']!=$Settings['GuestGroup']&&$GroupInfo['HasAdminCP']=="yes") {
 $_POST  = array_map("rsq", $_POST);
+$_POST['board_name'] = htmlspecialchars($_POST['board_name'], ENT_QUOTES, $Settings['charset']);
+$_POST['board_name'] = fixbamps($_POST['board_name']);
+$_POST['board_name'] = @remove_spaces($_POST['board_name']);
+$_POST['board_name'] = str_replace("\&#039;", "&#039;", $_POST['board_name']);
 $BoardSettings=$pretext2[0]."\n\$Settings['sqlhost'] = ".null_string($Settings['sqlhost']).";\n\$Settings['sqldb'] = ".null_string($Settings['sqldb']).";\n\$Settings['sqltable'] = ".null_string($Settings['sqltable']).";\n\$Settings['sqluser'] = ".null_string($Settings['sqluser']).";\n\$Settings['sqlpass'] = ".null_string($Settings['sqlpass']).";\n\$Settings['board_name'] = ".null_string($_POST['board_name']).";\n\$Settings['idbdir'] = ".null_string($Settings['idbdir']).";\n\$Settings['idburl'] = ".null_string($Settings['idburl']).";\n\$Settings['enable_https'] = ".null_string($Settings['enable_https']).";\n\$Settings['weburl'] = ".null_string($Settings['weburl']).";\n\$Settings['use_gzip'] = ".null_string($Settings['use_gzip']).";\n\$Settings['html_type'] = ".null_string($Settings['html_type']).";\n\$Settings['html_level'] = ".null_string($Settings['html_level']).";\n\$Settings['output_type'] = ".null_string($Settings['output_type']).";\n\$Settings['GuestGroup'] = ".null_string($Settings['GuestGroup']).";\n\$Settings['MemberGroup'] = ".null_string($Settings['MemberGroup']).";\n\$Settings['ValidateGroup'] = ".null_string($Settings['ValidateGroup']).";\n\$Settings['AdminValidate'] = ".null_string($Settings['AdminValidate']).";\n\$Settings['TestReferer'] = ".null_string($Settings['TestReferer']).";\n\$Settings['DefaultTheme'] = ".null_string($Settings['DefaultTheme']).";\n\$Settings['DefaultTimeZone'] = ".null_string($Settings['DefaultTimeZone']).";\n\$Settings['DefaultDST'] = ".null_string($Settings['DefaultDST']).";\n\$Settings['charset'] = ".null_string($Settings['charset']).";\n\$Settings['add_power_by'] = ".null_string($Settings['add_power_by']).";\n\$Settings['send_pagesize'] = ".null_string($Settings['send_pagesize']).";\n\$Settings['max_posts'] = ".null_string($Settings['max_posts']).";\n\$Settings['max_topics'] = ".null_string($Settings['max_topics']).";\n\$Settings['max_memlist'] = ".null_string($Settings['max_memlist']).";\n\$Settings['max_pmlist'] = ".null_string($Settings['max_pmlist']).";\n\$Settings['hot_topic_num'] = ".null_string($Settings['hot_topic_num']).";\n\$Settings['qstr'] = ".null_string($Settings['qstr']).";\n\$Settings['qsep'] = ".null_string($Settings['qsep']).";\n\$Settings['file_ext'] = ".null_string($Settings['file_ext']).";\n\$Settings['rss_ext'] = ".null_string($Settings['rss_ext']).";\n\$Settings['js_ext'] = ".null_string($Settings['js_ext']).";\n\$Settings['showverinfo'] = ".null_string($Settings['showverinfo']).";\n\$Settings['enable_rss'] = ".null_string($Settings['enable_rss']).";\n\$Settings['enable_search'] = ".null_string($Settings['enable_search']).";\n\$Settings['sessionid_in_urls'] = ".null_string($Settings['sessionid_in_urls']).";\n\$Settings['fixpathinfo'] = ".null_string($Settings['fixpathinfo']).";\n\$Settings['fixbasedir'] = ".null_string($Settings['fixbasedir']).";\n\$Settings['fixcookiedir'] = ".null_string($Settings['fixcookiedir']).";\n\$Settings['enable_pathinfo'] = ".null_string($Settings['enable_pathinfo']).";\n\$Settings['rssurl'] = ".null_string($Settings['rssurl']).";\n\$Settings['board_offline'] = ".null_string($Settings['board_offline']).";\n\$Settings['KarmaBoostDays'] = ".null_string($Settings['KarmaBoostDays']).";\n\$Settings['KBoostPercent'] = ".null_string($Settings['KBoostPercent']).";\n".$pretext2[1]."\n\$SettInfo['board_name'] = ".null_string($_POST['board_name']).";\n\$SettInfo['Author'] = ".null_string($_POST['Author']).";\n\$SettInfo['Keywords'] = ".null_string($_POST['Keywords']).";\n\$SettInfo['Description'] = ".null_string($_POST['Description']).";\n".$pretext2[2]."\n\$SettDir['maindir'] = ".null_string($SettDir['maindir']).";\n\$SettDir['inc'] = ".null_string($SettDir['inc']).";\n\$SettDir['misc'] = ".null_string($SettDir['misc']).";\n\$SettDir['admin'] = ".null_string($SettDir['admin']).";\n\$SettDir['mod'] = ".null_string($SettDir['mod']).";\n\$SettDir['themes'] = ".null_string($SettDir['themes']).";\n".$pretext2[3]."\n?>";
 $BoardSettingsBak = $pretext.$settcheck.$BoardSettings;
 $BoardSettings = $pretext.$settcheck.$BoardSettings;
