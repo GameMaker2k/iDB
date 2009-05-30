@@ -11,7 +11,7 @@
     Copyright 2004-2009 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: sqldumper.php - Last Update: 5/30/2009 SVN 254 - Author: cooldude2k $
+    $FileInfo: sqldumper.php - Last Update: 5/30/2009 SVN 255 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="sqldumper.php"||$File3Name=="/sqldumper.php") {
@@ -60,7 +60,7 @@ while ($row = mysql_fetch_row($result)) {
 if(in_array($row[0],$TableChCk)) {
 $TableNames[$l] = $row[0];
 $DropTable[$l] = "DROP TABLE IF EXISTS `".$row[0]."`;\n";
-$CreateTable[$l] = "CREATE TABLE `".$row[0]."` (\n";
+$CreateTable[$l] = "CREATE TABLE IF NOT EXISTS `".$row[0]."` (\n";
 $result2 = mysql_query("SHOW COLUMNS FROM ".$row[0]);
 $tabsta = mysql_query("SHOW TABLE STATUS LIKE '".$row[0]."'");
 $tabstats = mysql_fetch_array($tabsta); $AutoIncrement = " ";
@@ -70,12 +70,14 @@ $AutoIncrement = " AUTO_INCREMENT=".$tabstats["Auto_increment"]." "; }
 	while ($row2 = mysql_fetch_assoc($result2)) {
 		if($row2["Default"]=="") { $row2["Default"] = "''"; }
 		if($i==0) { $row2["Default"] = null; } $DefaVaule = null;
+		if(is_numeric($row2["Default"])) { $row2["Default"] = "'".$row2["Default"]."'"; }
 		if($row2["Default"]!=null) { $DefaVaule = " default ".$row2["Default"]; }
 		if($row2["Extra"]!="") { $row2["Extra"] = " ".$row2["Extra"]; }
+	if($row2["Type"]=="text") { $DefaVaule = null; }
         $TableInfo[$l] .= "  `".$row2["Field"]."` ".$row2["Type"]." NOT NULL".$DefaVaule.$row2["Extra"].",\n";
 		if($row2["Key"]=="PRI") { $PrimaryKey[$l] = "  PRIMARY KEY  (`".$row2["Field"]."`)"; }
 	++$i; } 
-	$TableStats[$l] = ") TYPE=".$tabstats["Engine"]." DEFAULT CHARSET=".mysql_client_encoding().$AutoIncrement.";\n";
+	$TableStats[$l] = ") ENGINE=".$tabstats["Engine"]." DEFAULT CHARSET=".mysql_client_encoding().$AutoIncrement.";\n";
 	$TableInfo[$l] .= $PrimaryKey[$l]."\n".$TableStats[$l];
 	$FullTable[$l] = $DropTable[$l].$CreateTable[$l].$TableInfo[$l]; }
 if (!$result2) {
@@ -92,7 +94,12 @@ echo "--\n";
 echo "-- Host: ".$Settings['sqlhost']."\n";
 echo "-- Generation Time: ".GMTimeGet('F d, Y \a\t h:i A',$_SESSION['UserTimeZone'],0,$_SESSION['UserDST'])."\n";
 echo "-- Server version: ".mysql_get_server_info()."\n";
-echo "-- PHP Version: ".phpversion()."\n";
+echo "-- PHP Version: ".phpversion()."\n\n";
+echo "SET SQL_MODE=\"NO_AUTO_VALUE_ON_ZERO\";\n\n";
+echo "--\n";
+echo "-- Database: `".$Settings['sqldb']."`\n";
+echo "--\n\n";
+echo "-- --------------------------------------------------------\n\n";
 while ($renee_s < $num) { $tnum = $num - 1;
 $trow = GetAllRows($TableNames[$renee_s]);
 $numz = count($trow); $kazuki_p = 0;
@@ -111,18 +118,18 @@ $trowrvalue = mysql_real_escape_string($trownew[$trowrname]);
 if($_GET['outtype']=="UTF-8") {
 $trowrvalue = utf8_encode($trowrvalue); }
 $trowrvalue = str_replace( array("\n", "\r"), array('\n', '\r'), $trowrvalue);
-if($kazuki_p==0) {
-if($il==0) { $srow = "INSERT DELAYED IGNORE INTO `".$TableNames[$renee_s]."` ("; }
-if($il<$tnums&&$il!=$tnums) { $srow .= "`".$trowrname."`,"; }
+if($kazuki_p===0) {
+if($il===0) { $srow = "INSERT DELAYED IGNORE INTO `".$TableNames[$renee_s]."` ("; }
+if($il<$tnums&&$il!=$tnums) { $srow .= "`".$trowrname."`, "; }
 if($il==$tnums) { $srow .= "`".$trowrname."`) VALUES"; } }
-if($il==0) { $srowvalue = "("; }
+if($il===0) { $srowvalue = "("; }
 if(!is_numeric($trowrvalue)) { $trowrvalue = "'".$trowrvalue."'"; }
-if($il<$tnums) { $srowvalue .= $trowrvalue.","; }
+if($il<$tnums) { $srowvalue .= $trowrvalue.", "; }
 if($il==$tnums) { $srowvalue .= $trowrvalue;
 if($kazuki_p<$tnumz) { $srowvalue .= "),"; }
 if($kazuki_p==$tnumz) { $srowvalue .= ");"; } }
 ++$il; }
-if($kazuki_p==0) {
+if($kazuki_p===0) {
 echo "--\n";
 echo "-- Dumping data for table `".$TableNames[$renee_s]."`\n";
 echo "--\n\n";
@@ -131,6 +138,11 @@ echo $srowvalue."\n";
 if($kazuki_p==$tnumz&&$renee_s<$tnum) {
 echo "\n-- --------------------------------------------------------\n"; }
 ++$kazuki_p; }
+if($numz===0) {
+echo "--\n";
+echo "-- Dumping data for table `".$TableNames[$renee_s]."`\n";
+echo "--\n\n";
+echo "\n-- --------------------------------------------------------\n"; }
 echo "\n";
 ++$renee_s; }
 fix_amp($Settings['use_gzip'],$GZipEncode['Type']);
