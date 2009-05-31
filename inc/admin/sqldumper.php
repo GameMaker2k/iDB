@@ -11,7 +11,7 @@
     Copyright 2004-2009 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: sqldumper.php - Last Update: 5/30/2009 SVN 255 - Author: cooldude2k $
+    $FileInfo: sqldumper.php - Last Update: 5/30/2009 SVN 256 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="sqldumper.php"||$File3Name=="/sqldumper.php") {
@@ -68,9 +68,8 @@ if($tabstats["Auto_increment"]!="") {
 $AutoIncrement = " AUTO_INCREMENT=".$tabstats["Auto_increment"]." "; }
 	$TableInfo[$l] = null; $TableStats = null; $i = 0;
 	while ($row2 = mysql_fetch_assoc($result2)) {
-		if($row2["Default"]=="") { $row2["Default"] = "''"; }
+		$row2["Default"] = "'".$row2["Default"]."'";
 		if($i==0) { $row2["Default"] = null; } $DefaVaule = null;
-		if(is_numeric($row2["Default"])) { $row2["Default"] = "'".$row2["Default"]."'"; }
 		if($row2["Default"]!=null) { $DefaVaule = " default ".$row2["Default"]; }
 		if($row2["Extra"]!="") { $row2["Extra"] = " ".$row2["Extra"]; }
 	if($row2["Type"]=="text") { $DefaVaule = null; }
