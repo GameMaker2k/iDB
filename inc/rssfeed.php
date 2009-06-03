@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: rssfeed.php - Last Update: 5/13/2009 SVN 252 - Author: cooldude2k $
+    $FileInfo: rssfeed.php - Last Update: 6/03/2009 SVN 258 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="rssfeed.php"||$File3Name=="/rssfeed.php") {
@@ -105,7 +105,7 @@ $gltf[$apcl] = $SubsForumID; ++$apcl; }
 $Atom = null; $RSS = null; $PreRSS = null;
 $gltnum = count($gltf); $glti = 0; 
 while ($glti < $gltnum) {
-$query = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `ForumID`=%i ORDER BY `Pinned` DESC, `LastUpdate` DESC", array($gltf[$glti]));
+$query = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `ForumID`=%i ORDER BY `Pinned` DESC, `LastUpdate` DESC LIMIT %i", array($gltf[$glti],$Settings['max_topics']));
 $result=mysql_query($query);
 $num=mysql_num_rows($result); $i=0;
 while ($i < $num) {

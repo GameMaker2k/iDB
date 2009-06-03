@@ -11,7 +11,7 @@
     Copyright 2004-2009 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: replies.php - Last Update: 5/04/2009 SVN 249 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 6/03/2009 SVN 258 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -95,12 +95,8 @@ if($TopicClosed==0&&$PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes") {
 	$CanMakeReply = "yes"; }
 if($TopicClosed==1&&$PermissionInfo['CanMakeReplysClose'][$TopicForumID]=="yes"
 	&&$PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes") {
-		$CanMakeReply = "yes"; } ?>
-<div style="padding: 10px; border: 1px solid gray;">
-<?php echo $pstring; ?></div>
-<div>&nbsp;</div>
-<div style="padding: 10px; border: 1px solid gray;">
-<?php } if($_GET['act']=="lowview") {
+		$CanMakeReply = "yes"; } } 
+if($_GET['act']=="lowview") {
 if($NumberReplies==null) { 
 	$NumberReplies = 0; }
 $num=$NumberReplies+1;
@@ -206,13 +202,12 @@ if($TopicClosed==1&&$PermissionInfo['CanMakeReplysClose'][$TopicForumID]=="yes"
 	&&$PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes") {
 		$CanMakeReply = "yes"; }
 if($pstring!=null||$CanMakeReply=="yes"||$CanMakeTopic=="yes") {
-/* ?>
+?>
 <div style="padding: 10px; border: 1px solid gray;">
 <?php echo $pstring; ?></div>
 <div>&nbsp;</div>
 <div style="padding: 10px; border: 1px solid gray;">
-<ul style="list-style-type: none;">
-<?php */ } while ($i < $num) {
+<?php } while ($i < $num) {
 $MyPostID=mysql_result($result,$i,"id");
 $MyTopicID=mysql_result($result,$i,"TopicID");
 $MyPostIP=mysql_result($result,$i,"IP");
