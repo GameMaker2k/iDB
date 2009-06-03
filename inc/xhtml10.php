@@ -11,7 +11,7 @@
     Copyright 2004-2009 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: xhtml10.php - Last Update: 5/04/2009 SVN 249 - Author: cooldude2k $
+    $FileInfo: xhtml10.php - Last Update: 6/02/2009 SVN 257 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="xhtml10.php"||$File3Name=="/xhtml10.php") {
@@ -78,7 +78,7 @@ if($checklowview===true&&$_GET['act']!="lowview") { $extext = "<a href=\"".url_m
 if($checklowview===true&&$_GET['act']=="lowview") {  $extext = "<a href=\"".url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'])."\">Hi-Version</a>"; }
 $endpagevar = "<div class=\"copyright\">Powered by ".$iDBURL1.$RName."</a> &copy; ".$GM2kURL." @ ".$csryear." - ".$cryear." <br />\n".$ThemeSet['CopyRight']." | ".$extext; 
 @header("Content-Language: en");
-@header("Vary: Accept");
+@header("Vary: Accept-Encoding");
 // Check if we are on a secure HTTP connection
 if($_SERVER['HTTPS']=="on") { $prehost = "https://"; }
 if($_SERVER['HTTPS']!="on") { $prehost = "http://"; }
@@ -108,6 +108,9 @@ if($Settings['html_level']=="Strict") { ?>
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $Settings['charset']; ?>" />
 <meta http-equiv="Content-Style-Type" content="text/css" />
 <meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta http-equiv="Cache-Control" content="private, no-cache, must-revalidate" />
+<meta http-equiv="Pragma" content="private, no-cache, must-revalidate" />
+<meta http-equiv="Expires" content="<?php echo gmdate("D, d M Y H:i:s")." GMT"; ?>" />
 <base href="<?php echo $BoardURL; ?>" />
 <?php if($Settings['showverinfo']=="on") { ?>
 <meta name="Generator" content="<?php echo $VerInfo['iDB_Ver_Show']; ?>" />
@@ -137,12 +140,16 @@ if($Settings['html_level']=="Strict") { ?>
 <link rel="Generator" href="http://idb.berlios.de/" title="<?php echo $iDB; ?>" />
 <?php } echo "\n"; ?>
 <?php if($ThemeSet['CSSType']=="import") { ?>
-<style type="text/css"><?php echo "\n@import url(\"".$ThemeSet['CSS']."\");\n"; ?></style>
+<style type="text/css">
+/* Import the theme css file */
+<?php echo "\n@import url(\"".$ThemeSet['CSS']."\");\n"; ?>
+</style><?php } if($ThemeSet['CSSType']=="link") { ?>
 <?php } if($ThemeSet['CSSType']=="link") { ?>
 <link rel="prefetch alternate stylesheet" href="<?php echo $ThemeSet['CSS']; ?>" />
 <link rel="stylesheet" type="text/css" href="<?php echo $ThemeSet['CSS']; ?>" />
 <?php } if($ThemeSet['CSSType']=="lowview") { ?>
 <style type="text/css">
+/* (Low View / Lo-Fi ) version start */
 body {
 background-color: #FFFFFF;
 color: #000000;

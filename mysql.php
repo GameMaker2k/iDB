@@ -11,7 +11,7 @@
     Copyright 2004-2009 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: mysql.php - Last Update: 5/08/2009 SVN 251 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 6/02/2009 SVN 257 - Author: cooldude2k $
 */
 //@ini_set("display_errors", true); 
 //@ini_set("display_startup_errors", true);
@@ -153,9 +153,9 @@ if($cookieSecure===true) {
 @session_set_cookie_params(0, $cbasedir, $cookieDomain, 1); }
 if($cookieSecure===false) {
 @session_set_cookie_params(0, $cbasedir, $cookieDomain); } }
-@session_cache_limiter("private, must-revalidate");
-@header("Cache-Control: private, must-revalidate"); // IE 6 Fix
-@header("Pragma: private, must-revalidate");
+@session_cache_limiter("private, no-cache, must-revalidate");
+@header("Cache-Control: private, no-cache, must-revalidate");
+@header("Pragma: private, no-cache, must-revalidate");
 @header("Date: ".gmdate("D, d M Y H:i:s")." GMT");
 @header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
 @header("Expires: ".gmdate("D, d M Y H:i:s")." GMT");
