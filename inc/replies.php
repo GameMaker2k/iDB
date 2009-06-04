@@ -11,7 +11,7 @@
     Copyright 2004-2009 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: replies.php - Last Update: 6/04/2009 SVN 260 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 6/04/2009 SVN 261 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -320,13 +320,13 @@ $ReplyNum = $i + $PageLimit + 1;
 <div class="TableInfo1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableInfoRow1">
-<span style="font-weight: bold; text-align: left;"><?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."&amp;&#35;reply".$ReplyNum; ?>"><?php echo $TopicName; ?></a> ( <?php echo $MyDescription; ?> )</span>
+<span style="font-weight: bold; text-align: left;"><?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']).$qstrhtml."&#35;reply".$ReplyNum; ?>"><?php echo $TopicName; ?></a> ( <?php echo $MyDescription; ?> )</span>
 </div>
 <?php } ?>
 <table class="TableInfo1">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableInfoRow1">
-<td class="TableInfoColumn1" colspan="2"><span style="font-weight: bold; text-align: left;"><?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."&amp;&#35;reply".$ReplyNum; ?>"><?php echo $TopicName; ?></a> ( <?php echo $MyDescription; ?> )</span>
+<td class="TableInfoColumn1" colspan="2"><span style="font-weight: bold; text-align: left;"><?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']).$qstrhtml."&#35;reply".$ReplyNum; ?>"><?php echo $TopicName; ?></a> ( <?php echo $MyDescription; ?> )</span>
 </td>
 </tr><?php } ?>
 <tr class="TableInfoRow2">
@@ -409,7 +409,43 @@ echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr
 </table></div>
 <div class="DivReplies">&nbsp;</div>
 <?php ++$i; } @mysql_free_result($result); } 
-if($_GET['act']=="create") {
+if((GMTimeStamp()<$_SESSION['LastPostTime']&&$_SESSION['LastPostTime']!=0)&&
+($_GET['act']=="create"||$_GET['act']=="edit"||$_GET['act']=="makereply"||$_GET['act']=="editreply")) { 
+$_GET['act'] = "view"; $_POST['act'] = null; 
+@redirect("refresh",$basedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],FALSE),"3"); ?>
+<div class="Table1Border">
+<?php if($ThemeSet['TableStyle']=="div") { ?>
+<div class="TableRow1">
+<span style="text-align: left;">
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a></span></div>
+<?php } ?>
+<table class="Table1">
+<?php if($ThemeSet['TableStyle']=="table") { ?>
+<tr class="TableRow1">
+<td class="TableColumn1"><span style="text-align: left;">
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a></span>
+</td>
+</tr><?php } ?>
+<tr class="TableRow2">
+<th class="TableColumn2" style="width: 100%; text-align: left;">&nbsp;Make Reply Message: </th>
+</tr>
+<tr class="TableRow3">
+<td class="TableColumn3">
+<table style="width: 100%; height: 25%; text-align: center;">
+<tr>
+	<td><span class="TableMessage"><br />
+	You have to wait before making/editing another post.<br />
+	Click <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>">here</a> to view your reply.<br />&nbsp;
+	</span><br /></td>
+</tr>
+</table>
+</td></tr>
+<tr class="TableRow4">
+<td class="TableColumn4">&nbsp;</td>
+</tr>
+</table></div>
+<div class="DivMkReply">&nbsp;</div>
+<?php } if($_GET['act']=="create") {
 if($GroupInfo['HasAdminCP']!="yes"||$GroupInfo['HasModCP']!="yes") {
 if($ForumPostCountView!=0&&$MyPostCountChk<$ForumPostCountView) {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); }
@@ -779,7 +815,8 @@ if($MyPostNum>$Settings['max_posts']) {
 $NumPages = ceil($MyPostNum/$Settings['max_posts']); }
 if($MyPostNum<=$Settings['max_posts']) {
 $NumPages = 1; }
-@redirect("refresh",$basedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],FALSE)."&#reply".$MyPostNum,"3");
+@redirect("refresh",$basedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],FALSE).$Settings['qstr']."#reply".$MyPostNum,"3");
+$_SESSION['LastPostTime'] = GMTimeStamp() + $GroupInfo['FloodControl'];
 ?><tr>
 	<td><span class="TableMessage"><br />
 	Reply to Topic <?php echo $TopicName; ?> was posted.<br />
@@ -825,7 +862,7 @@ $queryupd = query("UPDATE `".$Settings['sqltable']."topics` SET `Pinned`=1 WHERE
 	if($_GET['act']=="unpin") {
 $queryupd = query("UPDATE `".$Settings['sqltable']."topics` SET `Pinned`=0 WHERE `id`=%i", array($TTopicID)); } 
 mysql_query($queryupd); 
-@redirect("refresh",$basedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TTopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],false)."&#post".$_GET['post'],"4");
+@redirect("refresh",$basedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TTopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],false).$Settings['qstr']."#post".$_GET['post'],"4");
 ?>
 <div class="Table1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
@@ -882,7 +919,7 @@ $queryupd = query("UPDATE `".$Settings['sqltable']."topics` SET `Closed`=1 WHERE
 	if($_GET['act']=="open") {
 $queryupd = query("UPDATE `".$Settings['sqltable']."topics` SET `Closed`=0 WHERE `id`=%i", array($TTopicID)); } 
 mysql_query($queryupd); 
-@redirect("refresh",$basedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TTopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],false)."&#post".$_GET['post'],"4");
+@redirect("refresh",$basedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TTopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],false).$Settings['qstr']."#post".$_GET['post'],"4");
 ?>
 <div class="Table1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
@@ -1404,7 +1441,7 @@ if ($_POST['ReplyDesc']==null) { $Error="Yes"; ?>
 	</span>&nbsp;</td>
 </tr>
 <?php } if ($Error=="Yes") {
-@redirect("refresh",$basedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],false)."&#post".$_GET['post'],"4"); ?>
+@redirect("refresh",$basedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],false).$Settings['qstr']."#post".$_GET['post'],"4"); ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Click <a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">here</a> to goto index page.<br />&nbsp;
@@ -1427,12 +1464,13 @@ mysql_query($queryupd);
 if($ShowEditTopic===true) {
 $queryupd = query("UPDATE `".$Settings['sqltable']."topics` SET `TopicName`='%s',`Description`='%s' WHERE `id`=%i", array($_POST['TopicName'],$_POST['ReplyDesc'],$TopicID));
 mysql_query($queryupd); } } 
-@redirect(url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],FALSE)."&#post".$_GET['post'],"3");
+@redirect(url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],FALSE).$Settings['qstr']."#post".$_GET['post'],"3");
+$_SESSION['LastPostTime'] = GMTimeStamp() + $GroupInfo['FloodControl'];
 ?>
 <tr>
 	<td><span class="TableMessage"><br />
 	Reply to Topic <?php echo $TopicName; ?> was edited.<br />
-	Click <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."&amp;&#35;post".$_GET['post']; ?>">here</a> to view topic.<br />&nbsp;
+	Click <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']).$qstrhtml."&#35;post".$_GET['post']; ?>">here</a> to view topic.<br />&nbsp;
 	</span><br /></td>
 </tr>
 </table>

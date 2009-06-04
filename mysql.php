@@ -11,12 +11,13 @@
     Copyright 2004-2009 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: mysql.php - Last Update: 6/04/2009 SVN 259 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 6/04/2009 SVN 261 - Author: cooldude2k $
 */
 //@ini_set("display_errors", true); 
 //@ini_set("display_startup_errors", true);
 @error_reporting(E_ALL ^ E_NOTICE);
 @ini_set('session.use_trans_sid', false);
+@ini_set("url_rewriter.tags","");
 @set_time_limit(30); @ignore_user_abort(true);
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mysql.php"||$File3Name=="/mysql.php") {
@@ -31,7 +32,8 @@ if($Settings['fixbasedir']=="off") {
 	$Settings['fixbasedir'] = null; }
 if($Settings['fixcookiedir']=="off") {
 	$Settings['fixcookiedir'] = null; }
-if($Settings['idburl']=="localhost") { @header("Content-Type: text/plain; charset=UTF-8");
+if($Settings['idburl']=="localhost") { 
+@header("Content-Type: text/plain; charset=UTF-8");
 echo "500 Error: URL is malformed. Try reinstalling iDB."; die(); }
 if($Settings['fixbasedir']=="on") {
 if($Settings['idburl']!=null&&$Settings['idburl']!="localhost") {
@@ -96,6 +98,7 @@ if($Settings['enable_pathinfo']=="on") {
 	mrstring(); /* Change Path info to Get Vars :P */ }
 // Check to see if variables are set
 require_once($SettDir['misc'].'setcheck.php');
+$qstrhtml = htmlentities($Settings['qstr'], ENT_QUOTES, $Settings['charset']);
 if($Settings['enable_https']=="on"&&$_SERVER['HTTPS']=="on") {
 if($Settings['idburl']!=null&&$Settings['idburl']!="localhost") {
 $HTTPsTest = parse_url($Settings['idburl']); if($HTTPsTest['scheme']=="http") {
@@ -244,6 +247,7 @@ if(isset($_SESSION['MemberName'])||
 if(!isset($_SESSION['MemberName'])&&!isset($_COOKIE['MemberName'])) {
 if(!isset($_SESSION['GuestName'])&&isset($_COOKIE['GuestName'])) {
 	$_SESSION['GuestName'] = $_COOKIE['GuestName']; } }
+if(!isset($_SESSION['LastPostTime'])) { $_SESSION['LastPostTime'] = "0"; }
 // Skin Stuff
 if(!isset($_SESSION['Theme'])) { $_SESSION['Theme'] = null; }
 if(!isset($_GET['theme'])) { $_GET['theme'] = null; }

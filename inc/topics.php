@@ -11,7 +11,7 @@
     Copyright 2004-2009 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: topics.php - Last Update: 6/04/2009 SVN 260 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 6/04/2009 SVN 261 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -361,11 +361,11 @@ $Users_Name1 = $Users_Name1."..."; $UsersName1=$Users_Name1; } $lul = null;
 if($TimeStamp1!=null) { $lul = null;
 if($UsersID1!="-1") {
 $lul = url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UsersID1,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
-$luln = url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."&amp;&#35;reply".$NumRPosts;
+$luln = url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']).$qstrhtml."&#35;reply".$NumRPosts;
 $LastReply = "<a href=\"".$luln."\">".$TimeStamp1."</a><br />\nUser: <a href=\"".$lul."\" title=\"".$oldusername."\">".$UsersName1."</a>"; }
 if($UsersID1=="-1") {
 $lul = url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UsersID1,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
-$luln = url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."&amp;&#35;reply".$NumRPosts;
+$luln = url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']).$qstrhtml."&#35;reply".$NumRPosts;
 $LastReply = "<a href=\"".$luln."\">".$TimeStamp1."</a><br />\nGuest: <span title=\"".$oldusername."\">".$UsersName1."</span>"; } }
 @mysql_free_result($glrresult);
 if(!isset($TimeStamp1)) { $TimeStamp1 = null; } if(!isset($LastReply)) { $LastReply = "&nbsp;<br />&nbsp;"; }
@@ -426,7 +426,42 @@ echo "<span>".$UsersName."</span>"; }
 <div class="DivTopics">&nbsp;</div>
 <?php
 @mysql_free_result($result); }
-if($_GET['act']=="create") {
+if((GMTimeStamp()<$_SESSION['LastPostTime']&&$_SESSION['LastPostTime']!=0)&&($_GET['act']=="create"||$_GET['act']=="maketopic")) { 
+$_GET['act'] = "view"; $_POST['act'] = null; 
+@redirect("refresh",$basedir.url_maker($exfile['forum'],$Settings['file_ext'],"act=view&id=".$ForumID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum'],FALSE),"3"); ?>
+<div class="Table1Border">
+<?php if($ThemeSet['TableStyle']=="div") { ?>
+<div class="TableRow1">
+<span style="text-align: left;">
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['forum'],$Settings['file_ext'],"act=view&id=".$ForumID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum']); ?>"><?php echo $ForumName; ?></a></span></div>
+<?php } ?>
+<table class="Table1">
+<?php if($ThemeSet['TableStyle']=="table") { ?>
+<tr class="TableRow1">
+<td class="TableColumn1"><span style="text-align: left;">
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['forum'],$Settings['file_ext'],"act=view&id=".$ForumID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum']); ?>"><?php echo $ForumName; ?></a></span>
+</td>
+</tr><?php } ?>
+<tr class="TableRow2">
+<th class="TableColumn2" style="width: 100%; text-align: left;">&nbsp;Make Reply Message: </th>
+</tr>
+<tr class="TableRow3">
+<td class="TableColumn3">
+<table style="width: 100%; height: 25%; text-align: center;">
+<tr>
+	<td><span class="TableMessage"><br />
+	You have to wait before making another topic.<br />
+	Click <a href="<?php echo url_maker($exfile['forum'],$Settings['file_ext'],"act=view&id=".$ForumID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum']); ?>">here</a> to view your reply.<br />&nbsp;
+	</span><br /></td>
+</tr>
+</table>
+</td></tr>
+<tr class="TableRow4">
+<td class="TableColumn4">&nbsp;</td>
+</tr>
+</table></div>
+<div class="DivMkReply">&nbsp;</div>
+<?php } if($_GET['act']=="create") {
 if($GroupInfo['HasAdminCP']!="yes"||$GroupInfo['HasModCP']!="yes") {
 if($ForumPostCountView!=0&&$MyPostCountChk<$ForumPostCountView) {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); }
@@ -781,6 +816,7 @@ $NewNumPosts = $NumberPosts + 1; $NewNumTopics = $NumberTopics + 1;
 $queryupd = query("UPDATE `".$Settings['sqltable']."forums` SET `NumPosts`=%i,`NumTopics`=%i WHERE `id`=%i", array($NewNumPosts,$NewNumTopics,$ForumID));
 mysql_query($queryupd);
 @redirect("refresh",$basedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$topicid."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],FALSE),"3");
+$_SESSION['LastPostTime'] = GMTimeStamp() + $GroupInfo['FloodControl'];
 ?><tr>
 	<td><span class="TableMessage"><br />
 	Topic <?php echo $_POST['TopicName']; ?> was started.<br />

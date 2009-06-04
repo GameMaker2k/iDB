@@ -11,7 +11,7 @@
     Copyright 2004-2009 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: searchs.php - Last Update: 6/04/2009 SVN 260 - Author: cooldude2k $
+    $FileInfo: searchs.php - Last Update: 6/04/2009 SVN 261 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="searchs.php"||$File3Name=="/searchs.php") {
@@ -374,11 +374,11 @@ $oldusername=$UsersName1; $UsersName1=$Users_Name1; } $lul = null;
 if($TimeStamp1!=null) { $lul = null;
 if($UsersID1!="-1") {
 $lul = url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UsersID1,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
-$luln = url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."&amp;&#35;reply".$NumRPosts;
+$luln = url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']).$qstrhtml."&#35;reply".$NumRPosts;
 $LastReply = "User: <a href=\"".$lul."\" title=\"".$oldusername."\">".$UsersName1."</a><br />\nTime: <a href=\"".$luln."\">".$TimeStamp1."</a>"; }
 if($UsersID1=="-1") {
 $lul = url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']);
-$luln = url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."&amp;&#35;reply".$NumRPosts;
+$luln = url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']).$qstrhtml."&#35;reply".$NumRPosts;
 $LastReply = "Guest: <span title=\"".$oldusername."\">".$UsersName1."</span><br />\nTime: <a href=\"".$luln."\">".$TimeStamp1."</a>"; } }
 @mysql_free_result($glrresult);
 if($TimeStamp1==null) { $LastReply = "&nbsp;<br />&nbsp;"; }
