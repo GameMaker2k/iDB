@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
-    Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
+    Copyright 2004-2009 Cool Dude 2k - http://idb.berlios.de/
+    Copyright 2004-2009 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: groupsetup.php - Last Update: 4/22/2009 SVN 245 - Author: cooldude2k $
+    $FileInfo: groupsetup.php - Last Update: 6/04/2009 SVN 259 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="groupsetup.php"||$File3Name=="/groupsetup.php") {
@@ -106,6 +106,9 @@ $GroupInfo['NamePrefix']=mysql_result($gruresult,0,"NamePrefix");
 $GroupInfo['NameSuffix']=mysql_result($gruresult,0,"NameSuffix");
 $GroupInfo['CanViewBoard']=mysql_result($gruresult,0,"CanViewBoard");
 if($GroupInfo['CanViewBoard']!="yes"&&$GroupInfo['CanViewBoard']!="no") {
+		$GruError = true; }
+$GroupInfo['CanViewOffLine']=mysql_result($gruresult,0,"CanViewOffLine");
+if($GroupInfo['CanViewOffLine']!="yes"&&$GroupInfo['CanViewOffLine']!="no") {
 		$GruError = true; }
 $GroupInfo['FloodControl']=mysql_result($gruresult,0,"FloodControl");
 if(!is_numeric($GroupInfo['FloodControl'])) { $GroupInfo['FloodControl'] = 30; }

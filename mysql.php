@@ -11,7 +11,7 @@
     Copyright 2004-2009 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: mysql.php - Last Update: 6/02/2009 SVN 257 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 6/04/2009 SVN 259 - Author: cooldude2k $
 */
 //@ini_set("display_errors", true); 
 //@ini_set("display_startup_errors", true);
@@ -204,7 +204,7 @@ if(!isset($_SESSION['CheckCookie'])) {
 if(isset($_COOKIE['SessPass'])&&isset($_COOKIE['MemberName'])) {
 require($SettDir['inc'].'prelogin.php'); } }
 require($SettDir['inc'].'groupsetup.php');
-if($Settings['board_offline']=="on"&&$GroupInfo['HasAdminCP']!="yes") {
+if($Settings['board_offline']=="on"&&$GroupInfo['CanViewOffLine']!="yes") {
 @header("Content-Type: text/plain; charset=".$Settings['charset']); @mysql_free_result($peresult);
 ob_clean(); if(!isset($Settings['offline_text'])) {
 echo "Sorry the board is off line.\nIf you are a admin you can login by the admin cp."; }

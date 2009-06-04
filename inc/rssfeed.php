@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
-    Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
+    Copyright 2004-2009 Cool Dude 2k - http://idb.berlios.de/
+    Copyright 2004-2009 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: rssfeed.php - Last Update: 6/03/2009 SVN 258 - Author: cooldude2k $
+    $FileInfo: rssfeed.php - Last Update: 6/04/2009 SVN 259 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="rssfeed.php"||$File3Name=="/rssfeed.php") {
@@ -113,7 +113,7 @@ $TopicID=mysql_result($result,$i,"id");
 $ForumID=mysql_result($result,$i,"ForumID");
 $CategoryID=mysql_result($result,$i,"CategoryID");
 $UsersID=mysql_result($result,$i,"UserID");
-$GuestName=mysql_result($result,$i,"GuestName");
+$GuestsName=mysql_result($result,$i,"GuestName");
 $TheTime=mysql_result($result,$i,"TimeStamp");
 $TheTime=GMTimeChange("D, j M Y G:i:s \G\M\T",$TheTime,0);
 $TopicName=mysql_result($result,$i,"TopicName");

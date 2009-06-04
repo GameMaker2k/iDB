@@ -11,7 +11,7 @@
     Copyright 2004-2009 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: subcategories.php - Last Update: 5/03/2009 SVN 248 - Author: cooldude2k $
+    $FileInfo: subcategories.php - Last Update: 6/04/2009 SVN 259 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="subcategories.php"||$File3Name=="/subcategories.php") {
@@ -204,10 +204,10 @@ $TopicName1 = pre_substr($TopicName,0,20);
 if (pre_strlen($TopicName)>20) { $TopicName1 = $TopicName1."..."; 
 $oldtopicname=$TopicName; $TopicName=$TopicName1; }
 $UsersID=mysql_result($gltresult,0,"UserID");
-$GuestName=mysql_result($gltresult,0,"GuestName");
+$GuestsName=mysql_result($gltresult,0,"GuestName");
 $UsersName = GetUserName($UsersID,$Settings['sqltable']);
 $UsersName1 = pre_substr($UsersName,0,20);
-if($UsersName=="Guest") { $UsersName=$GuestName;
+if($UsersName=="Guest") { $UsersName=$GuestsName;
 if($UsersName==null) { $UsersName="Guest"; } }
 if (pre_strlen($UsersName)>20) { $UsersName1 = $UsersName1."...";
 $oldusername=$UsersName; $UsersName=$UsersName1; } $lul = null;

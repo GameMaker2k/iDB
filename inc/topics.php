@@ -11,7 +11,7 @@
     Copyright 2004-2009 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: topics.php - Last Update: 4/22/2009 SVN 245 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 6/04/2009 SVN 259 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -253,7 +253,7 @@ if($pstring!=null||$PermissionInfo['CanMakeTopics'][$ForumID]=="yes"&&$CanHaveTo
 while ($i < $num) {
 $TopicID=mysql_result($result,$i,"id");
 $UsersID=mysql_result($result,$i,"UserID");
-$GuestName=mysql_result($result,$i,"GuestName");
+$GuestsName=mysql_result($result,$i,"GuestName");
 $TheTime=mysql_result($result,$i,"TimeStamp");
 $TheTime=GMTimeChange("F j Y, g:i a",$TheTime,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $NumReply=mysql_result($result,$i,"NumReply");
@@ -330,7 +330,7 @@ $GroupNamePrefix=mysql_result($gresult,0,"NamePrefix");
 $GroupNameSuffix=mysql_result($gresult,0,"NameSuffix");
 @mysql_free_result($gresult);
 $UsersName = GetUserName($UsersID,$Settings['sqltable']);
-if($UsersName=="Guest") { $UsersName=$GuestName;
+if($UsersName=="Guest") { $UsersName=$GuestsName;
 if($UsersName==null) { $UsersName="Guest"; } }
 if(isset($GroupNamePrefix)&&$GroupNamePrefix!=null) {
 	$UsersName = $GroupNamePrefix.$UsersName; }
@@ -343,7 +343,7 @@ $glrnum=mysql_num_rows($glrresult);
 if($glrnum>0){
 $ReplyID1=mysql_result($glrresult,0,"id");
 $UsersID1=mysql_result($glrresult,0,"UserID");
-$GuestName1=mysql_result($glrresult,0,"GuestName");
+$GuestsName1=mysql_result($glrresult,0,"GuestName");
 $TimeStamp1=mysql_result($glrresult,0,"TimeStamp");
 $TimeStamp1=GMTimeChange("F j Y, g:i a",$TimeStamp1,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $UsersName1 = GetUserName($UsersID1,$Settings['sqltable']); }
@@ -354,7 +354,7 @@ $NumPages = ceil($NumRPosts/$Settings['max_posts']); }
 if($NumRPosts<=$Settings['max_posts']) {
 $NumPages = 1; }
 $Users_Name1 = pre_substr($UsersName1,0,20);
-if($UsersName1=="Guest") { $UsersName1=$GuestName1;
+if($UsersName1=="Guest") { $UsersName1=$GuestsName1;
 if($UsersName1==null) { $UsersName1="Guest"; } }
 $oldusername=$UsersName1;
 if (pre_strlen($UsersName1)>20) { 

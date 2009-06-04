@@ -11,7 +11,7 @@
     Copyright 2004-2009 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: xhtml11.php - Last Update: 6/02/2009 SVN 257 - Author: cooldude2k $
+    $FileInfo: xhtml11.php - Last Update: 6/04/2009 SVN 259 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="xhtml11.php"||$File3Name=="/xhtml11.php") {
@@ -144,7 +144,7 @@ body {
 background-color: #FFFFFF;
 color: #000000;
 font-family: Verdana, Tahoma, Arial, Trebuchet MS, Sans-Serif, Georgia, Courier, Times New Roman, Serif;
-font-size: 1em;
+font-size: 16px;
 margin: 20px;
 padding: 0px;
 }
@@ -154,6 +154,10 @@ font-family: Sans-Serif;
 font-size: 12px;
 line-height: 11px;
 color: #000000;
+}
+.EditReply {
+color: #000000;
+font-size: 9px;
 }
 </style>
 <?php } if($ThemeSet['FavIcon']!=null) { ?>

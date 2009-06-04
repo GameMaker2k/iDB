@@ -11,7 +11,7 @@
     Copyright 2004-2009 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: replies.php - Last Update: 6/03/2009 SVN 258 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 6/04/2009 SVN 259 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -201,13 +201,12 @@ if($TopicClosed==0&&$PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes") {
 if($TopicClosed==1&&$PermissionInfo['CanMakeReplysClose'][$TopicForumID]=="yes"
 	&&$PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes") {
 		$CanMakeReply = "yes"; }
-if($pstring!=null||$CanMakeReply=="yes"||$CanMakeTopic=="yes") {
 ?>
 <div style="padding: 10px; border: 1px solid gray;">
 <?php echo $pstring; ?></div>
 <div>&nbsp;</div>
 <div style="padding: 10px; border: 1px solid gray;">
-<?php } while ($i < $num) {
+<?php while ($i < $num) {
 $MyPostID=mysql_result($result,$i,"id");
 $MyTopicID=mysql_result($result,$i,"TopicID");
 $MyPostIP=mysql_result($result,$i,"IP");
@@ -226,7 +225,7 @@ $requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i
 $reresult=mysql_query($requery);
 $renum=mysql_num_rows($reresult);
 $rei=0; $ipshow = "two";
-$User1ID=$MyUserID; $GuestName = $MyGuestName;
+$User1ID=$MyUserID; $GuestsName = $MyGuestName;
 $User1Name=mysql_result($reresult,$rei,"Name");
 $User1IP=mysql_result($reresult,$rei,"IP");
 if($User1IP==$MyPostIP) { $ipshow = "one"; }
@@ -255,7 +254,7 @@ $User1PostCount=mysql_result($reresult,$rei,"PostCount");
 $User1Karma=mysql_result($reresult,$rei,"Karma");
 $User1IP=mysql_result($reresult,$rei,"IP");
 @mysql_free_result($reresult);
-if($User1Name=="Guest") { $User1Name=$GuestName;
+if($User1Name=="Guest") { $User1Name=$GuestsName;
 if($User1Name==null) { $User1Name="Guest"; } }
 if(isset($GroupNamePrefix)&&$GroupNamePrefix!=null) {
 	$User1Name = $GroupNamePrefix.$User1Name; }

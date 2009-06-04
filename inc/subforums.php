@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
-    Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
+    Copyright 2004-2009 Cool Dude 2k - http://idb.berlios.de/
+    Copyright 2004-2009 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: subforums.php - Last Update: 12/12/2008 SVN 215 - Author: cooldude2k $
+    $FileInfo: subforums.php - Last Update: 6/04/2009 SVN 259 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="subforums.php"||$File3Name=="/subforums.php") {
@@ -189,13 +189,13 @@ $glrnum=mysql_num_rows($glrresult);
 if($glrnum>0){
 $ReplyID=mysql_result($glrresult,0,"id");
 $UsersID=mysql_result($glrresult,0,"UserID");
-$GuestName=mysql_result($glrresult,0,"GuestName");
+$GuestsName=mysql_result($glrresult,0,"GuestName");
 $TimeStamp=mysql_result($glrresult,0,"TimeStamp");
 $TimeStamp=GMTimeChange("F j Y, g:i a",$TimeStamp,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 @mysql_free_result($glrresult); }
 $UsersName = GetUserName($UsersID,$Settings['sqltable']);
 $UsersName1 = pre_substr($UsersName,0,20);
-if($UsersName=="Guest") { $UsersName=$GuestName;
+if($UsersName=="Guest") { $UsersName=$GuestsName;
 if($UsersName==null) { $UsersName="Guest"; } }
 $oldusername=$UsersName;
 if (pre_strlen($UsersName)>20) {

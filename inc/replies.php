@@ -11,7 +11,7 @@
     Copyright 2004-2009 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: replies.php - Last Update: 3/29/2009 SVN 243 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 6/04/2009 SVN 259 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -255,7 +255,7 @@ $requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i
 $reresult=mysql_query($requery);
 $renum=mysql_num_rows($reresult);
 $rei=0; $ipshow = "two";
-$User1ID=$MyUserID; $GuestName = $MyGuestName;
+$User1ID=$MyUserID; $GuestsName = $MyGuestName;
 $User1Name=mysql_result($reresult,$rei,"Name");
 $User1IP=mysql_result($reresult,$rei,"IP");
 if($User1IP==$MyPostIP) { $ipshow = "one"; }
@@ -284,7 +284,7 @@ $User1PostCount=mysql_result($reresult,$rei,"PostCount");
 $User1Karma=mysql_result($reresult,$rei,"Karma");
 $User1IP=mysql_result($reresult,$rei,"IP");
 @mysql_free_result($reresult);
-if($User1Name=="Guest") { $User1Name=$GuestName;
+if($User1Name=="Guest") { $User1Name=$GuestsName;
 if($User1Name==null) { $User1Name="Guest"; } }
 if(isset($GroupNamePrefix)&&$GroupNamePrefix!=null) {
 	$User1Name = $GroupNamePrefix.$User1Name; }
@@ -408,107 +408,8 @@ echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr
 </tr>
 </table></div>
 <div class="DivReplies">&nbsp;</div>
-<?php ++$i; } @mysql_free_result($result); 
-if($CanMakeReply=="yes") {  
-if(!isset($_GET['fastreply'])) { $_GET['fastreply'] = false; }
-if($_GET['fastreply']===true||
-	$_GET['fastreply']=="on") { $fps = " "; }
-if($_GET['fastreply']!==true&&
-	$_GET['fastreply']!="on") { $fps = " style=\"display: none;\" "; }
-$QuoteReply = null; $QuoteDescription = null;
-$queryra = query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `TopicID`=%i ORDER BY `TimeStamp` ASC LIMIT 1", array($_GET['id']));
-$resultra=mysql_query($queryra);
-$numrose=mysql_num_rows($resultra);
-$QuoteDescription=mysql_result($resultra,0,"Description"); 
-$QuoteDescription = str_replace("Re: ","",$QuoteDescription);
-$QuoteDescription = "Re: ".$QuoteDescription;
-@mysql_free_result($resultra);
-?>
-<div class="Table1Border"<?php echo $fps; ?>id="FastReply">
-<?php if($ThemeSet['TableStyle']=="div") { ?>
-<div class="TableRow1">
-<span style="text-align: left;">
-<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>#<?php echo $TopicID; ?>"><?php echo $TopicName; ?></a></span></div>
-<?php } ?>
-<table class="Table1" id="MakeReply<?php echo $TopicForumID; ?>">
-<?php if($ThemeSet['TableStyle']=="table") { ?>
-<tr class="TableRow1" id="ReplyStart<?php echo $TopicForumID; ?>">
-<td class="TableColumn1" colspan="2"><span style="text-align: left;">
-<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>#<?php echo $TopicID; ?>"><?php echo $TopicName; ?></a></span>
-</td>
-</tr><?php } ?>
-<tr id="MakeReplyRow<?php echo $TopicForumID; ?>" class="TableRow2">
-<td class="TableColumn2" colspan="2" style="width: 100%;">Making a Reply in Topic <?php echo $TopicName; ?></td>
-</tr>
-<tr class="TableRow3" id="MkReply<?php echo $TopicForumID; ?>">
-<td class="TableColumn3" style="width: 15%; vertical-align: middle; text-align: center;">
-<div style="width: 100%; height: 160px; overflow: auto;">
-<table style="width: 100%; text-align: center;"><?php
-$renee_query=query("SELECT * FROM `".$Settings['sqltable']."smileys` WHERE `Show`='yes'", array(null));
-$renee_result=mysql_query($renee_query);
-$renee_num=mysql_num_rows($renee_result);
-$renee_s=0; $SmileRow=0; $SmileCRow=0;
-while ($renee_s < $renee_num) { ++$SmileRow;
-$FileName=mysql_result($renee_result,$renee_s,"FileName");
-$SmileName=mysql_result($renee_result,$renee_s,"SmileName");
-$SmileText=mysql_result($renee_result,$renee_s,"SmileText");
-$SmileDirectory=mysql_result($renee_result,$renee_s,"Directory");
-$ShowSmile=mysql_result($renee_result,$renee_s,"Show");
-$ReplaceType=mysql_result($renee_result,$renee_s,"ReplaceCI");
-if($SmileRow==1) { ?><tr>
-	<?php } if($SmileRow<5) { ++$SmileCRow; ?>
-	<td>&nbsp;<img src="<?php echo $SmileDirectory."".$FileName; ?>" style="vertical-align: middle; border: 0px; cursor: pointer;" title="<?php echo $SmileName; ?>" alt="<?php echo $SmileName; ?>" onclick="addsmiley('ReplyPost','&nbsp;<?php echo htmlspecialchars($SmileText, ENT_QUOTES, $Settings['charset']); ?>&nbsp;')" />&nbsp;</td>
-	<?php } if($SmileRow==5) { ++$SmileCRow; ?>
-	<td>&nbsp;<img src="<?php echo $SmileDirectory."".$FileName; ?>" style="vertical-align: middle; border: 0px; cursor: pointer;" title="<?php echo $SmileName; ?>" alt="<?php echo $SmileName; ?>" onclick="addsmiley('ReplyPost','&nbsp;<?php echo htmlspecialchars($SmileText, ENT_QUOTES, $Settings['charset']); ?>&nbsp;')" />&nbsp;</td></tr>
-	<?php $SmileCRow=0; $SmileRow=0; }
-++$renee_s; }
-if($SmileCRow<5&&$SmileCRow!=0) {
-$SmileCRowL = 5 - $SmileCRow;
-echo "<td colspan=\"".$SmileCRowL."\">&nbsp;</td></tr>"; }
-echo "</table>";
-@mysql_free_result($renee_result);
-?></div></td>
-<td class="TableColumn3" style="width: 85%;">
-<form style="display: inline;" method="post" id="MkReplyForm" action="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=makereply&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>">
-<table style="text-align: left;">
-<tr style="text-align: left;">
-	<td style="width: 50%;"><label class="TextBoxLabel" for="ReplyDesc">Insert Reply Description:</label></td>
-	<td style="width: 50%;"><input maxlength="45" type="text" name="ReplyDesc" class="TextBox" id="ReplyDesc" size="20" value="<?php echo $QuoteDescription; ?>" /></td>
-</tr><?php if($_SESSION['UserGroup']==$Settings['GuestGroup']) { ?><tr style="text-align: left;">
-	<td style="width: 50%;"><label class="TextBoxLabel" for="GuestName">Insert Guest Name:</label></td>
-	<?php if(!isset($_SESSION['GuestName'])) { ?>
-	<td style="width: 50%;"><input maxlength="25" type="text" name="GuestName" class="TextBox" id="GuestName" size="20" /></td>
-	<?php } if(isset($_SESSION['GuestName'])) { ?>
-	<td style="width: 50%;"><input maxlength="25" type="text" name="GuestName" class="TextBox" id="GuestName" size="20" value="<?php echo $_SESSION['GuestName']; ?>" /></td>
-<?php } ?></tr><?php } ?>
-</table>
-<table style="text-align: left;">
-<tr style="text-align: left;">
-<td style="width: 100%;">
-<label class="TextBoxLabel" for="ReplyPost">Insert Your Reply:</label><br />
-<textarea rows="10" name="ReplyPost" id="ReplyPost" cols="40" class="TextBox"><?php echo $QuoteReply; ?></textarea><br />
-<?php if($_SESSION['UserGroup']==$Settings['GuestGroup']&&$Settings['captcha_guest']=="on") { ?>
-<label class="TextBoxLabel" for="signcode"><img src="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=MkCaptcha",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>" alt="CAPTCHA Code" title="CAPTCHA Code" /></label><br />
-<input maxlength="25" type="text" class="TextBox" name="signcode" size="20" id="signcode" value="Enter SignCode" /><br />
-<?php } ?>
-<input type="hidden" name="act" value="makereplies" style="display: none;" />
-<?php if($_SESSION['UserGroup']!=$Settings['GuestGroup']) { ?>
-<input type="hidden" name="GuestName" value="null" style="display: none;" />
-<?php } ?>
-<input type="hidden" name="act" value="makereplies" style="display: none;" />
-<?php if($_SESSION['UserGroup']!=$Settings['GuestGroup']) { ?>
-<input type="hidden" name="GuestName" value="null" style="display: none;" />
-<?php } ?>
-<input type="submit" class="Button" value="Make Reply" name="make_reply" />
-<input type="reset" value="Reset Form" class="Button" name="Reset_Form" />
-</td></tr></table>
-</form></td></tr>
-<tr id="MkReplyEnd<?php echo $TopicForumID; ?>" class="TableRow4">
-<td class="TableColumn4" colspan="2">&nbsp;</td>
-</tr>
-</table></div>
-<div<?php echo $fps; ?>id="MkFastReply" class="MkFastReply">&nbsp;</div>
-<?php } } if($_GET['act']=="create") {
+<?php ++$i; } @mysql_free_result($result); } 
+if($_GET['act']=="create") {
 if($GroupInfo['HasAdminCP']!="yes"||$GroupInfo['HasModCP']!="yes") {
 if($ForumPostCountView!=0&&$MyPostCountChk<$ForumPostCountView) {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); }
@@ -1566,4 +1467,104 @@ if($pstring!=null||$CanMakeReply=="yes"||$CanMakeTopic=="yes") {
 </tr>
 </table>
 <div class="DivTable2">&nbsp;</div>
-<?php } } ?>
+<?php } }
+if($_GET['act']=="view"&&$CanMakeReply=="yes") {  
+if(!isset($_GET['fastreply'])) { $_GET['fastreply'] = false; }
+if($_GET['fastreply']===true||
+	$_GET['fastreply']=="on") { $fps = " "; }
+if($_GET['fastreply']!==true&&
+	$_GET['fastreply']!="on") { $fps = " style=\"display: none;\" "; }
+$QuoteReply = null; $QuoteDescription = null;
+$queryra = query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `TopicID`=%i ORDER BY `TimeStamp` ASC LIMIT 1", array($_GET['id']));
+$resultra=mysql_query($queryra);
+$numrose=mysql_num_rows($resultra);
+$QuoteDescription=mysql_result($resultra,0,"Description"); 
+$QuoteDescription = str_replace("Re: ","",$QuoteDescription);
+$QuoteDescription = "Re: ".$QuoteDescription;
+@mysql_free_result($resultra);
+?>
+<div class="Table1Border"<?php echo $fps; ?>id="FastReply">
+<?php if($ThemeSet['TableStyle']=="div") { ?>
+<div class="TableRow1">
+<span style="text-align: left;">
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>#<?php echo $TopicID; ?>"><?php echo $TopicName; ?></a></span></div>
+<?php } ?>
+<table class="Table1" id="MakeReply<?php echo $TopicForumID; ?>">
+<?php if($ThemeSet['TableStyle']=="table") { ?>
+<tr class="TableRow1" id="ReplyStart<?php echo $TopicForumID; ?>">
+<td class="TableColumn1" colspan="2"><span style="text-align: left;">
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>#<?php echo $TopicID; ?>"><?php echo $TopicName; ?></a></span>
+</td>
+</tr><?php } ?>
+<tr id="MakeReplyRow<?php echo $TopicForumID; ?>" class="TableRow2">
+<td class="TableColumn2" colspan="2" style="width: 100%;">Making a Reply in Topic <?php echo $TopicName; ?></td>
+</tr>
+<tr class="TableRow3" id="MkReply<?php echo $TopicForumID; ?>">
+<td class="TableColumn3" style="width: 15%; vertical-align: middle; text-align: center;">
+<div style="width: 100%; height: 160px; overflow: auto;">
+<table style="width: 100%; text-align: center;"><?php
+$renee_query=query("SELECT * FROM `".$Settings['sqltable']."smileys` WHERE `Show`='yes'", array(null));
+$renee_result=mysql_query($renee_query);
+$renee_num=mysql_num_rows($renee_result);
+$renee_s=0; $SmileRow=0; $SmileCRow=0;
+while ($renee_s < $renee_num) { ++$SmileRow;
+$FileName=mysql_result($renee_result,$renee_s,"FileName");
+$SmileName=mysql_result($renee_result,$renee_s,"SmileName");
+$SmileText=mysql_result($renee_result,$renee_s,"SmileText");
+$SmileDirectory=mysql_result($renee_result,$renee_s,"Directory");
+$ShowSmile=mysql_result($renee_result,$renee_s,"Show");
+$ReplaceType=mysql_result($renee_result,$renee_s,"ReplaceCI");
+if($SmileRow==1) { ?><tr>
+	<?php } if($SmileRow<5) { ++$SmileCRow; ?>
+	<td>&nbsp;<img src="<?php echo $SmileDirectory."".$FileName; ?>" style="vertical-align: middle; border: 0px; cursor: pointer;" title="<?php echo $SmileName; ?>" alt="<?php echo $SmileName; ?>" onclick="addsmiley('ReplyPost','&nbsp;<?php echo htmlspecialchars($SmileText, ENT_QUOTES, $Settings['charset']); ?>&nbsp;')" />&nbsp;</td>
+	<?php } if($SmileRow==5) { ++$SmileCRow; ?>
+	<td>&nbsp;<img src="<?php echo $SmileDirectory."".$FileName; ?>" style="vertical-align: middle; border: 0px; cursor: pointer;" title="<?php echo $SmileName; ?>" alt="<?php echo $SmileName; ?>" onclick="addsmiley('ReplyPost','&nbsp;<?php echo htmlspecialchars($SmileText, ENT_QUOTES, $Settings['charset']); ?>&nbsp;')" />&nbsp;</td></tr>
+	<?php $SmileCRow=0; $SmileRow=0; }
+++$renee_s; }
+if($SmileCRow<5&&$SmileCRow!=0) {
+$SmileCRowL = 5 - $SmileCRow;
+echo "<td colspan=\"".$SmileCRowL."\">&nbsp;</td></tr>"; }
+echo "</table>";
+@mysql_free_result($renee_result);
+?></div></td>
+<td class="TableColumn3" style="width: 85%;">
+<form style="display: inline;" method="post" id="MkReplyForm" action="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=makereply&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>">
+<table style="text-align: left;">
+<tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="ReplyDesc">Insert Reply Description:</label></td>
+	<td style="width: 50%;"><input maxlength="45" type="text" name="ReplyDesc" class="TextBox" id="ReplyDesc" size="20" value="<?php echo $QuoteDescription; ?>" /></td>
+</tr><?php if($_SESSION['UserGroup']==$Settings['GuestGroup']) { ?><tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="GuestName">Insert Guest Name:</label></td>
+	<?php if(!isset($_SESSION['GuestName'])) { ?>
+	<td style="width: 50%;"><input maxlength="25" type="text" name="GuestName" class="TextBox" id="GuestName" size="20" /></td>
+	<?php } if(isset($_SESSION['GuestName'])) { ?>
+	<td style="width: 50%;"><input maxlength="25" type="text" name="GuestName" class="TextBox" id="GuestName" size="20" value="<?php echo $_SESSION['GuestName']; ?>" /></td>
+<?php } ?></tr><?php } ?>
+</table>
+<table style="text-align: left;">
+<tr style="text-align: left;">
+<td style="width: 100%;">
+<label class="TextBoxLabel" for="ReplyPost">Insert Your Reply:</label><br />
+<textarea rows="10" name="ReplyPost" id="ReplyPost" cols="40" class="TextBox"><?php echo $QuoteReply; ?></textarea><br />
+<?php if($_SESSION['UserGroup']==$Settings['GuestGroup']&&$Settings['captcha_guest']=="on") { ?>
+<label class="TextBoxLabel" for="signcode"><img src="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=MkCaptcha",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>" alt="CAPTCHA Code" title="CAPTCHA Code" /></label><br />
+<input maxlength="25" type="text" class="TextBox" name="signcode" size="20" id="signcode" value="Enter SignCode" /><br />
+<?php } ?>
+<input type="hidden" name="act" value="makereplies" style="display: none;" />
+<?php if($_SESSION['UserGroup']!=$Settings['GuestGroup']) { ?>
+<input type="hidden" name="GuestName" value="null" style="display: none;" />
+<?php } ?>
+<input type="hidden" name="act" value="makereplies" style="display: none;" />
+<?php if($_SESSION['UserGroup']!=$Settings['GuestGroup']) { ?>
+<input type="hidden" name="GuestName" value="null" style="display: none;" />
+<?php } ?>
+<input type="submit" class="Button" value="Make Reply" name="make_reply" />
+<input type="reset" value="Reset Form" class="Button" name="Reset_Form" />
+</td></tr></table>
+</form></td></tr>
+<tr id="MkReplyEnd<?php echo $TopicForumID; ?>" class="TableRow4">
+<td class="TableColumn4" colspan="2">&nbsp;</td>
+</tr>
+</table></div>
+<div<?php echo $fps; ?>id="MkFastReply" class="MkFastReply">&nbsp;</div>
+<?php } ?>

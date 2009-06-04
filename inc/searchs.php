@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
-    Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
+    Copyright 2004-2009 Cool Dude 2k - http://idb.berlios.de/
+    Copyright 2004-2009 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: searchs.php - Last Update: 12/29/2008 SVN 225 - Author: cooldude2k $
+    $FileInfo: searchs.php - Last Update: 6/04/2009 SVN 259 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="searchs.php"||$File3Name=="/searchs.php") {
@@ -279,7 +279,7 @@ if(!is_numeric($Settings['hot_topic_num'])) {
 	$Settings['hot_topic_num'] = 15; }
 $CategoryID=mysql_result($result,$i,"CategoryID");
 $UsersID=mysql_result($result,$i,"UserID");
-$GuestName=mysql_result($result,$i,"GuestName");
+$GuestsName=mysql_result($result,$i,"GuestName");
 $TheTime=mysql_result($result,$i,"TimeStamp");
 $TheTime=GMTimeChange("F j, Y",$TheTime,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $NumReply=mysql_result($result,$i,"NumReply");
@@ -345,7 +345,7 @@ $TopicDescription=mysql_result($result,$i,"Description");
 $PinnedTopic=mysql_result($result,$i,"Pinned");
 $TopicStat=mysql_result($result,$i,"Closed");
 $UsersName = GetUserName($UsersID,$Settings['sqltable']);
-if($UsersName=="Guest") { $UsersName=$GuestName;
+if($UsersName=="Guest") { $UsersName=$GuestsName;
 if($UsersName==null) { $UsersName="Guest"; } }
 if(isset($PermissionInfo['CanViewForum'][$ForumID])&&
 	$PermissionInfo['CanViewForum'][$ForumID]=="yes"&&
@@ -357,7 +357,7 @@ $glrnum=mysql_num_rows($glrresult);
 if($glrnum>0){
 $ReplyID1=mysql_result($glrresult,0,"id");
 $UsersID1=mysql_result($glrresult,0,"UserID");
-$GuestName1=mysql_result($glrresult,0,"GuestName");
+$GuestsName1=mysql_result($glrresult,0,"GuestName");
 $TimeStamp1=mysql_result($glrresult,0,"TimeStamp");
 $TimeStamp1=GMTimeChange("F j, Y",$TimeStamp1,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $UsersName1 = GetUserName($UsersID1,$Settings['sqltable']); }
@@ -368,7 +368,7 @@ $NumPages = ceil($NumRPosts/$Settings['max_posts']); }
 if($NumRPosts<=$Settings['max_posts']) {
 $NumPages = 1; }
 $Users_Name1 = pre_substr($UsersName1,0,20);
-if($UsersName1=="Guest") { $UsersName1=$GuestName1;
+if($UsersName1=="Guest") { $UsersName1=$GuestsName1;
 if($UsersName1==null) { $UsersName1="Guest"; } }
 if (pre_strlen($UsersName1)>20) { $Users_Name1 = $Users_Name1."...";
 $oldusername=$UsersName1; $UsersName1=$Users_Name1; } $lul = null;
