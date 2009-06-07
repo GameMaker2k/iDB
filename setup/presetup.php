@@ -8,11 +8,11 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
-    Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
+    Copyright 2004-2009 Cool Dude 2k - http://idb.berlios.de/
+    Copyright 2004-2009 Game Maker 2k - http://intdb.sourceforge.net/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: presetup.php - Last Update: 12/12/2008 SVN 214 - Author: cooldude2k $
+    $FileInfo: presetup.php - Last Update: 6/07/2009 SVN 262 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="presetup.php"||$File3Name=="/presetup.php") {
@@ -42,6 +42,13 @@ if($Error!="Yes") {
 </tr><tr>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="DatabaseHost">Insert Database Host:</label></td>
 	<td style="width: 50%;"><input type="text" name="DatabaseHost" class="TextBox" id="DatabaseHost" size="20" value="localhost" /></td>
+</tr><tr>
+	<td style="width: 50%;"><label class="TextBoxLabel" for="charset">Select html charset:</label></td>
+	<td style="width: 50%;"><select size="1" class="TextBox" name="charset" id="charset">
+	<option value="ISO-8859-15">Latin-9 (ISO-8859-15)</option>
+	<option value="ISO-8859-1">Latin-1 (ISO-8859-1)</option>
+	<option value="UTF-8">Unicode (UTF-8)</option>
+	</select></td>
 	<?php if($ConvertInfo['ConvertFile']!=null) { ?>
 </tr><tr>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="SetupType">Type of install to do:</label></td>

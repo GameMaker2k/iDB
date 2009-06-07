@@ -11,7 +11,7 @@
     Copyright 2004-2009 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: mysql.php - Last Update: 6/04/2009 SVN 261 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 6/07/2009 SVN 262 - Author: cooldude2k $
 */
 //@ini_set("display_errors", true); 
 //@ini_set("display_startup_errors", true);
@@ -56,6 +56,13 @@ if($Settings['charset']!="ISO-8859-15"&&$Settings['charset']!="ISO-8859-1"&&
 	$Settings['charset']!="Shift_JIS"&&$Settings['charset']!="EUC-JP") {
 	$Settings['charset'] = "ISO-8859-15"; } }
 	$chkcharset = $Settings['charset'];
+$SQLCharset = "latin1"; 
+if($Settings['charset']=="ISO-8859-1") {
+	$SQLCharset = "latin1"; }
+if($Settings['charset']=="ISO-8859-15") {
+	$SQLCharset = "latin1"; }
+if($Settings['charset']=="UTF-8") {
+	$SQLCharset = "utf8"; }
 @ini_set('default_charset', $Settings['charset']);
 //@session_save_path($SettDir['inc']."temp/");
 if(!isset($Settings['sqldb'])) { 
@@ -185,6 +192,7 @@ if(stristr($_SERVER["HTTP_ACCEPT"],"application/javascript") ) {
 require($SettDir['inc'].'javascript.php');
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); die(); }
 $SQLStat = @ConnectMysql($Settings['sqlhost'],$Settings['sqluser'],$Settings['sqlpass'],$Settings['sqldb']);
+@mysql_set_charset($SQLCharset);
 if($SQLStat===false) {
 @header("Content-Type: text/plain; charset=".$Settings['charset']); @mysql_free_result($peresult);
 ob_clean(); echo "Sorry could not connect to mysql database.\nContact the board admin about error. Error log below.";

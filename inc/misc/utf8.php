@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
-    Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
+    Copyright 2004-2009 Cool Dude 2k - http://idb.berlios.de/
+    Copyright 2004-2009 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: utf8.php - Last Update: 1/13/2008 SVN 227 - Author: cooldude2k $
+    $FileInfo: utf8.php - Last Update: 6/07/2009 SVN 262 - Author: cooldude2k $
 */
 // UTF8 helper functions
 // author: Scott Michael Reynen "scott@randomchaos.com"
@@ -28,7 +28,7 @@ function pre_strlen($str) {
 global $chkcharset;
 if($chkcharset=="UTF-8") {
 if(!defined('UTF8_NOMBSTRING')&&function_exists('mb_strlen')) {
-return mb_strlen($string,'utf-8'); }
+return mb_strlen($str,'utf-8'); }
 else { return utf8_strlen($str); } }
 if($chkcharset!="UTF-8") { return strlen($str); } }
 

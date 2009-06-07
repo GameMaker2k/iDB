@@ -12,7 +12,7 @@
     Copyright 2004-2009 Game Maker 2k - http://intdb.sourceforge.net/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: setup.php - Last Update: 4/04/2009 SVN 244 - Author: cooldude2k $
+    $FileInfo: setup.php - Last Update: 6/07/2009 SVN 262 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="setup.php"||$File3Name=="/setup.php") {
@@ -174,6 +174,7 @@ echo "<option value=\"".$showmin."\">0:".$showmin." minutes</option>\n"; }
 <table style="text-align: left;">
 <tr style="text-align: left;">
 <td style="width: 100%;">
+<input type="hidden" name="charset" value="<?php echo $_POST['charset']; ?>" style="display: none;" />
 <input type="hidden" name="SetupType" value="install" style="display: none;" />
 <input type="hidden" name="act" value="Part4" style="display: none;" />
 <input type="submit" class="Button" value="Install Board" name="Install_Board" />

@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
-    Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
+    Copyright 2004-2009 Cool Dude 2k - http://idb.berlios.de/
+    Copyright 2004-2009 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: functions.php - Last Update: 5/08/2009 SVN 251 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 6/07/2009 SVN 262 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -102,6 +102,11 @@ if($use_gzip=="on") {
 	$goutput = gzcompress($output); }
 	echo $goutput; } }
 $foo="bar"; $$foo="foo";
+if(function_exists('mysql_set_charset')===false) {
+function mysql_set_charset($charset) {
+	mysql_query("SET CHARACTER SET '".$charset."'");
+	mysql_query("SET NAMES '".$charset."'"); 
+	return true; } }
 // SafeSQL Lite Source Code by Cool Dude 2k
 // Make SQL Query's safe
 function query($query_string,$query_vars) {

@@ -12,7 +12,7 @@
     Copyright 2004-2009 Game Maker 2k - http://intdb.sourceforge.net/
     iDB Installer made by Game Maker 2k - http://idb.berlios.de/support/category.php?act=view&id=2
 
-    $FileInfo: install.php - Last Update: 5/01/2009 SVN 247 - Author: cooldude2k $
+    $FileInfo: install.php - Last Update: 6/07/2009 SVN 262 - Author: cooldude2k $
 */
 if(@ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }
@@ -44,6 +44,15 @@ if($Settings['charset']!="ISO-8859-15"&&$Settings['charset']!="ISO-8859-1"&&
 	$Settings['charset']!="GB2312"&&$Settings['charset']!="BIG5-HKSCS"&&
 	$Settings['charset']!="Shift_JIS"&&$Settings['charset']!="EUC-JP") {
 	$Settings['charset'] = "ISO-8859-15"; } }
+$SQLCharset = "latin1";
+if(isset($_POST['charset'])) { 
+if($_POST['charset']=="ISO-8859-1") {
+	$SQLCharset = "latin1"; }
+if($_POST['charset']=="ISO-8859-15") {
+	$SQLCharset = "latin1"; }
+if($_POST['charset']=="UTF-8") {
+	$SQLCharset = "utf8"; }
+	$Settings['charset'] = $_POST['charset']; }
 require($SetupDir['setup'].'preinstall.php');
 require_once($SettDir['inc'].'filename.php');
 require_once($SettDir['inc'].'function.php');
@@ -112,7 +121,7 @@ if($_POST['SetupType']=="install") {
 if ($_GET['act']!="Part2"&&$_POST['act']!="Part2") {
 if ($_GET['act']!="Part3"&&$_POST['act']!="Part3") {
 if ($_GET['act']=="Part4"&&$_POST['act']=="Part4") {
-   require($SetupDir['setup'].'/mkconfig.php'); } } } }
+   require($SetupDir['setup'].'mkconfig.php'); } } } }
 if ($Error=="Yes") { ?>
 <br />Install Failed with errors. <a href="install.php?act=view">Click here</a> to restart install. &lt;_&lt;
 <br /><br />
