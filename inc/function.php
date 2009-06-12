@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
     Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
 
-    $FileInfo: function.php - Last Update: 12/09/2008 SVN 207 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 6/11/2009 SVN 263 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -58,18 +58,23 @@ $REFERERurl = null;
   * @param      string  an optional prefix
   * @return     string  the formatted uuid
   */
-  function uuid($useold = false,$more_entropy = false,$prefix = '') 
+  function uuid($useold = false,$more_entropy = false,$mtrand = false,$prefix = '') 
   {
-    if($useold==true) {
+    if($useold===true&&$mtrand===false) {
 	$chars = uniqid(md5(rand()),$more_entropy); }
-    if($useold==false) {
+    if($useold===false&&$mtrand===false) {
 	$chars = md5(uniqid(rand(),$more_entropy)); }
+    if($useold===true&&$mtrand===true) {
+	$chars = uniqid(md5(mt_rand()),$more_entropy); }
+    if($useold===false&&$mtrand===true) {
+	$chars = md5(uniqid(mt_rand(),$more_entropy)); }
     $uuid  = substr($chars,0,8) . '-';
     $uuid .= substr($chars,8,4) . '-';
     $uuid .= substr($chars,12,4) . '-';
     $uuid .= substr($chars,16,4) . '-';
     $uuid .= substr($chars,20,12);    
-    return $prefix . $uuid;
+    if(isset($prefix)) { return $prefix . $uuid; }
+    if(!isset($prefix)) { return $uuid; }
   }
 // Make the Query String if we are not useing &=
 function qstring($qstr=";",$qsep="=")

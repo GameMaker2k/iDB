@@ -12,7 +12,7 @@
     Copyright 2004-2009 Game Maker 2k - http://intdb.sourceforge.net/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mkconfig.php - Last Update: 6/07/2009 SVN 262 - Author: cooldude2k $
+    $FileInfo: mkconfig.php - Last Update: 6/11/2009 SVN 263 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mkconfig.php"||$File3Name=="/mkconfig.php") {
@@ -90,6 +90,7 @@ $query = query("INSERT INTO `".$_POST['tableprefix']."tagboard` VALUES (1,-1,'".
 */
 $query = query("INSERT INTO `".$_POST['tableprefix']."categories` VALUES (1,1,'Main','yes','category','yes',0,0,0,'The Main Category.')", array(null));
 mysql_query($query);
+$ServerUUID = uuid(false,true,false,null);
 if(!is_numeric($_POST['YourOffSet'])) { $_POST['YourOffSet'] = "0"; }
 if($_POST['YourOffSet']>12) { $_POST['YourOffSet'] = "12"; }
 if($_POST['YourOffSet']<-12) { $_POST['YourOffSet'] = "-12"; }
