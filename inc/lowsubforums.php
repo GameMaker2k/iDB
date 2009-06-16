@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2009 Cool Dude 2k - http://idb.berlios.de/
-    Copyright 2004-2009 Game Maker 2k - http://intdb.sourceforge.net/
+    Copyright 2004-2009 iDB Support - http://idb.berlios.de/
+    Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: lowsubforums.php - Last Update: 5/04/2009 SVN 249 - Author: cooldude2k $
+    $FileInfo: lowsubforums.php - Last Update: 6/16/2009 SVN 264 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="lowsubforums.php"||$File3Name=="/lowsubforums.php") {
@@ -139,44 +139,6 @@ $sflist = $sflist." ".$sfurl; }
 $gltf[$apcl] = $SubsForumID; ++$apcl; }
 ++$apci; }
 @mysql_free_result($apcresult); } }
-if(isset($PermissionInfo['CanViewForum'][$ForumID])&&
-	$PermissionInfo['CanViewForum'][$ForumID]=="yes") {
-$LastTopic = "&nbsp;<br />&nbsp;<br />&nbsp;";
-if(!isset($LastTopic)) { $LastTopic = null; }
-$gltnum = count($gltf); $glti = 0; 
-$OldUpdateTime = 0; $UseThisFonum = null;
-if ($ForumType=="subforum") { 
-while ($glti < $gltnum) {
-$gltfoquery = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `CategoryID`=%i AND `ForumID`=%i ORDER BY `LastUpdate` DESC LIMIT 1", array($CategoryID,$gltf[$glti]));
-$gltforesult=mysql_query($gltfoquery);
-$gltfonum=mysql_num_rows($gltforesult);
-if($gltfonum>0) {
-$NewUpdateTime=mysql_result($gltforesult,0,"LastUpdate");
-if($NewUpdateTime>$OldUpdateTime) { 
-	$UseThisFonum = $gltf[$glti]; 
-$OldUpdateTime = $NewUpdateTime; } }
-@mysql_free_result($gltforesult);
-++$glti; } }
-if ($ForumType!="subforum"&&$ForumType!="redirect") { $UseThisFonum = $gltf[0]; }
-if ($ForumType!="redirect") {
-$gltquery = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `ForumID`=%i ORDER BY `LastUpdate` DESC LIMIT 1", array($UseThisFonum));
-$gltresult=mysql_query($gltquery);
-$gltnum=mysql_num_rows($gltresult);
-if($gltnum>0){
-$TopicID=mysql_result($gltresult,0,"id");
-$TopicName=mysql_result($gltresult,0,"TopicName");
-$NumReplys=mysql_result($gltresult,0,"NumReply");
-$TopicName1 = pre_substr($TopicName,0,20);
-$oldtopicname=$TopicName;
-if (pre_strlen($TopicName)>20) { 
-$TopicName1 = $TopicName1."..."; $TopicName=$TopicName1; }
-if($UsersID!="-1") {
-$lul = url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UsersID,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
-$LastTopic = $TimeStamp."<br />\nTopic: <a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=lowview&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."&#35;post".$ReplyID."\" title=\"".$oldtopicname."\">".$TopicName."</a><br />\nUser: <a href=\"".$lul."\" title=\"".$oldusername."\">".$UsersName."</a>"; }
-if($UsersID=="-1") {
-$LastTopic = $TimeStamp."<br />\nTopic: <a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=lowview&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."&#35;post".$ReplyID."\" title=\"".$oldtopicname."\">".$TopicName."</a><br />\nGuest: <span title=\"".$oldusername."\">".$UsersName."</span>"; } }
-if($LastTopic==null) { $LastTopic = "&nbsp;<br />&nbsp;<br />&nbsp;"; } }
-@mysql_free_result($gltresult);
 $shownum = null;
 if ($ForumType=="redirect") { $shownum = "(".$NumRedirects." redirects)"; }
 if ($ForumType!="redirect") { $shownum = "(".$NumPosts." posts)"; }

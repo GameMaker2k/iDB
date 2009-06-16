@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
-    Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
+    Copyright 2004-2009 iDB Support - http://idb.berlios.de/
+    Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: stats.php - Last Update: 12/05/2008 SVN 199 - Author: cooldude2k $
+    $FileInfo: stats.php - Last Update: 6/16/2009 SVN 264 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="stats.php"||$File3Name=="/stats.php") {
@@ -36,7 +36,7 @@ $nummembers = mysql_result($rnmresult,0);
 $NewestMem = array(null);
 $NewestMem['ID']=mysql_result($nmresult,0,"id");
 $NewestMem['Name']=mysql_result($nmresult,0,"Name");
-if($NewestMem['ID']=="-1") { $NewestMem['ID'] = "0"; $NewestMem['Name'] = "Cool Dude 2k"; }
+if($NewestMem['ID']<=0) { $NewestMem['ID'] = "0"; $NewestMem['Name'] = "Anonymous"; }
 ?>
 <div class="StatsBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>

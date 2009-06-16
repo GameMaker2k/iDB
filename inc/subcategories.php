@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2009 Cool Dude 2k - http://idb.berlios.de/
-    Copyright 2004-2009 Game Maker 2k - http://intdb.sourceforge.net/
+    Copyright 2004-2009 iDB Support - http://idb.berlios.de/
+    Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: subcategories.php - Last Update: 6/04/2009 SVN 259 - Author: cooldude2k $
+    $FileInfo: subcategories.php - Last Update: 6/16/2009 SVN 264 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="subcategories.php"||$File3Name=="/subcategories.php") {
@@ -211,11 +211,13 @@ if($UsersName=="Guest") { $UsersName=$GuestsName;
 if($UsersName==null) { $UsersName="Guest"; } }
 if (pre_strlen($UsersName)>20) { $UsersName1 = $UsersName1."...";
 $oldusername=$UsersName; $UsersName=$UsersName1; } $lul = null;
-if($UsersID!="-1") {
+if($UsersID>0) {
 $lul = url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UsersID,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
-$LastTopic = "User: <a href=\"".$lul."\" title=\"".$oldusername."\">".$UsersName."</a><br />\nTopic: <a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."#reply".$ShowReply."\" title=\"".$oldtopicname."\">".$TopicName."</a>"; }
-if($UsersID=="-1") {
-$LastTopic = "User: <span title=\"".$oldusername."\">".$UsersName."</span><br />\nTopic: <a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."#reply".$ShowReply."\" title=\"".$oldtopicname."\">".$TopicName."</a>"; } }
+$LastTopic = "Topic: <a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."#reply".$ShowReply."\" title=\"".$oldtopicname."\">".$TopicName."</a><br />\nUser: <a href=\"".$lul."\" title=\"".$oldusername."\">".$UsersName."</a>"; }
+if($UsersID==-1) {
+$LastTopic = "Topic: <a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."#reply".$ShowReply."\" title=\"".$oldtopicname."\">".$TopicName."</a><br />\nUser: <span title=\"".$oldusername."\">".$UsersName."</span>"; }
+if($UsersID<=0&&$User1ID!=-1) {
+$LastTopic = "Topic: <a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."#reply".$ShowReply."\" title=\"".$oldtopicname."\">".$TopicName."</a><br />\nUser: <span title=\"Anonymous\">Anonymous</span>"; } }
 if($LastTopic==null) { $LastTopic="&nbsp;<br />&nbsp;"; } }
 @mysql_free_result($gltresult);
 if ($ForumType=="redirect") { $LastTopic="Redirects: ".$NumRedirects; }

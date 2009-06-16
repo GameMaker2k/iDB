@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2009 Cool Dude 2k - http://idb.berlios.de/
-    Copyright 2004-2009 Game Maker 2k - http://intdb.sourceforge.net/
+    Copyright 2004-2009 iDB Support - http://idb.berlios.de/
+    Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: utf8.php - Last Update: 6/07/2009 SVN 262 - Author: cooldude2k $
+    $FileInfo: utf8.php - Last Update: 6/16/2009 SVN 264 - Author: cooldude2k $
 */
 // UTF8 helper functions
 // author: Scott Michael Reynen "scott@randomchaos.com"

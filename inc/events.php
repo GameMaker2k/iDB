@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2008 Cool Dude 2k - http://idb.berlios.de/
-    Copyright 2004-2008 Game Maker 2k - http://intdb.sourceforge.net/
+    Copyright 2004-2009 iDB Support - http://idb.berlios.de/
+    Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: events.php - Last Update: 12/12/2008 SVN 215 - Author: cooldude2k $
+    $FileInfo: events.php - Last Update: 6/16/2009 SVN 264 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="events.php"||$File3Name=="/events.php") {
@@ -98,12 +98,14 @@ $User1Signature = text2icons($User1Signature,$Settings['sqltable']);
 <tr class="TableInfoRow2">
 <td class="TableInfoColumn2" style="vertical-align: middle; width: 160px;">
 &nbsp;<?php
-if($User1ID!="-1") {
+if($User1ID>0) {
 echo "<a href=\"";
 echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$User1ID,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
 echo "\">".$User1Name."</a>"; }
-if($User1ID=="-1") {
+if($User1ID==-1) {
 echo "<span>".$User1Name."</span>"; }
+if($User1ID<=0&&$User1ID!=-1) {
+echo "<span>Anonymous</span>"; }
 ?></td>
 <td class="TableInfoColumn2" style="vertical-align: middle;">
 <div style="float: left; text-align: left;">
@@ -125,8 +127,8 @@ echo "<span>".$User1Name."</span>"; }
 <?php echo $User1Title; ?><br />
 Group: <?php echo $User1Group; ?><br />
 Member: <?php 
-if($User1ID!="-1") { echo $User1ID; }
-if($User1ID=="-1") { echo 0; }
+if($User1ID>0) { echo $User1ID; }
+if($User1ID<=0) { echo 0; }
 ?><br />
 Posts: <?php echo $User1PostCount; ?><br />
 Joined: <?php echo $User1Joined; ?><br />
@@ -144,16 +146,16 @@ User IP: <a onclick="window.open(this.href);return false;" href="http://ip-looku
 <tr class="TableInfoRow4">
 <td class="TableInfoColumn4" colspan="2">
 <span style="text-align: left;">&nbsp;<a href="<?php
-if($User1ID!="-1") {
+if($User1ID>0&&isset($ThemeSet['Profile'])&&$ThemeSet['Profile']!=null) {
 echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$User1ID,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); }
-if($User1ID=="-1"&&isset($ThemeSet['Profile'])&&$ThemeSet['Profile']!=null) {
+if($User1ID<=0&&isset($ThemeSet['Profile'])&&$ThemeSet['Profile']!=null) {
 echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); }
 ?>"><?php echo $ThemeSet['Profile']; ?></a>
 <?php if(isset($ThemeSet['WWW'])&&$ThemeSet['WWW']!=null) {
 echo $ThemeSet['LineDividerTopic']; ?><a href="<?php echo $User1Website; ?>" onclick="window.open(this.href);return false;"><?php echo $ThemeSet['WWW']; ?></a><?php } echo $ThemeSet['LineDividerTopic']; ?><a href="<?php
-if($User1ID!="-1"&&isset($ThemeSet['Profile'])&&$ThemeSet['Profile']!=null) {
+if($User1ID>0&&isset($ThemeSet['PM'])&&$ThemeSet['PM']!=null) {
 echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=create&id=".$User1ID,$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); }
-if($User1ID=="-1"&&isset($ThemeSet['PM'])&&$ThemeSet['PM']!=null) {
+if($User1ID<=0&&isset($ThemeSet['PM'])&&$ThemeSet['PM']!=null) {
 echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); }
 ?>"><?php echo $ThemeSet['PM']; ?></a></span>
 </td>
