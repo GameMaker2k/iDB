@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: replies.php - Last Update: 6/16/2009 SVN 264 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 6/17/2009 SVN 265 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -336,10 +336,8 @@ if($User1ID>0) {
 echo "<a href=\"";
 echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$User1ID,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
 echo "\">".$User1Name."</a>"; }
-if($User1ID==-1) {
+if($User1ID<=0) {
 echo "<span>".$User1Name."</span>"; }
-if($User1ID<=0&&$User1ID!=-1) {
-echo "<span>Anonymous</span>"; }
 ?></td>
 <td class="TableInfoColumn2" style="vertical-align: middle;">
 <div style="float: left; text-align: left;" id="post<?php echo $MyPostID; ?>">
