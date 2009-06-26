@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: rssfeed.php - Last Update: 6/16/2009 SVN 264 - Author: cooldude2k $
+    $FileInfo: rssfeed.php - Last Update: 6/26/2009 SVN 269 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="rssfeed.php"||$File3Name=="/rssfeed.php") {
@@ -22,7 +22,8 @@ $boardsname = htmlentities($Settings['board_name'], ENT_QUOTES, $Settings['chars
 $boardsname = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $boardsname);
 $_GET['feedtype'] = strtolower($_GET['feedtype']);
 if($_GET['feedtype']!="rss"&&$_GET['feedtype']!="atom"&&
-	$_GET['feedtype']!="oldrss") { $_GET['feedtype'] = "rss"; }
+	$_GET['feedtype']!="oldrss"&&$_GET['feedtype']!="opensearch") { 
+	$_GET['feedtype'] = "rss"; }
 //$basepath = pathinfo($_SERVER['REQUEST_URI']);
 /*if(dirname($_SERVER['REQUEST_URI'])!="."||
 	dirname($_SERVER['REQUEST_URI'])!=null) {
@@ -58,6 +59,7 @@ $checkfeedtype = "application/rss+xml";
 if($_GET['feedtype']=="oldrss") { $checkfeedtype = "application/xml"; }
 if($_GET['feedtype']=="rss") { $checkfeedtype = "application/rss+xml"; }
 if($_GET['feedtype']=="atom") { $checkfeedtype = "application/atom+xml"; }
+if($_GET['feedtype']=="opensearch") { $checkfeedtype = "application/opensearchdescription+xml"; }
 if(stristr($_SERVER["HTTP_ACCEPT"],$checkfeedtype) ) {
 @header("Content-Type: ".$checkfeedtype."; charset=".$Settings['charset']); }
 else { if(stristr($_SERVER["HTTP_ACCEPT"],"application/xml") ) {
@@ -198,6 +200,21 @@ if($Settings['showverinfo']=="on") { ?>
   <!-- Renee Sabonis ^_^ -->
  <?php echo "\n".$Atom."\n"; ?>
 </feed>
+<?php } if($_GET['feedtype']=="opensearch") { ?>
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
+<ShortName><?php echo $boardsname." ".$ThemeSet['TitleDivider']; ?> Search</ShortName>
+<Description><?php echo $SettInfo['Description']; ?></Description>
+<InputEncoding><?php echo $Settings['charset']; ?></InputEncoding>
+<Image width="16" height="16" type="image/x-icon"><?php echo $BoardURL.$ThemeSet['FavIcon']; ?></Image>
+<Url type="text/html" method="POST" template="<?php echo $BoardURL.url_maker("search",$Settings['file_ext'],null,"search","search"); ?>">
+  <Param name="act" value="topics"/>
+  <Param name="search" value="{searchTerms}"/>
+  <Param name="type" value="wildcard"/>
+  <Param name="page" value="1"/>
+</Url>
+  <!-- Renee Sabonis ^_^ -->
+<SearchForm><?php echo $BoardURL.url_maker("search",$Settings['file_ext'],null,"search","search"); ?></SearchForm>
+</OpenSearchDescription>
 <?php }
 function execution_time($starttime) {
 list($uetime, $etime) = explode(" ", microtime());

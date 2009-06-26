@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: search.php - Last Update: 6/16/2009 SVN 264 - Author: cooldude2k $
+    $FileInfo: search.php - Last Update: 6/26/2009 SVN 269 - Author: cooldude2k $
 */
 if(@ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }
@@ -21,6 +21,7 @@ if($ext=="noext"||$ext=="no ext"||$ext=="no+ext") { $usefileext = ""; }
 $filewpath = $exfile['search'].$usefileext.$_SERVER['PATH_INFO'];
 ?>
 
+<link rel="search" type="application/opensearchdescription+xml" title="<?php echo $Settings['board_name']." ".$ThemeSet['TitleDivider']; ?> Search" href="<?php echo url_maker($exfile['rss'],$Settings['rss_ext'],"act=opensearch",$Settings['qstr'],$Settings['qsep'],$prexqstr['rss'],$exqstr['rss']); ?>" />
 <title> <?php echo $Settings['board_name'].$idbpowertitle; ?> </title>
 </head>
 <body>

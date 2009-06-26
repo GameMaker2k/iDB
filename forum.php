@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: forum.php - Last Update: 6/16/2009 SVN 264 - Author: cooldude2k $
+    $FileInfo: forum.php - Last Update: 6/26/2009 SVN 269 - Author: cooldude2k $
 */
 if(@ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }
@@ -24,6 +24,7 @@ if(!is_numeric($_GET['id']))
 { $_GET['id']="1"; }
 if($Settings['enable_rss']=="on") {
 ?>
+
 <link rel="alternate" type="application/xml" title="Forum Topics RSS 1.0 Feed" href="<?php echo url_maker($exfile['rss'],$Settings['rss_ext'],"act=oldrss&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['rss'],$exqstr['rss']); ?>" />
 <link rel="alternate" type="application/rss+xml" title="Forum Topics RSS 2.0 Feed" href="<?php echo url_maker($exfile['rss'],$Settings['rss_ext'],"act=rss&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['rss'],$exqstr['rss']); ?>" />
 <link rel="alternate" type="application/atom+xml" title="Forum Topics Atom Feed" href="<?php echo url_maker($exfile['rss'],$Settings['rss_ext'],"act=atom&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['rss'],$exqstr['rss']); ?>" />
