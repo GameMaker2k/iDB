@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: replies.php - Last Update: 6/17/2009 SVN 265 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 6/26/2009 SVN 270 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -1130,7 +1130,7 @@ $TopicName = @remove_spaces($TopicName);
 <tr class="TableRow3" id="EditReplies<?php echo $_GET['post']; ?>">
 <td class="TableColumn3" style="width: 15%; vertical-align: middle; text-align: center;">
 <div style="width: 100%; height: 160px; overflow: auto;"><?php
-$renee_query=query("SELECT * FROM `".$Settings['sqltable']."smileys`", array(null));
+$renee_query=query("SELECT * FROM `".$Settings['sqltable']."smileys` WHERE `Show`='yes'", array(null));
 $renee_result=mysql_query($renee_query);
 $renee_num=mysql_num_rows($renee_result);
 $renee_s=0; $SmileRow=1;

@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: lowtopics.php - Last Update: 6/16/2009 SVN 264 - Author: cooldude2k $
+    $FileInfo: lowtopics.php - Last Update: 6/26/2009 SVN 270 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="lowtopics.php"||$File3Name=="/lowtopics.php") {
@@ -255,9 +255,9 @@ if($NumberPages>=2) {
 	if($ThemeSet['MiniPageAltStyle']=="off") { $prepagelist = $prepagelist." "; }
 	$prepagelist = $prepagelist."<span class=\"minipagelinklast\">";
 	if($ThemeSet['MiniPageAltStyle']=="on") {
-	$prepagelist = $prepagelist."<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=lowview&id=".$TopicID."&page=4",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">4</a>"; }
+	$prepagelist = $prepagelist."<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=lowview&id=".$TopicID."&page=4",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">4</a></span>"; }
 	if($ThemeSet['MiniPageAltStyle']=="off") {
-	$prepagelist = $prepagelist."<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=lowview&id=".$TopicID."&page=4",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\"> ...4</a>"; }
+	$prepagelist = $prepagelist."<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=lowview&id=".$TopicID."&page=4",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\"> ...4</a></span>"; }
 	if($ThemeSet['MiniPageAltStyle']=="on") {
 	$prepagelist = $prepagelist."</span>"; } }
 	if($NumberPages>4) {
@@ -265,7 +265,7 @@ if($NumberPages>=2) {
 	if($ThemeSet['MiniPageAltStyle']=="on") {
 	$prepagelist = $prepagelist."<span class=\"minipagelinklast\">"; }
 	if($ThemeSet['MiniPageAltStyle']=="on") {
-	$prepagelist = $prepagelist."<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=lowview&id=".$TopicID."&page=".$NumberPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">&raquo; ".$NumberPages."</a>"; }
+	$prepagelist = $prepagelist."<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=lowview&id=".$TopicID."&page=".$NumberPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">&raquo; ".$NumberPages."</a></span>"; }
 	if($ThemeSet['MiniPageAltStyle']=="off") {
 	$prepagelist = $prepagelist."<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=lowview&id=".$TopicID."&page=".$NumberPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\"> ...".$NumberPages."</a>"; }
 	if($ThemeSet['MiniPageAltStyle']=="on") {
