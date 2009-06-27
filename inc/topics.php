@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: topics.php - Last Update: 6/26/2009 SVN 270 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 6/27/2009 SVN 271 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -263,7 +263,7 @@ if(!isset($Settings['max_posts'])) {
 	$Settings['max_posts'] = 10; }
 if(!isset($ThemeSet['MiniPageAltStyle'])) { 
 	$ThemeSet['MiniPageAltStyle'] = "off"; }
-if($ThemeSet['MiniPageAltStyle']!="on"||
+if($ThemeSet['MiniPageAltStyle']!="on"&&
 	$ThemeSet['MiniPageAltStyle']!="off") { 
 	$ThemeSet['MiniPageAltStyle'] = "off"; }
 if($NumberPosts>$Settings['max_posts']) {
@@ -295,11 +295,12 @@ if($NumberPages>=2) {
 	$prepagelist = $prepagelist."</span>"; } }
 	if($NumberPages==4) {
 	if($ThemeSet['MiniPageAltStyle']=="off") { $prepagelist = $prepagelist." "; }
-	$prepagelist = $prepagelist."<span class=\"minipagelinklast\">";
 	if($ThemeSet['MiniPageAltStyle']=="on") {
-	$prepagelist = $prepagelist."<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=4",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">4</a></span>"; }
+	$prepagelist = $prepagelist."<span class=\"minipagelinklast\">"; }
+	if($ThemeSet['MiniPageAltStyle']=="on") {
+	$prepagelist = $prepagelist."<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=4",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">4</a>"; }
 	if($ThemeSet['MiniPageAltStyle']=="off") {
-	$prepagelist = $prepagelist."<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=4",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\"> ...4</a></span>"; }
+	$prepagelist = $prepagelist."<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=4",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\"> ...4</a>"; }
 	if($ThemeSet['MiniPageAltStyle']=="on") {
 	$prepagelist = $prepagelist."</span>"; } }
 	if($NumberPages>4) {
@@ -307,7 +308,7 @@ if($NumberPages>=2) {
 	if($ThemeSet['MiniPageAltStyle']=="on") {
 	$prepagelist = $prepagelist."<span class=\"minipagelinklast\">"; }
 	if($ThemeSet['MiniPageAltStyle']=="on") {
-	$prepagelist = $prepagelist."<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumberPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">&raquo; ".$NumberPages."</a></span>"; }
+	$prepagelist = $prepagelist."<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumberPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">&raquo; ".$NumberPages."</a>"; }
 	if($ThemeSet['MiniPageAltStyle']=="off") {
 	$prepagelist = $prepagelist."<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumberPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\"> ...".$NumberPages."</a>"; }
 	if($ThemeSet['MiniPageAltStyle']=="on") {
@@ -809,14 +810,14 @@ $query = query("INSERT INTO `".$Settings['sqltable']."topics` VALUES (".$topicid
 mysql_query($query);
 $query = query("INSERT INTO `".$Settings['sqltable']."posts` VALUES (".$postid.",".$topicid.",%i,%i,%i,'%s',%i,%i,0,'%s','%s','%s','0')", array($ForumID,$ForumCatID,$User1ID,$User1Name,$LastActive,$LastActive,$_POST['TopicPost'],$_POST['TopicDesc'],$User1IP));
 mysql_query($query);
+$_SESSION['LastPostTime'] = GMTimeStamp() + $GroupInfo['FloodControl'];
 if($User1ID!=0&&$User1ID!=-1) {
-$queryupd = query("UPDATE `".$Settings['sqltable']."members` SET `LastActive`=%i,`IP`='%s',`PostCount`=%i WHERE `id`=%i", array($LastActive,$User1IP,$NewPostCount,$User1ID));
+$queryupd = query("UPDATE `".$Settings['sqltable']."members` SET `LastActive`=%i,`IP`='%s',`PostCount`=%i,`LastPostTime`=%i WHERE `id`=%i", array($LastActive,$User1IP,$NewPostCount,$_SESSION['LastPostTime'],$User1ID));
 mysql_query($queryupd); }
 $NewNumPosts = $NumberPosts + 1; $NewNumTopics = $NumberTopics + 1;
 $queryupd = query("UPDATE `".$Settings['sqltable']."forums` SET `NumPosts`=%i,`NumTopics`=%i WHERE `id`=%i", array($NewNumPosts,$NewNumTopics,$ForumID));
 mysql_query($queryupd);
 @redirect("refresh",$basedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$topicid."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],FALSE),"3");
-$_SESSION['LastPostTime'] = GMTimeStamp() + $GroupInfo['FloodControl'];
 ?><tr>
 	<td><span class="TableMessage"><br />
 	Topic <?php echo $_POST['TopicName']; ?> was started.<br />

@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: lowtopics.php - Last Update: 6/26/2009 SVN 270 - Author: cooldude2k $
+    $FileInfo: lowtopics.php - Last Update: 6/27/2009 SVN 271 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="lowtopics.php"||$File3Name=="/lowtopics.php") {
@@ -219,59 +219,6 @@ $NumberPosts=$NumReply + 1;
 $prepagelist = null;
 if(!isset($Settings['max_posts'])) { 
 	$Settings['max_posts'] = 10; }
-if(!isset($ThemeSet['MiniPageAltStyle'])) { 
-	$ThemeSet['MiniPageAltStyle'] = "off"; }
-if($ThemeSet['MiniPageAltStyle']!="on"||
-	$ThemeSet['MiniPageAltStyle']!="off") { 
-	$ThemeSet['MiniPageAltStyle'] = "off"; }
-if($NumberPosts>$Settings['max_posts']) {
-$NumberPages = ceil($NumberPosts/$Settings['max_posts']); }
-if($NumberPosts<=$Settings['max_posts']) {
-$NumberPages = 1; }
-if($NumberPages>4) {
-	$prepagelist = " &nbsp;"; }
-if($NumberPages>=2) {
-	if($ThemeSet['MiniPageAltStyle']=="off") { 
-	$prepagelist = "<span class=\"small\">(Pages: "; }
-	if($ThemeSet['MiniPageAltStyle']=="on") {
-	$prepagelist = $prepagelist."<span class=\"minipagelink\">"; }
-	$prepagelist = $prepagelist."<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=lowview&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">1</a>";
-	if($ThemeSet['MiniPageAltStyle']=="on") {
-	$prepagelist = $prepagelist."</span>"; }
-	if($ThemeSet['MiniPageAltStyle']=="off") { $prepagelist = $prepagelist." "; }
-	if($ThemeSet['MiniPageAltStyle']=="on") {
-	$prepagelist = $prepagelist."<span class=\"minipagelink\">"; }
-	$prepagelist = $prepagelist."<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=lowview&id=".$TopicID."&page=2",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">2</a>";
-	if($ThemeSet['MiniPageAltStyle']=="on") {
-	$prepagelist = $prepagelist."</span>"; }
-	if($NumberPages>=3) {
-	if($ThemeSet['MiniPageAltStyle']=="off") { $prepagelist = $prepagelist." "; }
-	if($ThemeSet['MiniPageAltStyle']=="on") {
-	$prepagelist = $prepagelist."<span class=\"minipagelink\">"; }
-	$prepagelist = $prepagelist."<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=lowview&id=".$TopicID."&page=3",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">3</a>";
-	if($ThemeSet['MiniPageAltStyle']=="on") {
-	$prepagelist = $prepagelist."</span>"; } }
-	if($NumberPages==4) {
-	if($ThemeSet['MiniPageAltStyle']=="off") { $prepagelist = $prepagelist." "; }
-	$prepagelist = $prepagelist."<span class=\"minipagelinklast\">";
-	if($ThemeSet['MiniPageAltStyle']=="on") {
-	$prepagelist = $prepagelist."<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=lowview&id=".$TopicID."&page=4",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">4</a></span>"; }
-	if($ThemeSet['MiniPageAltStyle']=="off") {
-	$prepagelist = $prepagelist."<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=lowview&id=".$TopicID."&page=4",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\"> ...4</a></span>"; }
-	if($ThemeSet['MiniPageAltStyle']=="on") {
-	$prepagelist = $prepagelist."</span>"; } }
-	if($NumberPages>4) {
-	if($ThemeSet['MiniPageAltStyle']=="off") { $prepagelist = $prepagelist." "; }
-	if($ThemeSet['MiniPageAltStyle']=="on") {
-	$prepagelist = $prepagelist."<span class=\"minipagelinklast\">"; }
-	if($ThemeSet['MiniPageAltStyle']=="on") {
-	$prepagelist = $prepagelist."<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=lowview&id=".$TopicID."&page=".$NumberPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">&raquo; ".$NumberPages."</a></span>"; }
-	if($ThemeSet['MiniPageAltStyle']=="off") {
-	$prepagelist = $prepagelist."<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=lowview&id=".$TopicID."&page=".$NumberPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\"> ...".$NumberPages."</a>"; }
-	if($ThemeSet['MiniPageAltStyle']=="on") {
-	$prepagelist = $prepagelist."</span>"; } }
-	if($ThemeSet['MiniPageAltStyle']=="off") { 
-	$prepagelist = $prepagelist.")</span>"; } }
 $TopicName=mysql_result($result,$i,"TopicName");
 $TopicDescription=mysql_result($result,$i,"Description");
 $PinnedTopic=mysql_result($result,$i,"Pinned");

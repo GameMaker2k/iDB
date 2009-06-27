@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: prelogin.php - Last Update: 6/16/2009 SVN 264 - Author: cooldude2k $
+    $FileInfo: prelogin.php - Last Update: 6/27/2009 SVN 271 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="prelogin.php"||$File3Name=="/prelogin.php") {
@@ -33,6 +33,7 @@ $YourGroupAM=mysql_result($gresult,0,"Name");
 $YourTimeZoneAM=mysql_result($resultlog2,0,"TimeZone");
 $UseThemeAM=mysql_result($resultlog2,0,"UseTheme");
 $YourDSTAM=mysql_result($resultlog2,0,"DST");
+$YourLastPostTime=mysql_result($resultlog2,0,"LastPostTime");
 $YourBanTime=mysql_result($resultlog2,0,"BanTime");
 $CGMTime = GMTimeStamp();
 if($YourBanTime!=0&&$YourBanTime!=null) {
@@ -48,6 +49,9 @@ $_SESSION['UserTimeZone']=$YourTimeZoneAM;
 $_SESSION['UserGroup']=$YourGroupAM;
 $_SESSION['UserDST']=$YourDSTAM;
 $_SESSION['UserPass']=$YourPassAM;
+$_SESSION['LastPostTime'] = $YourLastPostTime;
+$_SESSION['DBName']=$Settings['sqldb'];
+
 if($cookieDomain==null) {
 @setcookie("MemberName", $YourNameAM, time() + (7 * 86400), $cbasedir);
 @setcookie("UserID", $YourIDAM, time() + (7 * 86400), $cbasedir);

@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: searchs.php - Last Update: 6/26/2009 SVN 270 - Author: cooldude2k $
+    $FileInfo: searchs.php - Last Update: 6/27/2009 SVN 271 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="searchs.php"||$File3Name=="/searchs.php") {
@@ -289,7 +289,7 @@ if(!isset($Settings['max_posts'])) {
 	$Settings['max_posts'] = 10; }
 if(!isset($ThemeSet['MiniPageAltStyle'])) { 
 	$ThemeSet['MiniPageAltStyle'] = "off"; }
-if($ThemeSet['MiniPageAltStyle']!="on"||
+if($ThemeSet['MiniPageAltStyle']!="on"&&
 	$ThemeSet['MiniPageAltStyle']!="off") { 
 	$ThemeSet['MiniPageAltStyle'] = "off"; }
 if($NumberPosts>$Settings['max_posts']) {
@@ -321,11 +321,12 @@ if($NumberPages>=2) {
 	$prepagelist = $prepagelist."</span>"; } }
 	if($NumberPages==4) {
 	if($ThemeSet['MiniPageAltStyle']=="off") { $prepagelist = $prepagelist." "; }
-	$prepagelist = $prepagelist."<span class=\"minipagelinklast\">";
 	if($ThemeSet['MiniPageAltStyle']=="on") {
-	$prepagelist = $prepagelist."<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=4",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">4</a></span>"; }
+	$prepagelist = $prepagelist."<span class=\"minipagelinklast\">"; }
+	if($ThemeSet['MiniPageAltStyle']=="on") {
+	$prepagelist = $prepagelist."<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=4",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">4</a>"; }
 	if($ThemeSet['MiniPageAltStyle']=="off") {
-	$prepagelist = $prepagelist."<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=4",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\"> ...4</a></span>"; }
+	$prepagelist = $prepagelist."<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=4",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\"> ...4</a>"; }
 	if($ThemeSet['MiniPageAltStyle']=="on") {
 	$prepagelist = $prepagelist."</span>"; } }
 	if($NumberPages>4) {
@@ -333,7 +334,7 @@ if($NumberPages>=2) {
 	if($ThemeSet['MiniPageAltStyle']=="on") {
 	$prepagelist = $prepagelist."<span class=\"minipagelinklast\">"; }
 	if($ThemeSet['MiniPageAltStyle']=="on") {
-	$prepagelist = $prepagelist."<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumberPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">&raquo; ".$NumberPages."</a></span>"; }
+	$prepagelist = $prepagelist."<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumberPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">&raquo; ".$NumberPages."</a>"; }
 	if($ThemeSet['MiniPageAltStyle']=="off") {
 	$prepagelist = $prepagelist."<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumberPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\"> ...".$NumberPages."</a>"; }
 	if($ThemeSet['MiniPageAltStyle']=="on") {

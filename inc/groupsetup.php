@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: groupsetup.php - Last Update: 6/16/2009 SVN 264 - Author: cooldude2k $
+    $FileInfo: groupsetup.php - Last Update: 6/27/2009 SVN 271 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="groupsetup.php"||$File3Name=="/groupsetup.php") {
@@ -31,6 +31,7 @@ $ChkUsrGroup=mysql_result($resultchkusr,0,"GroupID");
 $ChkUsrPass=mysql_result($resultchkusr,0,"Password");
 $ChkUsrTimeZone=mysql_result($resultchkusr,0,"TimeZone");
 $ChkUsrTheme=mysql_result($resultchkusr,0,"UseTheme");
+$ChkUsrLastPostTime=mysql_result($resultchkusr,0,"LastPostTime");
 $MyPostCountChk=mysql_result($resultchkusr,0,"PostCount");
 $MyKarmaCount=mysql_result($resultchkusr,0,"Karma");
 $MyKarmaUpdate=mysql_result($resultchkusr,0,"KarmaUpdate");
@@ -56,7 +57,8 @@ $_SESSION['UserID']=$ChkUsrID;
 $_SESSION['UserTimeZone']=$ChkUsrTimeZone;
 $_SESSION['UserGroup']=$ChkUsrGroup;
 $_SESSION['UserDST']=$ChkUsrDST;
-$_SESSION['UserPass']=$ChkUsrPass; } }
+$_SESSION['UserPass']=$ChkUsrPass;
+$_SESSION['LastPostTime'] = $ChkUsrLastPostTime; } }
 if($numchkusr<=0||$numchkusr>1||$BanError=="yes") { @session_unset();
 if($cookieDomain==null) {
 @setcookie("MemberName", null, GMTimeStamp() - 3600, $cbasedir);
