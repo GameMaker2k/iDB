@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: table.php - Last Update: 6/23/2009 SVN 268 - Author: cooldude2k $
+    $FileInfo: table.php - Last Update: 7/16/2009 SVN 272 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="table.php"||$File3Name=="/table.php") {
@@ -66,6 +66,29 @@ if ($File3Name=="table.php"||$File3Name=="/table.php") {
 <td class="TableSMenuColumn3"><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=deleteforum",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Delete Forums</a></td>
 </tr><tr class="TableSMenuRow3">
 <td class="TableSMenuColumn3"><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=fpermissions",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Forum Permissions</a></td>
+</tr><tr class="TableSMenuRow4">
+<td class="TableSMenuColumn4">&nbsp;</td>
+</tr></table></div>
+<div>&nbsp;</div>
+<div class="TableSMenuBorder">
+<?php if($ThemeSet['TableStyle']=="div") { ?>
+<div class="TableSMenuRow1">
+<?php echo $ThemeSet['TitleIcon']; ?>Category Tool</div>
+<?php } ?>
+<table id="ForumTool" class="TableSMenu" style="width: 100%; text-align: left; vertical-align: top;">
+<?php if($ThemeSet['TableStyle']=="table") { ?>
+<tr class="TableSMenuRow1">
+<td class="TableSMenuColumn1"><?php echo $ThemeSet['TitleIcon']; ?>Category Tool</td>
+</tr><?php } ?><tr class="TableSMenuRow2">
+<td class="TableSMenuColumn2">&nbsp;</td>
+</tr><tr class="TableSMenuRow3">
+<td class="TableSMenuColumn3"><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=addcategory",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Add Categories</a></td>
+</tr><tr class="TableSMenuRow3">
+<td class="TableSMenuColumn3"><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=editcategory",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Edit Categories</a></td>
+</tr><tr class="TableSMenuRow3">
+<td class="TableSMenuColumn3"><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=deletecategory",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Delete Categories</a></td>
+</tr><tr class="TableSMenuRow3">
+<td class="TableSMenuColumn3"><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=cpermissions",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Category Permissions</a></td>
 </tr><tr class="TableSMenuRow4">
 <td class="TableSMenuColumn4">&nbsp;</td>
 </tr></table></div>
