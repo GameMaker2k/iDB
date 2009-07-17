@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: table.php - Last Update: 7/16/2009 SVN 272 - Author: cooldude2k $
+    $FileInfo: table.php - Last Update: 7/17/2009 SVN 273 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="table.php"||$File3Name=="/table.php") {
@@ -75,7 +75,7 @@ if ($File3Name=="table.php"||$File3Name=="/table.php") {
 <div class="TableSMenuRow1">
 <?php echo $ThemeSet['TitleIcon']; ?>Category Tool</div>
 <?php } ?>
-<table id="ForumTool" class="TableSMenu" style="width: 100%; text-align: left; vertical-align: top;">
+<table id="CategoryTool" class="TableSMenu" style="width: 100%; text-align: left; vertical-align: top;">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableSMenuRow1">
 <td class="TableSMenuColumn1"><?php echo $ThemeSet['TitleIcon']; ?>Category Tool</td>

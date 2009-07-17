@@ -12,7 +12,7 @@
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: presetup.php - Last Update: 6/16/2009 SVN 264 - Author: cooldude2k $
+    $FileInfo: presetup.php - Last Update: 7/17/2009 SVN 273 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="presetup.php"||$File3Name=="/presetup.php") {
@@ -30,7 +30,7 @@ if($Error!="Yes") {
 ?>
 <tr class="TableRow3">
 <td class="TableColumn3">
-<form style="display: inline;" method="post" name="install" id="install" action="install.php?act=Part3">
+<form style="display: inline;" method="post" id="install" action="install.php?act=Part3">
 <table style="text-align: left;">
 <tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="DatabaseUserName">Insert Database User Name:</label></td>
