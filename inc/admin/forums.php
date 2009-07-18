@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: forums.php - Last Update: 7/17/2009 SVN 274 - Author: cooldude2k $
+    $FileInfo: forums.php - Last Update: 7/18/2009 SVN 275 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="forums.php"||$File3Name=="/forums.php") {
@@ -159,10 +159,9 @@ $InForumID=mysql_result($fr,$fi,"id");
 $InForumName=mysql_result($fr,$fi,"Name");
 $InForumType=mysql_result($fr,$fi,"ForumType");
 $AiFiInSubForum=mysql_result($fr,$fi,"InSubForum");
-if ($InForumType!="redirect"&&$AiFiInSubForum=="0") {
 ?>
 	<option value="<?php echo $InForumID; ?>"><?php echo $InForumName; ?></option>
-<?php } ++$fi; }
+<?php ++$fi; }
 @mysql_free_result($fr); ?>
 	</select></td>
 </tr></table>

@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: pm.php - Last Update: 6/17/2009 SVN 265 - Author: cooldude2k $
+    $FileInfo: pm.php - Last Update: 7/18/2009 SVN 275 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pm.php"||$File3Name=="/pm.php") {
@@ -500,7 +500,7 @@ Posts: <?php echo $User1PostCount; ?><br />
 Karma: <?php echo $User1Karma; ?><br />
 Joined: <?php echo $User1Joined; ?><br />
 <?php if($GroupInfo['HasAdminCP']=="yes") { ?>
-User IP: <a onclick="window.open(this.href);return false;" href="http://ip-lookup.net/?<?php echo $User1IP; ?>">
+User IP: <a onclick="window.open(this.href);return false;" href="http://cqcounter.com/whois/?query=<?php echo $User1IP; ?>">
 <?php echo $User1IP; ?></a><br />
 <?php } ?><br />
 </td>
