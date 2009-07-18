@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: forums.php - Last Update: 7/17/2009 SVN 273 - Author: cooldude2k $
+    $FileInfo: forums.php - Last Update: 7/17/2009 SVN 274 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="forums.php"||$File3Name=="/forums.php") {
@@ -145,6 +145,26 @@ if ($InForumType!="redirect"&&$AiFiInSubForum=="0") {
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="NumPostHotTopic">Number of posts for hot topic:</label></td>
 	<td style="width: 50%;"><input type="text" class="TextBox" size="20" name="NumPostHotTopic" id="NumPostHotTopic" /></td>
+</tr><tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="CPermissions">Copy permissions from:</label></td>
+	<td style="width: 50%;"><select size="1" class="TextBox" name="CPermissions" id="CPermissions">
+	<option selected="selected" value="0">none</option>
+<?php 
+$fq = query("SELECT * FROM `".$Settings['sqltable']."forums` ORDER BY `OrderID` ASC, `id` ASC", array(null));
+$fr=mysql_query($fq);
+$ai=mysql_num_rows($fr);
+$fi=0;
+while ($fi < $ai) {
+$InForumID=mysql_result($fr,$fi,"id");
+$InForumName=mysql_result($fr,$fi,"Name");
+$InForumType=mysql_result($fr,$fi,"ForumType");
+$AiFiInSubForum=mysql_result($fr,$fi,"InSubForum");
+if ($InForumType!="redirect"&&$AiFiInSubForum=="0") {
+?>
+	<option value="<?php echo $InForumID; ?>"><?php echo $InForumName; ?></option>
+<?php } ++$fi; }
+@mysql_free_result($fr); ?>
+	</select></td>
 </tr></table>
 <table style="text-align: left;">
 <tr style="text-align: left;">
@@ -207,6 +227,7 @@ if ($Error!="Yes") {
 $admincptitle = " ".$ThemeSet['TitleDivider']." Updating Settings";
 $query = query("INSERT INTO `".$Settings['sqltable']."forums` VALUES (%i,%i,%i,'%s','%s','%s',%i,'%s',0,0,'%s','%s',%i,%i,'%s',%i,0,0)", array($_POST['ForumID'],$_POST['ForumCatID'],$_POST['OrderID'],$_POST['ForumName'],$_POST['ShowForum'],$_POST['ForumType'],$_POST['InSubForum'],$_POST['RedirectURL'],$_POST['ForumDesc'],$_POST['PostCountAdd'],$_POST['NumPostView'],$_POST['NumKarmaView'],$_POST['CanHaveTopics'],$_POST['NumPostHotTopic']));
 mysql_query($query);
+if(!is_numeric($_POST['CPermissions'])) { $_POST['CPermissions'] = "0"; }
 $getperidq = query("SELECT DISTINCT `PermissionID` FROM `".$Settings['sqltable']."permissions` ORDER BY `PermissionID` ASC", array(null));
 $getperidr=mysql_query($getperidq);
 $getperidnum=mysql_num_rows($getperidr);
@@ -214,12 +235,41 @@ $getperidi = 0;
 $nextperid = getnextid($Settings['sqltable'],"permissions");
 while ($getperidi < $getperidnum) {
 $getperidID=mysql_result($getperidr,$getperidi,"PermissionID");
-$getperidq2 = query("SELECT * FROM `".$Settings['sqltable']."permissions` WHERE `PermissionID`=%i", array($getperidID));
+if($_POST['CPermissions']=="0") {
+$getperidq2 = query("SELECT * FROM `".$Settings['sqltable']."permissions` WHERE `PermissionID`=%i", array($getperidID)); }
+if($_POST['CPermissions']!="0") {
+$getperidq2 = query("SELECT * FROM `".$Settings['sqltable']."permissions` WHERE `PermissionID`=%i AND ForumID=%i", array($getperidID,$_POST['CPermissions'])); }
 $getperidr2=mysql_query($getperidq2);
 $getperidnum2=mysql_num_rows($getperidr2);
-$getperidName=mysql_result($getperidr2,0,"Name");
+$PermissionNum=mysql_result($getperidr2,0,"id"); 
+$PermissionID=mysql_result($getperidr2,0,"PermissionID"); 
+$PermissionName=mysql_result($getperidr2,0,"Name"); 
+$PermissionForumID=mysql_result($getperidr2,0,"ForumID"); 
+$CanViewForum=mysql_result($getperidr2,0,"CanViewForum"); 
+$CanMakeTopics=mysql_result($getperidr2,0,"CanMakeTopics"); 
+$CanMakeReplys=mysql_result($getperidr2,0,"CanMakeReplys"); 
+$CanMakeReplysCT=mysql_result($getperidr2,0,"CanMakeReplysCT"); 
+$CanEditTopics=mysql_result($getperidr2,0,"CanEditTopics"); 
+$CanEditTopicsCT=mysql_result($getperidr2,0,"CanEditTopicsCT"); 
+$CanEditReplys=mysql_result($getperidr2,0,"CanEditReplys"); 
+$CanEditReplysCT=mysql_result($getperidr2,0,"CanEditReplysCT"); 
+$CanDeleteTopics=mysql_result($getperidr2,0,"CanDeleteTopics"); 
+$CanDeleteTopicsCT=mysql_result($getperidr2,0,"CanDeleteTopicsCT"); 
+$CanDeleteReplys=mysql_result($getperidr2,0,"CanDeleteReplys"); 
+$CanDeleteReplysCT=mysql_result($getperidr2,0,"CanDeleteReplysCT"); 
+$CanCloseTopics=mysql_result($getperidr2,0,"CanCloseTopics"); 
+$CanPinTopics=mysql_result($getperidr2,0,"CanPinTopics"); 
+$CanDohtml=mysql_result($getperidr2,0,"CanDohtml"); 
+$CanUseBBags=mysql_result($getperidr2,0,"CanUseBBags"); 
+$CanModForum=mysql_result($getperidr2,0,"CanModForum"); 
 @mysql_free_result($getperidr2);
-$query = query("INSERT IGNORE INTO `".$Settings['sqltable']."permissions` VALUES (%i, %i, '%s', %i, 'yes', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no')", array($nextperid,$getperidID,$getperidName,$_POST['ForumID'])); 
+if($_POST['CPermissions']=="0") {
+$query = query("INSERT IGNORE INTO `".$Settings['sqltable']."permissions` VALUES (%i, %i, '%s', %i, 'yes', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no')", array($nextperid,$PermissionID,$PermissionName,$_POST['ForumID'])); }
+if($_POST['CPermissions']!="0") {
+if($getperidnum2>0) {
+$query = query("INSERT IGNORE INTO `".$Settings['sqltable']."permissions` VALUES (%i, %i, '%s', %i, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')", array($nextperid,$PermissionID,$PermissionName,$_POST['ForumID'],$CanViewForum,$CanMakeTopics,$CanMakeReplys,$CanMakeReplysCT,$CanEditTopics,$CanEditTopicsCT,$CanEditReplys,$CanEditReplysCT,$CanDeleteTopics,$CanDeleteTopicsCT,$CanDeleteReplys,$CanDeleteReplysCT,$CanCloseTopics,$CanPinTopics,$CanDohtml,$CanUseBBags,$CanModForum)); }
+if($getperidnum2<=0) {
+$query = query("INSERT IGNORE INTO `".$Settings['sqltable']."permissions` VALUES (%i, %i, '%s', %i, 'yes', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no')", array($nextperid,$PermissionID,$PermissionName,$_POST['ForumID'])); } }
 mysql_query($query);
 ++$getperidi; ++$nextperid; }
 @mysql_free_result($getperidr);
