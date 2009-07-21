@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: subcategories.php - Last Update: 6/17/2009 SVN 265 - Author: cooldude2k $
+    $FileInfo: subcategories.php - Last Update: 7/21/2009 SVN 276 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="subcategories.php"||$File3Name=="/subcategories.php") {
@@ -206,15 +206,16 @@ $oldtopicname=$TopicName; $TopicName=$TopicName1; }
 $UsersID=mysql_result($gltresult,0,"UserID");
 $GuestsName=mysql_result($gltresult,0,"GuestName");
 $UsersName = GetUserName($UsersID,$Settings['sqltable']);
+$UsersHidden = GetHiddenMember($UsersID,$Settings['sqltable']);
 $UsersName1 = pre_substr($UsersName,0,20);
 if($UsersName=="Guest") { $UsersName=$GuestsName;
 if($UsersName==null) { $UsersName="Guest"; } }
 if (pre_strlen($UsersName)>20) { $UsersName1 = $UsersName1."...";
 $oldusername=$UsersName; $UsersName=$UsersName1; } $lul = null;
-if($UsersID>0) {
+if($UsersID>0&&$UsersHidden=="no") {
 $lul = url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UsersID,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
 $LastTopic = "Topic: <a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."#reply".$ShowReply."\" title=\"".$oldtopicname."\">".$TopicName."</a><br />\nUser: <a href=\"".$lul."\" title=\"".$oldusername."\">".$UsersName."</a>"; }
-if($UsersID<=0) {
+if($UsersID<=0||$UsersHidden=="yes") {
 $LastTopic = "Topic: <a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."#reply".$ShowReply."\" title=\"".$oldtopicname."\">".$TopicName."</a><br />\nUser: <span title=\"".$oldusername."\">".$UsersName."</span>"; } }
 @mysql_free_result($gltresult);
 if ($ForumType=="redirect") { $LastTopic="&nbsp;<br />Redirects: ".$NumRedirects."<br />&nbsp;"; }

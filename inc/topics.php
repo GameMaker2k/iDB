@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: topics.php - Last Update: 6/27/2009 SVN 271 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 7/21/2009 SVN 276 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -322,6 +322,7 @@ $TopicStat=mysql_result($result,$i,"Closed");
 $requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($UsersID));
 $reresult=mysql_query($requery);
 $renum=mysql_num_rows($reresult);
+$UserHidden=mysql_result($reresult,0,"HiddenMember");
 $UserGroupID=mysql_result($reresult,0,"GroupID");
 @mysql_free_result($reresult);
 $gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($UserGroupID));
@@ -344,6 +345,7 @@ $glrnum=mysql_num_rows($glrresult);
 if($glrnum>0){
 $ReplyID1=mysql_result($glrresult,0,"id");
 $UsersID1=mysql_result($glrresult,0,"UserID");
+$UsersHidden1=mysql_result($glrresult,0,"HiddenMember");
 $GuestsName1=mysql_result($glrresult,0,"GuestName");
 $TimeStamp1=mysql_result($glrresult,0,"TimeStamp");
 $TimeStamp1=GMTimeChange("F j Y, g:i a",$TimeStamp1,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
@@ -360,14 +362,17 @@ $oldusername=$UsersName1;
 if (pre_strlen($UsersName1)>20) { 
 $Users_Name1 = $Users_Name1."..."; $UsersName1=$Users_Name1; } $lul = null;
 if($TimeStamp1!=null) { $lul = null;
-if($UsersID1>0) {
+if($UsersID1>0&&$UsersHidden1=="no") {
 $lul = url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UsersID1,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
 $luln = url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']).$qstrhtml."&#35;reply".$NumRPosts;
 $LastReply = "<a href=\"".$luln."\">".$TimeStamp1."</a><br />\nUser: <a href=\"".$lul."\" title=\"".$oldusername."\">".$UsersName1."</a>"; }
-if($UsersID1<=0) {
+if($UsersID1<=0||$UsersHidden1=="yes") {
+if($UsersID==-1) { $UserPre = "Guest:"; }
+if($UsersID<-1||$UsersID=0||$UsersHidden=="yes") { 
+	$UserPre = "Hidden:"; }
 $lul = url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UsersID1,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
 $luln = url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']).$qstrhtml."&#35;reply".$NumRPosts;
-$LastReply = "<a href=\"".$luln."\">".$TimeStamp1."</a><br />\nGuest: <span title=\"".$oldusername."\">".$UsersName1."</span>"; } }
+$LastReply = "<a href=\"".$luln."\">".$TimeStamp1."</a><br />\n".$UserPre." <span title=\"".$oldusername."\">".$UsersName1."</span>"; } }
 @mysql_free_result($glrresult);
 if(!isset($TimeStamp1)) { $TimeStamp1 = null; } if(!isset($LastReply)) { $LastReply = "&nbsp;<br />&nbsp;"; }
 if($TimeStamp1==null) { $LastReply = "&nbsp;<br />&nbsp;"; }
@@ -407,11 +412,11 @@ if ($PinnedTopic==1&&$TopicStat==1) {
 <?php if($prepagelist!==null) { echo $prepagelist; } ?></div>
 <div class="topicdescription"><?php echo $TopicDescription; ?></div></td>
 <td class="TableColumn3" style="text-align: center;"><?php
-if($UsersID>0) {
+if($UsersID>0&&$UserHidden=="no") {
 echo "<a href=\"";
 echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UsersID,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
 echo "\">".$UsersName."</a>"; }
-if($UsersID<=0) {
+if($UsersID<=0||$UserHidden=="no") {
 echo "<span>".$UsersName."</span>"; }
 ?></td>
 <td class="TableColumn3" style="text-align: center;"><?php echo $TheTime; ?></td>

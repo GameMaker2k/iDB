@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: functions.php - Last Update: 6/16/2009 SVN 264 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 7/21/2009 SVN 276 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -350,6 +350,14 @@ if($gunnum>0){
 $UsersName=mysql_result($gunresult,0,"Name"); }
 @mysql_free_result($gunresult);
 return $UsersName; }
+function GetHiddenMember($idu,$sqlt) {
+$gunquery = query("SELECT * FROM `".$sqlt."members` WHERE `id`=%i", array($idu));
+$gunresult=mysql_query($gunquery);
+$gunnum=mysql_num_rows($gunresult);
+if($gunnum>0){
+$UsersHidden=mysql_result($gunresult,0,"HiddenMember"); }
+@mysql_free_result($gunresult);
+return $UsersHidden; }
 // hmac hash function
 function hmac($data,$key,$hash='sha1',$blocksize=64) {
   if (strlen($key)>$blocksize) {

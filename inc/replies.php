@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: replies.php - Last Update: 7/18/2009 SVN 275 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 7/21/2009 SVN 276 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -263,6 +263,7 @@ $User1Email=mysql_result($reresult,$rei,"Email");
 $User1Title=mysql_result($reresult,$rei,"Title");
 $User1Joined=mysql_result($reresult,$rei,"Joined");
 $User1Joined=GMTimeChange("M j Y",$User1Joined,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$User1Hidden=mysql_result($reresult,$rei,"HiddenMember");
 $User1GroupID=mysql_result($reresult,$rei,"GroupID");
 $gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($User1GroupID));
 $gresult=mysql_query($gquery);
@@ -332,11 +333,11 @@ $ReplyNum = $i + $PageLimit + 1;
 <tr class="TableInfoRow2">
 <td class="TableInfoColumn2" style="vertical-align: middle; width: 160px;">
 &nbsp;<?php
-if($User1ID>0) {
+if($User1ID>0&&$User1Hidden=="no") {
 echo "<a href=\"";
 echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$User1ID,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
 echo "\">".$User1Name."</a>"; }
-if($User1ID<=0) {
+if($User1ID<=0||$User1Hidden=="yes") {
 echo "<span>".$User1Name."</span>"; }
 ?></td>
 <td class="TableInfoColumn2" style="vertical-align: middle;">
@@ -369,8 +370,8 @@ echo $ThemeSet['LineDividerTopic']; ?><a href="<?php echo url_maker($exfile['top
 <?php echo $User1Title; ?><br />
 Group: <?php echo $User1Group; ?><br />
 Member: <?php 
-if($User1ID>0) { echo $User1ID; }
-if($User1ID<=0) { echo 0; }
+if($User1ID>0&&$User1Hidden=="no") { echo $User1ID; }
+if($User1ID<=0||$User1Hidden=="yes") { echo 0; }
 ?><br />
 Posts: <?php echo $User1PostCount; ?><br />
 Karma: <?php echo $User1Karma; ?><br />
@@ -392,16 +393,16 @@ Post IP: <a onclick="window.open(this.href);return false;" href="http://cqcounte
 <tr class="TableInfoRow4">
 <td class="TableInfoColumn4" colspan="2">
 <span style="text-align: left;">&nbsp;<a href="<?php
-if($User1ID>0&&isset($ThemeSet['Profile'])&&$ThemeSet['Profile']!=null) {
+if($User1ID>0&&$User1Hidden=="no"&&isset($ThemeSet['Profile'])&&$ThemeSet['Profile']!=null) {
 echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$User1ID,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); }
-if($User1ID<=0&&isset($ThemeSet['Profile'])&&$ThemeSet['Profile']!=null) {
+if(($User1ID<=0||$User1Hidden=="yes")&&isset($ThemeSet['Profile'])&&$ThemeSet['Profile']!=null) {
 echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); }
 ?>"><?php echo $ThemeSet['Profile']; ?></a>
 <?php if(isset($ThemeSet['WWW'])&&$ThemeSet['WWW']!=null) {
 echo $ThemeSet['LineDividerTopic']; ?><a href="<?php echo $User1Website; ?>" onclick="window.open(this.href);return false;"><?php echo $ThemeSet['WWW']; ?></a><?php } echo $ThemeSet['LineDividerTopic']; ?><a href="<?php
-if($User1ID>0&&isset($ThemeSet['PM'])&&$ThemeSet['PM']!=null) {
+if($User1ID>0&&$User1Hidden=="no"&&isset($ThemeSet['PM'])&&$ThemeSet['PM']!=null) {
 echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=create&id=".$User1ID,$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); }
-if($User1ID<=0&&isset($ThemeSet['PM'])&&$ThemeSet['PM']!=null) {
+if(($User1ID<=0||$User1Hidden=="yes")&&isset($ThemeSet['PM'])&&$ThemeSet['PM']!=null) {
 echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); }
 ?>"><?php echo $ThemeSet['PM']; ?></a></span>
 </td>
@@ -1441,7 +1442,7 @@ if ($_POST['ReplyDesc']==null) { $Error="Yes"; ?>
 	</span>&nbsp;</td>
 </tr>
 <?php } if ($Error=="Yes") {
-@redirect("refresh",$basedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],false).$Settings['qstr']."#post".$_GET['post'],"4"); ?>
+@redirect("refresh",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Click <a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">here</a> to goto index page.<br />&nbsp;

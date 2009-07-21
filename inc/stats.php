@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: stats.php - Last Update: 6/17/2009 SVN 265 - Author: cooldude2k $
+    $FileInfo: stats.php - Last Update: 7/21/2009 SVN 276 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="stats.php"||$File3Name=="/stats.php") {
@@ -26,7 +26,7 @@ $npquery = query("SELECT COUNT(*) FROM `".$Settings['sqltable']."posts`", array(
 $npresult = mysql_query($npquery);
 $numposts = mysql_result($npresult,0);
 @mysql_free_result($npresult);
-$nmquery = query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."members` WHERE `id`<>%i ORDER BY `Joined` DESC LIMIT 1", array(-1));
+$nmquery = query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."members` WHERE `id`>=0 AND `HiddenMember`='no' ORDER BY `Joined` DESC LIMIT 1", array(-1));
 $rnmquery = query("SELECT FOUND_ROWS();", array(null));
 $nmresult = mysql_query($nmquery);
 $rnmresult = mysql_query($rnmquery);

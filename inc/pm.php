@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: pm.php - Last Update: 7/18/2009 SVN 275 - Author: cooldude2k $
+    $FileInfo: pm.php - Last Update: 7/21/2009 SVN 276 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pm.php"||$File3Name=="/pm.php") {
@@ -175,8 +175,10 @@ while ($i < $num) {
 $PMID=mysql_result($result,$i,"id");
 $SenderID=mysql_result($result,$i,"SenderID");
 $SenderName = GetUserName($SenderID,$Settings['sqltable']);
+$SenderHidden = GetHiddenMember($SenderID,$Settings['sqltable']);
 $SentToID=mysql_result($result,$i,"PMSentID");
 $SentToName = GetUserName($SentToID,$Settings['sqltable']);
+$SentToHidden = GetHiddenMember($SentToID,$Settings['sqltable']);
 $PMGuest=mysql_result($result,$i,"GuestName");
 $MessageName=mysql_result($result,$i,"MessageTitle");
 $MessageDesc=mysql_result($result,$i,"Description");
@@ -198,11 +200,11 @@ if ($MessageStat==1) {
 <a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=read&id=".$PMID,$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>"><?php echo $MessageName; ?></a></div>
 <div class="messagedesc"><?php echo $MessageDesc; ?></div></td>
 <td class="TableMenuColumn3" style="text-align: center;"><?php
-if($SenderID>0) {
+if($SenderID>0&&$SenderHidden=="no") {
 echo "<a href=\"";
 echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$SenderID,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
 echo "\">".$SenderName."</a>"; }
-if($SenderID<=0) {
+if($SenderID<=0||$SenderHidden=="yes") {
 echo "<span>".$SenderName."</span>"; }
 ?></td>
 <td class="TableMenuColumn3" style="text-align: center;"><?php echo $DateSend; ?></td>
@@ -336,8 +338,10 @@ while ($i < $num) {
 $PMID=mysql_result($result,$i,"id");
 $SenderID=mysql_result($result,$i,"SenderID");
 $SenderName = GetUserName($SenderID,$Settings['sqltable']);
+$SenderHidden = GetHiddenMember($SenderID,$Settings['sqltable']);
 $SentToID=mysql_result($result,$i,"PMSentID");
 $SentToName = GetUserName($SentToID,$Settings['sqltable']);
+$SentToHidden = GetHiddenMember($SentToID,$Settings['sqltable']);
 $PMGuest=mysql_result($result,$i,"GuestName");
 $MessageName=mysql_result($result,$i,"MessageTitle");
 $MessageDesc=mysql_result($result,$i,"Description");
@@ -359,11 +363,11 @@ if ($MessageStat==1) {
 <a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=read&id=".$PMID,$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>"><?php echo $MessageName; ?></a></div>
 <div class="messagedesc"><?php echo $MessageDesc; ?></div></td>
 <td class="TableMenuColumn3" style="text-align: center;"><?php
-if($SentToID>0) {
+if($SentToID>0&&$SendToHidden=="no") {
 echo "<a href=\"";
 echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$SentToID,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
 echo "\">".$SentToName."</a>"; }
-if($SentToID<=0) {
+if($SentToID<=0||$SendToHidden=="yes") {
 echo "<span>".$SentToName."</span>"; }
 ?></td>
 <td class="TableMenuColumn3" style="text-align: center;"><?php echo $DateSend; ?></td>
@@ -384,9 +388,11 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 while ($is < $num) {
 $PMID=mysql_result($result,$is,"id");
 $SenderID=mysql_result($result,$is,"SenderID");
-$SenderName = GetUserName($SenderID,$Settings['sqltable']);
+//$SenderName = GetUserName($SenderID,$Settings['sqltable']);
+//$SenderHidden = GetHiddenMember($SenderID,$Settings['sqltable']);
 $SentToID=mysql_result($result,$is,"PMSentID");
 $SentToName = GetUserName($SentToID,$Settings['sqltable']);
+$SentToHidden = GetHiddenMember($SentToID,$Settings['sqltable']);
 $PMGuest=mysql_result($result,$is,"GuestName");
 $MessageName=mysql_result($result,$is,"MessageTitle");
 $DateSend=mysql_result($result,$is,"DateSend");
@@ -406,12 +412,15 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 while ($rei < $renum) {
 $User1ID=$SenderID;
 $User1Name=mysql_result($reresult,$rei,"Name");
+$SenderName = $User1Name;
 $User1IP=mysql_result($reresult,$rei,"IP");
 $User1Email=mysql_result($reresult,$rei,"Email");
 $User1Title=mysql_result($reresult,$rei,"Title");
 $User1Joined=mysql_result($reresult,$rei,"Joined");
 $User1Joined=GMTimeChange("M j Y",$User1Joined,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $User1GroupID=mysql_result($reresult,$rei,"GroupID");
+$User1Hidden=mysql_result($reresult,$rei,"HiddenMember");
+$SenderHidden = $User1Hidden;
 $gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i", array($User1GroupID));
 $gresult=mysql_query($gquery);
 $User1Group=mysql_result($gresult,0,"Name");
@@ -461,11 +470,11 @@ $User1Signature = text2icons($User1Signature,$Settings['sqltable']);
 <tr class="TableInfoMiniRow2">
 <td class="TableInfoMiniColumn2" style="vertical-align: middle; width: 160px;">
 &nbsp;<?php
-if($User1ID>0) {
+if($User1ID>0&&$User1Hidden=="no") {
 echo "<a href=\"";
 echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$User1ID,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
 echo "\">".$User1Name."</a>"; }
-if($User1ID<=0) {
+if($User1ID<=0||$User1Hidden=="yes") {
 echo "<span>".$User1Name."</span>"; }
 ?></td>
 <td class="TableInfoMiniColumn2" style="vertical-align: middle;">
@@ -493,8 +502,8 @@ echo $ThemeSet['LineDividerTopic']; ?><a href="<?php echo url_maker($exfile['mes
 <?php echo $User1Title; ?><br />
 Group: <?php echo $User1Group; ?><br />
 Member: <?php 
-if($User1ID>0) { echo $User1ID; }
-if($User1ID<=0) { echo 0; }
+if($User1ID>0&&$User1Hidden=="no") { echo $User1ID; }
+if($User1ID<=0||$User1Hidden=="yes") { echo 0; }
 ?><br />
 Posts: <?php echo $User1PostCount; ?><br />
 Karma: <?php echo $User1Karma; ?><br />
@@ -513,16 +522,16 @@ User IP: <a onclick="window.open(this.href);return false;" href="http://cqcounte
 <tr class="TableInfoMiniRow4">
 <td class="TableInfoMiniColumn4" colspan="2">
 <span style="text-align: left;">&nbsp;<a href="<?php
-if($User1ID!="-1"&&isset($ThemeSet['Profile'])&&$ThemeSet['Profile']!=null) {
+if($User1ID>0&&$User1Hidden=="no"&&isset($ThemeSet['Profile'])&&$ThemeSet['Profile']!=null) {
 echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$User1ID,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); }
-if($User1ID=="-1"&&isset($ThemeSet['Profile'])&&$ThemeSet['Profile']!=null) {
+if(($User1ID<=0||$User1Hidden=="yes")&&isset($ThemeSet['Profile'])&&$ThemeSet['Profile']!=null) {
 echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); }
 ?>"><?php echo $ThemeSet['Profile']; ?></a>
 <?php if(isset($ThemeSet['WWW'])&&$ThemeSet['WWW']!=null) {
 echo $ThemeSet['LineDividerTopic']; ?><a href="<?php echo $User1Website; ?>" onclick="window.open(this.href);return false;"><?php echo $ThemeSet['WWW']; ?></a><?php } echo $ThemeSet['LineDividerTopic']; ?><a href="<?php
-if($User1ID>0&&isset($ThemeSet['PM'])&&$ThemeSet['PM']!=null) {
+if($User1ID>0&&$User1Hidden=="no"&&isset($ThemeSet['PM'])&&$ThemeSet['PM']!=null) {
 echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=create&id=".$User1ID,$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); }
-if($User1ID<=0&&isset($ThemeSet['PM'])&&$ThemeSet['PM']!=null) {
+if(($User1ID<=0||$User1Hidden=="yes")&&isset($ThemeSet['PM'])&&$ThemeSet['PM']!=null) {
 echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); }
 ?>"><?php echo $ThemeSet['PM']; ?></a></span>
 </td></tr>

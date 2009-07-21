@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 7/18/2009 SVN 275 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 7/21/2009 SVN 276 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -65,9 +65,9 @@ $PageLimit = $nums - $Settings['max_memlist'];
 if($PageLimit<0) { $PageLimit = 0; }
 $i=0;
 if($_GET['groupid']==null) {
-$query = query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."members` WHERE `GroupID`<>%i AND id>=0 ".$orderlist." LIMIT %i,%i", array($GGroup,$PageLimit,$Settings['max_memlist'])); }
+$query = query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."members` WHERE `GroupID`<>%i AND `id`>=0 AND `HiddenMember`='no' ".$orderlist." LIMIT %i,%i", array($GGroup,$PageLimit,$Settings['max_memlist'])); }
 if($_GET['groupid']!=null) {
-$query = query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."members` WHERE `GroupID`=%i AND `GroupID`<>%i AND id>=0 ".$orderlist." LIMIT %i,%i", array($_GET['groupid'],$GGroup,$PageLimit,$Settings['max_memlist'])); }
+$query = query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."members` WHERE `GroupID`=%i AND `GroupID`<>%i AND `id`>=0 ".$orderlist." LIMIT %i,%i", array($_GET['groupid'],$GGroup,$PageLimit,$Settings['max_memlist'])); }
 $rnquery = query("SELECT FOUND_ROWS();", array(null));
 $result=mysql_query($query);
 $rnresult=mysql_query($rnquery);
@@ -265,6 +265,7 @@ $ViewMem['Avatar']=mysql_result($result,$i,"Avatar");
 $ViewMem['AvatarSize']=mysql_result($result,$i,"AvatarSize");
 $ViewMem['Email']=mysql_result($result,$i,"Email");
 $ViewMem['GroupID']=mysql_result($result,$i,"GroupID");
+$ViewMem['HiddenMember']=mysql_result($result,$i,"HiddenMember");
 $ViewMem['WarnLevel']=mysql_result($result,$i,"WarnLevel");
 $ViewMem['Interests']=mysql_result($result,$i,"Interests");
 $ViewMem['Title']=mysql_result($result,$i,"Title");
@@ -293,6 +294,9 @@ if(isset($GroupNamePrefix)&&$GroupNamePrefix!=null) {
 if(isset($GroupNameSuffix)&&$GroupNameSuffix!=null) {
 	$ViewMem['Name'] = $ViewMem['Name'].$GroupNameSuffix; }
 */
+if($ViewMem['HiddenMember']=="yes") { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
+ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 $membertitle = " ".$ThemeSet['TitleDivider']." ".$ViewMem['Name'];	
 if ($ViewMem['Avatar']=="http://"||$ViewMem['Avatar']==null||
 	strtolower($ViewMem['Avatar'])=="noavatar") {
@@ -917,7 +921,7 @@ if($Settings['AdminValidate']=="on"||$Settings['AdminValidate']!="off")
 { $ValidateStats="no"; $yourgroup=$Settings['ValidateGroup']; }
 if($Settings['AdminValidate']=="off"||$Settings['AdminValidate']!="on")
 { $ValidateStats="yes"; $yourgroup=$Settings['MemberGroup']; }
-$HashSalt = salt_hmac(); 
+$HideMe = "no"; $HashSalt = salt_hmac();
 $NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$HashSalt,"sha1");
 $_GET['YourPost'] = $_POST['Signature'];
 //require( './'.$SettDir['misc'].'HTMLTags.php');
@@ -948,7 +952,7 @@ if(!is_numeric($_POST['MinOffSet'])) { $_POST['MinOffSet'] = "00"; }
 if($_POST['MinOffSet']>59) { $_POST['MinOffSet'] = "59"; }
 if($_POST['MinOffSet']<0) { $_POST['MinOffSet'] = "00"; }
 $_POST['YourOffSet'] = $_POST['YourOffSet'].":".$_POST['MinOffSet'];
-$query = query("INSERT INTO `".$Settings['sqltable']."members` VALUES (".$yourid.",'%s','%s','%s','%s','%s','%s',%i,'%s','%s',%i,%i,'0','0','0','0','0','%s','%s','%s','%s','%s','%s',%i,0,0,10,10,10,'%s','%s','%s','%s','%s')", array($Name,$NewPassword,"iDBH",$_POST['Email'],$yourgroup,$ValidateStats,"0",$_POST['Interests'],$_POST['Title'],$_POST['Joined'],$_POST['LastActive'],$NewSignature,'Your Notes',$Avatar,"100x100",$Website,$_POST['YourGender'],$_POST['PostCount'],$_POST['YourOffSet'],$_POST['DST'],$Settings['DefaultTheme'],$_POST['UserIP'],$HashSalt));
+$query = query("INSERT INTO `".$Settings['sqltable']."members` VALUES (".$yourid.",'%s','%s','%s','%s','%s','%s','%s',%i,'%s','%s',%i,%i,'0','0','0','0','0','%s','%s','%s','%s','%s','%s',%i,0,0,10,10,10,'%s','%s','%s','%s','%s')", array($Name,$NewPassword,"iDBH",$_POST['Email'],$yourgroup,$ValidateStats,$HideMe,"0",$_POST['Interests'],$_POST['Title'],$_POST['Joined'],$_POST['LastActive'],$NewSignature,'Your Notes',$Avatar,"100x100",$Website,$_POST['YourGender'],$_POST['PostCount'],$_POST['YourOffSet'],$_POST['DST'],$Settings['DefaultTheme'],$_POST['UserIP'],$HashSalt));
 mysql_query($query);
 $querylogr = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `Name`='%s' AND `Password`='%s' LIMIT 1", array($Name,$NewPassword));
 $resultlogr=mysql_query($querylogr);
