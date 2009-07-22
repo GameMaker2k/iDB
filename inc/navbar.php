@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: navbar.php - Last Update: 6/17/2009 SVN 265 - Author: cooldude2k $
+    $FileInfo: navbar.php - Last Update: 7/22/2009 SVN 277 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="navbar.php"||$File3Name=="/navbar.php") {
@@ -28,6 +28,9 @@ $SentPMNumber=mysql_num_rows($pmresult2);
 @mysql_free_result($pmresult2); */ }
 if($ThemeSet['LogoStyle']==null) { $logostyle = ""; }
 if($ThemeSet['LogoStyle']!=null) { $logostyle = "style=\"".$ThemeSet['LogoStyle']."\" "; }
+// Am I hidden from everyone
+$AmIHidden = GetHiddenMember($_SESSION['UserID'],$Settings['sqltable']);
+// Hide me from everyone! >_> ^_^ <_< 
 ?>
 <div class="NavBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
@@ -50,7 +53,7 @@ if($ThemeSet['LogoStyle']!=null) { $logostyle = "style=\"".$ThemeSet['LogoStyle'
 <tr class="NavBarRow2">
 <td id="NavBarLinks" class="NavBarColumn2">
 <span style="float: left;">&nbsp;<?php if($_SESSION['UserGroup']==$Settings['GuestGroup']) {?>Welcome Guest ( <a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Log in</a><?php echo $ThemeSet['LineDivider']; ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=signup",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Register</a> )
-<?php } if($_SESSION['UserGroup']!=$Settings['GuestGroup']) { ?>Logged as: <?php if($_SESSION['UserID']>0) { ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$_SESSION['UserID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>"><?php } if($_SESSION['UserID']<0) { echo "<span>"; } echo $_SESSION['MemberName']; ?><?php if($_SESSION['UserID']>0) { ?></a><?php } if($_SESSION['UserID']<0) { echo "</span>"; } ?> ( <a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=logout",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Log out</a><?php if($GroupInfo['HasAdminCP']=="yes") { ?><?php echo $ThemeSet['LineDivider']; ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Admin CP</a><?php } ?> )<?php } ?></span>
+<?php } if($_SESSION['UserGroup']!=$Settings['GuestGroup']) { ?>Logged as: <?php if($_SESSION['UserID']>0&&$AmIHidden=="no") { ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$_SESSION['UserID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>"><?php } if($_SESSION['UserID']<0||$AmIHidden=="yes") { echo "<span>"; } echo $_SESSION['MemberName']; ?><?php if($_SESSION['UserID']>0&&$AmIHidden=="no") { ?></a><?php } if($_SESSION['UserID']<0||$AmIHidden=="yes") { echo "</span>"; } ?> ( <a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=logout",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Log out</a><?php if($GroupInfo['HasAdminCP']=="yes") { ?><?php echo $ThemeSet['LineDivider']; ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Admin CP</a><?php } ?> )<?php } ?></span>
 <span style="float: right;">
 <?php
 	if($Settings['enable_search']=="on"&&
