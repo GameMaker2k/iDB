@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: topics.php - Last Update: 7/22/2009 SVN 278 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 7/22/2009 SVN 279 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -367,8 +367,8 @@ $lul = url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UsersID
 $luln = url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']).$qstrhtml."&#35;reply".$NumRPosts;
 $LastReply = "<a href=\"".$luln."\">".$TimeStamp1."</a><br />\nUser: <a href=\"".$lul."\" title=\"".$oldusername."\">".$UsersName1."</a>"; }
 if($UsersID1<=0||$UsersHidden1=="yes") {
-if($UsersID==-1) { $UserPre = "Guest:"; }
-if($UsersID<-1||$UsersID=0||$UsersHidden=="yes") { 
+if($UsersID1==-1) { $UserPre = "Guest:"; }
+if($UsersID1<-1||$UsersID1=0||$UsersHidden=="yes") { 
 	$UserPre = "Hidden:"; }
 $lul = url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UsersID1,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
 $luln = url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']).$qstrhtml."&#35;reply".$NumRPosts;
