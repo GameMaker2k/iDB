@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: subforums.php - Last Update: 7/23/2009 SVN 280 - Author: cooldude2k $
+    $FileInfo: subforums.php - Last Update: 7/23/2009 SVN 281 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="subforums.php"||$File3Name=="/subforums.php") {
@@ -77,6 +77,7 @@ $isfForumID=mysql_result($isfresult,0,"id");
 $isfForumCatID=mysql_result($isfresult,0,"CategoryID");
 $isfForumName=mysql_result($isfresult,0,"Name");
 $isfForumType=mysql_result($isfresult,0,"ForumType");
+$isfForumType = strtolower($isfForumType);
 $isfRedirectURL=mysql_result($isfresult,0,"RedirectURL"); }
 if($isfnum<1) { $InSubForum = "0"; } 
 @mysql_free_result($isfresult); }

@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: lowcategories.php - Last Update: 6/16/2009 SVN 264 - Author: cooldude2k $
+    $FileInfo: lowcategories.php - Last Update: 7/23/2009 SVN 281 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="lowcategories.php"||$File3Name=="/lowcategories.php") {
@@ -29,6 +29,7 @@ $CategoryID=mysql_result($preresult,0,"id");
 $CategoryName=mysql_result($preresult,0,"Name");
 $CategoryShow=mysql_result($preresult,0,"ShowCategory");
 $CategoryType=mysql_result($preresult,0,"CategoryType");
+$InSubCategory=mysql_result($preresult,0,"InSubCategory");
 $SubShowForums=mysql_result($preresult,0,"SubShowForums");
 $CategoryDescription=mysql_result($preresult,0,"Description");
 $CategoryType = strtolower($CategoryType); $SubShowForums = strtolower($SubShowForums);
@@ -51,9 +52,21 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 if($CatPermissionInfo['CanViewCategory'][$CategoryID]=="yes") {
 if(!isset($CatCheck)) { $CatCheck = null; } 
 if($CatCheck!="skip") {
+if($InSubCategory!="0") {
+$iscquery = query("SELECT * FROM `".$Settings['sqltable']."categories` WHERE `id`=%i LIMIT 1", array($InSubCategory));
+$iscresult=mysql_query($iscquery);
+$iscnum=mysql_num_rows($iscresult);
+if($iscnum>=1) {
+$iscCategoryID=mysql_result($iscresult,0,"id");
+$iscCategoryName=mysql_result($iscresult,0,"Name");
+$iscCategoryShow=mysql_result($iscresult,0,"ShowCategory");
+$iscCategoryType=mysql_result($iscresult,0,"CategoryType");
+$iscCategoryType = strtolower($iscCategoryType); }
+if($iscnum<1) { $InSubCategory = "0"; } 
+@mysql_free_result($iscresult); }
 ?>
 <div style="font-size: 1.0em; font-weight: bold; margin-bottom: 10px; padding-top: 3px; width: auto;">Full Version: <a href="<?php echo url_maker($exfile[$CategoryType],$Settings['file_ext'],"act=view&id=".$CategoryID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$CategoryType],$exqstr[$CategoryType]); ?>"><?php echo $CategoryName; ?></a></div>
-<div style="padding: 10px; border: 1px solid gray;"><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=lowview",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">Board index</a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile[$CategoryType],$Settings['file_ext'],"act=lowview&id=".$CategoryID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$CategoryType],$exqstr[$CategoryType]); ?>"><?php echo $CategoryName; ?></a></div>
+<div style="padding: 10px; border: 1px solid gray;"><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=lowview",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">Board index</a><?php if($InSubCategory!="0") { echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile[$iscCategoryType],$Settings['file_ext'],"act=view&id=".$iscCategoryID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr[$iscCategoryType],$exqstr[$iscCategoryType]); ?>"><?php echo $iscCategoryName; ?></a><?php } echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile[$CategoryType],$Settings['file_ext'],"act=lowview&id=".$CategoryID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$CategoryType],$exqstr[$CategoryType]); ?>"><?php echo $CategoryName; ?></a></div>
 <div>&nbsp;</div>
 <div style="padding: 10px; border: 1px solid gray;">
 <ul style="list-style-type: none;">
