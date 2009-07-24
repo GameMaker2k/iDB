@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: subcategories.php - Last Update: 7/23/2009 SVN 281 - Author: cooldude2k $
+    $FileInfo: subcategories.php - Last Update: 7/23/2009 SVN 282 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="subcategories.php"||$File3Name=="/subcategories.php") {
@@ -187,13 +187,13 @@ $gltf[$apcl] = $SubsForumID; ++$apcl; }
 @mysql_free_result($apcresult); } }
 if(isset($PermissionInfo['CanViewForum'][$ForumID])&&
 	$PermissionInfo['CanViewForum'][$ForumID]=="yes") {
-$LastTopic = null; 
+$LastTopic = "&nbsp;<br />&nbsp;<br />&nbsp;";
 if(!isset($LastTopic)) { $LastTopic = null; }
 $gltnum = count($gltf); $glti = 0; 
 $OldUpdateTime = 0; $UseThisFonum = null;
 if ($ForumType=="subforum") { 
 while ($glti < $gltnum) {
-$gltfoquery = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `CategoryID`=%i AND `ForumID`=%i ORDER BY `LastUpdate` DESC LIMIT 1", array($CategoryID,$gltf[$glti]));
+$gltfoquery = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `ForumID`=%i ORDER BY `LastUpdate` DESC LIMIT 1", array($gltf[$glti]));
 $gltforesult=mysql_query($gltfoquery);
 $gltfonum=mysql_num_rows($gltforesult);
 if($gltfonum>0) {
@@ -205,31 +205,50 @@ $OldUpdateTime = $NewUpdateTime; } }
 ++$glti; } }
 if ($ForumType!="subforum"&&$ForumType!="redirect") { $UseThisFonum = $gltf[0]; }
 if ($ForumType!="redirect") {
-$gltquery = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `CategoryID`=%i AND `ForumID`=%i ORDER BY `LastUpdate` DESC LIMIT 1", array($CategoryID,$UseThisFonum));
+$gltquery = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `ForumID`=%i ORDER BY `LastUpdate` DESC LIMIT 1", array($UseThisFonum));
 $gltresult=mysql_query($gltquery);
 $gltnum=mysql_num_rows($gltresult);
 if($gltnum>0){
 $TopicID=mysql_result($gltresult,0,"id");
 $TopicName=mysql_result($gltresult,0,"TopicName");
 $NumReplys=mysql_result($gltresult,0,"NumReply");
-$ShowReply = $NumReplys + 1;
+$NumPages = null; $NumRPosts = $NumReplys + 1;
+if(!isset($Settings['max_posts'])) { $Settings['max_posts'] = 10; }
+if($NumRPosts>$Settings['max_posts']) {
+$NumPages = ceil($NumRPosts/$Settings['max_posts']); }
+if($NumRPosts<=$Settings['max_posts']) { $NumPages = 1; }
 $TopicName1 = pre_substr($TopicName,0,20);
-if (pre_strlen($TopicName)>20) { $TopicName1 = $TopicName1."..."; 
-$oldtopicname=$TopicName; $TopicName=$TopicName1; }
-$UsersID=mysql_result($gltresult,0,"UserID");
-$GuestsName=mysql_result($gltresult,0,"GuestName");
+$oldtopicname=$TopicName;
+if (pre_strlen($TopicName)>20) {
+$TopicName1 = $TopicName1."..."; $TopicName=$TopicName1; }
+$glrquery = query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `TopicID`=%i ORDER BY `TimeStamp` DESC LIMIT 1", array($TopicID));
+$glrresult=mysql_query($glrquery);
+$glrnum=mysql_num_rows($glrresult);
+if($glrnum>0){
+$ReplyID=mysql_result($glrresult,0,"id");
+$UsersID=mysql_result($glrresult,0,"UserID");
+$GuestsName=mysql_result($glrresult,0,"GuestName");
+$TimeStamp=mysql_result($glrresult,0,"TimeStamp");
+$TimeStamp=GMTimeChange("F j Y, g:i a",$TimeStamp,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+@mysql_free_result($glrresult); }
 $UsersName = GetUserName($UsersID,$Settings['sqltable']);
 $UsersHidden = GetHiddenMember($UsersID,$Settings['sqltable']);
-$UsersName1 = pre_substr($UsersName,0,20);
 if($UsersName=="Guest") { $UsersName=$GuestsName;
 if($UsersName==null) { $UsersName="Guest"; } }
-if (pre_strlen($UsersName)>20) { $UsersName1 = $UsersName1."...";
-$oldusername=$UsersName; $UsersName=$UsersName1; } $lul = null;
+$UsersName1 = pre_substr($UsersName,0,20);
+$oldusername=$UsersName;
+if (pre_strlen($UsersName)>20) { 
+$UsersName1 = $UsersName1."..."; $UsersName=$UsersName1; } 
+$lul = null;
 if($UsersID>0&&$UsersHidden=="no") {
 $lul = url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UsersID,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
-$LastTopic = "Topic: <a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."#reply".$ShowReply."\" title=\"".$oldtopicname."\">".$TopicName."</a><br />\nUser: <a href=\"".$lul."\" title=\"".$oldusername."\">".$UsersName."</a>"; }
+$LastTopic = $TimeStamp."<br />\nTopic: <a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']).$qstrhtml."&#35;reply".$NumRPosts."\" title=\"".$oldtopicname."\">".$TopicName."</a><br />\nUser: <a href=\"".$lul."\" title=\"".$oldusername."\">".$UsersName."</a>"; }
 if($UsersID<=0||$UsersHidden=="yes") {
-$LastTopic = "Topic: <a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."#reply".$ShowReply."\" title=\"".$oldtopicname."\">".$TopicName."</a><br />\nUser: <span title=\"".$oldusername."\">".$UsersName."</span>"; } }
+if($UsersID==-1) { $UserPre = "Guest:"; }
+if($UsersID<-1||$UsersID=0||$UsersHidden=="yes") { 
+	$UserPre = "Hidden:"; }
+$LastTopic = $TimeStamp."<br />\nTopic: <a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']).$qstrhtml."&#35;reply".$NumRPosts."\" title=\"".$oldtopicname."\">".$TopicName."</a><br />\n".$UserPre." <span title=\"".$oldusername."\">".$UsersName."</span>"; } }
+if($LastTopic==null) { $LastTopic = "&nbsp;<br />&nbsp;<br />&nbsp;"; } }
 @mysql_free_result($gltresult);
 if ($ForumType=="redirect") { $LastTopic="&nbsp;<br />Redirects: ".$NumRedirects."<br />&nbsp;"; }
 $PreForum = $ThemeSet['ForumIcon'];

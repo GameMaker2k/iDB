@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: lowsubcategories.php - Last Update: 7/23/2009 SVN 281 - Author: cooldude2k $
+    $FileInfo: lowsubcategories.php - Last Update: 7/23/2009 SVN 282 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="lowsubcategories.php"||$File3Name=="/lowsubcategories.php") {
@@ -146,7 +146,7 @@ $gltf[$apcl] = $SubsForumID; ++$apcl; }
 @mysql_free_result($apcresult); } }
 if(isset($PermissionInfo['CanViewForum'][$ForumID])&&
 	$PermissionInfo['CanViewForum'][$ForumID]=="yes") {
-$LastTopic = null; 
+$LastTopic = "&nbsp;<br />&nbsp;<br />&nbsp;";
 if(!isset($LastTopic)) { $LastTopic = null; }
 $gltnum = count($gltf); $glti = 0; 
 $OldUpdateTime = 0; $UseThisFonum = null;

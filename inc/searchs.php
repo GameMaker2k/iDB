@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: searchs.php - Last Update: 7/21/2009 SVN 276 - Author: cooldude2k $
+    $FileInfo: searchs.php - Last Update: 7/23/2009 SVN 282 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="searchs.php"||$File3Name=="/searchs.php") {
@@ -352,6 +352,7 @@ if(isset($PermissionInfo['CanViewForum'][$ForumID])&&
 	$PermissionInfo['CanViewForum'][$ForumID]=="yes"&&
 	isset($CatPermissionInfo['CanViewCategory'][$CategoryID])&&
 	$CatPermissionInfo['CanViewCategory'][$CategoryID]=="yes") {
+$LastReply = "&nbsp;<br />&nbsp;";
 $glrquery = query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `TopicID`=%i ORDER BY `TimeStamp` DESC LIMIT 1", array($TopicID));
 $glrresult=mysql_query($glrquery);
 $glrnum=mysql_num_rows($glrresult);
