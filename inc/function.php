@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: function.php - Last Update: 6/16/2009 SVN 264 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 7/29/2009 SVN 283 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -167,12 +167,12 @@ function xml_doc_start($ver,$encode,$retval=false) {
 	if($retval===true) {
 	return xml_tag_make('xml','version='.$ver.'&encoding='.$encode,true); } }
 $icharset = $Settings['charset'];
-// Make a url
 $debug_on = false;
 if(isset($_GET['debug'])) {
 if($_GET['debug']=="true"||
 	$_GET['debug']=="on") {
 $debug_on = true; } }
+// Make a url with query string
 function url_maker($file="index",$ext=".php",$qvarstr=null,$qstr=";",$qsep="=",$prexqstr=null,$exqstr=null,$fixhtml=true) {
 global $sidurls, $icharset, $debug_on;
 $fileurl = null; if(!isset($ext)) { $ext = null; }

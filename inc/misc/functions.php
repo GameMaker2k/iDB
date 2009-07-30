@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: functions.php - Last Update: 7/22/2009 SVN 277 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 7/29/2009 SVN 283 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -86,7 +86,7 @@ if($use_gzip=="on") {
 	if($gzip_type=="deflate") {
 	$goutput = gzcompress($output); }
 	echo $goutput; } }
-	$Names['RJ'] = "Kazuki Przyborowski";
+	$Names['RJ'] = "Rene Johnson";
 define("_rene_", $Names['RJ']);
 // GZip page for faster download
 function gzip_page($use_gzip="off",$gzip_type="gzip") {
@@ -141,6 +141,7 @@ $varname = preg_replace("/(HTTP_GET_VARS|HTTP_POST_VARS|HTTP_POST_FILES)/i", nul
 if(!isset($Settings['DefaultTheme'])) {
 	$Settings['DefaultTheme'] = "iDB"; }
 $BoardTheme = $Settings['DefaultTheme'];
+//Check to make sure theme exists
 function chack_themes($theme) {
 global $BoardTheme;
 if(!isset($theme)) { $theme = null; }
@@ -239,6 +240,7 @@ function getnextid($tablepre,$table) {
    $getnextid = mysql_fetch_assoc($getnextidr);
    return $getnextid['Auto_increment'];
    @mysql_free_result($getnextidr); }
+// Get number of rows for table
 function getnumrows($tablepre,$table) {
    $getnextidq = query("SHOW TABLE STATUS LIKE '".$tablepre.$table."'", array());
    $getnextidr = mysql_query($getnextidq);
@@ -276,8 +278,8 @@ if($dst=="on") { if($dstake!="done") {
 $TCHour = $TCHour + $tsa['hour'];
 $TCMinute = $TCMinute + $tsa['minute'];
 return date($format,mktime($TCHour,$TCMinute,$TCSecond,$TCMonth,$TCDay,$TCYear)); }
-	$Names['CK'] = "Christine";
-define("_christine_", $Names['CK']);
+	$Names['D'] = "Dagmara";
+define("_dagmara_", $Names['D']);
 // Change Time Stamp to a readable time
 function TimeChange($format,$timestamp,$offset,$minoffset=null,$dst=null) {
 return GMTimeChange($format,$timestamp,$offset,$minoffset,$dst); }
@@ -290,9 +292,12 @@ $GMTMonth = gmdate("n");
 $GMTDay = gmdate("d");
 $GMTYear = gmdate("Y");
 return mktime($GMTHour,$GMTMinute,$GMTSecond,$GMTMonth,$GMTDay,$GMTYear); }
+// Make a GMT Time Stamp alt version
 function GMTimeStampS() { return time() - date('Z', time()); }
+// Get GMT Time
 function GMTimeGet($format,$offset,$minoffset=null,$dst=null) { 
 	return GMTimeChange($format,GMTimeStamp(),$offset,$minoffset,$dst); }
+// Get GMT Time alt version
 function GMTimeGetS($format,$offset,$minoffset=null,$dst=null) {
 $dstake = null;
 if(!is_numeric($offset)) { $offset = "0"; }
@@ -323,19 +328,22 @@ $TestHour2 = date("H");
 @putenv("TZ=".@getenv("OTZ"));
 $TestHour3 = $TestHour1-$TestHour2;
 return $TestHour3; }
+// Get Server offset alt version
 function SeverOffSet() {
 $TestHour1 = date("H");
 $TestHour2 = gmdate("H");
 $TestHour3 = $TestHour1-$TestHour2;
 return $TestHour3; }
+// Get Server offset new version
 function SeverOffSetNew() {
 return gmdate("g",mktime(0,date("Z"))); }
 function gmtime() { return time() - (int) date('Z'); }
-function file_get_source($filename,$return = FALSE) {
 // Acts like highlight_file();
+function file_get_source($filename,$return = FALSE) {
 $phpsrc = file_get_contents($filename);
 $phpsrcs = highlight_string($phpsrc,$return);
 return $phpsrcs; }
+// Also acts like highlight_file(); but valid xhtml
 function valid_get_source($filename) {
 $phpsrcs = file_get_source($filename,TRUE);
 // Change font tag to span tag for valid xhtml
@@ -355,8 +363,10 @@ function GetHiddenMember($idu,$sqlt) {
 $gunquery = query("SELECT * FROM `".$sqlt."members` WHERE `id`=%i", array($idu));
 $gunresult=mysql_query($gunquery);
 $gunnum=mysql_num_rows($gunresult);
+// I'm now hidden from you. ^_^ | <_< I cant find you.
 $UsersHidden = "yes";
 if($gunnum>0){
+// Am i still hidden. o_O <_< I see you.
 $UsersHidden=mysql_result($gunresult,0,"HiddenMember"); }
 @mysql_free_result($gunresult);
 return $UsersHidden; }
@@ -370,6 +380,11 @@ function hmac($data,$key,$hash='sha1',$blocksize=64) {
   return $hash(($key^$opad).pack('H*',$hash(($key^$ipad).$data))); }
 // b64hmac hash function
 function b64e_hmac($data,$key,$extdata,$hash='sha1',$blocksize=64) {
+	$extdata2 = hexdec($extdata); $key = $key.$extdata2;
+  return base64_encode(hmac($data,$key,$hash,$blocksize).$extdata); }
+// b64hmac rot13 hash function
+function b64e_rot13_hmac($data,$key,$extdata,$hash='sha1',$blocksize=64) {
+	$data = str_rot13($data);
 	$extdata2 = hexdec($extdata); $key = $key.$extdata2;
   return base64_encode(hmac($data,$key,$hash,$blocksize).$extdata); }
 // salt hmac hash function
@@ -386,7 +401,7 @@ function is_empty($var) {
     if (((is_null($var) || rtrim($var) == "") &&
 		$var !== false) || (is_array($var) && empty($var))) {
         return true; } else { return false; } }
-// Hash two times with md5 and sha1
+// Hash two times with md5 and sha1 for DF2k
 function PassHash2x($Text) {
 $Text = md5($Text);
 $Text = sha1($Text);
