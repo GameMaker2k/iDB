@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: replies.php - Last Update: 7/22/2009 SVN 278 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 7/30/2009 SVN 284 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -38,7 +38,10 @@ $TopicID=mysql_result($preresult,0,"id");
 $TopicForumID=mysql_result($preresult,0,"ForumID");
 $TopicCatID=mysql_result($preresult,0,"CategoryID");
 $TopicClosed=mysql_result($preresult,0,"Closed");
-$NumberReplies=mysql_result($preresult,0,"NumReply");
+if(!isset($_GET['post'])||$_GET['post']!==null) {
+$NumberReplies=mysql_result($preresult,0,"NumReply"); }
+if(isset($_GET['post'])&&$_GET['post']!==null) {
+$NumberReplies=1; }
 $ViewTimes=mysql_result($preresult,0,"NumViews");
 @mysql_free_result($preresult);
 $forumcheckx = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i  LIMIT 1", array($TopicForumID));
@@ -140,7 +143,10 @@ $PageLimit = $Settings['max_posts'] * $snumber;
 if($PageLimit<0) { $PageLimit = 0; }
 //End Reply Page Code
 $i=0;
-$query = query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `TopicID`=%i ORDER BY `TimeStamp` ASC LIMIT %i,%i", array($_GET['id'],$PageLimit,$Settings['max_posts']));
+if(!isset($_GET['post'])||$_GET['post']!==null) {
+$query = query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `TopicID`=%i ORDER BY `TimeStamp` ASC LIMIT %i,%i", array($_GET['id'],$PageLimit,$Settings['max_posts'])); }
+if(isset($_GET['post'])&&$_GET['post']!==null) {
+$query = query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `TopicID`=%i AND `id`=%i ORDER BY `TimeStamp` ASC LIMIT %i,%i", array($_GET['id'],$_GET['post'],$PageLimit,$Settings['max_posts'])); }
 $result=mysql_query($query);
 $num=mysql_num_rows($result);
 if($num==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
@@ -318,13 +324,13 @@ if($_SESSION['UserID']==0) {
 	$CanEditReply = false; $CanDeleteReply = false; }
 $ReplyNum = $i + $PageLimit + 1;
 ?>
-<div class="TableInfo1Border">
+<div class="TableInfo1Border" id="reply<?php echo $ReplyNum; ?>">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableInfoRow1">
 <span style="font-weight: bold; text-align: left;"><?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']).$qstrhtml."&#35;reply".$ReplyNum; ?>"><?php echo $TopicName; ?></a> ( <?php echo $MyDescription; ?> )</span>
 </div>
 <?php } ?>
-<table class="TableInfo1">
+<table class="TableInfo1" id="post<?php echo $MyPostID; ?>">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableInfoRow1">
 <td class="TableInfoColumn1" colspan="2"><span style="font-weight: bold; text-align: left;"><?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']).$qstrhtml."&#35;reply".$ReplyNum; ?>"><?php echo $TopicName; ?></a> ( <?php echo $MyDescription; ?> )</span>
@@ -341,8 +347,8 @@ if($User1ID<=0||$User1Hidden=="yes") {
 echo "<span>".$User1Name."</span>"; }
 ?></td>
 <td class="TableInfoColumn2" style="vertical-align: middle;">
-<div style="float: left; text-align: left;" id="post<?php echo $MyPostID; ?>">
-<a style="vertical-align: middle;" id="reply<?php echo $ReplyNum; ?>">
+<div style="float: left; text-align: left;">
+<a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&post=".$MyPostID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>" style="vertical-align: middle;">
 <span style="font-weight: bold;">Time Posted: </span><?php echo $MyTimeStamp; ?></a>
 </div>
 <div style="float: right;">
