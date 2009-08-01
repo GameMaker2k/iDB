@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: lowtopics.php - Last Update: 7/23/2009 SVN 281 - Author: cooldude2k $
+    $FileInfo: lowtopics.php - Last Update: 8/1/2009 SVN 285 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="lowtopics.php"||$File3Name=="/lowtopics.php") {
@@ -77,7 +77,7 @@ $isfForumName=mysql_result($isfresult,0,"Name");
 $isfForumType=mysql_result($isfresult,0,"ForumType");
 $isfForumType = strtolower($isfForumType);
 $isfRedirectURL=mysql_result($isfresult,0,"RedirectURL"); }
-if($isfnum<1) { $InSubForum = "0"; } } 
+if($isfnum<1) { $InSubForum = "0"; }
 @mysql_free_result($isfresult); }
 ?>
 <div style="font-size: 1.0em; font-weight: bold; margin-bottom: 10px; padding-top: 3px; width: auto;">Full Version: <a href="<?php echo url_maker($exfile['forum'],$Settings['file_ext'],"act=view&id=".$ForumID."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum']); ?>"><?php echo $ForumName; ?></a></div>

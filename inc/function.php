@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: function.php - Last Update: 7/29/2009 SVN 283 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 8/1/2009 SVN 285 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -28,7 +28,7 @@ if(dirname($_SERVER['REQUEST_URI'])!="."||
 	dirname($_SERVER['REQUEST_URI'])!=null) {
 $basedir = dirname($_SERVER['REQUEST_URI'])."/"; }*/
 // Get the base dir name
-if(dirname($_SERVER['SCRIPT_NAME'])!="."||
+/*if(dirname($_SERVER['SCRIPT_NAME'])!="."||
 	dirname($_SERVER['SCRIPT_NAME'])!=null) {
 $basedir = dirname($_SERVER['SCRIPT_NAME'])."/"; }
 if($basedir==null||$basedir==".") {
@@ -36,7 +36,9 @@ if(dirname($_SERVER['SCRIPT_NAME'])=="."||
 	dirname($_SERVER['SCRIPT_NAME'])==null) {
 $basedir = dirname($_SERVER['PHP_SELF'])."/"; } }
 if($basedir=="\/") { $basedir="/"; }
-$basedir = str_replace("//", "/", $basedir);
+$basedir = str_replace("//", "/", $basedir);*/
+$basecheck = parse_url($Settings['idburl']);
+$basedir = $basecheck['path'];
 $cbasedir = $basedir;
 if($Settings['fixbasedir']!=null&&$Settings['fixbasedir']!="off") {
 		$basedir = $Settings['fixbasedir']; }
@@ -48,7 +50,7 @@ if(!isset($_SERVER['HTTP_REFERER'])) { $_SERVER['HTTP_REFERER'] = null; }
 $REFERERurl = parse_url($_SERVER['HTTP_REFERER']);
 if(!isset($REFERERurl['host'])) { $REFERERurl['host'] = null; }
 $URL['REFERER'] = $REFERERurl['host'];
-$URL['HOST'] = $_SERVER["SERVER_NAME"];
+$URL['HOST'] = $basecheck['host'];
 $REFERERurl = null;
 // http://www.ajaxray.com/blog/2008/02/06/php-uuid-generator-function/
 /**
