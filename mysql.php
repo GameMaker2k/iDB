@@ -11,14 +11,18 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: mysql.php - Last Update: 8/3/2009 SVN 287 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 8/3/2009 SVN 288 - Author: cooldude2k $
 */
+/* Some ini setting changes uncomment if you need them. */
 //@ini_set("display_errors", true); 
 //@ini_set("display_startup_errors", true);
 @error_reporting(E_ALL ^ E_NOTICE);
-@ini_set('session.use_trans_sid', false);
-@ini_set("url_rewriter.tags","");
+//@ini_set("session.use_trans_sid", false);
+//@ini_set("url_rewriter.tags","");
 @set_time_limit(30); @ignore_user_abort(true);
+//@ini_set("session.gc_probability", 1);
+//@ini_set("session.gc_divisor", 100);
+//@ini_set("session.gc_maxlifetime", 1440);
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mysql.php"||$File3Name=="/mysql.php") {
 	@header('Location: index.php');
@@ -174,7 +178,7 @@ return true; }
 function read( $id ) {
 global $sqltable;
 $data = "";
-$time = time();
+$time = GMTimeStamp();
 $sqlr = query("SELECT `session_data` FROM `".$sqltable."sessions` WHERE `session_id` = '%s' AND `expires` > %i", array($id,$time));
 $rs = mysql_query($sqlr);
 $a = mysql_num_rows($rs);
@@ -184,7 +188,7 @@ $data = $row['session_data']; }
 return $data; }
 function write( $id, $data ) {
 global $sqltable;              
-$time = time() + ini_get("session.gc_maxlifetime");
+$time = GMTimeStamp() + ini_get("session.gc_maxlifetime");
 $sqlw = query("REPLACE `".$sqltable."sessions` VALUES('$id','$data', $time)", array($id,$data,$time));
 $rs = mysql_query($sqlw);
 return true; }
@@ -195,8 +199,10 @@ mysql_query($sqld);
 return true; }
 function gc() {
 global $sqltable;
-$sqlg = query('DELETE FROM `'.$sqltable.'sessions` WHERE `expires` < UNIX_TIMESTAMP();', array(null));
-db_query($sqlg);
+$time = GMTimeStamp();
+//$sqlg = query('DELETE FROM `'.$sqltable.'sessions` WHERE `expires` < UNIX_TIMESTAMP();', array(null));
+$sqlg = query('DELETE FROM `'.$sqltable.'sessions` WHERE `expires` < %i', array($time));
+mysql_query($sqlg);
 return true; }
 @session_set_save_handler("open", "close", "read", "write", "destroy", "gc");
 if($cookieDomain==null) {

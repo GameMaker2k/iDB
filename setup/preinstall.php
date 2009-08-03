@@ -11,10 +11,11 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: preinstall.php - Last Update: 6/16/2009 SVN 264 - Author: cooldude2k $
+    $FileInfo: preinstall.php - Last Update: 8/3/2009 SVN 288 - Author: cooldude2k $
 */
 @error_reporting(E_ALL ^ E_NOTICE);
-@ini_set('session.use_trans_sid', false);
+/* Some ini setting changes uncomment if you need them. */
+//@ini_set('session.use_trans_sid', false);
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="preinstall.php"||$File3Name=="/preinstall.php") {
 	@header('Location: index.php');

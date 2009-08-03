@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: main.php - Last Update: 7/18/2009 SVN 275 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 8/3/2009 SVN 288 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -71,6 +71,11 @@ $Settings['KBoostPercent'] = "6|10"; }
 	<td style="width: 15%; vertical-align: top;">
 <?php 
 require($SettDir['admin'].'table.php'); 
+if($_GET['act']=="delsessions"&&$GroupInfo['ViewDBInfo']=="yes") {
+//$sqlg = query('DELETE FROM `'.$Settings['sqltable'].'sessions` WHERE `expires` < UNIX_TIMESTAMP();', array(null));
+$sqlgc = query('DELETE FROM `'.$Settings['sqltable'].'sessions` WHERE `expires` < %i', array($time));
+mysql_query($sqlgc);
+$_POST['update'] = "now"; $_GET['act'] = "view"; }
 ?>
 </td>
 	<td style="width: 85%; vertical-align: top;">
