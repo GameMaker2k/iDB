@@ -12,7 +12,7 @@
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mktable.php - Last Update: 7/21/2009 SVN 276 - Author: cooldude2k $
+    $FileInfo: mktable.php - Last Update: 8/3/2009 SVN 287 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mktable.php"||$File3Name=="/mktable.php") {
@@ -38,8 +38,6 @@ mysql_query($query);
 $query=query("CREATE TABLE `".$_POST['tableprefix']."tagboard` ( `id` int(15) NOT NULL auto_increment, `UserID` int(15) NOT NULL default '0', `GuestName` varchar(150) NOT NULL default '', `TimeStamp` int(15) NOT NULL default '0', `Post` text NOT NULL, `IP` varchar(20) NOT NULL default '', PRIMARY KEY  (`id`)) TYPE=`MyISAM` DEFAULT CHARSET=`".$SQLCharset."`;", array(null));
 */
 $query=query("CREATE TABLE `".$_POST['tableprefix']."topics` ( `id` int(15) NOT NULL auto_increment, `ForumID` int(15) NOT NULL default '0', `CategoryID` int(15) NOT NULL default '0',  `OldForumID` int(15) NOT NULL default '0', `UserID` int(15) NOT NULL default '0', `GuestName` varchar(150) NOT NULL default '', `TimeStamp` int(15) NOT NULL default '0', `LastUpdate` int(15) NOT NULL default '0', `TopicName` varchar(150) NOT NULL default '', `Description` text NOT NULL, `NumReply` int(15) NOT NULL default '0', `NumViews` int(15) NOT NULL default '0', `Pinned` int(5) NOT NULL default '0', `Closed` int(5) NOT NULL default '0', PRIMARY KEY  (`id`)) TYPE=`MyISAM` DEFAULT CHARSET=`".$SQLCharset."`;", array(null));
-mysql_query($query);
-$query=query("CREATE TABLE `".$_POST['tableprefix']."sessions` ( `SessionID` varchar(255) NOT NULL default '', `SessID` varchar(255) NOT NULL default '', `LastUpdated` int(15) NOT NULL default '0', `DataValue` text NOT NULL, PRIMARY KEY (`SessionID`)) TYPE=`MyISAM` DEFAULT CHARSET=`".$SQLCharset."`;", array(null));
 mysql_query($query);
 $query=query("CREATE TABLE `".$_POST['tableprefix']."groups` ( `id` int(15) NOT NULL auto_increment, `Name` varchar(150) NOT NULL default '', `PermissionID` int(15) NOT NULL default '0', `NamePrefix` varchar(150) NOT NULL default '', `NameSuffix` varchar(150) NOT NULL default '', `CanViewBoard` varchar(5) NOT NULL default '', `CanViewOffLine` varchar(5) NOT NULL default '', `CanEditProfile` varchar(5) NOT NULL default '', `CanAddEvents` varchar(5) NOT NULL default '', `CanPM` varchar(5) NOT NULL default '', `CanSearch` varchar(5) NOT NULL default '', `FloodControl` int(5) NOT NULL default '0', `SearchFlood` int(5) NOT NULL default '0', `PromoteTo` int(15) NOT NULL default '0', `PromotePosts` int(15) NOT NULL default '0', `PromoteKarma` int(15) NOT NULL default '0', `HasModCP` varchar(5) NOT NULL default '', `HasAdminCP` varchar(5) NOT NULL default '', `ViewDBInfo` varchar(5) NOT NULL default '', PRIMARY KEY  (`id`)) TYPE=`MyISAM` DEFAULT CHARSET=`".$SQLCharset."`;", array(null));
 mysql_query($query);

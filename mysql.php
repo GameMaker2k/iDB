@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: mysql.php - Last Update: 6/23/2009 SVN 268 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 8/3/2009 SVN 287 - Author: cooldude2k $
 */
 //@ini_set("display_errors", true); 
 //@ini_set("display_startup_errors", true);
@@ -157,6 +157,48 @@ if($GZipEncode['Type']!="gzip") { if($GZipEncode['Type']!="deflate") { $GZipEnco
 /* if(eregi("msie",$browser) && !eregi("opera",$browser)){
 @header('P3P: CP="NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM"'); } */
 // Some http stuff
+$SQLStat = @ConnectMysql($Settings['sqlhost'],$Settings['sqluser'],$Settings['sqlpass'],$Settings['sqldb']);
+@mysql_set_charset($SQLCharset);
+if($SQLStat===false) {
+@header("Content-Type: text/plain; charset=".$Settings['charset']); @mysql_free_result($peresult);
+ob_clean(); echo "Sorry could not connect to mysql database.\nContact the board admin about error. Error log below.";
+echo "\n".mysql_errno().": ".mysql_error();
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+$sqltable = $Settings['sqltable'];
+function open( $save_path, $session_name ) {
+global $sess_save_path;
+$sess_save_path = $save_path;
+return true; }
+function close() {
+return true; }
+function read( $id ) {
+global $sqltable;
+$data = "";
+$time = time();
+$sqlr = query("SELECT `session_data` FROM `".$sqltable."sessions` WHERE `session_id` = '%s' AND `expires` > %i", array($id,$time));
+$rs = mysql_query($sqlr);
+$a = mysql_num_rows($rs);
+if($a > 0) {
+$row = mysql_fetch_assoc($rs);
+$data = $row['session_data']; }
+return $data; }
+function write( $id, $data ) {
+global $sqltable;              
+$time = time() + ini_get("session.gc_maxlifetime");
+$sqlw = query("REPLACE `".$sqltable."sessions` VALUES('$id','$data', $time)", array($id,$data,$time));
+$rs = mysql_query($sqlw);
+return true; }
+function destroy( $id ) {
+global $sqltable;
+$sqld = query("DELETE FROM `".$sqltable."sessions` WHERE `session_id` = '$id'", array($id));
+mysql_query($sqld);
+return true; }
+function gc() {
+global $sqltable;
+$sqlg = query('DELETE FROM `'.$sqltable.'sessions` WHERE `expires` < UNIX_TIMESTAMP();', array(null));
+db_query($sqlg);
+return true; }
+@session_set_save_handler("open", "close", "read", "write", "destroy", "gc");
 if($cookieDomain==null) {
 @session_set_cookie_params(0, $cbasedir); }
 if($cookieDomain!=null) {
@@ -192,13 +234,6 @@ if(stristr($_SERVER["HTTP_ACCEPT"],"application/javascript") ) {
 @header("Content-Type: text/javascript; charset=".$Settings['charset']); } }
 require($SettDir['inc'].'javascript.php');
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); die(); }
-$SQLStat = @ConnectMysql($Settings['sqlhost'],$Settings['sqluser'],$Settings['sqlpass'],$Settings['sqldb']);
-@mysql_set_charset($SQLCharset);
-if($SQLStat===false) {
-@header("Content-Type: text/plain; charset=".$Settings['charset']); @mysql_free_result($peresult);
-ob_clean(); echo "Sorry could not connect to mysql database.\nContact the board admin about error. Error log below.";
-echo "\n".mysql_errno().": ".mysql_error();
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 if($Settings['use_captcha']=="on") {
 if($_GET['act']=="MkCaptcha"||$_GET['act']=="Captcha") {
 	if($Settings['captcha_clean']=="on") { @ob_clean(); }

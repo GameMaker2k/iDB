@@ -84,6 +84,8 @@ $mydbtest = @ConnectMysql($_POST['DatabaseHost'],$_POST['DatabaseUserName'],$_PO
 if($mydbtest!==true) { $Error="Yes";
 echo "<br />".mysql_errno().": ".mysql_error()."\n"; }
 if ($Error!="Yes") {
+$query=query("CREATE TABLE `".$_POST['tableprefix']."sessions` ( `session_id` varchar(150) NOT NULL default '', `session_data` text NOT NULL, `expires` int(15) NOT NULL default '0', PRIMARY KEY  (`session_id`)) TYPE=`MyISAM` DEFAULT CHARSET=`".$SQLCharset."`;", array(null));
+mysql_query($query);
 require($SetupDir['setup'].'mktable.php');
 /*
 $query = query("INSERT INTO `".$_POST['tableprefix']."tagboard` VALUES (1,-1,'".$iDB_Author."',".$YourDate.",'Welcome to Your New Tag Board. ^_^','127.0.0.1'), array(null)); 
@@ -161,14 +163,6 @@ fclose($fp);
 $fp = fopen("settingsbak.php","w+");
 fwrite($fp, $BoardSettingsBak);
 fclose($fp);
-$_SESSION['Theme']="iDB";
-$_SESSION['MemberName']=$_POST['AdminUser'];
-$_SESSION['UserID']=1;
-$_SESSION['UserTimeZone']=$AdminTime;
-$_SESSION['UserGroup']="Admin";
-$_SESSION['UserDST'] = $AdminDST;
-$_SESSION['UserPass']=$NewPassword;
-$_SESSION['DBName'] = $_POST['DatabaseName'];
 if($_POST['storecookie']=="true") {
 @setcookie("MemberName", $_POST['AdminUser'], time() + (7 * 86400), $this_dir, $URLsTest['host']);
 @setcookie("UserID", 1, time() + (7 * 86400), $this_dir, $URLsTest['host']);
