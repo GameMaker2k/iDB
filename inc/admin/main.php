@@ -72,6 +72,7 @@ $Settings['KBoostPercent'] = "6|10"; }
 <?php 
 require($SettDir['admin'].'table.php'); 
 if($_GET['act']=="delsessions"&&$GroupInfo['ViewDBInfo']=="yes") {
+$time = GMTimeStamp() - ini_get("session.gc_maxlifetime");
 //$sqlg = query('DELETE FROM `'.$Settings['sqltable'].'sessions` WHERE `expires` < UNIX_TIMESTAMP();', array(null));
 $sqlgc = query('DELETE FROM `'.$Settings['sqltable'].'sessions` WHERE `expires` < %i', array($time));
 mysql_query($sqlgc);

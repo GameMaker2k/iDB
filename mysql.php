@@ -169,42 +169,42 @@ ob_clean(); echo "Sorry could not connect to mysql database.\nContact the board 
 echo "\n".mysql_errno().": ".mysql_error();
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 $sqltable = $Settings['sqltable'];
-function open( $save_path, $session_name ) {
+function sqlsession_open( $save_path, $session_name ) {
 global $sess_save_path;
 $sess_save_path = $save_path;
 return true; }
-function close() {
+function sqlsession_close() {
 return true; }
-function read( $id ) {
+function sqlsession_read($id) {
 global $sqltable;
 $data = "";
 $time = GMTimeStamp();
-$sqlr = query("SELECT `session_data` FROM `".$sqltable."sessions` WHERE `session_id` = '%s' AND `expires` > %i", array($id,$time));
+$sqlr = query("SELECT `session_data` FROM `".$sqltable."sessions` WHERE `session_id` = '%s'", array($id,$time));
 $rs = mysql_query($sqlr);
 $a = mysql_num_rows($rs);
 if($a > 0) {
 $row = mysql_fetch_assoc($rs);
 $data = $row['session_data']; }
 return $data; }
-function write( $id, $data ) {
+function sqlsession_write($id,$data) {
 global $sqltable;              
-$time = GMTimeStamp() + ini_get("session.gc_maxlifetime");
+$time = GMTimeStamp();
 $sqlw = query("REPLACE `".$sqltable."sessions` VALUES('$id','$data', $time)", array($id,$data,$time));
 $rs = mysql_query($sqlw);
 return true; }
-function destroy( $id ) {
+function sqlsession_destroy($id) {
 global $sqltable;
 $sqld = query("DELETE FROM `".$sqltable."sessions` WHERE `session_id` = '$id'", array($id));
 mysql_query($sqld);
 return true; }
-function gc() {
+function sqlsession_gc($maxlifetime) {
 global $sqltable;
-$time = GMTimeStamp();
+$time = GMTimeStamp() - $maxlifetime;
 //$sqlg = query('DELETE FROM `'.$sqltable.'sessions` WHERE `expires` < UNIX_TIMESTAMP();', array(null));
 $sqlg = query('DELETE FROM `'.$sqltable.'sessions` WHERE `expires` < %i', array($time));
 mysql_query($sqlg);
 return true; }
-@session_set_save_handler("open", "close", "read", "write", "destroy", "gc");
+@session_set_save_handler("sqlsession_open", "sqlsession_close", "sqlsession_read", "sqlsession_write", "sqlsession_destroy", "sqlsession_gc");
 if($cookieDomain==null) {
 @session_set_cookie_params(0, $cbasedir); }
 if($cookieDomain!=null) {
