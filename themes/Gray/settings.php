@@ -61,7 +61,7 @@ $ThemeSet['RedirectIcon'] = "<div style=\"text-align: center; font-size: 11px;\"
 $ThemeSet['TitleIcon'] = null;
 $ThemeSet['NavLinkIcon'] = null;
 $ThemeSet['NavLinkDivider'] = " -&gt; ";
-$ThemeSet['StatsIcon'] = "<div style=\"text-align: center; font-size: 11px;\" title=\"Board Stats\"><br />(S)<br /></div> ";
+$ThemeSet['StatsIcon'] = "<div style=\"text-align: center; font-size: 11px;\" title=\"Board Stats\">(S)</div> ";
 $ThemeSet['NoAvatar'] = "themes/Gray/noavatar.png";
 $ThemeSet['NoAvatarSize'] = "100x100";
 ?>

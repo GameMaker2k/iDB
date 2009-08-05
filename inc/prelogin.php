@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: prelogin.php - Last Update: 6/27/2009 SVN 271 - Author: cooldude2k $
+    $FileInfo: prelogin.php - Last Update: 8/5/2009 SVN 290 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="prelogin.php"||$File3Name=="/prelogin.php") {
@@ -25,6 +25,7 @@ if($numlog2==1) {
 $YourIDAM=mysql_result($resultlog2,0,"id");
 $YourNameAM=mysql_result($resultlog2,0,"Name");
 $YourGroupAM=mysql_result($resultlog2,0,"GroupID");
+$YourGroupIDAM=$YourGroupAM;
 $YourPassAM=mysql_result($resultlog2,0,"Password");
 $gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($YourGroupAM));
 $gresult=mysql_query($gquery);
@@ -45,13 +46,14 @@ $queryup = query("UPDATE `".$Settings['sqltable']."members` SET `LastActive`=%i,
 $_SESSION['Theme']=$UseThemeAM;
 $_SESSION['MemberName']=$_COOKIE['MemberName'];
 $_SESSION['UserID']=$YourIDAM;
+$_SESSION['UserIP']=$_SERVER['REMOTE_ADDR'];
 $_SESSION['UserTimeZone']=$YourTimeZoneAM;
 $_SESSION['UserGroup']=$YourGroupAM;
+$_SESSION['UserGroupID']=$YourGroupIDAM;
 $_SESSION['UserDST']=$YourDSTAM;
 $_SESSION['UserPass']=$YourPassAM;
 $_SESSION['LastPostTime'] = $YourLastPostTime;
 $_SESSION['DBName']=$Settings['sqldb'];
-
 if($cookieDomain==null) {
 @setcookie("MemberName", $YourNameAM, time() + (7 * 86400), $cbasedir);
 @setcookie("UserID", $YourIDAM, time() + (7 * 86400), $cbasedir);

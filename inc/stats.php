@@ -11,12 +11,34 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: stats.php - Last Update: 7/21/2009 SVN 276 - Author: cooldude2k $
+    $FileInfo: stats.php - Last Update: 8/5/2009 SVN 290 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="stats.php"||$File3Name=="/stats.php") {
 	require('index.php');
 	exit(); }
+$uolcuttime = GMTimeStamp();
+$uoltime = $uolcuttime - ini_get("session.gc_maxlifetime");
+$uolquery = query("SELECT session_data FROM `".$Settings['sqltable']."sessions` WHERE `expires` >= %i ORDER BY `expires` DESC", array($uoltime));
+$uolresult=mysql_query($uolquery);
+$uolnum=mysql_num_rows($uolresult);
+$uoli=0; $olmn = 0; $olgn = 0; $olan = 0;
+$MembersOnline = null; $GuestsOnline = null;
+while ($uoli < $uolnum) {
+$session_data=mysql_result($uolresult,$uoli,"session_data"); 
+$UserSessInfo = unserialize_session($session_data);
+$AmIHiddenUser = GetHiddenMember($UserSessInfo['UserID'],$Settings['sqltable']);
+if($UserSessInfo['UserGroup']!=$Settings['GuestGroup']) {
+if($AmIHiddenUser=="no"&&$UserSessInfo['UserID']>0) {
+if($olmn>0) { $MembersOnline .= ", "; }
+$MembersOnline .= "<a href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UserSessInfo['UserID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">".$UserSessInfo['MemberName']."</a>"; 
+++$olmn; }
+if($UserSessInfo['UserID']<=0||$AmIHiddenUser=="yes") {
+++$olan; } }
+if($UserSessInfo['UserGroup']==$Settings['GuestGroup']) {
+/*$GuestsOnline .= "<a href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$MemList['ID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">".$MemList['Name']."</a>";*/
+++$olgn; }
+++$uoli; }
 if($_GET['act']=="view"||$_GET['act']=="stats") {
 $ntquery = query("SELECT COUNT(*) FROM `".$Settings['sqltable']."topics`", array(null));
 $ntresult = mysql_query($ntquery);
@@ -51,10 +73,22 @@ if($NewestMem['ID']<=0) { $NewestMem['ID'] = "0"; $NewestMem['Name'] = "Anonymou
 <?php echo $ThemeSet['TitleIcon']; ?><a id="bstats" href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=stats",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>#bstats">Board Statistics</a></span>
 </td>
 </tr><?php } ?>
+
 <tr id="Stats1" class="TableStatsRow2">
-<td class="TableStatsColumn2" colspan="2" style="width: 100%; font-weight: bold;">Board Stats</td>
+<td class="TableStatsColumn2" colspan="2" style="width: 100%; font-weight: bold;"><?php echo $uolnum; ?> users online</td>
 </tr>
 <tr class="TableStatsRow3" id="Stats2">
+<td style="width: 4%;" class="TableStatsColumn3"><div class="statsicon">
+<?php echo $ThemeSet['StatsIcon']; ?></div></td>
+<td style="width: 96%;" class="TableStatsColumn3"><div class="statsinfo">
+&nbsp;<span style="font-weight: bold;"><?php echo $olgn; ?></span> guests, <span style="font-weight: bold;"><?php echo $olmn; ?></span> members, <span style="font-weight: bold;"><?php echo $olan; ?></span> anonymous members <br />
+&nbsp;<?php echo $MembersOnline; ?>
+</div></td>
+</tr>
+<tr id="Stats3" class="TableStatsRow2">
+<td class="TableStatsColumn2" colspan="2" style="width: 100%; font-weight: bold;">Board Stats</td>
+</tr>
+<tr class="TableStatsRow3" id="Stats4">
 <td style="width: 4%;" class="TableStatsColumn3"><div class="statsicon">
 <?php echo $ThemeSet['StatsIcon']; ?></div></td>
 <td style="width: 96%;" class="TableStatsColumn3"><div class="statsinfo">
@@ -64,7 +98,7 @@ if($NewestMem['ID']<=0) { $NewestMem['ID'] = "0"; $NewestMem['Name'] = "Anonymou
 &nbsp;Our newest member is <a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$NewestMem['ID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>"><?php echo $NewestMem['Name']; ?></a>
 </div></td>
 </tr>
-<tr id="Stats3" class="TableStatsRow4">
+<tr id="Stats5" class="TableStatsRow4">
 <td class="TableStatsColumn4" colspan="2">&nbsp;</td>
 </tr>
 </table></div>

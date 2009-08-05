@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 7/21/2009 SVN 276 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 8/5/2009 SVN 290 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -538,6 +538,7 @@ $YourNameM=mysql_result($resultlog,$i,"Name");
 $YourPassM=mysql_result($resultlog,$i,"Password");
 $PostCount=mysql_result($resultlog,$i,"PostCount");
 $YourGroupM=mysql_result($resultlog,$i,"GroupID");
+$YourGroupIDM=$YourGroupM;
 $YourLastPostTime=mysql_result($resultlog,$i,"LastPostTime");
 $YourBanTime=mysql_result($resultlog,$i,"BanTime");
 $CGMTime = GMTimeStamp();
@@ -563,8 +564,10 @@ mysql_query($queryup);
 $_SESSION['Theme']=$UseTheme;
 $_SESSION['MemberName']=$YourNameM;
 $_SESSION['UserID']=$YourIDM;
+$_SESSION['UserIP']=$_SERVER['REMOTE_ADDR'];
 $_SESSION['UserTimeZone']=$YourTimeZoneM;
 $_SESSION['UserGroup']=$YourGroupM;
+$_SESSION['UserGroupID']=$YourGroupIDM;
 $_SESSION['UserDST']=$YourDSTM;
 $_SESSION['UserPass']=$NewPassword;
 $_SESSION['LastPostTime'] = $YourLastPostTime;
@@ -962,6 +965,7 @@ $ir=0;
 $YourIDMr=mysql_result($resultlogr,$ir,"id");
 $YourNameMr=mysql_result($resultlogr,$ir,"Name");
 $YourGroupMr=mysql_result($resultlogr,$ir,"GroupID");
+$YourGroupIDMr=$YourGroupMr;
 $gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($YourGroupMr));
 $gresult=mysql_query($gquery);
 $YourGroupMr=mysql_result($gresult,0,"Name");
@@ -973,9 +977,11 @@ $YourDSTMr=mysql_result($resultlogr,$ir,"DST"); }
 $_SESSION['Loggedin']=true;
 $_SESSION['MemberName']=$YourNameMr;
 $_SESSION['UserID']=$YourIDMr;
+$_SESSION['UserIP']=$_SERVER['REMOTE_ADDR'];
 $_SESSION['UserTimeZone']=$YourTimeZoneMr;
 $_SESSION['UserDST']=$YourDSTMr;
 $_SESSION['UserGroup']=$YourGroupMr;
+$_SESSION['UserGroupID']=$YourGroupIDMr;
 $_SESSION['UserPass']=$NewPassword;
 $_SESSION['DBName']=$Settings['sqldb'];
 if($_POST['storecookie']=="true") {

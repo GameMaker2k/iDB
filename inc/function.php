@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: function.php - Last Update: 8/1/2009 SVN 285 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 8/5/2009 SVN 290 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -78,6 +78,13 @@ $REFERERurl = null;
     if(isset($prefix)) { return $prefix . $uuid; }
     if(!isset($prefix)) { return $uuid; }
   }
+// unserialize sessions variables
+function unserialize_session($data) {
+    $vars=preg_split('/([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff^|]*)\|/',
+              $data,-1,PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+    for($i=0; $vars[$i]; $i++) $result[$vars[$i++]]=unserialize($vars[$i]);
+    return $result;
+}
 // Make the Query String if we are not useing &=
 function qstring($qstr=";",$qsep="=")
 { $_GET = null; $_GET = array();

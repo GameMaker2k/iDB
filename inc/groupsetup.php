@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: groupsetup.php - Last Update: 6/27/2009 SVN 271 - Author: cooldude2k $
+    $FileInfo: groupsetup.php - Last Update: 8/5/2009 SVN 290 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="groupsetup.php"||$File3Name=="/groupsetup.php") {
@@ -28,6 +28,7 @@ if($numchkusr==1) {
 $ChkUsrID=mysql_result($resultchkusr,0,"id");
 $ChkUsrName=mysql_result($resultchkusr,0,"Name");
 $ChkUsrGroup=mysql_result($resultchkusr,0,"GroupID");
+$ChkUsrGroupID=$ChkUsrGroup;
 $ChkUsrPass=mysql_result($resultchkusr,0,"Password");
 $ChkUsrTimeZone=mysql_result($resultchkusr,0,"TimeZone");
 $ChkUsrTheme=mysql_result($resultchkusr,0,"UseTheme");
@@ -54,8 +55,10 @@ if($BanError!="yes") {
 $_SESSION['Theme']=$ChkUsrTheme;
 $_SESSION['MemberName']=$ChkUsrName;
 $_SESSION['UserID']=$ChkUsrID;
+$_SESSION['UserIP']=$_SERVER['REMOTE_ADDR'];
 $_SESSION['UserTimeZone']=$ChkUsrTimeZone;
 $_SESSION['UserGroup']=$ChkUsrGroup;
+$_SESSION['UserGroupID']=$ChkUsrGroupID;
 $_SESSION['UserDST']=$ChkUsrDST;
 $_SESSION['UserPass']=$ChkUsrPass;
 $_SESSION['LastPostTime'] = $ChkUsrLastPostTime; } }
@@ -83,10 +86,20 @@ ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 @mysql_free_result($numchkusr); @mysql_free_result($svrgresultkgb); }
 if($_SESSION['UserID']==0||$_SESSION['UserID']==null) {
+$_SESSION['UserIP']=$_SERVER['REMOTE_ADDR'];
 $_SESSION['MemberName'] = null;
-$_SESSION['UserGroup'] = $Settings['GuestGroup']; }
+$_SESSION['UserGroup'] = $Settings['GuestGroup']; 
+$gidquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `name`='%s' LIMIT 1", array($Settings['GuestGroup']));
+$gidresult=mysql_query($gidquery);
+$_SESSION['UserGroupID']=mysql_result($gidresult,0,"id"); 
+@mysql_free_result($gidresult); }
 if($_SESSION['MemberName']==null) { $_SESSION['UserID'] = "0";
-$_SESSION['UserGroup'] = $Settings['GuestGroup']; }
+$_SESSION['UserIP']=$_SERVER['REMOTE_ADDR'];
+$_SESSION['UserGroup'] = $Settings['GuestGroup']; 
+$gidquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `name`='%s' LIMIT 1", array($Settings['GuestGroup']));
+$gidresult=mysql_query($gidquery);
+$_SESSION['UserGroupID']=mysql_result($gidresult,0,"id"); 
+@mysql_free_result($gidresult); }
 // Member Group Setup
 if(!isset($_SESSION['UserGroup'])) { $_SESSION['UserGroup'] = null; }
 if($_SESSION['UserGroup']==null) { 
@@ -293,8 +306,7 @@ $CatPermissionInfo['Name'][$PerCatID]=mysql_result($per2esult,$per2i,"Name");
 $CatPermissionInfo['CategoryID'][$PerCatID]=mysql_result($per2esult,$per2i,"CategoryID");
 if(!is_numeric($CatPermissionInfo['CategoryID'][$PerCatID])) { $Per2Error = true; }
 $CatPermissionInfo['CanViewCategory'][$PerCatID]=mysql_result($per2esult,$per2i,"CanViewCategory");
-if($CatPermissionInfo['CanViewCategory'][$PerCatID]!="yes"&&$CatPermissionInfo['CanViewCategory'][$PerCatID]!="no") {
-		$Per2Error = true; }
+if($CatPermissionInfo['CanViewCategory'][$PerCatID]!="yes"&&$CatPermissionInfo['CanViewCategory'][$PerCatID]!="no") { $Per2Error = true; }
 if($Per2Error===true) { $per2i = $per2num; }
 ++$per2i; } if($Per2Error===true) {
 @header("Content-Type: text/plain; charset=".$Settings['charset']); @mysql_free_result($per2esult);
