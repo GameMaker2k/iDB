@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 8/5/2009 SVN 290 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 8/5/2009 SVN 291 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -23,6 +23,7 @@ if(!is_numeric($_GET['page'])) { $_GET['page'] = null; }
 if($_GET['act']=="list") {
 $orderlist = null;
 $orderlist = "order by `ID` asc";
+if(!isset($_GET['list'])) { $_GET['list'] = "members"; }
 if(!isset($_GET['orderby'])) { $_GET['orderby'] = null; }
 if(!isset($_GET['sorttype'])) { $_GET['sorttype'] = null; }
 if(!isset($_GET['ordertype'])) { $_GET['ordertype'] = null; }
@@ -73,6 +74,9 @@ $result=mysql_query($query);
 $rnresult=mysql_query($rnquery);
 $NumberMembers = mysql_result($rnresult,0);
 @mysql_free_result($rnresult);
+$_SESSION['ViewingPage'] = url_maker($exfile['member'],$Settings['file_ext'],"act=list&orderby=".$_GET['orderby']."&ordertype=".$_GET['ordertype']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
+$_SESSION['PreViewingTitle'] = "Viewing";
+$_SESSION['ViewingTitle'] = "Member List";
 if($NumberMembers==null) { 
 	$NumberMembers = 0; }
 $num = $NumberMembers;
@@ -250,6 +254,197 @@ if($pagenum>1) {
 ?>
 <div class="DivPageLinks">&nbsp;</div>
 <?php } }
+if($_GET['act']=="online") {
+if($_GET['list']!="all"&&$_GET['list']!="members") {
+	$_GET['list'] = "members"; }
+//Get SQL LIMIT Number
+$nums = $_GET['page'] * $Settings['max_memlist'];
+$PageLimit = $nums - $Settings['max_memlist'];
+if($PageLimit<0) { $PageLimit = 0; }
+$i=0;
+$uolcuttime = GMTimeStamp();
+$uoltime = $uolcuttime - ini_get("session.gc_maxlifetime");
+$query = query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."sessions` WHERE `expires` >= %i ORDER BY `expires` DESC LIMIT %i,%i", array($uoltime,$PageLimit,$Settings['max_memlist']));
+$rnquery = query("SELECT FOUND_ROWS();", array(null));
+$result=mysql_query($query);
+$rnresult=mysql_query($rnquery);
+$NumberMembers = mysql_result($rnresult,0);
+@mysql_free_result($rnresult);
+$_SESSION['ViewingPage'] = url_maker($exfile['member'],$Settings['file_ext'],"act=online&list=".$_GET['list']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
+$_SESSION['PreViewingTitle'] = "Viewing";
+$_SESSION['ViewingTitle'] = "Online Member List";
+if($NumberMembers==null) { 
+	$NumberMembers = 0; }
+$num = $NumberMembers;
+//Start MemberList Page Code
+if(!isset($Settings['max_memlist'])) { $Settings['max_memlist'] = 10; }
+if($_GET['page']==null) { $_GET['page'] = 1; } 
+if($_GET['page']<=0) { $_GET['page'] = 1; }
+$nums = $_GET['page'] * $Settings['max_memlist'];
+if($nums>$num) { $nums = $num; }
+$numz = $nums - $Settings['max_memlist'];
+if($numz<=0) { $numz = 0; }
+//$i=$numz;
+if($nums<$num) { $nextpage = $_GET['page'] + 1; }
+if($nums>=$num) { $nextpage = $_GET['page']; }
+if($numz>=$Settings['max_memlist']) { $backpage = $_GET['page'] - 1; }
+if($_GET['page']<=1) { $backpage = 1; }
+$pnum = $num; $l = 1; $Pages = null;
+while ($pnum>0) {
+if($pnum>=$Settings['max_memlist']) { 
+	$pnum = $pnum - $Settings['max_memlist']; 
+	$Pages[$l] = $l; ++$l; }
+if($pnum<$Settings['max_memlist']&&$pnum>0) { 
+	$pnum = $pnum - $pnum; 
+	$Pages[$l] = $l; ++$l; } }
+$nums = $_GET['page'] * $Settings['max_memlist'];
+//End MemberList Page Code
+$num=mysql_num_rows($result);
+//List Page Number Code Start
+$pagenum=count($Pages);
+if($_GET['page']>$pagenum) {
+	$_GET['page'] = $pagenum; }
+$pagei=0; $pstring = null;
+if($pagenum>1) {
+$pstring = "<div class=\"PageList\"><span class=\"pagelink\">".$pagenum." Pages:</span> "; }
+if($_GET['page']<4) { $Pagez[0] = null; }
+if($_GET['page']>=4) { $Pagez[0] = "First"; }
+if($_GET['page']>=3) {
+$Pagez[1] = $_GET['page'] - 2; }
+if($_GET['page']<3) {
+$Pagez[1] = null; }
+if($_GET['page']>=2) {
+$Pagez[2] = $_GET['page'] - 1; }
+if($_GET['page']<2) {
+$Pagez[2] = null; }
+$Pagez[3] = $_GET['page'];
+if($_GET['page']<$pagenum) {
+$Pagez[4] = $_GET['page'] + 1; }
+if($_GET['page']>=$pagenum) {
+$Pagez[4] = null; }
+$pagenext = $_GET['page'] + 1;
+if($pagenext<$pagenum) {
+$Pagez[5] = $_GET['page'] + 2; }
+if($pagenext>=$pagenum) {
+$Pagez[5] = null; }
+if($_GET['page']<$pagenum) { $Pagez[6] = "Last"; }
+if($_GET['page']>=$pagenum) { $Pagez[6] = null; }
+$pagenumi=count($Pagez);
+if($NumberMembers==0) {
+$pagenumi = 0;
+$pstring = null; }
+if($pagenum>1) {
+while ($pagei < $pagenumi) {
+if($_GET['page']!=1&&$pagei==1) {
+$Pback = $_GET['page'] - 1;
+$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=list&orderby=".$_GET['orderby']."&ordertype=".$_GET['ordertype']."&page=".$Pback,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">&lt;</a></span> "; }
+if($Pagez[$pagei]!=null&&
+   $Pagez[$pagei]!="First"&&
+   $Pagez[$pagei]!="Last") {
+if($pagei!=3) { 
+$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=list&orderby=".$_GET['orderby']."&ordertype=".$_GET['ordertype']."&page=".$Pagez[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">".$Pagez[$pagei]."</a></span> "; }
+if($pagei==3) { 
+$pstring = $pstring."<span class=\"pagecurrent\"><a href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=list&orderby=".$_GET['orderby']."&ordertype=".$_GET['ordertype']."&page=".$Pagez[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">".$Pagez[$pagei]."</a></span> "; } }
+if($Pagez[$pagei]=="First") {
+$pstring = $pstring."<span class=\"pagelinklast\"><a href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=list&orderby=".$_GET['orderby']."&ordertype=".$_GET['ordertype']."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">&laquo;</a></span> "; }
+if($Pagez[$pagei]=="Last") {
+$ptestnext = $pagenext + 1;
+$paget = $pagei - 1;
+$Pnext = $_GET['page'] + 1;
+$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=list&orderby=".$_GET['orderby']."&ordertype=".$_GET['ordertype']."&page=".$Pnext,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">&gt;</a></span> ";
+if($ptestnext<$pagenum) {
+$pstring = $pstring."<span class=\"pagelinklast\"><a href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=list&orderby=".$_GET['orderby']."&ordertype=".$_GET['ordertype']."&page=".$pagenum,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">&raquo;</a></span> "; } }
+	++$pagei; } $pstring = $pstring."</div>"; }
+?>
+<div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">Board index</a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=list&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Member list</a></div>
+<div class="DivNavLinks">&nbsp;</div>
+<?php
+echo $pstring;
+//List Page Number Code end
+if($pagenum>1) {
+?>
+<div class="DivPageLinks">&nbsp;</div>
+<?php } ?>
+<div class="Table1Border">
+<?php if($ThemeSet['TableStyle']=="div") { ?>
+<div class="TableRow1">
+<span style="text-align: left;">
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=online&list=".$_GET['list']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Online Member List</a>
+</span></div>
+<?php } ?>
+<table class="Table1">
+<?php if($ThemeSet['TableStyle']=="table") { ?>
+<tr class="TableRow1">
+<td class="TableColumn1" colspan="8"><span style="text-align: left;">
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=online&list=".$_GET['list']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Online Member List</a>
+</span></td>
+</tr><?php } ?>
+<tr id="Member" class="TableRow2">
+<th class="TableColumn2" style="width: 5%;">ID</th>
+<th class="TableColumn2" style="width: 24%;">Member Name</th>
+<th class="TableColumn2" style="width: 24%;">Group Name</th>
+<th class="TableColumn2" style="width: 24%;">Location</th>
+<th class="TableColumn2" style="width: 23%;">Time</th>
+</tr>
+<?php
+while ($i < $num) {
+$session_data=mysql_result($result,$i,"session_data"); 
+$session_expires=mysql_result($result,$i,"expires"); 
+$session_expires = GMTimeChange("F j Y, g:i a",$session_expires,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$UserSessInfo = unserialize_session($session_data);
+if($UserSessInfo['UserGroup']!=$Settings['GuestGroup']) {
+$AmIHiddenUser = GetHiddenMember($UserSessInfo['UserID'],$Settings['sqltable']); }
+if(!isset($UserSessInfo['ViewingPage'])) {
+	$UserSessInfo['ViewingPage'] = url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); }
+if(!isset($UserSessInfo['PreViewingTitle'])) {
+	$UserSessInfo['PreViewingTitle'] = "Viewing"; }
+if(!isset($UserSessInfo['ViewingTitle'])) {
+	$UserSessInfo['ViewingTitle'] = "Board index"; }
+if($UserSessInfo['UserGroup']!=$Settings['GuestGroup']) {
+if($AmIHiddenUser=="no"&&$UserSessInfo['UserID']>0) { 
+?>
+<tr id="Member<?php echo $i; ?>" class="TableRow3">
+<td class="TableColumn3" style="text-align: center;"><?php echo $UserSessInfo['UserID']; ?></td>
+<td class="TableColumn3" style="text-align: center;"><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UserSessInfo['UserID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>"><?php echo $UserSessInfo['MemberName']; ?></a>
+<?php if($GroupInfo['HasAdminCP']=="yes") { ?> ( <a onclick="window.open(this.href);return false;" href="http://cqcounter.com/whois/?query=<?php echo $UserSessInfo['UserIP']; ?>"><?php echo $UserSessInfo['UserIP']; ?></a> )<?php } ?></td>
+<td class="TableColumn3" style="text-align: center;"><?php echo $UserSessInfo['UserGroup']; ?></td>
+<td class="TableColumn3" style="text-align: center;"><a href="<?php echo $UserSessInfo['ViewingPage']; ?>"><?php echo $UserSessInfo['PreViewingTitle']; ?> <?php echo $UserSessInfo['ViewingTitle']; ?></a></td>
+<td class="TableColumn3" style="text-align: center;"><?php echo $session_expires; ?></td>
+</tr>
+<?php } }
+if($UserSessInfo['UserGroup']==$Settings['GuestGroup']) {
+if(!isset($UserSessInfo['GuestName'])) { 
+	$UserSessInfo['GuestName'] = "Guest"; }
+if(!isset($UserSessInfo['UserID'])) { 
+	$UserSessInfo['UserID'] = "0"; }
+if($_GET['list']=="all") {
+?>
+<tr id="Member<?php echo $i; ?>" class="TableRow3">
+<td class="TableColumn3" style="text-align: center;"><?php echo $UserSessInfo['UserID']; ?></td>
+<td class="TableColumn3" style="text-align: center;"><span><?php echo $UserSessInfo['GuestName']; ?></span>
+<?php if($GroupInfo['HasAdminCP']=="yes") { ?> ( <a onclick="window.open(this.href);return false;" href="http://cqcounter.com/whois/?query=<?php echo $UserSessInfo['UserIP']; ?>"><?php echo $UserSessInfo['UserIP']; ?></a> )<?php } ?></td>
+<td class="TableColumn3" style="text-align: center;"><?php echo $UserSessInfo['UserGroup']; ?></td>
+<td class="TableColumn3" style="text-align: center;"><a href="<?php echo $UserSessInfo['ViewingPage']; ?>"><?php echo $UserSessInfo['PreViewingTitle']; ?> <?php echo $UserSessInfo['ViewingTitle']; ?></a></td>
+<td class="TableColumn3" style="text-align: center;"><?php echo $session_expires; ?></td>
+</tr>
+<?php } }
+++$i; }
+?>
+<tr id="MemEnd" class="TableRow4">
+<td class="TableColumn4" colspan="8">&nbsp;</td>
+</tr>
+</table></div>
+<?php 
+if($pagenum>1) {
+?>
+<div class="DivMembers">&nbsp;</div>
+<?php }
+echo $pstring;
+//List Page Number Code end
+if($pagenum>1) {
+?>
+<div class="DivPageLinks">&nbsp;</div>
+<?php } }
 if($_GET['act']=="view") { 
 $query = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($_GET['id']));
 $result=mysql_query($query);
@@ -319,6 +514,9 @@ if($_GET['view']=="website"||$_GET['view']=="homepage") {
 	strtolower($ViewMem['Avatar'])=="noavatar") {
 	@session_write_close();
 	@header("Location: ".$BoardURL."index.php?act=view"); } }
+$_SESSION['ViewingPage'] = url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
+$_SESSION['PreViewingTitle'] = "Viewing Profile:";
+$_SESSION['ViewingTitle'] = $ViewMem['Name'];
 ?>
 <div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">Board index</a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Viewing profile</a></div>
 <div class="DivNavLinks">&nbsp;</div>
@@ -406,6 +604,9 @@ redirect("location",$basedir.url_maker($exfile['member'],$Settings['file_ext'],"
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 if($_SESSION['UserID']==0||$_SESSION['UserID']==null) {
+$_SESSION['ViewingPage'] = url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
+$_SESSION['PreViewingTitle'] = null;
+$_SESSION['ViewingTitle'] = "Logging in";
 $membertitle = " ".$ThemeSet['TitleDivider']." Login";
 ?>
 <div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">Board index</a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Login</a></div>
@@ -463,6 +664,9 @@ redirect("location",$basedir.url_maker($exfile['member'],$Settings['file_ext'],"
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 if($_SESSION['UserID']==0||$_SESSION['UserID']==null) {
+$_SESSION['ViewingPage'] = url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
+$_SESSION['PreViewingTitle'] = null;
+$_SESSION['ViewingTitle'] = "Logging in";
 $membertitle = " ".$ThemeSet['TitleDivider']." Login";
 $REFERERurl = parse_url($_SERVER['HTTP_REFERER']);
 $URL['REFERER'] = $REFERERurl['host'];
@@ -618,6 +822,9 @@ redirect("location",$basedir.url_maker($exfile['member'],$Settings['file_ext'],"
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 if($_SESSION['UserID']==0||$_SESSION['UserID']==null) {
+$_SESSION['ViewingPage'] = url_maker($exfile['member'],$Settings['file_ext'],"act=signup",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
+$_SESSION['PreViewingTitle'] = null;
+$_SESSION['ViewingTitle'] = "Signing up";
 ?>
 <div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">Board index</a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=signup",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Signup</a></div>
 <div class="DivNavLinks">&nbsp;</div>
@@ -757,6 +964,9 @@ redirect("location",$basedir.url_maker($exfile['member'],$Settings['file_ext'],"
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 if($_SESSION['UserID']==0||$_SESSION['UserID']==null) {
+$_SESSION['ViewingPage'] = url_maker($exfile['member'],$Settings['file_ext'],"act=signup",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
+$_SESSION['PreViewingTitle'] = null;
+$_SESSION['ViewingTitle'] = "Signing up";
 $membertitle = " ".$ThemeSet['TitleDivider']." Signing up";
 $REFERERurl = parse_url($_SERVER['HTTP_REFERER']);
 $URL['REFERER'] = $REFERERurl['host'];

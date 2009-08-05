@@ -11,12 +11,16 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: groupsetup.php - Last Update: 8/5/2009 SVN 290 - Author: cooldude2k $
+    $FileInfo: groupsetup.php - Last Update: 8/5/2009 SVN 291 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="groupsetup.php"||$File3Name=="/groupsetup.php") {
 	require('index.php');
 	exit(); }
+//Set members temp location
+$_SESSION['ViewingPage'] = url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']);
+$_SESSION['PreViewingTitle'] = "Viewing";
+$_SESSION['ViewingTitle'] = "Board index";
 // Check to make sure MemberInfo is right
 $MyPostCountChk = null; $MyKarmaCount = null;
 if(!isset($_SESSION['UserID'])) { $_SESSION['UserID'] = 0; }

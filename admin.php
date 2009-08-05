@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: admin.php - Last Update: 8/3/2009 SVN 288 - Author: cooldude2k $
+    $FileInfo: admin.php - Last Update: 8/5/2009 SVN 291 - Author: cooldude2k $
 */
 if(@ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }
@@ -25,6 +25,9 @@ $filewpath = $exfile['admin'].$usefileext.$_SERVER['PATH_INFO'];
 </head>
 <body>
 <?php
+$_SESSION['ViewingPage'] = url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']);
+$_SESSION['PreViewingTitle'] = "Viewing";
+$_SESSION['ViewingTitle'] = "Board index";
 if(!isset($_GET['subact'])) { $_GET['subact'] = null; }
 if(!isset($_POST['subact'])) { $_POST['subact'] = null; }
 require($SettDir['inc'].'navbar.php');

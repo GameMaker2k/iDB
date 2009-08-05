@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: events.php - Last Update: 7/21/2009 SVN 276 - Author: cooldude2k $
+    $FileInfo: events.php - Last Update: 8/5/2009 SVN 291 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="events.php"||$File3Name=="/events.php") {
@@ -41,6 +41,9 @@ $EventStart=mysql_result($result,$is,"TimeStamp");
 $EventEnd=mysql_result($result,$is,"TimeStampEnd");
 $EventStart = GMTimeChange("M. j Y",$EventStart,null);
 $EventEnd = GMTimeChange("M. j Y",$EventEnd,null);
+$_SESSION['ViewingPage'] = url_maker($exfile['event'],$Settings['file_ext'],"act=view&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['event'],$exqstr['event']);
+$_SESSION['PreViewingTitle'] = "Viewing Event:";
+$_SESSION['ViewingTitle'] = $EventName;
 $requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($EventUser));
 $reresult=mysql_query($requery);
 $renum=mysql_num_rows($reresult);
@@ -257,6 +260,9 @@ if($GroupInfo['CanAddEvents']=="no") { redirect("location",$basedir.url_maker($e
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 $MyUserID = $_SESSION['UserID']; if($MyUserID=="0"||$MyUserID==null) { $MyUserID = -1; }
+$_SESSION['ViewingPage'] = url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']);
+$_SESSION['PreViewingTitle'] = "Making";
+$_SESSION['ViewingTitle'] = "Event";
 $REFERERurl = parse_url($_SERVER['HTTP_REFERER']);
 $URL['REFERER'] = $REFERERurl['host'];
 $URL['HOST'] = $_SERVER["SERVER_NAME"];

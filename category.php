@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: category.php - Last Update: 6/16/2009 SVN 264 - Author: cooldude2k $
+    $FileInfo: category.php - Last Update: 8/5/2009 SVN 291 - Author: cooldude2k $
 */
 if(@ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }
@@ -29,6 +29,7 @@ if(!is_numeric($_GET['id']))
 <body>
 <?php if($_GET['act']!="lowview") {
 require($SettDir['inc'].'navbar.php'); }
+$CatCheck = null;
 if($_GET['act']==null)
 { $_GET['act']="view"; }
 if(!is_numeric($_GET['id']))

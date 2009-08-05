@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: searchs.php - Last Update: 7/23/2009 SVN 282 - Author: cooldude2k $
+    $FileInfo: searchs.php - Last Update: 8/5/2009 SVN 291 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="searchs.php"||$File3Name=="/searchs.php") {
@@ -26,6 +26,9 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 $pagenum = null;
 if($Settings['enable_search']=="on"||
 	$GroupInfo['CanSearch']=="yes") {
+$_SESSION['ViewingPage'] = url_maker($exfile['search'],$Settings['file_ext'],"act=topics",$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search']);
+$_SESSION['PreViewingTitle'] = "Searching";
+$_SESSION['ViewingTitle'] = "Topics";
 if($_GET['act']=="topics") {
 	if($_GET['search']==null&&$_GET['type']==null) {
 	?>

@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: member.php - Last Update: 6/16/2009 SVN 264 - Author: cooldude2k $
+    $FileInfo: member.php - Last Update: 8/5/2009 SVN 291 - Author: cooldude2k $
 */
 if(@ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }
@@ -36,6 +36,7 @@ if(!is_numeric($_GET['id']))
 { $_GET['id']="1"; }
 require($SettDir['inc'].'navbar.php');
 if($_GET['act']=="login"||
+$_GET['act']=="online"||
 $_POST['act']=="loginmember"||
 $_GET['act']=="logout")
 { require($SettDir['inc'].'members.php'); } 

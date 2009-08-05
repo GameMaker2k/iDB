@@ -11,12 +11,15 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: calendars.php - Last Update: 6/16/2009 SVN 264 - Author: cooldude2k $
+    $FileInfo: calendars.php - Last Update: 8/5/2009 SVN 291 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="calendars.php"||$File3Name=="/calendars.php") {
 	require('index.php');
 	exit(); }
+$_SESSION['ViewingPage'] = url_maker($exfile['calendar'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['calendar'],$exqstr['calendar']);
+$_SESSION['PreViewingTitle'] = "Viewing";
+$_SESSION['ViewingTitle'] = "Calendar";
 if(!isset($_GET['HighligtDay'])) { $_GET['HighligtDay'] = null; }
 // Count the Days in this month
 $MyTimeStamp = GMTimeStamp();

@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: topics.php - Last Update: 8/1/2009 SVN 286 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 8/5/2009 SVN 291 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -20,8 +20,6 @@ if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
 $pstring = null; $pagenum = null;
 if(!is_numeric($_GET['id'])) { $_GET['id'] = null; }
 if(!is_numeric($_GET['page'])) { $_GET['page'] = null; }
-if(!isset($ForumCheck)) { $ForumCheck = null; }
-if(isset($ForumCheck)&&$ForumCheck!="skip") { $ForumCheck = null; }
 $prequery = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i LIMIT 1", array($_GET['id']));
 $preresult=mysql_query($prequery);
 $prenum=mysql_num_rows($preresult);
@@ -85,6 +83,9 @@ $isfRedirectURL=mysql_result($isfresult,0,"RedirectURL"); }
 if($isfnum<1) { $InSubForum = "0"; } 
 @mysql_free_result($isfresult); }
 if($ForumCheck!="skip") {
+$_SESSION['ViewingPage'] = url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$ForumID."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]);
+$_SESSION['PreViewingTitle'] = "Viewing Forum:";
+$_SESSION['ViewingTitle'] = $ForumName;
 ?>
 <div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">Board index</a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile[$CategoryType],$Settings['file_ext'],"act=view&id=".$ForumCatID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$CategoryType],$exqstr[$CategoryType]); ?>"><?php echo $CategoryName; ?></a><?php if($InSubForum!="0") { echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile[$isfForumType],$Settings['file_ext'],"act=view&id=".$isfForumID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr[$isfForumType],$exqstr[$isfForumType]); ?>"><?php echo $isfForumName; ?></a><?php } echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$ForumID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>"><?php echo $ForumName; ?></a></div>
 <div class="DivNavLinks">&nbsp;</div>

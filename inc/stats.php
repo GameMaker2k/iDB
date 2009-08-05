@@ -11,12 +11,16 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: stats.php - Last Update: 8/5/2009 SVN 290 - Author: cooldude2k $
+    $FileInfo: stats.php - Last Update: 8/5/2009 SVN 291 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="stats.php"||$File3Name=="/stats.php") {
 	require('index.php');
 	exit(); }
+if($_GET['act']=="stats") {
+$_SESSION['ViewingPage'] = url_maker($exfile['index'],$Settings['file_ext'],"act=stats",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']);
+$_SESSION['PreViewingTitle'] = "Viewing";
+$_SESSION['ViewingTitle'] = "Board Stats"; }
 $uolcuttime = GMTimeStamp();
 $uoltime = $uolcuttime - ini_get("session.gc_maxlifetime");
 $uolquery = query("SELECT session_data FROM `".$Settings['sqltable']."sessions` WHERE `expires` >= %i ORDER BY `expires` DESC", array($uoltime));
@@ -27,8 +31,9 @@ $MembersOnline = null; $GuestsOnline = null;
 while ($uoli < $uolnum) {
 $session_data=mysql_result($uolresult,$uoli,"session_data"); 
 $UserSessInfo = unserialize_session($session_data);
-$AmIHiddenUser = GetHiddenMember($UserSessInfo['UserID'],$Settings['sqltable']);
+$AmIHiddenUser = "no";
 if($UserSessInfo['UserGroup']!=$Settings['GuestGroup']) {
+$AmIHiddenUser = GetHiddenMember($UserSessInfo['UserID'],$Settings['sqltable']);
 if($AmIHiddenUser=="no"&&$UserSessInfo['UserID']>0) {
 if($olmn>0) { $MembersOnline .= ", "; }
 $MembersOnline .= "<a href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UserSessInfo['UserID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">".$UserSessInfo['MemberName']."</a>"; 
@@ -82,7 +87,8 @@ if($NewestMem['ID']<=0) { $NewestMem['ID'] = "0"; $NewestMem['Name'] = "Anonymou
 <?php echo $ThemeSet['StatsIcon']; ?></div></td>
 <td style="width: 96%;" class="TableStatsColumn3"><div class="statsinfo">
 &nbsp;<span style="font-weight: bold;"><?php echo $olgn; ?></span> guests, <span style="font-weight: bold;"><?php echo $olmn; ?></span> members, <span style="font-weight: bold;"><?php echo $olan; ?></span> anonymous members <br />
-&nbsp;<?php echo $MembersOnline; ?>
+<?php if($MembersOnline!=null) { ?>&nbsp;<?php echo $MembersOnline."\n<br />"; } ?>
+&nbsp;Show detailed by: <a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=online&list=all&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Last Click</a>, <a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=online&list=members&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Member Name</a>
 </div></td>
 </tr>
 <tr id="Stats3" class="TableStatsRow2">

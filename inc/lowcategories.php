@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: lowcategories.php - Last Update: 7/23/2009 SVN 281 - Author: cooldude2k $
+    $FileInfo: lowcategories.php - Last Update: 8/5/2009 SVN 291 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="lowcategories.php"||$File3Name=="/lowcategories.php") {
@@ -52,6 +52,11 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
 if($CatPermissionInfo['CanViewCategory'][$CategoryID]=="yes") {
 if(!isset($CatCheck)) { $CatCheck = null; } 
 if($CatCheck!="skip") {
+
+$_SESSION['ViewingPage'] = url_maker($exfile[$CategoryType],$Settings['file_ext'],"act=lowview&id=".$CategoryID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$CategoryType],$exqstr[$CategoryType]);
+$_SESSION['PreViewingTitle'] = "Viewing Category:";
+$_SESSION['ViewingTitle'] = $CategoryName;
+
 if($InSubCategory!="0") {
 $iscquery = query("SELECT * FROM `".$Settings['sqltable']."categories` WHERE `id`=%i LIMIT 1", array($InSubCategory));
 $iscresult=mysql_query($iscquery);

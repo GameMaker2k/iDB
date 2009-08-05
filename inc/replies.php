@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: replies.php - Last Update: 7/30/2009 SVN 284 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 8/5/2009 SVN 291 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -25,7 +25,6 @@ if(!isset($_GET['modact'])) { $_GET['modact'] = null; }
 if($_GET['modact']=="pin"||$_GET['modact']=="unpin"||$_GET['modact']=="open"||
 	$_GET['modact']=="close"||$_GET['modact']=="edit"||$_GET['modact']=="delete")
 		{ $_GET['act'] = $_GET['modact']; }
-if(!isset($ForumCheck)) { $ForumCheck = null; }
 $prequery = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `id`=%i LIMIT 1", array($_GET['id']));
 $preresult=mysql_query($prequery);
 $prenum=mysql_num_rows($preresult);
@@ -114,6 +113,10 @@ if($TopicClosed==1&&$PermissionInfo['CanMakeReplysClose'][$TopicForumID]=="yes"
 </table>
 <div class="DivTable2">&nbsp;</div>
 <?php } } if($_GET['act']=="view") {
+if($ForumCheck!="skip") {
+$_SESSION['ViewingPage'] = url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$TopicForumID."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]);
+$_SESSION['PreViewingTitle'] = "Viewing Topic:";
+$_SESSION['ViewingTitle'] = $TopicName; }
 if($NumberReplies==null) { 
 	$NumberReplies = 0; }
 $num=$NumberReplies+1;
