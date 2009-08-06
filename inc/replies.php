@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: replies.php - Last Update: 8/6/2009 SVN 293 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 8/6/2009 SVN 296 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -114,7 +114,11 @@ if($TopicClosed==1&&$PermissionInfo['CanMakeReplysClose'][$TopicForumID]=="yes"
 <div class="DivTable2">&nbsp;</div>
 <?php } } if($_GET['act']=="view") {
 if($ForumCheck!="skip") {
-$_SESSION['ViewingPage'] = url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']);
+$_SESSION['ViewingPage'] = url_maker(null,"no+ext","act=view&id=".$_GET['id']."&page=".$_GET['page'],"&","=",$prexqstr['topic'],$exqstr['topic']);
+if($Settings['file_ext']!="no+ext"&&$Settings['file_ext']!="no ext") {
+$_SESSION['ViewingFile'] = $exfile['topic'].$Settings['file_ext']; }
+if($Settings['file_ext']=="no+ext"||$Settings['file_ext']=="no ext") {
+$_SESSION['ViewingFile'] = $exfile['topic']; }
 $_SESSION['PreViewingTitle'] = "Viewing Topic:";
 $_SESSION['ViewingTitle'] = $TopicName; }
 if($NumberReplies==null) { 

@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 8/6/2009 SVN 293 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 8/6/2009 SVN 296 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -74,7 +74,11 @@ $result=mysql_query($query);
 $rnresult=mysql_query($rnquery);
 $NumberMembers = mysql_result($rnresult,0);
 @mysql_free_result($rnresult);
-$_SESSION['ViewingPage'] = url_maker($exfile['member'],$Settings['file_ext'],"act=list&orderby=".$_GET['orderby']."&ordertype=".$_GET['ordertype']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
+$_SESSION['ViewingPage'] = url_maker(null,"no+ext","act=list&orderby=".$_GET['orderby']."&ordertype=".$_GET['ordertype']."&page=".$_GET['page'],"&","=",$prexqstr['member'],$exqstr['member']);
+if($Settings['file_ext']!="no+ext"&&$Settings['file_ext']!="no ext") {
+$_SESSION['ViewingFile'] = $exfile['member'].$Settings['file_ext']; }
+if($Settings['file_ext']=="no+ext"||$Settings['file_ext']=="no ext") {
+$_SESSION['ViewingFile'] = $exfile['member']; }
 $_SESSION['PreViewingTitle'] = "Viewing";
 $_SESSION['ViewingTitle'] = "Member List";
 if($NumberMembers==null) { 
@@ -270,7 +274,11 @@ $result=mysql_query($query);
 $rnresult=mysql_query($rnquery);
 $NumberMembers = mysql_result($rnresult,0);
 @mysql_free_result($rnresult);
-$_SESSION['ViewingPage'] = url_maker($exfile['member'],$Settings['file_ext'],"act=online&list=".$_GET['list']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
+$_SESSION['ViewingPage'] = url_maker(null,"no+ext","act=online&list=".$_GET['list']."&page=".$_GET['page'],"&","=",$prexqstr['member'],$exqstr['member']);
+if($Settings['file_ext']!="no+ext"&&$Settings['file_ext']!="no ext") {
+$_SESSION['ViewingFile'] = $exfile['member'].$Settings['file_ext']; }
+if($Settings['file_ext']=="no+ext"||$Settings['file_ext']=="no ext") {
+$_SESSION['ViewingFile'] = $exfile['member']; }
 $_SESSION['PreViewingTitle'] = "Viewing";
 $_SESSION['ViewingTitle'] = "Online Member List";
 if($NumberMembers==null) { 
@@ -395,16 +403,22 @@ $UserSessInfo = unserialize_session($session_data);
 if($UserSessInfo['UserGroup']!=$Settings['GuestGroup']) {
 $AmIHiddenUser = GetHiddenMember($UserSessInfo['UserID'],$Settings['sqltable']); }
 if(!isset($UserSessInfo['ViewingPage'])) {
-	$UserSessInfo['ViewingPage'] = url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); }
+	$UserSessInfo['ViewingPage'] = url_maker(null,"no+ext","act=view","&","=",$prexqstr['index'],$exqstr['index']); }
+if(!isset($UserSessInfo['ViewingFile'])) {
+	if($Settings['file_ext']!="no+ext"&&$Settings['file_ext']!="no ext") {
+	$UserSessInfo['ViewingFile'] = $exfile['index'].$Settings['file_ext']; }
+	if($Settings['file_ext']=="no+ext"||$Settings['file_ext']=="no ext") {
+	$UserSessInfo['ViewingFile'] = $exfile['index']; } }
 if(!isset($UserSessInfo['PreViewingTitle'])) {
 	$UserSessInfo['PreViewingTitle'] = "Viewing"; }
 if(!isset($UserSessInfo['ViewingTitle'])) {
 	$UserSessInfo['ViewingTitle'] = "Board index"; }
 $PreExpPage = explode("?",$UserSessInfo['ViewingPage']);
-$PreFileName = $PreExpPage[0];
-$qstr = htmlentities($Settings['qstr'], ENT_QUOTES, $Settings['charset']);
-$qsep = htmlentities($Settings['qsep'], ENT_QUOTES, $Settings['charset']);
-$PreExpPage = str_replace($qstr, "&", $PreExpPage[1]);
+$PreFileName = $UserSessInfo['ViewingFile'];
+$qstr = htmlentities("&", ENT_QUOTES, $Settings['charset']);
+$qsep = htmlentities("=", ENT_QUOTES, $Settings['charset']);
+$PreExpPage = preg_replace("/^\?/","",$UserSessInfo['ViewingPage']);
+$PreExpPage = str_replace($qstr, "&", $PreExpPage);
 $PreExpPage = str_replace($qsep, "=", $PreExpPage);
 parse_str($PreExpPage,$ChkID);
 if($PreFileName==$exfile['topic'].$Settings['file_ext']) {
@@ -480,7 +494,7 @@ if($AmIHiddenUser=="no"&&$UserSessInfo['UserID']>0) {
 <td class="TableColumn3" style="text-align: center;"><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UserSessInfo['UserID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>"><?php echo $UserSessInfo['MemberName']; ?></a>
 <?php if($GroupInfo['HasAdminCP']=="yes") { ?> ( <a onclick="window.open(this.href);return false;" href="http://cqcounter.com/whois/?query=<?php echo $UserSessInfo['UserIP']; ?>"><?php echo $UserSessInfo['UserIP']; ?></a> )<?php } ?></td>
 <td class="TableColumn3" style="text-align: center;"><?php echo $UserSessInfo['UserGroup']; ?></td>
-<td class="TableColumn3" style="text-align: center;"><a href="<?php echo $UserSessInfo['ViewingPage']; ?>"><?php echo $UserSessInfo['PreViewingTitle']; ?> <?php echo $UserSessInfo['ViewingTitle']; ?></a></td>
+<td class="TableColumn3" style="text-align: center;"><a href="<?php echo url_maker($PreFileName,"no+ext",$PreExpPage,$Settings['qstr'],$Settings['qsep'],null,null); ?>"><?php echo $UserSessInfo['PreViewingTitle']; ?> <?php echo $UserSessInfo['ViewingTitle']; ?></a></td>
 <td class="TableColumn3" style="text-align: center;"><?php echo $session_expires; ?></td>
 </tr>
 <?php } }
@@ -496,7 +510,7 @@ if($_GET['list']=="all") {
 <td class="TableColumn3" style="text-align: center;"><span><?php echo $UserSessInfo['GuestName']; ?></span>
 <?php if($GroupInfo['HasAdminCP']=="yes") { ?> ( <a onclick="window.open(this.href);return false;" href="http://cqcounter.com/whois/?query=<?php echo $UserSessInfo['UserIP']; ?>"><?php echo $UserSessInfo['UserIP']; ?></a> )<?php } ?></td>
 <td class="TableColumn3" style="text-align: center;"><?php echo $UserSessInfo['UserGroup']; ?></td>
-<td class="TableColumn3" style="text-align: center;"><a href="<?php echo $UserSessInfo['ViewingPage']; ?>"><?php echo $UserSessInfo['PreViewingTitle']; ?> <?php echo $UserSessInfo['ViewingTitle']; ?></a></td>
+<td class="TableColumn3" style="text-align: center;"><a href="<?php echo url_maker($PreFileName,"no+ext",$PreExpPage,$Settings['qstr'],$Settings['qsep'],null,null); ?>"><?php echo $UserSessInfo['PreViewingTitle']; ?> <?php echo $UserSessInfo['ViewingTitle']; ?></a></td>
 <td class="TableColumn3" style="text-align: center;"><?php echo $session_expires; ?></td>
 </tr>
 <?php } }
@@ -586,7 +600,11 @@ if($_GET['view']=="website"||$_GET['view']=="homepage") {
 	strtolower($ViewMem['Avatar'])=="noavatar") {
 	@session_write_close();
 	@header("Location: ".$BoardURL."index.php?act=view"); } }
-$_SESSION['ViewingPage'] = url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
+$_SESSION['ViewingPage'] = url_maker(null,"no+ext","act=view&id=".$_GET['id'],"&","=",$prexqstr['member'],$exqstr['member']);
+if($Settings['file_ext']!="no+ext"&&$Settings['file_ext']!="no ext") {
+$_SESSION['ViewingFile'] = $exfile['member'].$Settings['file_ext']; }
+if($Settings['file_ext']=="no+ext"||$Settings['file_ext']=="no ext") {
+$_SESSION['ViewingFile'] = $exfile['member']; }
 $_SESSION['PreViewingTitle'] = "Viewing Profile:";
 $_SESSION['ViewingTitle'] = $ViewMem['Name'];
 ?>
@@ -676,7 +694,11 @@ redirect("location",$basedir.url_maker($exfile['member'],$Settings['file_ext'],"
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
 if($_SESSION['UserID']==0||$_SESSION['UserID']==null) {
-$_SESSION['ViewingPage'] = url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
+$_SESSION['ViewingPage'] = url_maker(null,"no+ext","act=login","&","=",$prexqstr['member'],$exqstr['member']);
+if($Settings['file_ext']!="no+ext"&&$Settings['file_ext']!="no ext") {
+$_SESSION['ViewingFile'] = $exfile['member'].$Settings['file_ext']; }
+if($Settings['file_ext']=="no+ext"||$Settings['file_ext']=="no ext") {
+$_SESSION['ViewingFile'] = $exfile['member']; }
 $_SESSION['PreViewingTitle'] = "Act: ";
 $_SESSION['ViewingTitle'] = "Logging in";
 $membertitle = " ".$ThemeSet['TitleDivider']." Login";
@@ -736,7 +758,11 @@ redirect("location",$basedir.url_maker($exfile['member'],$Settings['file_ext'],"
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
 if($_SESSION['UserID']==0||$_SESSION['UserID']==null) {
-$_SESSION['ViewingPage'] = url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
+$_SESSION['ViewingPage'] = url_maker(null,"no+ext","act=login","&","=",$prexqstr['member'],$exqstr['member']);
+if($Settings['file_ext']!="no+ext"&&$Settings['file_ext']!="no ext") {
+$_SESSION['ViewingFile'] = $exfile['member'].$Settings['file_ext']; }
+if($Settings['file_ext']=="no+ext"||$Settings['file_ext']=="no ext") {
+$_SESSION['ViewingFile'] = $exfile['member']; }
 $_SESSION['PreViewingTitle'] = "Act: ";
 $_SESSION['ViewingTitle'] = "Logging in";
 $membertitle = " ".$ThemeSet['TitleDivider']." Login";
@@ -894,7 +920,11 @@ redirect("location",$basedir.url_maker($exfile['member'],$Settings['file_ext'],"
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
 if($_SESSION['UserID']==0||$_SESSION['UserID']==null) {
-$_SESSION['ViewingPage'] = url_maker($exfile['member'],$Settings['file_ext'],"act=signup",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
+$_SESSION['ViewingPage'] = url_maker(null,"no+ext","act=signup","&","=",$prexqstr['member'],$exqstr['member']);
+if($Settings['file_ext']!="no+ext"&&$Settings['file_ext']!="no ext") {
+$_SESSION['ViewingFile'] = $exfile['member'].$Settings['file_ext']; }
+if($Settings['file_ext']=="no+ext"||$Settings['file_ext']=="no ext") {
+$_SESSION['ViewingFile'] = $exfile['member']; }
 $_SESSION['PreViewingTitle'] = "Act: ";
 $_SESSION['ViewingTitle'] = "Signing up";
 ?>
@@ -1036,7 +1066,11 @@ redirect("location",$basedir.url_maker($exfile['member'],$Settings['file_ext'],"
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
 if($_SESSION['UserID']==0||$_SESSION['UserID']==null) {
-$_SESSION['ViewingPage'] = url_maker($exfile['member'],$Settings['file_ext'],"act=signup",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
+$_SESSION['ViewingPage'] = url_maker(null,"no+ext","act=signup","&","=",$prexqstr['member'],$exqstr['member']);
+if($Settings['file_ext']!="no+ext"&&$Settings['file_ext']!="no ext") {
+$_SESSION['ViewingFile'] = $exfile['member'].$Settings['file_ext']; }
+if($Settings['file_ext']=="no+ext"||$Settings['file_ext']=="no ext") {
+$_SESSION['ViewingFile'] = $exfile['member']; }
 $_SESSION['PreViewingTitle'] = "Act: ";
 $_SESSION['ViewingTitle'] = "Signing up";
 $membertitle = " ".$ThemeSet['TitleDivider']." Signing up";

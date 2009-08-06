@@ -11,14 +11,18 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: stats.php - Last Update: 8/5/2009 SVN 291 - Author: cooldude2k $
+    $FileInfo: stats.php - Last Update: 8/6/2009 SVN 296 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="stats.php"||$File3Name=="/stats.php") {
 	require('index.php');
 	exit(); }
 if($_GET['act']=="stats") {
-$_SESSION['ViewingPage'] = url_maker($exfile['index'],$Settings['file_ext'],"act=stats",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']);
+$_SESSION['ViewingPage'] = url_maker(null,"no+ext","act=stats","&","=",$prexqstr['index'],$exqstr['index']);
+if($Settings['file_ext']!="no+ext"&&$Settings['file_ext']!="no ext") {
+$_SESSION['ViewingFile'] = $exfile['index'].$Settings['file_ext']; }
+if($Settings['file_ext']=="no+ext"||$Settings['file_ext']=="no ext") {
+$_SESSION['ViewingFile'] = $exfile['index']; }
 $_SESSION['PreViewingTitle'] = "Viewing";
 $_SESSION['ViewingTitle'] = "Board Stats"; }
 $uolcuttime = GMTimeStamp();
