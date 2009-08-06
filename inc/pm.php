@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: pm.php - Last Update: 8/5/2009 SVN 291 - Author: cooldude2k $
+    $FileInfo: pm.php - Last Update: 8/6/2009 SVN 293 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pm.php"||$File3Name=="/pm.php") {
@@ -19,12 +19,12 @@ if ($File3Name=="pm.php"||$File3Name=="/pm.php") {
 	exit(); }
 if(!is_numeric($_GET['id'])) { $_GET['id'] = null; }
 if(!is_numeric($_GET['post'])) { $_GET['post'] = null; }
-if(!is_numeric($_GET['page'])) { $_GET['page'] = null; }
+if(!is_numeric($_GET['page'])) { $_GET['page'] = 1; }
 // Check if we can read/send PM
 if($_SESSION['UserGroup']==$Settings['GuestGroup']||$GroupInfo['CanPM']=="no") {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
 $_SESSION['ViewingPage'] = url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']);
 $_SESSION['PreViewingTitle'] = "Viewing";
 $_SESSION['ViewingTitle'] = "Messages";
@@ -387,7 +387,7 @@ $num=mysql_num_rows($result);
 $is=0;
 if($num==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
 while ($is < $num) {
 $PMID=mysql_result($result,$is,"id");
 $SenderID=mysql_result($result,$is,"SenderID");
@@ -411,7 +411,7 @@ if($_SESSION['UserID']!=$SentToID&&
 	$_SESSION['UserID']!=$SenderID) {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
 while ($rei < $renum) {
 $User1ID=$SenderID;
 $User1Name=mysql_result($reresult,$rei,"Name");

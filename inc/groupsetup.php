@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: groupsetup.php - Last Update: 8/5/2009 SVN 291 - Author: cooldude2k $
+    $FileInfo: groupsetup.php - Last Update: 8/6/2009 SVN 293 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="groupsetup.php"||$File3Name=="/groupsetup.php") {
@@ -87,7 +87,7 @@ unset($_COOKIE[session_name()]);
 $_SESSION = array(); @session_unset(); @session_destroy();
 @redirect("location",$basedir.url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],false)); @mysql_free_result($numchkusr); @mysql_free_result($svrgresultkgb);
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
 @mysql_free_result($numchkusr); @mysql_free_result($svrgresultkgb); }
 if($_SESSION['UserID']==0||$_SESSION['UserID']==null) {
 $_SESSION['UserIP']=$_SERVER['REMOTE_ADDR'];
@@ -114,7 +114,7 @@ $grunum=mysql_num_rows($gruresult);
 if($grunum<=0) { $GruError = true; @mysql_free_result($gruresult);
 @header("Content-Type: text/plain; charset=".$Settings['charset']); 
 ob_clean(); echo "Sorry could not find group data in database.\nContact the board admin about error."; 
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
 if($grunum>=1) {
 $GroupInfo['ID']=mysql_result($gruresult,0,"id");
 if(!is_numeric($GroupInfo['ID'])) { $GruError = true; }
@@ -209,12 +209,12 @@ if($GroupInfo['ViewDBInfo']!="yes"&&$GroupInfo['ViewDBInfo']!="no") {
 if($GruError==true) {
 @header("Content-Type: text/plain; charset=".$Settings['charset']); @mysql_free_result($gruresult);
 ob_clean(); echo "Sorry could not load all group data in database.\nContact the board admin about error."; 
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); } }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); } }
 @mysql_free_result($gruresult);
 if($GroupInfo['CanViewBoard']=="no") { 
 @header("Content-Type: text/plain; charset=".$Settings['charset']); 
 ob_clean(); echo "Sorry you can not view the board."; 
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
 // Member Group Permissions Setup
 $perquery = query("SELECT * FROM `".$Settings['sqltable']."permissions` WHERE `PermissionID`=%i ORDER BY `ForumID` ASC", array($GroupInfo['PermissionID']));
 $peresult=mysql_query($perquery);
@@ -223,7 +223,7 @@ $peri=0; $PerError = null;
 if($pernum<=0) { $PerError = true; @mysql_free_result($peresult);
 @header("Content-Type: text/plain; charset=".$Settings['charset']); 
 ob_clean(); echo "Sorry could not find permission data in database.\nContact the board admin about error."; 
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
 if($pernum>=1) { while ($peri < $pernum) {
 $PerForumID=mysql_result($peresult,$peri,"ForumID");
 if(!is_numeric($PerForumID)) { $PerError = true; }
@@ -289,7 +289,7 @@ if($PerError===true) { $peri = $pernum; }
 ++$peri; } if($PerError===true) {
 @header("Content-Type: text/plain; charset=".$Settings['charset']); @mysql_free_result($peresult);
 ob_clean(); echo "Sorry could not load all permission data in database.\nContact the board admin about error."; 
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); } }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); } }
 @mysql_free_result($peresult);
 $per2query = query("SELECT * FROM `".$Settings['sqltable']."catpermissions` WHERE `PermissionID`=%i ORDER BY `CategoryID` ASC", array($GroupInfo['PermissionID']));
 $per2esult=mysql_query($per2query);
@@ -298,7 +298,7 @@ $per2i=0; $Per2Error = null;
 if($per2num<=0) { $Per2Error = true; @mysql_free_result($per2esult);
 @header("Content-Type: text/plain; charset=".$Settings['charset']); 
 ob_clean(); echo "Sorry could not find permission data in database.\nContact the board admin about error."; 
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
 if($per2num>=1) { while ($per2i < $per2num) {
 $PerCatID=mysql_result($per2esult,$per2i,"CategoryID");
 if(!is_numeric($PerCatID)) { $Per2Error = true; }
@@ -315,6 +315,6 @@ if($Per2Error===true) { $per2i = $per2num; }
 ++$per2i; } if($Per2Error===true) {
 @header("Content-Type: text/plain; charset=".$Settings['charset']); @mysql_free_result($per2esult);
 ob_clean(); echo "Sorry could not load all permission data in database.\nContact the board admin about error."; 
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); } }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); } }
 @mysql_free_result($per2esult);
 ?>

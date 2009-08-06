@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: lowcategories.php - Last Update: 8/5/2009 SVN 291 - Author: cooldude2k $
+    $FileInfo: lowcategories.php - Last Update: 8/6/2009 SVN 293 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="lowcategories.php"||$File3Name=="/lowcategories.php") {
@@ -23,7 +23,7 @@ $preresult=mysql_query($prequery);
 $prenum=mysql_num_rows($preresult);
 if($prenum==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=lowview",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); @mysql_free_result($preresult);
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
 if($prenum>=1) {
 $CategoryID=mysql_result($preresult,0,"id");
 $CategoryName=mysql_result($preresult,0,"Name");
@@ -48,7 +48,7 @@ if($CatPermissionInfo['CanViewCategory'][$CategoryID]=="no"||
 	$CatPermissionInfo['CanViewCategory'][$CategoryID]!="yes") {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=lowview",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
 if($CatPermissionInfo['CanViewCategory'][$CategoryID]=="yes") {
 if(!isset($CatCheck)) { $CatCheck = null; } 
 if($CatCheck!="skip") {
@@ -79,7 +79,7 @@ if($iscnum<1) { $InSubCategory = "0"; }
 if($CategoryType=="subcategory") {
 redirect("location",$basedir.url_maker($exfile['subcategory'],$Settings['file_ext'],"act=".$_GET['act']."&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['subcategory'],$exqstr['subcategory'],FALSE));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); } }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); } }
 $query = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `ShowForum`='yes' AND `CategoryID`=%i AND `InSubForum`=0 ORDER BY `OrderID` ASC, `id` ASC", array($CategoryID));
 $result=mysql_query($query);
 $num=mysql_num_rows($result);

@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: searchs.php - Last Update: 8/5/2009 SVN 291 - Author: cooldude2k $
+    $FileInfo: searchs.php - Last Update: 8/6/2009 SVN 293 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="searchs.php"||$File3Name=="/searchs.php") {
@@ -22,7 +22,7 @@ if($Settings['enable_search']=="off"||
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 @header("Content-Type: text/plain; charset=".$Settings['charset']);
 ob_clean(); echo "Sorry you do not have permission to do a search."; 
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
 $pagenum = null;
 if($Settings['enable_search']=="on"||
 	$GroupInfo['CanSearch']=="yes") {
@@ -141,7 +141,7 @@ if($num<=0) {
 redirect("location",$basedir.url_maker($exfile['search'],$Settings['file_ext'],"act=topics",$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search'],false));
 @header("Content-Type: text/plain; charset=".$Settings['charset']);
 ob_clean(); echo "Sorry could not find any search results."; @mysql_free_result($result);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
 $i=0;
 //List Page Number Code Start
 $pagenum=count($Pages);

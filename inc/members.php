@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 8/5/2009 SVN 292 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 8/6/2009 SVN 293 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -19,7 +19,7 @@ if ($File3Name=="members.php"||$File3Name=="/members.php") {
 	exit(); }
 $pagenum = null;
 if(!is_numeric($_GET['id'])) { $_GET['id'] = null; }
-if(!is_numeric($_GET['page'])) { $_GET['page'] = null; }
+if(!is_numeric($_GET['page'])) { $_GET['page'] = 1; }
 if($_GET['act']=="list") {
 $orderlist = null;
 $orderlist = "order by `ID` asc";
@@ -524,7 +524,7 @@ $num=mysql_num_rows($result);
 $i=0;
 if($num==0||$_GET['id']<=0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
 $ViewMem['ID']=mysql_result($result,$i,"id");
 $ViewMem['Name']=mysql_result($result,$i,"Name");
 $ViewMem['Signature']=mysql_result($result,$i,"Signature");
@@ -563,7 +563,7 @@ if(isset($GroupNameSuffix)&&$GroupNameSuffix!=null) {
 */
 if($ViewMem['HiddenMember']=="yes") { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
 $membertitle = " ".$ThemeSet['TitleDivider']." ".$ViewMem['Name'];	
 if ($ViewMem['Avatar']=="http://"||$ViewMem['Avatar']==null||
 	strtolower($ViewMem['Avatar'])=="noavatar") {
@@ -669,12 +669,12 @@ $_SESSION = array();
 @session_destroy();
 @redirect("location",$basedir.url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
 if($_GET['act']=="login") {
 if($_SESSION['UserID']!=0&&$_SESSION['UserID']!=null) { 
 redirect("location",$basedir.url_maker($exfile['member'],$Settings['file_ext'],"act=logout",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
 if($_SESSION['UserID']==0||$_SESSION['UserID']==null) {
 $_SESSION['ViewingPage'] = url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
 $_SESSION['PreViewingTitle'] = "Act: ";
@@ -734,7 +734,7 @@ $membertitle = " ".$ThemeSet['TitleDivider']." Login";
 if($_SESSION['UserID']!=0&&$_SESSION['UserID']!=null) { 
 redirect("location",$basedir.url_maker($exfile['member'],$Settings['file_ext'],"act=logout",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
 if($_SESSION['UserID']==0||$_SESSION['UserID']==null) {
 $_SESSION['ViewingPage'] = url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
 $_SESSION['PreViewingTitle'] = "Act: ";
@@ -892,7 +892,7 @@ $membertitle = " ".$ThemeSet['TitleDivider']." Signing up";
 if($_SESSION['UserID']!=0&&$_SESSION['UserID']!=null) { 
 redirect("location",$basedir.url_maker($exfile['member'],$Settings['file_ext'],"act=logout",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
 if($_SESSION['UserID']==0||$_SESSION['UserID']==null) {
 $_SESSION['ViewingPage'] = url_maker($exfile['member'],$Settings['file_ext'],"act=signup",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
 $_SESSION['PreViewingTitle'] = "Act: ";
@@ -1034,7 +1034,7 @@ echo "<option value=\"".$showmin."\">0:".$showmin." minutes</option>\n"; }
 if($_SESSION['UserID']!=0&&$_SESSION['UserID']!=null) { 
 redirect("location",$basedir.url_maker($exfile['member'],$Settings['file_ext'],"act=logout",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
 if($_SESSION['UserID']==0||$_SESSION['UserID']==null) {
 $_SESSION['ViewingPage'] = url_maker($exfile['member'],$Settings['file_ext'],"act=signup",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
 $_SESSION['PreViewingTitle'] = "Act: ";

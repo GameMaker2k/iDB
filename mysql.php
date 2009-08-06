@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: mysql.php - Last Update: 8/3/2009 SVN 288 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 8/6/2009 SVN 293 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. */
 //@ini_set("display_errors", true); 
@@ -167,7 +167,7 @@ if($SQLStat===false) {
 @header("Content-Type: text/plain; charset=".$Settings['charset']); @mysql_free_result($peresult);
 ob_clean(); echo "Sorry could not connect to mysql database.\nContact the board admin about error. Error log below.";
 echo "\n".mysql_errno().": ".mysql_error();
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
 $sqltable = $Settings['sqltable'];
 function sqlsession_open( $save_path, $session_name ) {
 global $sess_save_path;
@@ -252,7 +252,7 @@ if($_GET['act']=="MkCaptcha"||$_GET['act']=="Captcha") {
 	$RandNum=strtoupper($RandNum);
 	$oPhpCaptcha->SetOwnerText("Fake Code: ".$RandNum);
 	$oPhpCaptcha->UseColour(true);
-	$oPhpCaptcha->Create(); @mysql_close(); die(); } }
+	$oPhpCaptcha->Create(); @session_write_close(); die(); } }
 if(!isset($_SESSION['CheckCookie'])) {
 if(isset($_COOKIE['SessPass'])&&isset($_COOKIE['MemberName'])) {
 require($SettDir['inc'].'prelogin.php'); } }
@@ -263,7 +263,7 @@ ob_clean(); if(!isset($Settings['offline_text'])) {
 echo "Sorry the board is off line.\nIf you are a admin you can login by the admin cp."; }
 if(isset($Settings['offline_text'])) { echo $Settings['offline_text']; }
 //echo "\n".mysql_errno().": ".mysql_error();
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
 $dayconv = array('second' => 1, 'minute' => 60, 'hour' => 3600, 'day' => 86400, 'week' => 604800, 'month' => 2630880, 'year' => 31570560, 'decade' => 15705600);
 //Time Zone Set
 if(!isset($_SESSION['UserTimeZone'])) { 

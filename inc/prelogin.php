@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: prelogin.php - Last Update: 8/5/2009 SVN 290 - Author: cooldude2k $
+    $FileInfo: prelogin.php - Last Update: 8/6/2009 SVN 293 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="prelogin.php"||$File3Name=="/prelogin.php") {
@@ -88,6 +88,6 @@ unset($_COOKIE[session_name()]);
 $_SESSION = array(); @session_unset(); @session_destroy();
 @redirect("location",$basedir.url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],false)); @mysql_free_result($resultlog2); @mysql_free_result($gresult);
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
 @mysql_free_result($resultlog2); @mysql_free_result($gresult);
 ?>

@@ -37,7 +37,11 @@ if(dirname($_SERVER['SCRIPT_NAME'])=="."||
 $basedir = dirname($_SERVER['PHP_SELF'])."/"; } }
 if($basedir=="\/") { $basedir="/"; }
 $basedir = str_replace("//", "/", $basedir);*/
-$basecheck = parse_url($Settings['idburl']);
+if($Settings['qstr']!="/") {
+$iDBURLCHK = $Settings['idburl']; }
+if($Settings['qstr']=="/") {
+$iDBURLCHK = preg_replace("/\/$/","",$Settings['idburl']); }
+$basecheck = parse_url($iDBURLCHK);
 $basedir = $basecheck['path'];
 $cbasedir = $basedir;
 if($Settings['fixbasedir']!=null&&$Settings['fixbasedir']!="off") {

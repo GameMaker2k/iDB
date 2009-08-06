@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: replies.php - Last Update: 8/5/2009 SVN 291 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 8/6/2009 SVN 293 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -20,7 +20,7 @@ if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
 $pstring = null; $pagenum = null;
 if(!is_numeric($_GET['id'])) { $_GET['id'] = null; }
 if(!is_numeric($_GET['post'])) { $_GET['post'] = null; }
-if(!is_numeric($_GET['page'])) { $_GET['page'] = null; }
+if(!is_numeric($_GET['page'])) { $_GET['page'] = 1; }
 if(!isset($_GET['modact'])) { $_GET['modact'] = null; }
 if($_GET['modact']=="pin"||$_GET['modact']=="unpin"||$_GET['modact']=="open"||
 	$_GET['modact']=="close"||$_GET['modact']=="edit"||$_GET['modact']=="delete")
@@ -30,7 +30,7 @@ $preresult=mysql_query($prequery);
 $prenum=mysql_num_rows($preresult);
 if($prenum==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=lowview",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); @mysql_free_result($preresult);
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
 if($prenum>=1) {
 $TopicName=mysql_result($preresult,0,"TopicName");
 $TopicID=mysql_result($preresult,0,"id");
@@ -67,7 +67,7 @@ redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"a
 if($CategoryKarmaCountView!=0&&$MyKarmaCount<$CategoryKarmaCountView) {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=lowview",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); } }
 if($ForumCheck!="skip") {
-$_SESSION['ViewingPage'] = url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$TopicForumID."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]);
+$_SESSION['ViewingPage'] = url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']);
 $_SESSION['PreViewingTitle'] = "Viewing Topic:";
 $_SESSION['ViewingTitle'] = $TopicName;
 ?>
@@ -81,14 +81,14 @@ if($CatPermissionInfo['CanViewCategory'][$TopicCatID]=="no"||
 	$CatPermissionInfo['CanViewCategory'][$TopicCatID]!="yes") {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=lowview",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
 if(!isset($PermissionInfo['CanViewForum'][$TopicForumID])) {
 	$PermissionInfo['CanViewForum'][$TopicForumID] = "no"; }
 if($PermissionInfo['CanViewForum'][$TopicForumID]=="no"||
 	$PermissionInfo['CanViewForum'][$TopicForumID]!="yes") {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=lowview",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
 if($_GET['act']!="view") { 
 $CanMakeReply = "no"; $CanMakeTopic = "no";
 if($PermissionInfo['CanMakeTopics'][$TopicForumID]=="yes"&&$CanHaveTopics=="yes") { 
@@ -133,7 +133,7 @@ $result=mysql_query($query);
 $num=mysql_num_rows($result);
 if($num==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=lowview",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
 if($num!=0) { 
 if($ViewTimes==0||$ViewTimes==null) { $NewViewTimes = 1; }
 if($ViewTimes!=0&&$ViewTimes!=null) { $NewViewTimes = $ViewTimes + 1; }

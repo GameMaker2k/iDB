@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: subforums.php - Last Update: 8/5/2009 SVN 291 - Author: cooldude2k $
+    $FileInfo: subforums.php - Last Update: 8/6/2009 SVN 293 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="subforums.php"||$File3Name=="/subforums.php") {
@@ -23,7 +23,7 @@ $checkresult=mysql_query($checkquery);
 $checknum=mysql_num_rows($checkresult);
 if($checknum==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); @mysql_free_result($checkresult);
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
 if($checknum>=1) {
 $ForumID=mysql_result($checkresult,0,"id");
 $ForumName=mysql_result($checkresult,0,"Name");
@@ -49,15 +49,15 @@ mysql_query($redirup);
 if($RedirectURL!="http://"&&$RedirectURL!="") {
 redirect("location",$RedirectURL,0,null,false); ob_clean();
 @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
 if($RedirectURL=="http://"||$RedirectURL=="") {
 redirect("location",url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); } }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); } }
 if($ForumType=="forum") {
 redirect("location",$basedir.url_maker($exfile['forum'],$Settings['file_ext'],"act=".$_GET['act']."&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum'],FALSE));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
 @mysql_free_result($checkresult);
 $prequery = query("SELECT * FROM `".$Settings['sqltable']."categories` WHERE `ShowCategory`='yes' AND `id`=%i ORDER BY `OrderID` ASC, `id` ASC", array($CategoryID));
 $preresult=mysql_query($prequery);
@@ -94,14 +94,14 @@ if($CatPermissionInfo['CanViewCategory'][$CategoryID]=="no"||
 	$CatPermissionInfo['CanViewCategory'][$CategoryID]!="yes") {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
 if(!isset($PermissionInfo['CanViewForum'][$_GET['id']])) {
 	$PermissionInfo['CanViewForum'][$_GET['id']] = "no"; }
 if($PermissionInfo['CanViewForum'][$_GET['id']]=="no"||
 	$PermissionInfo['CanViewForum'][$_GET['id']]!="yes") {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
 if($CatPermissionInfo['CanViewCategory'][$CategoryID]=="yes"&&
 	$PermissionInfo['CanViewForum'][$_GET['id']]=="yes") {
 $query = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `ShowForum`='yes' AND `CategoryID`=%i AND `InSubForum`=%i ORDER BY `OrderID` ASC, `id` ASC", array($CategoryID,$_GET['id']));

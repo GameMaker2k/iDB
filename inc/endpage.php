@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: endpage.php - Last Update: 8/3/2009 SVN 287 - Author: cooldude2k $
+    $FileInfo: endpage.php - Last Update: 8/6/2009 SVN 293 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="endpage.php"||$File3Name=="/endpage.php") {
@@ -33,5 +33,5 @@ if($_GET['debug']=="true"||$_GET['debug']=="on") {
 	$endpagevar=$endpagevar."</div>\n";
 echo $endpagevar;
 session_write_close();
-//@mysql_close();
+//@session_write_close();
 ?>

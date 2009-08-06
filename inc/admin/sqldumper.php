@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sqldumper.php - Last Update: 6/16/2009 SVN 264 - Author: cooldude2k $
+    $FileInfo: sqldumper.php - Last Update: 8/6/2009 SVN 293 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="sqldumper.php"||$File3Name=="/sqldumper.php") {
@@ -21,7 +21,7 @@ if ($File3Name=="sqldumper.php"||$File3Name=="/sqldumper.php") {
 if($_SESSION['UserGroup']==$Settings['GuestGroup']||$GroupInfo['HasAdminCP']=="no") {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
 if(!isset($_GET['outtype'])) { $_GET['outtype'] = "UTF-8"; }
 header("Cache-Control: must-revalidate, post-check=0, pre-check=0"); 
 header("Cache-Control: private",false); 

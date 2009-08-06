@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: messenger.php - Last Update: 6/16/2009 SVN 264 - Author: cooldude2k $
+    $FileInfo: messenger.php - Last Update: 8/6/2009 SVN 293 - Author: cooldude2k $
 */
 if(@ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }
@@ -28,7 +28,7 @@ $filewpath = $exfile['messenger'].$usefileext.$_SERVER['PATH_INFO'];
 if($_SESSION['UserGroup']==$Settings['GuestGroup']||$GroupInfo['CanPM']=="no") {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
 ?>
 
 <?php 

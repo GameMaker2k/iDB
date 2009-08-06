@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: lowsubcategories.php - Last Update: 8/5/2009 SVN 291 - Author: cooldude2k $
+    $FileInfo: lowsubcategories.php - Last Update: 8/6/2009 SVN 293 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="lowsubcategories.php"||$File3Name=="/lowsubcategories.php") {
@@ -23,7 +23,7 @@ $checkresult=mysql_query($checkquery);
 $checknum=mysql_num_rows($checkresult);
 if($checknum==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=lowview",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); @mysql_free_result($checkresult);
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
 if($checknum>=1) {
 $CategoryID=mysql_result($checkresult,0,"id");
 $CategoryName=mysql_result($checkresult,0,"Name");
@@ -39,7 +39,7 @@ if($CatPermissionInfo['CanViewCategory'][$CategoryID]=="no"||
 	$CatPermissionInfo['CanViewCategory'][$CategoryID]!="yes") {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=lowview",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
 if($CatPermissionInfo['CanViewCategory'][$CategoryID]=="yes") {
 $_SESSION['ViewingPage'] = url_maker($exfile[$CategoryType],$Settings['file_ext'],"act=lowview&id=".$CategoryID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$CategoryType],$exqstr[$CategoryType]);
 $_SESSION['PreViewingTitle'] = "Viewing SubCategory:";
@@ -66,7 +66,7 @@ if($iscnum<1) { $InSubCategory = "0"; }
 if($CategoryType=="category") {
 redirect("location",$basedir.url_maker($exfile['category'],$Settings['file_ext'],"act=".$_GET['act']."&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['category'],$exqstr['category'],FALSE));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @mysql_close(); die(); }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
 @mysql_free_result($checkresult);
 $prequery = query("SELECT * FROM `".$Settings['sqltable']."categories` WHERE `ShowCategory`='yes' AND `InSubCategory`=%i ORDER BY `OrderID` ASC, `id` ASC", array($_GET['id']));
 $preresult=mysql_query($prequery);

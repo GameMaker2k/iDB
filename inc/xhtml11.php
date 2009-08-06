@@ -89,7 +89,11 @@ if($_SERVER['HTTPS']!="on") { $prehost = "http://"; }
 if($Settings['idburl']=="localhost"||$Settings['idburl']==null) {
 	$BoardURL = $prehost.$_SERVER["HTTP_HOST"].$basedir; }
 if($Settings['idburl']!="localhost"&&$Settings['idburl']!=null) {
-	$BoardURL = $Settings['idburl']; }
+	$BoardURL = $Settings['idburl']; 
+	if($Settings['qstr']!="/") {
+	$AltBoardURL = $BoardURL; } 
+	if($Settings['qstr']=="/") { 
+	$AltBoardURL = preg_replace("/\/$/","",$BoardURL); } }
  // HTML Document Starts, HTML meta tags and other html, head tags ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" 
    "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
@@ -123,8 +127,8 @@ if($Settings['idburl']!="localhost"&&$Settings['idburl']!=null) {
 <?php } echo "\n"; ?>
 
 <script type="text/javascript" src="<?php echo url_maker($exfilejs['javascript'],$Settings['js_ext'],null,$Settings['qstr'],$Settings['qsep'],$prexqstrjs['javascript'],$exqstrjs['javascript']); ?>"></script>
-<link rel="Start" href="<?php echo $BoardURL.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>" title="<?php echo $Settings['board_name'].$idbpowertitle; ?>" />
-<link rel="Copyright" href="<?php echo $BoardURL.url_maker($exfile['index'],$Settings['file_ext'],"act=bsd",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>" title="Copyright Notice" />
+<link rel="Start" href="<?php echo $AltBoardURL.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>" title="<?php echo $Settings['board_name'].$idbpowertitle; ?>" />
+<link rel="Copyright" href="<?php echo $AltBoardURL.url_maker($exfile['index'],$Settings['file_ext'],"act=bsd",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>" title="Copyright Notice" />
 <?php if($Settings['showverinfo']=="on") { ?>
 <link rel="Generator" href="http://idb.berlios.de/" title="<?php echo $VerInfo['iDB_Ver_Show']; ?>" />
 <?php } if($Settings['showverinfo']!="on") { ?>
