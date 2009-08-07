@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: replies.php - Last Update: 8/6/2009 SVN 296 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 8/7/2009 SVN 297 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -76,7 +76,7 @@ $_SESSION['PreViewingTitle'] = "Viewing Topic:";
 $_SESSION['ViewingTitle'] = $TopicName;
 ?>
 <div style="font-size: 1.0em; font-weight: bold; margin-bottom: 10px; padding-top: 3px; width: auto;">Full Version: <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a></div>
-<div style="padding: 10px; border: 1px solid gray;"><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=lowview",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">Board index</a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile[$CategoryType],$Settings['file_ext'],"act=lowview&id=".$TopicCatID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$CategoryType],$exqstr[$CategoryType]); ?>"><?php echo $CategoryName; ?></a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile[$ForumType],$Settings['file_ext'],"act=lowview&id=".$TopicForumID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>"><?php echo $ForumName; ?></a></div>
+<div style="font-size: 11px; font-weight: bold; padding: 10px; border: 1px solid gray;"><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=lowview",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">Board index</a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile[$CategoryType],$Settings['file_ext'],"act=lowview&id=".$TopicCatID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$CategoryType],$exqstr[$CategoryType]); ?>"><?php echo $CategoryName; ?></a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile[$ForumType],$Settings['file_ext'],"act=lowview&id=".$TopicForumID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>"><?php echo $ForumName; ?></a></div>
 <div>&nbsp;</div>
 <?php }
 if(!isset($CatPermissionInfo['CanViewCategory'][$TopicCatID])) {
@@ -149,7 +149,7 @@ if($_GET['page']>$pagenum) {
 	$_GET['page'] = $pagenum; }
 $pagei=0; $pstring = null;
 if($pagenum>1) {
-$pstring = "<div class=\"PageList\"><span class=\"pagelink\">".$pagenum." Pages:</span> "; }
+$pstring = "<div style=\"\" class=\"PageList\"><span class=\"pagelink\">".$pagenum." Pages:</span> "; }
 if($_GET['page']<4) { $Pagez[0] = null; }
 if($_GET['page']>=4) { $Pagez[0] = "First"; }
 if($_GET['page']>=3) {
@@ -208,7 +208,7 @@ if($TopicClosed==1&&$PermissionInfo['CanMakeReplysClose'][$TopicForumID]=="yes"
 	&&$PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes") {
 		$CanMakeReply = "yes"; }
 ?>
-<div style="padding: 10px; border: 1px solid gray;">
+<div style="font-size: 11px; font-weight: bold; padding: 10px; border: 1px solid gray;">
 <?php echo $pstring; ?></div>
 <div>&nbsp;</div>
 <div style="padding: 10px; border: 1px solid gray;">
@@ -293,10 +293,11 @@ if($_SESSION['UserID']==0) {
 	$CanEditReply = false; $CanDeleteReply = false; }
 $ReplyNum = $i + $PageLimit + 1;
 ?>
+<div style="border:1px solid #E6E3E4; padding:1px; margin-bottom: 15px;">
 <div style="border: 1px solid #E6E3E4; padding:1px; margin-bottom: 15px; background-color: #E6E3E4; padding: 6px;">
 <div style="font-weight: bold; font-size: 0.8em; width: auto; float: left;"><?php echo $User1Name; ?></div>
 <div style="width:auto; font-size: 0.8em; color: gray; text-align:right;"><?php echo $MyTimeStamp; ?></div>
 </div>
-<div style="padding: 6px; font-size: 0.8em;"><?php echo $MyPost; ?></div>
+<div style="padding: 6px; font-size: 0.8em;"><?php echo $MyPost; ?></div></div>
 <?php ++$i; } @mysql_free_result($result); 
 ?></div><div>&nbsp;</div><?php } } ?>
