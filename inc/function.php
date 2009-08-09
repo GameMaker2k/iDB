@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: function.php - Last Update: 8/8/2009 SVN 299 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 8/9/2009 SVN 301 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -65,16 +65,16 @@ $REFERERurl = null;
   * @param      string  an optional prefix
   * @return     string  the formatted uuid
   */
-  function uuid($useold = false,$more_entropy = false,$mtrand = false,$prefix = '') 
+  function uuid($useold = false,$more_entropy = false,$mtrand = false,$hash = 'sha1',$prefix = '') 
   {
     if($useold===true&&$mtrand===false) {
-	$chars = uniqid(md5(rand()),$more_entropy); }
+	$chars = uniqid($hash(rand()),$more_entropy); }
     if($useold===false&&$mtrand===false) {
-	$chars = md5(uniqid(rand(),$more_entropy)); }
+	$chars = $hash(uniqid(rand(),$more_entropy)); }
     if($useold===true&&$mtrand===true) {
-	$chars = uniqid(md5(mt_rand()),$more_entropy); }
+	$chars = uniqid($hash(mt_rand()),$more_entropy); }
     if($useold===false&&$mtrand===true) {
-	$chars = md5(uniqid(mt_rand(),$more_entropy)); }
+	$chars = $hash(uniqid(mt_rand(),$more_entropy)); }
     $uuid  = substr($chars,0,8) . '-';
     $uuid .= substr($chars,8,4) . '-';
     $uuid .= substr($chars,12,4) . '-';

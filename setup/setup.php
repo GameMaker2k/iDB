@@ -12,7 +12,7 @@
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: setup.php - Last Update: 7/17/2009 SVN 273 - Author: cooldude2k $
+    $FileInfo: setup.php - Last Update: 8/9/2009 SVN 301 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="setup.php"||$File3Name=="/setup.php") {
@@ -111,6 +111,13 @@ fclose($fp);
 	<td style="width: 50%;"><select id="storecookie" name="storecookie" class="TextBox">
 <option value="true">Yes</option>
 <option value="false">No</option>
+</select></td>
+</tr><tr>
+	<td style="width: 50%;"><label class="TextBoxLabel"" for="usehashtype">Hash user passwords with?</label></td>
+	<td style="width: 50%;"><select id="usehashtype" name="usehashtype" class="TextBox">
+<option value="sha256">SHA256</option>
+<option value="sha1">SHA1</option>
+<option value="md5">MD5</option>
 </select></td>
 </tr><tr>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="YourOffSet">Your TimeZone:</label></td>
