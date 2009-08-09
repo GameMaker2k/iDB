@@ -11,12 +11,13 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: function.php - Last Update: 8/5/2009 SVN 290 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 8/8/2009 SVN 299 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
 	require('index.php');
 	exit(); }
+require_once($SettDir['misc'].'sha256.php');
 require_once($SettDir['misc'].'functions.php');
 /* Change Some PHP Settings Fix the & to &amp;
 if($Settings['use_iniset']==true&&$Settings['qstr']!="/") {

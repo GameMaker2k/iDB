@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 8/6/2009 SVN 296 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 8/8/2009 SVN 299 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -830,9 +830,12 @@ $HashType=mysql_result($resultlog,$i,"HashType");
 $JoinedPass=mysql_result($resultlog,$i,"Joined");
 $HashSalt=mysql_result($resultlog,$i,"Salt");
 $UpdateHash = false;
-if($HashType=="ODFH") { $YourPassword = sha1(md5($_POST['userpass'])); }
+if($HashType=="ODFH") { $YourPassword = PassHash2x($_POST['userpass']); }
+if($HashType=="IPB2") { $YourPassword = hash2xkey($_POST['userpass'],$HashSalt); }
 if($HashType=="DF4H") { $YourPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$HashSalt,"sha1"); }
-if($HashType=="iDBH"||$UpdateHash!==true) { $YourPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$HashSalt,"sha1"); }
+if($HashType=="iDBH5") { $YourPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$HashSalt,"md5"); }
+if($HashType=="iDBH") { $YourPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$HashSalt,"sha1"); }
+if($HashType=="iDBH256") { $YourPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$HashSalt,"sha256"); }
 if($YourPassword!=$YourPassTry) { $passright = false; } 
 if($YourPassword==$YourPassTry) { $passright = true;
 $YourIDM=mysql_result($resultlog,$i,"id");
@@ -855,11 +858,16 @@ $YourDSTM=mysql_result($resultlog,$i,"DST");
 $JoinedDate=mysql_result($resultlog,$i,"Joined");
 $UseTheme=mysql_result($resultlog,$i,"UseTheme");
 $NewHashSalt = salt_hmac();
-$NewPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$NewHashSalt,"sha1");
+if($Settings['use_hashtype']=="md5") { $iDBHash = "iDBH5";
+$NewPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$NewHashSalt,"md5"); }
+if($Settings['use_hashtype']=="sha1") { $iDBHash = "iDBH";
+$NewPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$NewHashSalt,"sha1"); }
+if($Settings['use_hashtype']=="sha256") { $iDBHash = "iDBH256";
+$NewPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$NewHashSalt,"sha256"); }
 $NewDay=GMTimeStamp();
 $NewIP=$_SERVER['REMOTE_ADDR'];
 if($BanError!="yes") {
-$queryup = query("UPDATE `".$Settings['sqltable']."members` SET `Password`='%s',`HashType`='iDBH',`LastActive`=%i,`IP`='%s',`Salt`='%s' WHERE `id`=%i", array($NewPassword,$NewDay,$NewIP,$NewHashSalt,$YourIDM));
+$queryup = query("UPDATE `".$Settings['sqltable']."members` SET `Password`='%s',`HashType`='%s',`LastActive`=%i,`IP`='%s',`Salt`='%s' WHERE `id`=%i", array($NewPassword,$iDBHash,$NewDay,$NewIP,$NewHashSalt,$YourIDM));
 mysql_query($queryup);
 @mysql_free_result($resultlog); @mysql_free_result($queryup);
 //session_regenerate_id();
@@ -1241,7 +1249,12 @@ if($Settings['AdminValidate']=="on"||$Settings['AdminValidate']!="off")
 if($Settings['AdminValidate']=="off"||$Settings['AdminValidate']!="on")
 { $ValidateStats="yes"; $yourgroup=$Settings['MemberGroup']; }
 $HideMe = "no"; $HashSalt = salt_hmac();
-$NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$HashSalt,"sha1");
+if($Settings['use_hashtype']=="md5") { $iDBHash = "iDBH5";
+$NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$HashSalt,"md5"); }
+if($Settings['use_hashtype']=="sha1") { $iDBHash = "iDBH";
+$NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$HashSalt,"sha1"); }
+if($Settings['use_hashtype']=="sha256") { $iDBHash = "iDBH256";
+$NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$HashSalt,"sha256"); }
 $_GET['YourPost'] = $_POST['Signature'];
 //require( './'.$SettDir['misc'].'HTMLTags.php');
 $_GET['YourPost'] = htmlspecialchars($_GET['YourPost'], ENT_QUOTES, $Settings['charset']);
@@ -1271,7 +1284,7 @@ if(!is_numeric($_POST['MinOffSet'])) { $_POST['MinOffSet'] = "00"; }
 if($_POST['MinOffSet']>59) { $_POST['MinOffSet'] = "59"; }
 if($_POST['MinOffSet']<0) { $_POST['MinOffSet'] = "00"; }
 $_POST['YourOffSet'] = $_POST['YourOffSet'].":".$_POST['MinOffSet'];
-$query = query("INSERT INTO `".$Settings['sqltable']."members` VALUES (".$yourid.",'%s','%s','%s','%s','%s','%s','%s',%i,'%s','%s',%i,%i,'0','0','0','0','0','%s','%s','%s','%s','%s','%s',%i,0,0,10,10,10,'%s','%s','%s','%s','%s')", array($Name,$NewPassword,"iDBH",$_POST['Email'],$yourgroup,$ValidateStats,$HideMe,"0",$_POST['Interests'],$_POST['Title'],$_POST['Joined'],$_POST['LastActive'],$NewSignature,'Your Notes',$Avatar,"100x100",$Website,$_POST['YourGender'],$_POST['PostCount'],$_POST['YourOffSet'],$_POST['DST'],$Settings['DefaultTheme'],$_POST['UserIP'],$HashSalt));
+$query = query("INSERT INTO `".$Settings['sqltable']."members` VALUES (".$yourid.",'%s','%s','%s','%s','%s','%s','%s',%i,'%s','%s',%i,%i,'0','0','0','0','0','%s','%s','%s','%s','%s','%s',%i,0,0,10,10,10,'%s','%s','%s','%s','%s')", array($Name,$NewPassword,$iDBHash,$_POST['Email'],$yourgroup,$ValidateStats,$HideMe,"0",$_POST['Interests'],$_POST['Title'],$_POST['Joined'],$_POST['LastActive'],$NewSignature,'Your Notes',$Avatar,"100x100",$Website,$_POST['YourGender'],$_POST['PostCount'],$_POST['YourOffSet'],$_POST['DST'],$Settings['DefaultTheme'],$_POST['UserIP'],$HashSalt));
 mysql_query($query);
 $querylogr = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `Name`='%s' AND `Password`='%s' LIMIT 1", array($Name,$NewPassword));
 $resultlogr=mysql_query($querylogr);

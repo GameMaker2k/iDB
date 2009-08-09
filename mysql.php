@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: mysql.php - Last Update: 8/6/2009 SVN 293 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 8/8/2009 SVN 299 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. */
 //@ini_set("display_errors", true); 
@@ -105,6 +105,12 @@ if(!isset($_POST['License'])) { $_POST['License'] = null; }
 if(!isset($_SERVER['HTTPS'])) { $_SERVER['HTTPS'] = "off"; }
 require_once($SettDir['misc'].'utf8.php');
 require_once($SettDir['inc'].'filename.php');
+if(!isset($Settings['use_hashtype'])) {
+	$Settings['use_hashtype'] = "sha256"; }
+if($Settings['use_hashtype']!="md5"&&
+   $Settings['use_hashtype']!="sha1"&&
+   $Settings['use_hashtype']!="sha256") {
+	$Settings['use_hashtype'] = "sha256"; }
 require_once($SettDir['inc'].'function.php');
 if($Settings['enable_pathinfo']=="on") { 
 	mrstring(); /* Change Path info to Get Vars :P */ }
