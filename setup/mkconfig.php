@@ -12,7 +12,7 @@
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mkconfig.php - Last Update: 8/9/2009 SVN 301 - Author: cooldude2k $
+    $FileInfo: mkconfig.php - Last Update: 8/10/2009 SVN 302 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mkconfig.php"||$File3Name=="/mkconfig.php") {
@@ -87,6 +87,13 @@ if ($_POST['AdminUser']=="Guest") { $Error="Yes";
 echo "<br />You can not use Guest as your name."; }
 /* We are done now with fixing the info. ^_^ */
 $mydbtest = @ConnectMysql($_POST['DatabaseHost'],$_POST['DatabaseUserName'],$_POST['DatabasePassword'],$_POST['DatabaseName']);
+$SQLCharset = "latin1"; 
+if($Settings['charset']=="ISO-8859-1") {
+	$SQLCharset = "latin1"; }
+if($Settings['charset']=="ISO-8859-15") {
+	$SQLCharset = "latin1"; }
+if($Settings['charset']=="UTF-8") {
+	$SQLCharset = "utf8"; }
 @mysql_set_charset($SQLCharset);
 if($mydbtest!==true) { $Error="Yes";
 echo "<br />".mysql_errno().": ".mysql_error()."\n"; }
