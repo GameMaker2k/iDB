@@ -61,13 +61,6 @@ if($Settings['charset']!="ISO-8859-15"&&$Settings['charset']!="ISO-8859-1"&&
 	$Settings['charset']!="Shift_JIS"&&$Settings['charset']!="EUC-JP") {
 	$Settings['charset'] = "ISO-8859-15"; } }
 	$chkcharset = $Settings['charset'];
-$SQLCharset = "latin1"; 
-if($Settings['charset']=="ISO-8859-1") {
-	$SQLCharset = "latin1"; }
-if($Settings['charset']=="ISO-8859-15") {
-	$SQLCharset = "latin1"; }
-if($Settings['charset']=="UTF-8") {
-	$SQLCharset = "utf8"; }
 @ini_set('default_charset', $Settings['charset']);
 //@session_save_path($SettDir['inc']."temp/");
 if(!isset($Settings['sqldb'])) { 
@@ -168,6 +161,13 @@ if($GZipEncode['Type']!="gzip") { if($GZipEncode['Type']!="deflate") { $GZipEnco
 @header('P3P: CP="NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM"'); } */
 // Some http stuff
 $SQLStat = @ConnectMysql($Settings['sqlhost'],$Settings['sqluser'],$Settings['sqlpass'],$Settings['sqldb']);
+$SQLCharset = "latin1"; 
+if($Settings['charset']=="ISO-8859-1") {
+	$SQLCharset = "latin1"; }
+if($Settings['charset']=="ISO-8859-15") {
+	$SQLCharset = "latin1"; }
+if($Settings['charset']=="UTF-8") {
+	$SQLCharset = "utf8"; }
 @mysql_set_charset($SQLCharset);
 if($SQLStat===false) {
 @header("Content-Type: text/plain; charset=".$Settings['charset']); @mysql_free_result($peresult);
