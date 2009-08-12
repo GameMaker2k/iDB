@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: categories.php - Last Update: 8/6/2009 SVN 293 - Author: cooldude2k $
+    $FileInfo: categories.php - Last Update: 8/12/2009 SVN 305 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="categories.php"||$File3Name=="/categories.php") {
@@ -183,7 +183,7 @@ $getperidr2=mysql_query($getperidq2);
 $getperidnum2=mysql_num_rows($getperidr2);
 $getperidName=mysql_result($getperidr2,0,"Name");
 @mysql_free_result($getperidr2);
-$query = query("INSERT IGNORE INTO `".$Settings['sqltable']."permissions` VALUES (%i, %i, '%s', %i, 'yes')", array($nextperid,$getperidID,$getperidName,$_POST['CategoryID'])); 
+$query = query("INSERT IGNORE INTO `".$Settings['sqltable']."catpermissions` VALUES (%i, %i, '%s', %i, 'yes')", array($nextperid,$getperidID,$getperidName,$_POST['CategoryID'])); 
 mysql_query($query);
 ++$getperidi; ++$nextperid; }
 @mysql_free_result($getperidr);
@@ -576,7 +576,7 @@ if(!isset($_POST['id'])) {
 	<td style="width: 50%;"><label class="TextBoxLabel" for="id">Permission to view:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="id" id="id">
 <?php 
-$getperidq = query("SELECT DISTINCT `PermissionID` FROM `".$Settings['sqltable']."permissions`", array(null));
+$getperidq = query("SELECT DISTINCT `PermissionID` FROM `".$Settings['sqltable']."catpermissions`", array(null));
 $getperidr=mysql_query($getperidq);
 $getperidnum=mysql_num_rows($getperidr);
 $getperidi = 0;
@@ -806,8 +806,8 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); di
 if($prenum>=1) {
 $PermissionName=mysql_result($preresult,0,"Name"); 
 @mysql_free_result($preresult); }
-$nextidnum = getnextid($Settings['sqltable'],"permissions");
-$query = query("INSERT INTO `".$Settings['sqltable']."permissions` VALUES (%i, %i, '%s', %i, '%s')", array($nextidnum, $_POST['permid'], $PermissionName, $_POST['id'], $_POST['CanViewCategory'])); 
+$nextidnum = getnextid($Settings['sqltable'],"catpermissions");
+$query = query("INSERT INTO `".$Settings['sqltable']."catpermissions` VALUES (%i, %i, '%s', %i, '%s')", array($nextidnum, $_POST['permid'], $PermissionName, $_POST['id'], $_POST['CanViewCategory'])); 
 mysql_query($query); }
 ?>
 <?php } $doupdate = false;
