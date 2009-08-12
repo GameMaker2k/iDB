@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sqldumper.php - Last Update: 8/6/2009 SVN 293 - Author: cooldude2k $
+    $FileInfo: sqldumper.php - Last Update: 8/11/2009 SVN 304 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="sqldumper.php"||$File3Name=="/sqldumper.php") {
@@ -114,7 +114,7 @@ $nums = count($trownew); $il = 0;
 while ($il < $nums) { $tnums = $nums - 1;
 $trowrname = mysql_real_escape_string($trowname[$il]);
 $trowrvalue = mysql_real_escape_string($trownew[$trowrname]);
-if($_GET['outtype']=="UTF-8") {
+if($_GET['outtype']=="UTF-8"&&$Settings['charset']!="UTF-8") {
 $trowrvalue = utf8_encode($trowrvalue); }
 $trowrvalue = str_replace( array("\n", "\r"), array('\n', '\r'), $trowrvalue);
 if($kazuki_p===0) {
