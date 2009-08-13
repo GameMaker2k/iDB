@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 8/8/2009 SVN 299 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 8/13/2009 SVN 308 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -426,8 +426,12 @@ if(isset($ChkID["id"])) { $ChkID = $ChkID["id"];
 $prequery = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `id`=%i LIMIT 1", array($ChkID));
 $preresult=mysql_query($prequery);
 $prenum=mysql_num_rows($preresult);
+if($prenum>=1) {
 $TopicForumID=mysql_result($preresult,0,"ForumID");
-$TopicCatID=mysql_result($preresult,0,"CategoryID");
+$TopicCatID=mysql_result($preresult,0,"CategoryID"); }
+if($prenum<1) {
+$TopicForumID=0;
+$TopicCatID=0; }
 if($CatPermissionInfo['CanViewCategory'][$TopicCatID]=="no"||
 	$CatPermissionInfo['CanViewCategory'][$TopicCatID]!="yes") {
 	$UserSessInfo['ViewingPage'] = url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']);
