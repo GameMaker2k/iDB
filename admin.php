@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: admin.php - Last Update: 8/12/2009 SVN 306 - Author: cooldude2k $
+    $FileInfo: admin.php - Last Update: 8/13/2009 SVN 307 - Author: cooldude2k $
 */
 if(@ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }
@@ -61,6 +61,8 @@ if($_GET['act']=="addcategory"||
 	$_GET['act']=="deletecategory"||
 	$_GET['act']=="cpermissions")
 { require($SettDir['admin'].'categories.php'); }
+if($_GET['act']=="validate")
+{ require($SettDir['admin'].'members.php'); }
 require($SettDir['inc'].'endpage.php'); 
 if(!isset($admincptitle)) { $admincptitle = null; }
 ?>
