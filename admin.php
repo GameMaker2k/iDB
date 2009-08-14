@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: admin.php - Last Update: 8/13/2009 SVN 307 - Author: cooldude2k $
+    $FileInfo: admin.php - Last Update: 8/14/2009 SVN 309 - Author: cooldude2k $
 */
 if(@ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }
@@ -34,6 +34,8 @@ $_SESSION['PreViewingTitle'] = "Viewing";
 $_SESSION['ViewingTitle'] = "Board index";
 if(!isset($_GET['subact'])) { $_GET['subact'] = null; }
 if(!isset($_POST['subact'])) { $_POST['subact'] = null; }
+if(!isset($_GET['menu'])) { $_GET['menu'] = null; }
+$AdminMenu = null;
 require($SettDir['inc'].'navbar.php');
 if($_SESSION['UserGroup']==$Settings['GuestGroup']||$GroupInfo['HasAdminCP']=="no") {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
@@ -45,24 +47,32 @@ if($_GET['act']=="view"&&$GroupInfo['ViewDBInfo']!="yes") {
 	$_GET['act']="view"; }
 if($_GET['act']=="vercheck"&&$GroupInfo['ViewDBInfo']=="yes") {
 	@header("Location: ".$VerCheckURL."&bid=".$Settings['bid']."&vercheck=newtype"); }
-if($_GET['act']=="view"||
-	$_GET['act']=="settings"||
+if($_GET['act']=="view")
+{ $AdminMenu = "menu";
+if($_GET['menu']==null) {
+   $AdminMenu = "main"; }
+require($SettDir['admin'].'main.php'); }
+if($_GET['act']=="settings"||
 	$_GET['act']=="mysql"||
 	$_GET['act']=="info"||
 	$_GET['act']=="delsessions")
-{ require($SettDir['admin'].'main.php'); }
+{ $AdminMenu = "main";
+require($SettDir['admin'].'main.php'); }
 if($_GET['act']=="addforum"||
 	$_GET['act']=="editforum"||
 	$_GET['act']=="deleteforum"||
 	$_GET['act']=="fpermissions")
-{ require($SettDir['admin'].'forums.php'); }
+{ $AdminMenu = "forums";
+require($SettDir['admin'].'forums.php'); }
 if($_GET['act']=="addcategory"||
 	$_GET['act']=="editcategory"||
 	$_GET['act']=="deletecategory"||
 	$_GET['act']=="cpermissions")
-{ require($SettDir['admin'].'categories.php'); }
+{ $AdminMenu = "categories";
+require($SettDir['admin'].'categories.php'); }
 if($_GET['act']=="validate")
-{ require($SettDir['admin'].'members.php'); }
+{ $AdminMenu = "members";
+require($SettDir['admin'].'members.php'); }
 require($SettDir['inc'].'endpage.php'); 
 if(!isset($admincptitle)) { $admincptitle = null; }
 ?>
