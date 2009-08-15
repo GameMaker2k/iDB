@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 8/13/2009 SVN 308 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 8/14/2009 SVN 310 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -706,6 +706,8 @@ $_SESSION['ViewingFile'] = $exfile['member']; }
 $_SESSION['PreViewingTitle'] = "Act: ";
 $_SESSION['ViewingTitle'] = "Logging in";
 $membertitle = " ".$ThemeSet['TitleDivider']." Login";
+$UFID = uuid(false,true,false,$Settings['use_hashtype'],null);
+$_SESSION['UserFormID'] = $UFID;
 ?>
 <div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">Board index</a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Login</a></div>
 <div class="DivNavLinks">&nbsp;</div>
@@ -747,6 +749,7 @@ $membertitle = " ".$ThemeSet['TitleDivider']." Login";
 <tr style="text-align: left;">
 <td style="width: 100%;">
 <input type="hidden" name="act" value="loginmember" style="display: none;" />
+<input type="hidden" style="display: none;" name="fid" value="<?php echo $UFID; ?>" />
 <input class="Button" type="submit" value="Log in" />
 </td></tr></table>
 </form>
@@ -807,6 +810,12 @@ if (pre_strlen($_POST['userpass'])>="30") { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Your user name is too big.<br />
+	</span>&nbsp;</td>
+</tr>
+<?php } if($_POST['fid']!=$_SESSION['UserFormID']) { $Error="Yes";  ?>
+<tr>
+	<td><span class="TableMessage">
+	<br />Sorry the referering url dose not match our host name.<br />
 	</span>&nbsp;</td>
 </tr>
 <?php } if ($Settings['TestReferer']=="on") {
@@ -939,6 +948,8 @@ if($Settings['file_ext']=="no+ext"||$Settings['file_ext']=="no ext") {
 $_SESSION['ViewingFile'] = $exfile['member']; }
 $_SESSION['PreViewingTitle'] = "Act: ";
 $_SESSION['ViewingTitle'] = "Signing up";
+$UFID = uuid(false,true,false,$Settings['use_hashtype'],null);
+$_SESSION['UserFormID'] = $UFID;
 ?>
 <div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">Board index</a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=signup",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Signup</a></div>
 <div class="DivNavLinks">&nbsp;</div>
@@ -1061,6 +1072,7 @@ echo "<option value=\"".$showmin."\">0:".$showmin." minutes</option>\n"; }
 <label class="TextBoxLabel" for="signcode"><img src="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=MkCaptcha",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>" alt="CAPTCHA Code" title="CAPTCHA Code" /></label><br />
 <input maxlength="25" type="text" class="TextBox" name="signcode" size="20" id="signcode" value="Enter SignCode" /><br /><?php } ?>
 <input type="hidden" style="display: none;" name="act" value="makemembers" />
+<input type="hidden" style="display: none;" name="fid" value="<?php echo $UFID; ?>" />
 <input type="submit" class="Button" value="Sign UP" />
 </td></tr>
 </table>
@@ -1119,6 +1131,12 @@ require($SettDir['inc']."captcha.php"); }
 <tr>
 	<td><span class="TableMessage">
 	<br />Your password is too big.<br />
+	</span>&nbsp;</td>
+</tr>
+<?php } if($_POST['fid']!=$_SESSION['UserFormID']) { $Error="Yes";  ?>
+<tr>
+	<td><span class="TableMessage">
+	<br />Sorry the referering url dose not match our host name.<br />
 	</span>&nbsp;</td>
 </tr>
 <?php } if (pre_strlen($_POST['username'])>="24") { $Error="Yes";  ?>

@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: events.php - Last Update: 8/6/2009 SVN 296 - Author: cooldude2k $
+    $FileInfo: events.php - Last Update: 8/14/2009 SVN 310 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="events.php"||$File3Name=="/events.php") {
@@ -170,7 +170,9 @@ echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr
 <?php } if($_GET['act']=="create") { 
 if($GroupInfo['CanAddEvents']=="no") { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }	
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
+$UFID = uuid(false,true,false,$Settings['use_hashtype'],null);
+$_SESSION['UserFormID'] = $UFID;
 ?>
 <div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">Board index</a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['event'],$Settings['file_ext'],"act=create",$Settings['qstr'],$Settings['qsep'],$prexqstr['event'],$exqstr['event']); ?>">Making a Event</a></div>
 <div class="DivNavLinks">&nbsp;</div>
@@ -248,6 +250,7 @@ echo "</table>";
 <input maxlength="25" type="text" class="TextBox" name="signcode" size="20" id="signcode" value="Enter SignCode" /><br />
 <?php } ?>
 <input type="hidden" name="act" value="makeevents" style="display: none;" />
+<input type="hidden" style="display: none;" name="fid" value="<?php echo $UFID; ?>" />
 <?php if($_SESSION['UserGroup']!=$Settings['GuestGroup']) { ?>
 <input type="hidden" name="GuestName" value="null" style="display: none;" />
 <?php } ?>
@@ -309,6 +312,12 @@ require($SettDir['inc']."captcha.php"); }
 <tr>
 	<td><span class="TableMessage">
 	<br />Your Event Name is too big.<br />
+	</span>&nbsp;</td>
+</tr>
+<?php } if($_POST['fid']!=$_SESSION['UserFormID']) { $Error="Yes";  ?>
+<tr>
+	<td><span class="TableMessage">
+	<br />Sorry the referering url dose not match our host name.<br />
 	</span>&nbsp;</td>
 </tr>
 <?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&

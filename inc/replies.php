@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: replies.php - Last Update: 8/6/2009 SVN 296 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 8/14/2009 SVN 310 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -542,6 +542,8 @@ $QuoteReply = null; $QuoteDescription = null; }
 if($rCategoryKarmaCountView!=0&&$MyKarmaCount<$rCategoryKarmaCountView) {
 $QuoteReply = null; $QuoteDescription = null; } } }
 if($_GET['post']==null||$num<1) { $QuoteReply = null; /*$QuoteDescription = null;*/ }
+$UFID = uuid(false,true,false,$Settings['use_hashtype'],null);
+$_SESSION['UserFormID'] = $UFID;
 ?>
 <div class="Table1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
@@ -611,6 +613,7 @@ echo "</table>";
 <input maxlength="25" type="text" class="TextBox" name="signcode" size="20" id="signcode" value="Enter SignCode" /><br />
 <?php } ?>
 <input type="hidden" name="act" value="makereplies" style="display: none;" />
+<input type="hidden" style="display: none;" name="fid" value="<?php echo $UFID; ?>" />
 <?php if($_SESSION['UserGroup']!=$Settings['GuestGroup']) { ?>
 <input type="hidden" name="GuestName" value="null" style="display: none;" />
 <?php } ?>
@@ -691,6 +694,12 @@ if (PhpCaptcha::Validate($_POST['signcode'])) {
 <tr>
 	<td><span class="TableMessage">
 	<br />You Guest Name is too big.<br />
+	</span>&nbsp;</td>
+</tr>
+<?php } if($_POST['fid']!=$_SESSION['UserFormID']) { $Error="Yes";  ?>
+<tr>
+	<td><span class="TableMessage">
+	<br />Sorry the referering url dose not match our host name.<br />
 	</span>&nbsp;</td>
 </tr>
 <?php } if ($Settings['TestReferer']=="on") {
@@ -1124,6 +1133,8 @@ if($PermissionInfo['CanEditTopicsClose'][$TopicForumID]=="no"&&$TopicClosed==1) 
 //$TopicName = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $TopicName);
 $TopicName = @remove_spaces($TopicName);
 @mysql_free_result($gtsresult);
+$UFID = uuid(false,true,false,$Settings['use_hashtype'],null);
+$_SESSION['UserFormID'] = $UFID;
 ?>
 <div class="Table1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
@@ -1187,6 +1198,7 @@ if($SmileRow<5) { ?>
 <label class="TextBoxLabel" for="ReplyPost">Insert Your Reply:</label><br />
 <textarea rows="10" name="ReplyPost" id="ReplyPost" cols="40" class="TextBox"><?php echo $ReplyPost; ?></textarea><br />
 <input type="hidden" name="act" value="editreplies" style="display: none;" />
+<input type="hidden" style="display: none;" name="fid" value="<?php echo $UFID; ?>" />
 <?php if($_SESSION['UserGroup']!=$Settings['GuestGroup']) { ?>
 <input type="hidden" name="GuestName" value="null" style="display: none;" />
 <?php } ?>
@@ -1274,6 +1286,12 @@ if($PermissionInfo['CanEditTopicsClose'][$TopicForumID]=="no"&&$TopicClosed==1) 
 <tr>
 	<td><span class="TableMessage">
 	<br />Your Reply Description is too big.<br />
+	</span>&nbsp;</td>
+</tr>
+<?php } if($_POST['fid']!=$_SESSION['UserFormID']) { $Error="Yes";  ?>
+<tr>
+	<td><span class="TableMessage">
+	<br />Sorry the referering url dose not match our host name.<br />
 	</span>&nbsp;</td>
 </tr>
 <?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
@@ -1537,6 +1555,8 @@ $QuoteDescription=mysql_result($resultra,0,"Description");
 $QuoteDescription = str_replace("Re: ","",$QuoteDescription);
 $QuoteDescription = "Re: ".$QuoteDescription;
 @mysql_free_result($resultra);
+$UFID = uuid(false,true,false,$Settings['use_hashtype'],null);
+$_SESSION['UserFormID'] = $UFID;
 ?>
 <div class="Table1Border"<?php echo $fps; ?>id="FastReply">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
@@ -1606,6 +1626,7 @@ echo "</table>";
 <input maxlength="25" type="text" class="TextBox" name="signcode" size="20" id="signcode" value="Enter SignCode" /><br />
 <?php } ?>
 <input type="hidden" name="act" value="makereplies" style="display: none;" />
+<input type="hidden" style="display: none;" name="fid" value="<?php echo $UFID; ?>" />
 <?php if($_SESSION['UserGroup']!=$Settings['GuestGroup']) { ?>
 <input type="hidden" name="GuestName" value="null" style="display: none;" />
 <?php } ?>

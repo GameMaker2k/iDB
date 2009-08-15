@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: pm.php - Last Update: 8/6/2009 SVN 296 - Author: cooldude2k $
+    $FileInfo: pm.php - Last Update: 8/14/2009 SVN 310 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pm.php"||$File3Name=="/pm.php") {
@@ -581,6 +581,8 @@ $QuoteDescription = "Re: ".$QuoteDescription;
 $QuoteTitle = str_replace("Re: ","",$QuoteTitle);
 $QuoteTitle = "Re: ".$QuoteTitle;
 $QuoteReply = null; }
+$UFID = uuid(false,true,false,$Settings['use_hashtype'],null);
+$_SESSION['UserFormID'] = $UFID;
 ?>
 <div class="Table1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
@@ -660,6 +662,7 @@ echo "</table>";
 <input type="hidden" name="GuestName" value="null" style="display: none;" />
 <?php } ?>
 <input type="submit" class="Button" value="Send Message" name="send_message" />
+<input type="hidden" style="display: none;" name="fid" value="<?php echo $UFID; ?>" />
 <input type="reset" value="Reset Form" class="Button" name="Reset_Form" />
 </td></tr></table>
 </form></td></tr>
@@ -704,6 +707,12 @@ require($SettDir['inc']."captcha.php"); }
 <tr>
 	<td><span class="TableMessage">
 	<br />Send to user name too big.<br />
+	</span>&nbsp;</td>
+</tr>
+<?php } if($_POST['fid']!=$_SESSION['UserFormID']) { $Error="Yes";  ?>
+<tr>
+	<td><span class="TableMessage">
+	<br />Sorry the referering url dose not match our host name.<br />
 	</span>&nbsp;</td>
 </tr>
 <?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
