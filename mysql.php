@@ -11,15 +11,20 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: mysql.php - Last Update: 8/12/2009 SVN 306 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 8/15/2009 SVN 311 - Author: cooldude2k $
 */
-/* Some ini setting changes uncomment if you need them. */
+/* Some ini setting changes uncomment if you need them. 
+   Display PHP Errors */
 //@ini_set("display_errors", true); 
 //@ini_set("display_startup_errors", true);
 @error_reporting(E_ALL ^ E_NOTICE);
+/* Get rid of session id in urls */
 //@ini_set("session.use_trans_sid", false);
+//@ini_set("session.use_cookies", true);
+//@ini_set("session.use_only_cookies", true);
 //@ini_set("url_rewriter.tags","");
 @set_time_limit(30); @ignore_user_abort(true);
+/* Change session garbage collection settings */
 //@ini_set("session.gc_probability", 1);
 //@ini_set("session.gc_divisor", 100);
 //@ini_set("session.gc_maxlifetime", 1440);
