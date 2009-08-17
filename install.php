@@ -12,7 +12,7 @@
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.de/support/category.php?act=view&id=2
 
-    $FileInfo: install.php - Last Update: 6/16/2009 SVN 264 - Author: cooldude2k $
+    $FileInfo: install.php - Last Update: 8/17/2009 SVN 312 - Author: cooldude2k $
 */
 if(@ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }
@@ -53,6 +53,26 @@ if($_POST['charset']=="ISO-8859-15") {
 if($_POST['charset']=="UTF-8") {
 	$SQLCharset = "utf8"; }
 	$Settings['charset'] = $_POST['charset']; }
+if(!isset($_SERVER['HTTPS'])) { $_SERVER['HTTPS']=="off"; }
+if($_SERVER['HTTPS']=="on") { $prehost = "https://"; }
+if($_SERVER['HTTPS']!="on") { $prehost = "http://"; }
+$this_dir = null;
+if(dirname($_SERVER['SCRIPT_NAME'])!="."||
+	dirname($_SERVER['SCRIPT_NAME'])!=null) {
+$this_dir = dirname($_SERVER['SCRIPT_NAME'])."/"; }
+if($this_dir==null||$this_dir==".") {
+if(dirname($_SERVER['SCRIPT_NAME'])=="."||
+	dirname($_SERVER['SCRIPT_NAME'])==null) {
+$this_dir = dirname($_SERVER['PHP_SELF'])."/"; } }
+if($this_dir=="\/") { $this_dir="/"; }
+$this_dir = str_replace("//", "/", $this_dir);
+$idbdir = addslashes(str_replace("\\","/",dirname(__FILE__)."/"));
+if(!isset($_POST['BoardURL'])) { 
+   $Settings['idburl'] = $prehost.$_SERVER["HTTP_HOST"].$this_dir; }
+if(isset($_POST['BoardURL'])) { 
+   $Settings['idburl'] = $_POST['BoardURL']; }
+$Settings['qstr'] = "&";
+$Settings['qsep'] = "=";
 require($SetupDir['setup'].'preinstall.php');
 require_once($SettDir['inc'].'filename.php');
 require_once($SettDir['inc'].'function.php');
