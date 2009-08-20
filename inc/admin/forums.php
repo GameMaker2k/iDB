@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: forums.php - Last Update: 8/6/2009 SVN 293 - Author: cooldude2k $
+    $FileInfo: forums.php - Last Update: 8/19/2009 SVN 313 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="forums.php"||$File3Name=="/forums.php") {
@@ -217,9 +217,9 @@ if($id_check > 0) { $Error="Yes";
 $errorstr = $errorstr."This ID number is already used.<br />\n"; } 
 if($order_check > 0) { $Error="Yes"; 
 $errorstr = $errorstr."This order number is already used.<br />\n"; } 
-if (pre_strlen($_POST['ForumName'])>="30") { $Error="Yes";
+if (pre_strlen($_POST['ForumName'])>"150") { $Error="Yes";
 $errorstr = $errorstr."Your Forum Name is too big.<br />\n"; } 
-if (pre_strlen($_POST['ForumDesc'])>="45") { $Error="Yes";
+if (pre_strlen($_POST['ForumDesc'])>"300") { $Error="Yes";
 $errorstr = $errorstr."Your Forum Description is too big.<br />\n"; } 
 if ($Error!="Yes") {
 @redirect("refresh",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],FALSE),"4");
@@ -657,9 +657,9 @@ if($id_check > 0&&$_POST['ForumID']!=$OldID) { $Error="Yes";
 $errorstr = $errorstr."This ID number is already used.<br />\n"; } 
 if($order_check > 0&&$_POST['OrderID']!=$OldOrder) { $Error="Yes"; 
 $errorstr = $errorstr."This order number is already used.<br />\n"; } 
-if (pre_strlen($_POST['ForumName'])>="30") { $Error="Yes";
+if (pre_strlen($_POST['ForumName'])>"150") { $Error="Yes";
 $errorstr = $errorstr."Your Forum Name is too big.<br />\n"; } 
-if (pre_strlen($_POST['ForumDesc'])>="45") { $Error="Yes";
+if (pre_strlen($_POST['ForumDesc'])>"300") { $Error="Yes";
 $errorstr = $errorstr."Your Forum Description is too big.<br />\n"; } 
 if ($Error!="Yes") {
 @redirect("refresh",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],FALSE),"4");

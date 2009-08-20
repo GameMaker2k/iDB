@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: topics.php - Last Update: 8/14/2009 SVN 310 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 8/19/2009 SVN 313 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -625,7 +625,7 @@ require($SettDir['inc']."captcha.php"); }
 <tr class="TableRow3">
 <td class="TableColumn3">
 <table style="width: 100%; height: 25%; text-align: center;">
-<?php if (pre_strlen($_POST['TopicName'])>="30") { $Error="Yes";  ?>
+<?php if (pre_strlen($_POST['TopicName'])>"50") { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Your Topic Name is too big.<br />
@@ -641,7 +641,7 @@ if (PhpCaptcha::Validate($_POST['signcode'])) {
 	<br />Invalid code entered<br />
 	</span>&nbsp;</td>
 </tr>
-<?php } } if (pre_strlen($_POST['TopicDesc'])>="45") { $Error="Yes";  ?>
+<?php } } if (pre_strlen($_POST['TopicDesc'])>"80") { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Your Topic Description is too big.<br />
@@ -654,7 +654,7 @@ if (PhpCaptcha::Validate($_POST['signcode'])) {
 	</span>&nbsp;</td>
 </tr>
 <?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
-	pre_strlen($_POST['GuestName'])>="25") { $Error="Yes"; ?>
+	pre_strlen($_POST['GuestName'])>"30") { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You Guest Name is too big.<br />

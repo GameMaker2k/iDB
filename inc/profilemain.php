@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: profilemain.php - Last Update: 8/6/2009 SVN 296 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 8/19/2009 SVN 313 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
@@ -460,6 +460,8 @@ if ($handle = opendir($skindir)) { $dirnum = null;
 <option value="20">20</option>
 <option value="25">25</option>
 <option value="30">30</option>
+<option value="30">35</option>
+<option value="30">40</option>
 </select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 40%;"><label class="TextBoxLabel" for="TopicsPerPage">Topics Per Page:</label></td>
@@ -471,6 +473,8 @@ if ($handle = opendir($skindir)) { $dirnum = null;
 <option value="20">20</option>
 <option value="25">25</option>
 <option value="30">30</option>
+<option value="30">35</option>
+<option value="30">40</option>
 </select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 40%;"><label class="TextBoxLabel" for="MessagesPerPage">Messages/Members Per Page:</label></td>
@@ -482,6 +486,8 @@ if ($handle = opendir($skindir)) { $dirnum = null;
 <option value="20">20</option>
 <option value="25">25</option>
 <option value="30">30</option>
+<option value="30">35</option>
+<option value="30">40</option>
 </select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 40%;"><label class="TextBoxLabel" for="DST">Is <span title="Daylight Savings Time">DST</span> / <span title="Summer Time">ST</span> on or off:</label></td>
@@ -639,6 +645,8 @@ echo "<option value=\"".$showmin."\">0:".$showmin." minutes</option>\n";
 <option value="20">20</option>
 <option value="25">25</option>
 <option value="30">30</option>
+<option value="30">35</option>
+<option value="30">40</option>
 </select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 40%;"><label class="TextBoxLabel" for="TopicsPerPage">Topics Per Page:</label></td>
@@ -650,6 +658,8 @@ echo "<option value=\"".$showmin."\">0:".$showmin." minutes</option>\n";
 <option value="20">20</option>
 <option value="25">25</option>
 <option value="30">30</option>
+<option value="30">35</option>
+<option value="30">40</option>
 </select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 40%;"><label class="TextBoxLabel" for="MessagesPerPage">Messages/Members Per Page:</label></td>
@@ -856,9 +866,9 @@ if($OldHashType=="iDBH"&&$UpdateHash!==true) {
 	$NewPassword = b64e_hmac($_POST['Password'],$OldJoined,$NewSalt,"sha1"); }
 if($YourPassword!=$OldPassword) { $Error="Yes"; ?>
 <div class="TableMessage" style="text-align: center;">Your old Password did not match.<br />&nbsp;</div>
-<?php } if(pre_strlen($_POST['Password'])=="30") { $Error="Yes"; ?>
+<?php } if(pre_strlen($_POST['Password'])>"60") { $Error="Yes"; ?>
 <div class="TableMessage" style="text-align: center;">Your password is too big.<br />&nbsp;</div>
-<?php } if(pre_strlen($_POST['OldPass'])=="30") { $Error="Yes"; ?>
+<?php } if(pre_strlen($_POST['OldPass'])>"60") { $Error="Yes"; ?>
 <div class="TableMessage" style="text-align: center;">Your old password is too big.<br />&nbsp;</div>
 <?php } if ($_POST['Password']!=$_POST['RePassword']) { $Error="Yes";  ?>
 <div class="TableMessage" style="text-align: center;">Your passwords did not match.<br />&nbsp;</div>
