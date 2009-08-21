@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: events.php - Last Update: 8/14/2009 SVN 310 - Author: cooldude2k $
+    $FileInfo: events.php - Last Update: 8/20/2009 SVN 314 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="events.php"||$File3Name=="/events.php") {
@@ -63,7 +63,7 @@ $User1Joined=GMTimeChange("M j Y",$User1Joined,$_SESSION['UserTimeZone'],0,$_SES
 $User1GroupID=mysql_result($reresult,$rei,"GroupID");
 $gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($User1GroupID));
 $gresult=mysql_query($gquery);
-$User1Hidden=mysql_result($gresult,0,"HiddenMember");
+$User1Hidden=mysql_result($reresult,$rei,"HiddenMember");
 $User1Group=mysql_result($gresult,0,"Name");
 $GroupNamePrefix=mysql_result($gresult,0,"NamePrefix");
 $GroupNameSuffix=mysql_result($gresult,0,"NameSuffix");
