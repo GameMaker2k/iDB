@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: categories.php - Last Update: 8/19/2009 SVN 313 - Author: cooldude2k $
+    $FileInfo: categories.php - Last Update: 8/22/2009 SVN 315 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="categories.php"||$File3Name=="/categories.php") {
@@ -393,11 +393,13 @@ if($prenum>=1) {
 $CategoryID=mysql_result($preresult,0,"id");
 $CategoryOrder=mysql_result($preresult,0,"OrderID");
 $CategoryName=mysql_result($preresult,0,"Name");
+$CategoryName = htmlspecialchars($CategoryName, ENT_QUOTES, $Settings['charset']);
 $ShowCategory=mysql_result($preresult,0,"ShowCategory");
 $CategoryType=mysql_result($preresult,0,"CategoryType");
 $SubShowForums=mysql_result($preresult,0,"SubShowForums");
 $InSubCategory=mysql_result($preresult,0,"InSubCategory");
 $CategoryDescription=mysql_result($preresult,0,"Description");
+$CategoryDescription = htmlspecialchars($CategoryDescription, ENT_QUOTES, $Settings['charset']);
 $KarmaCountView=mysql_result($preresult,0,"KarmaCountView");
 $PostCountView=mysql_result($preresult,0,"PostCountView");
 @mysql_free_result($preresult);

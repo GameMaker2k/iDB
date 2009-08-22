@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: forums.php - Last Update: 8/19/2009 SVN 313 - Author: cooldude2k $
+    $FileInfo: forums.php - Last Update: 8/22/2009 SVN 315 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="forums.php"||$File3Name=="/forums.php") {
@@ -462,6 +462,7 @@ $ForumID=mysql_result($preresult,0,"id");
 $ForumCatID=mysql_result($preresult,0,"CategoryID");
 $ForumOrder=mysql_result($preresult,0,"OrderID");
 $ForumName=mysql_result($preresult,0,"Name");
+$ForumName = htmlspecialchars($ForumName, ENT_QUOTES, $Settings['charset']);
 $ShowForum=mysql_result($preresult,0,"ShowForum");
 $ForumType=mysql_result($preresult,0,"ForumType");
 $InSubForum=mysql_result($preresult,0,"InSubForum");
@@ -469,6 +470,7 @@ $RedirectURL=mysql_result($preresult,0,"RedirectURL");
 $RedirectTimes=mysql_result($preresult,0,"Redirects");
 $NumberViews=mysql_result($preresult,0,"NumViews");
 $ForumDescription=mysql_result($preresult,0,"Description");
+$ForumDescription = htmlspecialchars($ForumDescription, ENT_QUOTES, $Settings['charset']);
 $PostCountAdd=mysql_result($preresult,0,"PostCountAdd");
 $PostCountView=mysql_result($preresult,0,"PostCountView");
 $KarmaCountView=mysql_result($preresult,0,"KarmaCountView");

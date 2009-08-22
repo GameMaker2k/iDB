@@ -12,7 +12,7 @@
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mkconfig.php - Last Update: 8/19/2009 SVN 313 - Author: cooldude2k $
+    $FileInfo: mkconfig.php - Last Update: 8/22/2009 SVN 315 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mkconfig.php"||$File3Name=="/mkconfig.php") {
@@ -67,10 +67,9 @@ $YourDate = GMTimeStamp();
 $YourEditDate = $YourDate + $dayconv['minute'];
 $GSalt = salt_hmac(); $YourSalt = salt_hmac();
 /* Fix The User Info for iDB */
-$_POST['NewBoardName'] = htmlspecialchars($_POST['NewBoardName'], ENT_QUOTES, $Settings['charset']);
-$_POST['NewBoardName'] = fixbamps($_POST['NewBoardName']);
+$_POST['NewBoardName'] = stripcslashes(htmlspecialchars($_POST['NewBoardName'], ENT_QUOTES, $Settings['charset']));
+//$_POST['NewBoardName'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['NewBoardName']);
 $_POST['NewBoardName'] = @remove_spaces($_POST['NewBoardName']);
-$_POST['NewBoardName'] = str_replace("\&#039;", "&#039;", $_POST['NewBoardName']);
 //$_POST['AdminPassword'] = stripcslashes(htmlspecialchars($_POST['AdminPassword'], ENT_QUOTES, $Settings['charset']));
 //$_POST['AdminPassword'] = preg_replace("/\&amp;#(.*?);/is", "&#$1;", $_POST['AdminPassword']);
 $_POST['AdminUser'] = stripcslashes(htmlspecialchars($_POST['AdminUser'], ENT_QUOTES, $Settings['charset']));
