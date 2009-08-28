@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: mysql.php - Last Update: 8/22/2009 SVN 317 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 8/27/2009 SVN 318 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -109,10 +109,22 @@ if($_GET['act']=="versioninfo") { @header("Content-Type: text/plain; charset=UTF
 <?php echo "<name>iDB|".$VER2[1]."|".$VER1[0].".".$VER1[1].".".$VER1[2]."|".$VER2[2]."|".$SubVerN."</name>"; die(); }
 if(!isset($Settings['use_hashtype'])) {
 	$Settings['use_hashtype'] = "sha256"; }
+if(!function_exists('hash')||!function_exists('hash_algos')) {
 if($Settings['use_hashtype']!="md5"&&
    $Settings['use_hashtype']!="sha1"&&
    $Settings['use_hashtype']!="sha256") {
+	$Settings['use_hashtype'] = "sha256"; } }
+if(function_exists('hash')&&function_exists('hash_algos')) {
+if(!in_array($Settings['use_hashtype'],hash_algos())) {
 	$Settings['use_hashtype'] = "sha256"; }
+if($Settings['use_hashtype']!="md2"&&
+   $Settings['use_hashtype']!="md4"&&
+   $Settings['use_hashtype']!="md5"&&
+   $Settings['use_hashtype']!="sha1"&&
+   $Settings['use_hashtype']!="sha256"&&
+   $Settings['use_hashtype']!="sha386"&&
+   $Settings['use_hashtype']!="sha512") {
+	$Settings['use_hashtype'] = "sha256"; } }
 require_once($SettDir['inc'].'function.php');
 if($Settings['enable_pathinfo']=="on") { 
 	mrstring(); /* Change Path info to Get Vars :P */ }

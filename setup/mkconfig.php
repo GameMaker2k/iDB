@@ -12,7 +12,7 @@
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mkconfig.php - Last Update: 8/22/2009 SVN 315 - Author: cooldude2k $
+    $FileInfo: mkconfig.php - Last Update: 8/27/2009 SVN 318 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mkconfig.php"||$File3Name=="/mkconfig.php") {
@@ -75,13 +75,29 @@ $_POST['NewBoardName'] = @remove_spaces($_POST['NewBoardName']);
 $_POST['AdminUser'] = stripcslashes(htmlspecialchars($_POST['AdminUser'], ENT_QUOTES, $Settings['charset']));
 //$_POST['AdminUser'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['AdminUser']);
 $_POST['AdminUser'] = @remove_spaces($_POST['AdminUser']);
+if(!function_exists('hash')&&!function_exists('hash_algos')) {
 if($_POST['usehashtype']!="md5"&&
    $_POST['usehashtype']!="sha1"&&
    $_POST['usehashtype']!="sha256") {
+	$_POST['usehashtype'] = "sha256"; } }
+if(function_exists('hash')&&function_exists('hash_algos')) {
+if(!in_array($_POST['usehashtype'],hash_algos())) {
 	$_POST['usehashtype'] = "sha256"; }
+if($_POST['usehashtype']!="md2"&&
+   $_POST['usehashtype']!="md4"&&
+   $_POST['usehashtype']!="md5"&&
+   $_POST['usehashtype']!="sha1"&&
+   $_POST['usehashtype']!="sha256"&&
+   $_POST['usehashtype']!="sha386"&&
+   $_POST['usehashtype']!="sha512") {
+	$_POST['usehashtype'] = "sha256"; } }
+if($_POST['usehashtype']=="md2") { $iDBHashType = "iDBH2"; }
+if($_POST['usehashtype']=="md4") { $iDBHashType = "iDBH4"; }
 if($_POST['usehashtype']=="md5") { $iDBHashType = "iDBH5"; }
 if($_POST['usehashtype']=="sha1") { $iDBHashType = "iDBH"; }
 if($_POST['usehashtype']=="sha256") { $iDBHashType = "iDBH256"; }
+if($_POST['usehashtype']=="sha386") { $iDBHashType = "iDBH386"; }
+if($_POST['usehashtype']=="sha512") { $iDBHashType = "iDBH512"; }
 if ($_POST['AdminUser']=="Guest") { $Error="Yes";
 echo "<br />You can not use Guest as your name."; }
 /* We are done now with fixing the info. ^_^ */
