@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: searchs.php - Last Update: 8/6/2009 SVN 296 - Author: cooldude2k $
+    $FileInfo: searchs.php - Last Update: 9/16/2009 SVN 319 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="searchs.php"||$File3Name=="/searchs.php") {
@@ -388,7 +388,7 @@ $luln = url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID
 $LastReply = "Time: <a href=\"".$luln."\">".$TimeStamp1."</a><br />\nUser: <a href=\"".$lul."\" title=\"".$oldusername."\">".$UsersName1."</a>"; }
 if($UsersID1<=0||$UsersHidden1=="yes") {
 if($UsersID1==-1) { $UserPre = "Guest:"; }
-if($UsersID1<-1||$UsersID1=0||$UsersHidden1=="yes") { 
+if($UsersID1<-1||$UsersID1==0||$UsersHidden1=="yes") { 
 	$UserPre = "Hidden:"; }
 $lul = url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']);
 $luln = url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']).$qstrhtml."&#35;reply".$NumRPosts;
