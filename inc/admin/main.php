@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: main.php - Last Update: 8/9/2009 SVN 301 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 10/02/2009 SVN 321 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -159,6 +159,14 @@ if(!is_numeric($ts_array[1])) { $ts_array[1] = "00"; }
 if($ts_array[1]>59) { $ts_array[1] = "59"; $Settings['DefaultTimeZone'] = $ts_array[0].":".$ts_array[1]; }
 if($ts_array[1]<0) { $ts_array[1] = "00"; $Settings['DefaultTimeZone'] = $ts_array[0].":".$ts_array[1]; }
 $tsa = array("offset" => $Settings['DefaultTimeZone'], "hour" => $ts_array[0], "minute" => $ts_array[1]);
+$mguerys = query("SELECT * FROM `".$Settings['sqltable']."groups`", array(null));
+$mgresults=mysql_query($mguerys);
+$mnum=mysql_num_rows($mgresults);
+$mi = 0;
+while ($mi < $mnum) {
+$MGroups[$mi]=mysql_result($mgresults,$mi,"Name");
+++$mi; }
+@mysql_free_result($mgresults);
 ?>
 <div class="TableMenuBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
@@ -190,13 +198,31 @@ $tsa = array("offset" => $Settings['DefaultTimeZone'], "hour" => $ts_array[0], "
 	<td style="width: 50%;"><input type="text" class="TextBox" name="WebURL" size="20" id="WebURL" value="<?php echo $Settings['weburl']; ?>" /></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="GuestGroup">Insert The Guest Group:</label></td>
-	<td style="width: 50%;"><input type="text" class="TextBox" name="GuestGroup" size="20" id="GuestGroup" value="<?php echo $Settings['GuestGroup']; ?>" /></td>
+	<td style="width: 50%;"><select id="GuestGroup" name="GuestGroup" class="TextBox">
+<option selected="selected" value="<?php echo $Settings['GuestGroup']; ?>">Old Value (<?php echo $Settings['GuestGroup']; ?>)</option>
+<?php $gi = 0; $gnum = count($MGroups);
+while ($gi < $gnum) { ?>
+<option value="<?php echo $MGroups[$gi]; ?>"><?php echo $MGroups[$gi]; ?></option>
+<?php ++$gi; } ?>
+</select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="MemberGroup">Insert The Member Group:</label></td>
-	<td style="width: 50%;"><input type="text" class="TextBox" name="MemberGroup" size="20" id="MemberGroup" value="<?php echo $Settings['MemberGroup']; ?>" /></td>
+	<td style="width: 50%;"><select id="MemberGroup" name="MemberGroup" class="TextBox">
+<option selected="selected" value="<?php echo $Settings['MemberGroup']; ?>">Old Value (<?php echo $Settings['MemberGroup']; ?>)</option>
+<?php $gi = 0; $gnum = count($MGroups);
+while ($gi < $gnum) { ?>
+<option value="<?php echo $MGroups[$gi]; ?>"><?php echo $MGroups[$gi]; ?></option>
+<?php ++$gi; } ?>
+</select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="ValidateGroup">Insert The Validate Group:</label></td>
-	<td style="width: 50%;"><input type="text" class="TextBox" name="ValidateGroup" size="20" id="ValidateGroup" value="<?php echo $Settings['ValidateGroup']; ?>" /></td>
+	<td style="width: 50%;"><select id="ValidateGroup" name="ValidateGroup" class="TextBox">
+<option selected="selected" value="<?php echo $Settings['ValidateGroup']; ?>">Old Value (<?php echo $Settings['ValidateGroup']; ?>)</option>
+<?php $gi = 0; $gnum = count($MGroups);
+while ($gi < $gnum) { ?>
+<option value="<?php echo $MGroups[$gi]; ?>"><?php echo $MGroups[$gi]; ?></option>
+<?php ++$gi; } ?>
+</select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="AdminValidate">Do you want to validate new members:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="AdminValidate" id="AdminValidate">
@@ -205,19 +231,69 @@ $tsa = array("offset" => $Settings['DefaultTimeZone'], "hour" => $ts_array[0], "
 	</select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="max_posts">Max replies per page:</label></td>
-	<td style="width: 50%;"><input type="text" class="TextBox" name="max_posts" size="20" id="max_posts" value="<?php echo $Settings['max_posts']; ?>" /></td>
+	<td style="width: 50%;"><select id="max_posts" name="max_posts" class="TextBox">
+<option selected="selected" value="<?php echo $Settings['max_posts']; ?>">Old Value (<?php echo $Settings['max_posts']; ?>)</option>
+<option value="5">5</option>
+<option value="10">10</option>
+<option value="15">15</option>
+<option value="20">20</option>
+<option value="25">25</option>
+<option value="30">30</option>
+<option value="30">35</option>
+<option value="30">40</option>
+</select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="max_topics">Max topics per page:</label></td>
-	<td style="width: 50%;"><input type="text" class="TextBox" name="max_topics" size="20" id="max_topics" value="<?php echo $Settings['max_topics']; ?>" /></td>
+	<td style="width: 50%;"><select id="max_topics" name="max_topics" class="TextBox">
+<option selected="selected" value="<?php echo $Settings['max_topics']; ?>">Old Value (<?php echo $Settings['max_topics']; ?>)</option>
+<option value="5">5</option>
+<option value="10">10</option>
+<option value="15">15</option>
+<option value="20">20</option>
+<option value="25">25</option>
+<option value="30">30</option>
+<option value="30">35</option>
+<option value="30">40</option>
+</select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="max_memlist">Max members per page:</label></td>
-	<td style="width: 50%;"><input type="text" class="TextBox" name="max_memlist" size="20" id="max_memlist" value="<?php echo $Settings['max_memlist']; ?>" /></td>
+	<td style="width: 50%;"><select id="max_memlist" name="max_memlist" class="TextBox">
+<option selected="selected" value="<?php echo $Settings['max_memlist']; ?>">Old Value (<?php echo $Settings['max_memlist']; ?>)</option>
+<option value="5">5</option>
+<option value="10">10</option>
+<option value="15">15</option>
+<option value="20">20</option>
+<option value="25">25</option>
+<option value="30">30</option>
+<option value="30">35</option>
+<option value="30">40</option>
+</select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="max_pmlist">Max pms per page:</label></td>
-	<td style="width: 50%;"><input type="text" class="TextBox" name="max_pmlist" size="20" id="max_pmlist" value="<?php echo $Settings['max_pmlist']; ?>" /></td>
+	<td style="width: 50%;"><select id="max_pmlist" name="max_pmlist" class="TextBox">
+<option selected="selected" value="<?php echo $Settings['max_pmlist']; ?>">Old Value (<?php echo $Settings['max_pmlist']; ?>)</option>
+<option value="5">5</option>
+<option value="10">10</option>
+<option value="15">15</option>
+<option value="20">20</option>
+<option value="25">25</option>
+<option value="30">30</option>
+<option value="30">35</option>
+<option value="30">40</option>
+</select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="hot_topic_num">Number of replies for hot topic:</label></td>
-	<td style="width: 50%;"><input type="text" class="TextBox" name="hot_topic_num" size="20" id="hot_topic_num" value="<?php echo $Settings['hot_topic_num']; ?>" /></td>
+	<td style="width: 50%;"><select id="hot_topic_num" name="hot_topic_num" class="TextBox">
+<option selected="selected" value="<?php echo $Settings['hot_topic_num']; ?>">Old Value (<?php echo $Settings['hot_topic_num']; ?>)</option>
+<option value="5">5</option>
+<option value="10">10</option>
+<option value="15">15</option>
+<option value="20">20</option>
+<option value="25">25</option>
+<option value="30">30</option>
+<option value="30">35</option>
+<option value="30">40</option>
+</select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" title="Can save some bandwidth." for="UseGzip">Do you want to HTTP Content Compression:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="UseGzip" id="UseGzip">
