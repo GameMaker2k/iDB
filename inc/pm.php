@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: pm.php - Last Update: 8/14/2009 SVN 310 - Author: cooldude2k $
+    $FileInfo: pm.php - Last Update: 10/07/2009 SVN 323 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pm.php"||$File3Name=="/pm.php") {
@@ -40,10 +40,16 @@ if($_GET['act']=="view"||$_GET['act']=="viewsent"||$_GET['act']=="read") {
 <tr style="width: 100%; vertical-align: top;">
 	<td style="width: 15%; vertical-align: top;">
 	<div class="TableSMenuBorder">
-	<table id="MessengerLinks" class="TableSMenu" style="width: 100%; text-align: left; vertical-align: top;">
+<?php if($ThemeSet['TableStyle']=="div") { ?>
+<div class="TableSMenuRow1">
+<?php echo $ThemeSet['TitleIcon']; ?>Messenger</div>
+<?php } ?>
+<table id="ProfileLinks" class="TableSMenu" style="width: 100%; text-align: left; vertical-align: top;">
+<?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableSMenuRow1">
 <td class="TableSMenuColumn1"><?php echo $ThemeSet['TitleIcon']; ?>Messenger</td>
-</tr><tr class="TableSMenuRow2">
+</tr><?php } ?>
+<tr class="TableSMenuRow2">
 <td class="TableSMenuColumn2">&nbsp;</td>
 </tr><tr class="TableSMenuRow3">
 <td class="TableSMenuColumn3"><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>">View MailBox</a></td>
