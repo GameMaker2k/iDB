@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: pm.php - Last Update: 10/07/2009 SVN 323 - Author: cooldude2k $
+    $FileInfo: pm.php - Last Update: 10/08/2009 SVN 326 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pm.php"||$File3Name=="/pm.php") {
@@ -235,11 +235,12 @@ $query = query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."mess
 $rnquery = query("SELECT FOUND_ROWS();", array(null));
 $result=mysql_query($query);
 $rnresult=mysql_query($rnquery);
-$NumberTopics = mysql_result($rnresult,0);
+$NumberMessage = mysql_result($rnresult,0);
 @mysql_free_result($rnresult);
-if($NumberTopics==null) { 
-	$NumberTopics = 0; }
-$num = $NumberTopics;
+if($NumberMessage==null) { 
+	$NumberMessage = 0; }
+$num = $NumberMessage;
+$num=mysql_num_rows($result);
 //Start MessengerList Page Code
 if(!isset($Settings['max_pmlist'])) { $Settings['max_pmlist'] = 10; }
 if($_GET['page']==null) { $_GET['page'] = 1; } 
@@ -296,12 +297,12 @@ if($_GET['page']>=$pagenum) { $Pagez[6] = null; }
 $pagenumi=count($Pagez);
 if($num==0) {
 $pagenumi = 0;
-$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['messenger'],$Settings['file_ext'],"act=viewsentsent&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger'])."\">1</a></span> "; }
+$pstring = null; }
 if($pagenum>1) {
 while ($pagei < $pagenumi) {
 if($_GET['page']!=1&&$pagei==1) {
 $Pback = $_GET['page'] - 1;
-$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['messenger'],$Settings['file_ext'],"act=viewsent&page=".$Pback,$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger'])."\">&lt;</a></span> "; }
+$pstring = $pstring."<span class=\"pagelink\">a href=\"".url_maker($exfile['messenger'],$Settings['file_ext'],"act=viewsent&page=".$Pback,$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger'])."\">&lt;</a></span> "; }
 if($Pagez[$pagei]!=null&&
    $Pagez[$pagei]!="First"&&
    $Pagez[$pagei]!="Last") {
@@ -376,11 +377,11 @@ if ($MessageStat==1) {
 <a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=read&id=".$PMID,$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>"><?php echo $MessageName; ?></a></div>
 <div class="messagedesc"><?php echo $MessageDesc; ?></div></td>
 <td class="TableMenuColumn3" style="text-align: center;"><?php
-if($SentToID>0&&$SendToHidden=="no") {
+if($SentToID>0&&$SentToHidden=="no") {
 echo "<a href=\"";
 echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$SentToID,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
 echo "\">".$SentToName."</a>"; }
-if($SentToID<=0||$SendToHidden=="yes") {
+if($SentToID<=0||$SentToHidden=="yes") {
 echo "<span>".$SentToName."</span>"; }
 ?></td>
 <td class="TableMenuColumn3" style="text-align: center;"><?php echo $DateSend; ?></td>
