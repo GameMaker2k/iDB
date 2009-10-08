@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: function.php - Last Update: 8/9/2009 SVN 301 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 10/08/2009 SVN 325 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -87,7 +87,10 @@ $REFERERurl = null;
 function unserialize_session($data) {
     $vars=preg_split('/([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff^|]*)\|/',
               $data,-1,PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
-    for($i=0; $vars[$i]; $i++) $result[$vars[$i++]]=unserialize($vars[$i]);
+    $i = 0;
+    for($i=0; isset($vars[$i]); $i++) {
+	$result[$vars[$i]]=unserialize($vars[$i + 1]);
+	$i++; }
     return $result;
 }
 // Make the Query String if we are not useing &=
