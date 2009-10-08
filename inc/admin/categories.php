@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: categories.php - Last Update: 8/22/2009 SVN 315 - Author: cooldude2k $
+    $FileInfo: categories.php - Last Update: 10/08/2009 SVN 324 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="categories.php"||$File3Name=="/categories.php") {
@@ -167,7 +167,7 @@ $errorstr = $errorstr."Your category name is too big.<br />\n"; }
 if (pre_strlen($_POST['CategoryDesc'])>"300") { $Error="Yes";
 $errorstr = $errorstr."Your category description is too big.<br />\n"; } 
 if ($Error!="Yes") {
-@redirect("refresh",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],FALSE),"4");
+@redirect("refresh",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=categories",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],FALSE),"4");
 $admincptitle = " ".$ThemeSet['TitleDivider']." Updating Settings";
 $query = query("INSERT INTO `".$Settings['sqltable']."categories` VALUES (%i,%i,'%s','%s','%s','yes',%i,%i,%i,'%s')", array($_POST['CategoryID'],$_POST['OrderID'],$_POST['CategoryName'],$_POST['ShowCategory'],$_POST['CategoryType'],$_POST['InSubCategory'],$_POST['CategoryDesc'],$_POST['NumPostView'],$_POST['NumKarmaView'],$_POST['CategoryDesc']));
 mysql_query($query);
@@ -543,7 +543,7 @@ $errorstr = $errorstr."Your category name is too big.<br />\n"; }
 if (pre_strlen($_POST['CategoryDesc'])>"300") { $Error="Yes";
 $errorstr = $errorstr."Your category description is too big.<br />\n"; } 
 if ($Error!="Yes") {
-@redirect("refresh",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],FALSE),"4");
+@redirect("refresh",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=categories",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],FALSE),"4");
 $admincptitle = " ".$ThemeSet['TitleDivider']." Updating Settings";
 $query = query("UPDATE `".$Settings['sqltable']."categories` SET `id`=%i,`OrderID`=%i,`Name`='%s',`ShowCategory`='%s',`CategoryType`='%s',`InSubCategory`=%i,`Description`='%s',`PostCountView`=%i,`KarmaCountView`=%i WHERE `id`=%i", array($_POST['CategoryID'],$_POST['OrderID'],$_POST['CategoryName'],$_POST['ShowCategory'],$_POST['CategoryType'],$_POST['InSubCategory'],$_POST['CategoryDesc'],$_POST['NumPostView'],$_POST['NumKarmaView'],$_POST['id']));
 mysql_query($query);
@@ -745,7 +745,7 @@ $PermissionName = stripcslashes(htmlspecialchars($PermissionName, ENT_QUOTES, $S
 </div>
 <?php } if(isset($_POST['id'])&&$_POST['subact']=="editnow") {
 $admincptitle = " ".$ThemeSet['TitleDivider']." Updating Settings";
-@redirect("refresh",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],FALSE),"4");
+@redirect("refresh",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=categories",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],FALSE),"4");
 $query = query("UPDATE `".$Settings['sqltable']."catpermissions` SET `CanViewCategory`='%s' WHERE `id`=%i", array($_POST['CanViewCategory'], $_POST['id']));
 mysql_query($query); } if(isset($_POST['id'])&&$_POST['subact']=="create") { 
 ?>
@@ -798,7 +798,7 @@ mysql_query($query); } if(isset($_POST['id'])&&$_POST['subact']=="create") {
 </div>
 <?php } if(isset($_POST['id'])&&isset($_POST['permid'])&&$_POST['subact']=="makenow") {
 $admincptitle = " ".$ThemeSet['TitleDivider']." Updating Settings";
-@redirect("refresh",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],FALSE),"4");
+@redirect("refresh",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=categories",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],FALSE),"4");
 $prequery = query("SELECT * FROM `".$Settings['sqltable']."catpermissions` WHERE `id`=%i LIMIT 1", array($_POST['permid']));
 $preresult=mysql_query($prequery);
 $prenum=mysql_num_rows($preresult);
@@ -844,24 +844,24 @@ if($doupdate===true&&$Error!="Yes") { ?>
 <td class="TableMenuColumn3">
 <?php if(isset($_POST['id'])&&$_POST['subact']=="editnow") { ?>
 <div style="text-align: center;">
-	<br />The permission was edited successfully. <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to go back. ^_^<br />&nbsp;
+	<br />The permission was edited successfully. <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=categories",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to go back. ^_^<br />&nbsp;
 	</div>
 <?php } if(isset($_POST['id'])&&isset($_POST['permid'])&&$_POST['subact']=="makenow") { ?>
 <div style="text-align: center;">
-	<br />The permission was created successfully. <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to go back. ^_^<br />&nbsp;
+	<br />The permission was created successfully. <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=categories",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to go back. ^_^<br />&nbsp;
 	</div>
 <?php } if($_POST['act']=="addcategory"&&$_POST['update']=="now"&&$_GET['act']=="addcategory") { ?>
 <div style="text-align: center;">
-	<br />The category was created successfully. <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to go back. ^_^<br />&nbsp;
+	<br />The category was created successfully. <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=categories",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to go back. ^_^<br />&nbsp;
 	</div>
 <?php } if($_GET['act']=="deletecategory"&&$_POST['update']=="now"&&$_GET['act']=="deletecategory") { ?>
 <div style="text-align: center;">
-	<br />The category was deleted successfully. <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to go back. ^_^<br />&nbsp;
+	<br />The category was deleted successfully. <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=categories",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to go back. ^_^<br />&nbsp;
 	</div>
 <?php } if($_POST['act']=="editcategory"&&$_POST['update']=="now"&&$_GET['act']=="editcategory"&&
 	isset($_POST['id'])) { ?>
 <div style="text-align: center;">
-	<br />The category was edited successfully. <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to go back. ^_^<br />&nbsp;
+	<br />The category was edited successfully. <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=categories",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to go back. ^_^<br />&nbsp;
 	</div>
 <?php } ?>
 </td></tr>
@@ -869,19 +869,19 @@ if($doupdate===true&&$Error!="Yes") { ?>
 <td class="TableMenuColumn4">&nbsp;</td>
 </tr></table></div>
 <?php } if ($_GET['act']!=null&&$Error=="Yes") {
-@redirect("refresh",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],FALSE),"4");
+@redirect("refresh",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=categories",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],FALSE),"4");
 $admincptitle = " ".$ThemeSet['TitleDivider']." Updating Settings";
 ?>
 <div class="TableMenuBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableMenuRow1">
-<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Updating Settings</a></div>
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=categories",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Updating Settings</a></div>
 <?php } ?>
 <table class="TableMenu" style="width: 100%;">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableMenuRow1">
 <td class="TableMenuColumn1"><span style="float: left;">
-<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Updating Settings</a>
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=categories",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Updating Settings</a>
 </span><span style="float: right;">&nbsp;</span></td>
 </tr><?php } ?>
 <tr id="ProfileTitle" class="TableMenuRow2">
@@ -891,7 +891,7 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Updating Settings";
 <td class="TableMenuColumn3">
 <div style="text-align: center;">
 	<br /><?php echo $errorstr; ?>
-	Click <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">here</a> to back to admin cp.<br />&nbsp;
+	<a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=categories",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to back to admin cp.<br />&nbsp;
 	</div>
 </td></tr>
 <tr id="ProfileTitleEnd" class="TableMenuRow4">

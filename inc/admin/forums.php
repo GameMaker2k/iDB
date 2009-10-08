@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: forums.php - Last Update: 8/22/2009 SVN 315 - Author: cooldude2k $
+    $FileInfo: forums.php - Last Update: 10/08/2009 SVN 324 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="forums.php"||$File3Name=="/forums.php") {
@@ -34,7 +34,108 @@ require($SettDir['admin'].'table.php');
 ?>
 </td>
 	<td style="width: 85%; vertical-align: top;">
-<?php if($_GET['act']=="addforum"&&$_POST['update']!="now") { 
+<?php if($_GET['act']=="retopics") { 
+$admincptitle = " ".$ThemeSet['TitleDivider']." Recounting Topics";
+$query = query("SELECT * FROM `".$Settings['sqltable']."forums` ORDER BY `OrderID` ASC, `id` ASC", array(null));
+$result=mysql_query($query);
+$num=mysql_num_rows($result);
+$i=0;
+while ($i < $num) {
+$ForumID=mysql_result($result,$i,"id");
+$tquery = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `ForumID`=%i ORDER BY `Pinned` DESC, `LastUpdate` DESC", array($ForumID));
+$tresult=mysql_query($tquery);
+$tnum=mysql_num_rows($tresult);
+$rquery = query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `ForumID`=%i ORDER BY `TimeStamp` ASC", array($ForumID));
+$rresult=mysql_query($rquery);
+$rnum=mysql_num_rows($rresult);
+$query = query("UPDATE `".$Settings['sqltable']."forums` SET `NumPosts`=%i,`NumTopics`=%i WHERE `id`=%i", array($rnum,$tnum,$ForumID));
+mysql_query($query);
+@mysql_free_result($tresult);
+@mysql_free_result($rresult);
+++$i; }
+@mysql_free_result($result);
+?>
+<div class="TableMenuBorder">
+<?php if($ThemeSet['TableStyle']=="div") { ?>
+<div class="TableMenuRow1">
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Recounting Topics</a></div>
+<?php } ?>
+<table class="TableMenu" style="width: 100%;">
+<?php if($ThemeSet['TableStyle']=="table") { ?>
+<tr class="TableMenuRow1">
+<td class="TableMenuColumn1"><span style="float: left;">
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Recounting Topics</a>
+</span><span style="float: right;">&nbsp;</span></td>
+</tr><?php } ?>
+<tr class="TableMenuRow2">
+<th class="TableMenuColumn2" style="width: 100%; text-align: left;">
+<span style="float: left;">&nbsp;Recounting Topics: </span>
+<span style="float: right;">&nbsp;</span>
+</th>
+</tr>
+<tr class="TableMenuRow3">
+<td class="TableMenuColumn3">
+<div style="text-align: center;">
+	<br />Forums Topics &amp; Posts stats recounted.<br />
+	<a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to back to admin cp.<br />&nbsp;
+</div>
+</td>
+</tr>
+<tr class="TableMenuRow4">
+<td class="TableMenuColumn4">&nbsp;</td>
+</tr>
+</table>
+</div>
+<?php } if($_GET['act']=="rereplies") { 
+$admincptitle = " ".$ThemeSet['TitleDivider']." Recounting Replies";
+$query = query("SELECT * FROM `".$Settings['sqltable']."topics` ORDER BY `Pinned` DESC, `LastUpdate` DESC", array(null));
+$result=mysql_query($query);
+$num=mysql_num_rows($result);
+$i=0;
+while ($i < $num) {
+$TopicID=mysql_result($result,$i,"id");
+$rquery = query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `TopicID`=%i ORDER BY `TimeStamp` ASC", array($TopicID));
+$rresult=mysql_query($rquery);
+$rnum=mysql_num_rows($rresult);
+$Nrnum = $rnum - 1;
+$query = query("UPDATE `".$Settings['sqltable']."topics` SET `NumReply`=%i WHERE `id`=%i", array($Nrnum,$TopicID));
+mysql_query($query);
+@mysql_free_result($rresult);
+++$i; }
+@mysql_free_result($result);
+?>
+<div class="TableMenuBorder">
+<?php if($ThemeSet['TableStyle']=="div") { ?>
+<div class="TableMenuRow1">
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Recounting Replies</a></div>
+<?php } ?>
+<table class="TableMenu" style="width: 100%;">
+<?php if($ThemeSet['TableStyle']=="table") { ?>
+<tr class="TableMenuRow1">
+<td class="TableMenuColumn1"><span style="float: left;">
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Recounting Replies</a>
+</span><span style="float: right;">&nbsp;</span></td>
+</tr><?php } ?>
+<tr class="TableMenuRow2">
+<th class="TableMenuColumn2" style="width: 100%; text-align: left;">
+<span style="float: left;">&nbsp;Recounting Replies: </span>
+<span style="float: right;">&nbsp;</span>
+</th>
+</tr>
+<tr class="TableMenuRow3">
+<td class="TableMenuColumn3">
+<div style="text-align: center;">
+	<br />Topics Replys stats recounted.<br />
+	<a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to back to admin cp.<br />&nbsp;
+</div>
+</td>
+</tr>
+<tr class="TableMenuRow4">
+<td class="TableMenuColumn4">&nbsp;</td>
+</tr>
+</table>
+</div>
+<?php } if($_GET['act']=="addforum"&&$_POST['update']!="now") { 
 $admincptitle = " ".$ThemeSet['TitleDivider']." Adding new Forum";
 ?>
 <div class="TableMenuBorder">
@@ -222,7 +323,7 @@ $errorstr = $errorstr."Your Forum Name is too big.<br />\n"; }
 if (pre_strlen($_POST['ForumDesc'])>"300") { $Error="Yes";
 $errorstr = $errorstr."Your Forum Description is too big.<br />\n"; } 
 if ($Error!="Yes") {
-@redirect("refresh",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],FALSE),"4");
+@redirect("refresh",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],FALSE),"4");
 $admincptitle = " ".$ThemeSet['TitleDivider']." Updating Settings";
 $query = query("INSERT INTO `".$Settings['sqltable']."forums` VALUES (%i,%i,%i,'%s','%s','%s',%i,'%s',0,0,'%s','%s',%i,%i,'%s',%i,0,0)", array($_POST['ForumID'],$_POST['ForumCatID'],$_POST['OrderID'],$_POST['ForumName'],$_POST['ShowForum'],$_POST['ForumType'],$_POST['InSubForum'],$_POST['RedirectURL'],$_POST['ForumDesc'],$_POST['PostCountAdd'],$_POST['NumPostView'],$_POST['NumKarmaView'],$_POST['CanHaveTopics'],$_POST['NumPostHotTopic']));
 mysql_query($query);
@@ -664,7 +765,7 @@ $errorstr = $errorstr."Your Forum Name is too big.<br />\n"; }
 if (pre_strlen($_POST['ForumDesc'])>"300") { $Error="Yes";
 $errorstr = $errorstr."Your Forum Description is too big.<br />\n"; } 
 if ($Error!="Yes") {
-@redirect("refresh",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],FALSE),"4");
+@redirect("refresh",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],FALSE),"4");
 $admincptitle = " ".$ThemeSet['TitleDivider']." Updating Settings";
 $query = query("UPDATE `".$Settings['sqltable']."forums` SET `id`=%i,`CategoryID`=%i,`OrderID`=%i,`Name`='%s',`ShowForum`='%s',`ForumType`='%s',`InSubForum`=%i,`RedirectURL`='%s',`Description`='%s',`PostCountAdd`='%s',`PostCountView`=%i,`KarmaCountView`=%i,`CanHaveTopics`='%s',`HotTopicPosts`=%i WHERE `id`=%i", array($_POST['ForumID'],$_POST['ForumCatID'],$_POST['OrderID'],$_POST['ForumName'],$_POST['ShowForum'],$_POST['ForumType'],$_POST['InSubForum'],$_POST['RedirectURL'],$_POST['ForumDesc'],$_POST['PostCountAdd'],$_POST['NumPostView'],$_POST['NumKarmaView'],$_POST['CanHaveTopics'],$_POST['NumPostHotTopic'],$_POST['id']));
 mysql_query($query);
@@ -993,7 +1094,7 @@ $PermissionName = stripcslashes(htmlspecialchars($PermissionName, ENT_QUOTES, $S
 </div>
 <?php } if(isset($_POST['id'])&&$_POST['subact']=="editnow") {
 $admincptitle = " ".$ThemeSet['TitleDivider']." Updating Settings";
-@redirect("refresh",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],FALSE),"4");
+@redirect("refresh",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],FALSE),"4");
 $query = query("UPDATE `".$Settings['sqltable']."permissions` SET `CanViewForum`='%s', `CanMakeTopics`='%s', `CanMakeReplys`='%s', `CanMakeReplysCT`='%s', `CanEditTopics`='%s', `CanEditTopicsCT`='%s', `CanEditReplys`='%s', `CanEditReplysCT`='%s', `CanDeleteTopics`='%s', `CanDeleteTopicsCT`='%s', `CanDeleteReplys`='%s', `CanDeleteReplysCT`='%s', `CanCloseTopics`='%s', `CanPinTopics`='%s', `CanDohtml`='%s', `CanUseBBags`='%s', `CanModForum`='%s' WHERE `id`=%i", array($_POST['CanViewForum'], $_POST['CanMakeTopics'], $_POST['CanMakeReplys'], $_POST['CanMakeReplysCT'], $_POST['CanEditTopics'], $_POST['CanEditTopicsCT'], $_POST['CanEditReplys'], $_POST['CanEditReplysCT'], $_POST['CanDeleteTopics'], $_POST['CanDeleteTopicsCT'], $_POST['CanDeleteReplys'], $_POST['CanDeleteReplysCT'], $_POST['CanCloseTopics'], $_POST['CanPinTopics'], $_POST['CanDohtml'], $_POST['CanUseBBags'], $_POST['CanModForum'], $_POST['id']));
 mysql_query($query); } if(isset($_POST['id'])&&$_POST['subact']=="create") { 
 ?>
@@ -1158,7 +1259,7 @@ mysql_query($query); } if(isset($_POST['id'])&&$_POST['subact']=="create") {
 </div>
 <?php } if(isset($_POST['id'])&&isset($_POST['permid'])&&$_POST['subact']=="makenow") {
 $admincptitle = " ".$ThemeSet['TitleDivider']." Updating Settings";
-@redirect("refresh",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],FALSE),"4");
+@redirect("refresh",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],FALSE),"4");
 $prequery = query("SELECT * FROM `".$Settings['sqltable']."permissions` WHERE `id`=%i LIMIT 1", array($_POST['permid']));
 $preresult=mysql_query($prequery);
 $prenum=mysql_num_rows($preresult);
@@ -1204,24 +1305,24 @@ if($doupdate===true&&$Error!="Yes") { ?>
 <td class="TableMenuColumn3">
 <?php if(isset($_POST['id'])&&$_POST['subact']=="editnow") { ?>
 <div style="text-align: center;">
-	<br />The permission was edited successfully. <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to go back. ^_^<br />&nbsp;
+	<br />The permission was edited successfully. <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to go back. ^_^<br />&nbsp;
 	</div>
 <?php } if(isset($_POST['id'])&&isset($_POST['permid'])&&$_POST['subact']=="makenow") { ?>
 <div style="text-align: center;">
-	<br />The permission was created successfully. <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to go back. ^_^<br />&nbsp;
+	<br />The permission was created successfully. <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to go back. ^_^<br />&nbsp;
 	</div>
 <?php } if($_POST['act']=="addforum"&&$_POST['update']=="now"&&$_GET['act']=="addforum") { ?>
 <div style="text-align: center;">
-	<br />The forum was created successfully. <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to go back. ^_^<br />&nbsp;
+	<br />The forum was created successfully. <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to go back. ^_^<br />&nbsp;
 	</div>
 <?php } if($_GET['act']=="deleteforum"&&$_POST['update']=="now"&&$_GET['act']=="deleteforum") { ?>
 <div style="text-align: center;">
-	<br />The forum was deleted successfully. <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to go back. ^_^<br />&nbsp;
+	<br />The forum was deleted successfully. <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to go back. ^_^<br />&nbsp;
 	</div>
 <?php } if($_POST['act']=="editforum"&&$_POST['update']=="now"&&$_GET['act']=="editforum"&&
 	isset($_POST['id'])) { ?>
 <div style="text-align: center;">
-	<br />The forum was edited successfully. <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to go back. ^_^<br />&nbsp;
+	<br />The forum was edited successfully. <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to go back. ^_^<br />&nbsp;
 	</div>
 <?php } ?>
 </td></tr>
@@ -1229,19 +1330,19 @@ if($doupdate===true&&$Error!="Yes") { ?>
 <td class="TableMenuColumn4">&nbsp;</td>
 </tr></table></div>
 <?php } if ($_GET['act']!=null&&$Error=="Yes") {
-@redirect("refresh",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],FALSE),"4");
+@redirect("refresh",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],FALSE),"4");
 $admincptitle = " ".$ThemeSet['TitleDivider']." Updating Settings";
 ?>
 <div class="TableMenuBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableMenuRow1">
-<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Updating Settings</a></div>
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Updating Settings</a></div>
 <?php } ?>
 <table class="TableMenu" style="width: 100%;">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableMenuRow1">
 <td class="TableMenuColumn1"><span style="float: left;">
-<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Updating Settings</a>
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Updating Settings</a>
 </span><span style="float: right;">&nbsp;</span></td>
 </tr><?php } ?>
 <tr id="ProfileTitle" class="TableMenuRow2">
@@ -1251,7 +1352,7 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Updating Settings";
 <td class="TableMenuColumn3">
 <div style="text-align: center;">
 	<br /><?php echo $errorstr; ?>
-	Click <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">here</a> to back to admin cp.<br />&nbsp;
+	<a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to back to admin cp.<br />&nbsp;
 	</div>
 </td></tr>
 <tr id="ProfileTitleEnd" class="TableMenuRow4">

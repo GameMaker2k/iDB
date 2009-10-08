@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 10/05/2009 SVN 322 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 10/08/2009 SVN 324 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -118,7 +118,7 @@ $VMemName=mysql_result($result,$i,"Name");
 $VMemGroup=mysql_result($result,$i,"GroupID");
 $VMemValidated=mysql_result($result,$i,"Validated");
 $admincptitle = " ".$ThemeSet['TitleDivider']." Validating Members";
-@redirect("refresh",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],FALSE),"4");
+@redirect("refresh",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=members",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],FALSE),"4");
 if($VMemGroup==$VGroupID) {
 $query = query("UPDATE `".$Settings['sqltable']."members` SET `GroupID`='%s', `Validated`='%s' WHERE `id`=%i", array($MGroupID, "yes", $_POST['id']));
 mysql_query($query); }
@@ -129,13 +129,13 @@ mysql_query($query); }
 <div class="TableMenuBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableMenuRow1">
-<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Updating Settings</a></div>
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=members",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Updating Settings</a></div>
 <?php } ?>
 <table class="TableMenu" style="width: 100%;">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableMenuRow1">
 <td class="TableMenuColumn1"><span style="float: left;">
-<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Updating Settings</a>
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=members",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Updating Settings</a>
 </span><span style="float: right;">&nbsp;</span></td>
 </tr><?php } ?>
 <tr id="ProfileTitle" class="TableMenuRow2">
@@ -144,7 +144,7 @@ mysql_query($query); }
 <tr class="TableMenuRow3" id="ProfileUpdate">
 <td class="TableMenuColumn3">
 <div style="text-align: center;">
-	<br /><?php echo $VMemName ?> was validated successfully. <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to go back. ^_^<br />&nbsp;
+	<br /><?php echo $VMemName ?> was validated successfully. <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=members",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to back to admin cp.<br />&nbsp;
 	</div>
 </td></tr>
 <tr id="ProfileTitleEnd" class="TableMenuRow4">
