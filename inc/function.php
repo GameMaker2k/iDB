@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: function.php - Last Update: 10/08/2009 SVN 325 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 10/29/2009 SVN 329 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -89,8 +89,12 @@ function unserialize_session($data) {
               $data,-1,PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
     $i = 0;
     for($i=0; isset($vars[$i]); $i++) {
-	$result[$vars[$i]]=unserialize($vars[$i + 1]);
+	$l = $i + 1;
+	if(!isset($vars[$i])) { $vars[$i] = null; }
+	if(!isset($vars[$l])) { $vars[$l] = null; }
+	$result[$vars[$i]]=unserialize($vars[$l]);
 	$i++; }
+	if(!isset($result)) { $result = null; }
     return $result;
 }
 // Make the Query String if we are not useing &=
