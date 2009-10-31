@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: stats.php - Last Update: 10/29/2009 SVN 328 - Author: cooldude2k $
+    $FileInfo: stats.php - Last Update: 10/31/2009 SVN 330 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="stats.php"||$File3Name=="/stats.php") {
@@ -57,10 +57,10 @@ $npquery = query("SELECT COUNT(*) FROM `".$Settings['sqltable']."posts`", array(
 $npresult = mysql_query($npquery);
 $numposts = mysql_result($npresult,0);
 @mysql_free_result($npresult);
-if($Settings['AdminValidate']=="yes") {
-$nmquery = query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."members` WHERE `id`>=0 AND `HiddenMember`='no' AND `Validated`='yes' AND `GroupID`<>%i ORDER BY `Joined` DESC LIMIT 1", array(-1,$Settings['ValidateGroup'])); }
-if($Settings['AdminValidate']!="yes") {
-$nmquery = query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."members` WHERE `id`>=0 AND `HiddenMember`='no' ORDER BY `Joined` DESC LIMIT 1", array(-1,$Settings['ValidateGroup'])); }
+if($Settings['AdminValidate']=="on") {
+$nmquery = query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."members` WHERE `id`>=%i AND `HiddenMember`='no' AND `Validated`='yes' AND `GroupID`<>%i ORDER BY `Joined` DESC LIMIT 1", array(1,$Settings['ValidateGroup'])); }
+if($Settings['AdminValidate']!="on") {
+$nmquery = query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."members` WHERE `id`>=%i AND `HiddenMember`='no' ORDER BY `Joined` DESC LIMIT 1", array(1,$Settings['ValidateGroup'])); }
 $rnmquery = query("SELECT FOUND_ROWS();", array(null));
 $nmresult = mysql_query($nmquery);
 $rnmresult = mysql_query($rnmquery);
