@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: rssfeed.php - Last Update: 11/07/2009 SVN 333 - Author: cooldude2k $
+    $FileInfo: rssfeed.php - Last Update: 11/07/2009 SVN 334 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="rssfeed.php"||$File3Name=="/rssfeed.php") {
@@ -146,7 +146,8 @@ if(isset($GroupNameSuffix)&&$GroupNameSuffix!=null) {
 	$UsersName = $UsersName.$GroupNameSuffix; }
 $TheTime=mysql_result($result,$i,"TimeStamp");
 $AtomTime=GMTimeChange("Y-m-d\TH:i:s\Z",$TheTime,0);
-$OldRSSTime=GMTimeChange("Y-m-d\TH:i:s+0:00",$TheTime,0);
+//$OldRSSTime=GMTimeChange("Y-m-d\TH:i:s+0:00",$TheTime,0);
+$OldRSSTime=$AtomTime;
 $TheTime=GMTimeChange("D, j M Y G:i:s \G\M\T",$TheTime,0);
 $TopicName=mysql_result($result,$i,"TopicName");
 $ForumDescription=mysql_result($result,$i,"Description");
