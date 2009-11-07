@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: rssfeed.php - Last Update: 11/06/2009 SVN 331 - Author: cooldude2k $
+    $FileInfo: rssfeed.php - Last Update: 11/07/2009 SVN 333 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="rssfeed.php"||$File3Name=="/rssfeed.php") {
@@ -126,7 +126,27 @@ $MyDescription = preg_replace("/\<br\>/", "<br />\n", nl2br($MyDescription));
 $MyDescription= text2icons($MyDescription,$Settings['sqltable']);
 $UsersID=mysql_result($result,$i,"UserID");
 $GuestsName=mysql_result($result,$i,"GuestName");
+$requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($UsersID));
+$reresult=mysql_query($requery);
+$renum=mysql_num_rows($reresult);
+$UsersName=mysql_result($reresult,0,"Name");
+$UsersGroupID=mysql_result($reresult,0,"GroupID");
+if($UsersName=="Guest") { $UsersName=$GuestsName;
+if($UsersName==null) { $UsersName="Guest"; } }
+@mysql_free_result($reresult);
+$gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($UsersGroupID));
+$gresult=mysql_query($gquery);
+$UsersGroup=mysql_result($gresult,0,"Name");
+$GroupNamePrefix=mysql_result($gresult,0,"NamePrefix");
+$GroupNameSuffix=mysql_result($gresult,0,"NameSuffix");
+@mysql_free_result($gresult);
+if(isset($GroupNamePrefix)&&$GroupNamePrefix!=null) {
+	$UsersName = $GroupNamePrefix.$UsersName; }
+if(isset($GroupNameSuffix)&&$GroupNameSuffix!=null) {
+	$UsersName = $UsersName.$GroupNameSuffix; }
 $TheTime=mysql_result($result,$i,"TimeStamp");
+$AtomTime=GMTimeChange("Y-m-d\TH:i:s\Z",$TheTime,0);
+$OldRSSTime=GMTimeChange("Y-m-d\TH:i:s+0:00",$TheTime,0);
 $TheTime=GMTimeChange("D, j M Y G:i:s \G\M\T",$TheTime,0);
 $TopicName=mysql_result($result,$i,"TopicName");
 $ForumDescription=mysql_result($result,$i,"Description");
@@ -136,14 +156,14 @@ if(isset($PermissionInfo['CanViewForum'][$ForumID])&&
 	$CatPermissionInfo['CanViewCategory'][$CategoryID]=="yes") {
 if($_GET['feedtype']=="atom") {
 $CDataDescription = "<![CDATA[\n".$MyDescription."\n]]>";
-$Atom .= '<entry>'."\n".'<title>'.$TopicName.'</title>'."\n".'<summary>'.$CDataDescription.'</summary>'."\n".'<link rel="alternate" href="'.$BoardURL.url_maker($exfilerss['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstrrss['topic'],$exqstrrss['topic']).'" />'."\n".'<id>'.$BoardURL.url_maker($exfilerss['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstrrss['topic'],$exqstrrss['topic']).'</id>'."\n".'<author>'."\n".'<name>'.$SettInfo['Author'].'</name>'."\n".'</author>'."\n".'<updated>'.gmdate("Y-m-d\TH:i:s\Z").'</updated>'."\n".'</entry>'."\n"; }
+$Atom .= '<entry>'."\n".'<title>'.$TopicName.'</title>'."\n".'<summary>'.$CDataDescription.'</summary>'."\n".'<link rel="alternate" href="'.$BoardURL.url_maker($exfilerss['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstrrss['topic'],$exqstrrss['topic']).'" />'."\n".'<id>'.$BoardURL.url_maker($exfilerss['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstrrss['topic'],$exqstrrss['topic']).'</id>'."\n".'<author>'."\n".'<name>'.$UsersName.'</name>'."\n".'</author>'."\n".'<updated>'.$AtomTime.'</updated>'."\n".'</entry>'."\n"; }
 if($_GET['feedtype']=="oldrss") {
 $CDataDescription = "<![CDATA[\n".$MyDescription."\n]]>";
 $PreRSS .= '      <rdf:li rdf:resource="'.$BoardURL.url_maker($exfilerss['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstrrss['topic'],$exqstrrss['topic']).'" />'."\n";
-$RSS .= '<item rdf:about="'.$BoardURL.url_maker($exfilerss['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstrrss['topic'],$exqstrrss['topic']).'">'."\n".'<title>'.$TopicName.'</title>'."\n".'<description>'.$CDataDescription.'</description>'."\n".'</item>'."\n"; }
+$RSS .= '<item rdf:about="'.$BoardURL.url_maker($exfilerss['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstrrss['topic'],$exqstrrss['topic']).'">'."\n".'<title>'.$TopicName.'</title>'."\n".'<description>'.$CDataDescription.'</description>'."\n".'<dc:publisher>'.$UsersName.'</dc:publisher>'."\n".'<dc:creator>'.$UsersName.'</dc:creator>'."\n".'<dc:date>'.$OldRSSTime.'</dc:date>'."\n".'</item>'."\n"; }
 if($_GET['feedtype']=="rss") {
 $CDataDescription = "<![CDATA[\n".$MyDescription."\n]]>";
-$RSS .= '<item>'."\n".'<title>'.$TopicName.'</title>'."\n".'<description>'.$CDataDescription.'</description>'."\n".'<link>'.$BoardURL.url_maker($exfilerss['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstrrss['topic'],$exqstrrss['topic']).'</link>'."\n".'<guid>'.$BoardURL.url_maker($exfilerss['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstrrss['topic'],$exqstrrss['topic']).'</guid>'."\n".'</item>'."\n"; } }
+$RSS .= '<item>'."\n".'<pubDate>'.$TheTime.'</pubDate>'."\n".'<author>'.$UsersName.'</author>'."\n".'<title>'.$TopicName.'</title>'."\n".'<description>'.$CDataDescription.'</description>'."\n".'<link>'.$BoardURL.url_maker($exfilerss['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstrrss['topic'],$exqstrrss['topic']).'</link>'."\n".'<guid>'.$BoardURL.url_maker($exfilerss['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstrrss['topic'],$exqstrrss['topic']).'</guid>'."\n".'</item>'."\n"; } }
 ++$i; } @mysql_free_result($result);
 @mysql_free_result($result);
 ++$glti; }
@@ -155,7 +175,9 @@ if($Settings['showverinfo']=="on") { ?>
 <?php } echo "\n"; if($_GET['feedtype']=="oldrss") { ?>
 <rdf:RDF 
  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
- xmlns="http://purl.org/rss/1.0/">
+ xmlns="http://purl.org/rss/1.0/"
+ xmlns:dc="http://purl.org/dc/elements/1.1/"
+>
 <channel rdf:about="<?php echo $BoardURL.$feedsname; ?>">
  <title><?php echo $boardsname." ".$ThemeSet['TitleDivider']; ?> Viewing Forum <?php echo $ForumName; ?></title>
   <link><?php echo $BoardURL.url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$ForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?></link>
