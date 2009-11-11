@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 8/27/2009 SVN 318 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 11/10/2009 SVN 337 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -744,6 +744,12 @@ $_SESSION['UserFormID'] = $UFID;
 <option value="true">Yes</option>
 <option value="false">No</option>
 </select></td>
+</tr><tr style="text-align: left;">
+	<td style="width: 30%;"><label class="TextBoxLabel" title="Use your Email address for username." for="loginemail">Login by Email?</label></td>
+	<td style="width: 70%;"><select id="loginemail" name="loginemail" class="TextBox">
+<option value="false">No</option>
+<option value="true">Yes</option>
+</select></td>
 </tr></table>
 <table style="text-align: left;">
 <tr style="text-align: left;">
@@ -833,11 +839,16 @@ $YourName = stripcslashes(htmlspecialchars($_POST['username'], ENT_QUOTES, $Sett
 //$YourName = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $YourName);
 $YourName = @remove_spaces($YourName);
 $passtype="ODFH";
-$querylog = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `Name`='%s' LIMIT 1", array($YourName));
+if(!isset($_POST['loginemail'])) { $_POST['loginemail'] = "false"; }
+if($_POST['loginemail']!="true") {
+$querylog = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `Name`='%s' LIMIT 1", array($YourName)); }
+if($_POST['loginemail']=="true") {
+$querylog = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `Email`='%s' LIMIT 1", array($YourName)); }
 $resultlog=mysql_query($querylog);
 $numlog=mysql_num_rows($resultlog);
 if($numlog>=1) {
 $i=0;
+$YourName=mysql_result($resultlog,$i,"Name");
 $YourPassTry=mysql_result($resultlog,$i,"Password");
 $HashType=mysql_result($resultlog,$i,"HashType");
 $JoinedPass=mysql_result($resultlog,$i,"Joined");

@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: pm.php - Last Update: 11/10/2009 SVN 335 - Author: cooldude2k $
+    $FileInfo: pm.php - Last Update: 11/10/2009 SVN 337 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pm.php"||$File3Name=="/pm.php") {
@@ -188,10 +188,12 @@ while ($i < $num) {
 $PMID=mysql_result($result,$i,"id");
 $SenderID=mysql_result($result,$i,"SenderID");
 $SenderName = GetUserName($SenderID,$Settings['sqltable']);
+if($SenderName===null) { $SenderID = -1;
+$SenderName = GetUserName($SenderID,$Settings['sqltable']); }
 $SenderHidden = GetHiddenMember($SenderID,$Settings['sqltable']);
-$SentToID=mysql_result($result,$i,"ReciverID");
-$SentToName = GetUserName($SentToID,$Settings['sqltable']);
-$SentToHidden = GetHiddenMember($SentToID,$Settings['sqltable']);
+$ReciverID=mysql_result($result,$i,"ReciverID");
+$ReciverName = GetUserName($ReciverID,$Settings['sqltable']);
+$ReciverHidden = GetHiddenMember($ReciverID,$Settings['sqltable']);
 $PMGuest=mysql_result($result,$i,"GuestName");
 $MessageName=mysql_result($result,$i,"MessageTitle");
 $MessageDesc=mysql_result($result,$i,"Description");
@@ -352,10 +354,14 @@ while ($i < $num) {
 $PMID=mysql_result($result,$i,"id");
 $SenderID=mysql_result($result,$i,"SenderID");
 $SenderName = GetUserName($SenderID,$Settings['sqltable']);
+if($SenderName===null) { $SenderID = -1;
+$SenderName = GetUserName($SenderID,$Settings['sqltable']); }
 $SenderHidden = GetHiddenMember($SenderID,$Settings['sqltable']);
-$SentToID=mysql_result($result,$i,"ReciverID");
-$SentToName = GetUserName($SentToID,$Settings['sqltable']);
-$SentToHidden = GetHiddenMember($SentToID,$Settings['sqltable']);
+$ReciverID=mysql_result($result,$i,"ReciverID");
+$ReciverName = GetUserName($ReciverID,$Settings['sqltable']);
+if($ReciverName===null) { $ReciverID = -1;
+$ReciverName = GetUserName($ReciverID,$Settings['sqltable']); }
+$ReciverHidden = GetHiddenMember($ReciverID,$Settings['sqltable']);
 $PMGuest=mysql_result($result,$i,"GuestName");
 $MessageName=mysql_result($result,$i,"MessageTitle");
 $MessageDesc=mysql_result($result,$i,"Description");
@@ -377,12 +383,12 @@ if ($MessageStat==1) {
 <a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=read&id=".$PMID,$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>"><?php echo $MessageName; ?></a></div>
 <div class="messagedesc"><?php echo $MessageDesc; ?></div></td>
 <td class="TableMenuColumn3" style="text-align: center;"><?php
-if($SentToID>0&&$SentToHidden=="no") {
+if($ReciverID>0&&$ReciverHidden=="no") {
 echo "<a href=\"";
-echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$SentToID,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
-echo "\">".$SentToName."</a>"; }
-if($SentToID<=0||$SentToHidden=="yes") {
-echo "<span>".$SentToName."</span>"; }
+echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$ReciverID,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
+echo "\">".$ReciverName."</a>"; }
+if($ReciverID<=0||$ReciverHidden=="yes") {
+echo "<span>".$ReciverName."</span>"; }
 ?></td>
 <td class="TableMenuColumn3" style="text-align: center;"><?php echo $DateSend; ?></td>
 </tr>
@@ -402,11 +408,15 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); di
 while ($is < $num) {
 $PMID=mysql_result($result,$is,"id");
 $SenderID=mysql_result($result,$is,"SenderID");
-//$SenderName = GetUserName($SenderID,$Settings['sqltable']);
-//$SenderHidden = GetHiddenMember($SenderID,$Settings['sqltable']);
-$SentToID=mysql_result($result,$is,"ReciverID");
-$SentToName = GetUserName($SentToID,$Settings['sqltable']);
-$SentToHidden = GetHiddenMember($SentToID,$Settings['sqltable']);
+$SenderName = GetUserName($SenderID,$Settings['sqltable']);
+if($SenderName===null) { $SenderID = -1;
+$SenderName = GetUserName($SenderID,$Settings['sqltable']); }
+$SenderHidden = GetHiddenMember($SenderID,$Settings['sqltable']);
+$ReciverID=mysql_result($result,$is,"ReciverID");
+$ReciverName = GetUserName($ReciverID,$Settings['sqltable']);
+if($ReciverName===null) { $ReciverID = -1;
+$ReciverName = GetUserName($ReciverID,$Settings['sqltable']); }
+$ReciverHidden = GetHiddenMember($ReciverID,$Settings['sqltable']);
 $PMGuest=mysql_result($result,$is,"GuestName");
 $MessageName=mysql_result($result,$is,"MessageTitle");
 $DateSend=mysql_result($result,$is,"DateSend");
@@ -418,7 +428,7 @@ $requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i
 $reresult=mysql_query($requery);
 $renum=mysql_num_rows($reresult);
 $rei=0;
-if($_SESSION['UserID']!=$SentToID&&
+if($_SESSION['UserID']!=$ReciverID&&
 	$_SESSION['UserID']!=$SenderID) {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
@@ -456,7 +466,7 @@ $User1Karma=mysql_result($reresult,$rei,"Karma");
 $User1IP=mysql_result($reresult,$rei,"IP");
 ++$rei; } @mysql_free_result($reresult);
 ++$is; } @mysql_free_result($result);
-if($_SESSION['UserID']==$SentToID) {
+if($_SESSION['UserID']==$ReciverID) {
 $queryup = query("UPDATE `".$Settings['sqltable']."messenger` SET `Read`=%i WHERE `id`=%i", array(1,$_GET['id']));
 mysql_query($queryup); }
 if($User1Name=="Guest") { $User1Name=$PMGuest;

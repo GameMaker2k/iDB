@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: replies.php - Last Update: 8/7/2009 SVN 297 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 11/10/2009 SVN 337 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -223,6 +223,7 @@ $MyGuestName=mysql_result($result,$i,"GuestName");
 $MyTimeStamp=mysql_result($result,$i,"TimeStamp");
 $MyEditTime=mysql_result($result,$i,"LastUpdate");
 $MyEditUserID=mysql_result($result,$i,"EditUser");
+$MyEditUserName=mysql_result($result,$i,"EditUserName");
 $MyTimeStamp=GMTimeChange("M j, Y, g:i a",$MyTimeStamp,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $MyPost=mysql_result($result,$i,"Post");
 $MyPost = preg_replace("/\<br\>/", "<br />\n", nl2br($MyPost));
@@ -230,6 +231,10 @@ $MyDescription=mysql_result($result,$i,"Description");
 $requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($MyUserID));
 $reresult=mysql_query($requery);
 $renum=mysql_num_rows($reresult);
+if($renum<1) { $MyUserID = -1;
+$requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($MyUserID));
+$reresult=mysql_query($requery);
+$renum=mysql_num_rows($reresult); }
 $rei=0; $ipshow = "two";
 $User1ID=$MyUserID; $GuestsName = $MyGuestName;
 $User1Name=mysql_result($reresult,$rei,"Name");
@@ -268,15 +273,62 @@ if(isset($GroupNameSuffix)&&$GroupNameSuffix!=null) {
 	$User1Name = $User1Name.$GroupNameSuffix; }
 $MySubPost = null;
 if($MyEditTime!=$MyTimeStamp&&$MyEditUserID!=0) {
+if($MyEditUserID!=$MyUserID) {
 $euquery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($MyEditUserID));
 $euresult = mysql_query($euquery);
 $eunum = mysql_num_rows($euresult);
-$eui=0; while ($eui < $eunum) {
+if($eunum<1) { $MyEditUserID = -1;
+$euquery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($MyEditUserID));
+$euresult = mysql_query($euquery);
+$eunum = mysql_num_rows($euresult); }
 	$EditUserID = $MyEditUserID;
-	$EditUserName = mysql_result($euresult,$eui,"Name");
-	++$eui; }
+	$EditUserGroupID = mysql_result($euresult,0,"GroupID");
+	$EditUserHidden=mysql_result($euresult,0,"HiddenMember");
+	$EditUserName = mysql_result($euresult,0,"Name");
+	@mysql_free_result($euresult);
+	$eugquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($EditUserGroupID));
+	$eugresult=mysql_query($eugquery);
+	$EditUserGroup=mysql_result($eugresult,0,"Name");
+	$EditUserNamePrefix=mysql_result($eugresult,0,"NamePrefix");
+	$EditUserNameSuffix=mysql_result($eugresult,0,"NameSuffix");
+	@mysql_free_result($eugresult);	}
+	if($MyEditUserID==$MyUserID) {
+	$EditUserID = $User1ID;
+	$EditUserGroupID = $User1GroupID;
+	$EditUserHidden=$User1Hidden;
+	$EditUserName = $User1Name;
+	$EditUserGroup=$User1Group;
+	$EditUserNamePrefix=null;
+	$EditUserNameSuffix=null; }
+	if($EditUserName=="Guest") { $EditUserName=$MyEditUserName;
+	if($EditUserName==null) { $EditUserName="Guest"; } }
+	if(isset($GroupNamePrefix)&&$GroupNamePrefix!=null) {
+		$EditUserName = $EditUserNamePrefix.$EditUserName; }
+	if(isset($GroupNameSuffix)&&$GroupNameSuffix!=null) {
+		$EditUserName = $EditUserName.$EditUserNameSuffix; }
 	$MyEditTime = GMTimeChange("M j, Y, g:i a",$MyEditTime,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 	$MySubPost = "<div class=\"EditReply\"><br />This post has been edited by <b>".$EditUserName."</b> on ".$MyEditTime."</div>"; }
+if($MyEditTime!=$MyTimeStamp&&$MyEditUserID!=0&&$MyEditUserID!=$MyUserID) {
+$requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($MyUserID));
+$reresult=mysql_query($requery);
+$renum=mysql_num_rows($reresult);
+$rei=0; $ipshow = "two";
+$User1ID=$MyUserID; $GuestsName = $MyGuestName;
+$User1Name=mysql_result($reresult,$rei,"Name");
+$User1IP=mysql_result($reresult,$rei,"IP");
+if($User1IP==$MyPostIP) { $ipshow = "one"; }
+$User1Email=mysql_result($reresult,$rei,"Email");
+$User1Title=mysql_result($reresult,$rei,"Title");
+$User1Joined=mysql_result($reresult,$rei,"Joined");
+$User1Joined=GMTimeChange("M j Y",$User1Joined,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$User1Hidden=mysql_result($reresult,$rei,"HiddenMember");
+$User1GroupID=mysql_result($reresult,$rei,"GroupID");
+$gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($User1GroupID));
+$gresult=mysql_query($gquery);
+$User1Group=mysql_result($gresult,0,"Name");
+$GroupNamePrefix=mysql_result($gresult,0,"NamePrefix");
+$GroupNameSuffix=mysql_result($gresult,0,"NameSuffix");
+@mysql_free_result($gresult); }
 $MyPost = text2icons($MyPost,$Settings['sqltable']);
 if($MySubPost!=null) { $MyPost = $MyPost."\n".$MySubPost; }
 $User1Signature = preg_replace("/\<br\>/", "<br />\n", nl2br($User1Signature));

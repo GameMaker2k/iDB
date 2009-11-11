@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: events.php - Last Update: 8/20/2009 SVN 314 - Author: cooldude2k $
+    $FileInfo: events.php - Last Update: 11/10/2009 SVN 337 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="events.php"||$File3Name=="/events.php") {
@@ -51,8 +51,11 @@ $_SESSION['ViewingTitle'] = $EventName;
 $requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($EventUser));
 $reresult=mysql_query($requery);
 $renum=mysql_num_rows($reresult);
+if($renum<1) { $EventUser = -1;
+$requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($EventUser));
+$reresult=mysql_query($requery);
+$renum=mysql_num_rows($reresult); }
 $rei=0;
-while ($rei < $renum) {
 $User1ID=$EventUser;
 $User1Name=mysql_result($reresult,$rei,"Name");
 $User1IP=mysql_result($reresult,$rei,"IP");
@@ -81,7 +84,7 @@ $AvatarSize1W=$AvatarSize1[0]; $AvatarSize1H=$AvatarSize1[1];
 $User1Website=mysql_result($reresult,$rei,"Website");
 $User1PostCount=mysql_result($reresult,$rei,"PostCount");
 $User1IP=mysql_result($reresult,$rei,"IP");
-++$rei; } @mysql_free_result($reresult);
+@mysql_free_result($reresult);
 ++$is; } @mysql_free_result($result);
 if($User1Name=="Guest") { $User1Name=$EventGuest;
 if($User1Name==null) { $User1Name="Guest"; } }

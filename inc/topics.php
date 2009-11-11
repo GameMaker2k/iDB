@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: topics.php - Last Update: 11/10/2009 SVN 335 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 11/10/2009 SVN 337 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -344,6 +344,10 @@ $TopicStat=mysql_result($result,$i,"Closed");
 $requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($UsersID));
 $reresult=mysql_query($requery);
 $renum=mysql_num_rows($reresult);
+if($renum<1) { $UsersID = -1;
+$requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($UsersID));
+$reresult=mysql_query($requery);
+$renum=mysql_num_rows($reresult); }
 $UserHidden=mysql_result($reresult,0,"HiddenMember");
 $UserGroupID=mysql_result($reresult,0,"GroupID");
 @mysql_free_result($reresult);
@@ -367,11 +371,13 @@ $glrnum=mysql_num_rows($glrresult);
 if($glrnum>0){
 $ReplyID1=mysql_result($glrresult,0,"id");
 $UsersID1=mysql_result($glrresult,0,"UserID");
+$UsersName1 = GetUserName($UsersID1,$Settings['sqltable']);
+if($UsersName1===null) { $UsersID1 = -1;
+$UsersName1 = GetUserName($UsersID1,$Settings['sqltable']); }
 $UsersHidden1=GetHiddenMember($UsersID1,$Settings['sqltable']);
 $GuestsName1=mysql_result($glrresult,0,"GuestName");
 $TimeStamp1=mysql_result($glrresult,0,"TimeStamp");
-$TimeStamp1=GMTimeChange("F j Y, g:i a",$TimeStamp1,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$UsersName1 = GetUserName($UsersID1,$Settings['sqltable']); }
+$TimeStamp1=GMTimeChange("F j Y, g:i a",$TimeStamp1,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']); }
 $NumPages = null; $NumRPosts = $NumReply + 1;
 if(!isset($Settings['max_posts'])) { $Settings['max_posts'] = 10; }
 if($NumRPosts>$Settings['max_posts']) {

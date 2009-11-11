@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: mysql.php - Last Update: 8/27/2009 SVN 318 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 11/10/2009 SVN 337 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -357,7 +357,7 @@ $_GET['theme']="iDB"; $_SESSION['Theme']="iDB"; }
 if (file_exists($SettDir['themes'].$_GET['theme']."/settings.php")) {
 if($_SESSION['UserGroup']!=$Settings['GuestGroup']) {
 $NewDay=GMTimeStamp();
-$qnewskin = query("update `".$Settings['sqltable']."members` set `UseTheme`='%s',`LastActive`='%s' WHERE `id`=%i", array($_GET['theme'],$NewDay,$_SESSION['UserID']));
+$qnewskin = query("UPDATE `".$Settings['sqltable']."members` SET `UseTheme`='%s',`LastActive`='%s' WHERE `id`=%i", array($_GET['theme'],$NewDay,$_SESSION['UserID']));
 mysql_query($qnewskin); }
 /* The file Theme Exists */ }
 else { $_GET['theme'] = $Settings['DefaultTheme']; 
@@ -365,6 +365,12 @@ $_SESSION['Theme'] = $Settings['DefaultTheme'];
 /* The file Theme Dose Not Exists */ } }
 if($_GET['theme']==null) { 
 if($_SESSION['Theme']!=null) {
+$OldTheme = $_SESSION['Theme'];
+$_SESSION['Theme'] = chack_themes($_SESSION['Theme']);
+if($OldTheme!=$_SESSION['Theme']) { 
+$NewDay=GMTimeStamp();
+$qnewskin = query("UPDATE `".$Settings['sqltable']."members` SET `UseTheme`='%s',`LastActive`='%s' WHERE `id`=%i", array($_SESSION['Theme'],$NewDay,$_SESSION['UserID']));
+mysql_query($qnewskin); }
 $_GET['theme']=$_SESSION['Theme']; }
 if($_SESSION['Theme']==null) {
 $_SESSION['Theme']=$Settings['DefaultTheme'];

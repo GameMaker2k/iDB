@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: forums.php - Last Update: 9/16/2009 SVN 320 - Author: cooldude2k $
+    $FileInfo: forums.php - Last Update: 11/10/2009 SVN 337 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="forums.php"||$File3Name=="/forums.php") {
@@ -164,6 +164,8 @@ $TimeStamp=mysql_result($glrresult,0,"TimeStamp");
 $TimeStamp=GMTimeChange("F j Y, g:i a",$TimeStamp,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 @mysql_free_result($glrresult); }
 $UsersName = GetUserName($UsersID,$Settings['sqltable']);
+if($UsersName===null) { $UsersID = -1;
+$UsersName = GetUserName($UsersID,$Settings['sqltable']); }
 $UsersHidden = GetHiddenMember($UsersID,$Settings['sqltable']);
 $UsersName1 = pre_substr($UsersName,0,20);
 if($UsersName=="Guest") { $UsersName=$GuestsName;

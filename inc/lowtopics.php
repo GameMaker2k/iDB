@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: lowtopics.php - Last Update: 8/7/2009 SVN 297 - Author: cooldude2k $
+    $FileInfo: lowtopics.php - Last Update: 11/10/2009 SVN 337 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="lowtopics.php"||$File3Name=="/lowtopics.php") {
@@ -248,6 +248,10 @@ $TopicStat=mysql_result($result,$i,"Closed");
 $requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($UsersID));
 $reresult=mysql_query($requery);
 $renum=mysql_num_rows($reresult);
+if($renum<1) { $UsersID = -1;
+$requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($UsersID));
+$reresult=mysql_query($requery);
+$renum=mysql_num_rows($reresult); }
 $UserGroupID=mysql_result($reresult,0,"GroupID");
 @mysql_free_result($reresult);
 $gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($UserGroupID));

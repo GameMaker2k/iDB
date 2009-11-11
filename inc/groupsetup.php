@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: groupsetup.php - Last Update: 8/6/2009 SVN 296 - Author: cooldude2k $
+    $FileInfo: groupsetup.php - Last Update: 11/10/2009 SVN 337 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="groupsetup.php"||$File3Name=="/groupsetup.php") {
@@ -25,6 +25,9 @@ if($Settings['file_ext']=="no+ext"||$Settings['file_ext']=="no ext") {
 $_SESSION['ViewingFile'] = $exfile['index']; }
 $_SESSION['PreViewingTitle'] = "Viewing";
 $_SESSION['ViewingTitle'] = "Board index";
+/*$ggidquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `name`='%s' LIMIT 1", array($Settings['GuestGroup']));
+$ggidresult=mysql_query($ggidquery);
+$Settings['GuestGroupID']=mysql_result($ggidresult,0,"id");*/
 // Check to make sure MemberInfo is right
 $MyPostCountChk = null; $MyKarmaCount = null;
 if(!isset($_SESSION['UserID'])) { $_SESSION['UserID'] = 0; }

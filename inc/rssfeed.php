@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: rssfeed.php - Last Update: 11/07/2009 SVN 334 - Author: cooldude2k $
+    $FileInfo: rssfeed.php - Last Update: 11/10/2009 SVN 337 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="rssfeed.php"||$File3Name=="/rssfeed.php") {
@@ -129,6 +129,10 @@ $GuestsName=mysql_result($result,$i,"GuestName");
 $requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($UsersID));
 $reresult=mysql_query($requery);
 $renum=mysql_num_rows($reresult);
+if($renum<1) { $UsersID = -1;
+$requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($UsersID));
+$reresult=mysql_query($requery);
+$renum=mysql_num_rows($reresult); }
 $UsersName=mysql_result($reresult,0,"Name");
 $UsersGroupID=mysql_result($reresult,0,"GroupID");
 if($UsersName=="Guest") { $UsersName=$GuestsName;
