@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: functions.php - Last Update: 8/27/2009 SVN 318 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 11/11/2009 SVN 339 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -350,7 +350,7 @@ $phpsrcs = file_get_source($filename,TRUE);
 $phpsrcs = preg_replace("/\<font color=\"(.*?)\"\>/i", "<span style=\"color: \\1;\">", $phpsrcs);
 $phpsrcs = preg_replace("/\<\/font>/i", "</span>", $phpsrcs);
 return $phpsrcs; }
-function GetUserName($idu,$sqlt) {
+function GetUserName($idu,$sqlt) { $UsersName = null;
 $gunquery = query("SELECT * FROM `".$sqlt."members` WHERE `id`=%i", array($idu));
 $gunresult=mysql_query($gunquery);
 $gunnum=mysql_num_rows($gunresult);
@@ -358,7 +358,7 @@ if($gunnum>0){
 $UsersName=mysql_result($gunresult,0,"Name"); }
 @mysql_free_result($gunresult);
 return $UsersName; }
-// Check to see if I'm hidden from you. >_> | ^_^ | <_<
+// Check to see if the user is hidden/shy. >_> | ^_^ | <_<
 function GetHiddenMember($idu,$sqlt) {
 $gunquery = query("SELECT * FROM `".$sqlt."members` WHERE `id`=%i", array($idu));
 $gunresult=mysql_query($gunquery);

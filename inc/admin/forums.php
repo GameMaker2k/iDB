@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: forums.php - Last Update: 10/08/2009 SVN 324 - Author: cooldude2k $
+    $FileInfo: forums.php - Last Update: 11/11/2009 SVN 339 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="forums.php"||$File3Name=="/forums.php") {
@@ -126,6 +126,142 @@ mysql_query($query);
 <td class="TableMenuColumn3">
 <div style="text-align: center;">
 	<br />Topics Replys stats recounted.<br />
+	<a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to back to admin cp.<br />&nbsp;
+</div>
+</td>
+</tr>
+<tr class="TableMenuRow4">
+<td class="TableMenuColumn4">&nbsp;</td>
+</tr>
+</table>
+</div>
+<?php } if($_GET['act']=="fixtnames") { 
+$admincptitle = " ".$ThemeSet['TitleDivider']." Fixing Topic User Names";
+$query = query("SELECT * FROM `".$Settings['sqltable']."topics` ORDER BY `TimeStamp` ASC", array(null));
+$result=mysql_query($query);
+$num=mysql_num_rows($result);
+$i=0;
+while ($i < $num) {
+$TopicID=mysql_result($result,$i,"id");
+$UserID=mysql_result($result,$i,"UserID");
+$GuestsName=mysql_result($result,$i,"GuestName");
+$NewUserID = $UserID;
+$NewGuestsName = $GuestsName;
+$NewGuestsName = GetUserName($NewUserID,$Settings['sqltable']);
+if($UserID==-1&&$GuestsName!=null) { $NewGuestsName = $GuestsName; }
+if($NewGuestsName==null&&$GuestsName!=null&&$UserID!==0) {
+$NewUserID = -1; $NewGuestsName = $GuestsName; }
+if($UserID==-1&&$GuestsName==null) {
+$NewUserID = -1; $NewGuestsName = "Guest"; }
+if($UserID===0&&$GuestsName!=null) {
+$NewUserID = -1; $NewGuestsName = "Guest"; }
+if($UserID===0&&$GuestsName==null) {
+$NewUserID = -1; $NewGuestsName = "Guest"; }
+if($UserID==$NewUserID&&$GuestsName==$NewGuestsName) {
+$NewUserID = $UserID; $NewGuestsName = $GuestsName; }
+$query = query("UPDATE `".$Settings['sqltable']."topics` SET `UserID`=%i,`GuestName`='%s' WHERE `id`=%i", array($NewUserID,$NewGuestsName,$TopicID));
+mysql_query($query);
+++$i; }
+@mysql_free_result($result);
+?>
+<div class="TableMenuBorder">
+<?php if($ThemeSet['TableStyle']=="div") { ?>
+<div class="TableMenuRow1">
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Fixing Topic User Names</a></div>
+<?php } ?>
+<table class="TableMenu" style="width: 100%;">
+<?php if($ThemeSet['TableStyle']=="table") { ?>
+<tr class="TableMenuRow1">
+<td class="TableMenuColumn1"><span style="float: left;">
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Fixing Topic User Names</a>
+</span><span style="float: right;">&nbsp;</span></td>
+</tr><?php } ?>
+<tr class="TableMenuRow2">
+<th class="TableMenuColumn2" style="width: 100%; text-align: left;">
+<span style="float: left;">&nbsp;Fixing Topic User Names: </span>
+<span style="float: right;">&nbsp;</span>
+</th>
+</tr>
+<tr class="TableMenuRow3">
+<td class="TableMenuColumn3">
+<div style="text-align: center;">
+	<br />Topic User Names fixed.<br />
+	<a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to back to admin cp.<br />&nbsp;
+</div>
+</td>
+</tr>
+<tr class="TableMenuRow4">
+<td class="TableMenuColumn4">&nbsp;</td>
+</tr>
+</table>
+</div>
+<?php } if($_GET['act']=="fixrnames") { 
+$admincptitle = " ".$ThemeSet['TitleDivider']." Fixing Reply User Names";
+$query = query("SELECT * FROM `".$Settings['sqltable']."posts` ORDER BY `TimeStamp` ASC", array(null));
+$result=mysql_query($query);
+$num=mysql_num_rows($result);
+$i=0;
+while ($i < $num) {
+$PostID=mysql_result($result,$i,"id");
+$UserID=mysql_result($result,$i,"UserID");
+$GuestsName=mysql_result($result,$i,"GuestName");
+$NewUserID = $UserID;
+$NewGuestsName = $GuestsName;
+$NewGuestsName = GetUserName($NewUserID,$Settings['sqltable']);
+if($UserID==-1&&$GuestsName!=null) { $NewGuestsName = $GuestsName; }
+if($NewGuestsName==null&&$GuestsName!=null&&$UserID!==0) {
+$NewUserID = -1; $NewGuestsName = $GuestsName; }
+if($UserID==-1&&$GuestsName==null) {
+$NewUserID = -1; $NewGuestsName = "Guest"; }
+if($UserID===0&&$GuestsName!=null) {
+$NewUserID = -1; $NewGuestsName = "Guest"; }
+if($UserID===0&&$GuestsName==null) {
+$NewUserID = -1; $NewGuestsName = "Guest"; }
+if($UserID==$NewUserID&&$GuestsName==$NewGuestsName) {
+$NewUserID = $UserID; $NewGuestsName = $GuestsName; }
+$EditUserID=mysql_result($result,$i,"EditUser");
+$EditUserName=mysql_result($result,$i,"EditUserName");
+$NewEditUserID = $EditUserID;
+$NewEditUserName = $EditUserName;
+$NewEditUserName = GetUserName($NewEditUserID,$Settings['sqltable']);
+if($EditUserID==-1&&$EditUserName!=null) { $NewEditUserName = $EditUserName; }
+if($NewEditUserName==null&&$EditUserName!=null&&$EditUserID!==0) {
+$NewEditUserID = -1; $NewEditUserName = $EditUserName; }
+if($EditUserID==-1&&$EditUserName==null) {
+$NewEditUserID = -1; $NewEditUserName = "Guest"; }
+if($EditUserID===0&&$EditUserName!=null) {
+$NewEditUserID = "0"; $NewEditUserName = null; }
+if($EditUserID===0&&$EditUserName==null) {
+$NewEditUserID = "0"; $NewEditUserName = null; }
+if($EditUserID==$NewEditUserID&&$EditUserName==$NewEditUserName) {
+$NewEditUserID = $EditUserID; $NewEditUserName = $EditUserName; }
+$query = query("UPDATE `".$Settings['sqltable']."posts` SET `UserID`=%i,`GuestName`='%s',`EditUser`=%i,`EditUserName`='%s' WHERE `id`=%i", array($NewUserID,$NewGuestsName,$NewEditUserID,$NewEditUserName,$PostID));
+mysql_query($query);
+++$i; }
+@mysql_free_result($result);
+?>
+<div class="TableMenuBorder">
+<?php if($ThemeSet['TableStyle']=="div") { ?>
+<div class="TableMenuRow1">
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Fixing Reply User Names</a></div>
+<?php } ?>
+<table class="TableMenu" style="width: 100%;">
+<?php if($ThemeSet['TableStyle']=="table") { ?>
+<tr class="TableMenuRow1">
+<td class="TableMenuColumn1"><span style="float: left;">
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Fixing Reply User Names</a>
+</span><span style="float: right;">&nbsp;</span></td>
+</tr><?php } ?>
+<tr class="TableMenuRow2">
+<th class="TableMenuColumn2" style="width: 100%; text-align: left;">
+<span style="float: left;">&nbsp;Fixing Reply User Names: </span>
+<span style="float: right;">&nbsp;</span>
+</th>
+</tr>
+<tr class="TableMenuRow3">
+<td class="TableMenuColumn3">
+<div style="text-align: center;">
+	<br />Reply User Names fixed.<br />
 	<a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to back to admin cp.<br />&nbsp;
 </div>
 </td>
