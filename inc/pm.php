@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: pm.php - Last Update: 10/08/2009 SVN 326 - Author: cooldude2k $
+    $FileInfo: pm.php - Last Update: 11/10/2009 SVN 335 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pm.php"||$File3Name=="/pm.php") {
@@ -67,7 +67,7 @@ if($_GET['act']=="view") {
 //Get SQL LIMIT Number
 $nums = $_GET['page'] * $Settings['max_pmlist'];
 $PageLimit = $nums - $Settings['max_pmlist'];
-$query = query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."messenger` WHERE `PMSentID`=%i ORDER BY `DateSend` DESC LIMIT %i,%i", array($_SESSION['UserID'],$PageLimit,$Settings['max_pmlist']));
+$query = query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."messenger` WHERE `ReciverID`=%i ORDER BY `DateSend` DESC LIMIT %i,%i", array($_SESSION['UserID'],$PageLimit,$Settings['max_pmlist']));
 $rnquery = query("SELECT FOUND_ROWS();", array(null));
 $result=mysql_query($query);
 $rnresult=mysql_query($rnquery);
@@ -189,7 +189,7 @@ $PMID=mysql_result($result,$i,"id");
 $SenderID=mysql_result($result,$i,"SenderID");
 $SenderName = GetUserName($SenderID,$Settings['sqltable']);
 $SenderHidden = GetHiddenMember($SenderID,$Settings['sqltable']);
-$SentToID=mysql_result($result,$i,"PMSentID");
+$SentToID=mysql_result($result,$i,"ReciverID");
 $SentToName = GetUserName($SentToID,$Settings['sqltable']);
 $SentToHidden = GetHiddenMember($SentToID,$Settings['sqltable']);
 $PMGuest=mysql_result($result,$i,"GuestName");
@@ -353,7 +353,7 @@ $PMID=mysql_result($result,$i,"id");
 $SenderID=mysql_result($result,$i,"SenderID");
 $SenderName = GetUserName($SenderID,$Settings['sqltable']);
 $SenderHidden = GetHiddenMember($SenderID,$Settings['sqltable']);
-$SentToID=mysql_result($result,$i,"PMSentID");
+$SentToID=mysql_result($result,$i,"ReciverID");
 $SentToName = GetUserName($SentToID,$Settings['sqltable']);
 $SentToHidden = GetHiddenMember($SentToID,$Settings['sqltable']);
 $PMGuest=mysql_result($result,$i,"GuestName");
@@ -404,7 +404,7 @@ $PMID=mysql_result($result,$is,"id");
 $SenderID=mysql_result($result,$is,"SenderID");
 //$SenderName = GetUserName($SenderID,$Settings['sqltable']);
 //$SenderHidden = GetHiddenMember($SenderID,$Settings['sqltable']);
-$SentToID=mysql_result($result,$is,"PMSentID");
+$SentToID=mysql_result($result,$is,"ReciverID");
 $SentToName = GetUserName($SentToID,$Settings['sqltable']);
 $SentToHidden = GetHiddenMember($SentToID,$Settings['sqltable']);
 $PMGuest=mysql_result($result,$is,"GuestName");
