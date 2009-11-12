@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: mysql.php - Last Update: 11/10/2009 SVN 337 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 11/12/2009 SVN 340 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -182,12 +182,16 @@ if($GZipEncode['Type']!="gzip") { if($GZipEncode['Type']!="deflate") { $GZipEnco
 @header('P3P: CP="NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM"'); } */
 // Some http stuff
 $SQLStat = @ConnectMysql($Settings['sqlhost'],$Settings['sqluser'],$Settings['sqlpass'],$Settings['sqldb']);
+$SQLCollate = "latin1_general_ci";
 $SQLCharset = "latin1"; 
 if($Settings['charset']=="ISO-8859-1") {
+	$SQLCollate = "latin1_general_ci";
 	$SQLCharset = "latin1"; }
 if($Settings['charset']=="ISO-8859-15") {
+	$SQLCollate = "latin1_general_ci";
 	$SQLCharset = "latin1"; }
 if($Settings['charset']=="UTF-8") {
+	$SQLCollate = "utf8_unicode_ci";
 	$SQLCharset = "utf8"; }
 @mysql_set_charset($SQLCharset);
 if($SQLStat===false) {
