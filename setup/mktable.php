@@ -12,7 +12,7 @@
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mktable.php - Last Update: 11/12/2009 SVN 341 - Author: cooldude2k $
+    $FileInfo: mktable.php - Last Update: 11/13/2009 SVN 342 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mktable.php"||$File3Name=="/mktable.php") {
@@ -226,7 +226,7 @@ $query=query("CREATE TABLE IF NOT EXISTS `".$_POST['tableprefix']."sessions` (\n
 mysql_query($query);
 $query=query("CREATE TABLE IF NOT EXISTS `".$_POST['tableprefix']."smileys` (\n".
 "  `id` int(15) NOT NULL auto_increment,\n".
-"  `FileName` text character set ".$SQLCharset." collate latin1_general_cs NOT NULL,\n".
+"  `FileName` text collate ".$SQLCollate." NOT NULL,\n".
 "  `SmileName` text collate ".$SQLCollate." NOT NULL,\n".
 "  `SmileText` text collate ".$SQLCollate." NOT NULL,\n".
 "  `Directory` text collate ".$SQLCollate." NOT NULL,\n".
