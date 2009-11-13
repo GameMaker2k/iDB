@@ -12,7 +12,7 @@
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mktable.php - Last Update: 11/12/2009 SVN 340 - Author: cooldude2k $
+    $FileInfo: mktable.php - Last Update: 11/12/2009 SVN 341 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mktable.php"||$File3Name=="/mktable.php") {
@@ -20,37 +20,252 @@ if ($File3Name=="mktable.php"||$File3Name=="/mktable.php") {
 	exit(); }
 if(!isset($SetupDir['setup'])) { $SetupDir['setup'] = "setup/"; }
 if(!isset($SetupDir['convert'])) { $SetupDir['convert'] = "setup/convert/"; }
-$query=query("ALTER DATABASE `idb` DEFAULT CHARACTER SET ".$SQLCharset." COLLATE ".$SQLCollate, array(null));
+$query=query("ALTER DATABASE `".$_POST['DatabaseName']."` DEFAULT CHARACTER SET ".$SQLCharset." COLLATE ".$SQLCollate.";", array(null));
 mysql_query($query);
-$query=query("CREATE TABLE `".$_POST['tableprefix']."categories` ( `id` int(15) NOT NULL auto_increment, `OrderID` int(15) NOT NULL default '0', `Name` varchar(150) NOT NULL default '', `ShowCategory` varchar(5) NOT NULL default '', `CategoryType` varchar(15) NOT NULL default '', `SubShowForums` varchar(5) NOT NULL default '', `InSubCategory` int(15) NOT NULL default '0', `PostCountView` int(15) NOT NULL default '0', `KarmaCountView` int(15) NOT NULL default '0', `Description` text NOT NULL, PRIMARY KEY  (`id`)) TYPE=`MyISAM` DEFAULT CHARACTER SET ".$SQLCharset." COLLATE ".$SQLCollate."`;", array(null));
+$query=query("CREATE TABLE IF NOT EXISTS `".$_POST['tableprefix']."categories` (\n".
+"  `id` int(15) NOT NULL auto_increment,\n".
+"  `OrderID` int(15) NOT NULL default '0',\n".
+"  `Name` varchar(150) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `ShowCategory` varchar(5) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `CategoryType` varchar(15) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `SubShowForums` varchar(5) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `InSubCategory` int(15) NOT NULL default '0',\n".
+"  `PostCountView` int(15) NOT NULL default '0',\n".
+"  `KarmaCountView` int(15) NOT NULL default '0',\n".
+"  `Description` text collate ".$SQLCollate." NOT NULL,\n".
+"  PRIMARY KEY  (`id`)\n".
+") ENGINE=MyISAM  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
 mysql_query($query);
-$query=query("CREATE TABLE `".$_POST['tableprefix']."forums` ( `id` int(15) NOT NULL auto_increment, `CategoryID` int(15) NOT NULL default '0', `OrderID` int(15) NOT NULL default '0', `Name` varchar(150) NOT NULL default '', `ShowForum` varchar(5) NOT NULL default '', `ForumType` varchar(15) NOT NULL default '', `InSubForum` int(15) NOT NULL default '0', `RedirectURL` text NOT NULL, `Redirects` int(15) NOT NULL default '0', `NumViews` int(15) NOT NULL default '0', `Description` text NOT NULL, `PostCountAdd` varchar(15) NOT NULL default '', `PostCountView` int(15) NOT NULL default '0', `KarmaCountView` int(15) NOT NULL default '0', `CanHaveTopics` varchar(5) NOT NULL default '', `HotTopicPosts` int(15) NOT NULL default '0', `NumPosts` int(15) NOT NULL default '0', `NumTopics` int(15) NOT NULL default '0', PRIMARY KEY  (`id`)) TYPE=`MyISAM` DEFAULT CHARACTER SET ".$SQLCharset." COLLATE ".$SQLCollate."`;", array(null));
+$query=query("CREATE TABLE IF NOT EXISTS `".$_POST['tableprefix']."catpermissions` (\n".
+"  `id` int(15) NOT NULL auto_increment,\n".
+"  `PermissionID` int(15) NOT NULL default '0',\n".
+"  `Name` varchar(150) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `CategoryID` int(15) NOT NULL default '0',\n".
+"  `CanViewCategory` varchar(5) collate ".$SQLCollate." NOT NULL default '',\n".
+"  PRIMARY KEY  (`id`)\n".
+") ENGINE=MyISAM  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
 mysql_query($query);
-$query=query("CREATE TABLE `".$_POST['tableprefix']."events` ( `id` int(15) NOT NULL auto_increment, `UserID` int(15) NOT NULL default '0', `GuestName` varchar(150) NOT NULL default '', `EventName` varchar(150) NOT NULL default '', `EventText` text NOT NULL, `TimeStamp` int(15) NOT NULL default '0', `TimeStampEnd` int(15) NOT NULL default '0', `EventMonth` int(5) NOT NULL default '0', `EventMonthEnd` int(5) NOT NULL default '0', `EventDay` int(5) NOT NULL default '0', `EventDayEnd` int(5) NOT NULL default '0', `EventYear` int(5) NOT NULL default '0', `EventYearEnd` int(5) NOT NULL default '0', PRIMARY KEY  (`id`)) TYPE=`MyISAM` DEFAULT CHARACTER SET ".$SQLCharset." COLLATE ".$SQLCollate.";", array(null));
+$query=query("CREATE TABLE IF NOT EXISTS `".$_POST['tableprefix']."events` (\n".
+"  `id` int(15) NOT NULL auto_increment,\n".
+"  `UserID` int(15) NOT NULL default '0',\n".
+"  `GuestName` varchar(150) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `EventName` varchar(150) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `EventText` text collate ".$SQLCollate." NOT NULL,\n".
+"  `TimeStamp` int(15) NOT NULL default '0',\n".
+"  `TimeStampEnd` int(15) NOT NULL default '0',\n".
+"  `EventMonth` int(5) NOT NULL default '0',\n".
+"  `EventMonthEnd` int(5) NOT NULL default '0',\n".
+"  `EventDay` int(5) NOT NULL default '0',\n".
+"  `EventDayEnd` int(5) NOT NULL default '0',\n".
+"  `EventYear` int(5) NOT NULL default '0',\n".
+"  `EventYearEnd` int(5) NOT NULL default '0',\n".
+"  PRIMARY KEY  (`id`)\n".
+") ENGINE=MyISAM  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
 mysql_query($query);
-$query=query("CREATE TABLE `".$_POST['tableprefix']."members` ( `id` int(15) NOT NULL auto_increment, `Name` varchar(150) NOT NULL default '', `Password` varchar(250) NOT NULL default '', `HashType` varchar(50) NOT NULL default '', `Email` varchar(150) NOT NULL default '', `GroupID` int(15) NOT NULL default '0', `Validated` varchar(20) NOT NULL default '', `HiddenMember` varchar(20) NOT NULL default '', `WarnLevel` int(10) NOT NULL default '0', `Interests` varchar(150) NOT NULL default '', `Title` varchar(150) NOT NULL default '', `Joined` int(15) NOT NULL default '0', `LastActive` int(15) NOT NULL default '0', `LastPostTime` int(15) NOT NULL default '0', `BanTime` int(15) NOT NULL default '0', `BirthDay` int(5) NOT NULL default '0', `BirthMonth` int(5) NOT NULL default '0', `BirthYear` int(5) NOT NULL default '0', `Signature` text NOT NULL, `Notes` text NOT NULL, `Avatar` varchar(150) NOT NULL default '', `AvatarSize` varchar(10) NOT NULL default '', `Website` varchar(150) NOT NULL default '', `Gender` varchar(15) NOT NULL default '', `PostCount` int(15) NOT NULL default '0', `Karma` int(15) NOT NULL default '0', `KarmaUpdate` int(15) NOT NULL default '0', `RepliesPerPage` int(5) NOT NULL default '0', `TopicsPerPage` int(5) NOT NULL default '0', `MessagesPerPage` int(5) NOT NULL default '0', `TimeZone` varchar(5) NOT NULL default '0', `DST` varchar(5) NOT NULL default '0', `UseTheme` varchar(26) NOT NULL default '0', `IP` varchar(20) NOT NULL default '', `Salt` varchar(50) NOT NULL default '', PRIMARY KEY  (`id`), UNIQUE KEY `Name` (`Name`), UNIQUE KEY `Email` (`Email`)) TYPE=`MyISAM` DEFAULT CHARACTER SET ".$SQLCharset." COLLATE ".$SQLCollate.";", array(null));
+$query=query("CREATE TABLE IF NOT EXISTS `".$_POST['tableprefix']."forums` (\n".
+"  `id` int(15) NOT NULL auto_increment,\n".
+"  `CategoryID` int(15) NOT NULL default '0',\n".
+"  `OrderID` int(15) NOT NULL default '0',\n".
+"  `Name` varchar(150) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `ShowForum` varchar(5) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `ForumType` varchar(15) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `InSubForum` int(15) NOT NULL default '0',\n".
+"  `RedirectURL` text collate ".$SQLCollate." NOT NULL,\n".
+"  `Redirects` int(15) NOT NULL default '0',\n".
+"  `NumViews` int(15) NOT NULL default '0',\n".
+"  `Description` text collate ".$SQLCollate." NOT NULL,\n".
+"  `PostCountAdd` varchar(15) character set ".$SQLCharset." NOT NULL default '',\n".
+"  `PostCountView` int(15) NOT NULL default '0',\n".
+"  `KarmaCountView` int(15) NOT NULL default '0',\n".
+"  `CanHaveTopics` varchar(5) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `HotTopicPosts` int(15) NOT NULL default '0',\n".
+"  `NumPosts` int(15) NOT NULL default '0',\n".
+"  `NumTopics` int(15) NOT NULL default '0',\n".
+"  PRIMARY KEY  (`id`)\n".
+") ENGINE=MyISAM  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
 mysql_query($query);
-$query=query("CREATE TABLE `".$_POST['tableprefix']."messenger` ( `id` int(15) NOT NULL auto_increment, `SenderID` int(15) NOT NULL default '0', `ReciverID` int(15) NOT NULL default '0', `GuestName` varchar(150) NOT NULL default '', `MessageTitle` varchar(150) NOT NULL default '', `MessageText` text NOT NULL, `Description` text NOT NULL, `DateSend` int(15) NOT NULL default '0', `Read` int(5) NOT NULL default '0', PRIMARY KEY  (`id`)) TYPE=`MyISAM` DEFAULT CHARACTER SET ".$SQLCharset." COLLATE ".$SQLCollate.";", array(null));
+$query=query("CREATE TABLE IF NOT EXISTS `".$_POST['tableprefix']."groups` (\n".
+"  `id` int(15) NOT NULL auto_increment,\n".
+"  `Name` varchar(150) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `PermissionID` int(15) NOT NULL default '0',\n".
+"  `NamePrefix` varchar(150) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `NameSuffix` varchar(150) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `CanViewBoard` varchar(5) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `CanViewOffLine` varchar(5) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `CanEditProfile` varchar(5) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `CanAddEvents` varchar(5) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `CanPM` varchar(5) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `CanSearch` varchar(5) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `FloodControl` int(5) NOT NULL default '0',\n".
+"  `SearchFlood` int(5) NOT NULL default '0',\n".
+"  `PromoteTo` int(15) NOT NULL default '0',\n".
+"  `PromotePosts` int(15) NOT NULL default '0',\n".
+"  `PromoteKarma` int(15) NOT NULL default '0',\n".
+"  `HasModCP` varchar(5) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `HasAdminCP` varchar(5) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `ViewDBInfo` varchar(5) collate ".$SQLCollate." NOT NULL default '',\n".
+"  PRIMARY KEY  (`id`),\n".
+"  UNIQUE KEY `Name` (`Name`)\n".
+") ENGINE=MyISAM  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
 mysql_query($query);
-$query=query("CREATE TABLE `".$_POST['tableprefix']."posts` ( `id` int(15) NOT NULL auto_increment, `TopicID` int(15) NOT NULL default '0', `ForumID` int(15) NOT NULL default '0', `CategoryID` int(15) NOT NULL default '0', `UserID` int(15) NOT NULL default '0', `GuestName` varchar(150) NOT NULL default '', `TimeStamp` int(15) NOT NULL default '0', `LastUpdate` int(15) NOT NULL default '0', `EditUser` int(15) NOT NULL default '0', `EditUserName` varchar(150) NOT NULL default '', `Post` text NOT NULL, `Description` text NOT NULL, `IP` varchar(20) NOT NULL default '', `EditIP` varchar(20) NOT NULL default '', PRIMARY KEY  (`id`)) TYPE=`MyISAM` DEFAULT CHARACTER SET ".$SQLCharset." COLLATE ".$SQLCollate.";", array(null));
+$query=query("CREATE TABLE IF NOT EXISTS `".$_POST['tableprefix']."members` (\n".
+"  `id` int(15) NOT NULL auto_increment,\n".
+"  `Name` varchar(150) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `Password` varchar(250) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `HashType` varchar(50) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `Email` varchar(150) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `GroupID` int(15) NOT NULL default '0',\n".
+"  `Validated` varchar(20) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `HiddenMember` varchar(20) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `WarnLevel` int(10) NOT NULL default '0',\n".
+"  `Interests` varchar(150) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `Title` varchar(150) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `Joined` int(15) NOT NULL default '0',\n".
+"  `LastActive` int(15) NOT NULL default '0',\n".
+"  `LastPostTime` int(15) NOT NULL default '0',\n".
+"  `BanTime` int(15) NOT NULL default '0',\n".
+"  `BirthDay` int(5) NOT NULL default '0',\n".
+"  `BirthMonth` int(5) NOT NULL default '0',\n".
+"  `BirthYear` int(5) NOT NULL default '0',\n".
+"  `Signature` text collate ".$SQLCollate." NOT NULL,\n".
+"  `Notes` text collate ".$SQLCollate." NOT NULL,\n".
+"  `Avatar` varchar(150) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `AvatarSize` varchar(10) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `Website` varchar(150) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `Gender` varchar(15) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `PostCount` int(15) NOT NULL default '0',\n".
+"  `Karma` int(15) NOT NULL default '0',\n".
+"  `KarmaUpdate` int(15) NOT NULL default '0',\n".
+"  `RepliesPerPage` int(5) NOT NULL default '0',\n".
+"  `TopicsPerPage` int(5) NOT NULL default '0',\n".
+"  `MessagesPerPage` int(5) NOT NULL default '0',\n".
+"  `TimeZone` varchar(5) collate ".$SQLCollate." NOT NULL default '0',\n".
+"  `DST` varchar(5) collate ".$SQLCollate." NOT NULL default '0',\n".
+"  `UseTheme` varchar(26) collate ".$SQLCollate." NOT NULL default '0',\n".
+"  `IP` varchar(20) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `Salt` varchar(50) collate ".$SQLCollate." NOT NULL default '',\n".
+"  PRIMARY KEY  (`id`),\n".
+"  UNIQUE KEY `Name` (`Name`),\n".
+"  UNIQUE KEY `Email` (`Email`)\n".
+") ENGINE=MyISAM  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
 mysql_query($query);
-$query=query("CREATE TABLE `".$_POST['tableprefix']."smileys` ( `id` int(15) NOT NULL auto_increment, `FileName` text NOT NULL, `SmileName` text NOT NULL, `SmileText` text NOT NULL, `Directory` text NOT NULL, `Show` varchar(5) NOT NULL default '', `ReplaceCI` varchar(5) NOT NULL default '', PRIMARY KEY  (`id`)) TYPE=`MyISAM` DEFAULT CHARACTER SET ".$SQLCharset." COLLATE ".$SQLCollate.";", array(null));
+$query=query("CREATE TABLE IF NOT EXISTS `".$_POST['tableprefix']."messenger` (\n".
+"  `id` int(15) NOT NULL auto_increment,\n".
+"  `SenderID` int(15) NOT NULL default '0',\n".
+"  `ReciverID` int(15) NOT NULL default '0',\n".
+"  `GuestName` varchar(150) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `MessageTitle` varchar(150) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `MessageText` text collate ".$SQLCollate." NOT NULL,\n".
+"  `Description` text collate ".$SQLCollate." NOT NULL,\n".
+"  `DateSend` int(15) NOT NULL default '0',\n".
+"  `Read` int(5) NOT NULL default '0',\n".
+"  PRIMARY KEY  (`id`)\n".
+") ENGINE=MyISAM  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
+mysql_query($query);
+$query=query("CREATE TABLE IF NOT EXISTS `".$_POST['tableprefix']."permissions` (\n".
+"  `id` int(15) NOT NULL auto_increment,\n".
+"  `PermissionID` int(15) NOT NULL default '0',\n".
+"  `Name` varchar(150) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `ForumID` int(15) NOT NULL default '0',\n".
+"  `CanViewForum` varchar(5) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `CanMakeTopics` varchar(5) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `CanMakeReplys` varchar(5) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `CanMakeReplysCT` varchar(5) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `CanEditTopics` varchar(5) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `CanEditTopicsCT` varchar(5) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `CanEditReplys` varchar(5) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `CanEditReplysCT` varchar(5) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `CanDeleteTopics` varchar(5) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `CanDeleteTopicsCT` varchar(5) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `CanDeleteReplys` varchar(5) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `CanDeleteReplysCT` varchar(5) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `CanCloseTopics` varchar(5) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `CanPinTopics` varchar(5) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `CanDohtml` varchar(5) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `CanUseBBags` varchar(5) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `CanModForum` varchar(5) collate ".$SQLCollate." NOT NULL default '',\n".
+"  PRIMARY KEY  (`id`)\n".
+") ENGINE=MyISAM  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
+mysql_query($query);
+$query=query("CREATE TABLE IF NOT EXISTS `".$_POST['tableprefix']."posts` (\n".
+"  `id` int(15) NOT NULL auto_increment,\n".
+"  `TopicID` int(15) NOT NULL default '0',\n".
+"  `ForumID` int(15) NOT NULL default '0',\n".
+"  `CategoryID` int(15) NOT NULL default '0',\n".
+"  `UserID` int(15) NOT NULL default '0',\n".
+"  `GuestName` varchar(150) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `TimeStamp` int(15) NOT NULL default '0',\n".
+"  `LastUpdate` int(15) NOT NULL default '0',\n".
+"  `EditUser` int(15) NOT NULL default '0',\n".
+"  `EditUserName` varchar(150) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `Post` text collate ".$SQLCollate." NOT NULL,\n".
+"  `Description` text collate ".$SQLCollate." NOT NULL,\n".
+"  `IP` varchar(20) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `EditIP` varchar(20) collate ".$SQLCollate." NOT NULL default '',\n".
+"  PRIMARY KEY  (`id`)\n".
+") ENGINE=MyISAM  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
+mysql_query($query);
+$query=query("CREATE TABLE IF NOT EXISTS `".$_POST['tableprefix']."restrictedwords` (\n".
+"  `id` int(15) NOT NULL auto_increment,\n".
+"  `Word` text collate ".$SQLCollate." NOT NULL,\n".
+"  `RestrictedUserName` varchar(5) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `RestrictedTopicName` varchar(5) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `RestrictedEventName` varchar(5) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `RestrictedMessageName` varchar(5) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `CaseInsensitive` varchar(5) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `WholeWord` varchar(5) collate ".$SQLCollate." NOT NULL default '',\n".
+"  PRIMARY KEY  (`id`)\n".
+") ENGINE=MyISAM  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
+mysql_query($query);
+$query=query("CREATE TABLE IF NOT EXISTS `".$_POST['tableprefix']."sessions` (\n".
+"  `session_id` varchar(150) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `session_data` text collate ".$SQLCollate." NOT NULL,\n".
+"  `expires` int(15) NOT NULL default '0',\n".
+"  PRIMARY KEY  (`session_id`)\n".
+") ENGINE=MyISAM DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
+mysql_query($query);
+$query=query("CREATE TABLE IF NOT EXISTS `".$_POST['tableprefix']."smileys` (\n".
+"  `id` int(15) NOT NULL auto_increment,\n".
+"  `FileName` text character set ".$SQLCharset." collate latin1_general_cs NOT NULL,\n".
+"  `SmileName` text collate ".$SQLCollate." NOT NULL,\n".
+"  `SmileText` text collate ".$SQLCollate." NOT NULL,\n".
+"  `Directory` text collate ".$SQLCollate." NOT NULL,\n".
+"  `Show` varchar(5) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `ReplaceCI` varchar(5) collate ".$SQLCollate." NOT NULL default '',\n".
+"  PRIMARY KEY  (`id`)\n".
+") ENGINE=MyISAM  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
+mysql_query($query);
+$query=query("CREATE TABLE IF NOT EXISTS `".$_POST['tableprefix']."topics` (\n".
+"  `id` int(15) NOT NULL auto_increment,\n".
+"  `ForumID` int(15) NOT NULL default '0',\n".
+"  `CategoryID` int(15) NOT NULL default '0',\n".
+"  `OldForumID` int(15) NOT NULL default '0',\n".
+"  `OldCategoryID` int(15) NOT NULL default '0',\n".
+"  `UserID` int(15) NOT NULL default '0',\n".
+"  `GuestName` varchar(150) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `TimeStamp` int(15) NOT NULL default '0',\n".
+"  `LastUpdate` int(15) NOT NULL default '0',\n".
+"  `TopicName` varchar(150) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `Description` text collate ".$SQLCollate." NOT NULL,\n".
+"  `NumReply` int(15) NOT NULL default '0',\n".
+"  `NumViews` int(15) NOT NULL default '0',\n".
+"  `Pinned` int(5) NOT NULL default '0',\n".
+"  `Closed` int(5) NOT NULL default '0',\n".
+"  PRIMARY KEY  (`id`)\n".
+") ENGINE=MyISAM  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
+mysql_query($query);
+$query=query("CREATE TABLE IF NOT EXISTS `".$_POST['tableprefix']."wordfilter` (\n".
+"  `id` int(15) NOT NULL auto_increment,\n".
+"  `Filter` text collate ".$SQLCollate." NOT NULL,\n".
+"  `Replace` text collate ".$SQLCollate." NOT NULL,\n".
+"  `CaseInsensitive` varchar(5) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `WholeWord` varchar(5) collate ".$SQLCollate." NOT NULL default '',\n".
+"  PRIMARY KEY  (`id`)\n".
+") ENGINE=MyISAM  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
 mysql_query($query);
 /*
 $query=query("CREATE TABLE `".$_POST['tableprefix']."tagboard` ( `id` int(15) NOT NULL auto_increment, `UserID` int(15) NOT NULL default '0', `GuestName` varchar(150) NOT NULL default '', `TimeStamp` int(15) NOT NULL default '0', `Post` text NOT NULL, `IP` varchar(20) NOT NULL default '', PRIMARY KEY  (`id`)) TYPE=`MyISAM` DEFAULT CHARACTER SET ".$SQLCharset." COLLATE ".$SQLCollate.";", array(null));
 */
-$query=query("CREATE TABLE `".$_POST['tableprefix']."topics` ( `id` int(15) NOT NULL auto_increment, `ForumID` int(15) NOT NULL default '0', `CategoryID` int(15) NOT NULL default '0',  `OldForumID` int(15) NOT NULL default '0',  `OldCategoryID` int(15) NOT NULL default '0', `UserID` int(15) NOT NULL default '0', `GuestName` varchar(150) NOT NULL default '', `TimeStamp` int(15) NOT NULL default '0', `LastUpdate` int(15) NOT NULL default '0', `TopicName` varchar(150) NOT NULL default '', `Description` text NOT NULL, `NumReply` int(15) NOT NULL default '0', `NumViews` int(15) NOT NULL default '0', `Pinned` int(5) NOT NULL default '0', `Closed` int(5) NOT NULL default '0', PRIMARY KEY  (`id`)) TYPE=`MyISAM` DEFAULT CHARACTER SET ".$SQLCharset." COLLATE ".$SQLCollate.";", array(null));
-mysql_query($query);
-$query=query("CREATE TABLE `".$_POST['tableprefix']."groups` ( `id` int(15) NOT NULL auto_increment, `Name` varchar(150) NOT NULL default '', `PermissionID` int(15) NOT NULL default '0', `NamePrefix` varchar(150) NOT NULL default '', `NameSuffix` varchar(150) NOT NULL default '', `CanViewBoard` varchar(5) NOT NULL default '', `CanViewOffLine` varchar(5) NOT NULL default '', `CanEditProfile` varchar(5) NOT NULL default '', `CanAddEvents` varchar(5) NOT NULL default '', `CanPM` varchar(5) NOT NULL default '', `CanSearch` varchar(5) NOT NULL default '', `FloodControl` int(5) NOT NULL default '0', `SearchFlood` int(5) NOT NULL default '0', `PromoteTo` int(15) NOT NULL default '0', `PromotePosts` int(15) NOT NULL default '0', `PromoteKarma` int(15) NOT NULL default '0', `HasModCP` varchar(5) NOT NULL default '', `HasAdminCP` varchar(5) NOT NULL default '', `ViewDBInfo` varchar(5) NOT NULL default '', PRIMARY KEY  (`id`), UNIQUE KEY `Name` (`Name`)) TYPE=`MyISAM` DEFAULT CHARACTER SET ".$SQLCharset." COLLATE ".$SQLCollate.";", array(null));
-mysql_query($query);
-$query=query("CREATE TABLE `".$_POST['tableprefix']."permissions` ( `id` int(15) NOT NULL auto_increment, `PermissionID` int(15) NOT NULL default '0', `Name` varchar(150) NOT NULL default '', `ForumID` int(15) NOT NULL default '0', `CanViewForum` varchar(5) NOT NULL default '', `CanMakeTopics` varchar(5) NOT NULL default '', `CanMakeReplys` varchar(5) NOT NULL default '', `CanMakeReplysCT` varchar(5) NOT NULL default '', `CanEditTopics` varchar(5) NOT NULL default '', `CanEditTopicsCT` varchar(5) NOT NULL default '', `CanEditReplys` varchar(5) NOT NULL default '', `CanEditReplysCT` varchar(5) NOT NULL default '', `CanDeleteTopics` varchar(5) NOT NULL default '', `CanDeleteTopicsCT` varchar(5) NOT NULL default '', `CanDeleteReplys` varchar(5) NOT NULL default '', `CanDeleteReplysCT` varchar(5) NOT NULL default '', `CanCloseTopics` varchar(5) NOT NULL default '', `CanPinTopics` varchar(5) NOT NULL default '', `CanDohtml` varchar(5) NOT NULL default '', `CanUseBBags` varchar(5) NOT NULL default '', `CanModForum` varchar(5) NOT NULL default '', PRIMARY KEY  (`id`)) TYPE=`MyISAM` DEFAULT CHARACTER SET ".$SQLCharset." COLLATE ".$SQLCollate.";", array(null));
-mysql_query($query);
-$query=query("CREATE TABLE `".$_POST['tableprefix']."catpermissions` ( `id` int(15) NOT NULL auto_increment, `PermissionID` int(15) NOT NULL default '0', `Name` varchar(150) NOT NULL default '', `CategoryID` int(15) NOT NULL default '0', `CanViewCategory` varchar(5) NOT NULL default '', PRIMARY KEY  (`id`)) TYPE=`MyISAM` DEFAULT CHARACTER SET ".$SQLCharset." COLLATE ".$SQLCollate.";", array(null));
-mysql_query($query);
-$query=query("CREATE TABLE `".$_POST['tableprefix']."wordfilter` ( `id` int(15) NOT NULL auto_increment, `Filter` text NOT NULL, `Replace` text NOT NULL, `CaseInsensitive` varchar(5) NOT NULL default '', `WholeWord` varchar(5) NOT NULL default '', PRIMARY KEY  (`id`)) TYPE=`MyISAM` DEFAULT CHARACTER SET ".$SQLCharset." COLLATE ".$SQLCollate.";", array(null));
-mysql_query($query);
-$query=query("CREATE TABLE `".$_POST['tableprefix']."restrictedwords` ( `id` int(15) NOT NULL auto_increment, `Word` text NOT NULL, `RestrictedUserName` varchar(5) NOT NULL default '', `RestrictedTopicName` varchar(5) NOT NULL default '', `RestrictedEventName` varchar(5) NOT NULL default '', `RestrictedMessageName` varchar(5) NOT NULL default '', `CaseInsensitive` varchar(5) NOT NULL default '', `WholeWord` varchar(5) NOT NULL default '', PRIMARY KEY  (`id`)) TYPE=`MyISAM` DEFAULT CHARACTER SET ".$SQLCharset." COLLATE ".$SQLCollate.";", array(null));
-mysql_query($query);
 $query = query("INSERT INTO `".$_POST['tableprefix']."groups` VALUES (1, 'Admin', 1, '', '', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 30, 30, 0, 0, 0, 'yes', 'yes', 'yes'), (2, 'Moderator', 2, '', '', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 30, 30, 0, 0, 0, 'yes', 'no', 'no'), (3, 'Member', 3, '', '', 'yes', 'no', 'yes', 'yes', 'yes', 'yes', 30, 30, 0, 0, 0, 'no', 'no', 'no'), (4, 'Guest', 4, '', '', 'yes', 'no', 'no', 'no', 'no', 'no', 30, 30, 0, 0, 0, 'no', 'no', 'no'), (5, 'Banned', 5, '', '', 'no', 'no', 'no', 'no', 'no', 'no', 30, 30, 0, 0, 0, 'no', 'no', 'no'), (6, 'Validate', 6, '', '', 'yes', 'no', 'yes', 'no', 'no', 'yes', 30, 30, 0, 0, 0, 'no', 'no', 'no');", array(null)); 
 mysql_query($query);
 $query = query("INSERT INTO `".$_POST['tableprefix']."permissions` VALUES (1, 1, 'Admin', 1, 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes'), (2, 2, 'Moderator', 1, 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes'), (3, 3, 'Member', 1, 'yes', 'yes', 'yes', 'no', 'yes', 'no', 'yes', 'no', 'yes', 'no', 'yes', 'no', 'no', 'no', 'no', 'yes', 'no'), (4, 4, 'Guest', 1, 'yes', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no'), (5, 5, 'Banned', 1, 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no'), (6, 6, 'Validate', 1, 'yes', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no');", array(null)); 

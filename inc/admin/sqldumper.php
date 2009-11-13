@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sqldumper.php - Last Update: 8/11/2009 SVN 304 - Author: cooldude2k $
+    $FileInfo: sqldumper.php - Last Update: 11/12/2009 SVN 341 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="sqldumper.php"||$File3Name=="/sqldumper.php") {
@@ -68,15 +68,20 @@ if($tabstats["Auto_increment"]!="") {
 $AutoIncrement = " AUTO_INCREMENT=".$tabstats["Auto_increment"]." "; }
 	$TableInfo[$l] = null; $TableStats = null; $i = 0;
 	while ($row2 = mysql_fetch_assoc($result2)) {
-		$row2["Default"] = "'".$row2["Default"]."'";
+		$row2["Default"] = "'".$row2["Default"]."'"; 
 		if($i==0) { $row2["Default"] = null; } $DefaVaule = null;
 		if($row2["Default"]!=null) { $DefaVaule = " default ".$row2["Default"]; }
 		if($row2["Extra"]!="") { $row2["Extra"] = " ".$row2["Extra"]; }
 	if($row2["Type"]=="text") { $DefaVaule = null; }
+	if(isset($PrimaryKey[$l])) { 
+	if($row2["Key"]=="PRI"||$row2["Key"]=="UNI") {
+	$PrimaryKey[$l] .= ",\n"; } }
+	if(!isset($PrimaryKey[$l])) { $PrimaryKey[$l] = null; }
         $TableInfo[$l] .= "  `".$row2["Field"]."` ".$row2["Type"]." NOT NULL".$DefaVaule.$row2["Extra"].",\n";
-		if($row2["Key"]=="PRI") { $PrimaryKey[$l] = "  PRIMARY KEY  (`".$row2["Field"]."`)"; }
+		if($row2["Key"]=="PRI") { $PrimaryKey[$l] .= "  PRIMARY KEY (`".$row2["Field"]."`)"; }
+		if($row2["Key"]=="UNI") { $PrimaryKey[$l] .= "  UNIQUE KEY `".$row2["Field"]."` (`".$row2["Field"]."`)"; }
 	++$i; } 
-	$TableStats[$l] = ") ENGINE=".$tabstats["Engine"]." DEFAULT CHARSET=".mysql_client_encoding().$AutoIncrement.";\n";
+	$TableStats[$l] = ") ENGINE=".$tabstats["Engine"]." DEFAULT CHARSET=".mysql_client_encoding()." COLLATE=".$tabstats["Collation"].$AutoIncrement.";\n";
 	$TableInfo[$l] .= $PrimaryKey[$l]."\n".$TableStats[$l];
 	$FullTable[$l] = $DropTable[$l].$CreateTable[$l].$TableInfo[$l]; }
 if (!$result2) {

@@ -12,7 +12,7 @@
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mkconfig.php - Last Update: 11/12/2009 SVN 340 - Author: cooldude2k $
+    $FileInfo: mkconfig.php - Last Update: 11/12/2009 SVN 341 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mkconfig.php"||$File3Name=="/mkconfig.php") {
@@ -117,8 +117,6 @@ if($Settings['charset']=="UTF-8") {
 if($mydbtest!==true) { $Error="Yes";
 echo "<br />".mysql_errno().": ".mysql_error()."\n"; }
 if ($Error!="Yes") {
-$query=query("CREATE TABLE `".$_POST['tableprefix']."sessions` ( `session_id` varchar(150) NOT NULL default '', `session_data` text NOT NULL, `expires` int(15) NOT NULL default '0', PRIMARY KEY  (`session_id`)) TYPE=`MyISAM` DEFAULT CHARSET=`".$SQLCharset."`;", array(null));
-mysql_query($query);
 require($SetupDir['setup'].'mktable.php');
 /*
 $query = query("INSERT INTO `".$_POST['tableprefix']."tagboard` VALUES (1,-1,'".$iDB_Author."',".$YourDate.",'Welcome to Your New Tag Board. ^_^','127.0.0.1'), array(null)); 
