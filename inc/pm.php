@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: pm.php - Last Update: 11/10/2009 SVN 337 - Author: cooldude2k $
+    $FileInfo: pm.php - Last Update: 11/14/2009 SVN 344 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pm.php"||$File3Name=="/pm.php") {
@@ -954,7 +954,8 @@ if($renum==0) { $Error="Yes"; ?>
 $messageid = getnextid($Settings['sqltable'],"messenger");
 if($_SESSION['UserGroup']==$Settings['GuestGroup']) { $User1Name = $_POST['GuestName']; }
 if($_SESSION['UserGroup']!=$Settings['GuestGroup']) { $User1Name = $_SESSION['MemberName']; }
-$query = query("INSERT INTO `".$Settings['sqltable']."messenger` VALUES (".$messageid.",%i,%i,'%s','%s','%s','%s',%i,%i)", array($_SESSION['UserID'],$SendMessageToID,$_SESSION['MemberName'],$_POST['MessageName'],$_POST['Message'],$_POST['MessageDesc'],$LastActive,0));
+$query = query("INSERT INTO `".$Settings['sqltable']."messenger` (`SenderID`, `ReciverID`, `GuestName`, `MessageTitle`, `MessageText`, `Description`, `DateSend`, `Read`) VALUES 
+(%i, %i, '%s', '%s', '%s', '%s', %i, %i)", array($_SESSION['UserID'],$SendMessageToID,$_SESSION['MemberName'],$_POST['MessageName'],$_POST['Message'],$_POST['MessageDesc'],$LastActive,0));
 mysql_query($query);
 ?><tr>
 	<td><span class="TableMessage"><br />

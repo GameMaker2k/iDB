@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: categories.php - Last Update: 10/08/2009 SVN 324 - Author: cooldude2k $
+    $FileInfo: categories.php - Last Update: 11/14/2009 SVN 344 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="categories.php"||$File3Name=="/categories.php") {
@@ -169,7 +169,8 @@ $errorstr = $errorstr."Your category description is too big.<br />\n"; }
 if ($Error!="Yes") {
 @redirect("refresh",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=categories",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],FALSE),"4");
 $admincptitle = " ".$ThemeSet['TitleDivider']." Updating Settings";
-$query = query("INSERT INTO `".$Settings['sqltable']."categories` VALUES (%i,%i,'%s','%s','%s','yes',%i,%i,%i,'%s')", array($_POST['CategoryID'],$_POST['OrderID'],$_POST['CategoryName'],$_POST['ShowCategory'],$_POST['CategoryType'],$_POST['InSubCategory'],$_POST['CategoryDesc'],$_POST['NumPostView'],$_POST['NumKarmaView'],$_POST['CategoryDesc']));
+$query = query("INSERT INTO `".$Settings['sqltable']."categories` (`id`, `OrderID`, `Name`, `ShowCategory`, `CategoryType`, `SubShowForums`, `InSubCategory`, `PostCountView`, `KarmaCountView`, `Description`) VALUES\n".
+"(%i, %i, '%s', '%s', '%s', 'yes', %i, %i, %i, '%s')", array($_POST['CategoryID'],$_POST['OrderID'],$_POST['CategoryName'],$_POST['ShowCategory'],$_POST['CategoryType'],$_POST['InSubCategory'],$_POST['CategoryDesc'],$_POST['NumPostView'],$_POST['NumKarmaView'],$_POST['CategoryDesc']));
 mysql_query($query);
 $getperidq = query("SELECT DISTINCT `PermissionID` FROM `".$Settings['sqltable']."catpermissions` ORDER BY `PermissionID` ASC", array(null));
 $getperidr=mysql_query($getperidq);
@@ -809,7 +810,8 @@ if($prenum>=1) {
 $PermissionName=mysql_result($preresult,0,"Name"); 
 @mysql_free_result($preresult); }
 $nextidnum = getnextid($Settings['sqltable'],"catpermissions");
-$query = query("INSERT INTO `".$Settings['sqltable']."catpermissions` VALUES (%i, %i, '%s', %i, '%s')", array($nextidnum, $_POST['permid'], $PermissionName, $_POST['id'], $_POST['CanViewCategory'])); 
+$query = query("INSERT INTO `".$Settings['sqltable']."catpermissions` (`PermissionID`, `Name`, `CategoryID`, `CanViewCategory`) VALUES\n".
+"(%i, '%s', %i, '%s')", array($_POST['permid'], $PermissionName, $_POST['id'], $_POST['CanViewCategory'])); 
 mysql_query($query); }
 ?>
 <?php } $doupdate = false;

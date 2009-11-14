@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: topics.php - Last Update: 11/10/2009 SVN 337 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 11/14/2009 SVN 344 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -827,7 +827,7 @@ if ($_POST['TopicName']==null) { $Error="Yes"; ?>
 </tr>
 <?php } if ($Error!="Yes") { $LastActive = GMTimeStamp();
 $topicid = getnextid($Settings['sqltable'],"topics");
-$postid = getnextid($Settings['sqltable'],"posts");
+//$postid = getnextid($Settings['sqltable'],"posts");
 $requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($MyUserID));
 $reresult=mysql_query($requery);
 $renum=mysql_num_rows($reresult);
@@ -848,9 +848,12 @@ $User1Group=mysql_result($gresult,0,"Name");
 @mysql_free_result($gresult);
 $User1IP=$_SERVER['REMOTE_ADDR'];
 ++$rei; } @mysql_free_result($reresult);
-$query = query("INSERT INTO `".$Settings['sqltable']."topics` VALUES (".$topicid.",%i,%i,%i,%i,%i,'%s',%i,%i,'%s','%s',0,0,0,0)", array($ForumID,$ForumCatID,$ForumID,$ForumCatID,$User1ID,$User1Name,$LastActive,$LastActive,$_POST['TopicName'],$_POST['TopicDesc']));
+$query = query("INSERT INTO `".$Settings['sqltable']."topics` (`ForumID`, `CategoryID`, `OldForumID`, `OldCategoryID`, `UserID`, `GuestName`, `TimeStamp`, `LastUpdate`, `TopicName`, `Description`, `NumReply`, `NumViews`, `Pinned`, `Closed`) VALUES\n".
+"(%i, %i, %i, %i, %i, '%s', %i, %i, '%s', '%s', 0, 0, 0, 0)", array($ForumID,$ForumCatID,$ForumID,$ForumCatID,$User1ID,$User1Name,$LastActive,$LastActive,$_POST['TopicName'],$_POST['TopicDesc']));
 mysql_query($query);
-$query = query("INSERT INTO `".$Settings['sqltable']."posts` VALUES (".$postid.",".$topicid.",%i,%i,%i,'%s',%i,%i,0,'','%s','%s','%s','0')", array($ForumID,$ForumCatID,$User1ID,$User1Name,$LastActive,$LastActive,$_POST['TopicPost'],$_POST['TopicDesc'],$User1IP));
+//$topicid = mysql_insert_id();
+$query = query("INSERT INTO `".$Settings['sqltable']."posts` (`TopicID`, `ForumID`, `CategoryID`, `UserID`, `GuestName`, `TimeStamp`, `LastUpdate`, `EditUser`, `EditUserName`, `Post`, `Description`, `IP`, `EditIP`) VALUES\n".
+"(".$topicid.", %i, %i, %i, '%s', %i, %i, 0, '', '%s', '%s', '%s', '0')", array($ForumID,$ForumCatID,$User1ID,$User1Name,$LastActive,$LastActive,$_POST['TopicPost'],$_POST['TopicDesc'],$User1IP));
 mysql_query($query);
 $_SESSION['LastPostTime'] = GMTimeStamp() + $GroupInfo['FloodControl'];
 if($User1ID!=0&&$User1ID!=-1) {

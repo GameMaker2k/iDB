@@ -12,7 +12,7 @@
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mkconfig.php - Last Update: 11/13/2009 SVN 342 - Author: cooldude2k $
+    $FileInfo: mkconfig.php - Last Update: 11/14/2009 SVN 344 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mkconfig.php"||$File3Name=="/mkconfig.php") {
@@ -56,6 +56,10 @@ if (pre_strlen($_POST['AdminPasswords'])<"3") { $Error="Yes";
 echo "<br />Your password is too small."; }
 if (pre_strlen($_POST['AdminUser'])<"3") { $Error="Yes";
 echo "<br />Your user name is too small."; }
+if (pre_strlen($_POST['AdminUser'])<"3") { $Error="Yes";
+echo "<br />Your user name is too small."; }
+if (pre_strlen($_POST['AdminEmail'])<"3") { $Error="Yes";
+echo "<br />Your email name is too small."; }
 if (pre_strlen($_POST['AdminPasswords'])>"60") { $Error="Yes";
 echo "<br />Your password is too big."; }
 if (pre_strlen($_POST['AdminUser'])>"30") { $Error="Yes";
@@ -76,6 +80,7 @@ $_POST['NewBoardName'] = @remove_spaces($_POST['NewBoardName']);
 $_POST['AdminUser'] = stripcslashes(htmlspecialchars($_POST['AdminUser'], ENT_QUOTES, $Settings['charset']));
 //$_POST['AdminUser'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['AdminUser']);
 $_POST['AdminUser'] = @remove_spaces($_POST['AdminUser']);
+$_POST['AdminEmail'] = @remove_spaces($_POST['AdminEmail']);
 if(!function_exists('hash')&&!function_exists('hash_algos')) {
 if($_POST['usehashtype']!="md5"&&
    $_POST['usehashtype']!="sha1"&&
@@ -118,12 +123,6 @@ if($Settings['charset']=="UTF-8") {
 if($mydbtest!==true) { $Error="Yes";
 echo "<br />".mysql_errno().": ".mysql_error()."\n"; }
 if ($Error!="Yes") {
-require($SetupDir['setup'].'mktable.php');
-/*
-$query = query("INSERT INTO `".$_POST['tableprefix']."tagboard` VALUES (1,-1,'".$iDB_Author."',".$YourDate.",'Welcome to Your New Tag Board. ^_^','127.0.0.1'), array(null)); 
-*/
-$query = query("INSERT INTO `".$_POST['tableprefix']."categories` VALUES (1,1,'A Test Category','yes','category','yes',0,0,0,'&nbsp;')", array(null));
-mysql_query($query);
 $ServerUUID = uuid(false,true,false,$_POST['usehashtype'],null);
 if(!is_numeric($_POST['YourOffSet'])) { $_POST['YourOffSet'] = "0"; }
 if($_POST['YourOffSet']>12) { $_POST['YourOffSet'] = "12"; }
@@ -145,14 +144,6 @@ $EventDayEnd = GMTimeChange("d",$YourDateEnd,0,0,"off");
 $EventYear = GMTimeChange("Y",$YourDate,0,0,"off");
 $EventYearEnd = GMTimeChange("Y",$YourDateEnd,0,0,"off");
 $KarmaBoostDay = $EventMonth.$EventDay;
-$query = query("INSERT INTO `".$_POST['tableprefix']."events` VALUES (1, -1, '".$iDB_Author."', 'Opening', 'This is the day the Board was made. ^_^', %i, %i, %i, %i, %i, %i, %i, %i)", array($YourDate,$YourDateEnd,$EventMonth,$EventMonthEnd,$EventDay,$EventDayEnd,$EventYear,$EventYearEnd));
-mysql_query($query);
-$query = query("INSERT INTO `".$_POST['tableprefix']."forums` VALUES (1,1,1,'A Test Forum','yes','forum',0,'http://',0,0,'&nbsp;','off',0,0,'yes',15,1,1)", array(null));
-mysql_query($query);
-$query = query("INSERT INTO `".$_POST['tableprefix']."topics` VALUES (1,1,1,1,1,-1,'".$iDB_Author."',%i,%i,'Welcome','Install was successful',0,0,1,1)", array($YourDate,$YourDate));
-mysql_query($query);
-$query = query("INSERT INTO `".$_POST['tableprefix']."posts` VALUES (1,1,1,1,-1,'".$iDB_Author."',%i,%i,1,'".$_POST['AdminUser']."','Welcome to Your Message Board. :) ','Install was successful','127.0.0.1','127.0.0.1')", array($YourDate,$YourEditDate)); 
-mysql_query($query);
 $NewPassword = b64e_hmac($_POST['AdminPasswords'],$YourDate,$YourSalt,$_POST['usehashtype']);
 //$Name = stripcslashes(htmlspecialchars($AdminUser, ENT_QUOTES, $Settings['charset']));
 //$YourWebsite = "http://".$_SERVER['HTTP_HOST'].$this_dir."index.php?act=view";
@@ -172,12 +163,7 @@ if($csrand==3) { $gpass .= chr(rand(97,122)); }
 ++$i; } $GuestPassword = b64e_hmac($gpass,$YourDate,$GSalt,$_POST['usehashtype']);
 $url_this_dir = "http://".$_SERVER['HTTP_HOST'].$this_dir."index.php?act=view";
 $YourIP = $_SERVER['REMOTE_ADDR'];
-$query = query("INSERT INTO `".$_POST['tableprefix']."members` VALUES (-1,'Guest','%s','".$iDBHashType."','%s',4,'no','yes',0,'Guest Account','Guest',%i,%i,'0','0','0','0','0','[B]Test[/B] :)','Your Notes','http://','100x100','%s','UnKnow',1,0,0,10,10,10,'%s','%s','iDB','127.0.0.1','%s')", array($GuestPassword,$GEmail,$YourDate,$YourDate,$YourWebsite,$AdminTime,$AdminDST,$GSalt));
-mysql_query($query);
-$query = query("INSERT INTO `".$_POST['tableprefix']."members` VALUES (1,'%s','%s','".$iDBHashType."','%s',1,'yes','no',0,'%s','Admin',%i,%i,'0','0','0','0','0','%s','Your Notes','%s','100x100','%s','UnKnow',0,0,0,10,10,10,'%s','%s','iDB','%s','%s')", array($_POST['AdminUser'],$NewPassword,$Email,$Interests,$YourDate,$YourDate,$NewSignature,$Avatar,$YourWebsite,$AdminTime,$AdminDST,$UserIP,$YourSalt));
-mysql_query($query);
-$query = query("INSERT INTO `".$_POST['tableprefix']."messenger` VALUES (1,-1,1,'".$iDB_Author."','Test','Hello Welcome to your board.\r\nThis is a Test PM. :P ','Hello Welcome',%i,0)", array($YourDate));
-mysql_query($query);
+require($SetupDir['setup'].'mktable.php');
 $CHMOD = $_SERVER['PHP_SELF'];
 $iDBRDate = $SVNDay[0]."/".$SVNDay[1]."/".$SVNDay[2];
 $iDBRSVN = $VER2[2]." ".$SubVerN;

@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: events.php - Last Update: 11/10/2009 SVN 337 - Author: cooldude2k $
+    $FileInfo: events.php - Last Update: 11/14/2009 SVN 344 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="events.php"||$File3Name=="/events.php") {
@@ -631,7 +631,8 @@ $eventid = getnextid($Settings['sqltable'],"events");
 $User1ID=$MyUserID;
 if($_SESSION['UserGroup']==$Settings['GuestGroup']) { $User1Name = $_POST['GuestName']; }
 if($_SESSION['UserGroup']!=$Settings['GuestGroup']) { $User1Name = $_SESSION['MemberName']; }
-$query = query("INSERT INTO ".$Settings['sqltable']."events VALUES (%i, %i, '%s', '%s', '%s', %i, %i, %i, %i, %i, %i, %i, %i)", array($eventid,$User1ID,$User1Name,$_POST['EventName'],$_POST['EventText'],$TimeSIn,$TimeSOut,$EventMonth,$EventMonthEnd,$EventDay,$EventDayEnd,$EventYear,$EventYearEnd));
+$query = query("INSERT INTO ".$Settings['sqltable']."events (`UserID`, `GuestName`, `EventName`, `EventText`, `TimeStamp`, `TimeStampEnd`, `EventMonth`, `EventMonthEnd`, `EventDay`, `EventDayEnd`, `EventYear`, `EventYearEnd`) VALUES\n".
+"(%i, '%s', '%s', '%s', %i, %i, %i, %i, %i, %i, %i, %i)", array($User1ID,$User1Name,$_POST['EventName'],$_POST['EventText'],$TimeSIn,$TimeSOut,$EventMonth,$EventMonthEnd,$EventDay,$EventDayEnd,$EventYear,$EventYearEnd));
 mysql_query($query);
 @redirect("refresh",$basedir.url_maker($exfile['event'],$Settings['file_ext'],"act=event&id=".$eventid,$Settings['qstr'],$Settings['qsep'],$prexqstr['event'],$exqstr['event'],FALSE),"3");
 ?><tr>

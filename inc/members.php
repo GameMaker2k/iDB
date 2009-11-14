@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 11/10/2009 SVN 337 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 11/14/2009 SVN 344 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -1337,7 +1337,8 @@ if(!is_numeric($_POST['MinOffSet'])) { $_POST['MinOffSet'] = "00"; }
 if($_POST['MinOffSet']>59) { $_POST['MinOffSet'] = "59"; }
 if($_POST['MinOffSet']<0) { $_POST['MinOffSet'] = "00"; }
 $_POST['YourOffSet'] = $_POST['YourOffSet'].":".$_POST['MinOffSet'];
-$query = query("INSERT INTO `".$Settings['sqltable']."members` VALUES (".$yourid.",'%s','%s','%s','%s','%s','%s','%s',%i,'%s','%s',%i,%i,'0','0','0','0','0','%s','%s','%s','%s','%s','%s',%i,0,0,10,10,10,'%s','%s','%s','%s','%s')", array($Name,$NewPassword,$iDBHash,$_POST['Email'],$yourgroup,$ValidateStats,$HideMe,"0",$_POST['Interests'],$_POST['Title'],$_POST['Joined'],$_POST['LastActive'],$NewSignature,'Your Notes',$Avatar,"100x100",$Website,$_POST['YourGender'],$_POST['PostCount'],$_POST['YourOffSet'],$_POST['DST'],$Settings['DefaultTheme'],$_POST['UserIP'],$HashSalt));
+$query = query("INSERT INTO `".$Settings['sqltable']."members` (`id`, `Name`, `Password`, `HashType`, `Email`, `GroupID`, `Validated`, `HiddenMember`, `WarnLevel`, `Interests`, `Title`, `Joined`, `LastActive`, `LastPostTime`, `BanTime`, `BirthDay`, `BirthMonth`, `BirthYear`, `Signature`, `Notes`, `Avatar`, `AvatarSize`, `Website`, `Gender`, `PostCount`, `Karma`, `KarmaUpdate`, `RepliesPerPage`, `TopicsPerPage`, `MessagesPerPage`, `TimeZone`, `DST`, `UseTheme`, `IP`, `Salt`) VALUES\n". 
+"('%s', '%s', '%s', '%s', '%s', '%s', '%s', %i, '%s', '%s', %i, %i, '0', '0', '0', '0', '0', '%s', '%s', '%s', '%s', '%s', '%s', %i, 0, 0, 10, 10, 10, '%s', '%s', '%s', '%s', '%s')", array($Name,$NewPassword,$iDBHash,$_POST['Email'],$yourgroup,$ValidateStats,$HideMe,"0",$_POST['Interests'],$_POST['Title'],$_POST['Joined'],$_POST['LastActive'],$NewSignature,'Your Notes',$Avatar,"100x100",$Website,$_POST['YourGender'],$_POST['PostCount'],$_POST['YourOffSet'],$_POST['DST'],$Settings['DefaultTheme'],$_POST['UserIP'],$HashSalt));
 mysql_query($query);
 $querylogr = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `Name`='%s' AND `Password`='%s' LIMIT 1", array($Name,$NewPassword));
 $resultlogr=mysql_query($querylogr);
@@ -1380,15 +1381,6 @@ if($cookieSecure===false) {
 @setcookie("MemberName", $YourNameM, time() + (7 * 86400), $cbasedir, $cookieDomain);
 @setcookie("UserID", $YourIDM, time() + (7 * 86400), $cbasedir, $cookieDomain);
 @setcookie("SessPass", $NewPassword, time() + (7 * 86400), $cbasedir, $cookieDomain); } } }
-if(isset($Settings['PMNewMembers'])) {
-if($Settings['PMNewMembers']=="yes") {
-$SendPMtoID=$YourIDMr;
-$YourPMID = 1;
-$PMTitle = "Welcome ".$Name.".";
-$YourMessage = "Hello ".$Name.". Welcome to ".$Settings['board_name'].". I hope you enjoy your stay here. ^_^ ";
-$_POST['YourDate'] = $_POST['Joined'];
-$query = query("INSERT INTO `".$Settings['sqltable']."messenger` VALUES (null,%i,%i,'%s','%s','%s','%s',0)", array($YourPMID,$SendPMtoID,'',$PMTitle,$YourMessage,$_POST['YourDate']));
-mysql_query($query); } }
 @redirect("refresh",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],FALSE),"3");
 ?>
 <tr>

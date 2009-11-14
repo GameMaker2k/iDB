@@ -12,7 +12,7 @@
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mktable.php - Last Update: 11/13/2009 SVN 342 - Author: cooldude2k $
+    $FileInfo: mktable.php - Last Update: 11/14/2009 SVN 344 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mktable.php"||$File3Name=="/mktable.php") {
@@ -36,6 +36,9 @@ $query=query("CREATE TABLE IF NOT EXISTS `".$_POST['tableprefix']."categories` (
 "  PRIMARY KEY  (`id`)\n".
 ") ENGINE=MyISAM  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
 mysql_query($query);
+$query = query("INSERT INTO `".$_POST['tableprefix']."categories` (`OrderID`, `Name`, `ShowCategory`, `CategoryType`, `SubShowForums`, `InSubCategory`, `PostCountView`, `KarmaCountView`, `Description`)\n". 
+"VALUES (1, 'A Test Category', 'yes', 'category', 'yes', 0, 0, 0, 'A test category that may be removed at any time.')", array(null));
+mysql_query($query);
 $query=query("CREATE TABLE IF NOT EXISTS `".$_POST['tableprefix']."catpermissions` (\n".
 "  `id` int(15) NOT NULL auto_increment,\n".
 "  `PermissionID` int(15) NOT NULL default '0',\n".
@@ -44,6 +47,14 @@ $query=query("CREATE TABLE IF NOT EXISTS `".$_POST['tableprefix']."catpermission
 "  `CanViewCategory` varchar(5) collate ".$SQLCollate." NOT NULL default '',\n".
 "  PRIMARY KEY  (`id`)\n".
 ") ENGINE=MyISAM  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
+mysql_query($query);
+$query = query("INSERT INTO `".$_POST['tableprefix']."catpermissions` (`PermissionID`, `Name`, `CategoryID`, `CanViewCategory`) VALUES\n".
+"(1, 'Admin', 1, 'yes'),\n".
+"(2, 'Moderator', 1, 'yes'),\n".
+"(3, 'Member', 1, 'yes'),\n".
+"(4, 'Guest', 1, 'yes'),\n".
+"(5, 'Banned', 1, 'no'),\n".
+"(6, 'Validate', 1, 'yes');", array(null)); 
 mysql_query($query);
 $query=query("CREATE TABLE IF NOT EXISTS `".$_POST['tableprefix']."events` (\n".
 "  `id` int(15) NOT NULL auto_increment,\n".
@@ -61,6 +72,9 @@ $query=query("CREATE TABLE IF NOT EXISTS `".$_POST['tableprefix']."events` (\n".
 "  `EventYearEnd` int(5) NOT NULL default '0',\n".
 "  PRIMARY KEY  (`id`)\n".
 ") ENGINE=MyISAM  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
+mysql_query($query);
+$query = query("INSERT INTO `".$_POST['tableprefix']."events` (`UserID`, `GuestName`, `EventName`, `EventText`, `TimeStamp`, `TimeStampEnd`, `EventMonth`, `EventMonthEnd`, `EventDay`, `EventDayEnd`, `EventYear`, `EventYearEnd`) VALUES\n".
+"(-1, '".$iDB_Author."', 'Opening', 'This is the day the Board was made. ^_^', %i, %i, %i, %i, %i, %i, %i, %i)", array($YourDate,$YourDateEnd,$EventMonth,$EventMonthEnd,$EventDay,$EventDayEnd,$EventYear,$EventYearEnd));
 mysql_query($query);
 $query=query("CREATE TABLE IF NOT EXISTS `".$_POST['tableprefix']."forums` (\n".
 "  `id` int(15) NOT NULL auto_increment,\n".
@@ -83,6 +97,9 @@ $query=query("CREATE TABLE IF NOT EXISTS `".$_POST['tableprefix']."forums` (\n".
 "  `NumTopics` int(15) NOT NULL default '0',\n".
 "  PRIMARY KEY  (`id`)\n".
 ") ENGINE=MyISAM  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
+mysql_query($query);
+$query = query("INSERT INTO `".$_POST['tableprefix']."forums` (`CategoryID`, `OrderID`, `Name`, `ShowForum`, `ForumType`, `InSubForum`, `RedirectURL`, `Redirects`, `NumViews`, `Description`, `PostCountAdd`, `PostCountView`, `KarmaCountView`, `CanHaveTopics`, `HotTopicPosts`, `NumPosts`, `NumTopics`) VALUES\n".
+"(1, 1, 'A Test Forum', 'yes', 'forum', 0, 'http://', 0, 0, 'A test forum that may be removed at any time.', 'off', 0, 0, 'yes', 15, 1, 1)", array(null));
 mysql_query($query);
 $query=query("CREATE TABLE IF NOT EXISTS `".$_POST['tableprefix']."groups` (\n".
 "  `id` int(15) NOT NULL auto_increment,\n".
@@ -107,6 +124,14 @@ $query=query("CREATE TABLE IF NOT EXISTS `".$_POST['tableprefix']."groups` (\n".
 "  PRIMARY KEY  (`id`),\n".
 "  UNIQUE KEY `Name` (`Name`)\n".
 ") ENGINE=MyISAM  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
+mysql_query($query);
+$query = query("INSERT INTO `".$_POST['tableprefix']."groups` (`Name`, `PermissionID`, `NamePrefix`, `NameSuffix`, `CanViewBoard`, `CanViewOffLine`, `CanEditProfile`, `CanAddEvents`, `CanPM`, `CanSearch`, `FloodControl`, `SearchFlood`, `PromoteTo`, `PromotePosts`, `PromoteKarma`, `HasModCP`, `HasAdminCP`, `ViewDBInfo`) VALUES\n".
+"('Admin', 1, '', '', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 30, 30, 0, 0, 0, 'yes', 'yes', 'yes'),\n".
+"('Moderator', 2, '', '', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 30, 30, 0, 0, 0, 'yes', 'no', 'no'),\n".
+"('Member', 3, '', '', 'yes', 'no', 'yes', 'yes', 'yes', 'yes', 30, 30, 0, 0, 0, 'no', 'no', 'no'),\n".
+"('Guest', 4, '', '', 'yes', 'no', 'no', 'no', 'no', 'no', 30, 30, 0, 0, 0, 'no', 'no', 'no'),\n".
+"('Banned', 5, '', '', 'no', 'no', 'no', 'no', 'no', 'no', 30, 30, 0, 0, 0, 'no', 'no', 'no'),\n".
+"('Validate', 6, '', '', 'yes', 'no', 'yes', 'no', 'no', 'yes', 30, 30, 0, 0, 0, 'no', 'no', 'no');", array(null)); 
 mysql_query($query);
 $query=query("CREATE TABLE IF NOT EXISTS `".$_POST['tableprefix']."members` (\n".
 "  `id` int(15) NOT NULL auto_increment,\n".
@@ -149,6 +174,10 @@ $query=query("CREATE TABLE IF NOT EXISTS `".$_POST['tableprefix']."members` (\n"
 "  UNIQUE KEY `Email` (`Email`)\n".
 ") ENGINE=MyISAM  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
 mysql_query($query);
+$query = query("INSERT INTO `".$_POST['tableprefix']."members` (`id`, `Name`, `Password`, `HashType`, `Email`, `GroupID`, `Validated`, `HiddenMember`, `WarnLevel`, `Interests`, `Title`, `Joined`, `LastActive`, `LastPostTime`, `BanTime`, `BirthDay`, `BirthMonth`, `BirthYear`, `Signature`, `Notes`, `Avatar`, `AvatarSize`, `Website`, `Gender`, `PostCount`, `Karma`, `KarmaUpdate`, `RepliesPerPage`, `TopicsPerPage`, `MessagesPerPage`, `TimeZone`, `DST`, `UseTheme`, `IP`, `Salt`) VALUES\n".
+"(-1, 'Guest', '%s', '".$iDBHashType."', '%s', 4, 'no', 'yes', 0, 'Guest Account', 'Guest', %i, %i, '0', '0', '0', '0', '0', '[B]Test[/B] :)', 'Your Notes', 'http://', '100x100', '%s', 'UnKnow', 1, 0, 0, 10, 10, 10, '%s', '%s', 'iDB', '127.0.0.1', '%s'),\n".
+"(1, '%s', '%s', '".$iDBHashType."', '%s', 1, 'yes', 'no', 0, '%s', 'Admin', %i, %i, '0', '0', '0', '0', '0', '%s', 'Your Notes', '%s', '100x100', '%s', 'UnKnow', 0, 0, 0, 10, 10, 10, '%s', '%s', 'iDB', '%s', '%s');", array($GuestPassword,$GEmail,$YourDate,$YourDate,$YourWebsite,$AdminTime,$AdminDST,$GSalt,$_POST['AdminUser'],$NewPassword,$_POST['AdminEmail'],$Interests,$YourDate,$YourDate,$NewSignature,$Avatar,$YourWebsite,$AdminTime,$AdminDST,$UserIP,$YourSalt));
+mysql_query($query);
 $query=query("CREATE TABLE IF NOT EXISTS `".$_POST['tableprefix']."messenger` (\n".
 "  `id` int(15) NOT NULL auto_increment,\n".
 "  `SenderID` int(15) NOT NULL default '0',\n".
@@ -161,6 +190,9 @@ $query=query("CREATE TABLE IF NOT EXISTS `".$_POST['tableprefix']."messenger` (\
 "  `Read` int(5) NOT NULL default '0',\n".
 "  PRIMARY KEY  (`id`)\n".
 ") ENGINE=MyISAM  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
+mysql_query($query);
+$query = query("INSERT INTO `".$_POST['tableprefix']."messenger` (`SenderID`, `ReciverID`, `GuestName`, `MessageTitle`, `MessageText`, `Description`, `DateSend`, `Read`) VALUES\n".
+"(-1, 1, '".$iDB_Author."', 'Test', 'Hello Welcome to your board.\r\nThis is a Test PM. :P ', 'Hello Welcome', %i, 0)", array($YourDate));
 mysql_query($query);
 $query=query("CREATE TABLE IF NOT EXISTS `".$_POST['tableprefix']."permissions` (\n".
 "  `id` int(15) NOT NULL auto_increment,\n".
@@ -187,6 +219,14 @@ $query=query("CREATE TABLE IF NOT EXISTS `".$_POST['tableprefix']."permissions` 
 "  PRIMARY KEY  (`id`)\n".
 ") ENGINE=MyISAM  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
 mysql_query($query);
+$query = query("INSERT INTO `".$_POST['tableprefix']."permissions` (`PermissionID`, `Name`, `ForumID`, `CanViewForum`, `CanMakeTopics`, `CanMakeReplys`, `CanMakeReplysCT`, `CanEditTopics`, `CanEditTopicsCT`, `CanEditReplys`, `CanEditReplysCT`, `CanDeleteTopics`, `CanDeleteTopicsCT`, `CanDeleteReplys`, `CanDeleteReplysCT`, `CanCloseTopics`, `CanPinTopics`, `CanDohtml`, `CanUseBBags`, `CanModForum`) VALUES\n".
+"(1, 'Admin', 1, 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes'),\n".
+"(2, 'Moderator', 1, 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes'),\n".
+"(3, 'Member', 1, 'yes', 'yes', 'yes', 'no', 'yes', 'no', 'yes', 'no', 'yes', 'no', 'yes', 'no', 'no', 'no', 'no', 'yes', 'no'),\n".
+"(4, 'Guest', 1, 'yes', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no'),\n".
+"(5, 'Banned', 1, 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no'),\n".
+"(6, 'Validate', 1, 'yes', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no');", array(null)); 
+mysql_query($query);
 $query=query("CREATE TABLE IF NOT EXISTS `".$_POST['tableprefix']."posts` (\n".
 "  `id` int(15) NOT NULL auto_increment,\n".
 "  `TopicID` int(15) NOT NULL default '0',\n".
@@ -204,6 +244,9 @@ $query=query("CREATE TABLE IF NOT EXISTS `".$_POST['tableprefix']."posts` (\n".
 "  `EditIP` varchar(20) collate ".$SQLCollate." NOT NULL default '',\n".
 "  PRIMARY KEY  (`id`)\n".
 ") ENGINE=MyISAM  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
+mysql_query($query);
+$query = query("INSERT INTO `".$_POST['tableprefix']."posts` (`TopicID`, `ForumID`, `CategoryID`, `UserID`, `GuestName`, `TimeStamp`, `LastUpdate`, `EditUser`, `EditUserName`, `Post`, `Description`, `IP`, `EditIP`) VALUES\n".
+"(1, 1, 1, -1, '".$iDB_Author."', %i, %i, 1, '".$_POST['AdminUser']."', 'Welcome to your new Internet Discussion Board! :) ', 'Welcome %s', '127.0.0.1', '127.0.0.1')", array($YourDate,$YourEditDate,$_POST['AdminUser'])); 
 mysql_query($query);
 $query=query("CREATE TABLE IF NOT EXISTS `".$_POST['tableprefix']."restrictedwords` (\n".
 "  `id` int(15) NOT NULL auto_increment,\n".
@@ -235,6 +278,38 @@ $query=query("CREATE TABLE IF NOT EXISTS `".$_POST['tableprefix']."smileys` (\n"
 "  PRIMARY KEY  (`id`)\n".
 ") ENGINE=MyISAM  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
 mysql_query($query);
+$query = query("INSERT INTO `".$_POST['tableprefix']."smileys` (`FileName`, `SmileName`, `SmileText`, `Directory`, `Show`, `ReplaceCI`) VALUES\n".
+"('smile.gif', 'Happy', ':)', 'smileys/', 'yes', 'no'),\n".
+"('tongue.gif', 'Tongue', ':P', 'smileys/', 'yes', 'yes'),\n".
+"('tongue2.gif', 'Tongue', ':tongue:', 'smileys/', 'no', 'yes'),\n".
+"('sweat.gif', 'Sweat', ':sweat:', 'smileys/', 'yes', 'yes'),\n".
+"('sweat.gif', 'Sweat', '^_^', 'smileys/', 'no', 'yes'),\n".
+"('laugh.gif', 'lol', ':lol:', 'smileys/', 'yes', 'yes'),\n".
+"('cool.gif', 'Cool', 'B)', 'smileys/', 'yes', 'no'),\n".
+"('sleep.gif', 'Sleep', '-_-', 'smileys/', 'yes', 'no'),\n".
+"('sad.gif', 'Sad', ':(', 'smileys/', 'yes', 'no'),\n".
+"('angry.gif', 'Angry', ':angry:', 'smileys/', 'yes', 'yes'),\n".
+"('huh.gif', 'huh', ':huh:', 'smileys/', 'yes', 'yes'),\n".
+"('ohmy.gif', 'ohmy', ':o', 'smileys/', 'yes', 'yes'),\n".
+"('hmm.gif', 'hmm', ':unsure:', 'smileys/', 'yes', 'yes'),\n".
+"('mad.gif', 'Mad', ':mad:', 'smileys/', 'yes', 'yes'),\n".
+"('wub.gif', 'Wub', ':wub:', 'smileys/', 'yes', 'yes'),\n".
+"('x.gif', 'X', ':x:', 'smileys/', 'yes', 'yes');", array(null));
+mysql_query($query);
+/*
+$query=query("CREATE TABLE IF NOT EXISTS `".$_POST['tableprefix']."tagboard` (\n".
+"  `id` int(15) NOT NULL auto_increment,\n".
+"  `UserID` int(15) NOT NULL default '0',\n".
+"  `GuestName` varchar(150) collate ".$SQLCollate." NOT NULL default '',\n".
+"  `TimeStamp` int(15) NOT NULL default '0',\n".
+"  `Post` text collate ".$SQLCollate." NOT NULL,\n".
+"  `IP` varchar(20) collate ".$SQLCollate." NOT NULL default '',\n".
+"  PRIMARY KEY  (`id`)\n".
+") ENGINE=MyISAM  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
+mysql_query($query);
+$query = query("INSERT INTO `".$_POST['tableprefix']."tagboard` VALUES (1,-1,'".$iDB_Author."',".$YourDate.",'Welcome to Your New Tag Board. ^_^','127.0.0.1'), array(null)); 
+mysql_query($query);
+*/
 $query=query("CREATE TABLE IF NOT EXISTS `".$_POST['tableprefix']."topics` (\n".
 "  `id` int(15) NOT NULL auto_increment,\n".
 "  `ForumID` int(15) NOT NULL default '0',\n".
@@ -254,6 +329,9 @@ $query=query("CREATE TABLE IF NOT EXISTS `".$_POST['tableprefix']."topics` (\n".
 "  PRIMARY KEY  (`id`)\n".
 ") ENGINE=MyISAM  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
 mysql_query($query);
+$query = query("INSERT INTO `".$_POST['tableprefix']."topics` (`ForumID`, `CategoryID`, `OldForumID`, `OldCategoryID`, `UserID`, `GuestName`, `TimeStamp`, `LastUpdate`, `TopicName`, `Description`, `NumReply`, `NumViews`, `Pinned`, `Closed`) VALUES\n".
+"(1, 1, 1, 1, -1, '".$iDB_Author."', %i, %i, 'Welcome', 'Welcome %s', 0, 0, 1, 1)", array($YourDate,$YourDate,$_POST['AdminUser']));
+mysql_query($query);
 $query=query("CREATE TABLE IF NOT EXISTS `".$_POST['tableprefix']."wordfilter` (\n".
 "  `id` int(15) NOT NULL auto_increment,\n".
 "  `Filter` text collate ".$SQLCollate." NOT NULL,\n".
@@ -262,16 +340,5 @@ $query=query("CREATE TABLE IF NOT EXISTS `".$_POST['tableprefix']."wordfilter` (
 "  `WholeWord` varchar(5) collate ".$SQLCollate." NOT NULL default '',\n".
 "  PRIMARY KEY  (`id`)\n".
 ") ENGINE=MyISAM  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
-mysql_query($query);
-/*
-$query=query("CREATE TABLE `".$_POST['tableprefix']."tagboard` ( `id` int(15) NOT NULL auto_increment, `UserID` int(15) NOT NULL default '0', `GuestName` varchar(150) NOT NULL default '', `TimeStamp` int(15) NOT NULL default '0', `Post` text NOT NULL, `IP` varchar(20) NOT NULL default '', PRIMARY KEY  (`id`)) TYPE=`MyISAM` DEFAULT CHARACTER SET ".$SQLCharset." COLLATE ".$SQLCollate.";", array(null));
-*/
-$query = query("INSERT INTO `".$_POST['tableprefix']."groups` VALUES (1, 'Admin', 1, '', '', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 30, 30, 0, 0, 0, 'yes', 'yes', 'yes'), (2, 'Moderator', 2, '', '', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 30, 30, 0, 0, 0, 'yes', 'no', 'no'), (3, 'Member', 3, '', '', 'yes', 'no', 'yes', 'yes', 'yes', 'yes', 30, 30, 0, 0, 0, 'no', 'no', 'no'), (4, 'Guest', 4, '', '', 'yes', 'no', 'no', 'no', 'no', 'no', 30, 30, 0, 0, 0, 'no', 'no', 'no'), (5, 'Banned', 5, '', '', 'no', 'no', 'no', 'no', 'no', 'no', 30, 30, 0, 0, 0, 'no', 'no', 'no'), (6, 'Validate', 6, '', '', 'yes', 'no', 'yes', 'no', 'no', 'yes', 30, 30, 0, 0, 0, 'no', 'no', 'no');", array(null)); 
-mysql_query($query);
-$query = query("INSERT INTO `".$_POST['tableprefix']."permissions` VALUES (1, 1, 'Admin', 1, 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes'), (2, 2, 'Moderator', 1, 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes'), (3, 3, 'Member', 1, 'yes', 'yes', 'yes', 'no', 'yes', 'no', 'yes', 'no', 'yes', 'no', 'yes', 'no', 'no', 'no', 'no', 'yes', 'no'), (4, 4, 'Guest', 1, 'yes', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no'), (5, 5, 'Banned', 1, 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no'), (6, 6, 'Validate', 1, 'yes', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no');", array(null)); 
-mysql_query($query);
-$query = query("INSERT INTO `".$_POST['tableprefix']."catpermissions` VALUES (1, 1, 'Admin', 1, 'yes'), (2, 2, 'Moderator', 1, 'yes'), (3, 3, 'Member', 1, 'yes'), (4, 4, 'Guest', 1, 'yes'), (5, 5, 'Banned', 1, 'no'), (6, 6, 'Validate', 1, 'yes');", array(null)); 
-mysql_query($query);
-$query = query("INSERT INTO `".$_POST['tableprefix']."smileys` VALUES (1, 'smile.gif', 'Happy', ':)', 'smileys/', 'yes', 'no'), (2, 'tongue.gif', 'Tongue', ':P', 'smileys/', 'yes', 'yes'), (3, 'tongue2.gif', 'Tongue', ':tongue:', 'smileys/', 'no', 'yes'), (4, 'sweat.gif', 'Sweat', ':sweat:', 'smileys/', 'yes', 'yes'), (5, 'sweat.gif', 'Sweat', '^_^', 'smileys/', 'no', 'yes'), (6, 'laugh.gif', 'lol', ':lol:', 'smileys/', 'yes', 'yes'), (7, 'cool.gif', 'Cool', 'B)', 'smileys/', 'yes', 'no'), (8, 'sleep.gif', 'Sleep', '-_-', 'smileys/', 'yes', 'no'), (9, 'sad.gif', 'Sad', ':(', 'smileys/', 'yes', 'no'), (10, 'angry.gif', 'Angry', ':angry:', 'smileys/', 'yes', 'yes'), (11, 'huh.gif', 'huh', ':huh:', 'smileys/', 'yes', 'yes'), (12, 'ohmy.gif', 'ohmy', ':o', 'smileys/', 'yes', 'yes'), (13, 'hmm.gif', 'hmm', ':unsure:', 'smileys/', 'yes', 'yes'), (14, 'mad.gif', 'Mad', ':mad:', 'smileys/', 'yes', 'yes'), (15, 'wub.gif', 'Wub', ':wub:', 'smileys/', 'yes', 'yes'), (16, 'x.gif', 'X', ':x:', 'smileys/', 'yes', 'yes');", array(null));
 mysql_query($query);
 ?>
