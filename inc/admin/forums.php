@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: forums.php - Last Update: 11/11/2009 SVN 339 - Author: cooldude2k $
+    $FileInfo: forums.php - Last Update: 11/14/2009 SVN 343 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="forums.php"||$File3Name=="/forums.php") {
@@ -143,22 +143,22 @@ $num=mysql_num_rows($result);
 $i=0;
 while ($i < $num) {
 $TopicID=mysql_result($result,$i,"id");
-$UserID=mysql_result($result,$i,"UserID");
+$UsersID=mysql_result($result,$i,"UserID");
 $GuestsName=mysql_result($result,$i,"GuestName");
-$NewUserID = $UserID;
+$NewUserID = $UsersID;
 $NewGuestsName = $GuestsName;
 $NewGuestsName = GetUserName($NewUserID,$Settings['sqltable']);
-if($UserID==-1&&$GuestsName!=null) { $NewGuestsName = $GuestsName; }
-if($NewGuestsName==null&&$GuestsName!=null&&$UserID!==0) {
+if($UsersID==-1&&$GuestsName!=null) { $NewGuestsName = $GuestsName; }
+if($NewGuestsName==null&&$GuestsName!=null&&$UsersID!==0) {
 $NewUserID = -1; $NewGuestsName = $GuestsName; }
-if($UserID==-1&&$GuestsName==null) {
+if($UsersID==-1&&$GuestsName==null) {
 $NewUserID = -1; $NewGuestsName = "Guest"; }
-if($UserID===0&&$GuestsName!=null) {
+if($UsersID===0&&$GuestsName!=null) {
 $NewUserID = -1; $NewGuestsName = "Guest"; }
-if($UserID===0&&$GuestsName==null) {
+if($UsersID===0&&$GuestsName==null) {
 $NewUserID = -1; $NewGuestsName = "Guest"; }
-if($UserID==$NewUserID&&$GuestsName==$NewGuestsName) {
-$NewUserID = $UserID; $NewGuestsName = $GuestsName; }
+if($UsersID==$NewUserID&&$GuestsName==$NewGuestsName) {
+$NewUserID = $UsersID; $NewGuestsName = $GuestsName; }
 $query = query("UPDATE `".$Settings['sqltable']."topics` SET `UserID`=%i,`GuestName`='%s' WHERE `id`=%i", array($NewUserID,$NewGuestsName,$TopicID));
 mysql_query($query);
 ++$i; }
@@ -203,22 +203,22 @@ $num=mysql_num_rows($result);
 $i=0;
 while ($i < $num) {
 $PostID=mysql_result($result,$i,"id");
-$UserID=mysql_result($result,$i,"UserID");
+$UsersID=mysql_result($result,$i,"UserID");
 $GuestsName=mysql_result($result,$i,"GuestName");
-$NewUserID = $UserID;
+$NewUserID = $UsersID;
 $NewGuestsName = $GuestsName;
 $NewGuestsName = GetUserName($NewUserID,$Settings['sqltable']);
-if($UserID==-1&&$GuestsName!=null) { $NewGuestsName = $GuestsName; }
-if($NewGuestsName==null&&$GuestsName!=null&&$UserID!==0) {
+if($UsersID==-1&&$GuestsName!=null) { $NewGuestsName = $GuestsName; }
+if($NewGuestsName==null&&$GuestsName!=null&&$UsersID!==0) {
 $NewUserID = -1; $NewGuestsName = $GuestsName; }
-if($UserID==-1&&$GuestsName==null) {
+if($UsersID==-1&&$GuestsName==null) {
 $NewUserID = -1; $NewGuestsName = "Guest"; }
-if($UserID===0&&$GuestsName!=null) {
+if($UsersID===0&&$GuestsName!=null) {
 $NewUserID = -1; $NewGuestsName = "Guest"; }
-if($UserID===0&&$GuestsName==null) {
+if($UsersID===0&&$GuestsName==null) {
 $NewUserID = -1; $NewGuestsName = "Guest"; }
-if($UserID==$NewUserID&&$GuestsName==$NewGuestsName) {
-$NewUserID = $UserID; $NewGuestsName = $GuestsName; }
+if($UsersID==$NewUserID&&$GuestsName==$NewGuestsName) {
+$NewUserID = $UsersID; $NewGuestsName = $GuestsName; }
 $EditUserID=mysql_result($result,$i,"EditUser");
 $EditUserName=mysql_result($result,$i,"EditUserName");
 $NewEditUserID = $EditUserID;
