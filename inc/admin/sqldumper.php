@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sqldumper.php - Last Update: 11/12/2009 SVN 341 - Author: cooldude2k $
+    $FileInfo: sqldumper.php - Last Update: 11/14/2009 SVN 345 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="sqldumper.php"||$File3Name=="/sqldumper.php") {
@@ -61,9 +61,15 @@ if(in_array($row[0],$TableChCk)) {
 $TableNames[$l] = $row[0];
 $DropTable[$l] = "DROP TABLE IF EXISTS `".$row[0]."`;\n";
 $CreateTable[$l] = "CREATE TABLE IF NOT EXISTS `".$row[0]."` (\n";
+$CreateTable[$l] = null;
 $result2 = mysql_query("SHOW COLUMNS FROM ".$row[0]);
 $tabsta = mysql_query("SHOW TABLE STATUS LIKE '".$row[0]."'");
 $tabstats = mysql_fetch_array($tabsta); $AutoIncrement = " ";
+$tabstaz = mysql_query("SHOW CREATE TABLE `".$row[0]."`");
+$tabstatz = mysql_fetch_array($tabstaz);
+$FullTable[$l] = $tabstatz[1];
+$tabstats = mysql_fetch_array($tabsta); $AutoIncrement = " ";
+/*
 if($tabstats["Auto_increment"]!="") {
 $AutoIncrement = " AUTO_INCREMENT=".$tabstats["Auto_increment"]." "; }
 	$TableInfo[$l] = null; $TableStats = null; $i = 0;
@@ -80,10 +86,15 @@ $AutoIncrement = " AUTO_INCREMENT=".$tabstats["Auto_increment"]." "; }
         $TableInfo[$l] .= "  `".$row2["Field"]."` ".$row2["Type"]." NOT NULL".$DefaVaule.$row2["Extra"].",\n";
 		if($row2["Key"]=="PRI") { $PrimaryKey[$l] .= "  PRIMARY KEY (`".$row2["Field"]."`)"; }
 		if($row2["Key"]=="UNI") { $PrimaryKey[$l] .= "  UNIQUE KEY `".$row2["Field"]."` (`".$row2["Field"]."`)"; }
-	++$i; } 
+	++$i; } */
+	/*
 	$TableStats[$l] = ") ENGINE=".$tabstats["Engine"]." DEFAULT CHARSET=".mysql_client_encoding()." COLLATE=".$tabstats["Collation"].$AutoIncrement.";\n";
 	$TableInfo[$l] .= $PrimaryKey[$l]."\n".$TableStats[$l];
-	$FullTable[$l] = $DropTable[$l].$CreateTable[$l].$TableInfo[$l]; }
+	$FullTable[$l] = $DropTable[$l].$CreateTable[$l].$TableInfo[$l];
+	 }
+	$TableStats[$l] = ") ENGINE=".$tabstats["Engine"]." DEFAULT CHARSET=".mysql_client_encoding()." COLLATE=".$tabstats["Collation"].$AutoIncrement.";\n";
+	$TableInfo[$l] .= $PrimaryKey[$l]."\n".$TableStats[$l];
+	$FullTable[$l] = $DropTable[$l].$CreateTable[$l].$TableInfo[$l]; */ }
 if (!$result2) {
     echo 'Could not run query: ' . mysql_error();
     exit; }
