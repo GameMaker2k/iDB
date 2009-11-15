@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: stats.php - Last Update: 11/14/2009 SVN 347 - Author: cooldude2k $
+    $FileInfo: stats.php - Last Update: 11/15/2009 SVN 349 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="stats.php"||$File3Name=="/stats.php") {
@@ -37,7 +37,8 @@ $session_data=mysql_result($uolresult,$uoli,"session_data");
 $UserSessInfo = unserialize_session($session_data);
 $AmIHiddenUser = "no";
 if($UserSessInfo['UserGroup']!=$Settings['GuestGroup']) {
-$AmIHiddenUser = GetHiddenMember($UserSessInfo['UserID'],$Settings['sqltable']);
+$PreAmIHiddenUser = GetUserName($UserSessInfo['UserID'],$Settings['sqltable']);
+$AmIHiddenUser = $PreAmIHidden['Hidden'];
 if($AmIHiddenUser=="no"&&$UserSessInfo['UserID']>0) {
 if($olmn>0) { $MembersOnline .= ", "; }
 $MembersOnline .= "<a href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UserSessInfo['UserID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">".$UserSessInfo['MemberName']."</a>"; 

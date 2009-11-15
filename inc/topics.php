@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: topics.php - Last Update: 11/14/2009 SVN 347 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 11/15/2009 SVN 349 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -357,7 +357,11 @@ $User1Group=mysql_result($gresult,0,"Name");
 $GroupNamePrefix=mysql_result($gresult,0,"NamePrefix");
 $GroupNameSuffix=mysql_result($gresult,0,"NameSuffix");
 @mysql_free_result($gresult);
-$UsersName = GetUserName($UsersID,$Settings['sqltable']);
+$PreUsersName = GetUserName($UsersID,$Settings['sqltable']);
+if($PreUsersName['Name']===null) { $UsersID = -1;
+$PreUsersName = GetUserName($UsersID,$Settings['sqltable']); }
+$UsersName = $PreUsersName['Name'];
+$UsersHidden = $PreUsersName['Hidden'];
 if($UsersName=="Guest") { $UsersName=$GuestsName;
 if($UsersName==null) { $UsersName="Guest"; } }
 if(isset($GroupNamePrefix)&&$GroupNamePrefix!=null) {
@@ -371,10 +375,11 @@ $glrnum=mysql_num_rows($glrresult);
 if($glrnum>0){
 $ReplyID1=mysql_result($glrresult,0,"id");
 $UsersID1=mysql_result($glrresult,0,"UserID");
-$UsersName1 = GetUserName($UsersID1,$Settings['sqltable']);
-if($UsersName1===null) { $UsersID1 = -1;
-$UsersName1 = GetUserName($UsersID1,$Settings['sqltable']); }
-$UsersHidden1=GetHiddenMember($UsersID1,$Settings['sqltable']);
+$PreUsersName1 = GetUserName($UsersID1,$Settings['sqltable']);
+if($PreUsersName1['Name']===null) { $UsersID1 = -1;
+$PreUsersName1 = GetUserName($UsersID1,$Settings['sqltable']); }
+$UsersName1 = $PreUsersName1['Name'];
+$UsersHidden1 = $PreUsersName1['Hidden'];
 $GuestsName1=mysql_result($glrresult,0,"GuestName");
 $TimeStamp1=mysql_result($glrresult,0,"TimeStamp");
 $TimeStamp1=GMTimeChange("F j Y, g:i a",$TimeStamp1,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']); }

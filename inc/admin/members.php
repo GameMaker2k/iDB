@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 11/14/2009 SVN 347 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 11/15/2009 SVN 349 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -219,6 +219,7 @@ $getmemidName=mysql_result($getmemidr,$getmemidi,"Name");
 <?php } if($_POST['act']=="deletemember"&&$_POST['update']=="now"&&$_GET['act']=="deletemember"&&
 	($_POST['id']!="0"||$_POST['id']!="1"||$_POST['id']!="-1")) { 
 $DMemName = GetUserName($_POST['id'],$Settings['sqltable']);
+$DMemName = $DMemName['Name'];
 if($DMemName!==null&&($_POST['id']!="0"||$_POST['id']!="1"||$_POST['id']!="-1")) { 
 $dmquery = query("DELETE FROM `".$Settings['sqltable']."members` WHERE `id`=%i", array($_POST['id']));
 exec_query($dmquery); }
@@ -343,6 +344,7 @@ $vgidresult=exec_query($vgidquery);
 $ValidateGroupID=mysql_result($vgidresult,0,"id");
 @mysql_free_result($vgidresult);
 $DMemName = GetUserName($_POST['id'],$Settings['sqltable']);
+$DMemName = $DMemName['Name'];
 if($DMemName!==null&&($_POST['id']!="0"||$_POST['id']!="1"||$_POST['id']!="-1")&&
 	($_POST['gid']!=$GuestGroupID||$_POST['gid']!=$ValidateGroupID)) { 
 $dmquery = query("UPDATE `".$Settings['sqltable']."members` SET GroupID=%i WHERE `id`=%i", array($_POST['gid'],$_POST['id']));

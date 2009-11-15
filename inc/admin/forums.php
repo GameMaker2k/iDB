@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: forums.php - Last Update: 11/14/2009 SVN 347 - Author: cooldude2k $
+    $FileInfo: forums.php - Last Update: 11/15/2009 SVN 349 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="forums.php"||$File3Name=="/forums.php") {
@@ -148,6 +148,7 @@ $GuestsName=mysql_result($result,$i,"GuestName");
 $NewUserID = $UsersID;
 $NewGuestsName = $GuestsName;
 $NewGuestsName = GetUserName($NewUserID,$Settings['sqltable']);
+$NewGuestsName = $NewGuestsName['Name'];
 if($UsersID==-1&&$GuestsName!=null) { $NewGuestsName = $GuestsName; }
 if($NewGuestsName==null&&$GuestsName!=null&&$UsersID!==0) {
 $NewUserID = -1; $NewGuestsName = $GuestsName; }
@@ -208,6 +209,7 @@ $GuestsName=mysql_result($result,$i,"GuestName");
 $NewUserID = $UsersID;
 $NewGuestsName = $GuestsName;
 $NewGuestsName = GetUserName($NewUserID,$Settings['sqltable']);
+$NewGuestsName = $NewGuestsName['Name'];
 if($UsersID==-1&&$GuestsName!=null) { $NewGuestsName = $GuestsName; }
 if($NewGuestsName==null&&$GuestsName!=null&&$UsersID!==0) {
 $NewUserID = -1; $NewGuestsName = $GuestsName; }
@@ -224,6 +226,7 @@ $EditUserName=mysql_result($result,$i,"EditUserName");
 $NewEditUserID = $EditUserID;
 $NewEditUserName = $EditUserName;
 $NewEditUserName = GetUserName($NewEditUserID,$Settings['sqltable']);
+$NewEditUserName = $NewEditUserName['Name'];
 if($EditUserID==-1&&$EditUserName!=null) { $NewEditUserName = $EditUserName; }
 if($NewEditUserName==null&&$EditUserName!=null&&$EditUserID!==0) {
 $NewEditUserID = -1; $NewEditUserName = $EditUserName; }

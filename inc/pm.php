@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: pm.php - Last Update: 11/14/2009 SVN 347 - Author: cooldude2k $
+    $FileInfo: pm.php - Last Update: 11/15/2009 SVN 349 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pm.php"||$File3Name=="/pm.php") {
@@ -187,13 +187,17 @@ if($pagenum>1) {
 while ($i < $num) {
 $PMID=mysql_result($result,$i,"id");
 $SenderID=mysql_result($result,$i,"SenderID");
-$SenderName = GetUserName($SenderID,$Settings['sqltable']);
-if($SenderName===null) { $SenderID = -1;
-$SenderName = GetUserName($SenderID,$Settings['sqltable']); }
-$SenderHidden = GetHiddenMember($SenderID,$Settings['sqltable']);
+$PreSenderName = GetUserName($SenderID,$Settings['sqltable']);
+if($PreSenderName['Name']===null) { $SenderID = -1;
+$PreSenderName = GetUserName($SenderID,$Settings['sqltable']); }
+$SenderName = $PreSenderName['Name'];
+$SenderHidden = $PreSenderName['Hidden'];
 $ReciverID=mysql_result($result,$i,"ReciverID");
-$ReciverName = GetUserName($ReciverID,$Settings['sqltable']);
-$ReciverHidden = GetHiddenMember($ReciverID,$Settings['sqltable']);
+$PreReciverName = GetUserName($ReciverID,$Settings['sqltable']);
+if($PreReciverName['Name']===null) { $ReciverID = -1;
+$PreReciverName = GetUserName($ReciverID,$Settings['sqltable']); }
+$ReciverName = $PreReciverName['Name'];
+$ReciverHidden = $PreReciverName['Hidden'];
 $PMGuest=mysql_result($result,$i,"GuestName");
 $MessageName=mysql_result($result,$i,"MessageTitle");
 $MessageDesc=mysql_result($result,$i,"Description");
@@ -353,15 +357,17 @@ if($pagenum>1) {
 while ($i < $num) {
 $PMID=mysql_result($result,$i,"id");
 $SenderID=mysql_result($result,$i,"SenderID");
-$SenderName = GetUserName($SenderID,$Settings['sqltable']);
-if($SenderName===null) { $SenderID = -1;
-$SenderName = GetUserName($SenderID,$Settings['sqltable']); }
-$SenderHidden = GetHiddenMember($SenderID,$Settings['sqltable']);
+$PreSenderName = GetUserName($SenderID,$Settings['sqltable']);
+if($PreSenderName['Name']===null) { $SenderID = -1;
+$PreSenderName = GetUserName($SenderID,$Settings['sqltable']); }
+$SenderName = $PreSenderName['Name'];
+$SenderHidden = $PreSenderName['Hidden'];
 $ReciverID=mysql_result($result,$i,"ReciverID");
-$ReciverName = GetUserName($ReciverID,$Settings['sqltable']);
-if($ReciverName===null) { $ReciverID = -1;
-$ReciverName = GetUserName($ReciverID,$Settings['sqltable']); }
-$ReciverHidden = GetHiddenMember($ReciverID,$Settings['sqltable']);
+$PreReciverName = GetUserName($ReciverID,$Settings['sqltable']);
+if($PreReciverName['Name']===null) { $ReciverID = -1;
+$PreReciverName = GetUserName($ReciverID,$Settings['sqltable']); }
+$ReciverName = $PreReciverName['Name'];
+$ReciverHidden = $PreReciverName['Hidden'];
 $PMGuest=mysql_result($result,$i,"GuestName");
 $MessageName=mysql_result($result,$i,"MessageTitle");
 $MessageDesc=mysql_result($result,$i,"Description");
@@ -408,15 +414,17 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); di
 while ($is < $num) {
 $PMID=mysql_result($result,$is,"id");
 $SenderID=mysql_result($result,$is,"SenderID");
-$SenderName = GetUserName($SenderID,$Settings['sqltable']);
-if($SenderName===null) { $SenderID = -1;
-$SenderName = GetUserName($SenderID,$Settings['sqltable']); }
-$SenderHidden = GetHiddenMember($SenderID,$Settings['sqltable']);
+$PreSenderName = GetUserName($SenderID,$Settings['sqltable']);
+if($PreSenderName['Name']===null) { $SenderID = -1;
+$PreSenderName = GetUserName($SenderID,$Settings['sqltable']); }
+$SenderName = $PreSenderName['Name'];
+$SenderHidden = $PreSenderName['Hidden'];
 $ReciverID=mysql_result($result,$is,"ReciverID");
-$ReciverName = GetUserName($ReciverID,$Settings['sqltable']);
-if($ReciverName===null) { $ReciverID = -1;
-$ReciverName = GetUserName($ReciverID,$Settings['sqltable']); }
-$ReciverHidden = GetHiddenMember($ReciverID,$Settings['sqltable']);
+$PreReciverName = GetUserName($ReciverID,$Settings['sqltable']);
+if($PreReciverName['Name']===null) { $ReciverID = -1;
+$PreReciverName = GetUserName($ReciverID,$Settings['sqltable']); }
+$ReciverName = $PreReciverName['Name'];
+$ReciverHidden = $PreReciverName['Hidden'];
 $PMGuest=mysql_result($result,$is,"GuestName");
 $MessageName=mysql_result($result,$is,"MessageTitle");
 $DateSend=mysql_result($result,$is,"DateSend");

@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: lowtopics.php - Last Update: 11/14/2009 SVN 347 - Author: cooldude2k $
+    $FileInfo: lowtopics.php - Last Update: 11/15/2009 SVN 349 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="lowtopics.php"||$File3Name=="/lowtopics.php") {
@@ -245,28 +245,6 @@ $TopicName=mysql_result($result,$i,"TopicName");
 $TopicDescription=mysql_result($result,$i,"Description");
 $PinnedTopic=mysql_result($result,$i,"Pinned");
 $TopicStat=mysql_result($result,$i,"Closed");
-$requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($UsersID));
-$reresult=exec_query($requery);
-$renum=mysql_num_rows($reresult);
-if($renum<1) { $UsersID = -1;
-$requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($UsersID));
-$reresult=exec_query($requery);
-$renum=mysql_num_rows($reresult); }
-$UserGroupID=mysql_result($reresult,0,"GroupID");
-@mysql_free_result($reresult);
-$gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($UserGroupID));
-$gresult=exec_query($gquery);
-$User1Group=mysql_result($gresult,0,"Name");
-$GroupNamePrefix=mysql_result($gresult,0,"NamePrefix");
-$GroupNameSuffix=mysql_result($gresult,0,"NameSuffix");
-@mysql_free_result($gresult);
-$UsersName = GetUserName($UsersID,$Settings['sqltable']);
-if($UsersName=="Guest") { $UsersName=$GuestsName;
-if($UsersName==null) { $UsersName="Guest"; } }
-if(isset($GroupNamePrefix)&&$GroupNamePrefix!=null) {
-	$UsersName = $GroupNamePrefix.$UsersName; }
-if(isset($GroupNameSuffix)&&$GroupNameSuffix!=null) {
-	$UsersName = $UsersName.$GroupNameSuffix; }
 $PreTopic = null;
 if ($PinnedTopic>1) { $PinnedTopic = 1; } 
 if ($PinnedTopic<0) { $PinnedTopic = 0; }
