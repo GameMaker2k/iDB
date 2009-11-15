@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 11/14/2009 SVN 347 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 11/14/2009 SVN 348 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -400,6 +400,10 @@ $session_data=mysql_result($result,$i,"session_data");
 $session_expires=mysql_result($result,$i,"expires"); 
 $session_expires = GMTimeChange("F j Y, g:i a",$session_expires,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $UserSessInfo = unserialize_session($session_data);
+if(!isset($UserSessInfo['UserGroup'])) { 
+	$UserSessInfo['UserGroup'] = $Settings['GuestGroup']; }
+if(!isset($UserSessInfo['UserIP'])) { 
+	$UserSessInfo['UserIP'] = "127.0.0.1"; }
 if($UserSessInfo['UserGroup']!=$Settings['GuestGroup']) {
 $AmIHiddenUser = GetHiddenMember($UserSessInfo['UserID'],$Settings['sqltable']); }
 if(!isset($UserSessInfo['ViewingPage'])) {
