@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: function.php - Last Update: 10/29/2009 SVN 329 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 11/15/2009 SVN 350 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -152,7 +152,7 @@ if($type=="location") { header("Location: ".$url); } return true; }
 function html_tag_make($name="br",$emptytag=true,$attbvar=null,$attbval=null,$extratest=null) {
 	$var_num = count($attbvar); $value_num = count($attbval);
 	if($var_num!=$value_num) { 
-		echo "Erorr Number of Var and Values dont match!";
+		trigger_error("Erorr Number of Var and Values dont match!",E_USER_ERROR);
 	return false; } $i = 0;
 	while ($i < $var_num) {
 	if($i==0) { $mytag = "<".$name." ".$attbvar[$i]."=\"".$attbval[$i]."\""; }

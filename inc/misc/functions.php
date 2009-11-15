@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: functions.php - Last Update: 11/15/2009 SVN 349 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 11/15/2009 SVN 350 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -111,7 +111,7 @@ if(isset($link_identifier)) {
 if(!isset($link_identifier)) {
 	$result = mysql_query($query); }
 if (!$result) {
-    echo "Invalid query: ".mysql_error(); 
+    trigger_error("Invalid query: ".mysql_error(),E_USER_ERROR);
 	return false; }
 if ($result) {
 	++$NumQueries;
@@ -472,8 +472,12 @@ if (!function_exists('mysql_set_charset')) {
 //       by Kazuki Przyborowski - Cool Dude 2k      */
 function http_set_cookie($name,$value=null,$expire=null,$path=null,$domain=null,$secure=false,$httponly=false) {
 	$mkcookie = null; $expireGMT = null;
-	if(!isset($name)) { echo "Error: You need to enter a name for cookie."; return false; }
-	if(!isset($expire)) { echo "Error: You need to enter a time for cookie to expire."; return false; }
+	if(!isset($name)) { 
+	trigger_error("Error: You need to enter a name for cookie.",E_USER_ERROR); 
+	return false; }
+	if(!isset($expire)) { 
+	trigger_error("Error: You need to enter a time for cookie to expire.",E_USER_ERROR); 
+	return false; }
 	$expireGMT = gmdate("D, d-M-Y H:i:s \G\M\T", $expire);
 	if(!isset($value)) { $value = null; }
 	if(!isset($httponly)||$httponly==false) {
