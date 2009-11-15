@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: profilemain.php - Last Update: 8/19/2009 SVN 313 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 11/14/2009 SVN 347 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
@@ -113,7 +113,7 @@ $profiletitle = " ".$ThemeSet['TitleDivider']." NotePad";
 <?php } if($_GET['act']=="view") {
 if($_POST['update']!="now") {
 $query = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($_SESSION['UserID']));
-$result=mysql_query($query);
+$result=exec_query($query);
 $num=mysql_num_rows($result);
 $i=0;
 $YourID=mysql_result($result,$i,"id");
@@ -165,7 +165,7 @@ if($_POST['act']=="view"&&
 	/*    <_<  iWordFilter  >_>      
     by Kazuki Przyborowski - Cool Dude 2k */
 	$katarzynaqy=query("SELECT * FROM `".$Settings['sqltable']."wordfilter`", array(null));
-	$katarzynart=mysql_query($katarzynaqy);
+	$katarzynart=exec_query($katarzynaqy);
 	$katarzynanm=mysql_num_rows($katarzynart);
 	$katarzynas=0;
 	while ($katarzynas < $katarzynanm) {
@@ -192,11 +192,11 @@ if($_POST['act']=="view"&&
 	$NewDay=GMTimeStamp();
 	$NewIP=$_SERVER['REMOTE_ADDR'];
 	$querynewskin = query("UPDATE `".$Settings['sqltable']."members` SET `Notes`='%s',`LastActive`=%i,`IP`='%s' WHERE `id`=%i", array($_POST['NotePad'],$NewDay,$NewIP,$_SESSION['UserID']));
-		mysql_query($querynewskin); } } }
+		exec_query($querynewskin); } } }
 if($_GET['act']=="signature") {
 if($_POST['update']!="now") {
 $query = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($_SESSION['UserID']));
-$result=mysql_query($query);
+$result=exec_query($query);
 $num=mysql_num_rows($result);
 $i=0;
 $YourID=mysql_result($result,$i,"id");
@@ -247,7 +247,7 @@ if($_POST['act']=="signature"&&
 	/*    <_<  iWordFilter  >_>      
     by Kazuki Przyborowski - Cool Dude 2k */
 	$katarzynaqy=query("SELECT * FROM `".$Settings['sqltable']."wordfilter`", array(null));
-	$katarzynart=mysql_query($katarzynaqy);
+	$katarzynart=exec_query($katarzynaqy);
 	$katarzynanm=mysql_num_rows($katarzynart);
 	$katarzynas=0;
 	while ($katarzynas < $katarzynanm) {
@@ -274,11 +274,11 @@ if($_POST['act']=="signature"&&
 	$NewDay=GMTimeStamp();
 	$NewIP=$_SERVER['REMOTE_ADDR'];
 	$querynewskin = query("UPDATE `".$Settings['sqltable']."members` SET `Signature`='%s',`LastActive`=%i,`IP`='%s' WHERE `id`=%i", array($_POST['Signature'],$NewDay,$NewIP,$_SESSION['UserID']));
-	mysql_query($querynewskin); } } }
+	exec_query($querynewskin); } } }
 if($_GET['act']=="avatar") {
 if($_POST['update']!="now") {
 $query = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($_SESSION['UserID']));
-$result=mysql_query($query);
+$result=exec_query($query);
 $num=mysql_num_rows($result);
 $i=0;
 $YourID=mysql_result($result,$i,"id");
@@ -367,11 +367,11 @@ if($_POST['Avatar']!=null&&$_POST['AvatarSizeW']!=null&&$_POST['AvatarSizeH']!=n
 	$NewIP=$_SERVER['REMOTE_ADDR'];
 	$_POST['Avatar'] = @remove_spaces($_POST['Avatar']);
 	$querynewskin = query("UPDATE `".$Settings['sqltable']."members` SET `Avatar`='%s',`AvatarSize`='%s',`LastActive`=%i,`IP`='%s' WHERE `id`=%i", array($_POST['Avatar'],$fullavatarsize,$NewDay,$NewIP,$_SESSION['UserID']));
-	mysql_query($querynewskin); } } }
+	exec_query($querynewskin); } } }
 if($_GET['act']=="settings") {
 if($_POST['update']!="now") {
 $query = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($_SESSION['UserID']));
-$result=mysql_query($query);
+$result=exec_query($query);
 $num=mysql_num_rows($result);
 $i=0;
 $YourID=mysql_result($result,$i,"id");
@@ -532,11 +532,11 @@ if($_POST['act']=="settings"&&
 	if(!is_numeric($_POST['TopicsPerPage'])) { $_POST['TopicsPerPage'] = "10"; }
 	if(!is_numeric($_POST['MessagesPerPage'])) { $_POST['MessagesPerPage'] = "10"; }
 	$querynewskin = query("UPDATE `".$Settings['sqltable']."members` SET `UseTheme`='%s',`TimeZone`='%s',`DST`='%s',`LastActive`=%i,RepliesPerPage=%i,TopicsPerPage=%i,MessagesPerPage=%i,`IP`='%s' WHERE `id`=%i", array(chack_themes($_POST['skin']),$_POST['YourOffSet'],$_POST['DST'],$NewDay,$_POST['RepliesPerPage'],$_POST['TopicsPerPage'],$_POST['MessagesPerPage'],$NewIP,$_SESSION['UserID']));
-	mysql_query($querynewskin); } } }
+	exec_query($querynewskin); } } }
 if($_GET['act']=="profile") {
 if($_POST['update']!="now") {
 $query = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($_SESSION['UserID']));
-$result=mysql_query($query);
+$result=exec_query($query);
 $num=mysql_num_rows($result);
 $i=0;
 $YourID=mysql_result($result,$i,"id");
@@ -712,7 +712,7 @@ if($_POST['act']=="profile"&&
 	/*    <_<  iWordFilter  >_>      
     by Kazuki Przyborowski - Cool Dude 2k */
 	$katarzynaqy=query("SELECT * FROM `".$Settings['sqltable']."wordfilter`", array(null));
-	$katarzynart=mysql_query($katarzynaqy);
+	$katarzynart=exec_query($katarzynaqy);
 	$katarzynanm=mysql_num_rows($katarzynart);
 	$katarzynas=0;
 	while ($katarzynas < $katarzynanm) {
@@ -781,11 +781,11 @@ if($_POST['act']=="profile"&&
 	$NewDay=GMTimeStamp();
 	$NewIP=$_SERVER['REMOTE_ADDR'];
 	$querynewprofile = query("UPDATE `".$Settings['sqltable']."members` SET `Interests`='%s',`Title`='%s',`Website`='%s',`TimeZone`='%s',`Gender`='%s',`DST`='%s',`LastActive`=%i,`BirthMonth`=%i,`BirthDay`=%i,`BirthYear`=%i,RepliesPerPage=%i,TopicsPerPage=%i,MessagesPerPage=%i,`IP`='%s' WHERE `id`=%i", array($_POST['Interests'],$_POST['Title'],$_POST['Website'],$_POST['YourOffSet'],$_POST['YourGender'],$_POST['DST'],$NewDay,$BirthMonth,$BirthDay,$BirthYear,$_POST['RepliesPerPage'],$_POST['TopicsPerPage'],$_POST['MessagesPerPage'],$NewIP,$_SESSION['UserID']));
-	mysql_query($querynewprofile); } } }
+	exec_query($querynewprofile); } } }
 if($_GET['act']=="userinfo") {
 if($_POST['update']!="now") {
 $query = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($_SESSION['UserID']));
-$result=mysql_query($query);
+$result=exec_query($query);
 $num=mysql_num_rows($result);
 $i=0;
 $YourID=mysql_result($result,$i,"id");
@@ -847,7 +847,7 @@ if($_POST['update']=="now") {
 if($_POST['act']=="userinfo"&&
 	$_SESSION['UserGroup']!=$Settings['GuestGroup']) {
 	$query = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($_SESSION['UserID']));
-	$result=mysql_query($query);
+	$result=exec_query($query);
 	$num=mysql_num_rows($result);
 	$i=0;
 	$OldPassword=mysql_result($result,$i,"Password");
@@ -885,7 +885,7 @@ if($YourPassword!=$OldPassword) { $Error="Yes"; ?>
 	@setcookie("SessPass", $NewPassword, time() + (7 * 86400), $cbasedir, $cookieDomain); } }
 	$_POST['Email'] = @remove_spaces($_POST['Email']);
 	$querynewuserinfo = query("UPDATE `".$Settings['sqltable']."members` SET `Password`='%s',`HashType`='iDBH',`Email`='%s',`LastActive`=%i,`IP`='%s',`Salt`='%s' WHERE `id`=%i", array($NewPassword,$_POST['Email'],$NewDay,$NewIP,$NewSalt,$_SESSION['UserID']));
-	mysql_query($querynewuserinfo); } } } }
+	exec_query($querynewuserinfo); } } } }
 ?>
 <?php if($_POST['update']=="now"&&$_GET['act']!=null) {
 	$profiletitle = " ".$ThemeSet['TitleDivider']." Updating Settings"; ?>

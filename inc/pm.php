@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: pm.php - Last Update: 11/14/2009 SVN 344 - Author: cooldude2k $
+    $FileInfo: pm.php - Last Update: 11/14/2009 SVN 347 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pm.php"||$File3Name=="/pm.php") {
@@ -69,8 +69,8 @@ $nums = $_GET['page'] * $Settings['max_pmlist'];
 $PageLimit = $nums - $Settings['max_pmlist'];
 $query = query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."messenger` WHERE `ReciverID`=%i ORDER BY `DateSend` DESC LIMIT %i,%i", array($_SESSION['UserID'],$PageLimit,$Settings['max_pmlist']));
 $rnquery = query("SELECT FOUND_ROWS();", array(null));
-$result=mysql_query($query);
-$rnresult=mysql_query($rnquery);
+$result=exec_query($query);
+$rnresult=exec_query($rnquery);
 $NumberMessage = mysql_result($rnresult,0);
 @mysql_free_result($rnresult);
 if($NumberMessage==null) { 
@@ -235,8 +235,8 @@ $nums = $_GET['page'] * $Settings['max_pmlist'];
 $PageLimit = $nums - $Settings['max_pmlist'];
 $query = query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."messenger` WHERE `SenderID`=%i ORDER BY `DateSend` DESC LIMIT %i,%i", array($_SESSION['UserID'],$PageLimit,$Settings['max_pmlist']));
 $rnquery = query("SELECT FOUND_ROWS();", array(null));
-$result=mysql_query($query);
-$rnresult=mysql_query($rnquery);
+$result=exec_query($query);
+$rnresult=exec_query($rnquery);
 $NumberMessage = mysql_result($rnresult,0);
 @mysql_free_result($rnresult);
 if($NumberMessage==null) { 
@@ -399,7 +399,7 @@ echo "<span>".$ReciverName."</span>"; }
 <?php } @mysql_free_result($result);
 if($_GET['act']=="read") {
 $query = query("SELECT * FROM `".$Settings['sqltable']."messenger` WHERE `id`=%i", array($_GET['id']));
-$result=mysql_query($query);
+$result=exec_query($query);
 $num=mysql_num_rows($result);
 $is=0;
 if($num==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
@@ -425,7 +425,7 @@ $MessageText=mysql_result($result,$is,"MessageText");
 $MessageText = preg_replace("/\<br\>/", "<br />\n", nl2br($MessageText));
 $MessageDesc=mysql_result($result,$is,"Description");
 $requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i", array($SenderID));
-$reresult=mysql_query($requery);
+$reresult=exec_query($requery);
 $renum=mysql_num_rows($reresult);
 $rei=0;
 if($_SESSION['UserID']!=$ReciverID&&
@@ -446,7 +446,7 @@ $User1GroupID=mysql_result($reresult,$rei,"GroupID");
 $User1Hidden=mysql_result($reresult,$rei,"HiddenMember");
 $SenderHidden = $User1Hidden;
 $gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i", array($User1GroupID));
-$gresult=mysql_query($gquery);
+$gresult=exec_query($gquery);
 $User1Group=mysql_result($gresult,0,"Name");
 $GroupNamePrefix=mysql_result($gresult,0,"NamePrefix");
 $GroupNameSuffix=mysql_result($gresult,0,"NameSuffix");
@@ -468,7 +468,7 @@ $User1IP=mysql_result($reresult,$rei,"IP");
 ++$is; } @mysql_free_result($result);
 if($_SESSION['UserID']==$ReciverID) {
 $queryup = query("UPDATE `".$Settings['sqltable']."messenger` SET `Read`=%i WHERE `id`=%i", array(1,$_GET['id']));
-mysql_query($queryup); }
+exec_query($queryup); }
 if($User1Name=="Guest") { $User1Name=$PMGuest;
 if($User1Name==null) { $User1Name="Guest"; } }
 if(isset($GroupNamePrefix)&&$GroupNamePrefix!=null) {
@@ -567,7 +567,7 @@ echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr
 $SendMessageTo = null;
 if($_GET['id']!=null&&$_GET['id']!=-1) {
 $requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i", array($_GET['id']));
-$reresult=mysql_query($requery);
+$reresult=exec_query($requery);
 $renum=mysql_num_rows($reresult);
 $rei=0;
 while ($rei < $renum) {
@@ -584,13 +584,13 @@ $QuoteUserName = $SendMessageTo; }
 if(!isset($SendMessageTo)) {
 $QuoteUserName = "Unknown"; }
 $query = query("SELECT * FROM `".$Settings['sqltable']."messenger` WHERE `id`=%i", array($_GET['post']));
-$result=mysql_query($query);
+$result=exec_query($query);
 $num=mysql_num_rows($result);
 $QuoteTitle=mysql_result($result,0,"MessageTitle");
 $MessageText=mysql_result($result,0,"MessageText");
 $QuoteReply = preg_replace("/\<br\>/", "<br />\n", nl2br($MessageText));
 $QuoteDescription=mysql_result($result,0,"Description");
-$result=mysql_query($query);
+$result=exec_query($query);
 $num=mysql_num_rows($result);
 $QuoteReply = remove_bad_entities($QuoteReply);
 $QuoteDescription = str_replace("Re: ","",$QuoteDescription);
@@ -622,7 +622,7 @@ $_SESSION['UserFormID'] = $UFID;
 <div style="width: 100%; height: 160px; overflow: auto;">
 <table style="width: 100%; text-align: center;"><?php
 $renee_query=query("SELECT * FROM `".$Settings['sqltable']."smileys` WHERE `Show`='yes'", array(null));
-$renee_result=mysql_query($renee_query);
+$renee_result=exec_query($renee_query);
 $renee_num=mysql_num_rows($renee_result);
 $renee_s=0; $SmileRow=0; $SmileCRow=0;
 while ($renee_s < $renee_num) { ++$SmileRow;
@@ -798,7 +798,7 @@ $_SESSION['GuestName']=$_POST['GuestName']; } }
 /*    <_<  iWordFilter  >_>      
    by Kazuki Przyborowski - Cool Dude 2k */
 $katarzynaqy=query("SELECT * FROM `".$Settings['sqltable']."wordfilter`", array(null));
-$katarzynart=mysql_query($katarzynaqy);
+$katarzynart=exec_query($katarzynaqy);
 $katarzynanm=mysql_num_rows($katarzynart);
 $katarzynas=0;
 while ($katarzynas < $katarzynanm) {
@@ -827,7 +827,7 @@ $_POST['Message'] = preg_replace("/".$Filter."/i", $Replace, $_POST['Message']);
 $_POST['MessageDesc'] = preg_replace("/".$Filter."/i", $Replace, $_POST['MessageDesc']); }
 ++$katarzynas; } @mysql_free_result($katarzynart);
 $lonewolfqy=query("SELECT * FROM `".$Settings['sqltable']."restrictedwords` WHERE `RestrictedMessageName`='yes' or `RestrictedUserName`='yes'", array(null));
-$lonewolfrt=mysql_query($lonewolfqy);
+$lonewolfrt=exec_query($lonewolfqy);
 $lonewolfnm=mysql_num_rows($lonewolfrt);
 $lonewolfs=0; $RMatches = null; $RGMatches = null;
 while ($lonewolfs < $lonewolfnm) {
@@ -879,14 +879,14 @@ $RGMatches = preg_match("/".$RWord."/i", $_POST['GuestName']);
 	if($RGMatches==true) { break 1; } } }
 ++$lonewolfs; } @mysql_free_result($lonewolfrt);
 $requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `Name`='%s'", array($_POST['SendMessageTo']));
-$reresult=mysql_query($requery);
+$reresult=exec_query($requery);
 $renum=mysql_num_rows($reresult);
 $rei=0;
 while ($rei < $renum) {
 $SendMessageToID = mysql_result($reresult,$rei,"id");
 $SendToGroupID = mysql_result($reresult,$rei,"GroupID");
 $gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i", array($SendToGroupID));
-$gresult=mysql_query($gquery);
+$gresult=exec_query($gquery);
 $SendUserCanPM=mysql_result($gresult,0,"CanPM");
 $SendUserCanPM = strtolower($SendUserCanPM);
 if($SendUserCanPM!="yes"&&$SendUserCanPM!="no") {
@@ -956,7 +956,7 @@ if($_SESSION['UserGroup']==$Settings['GuestGroup']) { $User1Name = $_POST['Guest
 if($_SESSION['UserGroup']!=$Settings['GuestGroup']) { $User1Name = $_SESSION['MemberName']; }
 $query = query("INSERT INTO `".$Settings['sqltable']."messenger` (`SenderID`, `ReciverID`, `GuestName`, `MessageTitle`, `MessageText`, `Description`, `DateSend`, `Read`) VALUES 
 (%i, %i, '%s', '%s', '%s', '%s', %i, %i)", array($_SESSION['UserID'],$SendMessageToID,$_SESSION['MemberName'],$_POST['MessageName'],$_POST['Message'],$_POST['MessageDesc'],$LastActive,0));
-mysql_query($query);
+exec_query($query);
 ?><tr>
 	<td><span class="TableMessage"><br />
 	Message sent to user <?php echo $_POST['SendMessageTo']; ?>.<br />

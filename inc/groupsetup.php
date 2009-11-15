@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: groupsetup.php - Last Update: 11/10/2009 SVN 337 - Author: cooldude2k $
+    $FileInfo: groupsetup.php - Last Update: 11/14/2009 SVN 347 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="groupsetup.php"||$File3Name=="/groupsetup.php") {
@@ -26,14 +26,14 @@ $_SESSION['ViewingFile'] = $exfile['index']; }
 $_SESSION['PreViewingTitle'] = "Viewing";
 $_SESSION['ViewingTitle'] = "Board index";
 /*$ggidquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `name`='%s' LIMIT 1", array($Settings['GuestGroup']));
-$ggidresult=mysql_query($ggidquery);
+$ggidresult=exec_query($ggidquery);
 $Settings['GuestGroupID']=mysql_result($ggidresult,0,"id");*/
 // Check to make sure MemberInfo is right
 $MyPostCountChk = null; $MyKarmaCount = null;
 if(!isset($_SESSION['UserID'])) { $_SESSION['UserID'] = 0; }
 if($_SESSION['UserID']!=0&&$_SESSION['UserID']!=null) { $BanError = null;
 $kgbquerychkusr = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `Name`='%s' AND `Password`='%s' AND `id`=%i LIMIT 1", array($_SESSION['MemberName'],$_SESSION['UserPass'],$_SESSION['UserID'])); 
-$resultchkusr=mysql_query($kgbquerychkusr);
+$resultchkusr=exec_query($kgbquerychkusr);
 $numchkusr=mysql_num_rows($resultchkusr);
 if($numchkusr==1) {
 $ChkUsrID=mysql_result($resultchkusr,0,"id");
@@ -56,7 +56,7 @@ $Settings['max_memlist'] = $MyMessagesPerPage;
 $Settings['max_pmlist'] = $MyMessagesPerPage;
 $ChkUsrDST=mysql_result($resultchkusr,0,"DST");
 $svrquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($ChkUsrGroup));
-$svrgresultkgb=mysql_query($svrquery);
+$svrgresultkgb=exec_query($svrquery);
 $ChkUsrGroup=mysql_result($svrgresultkgb,0,"Name"); 
 $ChkUsrBanTime=mysql_result($resultchkusr,0,"BanTime");
 $ChkUsrGMTime = GMTimeStamp();
@@ -101,14 +101,14 @@ $_SESSION['UserIP']=$_SERVER['REMOTE_ADDR'];
 $_SESSION['MemberName'] = null;
 $_SESSION['UserGroup'] = $Settings['GuestGroup']; 
 $gidquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `name`='%s' LIMIT 1", array($Settings['GuestGroup']));
-$gidresult=mysql_query($gidquery);
+$gidresult=exec_query($gidquery);
 $_SESSION['UserGroupID']=mysql_result($gidresult,0,"id"); 
 @mysql_free_result($gidresult); }
 if($_SESSION['MemberName']==null) { $_SESSION['UserID'] = "0";
 $_SESSION['UserIP']=$_SERVER['REMOTE_ADDR'];
 $_SESSION['UserGroup'] = $Settings['GuestGroup']; 
 $gidquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `name`='%s' LIMIT 1", array($Settings['GuestGroup']));
-$gidresult=mysql_query($gidquery);
+$gidresult=exec_query($gidquery);
 $_SESSION['UserGroupID']=mysql_result($gidresult,0,"id"); 
 @mysql_free_result($gidresult); }
 // Member Group Setup
@@ -116,7 +116,7 @@ if(!isset($_SESSION['UserGroup'])) { $_SESSION['UserGroup'] = null; }
 if($_SESSION['UserGroup']==null) { 
 $_SESSION['UserGroup']=$Settings['GuestGroup']; } $GruError = null;
 $gruquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `Name`='%s' LIMIT 1", array($_SESSION['UserGroup']));
-$gruresult=mysql_query($gruquery);
+$gruresult=exec_query($gruquery);
 $grunum=mysql_num_rows($gruresult);
 if($grunum<=0) { $GruError = true; @mysql_free_result($gruresult);
 @header("Content-Type: text/plain; charset=".$Settings['charset']); 
@@ -189,21 +189,21 @@ if($MyKarmaUpdate<$NewKarmaUpdate&&$MyPostCountChk>0) {
 	if($BoostTotal==null) {
 	$MyKarmaCount = $MyKarmaCount + 1; }
 	$querykarmaup = query("UPDATE `".$Settings['sqltable']."members` SET `Karma`=%i,`KarmaUpdate`=%i WHERE `id`=%i", array($MyKarmaCount,$NewKarmaUpdate,$_SESSION['UserID']));
-	mysql_query($querykarmaup); }
+	exec_query($querykarmaup); }
 if($GroupInfo['PromoteTo']!=0&&$MyPostCountChk>=$GroupInfo['PromotePosts']) {
-	$sql_group_check = mysql_query(query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($GroupInfo['PromoteTo'])));
+	$sql_group_check = exec_query(query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($GroupInfo['PromoteTo'])));
 	$group_check = mysql_num_rows($sql_group_check);
 	@mysql_free_result($sql_group_check);
 	if($group_check > 0) {
 	$queryupgrade = query("UPDATE `".$Settings['sqltable']."members` SET `GroupID`=%i WHERE `id`=%i", array($GroupInfo['PromoteTo'],$_SESSION['UserID']));
-	mysql_query($queryupgrade); } }
+	exec_query($queryupgrade); } }
 if($GroupInfo['PromotePosts']==0&&$GroupInfo['PromoteTo']!=0&&$MyKarmaCount>=$GroupInfo['PromoteKarma']) {
-	$sql_group_check = mysql_query(query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($GroupInfo['PromoteTo'])));
+	$sql_group_check = exec_query(query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($GroupInfo['PromoteTo'])));
 	$group_check = mysql_num_rows($sql_group_check);
 	@mysql_free_result($sql_group_check);
 	if($group_check > 0) {
 	$queryupgrade = query("UPDATE `".$Settings['sqltable']."members` SET `GroupID`=%i WHERE `id`=%i", array($GroupInfo['PromoteTo'],$_SESSION['UserID']));
-	mysql_query($queryupgrade); } } }
+	exec_query($queryupgrade); } } }
 $GroupInfo['HasModCP']=mysql_result($gruresult,0,"HasModCP");
 if($GroupInfo['HasModCP']!="yes"&&$GroupInfo['HasModCP']!="no") {
 	$GroupInfo['HasModCP'] = "no"; }
@@ -224,7 +224,7 @@ ob_clean(); echo "Sorry you can not view the board.";
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
 // Member Group Permissions Setup
 $perquery = query("SELECT * FROM `".$Settings['sqltable']."permissions` WHERE `PermissionID`=%i ORDER BY `ForumID` ASC", array($GroupInfo['PermissionID']));
-$peresult=mysql_query($perquery);
+$peresult=exec_query($perquery);
 $pernum=mysql_num_rows($peresult);
 $peri=0; $PerError = null;
 if($pernum<=0) { $PerError = true; @mysql_free_result($peresult);
@@ -299,7 +299,7 @@ ob_clean(); echo "Sorry could not load all permission data in database.\nContact
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); } }
 @mysql_free_result($peresult);
 $per2query = query("SELECT * FROM `".$Settings['sqltable']."catpermissions` WHERE `PermissionID`=%i ORDER BY `CategoryID` ASC", array($GroupInfo['PermissionID']));
-$per2esult=mysql_query($per2query);
+$per2esult=exec_query($per2query);
 $per2num=mysql_num_rows($per2esult);
 $per2i=0; $Per2Error = null;
 if($per2num<=0) { $Per2Error = true; @mysql_free_result($per2esult);

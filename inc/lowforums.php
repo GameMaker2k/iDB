@@ -11,14 +11,14 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: lowforums.php - Last Update: 8/7/2009 SVN 298 - Author: cooldude2k $
+    $FileInfo: lowforums.php - Last Update: 11/14/2009 SVN 347 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="lowforums.php"||$File3Name=="/lowforums.php") {
 	require('index.php');
 	exit(); }
 $prequery = query("SELECT * FROM `".$Settings['sqltable']."categories` WHERE `ShowCategory`='yes' AND `InSubCategory`=0 ORDER BY `OrderID` ASC, `id` ASC", array());
-$preresult=mysql_query($prequery);
+$preresult=exec_query($prequery);
 $prenum=mysql_num_rows($preresult);
 $prei=0;
 $_SESSION['ViewingPage'] = url_maker(null,"no+ext","act=lowview","&","=",$prexqstr['index'],$exqstr['index']);
@@ -55,7 +55,7 @@ redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"a
 if(isset($CatPermissionInfo['CanViewCategory'][$CategoryID])&&
 	$CatPermissionInfo['CanViewCategory'][$CategoryID]=="yes") {
 $query = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `ShowForum`='yes' AND `CategoryID`=%i AND `InSubForum`=0 ORDER BY `OrderID` ASC, `id` ASC", array($CategoryID));
-$result=mysql_query($query);
+$result=exec_query($query);
 $num=mysql_num_rows($result);
 $i=0;
 if($num>=1) {
@@ -77,7 +77,7 @@ $ForumType = strtolower($ForumType); $sflist = null;
 $gltf = array(null); $gltf[0] = $ForumID;
 if ($ForumType=="subforum") { 
 $apcquery = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `ShowForum`='yes' AND `InSubForum`=%i ORDER BY `OrderID` ASC, `id` ASC", array($ForumID));
-$apcresult=mysql_query($apcquery);
+$apcresult=exec_query($apcquery);
 $apcnum=mysql_num_rows($apcresult);
 $apci=0; $apcl=1; if($apcnum>=1) {
 while ($apci < $apcnum) {
@@ -113,7 +113,7 @@ $OldUpdateTime = 0; $UseThisFonum = null;
 if ($ForumType=="subforum") { 
 while ($glti < $gltnum) {
 $gltfoquery = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `ForumID`=%i ORDER BY `LastUpdate` DESC LIMIT 1", array($gltf[$glti]));
-$gltforesult=mysql_query($gltfoquery);
+$gltforesult=exec_query($gltfoquery);
 $gltfonum=mysql_num_rows($gltforesult);
 if($gltfonum>0) {
 $NewUpdateTime=mysql_result($gltforesult,0,"LastUpdate");

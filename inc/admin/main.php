@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: main.php - Last Update: 10/08/2009 SVN 324 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 11/14/2009 SVN 347 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -75,7 +75,7 @@ if($_GET['act']=="delsessions"&&$GroupInfo['ViewDBInfo']=="yes") {
 $time = GMTimeStamp() - ini_get("session.gc_maxlifetime");
 //$sqlg = query('DELETE FROM `'.$Settings['sqltable'].'sessions` WHERE `expires` < UNIX_TIMESTAMP();', array(null));
 $sqlgc = query('DELETE FROM `'.$Settings['sqltable'].'sessions` WHERE `expires` < %i', array($time));
-mysql_query($sqlgc);
+exec_query($sqlgc);
 $_POST['update'] = "now"; $_GET['act'] = "view"; }
 ?>
 </td>
@@ -106,7 +106,7 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Updating Settings";
 <br />Settings have been updated <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=main",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">click here</a> to go back. ^_^<br />&nbsp;</div>
 <?php } if($_GET['act']=="view"&&$_POST['update']!="now") {
 $query = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($_SESSION['UserID']));
-$result=mysql_query($query);
+$result=exec_query($query);
 $num=mysql_num_rows($result);
 $i=0;
 $YourID=mysql_result($result,$i,"id");
@@ -160,7 +160,7 @@ if($ts_array[1]>59) { $ts_array[1] = "59"; $Settings['DefaultTimeZone'] = $ts_ar
 if($ts_array[1]<0) { $ts_array[1] = "00"; $Settings['DefaultTimeZone'] = $ts_array[0].":".$ts_array[1]; }
 $tsa = array("offset" => $Settings['DefaultTimeZone'], "hour" => $ts_array[0], "minute" => $ts_array[1]);
 $mguerys = query("SELECT * FROM `".$Settings['sqltable']."groups`", array(null));
-$mgresults=mysql_query($mguerys);
+$mgresults=exec_query($mguerys);
 $mnum=mysql_num_rows($mgresults);
 $mi = 0;
 while ($mi < $mnum) {

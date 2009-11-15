@@ -11,14 +11,14 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: forums.php - Last Update: 11/10/2009 SVN 337 - Author: cooldude2k $
+    $FileInfo: forums.php - Last Update: 11/14/2009 SVN 347 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="forums.php"||$File3Name=="/forums.php") {
 	require('index.php');
 	exit(); }
 $prequery = query("SELECT * FROM `".$Settings['sqltable']."categories` WHERE `ShowCategory`='yes' AND `InSubCategory`=0 ORDER BY `OrderID` ASC, `id` ASC", array());
-$preresult=mysql_query($prequery);
+$preresult=exec_query($prequery);
 $prenum=mysql_num_rows($preresult);
 $prei=0;
 $_SESSION['ViewingPage'] = url_maker(null,"no+ext","act=view","&","=",$prexqstr['index'],$exqstr['index']);
@@ -52,7 +52,7 @@ redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"a
 if(isset($CatPermissionInfo['CanViewCategory'][$CategoryID])&&
 	$CatPermissionInfo['CanViewCategory'][$CategoryID]=="yes") {
 $query = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `ShowForum`='yes' AND `CategoryID`=%i AND `InSubForum`=0 ORDER BY `OrderID` ASC, `id` ASC", array($CategoryID));
-$result=mysql_query($query);
+$result=exec_query($query);
 $num=mysql_num_rows($result);
 $i=0;
 if($num>=1) {
@@ -93,7 +93,7 @@ $ForumType = strtolower($ForumType); $sflist = null;
 $gltf = array(null); $gltf[0] = $ForumID;
 if ($ForumType=="subforum") { 
 $apcquery = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `ShowForum`='yes' AND `InSubForum`=%i ORDER BY `OrderID` ASC, `id` ASC", array($ForumID));
-$apcresult=mysql_query($apcquery);
+$apcresult=exec_query($apcquery);
 $apcnum=mysql_num_rows($apcresult);
 $apci=0; $apcl=1; if($apcnum>=1) {
 while ($apci < $apcnum) {
@@ -126,7 +126,7 @@ $OldUpdateTime = 0; $UseThisFonum = null;
 if ($ForumType=="subforum") { 
 while ($glti < $gltnum) {
 $gltfoquery = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `ForumID`=%i ORDER BY `LastUpdate` DESC LIMIT 1", array($gltf[$glti]));
-$gltforesult=mysql_query($gltfoquery);
+$gltforesult=exec_query($gltfoquery);
 $gltfonum=mysql_num_rows($gltforesult);
 if($gltfonum>0) {
 $NewUpdateTime=mysql_result($gltforesult,0,"LastUpdate");
@@ -138,7 +138,7 @@ $OldUpdateTime = $NewUpdateTime; } }
 if ($ForumType!="subforum"&&$ForumType!="redirect") { $UseThisFonum = $gltf[0]; }
 if ($ForumType!="redirect") {
 $gltquery = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `ForumID`=%i ORDER BY `LastUpdate` DESC LIMIT 1", array($UseThisFonum));
-$gltresult=mysql_query($gltquery);
+$gltresult=exec_query($gltquery);
 $gltnum=mysql_num_rows($gltresult);
 if($gltnum>0){
 $TopicID=mysql_result($gltresult,0,"id");
@@ -154,7 +154,7 @@ $oldtopicname=$TopicName;
 if (pre_strlen($TopicName)>20) { 
 $TopicName1 = $TopicName1."..."; $TopicName=$TopicName1; }
 $glrquery = query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `TopicID`=%i ORDER BY `TimeStamp` DESC LIMIT 1", array($TopicID));
-$glrresult=mysql_query($glrquery);
+$glrresult=exec_query($glrquery);
 $glrnum=mysql_num_rows($glrresult);
 if($glrnum>0){
 $ReplyID=mysql_result($glrresult,0,"id");

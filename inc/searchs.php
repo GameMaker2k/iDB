@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: searchs.php - Last Update: 11/10/2009 SVN 337 - Author: cooldude2k $
+    $FileInfo: searchs.php - Last Update: 11/14/2009 SVN 347 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="searchs.php"||$File3Name=="/searchs.php") {
@@ -89,7 +89,7 @@ if(pre_strlen($_GET['msearch'])>="25") {
 	$_GET['msearch'] = null; }
 if($_GET['msearch']!=null) {
 $memsiquery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `Name`='%s' LIMIT 1", array($_GET['msearch']));
-$memsiresult=mysql_query($memsiquery);
+$memsiresult=exec_query($memsiquery);
 $memsinum=mysql_num_rows($memsiresult);
 $memsi=0;
 if($memsinum==0) { $memsid = -1; }
@@ -115,8 +115,8 @@ $query = query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."topi
 if($memsid==-1) {
 $query = query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."topics` WHERE `TopicName` LIKE '%s' AND `GuestName`='%s' ORDER BY `Pinned` DESC, `LastUpdate` DESC LIMIT %i,%i", array($_GET['search'],$_GET['msearch'],$PageLimit,$Settings['max_topics'])); } } }
 $rnquery = query("SELECT FOUND_ROWS();", array(null));
-$result=mysql_query($query);
-$rnresult=mysql_query($rnquery);
+$result=exec_query($query);
+$rnresult=exec_query($rnquery);
 $NumberTopics = mysql_result($rnresult,0);
 @mysql_free_result($rnresult);
 if($NumberTopics==null) { 
@@ -278,7 +278,7 @@ while ($i < $num) {
 $TopicID=mysql_result($result,$i,"id");
 $ForumID=mysql_result($result,$i,"ForumID");
 $prequery = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i LIMIT 1", array($ForumID));
-$preresult=mysql_query($prequery);
+$preresult=exec_query($prequery);
 $prenum=mysql_num_rows($preresult);
 $HotTopicPosts = $Settings['hot_topic_num'];
 if($prenum > 0) {
@@ -367,7 +367,7 @@ if(isset($PermissionInfo['CanViewForum'][$ForumID])&&
 	$CatPermissionInfo['CanViewCategory'][$CategoryID]=="yes") {
 $LastReply = "&nbsp;<br />&nbsp;";
 $glrquery = query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `TopicID`=%i ORDER BY `TimeStamp` DESC LIMIT 1", array($TopicID));
-$glrresult=mysql_query($glrquery);
+$glrresult=exec_query($glrquery);
 $glrnum=mysql_num_rows($glrresult);
 if($glrnum>0){
 $ReplyID1=mysql_result($glrresult,0,"id");

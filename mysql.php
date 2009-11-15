@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: mysql.php - Last Update: 11/12/2009 SVN 340 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 11/14/2009 SVN 347 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -211,7 +211,7 @@ global $sqltable;
 $data = "";
 $time = GMTimeStamp();
 $sqlr = query("SELECT `session_data` FROM `".$sqltable."sessions` WHERE `session_id` = '%s'", array($id,$time));
-$rs = mysql_query($sqlr);
+$rs = exec_query($sqlr);
 $a = mysql_num_rows($rs);
 if($a > 0) {
 $row = mysql_fetch_assoc($rs);
@@ -221,19 +221,19 @@ function sqlsession_write($id,$data) {
 global $sqltable;              
 $time = GMTimeStamp();
 $sqlw = query("REPLACE `".$sqltable."sessions` VALUES('$id','$data', $time)", array($id,$data,$time));
-$rs = mysql_query($sqlw);
+$rs = exec_query($sqlw);
 return true; }
 function sqlsession_destroy($id) {
 global $sqltable;
 $sqld = query("DELETE FROM `".$sqltable."sessions` WHERE `session_id` = '$id'", array($id));
-mysql_query($sqld);
+exec_query($sqld);
 return true; }
 function sqlsession_gc($maxlifetime) {
 global $sqltable;
 $time = GMTimeStamp() - $maxlifetime;
 //$sqlg = query('DELETE FROM `'.$sqltable.'sessions` WHERE `expires` < UNIX_TIMESTAMP();', array(null));
 $sqlg = query('DELETE FROM `'.$sqltable.'sessions` WHERE `expires` < %i', array($time));
-mysql_query($sqlg);
+exec_query($sqlg);
 return true; }
 @session_set_save_handler("sqlsession_open", "sqlsession_close", "sqlsession_read", "sqlsession_write", "sqlsession_destroy", "sqlsession_gc");
 if($cookieDomain==null) {
@@ -362,7 +362,7 @@ if (file_exists($SettDir['themes'].$_GET['theme']."/settings.php")) {
 if($_SESSION['UserGroup']!=$Settings['GuestGroup']) {
 $NewDay=GMTimeStamp();
 $qnewskin = query("UPDATE `".$Settings['sqltable']."members` SET `UseTheme`='%s',`LastActive`='%s' WHERE `id`=%i", array($_GET['theme'],$NewDay,$_SESSION['UserID']));
-mysql_query($qnewskin); }
+exec_query($qnewskin); }
 /* The file Theme Exists */ }
 else { $_GET['theme'] = $Settings['DefaultTheme']; 
 $_SESSION['Theme'] = $Settings['DefaultTheme'];
@@ -374,7 +374,7 @@ $_SESSION['Theme'] = chack_themes($_SESSION['Theme']);
 if($OldTheme!=$_SESSION['Theme']) { 
 $NewDay=GMTimeStamp();
 $qnewskin = query("UPDATE `".$Settings['sqltable']."members` SET `UseTheme`='%s',`LastActive`='%s' WHERE `id`=%i", array($_SESSION['Theme'],$NewDay,$_SESSION['UserID']));
-mysql_query($qnewskin); }
+exec_query($qnewskin); }
 $_GET['theme']=$_SESSION['Theme']; }
 if($_SESSION['Theme']==null) {
 $_SESSION['Theme']=$Settings['DefaultTheme'];

@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 11/14/2009 SVN 344 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 11/14/2009 SVN 347 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -57,7 +57,7 @@ if(!is_numeric($_GET['gid'])) { $_GET['gid'] = null; }
 if($_GET['gid']!=null&&$_GET['groupid']==null) { $_GET['groupid'] = $_GET['gid']; }
 if(!is_numeric($_GET['groupid'])) { $_GET['groupid'] = null; }
 $ggquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `Name`='%s'", array($Settings['GuestGroup']));
-$ggresult=mysql_query($ggquery);
+$ggresult=exec_query($ggquery);
 $GGroup=mysql_result($ggresult,0,"id");
 @mysql_free_result($ggresult);
 //Get SQL LIMIT Number
@@ -70,8 +70,8 @@ $query = query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."memb
 if($_GET['groupid']!=null) {
 $query = query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."members` WHERE `GroupID`=%i AND `GroupID`<>%i AND `id`>=0 ".$orderlist." LIMIT %i,%i", array($_GET['groupid'],$GGroup,$PageLimit,$Settings['max_memlist'])); }
 $rnquery = query("SELECT FOUND_ROWS();", array(null));
-$result=mysql_query($query);
-$rnresult=mysql_query($rnquery);
+$result=exec_query($query);
+$rnresult=exec_query($rnquery);
 $NumberMembers = mysql_result($rnresult,0);
 @mysql_free_result($rnresult);
 $_SESSION['ViewingPage'] = url_maker(null,"no+ext","act=list&orderby=".$_GET['orderby']."&ordertype=".$_GET['ordertype']."&page=".$_GET['page'],"&","=",$prexqstr['member'],$exqstr['member']);
@@ -218,7 +218,7 @@ $MemList['TimeZone']=mysql_result($result,$i,"TimeZone");
 $MemList['DST']=mysql_result($result,$i,"DST");
 $MemList['IP']=mysql_result($result,$i,"IP");
 $gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($MemList['GroupID']));
-$gresult=mysql_query($gquery);
+$gresult=exec_query($gquery);
 $MemList['Group']=mysql_result($gresult,0,"Name");
 $GroupNamePrefix=mysql_result($gresult,0,"NamePrefix");
 $GroupNameSuffix=mysql_result($gresult,0,"NameSuffix");
@@ -270,8 +270,8 @@ $uolcuttime = GMTimeStamp();
 $uoltime = $uolcuttime - ini_get("session.gc_maxlifetime");
 $query = query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."sessions` WHERE `expires` >= %i ORDER BY `expires` DESC LIMIT %i,%i", array($uoltime,$PageLimit,$Settings['max_memlist']));
 $rnquery = query("SELECT FOUND_ROWS();", array(null));
-$result=mysql_query($query);
-$rnresult=mysql_query($rnquery);
+$result=exec_query($query);
+$rnresult=exec_query($rnquery);
 $NumberMembers = mysql_result($rnresult,0);
 @mysql_free_result($rnresult);
 $_SESSION['ViewingPage'] = url_maker(null,"no+ext","act=online&list=".$_GET['list']."&page=".$_GET['page'],"&","=",$prexqstr['member'],$exqstr['member']);
@@ -424,7 +424,7 @@ parse_str($PreExpPage,$ChkID);
 if($PreFileName==$exfile['topic'].$Settings['file_ext']) {
 if(isset($ChkID["id"])) { $ChkID = $ChkID["id"]; 
 $prequery = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `id`=%i LIMIT 1", array($ChkID));
-$preresult=mysql_query($prequery);
+$preresult=exec_query($prequery);
 $prenum=mysql_num_rows($preresult);
 if($prenum>=1) {
 $TopicForumID=mysql_result($preresult,0,"ForumID");
@@ -445,7 +445,7 @@ if($PermissionInfo['CanViewForum'][$TopicForumID]=="no"||
 if($PreFileName==$exfile['forum'].$Settings['file_ext']) {
 if(isset($ChkID["id"])) { $ChkID = $ChkID["id"]; 
 $prequery = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i LIMIT 1", array($ChkID));
-$preresult=mysql_query($prequery);
+$preresult=exec_query($prequery);
 $prenum=mysql_num_rows($preresult);
 $ForumCatID=mysql_result($preresult,0,"CategoryID");
 @mysql_free_result($preresult);
@@ -462,7 +462,7 @@ if($PermissionInfo['CanViewForum'][$ChkID]=="no"||
 if($PreFileName==$exfile['subforum'].$Settings['file_ext']) {
 if(isset($ChkID["id"])) { $ChkID = $ChkID["id"]; 
 $prequery = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i LIMIT 1", array($ChkID));
-$preresult=mysql_query($prequery);
+$preresult=exec_query($prequery);
 $prenum=mysql_num_rows($preresult);
 $ForumCatID=mysql_result($preresult,0,"CategoryID");
 @mysql_free_result($preresult);
@@ -537,7 +537,7 @@ if($pagenum>1) {
 <?php } }
 if($_GET['act']=="view") { 
 $query = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($_GET['id']));
-$result=mysql_query($query);
+$result=exec_query($query);
 $num=mysql_num_rows($result);
 $i=0;
 if($num==0||$_GET['id']<=0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
@@ -566,7 +566,7 @@ $ViewMem['TimeZone']=mysql_result($result,$i,"TimeZone");
 $ViewMem['DST']=mysql_result($result,$i,"DST");
 $ViewMem['IP']=mysql_result($result,$i,"IP");
 $gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($ViewMem['GroupID']));
-$gresult=mysql_query($gquery);
+$gresult=exec_query($gquery);
 $ViewMem['Group']=mysql_result($gresult,0,"Name");
 /*
 $GroupNamePrefix=mysql_result($gresult,0,"NamePrefix");
@@ -844,7 +844,7 @@ if($_POST['loginemail']!="true") {
 $querylog = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `Name`='%s' LIMIT 1", array($YourName)); }
 if($_POST['loginemail']=="true") {
 $querylog = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `Email`='%s' LIMIT 1", array($YourName)); }
-$resultlog=mysql_query($querylog);
+$resultlog=exec_query($querylog);
 $numlog=mysql_num_rows($resultlog);
 if($numlog>=1) {
 $i=0;
@@ -878,7 +878,7 @@ $CGMTime = GMTimeStamp();
 if($YourBanTime!=0&&$YourBanTime!=null) {
 if($YourBanTime>=$CGMTime) { $BanError = "yes"; } }
 $gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($YourGroupM));
-$gresult=mysql_query($gquery);
+$gresult=exec_query($gquery);
 $YourGroupM=mysql_result($gresult,0,"Name");
 @mysql_free_result($gresult);
 $YourTimeZoneM=mysql_result($resultlog,$i,"TimeZone");
@@ -904,7 +904,7 @@ $NewDay=GMTimeStamp();
 $NewIP=$_SERVER['REMOTE_ADDR'];
 if($BanError!="yes") {
 $queryup = query("UPDATE `".$Settings['sqltable']."members` SET `Password`='%s',`HashType`='%s',`LastActive`=%i,`IP`='%s',`Salt`='%s' WHERE `id`=%i", array($NewPassword,$iDBHash,$NewDay,$NewIP,$NewHashSalt,$YourIDM));
-mysql_query($queryup);
+exec_query($queryup);
 @mysql_free_result($resultlog); @mysql_free_result($queryup);
 //session_regenerate_id();
 $_SESSION['Theme']=$UseTheme;
@@ -1195,7 +1195,7 @@ $Name = stripcslashes(htmlspecialchars($_POST['Name'], ENT_QUOTES, $Settings['ch
 //$Name = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $Name);
 $Name = @remove_spaces($Name);
 $lonewolfqy=query("SELECT * FROM `".$Settings['sqltable']."restrictedwords` WHERE `RestrictedUserName`='yes'", array(null));
-$lonewolfrt=mysql_query($lonewolfqy);
+$lonewolfrt=exec_query($lonewolfqy);
 $lonewolfnm=mysql_num_rows($lonewolfrt);
 $lonewolfs=0; $RMatches = null;
 while ($lonewolfs < $lonewolfnm) {
@@ -1222,8 +1222,8 @@ if($RCaseInsensitive=="yes"&&$RWholeWord!="yes") {
 $RMatches = preg_match("/".$RWord."/i", $Name);
 	if($RMatches==true) { break 1; } }
 ++$lonewolfs; } @mysql_free_result($lonewolfrt);
-$sql_email_check = mysql_query(query("SELECT `Email` FROM `".$Settings['sqltable']."members` WHERE `Email`='%s'", array($_POST['Email'])));
-$sql_username_check = mysql_query(query("SELECT `Name` FROM `".$Settings['sqltable']."members` WHERE `Name`='%s'", array($Name)));
+$sql_email_check = exec_query(query("SELECT `Email` FROM `".$Settings['sqltable']."members` WHERE `Email`='%s'", array($_POST['Email'])));
+$sql_username_check = exec_query(query("SELECT `Name` FROM `".$Settings['sqltable']."members` WHERE `Name`='%s'", array($Name)));
 $email_check = mysql_num_rows($sql_email_check); 
 $username_check = mysql_num_rows($sql_username_check);
 @mysql_free_result($sql_email_check); @mysql_free_result($sql_username_check);
@@ -1323,7 +1323,7 @@ $Website = stripcslashes(htmlspecialchars($_POST['Website'], ENT_QUOTES, $Settin
 //$Website = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $Website);
 $Website = @remove_spaces($Website);
 $gquerys = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `Name`='%s' LIMIT 1", array($yourgroup));
-$gresults=mysql_query($gquerys);
+$gresults=exec_query($gquerys);
 $yourgroup=mysql_result($gresults,0,"id");
 @mysql_free_result($gresults);
 $yourid = getnextid($Settings['sqltable'],"members");
@@ -1339,9 +1339,9 @@ if($_POST['MinOffSet']<0) { $_POST['MinOffSet'] = "00"; }
 $_POST['YourOffSet'] = $_POST['YourOffSet'].":".$_POST['MinOffSet'];
 $query = query("INSERT INTO `".$Settings['sqltable']."members` (`Name`, `Password`, `HashType`, `Email`, `GroupID`, `Validated`, `HiddenMember`, `WarnLevel`, `Interests`, `Title`, `Joined`, `LastActive`, `LastPostTime`, `BanTime`, `BirthDay`, `BirthMonth`, `BirthYear`, `Signature`, `Notes`, `Avatar`, `AvatarSize`, `Website`, `Gender`, `PostCount`, `Karma`, `KarmaUpdate`, `RepliesPerPage`, `TopicsPerPage`, `MessagesPerPage`, `TimeZone`, `DST`, `UseTheme`, `IP`, `Salt`) VALUES\n". 
 "('%s', '%s', '%s', '%s', '%s', '%s', '%s', %i, '%s', '%s', %i, %i, '0', '0', '0', '0', '0', '%s', '%s', '%s', '%s', '%s', '%s', %i, 0, 0, 10, 10, 10, '%s', '%s', '%s', '%s', '%s')", array($Name,$NewPassword,$iDBHash,$_POST['Email'],$yourgroup,$ValidateStats,$HideMe,"0",$_POST['Interests'],$_POST['Title'],$_POST['Joined'],$_POST['LastActive'],$NewSignature,'Your Notes',$Avatar,"100x100",$Website,$_POST['YourGender'],$_POST['PostCount'],$_POST['YourOffSet'],$_POST['DST'],$Settings['DefaultTheme'],$_POST['UserIP'],$HashSalt));
-mysql_query($query);
+exec_query($query);
 $querylogr = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `Name`='%s' AND `Password`='%s' LIMIT 1", array($Name,$NewPassword));
-$resultlogr=mysql_query($querylogr);
+$resultlogr=exec_query($querylogr);
 $numlogr=mysql_num_rows($resultlogr);
 if($numlogr>=1) {
 $ir=0;
@@ -1350,7 +1350,7 @@ $YourNameMr=mysql_result($resultlogr,$ir,"Name");
 $YourGroupMr=mysql_result($resultlogr,$ir,"GroupID");
 $YourGroupIDMr=$YourGroupMr;
 $gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($YourGroupMr));
-$gresult=mysql_query($gquery);
+$gresult=exec_query($gquery);
 $YourGroupMr=mysql_result($gresult,0,"Name");
 @mysql_free_result($gresult);
 $YourTimeZoneMr=mysql_result($resultlogr,$ir,"TimeZone");

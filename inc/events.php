@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: events.php - Last Update: 11/14/2009 SVN 344 - Author: cooldude2k $
+    $FileInfo: events.php - Last Update: 11/14/2009 SVN 347 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="events.php"||$File3Name=="/events.php") {
@@ -20,7 +20,7 @@ if ($File3Name=="events.php"||$File3Name=="/events.php") {
 if(!is_numeric($_GET['id'])) { $_GET['id'] = null; }
 if($_GET['act']=="view"||$_GET['act']==null) {
 $query = query("SELECT * FROM `".$Settings['sqltable']."events` WHERE `id`=%i LIMIT 1", array($_GET['id']));
-$result=mysql_query($query);
+$result=exec_query($query);
 $num=mysql_num_rows($result);
 $is=0;
 if($num==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); @mysql_free_result($result);
@@ -49,11 +49,11 @@ $_SESSION['ViewingFile'] = $exfile['event']; }
 $_SESSION['PreViewingTitle'] = "Viewing Event:";
 $_SESSION['ViewingTitle'] = $EventName;
 $requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($EventUser));
-$reresult=mysql_query($requery);
+$reresult=exec_query($requery);
 $renum=mysql_num_rows($reresult);
 if($renum<1) { $EventUser = -1;
 $requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($EventUser));
-$reresult=mysql_query($requery);
+$reresult=exec_query($requery);
 $renum=mysql_num_rows($reresult); }
 $rei=0;
 $User1ID=$EventUser;
@@ -65,7 +65,7 @@ $User1Joined=mysql_result($reresult,$rei,"Joined");
 $User1Joined=GMTimeChange("M j Y",$User1Joined,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $User1GroupID=mysql_result($reresult,$rei,"GroupID");
 $gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($User1GroupID));
-$gresult=mysql_query($gquery);
+$gresult=exec_query($gquery);
 $User1Hidden=mysql_result($reresult,$rei,"HiddenMember");
 $User1Group=mysql_result($gresult,0,"Name");
 $GroupNamePrefix=mysql_result($gresult,0,"NamePrefix");
@@ -200,7 +200,7 @@ $_SESSION['UserFormID'] = $UFID;
 <div style="width: 100%; height: 160px; overflow: auto;">
 <table style="width: 100%; text-align: center;"><?php
 $renee_query=query("SELECT * FROM `".$Settings['sqltable']."smileys` WHERE `Show`='yes'", array(null));
-$renee_result=mysql_query($renee_query);
+$renee_result=exec_query($renee_query);
 $renee_num=mysql_num_rows($renee_result);
 $renee_s=0; $SmileRow=0; $SmileCRow=0;
 while ($renee_s < $renee_num) { ++$SmileRow;
@@ -449,7 +449,7 @@ $_SESSION['GuestName']=$_POST['GuestName']; } }
 /*    <_<  iWordFilter  >_>      
    by Kazuki Przyborowski - Cool Dude 2k */
 $katarzynaqy=query("SELECT * FROM `".$Settings['sqltable']."wordfilter`", array(null));
-$katarzynart=mysql_query($katarzynaqy);
+$katarzynart=exec_query($katarzynaqy);
 $katarzynanm=mysql_num_rows($katarzynart);
 $katarzynas=0;
 while ($katarzynas < $katarzynanm) {
@@ -474,7 +474,7 @@ if($CaseInsensitive=="yes"&&$WholeWord!="yes") {
 $_POST['EventText'] = preg_replace("/".$Filter."/i", $Replace, $_POST['EventText']); }
 ++$katarzynas; } @mysql_free_result($katarzynart);
 $lonewolfqy=query("SELECT * FROM `".$Settings['sqltable']."restrictedwords` WHERE `RestrictedEventName`='yes' or `RestrictedUserName`='yes'", array(null));
-$lonewolfrt=mysql_query($lonewolfqy);
+$lonewolfrt=exec_query($lonewolfqy);
 $lonewolfnm=mysql_num_rows($lonewolfrt);
 $lonewolfs=0; $RMatches = null; $RGMatches = null;
 while ($lonewolfs < $lonewolfnm) {
@@ -633,7 +633,7 @@ if($_SESSION['UserGroup']==$Settings['GuestGroup']) { $User1Name = $_POST['Guest
 if($_SESSION['UserGroup']!=$Settings['GuestGroup']) { $User1Name = $_SESSION['MemberName']; }
 $query = query("INSERT INTO ".$Settings['sqltable']."events (`UserID`, `GuestName`, `EventName`, `EventText`, `TimeStamp`, `TimeStampEnd`, `EventMonth`, `EventMonthEnd`, `EventDay`, `EventDayEnd`, `EventYear`, `EventYearEnd`) VALUES\n".
 "(%i, '%s', '%s', '%s', %i, %i, %i, %i, %i, %i, %i, %i)", array($User1ID,$User1Name,$_POST['EventName'],$_POST['EventText'],$TimeSIn,$TimeSOut,$EventMonth,$EventMonthEnd,$EventDay,$EventDayEnd,$EventYear,$EventYearEnd));
-mysql_query($query);
+exec_query($query);
 @redirect("refresh",$basedir.url_maker($exfile['event'],$Settings['file_ext'],"act=event&id=".$eventid,$Settings['qstr'],$Settings['qsep'],$prexqstr['event'],$exqstr['event'],FALSE),"3");
 ?><tr>
 	<td><span class="TableMessage"><br />

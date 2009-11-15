@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: rssfeed.php - Last Update: 11/10/2009 SVN 337 - Author: cooldude2k $
+    $FileInfo: rssfeed.php - Last Update: 11/14/2009 SVN 347 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="rssfeed.php"||$File3Name=="/rssfeed.php") {
@@ -74,7 +74,7 @@ else { if (stristr($_SERVER["HTTP_USER_AGENT"],"FeedValidator")) {
 @header("Content-Language: en");
 @header("Vary: Accept");
 $prequery = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i", array($_GET['id']));
-$preresult=mysql_query($prequery);
+$preresult=exec_query($prequery);
 $prenum=mysql_num_rows($preresult);
 $prei=0;
 $ForumID=mysql_result($preresult,0,"id");
@@ -98,7 +98,7 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); di
 $gltf = array(null); $gltf[0] = $ForumID;
 if ($ForumType=="subforum") { 
 $apcquery = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `ShowForum`='yes' AND `InSubForum`=%i ORDER BY `id`", array($ForumID));
-$apcresult=mysql_query($apcquery);
+$apcresult=exec_query($apcquery);
 $apcnum=mysql_num_rows($apcresult);
 $apci=0; $apcl=1; if($apcnum>=1) {
 while ($apci < $apcnum) {
@@ -112,14 +112,14 @@ $Atom = null; $RSS = null; $PreRSS = null;
 $gltnum = count($gltf); $glti = 0; 
 while ($glti < $gltnum) {
 $query = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `ForumID`=%i ORDER BY `Pinned` DESC, `LastUpdate` DESC LIMIT %i", array($gltf[$glti],$Settings['max_topics']));
-$result=mysql_query($query);
+$result=exec_query($query);
 $num=mysql_num_rows($result); $i=0;
 while ($i < $num) {
 $TopicID=mysql_result($result,$i,"id");
 $ForumID=mysql_result($result,$i,"ForumID");
 $CategoryID=mysql_result($result,$i,"CategoryID");
 $pquery = query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `TopicID`=%i ORDER BY `TimeStamp` ASC LIMIT %i", array($TopicID,1));
-$presult=mysql_query($pquery);
+$presult=exec_query($pquery);
 $pnum=mysql_num_rows($presult);
 $MyDescription=mysql_result($presult,0,"Post");
 $MyDescription = preg_replace("/\<br\>/", "<br />\n", nl2br($MyDescription));
@@ -127,11 +127,11 @@ $MyDescription= text2icons($MyDescription,$Settings['sqltable']);
 $UsersID=mysql_result($result,$i,"UserID");
 $GuestsName=mysql_result($result,$i,"GuestName");
 $requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($UsersID));
-$reresult=mysql_query($requery);
+$reresult=exec_query($requery);
 $renum=mysql_num_rows($reresult);
 if($renum<1) { $UsersID = -1;
 $requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($UsersID));
-$reresult=mysql_query($requery);
+$reresult=exec_query($requery);
 $renum=mysql_num_rows($reresult); }
 $UsersName=mysql_result($reresult,0,"Name");
 $UsersGroupID=mysql_result($reresult,0,"GroupID");
@@ -139,7 +139,7 @@ if($UsersName=="Guest") { $UsersName=$GuestsName;
 if($UsersName==null) { $UsersName="Guest"; } }
 @mysql_free_result($reresult);
 $gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($UsersGroupID));
-$gresult=mysql_query($gquery);
+$gresult=exec_query($gquery);
 $UsersGroup=mysql_result($gresult,0,"Name");
 $GroupNamePrefix=mysql_result($gresult,0,"NamePrefix");
 $GroupNameSuffix=mysql_result($gresult,0,"NameSuffix");

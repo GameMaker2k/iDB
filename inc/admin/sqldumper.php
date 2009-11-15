@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sqldumper.php - Last Update: 11/14/2009 SVN 345 - Author: cooldude2k $
+    $FileInfo: sqldumper.php - Last Update: 11/14/2009 SVN 347 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="sqldumper.php"||$File3Name=="/sqldumper.php") {
@@ -31,7 +31,7 @@ header("Content-Disposition: attachment; filename=".$fname.".sql");
 header("Content-Type: application/octet-stream");
 header("Content-Transfer-Encoding: binary");
 function GetAllRows($table) { $rene_j = 0; $trowout = null;
-$tresult = mysql_query("SELECT * FROM `".$table."`");
+$tresult = exec_query("SELECT * FROM `".$table."`");
 while ($trow = mysql_fetch_array($tresult, MYSQL_ASSOC)) {
 $trowout[$rene_j] = $trow;
 ++$rene_j; }
@@ -50,7 +50,7 @@ if($_GET['outtype']=="latin1") {
 if($_GET['outtype']=="latin15") {
 @header("Content-Type: text/plain; charset=ISO-8859-15"); }
 $sql = "SHOW TABLES LIKE '".$Settings['sqltable']."%'";
-$result = mysql_query($sql);
+$result = exec_query($sql);
 if (!$result) {
 echo "DB Error, could not list tables\n";
 echo 'MySQL Error: ' . mysql_error();
@@ -62,10 +62,10 @@ $TableNames[$l] = $row[0];
 $DropTable[$l] = "DROP TABLE IF EXISTS `".$row[0]."`;\n";
 $CreateTable[$l] = "CREATE TABLE IF NOT EXISTS `".$row[0]."` (\n";
 $CreateTable[$l] = null;
-$result2 = mysql_query("SHOW COLUMNS FROM ".$row[0]);
-$tabsta = mysql_query("SHOW TABLE STATUS LIKE '".$row[0]."'");
+$result2 = exec_query("SHOW COLUMNS FROM ".$row[0]);
+$tabsta = exec_query("SHOW TABLE STATUS LIKE '".$row[0]."'");
 $tabstats = mysql_fetch_array($tabsta); $AutoIncrement = " ";
-$tabstaz = mysql_query("SHOW CREATE TABLE `".$row[0]."`");
+$tabstaz = exec_query("SHOW CREATE TABLE `".$row[0]."`");
 $tabstatz = mysql_fetch_array($tabstaz);
 $FullTable[$l] = $tabstatz[1];
 $tabstats = mysql_fetch_array($tabsta); $AutoIncrement = " ";

@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: functions.php - Last Update: 11/11/2009 SVN 339 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 11/14/2009 SVN 347 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -102,11 +102,20 @@ if($use_gzip=="on") {
 	$goutput = gzcompress($output); }
 	echo $goutput; } }
 $foo="bar"; $$foo="foo";
-if(function_exists('mysql_set_charset')===false) {
-function mysql_set_charset($charset) {
-	mysql_query("SET CHARACTER SET '".$charset."'");
-	mysql_query("SET NAMES '".$charset."'"); 
-	return true; } }
+// Execute a query :P
+$NumQueries = 0;
+function exec_query($query,$link=null) {
+global $NumQueries;
+if(isset($link_identifier)) {
+	$result = mysql_query($query,$link); }
+if(!isset($link_identifier)) {
+	$result = mysql_query($query); }
+if (!$result) {
+    echo "Invalid query: ".mysql_error(); 
+	return false; }
+if ($result) {
+	++$NumQueries;
+	return $result; } }
 // SafeSQL Lite Source Code by Cool Dude 2k
 // Make SQL Query's safe
 function query($query_string,$query_vars) {
@@ -124,6 +133,11 @@ $query_val[$query_is] = $query_vars[$query_i];
 ++$query_i; }
    $query_val[0] = $query_string;
    return call_user_func_array("sprintf",$query_val); }
+if(function_exists('mysql_set_charset')===false) {
+function mysql_set_charset($charset) {
+	exec_query("SET CHARACTER SET '".$charset."'");
+	exec_query("SET NAMES '".$charset."'"); 
+	return true; } }
 	$Names['KP'] = "Kazuki Przyborowski";
 define("_kazuki_", $Names['KP']);
 // Kill bad vars for some functions
@@ -163,7 +177,7 @@ if(!in_array($theme,$cktheme)||strlen($theme)>26) {
 function text2icons($Text,$sqlt) {
 global $Settings;
 $reneequery=query("SELECT * FROM `".$sqlt."smileys`", array(null));
-$reneeresult=mysql_query($reneequery);
+$reneeresult=exec_query($reneequery);
 $reneenum=mysql_num_rows($reneeresult);
 $renees=0;
 while ($renees < $reneenum) {
@@ -236,14 +250,14 @@ return $text; }
 // Get next id for stuff
 function getnextid($tablepre,$table) {
    $getnextidq = query("SHOW TABLE STATUS LIKE '".$tablepre.$table."'", array());
-   $getnextidr = mysql_query($getnextidq);
+   $getnextidr = exec_query($getnextidq);
    $getnextid = mysql_fetch_assoc($getnextidr);
    return $getnextid['Auto_increment'];
    @mysql_free_result($getnextidr); }
 // Get number of rows for table
 function getnumrows($tablepre,$table) {
    $getnextidq = query("SHOW TABLE STATUS LIKE '".$tablepre.$table."'", array());
-   $getnextidr = mysql_query($getnextidq);
+   $getnextidr = exec_query($getnextidq);
    $getnextid = mysql_fetch_assoc($getnextidr);
    return $getnextid['Rows'];
    @mysql_free_result($getnextidr); }
@@ -352,7 +366,7 @@ $phpsrcs = preg_replace("/\<\/font>/i", "</span>", $phpsrcs);
 return $phpsrcs; }
 function GetUserName($idu,$sqlt) { $UsersName = null;
 $gunquery = query("SELECT * FROM `".$sqlt."members` WHERE `id`=%i", array($idu));
-$gunresult=mysql_query($gunquery);
+$gunresult=exec_query($gunquery);
 $gunnum=mysql_num_rows($gunresult);
 if($gunnum>0){
 $UsersName=mysql_result($gunresult,0,"Name"); }
@@ -361,7 +375,7 @@ return $UsersName; }
 // Check to see if the user is hidden/shy. >_> | ^_^ | <_<
 function GetHiddenMember($idu,$sqlt) {
 $gunquery = query("SELECT * FROM `".$sqlt."members` WHERE `id`=%i", array($idu));
-$gunresult=mysql_query($gunquery);
+$gunresult=exec_query($gunquery);
 $gunnum=mysql_num_rows($gunresult);
 // I'm now hidden from you. ^_^ | <_< I cant find you.
 $UsersHidden = "yes";
@@ -458,7 +472,7 @@ return $subject; } }
 //   http://us.php.net/manual/en/function.mysql-set-charset.php#77565   */
 if (!function_exists('mysql_set_charset')) {
   function mysql_set_charset($charset) {
-    return mysql_query("set names $charset"); } }
+    return exec_query("set names $charset"); } }
 /*   Adds httponly to PHP below Ver. 5.2.0   // 
 //       by Kazuki Przyborowski - Cool Dude 2k      */
 function http_set_cookie($name,$value=null,$expire=null,$path=null,$domain=null,$secure=false,$httponly=false) {
