@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sqldumper.php - Last Update: 11/14/2009 SVN 347 - Author: cooldude2k $
+    $FileInfo: sqldumper.php - Last Update: 11/15/2009 SVN 351 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="sqldumper.php"||$File3Name=="/sqldumper.php") {
@@ -67,7 +67,7 @@ $tabsta = exec_query("SHOW TABLE STATUS LIKE '".$row[0]."'");
 $tabstats = mysql_fetch_array($tabsta); $AutoIncrement = " ";
 $tabstaz = exec_query("SHOW CREATE TABLE `".$row[0]."`");
 $tabstatz = mysql_fetch_array($tabstaz);
-$FullTable[$l] = $tabstatz[1];
+$FullTable[$l] = $DropTable[$l].$tabstatz[1]."\n";
 $tabstats = mysql_fetch_array($tabsta); $AutoIncrement = " ";
 /*
 if($tabstats["Auto_increment"]!="") {
