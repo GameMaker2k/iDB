@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: pm.php - Last Update: 11/15/2009 SVN 349 - Author: cooldude2k $
+    $FileInfo: pm.php - Last Update: 11/17/2009 SVN 353 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pm.php"||$File3Name=="/pm.php") {
@@ -430,7 +430,7 @@ $MessageName=mysql_result($result,$is,"MessageTitle");
 $DateSend=mysql_result($result,$is,"DateSend");
 $DateSend=GMTimeChange("F j, Y, g:i a",$DateSend,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $MessageText=mysql_result($result,$is,"MessageText");
-$MessageText = preg_replace("/\<br\>/", "<br />\n", nl2br($MessageText));
+$MessageText = preg_replace("/\<br\>/", "<br />", nl2br($MessageText));
 $MessageDesc=mysql_result($result,$is,"Description");
 $requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i", array($SenderID));
 $reresult=exec_query($requery);
@@ -484,7 +484,7 @@ if(isset($GroupNamePrefix)&&$GroupNamePrefix!=null) {
 if(isset($GroupNameSuffix)&&$GroupNameSuffix!=null) {
 	$User1Name = $User1Name.$GroupNameSuffix; }
 $MessageText = text2icons($MessageText,$Settings['sqltable']);
-$User1Signature = preg_replace("/\<br\>/", "<br />\n", nl2br($User1Signature));
+$User1Signature = preg_replace("/\<br\>/", "<br />", nl2br($User1Signature));
 $User1Signature = text2icons($User1Signature,$Settings['sqltable']);
 ?>
 <div class="TableInfoMini1Border">
@@ -596,7 +596,7 @@ $result=exec_query($query);
 $num=mysql_num_rows($result);
 $QuoteTitle=mysql_result($result,0,"MessageTitle");
 $MessageText=mysql_result($result,0,"MessageText");
-$QuoteReply = preg_replace("/\<br\>/", "<br />\n", nl2br($MessageText));
+$QuoteReply = preg_replace("/\<br\>/", "<br />", nl2br($MessageText));
 $QuoteDescription=mysql_result($result,0,"Description");
 $result=exec_query($query);
 $num=mysql_num_rows($result);

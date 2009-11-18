@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: events.php - Last Update: 11/14/2009 SVN 347 - Author: cooldude2k $
+    $FileInfo: events.php - Last Update: 11/17/2009 SVN 353 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="events.php"||$File3Name=="/events.php") {
@@ -36,7 +36,7 @@ $EventUser=mysql_result($result,$is,"UserID");
 $EventGuest=mysql_result($result,$is,"GuestName");
 $EventName=mysql_result($result,$is,"EventName");
 $EventText=mysql_result($result,$is,"EventText");
-$EventText = preg_replace("/\<br\>/", "<br />\n", nl2br($EventText));
+$EventText = preg_replace("/\<br\>/", "<br />", nl2br($EventText));
 $EventStart=mysql_result($result,$is,"TimeStamp");
 $EventEnd=mysql_result($result,$is,"TimeStampEnd");
 $EventStart = GMTimeChange("M. j Y",$EventStart,null);
@@ -72,7 +72,7 @@ $GroupNamePrefix=mysql_result($gresult,0,"NamePrefix");
 $GroupNameSuffix=mysql_result($gresult,0,"NameSuffix");
 @mysql_free_result($gresult);
 $User1Signature=mysql_result($reresult,$rei,"Signature");
-$User1Signature = preg_replace("/\<br\>/", "<br />\n", nl2br($User1Signature));
+$User1Signature = preg_replace("/\<br\>/", "<br />", nl2br($User1Signature));
 $User1Avatar=mysql_result($reresult,$rei,"Avatar");
 $User1AvatarSize=mysql_result($reresult,$rei,"AvatarSize");
 if ($User1Avatar=="http://"||$User1Avatar==null||

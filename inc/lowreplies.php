@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: replies.php - Last Update: 11/14/2009 SVN 347 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 11/17/2009 SVN 353 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -226,7 +226,7 @@ $MyEditUserID=mysql_result($result,$i,"EditUser");
 $MyEditUserName=mysql_result($result,$i,"EditUserName");
 $MyTimeStamp=GMTimeChange("M j, Y, g:i a",$MyTimeStamp,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $MyPost=mysql_result($result,$i,"Post");
-$MyPost = preg_replace("/\<br\>/", "<br />\n", nl2br($MyPost));
+$MyPost = preg_replace("/\<br\>/", "<br />", nl2br($MyPost));
 $MyDescription=mysql_result($result,$i,"Description");
 $requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($MyUserID));
 $reresult=exec_query($requery);
@@ -331,7 +331,7 @@ $GroupNameSuffix=mysql_result($gresult,0,"NameSuffix");
 @mysql_free_result($gresult); }
 $MyPost = text2icons($MyPost,$Settings['sqltable']);
 if($MySubPost!=null) { $MyPost = $MyPost."\n".$MySubPost; }
-$User1Signature = preg_replace("/\<br\>/", "<br />\n", nl2br($User1Signature));
+$User1Signature = preg_replace("/\<br\>/", "<br />", nl2br($User1Signature));
 $User1Signature = text2icons($User1Signature,$Settings['sqltable']);
 $CanEditReply = false; $CanDeleteReply = false;
 if($_SESSION['UserGroup']!=$Settings['GuestGroup']) {
