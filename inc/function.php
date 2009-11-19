@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: function.php - Last Update: 11/15/2009 SVN 350 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 11/19/2009 SVN 354 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -99,7 +99,7 @@ function unserialize_session($data) {
 }
 // Make the Query String if we are not useing &=
 function qstring($qstr=";",$qsep="=")
-{ $_GET = null; $_GET = array();
+{ $_GET = array(); $_GET = null;
 if (!isset($_SERVER['QUERY_STRING'])) {
 $_SERVER['QUERY_STRING'] = getenv('QUERY_STRING'); }
 @ini_get("arg_separator.input", $qstr);
@@ -122,6 +122,23 @@ $myscript = $_SERVER["SCRIPT_NAME"];
 $myphpath = $_SERVER["PHP_SELF"];
 $mypathinfo = str_replace($myscript, "", $myphpath);
 @putenv("PATH_INFO=".$mypathinfo); } }
+// Change raw post data to POST array
+// Not sure why I made but alwell. :P 
+function parse_post_data()
+{ $_POST = array(); $_POST = null;
+$postdata = file_get_contents("php://input");
+if (!isset($postdata)) { $postdata = null; }
+$postdata = urldecode($postdata);
+$preqs = explode("&",$postdata);
+$qsnum = count($preqs); $qsi = 0;
+while ($qsi < $qsnum) {
+$preqst = explode("=",$preqs[$qsi],2);
+$fix1 = array(" ",'$'); $fix2  = array("_","_");
+$preqst[0] = str_replace($fix1, $fix2, $preqst[0]);
+$preqst[0] = killbadvars($preqst[0]);
+if($preqst[0]!=null) {
+$_POST[$preqst[0]] = $preqst[1]; }
+++$qsi; } return true; }
 // Change Path info to Get Vars :
 function mrstring() {
 $urlvar = explode('/',$_SERVER['PATH_INFO']);
