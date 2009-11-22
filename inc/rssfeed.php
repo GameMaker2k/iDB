@@ -11,12 +11,13 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: rssfeed.php - Last Update: 11/17/2009 SVN 353 - Author: cooldude2k $
+    $FileInfo: rssfeed.php - Last Update: 11/22/2009 SVN 355 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="rssfeed.php"||$File3Name=="/rssfeed.php") {
 	require('index.php');
 	exit(); }
+if(!isset($_GET['debug'])) { $_GET['debug'] = null; }
 if(!is_numeric($_GET['id'])) { $_GET['id'] = null; }
 $boardsname = htmlentities($Settings['board_name'], ENT_QUOTES, $Settings['charset']);
 $boardsname = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $boardsname);
@@ -256,10 +257,10 @@ if($Settings['showverinfo']=="on") { ?>
   <!-- Renee Sabonis ^_^ -->
 <SearchForm><?php echo $BoardURL.url_maker("search",$Settings['file_ext'],null,"search","search"); ?></SearchForm>
 </OpenSearchDescription>
-<?php }
+<?php } if($_GET['debug']=="true"||$_GET['debug']=="on") {
 function execution_time($starttime) {
 list($uetime, $etime) = explode(" ", microtime());
 $endtime = $uetime + $etime;
 return bcsub($endtime, $starttime, 4); }
-echo "<!-- execution_time=\"".execution_time($starttime)."\" -->";
+echo "<!-- execution_time=\"".execution_time($starttime)."\" -->"; }
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); ?>

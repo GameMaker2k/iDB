@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: xhtml11.php - Last Update: 6/16/2009 SVN 264 - Author: cooldude2k $
+    $FileInfo: xhtml11.php - Last Update: 11/22/2009 SVN 355 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="xhtml11.php"||$File3Name=="/xhtml11.php") {
@@ -43,12 +43,12 @@ if($Settings['output_type']!="xhtml") {
 if($checklowview===true) { $ThemeSet['CSSType'] = "lowview"; }
 if($checklowview===true&&$_GET['act']=="lowview") { 
    $ThemeSet['CSSType'] = "lowview"; 
-   $ThemeSet['ThemeName'] = "iDB Low Theme";
-   $ThemeSet['ThemeMaker'] = "Kazuki";
-   $ThemeSet['ThemeVersion'] = "0.2.5";
-   $ThemeSet['ThemeVersionType'] = "Pre-Alpha";
-   $ThemeSet['ThemeSubVersion'] = "SVN 222";
-   $ThemeSet['MakerURL'] = "http://idb.berlios.de/support/?act=lowview";
+   $ThemeSet['ThemeName'] = $OrgName." Low Theme";
+   $ThemeSet['ThemeMaker'] =$iDB_Author;
+   $ThemeSet['ThemeVersion'] = $VER1[0].".".$VER1[1].".".$VER1[2];
+   $ThemeSet['ThemeVersionType'] = $VER2[0];
+   $ThemeSet['ThemeSubVersion'] = $VER2[2]." ".$SubVerN;
+   $ThemeSet['MakerURL'] = $iDBHome."support/?act=lowview";
    $ThemeSet['CopyRight'] = $ThemeSet['ThemeName']." was made by <a href=\"".$ThemeSet['MakerURL']."\" title=\"".$ThemeSet['ThemeMaker']."\">".$ThemeSet['ThemeMaker']."</a>";
    $ThemeInfo['ThemeName'] = $ThemeSet['ThemeName'];
    $ThemeInfo['ThemeMaker'] = $ThemeSet['ThemeMaker'];
@@ -67,10 +67,10 @@ if($ThemeSet['CSSType']=="xhtml") {
 @header("Content-Style-Type: text/css");
 @header("Content-Script-Type: text/javascript");
 if($Settings['showverinfo']!="on") {
-$iDBURL1 = "<a href=\"http://idb.berlios.de/\" title=\"".$iDB."\" onclick=\"window.open(this.href);return false;\">"; }
+$iDBURL1 = "<a href=\"".$iDBHome."\" title=\"".$iDB."\" onclick=\"window.open(this.href);return false;\">"; }
 if($Settings['showverinfo']=="on") {
-$iDBURL1 = "<a href=\"http://idb.berlios.de/\" title=\"".$VerInfo['iDB_Ver_Show']."\" onclick=\"window.open(this.href);return false;\">"; }
-$GM2kURL = "<a href=\"http://idb.berlios.de/support/category.php?act=view&amp;id=2\" title=\"".$GM2k."\" onclick=\"window.open(this.href);return false;\">".$GM2k."</a>";
+$iDBURL1 = "<a href=\"".$iDBHome."\" title=\"".$VerInfo['iDB_Ver_Show']."\" onclick=\"window.open(this.href);return false;\">"; }
+$GM2kURL = "<a href=\"".$iDBHome."support/category.php?act=view&amp;id=2\" title=\"".$GM2k."\" onclick=\"window.open(this.href);return false;\">".$GM2k."</a>";
 $csryear = "2004"; $cryear = date("Y"); if($cryear<=2004) { $cryear = "2005"; }
 $BSDL = "<a href=\"".url_maker($exfile['index'],$Settings['file_ext'],"act=bsd",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'])."\" title=\"".$RName." is dual-licensed under the Revised BSD License\">BSDL</a>";
 $GPL = "<a href=\"".url_maker($exfile['index'],$Settings['file_ext'],"act=bsd",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'])."\" title=\"".$RName." is dual-licensed under the Gnu General Public License\">GPL</a>";
@@ -130,9 +130,9 @@ if($Settings['idburl']!="localhost"&&$Settings['idburl']!=null) {
 <link rel="Start" href="<?php echo $AltBoardURL.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>" title="<?php echo $Settings['board_name'].$idbpowertitle; ?>" />
 <link rel="Copyright" href="<?php echo $AltBoardURL.url_maker($exfile['index'],$Settings['file_ext'],"act=bsd",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>" title="Copyright Notice" />
 <?php if($Settings['showverinfo']=="on") { ?>
-<link rel="Generator" href="http://idb.berlios.de/" title="<?php echo $VerInfo['iDB_Ver_Show']; ?>" />
+<link rel="Generator" href="<?php echo $iDBHome; ?>" title="<?php echo $VerInfo['iDB_Ver_Show']; ?>" />
 <?php } if($Settings['showverinfo']!="on") { ?>
-<link rel="Generator" href="http://idb.berlios.de/" title="<?php echo $iDB; ?>" />
+<link rel="Generator" href="<?php echo $iDBHome; ?>" title="<?php echo $iDB; ?>" />
 <?php } echo "\n"; ?>
 <?php if($ThemeSet['CSSType']=="import") { ?>
 <style type="text/css">

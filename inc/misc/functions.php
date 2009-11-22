@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: functions.php - Last Update: 11/15/2009 SVN 350 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 11/22/2009 SVN 355 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -102,22 +102,88 @@ if($use_gzip=="on") {
 	$goutput = gzcompress($output); }
 	echo $goutput; } }
 $foo="bar"; $$foo="foo";
-// Execute a query :P
-$NumQueries = 0;
-function exec_query($query,$link=null) {
-global $NumQueries;
-if(isset($link_identifier)) {
-	$result = mysql_query($query,$link); }
-if(!isset($link_identifier)) {
-	$result = mysql_query($query); }
+//SQL Functions might make it easy to port to other SQL systems.
+function sql_error($link) {
+if(isset($link)) {
+	$result = mysql_error($link); }
+if(!isset($link)) {
+	$result = mysql_error(); }
 if (!$result) {
     trigger_error("Invalid query: ".mysql_error(),E_USER_ERROR);
+	return false; }
+	return $result; }
+// Execute a query :P
+$NumQueries = 0;
+/*
+Comment out untill I can change all calls to exec_query to sql_query.
+function sql_query($query,$link=null) {
+*/
+function exec_query($query,$link=null) {
+global $NumQueries;
+if(isset($link)) {
+	$result = mysql_query($query,$link); }
+if(!isset($link)) {
+	$result = mysql_query($query); }
+if (!$result) {
+    trigger_error("Invalid query: ".sql_error(),E_USER_ERROR);
 	return false; }
 if ($result) {
 	++$NumQueries;
 	return $result; } }
+// Query Results :P
+function sql_result($result,$row,$field=0) {
+$value = mysql_result($result, $row, $field);
+if (!$value) {
+    trigger_error("Invalid query: ".sql_error(),E_USER_ERROR);
+	return false; }
+	return $value; }
+// Free Results :P
+function sql_free_result($result) {
+$fresult = mysql_free_result($result);
+if (!$fresult) {
+    trigger_error("Invalid query: ".sql_error(),E_USER_ERROR);
+	return false; }
+if ($fresult) {
+	return true; } }
+//Fetch Results to Array
+function sql_fetch_array($result,$result_type=MYSQL_BOTH) {
+$row = mysql_fetch_array($result,$result_type);
+if (!$row) {
+    trigger_error("Invalid query: ".sql_error(),E_USER_ERROR);
+	return false; }
+	return $row; }
+//Fetch Row Results
+function sql_fetch_row($result,$result_type=MYSQL_BOTH) {
+$row = mysql_fetch_array($result,$result_type);
+if (!$row) {
+    trigger_error("Invalid query: ".sql_error(),E_USER_ERROR);
+	return false; }
+	return $row; }
+//Fetch Row Results
+function sql_server_info($link) {
+if(isset($link)) {
+	$result = mysql_get_server_info($link); }
+if(!isset($link)) {
+	$result = mysql_get_server_info(); }
+if (!$result) {
+    trigger_error("Invalid query: ".sql_error(),E_USER_ERROR);
+	return false; }
+	return $result; }
+function sql_escape_string($string,$link) {
+if(isset($link)) {
+	$string = mysql_real_escape_string($string,$link); }
+if(!isset($link)) {
+	$string = mysql_real_escape_string($string); }
+if (!$result) {
+    trigger_error("Invalid query: ".sql_error(),E_USER_ERROR);
+	return false; }
+	return $string; }
 // SafeSQL Lite Source Code by Cool Dude 2k
 // Make SQL Query's safe
+/*
+Comment out untill I can change all calls to query to sql_pre_query.
+function sql_pre_query($query_string,$query_vars) {
+*/
 function query($query_string,$query_vars) {
    $query_array = array(array("%i","%I","%F","%S"),array("%d","%d","%f","%s"));
    $query_string = str_replace($query_array[0], $query_array[1], $query_string);
@@ -133,10 +199,35 @@ $query_val[$query_is] = $query_vars[$query_i];
 ++$query_i; }
    $query_val[0] = $query_string;
    return call_user_func_array("sprintf",$query_val); }
+function sql_set_charset($charset,$link) {
 if(function_exists('mysql_set_charset')===false) {
-function mysql_set_charset($charset) {
-	exec_query("SET CHARACTER SET '".$charset."'");
-	exec_query("SET NAMES '".$charset."'"); 
+	$result = exec_query("SET CHARACTER SET '".$charset."'");
+if (!$result) {
+    trigger_error("Invalid query: ".sql_error(),E_USER_ERROR);
+	return false; }
+	$result = exec_query("SET NAMES '".$charset."'"); 
+if (!$result) {
+    trigger_error("Invalid query: ".sql_error(),E_USER_ERROR);
+	return false; }
+	return true; }
+if(function_exists('mysql_set_charset')===true) {
+if(isset($link)) {
+	$result = mysql_set_charset($charset,$link); }
+if(!isset($link)) {
+	$result = mysql_set_charset($charset); }
+if (!$result) {
+    trigger_error("Invalid query: ".sql_error(),E_USER_ERROR);
+	return false; }
+	return true; } }
+if(function_exists('mysql_set_charset')===false) {
+function mysql_set_charset($charset,$link) {
+if(isset($link)) {
+	$result = mysql_set_charset($charset,$link); }
+if(!isset($link)) {
+	$result = mysql_set_charset($charset); }
+if (!$result) {
+    trigger_error("Invalid query: ".sql_error(),E_USER_ERROR);
+	return false; }
 	return true; } }
 	$Names['KP'] = "Kazuki Przyborowski";
 define("_kazuki_", $Names['KP']);
