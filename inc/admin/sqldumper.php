@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sqldumper.php - Last Update: 11/15/2009 SVN 351 - Author: cooldude2k $
+    $FileInfo: sqldumper.php - Last Update: 11/22/2009 SVN 356 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="sqldumper.php"||$File3Name=="/sqldumper.php") {
@@ -30,6 +30,7 @@ $fname = str_replace("_","", $Settings['sqltable']);
 header("Content-Disposition: attachment; filename=".$fname.".sql");
 header("Content-Type: application/octet-stream");
 header("Content-Transfer-Encoding: binary");
+$SQLDumper = "SQL Dumper";
 function GetAllRows($table) { $rene_j = 0; $trowout = null;
 $tresult = exec_query("SELECT * FROM `".$table."`");
 while ($trow = mysql_fetch_array($tresult, MYSQL_ASSOC)) {
@@ -67,7 +68,7 @@ $tabsta = exec_query("SHOW TABLE STATUS LIKE '".$row[0]."'");
 $tabstats = mysql_fetch_array($tabsta); $AutoIncrement = " ";
 $tabstaz = exec_query("SHOW CREATE TABLE `".$row[0]."`");
 $tabstatz = mysql_fetch_array($tabstaz);
-$FullTable[$l] = $DropTable[$l].$tabstatz[1]."\n";
+$FullTable[$l] = $DropTable[$l].$tabstatz[1].";\n";
 $tabstats = mysql_fetch_array($tabsta); $AutoIncrement = " ";
 /*
 if($tabstats["Auto_increment"]!="") {
@@ -102,9 +103,9 @@ if (!$result2) {
 @mysql_free_result($tabsta);
 ++$l; } $tableout = null;
 $num = count($TableNames); $renee_s = 0;
-echo "-- iDB SQL Dumper\n";
+echo "-- ".$OrgName." ".$SQLDumper."\n";
 echo "-- version ".$VerInfo['iDB_Ver_SVN']."\n";
-echo "-- http://idb.berlios.de/support/\n";
+echo "-- ".$iDBHome."support/\n";
 echo "--\n";
 echo "-- Host: ".$Settings['sqlhost']."\n";
 echo "-- Generation Time: ".GMTimeGet('F d, Y \a\t h:i A',$_SESSION['UserTimeZone'],0,$_SESSION['UserDST'])."\n";
