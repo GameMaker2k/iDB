@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: lowsubcategories.php - Last Update: 11/14/2009 SVN 347 - Author: cooldude2k $
+    $FileInfo: lowsubcategories.php - Last Update: 11/23/2009 SVN 357 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="lowsubcategories.php"||$File3Name=="/lowsubcategories.php") {
@@ -21,9 +21,9 @@ if(!is_numeric($_GET['id'])) { $_GET['id'] = null; }
 $checkquery = query("SELECT * FROM `".$Settings['sqltable']."categories` WHERE `id`=%i LIMIT 1", array($_GET['id']));
 $checkresult=exec_query($checkquery);
 $checknum=mysql_num_rows($checkresult);
-if($checknum==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=lowview",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); @mysql_free_result($checkresult);
-ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
+if($checknum==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=lowview",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); mysql_free_result($checkresult);
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($checknum>=1) {
 $CategoryID=mysql_result($checkresult,0,"id");
 $CategoryName=mysql_result($checkresult,0,"Name");
@@ -38,8 +38,8 @@ if(!isset($CatPermissionInfo['CanViewCategory'][$CategoryID])) {
 if($CatPermissionInfo['CanViewCategory'][$CategoryID]=="no"||
 	$CatPermissionInfo['CanViewCategory'][$CategoryID]!="yes") {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=lowview",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
-ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($CatPermissionInfo['CanViewCategory'][$CategoryID]=="yes") {
 $_SESSION['ViewingPage'] = url_maker(null,"no+ext","act=lowview&id=".$CategoryID,"&","=",$prexqstr[$CategoryType],$exqstr[$CategoryType]);
 if($Settings['file_ext']!="no+ext"&&$Settings['file_ext']!="no ext") {
@@ -59,7 +59,7 @@ $iscCategoryShow=mysql_result($iscresult,0,"ShowCategory");
 $iscCategoryType=mysql_result($iscresult,0,"CategoryType");
 $iscCategoryType = strtolower($iscCategoryType); }
 if($iscnum<1) { $InSubCategory = "0"; } 
-@mysql_free_result($iscresult); }
+mysql_free_result($iscresult); }
 ?>
 <div style="font-size: 1.0em; font-weight: bold; margin-bottom: 10px; padding-top: 3px; width: auto;">Full Version: <a href="<?php echo url_maker($exfile[$CategoryType],$Settings['file_ext'],"act=view&id=".$CategoryID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$CategoryType],$exqstr[$CategoryType]); ?>"><?php echo $CategoryName; ?></a></div>
 <div style="font-size: 11px; font-weight: bold; padding: 10px; border: 1px solid gray;"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=lowview",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">Board index</a><?php if($InSubCategory!="0") { echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile[$iscCategoryType],$Settings['file_ext'],"act=view&id=".$iscCategoryID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr[$iscCategoryType],$exqstr[$iscCategoryType]); ?>"><?php echo $iscCategoryName; ?></a><?php } echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile[$CategoryType],$Settings['file_ext'],"act=lowview&id=".$CategoryID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$CategoryType],$exqstr[$CategoryType]); ?>"><?php echo $CategoryName; ?></a></div>
@@ -69,9 +69,9 @@ if($iscnum<1) { $InSubCategory = "0"; }
 <?php
 if($CategoryType=="category") {
 redirect("location",$basedir.url_maker($exfile['category'],$Settings['file_ext'],"act=".$_GET['act']."&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['category'],$exqstr['category'],FALSE));
-ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
-@mysql_free_result($checkresult);
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
+mysql_free_result($checkresult);
 $prequery = query("SELECT * FROM `".$Settings['sqltable']."categories` WHERE `ShowCategory`='yes' AND `InSubCategory`=%i ORDER BY `OrderID` ASC, `id` ASC", array($_GET['id']));
 $preresult=exec_query($prequery);
 $prenum=mysql_num_rows($preresult);
@@ -134,7 +134,7 @@ if($apcl>1) {
 $sflist = $sflist." ".$sfurl; }
 $gltf[$apcl] = $SubsForumID; ++$apcl; }
 ++$apci; }
-@mysql_free_result($apcresult); } }
+mysql_free_result($apcresult); } }
 if ($ForumType=="subforum") { 
 $apcquery = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `ShowForum`='yes' AND `InSubForum`=%i ORDER BY `OrderID` ASC, `id` ASC", array($ForumID));
 $apcresult=exec_query($apcquery);
@@ -150,7 +150,7 @@ if(isset($PermissionInfo['CanViewForum'][$SubsForumID])&&
 	$PermissionInfo['CanViewForum'][$SubsForumID]=="yes") {
 $gltf[$apcl] = $SubsForumID; ++$apcl; }
 ++$apci; }
-@mysql_free_result($apcresult); } }
+mysql_free_result($apcresult); } }
 if(isset($PermissionInfo['CanViewForum'][$ForumID])&&
 	$PermissionInfo['CanViewForum'][$ForumID]=="yes") {
 $LastTopic = "&nbsp;<br />&nbsp;<br />&nbsp;";
@@ -167,7 +167,7 @@ $NewUpdateTime=mysql_result($gltforesult,0,"LastUpdate");
 if($NewUpdateTime>$OldUpdateTime) { 
 	$UseThisFonum = $gltf[$glti]; 
 $OldUpdateTime = $NewUpdateTime; } }
-@mysql_free_result($gltforesult);
+mysql_free_result($gltforesult);
 ++$glti; } }
 $shownum = null;
 if ($ForumType=="redirect") { $shownum = "(".$NumRedirects." redirects)"; }
@@ -182,12 +182,12 @@ $ExStr = ""; if ($ForumType!="redirect"&&
 <ul style="list-style-type: none;"><li>
 <a href="<?php echo url_maker($exfile[$ForumType],$Settings['file_ext'],"act=lowview&id=".$ForumID.$ExStr,$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>"<?php if($ForumType=="redirect") { echo " onclick=\"window.open(this.href);return false;\""; } ?>><?php echo $ForumName; ?></a> <span style="color: gray; font-size: 10px;"><?php echo $shownum; ?></span></li>
 <?php echo $sflist; ?></ul>
-<?php } ++$i; } @mysql_free_result($result); } ?>
+<?php } ++$i; } mysql_free_result($result); } ?>
 </li></ul>
 <ul style="list-style-type: none;">
 <?php ++$prei; } } ?>
 <?php
-@mysql_free_result($preresult);
+mysql_free_result($preresult);
 $CatCheck = "skip";
 if($SubShowForums!="yes") { 
 	$CategoryName = $SCategoryName; }

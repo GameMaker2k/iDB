@@ -11,10 +11,10 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: javascript.php - Last Update: 6/16/2009 SVN 264 - Author: cooldude2k $
+    $FileInfo: javascript.php - Last Update: 11/23/2009 SVN 357 - Author: cooldude2k $
 */
-@header("Content-Language: en");
-@header("Vary: Accept");
+header("Content-Language: en");
+header("Vary: Accept");
 ?>
 function getid(id) {
 var itm;

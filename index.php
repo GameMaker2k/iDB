@@ -11,9 +11,9 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: index.php - Last Update: 6/16/2009 SVN 264 - Author: cooldude2k $
+    $FileInfo: index.php - Last Update: 11/23/2009 SVN 357 - Author: cooldude2k $
 */
-if(@ini_get("register_globals")) {
+if(ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }
 $checklowview = true;
 require('preindex.php');

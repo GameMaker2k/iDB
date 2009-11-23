@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: lowforums.php - Last Update: 11/14/2009 SVN 347 - Author: cooldude2k $
+    $FileInfo: lowforums.php - Last Update: 11/23/2009 SVN 357 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="lowforums.php"||$File3Name=="/lowforums.php") {
@@ -103,7 +103,7 @@ if($apcl>1) {
 $sflist = $sflist." ".$sfurl; }
 $gltf[$apcl] = $SubsForumID; ++$apcl; }
 ++$apci; }
-@mysql_free_result($apcresult); } }
+mysql_free_result($apcresult); } }
 if(isset($PermissionInfo['CanViewForum'][$ForumID])&&
 	$PermissionInfo['CanViewForum'][$ForumID]=="yes") {
 $LastTopic = "&nbsp;<br />&nbsp;<br />&nbsp;";
@@ -120,7 +120,7 @@ $NewUpdateTime=mysql_result($gltforesult,0,"LastUpdate");
 if($NewUpdateTime>$OldUpdateTime) { 
 	$UseThisFonum = $gltf[$glti]; 
 $OldUpdateTime = $NewUpdateTime; } }
-@mysql_free_result($gltforesult);
+mysql_free_result($gltforesult);
 ++$glti; } }
 $shownum = null;
 if ($ForumType=="redirect") { $shownum = "(".$NumRedirects." redirects)"; }
@@ -135,12 +135,12 @@ $ExStr = ""; if ($ForumType!="redirect"&&
 <ul style="list-style-type: none;"><li>
 <a href="<?php echo url_maker($exfile[$ForumType],$Settings['file_ext'],"act=lowview&id=".$ForumID.$ExStr,$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>"<?php if($ForumType=="redirect") { echo " onclick=\"window.open(this.href);return false;\""; } ?>><?php echo $ForumName; ?></a> <span style="color: gray; font-size: 10px;"><?php echo $shownum; ?></span></li>
 <?php echo $sflist; ?></ul>
-<?php } ++$i; } @mysql_free_result($result);
+<?php } ++$i; } mysql_free_result($result);
 if($num>=1) {
 ?>
 <?php } } 
 ?></li><?php
 ++$prei; }
-@mysql_free_result($preresult); ?>
+mysql_free_result($preresult); ?>
 </ul></div>
 <div>&nbsp;</div>

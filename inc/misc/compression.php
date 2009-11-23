@@ -13,14 +13,14 @@
     GZip and Zlib by Jean-loup Gailly (compression) and Mark Adler (decompression) http://www.zlib.net/
 	BZip2 and libbzip2 by Julian Seward http://www.bzip.org/
 
-    $FileInfo: compression.php - Last Update: 6/16/2009 SVN 264 - Author: cooldude2k $
+    $FileInfo: compression.php - Last Update: 11/23/2009 SVN 357 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="compression.php"||$File3Name=="/compression.php") {
 	require('index.php');
 	exit(); }
 //Check if zlib is loaded
-if(@extension_loaded("zlib")) {
+if(extension_loaded("zlib")) {
 function gunzip($infile, $outfile) {
   $string = null;
   $zp = gzopen($infile, "r");
@@ -47,7 +47,7 @@ function gzip($infile, $outfile, $param = 5) {
  gzclose($zp);
 } }
 //Check if bz2 is loaded
-if(@extension_loaded("bz2")) {
+if(extension_loaded("bz2")) {
 function bzip($infile, $outfile) {
  $fp = fopen($infile, "r");
  $data = fread($fp, filesize($infile));
@@ -68,10 +68,10 @@ function bunzip($infile, $outfile) {
   fclose($fp);
 } }
 //Check if zip is loaded
-if(@extension_loaded("zip")) {
+if(extension_loaded("zip")) {
 /* Nothing for now... :P */ }
 //Check if rar is loaded
-if(@extension_loaded("rar")) {
+if(extension_loaded("rar")) {
 /* Nothing for now... :P */ }
 
 ?>

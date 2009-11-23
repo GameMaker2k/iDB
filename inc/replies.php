@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: replies.php - Last Update: 11/17/2009 SVN 353 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 11/23/2009 SVN 357 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -28,9 +28,9 @@ if($_GET['modact']=="pin"||$_GET['modact']=="unpin"||$_GET['modact']=="open"||
 $prequery = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `id`=%i LIMIT 1", array($_GET['id']));
 $preresult=exec_query($prequery);
 $prenum=mysql_num_rows($preresult);
-if($prenum==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); @mysql_free_result($preresult);
-ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
+if($prenum==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); mysql_free_result($preresult);
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($prenum>=1) {
 $TopicName=mysql_result($preresult,0,"TopicName");
 $TopicID=mysql_result($preresult,0,"id");
@@ -42,7 +42,7 @@ $NumberReplies=mysql_result($preresult,0,"NumReply"); }
 if(isset($_GET['post'])&&$_GET['post']!==null) {
 $NumberReplies=1; }
 $ViewTimes=mysql_result($preresult,0,"NumViews");
-@mysql_free_result($preresult);
+mysql_free_result($preresult);
 $forumcheckx = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i  LIMIT 1", array($TopicForumID));
 $fmckresult=exec_query($forumcheckx);
 $ForumName=mysql_result($fmckresult,0,"Name");
@@ -50,14 +50,14 @@ $ForumType=mysql_result($fmckresult,0,"ForumType");
 $CanHaveTopics=mysql_result($fmckresult,0,"CanHaveTopics");
 $ForumPostCountView=mysql_result($fmckresult,0,"PostCountView");
 $ForumKarmaCountView=mysql_result($fmckresult,0,"KarmaCountView");
-@mysql_free_result($fmckresult);
+mysql_free_result($fmckresult);
 $catcheck = query("SELECT * FROM `".$Settings['sqltable']."categories` WHERE `id`=%i  LIMIT 1", array($TopicCatID));
 $catresult=exec_query($catcheck);
 $CategoryName=mysql_result($catresult,0,"Name");
 $CategoryType=mysql_result($catresult,0,"CategoryType");
 $CategoryPostCountView=mysql_result($catresult,0,"PostCountView");
 $CategoryKarmaCountView=mysql_result($catresult,0,"KarmaCountView");
-@mysql_free_result($catresult);
+mysql_free_result($catresult);
 if($GroupInfo['HasAdminCP']!="yes"||$GroupInfo['HasModCP']!="yes") {
 if($MyPostCountChk==null) { $MyPostCountChk = 0; }
 if($MyKarmaCount==null) { $MyKarmaCount = 0; }
@@ -79,15 +79,15 @@ if(!isset($CatPermissionInfo['CanViewCategory'][$TopicCatID])) {
 if($CatPermissionInfo['CanViewCategory'][$TopicCatID]=="no"||
 	$CatPermissionInfo['CanViewCategory'][$TopicCatID]!="yes") {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
-ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if(!isset($PermissionInfo['CanViewForum'][$TopicForumID])) {
 	$PermissionInfo['CanViewForum'][$TopicForumID] = "no"; }
 if($PermissionInfo['CanViewForum'][$TopicForumID]=="no"||
 	$PermissionInfo['CanViewForum'][$TopicForumID]!="yes") {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
-ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($_GET['act']!="view") { 
 $CanMakeReply = "no"; $CanMakeTopic = "no";
 if($PermissionInfo['CanMakeTopics'][$TopicForumID]=="yes"&&$CanHaveTopics=="yes") { 
@@ -157,8 +157,8 @@ $query = query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `TopicID`=%
 $result=exec_query($query);
 $num=mysql_num_rows($result);
 if($num==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
-ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($num!=0) { 
 if($ViewTimes==0||$ViewTimes==null) { $NewViewTimes = 1; }
 if($ViewTimes!=0&&$ViewTimes!=null) { $NewViewTimes = $ViewTimes + 1; }
@@ -288,7 +288,7 @@ $gresult=exec_query($gquery);
 $User1Group=mysql_result($gresult,0,"Name");
 $GroupNamePrefix=mysql_result($gresult,0,"NamePrefix");
 $GroupNameSuffix=mysql_result($gresult,0,"NameSuffix");
-@mysql_free_result($gresult);
+mysql_free_result($gresult);
 $User1Signature=mysql_result($reresult,$rei,"Signature");
 $User1Avatar=mysql_result($reresult,$rei,"Avatar");
 $User1AvatarSize=mysql_result($reresult,$rei,"AvatarSize");
@@ -302,7 +302,7 @@ $User1Website=mysql_result($reresult,$rei,"Website");
 $User1PostCount=mysql_result($reresult,$rei,"PostCount");
 $User1Karma=mysql_result($reresult,$rei,"Karma");
 $User1IP=mysql_result($reresult,$rei,"IP");
-@mysql_free_result($reresult);
+mysql_free_result($reresult);
 if($User1Name=="Guest") { $User1Name=$GuestsName;
 if($User1Name==null) { $User1Name="Guest"; } }
 if(isset($GroupNamePrefix)&&$GroupNamePrefix!=null) {
@@ -323,13 +323,13 @@ $eunum = mysql_num_rows($euresult); }
 	$EditUserGroupID = mysql_result($euresult,0,"GroupID");
 	$EditUserHidden=mysql_result($euresult,0,"HiddenMember");
 	$EditUserName = mysql_result($euresult,0,"Name");
-	@mysql_free_result($euresult);
+	mysql_free_result($euresult);
 	$eugquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($EditUserGroupID));
 	$eugresult=exec_query($eugquery);
 	$EditUserGroup=mysql_result($eugresult,0,"Name");
 	$EditUserNamePrefix=mysql_result($eugresult,0,"NamePrefix");
 	$EditUserNameSuffix=mysql_result($eugresult,0,"NameSuffix");
-	@mysql_free_result($eugresult);	}
+	mysql_free_result($eugresult);	}
 	if($MyEditUserID==$MyUserID) {
 	$EditUserID = $User1ID;
 	$EditUserGroupID = $User1GroupID;
@@ -453,11 +453,11 @@ echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr
 </tr>
 </table></div>
 <div class="DivReplies">&nbsp;</div>
-<?php ++$i; } @mysql_free_result($result); } 
+<?php ++$i; } mysql_free_result($result); } 
 if((GMTimeStamp()<$_SESSION['LastPostTime']&&$_SESSION['LastPostTime']!=0)&&
 ($_GET['act']=="create"||$_GET['act']=="edit"||$_GET['act']=="makereply"||$_GET['act']=="editreply")) { 
 $_GET['act'] = "view"; $_POST['act'] = null; 
-@redirect("refresh",$basedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],FALSE),"3"); ?>
+redirect("refresh",$basedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],FALSE),"3"); ?>
 <div class="Table1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableRow1">
@@ -501,11 +501,11 @@ redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"a
 if($CategoryKarmaCountView!=0&&$MyKarmaCount<$CategoryKarmaCountView) {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); } }
 if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="no") { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
-ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($PermissionInfo['CanMakeReplysClose'][$TopicForumID]=="no"&&$TopicClosed==1) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
-ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $QuoteReply = null; $QuoteDescription = null;
 if($_GET['post']==null) {
 $query = query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `TopicID`=%i ORDER BY `TimeStamp` ASC  LIMIT 1", array($_GET['id']));
@@ -514,7 +514,7 @@ $num=mysql_num_rows($result);
 $QuoteDescription=mysql_result($result,0,"Description"); 
 $QuoteDescription = str_replace("Re: ","",$QuoteDescription);
 $QuoteDescription = "Re: ".$QuoteDescription;
-@mysql_free_result($result); }
+mysql_free_result($result); }
 if($_GET['post']!=null) {
 $query = query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `id`=%i LIMIT 1", array($_GET['post']));
 $result=exec_query($query);
@@ -539,10 +539,10 @@ if($QuoteUserName=="Guest") { $QuoteUserName=$QuoteGuestName;
 if($QuoteUserName==null) { $QuoteUserName="Guest"; } }
 $QuoteUserName = stripcslashes(htmlspecialchars($QuoteUserName, ENT_QUOTES, $Settings['charset']));
 //$QuoteUserName = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $QuoteUserName);
-$QuoteUserName = @remove_spaces($QuoteUserName);
+$QuoteUserName = remove_spaces($QuoteUserName);
 /*$QuoteReply = stripcslashes(htmlspecialchars($QuoteReply, ENT_QUOTES, $Settings['charset']));
 $QuoteReply = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $QuoteReply);
-//$QuoteReply = @remove_spaces($QuoteReply);*/
+//$QuoteReply = remove_spaces($QuoteReply);*/
 $QuoteReply = remove_bad_entities($QuoteReply);
 $QuoteDescription = str_replace("Re: ","",$QuoteDescription);
 $QuoteDescription = "Re: ".$QuoteDescription;
@@ -561,12 +561,12 @@ $rforumcheck = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`
 $rfmckresult=exec_query($rforumcheck);
 $rForumPostCountView=mysql_result($rfmckresult,0,"PostCountView");
 $rForumKarmaCountView=mysql_result($rfmckresult,0,"KarmaCountView");
-@mysql_free_result($rfmckresult);
+mysql_free_result($rfmckresult);
 $rcatcheck = query("SELECT * FROM `".$Settings['sqltable']."categories` WHERE `id`=%i  LIMIT 1", array($QuoteReplyCID));
 $rcatresult=exec_query($rcatcheck);
 $rCategoryPostCountView=mysql_result($rcatresult,0,"PostCountView");
 $rCategoryKarmaCountView=mysql_result($rcatresult,0,"KarmaCountView");
-@mysql_free_result($rcatresult);
+mysql_free_result($rcatresult);
 if($MyPostCountChk==null) { $MyPostCountChk = 0; }
 if($rForumPostCountView!=0&&$MyPostCountChk<$rForumPostCountView) {
 $QuoteReply = null; $QuoteDescription = null; }
@@ -622,7 +622,7 @@ if($SmileCRow<5&&$SmileCRow!=0) {
 $SmileCRowL = 5 - $SmileCRow;
 echo "<td colspan=\"".$SmileCRowL."\">&nbsp;</td></tr>"; }
 echo "</table>";
-@mysql_free_result($renee_result);
+mysql_free_result($renee_result);
 ?></div></td>
 <td class="TableColumn3" style="width: 85%;">
 <form style="display: inline;" method="post" id="MkReplyForm" action="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=makereply&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>">
@@ -672,11 +672,11 @@ redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"a
 if($CategoryKarmaCountView!=0&&$MyKarmaCount<$CategoryKarmaCountView) {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); } }
 if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="no") { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
-ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($PermissionInfo['CanMakeReplysClose'][$TopicForumID]=="no"&&$TopicClosed==1) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
-ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $MyUsersID = $_SESSION['UserID']; if($MyUsersID=="0"||$MyUsersID==null) { $MyUsersID = -1; }
 $REFERERurl = parse_url($_SERVER['HTTP_REFERER']);
 $URL['REFERER'] = $REFERERurl['host'];
@@ -747,17 +747,17 @@ if (PhpCaptcha::Validate($_POST['signcode'])) {
 <?php } }
 $_POST['ReplyDesc'] = stripcslashes(htmlspecialchars($_POST['ReplyDesc'], ENT_QUOTES, $Settings['charset']));
 //$_POST['ReplyDesc'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['ReplyDesc']);
-$_POST['ReplyDesc'] = @remove_spaces($_POST['ReplyDesc']);
+$_POST['ReplyDesc'] = remove_spaces($_POST['ReplyDesc']);
 $_POST['GuestName'] = stripcslashes(htmlspecialchars($_POST['GuestName'], ENT_QUOTES, $Settings['charset']));
 //$_POST['GuestName'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['GuestName']);
-$_POST['GuestName'] = @remove_spaces($_POST['GuestName']);
+$_POST['GuestName'] = remove_spaces($_POST['GuestName']);
 $_POST['ReplyPost'] = stripcslashes(htmlspecialchars($_POST['ReplyPost'], ENT_QUOTES, $Settings['charset']));
 //$_POST['ReplyPost'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['ReplyPost']);
-//$_POST['ReplyPost'] = @remove_spaces($_POST['ReplyPost']);
+//$_POST['ReplyPost'] = remove_spaces($_POST['ReplyPost']);
 $_POST['ReplyPost'] = remove_bad_entities($_POST['ReplyPost']);
 if($_SESSION['UserGroup']==$Settings['GuestGroup']) {
 if(isset($_POST['GuestName'])&&$_POST['GuestName']!=null) {
-@setcookie("GuestName", $_POST['GuestName'], time() + (7 * 86400), $cbasedir);
+setcookie("GuestName", $_POST['GuestName'], time() + (7 * 86400), $cbasedir);
 $_SESSION['GuestName']=$_POST['GuestName']; } }
 /*    <_<  iWordFilter  >_>      
    by Kazuki Przyborowski - Cool Dude 2k */
@@ -789,7 +789,7 @@ $_POST['ReplyPost'] = preg_replace("/".$Filter."/", $Replace, $_POST['ReplyPost'
 if($CaseInsensitive=="yes"&&$WholeWord!="yes") {
 $_POST['ReplyDesc'] = preg_replace("/".$Filter."/i", $Replace, $_POST['ReplyDesc']); 
 $_POST['ReplyPost'] = preg_replace("/".$Filter."/i", $Replace, $_POST['ReplyPost']); }
-++$katarzynas; } @mysql_free_result($katarzynart);
+++$katarzynas; } mysql_free_result($katarzynart);
 if ($_POST['ReplyDesc']==null) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
@@ -823,7 +823,7 @@ if ($_POST['ReplyDesc']==null) { $Error="Yes"; ?>
 	</span>&nbsp;</td>
 </tr>
 <?php } if ($Error=="Yes") {
-@redirect("refresh",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false),"4"); ?>
+redirect("refresh",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false),"4"); ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Click <a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">here</a> to goto index page.<br />&nbsp;
@@ -834,7 +834,7 @@ $gnrquery = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i
 $gnrresult=exec_query($gnrquery); $gnrnum=mysql_num_rows($gnrresult);
 $NumberPosts=mysql_result($gnrresult,0,"NumPosts"); 
 $PostCountAdd=mysql_result($gnrresult,0,"PostCountAdd"); 
-@mysql_free_result($gnrresult);
+mysql_free_result($gnrresult);
 $postid = getnextid($Settings['sqltable'],"posts");
 $requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($MyUsersID));
 $reresult=exec_query($requery);
@@ -854,9 +854,9 @@ if(!isset($NewPostCount)) { $NewPostCount = $PostCount; }
 $gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($User1GroupID));
 $gresult=exec_query($gquery);
 $User1Group=mysql_result($gresult,0,"Name");
-@mysql_free_result($gresult);
+mysql_free_result($gresult);
 $User1IP=$_SERVER['REMOTE_ADDR'];
-++$rei; } @mysql_free_result($reresult);
+++$rei; } mysql_free_result($reresult);
 $query = query("INSERT INTO `".$Settings['sqltable']."posts` (`TopicID`, `ForumID`, `CategoryID`, `UserID`, `GuestName`, `TimeStamp`, `LastUpdate`, `EditUser`, `EditUserName`, `Post`, `Description`, `IP`, `EditIP`) VALUES\n".
 "(%i, %i, %i, %i, '%s', %i, %i, 0, '', '%s', '%s', '%s', '0')", array($TopicID,$TopicForumID,$TopicCatID,$User1ID,$User1Name,$LastActive,$LastActive,$_POST['ReplyPost'],$_POST['ReplyDesc'],$User1IP));
 exec_query($query);
@@ -875,7 +875,7 @@ if($MyPostNum>$Settings['max_posts']) {
 $NumPages = ceil($MyPostNum/$Settings['max_posts']); }
 if($MyPostNum<=$Settings['max_posts']) {
 $NumPages = 1; }
-@redirect("refresh",$basedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],FALSE).$Settings['qstr']."#reply".$MyPostNum,"3");
+redirect("refresh",$basedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],FALSE).$Settings['qstr']."#reply".$MyPostNum,"3");
 ?><tr>
 	<td><span class="TableMessage"><br />
 	Reply to Topic <?php echo $TopicName; ?> was posted.<br />
@@ -911,17 +911,17 @@ if($PermissionInfo['CanPinTopics'][$TForumID]=="yes"&&
 		$TopicClosed==1) { $CanPinTopics = false; } }
 if($_SESSION['UserID']==0) { $CanPinTopics = false; }
 if($CanPinTopics===false) {
-redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); @mysql_free_result($gtsresult);
-ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
-@mysql_free_result($gtsresult);
+redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); mysql_free_result($gtsresult);
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
+mysql_free_result($gtsresult);
 if($CanPinTopics===true) {
 	if($_GET['act']=="pin") {
 $queryupd = query("UPDATE `".$Settings['sqltable']."topics` SET `Pinned`=1 WHERE `id`=%i", array($TTopicID)); }
 	if($_GET['act']=="unpin") {
 $queryupd = query("UPDATE `".$Settings['sqltable']."topics` SET `Pinned`=0 WHERE `id`=%i", array($TTopicID)); } 
 exec_query($queryupd); 
-@redirect("refresh",$basedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TTopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],false).$Settings['qstr']."#post".$_GET['post'],"4");
+redirect("refresh",$basedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TTopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],false).$Settings['qstr']."#post".$_GET['post'],"4");
 ?>
 <div class="Table1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
@@ -968,17 +968,17 @@ if($PermissionInfo['CanCloseTopics'][$TForumID]=="yes"&&
 	$CanCloseTopics = true; } }
 if($_SESSION['UserID']==0) { $CanCloseTopics = false; }
 if($CanCloseTopics===false) {
-redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); @mysql_free_result($gtsresult);
-ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
-@mysql_free_result($gtsresult);
+redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); mysql_free_result($gtsresult);
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
+mysql_free_result($gtsresult);
 if($CanCloseTopics===true) {
 	if($_GET['act']=="close") {
 $queryupd = query("UPDATE `".$Settings['sqltable']."topics` SET `Closed`=1 WHERE `id`=%i", array($TTopicID)); }
 	if($_GET['act']=="open") {
 $queryupd = query("UPDATE `".$Settings['sqltable']."topics` SET `Closed`=0 WHERE `id`=%i", array($TTopicID)); } 
 exec_query($queryupd); 
-@redirect("refresh",$basedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TTopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],false).$Settings['qstr']."#post".$_GET['post'],"4");
+redirect("refresh",$basedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TTopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],false).$Settings['qstr']."#post".$_GET['post'],"4");
 ?>
 <div class="Table1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
@@ -1014,7 +1014,7 @@ $ReplyID=mysql_result($predresult,0,"id");
 $ReplyTopicID=mysql_result($predresult,0,"TopicID");
 $ReplyForumID=mysql_result($predresult,0,"ForumID");
 $ReplyUserID=mysql_result($predresult,0,"UserID");
-@mysql_free_result($predresult);
+mysql_free_result($predresult);
 $CanDeleteReply = false;
 if($_SESSION['UserID']!=0) {
 if($_SESSION['UserGroup']!=$Settings['GuestGroup']) {
@@ -1028,8 +1028,8 @@ if($PermissionInfo['CanDeleteReplys'][$ReplyForumID]=="yes"&&
 if($_SESSION['UserID']==0) { $CanDeleteReply = false; }
 if($CanDeleteReply===false) {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
-ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $delquery = query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `TopicID`=%i ORDER BY `TimeStamp` ASC", array($_GET['id']));
 $delresult=exec_query($delquery);
 $delnum=mysql_num_rows($delresult);
@@ -1037,7 +1037,7 @@ $DelTopic = false;
 $gnrquery = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i LIMIT 1", array($ReplyForumID));
 $gnrresult=exec_query($gnrquery); $gnrnum=mysql_num_rows($gnrresult);
 $NumberPosts=mysql_result($gnrresult,0,"NumPosts"); $NumberTopics=mysql_result($gnrresult,0,"NumTopics"); 
-@mysql_free_result($gnrresult);
+mysql_free_result($gnrresult);
 $FReplyID=mysql_result($delresult,0,"id");
 if($ReplyID==$FReplyID) { $DelTopic = true;
 $gtsquery = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `id`=%i LIMIT 1", array($ReplyTopicID));
@@ -1055,9 +1055,9 @@ if($PermissionInfo['CanDeleteTopics'][$ReplyForumID]=="yes"&&
 		$TopicClosed==1) { $CanDeleteTopics = false; } }
 if($_SESSION['UserID']==0) { $CanDeleteTopics = false; }
 if($CanDeleteTopics===false) {
-redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); @mysql_free_result($delresult);
-ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
+redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); mysql_free_result($delresult);
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($CanDeleteTopics===true) { $NewNumTopics = $NumberTopics - 1; $NewNumPosts = $NumberPosts - $delnum;
 $drquery = query("DELETE FROM `".$Settings['sqltable']."posts` WHERE `TopicID`=%i", array($ReplyTopicID));
 exec_query($drquery); 
@@ -1083,8 +1083,8 @@ $queryupd = query("UPDATE `".$Settings['sqltable']."forums` SET `NumPosts`=%i WH
 exec_query($queryupd);
 $queryupd = query("UPDATE `".$Settings['sqltable']."topics` SET `NumReply`=%i WHERE `id`=%i", array($NewNumReplies,$ReplyTopicID));
 exec_query($queryupd); }
-@redirect("refresh",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],FALSE),"3");
-@mysql_free_result($delresult);
+redirect("refresh",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],FALSE),"3");
+mysql_free_result($delresult);
 ?>
 <div class="Table1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
@@ -1114,46 +1114,46 @@ exec_query($queryupd); }
 </table></div>
 <?php } if($_GET['act']=="edit") {
 if($PermissionInfo['CanEditReplys'][$TopicForumID]=="no"||$_SESSION['UserID']==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
-ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($PermissionInfo['CanEditReplysClose'][$TopicForumID]=="no"&&$TopicClosed==1) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
-ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $ShowEditTopic = null;
 if($PermissionInfo['CanEditTopics'][$TopicForumID]=="yes") {
 $editquery = query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `TopicID`=%i ORDER BY `TimeStamp` ASC", array($TopicID));
 $editresult=exec_query($editquery);
 $editnum=mysql_num_rows($editresult);
 $FReplyID=mysql_result($editresult,0,"id");
-@mysql_free_result($editresult);
+mysql_free_result($editresult);
 if($_GET['post']==$FReplyID) { $ShowEditTopic = true; } }
 if($PermissionInfo['CanEditTopics'][$TopicForumID]=="no") { $ShowEditTopic = null; }
 $ersquery = query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `id`=%i LIMIT 1", array($_GET['post']));
 $ersresult=exec_query($ersquery);
 $ersnum=mysql_num_rows($ersresult);
-if($ersnum==0) { @mysql_free_result($ersresult);
+if($ersnum==0) { mysql_free_result($ersresult);
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
-ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $ReplyPost=mysql_result($ersresult,0,"Post");
 /*$ReplyPost = stripcslashes(htmlspecialchars($ReplyPost, ENT_QUOTES, $Settings['charset']));
 $ReplyPost = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $ReplyPost);
-//$ReplyPost = @remove_spaces($ReplyPost);*/
+//$ReplyPost = remove_spaces($ReplyPost);*/
 $ReplyPost = remove_bad_entities($ReplyPost);
 $ReplyDescription=mysql_result($ersresult,0,"Description");
 /*$ReplyDescription = stripcslashes(htmlspecialchars($ReplyDescription, ENT_QUOTES, $Settings['charset']));
 $ReplyDescription = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $ReplyDescription);
-//$ReplyDescription = @remove_spaces($ReplyDescription);*/
+//$ReplyDescription = remove_spaces($ReplyDescription);*/
 $ReplyGuestName=mysql_result($ersresult,0,"GuestName");
 //$ReplyGuestName = stripcslashes(htmlspecialchars($ReplyGuestName, ENT_QUOTES, $Settings['charset']));
 //$ReplyGuestName = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $ReplyGuestName);
-$ReplyGuestName = @remove_spaces($ReplyGuestName);
+$ReplyGuestName = remove_spaces($ReplyGuestName);
 $ReplyUser=mysql_result($ersresult,0,"UserID");
 if($_SESSION['UserID']!=$ReplyUser&&$PermissionInfo['CanModForum'][$TopicForumID]=="no") {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
-ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
-@mysql_free_result($ersresult);
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
+mysql_free_result($ersresult);
 if($ShowEditTopic===true) {
 $gtsquery = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `id`=%i LIMIT 1", array($TopicID));
 $gtsresult=exec_query($gtsquery);
@@ -1167,8 +1167,8 @@ if($PermissionInfo['CanEditTopicsClose'][$TopicForumID]=="no"&&$TopicClosed==1) 
 	$ShowEditTopic = null; } }
 //$TopicName = stripcslashes(htmlspecialchars($TopicName, ENT_QUOTES, $Settings['charset']));
 //$TopicName = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $TopicName);
-$TopicName = @remove_spaces($TopicName);
-@mysql_free_result($gtsresult);
+$TopicName = remove_spaces($TopicName);
+mysql_free_result($gtsresult);
 $UFID = uuid(false,true,false,$Settings['use_hashtype'],null);
 $_SESSION['UserFormID'] = $UFID;
 ?>
@@ -1208,7 +1208,7 @@ if($SmileRow<5) { ?>
 	<img src="<?php echo $SmileDirectory."".$FileName; ?>" style="vertical-align: middle; border: 0px; cursor: pointer;" title="<?php echo $SmileName; ?>" alt="<?php echo $SmileName; ?>" onclick="addsmiley('ReplyPost','&nbsp;<?php echo htmlspecialchars($SmileText, ENT_QUOTES, $Settings['charset']); ?>&nbsp;')" /><br />
 	<?php $SmileRow=1; }
 ++$renee_s; ++$SmileRow; }
-@mysql_free_result($renee_result);
+mysql_free_result($renee_result);
 ?></div></td>
 <td class="TableColumn3" style="width: 85%;">
 <form style="display: inline;" method="post" id="EditReplyForm" action="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=editreply&id=".$TopicID."&post=".$_GET['post'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>">
@@ -1249,11 +1249,11 @@ if($SmileRow<5) { ?>
 <div class="DivMkReply">&nbsp;</div>
 <?php } if($_GET['act']=="editreply"&&$_POST['act']=="editreplies") {
 if($PermissionInfo['CanEditReplys'][$TopicForumID]=="no"||$_SESSION['UserID']==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
-ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($PermissionInfo['CanEditReplysClose'][$TopicForumID]=="no"&&$TopicClosed==1) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
-ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $REFERERurl = parse_url($_SERVER['HTTP_REFERER']);
 $URL['REFERER'] = $REFERERurl['host'];
 $URL['HOST'] = $_SERVER["SERVER_NAME"];
@@ -1271,22 +1271,22 @@ $editquery = query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `TopicI
 $editresult=exec_query($editquery);
 $editnum=mysql_num_rows($editresult);
 $FReplyID=mysql_result($editresult,0,"id");
-@mysql_free_result($editresult);
+mysql_free_result($editresult);
 if($_GET['post']==$FReplyID) { $ShowEditTopic = true; } }
 if($PermissionInfo['CanEditTopics'][$TopicForumID]=="no") { $ShowEditTopic = null; }
 $ersquery = query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `id`=%i LIMIT 1", array($_GET['post']));
 $ersresult=exec_query($ersquery);
 $ersnum=mysql_num_rows($ersresult);
-if($ersnum==0) { @mysql_free_result($ersresult);
+if($ersnum==0) { mysql_free_result($ersresult);
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
-ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $ReplyUser=mysql_result($ersresult,0,"UserID");
 if($_SESSION['UserID']!=$ReplyUser&&$PermissionInfo['CanModForum'][$TopicForumID]=="no") {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
-ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
-@mysql_free_result($ersresult); 
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
+mysql_free_result($ersresult); 
 if($ShowEditTopic===true) {
 $gtsquery = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `id`=%i LIMIT 1", array($TopicID));
 $gtsresult=exec_query($gtsquery);
@@ -1364,17 +1364,17 @@ if (PhpCaptcha::Validate($_POST['signcode'])) {
 <?php } }
 $_POST['ReplyDesc'] = stripcslashes(htmlspecialchars($_POST['ReplyDesc'], ENT_QUOTES, $Settings['charset']));
 //$_POST['ReplyDesc'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['ReplyDesc']);
-$_POST['ReplyDesc'] = @remove_spaces($_POST['ReplyDesc']);
+$_POST['ReplyDesc'] = remove_spaces($_POST['ReplyDesc']);
 $_POST['GuestName'] = stripcslashes(htmlspecialchars($_POST['GuestName'], ENT_QUOTES, $Settings['charset']));
 //$_POST['GuestName'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['GuestName']);
-$_POST['GuestName'] = @remove_spaces($_POST['GuestName']);
+$_POST['GuestName'] = remove_spaces($_POST['GuestName']);
 $_POST['ReplyPost'] = stripcslashes(htmlspecialchars($_POST['ReplyPost'], ENT_QUOTES, $Settings['charset']));
 //$_POST['ReplyPost'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['ReplyPost']);
 $_POST['ReplyPost'] = remove_bad_entities($_POST['ReplyPost']);
 if($ShowEditTopic===true) {
 $_POST['TopicName'] = stripcslashes(htmlspecialchars($_POST['TopicName'], ENT_QUOTES, $Settings['charset']));
 //$_POST['TopicName'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['TopicName']);
-$_POST['TopicName'] = @remove_spaces($_POST['TopicName']); }
+$_POST['TopicName'] = remove_spaces($_POST['TopicName']); }
 /*    <_<  iWordFilter  >_>      
    by Kazuki Przyborowski - Cool Dude 2k */
 $katarzynaqy=query("SELECT * FROM `".$Settings['sqltable']."wordfilter`", array(null));
@@ -1405,7 +1405,7 @@ $_POST['ReplyPost'] = preg_replace("/".$Filter."/", $Replace, $_POST['ReplyPost'
 if($CaseInsensitive=="yes"&&$WholeWord!="yes") {
 $_POST['ReplyDesc'] = preg_replace("/".$Filter."/i", $Replace, $_POST['ReplyDesc']); 
 $_POST['ReplyPost'] = preg_replace("/".$Filter."/i", $Replace, $_POST['ReplyPost']); }
-++$katarzynas; } @mysql_free_result($katarzynart);
+++$katarzynas; } mysql_free_result($katarzynart);
 $lonewolfqy=query("SELECT * FROM `".$Settings['sqltable']."restrictedwords` WHERE `RestrictedTopicName`='yes' or `RestrictedUserName`='yes'", array(null));
 $lonewolfrt=exec_query($lonewolfqy);
 $lonewolfnm=mysql_num_rows($lonewolfrt);
@@ -1457,7 +1457,7 @@ $RMatches = preg_match("/".$RWord."/i", $_POST['TopicName']);
 if($RestrictedUserName=="yes") {
 $RGMatches = preg_match("/".$RWord."/i", $_POST['GuestName']);
 	if($RGMatches==true) { break 1; } } }
-++$lonewolfs; } @mysql_free_result($lonewolfrt);
+++$lonewolfs; } mysql_free_result($lonewolfrt);
 if ($_POST['ReplyDesc']==null) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
@@ -1509,7 +1509,7 @@ if ($_POST['ReplyDesc']==null) { $Error="Yes"; ?>
 	</span>&nbsp;</td>
 </tr>
 <?php } if ($Error=="Yes") {
-@redirect("refresh",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']),"3"); ?>
+redirect("refresh",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']),"3"); ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Click <a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">here</a> to goto index page.<br />&nbsp;
@@ -1525,7 +1525,7 @@ $User1ID=$_SESSION['UserID'];
 $User1Name=mysql_result($reresult,$rei,"Name");
 if($_SESSION['UserGroup']==$Settings['GuestGroup']) { $User1Name = $_POST['GuestName']; }
 ++$rei; }
-@mysql_free_result($reresult);
+mysql_free_result($reresult);
 $EditUserIP=$_SERVER['REMOTE_ADDR'];
 $_SESSION['LastPostTime'] = GMTimeStamp() + $GroupInfo['FloodControl'];
 if($_SESSION['UserID']!=0&&$_SESSION['UserID']!=-1) {
@@ -1536,7 +1536,7 @@ exec_query($queryupd);
 if($ShowEditTopic===true) {
 $queryupd = query("UPDATE `".$Settings['sqltable']."topics` SET `TopicName`='%s',`Description`='%s' WHERE `id`=%i", array($_POST['TopicName'],$_POST['ReplyDesc'],$TopicID));
 exec_query($queryupd); } } 
-@redirect(url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],FALSE).$Settings['qstr']."#post".$_GET['post'],"3");
+redirect(url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],FALSE).$Settings['qstr']."#post".$_GET['post'],"3");
 ?>
 <tr>
 	<td><span class="TableMessage"><br />
@@ -1590,7 +1590,7 @@ $numrose=mysql_num_rows($resultra);
 $QuoteDescription=mysql_result($resultra,0,"Description"); 
 $QuoteDescription = str_replace("Re: ","",$QuoteDescription);
 $QuoteDescription = "Re: ".$QuoteDescription;
-@mysql_free_result($resultra);
+mysql_free_result($resultra);
 $UFID = uuid(false,true,false,$Settings['use_hashtype'],null);
 $_SESSION['UserFormID'] = $UFID;
 ?>
@@ -1636,7 +1636,7 @@ if($SmileCRow<5&&$SmileCRow!=0) {
 $SmileCRowL = 5 - $SmileCRow;
 echo "<td colspan=\"".$SmileCRowL."\">&nbsp;</td></tr>"; }
 echo "</table>";
-@mysql_free_result($renee_result);
+mysql_free_result($renee_result);
 ?></div></td>
 <td class="TableColumn3" style="width: 85%;">
 <form style="display: inline;" method="post" id="MkReplyForm" action="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=makereply&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>">

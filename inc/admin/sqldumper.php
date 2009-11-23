@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sqldumper.php - Last Update: 11/22/2009 SVN 356 - Author: cooldude2k $
+    $FileInfo: sqldumper.php - Last Update: 11/23/2009 SVN 357 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="sqldumper.php"||$File3Name=="/sqldumper.php") {
@@ -20,8 +20,8 @@ if ($File3Name=="sqldumper.php"||$File3Name=="/sqldumper.php") {
 
 if($_SESSION['UserGroup']==$Settings['GuestGroup']||$GroupInfo['HasAdminCP']=="no") {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
-ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if(!isset($_GET['outtype'])) { $_GET['outtype'] = "UTF-8"; }
 header("Cache-Control: must-revalidate, post-check=0, pre-check=0"); 
 header("Cache-Control: private",false); 
@@ -36,7 +36,7 @@ $tresult = exec_query("SELECT * FROM `".$table."`");
 while ($trow = mysql_fetch_array($tresult, MYSQL_ASSOC)) {
 $trowout[$rene_j] = $trow;
 ++$rene_j; }
-@mysql_free_result($tresult);
+mysql_free_result($tresult);
 return $trowout; }
 $TablePreFix = $Settings['sqltable'];
 function add_prefix($tarray) {
@@ -45,11 +45,11 @@ return $TablePreFix.$tarray; }
 $TableChCk = array("categories", "catpermissions", "events", "forums", "groups", "members", "messenger", "permissions", "posts", "restrictedwords", "sessions", "smileys", "topics", "wordfilter");
 $TableChCk = array_map("add_prefix",$TableChCk);
 if(!isset($_GET['outtype'])||$_GET['outtype']=="UTF-8") {
-@header("Content-Type: text/plain; charset=UTF-8"); }
+header("Content-Type: text/plain; charset=UTF-8"); }
 if($_GET['outtype']=="latin1") {
-@header("Content-Type: text/plain; charset=ISO-8859-15"); }
+header("Content-Type: text/plain; charset=ISO-8859-15"); }
 if($_GET['outtype']=="latin15") {
-@header("Content-Type: text/plain; charset=ISO-8859-15"); }
+header("Content-Type: text/plain; charset=ISO-8859-15"); }
 $sql = "SHOW TABLES LIKE '".$Settings['sqltable']."%'";
 $result = exec_query($sql);
 if (!$result) {
@@ -99,8 +99,8 @@ $AutoIncrement = " AUTO_INCREMENT=".$tabstats["Auto_increment"]." "; }
 if (!$result2) {
     echo 'Could not run query: ' . mysql_error();
     exit; }
-@mysql_free_result($result2);
-@mysql_free_result($tabsta);
+mysql_free_result($result2);
+mysql_free_result($tabsta);
 ++$l; } $tableout = null;
 $num = count($TableNames); $renee_s = 0;
 echo "-- ".$OrgName." ".$SQLDumper."\n";

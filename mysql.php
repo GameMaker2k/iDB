@@ -11,26 +11,26 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: mysql.php - Last Update: 11/14/2009 SVN 347 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 11/23/2009 SVN 357 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
-//@ini_set("display_errors", true); 
-//@ini_set("display_startup_errors", true);
-@error_reporting(E_ALL ^ E_NOTICE);
+//ini_set("display_errors", true); 
+//ini_set("display_startup_errors", true);
+error_reporting(E_ALL ^ E_NOTICE);
 /* Get rid of session id in urls */
-//@ini_set("session.use_trans_sid", false);
-//@ini_set("session.use_cookies", true);
-//@ini_set("session.use_only_cookies", true);
-//@ini_set("url_rewriter.tags","");
-@set_time_limit(30); @ignore_user_abort(true);
+//ini_set("session.use_trans_sid", false);
+//ini_set("session.use_cookies", true);
+//ini_set("session.use_only_cookies", true);
+//ini_set("url_rewriter.tags","");
+set_time_limit(30); ignore_user_abort(true);
 /* Change session garbage collection settings */
-//@ini_set("session.gc_probability", 1);
-//@ini_set("session.gc_divisor", 100);
-//@ini_set("session.gc_maxlifetime", 1440);
+//ini_set("session.gc_probability", 1);
+//ini_set("session.gc_divisor", 100);
+//ini_set("session.gc_maxlifetime", 1440);
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mysql.php"||$File3Name=="/mysql.php") {
-	@header('Location: index.php');
+	header('Location: index.php');
 	exit(); }
 require('settings.php');
 $Settings['bid'] = base64_encode(urlencode($Settings['idburl']));
@@ -43,7 +43,7 @@ if($Settings['fixbasedir']=="off") {
 if($Settings['fixcookiedir']=="off") {
 	$Settings['fixcookiedir'] = null; }
 if($Settings['idburl']=="localhost") { 
-@header("Content-Type: text/plain; charset=UTF-8");
+header("Content-Type: text/plain; charset=UTF-8");
 echo "500 Error: URL is malformed. Try reinstalling iDB."; die(); }
 if($Settings['fixbasedir']=="on") {
 if($Settings['idburl']!=null&&$Settings['idburl']!="localhost") {
@@ -66,18 +66,18 @@ if($Settings['charset']!="ISO-8859-15"&&$Settings['charset']!="ISO-8859-1"&&
 	$Settings['charset']!="Shift_JIS"&&$Settings['charset']!="EUC-JP") {
 	$Settings['charset'] = "ISO-8859-15"; } }
 	$chkcharset = $Settings['charset'];
-@ini_set('default_charset', $Settings['charset']);
-//@session_save_path($SettDir['inc']."temp/");
+ini_set('default_charset', $Settings['charset']);
+//session_save_path($SettDir['inc']."temp/");
 if(!isset($Settings['sqldb'])) { 
-if(file_exists("install.php")) { @header('Location: install.php'); die(); } 
-if(!file_exists("install.php")) { @header("Content-Type: text/plain; charset=UTF-8");
+if(file_exists("install.php")) { header('Location: install.php'); die(); } 
+if(!file_exists("install.php")) { header("Content-Type: text/plain; charset=UTF-8");
 echo "403 Error: Sorry could not find install.php\nTry uploading files again and if that dose not work try download iDB again."; die(); } }
 if(!isset($Settings['sqlhost'])) { $Settings['sqlhost'] = "localhost"; }
-@ini_set("error_prepend_string","<span style='color: ff0000;'>");
-@ini_set("error_append_string","</span>");
+ini_set("error_prepend_string","<span style='color: ff0000;'>");
+ini_set("error_append_string","</span>");
 if($Settings['fixpathinfo']=="on") {
 	$_SERVER['PATH_INFO'] = $_SERVER['ORIG_PATH_INFO'];
-	@putenv("PATH_INFO=".$_SERVER['ORIG_PATH_INFO']); }
+	putenv("PATH_INFO=".$_SERVER['ORIG_PATH_INFO']); }
 // Check to see if variables are set
 if(!isset($SettDir['inc'])) { $SettDir['inc'] = "inc/"; }
 if(!isset($SettDir['misc'])) { $SettDir['misc'] = "inc/misc/"; }
@@ -103,7 +103,7 @@ if(!isset($_POST['License'])) { $_POST['License'] = null; }
 if(!isset($_SERVER['HTTPS'])) { $_SERVER['HTTPS'] = "off"; }
 require_once($SettDir['misc'].'utf8.php');
 require_once($SettDir['inc'].'filename.php');
-if($_GET['act']=="versioninfo") { @header("Content-Type: text/plain; charset=UTF-8"); ?>
+if($_GET['act']=="versioninfo") { header("Content-Type: text/plain; charset=UTF-8"); ?>
 <charset><?php echo $Settings['charset']; ?></charset> 
 <title><?php echo $Settings['board_name']; ?></title> 
 <?php echo "<name>iDB|".$VER2[1]."|".$VER1[0].".".$VER1[1].".".$VER1[2]."|".$VER2[2]."|".$SubVerN."</name>"; die(); }
@@ -142,7 +142,7 @@ $cookieDomain = $URLsTest['host'];
 if($Settings['enable_https']=="on") {
  if($URLsTest['scheme']=="https") { $cookieSecure = true; }
  if($URLsTest['scheme']!="https") { $cookieSecure = false; } } }
-@ini_set("default_charset",$Settings['charset']);
+ini_set("default_charset",$Settings['charset']);
 $File1Name = dirname($_SERVER['SCRIPT_NAME'])."/";
 $File2Name = $_SERVER['SCRIPT_NAME'];
 $File3Name=str_replace($File1Name, null, $File2Name);
@@ -170,18 +170,18 @@ if($Settings['clean_ob']=="on") {
    and close and get the contents in an array */
 $numob = count(ob_list_handlers()); $iob = 0; 
 while ($iob < $numob) { 
-	$old_ob_var[$iob] = @ob_get_clean(); 
-	++$iob; } } @ob_start();
+	$old_ob_var[$iob] = ob_get_clean(); 
+	++$iob; } } ob_start();
 if($Settings['use_gzip']=="on") { 
 if($GZipEncode['Type']!="gzip") { if($GZipEncode['Type']!="deflate") { $GZipEncode['Type'] = "gzip"; } }
 	if($GZipEncode['Type']=="gzip") {
-	@header("Content-Encoding: gzip"); }
+	header("Content-Encoding: gzip"); }
 	if($GZipEncode['Type']=="deflate") {
-	@header("Content-Encoding: deflate"); } }
+	header("Content-Encoding: deflate"); } }
 /* if(eregi("msie",$browser) && !eregi("opera",$browser)){
-@header('P3P: CP="NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM"'); } */
+header('P3P: CP="NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM"'); } */
 // Some http stuff
-$SQLStat = @ConnectMysql($Settings['sqlhost'],$Settings['sqluser'],$Settings['sqlpass'],$Settings['sqldb']);
+$SQLStat = ConnectMysql($Settings['sqlhost'],$Settings['sqluser'],$Settings['sqlpass'],$Settings['sqldb']);
 $SQLCollate = "latin1_general_ci";
 $SQLCharset = "latin1"; 
 if($Settings['charset']=="ISO-8859-1") {
@@ -193,12 +193,12 @@ if($Settings['charset']=="ISO-8859-15") {
 if($Settings['charset']=="UTF-8") {
 	$SQLCollate = "utf8_unicode_ci";
 	$SQLCharset = "utf8"; }
-@mysql_set_charset($SQLCharset);
+mysql_set_charset($SQLCharset);
 if($SQLStat===false) {
-@header("Content-Type: text/plain; charset=".$Settings['charset']); @mysql_free_result($peresult);
+header("Content-Type: text/plain; charset=".$Settings['charset']); mysql_free_result($peresult);
 ob_clean(); echo "Sorry could not connect to mysql database.\nContact the board admin about error. Error log below.";
 echo "\n".mysql_errno().": ".mysql_error();
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $sqltable = $Settings['sqltable'];
 function sqlsession_open( $save_path, $session_name ) {
 global $sess_save_path;
@@ -235,45 +235,45 @@ $time = GMTimeStamp() - $maxlifetime;
 $sqlg = query('DELETE FROM `'.$sqltable.'sessions` WHERE `expires` < %i', array($time));
 exec_query($sqlg);
 return true; }
-@session_set_save_handler("sqlsession_open", "sqlsession_close", "sqlsession_read", "sqlsession_write", "sqlsession_destroy", "sqlsession_gc");
+session_set_save_handler("sqlsession_open", "sqlsession_close", "sqlsession_read", "sqlsession_write", "sqlsession_destroy", "sqlsession_gc");
 if($cookieDomain==null) {
-@session_set_cookie_params(0, $cbasedir); }
+session_set_cookie_params(0, $cbasedir); }
 if($cookieDomain!=null) {
 if($cookieSecure===true) {
-@session_set_cookie_params(0, $cbasedir, $cookieDomain, 1); }
+session_set_cookie_params(0, $cbasedir, $cookieDomain, 1); }
 if($cookieSecure===false) {
-@session_set_cookie_params(0, $cbasedir, $cookieDomain); } }
-@session_cache_limiter("private, no-cache, must-revalidate");
-@header("Cache-Control: private, no-cache, must-revalidate");
-@header("Pragma: private, no-cache, must-revalidate");
-@header("Date: ".gmdate("D, d M Y H:i:s")." GMT");
-@header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
-@header("Expires: ".gmdate("D, d M Y H:i:s")." GMT");
-@session_name($Settings['sqltable']."sess");
-@session_start();
-//@header("Set-Cookie: PHPSESSID=" . session_id() . "; path=".$cbasedir);
-@output_reset_rewrite_vars();
+session_set_cookie_params(0, $cbasedir, $cookieDomain); } }
+session_cache_limiter("private, no-cache, must-revalidate");
+header("Cache-Control: private, no-cache, must-revalidate");
+header("Pragma: private, no-cache, must-revalidate");
+header("Date: ".gmdate("D, d M Y H:i:s")." GMT");
+header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
+header("Expires: ".gmdate("D, d M Y H:i:s")." GMT");
+session_name($Settings['sqltable']."sess");
+session_start();
+//header("Set-Cookie: PHPSESSID=" . session_id() . "; path=".$cbasedir);
+output_reset_rewrite_vars();
 if($_GET['act']=="bsdl"||$_GET['act']=="BSDL"||$_GET['act']=="license"||
 	$_GET['act']=="LICENSE"||$_GET['act']=="License") { $_GET['act']="bsd"; }
 if($_GET['act']=="bsd") {
-@header("Content-Type: text/plain; charset=".$Settings['charset']);
+header("Content-Type: text/plain; charset=".$Settings['charset']);
 require("LICENSE"); gzip_page($Settings['use_gzip'],$GZipEncode['Type']); die(); }
 if($_GET['act']=="README"||$_GET['act']=="ReadME") { $_GET['act']="readme"; }
 if($_GET['act']=="readme"||$_GET['act']=="ReadMe") {
-@header("Content-Type: text/plain; charset=".$Settings['charset']);
+header("Content-Type: text/plain; charset=".$Settings['charset']);
 require("README"); gzip_page($Settings['use_gzip'],$GZipEncode['Type']); die(); }
 if($_GET['act']=="js"||$_GET['act']=="javascript") {
-@header("Content-Script-Type: text/javascript");
+header("Content-Script-Type: text/javascript");
 if(stristr($_SERVER["HTTP_ACCEPT"],"application/x-javascript") ) {
-@header("Content-Type: application/x-javascript; charset=".$Settings['charset']); } else {
+header("Content-Type: application/x-javascript; charset=".$Settings['charset']); } else {
 if(stristr($_SERVER["HTTP_ACCEPT"],"application/javascript") ) {
-@header("Content-Type: application/javascript; charset=".$Settings['charset']); } else {
-@header("Content-Type: text/javascript; charset=".$Settings['charset']); } }
+header("Content-Type: application/javascript; charset=".$Settings['charset']); } else {
+header("Content-Type: text/javascript; charset=".$Settings['charset']); } }
 require($SettDir['inc'].'javascript.php');
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); die(); }
 if($Settings['use_captcha']=="on") {
 if($_GET['act']=="MkCaptcha"||$_GET['act']=="Captcha") {
-	if($Settings['captcha_clean']=="on") { @ob_clean(); }
+	if($Settings['captcha_clean']=="on") { ob_clean(); }
 	require($SettDir['inc']."captcha.php");
 	$aFonts = array('inc/fonts/VeraBd.ttf', 'inc/fonts/VeraBI.ttf', 'inc/fonts/VeraIt.ttf', 'inc/fonts/Vera.ttf');
 	$oPhpCaptcha = new PhpCaptcha($aFonts, 200, 60);
@@ -283,18 +283,18 @@ if($_GET['act']=="MkCaptcha"||$_GET['act']=="Captcha") {
 	$RandNum=strtoupper($RandNum);
 	$oPhpCaptcha->SetOwnerText("Fake Code: ".$RandNum);
 	$oPhpCaptcha->UseColour(true);
-	$oPhpCaptcha->Create(); @session_write_close(); die(); } }
+	$oPhpCaptcha->Create(); session_write_close(); die(); } }
 if(!isset($_SESSION['CheckCookie'])) {
 if(isset($_COOKIE['SessPass'])&&isset($_COOKIE['MemberName'])) {
 require($SettDir['inc'].'prelogin.php'); } }
 require($SettDir['inc'].'groupsetup.php');
 if($Settings['board_offline']=="on"&&$GroupInfo['CanViewOffLine']!="yes") {
-@header("Content-Type: text/plain; charset=".$Settings['charset']); @mysql_free_result($peresult);
+header("Content-Type: text/plain; charset=".$Settings['charset']); mysql_free_result($peresult);
 ob_clean(); if(!isset($Settings['offline_text'])) {
 echo "Sorry the board is off line.\nIf you are a admin you can login by the admin cp."; }
 if(isset($Settings['offline_text'])) { echo $Settings['offline_text']; }
 //echo "\n".mysql_errno().": ".mysql_error();
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $dayconv = array('second' => 1, 'minute' => 60, 'hour' => 3600, 'day' => 86400, 'week' => 604800, 'month' => 2630880, 'year' => 31570560, 'decade' => 15705600);
 //Time Zone Set
 if(!isset($_SESSION['UserTimeZone'])) { 
@@ -394,5 +394,5 @@ if($_SESSION['DBName']==null) {
 	$_SESSION['DBName'] = $Settings['sqldb']; }
 if($_SESSION['DBName']!=null) {
 	if($_SESSION['DBName']!=$Settings['sqldb']) {
-@redirect("location",$basedir.url_maker($exfile['member'],$Settings['file_ext'],"act=logout",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],false)); } }
+redirect("location",$basedir.url_maker($exfile['member'],$Settings['file_ext'],"act=logout",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],false)); } }
 ?>

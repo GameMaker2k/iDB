@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: stats.php - Last Update: 11/19/2009 SVN 354 - Author: cooldude2k $
+    $FileInfo: stats.php - Last Update: 11/23/2009 SVN 357 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="stats.php"||$File3Name=="/stats.php") {
@@ -53,11 +53,11 @@ if($_GET['act']=="view"||$_GET['act']=="stats") {
 $ntquery = query("SELECT COUNT(*) FROM `".$Settings['sqltable']."topics`", array(null));
 $ntresult = exec_query($ntquery);
 $numtopics = mysql_result($ntresult,0);
-@mysql_free_result($ntresult);
+mysql_free_result($ntresult);
 $npquery = query("SELECT COUNT(*) FROM `".$Settings['sqltable']."posts`", array(null));
 $npresult = exec_query($npquery);
 $numposts = mysql_result($npresult,0);
-@mysql_free_result($npresult);
+mysql_free_result($npresult);
 if($Settings['AdminValidate']=="on") {
 $nmquery = query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."members` WHERE `id`>=%i AND `HiddenMember`='no' AND `Validated`='yes' AND `GroupID`<>%i ORDER BY `Joined` DESC LIMIT 1", array(1,$Settings['ValidateGroup'])); }
 if($Settings['AdminValidate']!="on") {
@@ -67,7 +67,7 @@ $nmresult = exec_query($nmquery);
 $rnmresult = exec_query($rnmquery);
 //$nummembers = mysql_num_rows($nmresult);
 $nummembers = mysql_result($rnmresult,0);
-@mysql_free_result($rnmresult);
+mysql_free_result($rnmresult);
 $NewestMem = array(null);
 $NewestMem['ID']=mysql_result($nmresult,0,"id");
 $NewestMem['Name']=mysql_result($nmresult,0,"Name");

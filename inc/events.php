@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: events.php - Last Update: 11/17/2009 SVN 353 - Author: cooldude2k $
+    $FileInfo: events.php - Last Update: 11/23/2009 SVN 357 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="events.php"||$File3Name=="/events.php") {
@@ -23,9 +23,9 @@ $query = query("SELECT * FROM `".$Settings['sqltable']."events` WHERE `id`=%i LI
 $result=exec_query($query);
 $num=mysql_num_rows($result);
 $is=0;
-if($num==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); @mysql_free_result($result);
-ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
+if($num==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); mysql_free_result($result);
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 ?>
 <div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">Board index</a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['event'],$Settings['file_ext'],"act=view&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['event'],$exqstr['event']); ?>">Viewing Event</a></div>
 <div class="DivNavLinks">&nbsp;</div>
@@ -70,7 +70,7 @@ $User1Hidden=mysql_result($reresult,$rei,"HiddenMember");
 $User1Group=mysql_result($gresult,0,"Name");
 $GroupNamePrefix=mysql_result($gresult,0,"NamePrefix");
 $GroupNameSuffix=mysql_result($gresult,0,"NameSuffix");
-@mysql_free_result($gresult);
+mysql_free_result($gresult);
 $User1Signature=mysql_result($reresult,$rei,"Signature");
 $User1Signature = preg_replace("/\<br\>/", "<br />", nl2br($User1Signature));
 $User1Avatar=mysql_result($reresult,$rei,"Avatar");
@@ -84,8 +84,8 @@ $AvatarSize1W=$AvatarSize1[0]; $AvatarSize1H=$AvatarSize1[1];
 $User1Website=mysql_result($reresult,$rei,"Website");
 $User1PostCount=mysql_result($reresult,$rei,"PostCount");
 $User1IP=mysql_result($reresult,$rei,"IP");
-@mysql_free_result($reresult);
-++$is; } @mysql_free_result($result);
+mysql_free_result($reresult);
+++$is; } mysql_free_result($result);
 if($User1Name=="Guest") { $User1Name=$EventGuest;
 if($User1Name==null) { $User1Name="Guest"; } }
 if(isset($GroupNamePrefix)&&$GroupNamePrefix!=null) {
@@ -172,8 +172,8 @@ echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr
 </table></div>
 <?php } if($_GET['act']=="create") { 
 if($GroupInfo['CanAddEvents']=="no") { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
-ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $UFID = uuid(false,true,false,$Settings['use_hashtype'],null);
 $_SESSION['UserFormID'] = $UFID;
 ?>
@@ -221,7 +221,7 @@ if($SmileCRow<5&&$SmileCRow!=0) {
 $SmileCRowL = 5 - $SmileCRow;
 echo "<td colspan=\"".$SmileCRowL."\">&nbsp;</td></tr>"; }
 echo "</table>";
-@mysql_free_result($renee_result);
+mysql_free_result($renee_result);
 ?></div></td>
 <td class="TableColumn3" style="width: 85%;">
 <form style="display: inline;" method="post" id="MkEventForm" action="<?php echo url_maker($exfile['event'],$Settings['file_ext'],"act=makeevent",$Settings['qstr'],$Settings['qsep'],$prexqstr['event'],$exqstr['event']); ?>">
@@ -267,8 +267,8 @@ echo "</table>";
 </table></div>
 <?php }  if($_GET['act']=="makeevent"&&$_POST['act']=="makeevents") {
 if($GroupInfo['CanAddEvents']=="no") { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
-ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $MyUserID = $_SESSION['UserID']; if($MyUserID=="0"||$MyUserID==null) { $MyUserID = -1; }
 $_SESSION['ViewingPage'] = url_maker(null,"no+ext","act=view","&","=",$prexqstr['index'],$exqstr['index']);
 if($Settings['file_ext']!="no+ext"&&$Settings['file_ext']!="no ext") {
@@ -434,17 +434,17 @@ if (PhpCaptcha::Validate($_POST['signcode'])) {
 <?php } }
 $_POST['EventName'] = stripcslashes(htmlspecialchars($_POST['EventName'], ENT_QUOTES, $Settings['charset']));
 //$_POST['EventName'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['EventName']);
-$_POST['EventName'] = @remove_spaces($_POST['EventName']);
+$_POST['EventName'] = remove_spaces($_POST['EventName']);
 $_POST['GuestName'] = stripcslashes(htmlspecialchars($_POST['GuestName'], ENT_QUOTES, $Settings['charset']));
 //$_POST['GuestName'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['GuestName']);
-$_POST['GuestName'] = @remove_spaces($_POST['GuestName']);
+$_POST['GuestName'] = remove_spaces($_POST['GuestName']);
 $_POST['EventText'] = stripcslashes(htmlspecialchars($_POST['EventText'], ENT_QUOTES, $Settings['charset']));
 //$_POST['EventText'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['EventText']);
 $_POST['EventText'] = remove_bad_entities($_POST['EventText']);
-//$_POST['EventText'] = @remove_spaces($_POST['EventText']);
+//$_POST['EventText'] = remove_spaces($_POST['EventText']);
 if($_SESSION['UserGroup']==$Settings['GuestGroup']) {
 if(isset($_POST['GuestName'])&&$_POST['GuestName']!=null) {
-@setcookie("GuestName", $_POST['GuestName'], time() + (7 * 86400), $cbasedir);
+setcookie("GuestName", $_POST['GuestName'], time() + (7 * 86400), $cbasedir);
 $_SESSION['GuestName']=$_POST['GuestName']; } }
 /*    <_<  iWordFilter  >_>      
    by Kazuki Przyborowski - Cool Dude 2k */
@@ -472,7 +472,7 @@ if($CaseInsensitive!="yes"&&$WholeWord!="yes") {
 $_POST['EventText'] = preg_replace("/".$Filter."/", $Replace, $_POST['EventText']); }
 if($CaseInsensitive=="yes"&&$WholeWord!="yes") {
 $_POST['EventText'] = preg_replace("/".$Filter."/i", $Replace, $_POST['EventText']); }
-++$katarzynas; } @mysql_free_result($katarzynart);
+++$katarzynas; } mysql_free_result($katarzynart);
 $lonewolfqy=query("SELECT * FROM `".$Settings['sqltable']."restrictedwords` WHERE `RestrictedEventName`='yes' or `RestrictedUserName`='yes'", array(null));
 $lonewolfrt=exec_query($lonewolfqy);
 $lonewolfnm=mysql_num_rows($lonewolfrt);
@@ -524,7 +524,7 @@ $RMatches = preg_match("/".$RWord."/i", $_POST['EventName']);
 if($RestrictedUserName=="yes") {
 $RGMatches = preg_match("/".$RWord."/i", $_POST['GuestName']);
 	if($RGMatches==true) { break 1; } } }
-++$lonewolfs; } @mysql_free_result($lonewolfrt);
+++$lonewolfs; } mysql_free_result($lonewolfrt);
 if ($_POST['EventName']==null) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
@@ -612,7 +612,7 @@ if ($_POST['EventName']==null) { $Error="Yes"; ?>
 	</span>&nbsp;</td>
 </tr>
 <?php } if ($Error=="Yes") {
-@redirect("refresh",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false),"4"); ?>
+redirect("refresh",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false),"4"); ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Click <a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">here</a> to goto index page.<br />&nbsp;
@@ -634,7 +634,7 @@ if($_SESSION['UserGroup']!=$Settings['GuestGroup']) { $User1Name = $_SESSION['Me
 $query = query("INSERT INTO ".$Settings['sqltable']."events (`UserID`, `GuestName`, `EventName`, `EventText`, `TimeStamp`, `TimeStampEnd`, `EventMonth`, `EventMonthEnd`, `EventDay`, `EventDayEnd`, `EventYear`, `EventYearEnd`) VALUES\n".
 "(%i, '%s', '%s', '%s', %i, %i, %i, %i, %i, %i, %i, %i)", array($User1ID,$User1Name,$_POST['EventName'],$_POST['EventText'],$TimeSIn,$TimeSOut,$EventMonth,$EventMonthEnd,$EventDay,$EventDayEnd,$EventYear,$EventYearEnd));
 exec_query($query);
-@redirect("refresh",$basedir.url_maker($exfile['event'],$Settings['file_ext'],"act=event&id=".$eventid,$Settings['qstr'],$Settings['qsep'],$prexqstr['event'],$exqstr['event'],FALSE),"3");
+redirect("refresh",$basedir.url_maker($exfile['event'],$Settings['file_ext'],"act=event&id=".$eventid,$Settings['qstr'],$Settings['qsep'],$prexqstr['event'],$exqstr['event'],FALSE),"3");
 ?><tr>
 	<td><span class="TableMessage"><br />
 	Event <?php echo $_POST['EventName']; ?> was started.<br />

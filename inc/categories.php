@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: categories.php - Last Update: 11/15/2009 SVN 349 - Author: cooldude2k $
+    $FileInfo: categories.php - Last Update: 11/23/2009 SVN 357 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="categories.php"||$File3Name=="/categories.php") {
@@ -21,9 +21,9 @@ if(!is_numeric($_GET['id'])) { $_GET['id'] = null; }
 $prequery = query("SELECT * FROM `".$Settings['sqltable']."categories` WHERE `id`=%i LIMIT 1", array($_GET['id']));
 $preresult=exec_query($prequery);
 $prenum=mysql_num_rows($preresult);
-if($prenum==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); @mysql_free_result($preresult);
-ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
+if($prenum==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); mysql_free_result($preresult);
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($prenum>=1) {
 $CategoryID=mysql_result($preresult,0,"id");
 $CategoryName=mysql_result($preresult,0,"Name");
@@ -47,8 +47,8 @@ if(!isset($CatPermissionInfo['CanViewCategory'][$CategoryID])) {
 if($CatPermissionInfo['CanViewCategory'][$CategoryID]=="no"||
 	$CatPermissionInfo['CanViewCategory'][$CategoryID]!="yes") {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
-ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($CatPermissionInfo['CanViewCategory'][$CategoryID]=="yes") {
 if(!isset($CatCheck)) { $CatCheck = null; } 
 if($CatCheck!="skip") {
@@ -70,15 +70,15 @@ $iscCategoryShow=mysql_result($iscresult,0,"ShowCategory");
 $iscCategoryType=mysql_result($iscresult,0,"CategoryType");
 $iscCategoryType = strtolower($iscCategoryType); }
 if($iscnum<1) { $InSubCategory = "0"; } 
-@mysql_free_result($iscresult); }
+mysql_free_result($iscresult); }
 ?>
 <div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">Board index</a><?php if($InSubCategory!="0") { echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile[$iscCategoryType],$Settings['file_ext'],"act=view&id=".$iscCategoryID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr[$iscCategoryType],$exqstr[$iscCategoryType]); ?>"><?php echo $iscCategoryName; ?></a><?php } echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile[$CategoryType],$Settings['file_ext'],"act=view&id=".$CategoryID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$CategoryType],$exqstr[$CategoryType]); ?>"><?php echo $CategoryName; ?></a></div>
 <div class="DivNavLinks">&nbsp;</div>
 <?php
 if($CategoryType=="subcategory") {
 redirect("location",$basedir.url_maker($exfile['subcategory'],$Settings['file_ext'],"act=".$_GET['act']."&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['subcategory'],$exqstr['subcategory'],FALSE));
-ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); } }
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); } }
 $query = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `ShowForum`='yes' AND `CategoryID`=%i AND `InSubForum`=0 ORDER BY `OrderID` ASC, `id` ASC", array($CategoryID));
 $result=exec_query($query);
 $num=mysql_num_rows($result);
@@ -144,7 +144,7 @@ if($apcl>1) {
 $sflist = $sflist.", ".$sfurl; }
 $gltf[$apcl] = $SubsForumID; ++$apcl; }
 ++$apci; }
-@mysql_free_result($apcresult); } }
+mysql_free_result($apcresult); } }
 if(isset($PermissionInfo['CanViewForum'][$ForumID])&&
 	$PermissionInfo['CanViewForum'][$ForumID]=="yes") {
 $LastTopic = "&nbsp;<br />&nbsp;<br />&nbsp;";
@@ -161,7 +161,7 @@ $NewUpdateTime=mysql_result($gltforesult,0,"LastUpdate");
 if($NewUpdateTime>$OldUpdateTime) { 
 	$UseThisFonum = $gltf[$glti]; 
 $OldUpdateTime = $NewUpdateTime; } }
-@mysql_free_result($gltforesult);
+mysql_free_result($gltforesult);
 ++$glti; } }
 if ($ForumType!="subforum"&&$ForumType!="redirect") { $UseThisFonum = $gltf[0]; }
 if ($ForumType!="redirect") {
@@ -190,7 +190,7 @@ $UsersID=mysql_result($glrresult,0,"UserID");
 $GuestsName=mysql_result($glrresult,0,"GuestName");
 $TimeStamp=mysql_result($glrresult,0,"TimeStamp");
 $TimeStamp=GMTimeChange("F j Y, g:i a",$TimeStamp,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-@mysql_free_result($glrresult); }
+mysql_free_result($glrresult); }
 $PreUsersName = GetUserName($UsersID,$Settings['sqltable']);
 if($PreUsersName['Name']===null) { $UsersID = -1;
 $PreUsersName = GetUserName($UsersID,$Settings['sqltable']); }
@@ -212,7 +212,7 @@ if(($UsersID<-1&&$UsersHidden=="yes")||$UsersID==0||($UsersID>0&&$UsersHidden=="
 	$UserPre = "Hidden:"; }
 $LastTopic = $TimeStamp."<br />\nTopic: <a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']).$qstrhtml."&#35;reply".$NumRPosts."\" title=\"".$oldtopicname."\">".$TopicName."</a><br />\n".$UserPre." <span title=\"".$oldusername."\">".$UsersName."</span>"; } }
 if($LastTopic==null) { $LastTopic = "&nbsp;<br />&nbsp;<br />&nbsp;"; } }
-@mysql_free_result($gltresult);
+mysql_free_result($gltresult);
 if ($ForumType=="redirect") { $LastTopic="&nbsp;<br />Redirects: ".$NumRedirects."<br />&nbsp;"; }
 $PreForum = $ThemeSet['ForumIcon'];
 if ($ForumType=="forum") { $PreForum=$ThemeSet['ForumIcon']; }
@@ -232,7 +232,7 @@ $ExStr = ""; if ($ForumType!="redirect"&&
 <td class="TableColumn3" style="text-align: center;"><?php echo $NumPosts; ?></td>
 <td class="TableColumn3"><?php echo $LastTopic; ?></td>
 </tr>
-<?php } ++$i; } @mysql_free_result($result);
+<?php } ++$i; } mysql_free_result($result);
 if($num>=1) { ?>
 <tr id="CatEnd<?php echo $CategoryID; ?>" class="TableRow4">
 <td class="TableColumn4" colspan="5">&nbsp;</td>
@@ -240,4 +240,4 @@ if($num>=1) { ?>
 </table></div>
 <div class="DivCategories">&nbsp;</div>
 <?php } } }
-@mysql_free_result($preresult); ?>
+mysql_free_result($preresult); ?>

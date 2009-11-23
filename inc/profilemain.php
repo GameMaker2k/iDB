@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: profilemain.php - Last Update: 11/14/2009 SVN 347 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 11/23/2009 SVN 357 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
@@ -21,8 +21,8 @@ if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
 // Check if we can edit the profile
 if($_SESSION['UserGroup']==$Settings['GuestGroup']||$GroupInfo['CanEditProfile']=="no") {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
-ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if(!isset($_POST['update'])) { $_POST['update'] = null; }
 $_SESSION['ViewingPage'] = url_maker(null,"no+ext","act=view","&","=",$prexqstr['index'],$exqstr['index']);
 if($Settings['file_ext']!="no+ext"&&$Settings['file_ext']!="no ext") {
@@ -85,7 +85,7 @@ $_SESSION['ViewingTitle'] = "UserCP";
 <?php if($_POST['update']=="now"&&$_GET['act']!=null) {
 $updateact = url_maker($exfile['profile'],$Settings['file_ext'],"act=".$_GET['act'],$Settings['qstr'],$Settings['qsep'],$prexqstr['profile'],$exqstr['profile']);
 $profiletitle = " ".$ThemeSet['TitleDivider']." Updating Settings";
-@redirect("refresh",$basedir.url_maker($exfile['profile'],$Settings['file_ext'],"act=".$_GET['act'],$Settings['qstr'],$Settings['qsep'],$prexqstr['profile'],$exqstr['profile'],FALSE),"3");
+redirect("refresh",$basedir.url_maker($exfile['profile'],$Settings['file_ext'],"act=".$_GET['act'],$Settings['qstr'],$Settings['qsep'],$prexqstr['profile'],$exqstr['profile'],FALSE),"3");
 $noteact = url_maker($exfile['profile'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['profile'],$exqstr['profile']);
 $profiletitle = " ".$ThemeSet['TitleDivider']." NotePad";
 ?>
@@ -153,14 +153,14 @@ $notepadact = $noteact; $profiletitle = " ".$ThemeSet['TitleDivider']." NotePad"
 </tr>
 </table>
 </div>
-<?php @mysql_free_result($result); }
+<?php mysql_free_result($result); }
 if($_POST['update']=="now") {
 if($_POST['act']=="view"&&
 	$_SESSION['UserGroup']!=$Settings['GuestGroup']) {
 	$_POST['NotePad'] = htmlspecialchars($_POST['NotePad'], ENT_QUOTES, $Settings['charset']);
 	$_POST['NotePad'] = remove_bad_entities($_POST['NotePad']);
 	//$_POST['Signature'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['Signature']);
-	//$_POST['Signature'] = @remove_spaces($_POST['Signature']);
+	//$_POST['Signature'] = remove_spaces($_POST['Signature']);
 	//$_POST['Signature'] = remove_bad_entities($_POST['Signature']);
 	/*    <_<  iWordFilter  >_>      
     by Kazuki Przyborowski - Cool Dude 2k */
@@ -188,7 +188,7 @@ if($_POST['act']=="view"&&
 	$_POST['NotePad'] = preg_replace("/".$Filter."/", $Replace, $_POST['NotePad']); }
 	if($CaseInsensitive=="yes"&&$WholeWord!="yes") {
 	$_POST['NotePad'] = preg_replace("/".$Filter."/i", $Replace, $_POST['NotePad']); }
-	++$katarzynas; } @mysql_free_result($katarzynart);
+	++$katarzynas; } mysql_free_result($katarzynart);
 	$NewDay=GMTimeStamp();
 	$NewIP=$_SERVER['REMOTE_ADDR'];
 	$querynewskin = query("UPDATE `".$Settings['sqltable']."members` SET `Notes`='%s',`LastActive`=%i,`IP`='%s' WHERE `id`=%i", array($_POST['NotePad'],$NewDay,$NewIP,$_SESSION['UserID']));
@@ -236,13 +236,13 @@ $profiletitle = " ".$ThemeSet['TitleDivider']." Signature Editor";
 </tr>
 </table>
 </div>
-<?php @mysql_free_result($result); }
+<?php mysql_free_result($result); }
 if($_POST['update']=="now") {
 if($_POST['act']=="signature"&&
 	$_SESSION['UserGroup']!=$Settings['GuestGroup']) {
 	$_POST['Signature'] = stripcslashes(htmlspecialchars($_POST['Signature'], ENT_QUOTES));
 	//$_POST['Signature'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['Signature']);
-	//$_POST['Signature'] = @remove_spaces($_POST['Signature']);
+	//$_POST['Signature'] = remove_spaces($_POST['Signature']);
 	$_POST['Signature'] = remove_bad_entities($_POST['Signature']);
 	/*    <_<  iWordFilter  >_>      
     by Kazuki Przyborowski - Cool Dude 2k */
@@ -270,7 +270,7 @@ if($_POST['act']=="signature"&&
 	$_POST['Signature'] = preg_replace("/".$Filter."/", $Replace, $_POST['Signature']); }
 	if($CaseInsensitive=="yes"&&$WholeWord!="yes") {
 	$_POST['Signature'] = preg_replace("/".$Filter."/i", $Replace, $_POST['Signature']); }
-	++$katarzynas; } @mysql_free_result($katarzynart);
+	++$katarzynas; } mysql_free_result($katarzynart);
 	$NewDay=GMTimeStamp();
 	$NewIP=$_SERVER['REMOTE_ADDR'];
 	$querynewskin = query("UPDATE `".$Settings['sqltable']."members` SET `Signature`='%s',`LastActive`=%i,`IP`='%s' WHERE `id`=%i", array($_POST['Signature'],$NewDay,$NewIP,$_SESSION['UserID']));
@@ -353,7 +353,7 @@ $AvatarSize1W=$AvatarSize1[0]; $AvatarSize1H=$AvatarSize1[1];
 </tr>
 </table>
 </div>
-<?php @mysql_free_result($result); }
+<?php mysql_free_result($result); }
 if($_POST['update']=="now") {
 if($_POST['Avatar']!=null&&$_POST['AvatarSizeW']!=null&&$_POST['AvatarSizeH']!=null&&
 	$_SESSION['UserGroup']!=$Settings['GuestGroup']) {
@@ -365,7 +365,7 @@ if($_POST['Avatar']!=null&&$_POST['AvatarSizeW']!=null&&$_POST['AvatarSizeH']!=n
 	$_POST['Avatar'] = htmlentities($_POST['Avatar'], ENT_QUOTES, $Settings['charset']);
 	$NewDay=GMTimeStamp();
 	$NewIP=$_SERVER['REMOTE_ADDR'];
-	$_POST['Avatar'] = @remove_spaces($_POST['Avatar']);
+	$_POST['Avatar'] = remove_spaces($_POST['Avatar']);
 	$querynewskin = query("UPDATE `".$Settings['sqltable']."members` SET `Avatar`='%s',`AvatarSize`='%s',`LastActive`=%i,`IP`='%s' WHERE `id`=%i", array($_POST['Avatar'],$fullavatarsize,$NewDay,$NewIP,$_SESSION['UserID']));
 	exec_query($querynewskin); } } }
 if($_GET['act']=="settings") {
@@ -513,7 +513,7 @@ if ($handle = opendir($skindir)) { $dirnum = null;
 </tr>
 </table>
 </div>
-<?php @mysql_free_result($result); }
+<?php mysql_free_result($result); }
 if($_POST['update']=="now") {
 if($_POST['act']=="settings"&&
 	$_SESSION['UserGroup']!=$Settings['GuestGroup']) {
@@ -696,18 +696,18 @@ echo "<option value=\"".$showmin."\">0:".$showmin." minutes</option>\n";
 </tr>
 </table>
 </div>
-<?php @mysql_free_result($result); }
+<?php mysql_free_result($result); }
 if($_POST['update']=="now") {
 if($_POST['act']=="profile"&&
 	$_SESSION['UserGroup']!=$Settings['GuestGroup']) {
 	$_POST['Interests'] = htmlspecialchars($_POST['Interests'], ENT_QUOTES, $Settings['charset']);
-	$_POST['Interests'] = @remove_spaces($_POST['Interests']);
+	$_POST['Interests'] = remove_spaces($_POST['Interests']);
 	$_POST['Title'] = htmlspecialchars($_POST['Title'], ENT_QUOTES, $Settings['charset']);
-	$_POST['Title'] = @remove_spaces($_POST['Title']);
+	$_POST['Title'] = remove_spaces($_POST['Title']);
 	$_POST['Website'] = htmlentities($_POST['Website'], ENT_QUOTES, $Settings['charset']);
-	$_POST['Website'] = @remove_spaces($_POST['Website']);
+	$_POST['Website'] = remove_spaces($_POST['Website']);
 	//$_POST['Signature'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['Signature']);
-	//$_POST['Signature'] = @remove_spaces($_POST['Signature']);
+	//$_POST['Signature'] = remove_spaces($_POST['Signature']);
 	//$_POST['Signature'] = remove_bad_entities($_POST['Signature']);
 	/*    <_<  iWordFilter  >_>      
     by Kazuki Przyborowski - Cool Dude 2k */
@@ -739,7 +739,7 @@ if($_POST['act']=="profile"&&
 	if($CaseInsensitive=="yes"&&$WholeWord!="yes") {
 	$_POST['Interests'] = preg_replace("/".$Filter."/i", $Replace, $_POST['Interests']); 
 	$_POST['Title'] = preg_replace("/".$Filter."/i", $Replace, $_POST['Title']); }
-	++$katarzynas; } @mysql_free_result($katarzynart);
+	++$katarzynas; } mysql_free_result($katarzynart);
 	if(!is_numeric($_POST['RepliesPerPage'])) { $_POST['RepliesPerPage'] = "10"; }
 	if(!is_numeric($_POST['TopicsPerPage'])) { $_POST['TopicsPerPage'] = "10"; }
 	if(!is_numeric($_POST['MessagesPerPage'])) { $_POST['MessagesPerPage'] = "10"; }
@@ -842,7 +842,7 @@ $profiletitle = " ".$ThemeSet['TitleDivider']." User Info Editer";
 </tr>
 </table>
 </div>
-<?php @mysql_free_result($result); }
+<?php mysql_free_result($result); }
 if($_POST['update']=="now") {
 if($_POST['act']=="userinfo"&&
 	$_SESSION['UserGroup']!=$Settings['GuestGroup']) {
@@ -877,13 +877,13 @@ if($YourPassword!=$OldPassword) { $Error="Yes"; ?>
 	$NewIP=$_SERVER['REMOTE_ADDR'];
 	if ($Error!="Yes") { $_SESSION['UserPass']=$NewPassword;
 	if($cookieDomain==null) {
-	@setcookie("SessPass", $NewPassword, time() + (7 * 86400), $cbasedir); }
+	setcookie("SessPass", $NewPassword, time() + (7 * 86400), $cbasedir); }
 	if($cookieDomain!=null) {
 	if($cookieSecure===true) {
-	@setcookie("SessPass", $NewPassword, time() + (7 * 86400), $cbasedir, $cookieDomain, 1); }
+	setcookie("SessPass", $NewPassword, time() + (7 * 86400), $cbasedir, $cookieDomain, 1); }
 	if($cookieSecure===false) {
-	@setcookie("SessPass", $NewPassword, time() + (7 * 86400), $cbasedir, $cookieDomain); } }
-	$_POST['Email'] = @remove_spaces($_POST['Email']);
+	setcookie("SessPass", $NewPassword, time() + (7 * 86400), $cbasedir, $cookieDomain); } }
+	$_POST['Email'] = remove_spaces($_POST['Email']);
 	$querynewuserinfo = query("UPDATE `".$Settings['sqltable']."members` SET `Password`='%s',`HashType`='iDBH',`Email`='%s',`LastActive`=%i,`IP`='%s',`Salt`='%s' WHERE `id`=%i", array($NewPassword,$_POST['Email'],$NewDay,$NewIP,$NewSalt,$_SESSION['UserID']));
 	exec_query($querynewuserinfo); } } } }
 ?>

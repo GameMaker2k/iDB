@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: versioninfo.php - Last Update: 11/22/2009 SVN 356 - Author: cooldude2k $
+    $FileInfo: versioninfo.php - Last Update: 11/23/2009 SVN 357 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="versioninfo.php"||$File3Name=="/versioninfo.php") {
@@ -27,8 +27,8 @@ function version_info($proname,$subver,$ver,$supver,$reltype,$svnver,$showsvn) {
 	return $return_var; }
 // Version number and date stuff. :P
 $VER1[0] = 0; $VER1[1] = 3; $VER1[2] = 2; $VERFull[1] = $VER1[0].".".$VER1[1].".".$VER1[2];
-$VER2[0] = "Alpha"; $VER2[1] = "Al"; $VER2[2] = "SVN"; $SubVerN = 356; $RName = "iDB"; $SFName = "IntDB";
-$SVNDay[0] = 11; $SVNDay[1] = 22; $SVNDay[2] = 2009; $SVNDay[3] = $SVNDay[0]."/".$SVNDay[1]."/".$SVNDay[2];
+$VER2[0] = "Alpha"; $VER2[1] = "Al"; $VER2[2] = "SVN"; $SubVerN = 357; $RName = "iDB"; $SFName = "IntDB";
+$SVNDay[0] = 11; $SVNDay[1] = 23; $SVNDay[2] = 2009; $SVNDay[3] = $SVNDay[0]."/".$SVNDay[1]."/".$SVNDay[2];
 $VerInfo['iDB_Ver'] = version_info($RName,$VER1[0],$VER1[1],$VER1[2],$VER2[1],$SubVerN,false);
 $VerInfo['iDB_Ver_SVN'] = version_info($RName,$VER1[0],$VER1[1],$VER1[2],$VER2[1],$SubVerN,true);
 $VerInfo['iDB_Full_Ver'] = version_info($RName,$VER1[0],$VER1[1],$VER1[2],$VER2[0],$SubVerN,false);
@@ -47,15 +47,15 @@ $PHPQA = "PHP-Quick-Arcade|http://quickarcade.jcink.com/"; $TFBB = "TextFileBB|h
 $PHPQA = explode("|",$PHPQA); $TFBB = explode("|",$TFBB);
 $PHPQA = "<a href=\"".$PHPQA[1]."\" title=\"".$PHPQA[0]."\" onclick=\"window.open(this.href);return false;\">".$PHPQA[0]."</a>";
 $TFBB = "<a href=\"".$TFBB[1]."\" title=\"".$TFBB[0]."\" onclick=\"window.open(this.href);return false;\">".$TFBB[0]."</a>";
-$PHPV1 = @phpversion(); $PHPV2 = "PHP ".$PHPV1; $OSType = PHP_OS; // Check OS Name
+$PHPV1 = phpversion(); $PHPV2 = "PHP ".$PHPV1; $OSType = PHP_OS; // Check OS Name
 if($OSType=="WINNT") { $OSType="Windows NT"; } if($OSType=="WIN32") { $OSType="Windows 9x"; }
-$OSType2 = $PHPV2." / ".$OSType; $ZENDV1 = @zend_version(); $ZENDV2 = "Zend engine ".$ZENDV1;
+$OSType2 = $PHPV2." / ".$OSType; $ZENDV1 = zend_version(); $ZENDV2 = "Zend engine ".$ZENDV1;
 // Show or hide the version number
 if($Settings['showverinfo']=="on") {
-//@header("X-".$RName."-Powered-By: ".$VerInfo['iDB_Ver_Show']);
-@header("Generator: ".$VerInfo['iDB_Ver_Show']); }
+//header("X-".$RName."-Powered-By: ".$VerInfo['iDB_Ver_Show']);
+header("Generator: ".$VerInfo['iDB_Ver_Show']); }
 if($Settings['showverinfo']!="on") {
-//@header("X-".$RName."-Powered-By: ".$RName);
-//@header("X-Powered-By: PHP");
-@header("Generator: ".$RName); }
+//header("X-".$RName."-Powered-By: ".$RName);
+//header("X-Powered-By: PHP");
+header("Generator: ".$RName); }
 ?>

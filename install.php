@@ -12,12 +12,12 @@
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.de/support/category.php?act=view&id=2
 
-    $FileInfo: install.php - Last Update: 11/14/2009 SVN 347 - Author: cooldude2k $
+    $FileInfo: install.php - Last Update: 11/23/2009 SVN 357 - Author: cooldude2k $
 */
-if(@ini_get("register_globals")) {
+if(ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }
-@error_reporting(E_ALL ^ E_NOTICE);
-if(@ini_get("register_globals")) { 
+error_reporting(E_ALL ^ E_NOTICE);
+if(ini_get("register_globals")) { 
 	if(!isset($SettDir['misc'])) { $SettDir['misc'] = "inc/misc/"; }
 	require_once($SettDir['misc'].'killglobals.php'); }
 if(!isset($preact['idb'])) { $preact['idb'] = null; }

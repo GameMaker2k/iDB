@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 11/15/2009 SVN 349 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 11/23/2009 SVN 357 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -21,8 +21,8 @@ if ($File3Name=="members.php"||$File3Name=="/members.php") {
 // Check if we can goto admin cp
 if($_SESSION['UserGroup']==$Settings['GuestGroup']||$GroupInfo['HasAdminCP']=="no") {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
-ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if(!isset($_POST['update'])) { $_POST['update'] = null; }
 if(!isset($_POST['gid'])) { $_POST['gid'] = "0"; }
 if(!is_numeric($_POST['gid'])) { $_POST['gid'] = "0"; }
@@ -70,7 +70,7 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Validating Members";
 $gquerys = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `Name`='%s' LIMIT 1", array($Settings['ValidateGroup']));
 $gresults=exec_query($gquerys);
 $VGroupID=mysql_result($gresults,0,"id");
-@mysql_free_result($gresults);
+mysql_free_result($gresults);
 $getmemidq = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE (`GroupID`=%i AND `id`<>-1) OR (`Validated`='no' AND `id`<>-1)", array($VGroupID));
 $getmemidr=exec_query($getmemidq);
 $getmemidnum=mysql_num_rows($getmemidr);
@@ -84,7 +84,7 @@ $getmemidName=mysql_result($getmemidr,$getmemidi,"Name");
 ?>
 <option value="<?php echo $getmemidID; ?>"><?php echo $getmemidName; ?></option>
 <?php ++$getmemidi; }
-@mysql_free_result($getmemidr); ?>
+mysql_free_result($getmemidr); ?>
 	</select></td>
 </tr></table>
 <table style="text-align: left;">
@@ -107,11 +107,11 @@ $getmemidName=mysql_result($getmemidr,$getmemidi,"Name");
 $mguerys = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `Name`='%s' LIMIT 1", array($Settings['MemberGroup']));
 $mgresults=exec_query($mguerys);
 $MGroupID=mysql_result($mgresults,0,"id");
-@mysql_free_result($mgresults);
+mysql_free_result($mgresults);
 $gquerys = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `Name`='%s' LIMIT 1", array($Settings['ValidateGroup']));
 $gresults=exec_query($gquerys);
 $VGroupID=mysql_result($gresults,0,"id");
-@mysql_free_result($gresults);
+mysql_free_result($gresults);
 $query = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($_POST['id']));
 $result=exec_query($query);
 $num=mysql_num_rows($result);
@@ -120,7 +120,7 @@ $VMemName=mysql_result($result,$i,"Name");
 $VMemGroup=mysql_result($result,$i,"GroupID");
 $VMemValidated=mysql_result($result,$i,"Validated");
 $admincptitle = " ".$ThemeSet['TitleDivider']." Validating Members";
-@redirect("refresh",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=members",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],FALSE),"4");
+redirect("refresh",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=members",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],FALSE),"4");
 if($VMemGroup==$VGroupID) {
 $query = query("UPDATE `".$Settings['sqltable']."members` SET `GroupID`='%s', `Validated`='%s' WHERE `id`=%i", array($MGroupID, "yes", $_POST['id']));
 exec_query($query); }
@@ -197,7 +197,7 @@ $getmemidName=mysql_result($getmemidr,$getmemidi,"Name");
 ?>
 <option value="<?php echo $getmemidID; ?>"><?php echo $getmemidName; ?></option>
 <?php ++$getmemidi; }
-@mysql_free_result($getmemidr); ?>
+mysql_free_result($getmemidr); ?>
 	</select></td>
 </tr></table>
 <table style="text-align: left;">
@@ -295,7 +295,7 @@ $getmemidName=mysql_result($getmemidr,$getmemidi,"Name");
 ?>
 <option value="<?php echo $getmemidID; ?>"><?php echo $getmemidName; ?></option>
 <?php ++$getmemidi; }
-@mysql_free_result($getmemidr); ?>
+mysql_free_result($getmemidr); ?>
 	</select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="gid">New Group for Member:</label></td>
@@ -314,7 +314,7 @@ $getgrpidName=mysql_result($getgrpidr,$getgrpidi,"Name");
 ?>
 <option value="<?php echo $getgrpidID; ?>"><?php echo $getgrpidName; ?></option>
 <?php ++$getgrpidi; }
-@mysql_free_result($getgrpidr); ?>
+mysql_free_result($getgrpidr); ?>
 	</select></td>
 </tr></table>
 <table style="text-align: left;">
@@ -338,11 +338,11 @@ $getgrpidName=mysql_result($getgrpidr,$getgrpidi,"Name");
 $ggidquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `name`='%s' LIMIT 1", array($Settings['GuestGroup']));
 $ggidresult=exec_query($ggidquery);
 $GuestGroupID=mysql_result($ggidresult,0,"id");
-@mysql_free_result($ggidresult);
+mysql_free_result($ggidresult);
 $vgidquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `name`='%s' LIMIT 1", array($Settings['ValidateGroup']));
 $vgidresult=exec_query($vgidquery);
 $ValidateGroupID=mysql_result($vgidresult,0,"id");
-@mysql_free_result($vgidresult);
+mysql_free_result($vgidresult);
 $DMemName = GetUserName($_POST['id'],$Settings['sqltable']);
 $DMemName = $DMemName['Name'];
 if($DMemName!==null&&($_POST['id']!="0"||$_POST['id']!="1"||$_POST['id']!="-1")&&

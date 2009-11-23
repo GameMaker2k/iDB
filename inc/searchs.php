@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: searchs.php - Last Update: 11/17/2009 SVN 352 - Author: cooldude2k $
+    $FileInfo: searchs.php - Last Update: 11/23/2009 SVN 357 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="searchs.php"||$File3Name=="/searchs.php") {
@@ -20,9 +20,9 @@ if ($File3Name=="searchs.php"||$File3Name=="/searchs.php") {
 if($Settings['enable_search']=="off"||
 	$GroupInfo['CanSearch']=="no") {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
-@header("Content-Type: text/plain; charset=".$Settings['charset']);
+header("Content-Type: text/plain; charset=".$Settings['charset']);
 ob_clean(); echo "Sorry you do not have permission to do a search."; 
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $pagenum = null;
 if($Settings['enable_search']=="on"||
 	$GroupInfo['CanSearch']=="yes") {
@@ -95,7 +95,7 @@ $memsi=0;
 if($memsinum==0) { $memsid = -1; }
 if($memsinum!=0) {
 $memsid=mysql_result($memsiresult,$memsi,"id"); 
-@mysql_free_result($memsiresult); } }
+mysql_free_result($memsiresult); } }
 //Get SQL LIMIT Number
 $nums = $_GET['page'] * $Settings['max_topics'];
 $PageLimit = $nums - $Settings['max_topics'];
@@ -118,7 +118,7 @@ $rnquery = query("SELECT FOUND_ROWS();", array(null));
 $result=exec_query($query);
 $rnresult=exec_query($rnquery);
 $NumberTopics = mysql_result($rnresult,0);
-@mysql_free_result($rnresult);
+mysql_free_result($rnresult);
 if($NumberTopics==null) { 
 	$NumberTopics = 0; }
 $num = $NumberTopics;
@@ -147,9 +147,9 @@ if($pnum<$Settings['max_topics']&&$pnum>0) {
 $num=mysql_num_rows($result);
 if($num<=0) { 
 redirect("location",$basedir.url_maker($exfile['search'],$Settings['file_ext'],"act=topics",$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search'],false));
-@header("Content-Type: text/plain; charset=".$Settings['charset']);
-ob_clean(); echo "Sorry could not find any search results."; @mysql_free_result($result);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
+header("Content-Type: text/plain; charset=".$Settings['charset']);
+ob_clean(); echo "Sorry could not find any search results."; mysql_free_result($result);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $i=0;
 //List Page Number Code Start
 $pagenum=count($Pages);
@@ -283,7 +283,7 @@ $prenum=mysql_num_rows($preresult);
 $HotTopicPosts = $Settings['hot_topic_num'];
 if($prenum > 0) {
 $HotTopicPosts = mysql_result($preresult,0,"HotTopicPosts"); }
-@mysql_free_result($preresult);
+mysql_free_result($preresult);
 if($HotTopicPosts!=0&&is_numeric($HotTopicPosts)) {
 	$Settings['hot_topic_num'] = $HotTopicPosts; }
 if(!is_numeric($Settings['hot_topic_num'])) {
@@ -404,7 +404,7 @@ if(($UsersID1<-1&&$UsersHidden1=="yes")||$UsersID1==0||($UsersID1>0&&$UsersHidde
 $lul = url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']);
 $luln = url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']).$qstrhtml."&#35;reply".$NumRPosts;
 $LastReply = "Time: <a href=\"".$luln."\">".$TimeStamp1."</a><br />\n".$UserPre." <span title=\"".$oldusername."\">".$UsersName1."</span>"; } }
-@mysql_free_result($glrresult);
+mysql_free_result($glrresult);
 if($TimeStamp1==null) { $LastReply = "&nbsp;<br />&nbsp;"; }
 $PreTopic = $ThemeSet['TopicIcon'];
 if ($PinnedTopic>1) { $PinnedTopic = 1; } 
@@ -468,7 +468,7 @@ if($pagenum>1) {
 ?>
 <div class="DivPageLinks">&nbsp;</div>
 <?php }
-@mysql_free_result($result); } } } 
+mysql_free_result($result); } } } 
 if($pagenum<=1) { ?>
 <div class="DivSearch">&nbsp;</div>
 <?php } ?>

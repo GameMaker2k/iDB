@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: functions.php - Last Update: 11/22/2009 SVN 355 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 11/23/2009 SVN 357 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -31,18 +31,18 @@ if ($File3Name==$FileName||$File3Name=="/".$FileName) {
 CheckFile("functions.php");
 require($SettDir['misc']."compression.php");
 /* 
-if ($_GET['act']=="DeleteSession") { @session_destroy(); }
-if ($_GET['act']=="ResetSession") { @session_unset(); }
-if ($_GET['act']=="NewSessionID") { @session_regenerate_id(); }
-if ($_GET['act']=="PHPInfo") { @phpinfo(); exit(); }
-if ($_GET['act']=="phpinfo") { @phpinfo(); exit(); }
-if ($_GET['act']=="PHPCredits") { @phpcredits(); exit(); }
-if ($_GET['act']=="phpcredits") { @phpcredits(); exit(); } 
+if ($_GET['act']=="DeleteSession") { session_destroy(); }
+if ($_GET['act']=="ResetSession") { session_unset(); }
+if ($_GET['act']=="NewSessionID") { session_regenerate_id(); }
+if ($_GET['act']=="PHPInfo") { phpinfo(); exit(); }
+if ($_GET['act']=="phpinfo") { phpinfo(); exit(); }
+if ($_GET['act']=="PHPCredits") { phpcredits(); exit(); }
+if ($_GET['act']=="phpcredits") { phpcredits(); exit(); } 
 */// Connect to mysql database
 function ConnectMysql($sqlhost,$sqluser,$sqlpass,$sqldb,$retlink=false) {
 if($retlink!==true) { $retlink = false; }
-$StatSQL = @mysql_connect($sqlhost,$sqluser,$sqlpass);
-$StatBase = @mysql_select_db($sqldb);
+$StatSQL = mysql_connect($sqlhost,$sqluser,$sqlpass);
+$StatBase = mysql_select_db($sqldb);
 if (!$StatSQL) { return false; }
 if (!$StatBase) { return false; }
 if($retlink===true) { return $StatSQL; }
@@ -53,10 +53,10 @@ define("_renee_", $Names['RS']);
 function change_title($new_title,$use_gzip="off",$gzip_type="gzip") {
 global $Settings;
 if($gzip_type!="gzip") { if($gzip_type!="deflate") { $gzip_type = "gzip"; } }
-$output = @ob_get_clean();
+$output = ob_get_clean();
 $output = preg_replace("/<title>(.*?)<\/title>/i", "<title>".$new_title."</title>", $output);
 /* Change Some PHP Settings Fix the &PHPSESSID to &amp;PHPSESSID */
-$SessName = @session_name();
+$SessName = session_name();
 $output = preg_replace("/&PHPSESSID/", "&amp;PHPSESSID", $output);
 $qstrcode = htmlentities($Settings['qstr'], ENT_QUOTES, $Settings['charset']);
 $output = str_replace($Settings['qstr'].$SessName, $qstrcode.$SessName, $output);
@@ -72,9 +72,9 @@ if($use_gzip=="on") {
 function fix_amp($use_gzip="off",$gzip_type="gzip") {
 global $Settings;
 if($gzip_type!="gzip") { if($gzip_type!="deflate") { $gzip_type = "gzip"; } }
-$output = @ob_get_clean();
+$output = ob_get_clean();
 /* Change Some PHP Settings Fix the &PHPSESSID to &amp;PHPSESSID */
-$SessName = @session_name();
+$SessName = session_name();
 $output = preg_replace("/&PHPSESSID/", "&amp;PHPSESSID", $output);
 $qstrcode = htmlentities($Settings['qstr'], ENT_QUOTES, $Settings['charset']);
 $output = str_replace($Settings['qstr'].$SessName, $qstrcode.$SessName, $output);
@@ -91,7 +91,7 @@ define("_rene_", $Names['RJ']);
 // GZip page for faster download
 function gzip_page($use_gzip="off",$gzip_type="gzip") {
 global $Settings;
-$output = @ob_get_clean();
+$output = ob_get_clean();
 if($gzip_type!="gzip") { if($gzip_type!="deflate") { $gzip_type = "gzip"; } }
 if($use_gzip!="on") {
 	echo $output; }
@@ -326,7 +326,7 @@ $Text = preg_replace("/(^\r+|\r+$)/","",$Text);
 $Text = preg_replace("/(\r|\n|\t)+/"," ",$Text);
 $Text = preg_replace("/\s\s+/"," ",$Text);
 $Text = preg_replace("/(^\s+|\s+$)/","",$Text);
-$Text = @remove_bad_entities($Text);
+$Text = remove_bad_entities($Text);
 return $Text; }
 // Fix some chars
 function fixbamps($text) {
@@ -344,14 +344,14 @@ function getnextid($tablepre,$table) {
    $getnextidr = exec_query($getnextidq);
    $getnextid = mysql_fetch_assoc($getnextidr);
    return $getnextid['Auto_increment'];
-   @mysql_free_result($getnextidr); }
+   mysql_free_result($getnextidr); }
 // Get number of rows for table
 function getnumrows($tablepre,$table) {
    $getnextidq = query("SHOW TABLE STATUS LIKE '".$tablepre.$table."'", array());
    $getnextidr = exec_query($getnextidq);
    $getnextid = mysql_fetch_assoc($getnextidr);
    return $getnextid['Rows'];
-   @mysql_free_result($getnextidr); }
+   mysql_free_result($getnextidr); }
 	$Names['K'] = "Katarzyna";
 define("_katarzyna_", $Names['K']);
 // Change Time Stamp to a readable time
@@ -427,10 +427,10 @@ return date($format,mktime(gmdate('h')+$tsa['hour'],gmdate('i')+$tsa['minute'],g
 // Get Server offset
 function GetSeverZone() {
 $TestHour1 = date("H");
-@putenv("OTZ=".@getenv("TZ"));
-@putenv("TZ=GMT");
+putenv("OTZ=".getenv("TZ"));
+putenv("TZ=GMT");
 $TestHour2 = date("H");
-@putenv("TZ=".@getenv("OTZ"));
+putenv("TZ=".getenv("OTZ"));
 $TestHour3 = $TestHour1-$TestHour2;
 return $TestHour3; }
 // Get Server offset alt version
@@ -466,7 +466,7 @@ if($gunnum>0){
 $UsersName=mysql_result($gunresult,0,"Name");
 // Am i still hidden. o_O <_< I see you.
 $UsersHidden=mysql_result($gunresult,0,"HiddenMember"); }
-@mysql_free_result($gunresult);
+mysql_free_result($gunresult);
 $UsersInfo['Name'] = $UsersName;
 $UsersInfo['Hidden'] = $UsersHidden;
 return $UsersInfo; }

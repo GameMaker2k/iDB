@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: replies.php - Last Update: 11/17/2009 SVN 353 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 11/23/2009 SVN 357 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -28,9 +28,9 @@ if($_GET['modact']=="pin"||$_GET['modact']=="unpin"||$_GET['modact']=="open"||
 $prequery = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `id`=%i LIMIT 1", array($_GET['id']));
 $preresult=exec_query($prequery);
 $prenum=mysql_num_rows($preresult);
-if($prenum==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=lowview",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); @mysql_free_result($preresult);
-ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
+if($prenum==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=lowview",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); mysql_free_result($preresult);
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($prenum>=1) {
 $TopicName=mysql_result($preresult,0,"TopicName");
 $TopicID=mysql_result($preresult,0,"id");
@@ -39,7 +39,7 @@ $TopicCatID=mysql_result($preresult,0,"CategoryID");
 $TopicClosed=mysql_result($preresult,0,"Closed");
 $NumberReplies=mysql_result($preresult,0,"NumReply");
 $ViewTimes=mysql_result($preresult,0,"NumViews");
-@mysql_free_result($preresult);
+mysql_free_result($preresult);
 $forumcheckx = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i  LIMIT 1", array($TopicForumID));
 $fmckresult=exec_query($forumcheckx);
 $ForumName=mysql_result($fmckresult,0,"Name");
@@ -47,14 +47,14 @@ $ForumType=mysql_result($fmckresult,0,"ForumType");
 $CanHaveTopics=mysql_result($fmckresult,0,"CanHaveTopics");
 $ForumPostCountView=mysql_result($fmckresult,0,"PostCountView");
 $ForumKarmaCountView=mysql_result($fmckresult,0,"KarmaCountView");
-@mysql_free_result($fmckresult);
+mysql_free_result($fmckresult);
 $catcheck = query("SELECT * FROM `".$Settings['sqltable']."categories` WHERE `id`=%i  LIMIT 1", array($TopicCatID));
 $catresult=exec_query($catcheck);
 $CategoryName=mysql_result($catresult,0,"Name");
 $CategoryType=mysql_result($catresult,0,"CategoryType");
 $CategoryPostCountView=mysql_result($catresult,0,"PostCountView");
 $CategoryKarmaCountView=mysql_result($catresult,0,"KarmaCountView");
-@mysql_free_result($catresult);
+mysql_free_result($catresult);
 if($GroupInfo['HasAdminCP']!="yes"||$GroupInfo['HasModCP']!="yes") {
 if($MyPostCountChk==null) { $MyPostCountChk = 0; }
 if($MyKarmaCount==null) { $MyKarmaCount = 0; }
@@ -84,15 +84,15 @@ if(!isset($CatPermissionInfo['CanViewCategory'][$TopicCatID])) {
 if($CatPermissionInfo['CanViewCategory'][$TopicCatID]=="no"||
 	$CatPermissionInfo['CanViewCategory'][$TopicCatID]!="yes") {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=lowview",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
-ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if(!isset($PermissionInfo['CanViewForum'][$TopicForumID])) {
 	$PermissionInfo['CanViewForum'][$TopicForumID] = "no"; }
 if($PermissionInfo['CanViewForum'][$TopicForumID]=="no"||
 	$PermissionInfo['CanViewForum'][$TopicForumID]!="yes") {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=lowview",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
-ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($_GET['act']!="view") { 
 $CanMakeReply = "no"; $CanMakeTopic = "no";
 if($PermissionInfo['CanMakeTopics'][$TopicForumID]=="yes"&&$CanHaveTopics=="yes") { 
@@ -136,8 +136,8 @@ $query = query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `TopicID`=%
 $result=exec_query($query);
 $num=mysql_num_rows($result);
 if($num==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=lowview",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
-ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($num!=0) { 
 if($ViewTimes==0||$ViewTimes==null) { $NewViewTimes = 1; }
 if($ViewTimes!=0&&$ViewTimes!=null) { $NewViewTimes = $ViewTimes + 1; }
@@ -250,7 +250,7 @@ $gresult=exec_query($gquery);
 $User1Group=mysql_result($gresult,0,"Name");
 $GroupNamePrefix=mysql_result($gresult,0,"NamePrefix");
 $GroupNameSuffix=mysql_result($gresult,0,"NameSuffix");
-@mysql_free_result($gresult);
+mysql_free_result($gresult);
 $User1Signature=mysql_result($reresult,$rei,"Signature");
 $User1Avatar=mysql_result($reresult,$rei,"Avatar");
 $User1AvatarSize=mysql_result($reresult,$rei,"AvatarSize");
@@ -264,7 +264,7 @@ $User1Website=mysql_result($reresult,$rei,"Website");
 $User1PostCount=mysql_result($reresult,$rei,"PostCount");
 $User1Karma=mysql_result($reresult,$rei,"Karma");
 $User1IP=mysql_result($reresult,$rei,"IP");
-@mysql_free_result($reresult);
+mysql_free_result($reresult);
 if($User1Name=="Guest") { $User1Name=$GuestsName;
 if($User1Name==null) { $User1Name="Guest"; } }
 if(isset($GroupNamePrefix)&&$GroupNamePrefix!=null) {
@@ -285,13 +285,13 @@ $eunum = mysql_num_rows($euresult); }
 	$EditUserGroupID = mysql_result($euresult,0,"GroupID");
 	$EditUserHidden=mysql_result($euresult,0,"HiddenMember");
 	$EditUserName = mysql_result($euresult,0,"Name");
-	@mysql_free_result($euresult);
+	mysql_free_result($euresult);
 	$eugquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($EditUserGroupID));
 	$eugresult=exec_query($eugquery);
 	$EditUserGroup=mysql_result($eugresult,0,"Name");
 	$EditUserNamePrefix=mysql_result($eugresult,0,"NamePrefix");
 	$EditUserNameSuffix=mysql_result($eugresult,0,"NameSuffix");
-	@mysql_free_result($eugresult);	}
+	mysql_free_result($eugresult);	}
 	if($MyEditUserID==$MyUserID) {
 	$EditUserID = $User1ID;
 	$EditUserGroupID = $User1GroupID;
@@ -328,7 +328,7 @@ $gresult=exec_query($gquery);
 $User1Group=mysql_result($gresult,0,"Name");
 $GroupNamePrefix=mysql_result($gresult,0,"NamePrefix");
 $GroupNameSuffix=mysql_result($gresult,0,"NameSuffix");
-@mysql_free_result($gresult); }
+mysql_free_result($gresult); }
 $MyPost = text2icons($MyPost,$Settings['sqltable']);
 if($MySubPost!=null) { $MyPost = $MyPost."\n".$MySubPost; }
 $User1Signature = preg_replace("/\<br\>/", "<br />", nl2br($User1Signature));
@@ -351,5 +351,5 @@ $ReplyNum = $i + $PageLimit + 1;
 <div style="width:auto; font-size: 0.8em; color: gray; text-align:right;"><?php echo $MyTimeStamp; ?></div>
 </div>
 <div style="padding: 6px; font-size: 0.8em;"><?php echo $MyPost; ?></div></div>
-<?php ++$i; } @mysql_free_result($result); 
+<?php ++$i; } mysql_free_result($result); 
 ?></div><div>&nbsp;</div><?php } } ?>

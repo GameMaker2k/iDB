@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: function.php - Last Update: 11/19/2009 SVN 354 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 11/23/2009 SVN 357 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -21,9 +21,9 @@ require_once($SettDir['misc'].'sha256.php');
 require_once($SettDir['misc'].'functions.php');
 /* Change Some PHP Settings Fix the & to &amp;
 if($Settings['use_iniset']==true&&$Settings['qstr']!="/") {
-@ini_set("arg_separator.output",htmlentities($Settings['qstr'], ENT_QUOTES, $Settings['charset']));
-@ini_set("arg_separator.input",$Settings['qstr']);
-@ini_set("arg_separator",htmlentities($Settings['qstr'], ENT_QUOTES, $Settings['charset'])); }
+ini_set("arg_separator.output",htmlentities($Settings['qstr'], ENT_QUOTES, $Settings['charset']));
+ini_set("arg_separator.input",$Settings['qstr']);
+ini_set("arg_separator",htmlentities($Settings['qstr'], ENT_QUOTES, $Settings['charset'])); }
 //$basepath = pathinfo($_SERVER['REQUEST_URI']);
 if(dirname($_SERVER['REQUEST_URI'])!="."||
 	dirname($_SERVER['REQUEST_URI'])!=null) {
@@ -61,9 +61,9 @@ $REFERERurl = null;
 /**
   * Generates an UUID
   * 
-  * @author     Anis uddin Ahmad <admin@ajaxray.com>
-  * @param      string  an optional prefix
-  * @return     string  the formatted uuid
+  * author     Anis uddin Ahmad <adminajaxray.com>
+  * param      string  an optional prefix
+  * return     string  the formatted uuid
   */
   function uuid($useold = false,$more_entropy = false,$mtrand = false,$hash = 'sha1',$prefix = '') 
   {
@@ -102,7 +102,7 @@ function qstring($qstr=";",$qsep="=")
 { $_GET = array(); $_GET = null;
 if (!isset($_SERVER['QUERY_STRING'])) {
 $_SERVER['QUERY_STRING'] = getenv('QUERY_STRING'); }
-@ini_get("arg_separator.input", $qstr);
+ini_get("arg_separator.input", $qstr);
 $_SERVER['QUERY_STRING'] = urldecode($_SERVER['QUERY_STRING']);
 $preqs = explode($qstr,$_SERVER["QUERY_STRING"]);
 $qsnum = count($preqs); $qsi = 0;
@@ -115,13 +115,13 @@ if($preqst[0]!=null) {
 $_GET[$preqst[0]] = $preqst[1]; }
 ++$qsi; } return true; }
 if($_SERVER['PATH_INFO']==null) {
-	if(@getenv('PATH_INFO')!=null&&@getenv('PATH_INFO')!="1") {
-$_SERVER['PATH_INFO'] = @getenv('PATH_INFO'); }
-if(@getenv('PATH_INFO')==null) {
+	if(getenv('PATH_INFO')!=null&&getenv('PATH_INFO')!="1") {
+$_SERVER['PATH_INFO'] = getenv('PATH_INFO'); }
+if(getenv('PATH_INFO')==null) {
 $myscript = $_SERVER["SCRIPT_NAME"];
 $myphpath = $_SERVER["PHP_SELF"];
 $mypathinfo = str_replace($myscript, "", $myphpath);
-@putenv("PATH_INFO=".$mypathinfo); } }
+putenv("PATH_INFO=".$mypathinfo); } }
 // Change raw post data to POST array
 // Not sure why I made but alwell. :P 
 function parse_post_data()
@@ -159,7 +159,7 @@ if($type!="location"&&$type!="refresh") { $type=="location"; }
 if($url!=null) { $file = $url.$file; }
 if($dbsr===true) { $file = str_replace("//", "/", $file); }
 if($type=="refresh") { header("Refresh: ".$time."; URL=".$file); }
-if($type=="location") { @session_write_close(); 
+if($type=="location") { session_write_close(); 
 header("Location: ".$file); } return true; }
 function redirects($type,$url,$time=0) {
 if($type!="location"&&$type!="refresh") { $type=="location"; }

@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: pm.php - Last Update: 11/17/2009 SVN 353 - Author: cooldude2k $
+    $FileInfo: pm.php - Last Update: 11/23/2009 SVN 357 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pm.php"||$File3Name=="/pm.php") {
@@ -23,8 +23,8 @@ if(!is_numeric($_GET['page'])) { $_GET['page'] = 1; }
 // Check if we can read/send PM
 if($_SESSION['UserGroup']==$Settings['GuestGroup']||$GroupInfo['CanPM']=="no") {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
-ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $_SESSION['ViewingPage'] = url_maker(null,"no+ext","act=view","&","=",$prexqstr['index'],$exqstr['index']);
 if($Settings['file_ext']!="no+ext"&&$Settings['file_ext']!="no ext") {
 $_SESSION['ViewingFile'] = $exfile['index'].$Settings['file_ext']; }
@@ -72,7 +72,7 @@ $rnquery = query("SELECT FOUND_ROWS();", array(null));
 $result=exec_query($query);
 $rnresult=exec_query($rnquery);
 $NumberMessage = mysql_result($rnresult,0);
-@mysql_free_result($rnresult);
+mysql_free_result($rnresult);
 if($NumberMessage==null) { 
 	$NumberMessage = 0; }
 $num = $NumberMessage;
@@ -228,7 +228,7 @@ echo "<span>".$SenderName."</span>"; }
 ?></td>
 <td class="TableMenuColumn3" style="text-align: center;"><?php echo $DateSend; ?></td>
 </tr>
-<?php ++$i; } @mysql_free_result($result); ?>
+<?php ++$i; } mysql_free_result($result); ?>
 <tr id="MessengerEnd" class="TableMenuRow4">
 <td class="TableMenuColumn4" colspan="4">&nbsp;</td>
 </tr>
@@ -242,7 +242,7 @@ $rnquery = query("SELECT FOUND_ROWS();", array(null));
 $result=exec_query($query);
 $rnresult=exec_query($rnquery);
 $NumberMessage = mysql_result($rnresult,0);
-@mysql_free_result($rnresult);
+mysql_free_result($rnresult);
 if($NumberMessage==null) { 
 	$NumberMessage = 0; }
 $num = $NumberMessage;
@@ -402,15 +402,15 @@ echo "<span>".$ReciverName."</span>"; }
 <tr id="MessengerEnd" class="TableMenuRow4">
 <td class="TableMenuColumn4" colspan="4">&nbsp;</td>
 </tr>
-<?php } @mysql_free_result($result);
+<?php } mysql_free_result($result);
 if($_GET['act']=="read") {
 $query = query("SELECT * FROM `".$Settings['sqltable']."messenger` WHERE `id`=%i", array($_GET['id']));
 $result=exec_query($query);
 $num=mysql_num_rows($result);
 $is=0;
 if($num==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
-ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 while ($is < $num) {
 $PMID=mysql_result($result,$is,"id");
 $SenderID=mysql_result($result,$is,"SenderID");
@@ -439,8 +439,8 @@ $rei=0;
 if($_SESSION['UserID']!=$ReciverID&&
 	$_SESSION['UserID']!=$SenderID) {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
-ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 while ($rei < $renum) {
 $User1ID=$SenderID;
 $User1Name=mysql_result($reresult,$rei,"Name");
@@ -458,7 +458,7 @@ $gresult=exec_query($gquery);
 $User1Group=mysql_result($gresult,0,"Name");
 $GroupNamePrefix=mysql_result($gresult,0,"NamePrefix");
 $GroupNameSuffix=mysql_result($gresult,0,"NameSuffix");
-@mysql_free_result($gresult);
+mysql_free_result($gresult);
 $User1Signature=mysql_result($reresult,$rei,"Signature");
 $User1Avatar=mysql_result($reresult,$rei,"Avatar");
 $User1AvatarSize=mysql_result($reresult,$rei,"AvatarSize");
@@ -472,8 +472,8 @@ $User1Website=mysql_result($reresult,$rei,"Website");
 $User1PostCount=mysql_result($reresult,$rei,"PostCount");
 $User1Karma=mysql_result($reresult,$rei,"Karma");
 $User1IP=mysql_result($reresult,$rei,"IP");
-++$rei; } @mysql_free_result($reresult);
-++$is; } @mysql_free_result($result);
+++$rei; } mysql_free_result($reresult);
+++$is; } mysql_free_result($result);
 if($_SESSION['UserID']==$ReciverID) {
 $queryup = query("UPDATE `".$Settings['sqltable']."messenger` SET `Read`=%i WHERE `id`=%i", array(1,$_GET['id']));
 exec_query($queryup); }
@@ -582,7 +582,7 @@ while ($rei < $renum) {
 $SendMessageTo = mysql_result($reresult,$rei,"Name");
 $SendMessageTo = htmlspecialchars($SendMessageTo, ENT_QUOTES, $Settings['charset']);
 $SendToGroupID = mysql_result($reresult,$rei,"GroupID");
-++$rei; } } @mysql_free_result($reresult);
+++$rei; } } mysql_free_result($reresult);
 if(!isset($renum)) { $renum = 0; }
 if($renum==0) { $SendMessageTo = null; }
 $QuoteReply = null; $QuoteDescription = null; $QuoteTitle = null;
@@ -651,7 +651,7 @@ if($SmileCRow<5&&$SmileCRow!=0) {
 $SmileCRowL = 5 - $SmileCRow;
 echo "<td colspan=\"".$SmileCRowL."\">&nbsp;</td></tr>"; }
 echo "</table>";
-@mysql_free_result($renee_result);
+mysql_free_result($renee_result);
 ?></div></td>
 <td class="TableColumn3" style="width: 85%;">
 <form style="display: inline;" method="post" id="MkReplyForm" action="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=sendmessage",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>">
@@ -785,23 +785,23 @@ if (PhpCaptcha::Validate($_POST['signcode'])) {
 <?php } }
 $_POST['MessageName'] = stripcslashes(htmlspecialchars($_POST['MessageName'], ENT_QUOTES, $Settings['charset']));
 //$_POST['MessageName'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['MessageName']);
-$_POST['MessageName'] = @remove_spaces($_POST['MessageName']);
+$_POST['MessageName'] = remove_spaces($_POST['MessageName']);
 $_POST['MessageDesc'] = stripcslashes(htmlspecialchars($_POST['MessageDesc'], ENT_QUOTES, $Settings['charset']));
 //$_POST['MessageDesc'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['MessageDesc']);
-$_POST['MessageDesc'] = @remove_spaces($_POST['MessageDesc']);
+$_POST['MessageDesc'] = remove_spaces($_POST['MessageDesc']);
 $_POST['SendMessageTo'] = stripcslashes(htmlspecialchars($_POST['SendMessageTo'], ENT_QUOTES, $Settings['charset']));
 //$_POST['SendMessageTo'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['SendMessageTo']);
-$_POST['SendMessageTo'] = @remove_spaces($_POST['SendMessageTo']);
+$_POST['SendMessageTo'] = remove_spaces($_POST['SendMessageTo']);
 $_POST['GuestName'] = stripcslashes(htmlspecialchars($_POST['GuestName'], ENT_QUOTES, $Settings['charset']));
 //$_POST['GuestName'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['GuestName']);
-$_POST['GuestName'] = @remove_spaces($_POST['GuestName']);
+$_POST['GuestName'] = remove_spaces($_POST['GuestName']);
 $_POST['Message'] = stripcslashes(htmlspecialchars($_POST['Message'], ENT_QUOTES, $Settings['charset']));
 //$_POST['Message'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['Message']);
-//$_POST['Message'] = @remove_spaces($_POST['Message']);
+//$_POST['Message'] = remove_spaces($_POST['Message']);
 $_POST['Message'] = remove_bad_entities($_POST['Message']);
 if($_SESSION['UserGroup']==$Settings['GuestGroup']) {
 if(isset($_POST['GuestName'])&&$_POST['GuestName']!=null) {
-@setcookie("GuestName", $_POST['GuestName'], time() + (7 * 86400), $cbasedir);
+setcookie("GuestName", $_POST['GuestName'], time() + (7 * 86400), $cbasedir);
 $_SESSION['GuestName']=$_POST['GuestName']; } }
 /*    <_<  iWordFilter  >_>      
    by Kazuki Przyborowski - Cool Dude 2k */
@@ -833,7 +833,7 @@ $_POST['MessageDesc'] = preg_replace("/".$Filter."/", $Replace, $_POST['MessageD
 if($CaseInsensitive=="yes"&&$WholeWord!="yes") {
 $_POST['Message'] = preg_replace("/".$Filter."/i", $Replace, $_POST['Message']);
 $_POST['MessageDesc'] = preg_replace("/".$Filter."/i", $Replace, $_POST['MessageDesc']); }
-++$katarzynas; } @mysql_free_result($katarzynart);
+++$katarzynas; } mysql_free_result($katarzynart);
 $lonewolfqy=query("SELECT * FROM `".$Settings['sqltable']."restrictedwords` WHERE `RestrictedMessageName`='yes' or `RestrictedUserName`='yes'", array(null));
 $lonewolfrt=exec_query($lonewolfqy);
 $lonewolfnm=mysql_num_rows($lonewolfrt);
@@ -885,7 +885,7 @@ $RMatches = preg_match("/".$RWord."/i", $_POST['MessageName']);
 if($RestrictedUserName=="yes") {
 $RGMatches = preg_match("/".$RWord."/i", $_POST['GuestName']);
 	if($RGMatches==true) { break 1; } } }
-++$lonewolfs; } @mysql_free_result($lonewolfrt);
+++$lonewolfs; } mysql_free_result($lonewolfrt);
 $requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `Name`='%s'", array($_POST['SendMessageTo']));
 $reresult=exec_query($requery);
 $renum=mysql_num_rows($reresult);
@@ -899,8 +899,8 @@ $SendUserCanPM=mysql_result($gresult,0,"CanPM");
 $SendUserCanPM = strtolower($SendUserCanPM);
 if($SendUserCanPM!="yes"&&$SendUserCanPM!="no") {
 	$SendUserCanPM = "no"; }
-@mysql_free_result($gresult);
-++$rei; } @mysql_free_result($reresult);
+mysql_free_result($gresult);
+++$rei; } mysql_free_result($reresult);
 if($renum==0) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
@@ -952,7 +952,7 @@ if($renum==0) { $Error="Yes"; ?>
 	</span>&nbsp;</td>
 </tr>
 <?php } if ($Error=="Yes") {
-@redirect("refresh",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false),"4"); ?>
+redirect("refresh",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false),"4"); ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Click <a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">here</a> to goto index page.<br />&nbsp;

@@ -11,10 +11,10 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: utf8.php - Last Update: 6/16/2009 SVN 264 - Author: cooldude2k $
+    $FileInfo: utf8.php - Last Update: 11/23/2009 SVN 357 - Author: cooldude2k $
 */
 // UTF8 helper functions
-// author: Scott Michael Reynen "scott@randomchaos.com"
+// author: Scott Michael Reynen "scottrandomchaos.com"
 // url: http://www.randomchaos.com/document.php?source=php_and_unicode
 // utf8_substr by frank at jkelloggs dot dk
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
@@ -55,7 +55,7 @@ if($chkcharset!="UTF-8") { return substr($string,$start,$length); } }
 if(isset($_GET['text'])) {
 echo pre_substr($_GET['text'],0,6); }
 
-// author: Scott Michael Reynen "scott@randomchaos.com"
+// author: Scott Michael Reynen "scottrandomchaos.com"
 // url: http://www.randomchaos.com/document.php?source=php_and_unicode
 function utf8_strpos($haystack, $needle,$offset=0) {
   if(!defined('UTF8_NOMBSTRING')&&function_exists('mb_strpos')) {
@@ -79,7 +79,7 @@ function utf8_strpos($haystack, $needle,$offset=0) {
   return ( $found == true ) ? $position : false;
 } // strpos_unicode
 
-// author: Scott Michael Reynen "scott@randomchaos.com"
+// author: Scott Michael Reynen "scottrandomchaos.com"
 // url: http://www.randomchaos.com/document.php?source=php_and_unicode
 function utf8_to_unicode( $str ) {
   $unicode = array();  
@@ -105,7 +105,7 @@ function utf8_to_unicode( $str ) {
   return $unicode;
 } // utf8_to_unicode
 
-// author: Scott Michael Reynen "scott@randomchaos.com"
+// author: Scott Michael Reynen "scottrandomchaos.com"
 // url: http://www.randomchaos.com/document.php?source=php_and_unicode
 function unicode_to_utf8( $str ) {
   $utf8 = '';

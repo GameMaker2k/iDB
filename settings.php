@@ -12,12 +12,12 @@
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: settings.php & settingsbak.php - Last Update: 6/16/2009 SVN 264 - Author: cooldude2k $
+    $FileInfo: settings.php & settingsbak.php - Last Update: 11/23/2009 SVN 357 - Author: cooldude2k $
 */
 /*	You Need to install iDB. Run install.php	*/
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="settings.php"||$File3Name=="/settings.php"||
     $File3Name=="settingsbak.php"||$File3Name=="/settingsbak.php") {
-    @header('Location: index.php');
+    header('Location: index.php');
     exit(); }
 ?>

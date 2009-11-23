@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: xhtml11.php - Last Update: 11/22/2009 SVN 355 - Author: cooldude2k $
+    $FileInfo: xhtml11.php - Last Update: 11/23/2009 SVN 357 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="xhtml11.php"||$File3Name=="/xhtml11.php") {
@@ -24,22 +24,22 @@ if($Settings['output_type']!="xhtml") {
 	$Settings['output_type'] = "xhtml"; }
 if($Settings['output_type']=="html") {
 	$ccstart = "//<!--"; $ccend = "//-->";
-@header("Content-Type: text/html; charset=".$Settings['charset']); }
+header("Content-Type: text/html; charset=".$Settings['charset']); }
 if($Settings['output_type']=="xhtml") {
 if(stristr($_SERVER["HTTP_ACCEPT"],"application/xhtml+xml")) {
 	$ccstart = "//<![CDATA["; $ccend = "//]]>";
-@header("Content-Type: application/xhtml+xml; charset=".$Settings['charset']);
+header("Content-Type: application/xhtml+xml; charset=".$Settings['charset']);
 	xml_doc_start("1.0",$Settings['charset']); }
 else { if (stristr($_SERVER["HTTP_USER_AGENT"],"W3C_Validator")) {
 	$ccstart = "//<![CDATA["; $ccend = "//]]>";
-   @header("Content-Type: application/xhtml+xml; charset=".$Settings['charset']);
+   header("Content-Type: application/xhtml+xml; charset=".$Settings['charset']);
 	xml_doc_start("1.0",$Settings['charset']);
 } else { $ccstart = "//<!--"; $ccend = "//-->";
-	@header("Content-Type: text/html; charset=".$Settings['charset']); } } }
+	header("Content-Type: text/html; charset=".$Settings['charset']); } } }
 if($Settings['output_type']!="xhtml") {
 	if($Settings['output_type']!="html") {
 		$ccstart = "//<!--"; $ccend = "//-->";
-@header("Content-Type: text/html; charset=".$Settings['charset']); } }
+header("Content-Type: text/html; charset=".$Settings['charset']); } }
 if($checklowview===true) { $ThemeSet['CSSType'] = "lowview"; }
 if($checklowview===true&&$_GET['act']=="lowview") { 
    $ThemeSet['CSSType'] = "lowview"; 
@@ -64,8 +64,8 @@ if($ThemeSet['CSSType']!="import"&&
    $ThemeSet['CSSType'] = "import"; }
 if($ThemeSet['CSSType']=="xhtml") {
    xml_tag_make("xml-stylesheet","type=text/css&href=".$ThemeSet['CSS']); }
-@header("Content-Style-Type: text/css");
-@header("Content-Script-Type: text/javascript");
+header("Content-Style-Type: text/css");
+header("Content-Script-Type: text/javascript");
 if($Settings['showverinfo']!="on") {
 $iDBURL1 = "<a href=\"".$iDBHome."\" title=\"".$iDB."\" onclick=\"window.open(this.href);return false;\">"; }
 if($Settings['showverinfo']=="on") {
@@ -80,8 +80,8 @@ if($checklowview!==true) { $extext = "<a href=\"".url_maker($exfile['index'],$Se
 if($checklowview===true&&$_GET['act']!="lowview") { $extext = "<a href=\"".url_maker($exfile['index'],$Settings['file_ext'],"act=lowview",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'])."\">Low-Version</a>"; }
 if($checklowview===true&&$_GET['act']=="lowview") {  $extext = "<a href=\"".url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'])."\">Hi-Version</a>"; }
 $endpagevar = "<div class=\"copyright\">Powered by ".$iDBURL1.$RName."</a> &copy; ".$GM2kURL." @ ".$csryear." - ".$cryear." <br />\n".$ThemeSet['CopyRight']." | ".$extext; 
-@header("Content-Language: en");
-@header("Vary: Accept-Encoding");
+header("Content-Language: en");
+header("Vary: Accept-Encoding");
 // Check if we are on a secure HTTP connection
 if($_SERVER['HTTPS']=="on") { $prehost = "https://"; }
 if($_SERVER['HTTPS']!="on") { $prehost = "http://"; }

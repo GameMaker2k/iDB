@@ -12,7 +12,7 @@
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: setup.php - Last Update: 11/14/2009 SVN 344 - Author: cooldude2k $
+    $FileInfo: setup.php - Last Update: 11/23/2009 SVN 357 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="setup.php"||$File3Name=="/setup.php") {
@@ -27,10 +27,10 @@ if(!isset($SetupDir['convert'])) { $SetupDir['convert'] = "setup/convert/"; }
 $checkfile="settings.php";
 if (!is_writable($checkfile)) {
    echo "<br />Settings is not writable.";
-   @chmod("settings.php",0755); $Error="Yes";
-   @chmod("settingsbak.php",0755);
+   chmod("settings.php",0755); $Error="Yes";
+   chmod("settingsbak.php",0755);
 } else { /* settings.php is writable install iDB. ^_^ */ }
-$StatSQL = @mysql_connect($_POST['DatabaseHost'],$_POST['DatabaseUserName'],$_POST['DatabasePassword']);
+$StatSQL = mysql_connect($_POST['DatabaseHost'],$_POST['DatabaseUserName'],$_POST['DatabasePassword']);
 if(!$StatSQL) { $Error="Yes";
 echo "<span class=\"TableMessage\">";
 echo "<br />".mysql_errno().": ".mysql_error()."\n</span>\n"; }
@@ -40,7 +40,7 @@ $BoardSettings=$pretext."\$Settings = array();\n\$Settings['sqlhost'] = '".$_POS
 $fp = fopen("./settings.php","w+");
 fwrite($fp, $BoardSettings);
 fclose($fp);
-//	@cp("settings.php","settingsbak.php");
+//	cp("settings.php","settingsbak.php");
 $fp = fopen("./settingsbak.php","w+");
 fwrite($fp, $BoardSettings);
 fclose($fp);

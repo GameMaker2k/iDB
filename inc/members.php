@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 11/15/2009 SVN 349 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 11/23/2009 SVN 357 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -59,7 +59,7 @@ if(!is_numeric($_GET['groupid'])) { $_GET['groupid'] = null; }
 $ggquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `Name`='%s'", array($Settings['GuestGroup']));
 $ggresult=exec_query($ggquery);
 $GGroup=mysql_result($ggresult,0,"id");
-@mysql_free_result($ggresult);
+mysql_free_result($ggresult);
 //Get SQL LIMIT Number
 $nums = $_GET['page'] * $Settings['max_memlist'];
 $PageLimit = $nums - $Settings['max_memlist'];
@@ -73,7 +73,7 @@ $rnquery = query("SELECT FOUND_ROWS();", array(null));
 $result=exec_query($query);
 $rnresult=exec_query($rnquery);
 $NumberMembers = mysql_result($rnresult,0);
-@mysql_free_result($rnresult);
+mysql_free_result($rnresult);
 $_SESSION['ViewingPage'] = url_maker(null,"no+ext","act=list&orderby=".$_GET['orderby']."&ordertype=".$_GET['ordertype']."&page=".$_GET['page'],"&","=",$prexqstr['member'],$exqstr['member']);
 if($Settings['file_ext']!="no+ext"&&$Settings['file_ext']!="no ext") {
 $_SESSION['ViewingFile'] = $exfile['member'].$Settings['file_ext']; }
@@ -222,7 +222,7 @@ $gresult=exec_query($gquery);
 $MemList['Group']=mysql_result($gresult,0,"Name");
 $GroupNamePrefix=mysql_result($gresult,0,"NamePrefix");
 $GroupNameSuffix=mysql_result($gresult,0,"NameSuffix");
-@mysql_free_result($gresult);
+mysql_free_result($gresult);
 if(isset($GroupNamePrefix)&&$GroupNamePrefix!=null) {
 	$MemList['Name'] = $GroupNamePrefix.$MemList['Name']; }
 if(isset($GroupNameSuffix)&&$GroupNameSuffix!=null) {
@@ -241,7 +241,7 @@ if($MemList['Group']!=$Settings['GuestGroup']) {
 <td class="TableColumn3" style="text-align: center;"><a href="<?php echo $MemList['Website']; ?>" onclick="window.open(this.href);return false;">Website</a></td>
 </tr>
 <?php }
-++$i; } @mysql_free_result($result);
+++$i; } mysql_free_result($result);
 ?>
 <tr id="MemEnd" class="TableRow4">
 <td class="TableColumn4" colspan="8">&nbsp;</td>
@@ -273,7 +273,7 @@ $rnquery = query("SELECT FOUND_ROWS();", array(null));
 $result=exec_query($query);
 $rnresult=exec_query($rnquery);
 $NumberMembers = mysql_result($rnresult,0);
-@mysql_free_result($rnresult);
+mysql_free_result($rnresult);
 $_SESSION['ViewingPage'] = url_maker(null,"no+ext","act=online&list=".$_GET['list']."&page=".$_GET['page'],"&","=",$prexqstr['member'],$exqstr['member']);
 if($Settings['file_ext']!="no+ext"&&$Settings['file_ext']!="no ext") {
 $_SESSION['ViewingFile'] = $exfile['member'].$Settings['file_ext']; }
@@ -453,7 +453,7 @@ $prequery = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i
 $preresult=exec_query($prequery);
 $prenum=mysql_num_rows($preresult);
 $ForumCatID=mysql_result($preresult,0,"CategoryID");
-@mysql_free_result($preresult);
+mysql_free_result($preresult);
 if($CatPermissionInfo['CanViewCategory'][$ForumCatID]=="no"||
 	$CatPermissionInfo['CanViewCategory'][$ForumCatID]!="yes") {
 	$UserSessInfo['ViewingPage'] = url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']);
@@ -470,7 +470,7 @@ $prequery = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i
 $preresult=exec_query($prequery);
 $prenum=mysql_num_rows($preresult);
 $ForumCatID=mysql_result($preresult,0,"CategoryID");
-@mysql_free_result($preresult);
+mysql_free_result($preresult);
 if($CatPermissionInfo['CanViewCategory'][$ForumCatID]=="no"||
 	$CatPermissionInfo['CanViewCategory'][$ForumCatID]!="yes") {
 	$UserSessInfo['ViewingPage'] = url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']);
@@ -546,8 +546,8 @@ $result=exec_query($query);
 $num=mysql_num_rows($result);
 $i=0;
 if($num==0||$_GET['id']<=0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
-ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $ViewMem['ID']=mysql_result($result,$i,"id");
 $ViewMem['Name']=mysql_result($result,$i,"Name");
 $ViewMem['Signature']=mysql_result($result,$i,"Signature");
@@ -577,7 +577,7 @@ $ViewMem['Group']=mysql_result($gresult,0,"Name");
 $GroupNamePrefix=mysql_result($gresult,0,"NamePrefix");
 $GroupNameSuffix=mysql_result($gresult,0,"NameSuffix");
 */
-@mysql_free_result($gresult);
+mysql_free_result($gresult);
 /*
 if(isset($GroupNamePrefix)&&$GroupNamePrefix!=null) {
 	$ViewMem['Name'] = $GroupNamePrefix.$ViewMem['Name']; }
@@ -585,8 +585,8 @@ if(isset($GroupNameSuffix)&&$GroupNameSuffix!=null) {
 	$ViewMem['Name'] = $ViewMem['Name'].$GroupNameSuffix; }
 */
 if($ViewMem['HiddenMember']=="yes") { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
-ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $membertitle = " ".$ThemeSet['TitleDivider']." ".$ViewMem['Name'];	
 if ($ViewMem['Avatar']=="http://"||$ViewMem['Avatar']==null||
 	strtolower($ViewMem['Avatar'])=="noavatar") {
@@ -599,16 +599,16 @@ if($_GET['view']==null) { $_GET['view'] = "profile"; }
 if($_GET['view']!="profile"&&$_GET['view']!="avatar"&&
 	$_GET['view']!="website"&&$_GET['view']!="homepage") { $_GET['view'] = "profile"; }
 if($_GET['view']=="avatar") { 
-	@session_write_close();
-	@header("Location: ".$ViewMem['Avatar']); }
+	session_write_close();
+	header("Location: ".$ViewMem['Avatar']); }
 if($_GET['view']=="website"||$_GET['view']=="homepage") { 
 	if ($ViewMem['Website']!="http://"&&$ViewMem['Website']!=null) {
-	@session_write_close();
-	@header("Location: ".$ViewMem['Website']); }
+	session_write_close();
+	header("Location: ".$ViewMem['Website']); }
 	if ($ViewMem['Website']=="http://"||$ViewMem['Website']==null||
 	strtolower($ViewMem['Avatar'])=="noavatar") {
-	@session_write_close();
-	@header("Location: ".$BoardURL."index.php?act=view"); } }
+	session_write_close();
+	header("Location: ".$BoardURL."index.php?act=view"); } }
 $_SESSION['ViewingPage'] = url_maker(null,"no+ext","act=view&id=".$_GET['id'],"&","=",$prexqstr['member'],$exqstr['member']);
 if($Settings['file_ext']!="no+ext"&&$Settings['file_ext']!="no ext") {
 $_SESSION['ViewingFile'] = $exfile['member'].$Settings['file_ext']; }
@@ -671,37 +671,37 @@ Title: <?php echo $ViewMem['Title']; ?>
 <td class="TableColumn4" colspan="2">&nbsp;</td>
 </tr>
 </table></div>
-<?php } @mysql_free_result($result);
+<?php } mysql_free_result($result);
 if($_GET['act']=="logout") {
-@session_unset();
+session_unset();
 if($cookieDomain==null) {
-@setcookie("MemberName", null, GMTimeStamp() - 3600, $cbasedir);
-@setcookie("UserID", null, GMTimeStamp() - 3600, $cbasedir);
-@setcookie("SessPass", null, GMTimeStamp() - 3600, $cbasedir);
-@setcookie(session_name(), "", GMTimeStamp() - 3600, $cbasedir); }
+setcookie("MemberName", null, GMTimeStamp() - 3600, $cbasedir);
+setcookie("UserID", null, GMTimeStamp() - 3600, $cbasedir);
+setcookie("SessPass", null, GMTimeStamp() - 3600, $cbasedir);
+setcookie(session_name(), "", GMTimeStamp() - 3600, $cbasedir); }
 if($cookieDomain!=null) {
 if($cookieSecure===true) {
-@setcookie("MemberName", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain, 1);
-@setcookie("UserID", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain, 1);
-@setcookie("SessPass", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain, 1);
-@setcookie(session_name(), "", GMTimeStamp() - 3600, $cbasedir, $cookieDomain, 1); }
+setcookie("MemberName", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain, 1);
+setcookie("UserID", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain, 1);
+setcookie("SessPass", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain, 1);
+setcookie(session_name(), "", GMTimeStamp() - 3600, $cbasedir, $cookieDomain, 1); }
 if($cookieSecure===false) {
-@setcookie("MemberName", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain);
-@setcookie("UserID", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain);
-@setcookie("SessPass", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain);
-@setcookie(session_name(), "", GMTimeStamp() - 3600, $cbasedir, $cookieDomain); } }
+setcookie("MemberName", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain);
+setcookie("UserID", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain);
+setcookie("SessPass", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain);
+setcookie(session_name(), "", GMTimeStamp() - 3600, $cbasedir, $cookieDomain); } }
 unset($_COOKIE[session_name()]);
 $_SESSION = array();
-@session_unset();
-@session_destroy();
-@redirect("location",$basedir.url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],false));
-ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
+session_unset();
+session_destroy();
+redirect("location",$basedir.url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],false));
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($_GET['act']=="login") {
 if($_SESSION['UserID']!=0&&$_SESSION['UserID']!=null) { 
 redirect("location",$basedir.url_maker($exfile['member'],$Settings['file_ext'],"act=logout",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],false));
-ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($_SESSION['UserID']==0||$_SESSION['UserID']==null) {
 $_SESSION['ViewingPage'] = url_maker(null,"no+ext","act=login","&","=",$prexqstr['member'],$exqstr['member']);
 if($Settings['file_ext']!="no+ext"&&$Settings['file_ext']!="no ext") {
@@ -773,8 +773,8 @@ $_SESSION['UserFormID'] = $UFID;
 <?php } } if($_POST['act']=="loginmember"&&$_GET['act']=="login_now") {
 if($_SESSION['UserID']!=0&&$_SESSION['UserID']!=null) { 
 redirect("location",$basedir.url_maker($exfile['member'],$Settings['file_ext'],"act=logout",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],false));
-ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($_SESSION['UserID']==0||$_SESSION['UserID']==null) {
 $_SESSION['ViewingPage'] = url_maker(null,"no+ext","act=login","&","=",$prexqstr['member'],$exqstr['member']);
 if($Settings['file_ext']!="no+ext"&&$Settings['file_ext']!="no ext") {
@@ -838,11 +838,11 @@ if (pre_strlen($_POST['userpass'])>"60") { $Error="Yes";  ?>
 </tr>
 <?php } } $BanError = null;
 if ($Error=="Yes") {
-@redirect("refresh",$basedir.url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],false),"4"); }
+redirect("refresh",$basedir.url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],false),"4"); }
 if($Error!="Yes"){
 $YourName = stripcslashes(htmlspecialchars($_POST['username'], ENT_QUOTES, $Settings['charset']));
 //$YourName = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $YourName);
-$YourName = @remove_spaces($YourName);
+$YourName = remove_spaces($YourName);
 $passtype="ODFH";
 if(!isset($_POST['loginemail'])) { $_POST['loginemail'] = "false"; }
 if($_POST['loginemail']!="true") {
@@ -885,7 +885,7 @@ if($YourBanTime>=$CGMTime) { $BanError = "yes"; } }
 $gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($YourGroupM));
 $gresult=exec_query($gquery);
 $YourGroupM=mysql_result($gresult,0,"Name");
-@mysql_free_result($gresult);
+mysql_free_result($gresult);
 $YourTimeZoneM=mysql_result($resultlog,$i,"TimeZone");
 $YourDSTM=mysql_result($resultlog,$i,"DST");
 $JoinedDate=mysql_result($resultlog,$i,"Joined");
@@ -910,7 +910,7 @@ $NewIP=$_SERVER['REMOTE_ADDR'];
 if($BanError!="yes") {
 $queryup = query("UPDATE `".$Settings['sqltable']."members` SET `Password`='%s',`HashType`='%s',`LastActive`=%i,`IP`='%s',`Salt`='%s' WHERE `id`=%i", array($NewPassword,$iDBHash,$NewDay,$NewIP,$NewHashSalt,$YourIDM));
 exec_query($queryup);
-@mysql_free_result($resultlog); @mysql_free_result($queryup);
+mysql_free_result($resultlog); mysql_free_result($queryup);
 //session_regenerate_id();
 $_SESSION['Theme']=$UseTheme;
 $_SESSION['MemberName']=$YourNameM;
@@ -925,23 +925,23 @@ $_SESSION['LastPostTime'] = $YourLastPostTime;
 $_SESSION['DBName']=$Settings['sqldb'];
 if($_POST['storecookie']=="true") {
 if($cookieDomain==null) {
-@setcookie("MemberName", $YourNameM, time() + (7 * 86400), $cbasedir);
-@setcookie("UserID", $YourIDM, time() + (7 * 86400), $cbasedir);
-@setcookie("SessPass", $NewPassword, time() + (7 * 86400), $cbasedir); }
+setcookie("MemberName", $YourNameM, time() + (7 * 86400), $cbasedir);
+setcookie("UserID", $YourIDM, time() + (7 * 86400), $cbasedir);
+setcookie("SessPass", $NewPassword, time() + (7 * 86400), $cbasedir); }
 if($cookieDomain!=null) {
 if($cookieSecure===true) {
-@setcookie("MemberName", $YourNameM, time() + (7 * 86400), $cbasedir, $cookieDomain, 1);
-@setcookie("UserID", $YourIDM, time() + (7 * 86400), $cbasedir, $cookieDomain, 1);
-@setcookie("SessPass", $NewPassword, time() + (7 * 86400), $cbasedir, $cookieDomain, 1); }
+setcookie("MemberName", $YourNameM, time() + (7 * 86400), $cbasedir, $cookieDomain, 1);
+setcookie("UserID", $YourIDM, time() + (7 * 86400), $cbasedir, $cookieDomain, 1);
+setcookie("SessPass", $NewPassword, time() + (7 * 86400), $cbasedir, $cookieDomain, 1); }
 if($cookieSecure===false) {
-@setcookie("MemberName", $YourNameM, time() + (7 * 86400), $cbasedir, $cookieDomain);
-@setcookie("UserID", $YourIDM, time() + (7 * 86400), $cbasedir, $cookieDomain);
-@setcookie("SessPass", $NewPassword, time() + (7 * 86400), $cbasedir, $cookieDomain); } } } }
+setcookie("MemberName", $YourNameM, time() + (7 * 86400), $cbasedir, $cookieDomain);
+setcookie("UserID", $YourIDM, time() + (7 * 86400), $cbasedir, $cookieDomain);
+setcookie("SessPass", $NewPassword, time() + (7 * 86400), $cbasedir, $cookieDomain); } } } }
 } } if($numlog<=0) {
 //echo "Password was not right or user not found!! <_< ";
 } ?>
 <?php if($passright===true&&$BanError!="yes") {
-@redirect("refresh",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false),"3"); ?>
+redirect("refresh",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false),"3"); ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Welcome to the Board <?php echo $_SESSION['MemberName']; ?>. ^_^<br />
@@ -966,8 +966,8 @@ if($cookieSecure===false) {
 $membertitle = " ".$ThemeSet['TitleDivider']." Signing up"; 
 if($_SESSION['UserID']!=0&&$_SESSION['UserID']!=null) { 
 redirect("location",$basedir.url_maker($exfile['member'],$Settings['file_ext'],"act=logout",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],false));
-ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($_SESSION['UserID']==0||$_SESSION['UserID']==null) {
 $_SESSION['ViewingPage'] = url_maker(null,"no+ext","act=signup","&","=",$prexqstr['member'],$exqstr['member']);
 if($Settings['file_ext']!="no+ext"&&$Settings['file_ext']!="no ext") {
@@ -1115,8 +1115,8 @@ echo "<option value=\"".$showmin."\">0:".$showmin." minutes</option>\n"; }
 	if($_POST['act']=="makemembers") {
 if($_SESSION['UserID']!=0&&$_SESSION['UserID']!=null) { 
 redirect("location",$basedir.url_maker($exfile['member'],$Settings['file_ext'],"act=logout",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],false));
-ob_clean(); @header("Content-Type: text/plain; charset=".$Settings['charset']);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); @session_write_close(); die(); }
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($_SESSION['UserID']==0||$_SESSION['UserID']==null) {
 $_SESSION['ViewingPage'] = url_maker(null,"no+ext","act=signup","&","=",$prexqstr['member'],$exqstr['member']);
 if($Settings['file_ext']!="no+ext"&&$Settings['file_ext']!="no ext") {
@@ -1198,7 +1198,7 @@ if (PhpCaptcha::Validate($_POST['signcode'])) {
 <?php } }
 $Name = stripcslashes(htmlspecialchars($_POST['Name'], ENT_QUOTES, $Settings['charset']));
 //$Name = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $Name);
-$Name = @remove_spaces($Name);
+$Name = remove_spaces($Name);
 $lonewolfqy=query("SELECT * FROM `".$Settings['sqltable']."restrictedwords` WHERE `RestrictedUserName`='yes'", array(null));
 $lonewolfrt=exec_query($lonewolfqy);
 $lonewolfnm=mysql_num_rows($lonewolfrt);
@@ -1226,12 +1226,12 @@ $RMatches = preg_match("/".$RWord."/", $Name);
 if($RCaseInsensitive=="yes"&&$RWholeWord!="yes") {
 $RMatches = preg_match("/".$RWord."/i", $Name);
 	if($RMatches==true) { break 1; } }
-++$lonewolfs; } @mysql_free_result($lonewolfrt);
+++$lonewolfs; } mysql_free_result($lonewolfrt);
 $sql_email_check = exec_query(query("SELECT `Email` FROM `".$Settings['sqltable']."members` WHERE `Email`='%s'", array($_POST['Email'])));
 $sql_username_check = exec_query(query("SELECT `Name` FROM `".$Settings['sqltable']."members` WHERE `Name`='%s'", array($Name)));
 $email_check = mysql_num_rows($sql_email_check); 
 $username_check = mysql_num_rows($sql_username_check);
-@mysql_free_result($sql_email_check); @mysql_free_result($sql_username_check);
+mysql_free_result($sql_email_check); mysql_free_result($sql_username_check);
 if ($_POST['TOS']!="Agree") { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
@@ -1281,7 +1281,7 @@ if ($_POST['TOS']!="Agree") { $Error="Yes";  ?>
 	</span>&nbsp;</td>
 </tr>
 <?php } if ($Error=="Yes") {
-@redirect("refresh",$basedir.url_maker($exfile['member'],$Settings['file_ext'],"act=signup",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],FALSE),"4"); ?>
+redirect("refresh",$basedir.url_maker($exfile['member'],$Settings['file_ext'],"act=signup",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],FALSE),"4"); ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Click <a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=signup",$Settings['qstr'],$Settings['qsep'],$exqstr['member'],$prexqstr['member']); ?>">here</a> to try again.<br />&nbsp;
@@ -1323,18 +1323,18 @@ $_GET['YourPost'] = preg_replace("/\s\s+/"," ",$_GET['YourPost']);
 $_GET['YourPost'] = remove_bad_entities($_GET['YourPost']);
 $Avatar = stripcslashes(htmlspecialchars($_POST['Avatar'], ENT_QUOTES, $Settings['charset']));
 //$Avatar = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $Avatar);
-$Avatar = @remove_spaces($Avatar);
+$Avatar = remove_spaces($Avatar);
 $Website = stripcslashes(htmlspecialchars($_POST['Website'], ENT_QUOTES, $Settings['charset']));
 //$Website = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $Website);
-$Website = @remove_spaces($Website);
+$Website = remove_spaces($Website);
 $gquerys = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `Name`='%s' LIMIT 1", array($yourgroup));
 $gresults=exec_query($gquerys);
 $yourgroup=mysql_result($gresults,0,"id");
-@mysql_free_result($gresults);
+mysql_free_result($gresults);
 $yourid = getnextid($Settings['sqltable'],"members");
-$_POST['Interests'] = @remove_spaces($_POST['Interests']);
-$_POST['Title'] = @remove_spaces($_POST['Title']);
-$_POST['Email'] = @remove_spaces($_POST['Email']);
+$_POST['Interests'] = remove_spaces($_POST['Interests']);
+$_POST['Title'] = remove_spaces($_POST['Title']);
+$_POST['Email'] = remove_spaces($_POST['Email']);
 if(!is_numeric($_POST['YourOffSet'])) { $_POST['YourOffSet'] = "0"; }
 if($_POST['YourOffSet']>12) { $_POST['YourOffSet'] = "12"; }
 if($_POST['YourOffSet']<-12) { $_POST['YourOffSet'] = "-12"; }
@@ -1357,11 +1357,11 @@ $YourGroupIDMr=$YourGroupMr;
 $gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($YourGroupMr));
 $gresult=exec_query($gquery);
 $YourGroupMr=mysql_result($gresult,0,"Name");
-@mysql_free_result($gresult);
+mysql_free_result($gresult);
 $YourTimeZoneMr=mysql_result($resultlogr,$ir,"TimeZone");
 $YourDSTMr=mysql_result($resultlogr,$ir,"DST"); }
-@mysql_free_result($resultlogr);
-@session_regenerate_id(true);
+mysql_free_result($resultlogr);
+session_regenerate_id(true);
 $_SESSION['Loggedin']=true;
 $_SESSION['MemberName']=$YourNameMr;
 $_SESSION['UserID']=$YourIDMr;
@@ -1374,19 +1374,19 @@ $_SESSION['UserPass']=$NewPassword;
 $_SESSION['DBName']=$Settings['sqldb'];
 if($_POST['storecookie']=="true") {
 if($cookieDomain==null) {
-@setcookie("MemberName", $YourNameM, time() + (7 * 86400), $cbasedir);
-@setcookie("UserID", $YourIDM, time() + (7 * 86400), $cbasedir);
-@setcookie("SessPass", $NewPassword, time() + (7 * 86400), $cbasedir); }
+setcookie("MemberName", $YourNameM, time() + (7 * 86400), $cbasedir);
+setcookie("UserID", $YourIDM, time() + (7 * 86400), $cbasedir);
+setcookie("SessPass", $NewPassword, time() + (7 * 86400), $cbasedir); }
 if($cookieDomain!=null) {
 if($cookieSecure===true) {
-@setcookie("MemberName", $YourNameM, time() + (7 * 86400), $cbasedir, $cookieDomain, 1);
-@setcookie("UserID", $YourIDM, time() + (7 * 86400), $cbasedir, $cookieDomain, 1);
-@setcookie("SessPass", $NewPassword, time() + (7 * 86400), $cbasedir, $cookieDomain, 1); }
+setcookie("MemberName", $YourNameM, time() + (7 * 86400), $cbasedir, $cookieDomain, 1);
+setcookie("UserID", $YourIDM, time() + (7 * 86400), $cbasedir, $cookieDomain, 1);
+setcookie("SessPass", $NewPassword, time() + (7 * 86400), $cbasedir, $cookieDomain, 1); }
 if($cookieSecure===false) {
-@setcookie("MemberName", $YourNameM, time() + (7 * 86400), $cbasedir, $cookieDomain);
-@setcookie("UserID", $YourIDM, time() + (7 * 86400), $cbasedir, $cookieDomain);
-@setcookie("SessPass", $NewPassword, time() + (7 * 86400), $cbasedir, $cookieDomain); } } }
-@redirect("refresh",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],FALSE),"3");
+setcookie("MemberName", $YourNameM, time() + (7 * 86400), $cbasedir, $cookieDomain);
+setcookie("UserID", $YourIDM, time() + (7 * 86400), $cbasedir, $cookieDomain);
+setcookie("SessPass", $NewPassword, time() + (7 * 86400), $cbasedir, $cookieDomain); } } }
+redirect("refresh",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],FALSE),"3");
 ?>
 <tr>
 	<td><span class="TableMessage">

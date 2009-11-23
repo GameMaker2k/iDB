@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: calendars.php - Last Update: 11/14/2009 SVN 347 - Author: cooldude2k $
+    $FileInfo: calendars.php - Last Update: 11/23/2009 SVN 357 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="calendars.php"||$File3Name=="/calendars.php") {
@@ -81,7 +81,7 @@ if ($EventsName[$NextDay] == null) {
 $NextDay++; } }
 $EventsID[$EventDay] = $EventID;
 ++$is; } 
-@mysql_free_result($result);
+mysql_free_result($result);
 $bdquery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `BirthMonth`=%i", array($MyMonth));
 $bdresult=exec_query($bdquery);
 $bdnum=mysql_num_rows($bdresult);
@@ -101,7 +101,7 @@ if ($EventsName[$BirthDay] != null) {
 if ($EventsName[$BirthDay] == null) {
 	$EventsName[$BirthDay] = "<span title=\"".$oldusername."'s birthday.\">".$UserNamebd1."</span>"; }
 ++$bdi; } 
-@mysql_free_result($bdresult);
+mysql_free_result($bdresult);
 $MyDays = array();
 $MyDays[] = "Sunday";
 $MyDays[] = "Monday";

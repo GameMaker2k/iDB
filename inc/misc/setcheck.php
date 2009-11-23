@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: setcheck.php - Last Update: 6/16/2009 SVN 264 - Author: cooldude2k $
+    $FileInfo: setcheck.php - Last Update: 11/23/2009 SVN 357 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="setcheck.php"||$File3Name=="/setcheck.php") {
@@ -113,7 +113,7 @@ if($Settings['qstr']=="/"||
 	$Settings['qsep'] = "="; }
 if($Settings['qstr']!="&"&&
 	$Settings['qstr']!="/") {
-@qstring($Settings['qstr'],$Settings['qsep']);
+qstring($Settings['qstr'],$Settings['qsep']);
 if(!isset($_GET['page'])) { $_GET['page'] = null; }
 if(!isset($_GET['act'])) { $_GET['act'] = null; }
 if(!isset($_POST['act'])) { $_POST['act'] = null; }
@@ -170,11 +170,11 @@ if ($_GET['act']=="idx"||$_GET['act']=="View") { $_GET['act']="view"; }
 if ($_GET['act']=="Lo-Fi"||$_GET['act']=="lo-fi") { $_GET['act']="lowview"; }
 if ($_GET['act']=="Low-View"||$_GET['act']=="low-view") { $_GET['act']="lowview"; }
 if ($_GET['act']=="LowView"||$_GET['act']=="loview") { $_GET['act']="lowview"; }
-if ($_GET['act']=="iDBInfo") { @header('Location: http://sourceforge.net/projects/intdb/'); }
-if ($_GET['act']=="iDBSite") { @header('Location: http://intdb.sourceforge.net/'); }
-if ($_GET['act']=="OldiDBInfo") { @header('Location: http://developer.berlios.de/projects/idb/'); }
-if ($_GET['act']=="OldiDBSite") { @header('Location: http://idb.berlios.de/'); }
-if ($_GET['act']=="DF2kInfo") { @header('Location: http://developer.berlios.de/projects/df2k/'); }
-if ($_GET['act']=="DF2kSite") { @header('Location: http://df2k.berlios.de/'); }
-if ($_GET['act']=="GM2kSite") { @header('Location: http://upload.idb.s1.jcink.com/'); }
+if ($_GET['act']=="iDBInfo") { header('Location: http://sourceforge.net/projects/intdb/'); }
+if ($_GET['act']=="iDBSite") { header('Location: http://intdb.sourceforge.net/'); }
+if ($_GET['act']=="OldiDBInfo") { header('Location: http://developer.berlios.de/projects/idb/'); }
+if ($_GET['act']=="OldiDBSite") { header('Location: http://idb.berlios.de/'); }
+if ($_GET['act']=="DF2kInfo") { header('Location: http://developer.berlios.de/projects/df2k/'); }
+if ($_GET['act']=="DF2kSite") { header('Location: http://df2k.berlios.de/'); }
+if ($_GET['act']=="GM2kSite") { header('Location: http://upload.idb.s1.jcink.com/'); }
 ?>
