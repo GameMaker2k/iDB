@@ -21,7 +21,7 @@
 //                       """"""""""""""""""""""""""""""""""""""""""
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // UTF8 helper functions
-// author: Scott Michael Reynen "scottrandomchaos.com"
+// author: Scott Michael Reynen "scott@randomchaos.com"
 // url: http://www.randomchaos.com/document.php?source=php_and_unicode
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // utf8_substr by frank at jkelloggs dot dk
@@ -32,7 +32,7 @@
 // Copyright (C) 2005-2006, Edward Eliot.
 // All rights reserved.
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//        $FileInfo: README - Last Update: 11/23/2009 SVN 357 - Author: cooldude2k $            
+//        $FileInfo: README - Last Update: 11/23/2009 SVN 358 - Author: cooldude2k $            
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Copyright 2004-2009 Cool Dude 2k - http://intdb.sourceforge.net/ http://idb.berlios.net/
 // Copyright 2004-2009 Game Maker 2k - http://upload.idb.s1.jcink.com/ 
