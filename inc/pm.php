@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: pm.php - Last Update: 11/23/2009 SVN 357 - Author: cooldude2k $
+    $FileInfo: pm.php - Last Update: 11/23/2009 SVN 359 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pm.php"||$File3Name=="/pm.php") {
@@ -67,16 +67,16 @@ if($_GET['act']=="view") {
 //Get SQL LIMIT Number
 $nums = $_GET['page'] * $Settings['max_pmlist'];
 $PageLimit = $nums - $Settings['max_pmlist'];
-$query = query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."messenger` WHERE `ReciverID`=%i ORDER BY `DateSend` DESC LIMIT %i,%i", array($_SESSION['UserID'],$PageLimit,$Settings['max_pmlist']));
-$rnquery = query("SELECT FOUND_ROWS();", array(null));
-$result=exec_query($query);
-$rnresult=exec_query($rnquery);
-$NumberMessage = mysql_result($rnresult,0);
-mysql_free_result($rnresult);
+$query = sql_pre_query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."messenger` WHERE `ReciverID`=%i ORDER BY `DateSend` DESC LIMIT %i,%i", array($_SESSION['UserID'],$PageLimit,$Settings['max_pmlist']));
+$rnquery = sql_pre_query("SELECT FOUND_ROWS();", array(null));
+$result=sql_query($query);
+$rnresult=sql_query($rnquery);
+$NumberMessage = sql_result($rnresult,0);
+sql_free_result($rnresult);
 if($NumberMessage==null) { 
 	$NumberMessage = 0; }
 $num = $NumberMessage;
-$num=mysql_num_rows($result);
+$num=sql_num_rows($result);
 //Start MessengerList Page Code
 if(!isset($Settings['max_pmlist'])) { $Settings['max_pmlist'] = 10; }
 if($_GET['page']==null) { $_GET['page'] = 1; } 
@@ -99,7 +99,7 @@ if($pnum<$Settings['max_pmlist']&&$pnum>0) {
 	$pnum = $pnum - $pnum; 
 	$Pages[$l] = $l; ++$l; } }
 //End MessengerList Page Code
-$num=mysql_num_rows($result);
+$num=sql_num_rows($result);
 $i=0;
 //List Page Number Code Start
 $pagenum=count($Pages);
@@ -185,25 +185,25 @@ if($pagenum>1) {
 </tr>
 <?php
 while ($i < $num) {
-$PMID=mysql_result($result,$i,"id");
-$SenderID=mysql_result($result,$i,"SenderID");
+$PMID=sql_result($result,$i,"id");
+$SenderID=sql_result($result,$i,"SenderID");
 $PreSenderName = GetUserName($SenderID,$Settings['sqltable']);
 if($PreSenderName['Name']===null) { $SenderID = -1;
 $PreSenderName = GetUserName($SenderID,$Settings['sqltable']); }
 $SenderName = $PreSenderName['Name'];
 $SenderHidden = $PreSenderName['Hidden'];
-$ReciverID=mysql_result($result,$i,"ReciverID");
+$ReciverID=sql_result($result,$i,"ReciverID");
 $PreReciverName = GetUserName($ReciverID,$Settings['sqltable']);
 if($PreReciverName['Name']===null) { $ReciverID = -1;
 $PreReciverName = GetUserName($ReciverID,$Settings['sqltable']); }
 $ReciverName = $PreReciverName['Name'];
 $ReciverHidden = $PreReciverName['Hidden'];
-$PMGuest=mysql_result($result,$i,"GuestName");
-$MessageName=mysql_result($result,$i,"MessageTitle");
-$MessageDesc=mysql_result($result,$i,"Description");
-$DateSend=mysql_result($result,$i,"DateSend");
+$PMGuest=sql_result($result,$i,"GuestName");
+$MessageName=sql_result($result,$i,"MessageTitle");
+$MessageDesc=sql_result($result,$i,"Description");
+$DateSend=sql_result($result,$i,"DateSend");
 $DateSend=GMTimeChange("F j, Y, g:i a",$DateSend,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$MessageStat=mysql_result($result,$i,"Read");
+$MessageStat=sql_result($result,$i,"Read");
 if($SenderName=="Guest") { $SenderName=$PMGuest;
 if($SenderName==null) { $SenderName="Guest"; } }
 $PreMessage = $ThemeSet['MessageUnread'];
@@ -228,7 +228,7 @@ echo "<span>".$SenderName."</span>"; }
 ?></td>
 <td class="TableMenuColumn3" style="text-align: center;"><?php echo $DateSend; ?></td>
 </tr>
-<?php ++$i; } mysql_free_result($result); ?>
+<?php ++$i; } sql_free_result($result); ?>
 <tr id="MessengerEnd" class="TableMenuRow4">
 <td class="TableMenuColumn4" colspan="4">&nbsp;</td>
 </tr>
@@ -237,16 +237,16 @@ if($_GET['act']=="viewsent") {
 //Get SQL LIMIT Number
 $nums = $_GET['page'] * $Settings['max_pmlist'];
 $PageLimit = $nums - $Settings['max_pmlist'];
-$query = query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."messenger` WHERE `SenderID`=%i ORDER BY `DateSend` DESC LIMIT %i,%i", array($_SESSION['UserID'],$PageLimit,$Settings['max_pmlist']));
-$rnquery = query("SELECT FOUND_ROWS();", array(null));
-$result=exec_query($query);
-$rnresult=exec_query($rnquery);
-$NumberMessage = mysql_result($rnresult,0);
-mysql_free_result($rnresult);
+$query = sql_pre_query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."messenger` WHERE `SenderID`=%i ORDER BY `DateSend` DESC LIMIT %i,%i", array($_SESSION['UserID'],$PageLimit,$Settings['max_pmlist']));
+$rnquery = sql_pre_query("SELECT FOUND_ROWS();", array(null));
+$result=sql_query($query);
+$rnresult=sql_query($rnquery);
+$NumberMessage = sql_result($rnresult,0);
+sql_free_result($rnresult);
 if($NumberMessage==null) { 
 	$NumberMessage = 0; }
 $num = $NumberMessage;
-$num=mysql_num_rows($result);
+$num=sql_num_rows($result);
 //Start MessengerList Page Code
 if(!isset($Settings['max_pmlist'])) { $Settings['max_pmlist'] = 10; }
 if($_GET['page']==null) { $_GET['page'] = 1; } 
@@ -269,7 +269,7 @@ if($pnum<$Settings['max_pmlist']&&$pnum>0) {
 	$pnum = $pnum - $pnum; 
 	$Pages[$l] = $l; ++$l; } }
 //End MessengerList Page Code
-$num=mysql_num_rows($result);
+$num=sql_num_rows($result);
 $i=0;
 //List Page Number Code Start
 $pagenum=count($Pages);
@@ -355,25 +355,25 @@ if($pagenum>1) {
 </tr>
 <?php
 while ($i < $num) {
-$PMID=mysql_result($result,$i,"id");
-$SenderID=mysql_result($result,$i,"SenderID");
+$PMID=sql_result($result,$i,"id");
+$SenderID=sql_result($result,$i,"SenderID");
 $PreSenderName = GetUserName($SenderID,$Settings['sqltable']);
 if($PreSenderName['Name']===null) { $SenderID = -1;
 $PreSenderName = GetUserName($SenderID,$Settings['sqltable']); }
 $SenderName = $PreSenderName['Name'];
 $SenderHidden = $PreSenderName['Hidden'];
-$ReciverID=mysql_result($result,$i,"ReciverID");
+$ReciverID=sql_result($result,$i,"ReciverID");
 $PreReciverName = GetUserName($ReciverID,$Settings['sqltable']);
 if($PreReciverName['Name']===null) { $ReciverID = -1;
 $PreReciverName = GetUserName($ReciverID,$Settings['sqltable']); }
 $ReciverName = $PreReciverName['Name'];
 $ReciverHidden = $PreReciverName['Hidden'];
-$PMGuest=mysql_result($result,$i,"GuestName");
-$MessageName=mysql_result($result,$i,"MessageTitle");
-$MessageDesc=mysql_result($result,$i,"Description");
-$DateSend=mysql_result($result,$i,"DateSend");
+$PMGuest=sql_result($result,$i,"GuestName");
+$MessageName=sql_result($result,$i,"MessageTitle");
+$MessageDesc=sql_result($result,$i,"Description");
+$DateSend=sql_result($result,$i,"DateSend");
 $DateSend=GMTimeChange("F j, Y, g:i a",$DateSend,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$MessageStat=mysql_result($result,$i,"Read");
+$MessageStat=sql_result($result,$i,"Read");
 if($SenderName=="Guest") { $SenderName=$PMGuest;
 if($SenderName==null) { $SenderName="Guest"; } }
 $PreMessage = $ThemeSet['MessageUnread'];
@@ -402,39 +402,39 @@ echo "<span>".$ReciverName."</span>"; }
 <tr id="MessengerEnd" class="TableMenuRow4">
 <td class="TableMenuColumn4" colspan="4">&nbsp;</td>
 </tr>
-<?php } mysql_free_result($result);
+<?php } sql_free_result($result);
 if($_GET['act']=="read") {
-$query = query("SELECT * FROM `".$Settings['sqltable']."messenger` WHERE `id`=%i", array($_GET['id']));
-$result=exec_query($query);
-$num=mysql_num_rows($result);
+$query = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."messenger` WHERE `id`=%i", array($_GET['id']));
+$result=sql_query($query);
+$num=sql_num_rows($result);
 $is=0;
 if($num==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 while ($is < $num) {
-$PMID=mysql_result($result,$is,"id");
-$SenderID=mysql_result($result,$is,"SenderID");
+$PMID=sql_result($result,$is,"id");
+$SenderID=sql_result($result,$is,"SenderID");
 $PreSenderName = GetUserName($SenderID,$Settings['sqltable']);
 if($PreSenderName['Name']===null) { $SenderID = -1;
 $PreSenderName = GetUserName($SenderID,$Settings['sqltable']); }
 $SenderName = $PreSenderName['Name'];
 $SenderHidden = $PreSenderName['Hidden'];
-$ReciverID=mysql_result($result,$is,"ReciverID");
+$ReciverID=sql_result($result,$is,"ReciverID");
 $PreReciverName = GetUserName($ReciverID,$Settings['sqltable']);
 if($PreReciverName['Name']===null) { $ReciverID = -1;
 $PreReciverName = GetUserName($ReciverID,$Settings['sqltable']); }
 $ReciverName = $PreReciverName['Name'];
 $ReciverHidden = $PreReciverName['Hidden'];
-$PMGuest=mysql_result($result,$is,"GuestName");
-$MessageName=mysql_result($result,$is,"MessageTitle");
-$DateSend=mysql_result($result,$is,"DateSend");
+$PMGuest=sql_result($result,$is,"GuestName");
+$MessageName=sql_result($result,$is,"MessageTitle");
+$DateSend=sql_result($result,$is,"DateSend");
 $DateSend=GMTimeChange("F j, Y, g:i a",$DateSend,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$MessageText=mysql_result($result,$is,"MessageText");
+$MessageText=sql_result($result,$is,"MessageText");
 $MessageText = preg_replace("/\<br\>/", "<br />", nl2br($MessageText));
-$MessageDesc=mysql_result($result,$is,"Description");
-$requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i", array($SenderID));
-$reresult=exec_query($requery);
-$renum=mysql_num_rows($reresult);
+$MessageDesc=sql_result($result,$is,"Description");
+$requery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i", array($SenderID));
+$reresult=sql_query($requery);
+$renum=sql_num_rows($reresult);
 $rei=0;
 if($_SESSION['UserID']!=$ReciverID&&
 	$_SESSION['UserID']!=$SenderID) {
@@ -443,40 +443,40 @@ ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 while ($rei < $renum) {
 $User1ID=$SenderID;
-$User1Name=mysql_result($reresult,$rei,"Name");
+$User1Name=sql_result($reresult,$rei,"Name");
 $SenderName = $User1Name;
-$User1IP=mysql_result($reresult,$rei,"IP");
-$User1Email=mysql_result($reresult,$rei,"Email");
-$User1Title=mysql_result($reresult,$rei,"Title");
-$User1Joined=mysql_result($reresult,$rei,"Joined");
+$User1IP=sql_result($reresult,$rei,"IP");
+$User1Email=sql_result($reresult,$rei,"Email");
+$User1Title=sql_result($reresult,$rei,"Title");
+$User1Joined=sql_result($reresult,$rei,"Joined");
 $User1Joined=GMTimeChange("M j Y",$User1Joined,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$User1GroupID=mysql_result($reresult,$rei,"GroupID");
-$User1Hidden=mysql_result($reresult,$rei,"HiddenMember");
+$User1GroupID=sql_result($reresult,$rei,"GroupID");
+$User1Hidden=sql_result($reresult,$rei,"HiddenMember");
 $SenderHidden = $User1Hidden;
-$gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i", array($User1GroupID));
-$gresult=exec_query($gquery);
-$User1Group=mysql_result($gresult,0,"Name");
-$GroupNamePrefix=mysql_result($gresult,0,"NamePrefix");
-$GroupNameSuffix=mysql_result($gresult,0,"NameSuffix");
-mysql_free_result($gresult);
-$User1Signature=mysql_result($reresult,$rei,"Signature");
-$User1Avatar=mysql_result($reresult,$rei,"Avatar");
-$User1AvatarSize=mysql_result($reresult,$rei,"AvatarSize");
+$gquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i", array($User1GroupID));
+$gresult=sql_query($gquery);
+$User1Group=sql_result($gresult,0,"Name");
+$GroupNamePrefix=sql_result($gresult,0,"NamePrefix");
+$GroupNameSuffix=sql_result($gresult,0,"NameSuffix");
+sql_free_result($gresult);
+$User1Signature=sql_result($reresult,$rei,"Signature");
+$User1Avatar=sql_result($reresult,$rei,"Avatar");
+$User1AvatarSize=sql_result($reresult,$rei,"AvatarSize");
 if ($User1Avatar=="http://"||$User1Avatar==null||
 	strtolower($User1Avatar)=="noavatar") {
 $User1Avatar=$ThemeSet['NoAvatar'];
 $User1AvatarSize=$ThemeSet['NoAvatarSize']; }
 $AvatarSize1=explode("x", $User1AvatarSize);
 $AvatarSize1W=$AvatarSize1[0]; $AvatarSize1H=$AvatarSize1[1];
-$User1Website=mysql_result($reresult,$rei,"Website");
-$User1PostCount=mysql_result($reresult,$rei,"PostCount");
-$User1Karma=mysql_result($reresult,$rei,"Karma");
-$User1IP=mysql_result($reresult,$rei,"IP");
-++$rei; } mysql_free_result($reresult);
-++$is; } mysql_free_result($result);
+$User1Website=sql_result($reresult,$rei,"Website");
+$User1PostCount=sql_result($reresult,$rei,"PostCount");
+$User1Karma=sql_result($reresult,$rei,"Karma");
+$User1IP=sql_result($reresult,$rei,"IP");
+++$rei; } sql_free_result($reresult);
+++$is; } sql_free_result($result);
 if($_SESSION['UserID']==$ReciverID) {
-$queryup = query("UPDATE `".$Settings['sqltable']."messenger` SET `Read`=%i WHERE `id`=%i", array(1,$_GET['id']));
-exec_query($queryup); }
+$queryup = sql_pre_query("UPDATE `".$Settings['sqltable']."messenger` SET `Read`=%i WHERE `id`=%i", array(1,$_GET['id']));
+sql_query($queryup); }
 if($User1Name=="Guest") { $User1Name=$PMGuest;
 if($User1Name==null) { $User1Name="Guest"; } }
 if(isset($GroupNamePrefix)&&$GroupNamePrefix!=null) {
@@ -574,15 +574,15 @@ echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr
 <?php } if($_GET['act']=="create") { 
 $SendMessageTo = null;
 if($_GET['id']!=null&&$_GET['id']!=-1) {
-$requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i", array($_GET['id']));
-$reresult=exec_query($requery);
-$renum=mysql_num_rows($reresult);
+$requery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i", array($_GET['id']));
+$reresult=sql_query($requery);
+$renum=sql_num_rows($reresult);
 $rei=0;
 while ($rei < $renum) {
-$SendMessageTo = mysql_result($reresult,$rei,"Name");
+$SendMessageTo = sql_result($reresult,$rei,"Name");
 $SendMessageTo = htmlspecialchars($SendMessageTo, ENT_QUOTES, $Settings['charset']);
-$SendToGroupID = mysql_result($reresult,$rei,"GroupID");
-++$rei; } } mysql_free_result($reresult);
+$SendToGroupID = sql_result($reresult,$rei,"GroupID");
+++$rei; } } sql_free_result($reresult);
 if(!isset($renum)) { $renum = 0; }
 if($renum==0) { $SendMessageTo = null; }
 $QuoteReply = null; $QuoteDescription = null; $QuoteTitle = null;
@@ -591,15 +591,15 @@ if(isset($SendMessageTo)) {
 $QuoteUserName = $SendMessageTo; }
 if(!isset($SendMessageTo)) {
 $QuoteUserName = "Unknown"; }
-$query = query("SELECT * FROM `".$Settings['sqltable']."messenger` WHERE `id`=%i", array($_GET['post']));
-$result=exec_query($query);
-$num=mysql_num_rows($result);
-$QuoteTitle=mysql_result($result,0,"MessageTitle");
-$MessageText=mysql_result($result,0,"MessageText");
+$query = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."messenger` WHERE `id`=%i", array($_GET['post']));
+$result=sql_query($query);
+$num=sql_num_rows($result);
+$QuoteTitle=sql_result($result,0,"MessageTitle");
+$MessageText=sql_result($result,0,"MessageText");
 $QuoteReply = preg_replace("/\<br\>/", "<br />", nl2br($MessageText));
-$QuoteDescription=mysql_result($result,0,"Description");
-$result=exec_query($query);
-$num=mysql_num_rows($result);
+$QuoteDescription=sql_result($result,0,"Description");
+$result=sql_query($query);
+$num=sql_num_rows($result);
 $QuoteReply = remove_bad_entities($QuoteReply);
 $QuoteDescription = str_replace("Re: ","",$QuoteDescription);
 $QuoteDescription = "Re: ".$QuoteDescription;
@@ -629,17 +629,17 @@ $_SESSION['UserFormID'] = $UFID;
 <td class="TableColumn3" style="width: 15%; vertical-align: middle; text-align: center;">
 <div style="width: 100%; height: 160px; overflow: auto;">
 <table style="width: 100%; text-align: center;"><?php
-$renee_query=query("SELECT * FROM `".$Settings['sqltable']."smileys` WHERE `Show`='yes'", array(null));
-$renee_result=exec_query($renee_query);
-$renee_num=mysql_num_rows($renee_result);
+$renee_query=sql_pre_query("SELECT * FROM `".$Settings['sqltable']."smileys` WHERE `Show`='yes'", array(null));
+$renee_result=sql_query($renee_query);
+$renee_num=sql_num_rows($renee_result);
 $renee_s=0; $SmileRow=0; $SmileCRow=0;
 while ($renee_s < $renee_num) { ++$SmileRow;
-$FileName=mysql_result($renee_result,$renee_s,"FileName");
-$SmileName=mysql_result($renee_result,$renee_s,"SmileName");
-$SmileText=mysql_result($renee_result,$renee_s,"SmileText");
-$SmileDirectory=mysql_result($renee_result,$renee_s,"Directory");
-$ShowSmile=mysql_result($renee_result,$renee_s,"Show");
-$ReplaceType=mysql_result($renee_result,$renee_s,"ReplaceCI");
+$FileName=sql_result($renee_result,$renee_s,"FileName");
+$SmileName=sql_result($renee_result,$renee_s,"SmileName");
+$SmileText=sql_result($renee_result,$renee_s,"SmileText");
+$SmileDirectory=sql_result($renee_result,$renee_s,"Directory");
+$ShowSmile=sql_result($renee_result,$renee_s,"Show");
+$ReplaceType=sql_result($renee_result,$renee_s,"ReplaceCI");
 if($SmileRow==1) { ?><tr>
 	<?php } if($SmileRow<5) { ++$SmileCRow; ?>
 	<td>&nbsp;<img src="<?php echo $SmileDirectory."".$FileName; ?>" style="vertical-align: middle; border: 0px; cursor: pointer;" title="<?php echo $SmileName; ?>" alt="<?php echo $SmileName; ?>" onclick="addsmiley('ReplyPost','&nbsp;<?php echo htmlspecialchars($SmileText, ENT_QUOTES, $Settings['charset']); ?>&nbsp;')" />&nbsp;</td>
@@ -651,7 +651,7 @@ if($SmileCRow<5&&$SmileCRow!=0) {
 $SmileCRowL = 5 - $SmileCRow;
 echo "<td colspan=\"".$SmileCRowL."\">&nbsp;</td></tr>"; }
 echo "</table>";
-mysql_free_result($renee_result);
+sql_free_result($renee_result);
 ?></div></td>
 <td class="TableColumn3" style="width: 85%;">
 <form style="display: inline;" method="post" id="MkReplyForm" action="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=sendmessage",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>">
@@ -805,18 +805,18 @@ setcookie("GuestName", $_POST['GuestName'], time() + (7 * 86400), $cbasedir);
 $_SESSION['GuestName']=$_POST['GuestName']; } }
 /*    <_<  iWordFilter  >_>      
    by Kazuki Przyborowski - Cool Dude 2k */
-$katarzynaqy=query("SELECT * FROM `".$Settings['sqltable']."wordfilter`", array(null));
-$katarzynart=exec_query($katarzynaqy);
-$katarzynanm=mysql_num_rows($katarzynart);
+$katarzynaqy=sql_pre_query("SELECT * FROM `".$Settings['sqltable']."wordfilter`", array(null));
+$katarzynart=sql_query($katarzynaqy);
+$katarzynanm=sql_num_rows($katarzynart);
 $katarzynas=0;
 while ($katarzynas < $katarzynanm) {
-$Filter=mysql_result($katarzynart,$katarzynas,"Filter");
-$Replace=mysql_result($katarzynart,$katarzynas,"Replace");
-$CaseInsensitive=mysql_result($katarzynart,$katarzynas,"CaseInsensitive");
+$Filter=sql_result($katarzynart,$katarzynas,"Filter");
+$Replace=sql_result($katarzynart,$katarzynas,"Replace");
+$CaseInsensitive=sql_result($katarzynart,$katarzynas,"CaseInsensitive");
 if($CaseInsensitive=="on") { $CaseInsensitive = "yes"; }
 if($CaseInsensitive=="off") { $CaseInsensitive = "no"; }
 if($CaseInsensitive!="yes"||$CaseInsensitive!="no") { $CaseInsensitive = "no"; }
-$WholeWord=mysql_result($katarzynart,$katarzynas,"WholeWord");
+$WholeWord=sql_result($katarzynart,$katarzynas,"WholeWord");
 if($WholeWord=="on") { $WholeWord = "yes"; }
 if($WholeWord=="off") { $WholeWord = "no"; }
 if($WholeWord!="yes"&&$WholeWord!="no") { $WholeWord = "no"; }
@@ -833,26 +833,26 @@ $_POST['MessageDesc'] = preg_replace("/".$Filter."/", $Replace, $_POST['MessageD
 if($CaseInsensitive=="yes"&&$WholeWord!="yes") {
 $_POST['Message'] = preg_replace("/".$Filter."/i", $Replace, $_POST['Message']);
 $_POST['MessageDesc'] = preg_replace("/".$Filter."/i", $Replace, $_POST['MessageDesc']); }
-++$katarzynas; } mysql_free_result($katarzynart);
-$lonewolfqy=query("SELECT * FROM `".$Settings['sqltable']."restrictedwords` WHERE `RestrictedMessageName`='yes' or `RestrictedUserName`='yes'", array(null));
-$lonewolfrt=exec_query($lonewolfqy);
-$lonewolfnm=mysql_num_rows($lonewolfrt);
+++$katarzynas; } sql_free_result($katarzynart);
+$lonewolfqy=sql_pre_query("SELECT * FROM `".$Settings['sqltable']."restrictedwords` WHERE `RestrictedMessageName`='yes' or `RestrictedUserName`='yes'", array(null));
+$lonewolfrt=sql_query($lonewolfqy);
+$lonewolfnm=sql_num_rows($lonewolfrt);
 $lonewolfs=0; $RMatches = null; $RGMatches = null;
 while ($lonewolfs < $lonewolfnm) {
-$RWord=mysql_result($lonewolfrt,$lonewolfs,"Word");
-$RCaseInsensitive=mysql_result($lonewolfrt,$lonewolfs,"CaseInsensitive");
+$RWord=sql_result($lonewolfrt,$lonewolfs,"Word");
+$RCaseInsensitive=sql_result($lonewolfrt,$lonewolfs,"CaseInsensitive");
 if($RCaseInsensitive=="on") { $RCaseInsensitive = "yes"; }
 if($RCaseInsensitive=="off") { $RCaseInsensitive = "no"; }
 if($RCaseInsensitive!="yes"||$RCaseInsensitive!="no") { $RCaseInsensitive = "no"; }
-$RWholeWord=mysql_result($lonewolfrt,$lonewolfs,"WholeWord");
+$RWholeWord=sql_result($lonewolfrt,$lonewolfs,"WholeWord");
 if($RWholeWord=="on") { $RWholeWord = "yes"; }
 if($RWholeWord=="off") { $RWholeWord = "no"; }
 if($RWholeWord!="yes"||$RWholeWord!="no") { $RWholeWord = "no"; }
-$RestrictedMessageName=mysql_result($lonewolfrt,$lonewolfs,"RestrictedMessageName");
+$RestrictedMessageName=sql_result($lonewolfrt,$lonewolfs,"RestrictedMessageName");
 if($RestrictedMessageName=="on") { $RestrictedMessageName = "yes"; }
 if($RestrictedMessageName=="off") { $RestrictedMessageName = "no"; }
 if($RestrictedMessageName!="yes"||$RestrictedMessageName!="no") { $RestrictedMessageName = "no"; }
-$RestrictedUserName=mysql_result($lonewolfrt,$lonewolfs,"RestrictedUserName");
+$RestrictedUserName=sql_result($lonewolfrt,$lonewolfs,"RestrictedUserName");
 if($RestrictedUserName=="on") { $RestrictedUserName = "yes"; }
 if($RestrictedUserName=="off") { $RestrictedUserName = "no"; }
 if($RestrictedUserName!="yes"||$RestrictedUserName!="no") { $RestrictedUserName = "no"; }
@@ -885,22 +885,22 @@ $RMatches = preg_match("/".$RWord."/i", $_POST['MessageName']);
 if($RestrictedUserName=="yes") {
 $RGMatches = preg_match("/".$RWord."/i", $_POST['GuestName']);
 	if($RGMatches==true) { break 1; } } }
-++$lonewolfs; } mysql_free_result($lonewolfrt);
-$requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `Name`='%s'", array($_POST['SendMessageTo']));
-$reresult=exec_query($requery);
-$renum=mysql_num_rows($reresult);
+++$lonewolfs; } sql_free_result($lonewolfrt);
+$requery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `Name`='%s'", array($_POST['SendMessageTo']));
+$reresult=sql_query($requery);
+$renum=sql_num_rows($reresult);
 $rei=0;
 while ($rei < $renum) {
-$SendMessageToID = mysql_result($reresult,$rei,"id");
-$SendToGroupID = mysql_result($reresult,$rei,"GroupID");
-$gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i", array($SendToGroupID));
-$gresult=exec_query($gquery);
-$SendUserCanPM=mysql_result($gresult,0,"CanPM");
+$SendMessageToID = sql_result($reresult,$rei,"id");
+$SendToGroupID = sql_result($reresult,$rei,"GroupID");
+$gquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i", array($SendToGroupID));
+$gresult=sql_query($gquery);
+$SendUserCanPM=sql_result($gresult,0,"CanPM");
 $SendUserCanPM = strtolower($SendUserCanPM);
 if($SendUserCanPM!="yes"&&$SendUserCanPM!="no") {
 	$SendUserCanPM = "no"; }
-mysql_free_result($gresult);
-++$rei; } mysql_free_result($reresult);
+sql_free_result($gresult);
+++$rei; } sql_free_result($reresult);
 if($renum==0) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
@@ -959,12 +959,12 @@ redirect("refresh",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"ac
 	</span><br /></td>
 </tr>
 <?php } if ($Error!="Yes") { $LastActive = GMTimeStamp();
-$messageid = getnextid($Settings['sqltable'],"messenger");
+$messageid = sql_get_next_id($Settings['sqltable'],"messenger");
 if($_SESSION['UserGroup']==$Settings['GuestGroup']) { $User1Name = $_POST['GuestName']; }
 if($_SESSION['UserGroup']!=$Settings['GuestGroup']) { $User1Name = $_SESSION['MemberName']; }
-$query = query("INSERT INTO `".$Settings['sqltable']."messenger` (`SenderID`, `ReciverID`, `GuestName`, `MessageTitle`, `MessageText`, `Description`, `DateSend`, `Read`) VALUES 
+$query = sql_pre_query("INSERT INTO `".$Settings['sqltable']."messenger` (`SenderID`, `ReciverID`, `GuestName`, `MessageTitle`, `MessageText`, `Description`, `DateSend`, `Read`) VALUES 
 (%i, %i, '%s', '%s', '%s', '%s', %i, %i)", array($_SESSION['UserID'],$SendMessageToID,$_SESSION['MemberName'],$_POST['MessageName'],$_POST['Message'],$_POST['MessageDesc'],$LastActive,0));
-exec_query($query);
+sql_query($query);
 ?><tr>
 	<td><span class="TableMessage"><br />
 	Message sent to user <?php echo $_POST['SendMessageTo']; ?>.<br />

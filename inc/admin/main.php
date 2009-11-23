@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: main.php - Last Update: 11/23/2009 SVN 357 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 11/23/2009 SVN 359 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -74,9 +74,9 @@ $Settings['KBoostPercent'] = "6|10"; }
 require($SettDir['admin'].'table.php'); 
 if($_GET['act']=="delsessions"&&$GroupInfo['ViewDBInfo']=="yes") {
 $time = GMTimeStamp() - ini_get("session.gc_maxlifetime");
-//$sqlg = query('DELETE FROM `'.$Settings['sqltable'].'sessions` WHERE `expires` < UNIX_TIMESTAMP();', array(null));
-$sqlgc = query('DELETE FROM `'.$Settings['sqltable'].'sessions` WHERE `expires` < %i', array($time));
-exec_query($sqlgc);
+//$sqlg = sql_pre_query('DELETE FROM `'.$Settings['sqltable'].'sessions` WHERE `expires` < UNIX_TIMESTAMP();', array(null));
+$sqlgc = sql_pre_query('DELETE FROM `'.$Settings['sqltable'].'sessions` WHERE `expires` < %i', array($time));
+sql_query($sqlgc);
 $_POST['update'] = "now"; $_GET['act'] = "view"; }
 if($_GET['act']=="optimize"&&$GroupInfo['ViewDBInfo']=="yes") {
 $TablePreFix = $Settings['sqltable'];
@@ -90,8 +90,8 @@ $TblOptimized = 0;
 while ($ti < $tcount) {
 if(isset($OptimizeAr["Msg_text"])) { unset($OptimizeAr["Msg_text"]); }
 if(isset($OptimizeAr[3])) { unset($OptimizeAr[3]); }
-$OptimizeTea = exec_query(query("OPTIMIZE TABLE `".$TableChCk[$ti]."`", array(null))); 
-$OptimizeAr = mysql_fetch_array($OptimizeTea);
+$OptimizeTea = sql_query(sql_pre_query("OPTIMIZE TABLE `".$TableChCk[$ti]."`", array(null))); 
+$OptimizeAr = sql_fetch_array($OptimizeTea);
 if(!isset($OptimizeAr["Msg_text"])&&
 	isset($OptimizeAr[3])) { $OptimizeAr["Msg_text"] = $OptimizeAr[3]; }
 if($OptimizeAr["Msg_text"]=="OK") { 
@@ -127,12 +127,12 @@ redirect("refresh",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"ac
 <?php if(isset($OutPutLog)) { echo "<br />".$OutPutLog; } ?>
 <br />Settings have been updated <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=main",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">click here</a> to go back. ^_^<br />&nbsp;</div>
 <?php } if($_GET['act']=="view"&&$_POST['update']!="now") {
-$query = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($_SESSION['UserID']));
-$result=exec_query($query);
-$num=mysql_num_rows($result);
+$query = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($_SESSION['UserID']));
+$result=sql_query($query);
+$num=sql_num_rows($result);
 $i=0;
-$YourID=mysql_result($result,$i,"id");
-$Notes=mysql_result($result,$i,"Notes");
+$YourID=sql_result($result,$i,"id");
+$Notes=sql_result($result,$i,"Notes");
 $noteact = url_maker($exfile['profile'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['profile'],$exqstr['profile']);
 $notepadact = $noteact; $profiletitle = " ".$ThemeSet['TitleDivider']." NotePad";
 $admincptitle = " ".$ThemeSet['TitleDivider']." Admin CP";
@@ -181,14 +181,14 @@ if(!is_numeric($ts_array[1])) { $ts_array[1] = "00"; }
 if($ts_array[1]>59) { $ts_array[1] = "59"; $Settings['DefaultTimeZone'] = $ts_array[0].":".$ts_array[1]; }
 if($ts_array[1]<0) { $ts_array[1] = "00"; $Settings['DefaultTimeZone'] = $ts_array[0].":".$ts_array[1]; }
 $tsa = array("offset" => $Settings['DefaultTimeZone'], "hour" => $ts_array[0], "minute" => $ts_array[1]);
-$mguerys = query("SELECT * FROM `".$Settings['sqltable']."groups`", array(null));
-$mgresults=exec_query($mguerys);
-$mnum=mysql_num_rows($mgresults);
+$mguerys = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."groups`", array(null));
+$mgresults=sql_query($mguerys);
+$mnum=sql_num_rows($mgresults);
 $mi = 0;
 while ($mi < $mnum) {
-$MGroups[$mi]=mysql_result($mgresults,$mi,"Name");
+$MGroups[$mi]=sql_result($mgresults,$mi,"Name");
 ++$mi; }
-mysql_free_result($mgresults);
+sql_free_result($mgresults);
 ?>
 <div class="TableMenuBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>

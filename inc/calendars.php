@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: calendars.php - Last Update: 11/23/2009 SVN 357 - Author: cooldude2k $
+    $FileInfo: calendars.php - Last Update: 11/23/2009 SVN 359 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="calendars.php"||$File3Name=="/calendars.php") {
@@ -40,24 +40,24 @@ $MyTimeStamp2 = mktime(23,59,59,$MyMonth,$CountDays,$MyYear);
 $MyMonthName = GMTimeGet("F",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $FirstDayThisMonth = date("w", mktime(0, 0, 0, $MyMonth, 1, $MyYear));
 $EventsName = array();
-$query = query("SELECT * FROM `".$Settings['sqltable']."events` WHERE (`EventMonth`>=%i AND `EventYear`<%i AND `EventYearEnd`>=%i) OR (`EventMonth`<=%i AND `EventMonthEnd`>=%i AND `EventYearEnd`>=%i)", array($MyMonth,$MyYear,$MyYear,$MyMonth,$MyMonth,$MyYear));
-$result=exec_query($query);
-$num=mysql_num_rows($result);
+$query = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."events` WHERE (`EventMonth`>=%i AND `EventYear`<%i AND `EventYearEnd`>=%i) OR (`EventMonth`<=%i AND `EventMonthEnd`>=%i AND `EventYearEnd`>=%i)", array($MyMonth,$MyYear,$MyYear,$MyMonth,$MyMonth,$MyYear));
+$result=sql_query($query);
+$num=sql_num_rows($result);
 $is=0;
 while ($is < $num) {
-$EventID=mysql_result($result,$is,"id");
-$EventUser=mysql_result($result,$is,"UserID");
-$EventGuest=mysql_result($result,$is,"GuestName");
-$EventName=mysql_result($result,$is,"EventName");
-$EventText=mysql_result($result,$is,"EventText");
-$EventStart=mysql_result($result,$is,"TimeStamp");
-$EventEnd=mysql_result($result,$is,"TimeStampEnd");
-$EventMonth=mysql_result($result,$is,"EventMonth");
-$EventMonthEnd=mysql_result($result,$is,"EventMonthEnd");
-$EventDay=mysql_result($result,$is,"EventDay");
-$EventDayEnd=mysql_result($result,$is,"EventDayEnd");
-$EventYear=mysql_result($result,$is,"EventYear");
-$EventYearEnd=mysql_result($result,$is,"EventYearEnd");
+$EventID=sql_result($result,$is,"id");
+$EventUser=sql_result($result,$is,"UserID");
+$EventGuest=sql_result($result,$is,"GuestName");
+$EventName=sql_result($result,$is,"EventName");
+$EventText=sql_result($result,$is,"EventText");
+$EventStart=sql_result($result,$is,"TimeStamp");
+$EventEnd=sql_result($result,$is,"TimeStampEnd");
+$EventMonth=sql_result($result,$is,"EventMonth");
+$EventMonthEnd=sql_result($result,$is,"EventMonthEnd");
+$EventDay=sql_result($result,$is,"EventDay");
+$EventDayEnd=sql_result($result,$is,"EventDayEnd");
+$EventYear=sql_result($result,$is,"EventYear");
+$EventYearEnd=sql_result($result,$is,"EventYearEnd");
 if($EventMonthEnd!=$MyMonth) { $EventDayEnd = $CountDays; }
 if($EventMonth<$MyMonth) { $EventDay = 1; }
 $oldeventname=$EventName;
@@ -81,16 +81,16 @@ if ($EventsName[$NextDay] == null) {
 $NextDay++; } }
 $EventsID[$EventDay] = $EventID;
 ++$is; } 
-mysql_free_result($result);
-$bdquery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `BirthMonth`=%i", array($MyMonth));
-$bdresult=exec_query($bdquery);
-$bdnum=mysql_num_rows($bdresult);
+sql_free_result($result);
+$bdquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `BirthMonth`=%i", array($MyMonth));
+$bdresult=sql_query($bdquery);
+$bdnum=sql_num_rows($bdresult);
 $bdi=0;
 while ($bdi < $bdnum) {
-$UserNamebd=mysql_result($bdresult,$bdi,"Name");
-$BirthDay=mysql_result($bdresult,$bdi,"BirthDay");
-$BirthMonth=mysql_result($bdresult,$bdi,"BirthMonth");
-$BirthYear=mysql_result($bdresult,$bdi,"BirthYear");
+$UserNamebd=sql_result($bdresult,$bdi,"Name");
+$BirthDay=sql_result($bdresult,$bdi,"BirthDay");
+$BirthMonth=sql_result($bdresult,$bdi,"BirthMonth");
+$BirthYear=sql_result($bdresult,$bdi,"BirthYear");
 $oldusername=$UserNamebd;
 $UserNamebd1 = pre_substr($UserNamebd,0,20);
 if (pre_strlen($UserNamebd)>20) { $UserNamebd1 = $UserNamebd1."..."; }
@@ -101,7 +101,7 @@ if ($EventsName[$BirthDay] != null) {
 if ($EventsName[$BirthDay] == null) {
 	$EventsName[$BirthDay] = "<span title=\"".$oldusername."'s birthday.\">".$UserNamebd1."</span>"; }
 ++$bdi; } 
-mysql_free_result($bdresult);
+sql_free_result($bdresult);
 $MyDays = array();
 $MyDays[] = "Sunday";
 $MyDays[] = "Monday";

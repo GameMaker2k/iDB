@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sqldumper.php - Last Update: 11/23/2009 SVN 357 - Author: cooldude2k $
+    $FileInfo: sqldumper.php - Last Update: 11/23/2009 SVN 359 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="sqldumper.php"||$File3Name=="/sqldumper.php") {
@@ -32,11 +32,11 @@ header("Content-Type: application/octet-stream");
 header("Content-Transfer-Encoding: binary");
 $SQLDumper = "SQL Dumper";
 function GetAllRows($table) { $rene_j = 0; $trowout = null;
-$tresult = exec_query("SELECT * FROM `".$table."`");
-while ($trow = mysql_fetch_array($tresult, MYSQL_ASSOC)) {
+$tresult = sql_query("SELECT * FROM `".$table."`");
+while ($trow = sql_fetch_array($tresult, MYSQL_ASSOC)) {
 $trowout[$rene_j] = $trow;
 ++$rene_j; }
-mysql_free_result($tresult);
+sql_free_result($tresult);
 return $trowout; }
 $TablePreFix = $Settings['sqltable'];
 function add_prefix($tarray) {
@@ -51,30 +51,30 @@ header("Content-Type: text/plain; charset=ISO-8859-15"); }
 if($_GET['outtype']=="latin15") {
 header("Content-Type: text/plain; charset=ISO-8859-15"); }
 $sql = "SHOW TABLES LIKE '".$Settings['sqltable']."%'";
-$result = exec_query($sql);
+$result = sql_query($sql);
 if (!$result) {
 echo "DB Error, could not list tables\n";
-echo 'MySQL Error: ' . mysql_error();
+echo 'MySQL Error: ' . sql_error();
 exit; }
 $DropTable = null; $CreateTable = null; $TableNames = null; $l = 0;
-while ($row = mysql_fetch_row($result)) { 
+while ($row = sql_fetch_row($result)) { 
 if(in_array($row[0],$TableChCk)) {
 $TableNames[$l] = $row[0];
 $DropTable[$l] = "DROP TABLE IF EXISTS `".$row[0]."`;\n";
 $CreateTable[$l] = "CREATE TABLE IF NOT EXISTS `".$row[0]."` (\n";
 $CreateTable[$l] = null;
-$result2 = exec_query("SHOW COLUMNS FROM ".$row[0]);
-$tabsta = exec_query("SHOW TABLE STATUS LIKE '".$row[0]."'");
-$tabstats = mysql_fetch_array($tabsta); $AutoIncrement = " ";
-$tabstaz = exec_query("SHOW CREATE TABLE `".$row[0]."`");
-$tabstatz = mysql_fetch_array($tabstaz);
+$result2 = sql_query("SHOW COLUMNS FROM ".$row[0]);
+$tabsta = sql_query("SHOW TABLE STATUS LIKE '".$row[0]."'");
+$tabstats = sql_fetch_array($tabsta); $AutoIncrement = " ";
+$tabstaz = sql_query("SHOW CREATE TABLE `".$row[0]."`");
+$tabstatz = sql_fetch_array($tabstaz);
 $FullTable[$l] = $DropTable[$l].$tabstatz[1].";\n";
-$tabstats = mysql_fetch_array($tabsta); $AutoIncrement = " ";
+$tabstats = sql_fetch_array($tabsta); $AutoIncrement = " ";
 /*
 if($tabstats["Auto_increment"]!="") {
 $AutoIncrement = " AUTO_INCREMENT=".$tabstats["Auto_increment"]." "; }
 	$TableInfo[$l] = null; $TableStats = null; $i = 0;
-	while ($row2 = mysql_fetch_assoc($result2)) {
+	while ($row2 = sql_fetch_assoc($result2)) {
 		$row2["Default"] = "'".$row2["Default"]."'"; 
 		if($i==0) { $row2["Default"] = null; } $DefaVaule = null;
 		if($row2["Default"]!=null) { $DefaVaule = " default ".$row2["Default"]; }
@@ -97,10 +97,10 @@ $AutoIncrement = " AUTO_INCREMENT=".$tabstats["Auto_increment"]." "; }
 	$TableInfo[$l] .= $PrimaryKey[$l]."\n".$TableStats[$l];
 	$FullTable[$l] = $DropTable[$l].$CreateTable[$l].$TableInfo[$l]; */ }
 if (!$result2) {
-    echo 'Could not run query: ' . mysql_error();
+    echo 'Could not run query: ' . sql_error();
     exit; }
-mysql_free_result($result2);
-mysql_free_result($tabsta);
+sql_free_result($result2);
+sql_free_result($tabsta);
 ++$l; } $tableout = null;
 $num = count($TableNames); $renee_s = 0;
 echo "-- ".$OrgName." ".$SQLDumper."\n";
@@ -109,7 +109,7 @@ echo "-- ".$iDBHome."support/\n";
 echo "--\n";
 echo "-- Host: ".$Settings['sqlhost']."\n";
 echo "-- Generation Time: ".GMTimeGet('F d, Y \a\t h:i A',$_SESSION['UserTimeZone'],0,$_SESSION['UserDST'])."\n";
-echo "-- Server version: ".mysql_get_server_info()."\n";
+echo "-- Server version: ".sql_server_info()."\n";
 echo "-- PHP Version: ".phpversion()."\n\n";
 echo "SET SQL_MODE=\"NO_AUTO_VALUE_ON_ZERO\";\n\n";
 echo "--\n";
@@ -129,8 +129,8 @@ $trownew = $trow[$kazuki_p];
 $trowname = array_keys($trownew);
 $nums = count($trownew); $il = 0;
 while ($il < $nums) { $tnums = $nums - 1;
-$trowrname = mysql_real_escape_string($trowname[$il]);
-$trowrvalue = mysql_real_escape_string($trownew[$trowrname]);
+$trowrname = sql_escape_string($trowname[$il]);
+$trowrvalue = sql_escape_string($trownew[$trowrname]);
 if($_GET['outtype']=="UTF-8"&&$Settings['charset']!="UTF-8") {
 $trowrvalue = utf8_encode($trowrvalue); }
 $trowrvalue = str_replace( array("\n", "\r"), array('\n', '\r'), $trowrvalue);

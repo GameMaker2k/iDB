@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: searchs.php - Last Update: 11/23/2009 SVN 357 - Author: cooldude2k $
+    $FileInfo: searchs.php - Last Update: 11/23/2009 SVN 359 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="searchs.php"||$File3Name=="/searchs.php") {
@@ -88,37 +88,37 @@ if($_GET['act']=="topics") {
 if(pre_strlen($_GET['msearch'])>="25") { 
 	$_GET['msearch'] = null; }
 if($_GET['msearch']!=null) {
-$memsiquery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `Name`='%s' LIMIT 1", array($_GET['msearch']));
-$memsiresult=exec_query($memsiquery);
-$memsinum=mysql_num_rows($memsiresult);
+$memsiquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `Name`='%s' LIMIT 1", array($_GET['msearch']));
+$memsiresult=sql_query($memsiquery);
+$memsinum=sql_num_rows($memsiresult);
 $memsi=0;
 if($memsinum==0) { $memsid = -1; }
 if($memsinum!=0) {
-$memsid=mysql_result($memsiresult,$memsi,"id"); 
-mysql_free_result($memsiresult); } }
+$memsid=sql_result($memsiresult,$memsi,"id"); 
+sql_free_result($memsiresult); } }
 //Get SQL LIMIT Number
 $nums = $_GET['page'] * $Settings['max_topics'];
 $PageLimit = $nums - $Settings['max_topics'];
 if($PageLimit<0) { $PageLimit = 0; }
 if($_GET['msearch']==null) {
 if($_GET['type']!="wildcard") {
-$query = query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."topics` WHERE `TopicName`='%s' ORDER BY `Pinned` DESC, `LastUpdate` DESC LIMIT %i,%i", array($_GET['search'],$PageLimit,$Settings['max_topics'])); }
+$query = sql_pre_query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."topics` WHERE `TopicName`='%s' ORDER BY `Pinned` DESC, `LastUpdate` DESC LIMIT %i,%i", array($_GET['search'],$PageLimit,$Settings['max_topics'])); }
 if($_GET['type']=="wildcard") {
-$query = query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."topics` WHERE `TopicName` LIKE '%s' ORDER BY `Pinned` DESC, `LastUpdate` DESC LIMIT %i,%i", array($_GET['search'],$PageLimit,$Settings['max_topics'])); } }
+$query = sql_pre_query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."topics` WHERE `TopicName` LIKE '%s' ORDER BY `Pinned` DESC, `LastUpdate` DESC LIMIT %i,%i", array($_GET['search'],$PageLimit,$Settings['max_topics'])); } }
 if($_GET['msearch']!=null) {
 if($_GET['type']!="wildcard") {
-$query = query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."topics` WHERE `TopicName`='%s' AND `UserID`=%i ORDER BY `Pinned` DESC, `LastUpdate` DESC LIMIT %i,%i", array($_GET['search'],$memsid,$PageLimit,$Settings['max_topics']));
+$query = sql_pre_query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."topics` WHERE `TopicName`='%s' AND `UserID`=%i ORDER BY `Pinned` DESC, `LastUpdate` DESC LIMIT %i,%i", array($_GET['search'],$memsid,$PageLimit,$Settings['max_topics']));
 if($memsid==-1) {
-$query = query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."topics` WHERE `TopicName`='%s' AND `GuestName`='%s' ORDER BY `Pinned` DESC, `LastUpdate` DESC LIMIT %i,%i", array($_GET['search'],$_GET['msearch'],$PageLimit,$Settings['max_topics'])); } }
+$query = sql_pre_query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."topics` WHERE `TopicName`='%s' AND `GuestName`='%s' ORDER BY `Pinned` DESC, `LastUpdate` DESC LIMIT %i,%i", array($_GET['search'],$_GET['msearch'],$PageLimit,$Settings['max_topics'])); } }
 if($_GET['type']=="wildcard") {
-$query = query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."topics` WHERE `TopicName` LIKE '%s' AND `UserID`=%i ORDER BY `Pinned` DESC, `LastUpdate` DESC LIMIT %i,%i", array($_GET['search'],$memsid,$PageLimit,$Settings['max_topics']));
+$query = sql_pre_query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."topics` WHERE `TopicName` LIKE '%s' AND `UserID`=%i ORDER BY `Pinned` DESC, `LastUpdate` DESC LIMIT %i,%i", array($_GET['search'],$memsid,$PageLimit,$Settings['max_topics']));
 if($memsid==-1) {
-$query = query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."topics` WHERE `TopicName` LIKE '%s' AND `GuestName`='%s' ORDER BY `Pinned` DESC, `LastUpdate` DESC LIMIT %i,%i", array($_GET['search'],$_GET['msearch'],$PageLimit,$Settings['max_topics'])); } } }
-$rnquery = query("SELECT FOUND_ROWS();", array(null));
-$result=exec_query($query);
-$rnresult=exec_query($rnquery);
-$NumberTopics = mysql_result($rnresult,0);
-mysql_free_result($rnresult);
+$query = sql_pre_query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."topics` WHERE `TopicName` LIKE '%s' AND `GuestName`='%s' ORDER BY `Pinned` DESC, `LastUpdate` DESC LIMIT %i,%i", array($_GET['search'],$_GET['msearch'],$PageLimit,$Settings['max_topics'])); } } }
+$rnquery = sql_pre_query("SELECT FOUND_ROWS();", array(null));
+$result=sql_query($query);
+$rnresult=sql_query($rnquery);
+$NumberTopics = sql_result($rnresult,0);
+sql_free_result($rnresult);
 if($NumberTopics==null) { 
 	$NumberTopics = 0; }
 $num = $NumberTopics;
@@ -144,11 +144,11 @@ if($pnum<$Settings['max_topics']&&$pnum>0) {
 	$pnum = $pnum - $pnum; 
 	$Pages[$l] = $l; ++$l; } }
 //End Topic Page Code
-$num=mysql_num_rows($result);
+$num=sql_num_rows($result);
 if($num<=0) { 
 redirect("location",$basedir.url_maker($exfile['search'],$Settings['file_ext'],"act=topics",$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search'],false));
 header("Content-Type: text/plain; charset=".$Settings['charset']);
-ob_clean(); echo "Sorry could not find any search results."; mysql_free_result($result);
+ob_clean(); echo "Sorry could not find any search results."; sql_free_result($result);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $i=0;
 //List Page Number Code Start
@@ -275,25 +275,25 @@ if($_GET['msearch']==null) { ?>
 </tr>
 <?php
 while ($i < $num) {
-$TopicID=mysql_result($result,$i,"id");
-$ForumID=mysql_result($result,$i,"ForumID");
-$prequery = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i LIMIT 1", array($ForumID));
-$preresult=exec_query($prequery);
-$prenum=mysql_num_rows($preresult);
+$TopicID=sql_result($result,$i,"id");
+$ForumID=sql_result($result,$i,"ForumID");
+$prequery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i LIMIT 1", array($ForumID));
+$preresult=sql_query($prequery);
+$prenum=sql_num_rows($preresult);
 $HotTopicPosts = $Settings['hot_topic_num'];
 if($prenum > 0) {
-$HotTopicPosts = mysql_result($preresult,0,"HotTopicPosts"); }
-mysql_free_result($preresult);
+$HotTopicPosts = sql_result($preresult,0,"HotTopicPosts"); }
+sql_free_result($preresult);
 if($HotTopicPosts!=0&&is_numeric($HotTopicPosts)) {
 	$Settings['hot_topic_num'] = $HotTopicPosts; }
 if(!is_numeric($Settings['hot_topic_num'])) {
 	$Settings['hot_topic_num'] = 15; }
-$CategoryID=mysql_result($result,$i,"CategoryID");
-$UsersID=mysql_result($result,$i,"UserID");
-$GuestsName=mysql_result($result,$i,"GuestName");
-$TheTime=mysql_result($result,$i,"TimeStamp");
+$CategoryID=sql_result($result,$i,"CategoryID");
+$UsersID=sql_result($result,$i,"UserID");
+$GuestsName=sql_result($result,$i,"GuestName");
+$TheTime=sql_result($result,$i,"TimeStamp");
 $TheTime=GMTimeChange("F j, Y",$TheTime,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$NumReply=mysql_result($result,$i,"NumReply");
+$NumReply=sql_result($result,$i,"NumReply");
 $NumberPosts=$NumReply + 1;
 $prepagelist = null;
 if(!isset($Settings['max_posts'])) { 
@@ -352,10 +352,10 @@ if($NumberPages>=2) {
 	$prepagelist = $prepagelist."</span>"; } }
 	if($ThemeSet['MiniPageAltStyle']=="off") { 
 	$prepagelist = $prepagelist.")</span>"; } }
-$TopicName=mysql_result($result,$i,"TopicName");
-$TopicDescription=mysql_result($result,$i,"Description");
-$PinnedTopic=mysql_result($result,$i,"Pinned");
-$TopicStat=mysql_result($result,$i,"Closed");
+$TopicName=sql_result($result,$i,"TopicName");
+$TopicDescription=sql_result($result,$i,"Description");
+$PinnedTopic=sql_result($result,$i,"Pinned");
+$TopicStat=sql_result($result,$i,"Closed");
 $PreUsersName = GetUserName($UsersID,$Settings['sqltable']);
 if($PreUsersName['Name']===null) { $UsersID = -1;
 $PreUsersName = GetUserName($UsersID,$Settings['sqltable']); }
@@ -368,14 +368,14 @@ if(isset($PermissionInfo['CanViewForum'][$ForumID])&&
 	isset($CatPermissionInfo['CanViewCategory'][$CategoryID])&&
 	$CatPermissionInfo['CanViewCategory'][$CategoryID]=="yes") {
 $LastReply = "&nbsp;<br />&nbsp;";
-$glrquery = query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `TopicID`=%i ORDER BY `TimeStamp` DESC LIMIT 1", array($TopicID));
-$glrresult=exec_query($glrquery);
-$glrnum=mysql_num_rows($glrresult);
+$glrquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `TopicID`=%i ORDER BY `TimeStamp` DESC LIMIT 1", array($TopicID));
+$glrresult=sql_query($glrquery);
+$glrnum=sql_num_rows($glrresult);
 if($glrnum>0){
-$ReplyID1=mysql_result($glrresult,0,"id");
-$UsersID1=mysql_result($glrresult,0,"UserID");
-$GuestsName1=mysql_result($glrresult,0,"GuestName");
-$TimeStamp1=mysql_result($glrresult,0,"TimeStamp");
+$ReplyID1=sql_result($glrresult,0,"id");
+$UsersID1=sql_result($glrresult,0,"UserID");
+$GuestsName1=sql_result($glrresult,0,"GuestName");
+$TimeStamp1=sql_result($glrresult,0,"TimeStamp");
 $TimeStamp1=GMTimeChange("F j, Y",$TimeStamp1,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $PreUsersName1 = GetUserName($UsersID1,$Settings['sqltable']);
 if($PreUsersName1['Name']===null) { $UsersID1 = -1;
@@ -404,7 +404,7 @@ if(($UsersID1<-1&&$UsersHidden1=="yes")||$UsersID1==0||($UsersID1>0&&$UsersHidde
 $lul = url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']);
 $luln = url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']).$qstrhtml."&#35;reply".$NumRPosts;
 $LastReply = "Time: <a href=\"".$luln."\">".$TimeStamp1."</a><br />\n".$UserPre." <span title=\"".$oldusername."\">".$UsersName1."</span>"; } }
-mysql_free_result($glrresult);
+sql_free_result($glrresult);
 if($TimeStamp1==null) { $LastReply = "&nbsp;<br />&nbsp;"; }
 $PreTopic = $ThemeSet['TopicIcon'];
 if ($PinnedTopic>1) { $PinnedTopic = 1; } 
@@ -468,7 +468,7 @@ if($pagenum>1) {
 ?>
 <div class="DivPageLinks">&nbsp;</div>
 <?php }
-mysql_free_result($result); } } } 
+sql_free_result($result); } } } 
 if($pagenum<=1) { ?>
 <div class="DivSearch">&nbsp;</div>
 <?php } ?>

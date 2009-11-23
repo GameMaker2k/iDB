@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: lowtopics.php - Last Update: 11/23/2009 SVN 357 - Author: cooldude2k $
+    $FileInfo: lowtopics.php - Last Update: 11/23/2009 SVN 359 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="lowtopics.php"||$File3Name=="/lowtopics.php") {
@@ -20,41 +20,41 @@ if ($File3Name=="lowtopics.php"||$File3Name=="/lowtopics.php") {
 $pstring = null; $pagenum = null;
 if(!is_numeric($_GET['id'])) { $_GET['id'] = null; }
 if(!is_numeric($_GET['page'])) { $_GET['page'] = 1; }
-$prequery = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i LIMIT 1", array($_GET['id']));
-$preresult=exec_query($prequery);
-$prenum=mysql_num_rows($preresult);
-if($prenum==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=lowview",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); mysql_free_result($preresult);
+$prequery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i LIMIT 1", array($_GET['id']));
+$preresult=sql_query($prequery);
+$prenum=sql_num_rows($preresult);
+if($prenum==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=lowview",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($preresult);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($prenum>=1) {
-$ForumID=mysql_result($preresult,0,"id");
-$ForumCatID=mysql_result($preresult,0,"CategoryID");
-$ForumName=mysql_result($preresult,0,"Name");
-$ForumType=mysql_result($preresult,0,"ForumType");
-$InSubForum=mysql_result($preresult,0,"InSubForum");
-$RedirectURL=mysql_result($preresult,0,"RedirectURL");
-$RedirectTimes=mysql_result($preresult,0,"Redirects");
-$NumberViews=mysql_result($preresult,0,"NumViews");
-$NumberPosts=mysql_result($preresult,0,"NumPosts");
-$NumberTopics=mysql_result($preresult,0,"NumTopics");
-$PostCountAdd=mysql_result($preresult,0,"PostCountAdd");
-$CanHaveTopics=mysql_result($preresult,0,"CanHaveTopics");
-$HotTopicPosts=mysql_result($preresult,0,"HotTopicPosts");
+$ForumID=sql_result($preresult,0,"id");
+$ForumCatID=sql_result($preresult,0,"CategoryID");
+$ForumName=sql_result($preresult,0,"Name");
+$ForumType=sql_result($preresult,0,"ForumType");
+$InSubForum=sql_result($preresult,0,"InSubForum");
+$RedirectURL=sql_result($preresult,0,"RedirectURL");
+$RedirectTimes=sql_result($preresult,0,"Redirects");
+$NumberViews=sql_result($preresult,0,"NumViews");
+$NumberPosts=sql_result($preresult,0,"NumPosts");
+$NumberTopics=sql_result($preresult,0,"NumTopics");
+$PostCountAdd=sql_result($preresult,0,"PostCountAdd");
+$CanHaveTopics=sql_result($preresult,0,"CanHaveTopics");
+$HotTopicPosts=sql_result($preresult,0,"HotTopicPosts");
 if($HotTopicPosts!=0&&is_numeric($HotTopicPosts)) {
 	$Settings['hot_topic_num'] = $HotTopicPosts; }
 if(!is_numeric($Settings['hot_topic_num'])) {
 	$Settings['hot_topic_num'] = 15; }
-$ForumPostCountView=mysql_result($preresult,0,"PostCountView");
-$ForumKarmaCountView=mysql_result($preresult,0,"KarmaCountView");
-mysql_free_result($preresult);
+$ForumPostCountView=sql_result($preresult,0,"PostCountView");
+$ForumKarmaCountView=sql_result($preresult,0,"KarmaCountView");
+sql_free_result($preresult);
 $ForumType = strtolower($ForumType); $CanHaveTopics = strtolower($CanHaveTopics);
-$catcheck = query("SELECT * FROM `".$Settings['sqltable']."categories` WHERE `id`=%i  LIMIT 1", array($ForumCatID));
-$catresult=exec_query($catcheck);
-$CategoryName=mysql_result($catresult,0,"Name");
-$CategoryType=mysql_result($catresult,0,"CategoryType");
-$CategoryPostCountView=mysql_result($catresult,0,"PostCountView");
-$CategoryKarmaCountView=mysql_result($catresult,0,"KarmaCountView");
-mysql_free_result($catresult);
+$catcheck = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."categories` WHERE `id`=%i  LIMIT 1", array($ForumCatID));
+$catresult=sql_query($catcheck);
+$CategoryName=sql_result($catresult,0,"Name");
+$CategoryType=sql_result($catresult,0,"CategoryType");
+$CategoryPostCountView=sql_result($catresult,0,"PostCountView");
+$CategoryKarmaCountView=sql_result($catresult,0,"KarmaCountView");
+sql_free_result($catresult);
 if($GroupInfo['HasAdminCP']!="yes"||$GroupInfo['HasModCP']!="yes") {
 if($MyPostCountChk==null) { $MyPostCountChk = 0; }
 if($MyKarmaCount==null) { $MyKarmaCount = 0; }
@@ -67,18 +67,18 @@ redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"a
 if($CategoryKarmaCountView!=0&&$MyKarmaCount<$CategoryKarmaCountView) {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=lowview",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); } }
 if($InSubForum!="0") {
-$isfquery = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i LIMIT 1", array($InSubForum));
-$isfresult=exec_query($isfquery);
-$isfnum=mysql_num_rows($isfresult);
+$isfquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i LIMIT 1", array($InSubForum));
+$isfresult=sql_query($isfquery);
+$isfnum=sql_num_rows($isfresult);
 if($isfnum>=1) {
-$isfForumID=mysql_result($isfresult,0,"id");
-$isfForumCatID=mysql_result($isfresult,0,"CategoryID");
-$isfForumName=mysql_result($isfresult,0,"Name");
-$isfForumType=mysql_result($isfresult,0,"ForumType");
+$isfForumID=sql_result($isfresult,0,"id");
+$isfForumCatID=sql_result($isfresult,0,"CategoryID");
+$isfForumName=sql_result($isfresult,0,"Name");
+$isfForumType=sql_result($isfresult,0,"ForumType");
 $isfForumType = strtolower($isfForumType);
-$isfRedirectURL=mysql_result($isfresult,0,"RedirectURL"); }
+$isfRedirectURL=sql_result($isfresult,0,"RedirectURL"); }
 if($isfnum<1) { $InSubForum = "0"; }
-mysql_free_result($isfresult); }
+sql_free_result($isfresult); }
 $_SESSION['ViewingPage'] = url_maker(null,"no+ext","act=lowview&id=".$ForumID."&page=".$_GET['page'],"&","=",$prexqstr[$ForumType],$exqstr[$ForumType]);
 if($Settings['file_ext']!="no+ext"&&$Settings['file_ext']!="no ext") {
 $_SESSION['ViewingFile'] = $exfile[$ForumType].$Settings['file_ext']; }
@@ -111,13 +111,13 @@ if($CatPermissionInfo['CanViewCategory'][$ForumCatID]=="yes"&&
 if($ForumType!="redirect") {
 if($NumberViews==0||$NumberViews==null) { $NewNumberViews = 1; }
 if($NumberViews!=0&&$NumberViews!=null) { $NewNumberViews = $NumberViews + 1; }
-$viewup = query("UPDATE `".$Settings['sqltable']."forums` SET `NumViews`=%i WHERE `id`=%i", array($NewNumberViews,$_GET['id']));
-exec_query($viewup); }
+$viewup = sql_pre_query("UPDATE `".$Settings['sqltable']."forums` SET `NumViews`=%i WHERE `id`=%i", array($NewNumberViews,$_GET['id']));
+sql_query($viewup); }
 if($ForumType=="redirect") {
 if($RedirectTimes==0||$RedirectTimes==null) { $NewRedirTime = 1; }
 if($RedirectTimes!=0&&$RedirectTimes!=null) { $NewRedirTime = $RedirectTimes + 1; }
-$redirup = query("UPDATE `".$Settings['sqltable']."forums` SET `Redirects`=%i WHERE `id`=%i", array($NewRedirTime,$_GET['id']));
-exec_query($redirup);
+$redirup = sql_pre_query("UPDATE `".$Settings['sqltable']."forums` SET `Redirects`=%i WHERE `id`=%i", array($NewRedirTime,$_GET['id']));
+sql_query($redirup);
 if($RedirectURL!="http://"&&$RedirectURL!="") {
 redirect("location",$RedirectURL,0,null,false); ob_clean();
 header("Content-Type: text/plain; charset=".$Settings['charset']);
@@ -161,9 +161,9 @@ $PageLimit = $Settings['max_topics'] * $snumber;
 if($PageLimit<0) { $PageLimit = 0; }
 //End Topic Page Code
 $i=0;
-$query = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `ForumID`=%i ORDER BY `Pinned` DESC, `LastUpdate` DESC LIMIT %i,%i", array($_GET['id'],$PageLimit,$Settings['max_topics']));
-$result=exec_query($query);
-$num=mysql_num_rows($result);
+$query = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `ForumID`=%i ORDER BY `Pinned` DESC, `LastUpdate` DESC LIMIT %i,%i", array($_GET['id'],$PageLimit,$Settings['max_topics']));
+$result=sql_query($query);
+$num=sql_num_rows($result);
 //List Page Number Code Start
 $pagenum=count($Pages);
 if($_GET['page']>$pagenum) {
@@ -231,20 +231,20 @@ $pstring = $pstring."<span class=\"pagelinklast\"><a href=\"".url_maker($exfile[
 <ul style="list-style-type: decimal;">
 <?php }
 while ($i < $num) {
-$TopicID=mysql_result($result,$i,"id");
-$UsersID=mysql_result($result,$i,"UserID");
-$GuestsName=mysql_result($result,$i,"GuestName");
-$TheTime=mysql_result($result,$i,"TimeStamp");
+$TopicID=sql_result($result,$i,"id");
+$UsersID=sql_result($result,$i,"UserID");
+$GuestsName=sql_result($result,$i,"GuestName");
+$TheTime=sql_result($result,$i,"TimeStamp");
 $TheTime=GMTimeChange("F j Y, g:i a",$TheTime,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$NumReply=mysql_result($result,$i,"NumReply");
+$NumReply=sql_result($result,$i,"NumReply");
 $NumberPosts=$NumReply + 1;
 $prepagelist = null;
 if(!isset($Settings['max_posts'])) { 
 	$Settings['max_posts'] = 10; }
-$TopicName=mysql_result($result,$i,"TopicName");
-$TopicDescription=mysql_result($result,$i,"Description");
-$PinnedTopic=mysql_result($result,$i,"Pinned");
-$TopicStat=mysql_result($result,$i,"Closed");
+$TopicName=sql_result($result,$i,"TopicName");
+$TopicDescription=sql_result($result,$i,"Description");
+$PinnedTopic=sql_result($result,$i,"Pinned");
+$TopicStat=sql_result($result,$i,"Closed");
 $PreTopic = null;
 if ($PinnedTopic>1) { $PinnedTopic = 1; } 
 if ($PinnedTopic<0) { $PinnedTopic = 0; }
@@ -258,4 +258,4 @@ if ($PinnedTopic==0) { $PreTopic=null; }
 <li><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=lowview&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $PreTopic.$TopicName; ?></a> <span style="color: gray; font-size: 10px;">(<?php echo $NumReply; ?> replies)</span></li>
 <?php ++$i; } ?>
 </ul></div><div>&nbsp;</div>
-<?php mysql_free_result($result); } } } ?>
+<?php sql_free_result($result); } } } ?>

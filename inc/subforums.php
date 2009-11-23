@@ -11,41 +11,41 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: subforums.php - Last Update: 11/23/2009 SVN 357 - Author: cooldude2k $
+    $FileInfo: subforums.php - Last Update: 11/23/2009 SVN 359 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="subforums.php"||$File3Name=="/subforums.php") {
 	require('index.php');
 	exit(); }
 if(!is_numeric($_GET['id'])) { $_GET['id'] = null; }
-$checkquery = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i LIMIT 1", array($_GET['id']));
-$checkresult=exec_query($checkquery);
-$checknum=mysql_num_rows($checkresult);
-if($checknum==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); mysql_free_result($checkresult);
+$checkquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i LIMIT 1", array($_GET['id']));
+$checkresult=sql_query($checkquery);
+$checknum=sql_num_rows($checkresult);
+if($checknum==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($checkresult);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($checknum>=1) {
-$ForumID=mysql_result($checkresult,0,"id");
-$ForumName=mysql_result($checkresult,0,"Name");
-$ForumType=mysql_result($checkresult,0,"ForumType");
-$InSubForum=mysql_result($checkresult,0,"InSubForum");
-$CategoryID=mysql_result($checkresult,0,"CategoryID");
-$RedirectURL=mysql_result($checkresult,0,"RedirectURL");
-$RedirectTimes=mysql_result($checkresult,0,"Redirects");
-$CanHaveTopics=mysql_result($checkresult,0,"CanHaveTopics");
-$NumberViews=mysql_result($checkresult,0,"NumViews");
+$ForumID=sql_result($checkresult,0,"id");
+$ForumName=sql_result($checkresult,0,"Name");
+$ForumType=sql_result($checkresult,0,"ForumType");
+$InSubForum=sql_result($checkresult,0,"InSubForum");
+$CategoryID=sql_result($checkresult,0,"CategoryID");
+$RedirectURL=sql_result($checkresult,0,"RedirectURL");
+$RedirectTimes=sql_result($checkresult,0,"Redirects");
+$CanHaveTopics=sql_result($checkresult,0,"CanHaveTopics");
+$NumberViews=sql_result($checkresult,0,"NumViews");
 $SForumName = $ForumName;
 $ForumType = strtolower($ForumType); $CanHaveTopics = strtolower($CanHaveTopics);
 if($CanHaveTopics!="yes"&&$ForumType!="redirect") {
 if($NumberViews==0||$NumberViews==null) { $NewNumberViews = 1; }
 if($NumberViews!=0&&$NumberViews!=null) { $NewNumberViews = $NumberViews + 1; }
-$viewup = query("UPDATE `".$Settings['sqltable']."forums` SET `NumViews`='%s' WHERE `id`=%i", array($NewNumberViews,$_GET['id']));
-exec_query($viewup); }
+$viewup = sql_pre_query("UPDATE `".$Settings['sqltable']."forums` SET `NumViews`='%s' WHERE `id`=%i", array($NewNumberViews,$_GET['id']));
+sql_query($viewup); }
 if($ForumType=="redirect") {
 if($RedirectTimes==0||$RedirectTimes==null) { $NewRedirTime = 1; }
 if($RedirectTimes!=0&&$RedirectTimes!=null) { $NewRedirTime = $RedirectTimes + 1; }
-$redirup = query("UPDATE `".$Settings['sqltable']."forums` SET `Redirects`='%s' WHERE `id`=%i", array($NewRedirTime,$_GET['id']));
-exec_query($redirup);
+$redirup = sql_pre_query("UPDATE `".$Settings['sqltable']."forums` SET `Redirects`='%s' WHERE `id`=%i", array($NewRedirTime,$_GET['id']));
+sql_query($redirup);
 if($RedirectURL!="http://"&&$RedirectURL!="") {
 redirect("location",$RedirectURL,0,null,false); ob_clean();
 header("Content-Type: text/plain; charset=".$Settings['charset']);
@@ -58,29 +58,29 @@ if($ForumType=="forum") {
 redirect("location",$basedir.url_maker($exfile['forum'],$Settings['file_ext'],"act=".$_GET['act']."&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum'],FALSE));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
-mysql_free_result($checkresult);
-$prequery = query("SELECT * FROM `".$Settings['sqltable']."categories` WHERE `ShowCategory`='yes' AND `id`=%i ORDER BY `OrderID` ASC, `id` ASC", array($CategoryID));
-$preresult=exec_query($prequery);
-$prenum=mysql_num_rows($preresult);
+sql_free_result($checkresult);
+$prequery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."categories` WHERE `ShowCategory`='yes' AND `id`=%i ORDER BY `OrderID` ASC, `id` ASC", array($CategoryID));
+$preresult=sql_query($prequery);
+$prenum=sql_num_rows($preresult);
 $prei=0;
-$CategoryID=mysql_result($preresult,0,"id");
-$CategoryType=mysql_result($preresult,0,"CategoryType");
-$CategoryName=mysql_result($preresult,0,"Name");
-$CategoryShow=mysql_result($preresult,0,"ShowCategory");
-$CategoryDescription=mysql_result($preresult,0,"Description");
+$CategoryID=sql_result($preresult,0,"id");
+$CategoryType=sql_result($preresult,0,"CategoryType");
+$CategoryName=sql_result($preresult,0,"Name");
+$CategoryShow=sql_result($preresult,0,"ShowCategory");
+$CategoryDescription=sql_result($preresult,0,"Description");
 if($InSubForum!="0") {
-$isfquery = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i LIMIT 1", array($InSubForum));
-$isfresult=exec_query($isfquery);
-$isfnum=mysql_num_rows($isfresult);
+$isfquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i LIMIT 1", array($InSubForum));
+$isfresult=sql_query($isfquery);
+$isfnum=sql_num_rows($isfresult);
 if($isfnum>=1) {
-$isfForumID=mysql_result($isfresult,0,"id");
-$isfForumCatID=mysql_result($isfresult,0,"CategoryID");
-$isfForumName=mysql_result($isfresult,0,"Name");
-$isfForumType=mysql_result($isfresult,0,"ForumType");
+$isfForumID=sql_result($isfresult,0,"id");
+$isfForumCatID=sql_result($isfresult,0,"CategoryID");
+$isfForumName=sql_result($isfresult,0,"Name");
+$isfForumType=sql_result($isfresult,0,"ForumType");
 $isfForumType = strtolower($isfForumType);
-$isfRedirectURL=mysql_result($isfresult,0,"RedirectURL"); }
+$isfRedirectURL=sql_result($isfresult,0,"RedirectURL"); }
 if($isfnum<1) { $InSubForum = "0"; } 
-mysql_free_result($isfresult); }
+sql_free_result($isfresult); }
 $_SESSION['ViewingPage'] = url_maker(null,"no+ext","act=view&id=".$ForumID."&page=".$_GET['page'],"&","=",$prexqstr[$ForumType],$exqstr[$ForumType]);
 if($Settings['file_ext']!="no+ext"&&$Settings['file_ext']!="no ext") {
 $_SESSION['ViewingFile'] = $exfile[$ForumType].$Settings['file_ext']; }
@@ -108,9 +108,9 @@ ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($CatPermissionInfo['CanViewCategory'][$CategoryID]=="yes"&&
 	$PermissionInfo['CanViewForum'][$_GET['id']]=="yes") {
-$query = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `ShowForum`='yes' AND `CategoryID`=%i AND `InSubForum`=%i ORDER BY `OrderID` ASC, `id` ASC", array($CategoryID,$_GET['id']));
-$result=exec_query($query);
-$num=mysql_num_rows($result);
+$query = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `ShowForum`='yes' AND `CategoryID`=%i AND `InSubForum`=%i ORDER BY `OrderID` ASC, `id` ASC", array($CategoryID,$_GET['id']));
+$result=sql_query($query);
+$num=sql_num_rows($result);
 $i=0;
 ?>
 <div class="Table1Border">
@@ -135,31 +135,31 @@ $i=0;
 </tr>
 <?php
 while ($i < $num) {
-$ForumID=mysql_result($result,$i,"id");
-$ForumName=mysql_result($result,$i,"Name");
-$ForumShow=mysql_result($result,$i,"ShowForum");
-$ForumType=mysql_result($result,$i,"ForumType");
-$ForumShowTopics=mysql_result($result,$i,"CanHaveTopics");
+$ForumID=sql_result($result,$i,"id");
+$ForumName=sql_result($result,$i,"Name");
+$ForumShow=sql_result($result,$i,"ShowForum");
+$ForumType=sql_result($result,$i,"ForumType");
+$ForumShowTopics=sql_result($result,$i,"CanHaveTopics");
 $ForumShowTopics = strtolower($ForumShowTopics);
-$NumTopics=mysql_result($result,$i,"NumTopics");
-$NumPosts=mysql_result($result,$i,"NumPosts");
-$NumRedirects=mysql_result($result,$i,"Redirects");
-$ForumDescription=mysql_result($result,$i,"Description");
+$NumTopics=sql_result($result,$i,"NumTopics");
+$NumPosts=sql_result($result,$i,"NumPosts");
+$NumRedirects=sql_result($result,$i,"Redirects");
+$ForumDescription=sql_result($result,$i,"Description");
 $ForumType = strtolower($ForumType); $sflist = null;
 $gltf = array(null); $gltf[0] = $ForumID;
 if ($ForumType=="subforum") { 
-$apcquery = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `ShowForum`='yes' AND `InSubForum`=%i ORDER BY `OrderID` ASC, `id` ASC", array($ForumID));
-$apcresult=exec_query($apcquery);
-$apcnum=mysql_num_rows($apcresult);
+$apcquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `ShowForum`='yes' AND `InSubForum`=%i ORDER BY `OrderID` ASC, `id` ASC", array($ForumID));
+$apcresult=sql_query($apcquery);
+$apcnum=sql_num_rows($apcresult);
 $apci=0; $apcl=1; if($apcnum>=1) {
 while ($apci < $apcnum) {
-$NumsTopics=mysql_result($apcresult,$apci,"NumTopics");
+$NumsTopics=sql_result($apcresult,$apci,"NumTopics");
 $NumTopics = $NumsTopics + $NumTopics;
-$NumsPosts=mysql_result($apcresult,$apci,"NumPosts");
+$NumsPosts=sql_result($apcresult,$apci,"NumPosts");
 $NumPosts = $NumsPosts + $NumPosts;
-$SubsForumID=mysql_result($apcresult,$apci,"id");
-$SubsForumName=mysql_result($apcresult,$apci,"Name");
-$SubsForumType=mysql_result($apcresult,$apci,"ForumType");
+$SubsForumID=sql_result($apcresult,$apci,"id");
+$SubsForumName=sql_result($apcresult,$apci,"Name");
+$SubsForumType=sql_result($apcresult,$apci,"ForumType");
 if(isset($PermissionInfo['CanViewForum'][$SubsForumID])&&
 	$PermissionInfo['CanViewForum'][$SubsForumID]=="yes") {
 $sfurl = "<a href=\"";
@@ -172,7 +172,7 @@ if($apcl>1) {
 $sflist = $sflist.", ".$sfurl; }
 $gltf[$apcl] = $SubsForumID; ++$apcl; }
 ++$apci; }
-mysql_free_result($apcresult); } }
+sql_free_result($apcresult); } }
 if(isset($PermissionInfo['CanViewForum'][$ForumID])&&
 	$PermissionInfo['CanViewForum'][$ForumID]=="yes") {
 $LastTopic = "&nbsp;<br />&nbsp;<br />&nbsp;";
@@ -181,25 +181,25 @@ $gltnum = count($gltf); $glti = 0;
 $OldUpdateTime = 0; $UseThisFonum = null;
 if ($ForumType=="subforum") { 
 while ($glti < $gltnum) {
-$gltfoquery = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `CategoryID`=%i AND `ForumID`=%i ORDER BY `LastUpdate` DESC LIMIT 1", array($CategoryID,$gltf[$glti]));
-$gltforesult=exec_query($gltfoquery);
-$gltfonum=mysql_num_rows($gltforesult);
+$gltfoquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `CategoryID`=%i AND `ForumID`=%i ORDER BY `LastUpdate` DESC LIMIT 1", array($CategoryID,$gltf[$glti]));
+$gltforesult=sql_query($gltfoquery);
+$gltfonum=sql_num_rows($gltforesult);
 if($gltfonum>0) {
-$NewUpdateTime=mysql_result($gltforesult,0,"LastUpdate");
+$NewUpdateTime=sql_result($gltforesult,0,"LastUpdate");
 if($NewUpdateTime>$OldUpdateTime) { 
 	$UseThisFonum = $gltf[$glti]; 
 $OldUpdateTime = $NewUpdateTime; } }
-mysql_free_result($gltforesult);
+sql_free_result($gltforesult);
 ++$glti; } }
 if ($ForumType!="subforum"&&$ForumType!="redirect") { $UseThisFonum = $gltf[0]; }
 if ($ForumType!="redirect") {
-$gltquery = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `ForumID`=%i ORDER BY `LastUpdate` DESC LIMIT 1", array($UseThisFonum));
-$gltresult=exec_query($gltquery);
-$gltnum=mysql_num_rows($gltresult);
+$gltquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `ForumID`=%i ORDER BY `LastUpdate` DESC LIMIT 1", array($UseThisFonum));
+$gltresult=sql_query($gltquery);
+$gltnum=sql_num_rows($gltresult);
 if($gltnum>0){
-$TopicID=mysql_result($gltresult,0,"id");
-$TopicName=mysql_result($gltresult,0,"TopicName");
-$NumReplys=mysql_result($gltresult,0,"NumReply");
+$TopicID=sql_result($gltresult,0,"id");
+$TopicName=sql_result($gltresult,0,"TopicName");
+$NumReplys=sql_result($gltresult,0,"NumReply");
 $TopicName1 = pre_substr($TopicName,0,20);
 $oldtopicname=$TopicName; $NumRPosts = $NumReplys + 1;
 if(!isset($Settings['max_posts'])) { $Settings['max_posts'] = 10; }
@@ -208,16 +208,16 @@ $NumPages = ceil($NumRPosts/$Settings['max_posts']); }
 if($NumRPosts<=$Settings['max_posts']) { $NumPages = 1; }
 if (pre_strlen($TopicName)>20) { 
 $TopicName1 = $TopicName1."..."; $TopicName=$TopicName1; }
-$glrquery = query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `TopicID`=%i ORDER BY `TimeStamp` DESC LIMIT 1", array($TopicID));
-$glrresult=exec_query($glrquery);
-$glrnum=mysql_num_rows($glrresult);
+$glrquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `TopicID`=%i ORDER BY `TimeStamp` DESC LIMIT 1", array($TopicID));
+$glrresult=sql_query($glrquery);
+$glrnum=sql_num_rows($glrresult);
 if($glrnum>0){
-$ReplyID=mysql_result($glrresult,0,"id");
-$UsersID=mysql_result($glrresult,0,"UserID");
-$GuestsName=mysql_result($glrresult,0,"GuestName");
-$TimeStamp=mysql_result($glrresult,0,"TimeStamp");
+$ReplyID=sql_result($glrresult,0,"id");
+$UsersID=sql_result($glrresult,0,"UserID");
+$GuestsName=sql_result($glrresult,0,"GuestName");
+$TimeStamp=sql_result($glrresult,0,"TimeStamp");
 $TimeStamp=GMTimeChange("F j Y, g:i a",$TimeStamp,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-mysql_free_result($glrresult); }
+sql_free_result($glrresult); }
 $PreUsersName = GetUserName($UsersID,$Settings['sqltable']);
 if($PreUsersName['Name']===null) { $UsersID = -1;
 $PreUsersName = GetUserName($UsersID,$Settings['sqltable']); }
@@ -239,7 +239,7 @@ if(($UsersID<-1&&$UsersHidden=="yes")||$UsersID==0||($UsersID>0&&$UsersHidden=="
 	$UserPre = "Hidden:"; }
 $LastTopic = $TimeStamp."<br />\nTopic: <a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']).$qstrhtml."&#35;reply".$NumRPosts."\" title=\"".$oldtopicname."\">".$TopicName."</a><br />\n".$UserPre." <span title=\"".$oldusername."\">".$UsersName."</span>"; } }
 if($LastTopic==null) { $LastTopic = "&nbsp;<br />&nbsp;<br />&nbsp;"; } }
-mysql_free_result($gltresult);
+sql_free_result($gltresult);
 if ($ForumType=="redirect") { $LastTopic="&nbsp;<br />Redirects: ".$NumRedirects."<br />&nbsp;"; }
 $PreForum = $ThemeSet['ForumIcon'];
 if ($ForumType=="forum") { $PreForum=$ThemeSet['ForumIcon']; }
@@ -259,14 +259,14 @@ $ExStr = ""; if ($ForumType!="redirect"&&
 <td class="TableColumn3" style="text-align: center;"><?php echo $NumPosts; ?></td>
 <td class="TableColumn3"><?php echo $LastTopic; ?></td>
 </tr>
-<?php } ++$i; } mysql_free_result($result);
+<?php } ++$i; } sql_free_result($result);
 ?>
 <tr id="CatEnd<?php echo $CategoryID; ?>" class="TableRow4">
 <td class="TableColumn4" colspan="5">&nbsp;</td>
 </tr>
 </table></div>
 <div class="DivSubForums">&nbsp;</div>
-<?php } mysql_free_result($preresult);
+<?php } sql_free_result($preresult);
 $ForumCheck = "skip";
 if($CanHaveTopics!="yes") { 
 	$ForumName = $SForumName; }

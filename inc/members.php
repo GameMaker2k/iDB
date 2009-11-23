@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 11/23/2009 SVN 357 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 11/23/2009 SVN 359 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -56,24 +56,24 @@ if($_GET['ordertype']=="desc") { $orderlist .= " desc"; } }
 if(!is_numeric($_GET['gid'])) { $_GET['gid'] = null; }
 if($_GET['gid']!=null&&$_GET['groupid']==null) { $_GET['groupid'] = $_GET['gid']; }
 if(!is_numeric($_GET['groupid'])) { $_GET['groupid'] = null; }
-$ggquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `Name`='%s'", array($Settings['GuestGroup']));
-$ggresult=exec_query($ggquery);
-$GGroup=mysql_result($ggresult,0,"id");
-mysql_free_result($ggresult);
+$ggquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `Name`='%s'", array($Settings['GuestGroup']));
+$ggresult=sql_query($ggquery);
+$GGroup=sql_result($ggresult,0,"id");
+sql_free_result($ggresult);
 //Get SQL LIMIT Number
 $nums = $_GET['page'] * $Settings['max_memlist'];
 $PageLimit = $nums - $Settings['max_memlist'];
 if($PageLimit<0) { $PageLimit = 0; }
 $i=0;
 if($_GET['groupid']==null) {
-$query = query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."members` WHERE `GroupID`<>%i AND `id`>=0 AND `HiddenMember`='no' ".$orderlist." LIMIT %i,%i", array($GGroup,$PageLimit,$Settings['max_memlist'])); }
+$query = sql_pre_query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."members` WHERE `GroupID`<>%i AND `id`>=0 AND `HiddenMember`='no' ".$orderlist." LIMIT %i,%i", array($GGroup,$PageLimit,$Settings['max_memlist'])); }
 if($_GET['groupid']!=null) {
-$query = query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."members` WHERE `GroupID`=%i AND `GroupID`<>%i AND `id`>=0 ".$orderlist." LIMIT %i,%i", array($_GET['groupid'],$GGroup,$PageLimit,$Settings['max_memlist'])); }
-$rnquery = query("SELECT FOUND_ROWS();", array(null));
-$result=exec_query($query);
-$rnresult=exec_query($rnquery);
-$NumberMembers = mysql_result($rnresult,0);
-mysql_free_result($rnresult);
+$query = sql_pre_query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."members` WHERE `GroupID`=%i AND `GroupID`<>%i AND `id`>=0 ".$orderlist." LIMIT %i,%i", array($_GET['groupid'],$GGroup,$PageLimit,$Settings['max_memlist'])); }
+$rnquery = sql_pre_query("SELECT FOUND_ROWS();", array(null));
+$result=sql_query($query);
+$rnresult=sql_query($rnquery);
+$NumberMembers = sql_result($rnresult,0);
+sql_free_result($rnresult);
 $_SESSION['ViewingPage'] = url_maker(null,"no+ext","act=list&orderby=".$_GET['orderby']."&ordertype=".$_GET['ordertype']."&page=".$_GET['page'],"&","=",$prexqstr['member'],$exqstr['member']);
 if($Settings['file_ext']!="no+ext"&&$Settings['file_ext']!="no ext") {
 $_SESSION['ViewingFile'] = $exfile['member'].$Settings['file_ext']; }
@@ -107,7 +107,7 @@ if($pnum<$Settings['max_memlist']&&$pnum>0) {
 	$Pages[$l] = $l; ++$l; } }
 $nums = $_GET['page'] * $Settings['max_memlist'];
 //End MemberList Page Code
-$num=mysql_num_rows($result);
+$num=sql_num_rows($result);
 //List Page Number Code Start
 $pagenum=count($Pages);
 if($_GET['page']>$pagenum) {
@@ -199,30 +199,30 @@ if($pagenum>1) {
 </tr>
 <?php
 while ($i < $num) {
-$MemList['ID']=mysql_result($result,$i,"id");
-$MemList['Name']=mysql_result($result,$i,"Name");
-$MemList['Email']=mysql_result($result,$i,"Email");
-$MemList['GroupID']=mysql_result($result,$i,"GroupID");
-$MemList['WarnLevel']=mysql_result($result,$i,"WarnLevel");
-$MemList['Interests']=mysql_result($result,$i,"Interests");
-$MemList['Title']=mysql_result($result,$i,"Title");
-$MemList['Joined']=mysql_result($result,$i,"Joined");
+$MemList['ID']=sql_result($result,$i,"id");
+$MemList['Name']=sql_result($result,$i,"Name");
+$MemList['Email']=sql_result($result,$i,"Email");
+$MemList['GroupID']=sql_result($result,$i,"GroupID");
+$MemList['WarnLevel']=sql_result($result,$i,"WarnLevel");
+$MemList['Interests']=sql_result($result,$i,"Interests");
+$MemList['Title']=sql_result($result,$i,"Title");
+$MemList['Joined']=sql_result($result,$i,"Joined");
 $MemList['Joined']=GMTimeChange("F j Y, g:i a",$MemList['Joined'],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$MemList['LastActive']=mysql_result($result,$i,"LastActive");
+$MemList['LastActive']=sql_result($result,$i,"LastActive");
 $MemList['LastActive']=GMTimeChange("F j Y, g:i a",$MemList['LastActive'],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$MemList['Website']=mysql_result($result,$i,"Website");
-$MemList['Gender']=mysql_result($result,$i,"Gender");
-$MemList['PostCount']=mysql_result($result,$i,"PostCount");
-$MemList['Karma']=mysql_result($result,$i,"Karma");
-$MemList['TimeZone']=mysql_result($result,$i,"TimeZone");
-$MemList['DST']=mysql_result($result,$i,"DST");
-$MemList['IP']=mysql_result($result,$i,"IP");
-$gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($MemList['GroupID']));
-$gresult=exec_query($gquery);
-$MemList['Group']=mysql_result($gresult,0,"Name");
-$GroupNamePrefix=mysql_result($gresult,0,"NamePrefix");
-$GroupNameSuffix=mysql_result($gresult,0,"NameSuffix");
-mysql_free_result($gresult);
+$MemList['Website']=sql_result($result,$i,"Website");
+$MemList['Gender']=sql_result($result,$i,"Gender");
+$MemList['PostCount']=sql_result($result,$i,"PostCount");
+$MemList['Karma']=sql_result($result,$i,"Karma");
+$MemList['TimeZone']=sql_result($result,$i,"TimeZone");
+$MemList['DST']=sql_result($result,$i,"DST");
+$MemList['IP']=sql_result($result,$i,"IP");
+$gquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($MemList['GroupID']));
+$gresult=sql_query($gquery);
+$MemList['Group']=sql_result($gresult,0,"Name");
+$GroupNamePrefix=sql_result($gresult,0,"NamePrefix");
+$GroupNameSuffix=sql_result($gresult,0,"NameSuffix");
+sql_free_result($gresult);
 if(isset($GroupNamePrefix)&&$GroupNamePrefix!=null) {
 	$MemList['Name'] = $GroupNamePrefix.$MemList['Name']; }
 if(isset($GroupNameSuffix)&&$GroupNameSuffix!=null) {
@@ -241,7 +241,7 @@ if($MemList['Group']!=$Settings['GuestGroup']) {
 <td class="TableColumn3" style="text-align: center;"><a href="<?php echo $MemList['Website']; ?>" onclick="window.open(this.href);return false;">Website</a></td>
 </tr>
 <?php }
-++$i; } mysql_free_result($result);
+++$i; } sql_free_result($result);
 ?>
 <tr id="MemEnd" class="TableRow4">
 <td class="TableColumn4" colspan="8">&nbsp;</td>
@@ -268,12 +268,12 @@ if($PageLimit<0) { $PageLimit = 0; }
 $i=0;
 $uolcuttime = GMTimeStamp();
 $uoltime = $uolcuttime - ini_get("session.gc_maxlifetime");
-$query = query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."sessions` WHERE `expires` >= %i ORDER BY `expires` DESC LIMIT %i,%i", array($uoltime,$PageLimit,$Settings['max_memlist']));
-$rnquery = query("SELECT FOUND_ROWS();", array(null));
-$result=exec_query($query);
-$rnresult=exec_query($rnquery);
-$NumberMembers = mysql_result($rnresult,0);
-mysql_free_result($rnresult);
+$query = sql_pre_query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."sessions` WHERE `expires` >= %i ORDER BY `expires` DESC LIMIT %i,%i", array($uoltime,$PageLimit,$Settings['max_memlist']));
+$rnquery = sql_pre_query("SELECT FOUND_ROWS();", array(null));
+$result=sql_query($query);
+$rnresult=sql_query($rnquery);
+$NumberMembers = sql_result($rnresult,0);
+sql_free_result($rnresult);
 $_SESSION['ViewingPage'] = url_maker(null,"no+ext","act=online&list=".$_GET['list']."&page=".$_GET['page'],"&","=",$prexqstr['member'],$exqstr['member']);
 if($Settings['file_ext']!="no+ext"&&$Settings['file_ext']!="no ext") {
 $_SESSION['ViewingFile'] = $exfile['member'].$Settings['file_ext']; }
@@ -307,7 +307,7 @@ if($pnum<$Settings['max_memlist']&&$pnum>0) {
 	$Pages[$l] = $l; ++$l; } }
 $nums = $_GET['page'] * $Settings['max_memlist'];
 //End MemberList Page Code
-$num=mysql_num_rows($result);
+$num=sql_num_rows($result);
 //List Page Number Code Start
 $pagenum=count($Pages);
 if($_GET['page']>$pagenum) {
@@ -396,8 +396,8 @@ if($pagenum>1) {
 </tr>
 <?php
 while ($i < $num) {
-$session_data=mysql_result($result,$i,"session_data"); 
-$session_expires=mysql_result($result,$i,"expires"); 
+$session_data=sql_result($result,$i,"session_data"); 
+$session_expires=sql_result($result,$i,"expires"); 
 $session_expires = GMTimeChange("F j Y, g:i a",$session_expires,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $UserSessInfo = unserialize_session($session_data);
 if(!isset($UserSessInfo['UserGroup'])) { 
@@ -428,12 +428,12 @@ $PreExpPage = str_replace($qsep, "=", $PreExpPage);
 parse_str($PreExpPage,$ChkID);
 if($PreFileName==$exfile['topic'].$Settings['file_ext']) {
 if(isset($ChkID["id"])) { $ChkID = $ChkID["id"]; 
-$prequery = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `id`=%i LIMIT 1", array($ChkID));
-$preresult=exec_query($prequery);
-$prenum=mysql_num_rows($preresult);
+$prequery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `id`=%i LIMIT 1", array($ChkID));
+$preresult=sql_query($prequery);
+$prenum=sql_num_rows($preresult);
 if($prenum>=1) {
-$TopicForumID=mysql_result($preresult,0,"ForumID");
-$TopicCatID=mysql_result($preresult,0,"CategoryID"); }
+$TopicForumID=sql_result($preresult,0,"ForumID");
+$TopicCatID=sql_result($preresult,0,"CategoryID"); }
 if($prenum<1) {
 $TopicForumID=0;
 $TopicCatID=0; }
@@ -449,11 +449,11 @@ if($PermissionInfo['CanViewForum'][$TopicForumID]=="no"||
 	$UserSessInfo['ViewingTitle'] = "Board index"; } } }
 if($PreFileName==$exfile['forum'].$Settings['file_ext']) {
 if(isset($ChkID["id"])) { $ChkID = $ChkID["id"]; 
-$prequery = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i LIMIT 1", array($ChkID));
-$preresult=exec_query($prequery);
-$prenum=mysql_num_rows($preresult);
-$ForumCatID=mysql_result($preresult,0,"CategoryID");
-mysql_free_result($preresult);
+$prequery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i LIMIT 1", array($ChkID));
+$preresult=sql_query($prequery);
+$prenum=sql_num_rows($preresult);
+$ForumCatID=sql_result($preresult,0,"CategoryID");
+sql_free_result($preresult);
 if($CatPermissionInfo['CanViewCategory'][$ForumCatID]=="no"||
 	$CatPermissionInfo['CanViewCategory'][$ForumCatID]!="yes") {
 	$UserSessInfo['ViewingPage'] = url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']);
@@ -466,11 +466,11 @@ if($PermissionInfo['CanViewForum'][$ChkID]=="no"||
 	$UserSessInfo['ViewingTitle'] = "Board index"; } } }
 if($PreFileName==$exfile['subforum'].$Settings['file_ext']) {
 if(isset($ChkID["id"])) { $ChkID = $ChkID["id"]; 
-$prequery = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i LIMIT 1", array($ChkID));
-$preresult=exec_query($prequery);
-$prenum=mysql_num_rows($preresult);
-$ForumCatID=mysql_result($preresult,0,"CategoryID");
-mysql_free_result($preresult);
+$prequery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i LIMIT 1", array($ChkID));
+$preresult=sql_query($prequery);
+$prenum=sql_num_rows($preresult);
+$ForumCatID=sql_result($preresult,0,"CategoryID");
+sql_free_result($preresult);
 if($CatPermissionInfo['CanViewCategory'][$ForumCatID]=="no"||
 	$CatPermissionInfo['CanViewCategory'][$ForumCatID]!="yes") {
 	$UserSessInfo['ViewingPage'] = url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']);
@@ -541,43 +541,43 @@ if($pagenum>1) {
 <div class="DivPageLinks">&nbsp;</div>
 <?php } }
 if($_GET['act']=="view") { 
-$query = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($_GET['id']));
-$result=exec_query($query);
-$num=mysql_num_rows($result);
+$query = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($_GET['id']));
+$result=sql_query($query);
+$num=sql_num_rows($result);
 $i=0;
 if($num==0||$_GET['id']<=0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
-$ViewMem['ID']=mysql_result($result,$i,"id");
-$ViewMem['Name']=mysql_result($result,$i,"Name");
-$ViewMem['Signature']=mysql_result($result,$i,"Signature");
-$ViewMem['Avatar']=mysql_result($result,$i,"Avatar");
-$ViewMem['AvatarSize']=mysql_result($result,$i,"AvatarSize");
-$ViewMem['Email']=mysql_result($result,$i,"Email");
-$ViewMem['GroupID']=mysql_result($result,$i,"GroupID");
-$ViewMem['HiddenMember']=mysql_result($result,$i,"HiddenMember");
-$ViewMem['WarnLevel']=mysql_result($result,$i,"WarnLevel");
-$ViewMem['Interests']=mysql_result($result,$i,"Interests");
-$ViewMem['Title']=mysql_result($result,$i,"Title");
-$ViewMem['Joined']=mysql_result($result,$i,"Joined");
+$ViewMem['ID']=sql_result($result,$i,"id");
+$ViewMem['Name']=sql_result($result,$i,"Name");
+$ViewMem['Signature']=sql_result($result,$i,"Signature");
+$ViewMem['Avatar']=sql_result($result,$i,"Avatar");
+$ViewMem['AvatarSize']=sql_result($result,$i,"AvatarSize");
+$ViewMem['Email']=sql_result($result,$i,"Email");
+$ViewMem['GroupID']=sql_result($result,$i,"GroupID");
+$ViewMem['HiddenMember']=sql_result($result,$i,"HiddenMember");
+$ViewMem['WarnLevel']=sql_result($result,$i,"WarnLevel");
+$ViewMem['Interests']=sql_result($result,$i,"Interests");
+$ViewMem['Title']=sql_result($result,$i,"Title");
+$ViewMem['Joined']=sql_result($result,$i,"Joined");
 $ViewMem['Joined']=GMTimeChange("M j Y, g:i a",$ViewMem['Joined'],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$ViewMem['LastActive']=mysql_result($result,$i,"LastActive");
+$ViewMem['LastActive']=sql_result($result,$i,"LastActive");
 $ViewMem['LastActive']=GMTimeChange("M j Y, g:i a",$ViewMem['LastActive'],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$ViewMem['Website']=mysql_result($result,$i,"Website");
-$ViewMem['Gender']=mysql_result($result,$i,"Gender");
-$ViewMem['PostCount']=mysql_result($result,$i,"PostCount");
-$ViewMem['Karma']=mysql_result($result,$i,"Karma");
-$ViewMem['TimeZone']=mysql_result($result,$i,"TimeZone");
-$ViewMem['DST']=mysql_result($result,$i,"DST");
-$ViewMem['IP']=mysql_result($result,$i,"IP");
-$gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($ViewMem['GroupID']));
-$gresult=exec_query($gquery);
-$ViewMem['Group']=mysql_result($gresult,0,"Name");
+$ViewMem['Website']=sql_result($result,$i,"Website");
+$ViewMem['Gender']=sql_result($result,$i,"Gender");
+$ViewMem['PostCount']=sql_result($result,$i,"PostCount");
+$ViewMem['Karma']=sql_result($result,$i,"Karma");
+$ViewMem['TimeZone']=sql_result($result,$i,"TimeZone");
+$ViewMem['DST']=sql_result($result,$i,"DST");
+$ViewMem['IP']=sql_result($result,$i,"IP");
+$gquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($ViewMem['GroupID']));
+$gresult=sql_query($gquery);
+$ViewMem['Group']=sql_result($gresult,0,"Name");
 /*
-$GroupNamePrefix=mysql_result($gresult,0,"NamePrefix");
-$GroupNameSuffix=mysql_result($gresult,0,"NameSuffix");
+$GroupNamePrefix=sql_result($gresult,0,"NamePrefix");
+$GroupNameSuffix=sql_result($gresult,0,"NameSuffix");
 */
-mysql_free_result($gresult);
+sql_free_result($gresult);
 /*
 if(isset($GroupNamePrefix)&&$GroupNamePrefix!=null) {
 	$ViewMem['Name'] = $GroupNamePrefix.$ViewMem['Name']; }
@@ -671,7 +671,7 @@ Title: <?php echo $ViewMem['Title']; ?>
 <td class="TableColumn4" colspan="2">&nbsp;</td>
 </tr>
 </table></div>
-<?php } mysql_free_result($result);
+<?php } sql_free_result($result);
 if($_GET['act']=="logout") {
 session_unset();
 if($cookieDomain==null) {
@@ -846,18 +846,18 @@ $YourName = remove_spaces($YourName);
 $passtype="ODFH";
 if(!isset($_POST['loginemail'])) { $_POST['loginemail'] = "false"; }
 if($_POST['loginemail']!="true") {
-$querylog = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `Name`='%s' LIMIT 1", array($YourName)); }
+$querylog = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `Name`='%s' LIMIT 1", array($YourName)); }
 if($_POST['loginemail']=="true") {
-$querylog = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `Email`='%s' LIMIT 1", array($YourName)); }
-$resultlog=exec_query($querylog);
-$numlog=mysql_num_rows($resultlog);
+$querylog = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `Email`='%s' LIMIT 1", array($YourName)); }
+$resultlog=sql_query($querylog);
+$numlog=sql_num_rows($resultlog);
 if($numlog>=1) {
 $i=0;
-$YourName=mysql_result($resultlog,$i,"Name");
-$YourPassTry=mysql_result($resultlog,$i,"Password");
-$HashType=mysql_result($resultlog,$i,"HashType");
-$JoinedPass=mysql_result($resultlog,$i,"Joined");
-$HashSalt=mysql_result($resultlog,$i,"Salt");
+$YourName=sql_result($resultlog,$i,"Name");
+$YourPassTry=sql_result($resultlog,$i,"Password");
+$HashType=sql_result($resultlog,$i,"HashType");
+$JoinedPass=sql_result($resultlog,$i,"Joined");
+$HashSalt=sql_result($resultlog,$i,"Salt");
 $UpdateHash = false;
 if($HashType=="ODFH") { $YourPassword = PassHash2x($_POST['userpass']); }
 if($HashType=="IPB2") { $YourPassword = hash2xkey($_POST['userpass'],$HashSalt); }
@@ -871,25 +871,25 @@ if($HashType=="iDBH386") { $YourPassword = b64e_hmac($_POST['userpass'],$JoinedP
 if($HashType=="iDBH512") { $YourPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$HashSalt,"sha512"); }
 if($YourPassword!=$YourPassTry) { $passright = false; } 
 if($YourPassword==$YourPassTry) { $passright = true;
-$YourIDM=mysql_result($resultlog,$i,"id");
-$YourNameM=mysql_result($resultlog,$i,"Name");
-$YourPassM=mysql_result($resultlog,$i,"Password");
-$PostCount=mysql_result($resultlog,$i,"PostCount");
-$YourGroupM=mysql_result($resultlog,$i,"GroupID");
+$YourIDM=sql_result($resultlog,$i,"id");
+$YourNameM=sql_result($resultlog,$i,"Name");
+$YourPassM=sql_result($resultlog,$i,"Password");
+$PostCount=sql_result($resultlog,$i,"PostCount");
+$YourGroupM=sql_result($resultlog,$i,"GroupID");
 $YourGroupIDM=$YourGroupM;
-$YourLastPostTime=mysql_result($resultlog,$i,"LastPostTime");
-$YourBanTime=mysql_result($resultlog,$i,"BanTime");
+$YourLastPostTime=sql_result($resultlog,$i,"LastPostTime");
+$YourBanTime=sql_result($resultlog,$i,"BanTime");
 $CGMTime = GMTimeStamp();
 if($YourBanTime!=0&&$YourBanTime!=null) {
 if($YourBanTime>=$CGMTime) { $BanError = "yes"; } }
-$gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($YourGroupM));
-$gresult=exec_query($gquery);
-$YourGroupM=mysql_result($gresult,0,"Name");
-mysql_free_result($gresult);
-$YourTimeZoneM=mysql_result($resultlog,$i,"TimeZone");
-$YourDSTM=mysql_result($resultlog,$i,"DST");
-$JoinedDate=mysql_result($resultlog,$i,"Joined");
-$UseTheme=mysql_result($resultlog,$i,"UseTheme");
+$gquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($YourGroupM));
+$gresult=sql_query($gquery);
+$YourGroupM=sql_result($gresult,0,"Name");
+sql_free_result($gresult);
+$YourTimeZoneM=sql_result($resultlog,$i,"TimeZone");
+$YourDSTM=sql_result($resultlog,$i,"DST");
+$JoinedDate=sql_result($resultlog,$i,"Joined");
+$UseTheme=sql_result($resultlog,$i,"UseTheme");
 $NewHashSalt = salt_hmac();
 if($Settings['use_hashtype']=="md2") { $iDBHash = "iDBH2";
 $NewPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$NewHashSalt,"md2"); }
@@ -908,9 +908,9 @@ $NewPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$NewHashSalt,"sha512"); 
 $NewDay=GMTimeStamp();
 $NewIP=$_SERVER['REMOTE_ADDR'];
 if($BanError!="yes") {
-$queryup = query("UPDATE `".$Settings['sqltable']."members` SET `Password`='%s',`HashType`='%s',`LastActive`=%i,`IP`='%s',`Salt`='%s' WHERE `id`=%i", array($NewPassword,$iDBHash,$NewDay,$NewIP,$NewHashSalt,$YourIDM));
-exec_query($queryup);
-mysql_free_result($resultlog); mysql_free_result($queryup);
+$queryup = sql_pre_query("UPDATE `".$Settings['sqltable']."members` SET `Password`='%s',`HashType`='%s',`LastActive`=%i,`IP`='%s',`Salt`='%s' WHERE `id`=%i", array($NewPassword,$iDBHash,$NewDay,$NewIP,$NewHashSalt,$YourIDM));
+sql_query($queryup);
+sql_free_result($resultlog); sql_free_result($queryup);
 //session_regenerate_id();
 $_SESSION['Theme']=$UseTheme;
 $_SESSION['MemberName']=$YourNameM;
@@ -1199,17 +1199,17 @@ if (PhpCaptcha::Validate($_POST['signcode'])) {
 $Name = stripcslashes(htmlspecialchars($_POST['Name'], ENT_QUOTES, $Settings['charset']));
 //$Name = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $Name);
 $Name = remove_spaces($Name);
-$lonewolfqy=query("SELECT * FROM `".$Settings['sqltable']."restrictedwords` WHERE `RestrictedUserName`='yes'", array(null));
-$lonewolfrt=exec_query($lonewolfqy);
-$lonewolfnm=mysql_num_rows($lonewolfrt);
+$lonewolfqy=sql_pre_query("SELECT * FROM `".$Settings['sqltable']."restrictedwords` WHERE `RestrictedUserName`='yes'", array(null));
+$lonewolfrt=sql_query($lonewolfqy);
+$lonewolfnm=sql_num_rows($lonewolfrt);
 $lonewolfs=0; $RMatches = null;
 while ($lonewolfs < $lonewolfnm) {
-$RWord=mysql_result($lonewolfrt,$lonewolfs,"Word");
-$RCaseInsensitive=mysql_result($lonewolfrt,$lonewolfs,"CaseInsensitive");
+$RWord=sql_result($lonewolfrt,$lonewolfs,"Word");
+$RCaseInsensitive=sql_result($lonewolfrt,$lonewolfs,"CaseInsensitive");
 if($RCaseInsensitive=="on") { $RCaseInsensitive = "yes"; }
 if($RCaseInsensitive=="off") { $RCaseInsensitive = "no"; }
 if($RCaseInsensitive!="yes"||$RCaseInsensitive!="no") { $RCaseInsensitive = "no"; }
-$RWholeWord=mysql_result($lonewolfrt,$lonewolfs,"WholeWord");
+$RWholeWord=sql_result($lonewolfrt,$lonewolfs,"WholeWord");
 if($RWholeWord=="on") { $RWholeWord = "yes"; }
 if($RWholeWord=="off") { $RWholeWord = "no"; }
 if($RWholeWord!="yes"||$RWholeWord!="no") { $RWholeWord = "no"; }
@@ -1226,12 +1226,12 @@ $RMatches = preg_match("/".$RWord."/", $Name);
 if($RCaseInsensitive=="yes"&&$RWholeWord!="yes") {
 $RMatches = preg_match("/".$RWord."/i", $Name);
 	if($RMatches==true) { break 1; } }
-++$lonewolfs; } mysql_free_result($lonewolfrt);
-$sql_email_check = exec_query(query("SELECT `Email` FROM `".$Settings['sqltable']."members` WHERE `Email`='%s'", array($_POST['Email'])));
-$sql_username_check = exec_query(query("SELECT `Name` FROM `".$Settings['sqltable']."members` WHERE `Name`='%s'", array($Name)));
-$email_check = mysql_num_rows($sql_email_check); 
-$username_check = mysql_num_rows($sql_username_check);
-mysql_free_result($sql_email_check); mysql_free_result($sql_username_check);
+++$lonewolfs; } sql_free_result($lonewolfrt);
+$sql_email_check = sql_query(sql_pre_query("SELECT `Email` FROM `".$Settings['sqltable']."members` WHERE `Email`='%s'", array($_POST['Email'])));
+$sql_username_check = sql_query(sql_pre_query("SELECT `Name` FROM `".$Settings['sqltable']."members` WHERE `Name`='%s'", array($Name)));
+$email_check = sql_num_rows($sql_email_check); 
+$username_check = sql_num_rows($sql_username_check);
+sql_free_result($sql_email_check); sql_free_result($sql_username_check);
 if ($_POST['TOS']!="Agree") { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
@@ -1327,11 +1327,11 @@ $Avatar = remove_spaces($Avatar);
 $Website = stripcslashes(htmlspecialchars($_POST['Website'], ENT_QUOTES, $Settings['charset']));
 //$Website = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $Website);
 $Website = remove_spaces($Website);
-$gquerys = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `Name`='%s' LIMIT 1", array($yourgroup));
-$gresults=exec_query($gquerys);
-$yourgroup=mysql_result($gresults,0,"id");
-mysql_free_result($gresults);
-$yourid = getnextid($Settings['sqltable'],"members");
+$gquerys = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `Name`='%s' LIMIT 1", array($yourgroup));
+$gresults=sql_query($gquerys);
+$yourgroup=sql_result($gresults,0,"id");
+sql_free_result($gresults);
+$yourid = sql_get_next_id($Settings['sqltable'],"members");
 $_POST['Interests'] = remove_spaces($_POST['Interests']);
 $_POST['Title'] = remove_spaces($_POST['Title']);
 $_POST['Email'] = remove_spaces($_POST['Email']);
@@ -1342,25 +1342,25 @@ if(!is_numeric($_POST['MinOffSet'])) { $_POST['MinOffSet'] = "00"; }
 if($_POST['MinOffSet']>59) { $_POST['MinOffSet'] = "59"; }
 if($_POST['MinOffSet']<0) { $_POST['MinOffSet'] = "00"; }
 $_POST['YourOffSet'] = $_POST['YourOffSet'].":".$_POST['MinOffSet'];
-$query = query("INSERT INTO `".$Settings['sqltable']."members` (`Name`, `Password`, `HashType`, `Email`, `GroupID`, `Validated`, `HiddenMember`, `WarnLevel`, `Interests`, `Title`, `Joined`, `LastActive`, `LastPostTime`, `BanTime`, `BirthDay`, `BirthMonth`, `BirthYear`, `Signature`, `Notes`, `Avatar`, `AvatarSize`, `Website`, `Gender`, `PostCount`, `Karma`, `KarmaUpdate`, `RepliesPerPage`, `TopicsPerPage`, `MessagesPerPage`, `TimeZone`, `DST`, `UseTheme`, `IP`, `Salt`) VALUES\n". 
+$query = sql_pre_query("INSERT INTO `".$Settings['sqltable']."members` (`Name`, `Password`, `HashType`, `Email`, `GroupID`, `Validated`, `HiddenMember`, `WarnLevel`, `Interests`, `Title`, `Joined`, `LastActive`, `LastPostTime`, `BanTime`, `BirthDay`, `BirthMonth`, `BirthYear`, `Signature`, `Notes`, `Avatar`, `AvatarSize`, `Website`, `Gender`, `PostCount`, `Karma`, `KarmaUpdate`, `RepliesPerPage`, `TopicsPerPage`, `MessagesPerPage`, `TimeZone`, `DST`, `UseTheme`, `IP`, `Salt`) VALUES\n". 
 "('%s', '%s', '%s', '%s', '%s', '%s', '%s', %i, '%s', '%s', %i, %i, '0', '0', '0', '0', '0', '%s', '%s', '%s', '%s', '%s', '%s', %i, 0, 0, 10, 10, 10, '%s', '%s', '%s', '%s', '%s')", array($Name,$NewPassword,$iDBHash,$_POST['Email'],$yourgroup,$ValidateStats,$HideMe,"0",$_POST['Interests'],$_POST['Title'],$_POST['Joined'],$_POST['LastActive'],$NewSignature,'Your Notes',$Avatar,"100x100",$Website,$_POST['YourGender'],$_POST['PostCount'],$_POST['YourOffSet'],$_POST['DST'],$Settings['DefaultTheme'],$_POST['UserIP'],$HashSalt));
-exec_query($query);
-$querylogr = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `Name`='%s' AND `Password`='%s' LIMIT 1", array($Name,$NewPassword));
-$resultlogr=exec_query($querylogr);
-$numlogr=mysql_num_rows($resultlogr);
+sql_query($query);
+$querylogr = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `Name`='%s' AND `Password`='%s' LIMIT 1", array($Name,$NewPassword));
+$resultlogr=sql_query($querylogr);
+$numlogr=sql_num_rows($resultlogr);
 if($numlogr>=1) {
 $ir=0;
-$YourIDMr=mysql_result($resultlogr,$ir,"id");
-$YourNameMr=mysql_result($resultlogr,$ir,"Name");
-$YourGroupMr=mysql_result($resultlogr,$ir,"GroupID");
+$YourIDMr=sql_result($resultlogr,$ir,"id");
+$YourNameMr=sql_result($resultlogr,$ir,"Name");
+$YourGroupMr=sql_result($resultlogr,$ir,"GroupID");
 $YourGroupIDMr=$YourGroupMr;
-$gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($YourGroupMr));
-$gresult=exec_query($gquery);
-$YourGroupMr=mysql_result($gresult,0,"Name");
-mysql_free_result($gresult);
-$YourTimeZoneMr=mysql_result($resultlogr,$ir,"TimeZone");
-$YourDSTMr=mysql_result($resultlogr,$ir,"DST"); }
-mysql_free_result($resultlogr);
+$gquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($YourGroupMr));
+$gresult=sql_query($gquery);
+$YourGroupMr=sql_result($gresult,0,"Name");
+sql_free_result($gresult);
+$YourTimeZoneMr=sql_result($resultlogr,$ir,"TimeZone");
+$YourDSTMr=sql_result($resultlogr,$ir,"DST"); }
+sql_free_result($resultlogr);
 session_regenerate_id(true);
 $_SESSION['Loggedin']=true;
 $_SESSION['MemberName']=$YourNameMr;

@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: mysql.php - Last Update: 11/22/2009 SVN 357 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 11/23/2009 SVN 359 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mysql.php"||$File3Name=="/mysql.php") {
@@ -106,8 +106,8 @@ function sql_fetch_assoc($result) {
 $row = mysql_fetch_assoc($result);
 	return $row; }
 //Fetch Row Results
-function sql_fetch_row($result,$result_type=MYSQL_BOTH) {
-$row = mysql_fetch_row($result,$result_type);
+function sql_fetch_row($result) {
+$row = mysql_fetch_row($result);
 	return $row; }
 //Fetch Row Results
 function sql_server_info($link) {
@@ -116,7 +116,7 @@ if(isset($link)) {
 if(!isset($link)) {
 	$result = mysql_get_server_info(); }
 	return $result; }
-function sql_escape_string($string,$link) {
+function sql_escape_string($string,$link=null) {
 if(isset($link)) {
 	$string = mysql_real_escape_string($string,$link); }
 if(!isset($link)) {
@@ -142,7 +142,7 @@ $query_val[$query_is] = $query_vars[$query_i];
 ++$query_i; }
    $query_val[0] = $query_string;
    return call_user_func_array("sprintf",$query_val); }
-function sql_set_charset($charset,$link) {
+function sql_set_charset($charset,$link=null) {
 if(function_exists('mysql_set_charset')===false) {
 	$result = sql_query("SET CHARACTER SET '".$charset."'");
 if ($result===false) {

@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: functions.php - Last Update: 11/23/2009 SVN 357 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 11/23/2009 SVN 359 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -30,6 +30,7 @@ if ($File3Name==$FileName||$File3Name=="/".$FileName) {
 	return true; } }
 CheckFile("functions.php");
 require($SettDir['misc']."compression.php");
+require($SettDir['misc']."mysql.php");
 /* 
 if ($_GET['act']=="DeleteSession") { session_destroy(); }
 if ($_GET['act']=="ResetSession") { session_unset(); }
@@ -38,15 +39,7 @@ if ($_GET['act']=="PHPInfo") { phpinfo(); exit(); }
 if ($_GET['act']=="phpinfo") { phpinfo(); exit(); }
 if ($_GET['act']=="PHPCredits") { phpcredits(); exit(); }
 if ($_GET['act']=="phpcredits") { phpcredits(); exit(); } 
-*/// Connect to mysql database
-function ConnectMysql($sqlhost,$sqluser,$sqlpass,$sqldb,$retlink=false) {
-if($retlink!==true) { $retlink = false; }
-$StatSQL = mysql_connect($sqlhost,$sqluser,$sqlpass);
-$StatBase = mysql_select_db($sqldb);
-if (!$StatSQL) { return false; }
-if (!$StatBase) { return false; }
-if($retlink===true) { return $StatSQL; }
-if($retlink===false) { return true; } }
+*/
 	$Names['RS'] = "Renee Sabonis";
 define("_renee_", $Names['RS']);
 // Change the title and gzip page
@@ -102,133 +95,6 @@ if($use_gzip=="on") {
 	$goutput = gzcompress($output); }
 	echo $goutput; } }
 $foo="bar"; $$foo="foo";
-//SQL Functions might make it easy to port to other SQL systems.
-function sql_error($link) {
-if(isset($link)) {
-	$result = mysql_error($link); }
-if(!isset($link)) {
-	$result = mysql_error(); }
-if (!$result) {
-    trigger_error("Invalid query: ".mysql_error(),E_USER_ERROR);
-	return false; }
-	return $result; }
-// Execute a query :P
-$NumQueries = 0;
-/*
-Comment out untill I can change all calls to exec_query to sql_query.
-function sql_query($query,$link=null) {
-*/
-function exec_query($query,$link=null) {
-global $NumQueries;
-if(isset($link)) {
-	$result = mysql_query($query,$link); }
-if(!isset($link)) {
-	$result = mysql_query($query); }
-if (!$result) {
-    trigger_error("Invalid query: ".sql_error(),E_USER_ERROR);
-	return false; }
-if ($result) {
-	++$NumQueries;
-	return $result; } }
-// Query Results :P
-function sql_result($result,$row,$field=0) {
-$value = mysql_result($result, $row, $field);
-if (!$value) {
-    trigger_error("Invalid query: ".sql_error(),E_USER_ERROR);
-	return false; }
-	return $value; }
-// Free Results :P
-function sql_free_result($result) {
-$fresult = mysql_free_result($result);
-if (!$fresult) {
-    trigger_error("Invalid query: ".sql_error(),E_USER_ERROR);
-	return false; }
-if ($fresult) {
-	return true; } }
-//Fetch Results to Array
-function sql_fetch_array($result,$result_type=MYSQL_BOTH) {
-$row = mysql_fetch_array($result,$result_type);
-if (!$row) {
-    trigger_error("Invalid query: ".sql_error(),E_USER_ERROR);
-	return false; }
-	return $row; }
-//Fetch Row Results
-function sql_fetch_row($result,$result_type=MYSQL_BOTH) {
-$row = mysql_fetch_array($result,$result_type);
-if (!$row) {
-    trigger_error("Invalid query: ".sql_error(),E_USER_ERROR);
-	return false; }
-	return $row; }
-//Fetch Row Results
-function sql_server_info($link) {
-if(isset($link)) {
-	$result = mysql_get_server_info($link); }
-if(!isset($link)) {
-	$result = mysql_get_server_info(); }
-if (!$result) {
-    trigger_error("Invalid query: ".sql_error(),E_USER_ERROR);
-	return false; }
-	return $result; }
-function sql_escape_string($string,$link) {
-if(isset($link)) {
-	$string = mysql_real_escape_string($string,$link); }
-if(!isset($link)) {
-	$string = mysql_real_escape_string($string); }
-if (!$result) {
-    trigger_error("Invalid query: ".sql_error(),E_USER_ERROR);
-	return false; }
-	return $string; }
-// SafeSQL Lite Source Code by Cool Dude 2k
-// Make SQL Query's safe
-/*
-Comment out untill I can change all calls to query to sql_pre_query.
-function sql_pre_query($query_string,$query_vars) {
-*/
-function query($query_string,$query_vars) {
-   $query_array = array(array("%i","%I","%F","%S"),array("%d","%d","%f","%s"));
-   $query_string = str_replace($query_array[0], $query_array[1], $query_string);
-   if (get_magic_quotes_gpc()) {
-       $query_vars  = array_map("stripslashes", $query_vars); }
-   $query_vars = array_map("mysql_real_escape_string", $query_vars);
-   $query_val = $query_vars;
-$query_num = count($query_val);
-$query_i = 0;
-while ($query_i < $query_num) {
-$query_is = $query_i+1;
-$query_val[$query_is] = $query_vars[$query_i];
-++$query_i; }
-   $query_val[0] = $query_string;
-   return call_user_func_array("sprintf",$query_val); }
-function sql_set_charset($charset,$link) {
-if(function_exists('mysql_set_charset')===false) {
-	$result = exec_query("SET CHARACTER SET '".$charset."'");
-if (!$result) {
-    trigger_error("Invalid query: ".sql_error(),E_USER_ERROR);
-	return false; }
-	$result = exec_query("SET NAMES '".$charset."'"); 
-if (!$result) {
-    trigger_error("Invalid query: ".sql_error(),E_USER_ERROR);
-	return false; }
-	return true; }
-if(function_exists('mysql_set_charset')===true) {
-if(isset($link)) {
-	$result = mysql_set_charset($charset,$link); }
-if(!isset($link)) {
-	$result = mysql_set_charset($charset); }
-if (!$result) {
-    trigger_error("Invalid query: ".sql_error(),E_USER_ERROR);
-	return false; }
-	return true; } }
-if(function_exists('mysql_set_charset')===false) {
-function mysql_set_charset($charset,$link) {
-if(isset($link)) {
-	$result = mysql_set_charset($charset,$link); }
-if(!isset($link)) {
-	$result = mysql_set_charset($charset); }
-if (!$result) {
-    trigger_error("Invalid query: ".sql_error(),E_USER_ERROR);
-	return false; }
-	return true; } }
 	$Names['KP'] = "Kazuki Przyborowski";
 define("_kazuki_", $Names['KP']);
 // Kill bad vars for some functions
@@ -267,17 +133,17 @@ if(!in_array($theme,$cktheme)||strlen($theme)>26) {
 // Change the text to icons(smileys)
 function text2icons($Text,$sqlt) {
 global $Settings;
-$reneequery=query("SELECT * FROM `".$sqlt."smileys`", array(null));
-$reneeresult=exec_query($reneequery);
-$reneenum=mysql_num_rows($reneeresult);
+$reneequery=sql_pre_query("SELECT * FROM `".$sqlt."smileys`", array(null));
+$reneeresult=sql_query($reneequery);
+$reneenum=sql_num_rows($reneeresult);
 $renees=0;
 while ($renees < $reneenum) {
-$FileName=mysql_result($reneeresult,$renees,"FileName");
-$SmileName=mysql_result($reneeresult,$renees,"SmileName");
-$SmileText=mysql_result($reneeresult,$renees,"SmileText");
-$SmileDirectory=mysql_result($reneeresult,$renees,"Directory");
-$ShowSmile=mysql_result($reneeresult,$renees,"Show");
-$ReplaceType=mysql_result($reneeresult,$renees,"ReplaceCI");
+$FileName=sql_result($reneeresult,$renees,"FileName");
+$SmileName=sql_result($reneeresult,$renees,"SmileName");
+$SmileText=sql_result($reneeresult,$renees,"SmileText");
+$SmileDirectory=sql_result($reneeresult,$renees,"Directory");
+$ShowSmile=sql_result($reneeresult,$renees,"Show");
+$ReplaceType=sql_result($reneeresult,$renees,"ReplaceCI");
 if($ReplaceType=="on") { $ReplaceType = "yes"; }
 if($ReplaceType=="off") { $ReplaceType = "no"; }
 if($ReplaceType!="yes"||$ReplaceType!="no") { $ReplaceType = "no"; }
@@ -338,20 +204,6 @@ $text = preg_replace("/".$fixamps1[$ampi]."/i", $fixamps2[$ampi], $text);
 ++$ampi; }
 $text = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $text);
 return $text; }
-// Get next id for stuff
-function getnextid($tablepre,$table) {
-   $getnextidq = query("SHOW TABLE STATUS LIKE '".$tablepre.$table."'", array());
-   $getnextidr = exec_query($getnextidq);
-   $getnextid = mysql_fetch_assoc($getnextidr);
-   return $getnextid['Auto_increment'];
-   mysql_free_result($getnextidr); }
-// Get number of rows for table
-function getnumrows($tablepre,$table) {
-   $getnextidq = query("SHOW TABLE STATUS LIKE '".$tablepre.$table."'", array());
-   $getnextidr = exec_query($getnextidq);
-   $getnextid = mysql_fetch_assoc($getnextidr);
-   return $getnextid['Rows'];
-   mysql_free_result($getnextidr); }
 	$Names['K'] = "Katarzyna";
 define("_katarzyna_", $Names['K']);
 // Change Time Stamp to a readable time
@@ -457,16 +309,16 @@ $phpsrcs = preg_replace("/\<\/font>/i", "</span>", $phpsrcs);
 return $phpsrcs; }
 // Check to see if the user is hidden/shy. >_> | ^_^ | <_<
 function GetUserName($idu,$sqlt) { $UsersName = null;
-$gunquery = query("SELECT * FROM `".$sqlt."members` WHERE `id`=%i LIMIT 1", array($idu));
-$gunresult=exec_query($gunquery);
-$gunnum=mysql_num_rows($gunresult);
+$gunquery = sql_pre_query("SELECT * FROM `".$sqlt."members` WHERE `id`=%i LIMIT 1", array($idu));
+$gunresult=sql_query($gunquery);
+$gunnum=sql_num_rows($gunresult);
 // I'm now hidden from you. ^_^ | <_< I cant find you.
 $UsersHidden = "yes";
 if($gunnum>0){
-$UsersName=mysql_result($gunresult,0,"Name");
+$UsersName=sql_result($gunresult,0,"Name");
 // Am i still hidden. o_O <_< I see you.
-$UsersHidden=mysql_result($gunresult,0,"HiddenMember"); }
-mysql_free_result($gunresult);
+$UsersHidden=sql_result($gunresult,0,"HiddenMember"); }
+sql_free_result($gunresult);
 $UsersInfo['Name'] = $UsersName;
 $UsersInfo['Hidden'] = $UsersHidden;
 return $UsersInfo; }
@@ -554,11 +406,6 @@ if(!is_array($search)&&!is_array($replace)) {
 $search = preg_quote($search, "/");
 $subject = preg_replace("/".$search."/i", $replace, $subject); }
 return $subject; } }
-/*   Adds mysql_set_charset to PHP below Ver. 5.2.3 - by: Janez R.      // 
-//   http://us.php.net/manual/en/function.mysql-set-charset.php#77565   */
-if (!function_exists('mysql_set_charset')) {
-  function mysql_set_charset($charset) {
-    return exec_query("set names $charset"); } }
 /*   Adds httponly to PHP below Ver. 5.2.0   // 
 //       by Kazuki Przyborowski - Cool Dude 2k      */
 function http_set_cookie($name,$value=null,$expire=null,$path=null,$domain=null,$secure=false,$httponly=false) {

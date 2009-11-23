@@ -12,7 +12,7 @@
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mkconfig.php - Last Update: 11/23/2009 SVN 357 - Author: cooldude2k $
+    $FileInfo: mkconfig.php - Last Update: 11/23/2009 SVN 359 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mkconfig.php"||$File3Name=="/mkconfig.php") {
@@ -107,7 +107,7 @@ if($_POST['usehashtype']=="sha512") { $iDBHashType = "iDBH512"; }
 if ($_POST['AdminUser']=="Guest") { $Error="Yes";
 echo "<br />You can not use Guest as your name."; }
 /* We are done now with fixing the info. ^_^ */
-$mydbtest = ConnectMysql($_POST['DatabaseHost'],$_POST['DatabaseUserName'],$_POST['DatabasePassword'],$_POST['DatabaseName']);
+$mydbtest = sql_connect_db($_POST['DatabaseHost'],$_POST['DatabaseUserName'],$_POST['DatabasePassword'],$_POST['DatabaseName']);
 $SQLCollate = "latin1_general_ci";
 $SQLCharset = "latin1"; 
 if($Settings['charset']=="ISO-8859-1") {
@@ -119,9 +119,9 @@ if($Settings['charset']=="ISO-8859-15") {
 if($Settings['charset']=="UTF-8") {
 	$SQLCollate = "utf8_unicode_ci";
 	$SQLCharset = "utf8"; }
-mysql_set_charset($SQLCharset);
+sql_set_charset($SQLCharset);
 if($mydbtest!==true) { $Error="Yes";
-echo "<br />".mysql_errno().": ".mysql_error()."\n"; }
+echo "<br />".sql_errno().": ".sql_error()."\n"; }
 if ($Error!="Yes") {
 $ServerUUID = uuid(false,true,false,$_POST['usehashtype'],null);
 if(!is_numeric($_POST['YourOffSet'])) { $_POST['YourOffSet'] = "0"; }

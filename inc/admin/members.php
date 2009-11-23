@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 11/23/2009 SVN 357 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 11/23/2009 SVN 359 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -67,24 +67,24 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Validating Members";
 	<td style="width: 50%;"><label class="TextBoxLabel" for="id">Member to validate:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="id" id="id">
 <?php 
-$gquerys = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `Name`='%s' LIMIT 1", array($Settings['ValidateGroup']));
-$gresults=exec_query($gquerys);
-$VGroupID=mysql_result($gresults,0,"id");
-mysql_free_result($gresults);
-$getmemidq = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE (`GroupID`=%i AND `id`<>-1) OR (`Validated`='no' AND `id`<>-1)", array($VGroupID));
-$getmemidr=exec_query($getmemidq);
-$getmemidnum=mysql_num_rows($getmemidr);
+$gquerys = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `Name`='%s' LIMIT 1", array($Settings['ValidateGroup']));
+$gresults=sql_query($gquerys);
+$VGroupID=sql_result($gresults,0,"id");
+sql_free_result($gresults);
+$getmemidq = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."members` WHERE (`GroupID`=%i AND `id`<>-1) OR (`Validated`='no' AND `id`<>-1)", array($VGroupID));
+$getmemidr=sql_query($getmemidq);
+$getmemidnum=sql_num_rows($getmemidr);
 $getmemidi = 0;
 if($getmemidnum<1) { ?>
 	<option value="0">None</option>
 <?php }
 while ($getmemidi < $getmemidnum) {
-$getmemidID=mysql_result($getmemidr,$getmemidi,"id");
-$getmemidName=mysql_result($getmemidr,$getmemidi,"Name");
+$getmemidID=sql_result($getmemidr,$getmemidi,"id");
+$getmemidName=sql_result($getmemidr,$getmemidi,"Name");
 ?>
 <option value="<?php echo $getmemidID; ?>"><?php echo $getmemidName; ?></option>
 <?php ++$getmemidi; }
-mysql_free_result($getmemidr); ?>
+sql_free_result($getmemidr); ?>
 	</select></td>
 </tr></table>
 <table style="text-align: left;">
@@ -104,29 +104,29 @@ mysql_free_result($getmemidr); ?>
 </table>
 </div>
 <?php } if($_POST['act']=="validate"&&$_POST['update']=="now"&&$_GET['act']=="validate"&&$_POST['id']!="0") { 
-$mguerys = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `Name`='%s' LIMIT 1", array($Settings['MemberGroup']));
-$mgresults=exec_query($mguerys);
-$MGroupID=mysql_result($mgresults,0,"id");
-mysql_free_result($mgresults);
-$gquerys = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `Name`='%s' LIMIT 1", array($Settings['ValidateGroup']));
-$gresults=exec_query($gquerys);
-$VGroupID=mysql_result($gresults,0,"id");
-mysql_free_result($gresults);
-$query = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($_POST['id']));
-$result=exec_query($query);
-$num=mysql_num_rows($result);
+$mguerys = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `Name`='%s' LIMIT 1", array($Settings['MemberGroup']));
+$mgresults=sql_query($mguerys);
+$MGroupID=sql_result($mgresults,0,"id");
+sql_free_result($mgresults);
+$gquerys = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `Name`='%s' LIMIT 1", array($Settings['ValidateGroup']));
+$gresults=sql_query($gquerys);
+$VGroupID=sql_result($gresults,0,"id");
+sql_free_result($gresults);
+$query = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($_POST['id']));
+$result=sql_query($query);
+$num=sql_num_rows($result);
 $i=0;
-$VMemName=mysql_result($result,$i,"Name");
-$VMemGroup=mysql_result($result,$i,"GroupID");
-$VMemValidated=mysql_result($result,$i,"Validated");
+$VMemName=sql_result($result,$i,"Name");
+$VMemGroup=sql_result($result,$i,"GroupID");
+$VMemValidated=sql_result($result,$i,"Validated");
 $admincptitle = " ".$ThemeSet['TitleDivider']." Validating Members";
 redirect("refresh",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=members",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],FALSE),"4");
 if($VMemGroup==$VGroupID) {
-$query = query("UPDATE `".$Settings['sqltable']."members` SET `GroupID`='%s', `Validated`='%s' WHERE `id`=%i", array($MGroupID, "yes", $_POST['id']));
-exec_query($query); }
+$query = sql_pre_query("UPDATE `".$Settings['sqltable']."members` SET `GroupID`='%s', `Validated`='%s' WHERE `id`=%i", array($MGroupID, "yes", $_POST['id']));
+sql_query($query); }
 if($VMemGroup!=$VGroupID&&$VMemValidated=="no") {
-$query = query("UPDATE `".$Settings['sqltable']."members` SET `Validated`='%s' WHERE `id`=%i", array("yes", $_POST['id']));
-exec_query($query); }
+$query = sql_pre_query("UPDATE `".$Settings['sqltable']."members` SET `Validated`='%s' WHERE `id`=%i", array("yes", $_POST['id']));
+sql_query($query); }
 ?>
 <div class="TableMenuBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
@@ -184,20 +184,20 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Deleting Members";
 	<td style="width: 50%;"><label class="TextBoxLabel" for="id">Member to delete:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="id" id="id">
 <?php 
-$getmemidq = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE (`id`<>-1 AND `id`<>1)", array(null));
-$getmemidr=exec_query($getmemidq);
-$getmemidnum=mysql_num_rows($getmemidr);
+$getmemidq = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."members` WHERE (`id`<>-1 AND `id`<>1)", array(null));
+$getmemidr=sql_query($getmemidq);
+$getmemidnum=sql_num_rows($getmemidr);
 $getmemidi = 0;
 if($getmemidnum<1) { ?>
 	<option value="0">None</option>
 <?php }
 while ($getmemidi < $getmemidnum) {
-$getmemidID=mysql_result($getmemidr,$getmemidi,"id");
-$getmemidName=mysql_result($getmemidr,$getmemidi,"Name");
+$getmemidID=sql_result($getmemidr,$getmemidi,"id");
+$getmemidName=sql_result($getmemidr,$getmemidi,"Name");
 ?>
 <option value="<?php echo $getmemidID; ?>"><?php echo $getmemidName; ?></option>
 <?php ++$getmemidi; }
-mysql_free_result($getmemidr); ?>
+sql_free_result($getmemidr); ?>
 	</select></td>
 </tr></table>
 <table style="text-align: left;">
@@ -221,8 +221,8 @@ mysql_free_result($getmemidr); ?>
 $DMemName = GetUserName($_POST['id'],$Settings['sqltable']);
 $DMemName = $DMemName['Name'];
 if($DMemName!==null&&($_POST['id']!="0"||$_POST['id']!="1"||$_POST['id']!="-1")) { 
-$dmquery = query("DELETE FROM `".$Settings['sqltable']."members` WHERE `id`=%i", array($_POST['id']));
-exec_query($dmquery); }
+$dmquery = sql_pre_query("DELETE FROM `".$Settings['sqltable']."members` WHERE `id`=%i", array($_POST['id']));
+sql_query($dmquery); }
 ?>
 <div class="TableMenuBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
@@ -282,39 +282,39 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Editing Members";
 	<td style="width: 50%;"><label class="TextBoxLabel" for="id">Member to edit:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="id" id="id">
 <?php 
-$getmemidq = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE (`id`<>-1 AND `id`<>1)", array(null));
-$getmemidr=exec_query($getmemidq);
-$getmemidnum=mysql_num_rows($getmemidr);
+$getmemidq = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."members` WHERE (`id`<>-1 AND `id`<>1)", array(null));
+$getmemidr=sql_query($getmemidq);
+$getmemidnum=sql_num_rows($getmemidr);
 $getmemidi = 0;
 if($getmemidnum<1) { ?>
 	<option value="0">None</option>
 <?php }
 while ($getmemidi < $getmemidnum) {
-$getmemidID=mysql_result($getmemidr,$getmemidi,"id");
-$getmemidName=mysql_result($getmemidr,$getmemidi,"Name");
+$getmemidID=sql_result($getmemidr,$getmemidi,"id");
+$getmemidName=sql_result($getmemidr,$getmemidi,"Name");
 ?>
 <option value="<?php echo $getmemidID; ?>"><?php echo $getmemidName; ?></option>
 <?php ++$getmemidi; }
-mysql_free_result($getmemidr); ?>
+sql_free_result($getmemidr); ?>
 	</select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="gid">New Group for Member:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="gid" id="gid">
 <?php 
-$getgrpidq = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE (`Name`<>'%s' AND `Name`<>'%s')", array($Settings['GuestGroup'],$Settings['ValidateGroup']));
-$getgrpidr=exec_query($getgrpidq);
-$getgrpidnum=mysql_num_rows($getgrpidr);
+$getgrpidq = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE (`Name`<>'%s' AND `Name`<>'%s')", array($Settings['GuestGroup'],$Settings['ValidateGroup']));
+$getgrpidr=sql_query($getgrpidq);
+$getgrpidnum=sql_num_rows($getgrpidr);
 $getgrpidi = 0;
 if($getgrpidnum<1) { ?>
 	<option value="0">None</option>
 <?php }
 while ($getgrpidi < $getgrpidnum) {
-$getgrpidID=mysql_result($getgrpidr,$getgrpidi,"id");
-$getgrpidName=mysql_result($getgrpidr,$getgrpidi,"Name");
+$getgrpidID=sql_result($getgrpidr,$getgrpidi,"id");
+$getgrpidName=sql_result($getgrpidr,$getgrpidi,"Name");
 ?>
 <option value="<?php echo $getgrpidID; ?>"><?php echo $getgrpidName; ?></option>
 <?php ++$getgrpidi; }
-mysql_free_result($getgrpidr); ?>
+sql_free_result($getgrpidr); ?>
 	</select></td>
 </tr></table>
 <table style="text-align: left;">
@@ -335,20 +335,20 @@ mysql_free_result($getgrpidr); ?>
 </div>
 <?php } if($_POST['act']=="editmember"&&$_POST['update']=="now"&&$_GET['act']=="editmember"&&
 	($_POST['id']!="0"||$_POST['id']!="1"||$_POST['id']!="-1")) { 
-$ggidquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `name`='%s' LIMIT 1", array($Settings['GuestGroup']));
-$ggidresult=exec_query($ggidquery);
-$GuestGroupID=mysql_result($ggidresult,0,"id");
-mysql_free_result($ggidresult);
-$vgidquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `name`='%s' LIMIT 1", array($Settings['ValidateGroup']));
-$vgidresult=exec_query($vgidquery);
-$ValidateGroupID=mysql_result($vgidresult,0,"id");
-mysql_free_result($vgidresult);
+$ggidquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `name`='%s' LIMIT 1", array($Settings['GuestGroup']));
+$ggidresult=sql_query($ggidquery);
+$GuestGroupID=sql_result($ggidresult,0,"id");
+sql_free_result($ggidresult);
+$vgidquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `name`='%s' LIMIT 1", array($Settings['ValidateGroup']));
+$vgidresult=sql_query($vgidquery);
+$ValidateGroupID=sql_result($vgidresult,0,"id");
+sql_free_result($vgidresult);
 $DMemName = GetUserName($_POST['id'],$Settings['sqltable']);
 $DMemName = $DMemName['Name'];
 if($DMemName!==null&&($_POST['id']!="0"||$_POST['id']!="1"||$_POST['id']!="-1")&&
 	($_POST['gid']!=$GuestGroupID||$_POST['gid']!=$ValidateGroupID)) { 
-$dmquery = query("UPDATE `".$Settings['sqltable']."members` SET GroupID=%i WHERE `id`=%i", array($_POST['gid'],$_POST['id']));
-exec_query($dmquery); }
+$dmquery = sql_pre_query("UPDATE `".$Settings['sqltable']."members` SET GroupID=%i WHERE `id`=%i", array($_POST['gid'],$_POST['id']));
+sql_query($dmquery); }
 ?>
 <div class="TableMenuBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>

@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: events.php - Last Update: 11/23/2009 SVN 357 - Author: cooldude2k $
+    $FileInfo: events.php - Last Update: 11/23/2009 SVN 359 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="events.php"||$File3Name=="/events.php") {
@@ -19,11 +19,11 @@ if ($File3Name=="events.php"||$File3Name=="/events.php") {
 	exit(); }
 if(!is_numeric($_GET['id'])) { $_GET['id'] = null; }
 if($_GET['act']=="view"||$_GET['act']==null) {
-$query = query("SELECT * FROM `".$Settings['sqltable']."events` WHERE `id`=%i LIMIT 1", array($_GET['id']));
-$result=exec_query($query);
-$num=mysql_num_rows($result);
+$query = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."events` WHERE `id`=%i LIMIT 1", array($_GET['id']));
+$result=sql_query($query);
+$num=sql_num_rows($result);
 $is=0;
-if($num==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); mysql_free_result($result);
+if($num==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($result);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 ?>
@@ -31,14 +31,14 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die
 <div class="DivNavLinks">&nbsp;</div>
 <?php
 while ($is < $num) {
-$EventID=mysql_result($result,$is,"id");
-$EventUser=mysql_result($result,$is,"UserID");
-$EventGuest=mysql_result($result,$is,"GuestName");
-$EventName=mysql_result($result,$is,"EventName");
-$EventText=mysql_result($result,$is,"EventText");
+$EventID=sql_result($result,$is,"id");
+$EventUser=sql_result($result,$is,"UserID");
+$EventGuest=sql_result($result,$is,"GuestName");
+$EventName=sql_result($result,$is,"EventName");
+$EventText=sql_result($result,$is,"EventText");
 $EventText = preg_replace("/\<br\>/", "<br />", nl2br($EventText));
-$EventStart=mysql_result($result,$is,"TimeStamp");
-$EventEnd=mysql_result($result,$is,"TimeStampEnd");
+$EventStart=sql_result($result,$is,"TimeStamp");
+$EventEnd=sql_result($result,$is,"TimeStampEnd");
 $EventStart = GMTimeChange("M. j Y",$EventStart,null);
 $EventEnd = GMTimeChange("M. j Y",$EventEnd,null);
 $_SESSION['ViewingPage'] = url_maker(null,"no+ext","act=view&id=".$_GET['id'],"&","=",$prexqstr['event'],$exqstr['event']);
@@ -48,44 +48,44 @@ if($Settings['file_ext']=="no+ext"||$Settings['file_ext']=="no ext") {
 $_SESSION['ViewingFile'] = $exfile['event']; }
 $_SESSION['PreViewingTitle'] = "Viewing Event:";
 $_SESSION['ViewingTitle'] = $EventName;
-$requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($EventUser));
-$reresult=exec_query($requery);
-$renum=mysql_num_rows($reresult);
+$requery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($EventUser));
+$reresult=sql_query($requery);
+$renum=sql_num_rows($reresult);
 if($renum<1) { $EventUser = -1;
-$requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($EventUser));
-$reresult=exec_query($requery);
-$renum=mysql_num_rows($reresult); }
+$requery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($EventUser));
+$reresult=sql_query($requery);
+$renum=sql_num_rows($reresult); }
 $rei=0;
 $User1ID=$EventUser;
-$User1Name=mysql_result($reresult,$rei,"Name");
-$User1IP=mysql_result($reresult,$rei,"IP");
-$User1Email=mysql_result($reresult,$rei,"Email");
-$User1Title=mysql_result($reresult,$rei,"Title");
-$User1Joined=mysql_result($reresult,$rei,"Joined");
+$User1Name=sql_result($reresult,$rei,"Name");
+$User1IP=sql_result($reresult,$rei,"IP");
+$User1Email=sql_result($reresult,$rei,"Email");
+$User1Title=sql_result($reresult,$rei,"Title");
+$User1Joined=sql_result($reresult,$rei,"Joined");
 $User1Joined=GMTimeChange("M j Y",$User1Joined,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$User1GroupID=mysql_result($reresult,$rei,"GroupID");
-$gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($User1GroupID));
-$gresult=exec_query($gquery);
-$User1Hidden=mysql_result($reresult,$rei,"HiddenMember");
-$User1Group=mysql_result($gresult,0,"Name");
-$GroupNamePrefix=mysql_result($gresult,0,"NamePrefix");
-$GroupNameSuffix=mysql_result($gresult,0,"NameSuffix");
-mysql_free_result($gresult);
-$User1Signature=mysql_result($reresult,$rei,"Signature");
+$User1GroupID=sql_result($reresult,$rei,"GroupID");
+$gquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($User1GroupID));
+$gresult=sql_query($gquery);
+$User1Hidden=sql_result($reresult,$rei,"HiddenMember");
+$User1Group=sql_result($gresult,0,"Name");
+$GroupNamePrefix=sql_result($gresult,0,"NamePrefix");
+$GroupNameSuffix=sql_result($gresult,0,"NameSuffix");
+sql_free_result($gresult);
+$User1Signature=sql_result($reresult,$rei,"Signature");
 $User1Signature = preg_replace("/\<br\>/", "<br />", nl2br($User1Signature));
-$User1Avatar=mysql_result($reresult,$rei,"Avatar");
-$User1AvatarSize=mysql_result($reresult,$rei,"AvatarSize");
+$User1Avatar=sql_result($reresult,$rei,"Avatar");
+$User1AvatarSize=sql_result($reresult,$rei,"AvatarSize");
 if ($User1Avatar=="http://"||$User1Avatar==null||
 	strtolower($User1Avatar)=="noavatar") {
 $User1Avatar=$ThemeSet['NoAvatar'];
 $User1AvatarSize=$ThemeSet['NoAvatarSize']; }
 $AvatarSize1=explode("x", $User1AvatarSize);
 $AvatarSize1W=$AvatarSize1[0]; $AvatarSize1H=$AvatarSize1[1];
-$User1Website=mysql_result($reresult,$rei,"Website");
-$User1PostCount=mysql_result($reresult,$rei,"PostCount");
-$User1IP=mysql_result($reresult,$rei,"IP");
-mysql_free_result($reresult);
-++$is; } mysql_free_result($result);
+$User1Website=sql_result($reresult,$rei,"Website");
+$User1PostCount=sql_result($reresult,$rei,"PostCount");
+$User1IP=sql_result($reresult,$rei,"IP");
+sql_free_result($reresult);
+++$is; } sql_free_result($result);
 if($User1Name=="Guest") { $User1Name=$EventGuest;
 if($User1Name==null) { $User1Name="Guest"; } }
 if(isset($GroupNamePrefix)&&$GroupNamePrefix!=null) {
@@ -199,17 +199,17 @@ $_SESSION['UserFormID'] = $UFID;
 <td class="TableColumn3" style="width: 15%; vertical-align: middle; text-align: center;">
 <div style="width: 100%; height: 160px; overflow: auto;">
 <table style="width: 100%; text-align: center;"><?php
-$renee_query=query("SELECT * FROM `".$Settings['sqltable']."smileys` WHERE `Show`='yes'", array(null));
-$renee_result=exec_query($renee_query);
-$renee_num=mysql_num_rows($renee_result);
+$renee_query=sql_pre_query("SELECT * FROM `".$Settings['sqltable']."smileys` WHERE `Show`='yes'", array(null));
+$renee_result=sql_query($renee_query);
+$renee_num=sql_num_rows($renee_result);
 $renee_s=0; $SmileRow=0; $SmileCRow=0;
 while ($renee_s < $renee_num) { ++$SmileRow;
-$FileName=mysql_result($renee_result,$renee_s,"FileName");
-$SmileName=mysql_result($renee_result,$renee_s,"SmileName");
-$SmileText=mysql_result($renee_result,$renee_s,"SmileText");
-$SmileDirectory=mysql_result($renee_result,$renee_s,"Directory");
-$ShowSmile=mysql_result($renee_result,$renee_s,"Show");
-$ReplaceType=mysql_result($renee_result,$renee_s,"ReplaceCI");
+$FileName=sql_result($renee_result,$renee_s,"FileName");
+$SmileName=sql_result($renee_result,$renee_s,"SmileName");
+$SmileText=sql_result($renee_result,$renee_s,"SmileText");
+$SmileDirectory=sql_result($renee_result,$renee_s,"Directory");
+$ShowSmile=sql_result($renee_result,$renee_s,"Show");
+$ReplaceType=sql_result($renee_result,$renee_s,"ReplaceCI");
 if($SmileRow==1) { ?><tr>
 	<?php } if($SmileRow<5) { ++$SmileCRow; ?>
 	<td>&nbsp;<img src="<?php echo $SmileDirectory."".$FileName; ?>" style="vertical-align: middle; border: 0px; cursor: pointer;" title="<?php echo $SmileName; ?>" alt="<?php echo $SmileName; ?>" onclick="addsmiley('EventText','&nbsp;<?php echo htmlspecialchars($SmileText, ENT_QUOTES, $Settings['charset']); ?>&nbsp;')" />&nbsp;</td>
@@ -221,7 +221,7 @@ if($SmileCRow<5&&$SmileCRow!=0) {
 $SmileCRowL = 5 - $SmileCRow;
 echo "<td colspan=\"".$SmileCRowL."\">&nbsp;</td></tr>"; }
 echo "</table>";
-mysql_free_result($renee_result);
+sql_free_result($renee_result);
 ?></div></td>
 <td class="TableColumn3" style="width: 85%;">
 <form style="display: inline;" method="post" id="MkEventForm" action="<?php echo url_maker($exfile['event'],$Settings['file_ext'],"act=makeevent",$Settings['qstr'],$Settings['qsep'],$prexqstr['event'],$exqstr['event']); ?>">
@@ -448,18 +448,18 @@ setcookie("GuestName", $_POST['GuestName'], time() + (7 * 86400), $cbasedir);
 $_SESSION['GuestName']=$_POST['GuestName']; } }
 /*    <_<  iWordFilter  >_>      
    by Kazuki Przyborowski - Cool Dude 2k */
-$katarzynaqy=query("SELECT * FROM `".$Settings['sqltable']."wordfilter`", array(null));
-$katarzynart=exec_query($katarzynaqy);
-$katarzynanm=mysql_num_rows($katarzynart);
+$katarzynaqy=sql_pre_query("SELECT * FROM `".$Settings['sqltable']."wordfilter`", array(null));
+$katarzynart=sql_query($katarzynaqy);
+$katarzynanm=sql_num_rows($katarzynart);
 $katarzynas=0;
 while ($katarzynas < $katarzynanm) {
-$Filter=mysql_result($katarzynart,$katarzynas,"Filter");
-$Replace=mysql_result($katarzynart,$katarzynas,"Replace");
-$CaseInsensitive=mysql_result($katarzynart,$katarzynas,"CaseInsensitive");
+$Filter=sql_result($katarzynart,$katarzynas,"Filter");
+$Replace=sql_result($katarzynart,$katarzynas,"Replace");
+$CaseInsensitive=sql_result($katarzynart,$katarzynas,"CaseInsensitive");
 if($CaseInsensitive=="on") { $CaseInsensitive = "yes"; }
 if($CaseInsensitive=="off") { $CaseInsensitive = "no"; }
 if($CaseInsensitive!="yes"||$CaseInsensitive!="no") { $CaseInsensitive = "no"; }
-$WholeWord=mysql_result($katarzynart,$katarzynas,"WholeWord");
+$WholeWord=sql_result($katarzynart,$katarzynas,"WholeWord");
 if($WholeWord=="on") { $WholeWord = "yes"; }
 if($WholeWord=="off") { $WholeWord = "no"; }
 if($WholeWord!="yes"&&$WholeWord!="no") { $WholeWord = "no"; }
@@ -472,26 +472,26 @@ if($CaseInsensitive!="yes"&&$WholeWord!="yes") {
 $_POST['EventText'] = preg_replace("/".$Filter."/", $Replace, $_POST['EventText']); }
 if($CaseInsensitive=="yes"&&$WholeWord!="yes") {
 $_POST['EventText'] = preg_replace("/".$Filter."/i", $Replace, $_POST['EventText']); }
-++$katarzynas; } mysql_free_result($katarzynart);
-$lonewolfqy=query("SELECT * FROM `".$Settings['sqltable']."restrictedwords` WHERE `RestrictedEventName`='yes' or `RestrictedUserName`='yes'", array(null));
-$lonewolfrt=exec_query($lonewolfqy);
-$lonewolfnm=mysql_num_rows($lonewolfrt);
+++$katarzynas; } sql_free_result($katarzynart);
+$lonewolfqy=sql_pre_query("SELECT * FROM `".$Settings['sqltable']."restrictedwords` WHERE `RestrictedEventName`='yes' or `RestrictedUserName`='yes'", array(null));
+$lonewolfrt=sql_query($lonewolfqy);
+$lonewolfnm=sql_num_rows($lonewolfrt);
 $lonewolfs=0; $RMatches = null; $RGMatches = null;
 while ($lonewolfs < $lonewolfnm) {
-$RWord=mysql_result($lonewolfrt,$lonewolfs,"Word");
-$RCaseInsensitive=mysql_result($lonewolfrt,$lonewolfs,"CaseInsensitive");
+$RWord=sql_result($lonewolfrt,$lonewolfs,"Word");
+$RCaseInsensitive=sql_result($lonewolfrt,$lonewolfs,"CaseInsensitive");
 if($RCaseInsensitive=="on") { $RCaseInsensitive = "yes"; }
 if($RCaseInsensitive=="off") { $RCaseInsensitive = "no"; }
 if($RCaseInsensitive!="yes"||$RCaseInsensitive!="no") { $RCaseInsensitive = "no"; }
-$RWholeWord=mysql_result($lonewolfrt,$lonewolfs,"WholeWord");
+$RWholeWord=sql_result($lonewolfrt,$lonewolfs,"WholeWord");
 if($RWholeWord=="on") { $RWholeWord = "yes"; }
 if($RWholeWord=="off") { $RWholeWord = "no"; }
 if($RWholeWord!="yes"||$RWholeWord!="no") { $RWholeWord = "no"; }
-$RestrictedEventName=mysql_result($lonewolfrt,$lonewolfs,"RestrictedEventName");
+$RestrictedEventName=sql_result($lonewolfrt,$lonewolfs,"RestrictedEventName");
 if($RestrictedEventName=="on") { $RestrictedEventName = "yes"; }
 if($RestrictedEventName=="off") { $RestrictedEventName = "no"; }
 if($RestrictedEventName!="yes"||$RestrictedEventName!="no") { $RestrictedEventName = "no"; }
-$RestrictedUserName=mysql_result($lonewolfrt,$lonewolfs,"RestrictedUserName");
+$RestrictedUserName=sql_result($lonewolfrt,$lonewolfs,"RestrictedUserName");
 if($RestrictedUserName=="on") { $RestrictedUserName = "yes"; }
 if($RestrictedUserName=="off") { $RestrictedUserName = "no"; }
 if($RestrictedUserName!="yes"||$RestrictedUserName!="no") { $RestrictedUserName = "no"; }
@@ -524,7 +524,7 @@ $RMatches = preg_match("/".$RWord."/i", $_POST['EventName']);
 if($RestrictedUserName=="yes") {
 $RGMatches = preg_match("/".$RWord."/i", $_POST['GuestName']);
 	if($RGMatches==true) { break 1; } } }
-++$lonewolfs; } mysql_free_result($lonewolfrt);
+++$lonewolfs; } sql_free_result($lonewolfrt);
 if ($_POST['EventName']==null) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
@@ -627,13 +627,13 @@ $EventDay=GMTimeChange("d",$TimeSIn,0,0,"off");
 $EventDayEnd=GMTimeChange("d",$TimeSOut,0,0,"off");
 $EventYear=GMTimeChange("Y",$TimeSIn,0,0,"off");
 $EventYearEnd=GMTimeChange("Y",$TimeSOut,0,0,"off");
-$eventid = getnextid($Settings['sqltable'],"events");
+$eventid = sql_get_next_id($Settings['sqltable'],"events");
 $User1ID=$MyUserID;
 if($_SESSION['UserGroup']==$Settings['GuestGroup']) { $User1Name = $_POST['GuestName']; }
 if($_SESSION['UserGroup']!=$Settings['GuestGroup']) { $User1Name = $_SESSION['MemberName']; }
-$query = query("INSERT INTO ".$Settings['sqltable']."events (`UserID`, `GuestName`, `EventName`, `EventText`, `TimeStamp`, `TimeStampEnd`, `EventMonth`, `EventMonthEnd`, `EventDay`, `EventDayEnd`, `EventYear`, `EventYearEnd`) VALUES\n".
+$query = sql_pre_query("INSERT INTO ".$Settings['sqltable']."events (`UserID`, `GuestName`, `EventName`, `EventText`, `TimeStamp`, `TimeStampEnd`, `EventMonth`, `EventMonthEnd`, `EventDay`, `EventDayEnd`, `EventYear`, `EventYearEnd`) VALUES\n".
 "(%i, '%s', '%s', '%s', %i, %i, %i, %i, %i, %i, %i, %i)", array($User1ID,$User1Name,$_POST['EventName'],$_POST['EventText'],$TimeSIn,$TimeSOut,$EventMonth,$EventMonthEnd,$EventDay,$EventDayEnd,$EventYear,$EventYearEnd));
-exec_query($query);
+sql_query($query);
 redirect("refresh",$basedir.url_maker($exfile['event'],$Settings['file_ext'],"act=event&id=".$eventid,$Settings['qstr'],$Settings['qsep'],$prexqstr['event'],$exqstr['event'],FALSE),"3");
 ?><tr>
 	<td><span class="TableMessage"><br />

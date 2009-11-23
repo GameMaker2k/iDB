@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: rssfeed.php - Last Update: 11/23/2009 SVN 357 - Author: cooldude2k $
+    $FileInfo: rssfeed.php - Last Update: 11/23/2009 SVN 359 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="rssfeed.php"||$File3Name=="/rssfeed.php") {
@@ -74,18 +74,18 @@ else { if (stristr($_SERVER["HTTP_USER_AGENT"],"FeedValidator")) {
 } else { header("Content-Type: text/xml; charset=".$Settings['charset']); } } }
 header("Content-Language: en");
 header("Vary: Accept");
-$prequery = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i", array($_GET['id']));
-$preresult=exec_query($prequery);
-$prenum=mysql_num_rows($preresult);
+$prequery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i", array($_GET['id']));
+$preresult=sql_query($prequery);
+$prenum=sql_num_rows($preresult);
 $prei=0;
-$ForumID=mysql_result($preresult,0,"id");
-$ForumName=mysql_result($preresult,0,"Name");
+$ForumID=sql_result($preresult,0,"id");
+$ForumName=sql_result($preresult,0,"Name");
 $ForumName = htmlentities($ForumName, ENT_QUOTES, $Settings['charset']);
 $ForumName = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $ForumName);
-$ForumCatID=mysql_result($preresult,0,"CategoryID");
-$ForumType=mysql_result($preresult,0,"ForumType");
+$ForumCatID=sql_result($preresult,0,"CategoryID");
+$ForumType=sql_result($preresult,0,"ForumType");
 $ForumType = strtolower($ForumType);
-mysql_free_result($preresult);
+sql_free_result($preresult);
 if($PermissionInfo['CanViewForum'][$ForumID]=="no"||
 	$PermissionInfo['CanViewForum'][$ForumID]!="yes") {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
@@ -98,64 +98,64 @@ ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $gltf = array(null); $gltf[0] = $ForumID;
 if ($ForumType=="subforum") { 
-$apcquery = query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `ShowForum`='yes' AND `InSubForum`=%i ORDER BY `id`", array($ForumID));
-$apcresult=exec_query($apcquery);
-$apcnum=mysql_num_rows($apcresult);
+$apcquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `ShowForum`='yes' AND `InSubForum`=%i ORDER BY `id`", array($ForumID));
+$apcresult=sql_query($apcquery);
+$apcnum=sql_num_rows($apcresult);
 $apci=0; $apcl=1; if($apcnum>=1) {
 while ($apci < $apcnum) {
-$SubsForumID=mysql_result($apcresult,$apci,"id");
+$SubsForumID=sql_result($apcresult,$apci,"id");
 if(isset($PermissionInfo['CanViewForum'][$SubsForumID])&&
 	$PermissionInfo['CanViewForum'][$SubsForumID]=="yes") {
 $gltf[$apcl] = $SubsForumID; ++$apcl; }
 ++$apci; }
-mysql_free_result($apcresult); } }
+sql_free_result($apcresult); } }
 $Atom = null; $RSS = null; $PreRSS = null;
 $gltnum = count($gltf); $glti = 0; 
 while ($glti < $gltnum) {
-$query = query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `ForumID`=%i ORDER BY `Pinned` DESC, `LastUpdate` DESC LIMIT %i", array($gltf[$glti],$Settings['max_topics']));
-$result=exec_query($query);
-$num=mysql_num_rows($result); $i=0;
+$query = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `ForumID`=%i ORDER BY `Pinned` DESC, `LastUpdate` DESC LIMIT %i", array($gltf[$glti],$Settings['max_topics']));
+$result=sql_query($query);
+$num=sql_num_rows($result); $i=0;
 while ($i < $num) {
-$TopicID=mysql_result($result,$i,"id");
-$ForumID=mysql_result($result,$i,"ForumID");
-$CategoryID=mysql_result($result,$i,"CategoryID");
-$pquery = query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `TopicID`=%i ORDER BY `TimeStamp` ASC LIMIT %i", array($TopicID,1));
-$presult=exec_query($pquery);
-$pnum=mysql_num_rows($presult);
-$MyDescription=mysql_result($presult,0,"Post");
+$TopicID=sql_result($result,$i,"id");
+$ForumID=sql_result($result,$i,"ForumID");
+$CategoryID=sql_result($result,$i,"CategoryID");
+$pquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `TopicID`=%i ORDER BY `TimeStamp` ASC LIMIT %i", array($TopicID,1));
+$presult=sql_query($pquery);
+$pnum=sql_num_rows($presult);
+$MyDescription=sql_result($presult,0,"Post");
 $MyDescription = preg_replace("/\<br\>/", "<br />", nl2br($MyDescription));
 $MyDescription= text2icons($MyDescription,$Settings['sqltable']);
-$UsersID=mysql_result($result,$i,"UserID");
-$GuestsName=mysql_result($result,$i,"GuestName");
-$requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($UsersID));
-$reresult=exec_query($requery);
-$renum=mysql_num_rows($reresult);
+$UsersID=sql_result($result,$i,"UserID");
+$GuestsName=sql_result($result,$i,"GuestName");
+$requery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($UsersID));
+$reresult=sql_query($requery);
+$renum=sql_num_rows($reresult);
 if($renum<1) { $UsersID = -1;
-$requery = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($UsersID));
-$reresult=exec_query($requery);
-$renum=mysql_num_rows($reresult); }
-$UsersName=mysql_result($reresult,0,"Name");
-$UsersGroupID=mysql_result($reresult,0,"GroupID");
+$requery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($UsersID));
+$reresult=sql_query($requery);
+$renum=sql_num_rows($reresult); }
+$UsersName=sql_result($reresult,0,"Name");
+$UsersGroupID=sql_result($reresult,0,"GroupID");
 if($UsersName=="Guest") { $UsersName=$GuestsName;
 if($UsersName==null) { $UsersName="Guest"; } }
-mysql_free_result($reresult);
-$gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($UsersGroupID));
-$gresult=exec_query($gquery);
-$UsersGroup=mysql_result($gresult,0,"Name");
-$GroupNamePrefix=mysql_result($gresult,0,"NamePrefix");
-$GroupNameSuffix=mysql_result($gresult,0,"NameSuffix");
-mysql_free_result($gresult);
+sql_free_result($reresult);
+$gquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($UsersGroupID));
+$gresult=sql_query($gquery);
+$UsersGroup=sql_result($gresult,0,"Name");
+$GroupNamePrefix=sql_result($gresult,0,"NamePrefix");
+$GroupNameSuffix=sql_result($gresult,0,"NameSuffix");
+sql_free_result($gresult);
 if(isset($GroupNamePrefix)&&$GroupNamePrefix!=null) {
 	$UsersName = $GroupNamePrefix.$UsersName; }
 if(isset($GroupNameSuffix)&&$GroupNameSuffix!=null) {
 	$UsersName = $UsersName.$GroupNameSuffix; }
-$TheTime=mysql_result($result,$i,"TimeStamp");
+$TheTime=sql_result($result,$i,"TimeStamp");
 $AtomTime=GMTimeChange("Y-m-d\TH:i:s\Z",$TheTime,0);
 //$OldRSSTime=GMTimeChange("Y-m-d\TH:i:s+0:00",$TheTime,0);
 $OldRSSTime=$AtomTime;
 $TheTime=GMTimeChange("D, j M Y G:i:s \G\M\T",$TheTime,0);
-$TopicName=mysql_result($result,$i,"TopicName");
-$ForumDescription=mysql_result($result,$i,"Description");
+$TopicName=sql_result($result,$i,"TopicName");
+$ForumDescription=sql_result($result,$i,"Description");
 if(isset($PermissionInfo['CanViewForum'][$ForumID])&&
 	$PermissionInfo['CanViewForum'][$ForumID]=="yes"&&
 	isset($CatPermissionInfo['CanViewCategory'][$CategoryID])&&
@@ -170,8 +170,8 @@ $RSS .= '<item rdf:about="'.$BoardURL.url_maker($exfilerss['topic'],$Settings['f
 if($_GET['feedtype']=="rss") {
 $CDataDescription = "<![CDATA[\n".$MyDescription."\n]]>";
 $RSS .= '<item>'."\n".'<pubDate>'.$TheTime.'</pubDate>'."\n".'<author>'.$UsersName.'</author>'."\n".'<title>'.$TopicName.'</title>'."\n".'<description>'.$CDataDescription.'</description>'."\n".'<link>'.$BoardURL.url_maker($exfilerss['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstrrss['topic'],$exqstrrss['topic']).'</link>'."\n".'<guid>'.$BoardURL.url_maker($exfilerss['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstrrss['topic'],$exqstrrss['topic']).'</guid>'."\n".'</item>'."\n"; } }
-++$i; } mysql_free_result($result);
-mysql_free_result($result);
+++$i; } sql_free_result($result);
+sql_free_result($result);
 ++$glti; }
 xml_doc_start("1.0",$Settings['charset']);
 if($Settings['showverinfo']=="on") { ?>

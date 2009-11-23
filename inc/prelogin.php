@@ -11,38 +11,38 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: prelogin.php - Last Update: 11/23/2009 SVN 357 - Author: cooldude2k $
+    $FileInfo: prelogin.php - Last Update: 11/23/2009 SVN 359 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="prelogin.php"||$File3Name=="/prelogin.php") {
 	require('index.php');
 	exit(); }
 $_SESSION['CheckCookie']="done";
-$querylog2 = query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `Name`='%s' AND `Password`='%s' AND `id`=%i LIMIT 1", array($_COOKIE['MemberName'],$_COOKIE['SessPass'],$_COOKIE['UserID']));
-$resultlog2=exec_query($querylog2);
-$numlog2=mysql_num_rows($resultlog2);
+$querylog2 = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `Name`='%s' AND `Password`='%s' AND `id`=%i LIMIT 1", array($_COOKIE['MemberName'],$_COOKIE['SessPass'],$_COOKIE['UserID']));
+$resultlog2=sql_query($querylog2);
+$numlog2=sql_num_rows($resultlog2);
 if($numlog2==1) {
-$YourIDAM=mysql_result($resultlog2,0,"id");
-$YourNameAM=mysql_result($resultlog2,0,"Name");
-$YourGroupAM=mysql_result($resultlog2,0,"GroupID");
+$YourIDAM=sql_result($resultlog2,0,"id");
+$YourNameAM=sql_result($resultlog2,0,"Name");
+$YourGroupAM=sql_result($resultlog2,0,"GroupID");
 $YourGroupIDAM=$YourGroupAM;
-$YourPassAM=mysql_result($resultlog2,0,"Password");
-$gquery = query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($YourGroupAM));
-$gresult=exec_query($gquery);
-$YourGroupAM=mysql_result($gresult,0,"Name");
-mysql_free_result($gresult); $BanError = null;
-$YourTimeZoneAM=mysql_result($resultlog2,0,"TimeZone");
-$UseThemeAM=mysql_result($resultlog2,0,"UseTheme");
-$YourDSTAM=mysql_result($resultlog2,0,"DST");
-$YourLastPostTime=mysql_result($resultlog2,0,"LastPostTime");
-$YourBanTime=mysql_result($resultlog2,0,"BanTime");
+$YourPassAM=sql_result($resultlog2,0,"Password");
+$gquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($YourGroupAM));
+$gresult=sql_query($gquery);
+$YourGroupAM=sql_result($gresult,0,"Name");
+sql_free_result($gresult); $BanError = null;
+$YourTimeZoneAM=sql_result($resultlog2,0,"TimeZone");
+$UseThemeAM=sql_result($resultlog2,0,"UseTheme");
+$YourDSTAM=sql_result($resultlog2,0,"DST");
+$YourLastPostTime=sql_result($resultlog2,0,"LastPostTime");
+$YourBanTime=sql_result($resultlog2,0,"BanTime");
 $CGMTime = GMTimeStamp();
 if($YourBanTime!=0&&$YourBanTime!=null) {
 if($YourBanTime>=$CGMTime) { $BanError = "yes"; } }
 $NewDay=GMTimeStamp();
 $NewIP=$_SERVER['REMOTE_ADDR'];
 if($BanError!="yes") {
-$queryup = query("UPDATE `".$Settings['sqltable']."members` SET `LastActive`=%i,`IP`='%s' WHERE `id`=%i", array($NewDay,$NewIP,$YourIDAM));
+$queryup = sql_pre_query("UPDATE `".$Settings['sqltable']."members` SET `LastActive`=%i,`IP`='%s' WHERE `id`=%i", array($NewDay,$NewIP,$YourIDAM));
 $_SESSION['Theme']=$UseThemeAM;
 $_SESSION['MemberName']=$_COOKIE['MemberName'];
 $_SESSION['UserID']=$YourIDAM;
@@ -86,8 +86,8 @@ setcookie("SessPass", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain);
 setcookie(session_name(), "", GMTimeStamp() - 3600, $cbasedir, $cookieDomain); } }
 unset($_COOKIE[session_name()]);
 $_SESSION = array(); session_unset(); session_destroy();
-redirect("location",$basedir.url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],false)); mysql_free_result($resultlog2); mysql_free_result($gresult);
+redirect("location",$basedir.url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],false)); sql_free_result($resultlog2); sql_free_result($gresult);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
-mysql_free_result($resultlog2); mysql_free_result($gresult);
+sql_free_result($resultlog2); sql_free_result($gresult);
 ?>

@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: stats.php - Last Update: 11/23/2009 SVN 357 - Author: cooldude2k $
+    $FileInfo: stats.php - Last Update: 11/23/2009 SVN 359 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="stats.php"||$File3Name=="/stats.php") {
@@ -27,13 +27,13 @@ $_SESSION['PreViewingTitle'] = "Viewing";
 $_SESSION['ViewingTitle'] = "Board Stats"; }
 $uolcuttime = GMTimeStamp();
 $uoltime = $uolcuttime - ini_get("session.gc_maxlifetime");
-$uolquery = query("SELECT session_data FROM `".$Settings['sqltable']."sessions` WHERE `expires` >= %i ORDER BY `expires` DESC", array($uoltime));
-$uolresult=exec_query($uolquery);
-$uolnum=mysql_num_rows($uolresult);
+$uolquery = sql_pre_query("SELECT session_data FROM `".$Settings['sqltable']."sessions` WHERE `expires` >= %i ORDER BY `expires` DESC", array($uoltime));
+$uolresult=sql_query($uolquery);
+$uolnum=sql_num_rows($uolresult);
 $uoli=0; $olmn = 0; $olgn = 0; $olan = 0;
 $MembersOnline = null; $GuestsOnline = null;
 while ($uoli < $uolnum) {
-$session_data=mysql_result($uolresult,$uoli,"session_data"); 
+$session_data=sql_result($uolresult,$uoli,"session_data"); 
 $UserSessInfo = unserialize_session($session_data);
 $AmIHiddenUser = "no";
 if($UserSessInfo['UserGroup']!=$Settings['GuestGroup']) {
@@ -50,27 +50,27 @@ if($UserSessInfo['UserGroup']==$Settings['GuestGroup']) {
 ++$olgn; }
 ++$uoli; }
 if($_GET['act']=="view"||$_GET['act']=="stats") {
-$ntquery = query("SELECT COUNT(*) FROM `".$Settings['sqltable']."topics`", array(null));
-$ntresult = exec_query($ntquery);
-$numtopics = mysql_result($ntresult,0);
-mysql_free_result($ntresult);
-$npquery = query("SELECT COUNT(*) FROM `".$Settings['sqltable']."posts`", array(null));
-$npresult = exec_query($npquery);
-$numposts = mysql_result($npresult,0);
-mysql_free_result($npresult);
+$ntquery = sql_pre_query("SELECT COUNT(*) FROM `".$Settings['sqltable']."topics`", array(null));
+$ntresult = sql_query($ntquery);
+$numtopics = sql_result($ntresult,0);
+sql_free_result($ntresult);
+$npquery = sql_pre_query("SELECT COUNT(*) FROM `".$Settings['sqltable']."posts`", array(null));
+$npresult = sql_query($npquery);
+$numposts = sql_result($npresult,0);
+sql_free_result($npresult);
 if($Settings['AdminValidate']=="on") {
-$nmquery = query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."members` WHERE `id`>=%i AND `HiddenMember`='no' AND `Validated`='yes' AND `GroupID`<>%i ORDER BY `Joined` DESC LIMIT 1", array(1,$Settings['ValidateGroup'])); }
+$nmquery = sql_pre_query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."members` WHERE `id`>=%i AND `HiddenMember`='no' AND `Validated`='yes' AND `GroupID`<>%i ORDER BY `Joined` DESC LIMIT 1", array(1,$Settings['ValidateGroup'])); }
 if($Settings['AdminValidate']!="on") {
-$nmquery = query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."members` WHERE `id`>=%i AND `HiddenMember`='no' ORDER BY `Joined` DESC LIMIT 1", array(1,$Settings['ValidateGroup'])); }
-$rnmquery = query("SELECT FOUND_ROWS();", array(null));
-$nmresult = exec_query($nmquery);
-$rnmresult = exec_query($rnmquery);
-//$nummembers = mysql_num_rows($nmresult);
-$nummembers = mysql_result($rnmresult,0);
-mysql_free_result($rnmresult);
+$nmquery = sql_pre_query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."members` WHERE `id`>=%i AND `HiddenMember`='no' ORDER BY `Joined` DESC LIMIT 1", array(1,$Settings['ValidateGroup'])); }
+$rnmquery = sql_pre_query("SELECT FOUND_ROWS();", array(null));
+$nmresult = sql_query($nmquery);
+$rnmresult = sql_query($rnmquery);
+//$nummembers = sql_num_rows($nmresult);
+$nummembers = sql_result($rnmresult,0);
+sql_free_result($rnmresult);
 $NewestMem = array(null);
-$NewestMem['ID']=mysql_result($nmresult,0,"id");
-$NewestMem['Name']=mysql_result($nmresult,0,"Name");
+$NewestMem['ID']=sql_result($nmresult,0,"id");
+$NewestMem['Name']=sql_result($nmresult,0,"Name");
 if($NewestMem['ID']<=0) { $NewestMem['ID'] = "0"; $NewestMem['Name'] = "Anonymous"; }
 ?>
 <div class="StatsBorder">

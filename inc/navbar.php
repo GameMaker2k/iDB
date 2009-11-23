@@ -11,21 +11,21 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: navbar.php - Last Update: 11/23/2009 SVN 357 - Author: cooldude2k $
+    $FileInfo: navbar.php - Last Update: 11/23/2009 SVN 359 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="navbar.php"||$File3Name=="/navbar.php") {
 	require('index.php');
 	exit(); }
 if($_SESSION['UserGroup']!=$Settings['GuestGroup']||$GroupInfo['CanPM']=="yes") {
-$pmquery1 = query("SELECT * FROM `".$Settings['sqltable']."messenger` WHERE `ReciverID`=%i AND `Read`=0", array($_SESSION['UserID']));
-$pmresult1=exec_query($pmquery1);
-$PMNumber=mysql_num_rows($pmresult1);
-mysql_free_result($pmresult1); /*
-$pmquery2 = query("SELECT * FROM `".$Settings['sqltable']."messenger` WHERE `SenderID`=%i AND `Read`=0", array($_SESSION['UserID']));
-$pmresult2=exec_query($pmquery2);
-$SentPMNumber=mysql_num_rows($pmresult2);
-mysql_free_result($pmresult2); */ }
+$pmquery1 = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."messenger` WHERE `ReciverID`=%i AND `Read`=0", array($_SESSION['UserID']));
+$pmresult1=sql_query($pmquery1);
+$PMNumber=sql_num_rows($pmresult1);
+sql_free_result($pmresult1); /*
+$pmquery2 = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."messenger` WHERE `SenderID`=%i AND `Read`=0", array($_SESSION['UserID']));
+$pmresult2=sql_query($pmquery2);
+$SentPMNumber=sql_num_rows($pmresult2);
+sql_free_result($pmresult2); */ }
 if($ThemeSet['LogoStyle']==null) { $logostyle = ""; }
 if($ThemeSet['LogoStyle']!=null) { $logostyle = "style=\"".$ThemeSet['LogoStyle']."\" "; }
 // Am I hidden from everyone
