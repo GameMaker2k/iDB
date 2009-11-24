@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: pm.php - Last Update: 11/23/2009 SVN 359 - Author: cooldude2k $
+    $FileInfo: pm.php - Last Update: 11/24/2009 SVN 362 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pm.php"||$File3Name=="/pm.php") {
@@ -402,7 +402,7 @@ echo "<span>".$ReciverName."</span>"; }
 <tr id="MessengerEnd" class="TableMenuRow4">
 <td class="TableMenuColumn4" colspan="4">&nbsp;</td>
 </tr>
-<?php } sql_free_result($result);
+<?php sql_free_result($result); }
 if($_GET['act']=="read") {
 $query = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."messenger` WHERE `id`=%i", array($_GET['id']));
 $result=sql_query($query);
@@ -582,7 +582,7 @@ while ($rei < $renum) {
 $SendMessageTo = sql_result($reresult,$rei,"Name");
 $SendMessageTo = htmlspecialchars($SendMessageTo, ENT_QUOTES, $Settings['charset']);
 $SendToGroupID = sql_result($reresult,$rei,"GroupID");
-++$rei; } } sql_free_result($reresult);
+++$rei; } sql_free_result($reresult); }
 if(!isset($renum)) { $renum = 0; }
 if($renum==0) { $SendMessageTo = null; }
 $QuoteReply = null; $QuoteDescription = null; $QuoteTitle = null;
