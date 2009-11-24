@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 11/23/2009 SVN 359 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 11/23/2009 SVN 360 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -671,7 +671,7 @@ Title: <?php echo $ViewMem['Title']; ?>
 <td class="TableColumn4" colspan="2">&nbsp;</td>
 </tr>
 </table></div>
-<?php } sql_free_result($result);
+<?php sql_free_result($result); } 
 if($_GET['act']=="logout") {
 session_unset();
 if($cookieDomain==null) {
@@ -910,7 +910,7 @@ $NewIP=$_SERVER['REMOTE_ADDR'];
 if($BanError!="yes") {
 $queryup = sql_pre_query("UPDATE `".$Settings['sqltable']."members` SET `Password`='%s',`HashType`='%s',`LastActive`=%i,`IP`='%s',`Salt`='%s' WHERE `id`=%i", array($NewPassword,$iDBHash,$NewDay,$NewIP,$NewHashSalt,$YourIDM));
 sql_query($queryup);
-sql_free_result($resultlog); sql_free_result($queryup);
+sql_free_result($resultlog);
 //session_regenerate_id();
 $_SESSION['Theme']=$UseTheme;
 $_SESSION['MemberName']=$YourNameM;

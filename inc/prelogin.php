@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: prelogin.php - Last Update: 11/23/2009 SVN 359 - Author: cooldude2k $
+    $FileInfo: prelogin.php - Last Update: 11/23/2009 SVN 360 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="prelogin.php"||$File3Name=="/prelogin.php") {
@@ -30,12 +30,14 @@ $YourPassAM=sql_result($resultlog2,0,"Password");
 $gquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($YourGroupAM));
 $gresult=sql_query($gquery);
 $YourGroupAM=sql_result($gresult,0,"Name");
-sql_free_result($gresult); $BanError = null;
+sql_free_result($gresult);
+$BanError = null;
 $YourTimeZoneAM=sql_result($resultlog2,0,"TimeZone");
 $UseThemeAM=sql_result($resultlog2,0,"UseTheme");
 $YourDSTAM=sql_result($resultlog2,0,"DST");
 $YourLastPostTime=sql_result($resultlog2,0,"LastPostTime");
 $YourBanTime=sql_result($resultlog2,0,"BanTime");
+sql_free_result($resultlog2);
 $CGMTime = GMTimeStamp();
 if($YourBanTime!=0&&$YourBanTime!=null) {
 if($YourBanTime>=$CGMTime) { $BanError = "yes"; } }
@@ -89,5 +91,4 @@ $_SESSION = array(); session_unset(); session_destroy();
 redirect("location",$basedir.url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],false)); sql_free_result($resultlog2); sql_free_result($gresult);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
-sql_free_result($resultlog2); sql_free_result($gresult);
 ?>

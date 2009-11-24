@@ -12,7 +12,7 @@
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mkconfig.php - Last Update: 11/23/2009 SVN 359 - Author: cooldude2k $
+    $FileInfo: mkconfig.php - Last Update: 11/23/2009 SVN 360 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mkconfig.php"||$File3Name=="/mkconfig.php") {
@@ -35,12 +35,12 @@ $_POST['tableprefix'] = preg_replace("/[^A-Za-z0-9_$]/", "", $_POST['tableprefix
 if($_POST['tableprefix']==null||$_POST['tableprefix']=="_") { $_POST['tableprefix']="idb_"; }
 if($_POST['sessprefix']==null||$_POST['sessprefix']=="_") { $_POST['sessprefix']="idb_"; }
 $checkfile="settings.php";
-chmod("settings.php",0766);
-chmod("settingsbak.php",0766);
+@chmod("settings.php",0766);
+@chmod("settingsbak.php",0766);
 if (!is_writable($checkfile)) {
    echo "<br />Settings is not writable.";
-   chmod("settings.php",0766); $Error="Yes";
-   chmod("settingsbak.php",0766);
+   @chmod("settings.php",0766); $Error="Yes";
+   @chmod("settingsbak.php",0766);
 } else { /* settings.php is writable install iDB. ^_^ */ }
 session_name($_POST['tableprefix']."sess");
 $URLsTest = parse_url($_POST['BoardURL']);
@@ -120,7 +120,7 @@ if($Settings['charset']=="UTF-8") {
 	$SQLCollate = "utf8_unicode_ci";
 	$SQLCharset = "utf8"; }
 sql_set_charset($SQLCharset);
-if($mydbtest!==true) { $Error="Yes";
+if($mydbtest===false) { $Error="Yes";
 echo "<br />".sql_errno().": ".sql_error()."\n"; }
 if ($Error!="Yes") {
 $ServerUUID = uuid(false,true,false,$_POST['usehashtype'],null);
@@ -182,20 +182,21 @@ $fp = fopen("settingsbak.php","w+");
 fwrite($fp, $BoardSettingsBak);
 fclose($fp);
 if($_POST['storecookie']=="true") {
-setcookie("MemberName", $_POST['AdminUser'], time() + (7 * 86400), $this_dir, $URLsTest['host']);
-setcookie("UserID", 1, time() + (7 * 86400), $this_dir, $URLsTest['host']);
-setcookie("SessPass", $NewPassword, time() + (7 * 86400), $this_dir, $URLsTest['host']); }
+//setcookie("MemberName", $_POST['AdminUser'], time() + (7 * 86400), $this_dir, $URLsTest['host']);
+//setcookie("UserID", 1, time() + (7 * 86400), $this_dir, $URLsTest['host']);
+//setcookie("SessPass", $NewPassword, time() + (7 * 86400), $this_dir, $URLsTest['host']); 
+}
 mysql_close(); $chdel = true;
 if($Error!="Yes") {
 if($_POST['unlink']=="true") {
-$chdel1 = unlink($SetupDir['setup'].'presetup.php'); $chdel2 = unlink($SetupDir['setup'].'setup.php');
-$chdel3 = unlink($SetupDir['setup'].'mkconfig.php'); $chdel4 = unlink($SetupDir['setup'].'mktable.php');
-$chdel5 = unlink($SetupDir['setup'].'index.php'); $chdel6 = unlink($SetupDir['setup'].'license.php');
-$chdel7 = unlink($SetupDir['setup'].'preinstall.php'); $chdel8 = unlink($SetupDir['convert'].'index.php');
-if($ConvertInfo['ConvertFile']!=null) { $chdel0 = unlink($ConvertInfo['ConvertFile']); }
-$chdel9 = unlink($SetupDir['convert'].'info.php'); 
+$chdel1 = @unlink($SetupDir['setup'].'presetup.php'); $chdel2 = @unlink($SetupDir['setup'].'setup.php');
+$chdel3 = @unlink($SetupDir['setup'].'mkconfig.php'); $chdel4 = @unlink($SetupDir['setup'].'mktable.php');
+$chdel5 = @unlink($SetupDir['setup'].'index.php'); $chdel6 = @unlink($SetupDir['setup'].'license.php');
+$chdel7 = @unlink($SetupDir['setup'].'preinstall.php'); $chdel8 = @unlink($SetupDir['convert'].'index.php');
+if($ConvertInfo['ConvertFile']!=null) { $chdel0 = @unlink($ConvertInfo['ConvertFile']); }
+$chdel9 = @unlink($SetupDir['convert'].'info.php'); 
 $chdel10 = rmdir($SetupDir['convert']); $chdel11 = rmdir('setup');
-$chdel12 = unlink('install.php'); } }
+$chdel12 = @unlink('install.php'); } }
 if($chdel1===false||$chdel2===false||$chdel3===false||$chdel4===false) { $chdel = false; }
 if($chdel5===false||$chdel6===false||$chdel7===false||$chdel8===false) { $chdel = false; }
 if($chdel9===false||$chdel10===false||$chdel11===false||$chdel12===false) { $chdel = false; }

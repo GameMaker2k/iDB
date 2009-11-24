@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: mysql.php - Last Update: 11/23/2009 SVN 359 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 11/23/2009 SVN 360 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mysql.php"||$File3Name=="/mysql.php") {
@@ -68,7 +68,7 @@ if ($num===false) {
 	return false; }
 	return $num; }
 // Connect to mysql database
-function sql_connect_db($server,$username,$password,$database,$new_link=false) {
+function sql_connect_db($server,$username,$password,$database=null,$new_link=false) {
 if($new_link!==true) { $new_link = false; }
 if($new_link!==true||$new_link===false) {
 $link = mysql_connect($server,$username,$password); }
@@ -77,10 +77,11 @@ $link = mysql_connect($server,$username,$password,$new_link); }
 if ($link===false) {
     trigger_error("Not connected: ".sql_error(),E_USER_ERROR);
 	return false; }
+if($database!==null) {
 $dlink = mysql_select_db($database,$link);
 if ($dlink===false) {
     trigger_error("Can't use database ".$database.": ".sql_error(),E_USER_ERROR);
-	return false; }
+	return false; } }
 return $link; }
 // Query Results :P
 function sql_result($result,$row,$field=0) {
