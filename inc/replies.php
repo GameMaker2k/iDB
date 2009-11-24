@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: replies.php - Last Update: 11/23/2009 SVN 359 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 11/24/2009 SVN 361 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -1168,7 +1168,8 @@ if($PermissionInfo['CanEditTopicsClose'][$TopicForumID]=="no"&&$TopicClosed==1) 
 //$TopicName = stripcslashes(htmlspecialchars($TopicName, ENT_QUOTES, $Settings['charset']));
 //$TopicName = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $TopicName);
 $TopicName = remove_spaces($TopicName);
-sql_free_result($gtsresult);
+if($ShowEditTopic===true) {
+sql_free_result($gtsresult); }
 $UFID = uuid(false,true,false,$Settings['use_hashtype'],null);
 $_SESSION['UserFormID'] = $UFID;
 ?>
