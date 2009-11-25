@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: mysql.php - Last Update: 11/23/2009 SVN 360 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 11/24/2009 SVN 363 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mysql.php"||$File3Name=="/mysql.php") {
@@ -55,7 +55,7 @@ if(isset($link)) {
 if(!isset($link)) {
 	$result = mysql_query($query); }
 if ($result===false) {
-    trigger_error("Invalid query: ".sql_error(),E_USER_ERROR);
+    output_error("SQL Error: ".sql_error(),E_USER_ERROR);
 	return false; }
 if ($result!==false) {
 	++$NumQueries;
@@ -64,7 +64,7 @@ if ($result!==false) {
 function sql_num_rows($result) {
 $num = mysql_num_rows($result);
 if ($num===false) {
-    trigger_error("Invalid query: ".sql_error(),E_USER_ERROR);
+    output_error("SQL Error: ".sql_error(),E_USER_ERROR);
 	return false; }
 	return $num; }
 // Connect to mysql database
@@ -75,26 +75,26 @@ $link = mysql_connect($server,$username,$password); }
 if($new_link===true) {
 $link = mysql_connect($server,$username,$password,$new_link); }
 if ($link===false) {
-    trigger_error("Not connected: ".sql_error(),E_USER_ERROR);
+    output_error("Not connected: ".sql_error(),E_USER_ERROR);
 	return false; }
 if($database!==null) {
 $dlink = mysql_select_db($database,$link);
 if ($dlink===false) {
-    trigger_error("Can't use database ".$database.": ".sql_error(),E_USER_ERROR);
+    output_error("Can't use database ".$database.": ".sql_error(),E_USER_ERROR);
 	return false; } }
 return $link; }
 // Query Results :P
 function sql_result($result,$row,$field=0) {
 $value = mysql_result($result, $row, $field);
 if ($value===false) { 
-    trigger_error("Invalid query: ".sql_error(),E_USER_ERROR);
+    output_error("SQL Error: ".sql_error(),E_USER_ERROR);
 	return false; }
 	return $value; }
 // Free Results :P
 function sql_free_result($result) {
 $fresult = mysql_free_result($result);
 if ($fresult===false) {
-    trigger_error("Invalid query: ".sql_error(),E_USER_ERROR);
+    output_error("SQL Error: ".sql_error(),E_USER_ERROR);
 	return false; }
 if ($fresult===true) {
 	return true; } }
@@ -123,7 +123,7 @@ if(isset($link)) {
 if(!isset($link)) {
 	$string = mysql_real_escape_string($string); }
 if ($string===false) {
-    trigger_error("Invalid query: ".sql_error(),E_USER_ERROR);
+    output_error("SQL Error: ".sql_error(),E_USER_ERROR);
 	return false; }
 	return $string; }
 // SafeSQL Lite Source Code by Cool Dude 2k
@@ -147,11 +147,11 @@ function sql_set_charset($charset,$link=null) {
 if(function_exists('mysql_set_charset')===false) {
 	$result = sql_query("SET CHARACTER SET '".$charset."'");
 if ($result===false) {
-    trigger_error("Invalid query: ".sql_error(),E_USER_ERROR);
+    output_error("SQL Error: ".sql_error(),E_USER_ERROR);
 	return false; }
 	$result = sql_query("SET NAMES '".$charset."'"); 
 if ($result===false) {
-    trigger_error("Invalid query: ".sql_error(),E_USER_ERROR);
+    output_error("SQL Error: ".sql_error(),E_USER_ERROR);
 	return false; }
 	return true; }
 if(function_exists('mysql_set_charset')===true) {
@@ -160,7 +160,7 @@ if(isset($link)) {
 if(!isset($link)) {
 	$result = mysql_set_charset($charset); }
 if ($result===false) {
-    trigger_error("Invalid query: ".sql_error(),E_USER_ERROR);
+    output_error("SQL Error: ".sql_error(),E_USER_ERROR);
 	return false; }
 	return true; } }
 /*
@@ -171,7 +171,7 @@ if(isset($link)) {
 if(!isset($link)) {
 	$result = sql_set_charset($charset); }
 if ($result===false) {
-    trigger_error("Invalid query: ".sql_error(),E_USER_ERROR);
+    output_error("SQL Error: ".sql_error(),E_USER_ERROR);
 	return false; }
 	return true; } }
 */

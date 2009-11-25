@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: functions.php - Last Update: 11/23/2009 SVN 359 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 11/24/2009 SVN 363 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -411,10 +411,10 @@ return $subject; } }
 function http_set_cookie($name,$value=null,$expire=null,$path=null,$domain=null,$secure=false,$httponly=false) {
 	$mkcookie = null; $expireGMT = null;
 	if(!isset($name)) { 
-	trigger_error("Error: You need to enter a name for cookie.",E_USER_ERROR); 
+	output_error("Error: You need to enter a name for cookie.",E_USER_ERROR); 
 	return false; }
 	if(!isset($expire)) { 
-	trigger_error("Error: You need to enter a time for cookie to expire.",E_USER_ERROR); 
+	output_error("Error: You need to enter a time for cookie to expire.",E_USER_ERROR); 
 	return false; }
 	$expireGMT = gmdate("D, d-M-Y H:i:s \G\M\T", $expire);
 	if(!isset($value)) { $value = null; }
