@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: mysql.php - Last Update: 11/24/2009 SVN 363 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 11/27/2009 SVN 367 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mysql.php"||$File3Name=="/mysql.php") {
@@ -111,7 +111,7 @@ function sql_fetch_row($result) {
 $row = mysql_fetch_row($result);
 	return $row; }
 //Fetch Row Results
-function sql_server_info($link) {
+function sql_server_info($link=null) {
 if(isset($link)) {
 	$result = mysql_get_server_info($link); }
 if(!isset($link)) {
