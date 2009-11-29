@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: rssfeed.php - Last Update: 11/24/2009 SVN 363 - Author: cooldude2k $
+    $FileInfo: rssfeed.php - Last Update: 11/29/2009 SVN 368 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="rssfeed.php"||$File3Name=="/rssfeed.php") {
@@ -243,7 +243,8 @@ if($Settings['showverinfo']=="on") { ?>
  <?php echo "\n".$Atom."\n"; ?>
 </feed>
 <?php } if($_GET['feedtype']=="opensearch") { ?>
-<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/"
+                       xmlns:moz="http://www.mozilla.org/2006/browser/search/">
 <ShortName><?php echo $boardsname." ".$ThemeSet['TitleDivider']; ?> Search</ShortName>
 <Description><?php echo $SettInfo['Description']; ?></Description>
 <InputEncoding><?php echo $Settings['charset']; ?></InputEncoding>
@@ -255,7 +256,7 @@ if($Settings['showverinfo']=="on") { ?>
   <Param name="page" value="1"/>
 </Url>
   <!-- Renee Sabonis ^_^ -->
-<SearchForm><?php echo $BoardURL.url_maker("search",$Settings['file_ext'],null,"search","search"); ?></SearchForm>
+<moz:SearchForm><?php echo $BoardURL.url_maker("search",$Settings['file_ext'],null,"search","search"); ?></moz:SearchForm>
 </OpenSearchDescription>
 <?php } if($_GET['debug']=="true"||$_GET['debug']=="on") {
 function execution_time($starttime) {
