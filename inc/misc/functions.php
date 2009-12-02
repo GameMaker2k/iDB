@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: functions.php - Last Update: 11/24/2009 SVN 363 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 12/02/2009 SVN 369 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -116,6 +116,8 @@ $BoardTheme = $Settings['DefaultTheme'];
 function chack_themes($theme) {
 global $BoardTheme;
 if(!isset($theme)) { $theme = null; }
+if(preg_match("/([a-zA-Z].+)\:/isU",$theme)) {
+	$theme = $BoardTheme }
 require('settings.php');
 $ckskindir = dirname(realpath("settings.php"))."/".$SettDir['themes'];
 if ($handle = opendir($ckskindir)) { $dirnum = null;
@@ -432,8 +434,16 @@ function http_set_cookie($name,$value=null,$expire=null,$path=null,$domain=null,
 header($mkcookie, false); return true; } }
 $foobar="fubar"; $$foobar="foobar";
 // Debug info
-function dump_included_files() {	return var_dump(get_included_files()); }
+function dump_included_files($type="var_dump") {
+	if(!isset($type)) { $type = "var_dump"; }
+	if($type=="print_r") { return print_r(get_included_files()); }
+	if($type=="var_dump") { return var_dump(get_included_files()); }
+	if($type=="var_export") { return var_export(get_included_files()); } }
 function count_included_files() {	return count(get_included_files()); }
-function dump_extensions() {	return var_dump(get_loaded_extensions()); }
+function dump_extensions($type="var_dump") {
+	if(!isset($type)) { $type = "var_dump"; }
+	if($type=="print_r") { return print_r(get_loaded_extensions()); }
+	if($type=="var_dump") { return var_dump(get_loaded_extensions()); }
+	if($type=="var_export") { return var_export(get_loaded_extensions()); } }
 function count_extensions() {	return count(get_loaded_extensions()); }
 ?>
