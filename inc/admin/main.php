@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: main.php - Last Update: 11/23/2009 SVN 359 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 12/02/2009 SVN 371 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -53,8 +53,16 @@ if(!isset($string)) {
 function rsq($string) {
 $string = preg_replace("/^(\')|$(\')/i","\'",$string);
 return $string; }
-if(!is_numeric($Settings['KarmaBoostDays'])) {
-$Settings['KarmaBoostDays'] = null; }
+$KarmaExp = explode("&",$Settings['KarmaBoostDays']);
+$KarmaNum = count($KarmaExp); 
+$Karmai = 0; $KarmaNex = 0; $KarmaTemp = null;
+while ($Karmai < $KarmaNum) {
+if(is_numeric($KarmaExp[$Karmai])) {
+$KarmaTemp[$KarmaNex] = $KarmaExp[$Karmai];
+++$KarmaNex; }
+++$Karmai; }
+$KarmaExp = $KarmaTemp;
+$Settings['KarmaBoostDays'] = implode("&",$KarmaExp);
 $KBoostPercent = explode("|",$Settings['KBoostPercent']);
 if(count($KBoostPercent)<1) { 
 $Settings['KBoostPercent'] = "6|10"; }

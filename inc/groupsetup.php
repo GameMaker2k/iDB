@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: groupsetup.php - Last Update: 11/23/2009 SVN 359 - Author: cooldude2k $
+    $FileInfo: groupsetup.php - Last Update: 12/02/2009 SVN 371 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="groupsetup.php"||$File3Name=="/groupsetup.php") {
@@ -161,10 +161,24 @@ if(!is_numeric($GroupInfo['PromoteKarma'])) {
 	$GroupInfo['PromoteKarma'] = 0; $GroupInfo['PromoteTo'] = 0; }
 if(!isset($Settings['KarmaBoostDays'])) {
 	$Settings['KarmaBoostDays'] = null; }
+$Settings['OldKarmaBoostDays'] = $Settings['KarmaBoostDays'];
 if(!isset($Settings['KBoostPercent'])) {
 	$Settings['KBoostPercent'] = "6|10"; }
 //Update karma and group upgrade on post count or karma count.
 if($_SESSION['UserID']!=0) { $BoostTotal = null;
+$KarmaExp = explode("&",$Settings['KarmaBoostDays']);
+$KarmaNow = GMTimeGet("md",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$kupdate = false;
+if(in_array($KarmaNow,$KarmaExp)) {
+$KarmaNum = count($KarmaExp); 
+$Karmai = 0;
+while ($Karmai < $KarmaNum) {
+if($KarmaExp[$Karmai]==$KarmaNow) { 
+$Settings['KarmaBoostDays'] = $KarmaExp[$Karmai]; 
+$kupdate = true; break 1; }
+++$Karmai; } }
+if($kupdate===false) {
+$Settings['KarmaBoostDays'] = $KarmaExp[0]; }
 $NewKarmaUpdate = GMTimeGet("Ymd",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $ThisYearUpdate = GMTimeGet("Y",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 if($MyKarmaUpdate<$NewKarmaUpdate&&$MyPostCountChk>0) { 
@@ -190,6 +204,7 @@ if($MyKarmaUpdate<$NewKarmaUpdate&&$MyPostCountChk>0) {
 	$MyKarmaCount = $MyKarmaCount + 1; }
 	$querykarmaup = sql_pre_query("UPDATE `".$Settings['sqltable']."members` SET `Karma`=%i,`KarmaUpdate`=%i WHERE `id`=%i", array($MyKarmaCount,$NewKarmaUpdate,$_SESSION['UserID']));
 	sql_query($querykarmaup); }
+	$Settings['KarmaBoostDays'] = $Settings['OldKarmaBoostDays'];
 if($GroupInfo['PromoteTo']!=0&&$MyPostCountChk>=$GroupInfo['PromotePosts']) {
 	$sql_group_check = sql_query(sql_pre_query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($GroupInfo['PromoteTo'])));
 	$group_check = sql_num_rows($sql_group_check);
