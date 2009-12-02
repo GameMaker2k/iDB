@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: functions.php - Last Update: 12/02/2009 SVN 369 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 12/02/2009 SVN 370 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -117,7 +117,7 @@ function chack_themes($theme) {
 global $BoardTheme;
 if(!isset($theme)) { $theme = null; }
 if(preg_match("/([a-zA-Z].+)\:/isU",$theme)) {
-	$theme = $BoardTheme }
+	$theme = $BoardTheme; }
 require('settings.php');
 $ckskindir = dirname(realpath("settings.php"))."/".$SettDir['themes'];
 if ($handle = opendir($ckskindir)) { $dirnum = null;
