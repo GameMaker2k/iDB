@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: pm.php - Last Update: 11/24/2009 SVN 362 - Author: cooldude2k $
+    $FileInfo: pm.php - Last Update: 12/02/2009 SVN 372 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pm.php"||$File3Name=="/pm.php") {
@@ -483,6 +483,7 @@ if(isset($GroupNamePrefix)&&$GroupNamePrefix!=null) {
 	$User1Name = $GroupNamePrefix.$User1Name; }
 if(isset($GroupNameSuffix)&&$GroupNameSuffix!=null) {
 	$User1Name = $User1Name.$GroupNameSuffix; }
+$MessageText = url2link($MessageText);
 $MessageText = text2icons($MessageText,$Settings['sqltable']);
 $User1Signature = preg_replace("/\<br\>/", "<br />", nl2br($User1Signature));
 $User1Signature = text2icons($User1Signature,$Settings['sqltable']);

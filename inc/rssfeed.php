@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: rssfeed.php - Last Update: 11/29/2009 SVN 368 - Author: cooldude2k $
+    $FileInfo: rssfeed.php - Last Update: 12/02/2009 SVN 372 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="rssfeed.php"||$File3Name=="/rssfeed.php") {
@@ -124,7 +124,8 @@ $presult=sql_query($pquery);
 $pnum=sql_num_rows($presult);
 $MyDescription=sql_result($presult,0,"Post");
 $MyDescription = preg_replace("/\<br\>/", "<br />", nl2br($MyDescription));
-$MyDescription= text2icons($MyDescription,$Settings['sqltable']);
+$MyDescription = url2link($MyDescription);
+$MyDescription = text2icons($MyDescription,$Settings['sqltable']);
 $UsersID=sql_result($result,$i,"UserID");
 $GuestsName=sql_result($result,$i,"GuestName");
 $requery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($UsersID));

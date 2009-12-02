@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: function.php - Last Update: 11/24/2009 SVN 363 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 12/02/2009 SVN 372 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -216,6 +216,38 @@ if(isset($_GET['debug'])) {
 if($_GET['debug']=="true"||
 	$_GET['debug']=="on") {
 $debug_on = true; } }
+$BoardURL = $Settings['idburl'];
+// Change URLs to Links
+function pre_url2link($matches) {
+global $BoardURL; $opennew = true;
+$burlCHCK = parse_url($BoardURL);
+$urlCHCK = parse_url($matches[0]);
+if($urlCHCK['host']==$burlCHCK['host']) {
+	$opennew = false; }
+$outurl = $urlCHCK['scheme']."://";
+if(isset($urlCHCK['user'])) {
+$outurl = $outurl.$urlCHCK['user'];
+if(isset($urlCHCK['pass'])) {
+$outurl = $outurl.":".$urlCHCK['pass']; }
+$outurl = $outurl."@"; }
+$outurl = $outurl.$urlCHCK['host'];
+if(isset($urlCHCK['path'])) {
+$outurl = $outurl.$urlCHCK['path']; }
+if(!isset($urlCHCK['path'])) {
+$outurl = $outurl."/"; }
+if(isset($urlCHCK['query'])) {
+$urlCHCK['query'] = str_replace(" ", "+", $urlCHCK['query']);
+$outurl = $outurl."?".$urlCHCK['query']; }
+if(isset($urlCHCK['fragment'])) {
+$urlCHCK['fragment'] = str_replace(" ", "+", $urlCHCK['fragment']);
+$outurl = $outurl."#".$urlCHCK['fragment']; }
+if($opennew===true) {
+$outlink = "<a onclick=\"window.open(this.href); return false;\" href=\"".$outurl."\">".$outurl."</a>"; }
+if($opennew===false) {
+$outlink = "<a href=\"".$outurl."\">".$outurl."</a>"; }
+return $outlink; }
+function url2link($string) {
+return preg_replace_callback("/([a-zA-Z]+)\:\/\/([a-z0-9\-\.]+)(\:[0-9]+)?\/([A-Za-z0-9\.\/%\?\-_;]+)?(\?)?([A-Za-z0-9\.\/%&=\?\-_;]+)?(\#)?([A-Za-z0-9\.\/%&=\?\-_;]+)?/is", "pre_url2link", $string); }
 // Make a url with query string
 function url_maker($file="index",$ext=".php",$qvarstr=null,$qstr=";",$qsep="=",$prexqstr=null,$exqstr=null,$fixhtml=true) {
 global $sidurls, $icharset, $debug_on;
