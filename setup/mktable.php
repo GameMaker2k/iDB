@@ -12,7 +12,7 @@
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mktable.php - Last Update: 11/23/2009 SVN 359 - Author: cooldude2k $
+    $FileInfo: mktable.php - Last Update: 12/02/2009 SVN 373 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mktable.php"||$File3Name=="/mktable.php") {
@@ -279,22 +279,26 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS `".$_POST['tableprefix']."smile
 ") ENGINE=MyISAM  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
 sql_query($query);
 $query = sql_pre_query("INSERT INTO `".$_POST['tableprefix']."smileys` (`FileName`, `SmileName`, `SmileText`, `Directory`, `Show`, `ReplaceCI`) VALUES\n".
-"('smile.gif', 'Happy', ':)', 'smileys/', 'yes', 'no'),\n".
-"('tongue.gif', 'Tongue', ':P', 'smileys/', 'yes', 'yes'),\n".
-"('tongue2.gif', 'Tongue', ':tongue:', 'smileys/', 'no', 'yes'),\n".
-"('sweat.gif', 'Sweat', ':sweat:', 'smileys/', 'yes', 'yes'),\n".
-"('sweat.gif', 'Sweat', '^_^', 'smileys/', 'no', 'yes'),\n".
-"('laugh.gif', 'lol', ':lol:', 'smileys/', 'yes', 'yes'),\n".
-"('cool.gif', 'Cool', 'B)', 'smileys/', 'yes', 'no'),\n".
-"('sleep.gif', 'Sleep', '-_-', 'smileys/', 'yes', 'no'),\n".
-"('sad.gif', 'Sad', ':(', 'smileys/', 'yes', 'no'),\n".
-"('angry.gif', 'Angry', ':angry:', 'smileys/', 'yes', 'yes'),\n".
-"('huh.gif', 'huh', ':huh:', 'smileys/', 'yes', 'yes'),\n".
-"('ohmy.gif', 'ohmy', ':o', 'smileys/', 'yes', 'yes'),\n".
-"('hmm.gif', 'hmm', ':unsure:', 'smileys/', 'yes', 'yes'),\n".
-"('mad.gif', 'Mad', ':mad:', 'smileys/', 'yes', 'yes'),\n".
-"('wub.gif', 'Wub', ':wub:', 'smileys/', 'yes', 'yes'),\n".
-"('x.gif', 'X', ':x:', 'smileys/', 'yes', 'yes');", array(null));
+"('angry.png', 'Angry', ':angry:', 'smileys/', 'yes', 'yes'),\n".
+"('closedeyes.png', 'Sleep', 'v_v', 'smileys/', 'yes', 'no'),\n".
+"('cool.png', 'Cool', 'B)', 'smileys/', 'yes', 'no'),\n".
+"('glare.png', 'Hmph', ':hmph:', 'smileys/', 'yes', 'yes'),\n".
+"('happy.png', 'Happy', '^_^', 'smileys/', 'yes', 'no'),\n".
+"('hmm.png', 'Hmm', ':unsure:', 'smileys/', 'yes', 'yes'),\n".
+"('huh.png', 'Huh', ':huh:', 'smileys/', 'yes', 'yes'),\n".
+"('laugh.png', 'lol', ':laugh:', 'smileys/', 'yes', 'yes'),\n".
+"('lol.png', 'lol', ':lol:', 'smileys/', 'yes', 'yes'),\n".
+"('mad.png', 'Mad', ':mad:', 'smileys/', 'yes', 'yes'),\n".
+"('ninja.png', 'Ninja', ':ninja:', 'smileys/', 'yes', 'yes'),\n".
+"('ohmy.png', 'ohmy', ':o', 'smileys/', 'yes', 'yes'),\n".
+"('ohno.png', 'ohno', ':ohno:', 'smileys/', 'yes', 'yes'),\n".
+"('sad.png', 'Sad', ':(', 'smileys/', 'yes', 'no'),\n".
+"('sleep.png', 'Sleep', '-_-', 'smileys/', 'yes', 'no'),\n".
+"('smile.png', 'Happy', ':)', 'smileys/', 'yes', 'no'),\n".
+"('sweat.png', 'Sweat', ':sweat:', 'smileys/', 'yes', 'yes'),\n".
+"('tongue.png', 'Tongue', ':P', 'smileys/', 'yes', 'no'),\n".
+"('wub.png', 'Wub', ':wub:', 'smileys/', 'yes', 'yes'),\n".
+"('x.png', 'X', ':x:', 'smileys/', 'yes', 'yes');", array(null));
 sql_query($query);
 /*
 $query=sql_pre_query("CREATE TABLE IF NOT EXISTS `".$_POST['tableprefix']."tagboard` (\n".
