@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: events.php - Last Update: 12/03/2009 SVN 375 - Author: cooldude2k $
+    $FileInfo: events.php - Last Update: 12/05/2009 SVN 376 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="events.php"||$File3Name=="/events.php") {
@@ -82,6 +82,12 @@ $User1AvatarSize=$ThemeSet['NoAvatarSize']; }
 $AvatarSize1=explode("x", $User1AvatarSize);
 $AvatarSize1W=$AvatarSize1[0]; $AvatarSize1H=$AvatarSize1[1];
 $User1Website=sql_result($reresult,$rei,"Website");
+$User1Website = urlcheck($User1Website);
+$BoardWWWChCk = parse_url($Settings['idburl']);
+$User1WWWChCk = parse_url($User1Website);
+$opennew = " onclick=\"window.open(this.href);return false;\"";
+if($BoardWWWChCk['host']==$User1WWWChCk['host']) {
+	$opennew = null; }
 $User1PostCount=sql_result($reresult,$rei,"PostCount");
 $User1IP=sql_result($reresult,$rei,"IP");
 sql_free_result($reresult);
@@ -162,7 +168,7 @@ if(($User1ID<=0||$User1Hidden=="yes")&&isset($ThemeSet['Profile'])&&$ThemeSet['P
 echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); }
 ?>"><?php echo $ThemeSet['Profile']; ?></a>
 <?php if(isset($ThemeSet['WWW'])&&$ThemeSet['WWW']!=null) {
-echo $ThemeSet['LineDividerTopic']; ?><a href="<?php echo $User1Website; ?>" onclick="window.open(this.href);return false;"><?php echo $ThemeSet['WWW']; ?></a><?php } echo $ThemeSet['LineDividerTopic']; ?><a href="<?php
+echo $ThemeSet['LineDividerTopic']; ?><a href="<?php echo $User1Website; ?>"<?php echo $opennew; ?>><?php echo $ThemeSet['WWW']; ?></a><?php } echo $ThemeSet['LineDividerTopic']; ?><a href="<?php
 if($User1ID>0&&$User1Hidden=="no"&&isset($ThemeSet['PM'])&&$ThemeSet['PM']!=null) {
 echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=create&id=".$User1ID,$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); }
 if(($User1ID<=0||$User1Hidden=="yes")&&isset($ThemeSet['PM'])&&$ThemeSet['PM']!=null) {

@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: replies.php - Last Update: 12/02/2009 SVN 372 - Author: cooldude2k $
+    $FileInfo: lowreplies.php - Last Update: 12/05/2009 SVN 376 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -261,6 +261,12 @@ $User1AvatarSize=$ThemeSet['NoAvatarSize']; }
 $AvatarSize1=explode("x", $User1AvatarSize);
 $AvatarSize1W=$AvatarSize1[0]; $AvatarSize1H=$AvatarSize1[1];
 $User1Website=sql_result($reresult,$rei,"Website");
+$BoardWWWChCk = parse_url($Settings['idburl']);
+$User1WWWChCk = parse_url($User1Website);
+$User1Website = urlcheck($User1Website);
+$opennew = " onclick=\"window.open(this.href);return false;\"";
+if($BoardWWWChCk['host']==$User1WWWChCk['host']) {
+	$opennew = null; }
 $User1PostCount=sql_result($reresult,$rei,"PostCount");
 $User1Karma=sql_result($reresult,$rei,"Karma");
 $User1IP=sql_result($reresult,$rei,"IP");

@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: profilemain.php - Last Update: 11/26/2009 SVN 365 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 12/05/2009 SVN 376 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
@@ -543,6 +543,7 @@ $YourID=sql_result($result,$i,"id");
 $User1Interests=sql_result($result,$i,"Interests"); 
 $User1Title=sql_result($result,$i,"Title");
 $User1Website=sql_result($result,$i,"Website"); 
+$User1Website = urlcheck($User1Website);
 $User1Gender=sql_result($result,$i,"Gender");
 $User1TimeZone=sql_result($result,$i,"TimeZone");
 $BirthDay=sql_result($result,$i,"BirthDay");
@@ -780,6 +781,7 @@ if($_POST['act']=="profile"&&
 	$_SESSION['UserDST'] = $_POST['DST'];
 	$NewDay=GMTimeStamp();
 	$NewIP=$_SERVER['REMOTE_ADDR'];
+	$_POST['Website'] = urlcheck($_POST['Website']);
 	$querynewprofile = sql_pre_query("UPDATE `".$Settings['sqltable']."members` SET `Interests`='%s',`Title`='%s',`Website`='%s',`TimeZone`='%s',`Gender`='%s',`DST`='%s',`LastActive`=%i,`BirthMonth`=%i,`BirthDay`=%i,`BirthYear`=%i,RepliesPerPage=%i,TopicsPerPage=%i,MessagesPerPage=%i,`IP`='%s' WHERE `id`=%i", array($_POST['Interests'],$_POST['Title'],$_POST['Website'],$_POST['YourOffSet'],$_POST['YourGender'],$_POST['DST'],$NewDay,$BirthMonth,$BirthDay,$BirthYear,$_POST['RepliesPerPage'],$_POST['TopicsPerPage'],$_POST['MessagesPerPage'],$NewIP,$_SESSION['UserID']));
 	sql_query($querynewprofile); } } }
 if($_GET['act']=="userinfo") {

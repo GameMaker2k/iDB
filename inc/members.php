@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 12/02/2009 SVN 372 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 12/05/2009 SVN 376 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -211,6 +211,12 @@ $MemList['Joined']=GMTimeChange("F j Y, g:i a",$MemList['Joined'],$_SESSION['Use
 $MemList['LastActive']=sql_result($result,$i,"LastActive");
 $MemList['LastActive']=GMTimeChange("F j Y, g:i a",$MemList['LastActive'],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $MemList['Website']=sql_result($result,$i,"Website");
+$MemList['Website'] = urlcheck($MemList['Website']);
+$BoardWWWChCk = parse_url($Settings['idburl']);
+$MemsWWWChCk = parse_url($MemList['Website']);
+$opennew = " onclick=\"window.open(this.href);return false;\"";
+if($BoardWWWChCk['host']==$MemsWWWChCk['host']) {
+	$opennew = null; }
 $MemList['Gender']=sql_result($result,$i,"Gender");
 $MemList['PostCount']=sql_result($result,$i,"PostCount");
 $MemList['Karma']=sql_result($result,$i,"Karma");
@@ -238,7 +244,7 @@ if($MemList['Group']!=$Settings['GuestGroup']) {
 <td class="TableColumn3" style="text-align: center;"><?php echo $MemList['Karma']; ?></td>
 <td class="TableColumn3" style="text-align: center;"><?php echo $MemList['Joined']; ?></td>
 <td class="TableColumn3" style="text-align: center;"><?php echo $MemList['LastActive']; ?></td>
-<td class="TableColumn3" style="text-align: center;"><a href="<?php echo $MemList['Website']; ?>" onclick="window.open(this.href);return false;">Website</a></td>
+<td class="TableColumn3" style="text-align: center;"><a href="<?php echo $MemList['Website']; ?>"<?php echo $opennew; ?>>Website</a></td>
 </tr>
 <?php }
 ++$i; } sql_free_result($result);
@@ -564,6 +570,12 @@ $ViewMem['Joined']=GMTimeChange("M j Y, g:i a",$ViewMem['Joined'],$_SESSION['Use
 $ViewMem['LastActive']=sql_result($result,$i,"LastActive");
 $ViewMem['LastActive']=GMTimeChange("M j Y, g:i a",$ViewMem['LastActive'],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $ViewMem['Website']=sql_result($result,$i,"Website");
+$ViewMem['Website'] = urlcheck($ViewMem['Website']);
+$BoardWWWChCk = parse_url($Settings['idburl']);
+$MemsWWWChCk = parse_url($ViewMem['Website']);
+$opennew = " onclick=\"window.open(this.href);return false;\"";
+if($BoardWWWChCk['host']==$MemsWWWChCk['host']) {
+	$opennew = null; }
 $ViewMem['Gender']=sql_result($result,$i,"Gender");
 $ViewMem['PostCount']=sql_result($result,$i,"PostCount");
 $ViewMem['Karma']=sql_result($result,$i,"Karma");
@@ -662,7 +674,7 @@ Title: <?php echo $ViewMem['Title']; ?>
 &nbsp;User Joined: <?php echo $ViewMem['Joined']; ?><br />
 &nbsp;Last Active: <?php echo $ViewMem['LastActive']; ?><br />
 &nbsp;User Time: <?php echo GMTimeGet("M j Y, g:i a",$ViewMem['TimeZone'],0,$ViewMem['DST']); ?><br />
-&nbsp;User Website: <a href="<?php echo $ViewMem['Website']; ?>" onclick="window.open(this.href);return false;">Website</a><br />
+&nbsp;User Website: <a href="<?php echo $ViewMem['Website']; ?>"<?php echo $opennew; ?>>Website</a><br />
 &nbsp;Post Count: <?php echo $ViewMem['PostCount']; ?><br />
 &nbsp;Karma: <?php echo $ViewMem['Karma']; ?><br />
 &nbsp;Interests: <?php echo $ViewMem['Interests']; ?><br />
