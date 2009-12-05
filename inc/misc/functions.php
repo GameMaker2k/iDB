@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: functions.php - Last Update: 12/02/2009 SVN 373 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 12/05/2009 SVN 377 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -111,7 +111,6 @@ $varname = preg_replace("/(HTTP_GET_VARS|HTTP_POST_VARS|HTTP_POST_FILES)/i", nul
 // http://xforce.iss.net/xforce/xfdb/49697
 if(!isset($Settings['DefaultTheme'])) {
 	$Settings['DefaultTheme'] = "iDB"; }
-$BoardTheme = $Settings['DefaultTheme'];
 // Change the text to icons(smileys)
 function text2icons($Text,$sqlt) {
 global $Settings;
