@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: mysql.php - Last Update: 11/23/2009 SVN 359 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 12/06/2009 SVN 379 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -197,7 +197,7 @@ sql_set_charset($SQLCharset);
 if($SQLStat===false) {
 header("Content-Type: text/plain; charset=".$Settings['charset']); sql_free_result($peresult);
 ob_clean(); echo "Sorry could not connect to mysql database.\nContact the board admin about error. Error log below.";
-echo "\n".sql_errno().": ".sql_error();
+echo "\n".sql_errorno();
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $sqltable = $Settings['sqltable'];
 function sqlsession_open( $save_path, $session_name ) {
@@ -293,7 +293,7 @@ header("Content-Type: text/plain; charset=".$Settings['charset']); sql_free_resu
 ob_clean(); if(!isset($Settings['offline_text'])) {
 echo "Sorry the board is off line.\nIf you are a admin you can login by the admin cp."; }
 if(isset($Settings['offline_text'])) { echo $Settings['offline_text']; }
-//echo "\n".sql_errno().": ".sql_error();
+//echo "\n".sql_errorno();
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $dayconv = array('second' => 1, 'minute' => 60, 'hour' => 3600, 'day' => 86400, 'week' => 604800, 'month' => 2630880, 'year' => 31570560, 'decade' => 15705600);
 //Time Zone Set

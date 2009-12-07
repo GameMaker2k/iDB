@@ -12,7 +12,7 @@
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mkconfig.php - Last Update: 11/23/2009 SVN 360 - Author: cooldude2k $
+    $FileInfo: mkconfig.php - Last Update: 12/06/2009 SVN 379 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mkconfig.php"||$File3Name=="/mkconfig.php") {
@@ -121,7 +121,7 @@ if($Settings['charset']=="UTF-8") {
 	$SQLCharset = "utf8"; }
 sql_set_charset($SQLCharset);
 if($mydbtest===false) { $Error="Yes";
-echo "<br />".sql_errno().": ".sql_error()."\n"; }
+echo "<br />".sql_errorno()."\n"; }
 if ($Error!="Yes") {
 $ServerUUID = uuid(false,true,false,$_POST['usehashtype'],null);
 if(!is_numeric($_POST['YourOffSet'])) { $_POST['YourOffSet'] = "0"; }
