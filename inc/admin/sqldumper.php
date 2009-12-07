@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sqldumper.php - Last Update: 11/23/2009 SVN 359 - Author: cooldude2k $
+    $FileInfo: sqldumper.php - Last Update: 12/07/2009 SVN 380 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="sqldumper.php"||$File3Name=="/sqldumper.php") {
@@ -32,7 +32,7 @@ header("Content-Type: application/octet-stream");
 header("Content-Transfer-Encoding: binary");
 $SQLDumper = "SQL Dumper";
 function GetAllRows($table) { $rene_j = 0; $trowout = null;
-$tresult = sql_query("SELECT * FROM `".$table."`");
+$tresult = sql_query("SELECT * FROM `".$table."`",$SQLStat);
 while ($trow = sql_fetch_array($tresult, MYSQL_ASSOC)) {
 $trowout[$rene_j] = $trow;
 ++$rene_j; }
@@ -51,10 +51,10 @@ header("Content-Type: text/plain; charset=ISO-8859-15"); }
 if($_GET['outtype']=="latin15") {
 header("Content-Type: text/plain; charset=ISO-8859-15"); }
 $sql = "SHOW TABLES LIKE '".$Settings['sqltable']."%'";
-$result = sql_query($sql);
+$result = sql_query($sql,$SQLStat);
 if (!$result) {
 echo "DB Error, could not list tables\n";
-echo 'MySQL Error: ' . sql_error();
+echo 'MySQL Error: ' . sql_error($SQLStat);
 exit; }
 $DropTable = null; $CreateTable = null; $TableNames = null; $l = 0;
 while ($row = sql_fetch_row($result)) { 
@@ -63,10 +63,10 @@ $TableNames[$l] = $row[0];
 $DropTable[$l] = "DROP TABLE IF EXISTS `".$row[0]."`;\n";
 $CreateTable[$l] = "CREATE TABLE IF NOT EXISTS `".$row[0]."` (\n";
 $CreateTable[$l] = null;
-$result2 = sql_query("SHOW COLUMNS FROM ".$row[0]);
-$tabsta = sql_query("SHOW TABLE STATUS LIKE '".$row[0]."'");
+$result2 = sql_query("SHOW COLUMNS FROM ".$row[0],$SQLStat);
+$tabsta = sql_query("SHOW TABLE STATUS LIKE '".$row[0]."'",$SQLStat);
 $tabstats = sql_fetch_array($tabsta); $AutoIncrement = " ";
-$tabstaz = sql_query("SHOW CREATE TABLE `".$row[0]."`");
+$tabstaz = sql_query("SHOW CREATE TABLE `".$row[0]."`",$SQLStat);
 $tabstatz = sql_fetch_array($tabstaz);
 $FullTable[$l] = $DropTable[$l].$tabstatz[1].";\n";
 $tabstats = sql_fetch_array($tabsta); $AutoIncrement = " ";
@@ -97,7 +97,7 @@ $AutoIncrement = " AUTO_INCREMENT=".$tabstats["Auto_increment"]." "; }
 	$TableInfo[$l] .= $PrimaryKey[$l]."\n".$TableStats[$l];
 	$FullTable[$l] = $DropTable[$l].$CreateTable[$l].$TableInfo[$l]; */ }
 if (!$result2) {
-    echo 'Could not run query: ' . sql_error();
+    echo 'Could not run query: ' . sql_error($SQLStat);
     exit; }
 sql_free_result($result2);
 sql_free_result($tabsta);
@@ -109,7 +109,7 @@ echo "-- ".$iDBHome."support/\n";
 echo "--\n";
 echo "-- Host: ".$Settings['sqlhost']."\n";
 echo "-- Generation Time: ".GMTimeGet('F d, Y \a\t h:i A',$_SESSION['UserTimeZone'],0,$_SESSION['UserDST'])."\n";
-echo "-- Server version: ".sql_server_info()."\n";
+echo "-- Server version: ".sql_server_info($SQLStat)."\n";
 echo "-- PHP Version: ".phpversion()."\n\n";
 echo "SET SQL_MODE=\"NO_AUTO_VALUE_ON_ZERO\";\n\n";
 echo "--\n";

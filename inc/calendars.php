@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: calendars.php - Last Update: 11/23/2009 SVN 359 - Author: cooldude2k $
+    $FileInfo: calendars.php - Last Update: 12/07/2009 SVN 380 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="calendars.php"||$File3Name=="/calendars.php") {
@@ -41,7 +41,7 @@ $MyMonthName = GMTimeGet("F",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $FirstDayThisMonth = date("w", mktime(0, 0, 0, $MyMonth, 1, $MyYear));
 $EventsName = array();
 $query = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."events` WHERE (`EventMonth`>=%i AND `EventYear`<%i AND `EventYearEnd`>=%i) OR (`EventMonth`<=%i AND `EventMonthEnd`>=%i AND `EventYearEnd`>=%i)", array($MyMonth,$MyYear,$MyYear,$MyMonth,$MyMonth,$MyYear));
-$result=sql_query($query);
+$result=sql_query($query,$SQLStat);
 $num=sql_num_rows($result);
 $is=0;
 while ($is < $num) {
@@ -83,7 +83,7 @@ $EventsID[$EventDay] = $EventID;
 ++$is; } 
 sql_free_result($result);
 $bdquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `BirthMonth`=%i", array($MyMonth));
-$bdresult=sql_query($bdquery);
+$bdresult=sql_query($bdquery,$SQLStat);
 $bdnum=sql_num_rows($bdresult);
 $bdi=0;
 while ($bdi < $bdnum) {

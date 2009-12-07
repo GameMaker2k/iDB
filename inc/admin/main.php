@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: main.php - Last Update: 12/02/2009 SVN 371 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 12/07/2009 SVN 380 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -84,7 +84,7 @@ if($_GET['act']=="delsessions"&&$GroupInfo['ViewDBInfo']=="yes") {
 $time = GMTimeStamp() - ini_get("session.gc_maxlifetime");
 //$sqlg = sql_pre_query('DELETE FROM `'.$Settings['sqltable'].'sessions` WHERE `expires` < UNIX_TIMESTAMP();', array(null));
 $sqlgc = sql_pre_query('DELETE FROM `'.$Settings['sqltable'].'sessions` WHERE `expires` < %i', array($time));
-sql_query($sqlgc);
+sql_query($sqlgc,$SQLStat);
 $_POST['update'] = "now"; $_GET['act'] = "view"; }
 if($_GET['act']=="optimize"&&$GroupInfo['ViewDBInfo']=="yes") {
 $TablePreFix = $Settings['sqltable'];
@@ -98,7 +98,7 @@ $TblOptimized = 0;
 while ($ti < $tcount) {
 if(isset($OptimizeAr["Msg_text"])) { unset($OptimizeAr["Msg_text"]); }
 if(isset($OptimizeAr[3])) { unset($OptimizeAr[3]); }
-$OptimizeTea = sql_query(sql_pre_query("OPTIMIZE TABLE `".$TableChCk[$ti]."`", array(null))); 
+$OptimizeTea = sql_query(sql_pre_query("OPTIMIZE TABLE `".$TableChCk[$ti]."`", array(null)),$SQLStat); 
 $OptimizeAr = sql_fetch_array($OptimizeTea);
 if(!isset($OptimizeAr["Msg_text"])&&
 	isset($OptimizeAr[3])) { $OptimizeAr["Msg_text"] = $OptimizeAr[3]; }
@@ -136,7 +136,7 @@ redirect("refresh",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"ac
 <br />Settings have been updated <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=main",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">click here</a> to go back. ^_^<br />&nbsp;</div>
 <?php } if($_GET['act']=="view"&&$_POST['update']!="now") {
 $query = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($_SESSION['UserID']));
-$result=sql_query($query);
+$result=sql_query($query,$SQLStat);
 $num=sql_num_rows($result);
 $i=0;
 $YourID=sql_result($result,$i,"id");
@@ -190,7 +190,7 @@ if($ts_array[1]>59) { $ts_array[1] = "59"; $Settings['DefaultTimeZone'] = $ts_ar
 if($ts_array[1]<0) { $ts_array[1] = "00"; $Settings['DefaultTimeZone'] = $ts_array[0].":".$ts_array[1]; }
 $tsa = array("offset" => $Settings['DefaultTimeZone'], "hour" => $ts_array[0], "minute" => $ts_array[1]);
 $mguerys = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."groups`", array(null));
-$mgresults=sql_query($mguerys);
+$mgresults=sql_query($mguerys,$SQLStat);
 $mnum=sql_num_rows($mgresults);
 $mi = 0;
 while ($mi < $mnum) {

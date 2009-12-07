@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: mysql.php - Last Update: 12/06/2009 SVN 379 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 12/07/2009 SVN 380 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -193,11 +193,11 @@ if($Settings['charset']=="ISO-8859-15") {
 if($Settings['charset']=="UTF-8") {
 	$SQLCollate = "utf8_unicode_ci";
 	$SQLCharset = "utf8"; }
-sql_set_charset($SQLCharset);
+sql_set_charset($SQLCharset,$SQLStat);
 if($SQLStat===false) {
 header("Content-Type: text/plain; charset=".$Settings['charset']); sql_free_result($peresult);
 ob_clean(); echo "Sorry could not connect to mysql database.\nContact the board admin about error. Error log below.";
-echo "\n".sql_errorno();
+echo "\n".sql_errorno($SQLStat);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $sqltable = $Settings['sqltable'];
 function sqlsession_open( $save_path, $session_name ) {
@@ -211,7 +211,7 @@ global $sqltable;
 $data = "";
 $time = GMTimeStamp();
 $sqlr = sql_pre_query("SELECT `session_data` FROM `".$sqltable."sessions` WHERE `session_id` = '%s'", array($id,$time));
-$rs = sql_query($sqlr);
+$rs = sql_query($sqlr,$SQLStat);
 $a = sql_num_rows($rs);
 if($a > 0) {
 $row = sql_fetch_assoc($rs);
@@ -221,19 +221,19 @@ function sqlsession_write($id,$data) {
 global $sqltable;              
 $time = GMTimeStamp();
 $sqlw = sql_pre_query("REPLACE `".$sqltable."sessions` VALUES('$id','$data', $time)", array($id,$data,$time));
-$rs = sql_query($sqlw);
+$rs = sql_query($sqlw,$SQLStat);
 return true; }
 function sqlsession_destroy($id) {
 global $sqltable;
 $sqld = sql_pre_query("DELETE FROM `".$sqltable."sessions` WHERE `session_id` = '$id'", array($id));
-sql_query($sqld);
+sql_query($sqld,$SQLStat);
 return true; }
 function sqlsession_gc($maxlifetime) {
 global $sqltable;
 $time = GMTimeStamp() - $maxlifetime;
 //$sqlg = sql_pre_query('DELETE FROM `'.$sqltable.'sessions` WHERE `expires` < UNIX_TIMESTAMP();', array(null));
 $sqlg = sql_pre_query('DELETE FROM `'.$sqltable.'sessions` WHERE `expires` < %i', array($time));
-sql_query($sqlg);
+sql_query($sqlg,$SQLStat);
 return true; }
 session_set_save_handler("sqlsession_open", "sqlsession_close", "sqlsession_read", "sqlsession_write", "sqlsession_destroy", "sqlsession_gc");
 if($cookieDomain==null) {
@@ -293,7 +293,7 @@ header("Content-Type: text/plain; charset=".$Settings['charset']); sql_free_resu
 ob_clean(); if(!isset($Settings['offline_text'])) {
 echo "Sorry the board is off line.\nIf you are a admin you can login by the admin cp."; }
 if(isset($Settings['offline_text'])) { echo $Settings['offline_text']; }
-//echo "\n".sql_errorno();
+//echo "\n".sql_errorno($SQLStat);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $dayconv = array('second' => 1, 'minute' => 60, 'hour' => 3600, 'day' => 86400, 'week' => 604800, 'month' => 2630880, 'year' => 31570560, 'decade' => 15705600);
 //Time Zone Set
@@ -362,7 +362,7 @@ if (file_exists($SettDir['themes'].$_GET['theme']."/settings.php")) {
 if($_SESSION['UserGroup']!=$Settings['GuestGroup']) {
 $NewDay=GMTimeStamp();
 $qnewskin = sql_pre_query("UPDATE `".$Settings['sqltable']."members` SET `UseTheme`='%s',`LastActive`='%s' WHERE `id`=%i", array($_GET['theme'],$NewDay,$_SESSION['UserID']));
-sql_query($qnewskin); }
+sql_query($qnewskin,$SQLStat); }
 /* The file Theme Exists */ }
 else { $_GET['theme'] = $Settings['DefaultTheme']; 
 $_SESSION['Theme'] = $Settings['DefaultTheme'];
@@ -374,7 +374,7 @@ $_SESSION['Theme'] = chack_themes($_SESSION['Theme']);
 if($OldTheme!=$_SESSION['Theme']) { 
 $NewDay=GMTimeStamp();
 $qnewskin = sql_pre_query("UPDATE `".$Settings['sqltable']."members` SET `UseTheme`='%s',`LastActive`='%s' WHERE `id`=%i", array($_SESSION['Theme'],$NewDay,$_SESSION['UserID']));
-sql_query($qnewskin); }
+sql_query($qnewskin,$SQLStat); }
 $_GET['theme']=$_SESSION['Theme']; }
 if($_SESSION['Theme']==null) {
 $_SESSION['Theme']=$Settings['DefaultTheme'];

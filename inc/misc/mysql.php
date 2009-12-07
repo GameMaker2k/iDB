@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: mysql.php - Last Update: 12/06/2009 SVN 379 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 12/07/2009 SVN 380 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mysql.php"||$File3Name=="/mysql.php") {
@@ -145,11 +145,17 @@ $query_val[$query_is] = $query_vars[$query_i];
    return call_user_func_array("sprintf",$query_val); }
 function sql_set_charset($charset,$link=null) {
 if(function_exists('mysql_set_charset')===false) {
-	$result = sql_query("SET CHARACTER SET '".$charset."'");
+if(!isset($link)) {
+	$result = sql_query("SET CHARACTER SET '".$charset."'"); }
+if(isset($link)) {
+	$result = sql_query("SET CHARACTER SET '".$charset."'",$link); }
 if ($result===false) {
     output_error("SQL Error: ".sql_error(),E_USER_ERROR);
 	return false; }
-	$result = sql_query("SET NAMES '".$charset."'"); 
+if(!isset($link)) {
+	$result = sql_query("SET NAMES '".$charset."'"); }
+if(isset($link)) {
+	$result = sql_query("SET NAMES '".$charset."'",$link); } 
 if ($result===false) {
     output_error("SQL Error: ".sql_error(),E_USER_ERROR);
 	return false; }
@@ -176,16 +182,22 @@ if ($result===false) {
 	return true; } }
 */
 // Get next id for stuff
-function sql_get_next_id($tablepre,$table) {
+function sql_get_next_id($tablepre,$table,$link=null) {
    $getnextidq = sql_pre_query("SHOW TABLE STATUS LIKE '".$tablepre.$table."'", array());
-   $getnextidr = sql_query($getnextidq);
+if(!isset($link)) {
+	$result = sql_query($getnextidq); }
+if(isset($link)) {
+	$getnextidr = sql_query($getnextidq,$link); } 
    $getnextid = sql_fetch_assoc($getnextidr);
    return $getnextid['Auto_increment'];
    @sql_free_result($getnextidr); }
 // Get number of rows for table
-function sql_get_num_rows($tablepre,$table) {
+function sql_get_num_rows($tablepre,$table,$link=null) {
    $getnextidq = sql_pre_query("SHOW TABLE STATUS LIKE '".$tablepre.$table."'", array());
-   $getnextidr = sql_query($getnextidq);
+if(!isset($link)) {
+	$getnextidr = sql_query($getnextidq); }
+if(isset($link)) {
+	$getnextidr = sql_query($getnextidq,$link); } 
    $getnextid = sql_fetch_assoc($getnextidr);
    return $getnextid['Rows'];
    @sql_free_result($getnextidr); }

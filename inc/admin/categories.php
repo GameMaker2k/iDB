@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: categories.php - Last Update: 11/23/2009 SVN 359 - Author: cooldude2k $
+    $FileInfo: categories.php - Last Update: 12/07/2009 SVN 380 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="categories.php"||$File3Name=="/categories.php") {
@@ -89,7 +89,7 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Adding new Category";
 	<option selected="selected" value="0">none</option>
 <?php 
 $fq = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."categories` WHERE `InSubCategory`=0 ORDER BY `OrderID` ASC, `id` ASC", array(null));
-$fr=sql_query($fq);
+$fr=sql_query($fq,$SQLStat);
 $ai=sql_num_rows($fr);
 $fi=0;
 while ($fi < $ai) {
@@ -133,8 +133,8 @@ $_POST['CategoryName'] = remove_spaces($_POST['CategoryName']);
 $_POST['CategoryDesc'] = stripcslashes(htmlspecialchars($_POST['CategoryDesc'], ENT_QUOTES, $Settings['charset']));
 //$_POST['CategoryDesc'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['CategoryDesc']);
 $_POST['CategoryDesc'] = remove_spaces($_POST['CategoryDesc']);
-$sql_id_check = sql_query(sql_pre_query("SELECT `id` FROM `".$Settings['sqltable']."categories` WHERE `id`=%i LIMIT 1", array($_POST['CategoryID'])));
-$sql_order_check = sql_query(sql_pre_query("SELECT `OrderID` FROM `".$Settings['sqltable']."categories` WHERE `OrderID`=%i LIMIT 1", array($_POST['OrderID'])));
+$sql_id_check = sql_query(sql_pre_query("SELECT `id` FROM `".$Settings['sqltable']."categories` WHERE `id`=%i LIMIT 1", array($_POST['CategoryID'])),$SQLStat);
+$sql_order_check = sql_query(sql_pre_query("SELECT `OrderID` FROM `".$Settings['sqltable']."categories` WHERE `OrderID`=%i LIMIT 1", array($_POST['OrderID'])),$SQLStat);
 $id_check = sql_num_rows($sql_id_check); $order_check = sql_num_rows($sql_order_check);
 sql_free_result($sql_id_check); sql_free_result($sql_order_check);
 $errorstr = "";
@@ -171,21 +171,21 @@ redirect("refresh",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"ac
 $admincptitle = " ".$ThemeSet['TitleDivider']." Updating Settings";
 $query = sql_pre_query("INSERT INTO `".$Settings['sqltable']."categories` (`id`, `OrderID`, `Name`, `ShowCategory`, `CategoryType`, `SubShowForums`, `InSubCategory`, `PostCountView`, `KarmaCountView`, `Description`) VALUES\n".
 "(%i, %i, '%s', '%s', '%s', 'yes', %i, %i, %i, '%s')", array($_POST['CategoryID'],$_POST['OrderID'],$_POST['CategoryName'],$_POST['ShowCategory'],$_POST['CategoryType'],$_POST['InSubCategory'],$_POST['CategoryDesc'],$_POST['NumPostView'],$_POST['NumKarmaView'],$_POST['CategoryDesc']));
-sql_query($query);
+sql_query($query,$SQLStat);
 $getperidq = sql_pre_query("SELECT DISTINCT `PermissionID` FROM `".$Settings['sqltable']."catpermissions` ORDER BY `PermissionID` ASC", array(null));
-$getperidr=sql_query($getperidq);
+$getperidr=sql_query($getperidq,$SQLStat);
 $getperidnum=sql_num_rows($getperidr);
 $getperidi = 0; 
-$nextperid = sql_get_next_id($Settings['sqltable'],"catpermissions");
+$nextperid = sql_get_next_id($Settings['sqltable'],"catpermissions",$SQLStat);
 while ($getperidi < $getperidnum) {
 $getperidID=sql_result($getperidr,$getperidi,"PermissionID");
 $getperidq2 = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."catpermissions` WHERE `PermissionID`=%i", array($getperidID));
-$getperidr2=sql_query($getperidq2);
+$getperidr2=sql_query($getperidq2,$SQLStat);
 $getperidnum2=sql_num_rows($getperidr2);
 $getperidName=sql_result($getperidr2,0,"Name");
 sql_free_result($getperidr2);
 $query = sql_pre_query("INSERT IGNORE INTO `".$Settings['sqltable']."catpermissions` VALUES (%i, %i, '%s', %i, 'yes')", array($nextperid,$getperidID,$getperidName,$_POST['CategoryID'])); 
-sql_query($query);
+sql_query($query,$SQLStat);
 ++$getperidi; ++$nextperid; }
 sql_free_result($getperidr);
 ?>
@@ -243,7 +243,7 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Deleting a Category";
 	<td style="width: 50%;"><select size="1" class="TextBox" name="DelID" id="DelID">
 <?php 
 $fq = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."categories` ORDER BY `OrderID` ASC, `id` ASC", array(null));
-$fr=sql_query($fq);
+$fr=sql_query($fq,$SQLStat);
 $ai=sql_num_rows($fr);
 $fi=0;
 while ($fi < $ai) {
@@ -276,50 +276,50 @@ sql_free_result($fr); ?>
 <?php } if($_GET['act']=="deletecategory"&&$_POST['update']=="now"&&$_GET['act']=="deletecategory") { 
 $admincptitle = " ".$ThemeSet['TitleDivider']." Updating Settings";
 $prequery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i LIMIT 1", array($_POST['DelID']));
-$preresult=sql_query($prequery);
+$preresult=sql_query($prequery,$SQLStat);
 $prenum=sql_num_rows($preresult);
 $errorstr = ""; $Error = null;
 if (!is_numeric($_POST['DelID'])) { $Error="Yes";
 $errorstr = $errorstr."You need to enter a forum ID.<br />\n"; } 
 if($prenum>0&&$Error!="Yes") {
 $dtquery = sql_pre_query("DELETE FROM `".$Settings['sqltable']."categories` WHERE `id`=%i", array($_POST['DelID']));
-sql_query($dtquery);
+sql_query($dtquery,$SQLStat);
 if($_POST['DelCategories']=="yes") {
 $dscquery = sql_pre_query("DELETE FROM `".$Settings['sqltable']."categories` WHERE `InSubCategory`=%i", array($_POST['DelID']));
-sql_query($dscquery); }
+sql_query($dscquery,$SQLStat); }
 if($_POST['DelForums']=="yes") {
 $dsfquery = sql_pre_query("DELETE FROM `".$Settings['sqltable']."forums` WHERE `CategoryID`=%i", array($_POST['DelID']));
-sql_query($dsfquery); }
+sql_query($dsfquery,$SQLStat); }
 if($_POST['DelForums']=="yes") {
 $dstquery = sql_pre_query("DELETE FROM `".$Settings['sqltable']."topics` WHERE `CategoryID`=%i", array($_POST['DelID']));
-sql_query($dstquery); }
+sql_query($dstquery,$SQLStat); }
 if($_POST['DelForums']=="yes") {
 $dstquery = sql_pre_query("DELETE FROM `".$Settings['sqltable']."topics` WHERE `CategoryID`=%i", array($_POST['DelID']));
-sql_query($dstquery);
+sql_query($dstquery,$SQLStat);
 $dstquery = sql_pre_query("DELETE FROM `".$Settings['sqltable']."posts` WHERE `CategoryID`=%i", array($_POST['DelID']));
-sql_query($dstquery); }
+sql_query($dstquery,$SQLStat); }
 if($_POST['DelPermission']=="yes") {
 $apcquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `CategoryID`=%i ORDER BY `OrderID` ASC, `id` ASC", array($_POST['DelID']));
-$apcresult=sql_query($apcquery);
+$apcresult=sql_query($apcquery,$SQLStat);
 $apcnum=sql_num_rows($apcresult);
 $apci=0; $apcl=1; if($apcnum>=1) {
 while ($apci < $apcnum) {
 $DelForumID=sql_result($apcresult,$apci,"id");
 if($_POST['DelPermission']=="yes") {
 $dtquery = sql_pre_query("DELETE FROM `".$Settings['sqltable']."permissions` WHERE `ForumID`=%i", array($DelForumID));
-sql_query($dtquery); }
+sql_query($dtquery,$SQLStat); }
 ++$apci; }
 sql_free_result($apcresult); } }
 if($_POST['DelPermission']=="yes") {
 $apcquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."categories` WHERE `InSubCategory`=%i ORDER BY `OrderID` ASC, `id` ASC", array($_POST['DelID']));
-$apcresult=sql_query($apcquery);
+$apcresult=sql_query($apcquery,$SQLStat);
 $apcnum=sql_num_rows($apcresult);
 $apci=0; $apcl=1; if($apcnum>=1) {
 while ($apci < $apcnum) {
 $DelSubsCategoryID=sql_result($apcresult,$apci,"id");
 if($_POST['DelPermission']=="yes") {
 $dtquery = sql_pre_query("DELETE FROM `".$Settings['sqltable']."catpermissions` WHERE `CategoryID`=%i", array($DelSubsCategoryID));
-sql_query($dtquery); }
+sql_query($dtquery,$SQLStat); }
 ++$apci; }
 sql_free_result($apcresult); } }
 ?>
@@ -354,7 +354,7 @@ if(!isset($_POST['id'])) {
 	<td style="width: 50%;"><select size="1" class="TextBox" name="id" id="id">
 <?php 
 $fq = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."categories` ORDER BY `OrderID` ASC, `id` ASC", array(null));
-$fr=sql_query($fq);
+$fr=sql_query($fq,$SQLStat);
 $ai=sql_num_rows($fr);
 $fi=0;
 while ($fi < $ai) {
@@ -385,7 +385,7 @@ sql_free_result($fr); ?>
 </div>
 <?php } if(isset($_POST['id'])) { 
 $prequery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."categories` WHERE `id`=%i LIMIT 1", array($_POST['id']));
-$preresult=sql_query($prequery);
+$preresult=sql_query($prequery,$SQLStat);
 $prenum=sql_num_rows($preresult);
 if($prenum==0) { redirect("location",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],false)); sql_free_result($preresult);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
@@ -458,7 +458,7 @@ $CategoryType = strtolower($CategoryType);
 	<option selected="selected" value="0">none</option>
 <?php 
 $fq = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."categories` WHERE `InSubCategory`=0 AND `id`<>%i ORDER BY `OrderID` ASC, `id` ASC", array($CategoryID));
-$fr=sql_query($fq);
+$fr=sql_query($fq,$SQLStat);
 $ai=sql_num_rows($fr);
 $fi=0;
 while ($fi < $ai) {
@@ -508,7 +508,7 @@ $_POST['CategoryDesc'] = stripcslashes(htmlspecialchars($_POST['CategoryDesc'], 
 //$_POST['CategoryDesc'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['CategoryDesc']);
 $_POST['CategoryDesc'] = remove_spaces($_POST['CategoryDesc']);
 $prequery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."categories` WHERE `id`=%i LIMIT 1", array($_POST['id']));
-$preresult=sql_query($prequery);
+$preresult=sql_query($prequery,$SQLStat);
 $prenum=sql_num_rows($preresult);
 if($prenum==0) { redirect("location",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],false)); sql_free_result($preresult);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
@@ -517,8 +517,8 @@ if($prenum>=1) {
 $OldID=sql_result($preresult,0,"id");
 $OldOrder=sql_result($preresult,0,"OrderID");
 sql_free_result($preresult);
-$sql_id_check = sql_query(sql_pre_query("SELECT `id` FROM `".$Settings['sqltable']."categories` WHERE `id`=%i LIMIT 1", array($_POST['ForumID'])));
-$sql_order_check = sql_query(sql_pre_query("SELECT `OrderID` FROM `".$Settings['sqltable']."categories` WHERE `OrderID`=%i LIMIT 1", array($_POST['OrderID'])));
+$sql_id_check = sql_query(sql_pre_query("SELECT `id` FROM `".$Settings['sqltable']."categories` WHERE `id`=%i LIMIT 1", array($_POST['ForumID'])),$SQLStat);
+$sql_order_check = sql_query(sql_pre_query("SELECT `OrderID` FROM `".$Settings['sqltable']."categories` WHERE `OrderID`=%i LIMIT 1", array($_POST['OrderID'])),$SQLStat);
 $id_check = sql_num_rows($sql_id_check); $order_check = sql_num_rows($sql_order_check);
 sql_free_result($sql_id_check); sql_free_result($sql_order_check);
 if ($_POST['NumPostView']==null||
@@ -547,9 +547,8 @@ if ($Error!="Yes") {
 redirect("refresh",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=categories",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],FALSE),"4");
 $admincptitle = " ".$ThemeSet['TitleDivider']." Updating Settings";
 $query = sql_pre_query("UPDATE `".$Settings['sqltable']."categories` SET `id`=%i,`OrderID`=%i,`Name`='%s',`ShowCategory`='%s',`CategoryType`='%s',`InSubCategory`=%i,`Description`='%s',`PostCountView`=%i,`KarmaCountView`=%i WHERE `id`=%i", array($_POST['CategoryID'],$_POST['OrderID'],$_POST['CategoryName'],$_POST['ShowCategory'],$_POST['CategoryType'],$_POST['InSubCategory'],$_POST['CategoryDesc'],$_POST['NumPostView'],$_POST['NumKarmaView'],$_POST['id']));
-sql_query($query);
-?>
-<?php } } } if($_GET['act']=="cpermissions"&&$_POST['update']!="now") {
+sql_query($query,$SQLStat); } } } 
+if($_GET['act']=="cpermissions"&&$_POST['update']!="now") {
 $admincptitle = " ".$ThemeSet['TitleDivider']." Category Permissions Manager";
 if(!isset($_POST['id'])) {
 ?>
@@ -580,13 +579,13 @@ if(!isset($_POST['id'])) {
 	<td style="width: 50%;"><select size="1" class="TextBox" name="id" id="id">
 <?php 
 $getperidq = sql_pre_query("SELECT DISTINCT `PermissionID` FROM `".$Settings['sqltable']."catpermissions`", array(null));
-$getperidr=sql_query($getperidq);
+$getperidr=sql_query($getperidq,$SQLStat);
 $getperidnum=sql_num_rows($getperidr);
 $getperidi = 0;
 while ($getperidi < $getperidnum) {
 $getperidID=sql_result($getperidr,$getperidi,"PermissionID");
 $getperidq2 = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."catpermissions` WHERE `PermissionID`=%i ORDER BY `CategoryID` ASC", array($getperidID));
-$getperidr2=sql_query($getperidq2);
+$getperidr2=sql_query($getperidq2,$SQLStat);
 $getperidnum2=sql_num_rows($getperidr2);
 $getperidName=sql_result($getperidr2,0,"Name");
 sql_free_result($getperidr2);
@@ -634,14 +633,14 @@ sql_free_result($getperidr); ?>
 <td class="TableMenuColumn3">
 <?php 
 $fq = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."categories` ORDER BY `OrderID` ASC, `id` ASC", array(null));
-$fr=sql_query($fq);
+$fr=sql_query($fq,$SQLStat);
 $ai=sql_num_rows($fr);
 $fi=0;
 while ($fi < $ai) {
 $InCategoryID=sql_result($fr,$fi,"id");
 $InCategoryName=sql_result($fr,$fi,"Name");
 $getperidq = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."catpermissions` WHERE PermissionID=%i AND `CategoryID`=%i LIMIT 1", array($_POST['id'],$InCategoryID));
-$getperidr=sql_query($getperidq);
+$getperidr=sql_query($getperidq,$SQLStat);
 $getperidnum=sql_num_rows($getperidr);
 $getperidNumz = null;
 $getperidID = null;
@@ -682,7 +681,7 @@ sql_free_result($fr); ?>
 </div>
 <?php } if(isset($_POST['id'])&&$_POST['subact']=="edit") {
 $prequery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."catpermissions` WHERE `id`=%i LIMIT 1", array($_POST['id']));
-$preresult=sql_query($prequery);
+$preresult=sql_query($prequery,$SQLStat);
 $prenum=sql_num_rows($preresult);
 if($prenum==0) { redirect("location",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],false)); sql_free_result($preresult);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
@@ -748,7 +747,7 @@ $PermissionName = stripcslashes(htmlspecialchars($PermissionName, ENT_QUOTES, $S
 $admincptitle = " ".$ThemeSet['TitleDivider']." Updating Settings";
 redirect("refresh",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=categories",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],FALSE),"4");
 $query = sql_pre_query("UPDATE `".$Settings['sqltable']."catpermissions` SET `CanViewCategory`='%s' WHERE `id`=%i", array($_POST['CanViewCategory'], $_POST['id']));
-sql_query($query); } if(isset($_POST['id'])&&$_POST['subact']=="create") { 
+sql_query($query,$SQLStat); } if(isset($_POST['id'])&&$_POST['subact']=="create") { 
 ?>
 <div class="TableMenuBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
@@ -801,7 +800,7 @@ sql_query($query); } if(isset($_POST['id'])&&$_POST['subact']=="create") {
 $admincptitle = " ".$ThemeSet['TitleDivider']." Updating Settings";
 redirect("refresh",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=categories",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],FALSE),"4");
 $prequery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."catpermissions` WHERE `id`=%i LIMIT 1", array($_POST['permid']));
-$preresult=sql_query($prequery);
+$preresult=sql_query($prequery,$SQLStat);
 $prenum=sql_num_rows($preresult);
 if($prenum==0) { redirect("location",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],false)); sql_free_result($preresult);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
@@ -809,12 +808,10 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die
 if($prenum>=1) {
 $PermissionName=sql_result($preresult,0,"Name"); 
 sql_free_result($preresult); }
-$nextidnum = sql_get_next_id($Settings['sqltable'],"catpermissions");
+$nextidnum = sql_get_next_id($Settings['sqltable'],"catpermissions",$SQLStat);
 $query = sql_pre_query("INSERT INTO `".$Settings['sqltable']."catpermissions` (`PermissionID`, `Name`, `CategoryID`, `CanViewCategory`) VALUES\n".
 "(%i, '%s', %i, '%s')", array($_POST['permid'], $PermissionName, $_POST['id'], $_POST['CanViewCategory'])); 
-sql_query($query); }
-?>
-<?php } $doupdate = false;
+sql_query($query,$SQLStat); } } $doupdate = false;
 if(isset($_POST['id'])&&$_POST['subact']=="editnow") { 
 	$doupdate = true; }
 if(isset($_POST['id'])&&isset($_POST['permid'])&&$_POST['subact']=="makenow") { 

@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: functions.php - Last Update: 12/05/2009 SVN 377 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 12/07/2009 SVN 380 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -115,7 +115,7 @@ if(!isset($Settings['DefaultTheme'])) {
 function text2icons($Text,$sqlt) {
 global $Settings;
 $reneequery=sql_pre_query("SELECT * FROM `".$sqlt."smileys`", array(null));
-$reneeresult=sql_query($reneequery);
+$reneeresult=sql_query($reneequery,$SQLStat);
 $reneenum=sql_num_rows($reneeresult);
 $renees=0;
 while ($renees < $reneenum) {
@@ -291,7 +291,7 @@ return $phpsrcs; }
 // Check to see if the user is hidden/shy. >_> | ^_^ | <_<
 function GetUserName($idu,$sqlt) { $UsersName = null;
 $gunquery = sql_pre_query("SELECT * FROM `".$sqlt."members` WHERE `id`=%i LIMIT 1", array($idu));
-$gunresult=sql_query($gunquery);
+$gunresult=sql_query($gunquery,$SQLStat);
 $gunnum=sql_num_rows($gunresult);
 // I'm now hidden from you. ^_^ | <_< I cant find you.
 $UsersHidden = "yes";

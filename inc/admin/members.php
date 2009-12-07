@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 11/23/2009 SVN 359 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 12/07/2009 SVN 380 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -68,11 +68,11 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Validating Members";
 	<td style="width: 50%;"><select size="1" class="TextBox" name="id" id="id">
 <?php 
 $gquerys = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `Name`='%s' LIMIT 1", array($Settings['ValidateGroup']));
-$gresults=sql_query($gquerys);
+$gresults=sql_query($gquerys,$SQLStat);
 $VGroupID=sql_result($gresults,0,"id");
 sql_free_result($gresults);
 $getmemidq = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."members` WHERE (`GroupID`=%i AND `id`<>-1) OR (`Validated`='no' AND `id`<>-1)", array($VGroupID));
-$getmemidr=sql_query($getmemidq);
+$getmemidr=sql_query($getmemidq,$SQLStat);
 $getmemidnum=sql_num_rows($getmemidr);
 $getmemidi = 0;
 if($getmemidnum<1) { ?>
@@ -105,15 +105,15 @@ sql_free_result($getmemidr); ?>
 </div>
 <?php } if($_POST['act']=="validate"&&$_POST['update']=="now"&&$_GET['act']=="validate"&&$_POST['id']!="0") { 
 $mguerys = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `Name`='%s' LIMIT 1", array($Settings['MemberGroup']));
-$mgresults=sql_query($mguerys);
+$mgresults=sql_query($mguerys,$SQLStat);
 $MGroupID=sql_result($mgresults,0,"id");
 sql_free_result($mgresults);
 $gquerys = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `Name`='%s' LIMIT 1", array($Settings['ValidateGroup']));
-$gresults=sql_query($gquerys);
+$gresults=sql_query($gquerys,$SQLStat);
 $VGroupID=sql_result($gresults,0,"id");
 sql_free_result($gresults);
 $query = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($_POST['id']));
-$result=sql_query($query);
+$result=sql_query($query,$SQLStat);
 $num=sql_num_rows($result);
 $i=0;
 $VMemName=sql_result($result,$i,"Name");
@@ -123,10 +123,10 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Validating Members";
 redirect("refresh",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=members",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],FALSE),"4");
 if($VMemGroup==$VGroupID) {
 $query = sql_pre_query("UPDATE `".$Settings['sqltable']."members` SET `GroupID`='%s', `Validated`='%s' WHERE `id`=%i", array($MGroupID, "yes", $_POST['id']));
-sql_query($query); }
+sql_query($query,$SQLStat); }
 if($VMemGroup!=$VGroupID&&$VMemValidated=="no") {
 $query = sql_pre_query("UPDATE `".$Settings['sqltable']."members` SET `Validated`='%s' WHERE `id`=%i", array("yes", $_POST['id']));
-sql_query($query); }
+sql_query($query,$SQLStat); }
 ?>
 <div class="TableMenuBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
@@ -185,7 +185,7 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Deleting Members";
 	<td style="width: 50%;"><select size="1" class="TextBox" name="id" id="id">
 <?php 
 $getmemidq = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."members` WHERE (`id`<>-1 AND `id`<>1)", array(null));
-$getmemidr=sql_query($getmemidq);
+$getmemidr=sql_query($getmemidq,$SQLStat);
 $getmemidnum=sql_num_rows($getmemidr);
 $getmemidi = 0;
 if($getmemidnum<1) { ?>
@@ -222,7 +222,7 @@ $DMemName = GetUserName($_POST['id'],$Settings['sqltable']);
 $DMemName = $DMemName['Name'];
 if($DMemName!==null&&($_POST['id']!="0"||$_POST['id']!="1"||$_POST['id']!="-1")) { 
 $dmquery = sql_pre_query("DELETE FROM `".$Settings['sqltable']."members` WHERE `id`=%i", array($_POST['id']));
-sql_query($dmquery); }
+sql_query($dmquery,$SQLStat); }
 ?>
 <div class="TableMenuBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
@@ -283,7 +283,7 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Editing Members";
 	<td style="width: 50%;"><select size="1" class="TextBox" name="id" id="id">
 <?php 
 $getmemidq = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."members` WHERE (`id`<>-1 AND `id`<>1)", array(null));
-$getmemidr=sql_query($getmemidq);
+$getmemidr=sql_query($getmemidq,$SQLStat);
 $getmemidnum=sql_num_rows($getmemidr);
 $getmemidi = 0;
 if($getmemidnum<1) { ?>
@@ -302,7 +302,7 @@ sql_free_result($getmemidr); ?>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="gid" id="gid">
 <?php 
 $getgrpidq = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE (`Name`<>'%s' AND `Name`<>'%s')", array($Settings['GuestGroup'],$Settings['ValidateGroup']));
-$getgrpidr=sql_query($getgrpidq);
+$getgrpidr=sql_query($getgrpidq,$SQLStat);
 $getgrpidnum=sql_num_rows($getgrpidr);
 $getgrpidi = 0;
 if($getgrpidnum<1) { ?>
@@ -336,11 +336,11 @@ sql_free_result($getgrpidr); ?>
 <?php } if($_POST['act']=="editmember"&&$_POST['update']=="now"&&$_GET['act']=="editmember"&&
 	($_POST['id']!="0"||$_POST['id']!="1"||$_POST['id']!="-1")) { 
 $ggidquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `name`='%s' LIMIT 1", array($Settings['GuestGroup']));
-$ggidresult=sql_query($ggidquery);
+$ggidresult=sql_query($ggidquery,$SQLStat);
 $GuestGroupID=sql_result($ggidresult,0,"id");
 sql_free_result($ggidresult);
 $vgidquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `name`='%s' LIMIT 1", array($Settings['ValidateGroup']));
-$vgidresult=sql_query($vgidquery);
+$vgidresult=sql_query($vgidquery,$SQLStat);
 $ValidateGroupID=sql_result($vgidresult,0,"id");
 sql_free_result($vgidresult);
 $DMemName = GetUserName($_POST['id'],$Settings['sqltable']);
@@ -348,7 +348,7 @@ $DMemName = $DMemName['Name'];
 if($DMemName!==null&&($_POST['id']!="0"||$_POST['id']!="1"||$_POST['id']!="-1")&&
 	($_POST['gid']!=$GuestGroupID||$_POST['gid']!=$ValidateGroupID)) { 
 $dmquery = sql_pre_query("UPDATE `".$Settings['sqltable']."members` SET GroupID=%i WHERE `id`=%i", array($_POST['gid'],$_POST['id']));
-sql_query($dmquery); }
+sql_query($dmquery,$SQLStat); }
 ?>
 <div class="TableMenuBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
