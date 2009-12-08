@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: mysql.php - Last Update: 12/07/2009 SVN 380 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 12/07/2009 SVN 381 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -29,7 +29,7 @@ set_time_limit(30); ignore_user_abort(true);
 //ini_set("session.gc_divisor", 100);
 //ini_set("session.gc_maxlifetime", 1440);
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
-if ($File3Name=="mysql.php"||$File3Name=="/mysql.php") {
+if ($File3Name=="sql.php"||$File3Name=="/sql.php") {
 	header('Location: index.php');
 	exit(); }
 require('settings.php');
@@ -146,7 +146,7 @@ ini_set("default_charset",$Settings['charset']);
 $File1Name = dirname($_SERVER['SCRIPT_NAME'])."/";
 $File2Name = $_SERVER['SCRIPT_NAME'];
 $File3Name=str_replace($File1Name, null, $File2Name);
-if ($File3Name=="mysql.php"||$File3Name=="/mysql.php") {
+if ($File3Name=="sql.php"||$File3Name=="/sql.php") {
 	require($SettDir['inc'].'forbidden.php');
 	exit(); }
 //error_reporting(E_ERROR);

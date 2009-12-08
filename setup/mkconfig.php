@@ -12,7 +12,7 @@
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mkconfig.php - Last Update: 12/07/2009 SVN 380 - Author: cooldude2k $
+    $FileInfo: mkconfig.php - Last Update: 12/07/2009 SVN 381 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mkconfig.php"||$File3Name=="/mkconfig.php") {
@@ -163,7 +163,7 @@ if($csrand==3) { $gpass .= chr(rand(97,122)); }
 ++$i; } $GuestPassword = b64e_hmac($gpass,$YourDate,$GSalt,$_POST['usehashtype']);
 $url_this_dir = "http://".$_SERVER['HTTP_HOST'].$this_dir."index.php?act=view";
 $YourIP = $_SERVER['REMOTE_ADDR'];
-require($SetupDir['setup'].'mktable.php');
+require($SetupDir['setup'].'mysql.php');
 $CHMOD = $_SERVER['PHP_SELF'];
 $iDBRDate = $SVNDay[0]."/".$SVNDay[1]."/".$SVNDay[2];
 $iDBRSVN = $VER2[2]." ".$SubVerN;
@@ -190,7 +190,7 @@ mysql_close(); $chdel = true;
 if($Error!="Yes") {
 if($_POST['unlink']=="true") {
 $chdel1 = @unlink($SetupDir['setup'].'presetup.php'); $chdel2 = @unlink($SetupDir['setup'].'setup.php');
-$chdel3 = @unlink($SetupDir['setup'].'mkconfig.php'); $chdel4 = @unlink($SetupDir['setup'].'mktable.php');
+$chdel3 = @unlink($SetupDir['setup'].'mkconfig.php'); $chdel4 = @unlink($SetupDir['setup'].'mysql.php');
 $chdel5 = @unlink($SetupDir['setup'].'index.php'); $chdel6 = @unlink($SetupDir['setup'].'license.php');
 $chdel7 = @unlink($SetupDir['setup'].'preinstall.php'); $chdel8 = @unlink($SetupDir['convert'].'index.php');
 if($ConvertInfo['ConvertFile']!=null) { $chdel0 = @unlink($ConvertInfo['ConvertFile']); }

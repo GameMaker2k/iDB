@@ -12,10 +12,10 @@
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mktable.php - Last Update: 12/07/2009 SVN 380 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 12/07/2009 SVN 381 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
-if ($File3Name=="mktable.php"||$File3Name=="/mktable.php") {
+if ($File3Name=="mysql.php"||$File3Name=="/mysql.php") {
 	require('index.php');
 	exit(); }
 if(!isset($SetupDir['setup'])) { $SetupDir['setup'] = "setup/"; }
@@ -88,7 +88,7 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS `".$_POST['tableprefix']."forum
 "  `Redirects` int(15) NOT NULL default '0',\n".
 "  `NumViews` int(15) NOT NULL default '0',\n".
 "  `Description` text collate ".$SQLCollate." NOT NULL,\n".
-"  `PostCountAdd` varchar(15) character set ".$SQLCharset." NOT NULL default '',\n".
+"  `PostCountAdd` varchar(15) collate ".$SQLCollate." NOT NULL default '',\n".
 "  `PostCountView` int(15) NOT NULL default '0',\n".
 "  `KarmaCountView` int(15) NOT NULL default '0',\n".
 "  `CanHaveTopics` varchar(5) collate ".$SQLCollate." NOT NULL default '',\n".
