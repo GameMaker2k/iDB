@@ -12,7 +12,7 @@
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mysql.php - Last Update: 12/09/2009 SVN 382 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 12/09/2009 SVN 383 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mysql.php"||$File3Name=="/mysql.php") {
@@ -136,7 +136,7 @@ sql_query($query,$SQLStat);
 $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."members\" (\n".
 "  \"id\" int(15) NOT NULL auto_increment,\n".
 "  \"Name\" varchar(150) collate ".$SQLCollate." NOT NULL default '',\n".
-"  \"Password\" varchar(250) collate ".$SQLCollate." NOT NULL default '',\n".
+"  \"UserPassword\" varchar(250) collate ".$SQLCollate." NOT NULL default '',\n".
 "  \"HashType\" varchar(50) collate ".$SQLCollate." NOT NULL default '',\n".
 "  \"Email\" varchar(150) collate ".$SQLCollate." NOT NULL default '',\n".
 "  \"GroupID\" int(15) NOT NULL default '0',\n".
@@ -174,7 +174,7 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."memb
 "  UNIQUE KEY \"Email\" (\"Email\")\n".
 ") ENGINE=MyISAM  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
 sql_query($query,$SQLStat);
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."members\" (\"id\", \"Name\", \"Password\", \"HashType\", \"Email\", \"GroupID\", \"Validated\", \"HiddenMember\", \"WarnLevel\", \"Interests\", \"Title\", \"Joined\", \"LastActive\", \"LastPostTime\", \"BanTime\", \"BirthDay\", \"BirthMonth\", \"BirthYear\", \"Signature\", \"Notes\", \"Avatar\", \"AvatarSize\", \"Website\", \"Gender\", \"PostCount\", \"Karma\", \"KarmaUpdate\", \"RepliesPerPage\", \"TopicsPerPage\", \"MessagesPerPage\", \"TimeZone\", \"DST\", \"UseTheme\", \"IP\", \"Salt\") VALUES\n".
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."members\" (\"id\", \"Name\", \"UserPassword\", \"HashType\", \"Email\", \"GroupID\", \"Validated\", \"HiddenMember\", \"WarnLevel\", \"Interests\", \"Title\", \"Joined\", \"LastActive\", \"LastPostTime\", \"BanTime\", \"BirthDay\", \"BirthMonth\", \"BirthYear\", \"Signature\", \"Notes\", \"Avatar\", \"AvatarSize\", \"Website\", \"Gender\", \"PostCount\", \"Karma\", \"KarmaUpdate\", \"RepliesPerPage\", \"TopicsPerPage\", \"MessagesPerPage\", \"TimeZone\", \"DST\", \"UseTheme\", \"IP\", \"Salt\") VALUES\n".
 "(-1, 'Guest', '%s', '".$iDBHashType."', '%s', 4, 'no', 'yes', 0, 'Guest Account', 'Guest', %i, %i, '0', '0', '0', '0', '0', '[B]Test[/B] :)', 'Your Notes', 'http://', '100x100', '%s', 'UnKnow', 1, 0, 0, 10, 10, 10, '%s', '%s', 'iDB', '127.0.0.1', '%s'),\n".
 "(1, '%s', '%s', '".$iDBHashType."', '%s', 1, 'yes', 'no', 0, '%s', 'Admin', %i, %i, '0', '0', '0', '0', '0', '%s', 'Your Notes', '%s', '100x100', '%s', 'UnKnow', 0, 0, 0, 10, 10, 10, '%s', '%s', 'iDB', '%s', '%s');", array($GuestPassword,$GEmail,$YourDate,$YourDate,$YourWebsite,$AdminTime,$AdminDST,$GSalt,$_POST['AdminUser'],$NewPassword,$_POST['AdminEmail'],$Interests,$YourDate,$YourDate,$NewSignature,$Avatar,$YourWebsite,$AdminTime,$AdminDST,$UserIP,$YourSalt));
 sql_query($query,$SQLStat);
@@ -273,12 +273,12 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."smil
 "  \"SmileName\" text collate ".$SQLCollate." NOT NULL,\n".
 "  \"SmileText\" text collate ".$SQLCollate." NOT NULL,\n".
 "  \"Directory\" text collate ".$SQLCollate." NOT NULL,\n".
-"  \"Show\" varchar(5) collate ".$SQLCollate." NOT NULL default '',\n".
+"  \"Display\" varchar(5) collate ".$SQLCollate." NOT NULL default '',\n".
 "  \"ReplaceCI\" varchar(5) collate ".$SQLCollate." NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\")\n".
 ") ENGINE=MyISAM  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
 sql_query($query,$SQLStat);
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."smileys\" (\"FileName\", \"SmileName\", \"SmileText\", \"Directory\", \"Show\", \"ReplaceCI\") VALUES\n".
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."smileys\" (\"FileName\", \"SmileName\", \"SmileText\", \"Directory\", \"Display\", \"ReplaceCI\") VALUES\n".
 "('angry.png', 'Angry', ':angry:', 'smileys/', 'yes', 'yes'),\n".
 "('closedeyes.png', 'Sleep', 'v_v', 'smileys/', 'yes', 'no'),\n".
 "('cool.png', 'Cool', 'B)', 'smileys/', 'yes', 'no'),\n".
@@ -338,8 +338,8 @@ $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."topics\" (\"Forum
 sql_query($query,$SQLStat);
 $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."wordfilter\" (\n".
 "  \"id\" int(15) NOT NULL auto_increment,\n".
-"  \"Filter\" text collate ".$SQLCollate." NOT NULL,\n".
-"  \"Replace\" text collate ".$SQLCollate." NOT NULL,\n".
+"  \"FilterWord\" text collate ".$SQLCollate." NOT NULL,\n".
+"  \"Replacement\" text collate ".$SQLCollate." NOT NULL,\n".
 "  \"CaseInsensitive\" varchar(5) collate ".$SQLCollate." NOT NULL default '',\n".
 "  \"WholeWord\" varchar(5) collate ".$SQLCollate." NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\")\n".

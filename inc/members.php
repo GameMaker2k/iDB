@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 12/09/2009 SVN 382 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 12/09/2009 SVN 383 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -867,7 +867,7 @@ $numlog=sql_num_rows($resultlog);
 if($numlog>=1) {
 $i=0;
 $YourName=sql_result($resultlog,$i,"Name");
-$YourPassTry=sql_result($resultlog,$i,"Password");
+$YourPassTry=sql_result($resultlog,$i,"UserPassword");
 $HashType=sql_result($resultlog,$i,"HashType");
 $JoinedPass=sql_result($resultlog,$i,"Joined");
 $HashSalt=sql_result($resultlog,$i,"Salt");
@@ -886,7 +886,7 @@ if($YourPassword!=$YourPassTry) { $passright = false; }
 if($YourPassword==$YourPassTry) { $passright = true;
 $YourIDM=sql_result($resultlog,$i,"id");
 $YourNameM=sql_result($resultlog,$i,"Name");
-$YourPassM=sql_result($resultlog,$i,"Password");
+$YourPassM=sql_result($resultlog,$i,"UserPassword");
 $PostCount=sql_result($resultlog,$i,"PostCount");
 $YourGroupM=sql_result($resultlog,$i,"GroupID");
 $YourGroupIDM=$YourGroupM;
@@ -921,7 +921,7 @@ $NewPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$NewHashSalt,"sha512"); 
 $NewDay=GMTimeStamp();
 $NewIP=$_SERVER['REMOTE_ADDR'];
 if($BanError!="yes") {
-$queryup = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"Password\"='%s',\"HashType\"='%s',\"LastActive\"=%i,\"IP\"='%s',\"Salt\"='%s' WHERE \"id\"=%i", array($NewPassword,$iDBHash,$NewDay,$NewIP,$NewHashSalt,$YourIDM));
+$queryup = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"UserPassword\"='%s',\"HashType\"='%s',\"LastActive\"=%i,\"IP\"='%s',\"Salt\"='%s' WHERE \"id\"=%i", array($NewPassword,$iDBHash,$NewDay,$NewIP,$NewHashSalt,$YourIDM));
 sql_query($queryup,$SQLStat);
 sql_free_result($resultlog);
 //session_regenerate_id();
@@ -1355,10 +1355,10 @@ if(!is_numeric($_POST['MinOffSet'])) { $_POST['MinOffSet'] = "00"; }
 if($_POST['MinOffSet']>59) { $_POST['MinOffSet'] = "59"; }
 if($_POST['MinOffSet']<0) { $_POST['MinOffSet'] = "00"; }
 $_POST['YourOffSet'] = $_POST['YourOffSet'].":".$_POST['MinOffSet'];
-$query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."members\" (\"Name\", \"Password\", \"HashType\", \"Email\", \"GroupID\", \"Validated\", \"HiddenMember\", \"WarnLevel\", \"Interests\", \"Title\", \"Joined\", \"LastActive\", \"LastPostTime\", \"BanTime\", \"BirthDay\", \"BirthMonth\", \"BirthYear\", \"Signature\", \"Notes\", \"Avatar\", \"AvatarSize\", \"Website\", \"Gender\", \"PostCount\", \"Karma\", \"KarmaUpdate\", \"RepliesPerPage\", \"TopicsPerPage\", \"MessagesPerPage\", \"TimeZone\", \"DST\", \"UseTheme\", \"IP\", \"Salt\") VALUES\n". 
+$query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."members\" (\"Name\", \"UserPassword\", \"HashType\", \"Email\", \"GroupID\", \"Validated\", \"HiddenMember\", \"WarnLevel\", \"Interests\", \"Title\", \"Joined\", \"LastActive\", \"LastPostTime\", \"BanTime\", \"BirthDay\", \"BirthMonth\", \"BirthYear\", \"Signature\", \"Notes\", \"Avatar\", \"AvatarSize\", \"Website\", \"Gender\", \"PostCount\", \"Karma\", \"KarmaUpdate\", \"RepliesPerPage\", \"TopicsPerPage\", \"MessagesPerPage\", \"TimeZone\", \"DST\", \"UseTheme\", \"IP\", \"Salt\") VALUES\n". 
 "('%s', '%s', '%s', '%s', '%s', '%s', '%s', %i, '%s', '%s', %i, %i, '0', '0', '0', '0', '0', '%s', '%s', '%s', '%s', '%s', '%s', %i, 0, 0, 10, 10, 10, '%s', '%s', '%s', '%s', '%s')", array($Name,$NewPassword,$iDBHash,$_POST['Email'],$yourgroup,$ValidateStats,$HideMe,"0",$_POST['Interests'],$_POST['Title'],$_POST['Joined'],$_POST['LastActive'],$NewSignature,'Your Notes',$Avatar,"100x100",$Website,$_POST['YourGender'],$_POST['PostCount'],$_POST['YourOffSet'],$_POST['DST'],$Settings['DefaultTheme'],$_POST['UserIP'],$HashSalt));
 sql_query($query,$SQLStat);
-$querylogr = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s' AND \"Password\"='%s' LIMIT 1", array($Name,$NewPassword));
+$querylogr = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s' AND \"UserPassword\"='%s' LIMIT 1", array($Name,$NewPassword));
 $resultlogr=sql_query($querylogr,$SQLStat);
 $numlogr=sql_num_rows($resultlogr);
 if($numlogr>=1) {

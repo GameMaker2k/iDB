@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: functions.php - Last Update: 12/09/2009 SVN 382 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 12/09/2009 SVN 383 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -123,7 +123,7 @@ $FileName=sql_result($reneeresult,$renees,"FileName");
 $SmileName=sql_result($reneeresult,$renees,"SmileName");
 $SmileText=sql_result($reneeresult,$renees,"SmileText");
 $SmileDirectory=sql_result($reneeresult,$renees,"Directory");
-$ShowSmile=sql_result($reneeresult,$renees,"Show");
+$ShowSmile=sql_result($reneeresult,$renees,"Display");
 $ReplaceType=sql_result($reneeresult,$renees,"ReplaceCI");
 if($ReplaceType=="on") { $ReplaceType = "yes"; }
 if($ReplaceType=="off") { $ReplaceType = "no"; }

@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: replies.php - Last Update: 12/09/2009 SVN 382 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 12/09/2009 SVN 383 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -608,7 +608,7 @@ $_SESSION['UserFormID'] = $UFID;
 <td class="TableColumn3" style="width: 15%; vertical-align: middle; text-align: center;">
 <div style="width: 100%; height: 160px; overflow: auto;">
 <table style="width: 100%; text-align: center;"><?php
-$renee_query=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."smileys\" WHERE \"Show\"='yes'", array(null));
+$renee_query=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."smileys\" WHERE \"Display\"='yes'", array(null));
 $renee_result=sql_query($renee_query,$SQLStat);
 $renee_num=sql_num_rows($renee_result);
 $renee_s=0; $rose_a=0; $SmileRow=0; $SmileCRow=0;
@@ -617,7 +617,7 @@ $FileName=sql_result($renee_result,$renee_s,"FileName");
 $SmileName=sql_result($renee_result,$renee_s,"SmileName");
 $SmileText=sql_result($renee_result,$renee_s,"SmileText");
 $SmileDirectory=sql_result($renee_result,$renee_s,"Directory");
-$ShowSmile=sql_result($renee_result,$renee_s,"Show");
+$ShowSmile=sql_result($renee_result,$renee_s,"Display");
 $ReplaceType=sql_result($renee_result,$renee_s,"ReplaceCI");
 if($SmileRow==1) { ?><tr>
 	<?php } if($SmileRow<5) { ++$SmileCRow; ?>
@@ -774,8 +774,8 @@ $katarzynart=sql_query($katarzynaqy,$SQLStat);
 $katarzynanm=sql_num_rows($katarzynart);
 $katarzynas=0;
 while ($katarzynas < $katarzynanm) {
-$Filter=sql_result($katarzynart,$katarzynas,"Filter");
-$Replace=sql_result($katarzynart,$katarzynas,"Replace");
+$Filter=sql_result($katarzynart,$katarzynas,"FilterWord");
+$Replace=sql_result($katarzynart,$katarzynas,"Replacement");
 $CaseInsensitive=sql_result($katarzynart,$katarzynas,"CaseInsensitive");
 if($CaseInsensitive=="on") { $CaseInsensitive = "yes"; }
 if($CaseInsensitive=="off") { $CaseInsensitive = "no"; }
@@ -1200,7 +1200,7 @@ $_SESSION['UserFormID'] = $UFID;
 <tr class="TableRow3" id="EditReplies<?php echo $_GET['post']; ?>">
 <td class="TableColumn3" style="width: 15%; vertical-align: middle; text-align: center;">
 <div style="width: 100%; height: 160px; overflow: auto;"><?php
-$renee_query=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."smileys\" WHERE \"Show\"='yes'", array(null));
+$renee_query=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."smileys\" WHERE \"Display\"='yes'", array(null));
 $renee_result=sql_query($renee_query,$SQLStat);
 $renee_num=sql_num_rows($renee_result);
 $renee_s=0; $SmileRow=1;
@@ -1209,7 +1209,7 @@ $FileName=sql_result($renee_result,$renee_s,"FileName");
 $SmileName=sql_result($renee_result,$renee_s,"SmileName");
 $SmileText=sql_result($renee_result,$renee_s,"SmileText");
 $SmileDirectory=sql_result($renee_result,$renee_s,"Directory");
-$ShowSmile=sql_result($renee_result,$renee_s,"Show");
+$ShowSmile=sql_result($renee_result,$renee_s,"Display");
 $ReplaceType=sql_result($renee_result,$renee_s,"ReplaceCI");
 if($SmileRow<5) { ?>
 	<img src="<?php echo $SmileDirectory."".$FileName; ?>" style="vertical-align: middle; border: 0px; cursor: pointer;" title="<?php echo $SmileName; ?>" alt="<?php echo $SmileName; ?>" onclick="addsmiley('ReplyPost','&nbsp;<?php echo htmlspecialchars($SmileText, ENT_QUOTES, $Settings['charset']); ?>&nbsp;')" />&nbsp;&nbsp;
@@ -1391,8 +1391,8 @@ $katarzynart=sql_query($katarzynaqy,$SQLStat);
 $katarzynanm=sql_num_rows($katarzynart);
 $katarzynas=0;
 while ($katarzynas < $katarzynanm) {
-$Filter=sql_result($katarzynart,$katarzynas,"Filter");
-$Replace=sql_result($katarzynart,$katarzynas,"Replace");
+$Filter=sql_result($katarzynart,$katarzynas,"FilterWord");
+$Replace=sql_result($katarzynart,$katarzynas,"Replacement");
 $CaseInsensitive=sql_result($katarzynart,$katarzynas,"CaseInsensitive");
 if($CaseInsensitive=="on") { $CaseInsensitive = "yes"; }
 if($CaseInsensitive=="off") { $CaseInsensitive = "no"; }
@@ -1623,7 +1623,7 @@ $_SESSION['UserFormID'] = $UFID;
 <td class="TableColumn3" style="width: 15%; vertical-align: middle; text-align: center;">
 <div style="width: 100%; height: 160px; overflow: auto;">
 <table style="width: 100%; text-align: center;"><?php
-$renee_query=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."smileys\" WHERE \"Show\"='yes'", array(null));
+$renee_query=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."smileys\" WHERE \"Display\"='yes'", array(null));
 $renee_result=sql_query($renee_query,$SQLStat);
 $renee_num=sql_num_rows($renee_result);
 $renee_s=0; $SmileRow=0; $SmileCRow=0;
@@ -1632,7 +1632,7 @@ $FileName=sql_result($renee_result,$renee_s,"FileName");
 $SmileName=sql_result($renee_result,$renee_s,"SmileName");
 $SmileText=sql_result($renee_result,$renee_s,"SmileText");
 $SmileDirectory=sql_result($renee_result,$renee_s,"Directory");
-$ShowSmile=sql_result($renee_result,$renee_s,"Show");
+$ShowSmile=sql_result($renee_result,$renee_s,"Display");
 $ReplaceType=sql_result($renee_result,$renee_s,"ReplaceCI");
 if($SmileRow==1) { ?><tr>
 	<?php } if($SmileRow<5) { ++$SmileCRow; ?>

@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: groupsetup.php - Last Update: 12/09/2009 SVN 382 - Author: cooldude2k $
+    $FileInfo: groupsetup.php - Last Update: 12/09/2009 SVN 383 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="groupsetup.php"||$File3Name=="/groupsetup.php") {
@@ -32,7 +32,7 @@ $Settings['GuestGroupID']=sql_result($ggidresult,0,"id");*/
 $MyPostCountChk = null; $MyKarmaCount = null;
 if(!isset($_SESSION['UserID'])) { $_SESSION['UserID'] = 0; }
 if($_SESSION['UserID']!=0&&$_SESSION['UserID']!=null) { $BanError = null;
-$kgbquerychkusr = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s' AND \"Password\"='%s' AND \"id\"=%i LIMIT 1", array($_SESSION['MemberName'],$_SESSION['UserPass'],$_SESSION['UserID'])); 
+$kgbquerychkusr = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s' AND \"UserPassword\"='%s' AND \"id\"=%i LIMIT 1", array($_SESSION['MemberName'],$_SESSION['UserPass'],$_SESSION['UserID'])); 
 $resultchkusr=sql_query($kgbquerychkusr,$SQLStat);
 $numchkusr=sql_num_rows($resultchkusr);
 if($numchkusr==1) {
@@ -40,7 +40,7 @@ $ChkUsrID=sql_result($resultchkusr,0,"id");
 $ChkUsrName=sql_result($resultchkusr,0,"Name");
 $ChkUsrGroup=sql_result($resultchkusr,0,"GroupID");
 $ChkUsrGroupID=$ChkUsrGroup;
-$ChkUsrPass=sql_result($resultchkusr,0,"Password");
+$ChkUsrPass=sql_result($resultchkusr,0,"UserPassword");
 $ChkUsrTimeZone=sql_result($resultchkusr,0,"TimeZone");
 $ChkUsrTheme=sql_result($resultchkusr,0,"UseTheme");
 $ChkUsrLastPostTime=sql_result($resultchkusr,0,"LastPostTime");

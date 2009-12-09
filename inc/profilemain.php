@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: profilemain.php - Last Update: 12/09/2009 SVN 382 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 12/09/2009 SVN 383 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
@@ -169,8 +169,8 @@ if($_POST['act']=="view"&&
 	$katarzynanm=sql_num_rows($katarzynart);
 	$katarzynas=0;
 	while ($katarzynas < $katarzynanm) {
-	$Filter=sql_result($katarzynart,$katarzynas,"Filter");
-	$Replace=sql_result($katarzynart,$katarzynas,"Replace");
+	$Filter=sql_result($katarzynart,$katarzynas,"FilterWord");
+	$Replace=sql_result($katarzynart,$katarzynas,"Replacement");
 	$CaseInsensitive=sql_result($katarzynart,$katarzynas,"CaseInsensitive");
 	if($CaseInsensitive=="on") { $CaseInsensitive = "yes"; }
 	if($CaseInsensitive=="off") { $CaseInsensitive = "no"; }
@@ -251,8 +251,8 @@ if($_POST['act']=="signature"&&
 	$katarzynanm=sql_num_rows($katarzynart);
 	$katarzynas=0;
 	while ($katarzynas < $katarzynanm) {
-	$Filter=sql_result($katarzynart,$katarzynas,"Filter");
-	$Replace=sql_result($katarzynart,$katarzynas,"Replace");
+	$Filter=sql_result($katarzynart,$katarzynas,"FilterWord");
+	$Replace=sql_result($katarzynart,$katarzynas,"Replacement");
 	$CaseInsensitive=sql_result($katarzynart,$katarzynas,"CaseInsensitive");
 	if($CaseInsensitive=="on") { $CaseInsensitive = "yes"; }
 	if($CaseInsensitive=="off") { $CaseInsensitive = "no"; }
@@ -717,8 +717,8 @@ if($_POST['act']=="profile"&&
 	$katarzynanm=sql_num_rows($katarzynart);
 	$katarzynas=0;
 	while ($katarzynas < $katarzynanm) {
-	$Filter=sql_result($katarzynart,$katarzynas,"Filter");
-	$Replace=sql_result($katarzynart,$katarzynas,"Replace");
+	$Filter=sql_result($katarzynart,$katarzynas,"FilterWord");
+	$Replace=sql_result($katarzynart,$katarzynas,"Replacement");
 	$CaseInsensitive=sql_result($katarzynart,$katarzynas,"CaseInsensitive");
 	if($CaseInsensitive=="on") { $CaseInsensitive = "yes"; }
 	if($CaseInsensitive=="off") { $CaseInsensitive = "no"; }
@@ -852,7 +852,7 @@ if($_POST['act']=="userinfo"&&
 	$result=sql_query($query,$SQLStat);
 	$num=sql_num_rows($result);
 	$i=0;
-	$OldPassword=sql_result($result,$i,"Password");
+	$OldPassword=sql_result($result,$i,"UserPassword");
 	$OldHashType=sql_result($result,$i,"HashType");
 	$OldJoined=sql_result($result,$i,"Joined");
 	$OldSalt=sql_result($result,$i,"Salt");
@@ -912,7 +912,7 @@ if($YourPassword!=$OldPassword) { $Error="Yes"; ?>
 	if($cookieSecure===false) {
 	setcookie("SessPass", $NewPassword, time() + (7 * 86400), $cbasedir, $cookieDomain); } }
 	$_POST['Email'] = remove_spaces($_POST['Email']);
-	$querynewuserinfo = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"Password\"='%s',\"HashType\"='iDBH',\"Email\"='%s',\"LastActive\"=%i,\"IP\"='%s',\"Salt\"='%s' WHERE \"id\"=%i", array($NewPassword,$_POST['Email'],$NewDay,$NewIP,$NewSalt,$_SESSION['UserID']));
+	$querynewuserinfo = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"UserPassword\"='%s',\"HashType\"='iDBH',\"Email\"='%s',\"LastActive\"=%i,\"IP\"='%s',\"Salt\"='%s' WHERE \"id\"=%i", array($NewPassword,$_POST['Email'],$NewDay,$NewIP,$NewSalt,$_SESSION['UserID']));
 	sql_query($querynewuserinfo,$SQLStat); } } } }
 ?>
 <?php if($_POST['update']=="now"&&$_GET['act']!=null) {
