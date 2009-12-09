@@ -12,7 +12,7 @@
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mkconfig.php - Last Update: 12/07/2009 SVN 381 - Author: cooldude2k $
+    $FileInfo: mkconfig.php - Last Update: 12/09/2009 SVN 384 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mkconfig.php"||$File3Name=="/mkconfig.php") {
@@ -186,7 +186,7 @@ if($_POST['storecookie']=="true") {
 //setcookie("UserID", 1, time() + (7 * 86400), $this_dir, $URLsTest['host']);
 //setcookie("SessPass", $NewPassword, time() + (7 * 86400), $this_dir, $URLsTest['host']); 
 }
-mysql_close(); $chdel = true;
+/*mysql_close();*/ $chdel = true;
 if($Error!="Yes") {
 if($_POST['unlink']=="true") {
 $chdel1 = @unlink($SetupDir['setup'].'presetup.php'); $chdel2 = @unlink($SetupDir['setup'].'setup.php');
@@ -194,7 +194,7 @@ $chdel3 = @unlink($SetupDir['setup'].'mkconfig.php'); $chdel4 = @unlink($SetupDi
 $chdel5 = @unlink($SetupDir['setup'].'index.php'); $chdel6 = @unlink($SetupDir['setup'].'license.php');
 $chdel7 = @unlink($SetupDir['setup'].'preinstall.php'); $chdel8 = @unlink($SetupDir['convert'].'index.php');
 if($ConvertInfo['ConvertFile']!=null) { $chdel0 = @unlink($ConvertInfo['ConvertFile']); }
-$chdel9 = @unlink($SetupDir['convert'].'info.php'); 
+$chdel9 = @unlink($SetupDir['convert'].'info.php'); $chdel0 = @unlink($SetupDir['setup'].'pgsql.php');
 $chdel10 = rmdir($SetupDir['convert']); $chdel11 = rmdir('setup');
 $chdel12 = @unlink('install.php'); } }
 if($chdel1===false||$chdel2===false||$chdel3===false||$chdel4===false) { $chdel = false; }
