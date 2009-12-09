@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sqldumper.php - Last Update: 12/07/2009 SVN 380 - Author: cooldude2k $
+    $FileInfo: sqldumper.php - Last Update: 12/09/2009 SVN 382 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="sqldumper.php"||$File3Name=="/sqldumper.php") {
@@ -32,7 +32,7 @@ header("Content-Type: application/octet-stream");
 header("Content-Transfer-Encoding: binary");
 $SQLDumper = "SQL Dumper";
 function GetAllRows($table) { $rene_j = 0; $trowout = null;
-$tresult = sql_query("SELECT * FROM `".$table."`",$SQLStat);
+$tresult = sql_query("SELECT * FROM \"".$table."\"",$SQLStat);
 while ($trow = sql_fetch_array($tresult, MYSQL_ASSOC)) {
 $trowout[$rene_j] = $trow;
 ++$rene_j; }
@@ -60,13 +60,13 @@ $DropTable = null; $CreateTable = null; $TableNames = null; $l = 0;
 while ($row = sql_fetch_row($result)) { 
 if(in_array($row[0],$TableChCk)) {
 $TableNames[$l] = $row[0];
-$DropTable[$l] = "DROP TABLE IF EXISTS `".$row[0]."`;\n";
-$CreateTable[$l] = "CREATE TABLE IF NOT EXISTS `".$row[0]."` (\n";
+$DropTable[$l] = "DROP TABLE IF EXISTS \"".$row[0]."\";\n";
+$CreateTable[$l] = "CREATE TABLE IF NOT EXISTS \"".$row[0]."\" (\n";
 $CreateTable[$l] = null;
 $result2 = sql_query("SHOW COLUMNS FROM ".$row[0],$SQLStat);
 $tabsta = sql_query("SHOW TABLE STATUS LIKE '".$row[0]."'",$SQLStat);
 $tabstats = sql_fetch_array($tabsta); $AutoIncrement = " ";
-$tabstaz = sql_query("SHOW CREATE TABLE `".$row[0]."`",$SQLStat);
+$tabstaz = sql_query("SHOW CREATE TABLE \"".$row[0]."\"",$SQLStat);
 $tabstatz = sql_fetch_array($tabstaz);
 $FullTable[$l] = $DropTable[$l].$tabstatz[1].";\n";
 $tabstats = sql_fetch_array($tabsta); $AutoIncrement = " ";
@@ -84,9 +84,9 @@ $AutoIncrement = " AUTO_INCREMENT=".$tabstats["Auto_increment"]." "; }
 	if($row2["Key"]=="PRI"||$row2["Key"]=="UNI") {
 	$PrimaryKey[$l] .= ",\n"; } }
 	if(!isset($PrimaryKey[$l])) { $PrimaryKey[$l] = null; }
-        $TableInfo[$l] .= "  `".$row2["Field"]."` ".$row2["Type"]." NOT NULL".$DefaVaule.$row2["Extra"].",\n";
-		if($row2["Key"]=="PRI") { $PrimaryKey[$l] .= "  PRIMARY KEY (`".$row2["Field"]."`)"; }
-		if($row2["Key"]=="UNI") { $PrimaryKey[$l] .= "  UNIQUE KEY `".$row2["Field"]."` (`".$row2["Field"]."`)"; }
+        $TableInfo[$l] .= "  \"".$row2["Field"]."\" ".$row2["Type"]." NOT NULL".$DefaVaule.$row2["Extra"].",\n";
+		if($row2["Key"]=="PRI") { $PrimaryKey[$l] .= "  PRIMARY KEY (\"".$row2["Field"]."\")"; }
+		if($row2["Key"]=="UNI") { $PrimaryKey[$l] .= "  UNIQUE KEY \"".$row2["Field"]."\" (\"".$row2["Field"]."\")"; }
 	++$i; } */
 	/*
 	$TableStats[$l] = ") ENGINE=".$tabstats["Engine"]." DEFAULT CHARSET=".mysql_client_encoding()." COLLATE=".$tabstats["Collation"].$AutoIncrement.";\n";
@@ -111,16 +111,17 @@ echo "-- Host: ".$Settings['sqlhost']."\n";
 echo "-- Generation Time: ".GMTimeGet('F d, Y \a\t h:i A',$_SESSION['UserTimeZone'],0,$_SESSION['UserDST'])."\n";
 echo "-- Server version: ".sql_server_info($SQLStat)."\n";
 echo "-- PHP Version: ".phpversion()."\n\n";
-echo "SET SQL_MODE=\"NO_AUTO_VALUE_ON_ZERO\";\n\n";
+echo "SET SQL_MODE=\"NO_AUTO_VALUE_ON_ZERO\";\n";
+echo "SET SESSION SQL_MODE='ANSI_QUOTES';\n\n";
 echo "--\n";
-echo "-- Database: `".$Settings['sqldb']."`\n";
+echo "-- Database: \"".$Settings['sqldb']."\"\n";
 echo "--\n\n";
 echo "-- --------------------------------------------------------\n\n";
 while ($renee_s < $num) { $tnum = $num - 1;
 $trow = GetAllRows($TableNames[$renee_s]);
 $numz = count($trow); $kazuki_p = 0;
 echo "--\n";
-echo "-- Table structure for table `".$TableNames[$renee_s]."`\n";
+echo "-- Table structure for table \"".$TableNames[$renee_s]."\"\n";
 echo "--\n\n";
 echo $FullTable[$renee_s]."\n";
 while ($kazuki_p < $numz) { $tnumz = $numz - 1;
@@ -135,9 +136,9 @@ if($_GET['outtype']=="UTF-8"&&$Settings['charset']!="UTF-8") {
 $trowrvalue = utf8_encode($trowrvalue); }
 $trowrvalue = str_replace( array("\n", "\r"), array('\n', '\r'), $trowrvalue);
 if($kazuki_p===0) {
-if($il===0) { $srow = "INSERT DELAYED IGNORE INTO `".$TableNames[$renee_s]."` ("; }
-if($il<$tnums&&$il!=$tnums) { $srow .= "`".$trowrname."`, "; }
-if($il==$tnums) { $srow .= "`".$trowrname."`) VALUES"; } }
+if($il===0) { $srow = "INSERT DELAYED IGNORE INTO \"".$TableNames[$renee_s]."\" ("; }
+if($il<$tnums&&$il!=$tnums) { $srow .= "\"".$trowrname."\", "; }
+if($il==$tnums) { $srow .= "\"".$trowrname."\") VALUES"; } }
 if($il===0) { $srowvalue = "("; }
 if(!is_numeric($trowrvalue)) { $trowrvalue = "'".$trowrvalue."'"; }
 if($il<$tnums) { $srowvalue .= $trowrvalue.", "; }
@@ -147,7 +148,7 @@ if($kazuki_p==$tnumz) { $srowvalue .= ");"; } }
 ++$il; }
 if($kazuki_p===0) {
 echo "--\n";
-echo "-- Dumping data for table `".$TableNames[$renee_s]."`\n";
+echo "-- Dumping data for table \"".$TableNames[$renee_s]."\"\n";
 echo "--\n\n";
 echo $srow."\n"; }
 echo $srowvalue."\n";
@@ -156,7 +157,7 @@ echo "\n-- --------------------------------------------------------\n"; }
 ++$kazuki_p; }
 if($numz===0) {
 echo "--\n";
-echo "-- Dumping data for table `".$TableNames[$renee_s]."`\n";
+echo "-- Dumping data for table \"".$TableNames[$renee_s]."\"\n";
 echo "--\n\n";
 echo "\n-- --------------------------------------------------------\n"; }
 echo "\n";

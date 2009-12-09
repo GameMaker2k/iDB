@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: groupsetup.php - Last Update: 12/07/2009 SVN 380 - Author: cooldude2k $
+    $FileInfo: groupsetup.php - Last Update: 12/09/2009 SVN 382 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="groupsetup.php"||$File3Name=="/groupsetup.php") {
@@ -25,14 +25,14 @@ if($Settings['file_ext']=="no+ext"||$Settings['file_ext']=="no ext") {
 $_SESSION['ViewingFile'] = $exfile['index']; }
 $_SESSION['PreViewingTitle'] = "Viewing";
 $_SESSION['ViewingTitle'] = "Board index";
-/*$ggidquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `name`='%s' LIMIT 1", array($Settings['GuestGroup']));
+/*$ggidquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"name\"='%s' LIMIT 1", array($Settings['GuestGroup']));
 $ggidresult=sql_query($ggidquery,$SQLStat);
 $Settings['GuestGroupID']=sql_result($ggidresult,0,"id");*/
 // Check to make sure MemberInfo is right
 $MyPostCountChk = null; $MyKarmaCount = null;
 if(!isset($_SESSION['UserID'])) { $_SESSION['UserID'] = 0; }
 if($_SESSION['UserID']!=0&&$_SESSION['UserID']!=null) { $BanError = null;
-$kgbquerychkusr = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `Name`='%s' AND `Password`='%s' AND `id`=%i LIMIT 1", array($_SESSION['MemberName'],$_SESSION['UserPass'],$_SESSION['UserID'])); 
+$kgbquerychkusr = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s' AND \"Password\"='%s' AND \"id\"=%i LIMIT 1", array($_SESSION['MemberName'],$_SESSION['UserPass'],$_SESSION['UserID'])); 
 $resultchkusr=sql_query($kgbquerychkusr,$SQLStat);
 $numchkusr=sql_num_rows($resultchkusr);
 if($numchkusr==1) {
@@ -55,7 +55,7 @@ $MyMessagesPerPage=sql_result($resultchkusr,0,"MessagesPerPage");
 $Settings['max_memlist'] = $MyMessagesPerPage;
 $Settings['max_pmlist'] = $MyMessagesPerPage;
 $ChkUsrDST=sql_result($resultchkusr,0,"DST");
-$svrquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($ChkUsrGroup));
+$svrquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i LIMIT 1", array($ChkUsrGroup));
 $svrgresultkgb=sql_query($svrquery,$SQLStat);
 $ChkUsrGroup=sql_result($svrgresultkgb,0,"Name"); 
 $ChkUsrBanTime=sql_result($resultchkusr,0,"BanTime");
@@ -100,14 +100,14 @@ if($_SESSION['UserID']==0||$_SESSION['UserID']==null) {
 $_SESSION['UserIP']=$_SERVER['REMOTE_ADDR'];
 $_SESSION['MemberName'] = null;
 $_SESSION['UserGroup'] = $Settings['GuestGroup']; 
-$gidquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `name`='%s' LIMIT 1", array($Settings['GuestGroup']));
+$gidquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"name\"='%s' LIMIT 1", array($Settings['GuestGroup']));
 $gidresult=sql_query($gidquery,$SQLStat);
 $_SESSION['UserGroupID']=sql_result($gidresult,0,"id"); 
 sql_free_result($gidresult); }
 if($_SESSION['MemberName']==null) { $_SESSION['UserID'] = "0";
 $_SESSION['UserIP']=$_SERVER['REMOTE_ADDR'];
 $_SESSION['UserGroup'] = $Settings['GuestGroup']; 
-$gidquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `name`='%s' LIMIT 1", array($Settings['GuestGroup']));
+$gidquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"name\"='%s' LIMIT 1", array($Settings['GuestGroup']));
 $gidresult=sql_query($gidquery,$SQLStat);
 $_SESSION['UserGroupID']=sql_result($gidresult,0,"id"); 
 sql_free_result($gidresult); }
@@ -115,7 +115,7 @@ sql_free_result($gidresult); }
 if(!isset($_SESSION['UserGroup'])) { $_SESSION['UserGroup'] = null; }
 if($_SESSION['UserGroup']==null) { 
 $_SESSION['UserGroup']=$Settings['GuestGroup']; } $GruError = null;
-$gruquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `Name`='%s' LIMIT 1", array($_SESSION['UserGroup']));
+$gruquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"Name\"='%s' LIMIT 1", array($_SESSION['UserGroup']));
 $gruresult=sql_query($gruquery,$SQLStat);
 $grunum=sql_num_rows($gruresult);
 if($grunum<=0) { $GruError = true; sql_free_result($gruresult);
@@ -202,22 +202,22 @@ if($MyKarmaUpdate<$NewKarmaUpdate&&$MyPostCountChk>0) {
 	$MyKarmaCount = $MyKarmaCount + $BoostTotal; }
 	if($BoostTotal==null) {
 	$MyKarmaCount = $MyKarmaCount + 1; }
-	$querykarmaup = sql_pre_query("UPDATE `".$Settings['sqltable']."members` SET `Karma`=%i,`KarmaUpdate`=%i WHERE `id`=%i", array($MyKarmaCount,$NewKarmaUpdate,$_SESSION['UserID']));
+	$querykarmaup = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"Karma\"=%i,\"KarmaUpdate\"=%i WHERE \"id\"=%i", array($MyKarmaCount,$NewKarmaUpdate,$_SESSION['UserID']));
 	sql_query($querykarmaup,$SQLStat); }
 	$Settings['KarmaBoostDays'] = $Settings['OldKarmaBoostDays'];
 if($GroupInfo['PromoteTo']!=0&&$MyPostCountChk>=$GroupInfo['PromotePosts']) {
-	$sql_group_check = sql_query(sql_pre_query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($GroupInfo['PromoteTo'])),$SQLStat);
+	$sql_group_check = sql_query(sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i LIMIT 1", array($GroupInfo['PromoteTo'])),$SQLStat);
 	$group_check = sql_num_rows($sql_group_check);
 	sql_free_result($sql_group_check);
 	if($group_check > 0) {
-	$queryupgrade = sql_pre_query("UPDATE `".$Settings['sqltable']."members` SET `GroupID`=%i WHERE `id`=%i", array($GroupInfo['PromoteTo'],$_SESSION['UserID']));
+	$queryupgrade = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"GroupID\"=%i WHERE \"id\"=%i", array($GroupInfo['PromoteTo'],$_SESSION['UserID']));
 	sql_query($queryupgrade,$SQLStat); } }
 if($GroupInfo['PromotePosts']==0&&$GroupInfo['PromoteTo']!=0&&$MyKarmaCount>=$GroupInfo['PromoteKarma']) {
-	$sql_group_check = sql_query(sql_pre_query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($GroupInfo['PromoteTo'])),$SQLStat);
+	$sql_group_check = sql_query(sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i LIMIT 1", array($GroupInfo['PromoteTo'])),$SQLStat);
 	$group_check = sql_num_rows($sql_group_check);
 	sql_free_result($sql_group_check);
 	if($group_check > 0) {
-	$queryupgrade = sql_pre_query("UPDATE `".$Settings['sqltable']."members` SET `GroupID`=%i WHERE `id`=%i", array($GroupInfo['PromoteTo'],$_SESSION['UserID']));
+	$queryupgrade = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"GroupID\"=%i WHERE \"id\"=%i", array($GroupInfo['PromoteTo'],$_SESSION['UserID']));
 	sql_query($queryupgrade,$SQLStat); } } }
 $GroupInfo['HasModCP']=sql_result($gruresult,0,"HasModCP");
 if($GroupInfo['HasModCP']!="yes"&&$GroupInfo['HasModCP']!="no") {
@@ -238,7 +238,7 @@ header("Content-Type: text/plain; charset=".$Settings['charset']);
 ob_clean(); echo "Sorry you can not view the board."; 
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 // Member Group Permissions Setup
-$perquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."permissions` WHERE `PermissionID`=%i ORDER BY `ForumID` ASC", array($GroupInfo['PermissionID']));
+$perquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i ORDER BY \"ForumID\" ASC", array($GroupInfo['PermissionID']));
 $peresult=sql_query($perquery,$SQLStat);
 $pernum=sql_num_rows($peresult);
 $peri=0; $PerError = null;
@@ -313,7 +313,7 @@ header("Content-Type: text/plain; charset=".$Settings['charset']); sql_free_resu
 ob_clean(); echo "Sorry could not load all permission data in database.\nContact the board admin about error."; 
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); } }
 sql_free_result($peresult);
-$per2query = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."catpermissions` WHERE `PermissionID`=%i ORDER BY `CategoryID` ASC", array($GroupInfo['PermissionID']));
+$per2query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."catpermissions\" WHERE \"PermissionID\"=%i ORDER BY \"CategoryID\" ASC", array($GroupInfo['PermissionID']));
 $per2esult=sql_query($per2query,$SQLStat);
 $per2num=sql_num_rows($per2esult);
 $per2i=0; $Per2Error = null;

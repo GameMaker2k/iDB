@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: forums.php - Last Update: 12/07/2009 SVN 380 - Author: cooldude2k $
+    $FileInfo: forums.php - Last Update: 12/09/2009 SVN 382 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="forums.php"||$File3Name=="/forums.php") {
@@ -36,19 +36,19 @@ require($SettDir['admin'].'table.php');
 	<td style="width: 85%; vertical-align: top;">
 <?php if($_GET['act']=="retopics") { 
 $admincptitle = " ".$ThemeSet['TitleDivider']." Recounting Topics";
-$query = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."forums` ORDER BY `OrderID` ASC, `id` ASC", array(null));
+$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" ORDER BY \"OrderID\" ASC, \"id\" ASC", array(null));
 $result=sql_query($query,$SQLStat);
 $num=sql_num_rows($result);
 $i=0;
 while ($i < $num) {
 $ForumID=sql_result($result,$i,"id");
-$tquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `ForumID`=%i ORDER BY `Pinned` DESC, `LastUpdate` DESC", array($ForumID));
+$tquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"ForumID\"=%i ORDER BY \"Pinned\" DESC, \"LastUpdate\" DESC", array($ForumID));
 $tresult=sql_query($tquery,$SQLStat);
 $tnum=sql_num_rows($tresult);
-$rquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `ForumID`=%i ORDER BY `TimeStamp` ASC", array($ForumID));
+$rquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"ForumID\"=%i ORDER BY \"TimeStamp\" ASC", array($ForumID));
 $rresult=sql_query($rquery,$SQLStat);
 $rnum=sql_num_rows($rresult);
-$query = sql_pre_query("UPDATE `".$Settings['sqltable']."forums` SET `NumPosts`=%i,`NumTopics`=%i WHERE `id`=%i", array($rnum,$tnum,$ForumID));
+$query = sql_pre_query("UPDATE \"".$Settings['sqltable']."forums\" SET \"NumPosts\"=%i,\"NumTopics\"=%i WHERE \"id\"=%i", array($rnum,$tnum,$ForumID));
 sql_query($query,$SQLStat);
 sql_free_result($tresult);
 sql_free_result($rresult);
@@ -88,17 +88,17 @@ sql_free_result($result);
 </div>
 <?php } if($_GET['act']=="rereplies") { 
 $admincptitle = " ".$ThemeSet['TitleDivider']." Recounting Replies";
-$query = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."topics` ORDER BY `Pinned` DESC, `LastUpdate` DESC", array(null));
+$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" ORDER BY \"Pinned\" DESC, \"LastUpdate\" DESC", array(null));
 $result=sql_query($query,$SQLStat);
 $num=sql_num_rows($result);
 $i=0;
 while ($i < $num) {
 $TopicID=sql_result($result,$i,"id");
-$rquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `TopicID`=%i ORDER BY `TimeStamp` ASC", array($TopicID));
+$rquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" ASC", array($TopicID));
 $rresult=sql_query($rquery,$SQLStat);
 $rnum=sql_num_rows($rresult);
 $Nrnum = $rnum - 1;
-$query = sql_pre_query("UPDATE `".$Settings['sqltable']."topics` SET `NumReply`=%i WHERE `id`=%i", array($Nrnum,$TopicID));
+$query = sql_pre_query("UPDATE \"".$Settings['sqltable']."topics\" SET \"NumReply\"=%i WHERE \"id\"=%i", array($Nrnum,$TopicID));
 sql_query($query,$SQLStat);
 sql_free_result($rresult);
 ++$i; }
@@ -137,7 +137,7 @@ sql_free_result($result);
 </div>
 <?php } if($_GET['act']=="fixtnames") { 
 $admincptitle = " ".$ThemeSet['TitleDivider']." Fixing Topic User Names";
-$query = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."topics` ORDER BY `TimeStamp` ASC", array(null));
+$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" ORDER BY \"TimeStamp\" ASC", array(null));
 $result=sql_query($query,$SQLStat);
 $num=sql_num_rows($result);
 $i=0;
@@ -160,7 +160,7 @@ if($UsersID===0&&$GuestsName==null) {
 $NewUserID = -1; $NewGuestsName = "Guest"; }
 if($UsersID==$NewUserID&&$GuestsName==$NewGuestsName) {
 $NewUserID = $UsersID; $NewGuestsName = $GuestsName; }
-$query = sql_pre_query("UPDATE `".$Settings['sqltable']."topics` SET `UserID`=%i,`GuestName`='%s' WHERE `id`=%i", array($NewUserID,$NewGuestsName,$TopicID));
+$query = sql_pre_query("UPDATE \"".$Settings['sqltable']."topics\" SET \"UserID\"=%i,\"GuestName\"='%s' WHERE \"id\"=%i", array($NewUserID,$NewGuestsName,$TopicID));
 sql_query($query,$SQLStat);
 ++$i; }
 sql_free_result($result);
@@ -198,7 +198,7 @@ sql_free_result($result);
 </div>
 <?php } if($_GET['act']=="fixrnames") { 
 $admincptitle = " ".$ThemeSet['TitleDivider']." Fixing Reply User Names";
-$query = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."posts` ORDER BY `TimeStamp` ASC", array(null));
+$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" ORDER BY \"TimeStamp\" ASC", array(null));
 $result=sql_query($query,$SQLStat);
 $num=sql_num_rows($result);
 $i=0;
@@ -238,7 +238,7 @@ if($EditUserID===0&&$EditUserName==null) {
 $NewEditUserID = "0"; $NewEditUserName = null; }
 if($EditUserID==$NewEditUserID&&$EditUserName==$NewEditUserName) {
 $NewEditUserID = $EditUserID; $NewEditUserName = $EditUserName; }
-$query = sql_pre_query("UPDATE `".$Settings['sqltable']."posts` SET `UserID`=%i,`GuestName`='%s',`EditUser`=%i,`EditUserName`='%s' WHERE `id`=%i", array($NewUserID,$NewGuestsName,$NewEditUserID,$NewEditUserName,$PostID));
+$query = sql_pre_query("UPDATE \"".$Settings['sqltable']."posts\" SET \"UserID\"=%i,\"GuestName\"='%s',\"EditUser\"=%i,\"EditUserName\"='%s' WHERE \"id\"=%i", array($NewUserID,$NewGuestsName,$NewEditUserID,$NewEditUserName,$PostID));
 sql_query($query,$SQLStat);
 ++$i; }
 sql_free_result($result);
@@ -309,7 +309,7 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Adding new Forum";
 	<td style="width: 50%;"><label class="TextBoxLabel" for="ForumCatID">Select category for forum:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="ForumCatID" id="ForumCatID">
 <?php 
-$cq = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."categories` ORDER BY `OrderID` ASC, `id` ASC", array(null));
+$cq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."categories\" ORDER BY \"OrderID\" ASC, \"id\" ASC", array(null));
 $cr=sql_query($cq,$SQLStat);
 $eu=sql_num_rows($cr);
 $nu=0;
@@ -349,7 +349,7 @@ sql_free_result($cr); ?>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="InSubForum" id="InSubForum">
 	<option selected="selected" value="0">none</option>
 <?php 
-$fq = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `InSubForum`=0 ORDER BY `OrderID` ASC, `id` ASC", array(null));
+$fq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"InSubForum\"=0 ORDER BY \"OrderID\" ASC, \"id\" ASC", array(null));
 $fr=sql_query($fq,$SQLStat);
 $ai=sql_num_rows($fr);
 $fi=0;
@@ -390,7 +390,7 @@ sql_free_result($fr); ?>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="CPermissions" id="CPermissions">
 	<option selected="selected" value="0">none</option>
 <?php 
-$fq = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."forums` ORDER BY `OrderID` ASC, `id` ASC", array(null));
+$fq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" ORDER BY \"OrderID\" ASC, \"id\" ASC", array(null));
 $fr=sql_query($fq,$SQLStat);
 $ai=sql_num_rows($fr);
 $fi=0;
@@ -428,8 +428,8 @@ $_POST['ForumName'] = remove_spaces($_POST['ForumName']);
 $_POST['ForumDesc'] = stripcslashes(htmlspecialchars($_POST['ForumDesc'], ENT_QUOTES, $Settings['charset']));
 //$_POST['ForumDesc'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['ForumDesc']);
 $_POST['ForumDesc'] = remove_spaces($_POST['ForumDesc']);
-$sql_id_check = sql_query(sql_pre_query("SELECT `id` FROM `".$Settings['sqltable']."forums` WHERE `id`=%i LIMIT 1", array($_POST['ForumID'])),$SQLStat);
-$sql_order_check = sql_query(sql_pre_query("SELECT `OrderID` FROM `".$Settings['sqltable']."forums` WHERE `OrderID`=%i LIMIT 1", array($_POST['OrderID'])),$SQLStat);
+$sql_id_check = sql_query(sql_pre_query("SELECT \"id\" FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($_POST['ForumID'])),$SQLStat);
+$sql_order_check = sql_query(sql_pre_query("SELECT \"OrderID\" FROM \"".$Settings['sqltable']."forums\" WHERE \"OrderID\"=%i LIMIT 1", array($_POST['OrderID'])),$SQLStat);
 $id_check = sql_num_rows($sql_id_check); $order_check = sql_num_rows($sql_order_check);
 sql_free_result($sql_id_check); sql_free_result($sql_order_check);
 $errorstr = "";
@@ -464,11 +464,11 @@ $errorstr = $errorstr."Your Forum Description is too big.<br />\n"; }
 if ($Error!="Yes") {
 redirect("refresh",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],FALSE),"4");
 $admincptitle = " ".$ThemeSet['TitleDivider']." Updating Settings";
-$query = sql_pre_query("INSERT INTO `".$Settings['sqltable']."forums` (`id`, `CategoryID`, `OrderID`, `Name`, `ShowForum`, `ForumType`, `InSubForum`, `RedirectURL`, `Redirects`, `NumViews`, `Description`, `PostCountAdd`, `PostCountView`, `KarmaCountView`, `CanHaveTopics`, `HotTopicPosts`, `NumPosts`, `NumTopics`) VALUES\n".
+$query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."forums\" (\"id\", \"CategoryID\", \"OrderID\", \"Name\", \"ShowForum\", \"ForumType\", \"InSubForum\", \"RedirectURL\", \"Redirects\", \"NumViews\", \"Description\", \"PostCountAdd\", \"PostCountView\", \"KarmaCountView\", \"CanHaveTopics\", \"HotTopicPosts\", \"NumPosts\", \"NumTopics\") VALUES\n".
 "(%i, %i, %i, '%s', '%s', '%s', %i, '%s', 0, 0, '%s', '%s', %i, %i, '%s', %i, 0, 0)", array($_POST['ForumID'],$_POST['ForumCatID'],$_POST['OrderID'],$_POST['ForumName'],$_POST['ShowForum'],$_POST['ForumType'],$_POST['InSubForum'],$_POST['RedirectURL'],$_POST['ForumDesc'],$_POST['PostCountAdd'],$_POST['NumPostView'],$_POST['NumKarmaView'],$_POST['CanHaveTopics'],$_POST['NumPostHotTopic']));
 sql_query($query,$SQLStat);
 if(!is_numeric($_POST['CPermissions'])) { $_POST['CPermissions'] = "0"; }
-$getperidq = sql_pre_query("SELECT DISTINCT `PermissionID` FROM `".$Settings['sqltable']."permissions` ORDER BY `PermissionID` ASC", array(null));
+$getperidq = sql_pre_query("SELECT DISTINCT \"PermissionID\" FROM \"".$Settings['sqltable']."permissions\" ORDER BY \"PermissionID\" ASC", array(null));
 $getperidr=sql_query($getperidq,$SQLStat);
 $getperidnum=sql_num_rows($getperidr);
 $getperidi = 0; 
@@ -476,9 +476,9 @@ $nextperid = sql_get_next_id($Settings['sqltable'],"permissions",$SQLStat);
 while ($getperidi < $getperidnum) {
 $getperidID=sql_result($getperidr,$getperidi,"PermissionID");
 if($_POST['CPermissions']=="0") {
-$getperidq2 = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."permissions` WHERE `PermissionID`=%i", array($getperidID)); }
+$getperidq2 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i", array($getperidID)); }
 if($_POST['CPermissions']!="0") {
-$getperidq2 = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."permissions` WHERE `PermissionID`=%i AND ForumID=%i", array($getperidID,$_POST['CPermissions'])); }
+$getperidq2 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i AND ForumID=%i", array($getperidID,$_POST['CPermissions'])); }
 $getperidr2=sql_query($getperidq2,$SQLStat);
 $getperidnum2=sql_num_rows($getperidr2);
 $PermissionNum=sql_result($getperidr2,0,"id"); 
@@ -504,12 +504,12 @@ $CanUseBBags=sql_result($getperidr2,0,"CanUseBBags");
 $CanModForum=sql_result($getperidr2,0,"CanModForum"); 
 sql_free_result($getperidr2);
 if($_POST['CPermissions']=="0") {
-$query = sql_pre_query("INSERT IGNORE INTO `".$Settings['sqltable']."permissions` VALUES (%i, %i, '%s', %i, 'yes', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no')", array($nextperid,$PermissionID,$PermissionName,$_POST['ForumID'])); }
+$query = sql_pre_query("INSERT IGNORE INTO \"".$Settings['sqltable']."permissions\" VALUES (%i, %i, '%s', %i, 'yes', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no')", array($nextperid,$PermissionID,$PermissionName,$_POST['ForumID'])); }
 if($_POST['CPermissions']!="0") {
 if($getperidnum2>0) {
-$query = sql_pre_query("INSERT IGNORE INTO `".$Settings['sqltable']."permissions` VALUES (%i, %i, '%s', %i, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')", array($nextperid,$PermissionID,$PermissionName,$_POST['ForumID'],$CanViewForum,$CanMakeTopics,$CanMakeReplys,$CanMakeReplysCT,$CanEditTopics,$CanEditTopicsCT,$CanEditReplys,$CanEditReplysCT,$CanDeleteTopics,$CanDeleteTopicsCT,$CanDeleteReplys,$CanDeleteReplysCT,$CanCloseTopics,$CanPinTopics,$CanDohtml,$CanUseBBags,$CanModForum)); }
+$query = sql_pre_query("INSERT IGNORE INTO \"".$Settings['sqltable']."permissions\" VALUES (%i, %i, '%s', %i, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')", array($nextperid,$PermissionID,$PermissionName,$_POST['ForumID'],$CanViewForum,$CanMakeTopics,$CanMakeReplys,$CanMakeReplysCT,$CanEditTopics,$CanEditTopicsCT,$CanEditReplys,$CanEditReplysCT,$CanDeleteTopics,$CanDeleteTopicsCT,$CanDeleteReplys,$CanDeleteReplysCT,$CanCloseTopics,$CanPinTopics,$CanDohtml,$CanUseBBags,$CanModForum)); }
 if($getperidnum2<=0) {
-$query = sql_pre_query("INSERT IGNORE INTO `".$Settings['sqltable']."permissions` VALUES (%i, %i, '%s', %i, 'yes', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no')", array($nextperid,$PermissionID,$PermissionName,$_POST['ForumID'])); } }
+$query = sql_pre_query("INSERT IGNORE INTO \"".$Settings['sqltable']."permissions\" VALUES (%i, %i, '%s', %i, 'yes', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no')", array($nextperid,$PermissionID,$PermissionName,$_POST['ForumID'])); } }
 sql_query($query,$SQLStat);
 ++$getperidi; ++$nextperid; }
 sql_free_result($getperidr);
@@ -561,7 +561,7 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Deleting a Forum";
 	<td style="width: 50%;"><label class="TextBoxLabel" for="DelID">Delete Forum:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="DelID" id="DelID">
 <?php 
-$fq = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."forums` ORDER BY `OrderID` ASC, `id` ASC", array(null));
+$fq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" ORDER BY \"OrderID\" ASC, \"id\" ASC", array(null));
 $fr=sql_query($fq,$SQLStat);
 $ai=sql_num_rows($fr);
 $fi=0;
@@ -594,39 +594,39 @@ sql_free_result($fr); ?>
 </div>
 <?php } if($_GET['act']=="deleteforum"&&$_POST['update']=="now"&&$_GET['act']=="deleteforum") { 
 $admincptitle = " ".$ThemeSet['TitleDivider']." Updating Settings";
-$prequery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i LIMIT 1", array($_POST['DelID']));
+$prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($_POST['DelID']));
 $preresult=sql_query($prequery,$SQLStat);
 $prenum=sql_num_rows($preresult);
 $errorstr = ""; $Error = null;
 if (!is_numeric($_POST['DelID'])) { $Error="Yes";
 $errorstr = $errorstr."You need to enter a forum ID.<br />\n"; } 
 if($prenum>0&&$Error!="Yes") {
-$dtquery = sql_pre_query("DELETE FROM `".$Settings['sqltable']."forums` WHERE `id`=%i", array($_POST['DelID']));
+$dtquery = sql_pre_query("DELETE FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i", array($_POST['DelID']));
 sql_query($dtquery,$SQLStat);
 if($_POST['DelForums']=="yes") {
-$dtquery = sql_pre_query("DELETE FROM `".$Settings['sqltable']."topics` WHERE `ForumID`=%i", array($_POST['DelID']));
+$dtquery = sql_pre_query("DELETE FROM \"".$Settings['sqltable']."topics\" WHERE \"ForumID\"=%i", array($_POST['DelID']));
 sql_query($dtquery,$SQLStat);
-$dtquery = sql_pre_query("DELETE FROM `".$Settings['sqltable']."posts` WHERE `ForumID`=%i", array($_POST['DelID']));
+$dtquery = sql_pre_query("DELETE FROM \"".$Settings['sqltable']."posts\" WHERE \"ForumID\"=%i", array($_POST['DelID']));
 sql_query($dtquery,$SQLStat); }
 if($_POST['DelPermission']=="yes") {
-$dtquery = sql_pre_query("DELETE FROM `".$Settings['sqltable']."permissions` WHERE `ForumID`=%i", array($_POST['DelID']));
+$dtquery = sql_pre_query("DELETE FROM \"".$Settings['sqltable']."permissions\" WHERE \"ForumID\"=%i", array($_POST['DelID']));
 sql_query($dtquery,$SQLStat); }
 if($_POST['DelForums']=="yes") {
-$apcquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `InSubForum`=%i ORDER BY `OrderID` ASC, `id` ASC", array($_POST['DelID']));
+$apcquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"InSubForum\"=%i ORDER BY \"OrderID\" ASC, \"id\" ASC", array($_POST['DelID']));
 $apcresult=sql_query($apcquery,$SQLStat);
 $apcnum=sql_num_rows($apcresult);
 $apci=0; $apcl=1; if($apcnum>=1) {
 while ($apci < $apcnum) {
 $DelSubsForumID=sql_result($apcresult,$apci,"id");
 if($_POST['DelForums']=="yes") {
-$dtquery = sql_pre_query("DELETE FROM `".$Settings['sqltable']."topics` WHERE `ForumID`=%i", array($DelSubsForumID));
+$dtquery = sql_pre_query("DELETE FROM \"".$Settings['sqltable']."topics\" WHERE \"ForumID\"=%i", array($DelSubsForumID));
 sql_query($dtquery,$SQLStat);
-$dtquery = sql_pre_query("DELETE FROM `".$Settings['sqltable']."posts` WHERE `ForumID`=%i", array($DelSubsForumID));
+$dtquery = sql_pre_query("DELETE FROM \"".$Settings['sqltable']."posts\" WHERE \"ForumID\"=%i", array($DelSubsForumID));
 sql_query($dtquery,$SQLStat); }
 if($_POST['DelPermission']=="yes") {
-$dtquery = sql_pre_query("DELETE FROM `".$Settings['sqltable']."permissions` WHERE `ForumID`=%i", array($DelSubsForumID));
+$dtquery = sql_pre_query("DELETE FROM \"".$Settings['sqltable']."permissions\" WHERE \"ForumID\"=%i", array($DelSubsForumID));
 sql_query($dtquery,$SQLStat); }
-$dtquery = sql_pre_query("DELETE FROM `".$Settings['sqltable']."forums` WHERE `id`=%i", array($DelSubsForumID));
+$dtquery = sql_pre_query("DELETE FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i", array($DelSubsForumID));
 sql_query($dtquery,$SQLStat);
 ++$apci; }
 sql_free_result($apcresult); } }
@@ -661,7 +661,7 @@ if(!isset($_POST['id'])) {
 	<td style="width: 50%;"><label class="TextBoxLabel" for="id">Forum to Edit:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="id" id="id">
 <?php 
-$fq = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."forums` ORDER BY `OrderID` ASC, `id` ASC", array(null));
+$fq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" ORDER BY \"OrderID\" ASC, \"id\" ASC", array(null));
 $fr=sql_query($fq,$SQLStat);
 $ai=sql_num_rows($fr);
 $fi=0;
@@ -692,7 +692,7 @@ sql_free_result($fr); ?>
 </table>
 </div>
 <?php } if(isset($_POST['id'])) { 
-$prequery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i LIMIT 1", array($_POST['id']));
+$prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($_POST['id']));
 $preresult=sql_query($prequery,$SQLStat);
 $prenum=sql_num_rows($preresult);
 if($prenum==0) { redirect("location",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],false)); sql_free_result($preresult);
@@ -754,7 +754,7 @@ $ForumType = strtolower($ForumType); $CanHaveTopics = strtolower($CanHaveTopics)
 	<td style="width: 50%;"><label class="TextBoxLabel" for="ForumCatID">Select category for forum:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="ForumCatID" id="ForumCatID">
 <?php 
-$cq = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."categories` ORDER BY `OrderID` ASC, `id` ASC", array(null));
+$cq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."categories\" ORDER BY \"OrderID\" ASC, \"id\" ASC", array(null));
 $cr=sql_query($cq,$SQLStat);
 $eu=sql_num_rows($cr);
 $nu=0;
@@ -797,7 +797,7 @@ sql_free_result($cr); ?>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="InSubForum" id="InSubForum">
 	<option selected="selected" value="0">none</option>
 <?php 
-$fq = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `InSubForum`=0 AND `id`<>%i ORDER BY `OrderID` ASC, `id` ASC", array($ForumID));
+$fq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"InSubForum\"=0 AND \"id\"<>%i ORDER BY \"OrderID\" ASC, \"id\" ASC", array($ForumID));
 $fr=sql_query($fq,$SQLStat);
 $ai=sql_num_rows($fr);
 $fi=0;
@@ -862,7 +862,7 @@ $_POST['ForumName'] = remove_spaces($_POST['ForumName']);
 $_POST['ForumDesc'] = stripcslashes(htmlspecialchars($_POST['ForumDesc'], ENT_QUOTES, $Settings['charset']));
 //$_POST['ForumDesc'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['ForumDesc']);
 $_POST['ForumDesc'] = remove_spaces($_POST['ForumDesc']);
-$prequery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i LIMIT 1", array($_POST['id']));
+$prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($_POST['id']));
 $preresult=sql_query($prequery,$SQLStat);
 $prenum=sql_num_rows($preresult);
 if($prenum==0) { redirect("location",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],false)); sql_free_result($preresult);
@@ -872,8 +872,8 @@ if($prenum>=1) {
 $OldID=sql_result($preresult,0,"id");
 $OldOrder=sql_result($preresult,0,"OrderID");
 sql_free_result($preresult);
-$sql_id_check = sql_query(sql_pre_query("SELECT `id` FROM `".$Settings['sqltable']."forums` WHERE `id`=%i LIMIT 1", array($_POST['ForumID'])),$SQLStat);
-$sql_order_check = sql_query(sql_pre_query("SELECT `OrderID` FROM `".$Settings['sqltable']."forums` WHERE `OrderID`=%i LIMIT 1", array($_POST['OrderID'])),$SQLStat);
+$sql_id_check = sql_query(sql_pre_query("SELECT \"id\" FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($_POST['ForumID'])),$SQLStat);
+$sql_order_check = sql_query(sql_pre_query("SELECT \"OrderID\" FROM \"".$Settings['sqltable']."forums\" WHERE \"OrderID\"=%i LIMIT 1", array($_POST['OrderID'])),$SQLStat);
 $id_check = sql_num_rows($sql_id_check); $order_check = sql_num_rows($sql_order_check);
 sql_free_result($sql_id_check); sql_free_result($sql_order_check);
 if ($_POST['NumPostView']==null||
@@ -907,7 +907,7 @@ $errorstr = $errorstr."Your Forum Description is too big.<br />\n"; }
 if ($Error!="Yes") {
 redirect("refresh",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],FALSE),"4");
 $admincptitle = " ".$ThemeSet['TitleDivider']." Updating Settings";
-$query = sql_pre_query("UPDATE `".$Settings['sqltable']."forums` SET `id`=%i,`CategoryID`=%i,`OrderID`=%i,`Name`='%s',`ShowForum`='%s',`ForumType`='%s',`InSubForum`=%i,`RedirectURL`='%s',`Description`='%s',`PostCountAdd`='%s',`PostCountView`=%i,`KarmaCountView`=%i,`CanHaveTopics`='%s',`HotTopicPosts`=%i WHERE `id`=%i", array($_POST['ForumID'],$_POST['ForumCatID'],$_POST['OrderID'],$_POST['ForumName'],$_POST['ShowForum'],$_POST['ForumType'],$_POST['InSubForum'],$_POST['RedirectURL'],$_POST['ForumDesc'],$_POST['PostCountAdd'],$_POST['NumPostView'],$_POST['NumKarmaView'],$_POST['CanHaveTopics'],$_POST['NumPostHotTopic'],$_POST['id']));
+$query = sql_pre_query("UPDATE \"".$Settings['sqltable']."forums\" SET \"id\"=%i,\"CategoryID\"=%i,\"OrderID\"=%i,\"Name\"='%s',\"ShowForum\"='%s',\"ForumType\"='%s',\"InSubForum\"=%i,\"RedirectURL\"='%s',\"Description\"='%s',\"PostCountAdd\"='%s',\"PostCountView\"=%i,\"KarmaCountView\"=%i,\"CanHaveTopics\"='%s',\"HotTopicPosts\"=%i WHERE \"id\"=%i", array($_POST['ForumID'],$_POST['ForumCatID'],$_POST['OrderID'],$_POST['ForumName'],$_POST['ShowForum'],$_POST['ForumType'],$_POST['InSubForum'],$_POST['RedirectURL'],$_POST['ForumDesc'],$_POST['PostCountAdd'],$_POST['NumPostView'],$_POST['NumKarmaView'],$_POST['CanHaveTopics'],$_POST['NumPostHotTopic'],$_POST['id']));
 sql_query($query,$SQLStat); } } } 
 if($_GET['act']=="fpermissions"&&$_POST['update']!="now") {
 $admincptitle = " ".$ThemeSet['TitleDivider']." Forum Permissions Manager";
@@ -939,13 +939,13 @@ if(!isset($_POST['id'])) {
 	<td style="width: 50%;"><label class="TextBoxLabel" for="id">Permission to view:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="id" id="id">
 <?php 
-$getperidq = sql_pre_query("SELECT DISTINCT `PermissionID` FROM `".$Settings['sqltable']."permissions`", array(null));
+$getperidq = sql_pre_query("SELECT DISTINCT \"PermissionID\" FROM \"".$Settings['sqltable']."permissions\"", array(null));
 $getperidr=sql_query($getperidq,$SQLStat);
 $getperidnum=sql_num_rows($getperidr);
 $getperidi = 0;
 while ($getperidi < $getperidnum) {
 $getperidID=sql_result($getperidr,$getperidi,"PermissionID");
-$getperidq2 = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."permissions` WHERE `PermissionID`=%i ORDER BY `ForumID` ASC", array($getperidID));
+$getperidq2 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i ORDER BY \"ForumID\" ASC", array($getperidID));
 $getperidr2=sql_query($getperidq2,$SQLStat);
 $getperidnum2=sql_num_rows($getperidr2);
 $getperidName=sql_result($getperidr2,0,"Name");
@@ -993,14 +993,14 @@ sql_free_result($getperidr); ?>
 <tr class="TableMenuRow3">
 <td class="TableMenuColumn3">
 <?php 
-$fq = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."forums` ORDER BY `OrderID` ASC, `id` ASC", array(null));
+$fq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" ORDER BY \"OrderID\" ASC, \"id\" ASC", array(null));
 $fr=sql_query($fq,$SQLStat);
 $ai=sql_num_rows($fr);
 $fi=0;
 while ($fi < $ai) {
 $InForumID=sql_result($fr,$fi,"id");
 $InForumName=sql_result($fr,$fi,"Name");
-$getperidq = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."permissions` WHERE PermissionID=%i AND `ForumID`=%i LIMIT 1", array($_POST['id'],$InForumID));
+$getperidq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."permissions\" WHERE PermissionID=%i AND \"ForumID\"=%i LIMIT 1", array($_POST['id'],$InForumID));
 $getperidr=sql_query($getperidq,$SQLStat);
 $getperidnum=sql_num_rows($getperidr);
 $getperidNumz = null;
@@ -1041,7 +1041,7 @@ sql_free_result($fr); ?>
 </table>
 </div>
 <?php } if(isset($_POST['id'])&&$_POST['subact']=="edit") {
-$prequery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."permissions` WHERE `id`=%i LIMIT 1", array($_POST['id']));
+$prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."permissions\" WHERE \"id\"=%i LIMIT 1", array($_POST['id']));
 $preresult=sql_query($prequery,$SQLStat);
 $prenum=sql_num_rows($preresult);
 if($prenum==0) { redirect("location",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],false)); sql_free_result($preresult);
@@ -1234,7 +1234,7 @@ $PermissionName = stripcslashes(htmlspecialchars($PermissionName, ENT_QUOTES, $S
 <?php } if(isset($_POST['id'])&&$_POST['subact']=="editnow") {
 $admincptitle = " ".$ThemeSet['TitleDivider']." Updating Settings";
 redirect("refresh",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],FALSE),"4");
-$query = sql_pre_query("UPDATE `".$Settings['sqltable']."permissions` SET `CanViewForum`='%s', `CanMakeTopics`='%s', `CanMakeReplys`='%s', `CanMakeReplysCT`='%s', `CanEditTopics`='%s', `CanEditTopicsCT`='%s', `CanEditReplys`='%s', `CanEditReplysCT`='%s', `CanDeleteTopics`='%s', `CanDeleteTopicsCT`='%s', `CanDeleteReplys`='%s', `CanDeleteReplysCT`='%s', `CanCloseTopics`='%s', `CanPinTopics`='%s', `CanDohtml`='%s', `CanUseBBags`='%s', `CanModForum`='%s' WHERE `id`=%i", array($_POST['CanViewForum'], $_POST['CanMakeTopics'], $_POST['CanMakeReplys'], $_POST['CanMakeReplysCT'], $_POST['CanEditTopics'], $_POST['CanEditTopicsCT'], $_POST['CanEditReplys'], $_POST['CanEditReplysCT'], $_POST['CanDeleteTopics'], $_POST['CanDeleteTopicsCT'], $_POST['CanDeleteReplys'], $_POST['CanDeleteReplysCT'], $_POST['CanCloseTopics'], $_POST['CanPinTopics'], $_POST['CanDohtml'], $_POST['CanUseBBags'], $_POST['CanModForum'], $_POST['id']));
+$query = sql_pre_query("UPDATE \"".$Settings['sqltable']."permissions\" SET \"CanViewForum\"='%s', \"CanMakeTopics\"='%s', \"CanMakeReplys\"='%s', \"CanMakeReplysCT\"='%s', \"CanEditTopics\"='%s', \"CanEditTopicsCT\"='%s', \"CanEditReplys\"='%s', \"CanEditReplysCT\"='%s', \"CanDeleteTopics\"='%s', \"CanDeleteTopicsCT\"='%s', \"CanDeleteReplys\"='%s', \"CanDeleteReplysCT\"='%s', \"CanCloseTopics\"='%s', \"CanPinTopics\"='%s', \"CanDohtml\"='%s', \"CanUseBBags\"='%s', \"CanModForum\"='%s' WHERE \"id\"=%i", array($_POST['CanViewForum'], $_POST['CanMakeTopics'], $_POST['CanMakeReplys'], $_POST['CanMakeReplysCT'], $_POST['CanEditTopics'], $_POST['CanEditTopicsCT'], $_POST['CanEditReplys'], $_POST['CanEditReplysCT'], $_POST['CanDeleteTopics'], $_POST['CanDeleteTopicsCT'], $_POST['CanDeleteReplys'], $_POST['CanDeleteReplysCT'], $_POST['CanCloseTopics'], $_POST['CanPinTopics'], $_POST['CanDohtml'], $_POST['CanUseBBags'], $_POST['CanModForum'], $_POST['id']));
 sql_query($query,$SQLStat); } if(isset($_POST['id'])&&$_POST['subact']=="create") { 
 ?>
 <div class="TableMenuBorder">
@@ -1399,7 +1399,7 @@ sql_query($query,$SQLStat); } if(isset($_POST['id'])&&$_POST['subact']=="create"
 <?php } if(isset($_POST['id'])&&isset($_POST['permid'])&&$_POST['subact']=="makenow") {
 $admincptitle = " ".$ThemeSet['TitleDivider']." Updating Settings";
 redirect("refresh",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],FALSE),"4");
-$prequery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."permissions` WHERE `id`=%i LIMIT 1", array($_POST['permid']));
+$prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."permissions\" WHERE \"id\"=%i LIMIT 1", array($_POST['permid']));
 $preresult=sql_query($prequery,$SQLStat);
 $prenum=sql_num_rows($preresult);
 if($prenum==0) { redirect("location",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],false)); sql_free_result($preresult);
@@ -1409,7 +1409,7 @@ if($prenum>=1) {
 $PermissionName=sql_result($preresult,0,"Name"); 
 sql_free_result($preresult); }
 $nextidnum = sql_get_next_id($Settings['sqltable'],"permissions",$SQLStat);
-$query = sql_pre_query("INSERT INTO `".$Settings['sqltable']."permissions` (`PermissionID`, `Name`, `ForumID`, `CanViewForum`, `CanMakeTopics`, `CanMakeReplys`, `CanMakeReplysCT`, `CanEditTopics`, `CanEditTopicsCT`, `CanEditReplys`, `CanEditReplysCT`, `CanDeleteTopics`, `CanDeleteTopicsCT`, `CanDeleteReplys`, `CanDeleteReplysCT`, `CanCloseTopics`, `CanPinTopics`, `CanDohtml`, `CanUseBBags`, `CanModForum`) VALUES\n".
+$query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."permissions\" (\"PermissionID\", \"Name\", \"ForumID\", \"CanViewForum\", \"CanMakeTopics\", \"CanMakeReplys\", \"CanMakeReplysCT\", \"CanEditTopics\", \"CanEditTopicsCT\", \"CanEditReplys\", \"CanEditReplysCT\", \"CanDeleteTopics\", \"CanDeleteTopicsCT\", \"CanDeleteReplys\", \"CanDeleteReplysCT\", \"CanCloseTopics\", \"CanPinTopics\", \"CanDohtml\", \"CanUseBBags\", \"CanModForum\") VALUES\n".
 "(%i, '%s', %i, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')", array($_POST['permid'], $PermissionName, $_POST['id'], $_POST['CanViewForum'], $_POST['CanMakeTopics'], $_POST['CanMakeReplys'], $_POST['CanMakeReplysCT'], $_POST['CanEditTopics'], $_POST['CanEditTopicsCT'], $_POST['CanEditReplys'], $_POST['CanEditReplysCT'], $_POST['CanDeleteTopics'], $_POST['CanDeleteTopicsCT'], $_POST['CanDeleteReplys'], $_POST['CanDeleteReplysCT'], $_POST['CanCloseTopics'], $_POST['CanPinTopics'], $_POST['CanDohtml'], $_POST['CanUseBBags'], $_POST['CanModForum'])); 
 sql_query($query,$SQLStat); }
 ?>

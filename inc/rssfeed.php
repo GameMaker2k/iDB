@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: rssfeed.php - Last Update: 12/07/2009 SVN 380 - Author: cooldude2k $
+    $FileInfo: rssfeed.php - Last Update: 12/09/2009 SVN 382 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="rssfeed.php"||$File3Name=="/rssfeed.php") {
@@ -74,7 +74,7 @@ else { if (stristr($_SERVER["HTTP_USER_AGENT"],"FeedValidator")) {
 } else { header("Content-Type: text/xml; charset=".$Settings['charset']); } } }
 header("Content-Language: en");
 header("Vary: Accept");
-$prequery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i", array($_GET['id']));
+$prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i", array($_GET['id']));
 $preresult=sql_query($prequery,$SQLStat);
 $prenum=sql_num_rows($preresult);
 $prei=0;
@@ -98,7 +98,7 @@ ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $gltf = array(null); $gltf[0] = $ForumID;
 if ($ForumType=="subforum") { 
-$apcquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `ShowForum`='yes' AND `InSubForum`=%i ORDER BY `id`", array($ForumID));
+$apcquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"ShowForum\"='yes' AND \"InSubForum\"=%i ORDER BY \"id\"", array($ForumID));
 $apcresult=sql_query($apcquery,$SQLStat);
 $apcnum=sql_num_rows($apcresult);
 $apci=0; $apcl=1; if($apcnum>=1) {
@@ -112,14 +112,14 @@ sql_free_result($apcresult); } }
 $Atom = null; $RSS = null; $PreRSS = null;
 $gltnum = count($gltf); $glti = 0; 
 while ($glti < $gltnum) {
-$query = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `ForumID`=%i ORDER BY `Pinned` DESC, `LastUpdate` DESC LIMIT %i", array($gltf[$glti],$Settings['max_topics']));
+$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"ForumID\"=%i ORDER BY \"Pinned\" DESC, \"LastUpdate\" DESC LIMIT %i", array($gltf[$glti],$Settings['max_topics']));
 $result=sql_query($query,$SQLStat);
 $num=sql_num_rows($result); $i=0;
 while ($i < $num) {
 $TopicID=sql_result($result,$i,"id");
 $ForumID=sql_result($result,$i,"ForumID");
 $CategoryID=sql_result($result,$i,"CategoryID");
-$pquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `TopicID`=%i ORDER BY `TimeStamp` ASC LIMIT %i", array($TopicID,1));
+$pquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" ASC LIMIT %i", array($TopicID,1));
 $presult=sql_query($pquery,$SQLStat);
 $pnum=sql_num_rows($presult);
 $MyDescription=sql_result($presult,0,"Post");
@@ -128,11 +128,11 @@ $MyDescription = url2link($MyDescription);
 $MyDescription = text2icons($MyDescription,$Settings['sqltable']);
 $UsersID=sql_result($result,$i,"UserID");
 $GuestsName=sql_result($result,$i,"GuestName");
-$requery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($UsersID));
+$requery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($UsersID));
 $reresult=sql_query($requery,$SQLStat);
 $renum=sql_num_rows($reresult);
 if($renum<1) { $UsersID = -1;
-$requery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($UsersID));
+$requery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($UsersID));
 $reresult=sql_query($requery,$SQLStat);
 $renum=sql_num_rows($reresult); }
 $UsersName=sql_result($reresult,0,"Name");
@@ -140,7 +140,7 @@ $UsersGroupID=sql_result($reresult,0,"GroupID");
 if($UsersName=="Guest") { $UsersName=$GuestsName;
 if($UsersName==null) { $UsersName="Guest"; } }
 sql_free_result($reresult);
-$gquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($UsersGroupID));
+$gquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i LIMIT 1", array($UsersGroupID));
 $gresult=sql_query($gquery,$SQLStat);
 $UsersGroup=sql_result($gresult,0,"Name");
 $GroupNamePrefix=sql_result($gresult,0,"NamePrefix");

@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: replies.php - Last Update: 12/07/2009 SVN 380 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 12/09/2009 SVN 382 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -25,7 +25,7 @@ if(!isset($_GET['modact'])) { $_GET['modact'] = null; }
 if($_GET['modact']=="pin"||$_GET['modact']=="unpin"||$_GET['modact']=="open"||
 	$_GET['modact']=="close"||$_GET['modact']=="edit"||$_GET['modact']=="delete")
 		{ $_GET['act'] = $_GET['modact']; }
-$prequery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `id`=%i LIMIT 1", array($_GET['id']));
+$prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"id\"=%i LIMIT 1", array($_GET['id']));
 $preresult=sql_query($prequery,$SQLStat);
 $prenum=sql_num_rows($preresult);
 if($prenum==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($preresult);
@@ -43,7 +43,7 @@ if(isset($_GET['post'])&&$_GET['post']!==null) {
 $NumberReplies=1; }
 $ViewTimes=sql_result($preresult,0,"NumViews");
 sql_free_result($preresult);
-$forumcheckx = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i  LIMIT 1", array($TopicForumID));
+$forumcheckx = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i  LIMIT 1", array($TopicForumID));
 $fmckresult=sql_query($forumcheckx,$SQLStat);
 $ForumName=sql_result($fmckresult,0,"Name");
 $ForumType=sql_result($fmckresult,0,"ForumType");
@@ -51,7 +51,7 @@ $CanHaveTopics=sql_result($fmckresult,0,"CanHaveTopics");
 $ForumPostCountView=sql_result($fmckresult,0,"PostCountView");
 $ForumKarmaCountView=sql_result($fmckresult,0,"KarmaCountView");
 sql_free_result($fmckresult);
-$catcheck = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."categories` WHERE `id`=%i  LIMIT 1", array($TopicCatID));
+$catcheck = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."categories\" WHERE \"id\"=%i  LIMIT 1", array($TopicCatID));
 $catresult=sql_query($catcheck,$SQLStat);
 $CategoryName=sql_result($catresult,0,"Name");
 $CategoryType=sql_result($catresult,0,"CategoryType");
@@ -151,9 +151,9 @@ if($PageLimit<0) { $PageLimit = 0; }
 //End Reply Page Code
 $i=0;
 if(!isset($_GET['post'])||$_GET['post']!==null) {
-$query = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `TopicID`=%i ORDER BY `TimeStamp` ASC LIMIT %i,%i", array($_GET['id'],$PageLimit,$Settings['max_posts'])); }
+$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" ASC LIMIT %i,%i", array($_GET['id'],$PageLimit,$Settings['max_posts'])); }
 if(isset($_GET['post'])&&$_GET['post']!==null) {
-$query = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `TopicID`=%i AND `id`=%i ORDER BY `TimeStamp` ASC LIMIT %i,%i", array($_GET['id'],$_GET['post'],$PageLimit,$Settings['max_posts'])); }
+$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i AND \"id\"=%i ORDER BY \"TimeStamp\" ASC LIMIT %i,%i", array($_GET['id'],$_GET['post'],$PageLimit,$Settings['max_posts'])); }
 $result=sql_query($query,$SQLStat);
 $num=sql_num_rows($result);
 if($num==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
@@ -162,7 +162,7 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die
 if($num!=0) { 
 if($ViewTimes==0||$ViewTimes==null) { $NewViewTimes = 1; }
 if($ViewTimes!=0&&$ViewTimes!=null) { $NewViewTimes = $ViewTimes + 1; }
-$viewsup = sql_pre_query("UPDATE `".$Settings['sqltable']."topics` SET `NumViews`='%s' WHERE `id`=%i", array($NewViewTimes,$_GET['id']));
+$viewsup = sql_pre_query("UPDATE \"".$Settings['sqltable']."topics\" SET \"NumViews\"='%s' WHERE \"id\"=%i", array($NewViewTimes,$_GET['id']));
 sql_query($viewsup,$SQLStat); }
 //List Page Number Code Start
 $pagenum=count($Pages);
@@ -265,11 +265,11 @@ $MyTimeStamp=GMTimeChange("M j, Y, g:i a",$MyTimeStamp,$_SESSION['UserTimeZone']
 $MyPost=sql_result($result,$i,"Post");
 $MyPost = preg_replace("/\<br\>/", "<br />", nl2br($MyPost));
 $MyDescription=sql_result($result,$i,"Description");
-$requery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($MyUserID));
+$requery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($MyUserID));
 $reresult=sql_query($requery,$SQLStat);
 $renum=sql_num_rows($reresult);
 if($renum<1) { $MyUserID = -1;
-$requery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($MyUserID));
+$requery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($MyUserID));
 $reresult=sql_query($requery,$SQLStat);
 $renum=sql_num_rows($reresult); }
 $rei=0; $ipshow = "two";
@@ -283,7 +283,7 @@ $User1Joined=sql_result($reresult,$rei,"Joined");
 $User1Joined=GMTimeChange("M j Y",$User1Joined,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $User1Hidden=sql_result($reresult,$rei,"HiddenMember");
 $User1GroupID=sql_result($reresult,$rei,"GroupID");
-$gquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($User1GroupID));
+$gquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i LIMIT 1", array($User1GroupID));
 $gresult=sql_query($gquery,$SQLStat);
 $User1Group=sql_result($gresult,0,"Name");
 $GroupNamePrefix=sql_result($gresult,0,"NamePrefix");
@@ -318,11 +318,11 @@ if(isset($GroupNameSuffix)&&$GroupNameSuffix!=null) {
 $MySubPost = null;
 if($MyEditTime!=$MyTimeStamp&&$MyEditUserID!=0) {
 if($MyEditUserID!=$MyUserID) {
-$euquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($MyEditUserID));
+$euquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($MyEditUserID));
 $euresult = sql_query($euquery,$SQLStat);
 $eunum = sql_num_rows($euresult);
 if($eunum<1) { $MyEditUserID = -1;
-$euquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($MyEditUserID));
+$euquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($MyEditUserID));
 $euresult = sql_query($euquery,$SQLStat);
 $eunum = sql_num_rows($euresult); }
 	$EditUserID = $MyEditUserID;
@@ -330,7 +330,7 @@ $eunum = sql_num_rows($euresult); }
 	$EditUserHidden=sql_result($euresult,0,"HiddenMember");
 	$EditUserName = sql_result($euresult,0,"Name");
 	sql_free_result($euresult);
-	$eugquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($EditUserGroupID));
+	$eugquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i LIMIT 1", array($EditUserGroupID));
 	$eugresult=sql_query($eugquery,$SQLStat);
 	$EditUserGroup=sql_result($eugresult,0,"Name");
 	$EditUserNamePrefix=sql_result($eugresult,0,"NamePrefix");
@@ -516,7 +516,7 @@ ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $QuoteReply = null; $QuoteDescription = null;
 if($_GET['post']==null) {
-$query = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `TopicID`=%i ORDER BY `TimeStamp` ASC  LIMIT 1", array($_GET['id']));
+$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" ASC  LIMIT 1", array($_GET['id']));
 $result=sql_query($query,$SQLStat);
 $num=sql_num_rows($result);
 $QuoteDescription=sql_result($result,0,"Description"); 
@@ -524,7 +524,7 @@ $QuoteDescription = str_replace("Re: ","",$QuoteDescription);
 $QuoteDescription = "Re: ".$QuoteDescription;
 sql_free_result($result); }
 if($_GET['post']!=null) {
-$query = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `id`=%i LIMIT 1", array($_GET['post']));
+$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"id\"=%i LIMIT 1", array($_GET['post']));
 $result=sql_query($query,$SQLStat);
 $num=sql_num_rows($result);
 if($num>=1) {
@@ -535,11 +535,11 @@ $QuoteUserID=sql_result($result,0,"UserID");
 $QuoteReply=sql_result($result,0,"Post");
 $QuoteDescription=sql_result($result,0,"Description");
 $QuoteGuestName=sql_result($result,0,"GuestName");
-$requery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($QuoteUserID));
+$requery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($QuoteUserID));
 $reresult=sql_query($requery,$SQLStat);
 $renum=sql_num_rows($reresult);
 if($renum<1) { $QuoteUserID = -1;
-$requery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($QuoteUserID));
+$requery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($QuoteUserID));
 $reresult=sql_query($requery,$SQLStat);
 $renum=sql_num_rows($reresult); }
 $QuoteUserName=sql_result($reresult,0,"Name");
@@ -565,12 +565,12 @@ if($CatPermissionInfo['CanViewCategory'][$QuoteReplyCID]=="no") {
 	$QuoteReply = null; $QuoteDescription = null; } } }
 if($GroupInfo['HasAdminCP']!="yes"||$GroupInfo['HasModCP']!="yes") {
 if($_GET['post']!=null&&$num>=1) {
-$rforumcheck = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i  LIMIT 1", array($QuoteReplyFID));
+$rforumcheck = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i  LIMIT 1", array($QuoteReplyFID));
 $rfmckresult=sql_query($rforumcheck,$SQLStat);
 $rForumPostCountView=sql_result($rfmckresult,0,"PostCountView");
 $rForumKarmaCountView=sql_result($rfmckresult,0,"KarmaCountView");
 sql_free_result($rfmckresult);
-$rcatcheck = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."categories` WHERE `id`=%i  LIMIT 1", array($QuoteReplyCID));
+$rcatcheck = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."categories\" WHERE \"id\"=%i  LIMIT 1", array($QuoteReplyCID));
 $rcatresult=sql_query($rcatcheck,$SQLStat);
 $rCategoryPostCountView=sql_result($rcatresult,0,"PostCountView");
 $rCategoryKarmaCountView=sql_result($rcatresult,0,"KarmaCountView");
@@ -608,7 +608,7 @@ $_SESSION['UserFormID'] = $UFID;
 <td class="TableColumn3" style="width: 15%; vertical-align: middle; text-align: center;">
 <div style="width: 100%; height: 160px; overflow: auto;">
 <table style="width: 100%; text-align: center;"><?php
-$renee_query=sql_pre_query("SELECT * FROM `".$Settings['sqltable']."smileys` WHERE `Show`='yes'", array(null));
+$renee_query=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."smileys\" WHERE \"Show\"='yes'", array(null));
 $renee_result=sql_query($renee_query,$SQLStat);
 $renee_num=sql_num_rows($renee_result);
 $renee_s=0; $rose_a=0; $SmileRow=0; $SmileCRow=0;
@@ -769,7 +769,7 @@ setcookie("GuestName", $_POST['GuestName'], time() + (7 * 86400), $cbasedir);
 $_SESSION['GuestName']=$_POST['GuestName']; } }
 /*    <_<  iWordFilter  >_>      
    by Kazuki Przyborowski - Cool Dude 2k */
-$katarzynaqy=sql_pre_query("SELECT * FROM `".$Settings['sqltable']."wordfilter`", array(null));
+$katarzynaqy=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."wordfilter\"", array(null));
 $katarzynart=sql_query($katarzynaqy,$SQLStat);
 $katarzynanm=sql_num_rows($katarzynart);
 $katarzynas=0;
@@ -838,13 +838,13 @@ redirect("refresh",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"ac
 	</span><br /></td>
 </tr>
 <?php } if ($Error!="Yes") { $LastActive = GMTimeStamp();
-$gnrquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i LIMIT 1", array($TopicForumID));
+$gnrquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($TopicForumID));
 $gnrresult=sql_query($gnrquery,$SQLStat); $gnrnum=sql_num_rows($gnrresult);
 $NumberPosts=sql_result($gnrresult,0,"NumPosts"); 
 $PostCountAdd=sql_result($gnrresult,0,"PostCountAdd"); 
 sql_free_result($gnrresult);
 $postid = sql_get_next_id($Settings['sqltable'],"posts",$SQLStat);
-$requery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($MyUsersID));
+$requery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($MyUsersID));
 $reresult=sql_query($requery,$SQLStat);
 $renum=sql_num_rows($reresult);
 $rei=0;
@@ -859,23 +859,23 @@ $PostCount=sql_result($reresult,$rei,"PostCount");
 $NewPostCount = null;
 if($PostCountAdd=="on") { $NewPostCount = $PostCount + 1; }
 if(!isset($NewPostCount)) { $NewPostCount = $PostCount; }
-$gquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($User1GroupID));
+$gquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i LIMIT 1", array($User1GroupID));
 $gresult=sql_query($gquery,$SQLStat);
 $User1Group=sql_result($gresult,0,"Name");
 sql_free_result($gresult);
 $User1IP=$_SERVER['REMOTE_ADDR'];
 ++$rei; } sql_free_result($reresult);
-$query = sql_pre_query("INSERT INTO `".$Settings['sqltable']."posts` (`TopicID`, `ForumID`, `CategoryID`, `UserID`, `GuestName`, `TimeStamp`, `LastUpdate`, `EditUser`, `EditUserName`, `Post`, `Description`, `IP`, `EditIP`) VALUES\n".
+$query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."posts\" (\"TopicID\", \"ForumID\", \"CategoryID\", \"UserID\", \"GuestName\", \"TimeStamp\", \"LastUpdate\", \"EditUser\", \"EditUserName\", \"Post\", \"Description\", \"IP\", \"EditIP\") VALUES\n".
 "(%i, %i, %i, %i, '%s', %i, %i, 0, '', '%s', '%s', '%s', '0')", array($TopicID,$TopicForumID,$TopicCatID,$User1ID,$User1Name,$LastActive,$LastActive,$_POST['ReplyPost'],$_POST['ReplyDesc'],$User1IP));
 sql_query($query,$SQLStat);
 $_SESSION['LastPostTime'] = GMTimeStamp() + $GroupInfo['FloodControl'];
 if($User1ID!=0&&$User1ID!=-1) {
-$queryupd = sql_pre_query("UPDATE `".$Settings['sqltable']."members` SET `LastActive`=%i,`IP`='%s',`PostCount`=%i,`LastPostTime`=%i WHERE `id`=%i", array($LastActive,$User1IP,$NewPostCount,$_SESSION['LastPostTime'],$User1ID));
+$queryupd = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"LastActive\"=%i,\"IP\"='%s',\"PostCount\"=%i,\"LastPostTime\"=%i WHERE \"id\"=%i", array($LastActive,$User1IP,$NewPostCount,$_SESSION['LastPostTime'],$User1ID));
 sql_query($queryupd,$SQLStat); }
 $NewNumPosts = $NumberPosts + 1; $NewNumReplies = $NumberReplies + 1;
-$queryupd = sql_pre_query("UPDATE `".$Settings['sqltable']."forums` SET `NumPosts`=%i WHERE `id`=%i", array($NewNumPosts,$TopicForumID));
+$queryupd = sql_pre_query("UPDATE \"".$Settings['sqltable']."forums\" SET \"NumPosts\"=%i WHERE \"id\"=%i", array($NewNumPosts,$TopicForumID));
 sql_query($queryupd,$SQLStat);
-$queryupd = sql_pre_query("UPDATE `".$Settings['sqltable']."topics` SET `NumReply`=%i,LastUpdate=%i WHERE `id`=%i", array($NewNumReplies,$LastActive,$TopicID));
+$queryupd = sql_pre_query("UPDATE \"".$Settings['sqltable']."topics\" SET \"NumReply\"=%i,LastUpdate=%i WHERE \"id\"=%i", array($NewNumReplies,$LastActive,$TopicID));
 sql_query($queryupd,$SQLStat);
 $MyPostNum = $NewNumReplies + 1; $NumPages = null;
 if(!isset($Settings['max_posts'])) { $Settings['max_posts'] = 10; }
@@ -899,7 +899,7 @@ redirect("refresh",$basedir.url_maker($exfile['topic'],$Settings['file_ext'],"ac
 </table></div>
 <div class="DivMkReply">&nbsp;</div>
 <?php } if($_GET['act']=="pin"||$_GET['act']=="unpin") {
-$gtsquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `id`=%i LIMIT 1", array($_GET['id']));
+$gtsquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"id\"=%i LIMIT 1", array($_GET['id']));
 $gtsresult=sql_query($gtsquery,$SQLStat);
 $gtsnum=sql_num_rows($gtsresult);
 $TTopicID=sql_result($gtsresult,0,"id");
@@ -925,9 +925,9 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die
 sql_free_result($gtsresult);
 if($CanPinTopics===true) {
 	if($_GET['act']=="pin") {
-$queryupd = sql_pre_query("UPDATE `".$Settings['sqltable']."topics` SET `Pinned`=1 WHERE `id`=%i", array($TTopicID)); }
+$queryupd = sql_pre_query("UPDATE \"".$Settings['sqltable']."topics\" SET \"Pinned\"=1 WHERE \"id\"=%i", array($TTopicID)); }
 	if($_GET['act']=="unpin") {
-$queryupd = sql_pre_query("UPDATE `".$Settings['sqltable']."topics` SET `Pinned`=0 WHERE `id`=%i", array($TTopicID)); } 
+$queryupd = sql_pre_query("UPDATE \"".$Settings['sqltable']."topics\" SET \"Pinned\"=0 WHERE \"id\"=%i", array($TTopicID)); } 
 sql_query($queryupd,$SQLStat); 
 redirect("refresh",$basedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TTopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],false).$Settings['qstr']."#post".$_GET['post'],"4");
 ?>
@@ -958,7 +958,7 @@ redirect("refresh",$basedir.url_maker($exfile['topic'],$Settings['file_ext'],"ac
 </tr>
 </table></div>
 <?php } } if($_GET['act']=="open"||$_GET['act']=="close") {
-$gtsquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `id`=%i LIMIT 1", array($_GET['id']));
+$gtsquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"id\"=%i LIMIT 1", array($_GET['id']));
 $gtsresult=sql_query($gtsquery,$SQLStat);
 $gtsnum=sql_num_rows($gtsresult);
 $TTopicID=sql_result($gtsresult,0,"id");
@@ -982,9 +982,9 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die
 sql_free_result($gtsresult);
 if($CanCloseTopics===true) {
 	if($_GET['act']=="close") {
-$queryupd = sql_pre_query("UPDATE `".$Settings['sqltable']."topics` SET `Closed`=1 WHERE `id`=%i", array($TTopicID)); }
+$queryupd = sql_pre_query("UPDATE \"".$Settings['sqltable']."topics\" SET \"Closed\"=1 WHERE \"id\"=%i", array($TTopicID)); }
 	if($_GET['act']=="open") {
-$queryupd = sql_pre_query("UPDATE `".$Settings['sqltable']."topics` SET `Closed`=0 WHERE `id`=%i", array($TTopicID)); } 
+$queryupd = sql_pre_query("UPDATE \"".$Settings['sqltable']."topics\" SET \"Closed\"=0 WHERE \"id\"=%i", array($TTopicID)); } 
 sql_query($queryupd,$SQLStat); 
 redirect("refresh",$basedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TTopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],false).$Settings['qstr']."#post".$_GET['post'],"4");
 ?>
@@ -1015,7 +1015,7 @@ redirect("refresh",$basedir.url_maker($exfile['topic'],$Settings['file_ext'],"ac
 </tr>
 </table></div>
 <?php } } if($_GET['act']=="delete") {
-$predquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `id`=%i LIMIT 1", array($_GET['post']));
+$predquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"id\"=%i LIMIT 1", array($_GET['post']));
 $predresult=sql_query($predquery,$SQLStat);
 $prednum=sql_num_rows($predresult);
 $ReplyID=sql_result($predresult,0,"id");
@@ -1038,17 +1038,17 @@ if($CanDeleteReply===false) {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
-$delquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `TopicID`=%i ORDER BY `TimeStamp` ASC", array($_GET['id']));
+$delquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" ASC", array($_GET['id']));
 $delresult=sql_query($delquery,$SQLStat);
 $delnum=sql_num_rows($delresult);
 $DelTopic = false;
-$gnrquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i LIMIT 1", array($ReplyForumID));
+$gnrquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($ReplyForumID));
 $gnrresult=sql_query($gnrquery,$SQLStat); $gnrnum=sql_num_rows($gnrresult);
 $NumberPosts=sql_result($gnrresult,0,"NumPosts"); $NumberTopics=sql_result($gnrresult,0,"NumTopics"); 
 sql_free_result($gnrresult);
 $FReplyID=sql_result($delresult,0,"id");
 if($ReplyID==$FReplyID) { $DelTopic = true;
-$gtsquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `id`=%i LIMIT 1", array($ReplyTopicID));
+$gtsquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"id\"=%i LIMIT 1", array($ReplyTopicID));
 $gtsresult=sql_query($gtsquery,$SQLStat);
 $gtsnum=sql_num_rows($gtsresult);
 $TUsersID=sql_result($gtsresult,0,"UserID");
@@ -1067,29 +1067,29 @@ redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"a
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($CanDeleteTopics===true) { $NewNumTopics = $NumberTopics - 1; $NewNumPosts = $NumberPosts - $delnum;
-$drquery = sql_pre_query("DELETE FROM `".$Settings['sqltable']."posts` WHERE `TopicID`=%i", array($ReplyTopicID));
+$drquery = sql_pre_query("DELETE FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i", array($ReplyTopicID));
 sql_query($drquery,$SQLStat); 
-$dtquery = sql_pre_query("DELETE FROM `".$Settings['sqltable']."topics` WHERE `id`=%i", array($ReplyTopicID));
+$dtquery = sql_pre_query("DELETE FROM \"".$Settings['sqltable']."topics\" WHERE \"id\"=%i", array($ReplyTopicID));
 sql_query($dtquery,$SQLStat);
-$queryupd = sql_pre_query("UPDATE `".$Settings['sqltable']."forums` SET `NumPosts`=%i,`NumTopics`=%i WHERE `id`=%i", array($NewNumPosts,$NewNumTopics,$ReplyForumID));
+$queryupd = sql_pre_query("UPDATE \"".$Settings['sqltable']."forums\" SET \"NumPosts\"=%i,\"NumTopics\"=%i WHERE \"id\"=%i", array($NewNumPosts,$NewNumTopics,$ReplyForumID));
 sql_query($queryupd,$SQLStat); } }
 if($ReplyID!=$FReplyID) {
 $LReplyID=sql_result($delresult,$delnum-1,"id");
 $SLReplyID=sql_result($delresult,$delnum-2,"id");
 $NewLastUpdate=sql_result($delresult,$delnum-2,"TimeStamp");
 if($ReplyID==$LReplyID) { $NewNumReplies = $NumberReplies - 1; $NewNumPosts = $NumberPosts - 1;
-$drquery = sql_pre_query("DELETE FROM `".$Settings['sqltable']."posts` WHERE `id`=%i", array($ReplyID));
+$drquery = sql_pre_query("DELETE FROM \"".$Settings['sqltable']."posts\" WHERE \"id\"=%i", array($ReplyID));
 sql_query($drquery,$SQLStat); 
-$queryupd = sql_pre_query("UPDATE `".$Settings['sqltable']."forums` SET `NumPosts`=%i WHERE `id`=%i", array($NewNumPosts,$ReplyForumID));
+$queryupd = sql_pre_query("UPDATE \"".$Settings['sqltable']."forums\" SET \"NumPosts\"=%i WHERE \"id\"=%i", array($NewNumPosts,$ReplyForumID));
 sql_query($queryupd,$SQLStat);
-$queryupd = sql_pre_query("UPDATE `".$Settings['sqltable']."topics` SET `LastUpdate`=%i,`NumReply`=%i WHERE `id`=%i", array($NewLastUpdate,$NewNumReplies,$ReplyTopicID));
+$queryupd = sql_pre_query("UPDATE \"".$Settings['sqltable']."topics\" SET \"LastUpdate\"=%i,\"NumReply\"=%i WHERE \"id\"=%i", array($NewLastUpdate,$NewNumReplies,$ReplyTopicID));
 sql_query($queryupd,$SQLStat); } }
 if($ReplyID!=$FReplyID&&$ReplyID!=$LReplyID) { $NewNumReplies = $NumberReplies - 1; $NewNumPosts = $NumberPosts - 1;
-$drquery = sql_pre_query("DELETE FROM `".$Settings['sqltable']."posts` WHERE `id`=%i", array($ReplyID));
+$drquery = sql_pre_query("DELETE FROM \"".$Settings['sqltable']."posts\" WHERE \"id\"=%i", array($ReplyID));
 sql_query($drquery,$SQLStat);
-$queryupd = sql_pre_query("UPDATE `".$Settings['sqltable']."forums` SET `NumPosts`=%i WHERE `id`=%i", array($NewNumPosts,$ReplyForumID));
+$queryupd = sql_pre_query("UPDATE \"".$Settings['sqltable']."forums\" SET \"NumPosts\"=%i WHERE \"id\"=%i", array($NewNumPosts,$ReplyForumID));
 sql_query($queryupd,$SQLStat);
-$queryupd = sql_pre_query("UPDATE `".$Settings['sqltable']."topics` SET `NumReply`=%i WHERE `id`=%i", array($NewNumReplies,$ReplyTopicID));
+$queryupd = sql_pre_query("UPDATE \"".$Settings['sqltable']."topics\" SET \"NumReply\"=%i WHERE \"id\"=%i", array($NewNumReplies,$ReplyTopicID));
 sql_query($queryupd,$SQLStat); }
 redirect("refresh",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],FALSE),"3");
 sql_free_result($delresult);
@@ -1129,14 +1129,14 @@ ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $ShowEditTopic = null;
 if($PermissionInfo['CanEditTopics'][$TopicForumID]=="yes") {
-$editquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `TopicID`=%i ORDER BY `TimeStamp` ASC", array($TopicID));
+$editquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" ASC", array($TopicID));
 $editresult=sql_query($editquery,$SQLStat);
 $editnum=sql_num_rows($editresult);
 $FReplyID=sql_result($editresult,0,"id");
 sql_free_result($editresult);
 if($_GET['post']==$FReplyID) { $ShowEditTopic = true; } }
 if($PermissionInfo['CanEditTopics'][$TopicForumID]=="no") { $ShowEditTopic = null; }
-$ersquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `id`=%i LIMIT 1", array($_GET['post']));
+$ersquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"id\"=%i LIMIT 1", array($_GET['post']));
 $ersresult=sql_query($ersquery,$SQLStat);
 $ersnum=sql_num_rows($ersresult);
 if($ersnum==0) { sql_free_result($ersresult);
@@ -1163,7 +1163,7 @@ ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 sql_free_result($ersresult);
 if($ShowEditTopic===true) {
-$gtsquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `id`=%i LIMIT 1", array($TopicID));
+$gtsquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"id\"=%i LIMIT 1", array($TopicID));
 $gtsresult=sql_query($gtsquery,$SQLStat);
 $gtsnum=sql_num_rows($gtsresult);
 $TUsersID=sql_result($gtsresult,0,"UserID");
@@ -1200,7 +1200,7 @@ $_SESSION['UserFormID'] = $UFID;
 <tr class="TableRow3" id="EditReplies<?php echo $_GET['post']; ?>">
 <td class="TableColumn3" style="width: 15%; vertical-align: middle; text-align: center;">
 <div style="width: 100%; height: 160px; overflow: auto;"><?php
-$renee_query=sql_pre_query("SELECT * FROM `".$Settings['sqltable']."smileys` WHERE `Show`='yes'", array(null));
+$renee_query=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."smileys\" WHERE \"Show\"='yes'", array(null));
 $renee_result=sql_query($renee_query,$SQLStat);
 $renee_num=sql_num_rows($renee_result);
 $renee_s=0; $SmileRow=1;
@@ -1276,14 +1276,14 @@ if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
 require($SettDir['inc']."captcha.php"); }
 $ShowEditTopic = null;
 if($PermissionInfo['CanEditTopics'][$TopicForumID]=="yes") {
-$editquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `TopicID`=%i ORDER BY `TimeStamp` ASC", array($TopicID));
+$editquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" ASC", array($TopicID));
 $editresult=sql_query($editquery,$SQLStat);
 $editnum=sql_num_rows($editresult);
 $FReplyID=sql_result($editresult,0,"id");
 sql_free_result($editresult);
 if($_GET['post']==$FReplyID) { $ShowEditTopic = true; } }
 if($PermissionInfo['CanEditTopics'][$TopicForumID]=="no") { $ShowEditTopic = null; }
-$ersquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `id`=%i LIMIT 1", array($_GET['post']));
+$ersquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"id\"=%i LIMIT 1", array($_GET['post']));
 $ersresult=sql_query($ersquery,$SQLStat);
 $ersnum=sql_num_rows($ersresult);
 if($ersnum==0) { sql_free_result($ersresult);
@@ -1297,7 +1297,7 @@ ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 sql_free_result($ersresult); 
 if($ShowEditTopic===true) {
-$gtsquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `id`=%i LIMIT 1", array($TopicID));
+$gtsquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"id\"=%i LIMIT 1", array($TopicID));
 $gtsresult=sql_query($gtsquery,$SQLStat);
 $gtsnum=sql_num_rows($gtsresult);
 $TUsersID=sql_result($gtsresult,0,"UserID");
@@ -1386,7 +1386,7 @@ $_POST['TopicName'] = stripcslashes(htmlspecialchars($_POST['TopicName'], ENT_QU
 $_POST['TopicName'] = remove_spaces($_POST['TopicName']); }
 /*    <_<  iWordFilter  >_>      
    by Kazuki Przyborowski - Cool Dude 2k */
-$katarzynaqy=sql_pre_query("SELECT * FROM `".$Settings['sqltable']."wordfilter`", array(null));
+$katarzynaqy=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."wordfilter\"", array(null));
 $katarzynart=sql_query($katarzynaqy,$SQLStat);
 $katarzynanm=sql_num_rows($katarzynart);
 $katarzynas=0;
@@ -1415,7 +1415,7 @@ if($CaseInsensitive=="yes"&&$WholeWord!="yes") {
 $_POST['ReplyDesc'] = preg_replace("/".$Filter."/i", $Replace, $_POST['ReplyDesc']); 
 $_POST['ReplyPost'] = preg_replace("/".$Filter."/i", $Replace, $_POST['ReplyPost']); }
 ++$katarzynas; } sql_free_result($katarzynart);
-$lonewolfqy=sql_pre_query("SELECT * FROM `".$Settings['sqltable']."restrictedwords` WHERE `RestrictedTopicName`='yes' or `RestrictedUserName`='yes'", array(null));
+$lonewolfqy=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."restrictedwords\" WHERE \"RestrictedTopicName\"='yes' or \"RestrictedUserName\"='yes'", array(null));
 $lonewolfrt=sql_query($lonewolfqy,$SQLStat);
 $lonewolfnm=sql_num_rows($lonewolfrt);
 $lonewolfs=0; $RMatches = null; $RGMatches = null;
@@ -1525,7 +1525,7 @@ redirect("refresh",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"ac
 	</span><br /></td>
 </tr>
 <?php } if ($Error!="Yes") { $LastActive = GMTimeStamp();
-$requery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($_SESSION['UserID']));
+$requery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_SESSION['UserID']));
 $reresult=sql_query($requery,$SQLStat);
 $renum=sql_num_rows($reresult);
 $rei=0;
@@ -1538,12 +1538,12 @@ sql_free_result($reresult);
 $EditUserIP=$_SERVER['REMOTE_ADDR'];
 $_SESSION['LastPostTime'] = GMTimeStamp() + $GroupInfo['FloodControl'];
 if($_SESSION['UserID']!=0&&$_SESSION['UserID']!=-1) {
-$queryupd = sql_pre_query("UPDATE `".$Settings['sqltable']."members` SET `LastActive`=%i,`IP`='%s',`LastPostTime`=%i WHERE `id`=%i", array($LastActive,$EditUserIP,$_SESSION['LastPostTime'],$_SESSION['UserID']));
+$queryupd = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"LastActive\"=%i,\"IP\"='%s',\"LastPostTime\"=%i WHERE \"id\"=%i", array($LastActive,$EditUserIP,$_SESSION['LastPostTime'],$_SESSION['UserID']));
 sql_query($queryupd,$SQLStat); }
-$queryupd = sql_pre_query("UPDATE `".$Settings['sqltable']."posts` SET `LastUpdate`=%i,`EditUser`=%i,`EditUserName`='%s',`Post`='%s',`Description`='%s',`EditIP`='%s' WHERE `id`=%i", array($LastActive,$User1ID,$User1Name,$_POST['ReplyPost'],$_POST['ReplyDesc'],$EditUserIP,$_GET['post']));
+$queryupd = sql_pre_query("UPDATE \"".$Settings['sqltable']."posts\" SET \"LastUpdate\"=%i,\"EditUser\"=%i,\"EditUserName\"='%s',\"Post\"='%s',\"Description\"='%s',\"EditIP\"='%s' WHERE \"id\"=%i", array($LastActive,$User1ID,$User1Name,$_POST['ReplyPost'],$_POST['ReplyDesc'],$EditUserIP,$_GET['post']));
 sql_query($queryupd,$SQLStat);
 if($ShowEditTopic===true) {
-$queryupd = sql_pre_query("UPDATE `".$Settings['sqltable']."topics` SET `TopicName`='%s',`Description`='%s' WHERE `id`=%i", array($_POST['TopicName'],$_POST['ReplyDesc'],$TopicID));
+$queryupd = sql_pre_query("UPDATE \"".$Settings['sqltable']."topics\" SET \"TopicName\"='%s',\"Description\"='%s' WHERE \"id\"=%i", array($_POST['TopicName'],$_POST['ReplyDesc'],$TopicID));
 sql_query($queryupd,$SQLStat); } } 
 redirect(url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],FALSE).$Settings['qstr']."#post".$_GET['post'],"3");
 ?>
@@ -1593,7 +1593,7 @@ if($_GET['fastreply']===true||
 if($_GET['fastreply']!==true&&
 	$_GET['fastreply']!="on") { $fps = " style=\"display: none;\" "; }
 $QuoteReply = null; $QuoteDescription = null;
-$queryra = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `TopicID`=%i ORDER BY `TimeStamp` ASC LIMIT 1", array($_GET['id']));
+$queryra = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" ASC LIMIT 1", array($_GET['id']));
 $resultra=sql_query($queryra,$SQLStat);
 $numrose=sql_num_rows($resultra);
 $QuoteDescription=sql_result($resultra,0,"Description"); 
@@ -1623,7 +1623,7 @@ $_SESSION['UserFormID'] = $UFID;
 <td class="TableColumn3" style="width: 15%; vertical-align: middle; text-align: center;">
 <div style="width: 100%; height: 160px; overflow: auto;">
 <table style="width: 100%; text-align: center;"><?php
-$renee_query=sql_pre_query("SELECT * FROM `".$Settings['sqltable']."smileys` WHERE `Show`='yes'", array(null));
+$renee_query=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."smileys\" WHERE \"Show\"='yes'", array(null));
 $renee_result=sql_query($renee_query,$SQLStat);
 $renee_num=sql_num_rows($renee_result);
 $renee_s=0; $SmileRow=0; $SmileCRow=0;

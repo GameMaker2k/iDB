@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: searchs.php - Last Update: 12/07/2009 SVN 380 - Author: cooldude2k $
+    $FileInfo: searchs.php - Last Update: 12/09/2009 SVN 382 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="searchs.php"||$File3Name=="/searchs.php") {
@@ -88,7 +88,7 @@ if($_GET['act']=="topics") {
 if(pre_strlen($_GET['msearch'])>="25") { 
 	$_GET['msearch'] = null; }
 if($_GET['msearch']!=null) {
-$memsiquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `Name`='%s' LIMIT 1", array($_GET['msearch']));
+$memsiquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s' LIMIT 1", array($_GET['msearch']));
 $memsiresult=sql_query($memsiquery,$SQLStat);
 $memsinum=sql_num_rows($memsiresult);
 $memsi=0;
@@ -102,18 +102,18 @@ $PageLimit = $nums - $Settings['max_topics'];
 if($PageLimit<0) { $PageLimit = 0; }
 if($_GET['msearch']==null) {
 if($_GET['type']!="wildcard") {
-$query = sql_pre_query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."topics` WHERE `TopicName`='%s' ORDER BY `Pinned` DESC, `LastUpdate` DESC LIMIT %i,%i", array($_GET['search'],$PageLimit,$Settings['max_topics'])); }
+$query = sql_pre_query("SELECT SQL_CALC_FOUND_ROWS * FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\"='%s' ORDER BY \"Pinned\" DESC, \"LastUpdate\" DESC LIMIT %i,%i", array($_GET['search'],$PageLimit,$Settings['max_topics'])); }
 if($_GET['type']=="wildcard") {
-$query = sql_pre_query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."topics` WHERE `TopicName` LIKE '%s' ORDER BY `Pinned` DESC, `LastUpdate` DESC LIMIT %i,%i", array($_GET['search'],$PageLimit,$Settings['max_topics'])); } }
+$query = sql_pre_query("SELECT SQL_CALC_FOUND_ROWS * FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\" LIKE '%s' ORDER BY \"Pinned\" DESC, \"LastUpdate\" DESC LIMIT %i,%i", array($_GET['search'],$PageLimit,$Settings['max_topics'])); } }
 if($_GET['msearch']!=null) {
 if($_GET['type']!="wildcard") {
-$query = sql_pre_query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."topics` WHERE `TopicName`='%s' AND `UserID`=%i ORDER BY `Pinned` DESC, `LastUpdate` DESC LIMIT %i,%i", array($_GET['search'],$memsid,$PageLimit,$Settings['max_topics']));
+$query = sql_pre_query("SELECT SQL_CALC_FOUND_ROWS * FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\"='%s' AND \"UserID\"=%i ORDER BY \"Pinned\" DESC, \"LastUpdate\" DESC LIMIT %i,%i", array($_GET['search'],$memsid,$PageLimit,$Settings['max_topics']));
 if($memsid==-1) {
-$query = sql_pre_query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."topics` WHERE `TopicName`='%s' AND `GuestName`='%s' ORDER BY `Pinned` DESC, `LastUpdate` DESC LIMIT %i,%i", array($_GET['search'],$_GET['msearch'],$PageLimit,$Settings['max_topics'])); } }
+$query = sql_pre_query("SELECT SQL_CALC_FOUND_ROWS * FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\"='%s' AND \"GuestName\"='%s' ORDER BY \"Pinned\" DESC, \"LastUpdate\" DESC LIMIT %i,%i", array($_GET['search'],$_GET['msearch'],$PageLimit,$Settings['max_topics'])); } }
 if($_GET['type']=="wildcard") {
-$query = sql_pre_query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."topics` WHERE `TopicName` LIKE '%s' AND `UserID`=%i ORDER BY `Pinned` DESC, `LastUpdate` DESC LIMIT %i,%i", array($_GET['search'],$memsid,$PageLimit,$Settings['max_topics']));
+$query = sql_pre_query("SELECT SQL_CALC_FOUND_ROWS * FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\" LIKE '%s' AND \"UserID\"=%i ORDER BY \"Pinned\" DESC, \"LastUpdate\" DESC LIMIT %i,%i", array($_GET['search'],$memsid,$PageLimit,$Settings['max_topics']));
 if($memsid==-1) {
-$query = sql_pre_query("SELECT SQL_CALC_FOUND_ROWS * FROM `".$Settings['sqltable']."topics` WHERE `TopicName` LIKE '%s' AND `GuestName`='%s' ORDER BY `Pinned` DESC, `LastUpdate` DESC LIMIT %i,%i", array($_GET['search'],$_GET['msearch'],$PageLimit,$Settings['max_topics'])); } } }
+$query = sql_pre_query("SELECT SQL_CALC_FOUND_ROWS * FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\" LIKE '%s' AND \"GuestName\"='%s' ORDER BY \"Pinned\" DESC, \"LastUpdate\" DESC LIMIT %i,%i", array($_GET['search'],$_GET['msearch'],$PageLimit,$Settings['max_topics'])); } } }
 $rnquery = sql_pre_query("SELECT FOUND_ROWS();", array(null));
 $result=sql_query($query,$SQLStat);
 $rnresult=sql_query($rnquery,$SQLStat);
@@ -277,7 +277,7 @@ if($_GET['msearch']==null) { ?>
 while ($i < $num) {
 $TopicID=sql_result($result,$i,"id");
 $ForumID=sql_result($result,$i,"ForumID");
-$prequery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i LIMIT 1", array($ForumID));
+$prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($ForumID));
 $preresult=sql_query($prequery,$SQLStat);
 $prenum=sql_num_rows($preresult);
 $HotTopicPosts = $Settings['hot_topic_num'];
@@ -368,7 +368,7 @@ if(isset($PermissionInfo['CanViewForum'][$ForumID])&&
 	isset($CatPermissionInfo['CanViewCategory'][$CategoryID])&&
 	$CatPermissionInfo['CanViewCategory'][$CategoryID]=="yes") {
 $LastReply = "&nbsp;<br />&nbsp;";
-$glrquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `TopicID`=%i ORDER BY `TimeStamp` DESC LIMIT 1", array($TopicID));
+$glrquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" DESC LIMIT 1", array($TopicID));
 $glrresult=sql_query($glrquery,$SQLStat);
 $glrnum=sql_num_rows($glrresult);
 if($glrnum>0){

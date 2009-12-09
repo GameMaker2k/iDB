@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: lowtopics.php - Last Update: 12/07/2009 SVN 380 - Author: cooldude2k $
+    $FileInfo: lowtopics.php - Last Update: 12/09/2009 SVN 382 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="lowtopics.php"||$File3Name=="/lowtopics.php") {
@@ -20,7 +20,7 @@ if ($File3Name=="lowtopics.php"||$File3Name=="/lowtopics.php") {
 $pstring = null; $pagenum = null;
 if(!is_numeric($_GET['id'])) { $_GET['id'] = null; }
 if(!is_numeric($_GET['page'])) { $_GET['page'] = 1; }
-$prequery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i LIMIT 1", array($_GET['id']));
+$prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($_GET['id']));
 $preresult=sql_query($prequery,$SQLStat);
 $prenum=sql_num_rows($preresult);
 if($prenum==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=lowview",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($preresult);
@@ -48,7 +48,7 @@ $ForumPostCountView=sql_result($preresult,0,"PostCountView");
 $ForumKarmaCountView=sql_result($preresult,0,"KarmaCountView");
 sql_free_result($preresult);
 $ForumType = strtolower($ForumType); $CanHaveTopics = strtolower($CanHaveTopics);
-$catcheck = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."categories` WHERE `id`=%i  LIMIT 1", array($ForumCatID));
+$catcheck = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."categories\" WHERE \"id\"=%i  LIMIT 1", array($ForumCatID));
 $catresult=sql_query($catcheck,$SQLStat);
 $CategoryName=sql_result($catresult,0,"Name");
 $CategoryType=sql_result($catresult,0,"CategoryType");
@@ -67,7 +67,7 @@ redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"a
 if($CategoryKarmaCountView!=0&&$MyKarmaCount<$CategoryKarmaCountView) {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=lowview",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); } }
 if($InSubForum!="0") {
-$isfquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i LIMIT 1", array($InSubForum));
+$isfquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($InSubForum));
 $isfresult=sql_query($isfquery,$SQLStat);
 $isfnum=sql_num_rows($isfresult);
 if($isfnum>=1) {
@@ -111,12 +111,12 @@ if($CatPermissionInfo['CanViewCategory'][$ForumCatID]=="yes"&&
 if($ForumType!="redirect") {
 if($NumberViews==0||$NumberViews==null) { $NewNumberViews = 1; }
 if($NumberViews!=0&&$NumberViews!=null) { $NewNumberViews = $NumberViews + 1; }
-$viewup = sql_pre_query("UPDATE `".$Settings['sqltable']."forums` SET `NumViews`=%i WHERE `id`=%i", array($NewNumberViews,$_GET['id']));
+$viewup = sql_pre_query("UPDATE \"".$Settings['sqltable']."forums\" SET \"NumViews\"=%i WHERE \"id\"=%i", array($NewNumberViews,$_GET['id']));
 sql_query($viewup,$SQLStat); }
 if($ForumType=="redirect") {
 if($RedirectTimes==0||$RedirectTimes==null) { $NewRedirTime = 1; }
 if($RedirectTimes!=0&&$RedirectTimes!=null) { $NewRedirTime = $RedirectTimes + 1; }
-$redirup = sql_pre_query("UPDATE `".$Settings['sqltable']."forums` SET `Redirects`=%i WHERE `id`=%i", array($NewRedirTime,$_GET['id']));
+$redirup = sql_pre_query("UPDATE \"".$Settings['sqltable']."forums\" SET \"Redirects\"=%i WHERE \"id\"=%i", array($NewRedirTime,$_GET['id']));
 sql_query($redirup,$SQLStat);
 if($RedirectURL!="http://"&&$RedirectURL!="") {
 redirect("location",$RedirectURL,0,null,false); ob_clean();
@@ -161,7 +161,7 @@ $PageLimit = $Settings['max_topics'] * $snumber;
 if($PageLimit<0) { $PageLimit = 0; }
 //End Topic Page Code
 $i=0;
-$query = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `ForumID`=%i ORDER BY `Pinned` DESC, `LastUpdate` DESC LIMIT %i,%i", array($_GET['id'],$PageLimit,$Settings['max_topics']));
+$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"ForumID\"=%i ORDER BY \"Pinned\" DESC, \"LastUpdate\" DESC LIMIT %i,%i", array($_GET['id'],$PageLimit,$Settings['max_topics']));
 $result=sql_query($query,$SQLStat);
 $num=sql_num_rows($result);
 //List Page Number Code Start

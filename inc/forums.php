@@ -11,13 +11,13 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: forums.php - Last Update: 12/07/2009 SVN 380 - Author: cooldude2k $
+    $FileInfo: forums.php - Last Update: 12/09/2009 SVN 382 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="forums.php"||$File3Name=="/forums.php") {
 	require('index.php');
 	exit(); }
-$prequery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."categories` WHERE `ShowCategory`='yes' AND `InSubCategory`=0 ORDER BY `OrderID` ASC, `id` ASC", array());
+$prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."categories\" WHERE \"ShowCategory\"='yes' AND \"InSubCategory\"=0 ORDER BY \"OrderID\" ASC, \"id\" ASC", array());
 $preresult=sql_query($prequery,$SQLStat);
 $prenum=sql_num_rows($preresult);
 $prei=0;
@@ -51,7 +51,7 @@ if($CategoryKarmaCountView!=0&&$MyKarmaCount<$CategoryKarmaCountView) {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); } }
 if(isset($CatPermissionInfo['CanViewCategory'][$CategoryID])&&
 	$CatPermissionInfo['CanViewCategory'][$CategoryID]=="yes") {
-$query = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `ShowForum`='yes' AND `CategoryID`=%i AND `InSubForum`=0 ORDER BY `OrderID` ASC, `id` ASC", array($CategoryID));
+$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"ShowForum\"='yes' AND \"CategoryID\"=%i AND \"InSubForum\"=0 ORDER BY \"OrderID\" ASC, \"id\" ASC", array($CategoryID));
 $result=sql_query($query,$SQLStat);
 $num=sql_num_rows($result);
 $i=0;
@@ -92,7 +92,7 @@ $ForumDescription=sql_result($result,$i,"Description");
 $ForumType = strtolower($ForumType); $sflist = null;
 $gltf = array(null); $gltf[0] = $ForumID;
 if ($ForumType=="subforum") { 
-$apcquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `ShowForum`='yes' AND `InSubForum`=%i ORDER BY `OrderID` ASC, `id` ASC", array($ForumID));
+$apcquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"ShowForum\"='yes' AND \"InSubForum\"=%i ORDER BY \"OrderID\" ASC, \"id\" ASC", array($ForumID));
 $apcresult=sql_query($apcquery,$SQLStat);
 $apcnum=sql_num_rows($apcresult);
 $apci=0; $apcl=1; if($apcnum>=1) {
@@ -125,7 +125,7 @@ $gltnum = count($gltf); $glti = 0;
 $OldUpdateTime = 0; $UseThisFonum = null;
 if ($ForumType=="subforum") { 
 while ($glti < $gltnum) {
-$gltfoquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `ForumID`=%i ORDER BY `LastUpdate` DESC LIMIT 1", array($gltf[$glti]));
+$gltfoquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"ForumID\"=%i ORDER BY \"LastUpdate\" DESC LIMIT 1", array($gltf[$glti]));
 $gltforesult=sql_query($gltfoquery,$SQLStat);
 $gltfonum=sql_num_rows($gltforesult);
 if($gltfonum>0) {
@@ -137,7 +137,7 @@ sql_free_result($gltforesult);
 ++$glti; } }
 if ($ForumType!="subforum"&&$ForumType!="redirect") { $UseThisFonum = $gltf[0]; }
 if ($ForumType!="redirect") {
-$gltquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE `ForumID`=%i ORDER BY `LastUpdate` DESC LIMIT 1", array($UseThisFonum));
+$gltquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"ForumID\"=%i ORDER BY \"LastUpdate\" DESC LIMIT 1", array($UseThisFonum));
 $gltresult=sql_query($gltquery,$SQLStat);
 $gltnum=sql_num_rows($gltresult);
 if($gltnum>0){
@@ -153,7 +153,7 @@ $TopicName1 = pre_substr($TopicName,0,20);
 $oldtopicname=$TopicName;
 if (pre_strlen($TopicName)>20) { 
 $TopicName1 = $TopicName1."..."; $TopicName=$TopicName1; }
-$glrquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `TopicID`=%i ORDER BY `TimeStamp` DESC LIMIT 1", array($TopicID));
+$glrquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" DESC LIMIT 1", array($TopicID));
 $glrresult=sql_query($glrquery,$SQLStat);
 $glrnum=sql_num_rows($glrresult);
 if($glrnum>0){

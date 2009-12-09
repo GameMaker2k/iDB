@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: topics.php - Last Update: 12/07/2009 SVN 380 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 12/09/2009 SVN 382 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -20,7 +20,7 @@ if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
 $pstring = null; $pagenum = null;
 if(!is_numeric($_GET['id'])) { $_GET['id'] = null; }
 if(!is_numeric($_GET['page'])) { $_GET['page'] = 1; }
-$prequery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i LIMIT 1", array($_GET['id']));
+$prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($_GET['id']));
 $preresult=sql_query($prequery,$SQLStat);
 $prenum=sql_num_rows($preresult);
 if($prenum==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($preresult);
@@ -51,7 +51,7 @@ $ForumType = strtolower($ForumType); $CanHaveTopics = strtolower($CanHaveTopics)
 if($CanHaveTopics=="yes"&&$ForumType=="subforum") { 
 if($_GET['act']=="create"||$_GET['act']=="maketopic"||
 	$_POST['act']=="maketopics") { $ForumCheck = "skip"; } }
-$catcheck = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."categories` WHERE `id`=%i  LIMIT 1", array($ForumCatID));
+$catcheck = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."categories\" WHERE \"id\"=%i  LIMIT 1", array($ForumCatID));
 $catresult=sql_query($catcheck,$SQLStat);
 $CategoryName=sql_result($catresult,0,"Name");
 $CategoryType=sql_result($catresult,0,"CategoryType");
@@ -70,7 +70,7 @@ redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"a
 if($CategoryKarmaCountView!=0&&$MyKarmaCount<$CategoryKarmaCountView) {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); } }
 if($InSubForum!="0") {
-$isfquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."forums` WHERE `id`=%i LIMIT 1", array($InSubForum));
+$isfquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($InSubForum));
 $isfresult=sql_query($isfquery,$SQLStat);
 $isfnum=sql_num_rows($isfresult);
 if($isfnum>=1) {
@@ -113,12 +113,12 @@ if($CatPermissionInfo['CanViewCategory'][$ForumCatID]=="yes"&&
 if($ForumType!="redirect") {
 if($NumberViews==0||$NumberViews==null) { $NewNumberViews = 1; }
 if($NumberViews!=0&&$NumberViews!=null) { $NewNumberViews = $NumberViews + 1; }
-$viewup = sql_pre_query("UPDATE `".$Settings['sqltable']."forums` SET `NumViews`=%i WHERE `id`=%i", array($NewNumberViews,$_GET['id']));
+$viewup = sql_pre_query("UPDATE \"".$Settings['sqltable']."forums\" SET \"NumViews\"=%i WHERE \"id\"=%i", array($NewNumberViews,$_GET['id']));
 sql_query($viewup,$SQLStat); }
 if($ForumType=="redirect") {
 if($RedirectTimes==0||$RedirectTimes==null) { $NewRedirTime = 1; }
 if($RedirectTimes!=0&&$RedirectTimes!=null) { $NewRedirTime = $RedirectTimes + 1; }
-$redirup = sql_pre_query("UPDATE `".$Settings['sqltable']."forums` SET `Redirects`=%i WHERE `id`=%i", array($NewRedirTime,$_GET['id']));
+$redirup = sql_pre_query("UPDATE \"".$Settings['sqltable']."forums\" SET \"Redirects\"=%i WHERE \"id\"=%i", array($NewRedirTime,$_GET['id']));
 sql_query($redirup,$SQLStat);
 if($RedirectURL!="http://"&&$RedirectURL!="") {
 redirect("location",$RedirectURL,0,null,false); ob_clean();
@@ -174,7 +174,7 @@ $PageLimit = $Settings['max_topics'] * $snumber;
 if($PageLimit<0) { $PageLimit = 0; }
 //End Topic Page Code
 $i=0;
-$query = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."topics` WHERE (`ForumID`=%i) OR (`OldForumID`=%i) ORDER BY `Pinned` DESC, `LastUpdate` DESC LIMIT %i,%i", array($_GET['id'],$_GET['id'],$PageLimit,$Settings['max_topics']));
+$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE (\"ForumID\"=%i) OR (\"OldForumID\"=%i) ORDER BY \"Pinned\" DESC, \"LastUpdate\" DESC LIMIT %i,%i", array($_GET['id'],$_GET['id'],$PageLimit,$Settings['max_topics']));
 $result=sql_query($query,$SQLStat);
 $num=sql_num_rows($result);
 //List Page Number Code Start
@@ -341,17 +341,17 @@ $TopicName=sql_result($result,$i,"TopicName");
 $TopicDescription=sql_result($result,$i,"Description");
 $PinnedTopic=sql_result($result,$i,"Pinned");
 $TopicStat=sql_result($result,$i,"Closed");
-$requery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($UsersID));
+$requery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($UsersID));
 $reresult=sql_query($requery,$SQLStat);
 $renum=sql_num_rows($reresult);
 if($renum<1) { $UsersID = -1;
-$requery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($UsersID));
+$requery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($UsersID));
 $reresult=sql_query($requery,$SQLStat);
 $renum=sql_num_rows($reresult); }
 $UserHidden=sql_result($reresult,0,"HiddenMember");
 $UserGroupID=sql_result($reresult,0,"GroupID");
 sql_free_result($reresult);
-$gquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($UserGroupID));
+$gquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i LIMIT 1", array($UserGroupID));
 $gresult=sql_query($gquery,$SQLStat);
 $User1Group=sql_result($gresult,0,"Name");
 $GroupNamePrefix=sql_result($gresult,0,"NamePrefix");
@@ -369,7 +369,7 @@ if(isset($GroupNamePrefix)&&$GroupNamePrefix!=null) {
 if(isset($GroupNameSuffix)&&$GroupNameSuffix!=null) {
 	$UsersName = $UsersName.$GroupNameSuffix; }
 $LastReply = "&nbsp;<br />&nbsp;";
-$glrquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."posts` WHERE `TopicID`=%i ORDER BY `TimeStamp` DESC LIMIT 1", array($TopicID));
+$glrquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" DESC LIMIT 1", array($TopicID));
 $glrresult=sql_query($glrquery,$SQLStat);
 $glrnum=sql_num_rows($glrresult);
 if($glrnum>0){
@@ -536,7 +536,7 @@ $_SESSION['UserFormID'] = $UFID;
 <td class="TableColumn3" style="width: 15%; vertical-align: middle; text-align: center;">
 <div style="width: 100%; height: 160px; overflow: auto;">
 <table style="width: 100%; text-align: center;"><?php
-$renee_query=sql_pre_query("SELECT * FROM `".$Settings['sqltable']."smileys` WHERE `Show`='yes'", array(null));
+$renee_query=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."smileys\" WHERE \"Show\"='yes'", array(null));
 $renee_result=sql_query($renee_query,$SQLStat);
 $renee_num=sql_num_rows($renee_result);
 $renee_s=0; $SmileRow=0; $SmileCRow=0;
@@ -698,7 +698,7 @@ setcookie("GuestName", $_POST['GuestName'], time() + (7 * 86400), $cbasedir);
 $_SESSION['GuestName']=$_POST['GuestName']; } }
 /*    <_<  iWordFilter  >_>      
    by Kazuki Przyborowski - Cool Dude 2k */
-$katarzynaqy=sql_pre_query("SELECT * FROM `".$Settings['sqltable']."wordfilter`", array(null));
+$katarzynaqy=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."wordfilter\"", array(null));
 $katarzynart=sql_query($katarzynaqy,$SQLStat);
 $katarzynanm=sql_num_rows($katarzynart);
 $katarzynas=0;
@@ -727,7 +727,7 @@ if($CaseInsensitive=="yes"&&$WholeWord!="yes") {
 $_POST['TopicDesc'] = preg_replace("/".$Filter."/i", $Replace, $_POST['TopicDesc']); 
 $_POST['TopicPost'] = preg_replace("/".$Filter."/i", $Replace, $_POST['TopicPost']); }
 ++$katarzynas; } sql_free_result($katarzynart);
-$lonewolfqy=sql_pre_query("SELECT * FROM `".$Settings['sqltable']."restrictedwords` WHERE `RestrictedTopicName`='yes' or `RestrictedUserName`='yes'", array(null));
+$lonewolfqy=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."restrictedwords\" WHERE \"RestrictedTopicName\"='yes' or \"RestrictedUserName\"='yes'", array(null));
 $lonewolfrt=sql_query($lonewolfqy,$SQLStat);
 $lonewolfnm=sql_num_rows($lonewolfrt);
 $lonewolfs=0; $RMatches = null; $RGMatches = null;
@@ -833,7 +833,7 @@ redirect("refresh",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"ac
 <?php } if ($Error!="Yes") { $LastActive = GMTimeStamp();
 $topicid = sql_get_next_id($Settings['sqltable'],"topics",$SQLStat);
 //$postid = sql_get_next_id($Settings['sqltable'],"posts",$SQLStat);
-$requery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."members` WHERE `id`=%i LIMIT 1", array($MyUserID));
+$requery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($MyUserID));
 $reresult=sql_query($requery,$SQLStat);
 $renum=sql_num_rows($reresult);
 $rei=0;
@@ -847,25 +847,25 @@ $User1GroupID=sql_result($reresult,$rei,"GroupID");
 $PostCount=sql_result($reresult,$rei,"PostCount");
 if($PostCountAdd=="on") { $NewPostCount = $PostCount + 1; }
 if(!isset($NewPostCount)) { $NewPostCount = $PostCount; }
-$gquery = sql_pre_query("SELECT * FROM `".$Settings['sqltable']."groups` WHERE `id`=%i LIMIT 1", array($User1GroupID));
+$gquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i LIMIT 1", array($User1GroupID));
 $gresult=sql_query($gquery,$SQLStat);
 $User1Group=sql_result($gresult,0,"Name");
 sql_free_result($gresult);
 $User1IP=$_SERVER['REMOTE_ADDR'];
 ++$rei; } sql_free_result($reresult);
-$query = sql_pre_query("INSERT INTO `".$Settings['sqltable']."topics` (`ForumID`, `CategoryID`, `OldForumID`, `OldCategoryID`, `UserID`, `GuestName`, `TimeStamp`, `LastUpdate`, `TopicName`, `Description`, `NumReply`, `NumViews`, `Pinned`, `Closed`) VALUES\n".
+$query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."topics\" (\"ForumID\", \"CategoryID\", \"OldForumID\", \"OldCategoryID\", \"UserID\", \"GuestName\", \"TimeStamp\", \"LastUpdate\", \"TopicName\", \"Description\", \"NumReply\", \"NumViews\", \"Pinned\", \"Closed\") VALUES\n".
 "(%i, %i, %i, %i, %i, '%s', %i, %i, '%s', '%s', 0, 0, 0, 0)", array($ForumID,$ForumCatID,$ForumID,$ForumCatID,$User1ID,$User1Name,$LastActive,$LastActive,$_POST['TopicName'],$_POST['TopicDesc']));
 sql_query($query,$SQLStat);
 //$topicid = mysql_insert_id();
-$query = sql_pre_query("INSERT INTO `".$Settings['sqltable']."posts` (`TopicID`, `ForumID`, `CategoryID`, `UserID`, `GuestName`, `TimeStamp`, `LastUpdate`, `EditUser`, `EditUserName`, `Post`, `Description`, `IP`, `EditIP`) VALUES\n".
+$query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."posts\" (\"TopicID\", \"ForumID\", \"CategoryID\", \"UserID\", \"GuestName\", \"TimeStamp\", \"LastUpdate\", \"EditUser\", \"EditUserName\", \"Post\", \"Description\", \"IP\", \"EditIP\") VALUES\n".
 "(".$topicid.", %i, %i, %i, '%s', %i, %i, 0, '', '%s', '%s', '%s', '0')", array($ForumID,$ForumCatID,$User1ID,$User1Name,$LastActive,$LastActive,$_POST['TopicPost'],$_POST['TopicDesc'],$User1IP));
 sql_query($query,$SQLStat);
 $_SESSION['LastPostTime'] = GMTimeStamp() + $GroupInfo['FloodControl'];
 if($User1ID!=0&&$User1ID!=-1) {
-$queryupd = sql_pre_query("UPDATE `".$Settings['sqltable']."members` SET `LastActive`=%i,`IP`='%s',`PostCount`=%i,`LastPostTime`=%i WHERE `id`=%i", array($LastActive,$User1IP,$NewPostCount,$_SESSION['LastPostTime'],$User1ID));
+$queryupd = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"LastActive\"=%i,\"IP\"='%s',\"PostCount\"=%i,\"LastPostTime\"=%i WHERE \"id\"=%i", array($LastActive,$User1IP,$NewPostCount,$_SESSION['LastPostTime'],$User1ID));
 sql_query($queryupd,$SQLStat); }
 $NewNumPosts = $NumberPosts + 1; $NewNumTopics = $NumberTopics + 1;
-$queryupd = sql_pre_query("UPDATE `".$Settings['sqltable']."forums` SET `NumPosts`=%i,`NumTopics`=%i WHERE `id`=%i", array($NewNumPosts,$NewNumTopics,$ForumID));
+$queryupd = sql_pre_query("UPDATE \"".$Settings['sqltable']."forums\" SET \"NumPosts\"=%i,\"NumTopics\"=%i WHERE \"id\"=%i", array($NewNumPosts,$NewNumTopics,$ForumID));
 sql_query($queryupd,$SQLStat);
 redirect("refresh",$basedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$topicid."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],FALSE),"3");
 ?><tr>
