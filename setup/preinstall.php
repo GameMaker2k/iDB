@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: preinstall.php - Last Update: 11/23/2009 SVN 357 - Author: cooldude2k $
+    $FileInfo: preinstall.php - Last Update: 12/10/2009 SVN 390 - Author: cooldude2k $
 */
 error_reporting(E_ALL ^ E_NOTICE);
 /* Some ini setting changes uncomment if you need them. */
@@ -33,6 +33,12 @@ if(!isset($SettDir['admin'])) { $SettDir['admin'] = "inc/admin/"; }
 if(!isset($SettDir['mod'])) { $SettDir['mod'] = "inc/mod/"; }
 if(!isset($SettDir['themes'])) { $SettDir['themes'] = "themes/"; }
 if(!isset($_POST['License'])) { $_POST['License'] = null; }
+if(isset($_POST['DatabaseType'])) { 
+	$Settings['sqltype'] = $_POST['DatabaseType']; }
+if(isset($Settings['sqltype'])) {
+if($Settings['sqltype']!="mysql"&&
+	$Settings['sqltype']!="pgsql") {
+	$Settings['sqltype'] = "mysql"; } }
 if(file_exists($SettDir['themes']."iDB/settings.php")) {
 	require($SettDir['themes']."iDB/settings.php"); }
 if(!file_exists($SettDir['themes']."iDB/settings.php")) {

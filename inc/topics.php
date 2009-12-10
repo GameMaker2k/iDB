@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: topics.php - Last Update: 12/10/2009 SVN 386 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 12/10/2009 SVN 390 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -831,8 +831,9 @@ redirect("refresh",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"ac
 	</span><br /></td>
 </tr>
 <?php } if ($Error!="Yes") { $LastActive = GMTimeStamp();
+if($Settings['sqltype']=="mysql") {
 $topicid = sql_get_next_id($Settings['sqltable'],"topics",$SQLStat);
-//$postid = sql_get_next_id($Settings['sqltable'],"posts",$SQLStat);
+/*$postid = sql_get_next_id($Settings['sqltable'],"posts",$SQLStat);*/ }
 $requery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($MyUserID));
 $reresult=sql_query($requery,$SQLStat);
 $renum=sql_num_rows($reresult);
@@ -856,10 +857,14 @@ $User1IP=$_SERVER['REMOTE_ADDR'];
 $query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."topics\" (\"ForumID\", \"CategoryID\", \"OldForumID\", \"OldCategoryID\", \"UserID\", \"GuestName\", \"TimeStamp\", \"LastUpdate\", \"TopicName\", \"Description\", \"NumReply\", \"NumViews\", \"Pinned\", \"Closed\") VALUES\n".
 "(%i, %i, %i, %i, %i, '%s', %i, %i, '%s', '%s', 0, 0, 0, 0)", array($ForumID,$ForumCatID,$ForumID,$ForumCatID,$User1ID,$User1Name,$LastActive,$LastActive,$_POST['TopicName'],$_POST['TopicDesc']));
 sql_query($query,$SQLStat);
+if($Settings['sqltype']=="pgsql") {
+$topicid = sql_get_next_id($Settings['sqltable'],"topics",$SQLStat); }
 //$topicid = mysql_insert_id();
 $query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."posts\" (\"TopicID\", \"ForumID\", \"CategoryID\", \"UserID\", \"GuestName\", \"TimeStamp\", \"LastUpdate\", \"EditUser\", \"EditUserName\", \"Post\", \"Description\", \"IP\", \"EditIP\") VALUES\n".
 "(".$topicid.", %i, %i, %i, '%s', %i, %i, 0, '', '%s', '%s', '%s', '0')", array($ForumID,$ForumCatID,$User1ID,$User1Name,$LastActive,$LastActive,$_POST['TopicPost'],$_POST['TopicDesc'],$User1IP));
 sql_query($query,$SQLStat);
+if($Settings['sqltype']=="pgsql") {
+/*$postid = sql_get_next_id($Settings['sqltable'],"posts",$SQLStat);*/ }
 $_SESSION['LastPostTime'] = GMTimeStamp() + $GroupInfo['FloodControl'];
 if($User1ID!=0&&$User1ID!=-1) {
 $queryupd = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"LastActive\"=%i,\"IP\"='%s',\"PostCount\"=%i,\"LastPostTime\"=%i WHERE \"id\"=%i", array($LastActive,$User1IP,$NewPostCount,$_SESSION['LastPostTime'],$User1ID));
