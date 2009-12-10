@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: lowtopics.php - Last Update: 12/09/2009 SVN 382 - Author: cooldude2k $
+    $FileInfo: lowtopics.php - Last Update: 12/10/2009 SVN 386 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="lowtopics.php"||$File3Name=="/lowtopics.php") {
@@ -161,7 +161,7 @@ $PageLimit = $Settings['max_topics'] * $snumber;
 if($PageLimit<0) { $PageLimit = 0; }
 //End Topic Page Code
 $i=0;
-$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"ForumID\"=%i ORDER BY \"Pinned\" DESC, \"LastUpdate\" DESC LIMIT %i,%i", array($_GET['id'],$PageLimit,$Settings['max_topics']));
+$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"ForumID\"=%i ORDER BY \"Pinned\" DESC, \"LastUpdate\" DESC ".$SQLimit, array($_GET['id'],$PageLimit,$Settings['max_topics']));
 $result=sql_query($query,$SQLStat);
 $num=sql_num_rows($result);
 //List Page Number Code Start

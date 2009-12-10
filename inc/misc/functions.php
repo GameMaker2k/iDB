@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: functions.php - Last Update: 12/09/2009 SVN 385 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 12/10/2009 SVN 386 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -30,7 +30,10 @@ if ($File3Name==$FileName||$File3Name=="/".$FileName) {
 	return true; } }
 CheckFile("functions.php");
 require($SettDir['misc']."compression.php");
-require($SettDir['misc']."mysql.php");
+if($Settings['sqltype']=="mysql") {
+require($SettDir['misc']."mysql.php"); }
+if($Settings['sqltype']=="pgsql") {
+require($SettDir['misc']."pgsql.php"); }
 /* 
 if ($_GET['act']=="DeleteSession") { session_destroy(); }
 if ($_GET['act']=="ResetSession") { session_unset(); }
@@ -113,7 +116,7 @@ if(!isset($Settings['DefaultTheme'])) {
 	$Settings['DefaultTheme'] = "iDB"; }
 // Change the text to icons(smileys)
 function text2icons($Text,$sqlt) {
-global $Settings;
+global $SQLStat;
 $reneequery=sql_pre_query("SELECT * FROM \"".$sqlt."smileys\"", array(null));
 $reneeresult=sql_query($reneequery,$SQLStat);
 $reneenum=sql_num_rows($reneeresult);

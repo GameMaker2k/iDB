@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: pm.php - Last Update: 12/09/2009 SVN 383 - Author: cooldude2k $
+    $FileInfo: pm.php - Last Update: 12/10/2009 SVN 386 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pm.php"||$File3Name=="/pm.php") {
@@ -67,7 +67,7 @@ if($_GET['act']=="view") {
 //Get SQL LIMIT Number
 $nums = $_GET['page'] * $Settings['max_pmlist'];
 $PageLimit = $nums - $Settings['max_pmlist'];
-$query = sql_pre_query("SELECT SQL_CALC_FOUND_ROWS * FROM \"".$Settings['sqltable']."messenger\" WHERE \"ReciverID\"=%i ORDER BY \"DateSend\" DESC LIMIT %i,%i", array($_SESSION['UserID'],$PageLimit,$Settings['max_pmlist']));
+$query = sql_pre_query("SELECT SQL_CALC_FOUND_ROWS * FROM \"".$Settings['sqltable']."messenger\" WHERE \"ReciverID\"=%i ORDER BY \"DateSend\" DESC ".$SQLimit, array($_SESSION['UserID'],$PageLimit,$Settings['max_pmlist']));
 $rnquery = sql_pre_query("SELECT FOUND_ROWS();", array(null));
 $result=sql_query($query,$SQLStat);
 $rnresult=sql_query($rnquery,$SQLStat);
@@ -237,7 +237,7 @@ if($_GET['act']=="viewsent") {
 //Get SQL LIMIT Number
 $nums = $_GET['page'] * $Settings['max_pmlist'];
 $PageLimit = $nums - $Settings['max_pmlist'];
-$query = sql_pre_query("SELECT SQL_CALC_FOUND_ROWS * FROM \"".$Settings['sqltable']."messenger\" WHERE \"SenderID\"=%i ORDER BY \"DateSend\" DESC LIMIT %i,%i", array($_SESSION['UserID'],$PageLimit,$Settings['max_pmlist']));
+$query = sql_pre_query("SELECT SQL_CALC_FOUND_ROWS * FROM \"".$Settings['sqltable']."messenger\" WHERE \"SenderID\"=%i ORDER BY \"DateSend\" DESC ".$SQLimit, array($_SESSION['UserID'],$PageLimit,$Settings['max_pmlist']));
 $rnquery = sql_pre_query("SELECT FOUND_ROWS();", array(null));
 $result=sql_query($query,$SQLStat);
 $rnresult=sql_query($rnquery,$SQLStat);

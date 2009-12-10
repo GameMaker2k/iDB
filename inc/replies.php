@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: replies.php - Last Update: 12/09/2009 SVN 383 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 12/10/2009 SVN 386 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -151,9 +151,9 @@ if($PageLimit<0) { $PageLimit = 0; }
 //End Reply Page Code
 $i=0;
 if(!isset($_GET['post'])||$_GET['post']!==null) {
-$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" ASC LIMIT %i,%i", array($_GET['id'],$PageLimit,$Settings['max_posts'])); }
+$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" ASC ".$SQLimit, array($_GET['id'],$PageLimit,$Settings['max_posts'])); }
 if(isset($_GET['post'])&&$_GET['post']!==null) {
-$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i AND \"id\"=%i ORDER BY \"TimeStamp\" ASC LIMIT %i,%i", array($_GET['id'],$_GET['post'],$PageLimit,$Settings['max_posts'])); }
+$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i AND \"id\"=%i ORDER BY \"TimeStamp\" ASC ".$SQLimit, array($_GET['id'],$_GET['post'],$PageLimit,$Settings['max_posts'])); }
 $result=sql_query($query,$SQLStat);
 $num=sql_num_rows($result);
 if($num==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));

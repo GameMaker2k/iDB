@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 12/09/2009 SVN 383 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 12/10/2009 SVN 386 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -66,9 +66,9 @@ $PageLimit = $nums - $Settings['max_memlist'];
 if($PageLimit<0) { $PageLimit = 0; }
 $i=0;
 if($_GET['groupid']==null) {
-$query = sql_pre_query("SELECT SQL_CALC_FOUND_ROWS * FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"<>%i AND \"id\">=0 AND \"HiddenMember\"='no' ".$orderlist." LIMIT %i,%i", array($GGroup,$PageLimit,$Settings['max_memlist'])); }
+$query = sql_pre_query("SELECT SQL_CALC_FOUND_ROWS * FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"<>%i AND \"id\">=0 AND \"HiddenMember\"='no' ".$orderlist." ".$SQLimit, array($GGroup,$PageLimit,$Settings['max_memlist'])); }
 if($_GET['groupid']!=null) {
-$query = sql_pre_query("SELECT SQL_CALC_FOUND_ROWS * FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"=%i AND \"GroupID\"<>%i AND \"id\">=0 ".$orderlist." LIMIT %i,%i", array($_GET['groupid'],$GGroup,$PageLimit,$Settings['max_memlist'])); }
+$query = sql_pre_query("SELECT SQL_CALC_FOUND_ROWS * FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"=%i AND \"GroupID\"<>%i AND \"id\">=0 ".$orderlist." ".$SQLimit, array($_GET['groupid'],$GGroup,$PageLimit,$Settings['max_memlist'])); }
 $rnquery = sql_pre_query("SELECT FOUND_ROWS();", array(null));
 $result=sql_query($query,$SQLStat);
 $rnresult=sql_query($rnquery,$SQLStat);
@@ -274,7 +274,7 @@ if($PageLimit<0) { $PageLimit = 0; }
 $i=0;
 $uolcuttime = GMTimeStamp();
 $uoltime = $uolcuttime - ini_get("session.gc_maxlifetime");
-$query = sql_pre_query("SELECT SQL_CALC_FOUND_ROWS * FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i ORDER BY \"expires\" DESC LIMIT %i,%i", array($uoltime,$PageLimit,$Settings['max_memlist']));
+$query = sql_pre_query("SELECT SQL_CALC_FOUND_ROWS * FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i ORDER BY \"expires\" DESC ".$SQLimit, array($uoltime,$PageLimit,$Settings['max_memlist']));
 $rnquery = sql_pre_query("SELECT FOUND_ROWS();", array(null));
 $result=sql_query($query,$SQLStat);
 $rnresult=sql_query($rnquery,$SQLStat);
