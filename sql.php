@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 12/09/2009 SVN 382 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 12/10/2009 SVN 387 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -125,11 +125,12 @@ if($Settings['use_hashtype']!="md2"&&
    $Settings['use_hashtype']!="sha386"&&
    $Settings['use_hashtype']!="sha512") {
 	$Settings['use_hashtype'] = "sha256"; } }
+// Check to see if variables are set
+require_once($SettDir['misc'].'setcheck.php');
 require_once($SettDir['inc'].'function.php');
 if($Settings['enable_pathinfo']=="on") { 
 	mrstring(); /* Change Path info to Get Vars :P */ }
 // Check to see if variables are set
-require_once($SettDir['misc'].'setcheck.php');
 $qstrhtml = htmlentities($Settings['qstr'], ENT_QUOTES, $Settings['charset']);
 if($Settings['enable_https']=="on"&&$_SERVER['HTTPS']=="on") {
 if($Settings['idburl']!=null&&$Settings['idburl']!="localhost") {
