@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: functions.php - Last Update: 12/09/2009 SVN 383 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 12/09/2009 SVN 385 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -290,6 +290,7 @@ $phpsrcs = preg_replace("/\<\/font>/i", "</span>", $phpsrcs);
 return $phpsrcs; }
 // Check to see if the user is hidden/shy. >_> | ^_^ | <_<
 function GetUserName($idu,$sqlt) { $UsersName = null;
+global $SQLStat;
 $gunquery = sql_pre_query("SELECT * FROM \"".$sqlt."members\" WHERE \"id\"=%i LIMIT 1", array($idu));
 $gunresult=sql_query($gunquery,$SQLStat);
 $gunnum=sql_num_rows($gunresult);

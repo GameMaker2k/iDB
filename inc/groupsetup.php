@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: groupsetup.php - Last Update: 12/09/2009 SVN 383 - Author: cooldude2k $
+    $FileInfo: groupsetup.php - Last Update: 12/09/2009 SVN 385 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="groupsetup.php"||$File3Name=="/groupsetup.php") {
@@ -25,7 +25,7 @@ if($Settings['file_ext']=="no+ext"||$Settings['file_ext']=="no ext") {
 $_SESSION['ViewingFile'] = $exfile['index']; }
 $_SESSION['PreViewingTitle'] = "Viewing";
 $_SESSION['ViewingTitle'] = "Board index";
-/*$ggidquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"name\"='%s' LIMIT 1", array($Settings['GuestGroup']));
+/*$ggidquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"Name\"='%s' LIMIT 1", array($Settings['GuestGroup']));
 $ggidresult=sql_query($ggidquery,$SQLStat);
 $Settings['GuestGroupID']=sql_result($ggidresult,0,"id");*/
 // Check to make sure MemberInfo is right
@@ -100,14 +100,14 @@ if($_SESSION['UserID']==0||$_SESSION['UserID']==null) {
 $_SESSION['UserIP']=$_SERVER['REMOTE_ADDR'];
 $_SESSION['MemberName'] = null;
 $_SESSION['UserGroup'] = $Settings['GuestGroup']; 
-$gidquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"name\"='%s' LIMIT 1", array($Settings['GuestGroup']));
+$gidquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"Name\"='%s' LIMIT 1", array($Settings['GuestGroup']));
 $gidresult=sql_query($gidquery,$SQLStat);
 $_SESSION['UserGroupID']=sql_result($gidresult,0,"id"); 
 sql_free_result($gidresult); }
 if($_SESSION['MemberName']==null) { $_SESSION['UserID'] = "0";
 $_SESSION['UserIP']=$_SERVER['REMOTE_ADDR'];
 $_SESSION['UserGroup'] = $Settings['GuestGroup']; 
-$gidquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"name\"='%s' LIMIT 1", array($Settings['GuestGroup']));
+$gidquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"Name\"='%s' LIMIT 1", array($Settings['GuestGroup']));
 $gidresult=sql_query($gidquery,$SQLStat);
 $_SESSION['UserGroupID']=sql_result($gidresult,0,"id"); 
 sql_free_result($gidresult); }
@@ -249,7 +249,7 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die
 if($pernum>=1) { while ($peri < $pernum) {
 $PerForumID=sql_result($peresult,$peri,"ForumID");
 if(!is_numeric($PerForumID)) { $PerError = true; }
-$PermissionInfo['ID'][$PerForumID]=sql_result($peresult,$peri,"ID");
+$PermissionInfo['ID'][$PerForumID]=sql_result($peresult,$peri,"id");
 if(!is_numeric($PermissionInfo['ID'][$PerForumID])) { $PerError = true; }
 $PermissionInfo['PermissionID'][$PerForumID]=sql_result($peresult,$peri,"PermissionID");
 if(!is_numeric($PermissionInfo['PermissionID'][$PerForumID])) { $PerError = true; }

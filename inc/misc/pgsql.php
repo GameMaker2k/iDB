@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: mysql.php - Last Update: 12/09/2009 SVN 384 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 12/09/2009 SVN 385 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mysql.php"||$File3Name=="/mysql.php") {
@@ -78,7 +78,10 @@ if ($link===false) {
 return $link; }
 // Query Results :P
 function sql_result($result,$row,$field=0) {
-$value = pg_fetch_result($result, $row, $field);
+if(is_numeric($field)) {
+$value = pg_fetch_result($result, $row, $field); }
+if(!is_numeric($field)) {
+$value = pg_fetch_result($result, $row, "\"".$field."\""); }
 if ($value===false) { 
     output_error("SQL Error: ".sql_error(),E_USER_ERROR);
 	return false; }
