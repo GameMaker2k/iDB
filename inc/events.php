@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: events.php - Last Update: 12/10/2009 SVN 390 - Author: cooldude2k $
+    $FileInfo: events.php - Last Update: 12/10/2009 SVN 391 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="events.php"||$File3Name=="/events.php") {
@@ -99,8 +99,8 @@ if(isset($GroupNamePrefix)&&$GroupNamePrefix!=null) {
 if(isset($GroupNameSuffix)&&$GroupNameSuffix!=null) {
 	$User1Name = $User1Name.$GroupNameSuffix; }
 $EventText = url2link($EventText);
-$EventText = text2icons($EventText,$Settings['sqltable']); 
-$User1Signature = text2icons($User1Signature,$Settings['sqltable']);
+$EventText = text2icons($EventText,$Settings['sqltable'],$SQLStat); 
+$User1Signature = text2icons($User1Signature,$Settings['sqltable'],$SQLStat);
 ?>
 <div class="TableInfo1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>

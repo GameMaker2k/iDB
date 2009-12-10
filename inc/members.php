@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 12/10/2009 SVN 390 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 12/10/2009 SVN 391 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -412,7 +412,7 @@ if(!isset($UserSessInfo['UserGroup'])) {
 if(!isset($UserSessInfo['UserIP'])) { 
 	$UserSessInfo['UserIP'] = "127.0.0.1"; }
 if($UserSessInfo['UserGroup']!=$Settings['GuestGroup']) {
-$PreAmIHiddenUser = GetUserName($UserSessInfo['UserID'],$Settings['sqltable']);
+$PreAmIHiddenUser = GetUserName($UserSessInfo['UserID'],$Settings['sqltable'],$SQLStat);
 $AmIHiddenUser = $PreAmIHidden['Hidden']; }
 if(!isset($UserSessInfo['ViewingPage'])) {
 	$UserSessInfo['ViewingPage'] = url_maker(null,"no+ext","act=view","&","=",$prexqstr['index'],$exqstr['index']); }
@@ -608,7 +608,7 @@ $ViewMem['AvatarSize']=$ThemeSet['NoAvatarSize']; }
 $AvatarSize1=explode("x", $ViewMem['AvatarSize']);
 $AvatarSize1W=$AvatarSize1[0]; $AvatarSize1H=$AvatarSize1[1];
 $ViewMem['Signature'] = url2link($ViewMem['Signature']);
-$ViewMem['Signature'] = text2icons($ViewMem['Signature'],$Settings['sqltable']);
+$ViewMem['Signature'] = text2icons($ViewMem['Signature'],$Settings['sqltable'],$SQLStat);
 if($_GET['view']==null) { $_GET['view'] = "profile"; }
 if($_GET['view']!="profile"&&$_GET['view']!="avatar"&&
 	$_GET['view']!="website"&&$_GET['view']!="homepage") { $_GET['view'] = "profile"; }

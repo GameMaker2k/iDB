@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: lowreplies.php - Last Update: 12/10/2009 SVN 386 - Author: cooldude2k $
+    $FileInfo: lowreplies.php - Last Update: 12/10/2009 SVN 391 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -336,11 +336,11 @@ $GroupNamePrefix=sql_result($gresult,0,"NamePrefix");
 $GroupNameSuffix=sql_result($gresult,0,"NameSuffix");
 sql_free_result($gresult); }
 $MyPost = url2link($MyPost);
-$MyPost = text2icons($MyPost,$Settings['sqltable']);
+$MyPost = text2icons($MyPost,$Settings['sqltable'],$SQLStat);
 if($MySubPost!=null) { $MyPost = $MyPost."\n".$MySubPost; }
 $User1Signature = preg_replace("/\<br\>/", "<br />", nl2br($User1Signature));
 $User1Signature = url2link($User1Signature);
-$User1Signature = text2icons($User1Signature,$Settings['sqltable']);
+$User1Signature = text2icons($User1Signature,$Settings['sqltable'],$SQLStat);
 $CanEditReply = false; $CanDeleteReply = false;
 if($_SESSION['UserGroup']!=$Settings['GuestGroup']) {
 if($PermissionInfo['CanEditReplys'][$MyForumID]=="yes"&&

@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: searchs.php - Last Update: 12/10/2009 SVN 388 - Author: cooldude2k $
+    $FileInfo: searchs.php - Last Update: 12/10/2009 SVN 391 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="searchs.php"||$File3Name=="/searchs.php") {
@@ -361,9 +361,9 @@ $TopicName=sql_result($result,$i,"TopicName");
 $TopicDescription=sql_result($result,$i,"Description");
 $PinnedTopic=sql_result($result,$i,"Pinned");
 $TopicStat=sql_result($result,$i,"Closed");
-$PreUsersName = GetUserName($UsersID,$Settings['sqltable']);
+$PreUsersName = GetUserName($UsersID,$Settings['sqltable'],$SQLStat);
 if($PreUsersName['Name']===null) { $UsersID = -1;
-$PreUsersName = GetUserName($UsersID,$Settings['sqltable']); }
+$PreUsersName = GetUserName($UsersID,$Settings['sqltable'],$SQLStat); }
 $UsersName = $PreUsersName['Name'];
 $UsersHidden = $PreUsersName['Hidden'];
 if($UsersName=="Guest") { $UsersName=$GuestsName;
@@ -382,9 +382,9 @@ $UsersID1=sql_result($glrresult,0,"UserID");
 $GuestsName1=sql_result($glrresult,0,"GuestName");
 $TimeStamp1=sql_result($glrresult,0,"TimeStamp");
 $TimeStamp1=GMTimeChange("F j, Y",$TimeStamp1,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$PreUsersName1 = GetUserName($UsersID1,$Settings['sqltable']);
+$PreUsersName1 = GetUserName($UsersID1,$Settings['sqltable'],$SQLStat);
 if($PreUsersName1['Name']===null) { $UsersID1 = -1;
-$PreUsersName1 = GetUserName($UsersID1,$Settings['sqltable']); }
+$PreUsersName1 = GetUserName($UsersID1,$Settings['sqltable'],$SQLStat); }
 $UsersName1 = $PreUsersName1['Name'];
 $UsersHidden1 = $PreUsersName1['Hidden']; }
 $NumPages = null; $NumRPosts = $NumReply + 1;

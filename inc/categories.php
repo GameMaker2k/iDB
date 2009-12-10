@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: categories.php - Last Update: 12/09/2009 SVN 382 - Author: cooldude2k $
+    $FileInfo: categories.php - Last Update: 12/10/2009 SVN 391 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="categories.php"||$File3Name=="/categories.php") {
@@ -191,9 +191,9 @@ $GuestsName=sql_result($glrresult,0,"GuestName");
 $TimeStamp=sql_result($glrresult,0,"TimeStamp");
 $TimeStamp=GMTimeChange("F j Y, g:i a",$TimeStamp,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 sql_free_result($glrresult); }
-$PreUsersName = GetUserName($UsersID,$Settings['sqltable']);
+$PreUsersName = GetUserName($UsersID,$Settings['sqltable'],$SQLStat);
 if($PreUsersName['Name']===null) { $UsersID = -1;
-$PreUsersName = GetUserName($UsersID,$Settings['sqltable']); }
+$PreUsersName = GetUserName($UsersID,$Settings['sqltable'],$SQLStat); }
 $UsersName = $PreUsersName['Name'];
 $UsersHidden = $PreUsersName['Hidden'];
 if($UsersName=="Guest") { $UsersName=$GuestsName;

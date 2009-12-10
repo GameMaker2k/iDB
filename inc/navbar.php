@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: navbar.php - Last Update: 12/09/2009 SVN 382 - Author: cooldude2k $
+    $FileInfo: navbar.php - Last Update: 12/10/2009 SVN 391 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="navbar.php"||$File3Name=="/navbar.php") {
@@ -30,7 +30,7 @@ if($ThemeSet['LogoStyle']==null) { $logostyle = ""; }
 if($ThemeSet['LogoStyle']!=null) { $logostyle = "style=\"".$ThemeSet['LogoStyle']."\" "; }
 // Am I hidden from everyone
 if($_SESSION['UserGroup']!=$Settings['GuestGroup']) {
-$PreAmIHidden = GetUserName($_SESSION['UserID'],$Settings['sqltable']);
+$PreAmIHidden = GetUserName($_SESSION['UserID'],$Settings['sqltable'],$SQLStat);
 $AmIHidden = $PreAmIHidden['Hidden']; }
 // Hide me from everyone! >_> ^_^ <_< 
 ?>

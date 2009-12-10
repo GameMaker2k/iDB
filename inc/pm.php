@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: pm.php - Last Update: 12/10/2009 SVN 390 - Author: cooldude2k $
+    $FileInfo: pm.php - Last Update: 12/10/2009 SVN 391 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pm.php"||$File3Name=="/pm.php") {
@@ -187,15 +187,15 @@ if($pagenum>1) {
 while ($i < $num) {
 $PMID=sql_result($result,$i,"id");
 $SenderID=sql_result($result,$i,"SenderID");
-$PreSenderName = GetUserName($SenderID,$Settings['sqltable']);
+$PreSenderName = GetUserName($SenderID,$Settings['sqltable'],$SQLStat);
 if($PreSenderName['Name']===null) { $SenderID = -1;
-$PreSenderName = GetUserName($SenderID,$Settings['sqltable']); }
+$PreSenderName = GetUserName($SenderID,$Settings['sqltable'],$SQLStat); }
 $SenderName = $PreSenderName['Name'];
 $SenderHidden = $PreSenderName['Hidden'];
 $ReciverID=sql_result($result,$i,"ReciverID");
-$PreReciverName = GetUserName($ReciverID,$Settings['sqltable']);
+$PreReciverName = GetUserName($ReciverID,$Settings['sqltable'],$SQLStat);
 if($PreReciverName['Name']===null) { $ReciverID = -1;
-$PreReciverName = GetUserName($ReciverID,$Settings['sqltable']); }
+$PreReciverName = GetUserName($ReciverID,$Settings['sqltable'],$SQLStat); }
 $ReciverName = $PreReciverName['Name'];
 $ReciverHidden = $PreReciverName['Hidden'];
 $PMGuest=sql_result($result,$i,"GuestName");
@@ -357,15 +357,15 @@ if($pagenum>1) {
 while ($i < $num) {
 $PMID=sql_result($result,$i,"id");
 $SenderID=sql_result($result,$i,"SenderID");
-$PreSenderName = GetUserName($SenderID,$Settings['sqltable']);
+$PreSenderName = GetUserName($SenderID,$Settings['sqltable'],$SQLStat);
 if($PreSenderName['Name']===null) { $SenderID = -1;
-$PreSenderName = GetUserName($SenderID,$Settings['sqltable']); }
+$PreSenderName = GetUserName($SenderID,$Settings['sqltable'],$SQLStat); }
 $SenderName = $PreSenderName['Name'];
 $SenderHidden = $PreSenderName['Hidden'];
 $ReciverID=sql_result($result,$i,"ReciverID");
-$PreReciverName = GetUserName($ReciverID,$Settings['sqltable']);
+$PreReciverName = GetUserName($ReciverID,$Settings['sqltable'],$SQLStat);
 if($PreReciverName['Name']===null) { $ReciverID = -1;
-$PreReciverName = GetUserName($ReciverID,$Settings['sqltable']); }
+$PreReciverName = GetUserName($ReciverID,$Settings['sqltable'],$SQLStat); }
 $ReciverName = $PreReciverName['Name'];
 $ReciverHidden = $PreReciverName['Hidden'];
 $PMGuest=sql_result($result,$i,"GuestName");
@@ -414,15 +414,15 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die
 while ($is < $num) {
 $PMID=sql_result($result,$is,"id");
 $SenderID=sql_result($result,$is,"SenderID");
-$PreSenderName = GetUserName($SenderID,$Settings['sqltable']);
+$PreSenderName = GetUserName($SenderID,$Settings['sqltable'],$SQLStat);
 if($PreSenderName['Name']===null) { $SenderID = -1;
-$PreSenderName = GetUserName($SenderID,$Settings['sqltable']); }
+$PreSenderName = GetUserName($SenderID,$Settings['sqltable'],$SQLStat); }
 $SenderName = $PreSenderName['Name'];
 $SenderHidden = $PreSenderName['Hidden'];
 $ReciverID=sql_result($result,$is,"ReciverID");
-$PreReciverName = GetUserName($ReciverID,$Settings['sqltable']);
+$PreReciverName = GetUserName($ReciverID,$Settings['sqltable'],$SQLStat);
 if($PreReciverName['Name']===null) { $ReciverID = -1;
-$PreReciverName = GetUserName($ReciverID,$Settings['sqltable']); }
+$PreReciverName = GetUserName($ReciverID,$Settings['sqltable'],$SQLStat); }
 $ReciverName = $PreReciverName['Name'];
 $ReciverHidden = $PreReciverName['Hidden'];
 $PMGuest=sql_result($result,$is,"GuestName");
@@ -490,9 +490,9 @@ if(isset($GroupNamePrefix)&&$GroupNamePrefix!=null) {
 if(isset($GroupNameSuffix)&&$GroupNameSuffix!=null) {
 	$User1Name = $User1Name.$GroupNameSuffix; }
 $MessageText = url2link($MessageText);
-$MessageText = text2icons($MessageText,$Settings['sqltable']);
+$MessageText = text2icons($MessageText,$Settings['sqltable'],$SQLStat);
 $User1Signature = preg_replace("/\<br\>/", "<br />", nl2br($User1Signature));
-$User1Signature = text2icons($User1Signature,$Settings['sqltable']);
+$User1Signature = text2icons($User1Signature,$Settings['sqltable'],$SQLStat);
 ?>
 <div class="TableInfoMini1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>

@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: pgsql.php - Last Update: 12/10/2009 SVN 390 - Author: cooldude2k $
+    $FileInfo: pgsql.php - Last Update: 12/10/2009 SVN 391 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mysql.php"||$File3Name=="/mysql.php") {
@@ -115,6 +115,7 @@ if(!isset($link)) {
 	return "PostgreSQL Server ".$result; }
 function sql_escape_string($string,$link=null) {
 global $SQLStat;
+if(!isset($link)) { $link = $SQLStat; }
 if(isset($link)) {
 	$string = pg_escape_string($link,$string); }
 if(!isset($link)) {

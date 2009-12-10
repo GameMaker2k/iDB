@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: functions.php - Last Update: 12/10/2009 SVN 386 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 12/10/2009 SVN 391 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -115,10 +115,11 @@ $varname = preg_replace("/(HTTP_GET_VARS|HTTP_POST_VARS|HTTP_POST_FILES)/i", nul
 if(!isset($Settings['DefaultTheme'])) {
 	$Settings['DefaultTheme'] = "iDB"; }
 // Change the text to icons(smileys)
-function text2icons($Text,$sqlt) {
+function text2icons($Text,$sqlt,$link=null) {
 global $SQLStat;
+if(!isset($link)) { $link = $SQLStat; }
 $reneequery=sql_pre_query("SELECT * FROM \"".$sqlt."smileys\"", array(null));
-$reneeresult=sql_query($reneequery,$SQLStat);
+$reneeresult=sql_query($reneequery,$link);
 $reneenum=sql_num_rows($reneeresult);
 $renees=0;
 while ($renees < $reneenum) {
@@ -292,10 +293,11 @@ $phpsrcs = preg_replace("/\<font color=\"(.*?)\"\>/i", "<span style=\"color: \\1
 $phpsrcs = preg_replace("/\<\/font>/i", "</span>", $phpsrcs);
 return $phpsrcs; }
 // Check to see if the user is hidden/shy. >_> | ^_^ | <_<
-function GetUserName($idu,$sqlt) { $UsersName = null;
+function GetUserName($idu,$sqlt,$link=null) { $UsersName = null;
 global $SQLStat;
+if(!isset($link)) { $link = $SQLStat; }
 $gunquery = sql_pre_query("SELECT * FROM \"".$sqlt."members\" WHERE \"id\"=%i LIMIT 1", array($idu));
-$gunresult=sql_query($gunquery,$SQLStat);
+$gunresult=sql_query($gunquery,$link);
 $gunnum=sql_num_rows($gunresult);
 // I'm now hidden from you. ^_^ | <_< I cant find you.
 $UsersHidden = "yes";

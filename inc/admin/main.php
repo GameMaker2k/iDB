@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: main.php - Last Update: 12/10/2009 SVN 390 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 12/10/2009 SVN 391 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -114,9 +114,9 @@ if(!isset($OptimizeAr["Msg_text"])&&
 if($OptimizeAr["Msg_text"]=="OK") { 
 	++$TblOptimized; } ++$ti; }
 if($Settings['sqltype']=="mysql") {
-$OutPutLog = "MySQL Output: ".$TblOptimized." Tables optimized."; }
+$OutPutLog = "MySQL Output: ".$TblOptimized." tables optimized."; }
 if($Settings['sqltype']=="pgsql") {
-$OutPutLog = "PGSQL Output: ".$TblOptimized." Tables optimized."; }
+$OutPutLog = "PGSQL Output: All tables optimized."; }
 $_POST['update'] = "now"; $_GET['act'] = "view"; }
 ?>
 </td>
