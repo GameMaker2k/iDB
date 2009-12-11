@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: pgsql.php - Last Update: 12/10/2009 SVN 391 - Author: cooldude2k $
+    $FileInfo: pgsql.php - Last Update: 12/11/2009 SVN 395 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mysql.php"||$File3Name=="/mysql.php") {
@@ -63,14 +63,22 @@ if ($num===false) {
     output_error("SQL Error: ".sql_error(),E_USER_ERROR);
 	return false; }
 	return $num; }
-// Connect to mysql database
+// Connect to pgsql database
 function sql_connect_db($server,$username,$password,$database=null,$new_link=false) {
 if($new_link!==true) { $new_link = false; }
+$pgport = "5432";
+$hostex = explode(":", $server);
+if(isset($hostex[1])&&
+	!is_numeric($hostex[1])) {
+	$hostex[1] = $pgport; }
+if(isset($hostex[1])) { 
+	$server = $hostex[0];
+	$pgport = $hostex[1]; }
 $pgstring = null;
 if($database===null) {
-$pgstring = "host=".$server." port=5432 user=".$username." password=".$password; }
+$pgstring = "host=".$server." port=".$pgport." user=".$username." password=".$password; }
 if($database!==null) {
-$pgstring = "host=".$server." port=5432 dbname=".$database." user=".$username." password=".$password; }
+$pgstring = "host=".$server." port=".$pgport." dbname=".$database." user=".$username." password=".$password; }
 $link = pg_connect($pgstring);
 if ($link===false) {
     output_error("Not connected: ".sql_error(),E_USER_ERROR);
