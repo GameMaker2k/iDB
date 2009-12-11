@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: replies.php - Last Update: 12/10/2009 SVN 391 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 12/11/2009 SVN 396 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -869,7 +869,8 @@ $User1IP=$_SERVER['REMOTE_ADDR'];
 $query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."posts\" (\"TopicID\", \"ForumID\", \"CategoryID\", \"UserID\", \"GuestName\", \"TimeStamp\", \"LastUpdate\", \"EditUser\", \"EditUserName\", \"Post\", \"Description\", \"IP\", \"EditIP\") VALUES\n".
 "(%i, %i, %i, %i, '%s', %i, %i, 0, '', '%s', '%s', '%s', '0')", array($TopicID,$TopicForumID,$TopicCatID,$User1ID,$User1Name,$LastActive,$LastActive,$_POST['ReplyPost'],$_POST['ReplyDesc'],$User1IP));
 sql_query($query,$SQLStat);
-if($Settings['sqltype']=="mysql") {
+if($Settings['sqltype']=="pgsql"||
+	$Settings['sqltype']=="sqlite") {
 $postid = sql_get_next_id($Settings['sqltable'],"posts",$SQLStat); }
 $_SESSION['LastPostTime'] = GMTimeStamp() + $GroupInfo['FloodControl'];
 if($User1ID!=0&&$User1ID!=-1) {

@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: pm.php - Last Update: 12/10/2009 SVN 391 - Author: cooldude2k $
+    $FileInfo: pm.php - Last Update: 12/11/2009 SVN 396 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pm.php"||$File3Name=="/pm.php") {
@@ -973,7 +973,8 @@ if($_SESSION['UserGroup']!=$Settings['GuestGroup']) { $User1Name = $_SESSION['Me
 $query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."messenger\" (\"SenderID\", \"ReciverID\", \"GuestName\", \"MessageTitle\", \"MessageText\", \"Description\", \"DateSend\", \"Read\") VALUES 
 (%i, %i, '%s', '%s', '%s', '%s', %i, %i)", array($_SESSION['UserID'],$SendMessageToID,$_SESSION['MemberName'],$_POST['MessageName'],$_POST['Message'],$_POST['MessageDesc'],$LastActive,0));
 sql_query($query,$SQLStat);
-if($Settings['sqltype']=="pgsql") {
+if($Settings['sqltype']=="pgsql"||
+	$Settings['sqltype']=="sqlite") {
 $messageid = sql_get_next_id($Settings['sqltable'],"messenger",$SQLStat); }
 ?><tr>
 	<td><span class="TableMessage"><br />

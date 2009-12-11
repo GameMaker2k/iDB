@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: events.php - Last Update: 12/10/2009 SVN 391 - Author: cooldude2k $
+    $FileInfo: events.php - Last Update: 12/11/2009 SVN 396 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="events.php"||$File3Name=="/events.php") {
@@ -642,7 +642,8 @@ if($_SESSION['UserGroup']!=$Settings['GuestGroup']) { $User1Name = $_SESSION['Me
 $query = sql_pre_query("INSERT INTO ".$Settings['sqltable']."events (\"UserID\", \"GuestName\", \"EventName\", \"EventText\", \"TimeStamp\", \"TimeStampEnd\", \"EventMonth\", \"EventMonthEnd\", \"EventDay\", \"EventDayEnd\", \"EventYear\", \"EventYearEnd\") VALUES\n".
 "(%i, '%s', '%s', '%s', %i, %i, %i, %i, %i, %i, %i, %i)", array($User1ID,$User1Name,$_POST['EventName'],$_POST['EventText'],$TimeSIn,$TimeSOut,$EventMonth,$EventMonthEnd,$EventDay,$EventDayEnd,$EventYear,$EventYearEnd));
 sql_query($query,$SQLStat);
-if($Settings['sqltype']=="pgsql") {
+if($Settings['sqltype']=="pgsql"||
+	$Settings['sqltype']=="sqlite") {
 $eventid = sql_get_next_id($Settings['sqltable'],"events"); }
 redirect("refresh",$basedir.url_maker($exfile['event'],$Settings['file_ext'],"act=event&id=".$eventid,$Settings['qstr'],$Settings['qsep'],$prexqstr['event'],$exqstr['event'],FALSE),"3");
 ?><tr>

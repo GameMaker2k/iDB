@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: preinstall.php - Last Update: 12/10/2009 SVN 390 - Author: cooldude2k $
+    $FileInfo: preinstall.php - Last Update: 12/11/2009 SVN 396 - Author: cooldude2k $
 */
 error_reporting(E_ALL ^ E_NOTICE);
 /* Some ini setting changes uncomment if you need them. */
@@ -37,7 +37,8 @@ if(isset($_POST['DatabaseType'])) {
 	$Settings['sqltype'] = $_POST['DatabaseType']; }
 if(isset($Settings['sqltype'])) {
 if($Settings['sqltype']!="mysql"&&
-	$Settings['sqltype']!="pgsql") {
+	$Settings['sqltype']!="pgsql"&&
+	$Settings['sqltype']!="sqlite") {
 	$Settings['sqltype'] = "mysql"; } }
 if(file_exists($SettDir['themes']."iDB/settings.php")) {
 	require($SettDir['themes']."iDB/settings.php"); }

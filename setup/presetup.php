@@ -12,7 +12,7 @@
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: presetup.php - Last Update: 12/10/2009 SVN 390 - Author: cooldude2k $
+    $FileInfo: presetup.php - Last Update: 12/11/2009 SVN 396 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="presetup.php"||$File3Name=="/presetup.php") {
@@ -46,6 +46,7 @@ if($Error!="Yes") {
 	<td style="width: 50%;"><select size="1" class="TextBox" name="DatabaseType" id="DatabaseType">
 	<option value="mysql">MySQL Databse</option>
 	<option value="pgsql">PostgreSQL Databse</option>
+	<option value="sqlite">SQLite Databse</option>
 	</select></td>
 </tr><tr>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="charset">Select html charset:</label></td>
