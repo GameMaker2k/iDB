@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: preindex.php - Last Update: 12/07/2009 SVN 381 - Author: cooldude2k $
+    $FileInfo: preindex.php - Last Update: 12/12/2009 SVN 400 - Author: cooldude2k $
 */
 $pretime = explode(" ", microtime());
 $utime = $pretime[0];
@@ -23,7 +23,8 @@ if ($File3Name=="preindex.php"||$File3Name=="/preindex.php") {
 	exit(); }
 require('sql.php');
 if($_GET['act']=="sqldumper"&&$_SESSION['UserGroup']!=$Settings['GuestGroup']&&
-	$GroupInfo['HasAdminCP']=="yes") { require($SettDir['admin'].'sqldumper.php'); die(); }
+	$GroupInfo['HasAdminCP']=="yes") { require($SettDir['admin'].'sqldumper.php'); 
+	session_write_close(); die(); }
 if(!isset($checklowview)) {
 	$checklowview = false; }
 if($checklowview!==false&&$checklowview!==true) {
