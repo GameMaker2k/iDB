@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: main.php - Last Update: 12/11/2009 SVN 396 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 12/12/2009 SVN 399 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -78,6 +78,7 @@ if(!isset($Settings['sqltype'])) {
 	$Settings['sqltype'] = "mysql"; }
 $Settings['sqltype'] = strtolower($Settings['sqltype']);
 if($Settings['sqltype']!="mysql"&&
+	$Settings['sqltype']!="mysqli"&&
 	$Settings['sqltype']!="pgsql"&&
 	$Settings['sqltype']!="sqlite") {
 	$Settings['sqltype'] = "mysql"; }
@@ -105,7 +106,8 @@ $TblOptimized = 0;
 while ($ti < $tcount) {
 if(isset($OptimizeAr["Msg_text"])) { unset($OptimizeAr["Msg_text"]); }
 if(isset($OptimizeAr[3])) { unset($OptimizeAr[3]); }
-if($Settings['sqltype']=="mysql") {
+if($Settings['sqltype']=="mysql"||
+	$Settings['sqltype']=="mysqli") {
 $OptimizeTea = sql_query(sql_pre_query("OPTIMIZE TABLE \"".$TableChCk[$ti]."\"", array(null)),$SQLStat); }
 if($Settings['sqltype']=="pgsql") {
 $OptimizeTea = sql_query(sql_pre_query("VACUUM ANALYZE \"".$TableChCk[$ti]."\"", array(null)),$SQLStat); }
@@ -117,7 +119,8 @@ if(!isset($OptimizeAr["Msg_text"])&&
 	isset($OptimizeAr[3])) { $OptimizeAr["Msg_text"] = $OptimizeAr[3]; }
 if($OptimizeAr["Msg_text"]=="OK") { 
 	++$TblOptimized; } } ++$ti; }
-if($Settings['sqltype']=="mysql") {
+if($Settings['sqltype']=="mysql"||
+	$Settings['sqltype']=="mysqli") {
 $OutPutLog = "MySQL Output: ".$TblOptimized." tables optimized."; }
 if($Settings['sqltype']=="pgsql") {
 $OutPutLog = "PGSQL Output: All tables optimized."; }

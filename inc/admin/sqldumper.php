@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sqldumper.php - Last Update: 12/10/2009 SVN 390 - Author: cooldude2k $
+    $FileInfo: sqldumper.php - Last Update: 12/12/2009 SVN 399 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="sqldumper.php"||$File3Name=="/sqldumper.php") {
@@ -22,7 +22,7 @@ if($_SESSION['UserGroup']==$Settings['GuestGroup']||$GroupInfo['HasAdminCP']=="n
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
-if($Settings['sqltype']!="mysql") {
+if($Settings['sqltype']!="mysql"&&$Settings['sqltype']!="mysqli") {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
@@ -36,8 +36,9 @@ header("Content-Type: application/octet-stream");
 header("Content-Transfer-Encoding: binary");
 $SQLDumper = "SQL Dumper";
 function GetAllRows($table) { $rene_j = 0; $trowout = null;
+global $SQLStat;
 $tresult = sql_query("SELECT * FROM \"".$table."\"",$SQLStat);
-while ($trow = sql_fetch_array($tresult, MYSQL_ASSOC)) {
+while ($trow = sql_fetch_assoc($tresult)) {
 $trowout[$rene_j] = $trow;
 ++$rene_j; }
 sql_free_result($tresult);
@@ -134,8 +135,8 @@ $trownew = $trow[$kazuki_p];
 $trowname = array_keys($trownew);
 $nums = count($trownew); $il = 0;
 while ($il < $nums) { $tnums = $nums - 1;
-$trowrname = sql_escape_string($trowname[$il]);
-$trowrvalue = sql_escape_string($trownew[$trowrname]);
+$trowrname = sql_escape_string($trowname[$il],$SQLStat);
+$trowrvalue = sql_escape_string($trownew[$trowrname],$SQLStat);
 if($_GET['outtype']=="UTF-8"&&$Settings['charset']!="UTF-8") {
 $trowrvalue = utf8_encode($trowrvalue); }
 $trowrvalue = str_replace( array("\n", "\r"), array('\n', '\r'), $trowrvalue);
