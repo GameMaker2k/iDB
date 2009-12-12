@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sqlite.php - Last Update: 12/11/2009 SVN 396 - Author: cooldude2k $
+    $FileInfo: sqlite.php - Last Update: 12/12/2009 SVN 397 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mysql.php"||$File3Name=="/mysql.php") {
@@ -87,7 +87,7 @@ return $retval; }
 function sql_free_result($result) {
 	return true; }
 //Fetch Results to Array
-function sql_fetch_array($result,$result_type=MYSQL_BOTH) {
+function sql_fetch_array($result,$result_type=SQLITE_BOTH) {
 $row = sqlite_fetch_array($result,$result_type);
 	return $row; }
 //Fetch Results to Associative Array
@@ -96,7 +96,7 @@ $row = sqlite_fetch_array($result,SQLITE_ASSOC);
 	return $row; }
 //Fetch Row Results
 function sql_fetch_row($result) {
-$row = sqlite_fetch_single($result);
+$row = sqlite_fetch_array($result,SQLITE_NUM);
 	return $row; }
 //Fetch Row Results
 function sql_server_info($link=null) {
