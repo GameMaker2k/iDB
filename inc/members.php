@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 12/11/2009 SVN 396 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 12/12/2009 SVN 398 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -1345,7 +1345,8 @@ $gquerys = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHER
 $gresults=sql_query($gquerys,$SQLStat);
 $yourgroup=sql_result($gresults,0,"id");
 sql_free_result($gresults);
-if($Settings['sqltype']=="mysql") {
+if($Settings['sqltype']=="mysql"||
+	$Settings['sqltype']=="mysqli") {
 $yourid = sql_get_next_id($Settings['sqltable'],"members",$SQLStat); }
 $_POST['Interests'] = remove_spaces($_POST['Interests']);
 $_POST['Title'] = remove_spaces($_POST['Title']);

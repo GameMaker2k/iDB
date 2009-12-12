@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: events.php - Last Update: 12/11/2009 SVN 396 - Author: cooldude2k $
+    $FileInfo: events.php - Last Update: 12/12/2009 SVN 398 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="events.php"||$File3Name=="/events.php") {
@@ -634,7 +634,8 @@ $EventDay=GMTimeChange("d",$TimeSIn,0,0,"off");
 $EventDayEnd=GMTimeChange("d",$TimeSOut,0,0,"off");
 $EventYear=GMTimeChange("Y",$TimeSIn,0,0,"off");
 $EventYearEnd=GMTimeChange("Y",$TimeSOut,0,0,"off");
-if($Settings['sqltype']=="mysql") {
+if($Settings['sqltype']=="mysql"||
+	$Settings['sqltype']=="mysqli") {
 $eventid = sql_get_next_id($Settings['sqltable'],"events",$SQLStat); }
 $User1ID=$MyUserID;
 if($_SESSION['UserGroup']==$Settings['GuestGroup']) { $User1Name = $_POST['GuestName']; }

@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 12/11/2009 SVN 396 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 12/12/2009 SVN 398 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -224,7 +224,8 @@ $SQLSType = $Settings['sqltype'];
 function sqlsession_write($id,$data) {
 global $sqltable,$SQLStat,$SQLSType;
 $time = GMTimeStamp();
-if($SQLSType=="mysql") {
+if($SQLSType=="mysql"||
+	$SQLSType=="mysqli") {
 $sqlw = sql_pre_query("REPLACE \"".$sqltable."sessions\" VALUES('$id','$data', $time)", array($id,$data,$time));
 $rs = sql_query($sqlw,$SQLStat); }
 if($SQLSType=="pgsql"||

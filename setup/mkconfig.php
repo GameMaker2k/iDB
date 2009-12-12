@@ -12,7 +12,7 @@
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mkconfig.php - Last Update: 12/11/2009 SVN 396 - Author: cooldude2k $
+    $FileInfo: mkconfig.php - Last Update: 12/12/2009 SVN 398 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mkconfig.php"||$File3Name=="/mkconfig.php") {
@@ -164,7 +164,8 @@ if($csrand==3) { $gpass .= chr(rand(97,122)); }
 ++$i; } $GuestPassword = b64e_hmac($gpass,$YourDate,$GSalt,$_POST['usehashtype']);
 $url_this_dir = "http://".$_SERVER['HTTP_HOST'].$this_dir."index.php?act=view";
 $YourIP = $_SERVER['REMOTE_ADDR'];
-if($Settings['sqltype']=="mysql") {
+if($Settings['sqltype']=="mysql"||
+	$Settings['sqltype']=="mysqli") {
 require($SetupDir['setup'].'mysql.php'); }
 if($Settings['sqltype']=="pgsql") {
 require($SetupDir['setup'].'pgsql.php'); }

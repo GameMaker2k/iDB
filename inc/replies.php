@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: replies.php - Last Update: 12/11/2009 SVN 396 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 12/12/2009 SVN 398 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -843,7 +843,8 @@ $gnrresult=sql_query($gnrquery,$SQLStat); $gnrnum=sql_num_rows($gnrresult);
 $NumberPosts=sql_result($gnrresult,0,"NumPosts"); 
 $PostCountAdd=sql_result($gnrresult,0,"PostCountAdd"); 
 sql_free_result($gnrresult);
-if($Settings['sqltype']=="mysql") {
+if($Settings['sqltype']=="mysql"||
+	$Settings['sqltype']=="mysqli") {
 $postid = sql_get_next_id($Settings['sqltable'],"posts",$SQLStat); }
 $requery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($MyUsersID));
 $reresult=sql_query($requery,$SQLStat);
