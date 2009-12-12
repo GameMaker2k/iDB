@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: mysqli.php - Last Update: 12/12/2009 SVN 398 - Author: cooldude2k $
+    $FileInfo: sqlite.php - Last Update: 12/12/2009 SVN 401 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mysql.php"||$File3Name=="/mysql.php") {
@@ -19,41 +19,40 @@ if ($File3Name=="mysql.php"||$File3Name=="/mysql.php") {
 	exit(); }
 // MySQL Functions.
 function sql_error($link=null) {
+global $SQLStat;
 if(isset($link)) {
-	$result = mysqli_error($link); }
+	$result = sqlite_error_string(sqlite_last_error($link)); }
 if(!isset($link)) {
-	$result = mysqli_error(); }
+	$result = sqlite_error_string(sqlite_last_error($SQLStat)); }
 if ($result=="") {
 	return ""; }
 	return $result; }
 function sql_errno($link=null) {
+global $SQLStat;
 if(isset($link)) {
-	$result = mysqli_errno($link); }
+	$result = sqlite_last_error($link); }
 if(!isset($link)) {
-	$result = mysqli_errno(); }
+	$result = sqlite_last_error($SQLStat); }
 if ($result===0) {
 	return 0; }
 	return $result; }
 function sql_errorno($link=null) {
+global $SQLStat;
 if(isset($link)) {
-	$result = sql_error($link);
-	$resultno = sql_errno($link); }
+	$result = sqlite_last_error($link).": ".sqlite_error_string(sqlite_last_error($link)); }
 if(!isset($link)) {
-	$result = sql_error();
-	$resultno = sql_errno(); }
-if ($result==""&&$result===0) {
+	$result = sqlite_last_error($SQLStat).": ".sqlite_error_string(sqlite_last_error($SQLStat)); }
+if ($result=="") {
 	return ""; }
-if ($result!=""&&$result!==0) {
-	$result = $resultno.": ".$result; }
 	return $result; }
 // Execute a query :P
 $NumQueries = 0;
 function sql_query($query,$link=null) {
-global $NumQueries;
+global $NumQueries,$SQLStat;
 if(isset($link)) {
-	$result = mysqli_query($link,$query); }
+	$result = sqlite_query($link,$query); }
 if(!isset($link)) {
-	$result = mysqli_query(null,$query); }
+	$result = sqlite_query(null,$query); }
 if ($result===false) {
     output_error("SQL Error: ".sql_error(),E_USER_ERROR);
 	return false; }
@@ -62,72 +61,52 @@ if ($result!==false) {
 	return $result; } }
 //Fetch Number of Rows
 function sql_num_rows($result) {
-$num = mysqli_num_rows($result);
+$num = sqlite_num_rows($result);
 if ($num===false) {
     output_error("SQL Error: ".sql_error(),E_USER_ERROR);
 	return false; }
 	return $num; }
-// Connect to mysql database
+// Connect to pgsql database
 function sql_connect_db($server,$username,$password,$database=null,$new_link=false) {
-$myport = "3306";
-$hostex = explode(":", $server);
-if(isset($hostex[1])&&
-	!is_numeric($hostex[1])) {
-	$hostex[1] = $myport; }
-if(isset($hostex[1])) { 
-	$server = $hostex[0];
-	$myport = $hostex[1]; }
+if($new_link!==true) { $new_link = false; }
 if($database===null) {
-$link = mysqli_connect($server,$username,$password,null,$myport); }
+return true; }
 if($database!==null) {
-$link = mysqli_connect($server,$username,$password,$database,$myport); }
+$link = sqlite_open($database,0666,$sqliteerror); }
 if ($link===false) {
-    output_error("Not connected: ".sql_error(),E_USER_ERROR);
-	return false; }
-$result = sql_query("SET SESSION SQL_MODE='ANSI_QUOTES';",$link);
-if ($result===false) {
-    output_error("SQL Error: ".sql_error(),E_USER_ERROR);
+    output_error("Not connected: ".$sqliteerror,E_USER_ERROR);
 	return false; }
 return $link; }
 // Query Results :P
 function sql_result($result,$row,$field=0) {
-mysqli_data_seek($result,$row);
-$trow = mysqli_fetch_array($result);
+$check = sqlite_seek($result,$row);
+if ($check===false) {
+    output_error("SQL Error: ".sql_error(),E_USER_ERROR);
+	return false; }
+$trow = sqlite_fetch_array($result);
 $retval = $trow[$field]; 
 return $retval; }
 // Free Results :P
 function sql_free_result($result) {
-$fresult = mysqli_free_result($result);
-if ($fresult===false) {
-    output_error("SQL Error: ".sql_error(),E_USER_ERROR);
-	return false; }
-if ($fresult===true) {
-	return true; } }
+	return true; }
 //Fetch Results to Array
-function sql_fetch_array($result,$result_type=MYSQLI_BOTH) {
-$row = mysqli_fetch_array($result,$result_type);
+function sql_fetch_array($result,$result_type=SQLITE_BOTH) {
+$row = sqlite_fetch_array($result,$result_type);
 	return $row; }
 //Fetch Results to Associative Array
 function sql_fetch_assoc($result) {
-$row = mysqli_fetch_assoc($result);
+$row = sqlite_fetch_array($result,SQLITE_ASSOC);
 	return $row; }
 //Fetch Row Results
 function sql_fetch_row($result) {
-$row = mysqli_fetch_row($result);
+$row = sqlite_fetch_array($result,SQLITE_NUM);
 	return $row; }
 //Fetch Row Results
 function sql_server_info($link=null) {
-if(isset($link)) {
-	$result = mysqli_get_server_info($link); }
-if(!isset($link)) {
-	$result = mysqli_get_server_info(); }
-	return $result; }
+	$result = sqlite_libversion();
+	return "SQLite Server ".$result; }
 function sql_escape_string($string,$link=null) {
-global $SQLStat;
-if(isset($link)) {
-	$string = mysqli_real_escape_string($link,$string); }
-if(!isset($link)) {
-	$string = mysqli_real_escape_string($SQLStat,$string); }
+	$string = sqlite_escape_string($string);
 if ($string===false) {
     output_error("SQL Error: ".sql_error(),E_USER_ERROR);
 	return false; }
@@ -150,7 +129,10 @@ $query_val[$query_is] = $query_vars[$query_i];
    $query_val[0] = $query_string;
    return call_user_func_array("sprintf",$query_val); }
 function sql_set_charset($charset,$link=null) {
-if(function_exists('mysqli_set_charset')===false) {
+	return true; }
+/*
+function sql_set_charset($charset,$link=null) {
+if(function_exists('mysql_set_charset')===false) {
 if(!isset($link)) {
 	$result = sql_query("SET CHARACTER SET '".$charset."'"); }
 if(isset($link)) {
@@ -166,18 +148,17 @@ if ($result===false) {
     output_error("SQL Error: ".sql_error(),E_USER_ERROR);
 	return false; }
 	return true; }
-if(function_exists('mysqli_set_charset')===true) {
+if(function_exists('mysql_set_charset')===true) {
 if(isset($link)) {
-	$result = mysqli_set_charset($link,$charset); }
+	$result = mysql_set_charset($charset,$link); }
 if(!isset($link)) {
-	$result = mysqli_set_charset(null,$charset); }
+	$result = mysql_set_charset($charset); }
 if ($result===false) {
     output_error("SQL Error: ".sql_error(),E_USER_ERROR);
 	return false; }
-	return true; } }
-/*
-if(function_exists('mysqli_set_charset')===false) {
-function mysqli_set_charset($charset,$link) {
+	return true; }
+if(function_exists('mysql_set_charset')===false) {
+function mysql_set_charset($charset,$link) {
 if(isset($link)) {
 	$result = sql_set_charset($charset,$link); }
 if(!isset($link)) {
@@ -189,14 +170,13 @@ if ($result===false) {
 */
 // Get next id for stuff
 function sql_get_next_id($tablepre,$table,$link=null) {
-   $getnextidq = sql_pre_query("SHOW TABLE STATUS LIKE '".$tablepre.$table."'", array());
+   $getnextidq = sql_pre_query("SELECT last_insert_rowid();", array());
 if(!isset($link)) {
 	$result = sql_query($getnextidq); }
 if(isset($link)) {
 	$getnextidr = sql_query($getnextidq,$link); } 
-   $getnextid = sql_fetch_assoc($getnextidr);
-   return $getnextid['Auto_increment'];
-   @sql_free_result($getnextidr); }
+	return sql_result($getnextidr,0);
+	sql_free_result($getnextidr); }
 // Get number of rows for table
 function sql_get_num_rows($tablepre,$table,$link=null) {
    $getnextidq = sql_pre_query("SHOW TABLE STATUS LIKE '".$tablepre.$table."'", array());

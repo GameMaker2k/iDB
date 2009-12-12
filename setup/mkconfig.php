@@ -12,7 +12,7 @@
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mkconfig.php - Last Update: 12/12/2009 SVN 398 - Author: cooldude2k $
+    $FileInfo: mkconfig.php - Last Update: 12/12/2009 SVN 401 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mkconfig.php"||$File3Name=="/mkconfig.php") {
@@ -20,6 +20,7 @@ if ($File3Name=="mkconfig.php"||$File3Name=="/mkconfig.php") {
 	exit(); }
 require_once('settings.php');
 if(!isset($SetupDir['setup'])) { $SetupDir['setup'] = "setup/"; }
+if(!isset($SetupDir['sql'])) { $SetupDir['sql'] = "setup/sql/"; }
 if(!isset($SetupDir['convert'])) { $SetupDir['convert'] = "setup/convert/"; }
 $_POST['DatabaseHost'] = $Settings['sqlhost'];
 $_POST['DatabaseUserName'] = $Settings['sqluser'];
@@ -166,11 +167,11 @@ $url_this_dir = "http://".$_SERVER['HTTP_HOST'].$this_dir."index.php?act=view";
 $YourIP = $_SERVER['REMOTE_ADDR'];
 if($Settings['sqltype']=="mysql"||
 	$Settings['sqltype']=="mysqli") {
-require($SetupDir['setup'].'mysql.php'); }
+require($SetupDir['sql'].'mysql.php'); }
 if($Settings['sqltype']=="pgsql") {
-require($SetupDir['setup'].'pgsql.php'); }
+require($SetupDir['sql'].'pgsql.php'); }
 if($Settings['sqltype']=="sqlite") {
-require($SetupDir['setup'].'sqlite.php'); }
+require($SetupDir['sql'].'sqlite.php'); }
 $CHMOD = $_SERVER['PHP_SELF'];
 $iDBRDate = $SVNDay[0]."/".$SVNDay[1]."/".$SVNDay[2];
 $iDBRSVN = $VER2[2]." ".$SubVerN;
@@ -178,7 +179,7 @@ $LastUpdateS = "Last Update: ".$iDBRDate." ".$iDBRSVN;
 $pretext = "<?php\n/*\n    This program is free software; you can redistribute it and/or modify\n    it under the terms of the GNU General Public License as published by\n    the Free Software Foundation; either version 2 of the License, or\n    (at your option) any later version.\n\n    This program is distributed in the hope that it will be useful,\n    but WITHOUT ANY WARRANTY; without even the implied warranty of\n    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n    Revised BSD License for more details.\n\n    Copyright 2004-".$SVNDay[2]." iDB Support - http://idb.berlios.de/\n    Copyright 2004-".$SVNDay[2]." Game Maker 2k - http://gamemaker2k.org/\n    iDB Installer made by Game Maker 2k - http://idb.berlios.net/\n\n    \$FileInfo: settings.php & settingsbak.php - ".$LastUpdateS." - Author: cooldude2k \$\n*/\n";
 $pretext2 = array("/*   Board Setting Section Begins   */\n\$Settings = array();","/*   Board Setting Section Ends  \n     Board Info Section Begins   */\n\$SettInfo = array();","/*   Board Setting Section Ends   \n     Board Dir Section Begins   */\n\$SettDir = array();","/*   Board Dir Section Ends   */");
 $settcheck = "\$File3Name = basename(\$_SERVER['SCRIPT_NAME']);\nif (\$File3Name==\"settings.php\"||\$File3Name==\"/settings.php\"||\n    \$File3Name==\"settingsbak.php\"||\$File3Name==\"/settingsbak.php\") {\n    header('Location: index.php');\n    exit(); }\n";
-$BoardSettings=$pretext2[0]."\n\$Settings['sqlhost'] = '".$_POST['DatabaseHost']."';\n\$Settings['sqldb'] = '".$_POST['DatabaseName']."';\n\$Settings['sqltable'] = '".$_POST['tableprefix']."';\n\$Settings['sqluser'] = '".$_POST['DatabaseUserName']."';\n\$Settings['sqlpass'] = '".$_POST['DatabasePassword']."';\n\$Settings['sqltype'] = '".$_POST['DatabaseType']."';\n\$Settings['board_name'] = '".$_POST['NewBoardName']."';\n\$Settings['idbdir'] = '".$idbdir."';\n\$Settings['idburl'] = '".$_POST['BoardURL']."';\n\$Settings['enable_https'] = 'off';\n\$Settings['weburl'] = '".$_POST['WebURL']."';\n\$Settings['use_gzip'] = '".$_POST['GZip']."';\n\$Settings['html_type'] = '".$_POST['HTMLType']."';\n\$Settings['html_level'] = '".$_POST['HTMLLevel']."';\n\$Settings['output_type'] = '".$_POST['OutPutType']."';\n\$Settings['GuestGroup'] = 'Guest';\n\$Settings['MemberGroup'] = 'Member';\n\$Settings['ValidateGroup'] = 'Validate';\n\$Settings['AdminValidate'] = 'off';\n\$Settings['TestReferer'] = '".$_POST['TestReferer']."';\n\$Settings['DefaultTheme'] = 'iDB';\n\$Settings['DefaultTimeZone'] = '".$AdminTime."';\n\$Settings['DefaultDST'] = '".$AdminDST."';\n\$Settings['use_hashtype'] = '".$_POST['usehashtype']."';\n\$Settings['charset'] = '".$_POST['charset']."';\n\$Settings['add_power_by'] = 'off';\n\$Settings['send_pagesize'] = 'off';\n\$Settings['max_posts'] = '10';\n\$Settings['max_topics'] = '10';\n\$Settings['max_memlist'] = '10';\n\$Settings['max_pmlist'] = '10';\n\$Settings['hot_topic_num'] = '15';\n\$Settings['qstr'] = '&';\n\$Settings['qsep'] = '=';\n\$Settings['file_ext'] = '.php';\n\$Settings['rss_ext'] = '.php';\n\$Settings['js_ext'] = '.js';\n\$Settings['showverinfo'] = 'on';\n\$Settings['enable_rss'] = 'on';\n\$Settings['enable_search'] = 'on';\n\$Settings['sessionid_in_urls'] = 'off';\n\$Settings['fixpathinfo'] = 'off';\n\$Settings['fixbasedir'] = 'off';\n\$Settings['fixcookiedir'] = 'off';\n\$Settings['enable_pathinfo'] = 'off';\n\$Settings['rssurl'] = 'off';\n\$Settings['board_offline'] = 'off';\n\$Settings['BoardUUID'] = '".$ServerUUID."';\n\$Settings['KarmaBoostDays'] = '".$KarmaBoostDay."';\n\$Settings['KBoostPercent'] = '6|10';\n".$pretext2[1]."\n\$SettInfo['board_name'] = '".$_POST['NewBoardName']."';\n\$SettInfo['Author'] = '".$_POST['AdminUser']."';\n\$SettInfo['Keywords'] = '".$_POST['NewBoardName'].",".$_POST['AdminUser']."';\n\$SettInfo['Description'] = '".$_POST['NewBoardName'].",".$_POST['AdminUser']."';\n".$pretext2[2]."\n\$SettDir['maindir'] = '".$idbdir."';\n\$SettDir['inc'] = 'inc/';\n\$SettDir['misc'] = 'inc/misc/';\n\$SettDir['admin'] = 'inc/admin/';\n\$SettDir['mod'] = 'inc/mod/';\n\$SettDir['themes'] = 'themes/';\n".$pretext2[3]."\n?>";
+$BoardSettings=$pretext2[0]."\n\$Settings['sqlhost'] = '".$_POST['DatabaseHost']."';\n\$Settings['sqldb'] = '".$_POST['DatabaseName']."';\n\$Settings['sqltable'] = '".$_POST['tableprefix']."';\n\$Settings['sqluser'] = '".$_POST['DatabaseUserName']."';\n\$Settings['sqlpass'] = '".$_POST['DatabasePassword']."';\n\$Settings['sqltype'] = '".$_POST['DatabaseType']."';\n\$Settings['board_name'] = '".$_POST['NewBoardName']."';\n\$Settings['idbdir'] = '".$idbdir."';\n\$Settings['idburl'] = '".$_POST['BoardURL']."';\n\$Settings['enable_https'] = 'off';\n\$Settings['weburl'] = '".$_POST['WebURL']."';\n\$Settings['use_gzip'] = '".$_POST['GZip']."';\n\$Settings['html_type'] = '".$_POST['HTMLType']."';\n\$Settings['html_level'] = '".$_POST['HTMLLevel']."';\n\$Settings['output_type'] = '".$_POST['OutPutType']."';\n\$Settings['GuestGroup'] = 'Guest';\n\$Settings['MemberGroup'] = 'Member';\n\$Settings['ValidateGroup'] = 'Validate';\n\$Settings['AdminValidate'] = 'off';\n\$Settings['TestReferer'] = '".$_POST['TestReferer']."';\n\$Settings['DefaultTheme'] = 'iDB';\n\$Settings['DefaultTimeZone'] = '".$AdminTime."';\n\$Settings['DefaultDST'] = '".$AdminDST."';\n\$Settings['use_hashtype'] = '".$_POST['usehashtype']."';\n\$Settings['charset'] = '".$_POST['charset']."';\n\$Settings['add_power_by'] = 'off';\n\$Settings['send_pagesize'] = 'off';\n\$Settings['max_posts'] = '10';\n\$Settings['max_topics'] = '10';\n\$Settings['max_memlist'] = '10';\n\$Settings['max_pmlist'] = '10';\n\$Settings['hot_topic_num'] = '15';\n\$Settings['qstr'] = '&';\n\$Settings['qsep'] = '=';\n\$Settings['file_ext'] = '.php';\n\$Settings['rss_ext'] = '.php';\n\$Settings['js_ext'] = '.js';\n\$Settings['showverinfo'] = 'on';\n\$Settings['enable_rss'] = 'on';\n\$Settings['enable_search'] = 'on';\n\$Settings['sessionid_in_urls'] = 'off';\n\$Settings['fixpathinfo'] = 'off';\n\$Settings['fixbasedir'] = 'off';\n\$Settings['fixcookiedir'] = 'off';\n\$Settings['enable_pathinfo'] = 'off';\n\$Settings['rssurl'] = 'off';\n\$Settings['board_offline'] = 'off';\n\$Settings['BoardUUID'] = '".$ServerUUID."';\n\$Settings['KarmaBoostDays'] = '".$KarmaBoostDay."';\n\$Settings['KBoostPercent'] = '6|10';\n".$pretext2[1]."\n\$SettInfo['board_name'] = '".$_POST['NewBoardName']."';\n\$SettInfo['Author'] = '".$_POST['AdminUser']."';\n\$SettInfo['Keywords'] = '".$_POST['NewBoardName'].",".$_POST['AdminUser']."';\n\$SettInfo['Description'] = '".$_POST['NewBoardName'].",".$_POST['AdminUser']."';\n".$pretext2[2]."\n\$SettDir['maindir'] = '".$idbdir."';\n\$SettDir['inc'] = 'inc/';\n\$SettDir['misc'] = 'inc/misc/';\n\$SettDir['sql'] = 'inc/misc/sql/';\n\$SettDir['admin'] = 'inc/admin/';\n\$SettDir['mod'] = 'inc/mod/';\n\$SettDir['themes'] = 'themes/';\n".$pretext2[3]."\n?>";
 $BoardSettingsBak = $pretext.$settcheck.$BoardSettings;
 $BoardSettings = $pretext.$settcheck.$BoardSettings;
 $fp = fopen("settings.php","w+");
@@ -197,18 +198,18 @@ if($_POST['storecookie']=="true") {
 if($Error!="Yes") {
 if($_POST['unlink']=="true") {
 $chdel1 = @unlink($SetupDir['setup'].'presetup.php'); $chdel2 = @unlink($SetupDir['setup'].'setup.php');
-$chdel3 = @unlink($SetupDir['setup'].'mkconfig.php'); $chdel4 = @unlink($SetupDir['setup'].'mysql.php');
+$chdel3 = @unlink($SetupDir['setup'].'mkconfig.php'); $chdel4 = @unlink($SetupDir['sql'].'mysql.php');
 $chdel5 = @unlink($SetupDir['setup'].'index.php'); $chdel6 = @unlink($SetupDir['setup'].'license.php');
 $chdel7 = @unlink($SetupDir['setup'].'preinstall.php'); $chdel8 = @unlink($SetupDir['convert'].'index.php');
 if($ConvertInfo['ConvertFile']!=null) { $chdel0 = @unlink($ConvertInfo['ConvertFile']); }
 $chdel9 = @unlink($SetupDir['convert'].'info.php'); 
-$chdel14 = @unlink($SetupDir['setup'].'pgsql.php'); $chdel15 = @unlink($SetupDir['setup'].'sqlite.php');
-$chdel10 = @rmdir($SetupDir['convert']); $chdel11 = @rmdir('setup');
+$chdel14 = @unlink($SetupDir['sql'].'pgsql.php'); $chdel15 = @unlink($SetupDir['sql'].'sqlite.php');
+$chdel10 = @rmdir($SetupDir['convert']); $chdel16 = @rmdir($SetupDir['sql']); $chdel11 = @rmdir('setup');
 $chdel12 = @unlink('install.php'); } }
 if($chdel1===false||$chdel2===false||$chdel3===false||$chdel4===false) { $chdel = false; }
 if($chdel5===false||$chdel6===false||$chdel7===false||$chdel8===false) { $chdel = false; }
 if($chdel9===false||$chdel10===false||$chdel11===false||$chdel12===false) { $chdel = false; }
-if($chdel4===false||$chdel15===false) { $chdel = false; }
+if($chdel4===false||$chdel15===false||$chdel16===false) { $chdel = false; }
 if($ConvertInfo['ConvertFile']!=null) { if($chdel0===false) { $chdel = false; } }
 ?><span class="TableMessage">
 <br />Install Finish <a href="index.php?act=view">Click here</a> to goto board. ^_^</span>

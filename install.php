@@ -13,9 +13,10 @@
     iDB Installer made by Game Maker 2k - http://idb.berlios.de/support/category.php?act=view&id=2
 
     $FileInfo: install.php - Last Update: 12/07/2009 SVN 380 - Author: cooldude2k $
-*/
+*//*
 if(ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }
+*/
 //ini_set("display_errors", true); 
 //ini_set("display_startup_errors", true);
 error_reporting(E_ALL ^ E_NOTICE);
@@ -43,8 +44,8 @@ $_GET['act'] = strtolower($_GET['act']); if(isset($_TEG['part'])) {
 if($_TEG['part']<=4&&$_TEG['part']>=1) { $_GET['act'] = "Part".$_TEG['part']; } }
 if ($_GET['act']!="Part4"&&$_POST['act']!="Part4") {
 	$preact['idb'] = "installing";	}
-$SetupDir['setup'] = "setup/"; $ConvertDir['setup'] = $SetupDir['setup'];
-$SetupDir['convert'] = "setup/convert/"; $ConvertDir['convert'] = $SetupDir['convert'];
+$SetupDir['setup'] = "setup/"; $ConvertDir['setup'] = $SetupDir['setup']; $SetupDir['sql'] = "setup/sql/"; 
+$SetupDir['convert'] = "setup/convert/"; $ConvertDir['convert'] = $SetupDir['convert']; $ConvertDir['sql'] = $SetupDir['sql'];
 $Settings['output_type'] = "html"; $Settings['html_type'] = "xhtml10";
 $Settings['board_name'] = "Installing iDB"; 
 if(!isset($Settings['charset'])) {
