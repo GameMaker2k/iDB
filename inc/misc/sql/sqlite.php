@@ -11,10 +11,10 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sqlite.php - Last Update: 12/12/2009 SVN 401 - Author: cooldude2k $
+    $FileInfo: sqlite.php - Last Update: 12/13/2009 SVN 404 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
-if ($File3Name=="mysql.php"||$File3Name=="/mysql.php") {
+if ($File3Name=="sqlite.php"||$File3Name=="/sqlite.php") {
 	@header('Location: index.php');
 	exit(); }
 // MySQL Functions.
@@ -104,7 +104,7 @@ $row = sqlite_fetch_array($result,SQLITE_NUM);
 //Fetch Row Results
 function sql_server_info($link=null) {
 	$result = sqlite_libversion();
-	return "SQLite Server ".$result; }
+	return $result; }
 function sql_escape_string($string,$link=null) {
 	$string = sqlite_escape_string($string);
 if ($string===false) {
@@ -170,12 +170,16 @@ if ($result===false) {
 */
 // Get next id for stuff
 function sql_get_next_id($tablepre,$table,$link=null) {
-   $getnextidq = sql_pre_query("SELECT last_insert_rowid();", array());
+if(function_exists('sqlite_last_insert_rowid')===false) {
+	$getnextidq = sql_pre_query("SELECT last_insert_rowid();", array());
 if(!isset($link)) {
 	$result = sql_query($getnextidq); }
 if(isset($link)) {
 	$getnextidr = sql_query($getnextidq,$link); } 
-	return sql_result($getnextidr,0);
+	$nid = sql_result($getnextidr,0); }
+if(function_exists('sqlite_last_insert_rowid')===true) {
+	$nid = sqlite_last_insert_rowid($link); }
+	return $nid;
 	sql_free_result($getnextidr); }
 // Get number of rows for table
 function sql_get_num_rows($tablepre,$table,$link=null) {

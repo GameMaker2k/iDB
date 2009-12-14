@@ -12,10 +12,10 @@
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: sqlite.php - Last Update: 12/12/2009 SVN 401 - Author: cooldude2k $
+    $FileInfo: sqlite.php - Last Update: 12/13/2009 SVN 404 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
-if ($File3Name=="mysql.php"||$File3Name=="/mysql.php") {
+if ($File3Name=="sqlite.php"||$File3Name=="/sqlite.php") {
 	require('index.php');
 	exit(); }
 if(!isset($SetupDir['setup'])) { $SetupDir['setup'] = "setup/"; }
@@ -111,7 +111,7 @@ $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."forums\" (\"Categ
 sql_query($query,$SQLStat);
 $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."groups\" (\n".
 "  \"id\" INTEGER PRIMARY KEY NOT NULL,\n".
-"  \"Name\" VARCHAR(150) NOT NULL default '',\n".
+"  \"Name\" VARCHAR(150) UNIQUE NOT NULL default '',\n".
 "  \"PermissionID\" INTEGER NOT NULL default '0',\n".
 "  \"NamePrefix\" VARCHAR(150) NOT NULL default '',\n".
 "  \"NameSuffix\" VARCHAR(150) NOT NULL default '',\n".
@@ -128,8 +128,7 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."groups\" (\n".
 "  \"PromoteKarma\" INTEGER NOT NULL default '0',\n".
 "  \"HasModCP\" VARCHAR(5) NOT NULL default '',\n".
 "  \"HasAdminCP\" VARCHAR(5) NOT NULL default '',\n".
-"  \"ViewDBInfo\" VARCHAR(5) NOT NULL default '',\n".
-"  UNIQUE (\"Name\")\n".
+"  \"ViewDBInfo\" VARCHAR(5) NOT NULL default ''\n".
 ");", array(null));
 sql_query($query,$SQLStat);
 $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."groups\" (\"Name\", \"PermissionID\", \"NamePrefix\", \"NameSuffix\", \"CanViewBoard\", \"CanViewOffLine\", \"CanEditProfile\", \"CanAddEvents\", \"CanPM\", \"CanSearch\", \"FloodControl\", \"SearchFlood\", \"PromoteTo\", \"PromotePosts\", \"PromoteKarma\", \"HasModCP\", \"HasAdminCP\", \"ViewDBInfo\") VALUES\n".
@@ -152,10 +151,10 @@ $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."groups\" (\"Name\
 sql_query($query,$SQLStat);
 $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."members\" (\n".
 "  \"id\" INTEGER PRIMARY KEY NOT NULL,\n".
-"  \"Name\" VARCHAR(150) NOT NULL default '',\n".
+"  \"Name\" VARCHAR(150) UNIQUE NOT NULL default '',\n".
 "  \"UserPassword\" VARCHAR(250) NOT NULL default '',\n".
 "  \"HashType\" VARCHAR(50) NOT NULL default '',\n".
-"  \"Email\" VARCHAR(150) NOT NULL default '',\n".
+"  \"Email\" VARCHAR(150) UNIQUE NOT NULL default '',\n".
 "  \"GroupID\" INTEGER NOT NULL default '0',\n".
 "  \"Validated\" VARCHAR(20) NOT NULL default '',\n".
 "  \"HiddenMember\" VARCHAR(20) NOT NULL default '',\n".
@@ -185,9 +184,7 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."members\" (\n".
 "  \"DST\" VARCHAR(5) NOT NULL default '0',\n".
 "  \"UseTheme\" VARCHAR(26) NOT NULL default '0',\n".
 "  \"IP\" VARCHAR(20) NOT NULL default '',\n".
-"  \"Salt\" VARCHAR(50) NOT NULL default '',\n".
-"  UNIQUE (\"Name\"),\n".
-"  UNIQUE (\"Email\")\n".
+"  \"Salt\" VARCHAR(50) NOT NULL default ''\n".
 ");", array(null));
 sql_query($query,$SQLStat);
 $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."members\" (\"id\", \"Name\", \"UserPassword\", \"HashType\", \"Email\", \"GroupID\", \"Validated\", \"HiddenMember\", \"WarnLevel\", \"Interests\", \"Title\", \"Joined\", \"LastActive\", \"LastPostTime\", \"BanTime\", \"BirthDay\", \"BirthMonth\", \"BirthYear\", \"Signature\", \"Notes\", \"Avatar\", \"AvatarSize\", \"Website\", \"Gender\", \"PostCount\", \"Karma\", \"KarmaUpdate\", \"RepliesPerPage\", \"TopicsPerPage\", \"MessagesPerPage\", \"TimeZone\", \"DST\", \"UseTheme\", \"IP\", \"Salt\") VALUES\n".

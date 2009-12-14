@@ -11,10 +11,10 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: mysqli.php - Last Update: 12/12/2009 SVN 401 - Author: cooldude2k $
+    $FileInfo: mysqli.php - Last Update: 12/13/2009 SVN 404 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
-if ($File3Name=="mysql.php"||$File3Name=="/mysql.php") {
+if ($File3Name=="mysqli.php"||$File3Name=="/mysqli.php") {
 	@header('Location: index.php');
 	exit(); }
 // MySQL Functions.

@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 12/12/2009 SVN 401 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 12/13/2009 SVN 404 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -83,6 +83,7 @@ if(!isset($SettDir['inc'])) { $SettDir['inc'] = "inc/"; }
 if(!isset($SettDir['misc'])) { $SettDir['misc'] = "inc/misc/"; }
 if(!isset($SettDir['sql'])) { $SettDir['sql'] = "inc/misc/sql/"; }
 if(!isset($SettDir['admin'])) { $SettDir['admin'] = "inc/admin/"; }
+if(!isset($SettDir['sqldumper'])) { $SettDir['sqldumper'] = "inc/admin/sqldumper/"; }
 if(!isset($SettDir['mod'])) { $SettDir['mod'] = "inc/mod/"; }
 if(!isset($SettDir['themes'])) { $SettDir['themes'] = "themes/"; }
 if(!isset($Settings['use_iniset'])) { $Settings['use_iniset'] = null; }
