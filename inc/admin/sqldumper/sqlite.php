@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sqlite.php - Last Update: 12/13/2009 SVN 404 - Author: cooldude2k $
+    $FileInfo: sqlite.php - Last Update: 12/14/2009 SVN 405 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="sqlite.php"||$File3Name=="/sqlite.php") {
@@ -52,7 +52,7 @@ $TableChCk = array_map("add_prefix",$TableChCk);
 if(!isset($_GET['outtype'])||$_GET['outtype']=="UTF-8") {
 header("Content-Type: text/plain; charset=UTF-8"); }
 if($_GET['outtype']=="latin1") {
-header("Content-Type: text/plain; charset=ISO-8859-15"); }
+header("Content-Type: text/plain; charset=ISO-8859-1"); }
 if($_GET['outtype']=="latin15") {
 header("Content-Type: text/plain; charset=ISO-8859-15"); }
 if($Settings['sqltype']=="sqlite") {
