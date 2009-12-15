@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: preindex.php - Last Update: 12/13/2009 SVN 404 - Author: cooldude2k $
+    $FileInfo: preindex.php - Last Update: 12/14/2009 SVN 406 - Author: cooldude2k $
 */
 $pretime = explode(" ", microtime());
 $utime = $pretime[0];
@@ -26,6 +26,8 @@ if($_GET['act']=="sqldumper"&&$_SESSION['UserGroup']!=$Settings['GuestGroup']&&
 	$GroupInfo['HasAdminCP']=="yes") { 
 	if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli") {
 	require($SettDir['sqldumper'].'mysql.php'); }
+	if($Settings['sqltype']=="pgsql") {
+	require($SettDir['sqldumper'].'pgsql.php'); } 
 	if($Settings['sqltype']=="sqlite") {
 	require($SettDir['sqldumper'].'sqlite.php'); } 
 	session_write_close(); die(); }

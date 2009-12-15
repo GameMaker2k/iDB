@@ -12,7 +12,7 @@
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: pgsql.php - Last Update: 12/13/2009 SVN 404 - Author: cooldude2k $
+    $FileInfo: pgsql.php - Last Update: 12/14/2009 SVN 406 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pgsql.php"||$File3Name=="/pgsql.php") {
@@ -26,14 +26,14 @@ sql_query($query,$SQLStat);
 */
 $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."categories\" (\n".
 "  \"id\" SERIAL PRIMARY KEY NOT NULL,\n".
-"  \"OrderID\" int NOT NULL default '0',\n".
+"  \"OrderID\" int4 NOT NULL default '0',\n".
 "  \"Name\" varchar(150) NOT NULL default '',\n".
 "  \"ShowCategory\" varchar(5) NOT NULL default '',\n".
 "  \"CategoryType\" varchar(15) NOT NULL default '',\n".
 "  \"SubShowForums\" varchar(5) NOT NULL default '',\n".
-"  \"InSubCategory\" int NOT NULL default '0',\n".
-"  \"PostCountView\" int NOT NULL default '0',\n".
-"  \"KarmaCountView\" int NOT NULL default '0',\n".
+"  \"InSubCategory\" int4 NOT NULL default '0',\n".
+"  \"PostCountView\" int4 NOT NULL default '0',\n".
+"  \"KarmaCountView\" int4 NOT NULL default '0',\n".
 "  \"Description\" text NOT NULL\n".
 ");", array(null));
 sql_query($query,$SQLStat);
@@ -42,9 +42,9 @@ $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."categories\" (\"O
 sql_query($query,$SQLStat);
 $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."catpermissions\" (\n".
 "  \"id\" SERIAL PRIMARY KEY NOT NULL,\n".
-"  \"PermissionID\" int NOT NULL default '0',\n".
+"  \"PermissionID\" int4 NOT NULL default '0',\n".
 "  \"Name\" varchar(150) NOT NULL default '',\n".
-"  \"CategoryID\" int NOT NULL default '0',\n".
+"  \"CategoryID\" int4 NOT NULL default '0',\n".
 "  \"CanViewCategory\" varchar(5) NOT NULL default ''\n".
 ");", array(null));
 sql_query($query,$SQLStat);
@@ -58,18 +58,18 @@ $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."catpermissions\" 
 sql_query($query,$SQLStat);
 $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."events\" (\n".
 "  \"id\" SERIAL PRIMARY KEY NOT NULL,\n".
-"  \"UserID\" int NOT NULL default '0',\n".
+"  \"UserID\" int4 NOT NULL default '0',\n".
 "  \"GuestName\" varchar(150) NOT NULL default '',\n".
 "  \"EventName\" varchar(150) NOT NULL default '',\n".
 "  \"EventText\" text NOT NULL,\n".
-"  \"TimeStamp\" int NOT NULL default '0',\n".
-"  \"TimeStampEnd\" int NOT NULL default '0',\n".
-"  \"EventMonth\" int NOT NULL default '0',\n".
-"  \"EventMonthEnd\" int NOT NULL default '0',\n".
-"  \"EventDay\" int NOT NULL default '0',\n".
-"  \"EventDayEnd\" int NOT NULL default '0',\n".
-"  \"EventYear\" int NOT NULL default '0',\n".
-"  \"EventYearEnd\" int NOT NULL default '0'\n".
+"  \"TimeStamp\" int4 NOT NULL default '0',\n".
+"  \"TimeStampEnd\" int4 NOT NULL default '0',\n".
+"  \"EventMonth\" int4 NOT NULL default '0',\n".
+"  \"EventMonthEnd\" int4 NOT NULL default '0',\n".
+"  \"EventDay\" int4 NOT NULL default '0',\n".
+"  \"EventDayEnd\" int4 NOT NULL default '0',\n".
+"  \"EventYear\" int4 NOT NULL default '0',\n".
+"  \"EventYearEnd\" int4 NOT NULL default '0'\n".
 ");", array(null));
 sql_query($query,$SQLStat);
 $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."events\" (\"UserID\", \"GuestName\", \"EventName\", \"EventText\", \"TimeStamp\", \"TimeStampEnd\", \"EventMonth\", \"EventMonthEnd\", \"EventDay\", \"EventDayEnd\", \"EventYear\", \"EventYearEnd\") VALUES\n".
@@ -77,23 +77,23 @@ $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."events\" (\"UserI
 sql_query($query,$SQLStat);
 $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."forums\" (\n".
 "  \"id\" SERIAL PRIMARY KEY NOT NULL,\n".
-"  \"CategoryID\" int NOT NULL default '0',\n".
-"  \"OrderID\" int NOT NULL default '0',\n".
+"  \"CategoryID\" int4 NOT NULL default '0',\n".
+"  \"OrderID\" int4 NOT NULL default '0',\n".
 "  \"Name\" varchar(150) NOT NULL default '',\n".
 "  \"ShowForum\" varchar(5) NOT NULL default '',\n".
 "  \"ForumType\" varchar(15) NOT NULL default '',\n".
-"  \"InSubForum\" int NOT NULL default '0',\n".
+"  \"InSubForum\" int4 NOT NULL default '0',\n".
 "  \"RedirectURL\" text NOT NULL,\n".
-"  \"Redirects\" int NOT NULL default '0',\n".
-"  \"NumViews\" int NOT NULL default '0',\n".
+"  \"Redirects\" int4 NOT NULL default '0',\n".
+"  \"NumViews\" int4 NOT NULL default '0',\n".
 "  \"Description\" text NOT NULL,\n".
 "  \"PostCountAdd\" varchar(15) NOT NULL default '',\n".
-"  \"PostCountView\" int NOT NULL default '0',\n".
-"  \"KarmaCountView\" int NOT NULL default '0',\n".
+"  \"PostCountView\" int4 NOT NULL default '0',\n".
+"  \"KarmaCountView\" int4 NOT NULL default '0',\n".
 "  \"CanHaveTopics\" varchar(5) NOT NULL default '',\n".
-"  \"HotTopicPosts\" int NOT NULL default '0',\n".
-"  \"NumPosts\" int NOT NULL default '0',\n".
-"  \"NumTopics\" int NOT NULL default '0'\n".
+"  \"HotTopicPosts\" int4 NOT NULL default '0',\n".
+"  \"NumPosts\" int4 NOT NULL default '0',\n".
+"  \"NumTopics\" int4 NOT NULL default '0'\n".
 ");", array(null));
 sql_query($query,$SQLStat);
 $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."forums\" (\"CategoryID\", \"OrderID\", \"Name\", \"ShowForum\", \"ForumType\", \"InSubForum\", \"RedirectURL\", \"Redirects\", \"NumViews\", \"Description\", \"PostCountAdd\", \"PostCountView\", \"KarmaCountView\", \"CanHaveTopics\", \"HotTopicPosts\", \"NumPosts\", \"NumTopics\") VALUES\n".
@@ -102,7 +102,7 @@ sql_query($query,$SQLStat);
 $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."groups\" (\n".
 "  \"id\" SERIAL PRIMARY KEY NOT NULL,\n".
 "  \"Name\" varchar(150) NOT NULL default '',\n".
-"  \"PermissionID\" int NOT NULL default '0',\n".
+"  \"PermissionID\" int4 NOT NULL default '0',\n".
 "  \"NamePrefix\" varchar(150) NOT NULL default '',\n".
 "  \"NameSuffix\" varchar(150) NOT NULL default '',\n".
 "  \"CanViewBoard\" varchar(5) NOT NULL default '',\n".
@@ -111,11 +111,11 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."groups\" (\n".
 "  \"CanAddEvents\" varchar(5) NOT NULL default '',\n".
 "  \"CanPM\" varchar(5) NOT NULL default '',\n".
 "  \"CanSearch\" varchar(5) NOT NULL default '',\n".
-"  \"FloodControl\" int NOT NULL default '0',\n".
-"  \"SearchFlood\" int NOT NULL default '0',\n".
-"  \"PromoteTo\" int NOT NULL default '0',\n".
-"  \"PromotePosts\" int NOT NULL default '0',\n".
-"  \"PromoteKarma\" int NOT NULL default '0',\n".
+"  \"FloodControl\" int4 NOT NULL default '0',\n".
+"  \"SearchFlood\" int4 NOT NULL default '0',\n".
+"  \"PromoteTo\" int4 NOT NULL default '0',\n".
+"  \"PromotePosts\" int4 NOT NULL default '0',\n".
+"  \"PromoteKarma\" int4 NOT NULL default '0',\n".
 "  \"HasModCP\" varchar(5) NOT NULL default '',\n".
 "  \"HasAdminCP\" varchar(5) NOT NULL default '',\n".
 "  \"ViewDBInfo\" varchar(5) NOT NULL default '',\n".
@@ -136,31 +136,31 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."members\" (\n".
 "  \"UserPassword\" varchar(250) NOT NULL default '',\n".
 "  \"HashType\" varchar(50) NOT NULL default '',\n".
 "  \"Email\" varchar(150) NOT NULL default '',\n".
-"  \"GroupID\" int NOT NULL default '0',\n".
+"  \"GroupID\" int4 NOT NULL default '0',\n".
 "  \"Validated\" varchar(20) NOT NULL default '',\n".
 "  \"HiddenMember\" varchar(20) NOT NULL default '',\n".
-"  \"WarnLevel\" int NOT NULL default '0',\n".
+"  \"WarnLevel\" int4 NOT NULL default '0',\n".
 "  \"Interests\" varchar(150) NOT NULL default '',\n".
 "  \"Title\" varchar(150) NOT NULL default '',\n".
-"  \"Joined\" int NOT NULL default '0',\n".
-"  \"LastActive\" int NOT NULL default '0',\n".
-"  \"LastPostTime\" int NOT NULL default '0',\n".
-"  \"BanTime\" int NOT NULL default '0',\n".
-"  \"BirthDay\" int NOT NULL default '0',\n".
-"  \"BirthMonth\" int NOT NULL default '0',\n".
-"  \"BirthYear\" int NOT NULL default '0',\n".
+"  \"Joined\" int4 NOT NULL default '0',\n".
+"  \"LastActive\" int4 NOT NULL default '0',\n".
+"  \"LastPostTime\" int4 NOT NULL default '0',\n".
+"  \"BanTime\" int4 NOT NULL default '0',\n".
+"  \"BirthDay\" int4 NOT NULL default '0',\n".
+"  \"BirthMonth\" int4 NOT NULL default '0',\n".
+"  \"BirthYear\" int4 NOT NULL default '0',\n".
 "  \"Signature\" text NOT NULL,\n".
 "  \"Notes\" text NOT NULL,\n".
 "  \"Avatar\" varchar(150) NOT NULL default '',\n".
 "  \"AvatarSize\" varchar(10) NOT NULL default '',\n".
 "  \"Website\" varchar(150) NOT NULL default '',\n".
 "  \"Gender\" varchar(15) NOT NULL default '',\n".
-"  \"PostCount\" int NOT NULL default '0',\n".
-"  \"Karma\" int NOT NULL default '0',\n".
-"  \"KarmaUpdate\" int NOT NULL default '0',\n".
-"  \"RepliesPerPage\" int NOT NULL default '0',\n".
-"  \"TopicsPerPage\" int NOT NULL default '0',\n".
-"  \"MessagesPerPage\" int NOT NULL default '0',\n".
+"  \"PostCount\" int4 NOT NULL default '0',\n".
+"  \"Karma\" int4 NOT NULL default '0',\n".
+"  \"KarmaUpdate\" int4 NOT NULL default '0',\n".
+"  \"RepliesPerPage\" int4 NOT NULL default '0',\n".
+"  \"TopicsPerPage\" int4 NOT NULL default '0',\n".
+"  \"MessagesPerPage\" int4 NOT NULL default '0',\n".
 "  \"TimeZone\" varchar(5) NOT NULL default '0',\n".
 "  \"DST\" varchar(5) NOT NULL default '0',\n".
 "  \"UseTheme\" varchar(26) NOT NULL default '0',\n".
@@ -176,14 +176,14 @@ $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."members\" (\"id\"
 sql_query($query,$SQLStat);
 $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."messenger\" (\n".
 "  \"id\" SERIAL PRIMARY KEY NOT NULL,\n".
-"  \"SenderID\" int NOT NULL default '0',\n".
-"  \"ReciverID\" int NOT NULL default '0',\n".
+"  \"SenderID\" int4 NOT NULL default '0',\n".
+"  \"ReciverID\" int4 NOT NULL default '0',\n".
 "  \"GuestName\" varchar(150) NOT NULL default '',\n".
 "  \"MessageTitle\" varchar(150) NOT NULL default '',\n".
 "  \"MessageText\" text NOT NULL,\n".
 "  \"Description\" text NOT NULL,\n".
-"  \"DateSend\" int NOT NULL default '0',\n".
-"  \"Read\" int NOT NULL default '0'\n".
+"  \"DateSend\" int4 NOT NULL default '0',\n".
+"  \"Read\" int4 NOT NULL default '0'\n".
 ");", array(null));
 sql_query($query,$SQLStat);
 $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."messenger\" (\"SenderID\", \"ReciverID\", \"GuestName\", \"MessageTitle\", \"MessageText\", \"Description\", \"DateSend\", \"Read\") VALUES\n".
@@ -191,9 +191,9 @@ $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."messenger\" (\"Se
 sql_query($query,$SQLStat);
 $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."permissions\" (\n".
 "  \"id\" SERIAL PRIMARY KEY NOT NULL,\n".
-"  \"PermissionID\" int NOT NULL default '0',\n".
+"  \"PermissionID\" int4 NOT NULL default '0',\n".
 "  \"Name\" varchar(150) NOT NULL default '',\n".
-"  \"ForumID\" int NOT NULL default '0',\n".
+"  \"ForumID\" int4 NOT NULL default '0',\n".
 "  \"CanViewForum\" varchar(5) NOT NULL default '',\n".
 "  \"CanMakeTopics\" varchar(5) NOT NULL default '',\n".
 "  \"CanMakeReplys\" varchar(5) NOT NULL default '',\n".
@@ -223,14 +223,14 @@ $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."permissions\" (\"
 sql_query($query,$SQLStat);
 $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."posts\" (\n".
 "  \"id\" SERIAL PRIMARY KEY NOT NULL,\n".
-"  \"TopicID\" int NOT NULL default '0',\n".
-"  \"ForumID\" int NOT NULL default '0',\n".
-"  \"CategoryID\" int NOT NULL default '0',\n".
-"  \"UserID\" int NOT NULL default '0',\n".
+"  \"TopicID\" int4 NOT NULL default '0',\n".
+"  \"ForumID\" int4 NOT NULL default '0',\n".
+"  \"CategoryID\" int4 NOT NULL default '0',\n".
+"  \"UserID\" int4 NOT NULL default '0',\n".
 "  \"GuestName\" varchar(150) NOT NULL default '',\n".
-"  \"TimeStamp\" int NOT NULL default '0',\n".
-"  \"LastUpdate\" int NOT NULL default '0',\n".
-"  \"EditUser\" int NOT NULL default '0',\n".
+"  \"TimeStamp\" int4 NOT NULL default '0',\n".
+"  \"LastUpdate\" int4 NOT NULL default '0',\n".
+"  \"EditUser\" int4 NOT NULL default '0',\n".
 "  \"EditUserName\" varchar(150) NOT NULL default '',\n".
 "  \"Post\" text NOT NULL,\n".
 "  \"Description\" text NOT NULL,\n".
@@ -255,7 +255,7 @@ sql_query($query,$SQLStat);
 $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."sessions\" (\n".
 "  \"session_id\" varchar(150) PRIMARY KEY NOT NULL default '',\n".
 "  \"session_data\" text NOT NULL,\n".
-"  \"expires\" int NOT NULL default '0'\n".
+"  \"expires\" int4 NOT NULL default '0'\n".
 ");", array(null));
 sql_query($query,$SQLStat);
 $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."smileys\" (\n".
@@ -293,9 +293,9 @@ sql_query($query,$SQLStat);
 /*
 $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."tagboard\" (\n".
 "  \"id\" SERIAL PRIMARY KEY NOT NULL,\n".
-"  \"UserID\" int NOT NULL default '0',\n".
+"  \"UserID\" int4 NOT NULL default '0',\n".
 "  \"GuestName\" varchar(150) NOT NULL default '',\n".
-"  \"TimeStamp\" int NOT NULL default '0',\n".
+"  \"TimeStamp\" int4 NOT NULL default '0',\n".
 "  \"Post\" text NOT NULL,\n".
 "  \"IP\" varchar(20) NOT NULL default ''
 ");", array(null));
@@ -305,20 +305,20 @@ sql_query($query,$SQLStat);
 */
 $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."topics\" (\n".
 "  \"id\" SERIAL PRIMARY KEY NOT NULL,\n".
-"  \"ForumID\" int NOT NULL default '0',\n".
-"  \"CategoryID\" int NOT NULL default '0',\n".
-"  \"OldForumID\" int NOT NULL default '0',\n".
-"  \"OldCategoryID\" int NOT NULL default '0',\n".
-"  \"UserID\" int NOT NULL default '0',\n".
+"  \"ForumID\" int4 NOT NULL default '0',\n".
+"  \"CategoryID\" int4 NOT NULL default '0',\n".
+"  \"OldForumID\" int4 NOT NULL default '0',\n".
+"  \"OldCategoryID\" int4 NOT NULL default '0',\n".
+"  \"UserID\" int4 NOT NULL default '0',\n".
 "  \"GuestName\" varchar(150) NOT NULL default '',\n".
-"  \"TimeStamp\" int NOT NULL default '0',\n".
-"  \"LastUpdate\" int NOT NULL default '0',\n".
+"  \"TimeStamp\" int4 NOT NULL default '0',\n".
+"  \"LastUpdate\" int4 NOT NULL default '0',\n".
 "  \"TopicName\" varchar(150) NOT NULL default '',\n".
 "  \"Description\" text NOT NULL,\n".
-"  \"NumReply\" int NOT NULL default '0',\n".
-"  \"NumViews\" int NOT NULL default '0',\n".
-"  \"Pinned\" int NOT NULL default '0',\n".
-"  \"Closed\" int NOT NULL default '0'\n".
+"  \"NumReply\" int4 NOT NULL default '0',\n".
+"  \"NumViews\" int4 NOT NULL default '0',\n".
+"  \"Pinned\" int4 NOT NULL default '0',\n".
+"  \"Closed\" int4 NOT NULL default '0'\n".
 ");", array(null));
 sql_query($query,$SQLStat);
 $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."topics\" (\"ForumID\", \"CategoryID\", \"OldForumID\", \"OldCategoryID\", \"UserID\", \"GuestName\", \"TimeStamp\", \"LastUpdate\", \"TopicName\", \"Description\", \"NumReply\", \"NumViews\", \"Pinned\", \"Closed\") VALUES\n".

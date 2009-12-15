@@ -22,7 +22,7 @@ if($_SESSION['UserGroup']==$Settings['GuestGroup']||$GroupInfo['HasAdminCP']=="n
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
-if($Settings['sqltype']!="sqlite") {
+if($Settings['sqltype']!="pgsql") {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
@@ -57,21 +57,39 @@ if($_GET['outtype']=="latin15") {
 header("Content-Type: text/plain; charset=ISO-8859-15"); }
 $sli = 0; $slnum = count($TableChCk);
 while ($sli < $slnum) {
-$FullTable[$sli] = "CREATE TABLE \"".$TableChCk[$sli]."\" (\n";
-$tabsta = sql_query("PRAGMA table_info(\"".$TableChCk[$sli]."\");",$SQLStat);
-$zli = 0;
-while ($tabstats = sql_fetch_array($tabsta)) {
-if($zli>0) { $FullTable[$sli] .= ",\n"; }
-$SQLDefault = null; $PrimeKey = " ";
-if($tabstats['dflt_value']!==null) {
-$SQLDefault = " default '".$tabstats['dflt_value']."'"; }
-if($tabstats['dflt_value']===null) {
-$SQLDefault = ""; }
-if($tabstats['pk']=="1") {
-$PrimeKey = " PRIMARY KEY "; }
-$FullTable[$sli] .= "  \"".$tabstats['name']."\" ".$tabstats['type'].$PrimeKey."NOT NULL".$SQLDefault;
+$FullTable[$sli] = "CREATE TABLE \"".$TableChCk[$sli]."\" (";
+$tabsta = sql_query("select * from information_schema.columns where table_name='".$TableChCk[$sli]."';",$SQLStat);
+$zli = 0; $zlnum = sql_num_rows($tabsta);
+$UniKeyRow = null;
+while ($zli < $zlnum) {
+$SQL['column_name'] = sql_result($tabsta,$zli,"column_name");
+$SQL['column_default'] = sql_result($tabsta,$zli,"column_default");
+$PSQL = null;
+$PSQL = explode("::", $SQL['column_default']);
+if(count($PSQL)>1) { $SQL['column_default'] = $PSQL[0]; }
+if (preg_match("/nextval(.*)\_seq/i", $SQL['column_default'])) {
+$SQL['udt_name'] = "SERIAL"; $SQL['column_default'] = null;
+} else { $SQL['column_default'] = " DEFAULT ".$SQL['column_default'];
+$SQL['udt_name'] = sql_result($tabsta,$zli,"udt_name"); }
+if($SQL['udt_name']=="text") { $SQL['column_default'] = null; }
+$SQL['character_maximum_length'] = sql_result($tabsta,$zli,"character_maximum_length");
+if($SQL['udt_name']=="varchar") {
+	$SQL['udt_name'] = $SQL['udt_name']."(".$SQL['character_maximum_length'].")"; }
+$pristats = null; $PriKeyRow = " ";
+$prista = sql_query("SELECT * FROM information_schema.key_column_usage WHERE table_name = '".$TableChCk[$sli]."' and column_name = '".$SQL['column_name']."';",$SQLStat);
+$pristats = @pg_fetch_result($prista,0,"\"constraint_name\"");
+if (preg_match("/(.*)\_pkey/i", $pristats)) {
+$PriKeyRow = " PRIMARY KEY ";
+} else {
+if (preg_match("/(.*)\_key/i", $pristats)) {
+$UniKeyRow = $UniKeyRow.",\n  UNIQUE (\"".$SQL['column_name']."\")";
+} else {
+/*Nothing*/ } }
+if($pristats==$SQL['column_name']) { $PriKeyRow = " PRIMARY KEY "; }
+$FullTable[$sli] .= "\n  \"".$SQL['column_name']."\" ".$SQL['udt_name'].$PriKeyRow."NOT NULL".$SQL['column_default'];
+if($zli+1 < $zlnum) { $FullTable[$sli] .= ","; }
 ++$zli; }
-$FullTable[$sli] .= "\n);\n";
+$FullTable[$sli] .= $UniKeyRow."\n);\n";
 ++$sli; }
 $TableNames = $TableChCk;
 $num = count($TableNames); $renee_s = 0;
@@ -79,8 +97,9 @@ echo "-- ".$OrgName." ".$SQLDumper."\n";
 echo "-- version ".$VerInfo['iDB_Ver_SVN']."\n";
 echo "-- ".$iDBHome."support/\n";
 echo "--\n";
+echo "-- Host: ".$Settings['sqlhost']."\n";
 echo "-- Generation Time: ".GMTimeGet('F d, Y \a\t h:i A',$_SESSION['UserTimeZone'],0,$_SESSION['UserDST'])."\n";
-echo "-- SQLite Server version: ".sql_server_info($SQLStat)."\n";
+echo "-- Server version: ".sql_server_info($SQLStat)."\n";
 echo "-- PHP Version: ".phpversion()."\n\n";
 echo "--\n";
 echo "-- Database: \"".$Settings['sqldb']."\"\n";
@@ -104,21 +123,22 @@ $trowrvalue = sql_escape_string($trownew[$trowrname],$SQLStat);
 if($_GET['outtype']=="UTF-8"&&$Settings['charset']!="UTF-8") {
 $trowrvalue = utf8_encode($trowrvalue); }
 $trowrvalue = str_replace( array("\n", "\r"), array('\n', '\r'), $trowrvalue);
+if($kazuki_p===0) {
 if($il===0) { $srow = "INSERT INTO \"".$TableNames[$renee_s]."\" ("; }
 if($il<$tnums&&$il!=$tnums) { $srow .= "\"".$trowrname."\", "; }
-if($il==$tnums) { $srow .= "\"".$trowrname."\") VALUES"; }
+if($il==$tnums) { $srow .= "\"".$trowrname."\") VALUES"; } }
 if($il===0) { $srowvalue = "("; }
 if(!is_numeric($trowrvalue)) { $trowrvalue = "'".$trowrvalue."'"; }
 if($il<$tnums) { $srowvalue .= $trowrvalue.", "; }
 if($il==$tnums) { $srowvalue .= $trowrvalue;
-if($kazuki_p<$tnumz) { $srowvalue .= ");"; }
+if($kazuki_p<$tnumz) { $srowvalue .= "),"; }
 if($kazuki_p==$tnumz) { $srowvalue .= ");"; } }
 ++$il; }
 if($kazuki_p===0) {
 echo "--\n";
 echo "-- Dumping data for table \"".$TableNames[$renee_s]."\"\n";
-echo "--\n\n"; }
-echo $srow."\n";
+echo "--\n\n";
+echo $srow."\n"; }
 echo $srowvalue."\n";
 if($kazuki_p==$tnumz&&$renee_s<$tnum) {
 echo "\n-- --------------------------------------------------------\n"; }
