@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sqlite.php - Last Update: 12/14/2009 SVN 406 - Author: cooldude2k $
+    $FileInfo: sqlite.php - Last Update: 12/15/2009 SVN 407 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="sqlite.php"||$File3Name=="/sqlite.php") {
@@ -57,10 +57,17 @@ if($_GET['outtype']=="latin15") {
 header("Content-Type: text/plain; charset=ISO-8859-15"); }
 $sli = 0; $slnum = count($TableChCk);
 while ($sli < $slnum) {
+/*
 $FullTable[$sli] = "CREATE TABLE \"".$TableChCk[$sli]."\" (\n";
-$tabsta = sql_query("PRAGMA table_info(\"".$TableChCk[$sli]."\");",$SQLStat);
+*/
+$tabsta = sql_query("SELECT * FROM sqlite_master WHERE type=\"table\" and tbl_name=\"".$TableChCk[$sli]."\";",$SQLStat);
+$tabstats = sql_fetch_array($tabsta);
+$FullTable[$sli] = $tabstats['sql'];
+/*
 $zli = 0;
+$tabsta = sql_query("PRAGMA table_info(\"".$TableChCk[$sli]."\");",$SQLStat);
 while ($tabstats = sql_fetch_array($tabsta)) {
+var_dump($tabstats);
 if($zli>0) { $FullTable[$sli] .= ",\n"; }
 $SQLDefault = null; $PrimeKey = " ";
 if($tabstats['dflt_value']!==null) {
@@ -72,6 +79,7 @@ $PrimeKey = " PRIMARY KEY "; }
 $FullTable[$sli] .= "  \"".$tabstats['name']."\" ".$tabstats['type'].$PrimeKey."NOT NULL".$SQLDefault;
 ++$zli; }
 $FullTable[$sli] .= "\n);\n";
+*/
 ++$sli; }
 $TableNames = $TableChCk;
 $num = count($TableNames); $renee_s = 0;
