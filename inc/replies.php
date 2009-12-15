@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: replies.php - Last Update: 12/12/2009 SVN 398 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 12/12/2009 SVN 409 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -1580,9 +1580,9 @@ if($pstring!=null||$CanMakeReply=="yes"||$CanMakeTopic=="yes") {
  <?php if($CanMakeReply=="yes") { ?>
  <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=create&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $ThemeSet['AddReply']; ?></a>
  <?php if(isset($ThemeSet['FastReply'])&&$ThemeSet['FastReply']!=null) { ?>
- <?php echo $ThemeSet['ButtonDivider']; } ?>
+ <?php echo $ThemeSet['ButtonDivider']; ?>
  <a onclick="toggletag('FastReply'); toggletag('MkFastReply'); return false;" href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$_GET['page']."&fastreply=".$frnext,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']).$extrafe; ?>"><?php echo $ThemeSet['FastReply']; ?></a>
- <?php } if($PermissionInfo['CanMakeTopics'][$TopicForumID]=="yes") {
+ <?php } } if($PermissionInfo['CanMakeTopics'][$TopicForumID]=="yes") {
 	if($CanMakeTopic=="yes"&&$CanMakeReply=="yes") { ?>
  <?php echo $ThemeSet['ButtonDivider']; } ?>
  <a href="<?php echo url_maker($exfile['forum'],$Settings['file_ext'],"act=create&id=".$TopicForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum']); ?>"><?php echo $ThemeSet['NewTopic']; ?></a>
