@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sqlite.php - Last Update: 12/15/2009 SVN 407 - Author: cooldude2k $
+    $FileInfo: sqlite.php - Last Update: 12/15/2009 SVN 408 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="sqlite.php"||$File3Name=="/sqlite.php") {
@@ -62,7 +62,7 @@ $FullTable[$sli] = "CREATE TABLE \"".$TableChCk[$sli]."\" (\n";
 */
 $tabsta = sql_query("SELECT * FROM sqlite_master WHERE type=\"table\" and tbl_name=\"".$TableChCk[$sli]."\";",$SQLStat);
 $tabstats = sql_fetch_array($tabsta);
-$FullTable[$sli] = $tabstats['sql'];
+$FullTable[$sli] = $tabstats['sql'].";\n";
 /*
 $zli = 0;
 $tabsta = sql_query("PRAGMA table_info(\"".$TableChCk[$sli]."\");",$SQLStat);
