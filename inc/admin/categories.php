@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: categories.php - Last Update: 12/15/2009 SVN 411 - Author: cooldude2k $
+    $FileInfo: categories.php - Last Update: 12/16/2009 SVN 412 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="categories.php"||$File3Name=="/categories.php") {
@@ -189,12 +189,11 @@ $getperidr2=sql_query($getperidq2,$SQLStat);
 $getperidnum2=sql_num_rows($getperidr2);
 $getperidName=sql_result($getperidr2,0,"Name");
 sql_free_result($getperidr2);
-$query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."catpermissions\" (\"PermissionID\", \"Name\", \"CategoryID\", \"CanViewCategory\") VALUES (%i, '%s', %i, 'yes')", array($getperidID,$getperidName,$_POST['CategoryID'])); 
+$query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."catpermissions\" (\"PermissionID\", \"Name\", \"CategoryID\", \"CanViewCategory\") VALUES (%i, '%s', %i, 'yes')", array($getperidName,$_POST['CategoryID'])); 
 sql_query($query,$SQLStat);
 ++$getperidi; /*++$nextperid;*/ }
-sql_free_result($getperidr);
-?>
-<?php } } if($_GET['act']=="deletecategory"&&$_POST['update']!="now") { 
+sql_free_result($getperidr); } } 
+if($_GET['act']=="deletecategory"&&$_POST['update']!="now") { 
 $admincptitle = " ".$ThemeSet['TitleDivider']." Deleting a Category";
 ?>
 <div class="TableMenuBorder">
@@ -648,7 +647,7 @@ $fi=0;
 while ($fi < $ai) {
 $InCategoryID=sql_result($fr,$fi,"id");
 $InCategoryName=sql_result($fr,$fi,"Name");
-$getperidq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."catpermissions\" WHERE PermissionID=%i AND \"CategoryID\"=%i LIMIT 1", array($_POST['id'],$InCategoryID));
+$getperidq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."catpermissions\" WHERE \"PermissionID\"=%i AND \"CategoryID\"=%i LIMIT 1", array($_POST['id'],$InCategoryID));
 $getperidr=sql_query($getperidq,$SQLStat);
 $getperidnum=sql_num_rows($getperidr);
 $getperidNumz = null;
