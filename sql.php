@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 12/16/2009 SVN 414 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 12/16/2009 SVN 415 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -120,7 +120,7 @@ if($_GET['act']=="versioninfo") { header("Content-Type: text/plain; charset=UTF-
 <?php echo "<name>".$iDBVerName."</name>"; die(); } }
 if($Settings['vercheck']===1) {
 if($_GET['act']=="versioninfo") { header("Content-Type: text/plain; charset=UTF-8");
-header("Location: ".$VerCheckURL."&name=".urlencode($iDBVerName); die(); } }
+header("Location: ".$VerCheckURL."&name=".urlencode($iDBVerName)); die(); } }
 if(!isset($Settings['use_hashtype'])) {
 	$Settings['use_hashtype'] = "sha256"; }
 if(!function_exists('hash')||!function_exists('hash_algos')) {
