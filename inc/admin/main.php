@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: main.php - Last Update: 12/13/2009 SVN 404 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 12/17/2009 SVN 417 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -84,11 +84,14 @@ if($Settings['sqltype']!="mysql"&&
 	$Settings['sqltype'] = "mysql"; }
 if($Settings['sqltype']=="mysql"||
 	$Settings['sqltype']=="mysqli") {
-$DBType = "MySQL version ".sql_server_info($SQLStat); }
+$DBType['Server'] = "MySQL version ".sql_server_info($SQLStat);
+$DBType['Client'] = "MySQL version ".sql_client_info($SQLStat); }
 if($Settings['sqltype']=="pgsql") {
-$DBType = "PostgreSQL server ".sql_server_info($SQLStat); }
+$DBType['Server'] = "PostgreSQL version ".sql_server_info($SQLStat);
+$DBType['Client'] = "PostgreSQL version ".sql_client_info($SQLStat); }
 if($Settings['sqltype']=="sqlite") {
-$DBType = "SQLite version ".sql_server_info($SQLStat); }
+$DBType['Server'] = "SQLite version ".sql_server_info($SQLStat);
+$DBType['Client'] = sql_client_info($SQLStat); }
 ?>
 <table class="Table3">
 <tr style="width: 100%; vertical-align: top;">
@@ -250,7 +253,7 @@ sql_free_result($mgresults);
 <form style="display: inline;" method="post" id="acptool" action="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=settings",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">
 <table style="text-align: left;">
 <tr style="text-align: left;">
-	<td style="width: 50%;"><label class="TextBoxLabel" for="BoardURL">Insert The Board URL or localhost to use any url:</label></td>
+	<td style="width: 50%;"><label class="TextBoxLabel" for="BoardURL">Insert The Board URL:</label></td>
 	<td style="width: 50%;"><input type="text" class="TextBox" name="BoardURL" size="20" id="BoardURL" value="<?php echo $Settings['idburl']; ?>" /></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="WebURL">Insert The WebSite URL:</label></td>
@@ -544,9 +547,18 @@ require('settings.php'); $admincptitle = " ".$ThemeSet['TitleDivider']." Databas
 <form style="display: inline;" method="post" id="acptool" action="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=sql",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">
 <table style="text-align: left;">
 <tr style="text-align: left;">
-	<td style="width: 50%;"><span class="TextBoxLabel">Database Type:</span></td>
-	<td style="width: 50%;"><?php echo $DBType; ?></td>
+	<td style="width: 50%;"><span class="TextBoxLabel">Forum Software Version:</span></td>
+	<td style="width: 50%;"><?php echo $VerInfo['iDB_Ver_Show']; ?></td>
 </tr><tr style="text-align: left;">
+	<td style="width: 50%;"><span class="TextBoxLabel">Database Server:</span></td>
+	<td style="width: 50%;"><?php echo $DBType['Server']; ?></td>
+</tr><?php if($Settings['sqltype']=="mysql"||
+	$Settings['sqltype']=="mysqli"||
+	$Settings['sqltype']=="pgsql") { 
+?><tr style="text-align: left;">
+	<td style="width: 50%;"><span class="TextBoxLabel">Database Client:</span></td>
+	<td style="width: 50%;"><?php echo $DBType['Client']; ?></td>
+</tr><?php } ?><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="DatabaseUserName">Insert Database User Name:</label></td>
 	<td style="width: 50%;"><input type="text" name="DatabaseUserName" class="TextBox" id="DatabaseUserName" size="20" value="<?php echo $Settings['sqluser']; ?>" /></td>
 </tr><tr style="text-align: left;">

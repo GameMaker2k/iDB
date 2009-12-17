@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: pgsql.php - Last Update: 12/14/2009 SVN 406 - Author: cooldude2k $
+    $FileInfo: pgsql.php - Last Update: 12/17/2009 SVN 417 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pgsql.php"||$File3Name=="/pgsql.php") {
@@ -114,13 +114,20 @@ $row = pg_fetch_assoc($result);
 function sql_fetch_row($result) {
 $row = pg_fetch_row($result);
 	return $row; }
-//Fetch Row Results
+//Get Server Info
 function sql_server_info($link=null) {
 if(isset($link)) {
 	$result = pg_version($link); }
 if(!isset($link)) {
 	$result = pg_version(); }
 	return $result['server']; }
+//Get Client Info
+function sql_client_info($link=null) {
+if(isset($link)) {
+	$result = pg_version($link); }
+if(!isset($link)) {
+	$result = pg_version(); }
+	return $result['client']; }
 function sql_escape_string($string,$link=null) {
 global $SQLStat;
 if(!isset($link)) { $link = $SQLStat; }
