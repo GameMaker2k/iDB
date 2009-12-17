@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: profilemain.php - Last Update: 12/10/2009 SVN 389 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 12/17/2009 SVN 418 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
@@ -887,7 +887,8 @@ if($YourPassword!=$OldPassword) { $Error="Yes"; ?>
 <div class="TableMessage" style="text-align: center;">Your passwords did not match.<br />&nbsp;</div>
 <?php }
 	$NewIP=$_SERVER['REMOTE_ADDR'];
-	if ($Error!="Yes") { 
+	if($Error!="Yes") { 
+	if($_POST['Password']!="") {
 	$NewSalt = salt_hmac(); $NewDay = GMTimeStamp();
 	if($Settings['use_hashtype']=="md2") { $iDBHash = "iDBH2";
 	$NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$NewSalt,"md2"); }
@@ -910,10 +911,14 @@ if($YourPassword!=$OldPassword) { $Error="Yes"; ?>
 	if($cookieSecure===true) {
 	setcookie("SessPass", $NewPassword, time() + (7 * 86400), $cbasedir, $cookieDomain, 1); }
 	if($cookieSecure===false) {
-	setcookie("SessPass", $NewPassword, time() + (7 * 86400), $cbasedir, $cookieDomain); } }
+	setcookie("SessPass", $NewPassword, time() + (7 * 86400), $cbasedir, $cookieDomain); } } }
 	$_POST['Email'] = remove_spaces($_POST['Email']);
+	if($_POST['Password']!="") {
 	$querynewuserinfo = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"UserPassword\"='%s',\"HashType\"='iDBH',\"Email\"='%s',\"LastActive\"=%i,\"IP\"='%s',\"Salt\"='%s' WHERE \"id\"=%i", array($NewPassword,$_POST['Email'],$NewDay,$NewIP,$NewSalt,$_SESSION['UserID']));
-	sql_query($querynewuserinfo,$SQLStat); } } } }
+	sql_query($querynewuserinfo,$SQLStat); }
+	if($_POST['Password']=="") {
+	echo $querynewuserinfo = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"Email\"='%s',\"LastActive\"=%i,\"IP\"='%s' WHERE \"id\"=%i", array($_POST['Email'],$NewDay,$NewIP,$_SESSION['UserID']));
+	sql_query($querynewuserinfo,$SQLStat); } } } } }
 ?>
 <?php if($_POST['update']=="now"&&$_GET['act']!=null) {
 	$profiletitle = " ".$ThemeSet['TitleDivider']." Updating Settings"; ?>

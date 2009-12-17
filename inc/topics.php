@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: topics.php - Last Update: 12/17/2009 SVN 416 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 12/17/2009 SVN 418 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -490,7 +490,7 @@ redirect("refresh",$basedir.url_maker($exfile['forum'],$Settings['file_ext'],"ac
 <tr>
 	<td><span class="TableMessage"><br />
 	You have to wait before making another topic.<br />
-	Click <a href="<?php echo url_maker($exfile['forum'],$Settings['file_ext'],"act=view&id=".$ForumID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum']); ?>">here</a> to view your reply.<br />&nbsp;
+	Click <a href="<?php echo url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$ForumID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>">here</a> to go back to forum.<br />&nbsp;
 	</span><br /></td>
 </tr>
 </table>
@@ -601,6 +601,10 @@ sql_free_result($renee_result);
 </table></div>
 <div class="DivMkTopics">&nbsp;</div>
 <?php } if($_GET['act']=="maketopic"&&$_POST['act']=="maketopics") {
+if($_POST['TopicDesc']==""&&$_POST['TopicName']!="") {
+	$_POST['TopicDesc'] = $_POST['TopicName']; }
+if($_POST['TopicDesc']!=""&&$_POST['TopicName']=="") {
+	$_POST['TopicName'] = $_POST['TopicDesc']; }
 if($PermissionInfo['CanMakeTopics'][$ForumID]=="no"||$CanHaveTopics=="no") { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
