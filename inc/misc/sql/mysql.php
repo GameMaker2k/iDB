@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: mysql.php - Last Update: 12/12/2009 SVN 401 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 12/17/2009 SVN 416 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mysql.php"||$File3Name=="/mysql.php") {
@@ -187,14 +187,8 @@ if ($result===false) {
 */
 // Get next id for stuff
 function sql_get_next_id($tablepre,$table,$link=null) {
-   $getnextidq = sql_pre_query("SHOW TABLE STATUS LIKE '".$tablepre.$table."'", array());
-if(!isset($link)) {
-	$result = sql_query($getnextidq); }
-if(isset($link)) {
-	$getnextidr = sql_query($getnextidq,$link); } 
-   $getnextid = sql_fetch_assoc($getnextidr);
-   return $getnextid['Auto_increment'];
-   @sql_free_result($getnextidr); }
+	$nid = mysql_insert_id($link);
+	return $nid; }
 // Get number of rows for table
 function sql_get_num_rows($tablepre,$table,$link=null) {
    $getnextidq = sql_pre_query("SHOW TABLE STATUS LIKE '".$tablepre.$table."'", array());

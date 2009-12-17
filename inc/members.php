@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 12/13/2009 SVN 402 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 12/17/2009 SVN 416 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -898,7 +898,8 @@ $YourLastPostTime=sql_result($resultlog,$i,"LastPostTime");
 $YourBanTime=sql_result($resultlog,$i,"BanTime");
 $CGMTime = GMTimeStamp();
 if($YourBanTime!=0&&$YourBanTime!=null) {
-if($YourBanTime>=$CGMTime) { $BanError = "yes"; } }
+if($YourBanTime>=$CGMTime) { $BanError = "yes"; }
+if($YourBanTime<0) { $BanError = "yes"; } }
 $gquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i LIMIT 1", array($YourGroupM));
 $gresult=sql_query($gquery,$SQLStat);
 $YourGroupM=sql_result($gresult,0,"Name");
@@ -1348,9 +1349,6 @@ $gquerys = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHER
 $gresults=sql_query($gquerys,$SQLStat);
 $yourgroup=sql_result($gresults,0,"id");
 sql_free_result($gresults);
-if($Settings['sqltype']=="mysql"||
-	$Settings['sqltype']=="mysqli") {
-$yourid = sql_get_next_id($Settings['sqltable'],"members",$SQLStat); }
 $_POST['Interests'] = remove_spaces($_POST['Interests']);
 $_POST['Title'] = remove_spaces($_POST['Title']);
 $_POST['Email'] = remove_spaces($_POST['Email']);
@@ -1364,9 +1362,7 @@ $_POST['YourOffSet'] = $_POST['YourOffSet'].":".$_POST['MinOffSet'];
 $query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."members\" (\"Name\", \"UserPassword\", \"HashType\", \"Email\", \"GroupID\", \"Validated\", \"HiddenMember\", \"WarnLevel\", \"Interests\", \"Title\", \"Joined\", \"LastActive\", \"LastPostTime\", \"BanTime\", \"BirthDay\", \"BirthMonth\", \"BirthYear\", \"Signature\", \"Notes\", \"Avatar\", \"AvatarSize\", \"Website\", \"Gender\", \"PostCount\", \"Karma\", \"KarmaUpdate\", \"RepliesPerPage\", \"TopicsPerPage\", \"MessagesPerPage\", \"TimeZone\", \"DST\", \"UseTheme\", \"IP\", \"Salt\") VALUES\n". 
 "('%s', '%s', '%s', '%s', '%s', '%s', '%s', %i, '%s', '%s', %i, %i, '0', '0', '0', '0', '0', '%s', '%s', '%s', '%s', '%s', '%s', %i, 0, 0, 10, 10, 10, '%s', '%s', '%s', '%s', '%s')", array($Name,$NewPassword,$iDBHash,$_POST['Email'],$yourgroup,$ValidateStats,$HideMe,"0",$_POST['Interests'],$_POST['Title'],$_POST['Joined'],$_POST['LastActive'],$NewSignature,'Your Notes',$Avatar,"100x100",$Website,$_POST['YourGender'],$_POST['PostCount'],$_POST['YourOffSet'],$_POST['DST'],$Settings['DefaultTheme'],$_POST['UserIP'],$HashSalt));
 sql_query($query,$SQLStat);
-if($Settings['sqltype']=="pgsql"||
-	$Settings['sqltype']=="sqlite") {
-$yourid = sql_get_next_id($Settings['sqltable'],"members",$SQLStat); }
+$yourid = sql_get_next_id($Settings['sqltable'],"members",$SQLStat);
 $querylogr = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s' AND \"UserPassword\"='%s' LIMIT 1", array($Name,$NewPassword));
 $resultlogr=sql_query($querylogr,$SQLStat);
 $numlogr=sql_num_rows($resultlogr);

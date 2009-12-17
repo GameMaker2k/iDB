@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: prelogin.php - Last Update: 12/09/2009 SVN 383 - Author: cooldude2k $
+    $FileInfo: prelogin.php - Last Update: 12/17/2009 SVN 416 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="prelogin.php"||$File3Name=="/prelogin.php") {
@@ -40,7 +40,8 @@ $YourBanTime=sql_result($resultlog2,0,"BanTime");
 sql_free_result($resultlog2);
 $CGMTime = GMTimeStamp();
 if($YourBanTime!=0&&$YourBanTime!=null) {
-if($YourBanTime>=$CGMTime) { $BanError = "yes"; } }
+if($YourBanTime>=$CGMTime) { $BanError = "yes"; } 
+if($YourBanTime<0) { $BanError = "yes"; } }
 $NewDay=GMTimeStamp();
 $NewIP=$_SERVER['REMOTE_ADDR'];
 if($BanError!="yes") {

@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: replies.php - Last Update: 12/12/2009 SVN 409 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 12/17/2009 SVN 416 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -843,9 +843,6 @@ $gnrresult=sql_query($gnrquery,$SQLStat); $gnrnum=sql_num_rows($gnrresult);
 $NumberPosts=sql_result($gnrresult,0,"NumPosts"); 
 $PostCountAdd=sql_result($gnrresult,0,"PostCountAdd"); 
 sql_free_result($gnrresult);
-if($Settings['sqltype']=="mysql"||
-	$Settings['sqltype']=="mysqli") {
-$postid = sql_get_next_id($Settings['sqltable'],"posts",$SQLStat); }
 $requery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($MyUsersID));
 $reresult=sql_query($requery,$SQLStat);
 $renum=sql_num_rows($reresult);
@@ -870,9 +867,7 @@ $User1IP=$_SERVER['REMOTE_ADDR'];
 $query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."posts\" (\"TopicID\", \"ForumID\", \"CategoryID\", \"UserID\", \"GuestName\", \"TimeStamp\", \"LastUpdate\", \"EditUser\", \"EditUserName\", \"Post\", \"Description\", \"IP\", \"EditIP\") VALUES\n".
 "(%i, %i, %i, %i, '%s', %i, %i, 0, '', '%s', '%s', '%s', '0')", array($TopicID,$TopicForumID,$TopicCatID,$User1ID,$User1Name,$LastActive,$LastActive,$_POST['ReplyPost'],$_POST['ReplyDesc'],$User1IP));
 sql_query($query,$SQLStat);
-if($Settings['sqltype']=="pgsql"||
-	$Settings['sqltype']=="sqlite") {
-$postid = sql_get_next_id($Settings['sqltable'],"posts",$SQLStat); }
+$postid = sql_get_next_id($Settings['sqltable'],"posts",$SQLStat);
 $_SESSION['LastPostTime'] = GMTimeStamp() + $GroupInfo['FloodControl'];
 if($User1ID!=0&&$User1ID!=-1) {
 $queryupd = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"LastActive\"=%i,\"IP\"='%s',\"PostCount\"=%i,\"LastPostTime\"=%i WHERE \"id\"=%i", array($LastActive,$User1IP,$NewPostCount,$_SESSION['LastPostTime'],$User1ID));

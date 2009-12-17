@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: groupsetup.php - Last Update: 12/09/2009 SVN 385 - Author: cooldude2k $
+    $FileInfo: groupsetup.php - Last Update: 12/17/2009 SVN 416 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="groupsetup.php"||$File3Name=="/groupsetup.php") {
@@ -61,7 +61,8 @@ $ChkUsrGroup=sql_result($svrgresultkgb,0,"Name");
 $ChkUsrBanTime=sql_result($resultchkusr,0,"BanTime");
 $ChkUsrGMTime = GMTimeStamp();
 if($ChkUsrBanTime!=0&&$ChkUsrBanTime!=null) {
-if($ChkUsrBanTime>=$ChkUsrGMTime) { $BanError = "yes"; } }
+if($ChkUsrBanTime>=$ChkUsrGMTime) { $BanError = "yes"; }
+if($ChkUsrBanTime<0) { $BanError = "yes"; } }
 if($BanError!="yes") {
 $_SESSION['Theme']=$ChkUsrTheme;
 $_SESSION['MemberName']=$ChkUsrName;
