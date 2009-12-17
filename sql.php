@@ -11,13 +11,15 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 12/13/2009 SVN 404 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 12/16/2009 SVN 414 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
 //ini_set("display_errors", true); 
 //ini_set("display_startup_errors", true);
 error_reporting(E_ALL ^ E_NOTICE);
+//ini_set("error_prepend_string","<span style='color: ff0000;'>");
+//ini_set("error_append_string","</span>");
 /* Get rid of session id in urls */
 //ini_set("session.use_trans_sid", false);
 //ini_set("session.use_cookies", true);
@@ -66,15 +68,13 @@ if($Settings['charset']!="ISO-8859-15"&&$Settings['charset']!="ISO-8859-1"&&
 	$Settings['charset']!="Shift_JIS"&&$Settings['charset']!="EUC-JP") {
 	$Settings['charset'] = "ISO-8859-15"; } }
 	$chkcharset = $Settings['charset'];
-ini_set('default_charset', $Settings['charset']);
+@ini_set('default_charset', $Settings['charset']);
 //session_save_path($SettDir['inc']."temp/");
 if(!isset($Settings['sqldb'])) { 
 if(file_exists("install.php")) { header('Location: install.php'); die(); } 
 if(!file_exists("install.php")) { header("Content-Type: text/plain; charset=UTF-8");
 echo "403 Error: Sorry could not find install.php\nTry uploading files again and if that dose not work try download iDB again."; die(); } }
 if(!isset($Settings['sqlhost'])) { $Settings['sqlhost'] = "localhost"; }
-ini_set("error_prepend_string","<span style='color: ff0000;'>");
-ini_set("error_append_string","</span>");
 if($Settings['fixpathinfo']=="on") {
 	$_SERVER['PATH_INFO'] = $_SERVER['ORIG_PATH_INFO'];
 	putenv("PATH_INFO=".$_SERVER['ORIG_PATH_INFO']); }
@@ -105,10 +105,22 @@ if(!isset($_POST['License'])) { $_POST['License'] = null; }
 if(!isset($_SERVER['HTTPS'])) { $_SERVER['HTTPS'] = "off"; }
 require_once($SettDir['misc'].'utf8.php');
 require_once($SettDir['inc'].'filename.php');
+$iDBVerName = "iDB|".$VER2[1]."|".$VER1[0].".".$VER1[1].".".$VER1[2]."|".$VER2[2]."|".$SubVerN;
+/* This way checks iDB version by sending the iDBVerName to the iDB Version Checker.*/
+$Settings['vercheck'] = 1;
+/* This way checks iDB version by sending the board url to the iDB Version Checker.*/
+$Settings['vercheck'] = 2;
+if($Settings['vercheck']!=1&&
+	$Settings['vercheck']!=2) {
+	$Settings['vercheck'] = 2; }
+if($Settings['vercheck']===2) {
 if($_GET['act']=="versioninfo") { header("Content-Type: text/plain; charset=UTF-8"); ?>
 <charset><?php echo $Settings['charset']; ?></charset> 
 <title><?php echo $Settings['board_name']; ?></title> 
-<?php echo "<name>iDB|".$VER2[1]."|".$VER1[0].".".$VER1[1].".".$VER1[2]."|".$VER2[2]."|".$SubVerN."</name>"; die(); }
+<?php echo "<name>".$iDBVerName."</name>"; die(); } }
+if($Settings['vercheck']===1) {
+if($_GET['act']=="versioninfo") { header("Content-Type: text/plain; charset=UTF-8");
+header("Location: ".$VerCheckURL."&name=".urlencode($iDBVerName); die(); } }
 if(!isset($Settings['use_hashtype'])) {
 	$Settings['use_hashtype'] = "sha256"; }
 if(!function_exists('hash')||!function_exists('hash_algos')) {

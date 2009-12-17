@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: admin.php - Last Update: 12/13/2009 SVN 403 - Author: cooldude2k $
+    $FileInfo: admin.php - Last Update: 12/16/2009 SVN 414 - Author: cooldude2k $
 */
 if(ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }
@@ -46,7 +46,12 @@ if($_GET['act']==null) {
 if($_GET['act']=="view"&&$GroupInfo['ViewDBInfo']!="yes") {
 	$_GET['act']="view"; }
 if($_GET['act']=="vercheck"&&$GroupInfo['ViewDBInfo']=="yes") {
-	header("Location: ".$VerCheckURL."&bid=".$Settings['bid']."&vercheck=newtype"); }
+	if($Settings['vercheck']!=1&&$Settings['vercheck']!=2) {
+	$Settings['vercheck'] = 1; }
+	if($Settings['vercheck']===1) {
+	header("Location: ".$VerCheckURL."&name=".urlencode($iDBVerName); }
+	if($Settings['vercheck']===2) {
+	header("Location: ".$VerCheckURL."&bid=".$Settings['bid']."&vercheck=newtype"); } }
 if($_GET['act']=="view")
 { $AdminMenu = "menu";
 if($_GET['menu']==null) {
