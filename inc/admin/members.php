@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 12/18/2009 SVN 421 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 12/18/2009 SVN 422 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -238,6 +238,12 @@ $_POST['MemName'] = remove_spaces($_POST['MemName']);
 $_POST['MemEmail'] = remove_spaces($_POST['MemEmail']);
 $username_check = null;
 if($_POST['MemName']!=$DMemName) {
+$tquery = sql_pre_query("UPDATE \"".$Settings['sqltable']."topics\" SET \"GuestName\"='%s' WHERE \"UserID\"=%i", array($_POST['MemName'],$_POST['id']));
+sql_query($tquery,$SQLStat);
+$r1query = sql_pre_query("UPDATE \"".$Settings['sqltable']."posts\" SET \"GuestName\"='%s' WHERE \"UserID\"=%i", array($_POST['MemName'],$_POST['id']));
+sql_query($r1query,$SQLStat);
+$r2query = sql_pre_query("UPDATE \"".$Settings['sqltable']."posts\" SET \"EditUserName\"='%s' WHERE \"EditUser\"=%i", array($_POST['MemName'],$_POST['id']));
+sql_query($r2query,$SQLStat);
 $sql_username_check = sql_query(sql_pre_query("SELECT \"Name\" FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s'", array($_POST['MemName'])),$SQLStat);
 $username_check = sql_num_rows($sql_username_check);
 sql_free_result($sql_username_check); }
