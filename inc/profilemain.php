@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: profilemain.php - Last Update: 12/17/2009 SVN 418 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 12/18/2009 SVN 421 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
@@ -315,7 +315,8 @@ $AvatarSize1W=$AvatarSize1[0]; $AvatarSize1H=$AvatarSize1[1];
 <tr class="TableMenuRow3" id="AvatarEditor">
 <td class="TableMenuColumn3">
 <form style="display: inline;" method="post" action="<?php echo $avataract; ?>">
- <?php  /* Avatar Table Thanks For SeanJ's Help at http://seanj.jcink.com/ */  ?>
+<?php  // Avatar Table Thanks For SeanJ's Help at http://seanj.jcink.com/  
+ ?>
  <table class="AvatarTable" style="width: 100px; height: 100px; text-align: center;">
 	<tr class="AvatarRow" style="width: 100%; height: 100%;">
 		<td class="AvatarRow" style="width: 100%; height: 100%; text-align: center; vertical-align: middle;">

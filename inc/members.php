@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 12/17/2009 SVN 416 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 12/18/2009 SVN 421 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -594,6 +594,7 @@ $GroupNamePrefix=sql_result($gresult,0,"NamePrefix");
 $GroupNameSuffix=sql_result($gresult,0,"NameSuffix");
 */
 sql_free_result($gresult);
+if($ViewMem['Title']=="") { $ViewMem['Title'] = $ViewMem['Group']; }
 /*
 if(isset($GroupNamePrefix)&&$GroupNamePrefix!=null) {
 	$ViewMem['Name'] = $GroupNamePrefix.$ViewMem['Name']; }
@@ -656,7 +657,8 @@ $_SESSION['ViewingTitle'] = $ViewMem['Name'];
 </tr>
 <tr class="TableRow3" id="MemberProfile">
 <td class="TableColumn3">
-<?php  /* Avatar Table Thanks For SeanJ's Help at http://seanj.jcink.com/ */  ?>
+<?php  // Avatar Table Thanks For SeanJ's Help at http://seanj.jcink.com/  
+ ?>
  <table class="AvatarTable" style="width: 100%; height: 100px; text-align: center;">
 	<tr class="AvatarRow" style="width: 100px; height: 100px;">
 		<td class="AvatarRow" style="width: 100%; height: 100%; text-align: center; vertical-align: middle;">

@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 12/16/2009 SVN 415 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 12/18/2009 SVN 421 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -225,14 +225,12 @@ function sqlsession_read($id) {
 global $sqltable,$SQLStat,$SQLSType;
 $data = "";
 $time = GMTimeStamp();
-$sqlr = sql_pre_query("SELECT \"session_data\" FROM \"".$sqltable."sessions\" WHERE \"session_id\" = '%s'", array($id,$time));
+$sqlr = sql_pre_query("SELECT * FROM \"".$sqltable."sessions\" WHERE \"session_id\" = '%s'", array($id,$time));
 $rs = sql_query($sqlr,$SQLStat);
 $a = sql_num_rows($rs);
 if($a > 0) {
 $row = sql_fetch_assoc($rs);
-$data = $row['session_data'];
-if($SQLSType=="sqlite") {
-$data = $row["\"session_data\""]; } }
+$data = $row['session_data']; }
 return $data; }
 $SQLSType = $Settings['sqltype'];
 function sqlsession_write($id,$data) {
@@ -244,7 +242,7 @@ $sqlw = sql_pre_query("REPLACE \"".$sqltable."sessions\" VALUES('$id','$data', $
 $rs = sql_query($sqlw,$SQLStat); }
 if($SQLSType=="pgsql"||
 	$SQLSType=="sqlite") {
-$sqlr = sql_pre_query("SELECT \"session_data\" FROM \"".$sqltable."sessions\" WHERE \"session_id\" = '%s'", array($id,$time));
+$sqlr = sql_pre_query("SELECT * FROM \"".$sqltable."sessions\" WHERE \"session_id\" = '%s'", array($id,$time));
 $rs = sql_query($sqlr,$SQLStat);
 $a = sql_num_rows($rs);
 if($a>0) {
