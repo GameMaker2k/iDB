@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 12/18/2009 SVN 424 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 12/18/2009 SVN 425 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -25,6 +25,7 @@ ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if(!isset($_POST['update'])) { $_POST['update'] = null; }
 if(!isset($_POST['gid'])) { $_POST['gid'] = "0"; }
+if(!isset($_POST['search'])) { $_POST['search'] = "%"; }
 if(!is_numeric($_POST['gid'])) { $_POST['gid'] = "0"; }
 $Error = null; $errorstr = null;
 ?>
@@ -253,6 +254,9 @@ sql_query($dmquery,$SQLStat); }
 	$_POST['act'] = null; $_POST['update'] = null; }
 if($_GET['act']=="editmember"&&$_POST['update']!="now"&&!isset($_POST['id'])) { 
 $admincptitle = " ".$ThemeSet['TitleDivider']." Editing Members";
+$_POST['search'] = stripcslashes(htmlspecialchars($_POST['search'], ENT_QUOTES, $Settings['charset']));
+//$_POST['search'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['search']);
+$_POST['search'] = remove_spaces($_POST['search']);
 ?>
 <div class="TableMenuBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
@@ -274,13 +278,26 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Editing Members";
 </tr>
 <tr class="TableMenuRow3">
 <td class="TableMenuColumn3">
+<form style="display: inline;" method="post" id="acpstool" action="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=editmember",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">
+<table style="text-align: left;">
+<tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="search">Search for member name:</label></td>
+	<td style="width: 50%;"><input type="text" name="search" class="TextBox" id="search" size="20" value="<?php echo $_POST['search']; ?>" /></td>
+</tr></table>
+<table style="text-align: left;">
+<tr style="text-align: left;">
+<td style="width: 100%;">
+<input type="submit" class="Button" value="Search" name="Apply_Changes" />
+</td></tr></table>
+</form>
+<?php if(isset($_POST['search'])) { ?>
 <form style="display: inline;" method="post" id="acptool" action="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=editmember",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">
 <table style="text-align: left;">
 <tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="id">Member to edit:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="id" id="id">
 <?php 
-$getmemidq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE (\"id\"<>-1 AND \"id\"<>1)", array(null));
+$getmemidq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"Name\" LIKE '%s' AND (\"id\"<>-1 AND \"id\"<>1)", array($_POST['search']));
 $getmemidr=sql_query($getmemidq,$SQLStat);
 $getmemidnum=sql_num_rows($getmemidr);
 $getmemidi = 0;
@@ -303,7 +320,7 @@ sql_free_result($getmemidr); ?>
 <input type="submit" class="Button" value="Edit Member" name="Apply_Changes" />
 <input type="reset" value="Reset Form" class="Button" name="Reset_Form" />
 </td></tr></table>
-</form>
+</form><?php } ?>
 </td>
 </tr>
 <tr class="TableMenuRow4">
