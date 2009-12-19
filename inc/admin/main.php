@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: main.php - Last Update: 12/17/2009 SVN 417 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 12/19/2009 SVN 428 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -558,6 +558,10 @@ require('settings.php'); $admincptitle = " ".$ThemeSet['TitleDivider']." Databas
 ?><tr style="text-align: left;">
 	<td style="width: 50%;"><span class="TextBoxLabel">Database Client:</span></td>
 	<td style="width: 50%;"><?php echo $DBType['Client']; ?></td>
+</tr><?php } if($Settings['sqltype']=="sqlite") { 
+?><tr style="text-align: left;">
+	<td style="width: 50%;"><span class="TextBoxLabel">Database File Size:</span></td>
+	<td style="width: 50%;"><?php echo sprintf("%u", filesize($Settings['sqldb']))." bytes"; ?></td>
 </tr><?php } ?><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="DatabaseUserName">Insert Database User Name:</label></td>
 	<td style="width: 50%;"><input type="text" name="DatabaseUserName" class="TextBox" id="DatabaseUserName" size="20" value="<?php echo $Settings['sqluser']; ?>" /></td>
