@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 12/18/2009 SVN 425 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 12/18/2009 SVN 426 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -350,6 +350,11 @@ $EditMem['Validated']=sql_result($result,0,"Validated");
 $EditMem['HiddenMember']=sql_result($result,0,"HiddenMember");
 $EditMem['WarnLevel']=sql_result($result,0,"WarnLevel");
 $EditMem['BanTime']=sql_result($result,0,"BanTime");
+if($EditMem['BanTime']!=""&&$EditMem['BanTime']>1) {
+$BanMonth=GMTimeChange("m",$EditMem['BanTime'],0,0,"off");
+$BanDay=GMTimeChange("d",$EditMem['BanTime'],0,0,"off");
+$BanYear=GMTimeChange("Y",$EditMem['BanTime'],0,0,"off");
+$EditMem['BanTime'] = $BanMonth."/".$BanDay."/".$BanYear; }
 $EditMem['Interests']=sql_result($result,0,"Interests");
 $EditMem['Signature']=sql_result($result,0,"Signature");
 $EditMem['Avatar']=sql_result($result,0,"Avatar");
@@ -424,7 +429,7 @@ sql_free_result($getgrpidr); ?>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="MemWarnLevel">Members Warn Level:</label></td>
 	<td style="width: 50%;"><input type="text" name="MemWarnLevel" class="TextBox" id="MemWarnLevel" size="20" value="<?php echo $EditMem['WarnLevel']; ?>" /></td>
 </tr><tr style="text-align: left;">
-	<td style="width: 50%;"><label class="TextBoxLabel" for="MemBanTime" title="Enter date till user is banned in MM/DD/YY format. 0 means no ban and -1 means permanent ban.">Members Ban Time:</label></td>
+	<td style="width: 50%;"><label class="TextBoxLabel" for="MemBanTime" title="Enter date till user is banned in MM/DD/YYYY format. 0 means no ban and -1 means permanent ban.">Members Ban Time:</label></td>
 	<td style="width: 50%;"><input type="text" name="MemBanTime" class="TextBox" id="MemBanTime" size="20" value="<?php echo $EditMem['BanTime']; ?>" /></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="MemPostCount">Members Post Count:</label></td>
