@@ -11,25 +11,27 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 12/18/2009 SVN 421 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 12/19/2009 SVN 427 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
-//ini_set("display_errors", true); 
-//ini_set("display_startup_errors", true);
-error_reporting(E_ALL ^ E_NOTICE);
-//ini_set("error_prepend_string","<span style='color: ff0000;'>");
-//ini_set("error_append_string","</span>");
+//@ini_set("display_errors", true); 
+//@ini_set("display_startup_errors", true);
+@error_reporting(E_ALL ^ E_NOTICE);
+//@ini_set("error_prepend_string","<span style=\"color: ff0000;\">");
+//@ini_set("error_append_string","</span>");
+//@ini_set("docref_root","http://us.php.net/manual-lookup.php?pattern=");
+//@ini_set("docref_ext","");
 /* Get rid of session id in urls */
-//ini_set("session.use_trans_sid", false);
-//ini_set("session.use_cookies", true);
-//ini_set("session.use_only_cookies", true);
-//ini_set("url_rewriter.tags","");
-set_time_limit(30); ignore_user_abort(true);
+//@ini_set("session.use_trans_sid", false);
+//@ini_set("session.use_cookies", true);
+//@ini_set("session.use_only_cookies", true);
+//@ini_set("url_rewriter.tags","");
+@set_time_limit(30); @ignore_user_abort(true);
 /* Change session garbage collection settings */
-//ini_set("session.gc_probability", 1);
-//ini_set("session.gc_divisor", 100);
-//ini_set("session.gc_maxlifetime", 1440);
+//@ini_set("session.gc_probability", 1);
+//@ini_set("session.gc_divisor", 100);
+//@ini_set("session.gc_maxlifetime", 1440);
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="sql.php"||$File3Name=="/sql.php") {
 	header('Location: index.php');
@@ -157,7 +159,7 @@ $cookieDomain = $URLsTest['host'];
 if($Settings['enable_https']=="on") {
  if($URLsTest['scheme']=="https") { $cookieSecure = true; }
  if($URLsTest['scheme']!="https") { $cookieSecure = false; } } }
-ini_set("default_charset",$Settings['charset']);
+@ini_set("default_charset",$Settings['charset']);
 $File1Name = dirname($_SERVER['SCRIPT_NAME'])."/";
 $File2Name = $_SERVER['SCRIPT_NAME'];
 $File3Name=str_replace($File1Name, null, $File2Name);
