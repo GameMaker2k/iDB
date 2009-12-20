@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: categories.php - Last Update: 12/16/2009 SVN 412 - Author: cooldude2k $
+    $FileInfo: categories.php - Last Update: 12/19/2009 SVN 429 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="categories.php"||$File3Name=="/categories.php") {
@@ -144,12 +144,6 @@ if ($_POST['NumPostView']==null||
 if ($_POST['NumKarmaView']==null||
 	!is_numeric($_POST['NumKarmaView'])) {
 	$_POST['NumKarmaView'] = 0; }
-if ($Settings['hot_topic_num']==null||
-	!is_numeric($Settings['hot_topic_num'])) {
-	$Settings['hot_topic_num'] = 10; }
-if ($_POST['NumPostHotTopic']==null||
-	!is_numeric($_POST['NumPostHotTopic'])) {
-	$_POST['NumPostHotTopic'] = $Settings['hot_topic_num']; }
 if ($_POST['CategoryName']==null||
 	$_POST['CategoryName']=="ShowMe") { $Error="Yes";
 $errorstr = $errorstr."You need to enter a category name.<br />\n"; } 
@@ -189,7 +183,7 @@ $getperidr2=sql_query($getperidq2,$SQLStat);
 $getperidnum2=sql_num_rows($getperidr2);
 $getperidName=sql_result($getperidr2,0,"Name");
 sql_free_result($getperidr2);
-$query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."catpermissions\" (\"PermissionID\", \"Name\", \"CategoryID\", \"CanViewCategory\") VALUES (%i, '%s', %i, 'yes')", array($getperidName,$_POST['CategoryID'])); 
+$query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."catpermissions\" (\"PermissionID\", \"Name\", \"CategoryID\", \"CanViewCategory\") VALUES (%i, '%s', %i, 'yes')", array($getperidID,$getperidName,$_POST['CategoryID'])); 
 sql_query($query,$SQLStat);
 ++$getperidi; /*++$nextperid;*/ }
 sql_free_result($getperidr); } } 
@@ -279,7 +273,7 @@ sql_free_result($fr); ?>
 </div>
 <?php } if($_GET['act']=="deletecategory"&&$_POST['update']=="now"&&$_GET['act']=="deletecategory") { 
 $admincptitle = " ".$ThemeSet['TitleDivider']." Updating Settings";
-$prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($_POST['DelID']));
+$prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."categories\" WHERE \"id\"=%i LIMIT 1", array($_POST['DelID']));
 $preresult=sql_query($prequery,$SQLStat);
 $prenum=sql_num_rows($preresult);
 $errorstr = ""; $Error = null;
@@ -398,13 +392,11 @@ if($prenum>=1) {
 $CategoryID=sql_result($preresult,0,"id");
 $CategoryOrder=sql_result($preresult,0,"OrderID");
 $CategoryName=sql_result($preresult,0,"Name");
-$CategoryName = htmlspecialchars($CategoryName, ENT_QUOTES, $Settings['charset']);
 $ShowCategory=sql_result($preresult,0,"ShowCategory");
 $CategoryType=sql_result($preresult,0,"CategoryType");
 $SubShowForums=sql_result($preresult,0,"SubShowForums");
 $InSubCategory=sql_result($preresult,0,"InSubCategory");
 $CategoryDescription=sql_result($preresult,0,"Description");
-$CategoryDescription = htmlspecialchars($CategoryDescription, ENT_QUOTES, $Settings['charset']);
 $KarmaCountView=sql_result($preresult,0,"KarmaCountView");
 $PostCountView=sql_result($preresult,0,"PostCountView");
 sql_free_result($preresult);

@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: forums.php - Last Update: 12/18/2009 SVN 421 - Author: cooldude2k $
+    $FileInfo: forums.php - Last Update: 12/19/2009 SVN 429 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="forums.php"||$File3Name=="/forums.php") {
@@ -468,7 +468,7 @@ $query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."forums\" (\"id\",
 "(%i, %i, %i, '%s', '%s', '%s', %i, '%s', 0, 0, '%s', '%s', %i, %i, '%s', %i, 0, 0)", array($_POST['ForumID'],$_POST['ForumCatID'],$_POST['OrderID'],$_POST['ForumName'],$_POST['ShowForum'],$_POST['ForumType'],$_POST['InSubForum'],$_POST['RedirectURL'],$_POST['ForumDesc'],$_POST['PostCountAdd'],$_POST['NumPostView'],$_POST['NumKarmaView'],$_POST['CanHaveTopics'],$_POST['NumPostHotTopic']));
 sql_query($query,$SQLStat);
 if(!is_numeric($_POST['CPermissions'])) { $_POST['CPermissions'] = "0"; }
-$getperidq = sql_pre_query("SELECT DISTINCT * FROM \"".$Settings['sqltable']."permissions\" ORDER BY \"PermissionID\" ASC", array(null));
+$getperidq = sql_pre_query("SELECT DISTINCT \"PermissionID\" FROM \"".$Settings['sqltable']."permissions\" ORDER BY \"PermissionID\" ASC", array(null));
 $getperidr=sql_query($getperidq,$SQLStat);
 $getperidnum=sql_num_rows($getperidr);
 $getperidi = 0; 
@@ -481,7 +481,11 @@ if($Settings['sqltype']=="sqlite") {
 $nextperid = sql_get_next_id($Settings['sqltable'],"\"permissions\"",$SQLStat); }
 */
 while ($getperidi < $getperidnum) {
-$getperidID=sql_result($getperidr,$getperidi,"PermissionID");
+if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"
+	||$Settings['sqltype']=="pgsql") {
+$getperidID=sql_result($getperidr,$getperidi,"PermissionID"); }
+if($Settings['sqltype']=="sqlite") {
+$getperidID=sql_result($getperidr,$getperidi,"\"PermissionID\""); }
 if($_POST['CPermissions']=="0") {
 $getperidq2 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i", array($getperidID)); }
 if($_POST['CPermissions']!="0") {
@@ -519,9 +523,8 @@ if($getperidnum2<=0) {
 $query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."permissions\" (\"PermissionID\", \"Name\", \"ForumID\", \"CanViewForum\", \"CanMakeTopics\", \"CanMakeReplys\", \"CanMakeReplysCT\", \"CanEditTopics\", \"CanEditTopicsCT\", \"CanEditReplys\", \"CanEditReplysCT\", \"CanDeleteTopics\", \"CanDeleteTopicsCT\", \"CanDeleteReplys\", \"CanDeleteReplysCT\", \"CanCloseTopics\", \"CanPinTopics\", \"CanDohtml\", \"CanUseBBags\", \"CanModForum\") VALUES (%i, '%s', %i, 'yes', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no')", array($PermissionID,$PermissionName,$_POST['ForumID'])); } }
 sql_query($query,$SQLStat);
 ++$getperidi; /*++$nextperid;*/ }
-sql_free_result($getperidr);
-?>
-<?php } } if($_GET['act']=="deleteforum"&&$_POST['update']!="now") { 
+sql_free_result($getperidr); } } 
+if($_GET['act']=="deleteforum"&&$_POST['update']!="now") { 
 $admincptitle = " ".$ThemeSet['TitleDivider']." Deleting a Forum";
 ?>
 <div class="TableMenuBorder">
@@ -710,7 +713,6 @@ $ForumID=sql_result($preresult,0,"id");
 $ForumCatID=sql_result($preresult,0,"CategoryID");
 $ForumOrder=sql_result($preresult,0,"OrderID");
 $ForumName=sql_result($preresult,0,"Name");
-$ForumName = htmlspecialchars($ForumName, ENT_QUOTES, $Settings['charset']);
 $ShowForum=sql_result($preresult,0,"ShowForum");
 $ForumType=sql_result($preresult,0,"ForumType");
 $InSubForum=sql_result($preresult,0,"InSubForum");
@@ -718,7 +720,6 @@ $RedirectURL=sql_result($preresult,0,"RedirectURL");
 $RedirectTimes=sql_result($preresult,0,"Redirects");
 $NumberViews=sql_result($preresult,0,"NumViews");
 $ForumDescription=sql_result($preresult,0,"Description");
-$ForumDescription = htmlspecialchars($ForumDescription, ENT_QUOTES, $Settings['charset']);
 $PostCountAdd=sql_result($preresult,0,"PostCountAdd");
 $PostCountView=sql_result($preresult,0,"PostCountView");
 $KarmaCountView=sql_result($preresult,0,"KarmaCountView");

@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: table.php - Last Update: 12/14/2009 SVN 406 - Author: cooldude2k $
+    $FileInfo: table.php - Last Update: 12/19/2009 SVN 429 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="table.php"||$File3Name=="/table.php") {
@@ -33,11 +33,13 @@ if ($File3Name=="table.php"||$File3Name=="/table.php") {
 </tr><tr class="TableSMenuRow3">
 <td class="TableSMenuColumn3"><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=main",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Main Settings</a></td>
 </tr><tr class="TableSMenuRow3">
-<td class="TableSMenuColumn3"><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Forum Tool</a></td>
+<td class="TableSMenuColumn3"><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Forum Menu</a></td>
 </tr><tr class="TableSMenuRow3">
-<td class="TableSMenuColumn3"><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=categories",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Category Tool</a></td>
+<td class="TableSMenuColumn3"><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=categories",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Category Menu</a></td>
 </tr><tr class="TableSMenuRow3">
-<td class="TableSMenuColumn3"><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=members",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Memeber Tool</a></td>
+<td class="TableSMenuColumn3"><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=members",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Memeber Menu</a></td>
+</tr><tr class="TableSMenuRow3">
+<td class="TableSMenuColumn3"><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=groups",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Group Menu</a></td>
 </tr><tr class="TableSMenuRow4">
 <td class="TableSMenuColumn4">&nbsp;</td>
 </tr></table></div>
@@ -84,12 +86,12 @@ if ($File3Name=="table.php"||$File3Name=="/table.php") {
 <div class="TableSMenuBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableSMenuRow1">
-<?php echo $ThemeSet['TitleIcon']; ?>Forum Tool</div>
+<?php echo $ThemeSet['TitleIcon']; ?>Forum Menu</div>
 <?php } ?>
-<table id="ForumTool" class="TableSMenu" style="width: 100%; text-align: left; vertical-align: top;">
+<table id="ForumMenu" class="TableSMenu" style="width: 100%; text-align: left; vertical-align: top;">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableSMenuRow1">
-<td class="TableSMenuColumn1"><?php echo $ThemeSet['TitleIcon']; ?>Forum Tool</td>
+<td class="TableSMenuColumn1"><?php echo $ThemeSet['TitleIcon']; ?>Forum Menu</td>
 </tr><?php } ?><tr class="TableSMenuRow2">
 <td class="TableSMenuColumn2">&nbsp;</td>
 </tr><tr class="TableSMenuRow3">
@@ -116,12 +118,12 @@ if ($File3Name=="table.php"||$File3Name=="/table.php") {
 <div class="TableSMenuBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableSMenuRow1">
-<?php echo $ThemeSet['TitleIcon']; ?>Category Tool</div>
+<?php echo $ThemeSet['TitleIcon']; ?>Category Menu</div>
 <?php } ?>
-<table id="CategoryTool" class="TableSMenu" style="width: 100%; text-align: left; vertical-align: top;">
+<table id="CategoryMenu" class="TableSMenu" style="width: 100%; text-align: left; vertical-align: top;">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableSMenuRow1">
-<td class="TableSMenuColumn1"><?php echo $ThemeSet['TitleIcon']; ?>Category Tool</td>
+<td class="TableSMenuColumn1"><?php echo $ThemeSet['TitleIcon']; ?>Category Menu</td>
 </tr><?php } ?><tr class="TableSMenuRow2">
 <td class="TableSMenuColumn2">&nbsp;</td>
 </tr><tr class="TableSMenuRow3">
@@ -140,20 +142,41 @@ if ($File3Name=="table.php"||$File3Name=="/table.php") {
 <div class="TableSMenuBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableSMenuRow1">
-<?php echo $ThemeSet['TitleIcon']; ?>Memeber Tool</div>
+<?php echo $ThemeSet['TitleIcon']; ?>Memeber Menu</div>
 <?php } ?>
-<table id="MemberTool" class="TableSMenu" style="width: 100%; text-align: left; vertical-align: top;">
+<table id="MemberMenu" class="TableSMenu" style="width: 100%; text-align: left; vertical-align: top;">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableSMenuRow1">
-<td class="TableSMenuColumn1"><?php echo $ThemeSet['TitleIcon']; ?>Memeber Tool</td>
+<td class="TableSMenuColumn1"><?php echo $ThemeSet['TitleIcon']; ?>Memeber Menu</td>
 </tr><?php } ?><tr class="TableSMenuRow2">
 <td class="TableSMenuColumn2">&nbsp;</td>
 </tr><tr class="TableSMenuRow3">
-<td class="TableSMenuColumn3"><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=validate",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Validate Tool</a></td>
+<td class="TableSMenuColumn3"><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=validate",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Validate Menu</a></td>
 </tr><tr class="TableSMenuRow3">
 <td class="TableSMenuColumn3"><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=editmember",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Edit Member</a></td>
 </tr><tr class="TableSMenuRow3">
 <td class="TableSMenuColumn3"><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=deletemember",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Delete Member</a></td>
+</tr><tr class="TableSMenuRow4">
+<td class="TableSMenuColumn4">&nbsp;</td>
+</tr></table></div>
+<?php } if($AdminMenu=="groups"||$_GET['menu']=="groups") { ?>
+<div class="TableSMenuBorder">
+<?php if($ThemeSet['TableStyle']=="div") { ?>
+<div class="TableSMenuRow1">
+<?php echo $ThemeSet['TitleIcon']; ?>Group Menu</div>
+<?php } ?>
+<table id="GroupMenu" class="TableSMenu" style="width: 100%; text-align: left; vertical-align: top;">
+<?php if($ThemeSet['TableStyle']=="table") { ?>
+<tr class="TableSMenuRow1">
+<td class="TableSMenuColumn1"><?php echo $ThemeSet['TitleIcon']; ?>Group Menu</td>
+</tr><?php } ?><tr class="TableSMenuRow2">
+<td class="TableSMenuColumn2">&nbsp;</td>
+</tr><tr class="TableSMenuRow3">
+<td class="TableSMenuColumn3"><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=addgroup",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Add Groups</a></td>
+</tr><tr class="TableSMenuRow3">
+<td class="TableSMenuColumn3"><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=editgroup",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Edit Groups</a></td>
+</tr><tr class="TableSMenuRow3">
+<td class="TableSMenuColumn3"><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=deletegroup",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Delete Groups</a></td>
 </tr><tr class="TableSMenuRow4">
 <td class="TableSMenuColumn4">&nbsp;</td>
 </tr></table></div>
