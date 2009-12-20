@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: function.php - Last Update: 12/09/2009 SVN 382 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 12/19/2009 SVN 431 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -256,15 +256,16 @@ if(!isset($urlcheck[0][0])) { $url = $BoardURL; }
 return $url; }
 //Check to make sure theme exists
 $BoardTheme = $Settings['DefaultTheme'];
+$ThemeDir = $SettDir['themes'];
 function chack_themes($theme) {
-global $BoardTheme;
+global $BoardTheme,$ThemeDir;
 if(!isset($theme)) { $theme = null; }
 if(preg_match("/([a-zA-Z]+)\:/isU",$theme)) {
 	$theme = $BoardTheme; }
 if(!preg_match("/^[a-z0-9]+$/isU",$theme)) {
 	$theme = $BoardTheme; }
 require('settings.php');
-$ckskindir = dirname(realpath("settings.php"))."/".$SettDir['themes'];
+$ckskindir = dirname(realpath("settings.php"))."/".$ThemeDir;
 if ($handle = opendir($ckskindir)) { $dirnum = null;
    while (false !== ($ckfile = readdir($handle))) {
 	   if ($dirnum==null) { $dirnum = 0; }

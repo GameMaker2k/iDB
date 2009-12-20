@@ -12,7 +12,7 @@
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: setup.php - Last Update: 12/16/2009 SVN 413 - Author: cooldude2k $
+    $FileInfo: setup.php - Last Update: 12/19/2009 SVN 431 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="setup.php"||$File3Name=="/setup.php") {
@@ -190,6 +190,24 @@ echo "<option value=\"".$showmin."\">0:".$showmin." minutes</option>\n"; }
 <option selected="selected" value="off">off</option>
 <option value="on">on</option>
 </select></td>
+</tr><tr>
+	<td style="width: 50%;"><label class="TextBoxLabel" for="DefaultTheme">Default Theme</label></td>
+	<td style="width: 50%;"><select id="DefaultTheme" name="DefaultTheme" class="TextBox"><?php
+$skindir = dirname(realpath("settings.php"))."/".$SettDir['themes'];
+if ($handle = opendir($skindir)) { $dirnum = null;
+   while (false !== ($file = readdir($handle))) {
+	   if ($dirnum==null) { $dirnum = 0; }
+	   if (file_exists($skindir.$file."/info.php")) {
+		   if ($file != "." && $file != "..") {
+	   include($skindir.$file."/info.php");
+       $themelist[$dirnum] =  "<option value=\"".$file."\">".$ThemeInfo['ThemeName']."</option>";
+	   ++$dirnum; } } }
+   closedir($handle); asort($themelist);
+   $themenum=count($themelist); $themei=0; 
+   while ($themei < $themenum) {
+   echo $themelist[$themei]."\n";
+   ++$themei; }
+} ?></select></td>
 </tr><tr>
 	<td style="width: 50%;"><label class="TextBoxLabel" title="Might not work" for="unlink">Delete Installer When Done? (Might not work)</label></td>
 	<td style="width: 50%;"><select id="unlink" name="unlink" class="TextBox">
