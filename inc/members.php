@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 12/18/2009 SVN 421 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 12/19/2009 SVN 430 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -1394,17 +1394,17 @@ $_SESSION['UserPass']=$NewPassword;
 $_SESSION['DBName']=$Settings['sqldb'];
 if($_POST['storecookie']=="true") {
 if($cookieDomain==null) {
-setcookie("MemberName", $YourNameM, time() + (7 * 86400), $cbasedir);
-setcookie("UserID", $YourIDM, time() + (7 * 86400), $cbasedir);
+setcookie("MemberName", $YourNameMr, time() + (7 * 86400), $cbasedir);
+setcookie("UserID", $YourIDMr, time() + (7 * 86400), $cbasedir);
 setcookie("SessPass", $NewPassword, time() + (7 * 86400), $cbasedir); }
 if($cookieDomain!=null) {
 if($cookieSecure===true) {
-setcookie("MemberName", $YourNameM, time() + (7 * 86400), $cbasedir, $cookieDomain, 1);
-setcookie("UserID", $YourIDM, time() + (7 * 86400), $cbasedir, $cookieDomain, 1);
+setcookie("MemberName", $YourNameMr, time() + (7 * 86400), $cbasedir, $cookieDomain, 1);
+setcookie("UserID", $YourIDMr, time() + (7 * 86400), $cbasedir, $cookieDomain, 1);
 setcookie("SessPass", $NewPassword, time() + (7 * 86400), $cbasedir, $cookieDomain, 1); }
 if($cookieSecure===false) {
-setcookie("MemberName", $YourNameM, time() + (7 * 86400), $cbasedir, $cookieDomain);
-setcookie("UserID", $YourIDM, time() + (7 * 86400), $cbasedir, $cookieDomain);
+setcookie("MemberName", $YourNameMr, time() + (7 * 86400), $cbasedir, $cookieDomain);
+setcookie("UserID", $YourIDMr, time() + (7 * 86400), $cbasedir, $cookieDomain);
 setcookie("SessPass", $NewPassword, time() + (7 * 86400), $cbasedir, $cookieDomain); } } }
 redirect("refresh",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],FALSE),"3");
 ?>
