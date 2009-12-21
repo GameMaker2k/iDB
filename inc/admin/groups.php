@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: groups.php - Last Update: 12/19/2009 SVN 432 - Author: cooldude2k $
+    $FileInfo: groups.php - Last Update: 12/21/2009 SVN 433 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="groups.php"||$File3Name=="/groups.php") {
@@ -248,7 +248,7 @@ $nextperid = sql_get_next_id($Settings['sqltable'],"\"permissions\"",$SQLStat); 
 while ($getperidi < $getperidnum) {
 $getperidID=sql_result($getperidr,$getperidi,"id");
 if($_POST['GroupPerm']!="0") {
-$getperidq2 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."permissions\" WHERE \"ForumID\"=%i", array($getperidID));
+$getperidq2 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i AND \"ForumID\"=%i", array($_POST['GroupPerm'],$getperidID));
 $getperidr2=sql_query($getperidq2,$SQLStat);
 $getperidnum2=sql_num_rows($getperidr2);
 $PermissionNum=sql_result($getperidr2,0,"id"); 
@@ -301,7 +301,7 @@ $nextperid = sql_get_next_id($Settings['sqltable'],"\"permissions\"",$SQLStat); 
 while ($getperidi < $getperidnum) {
 $getperidID=sql_result($getperidr,$getperidi,"id");
 if($_POST['GroupPerm']!="0") {
-$getperidq2 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."catpermissions\" WHERE \"CategoryID\"=%i", array($getperidID));
+$getperidq2 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."catpermissions\" WHERE \"PermissionID\"=%i AND \"CategoryID\"=%i", array($_POST['GroupPerm'],$getperidID));
 $getperidr2=sql_query($getperidq2,$SQLStat);
 $getperidnum2=sql_num_rows($getperidr2);
 $PermissionNum=sql_result($getperidr2,0,"id"); 
