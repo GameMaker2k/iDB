@@ -12,7 +12,7 @@
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: setup.php - Last Update: 12/19/2009 SVN 431 - Author: cooldude2k $
+    $FileInfo: setup.php - Last Update: 12/29/2009 SVN 435 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="setup.php"||$File3Name=="/setup.php") {
@@ -196,11 +196,15 @@ echo "<option value=\"".$showmin."\">0:".$showmin." minutes</option>\n"; }
 $skindir = dirname(realpath("settings.php"))."/".$SettDir['themes'];
 if ($handle = opendir($skindir)) { $dirnum = null;
    while (false !== ($file = readdir($handle))) {
+	   $selected = null;
 	   if ($dirnum==null) { $dirnum = 0; }
 	   if (file_exists($skindir.$file."/info.php")) {
 		   if ($file != "." && $file != "..") {
 	   include($skindir.$file."/info.php");
-       $themelist[$dirnum] =  "<option value=\"".$file."\">".$ThemeInfo['ThemeName']."</option>";
+	   if($file=="iDB") { 
+       $themelist[$dirnum] =  "<option value=\"".$file."\" selected=\"selected\">".$ThemeInfo['ThemeName']."</option>"; }
+	   if($file!="iDB") {
+	   $themelist[$dirnum] =  "<option value=\"".$file."\">".$ThemeInfo['ThemeName']."</option>"; }
 	   ++$dirnum; } } }
    closedir($handle); asort($themelist);
    $themenum=count($themelist); $themei=0; 
