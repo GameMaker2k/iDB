@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: main.php - Last Update: 12/19/2009 SVN 428 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 12/30/2009 SVN 436 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -221,7 +221,7 @@ if(!is_numeric($ts_array[1])) { $ts_array[1] = "00"; }
 if($ts_array[1]>59) { $ts_array[1] = "59"; $Settings['DefaultTimeZone'] = $ts_array[0].":".$ts_array[1]; }
 if($ts_array[1]<0) { $ts_array[1] = "00"; $Settings['DefaultTimeZone'] = $ts_array[0].":".$ts_array[1]; }
 $tsa = array("offset" => $Settings['DefaultTimeZone'], "hour" => $ts_array[0], "minute" => $ts_array[1]);
-$mguerys = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\"", array(null));
+$mguerys = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE (\"Name\"<>'%s') ORDER BY \"id\" ASC", array("Admin"));
 $mgresults=sql_query($mguerys,$SQLStat);
 $mnum=sql_num_rows($mgresults);
 $mi = 0;
