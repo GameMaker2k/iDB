@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: main.php - Last Update: 12/30/2009 SVN 436 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 12/31/2009 SVN 437 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -46,10 +46,14 @@ return "false"; }
 if($boolean==1||$boolean===true) { 
 return "true"; } } }
 function null_string($string) {
-if(isset($string)) {
+$strtype = strtolower(gettype($string));
+if($strtype=="string") {
 	return "'".$string."'"; }
-if(!isset($string)) {
-	return "null"; } }
+if($strtype=="null") {
+	return "null"; }
+if($strtype=="integer") {
+	return $string; } 
+	return "null"; }
 function rsq($string) {
 $string = preg_replace("/^(\')|$(\')/i","\'",$string);
 return $string; }
@@ -92,6 +96,11 @@ $DBType['Client'] = "PostgreSQL version ".sql_client_info($SQLStat); }
 if($Settings['sqltype']=="sqlite") {
 $DBType['Server'] = "SQLite version ".sql_server_info($SQLStat);
 $DBType['Client'] = sql_client_info($SQLStat); }
+if(!isset($Settings['vercheck'])) { 
+	$Settings['vercheck'] = 2; }
+if($Settings['vercheck']!=1&&
+	$Settings['vercheck']!=2) {
+	$Settings['vercheck'] = 2; }
 ?>
 <table class="Table3">
 <tr style="width: 100%; vertical-align: top;">
@@ -512,7 +521,70 @@ $SettInfo['Description'] = htmlspecialchars($SettInfo['Description'], ENT_QUOTES
 $SettInfo['Description'] = fixbamps($SettInfo['Description']);
 $SettInfo['Description'] = remove_spaces($SettInfo['Description']);
 $SettInfo['Description'] = str_replace("\&#039;", "&#039;", $SettInfo['Description']);
-$BoardSettings=$pretext2[0]."\n\$Settings['sqlhost'] = ".null_string($Settings['sqlhost']).";\n\$Settings['sqldb'] = ".null_string($Settings['sqldb']).";\n\$Settings['sqltable'] = ".null_string($Settings['sqltable']).";\n\$Settings['sqluser'] = ".null_string($Settings['sqluser']).";\n\$Settings['sqlpass'] = ".null_string($Settings['sqlpass']).";\n\$Settings['sqltype'] = ".null_string($Settings['sqltype']).";\n\$Settings['board_name'] = ".null_string($Settings['board_name']).";\n\$Settings['idbdir'] = ".null_string($Settings['idbdir']).";\n\$Settings['idburl'] = ".null_string($_POST['BoardURL']).";\n\$Settings['enable_https'] = ".null_string($_POST['enable_https']).";\n\$Settings['weburl'] = ".null_string($_POST['WebURL']).";\n\$Settings['use_gzip'] = ".null_string($_POST['UseGzip']).";\n\$Settings['html_type'] = ".null_string($_POST['HTMLType']).";\n\$Settings['html_level'] = ".null_string($_POST['HTMLLevel']).";\n\$Settings['output_type'] = ".null_string($_POST['OutPutType']).";\n\$Settings['GuestGroup'] = ".null_string($_POST['GuestGroup']).";\n\$Settings['MemberGroup'] = ".null_string($_POST['MemberGroup']).";\n\$Settings['ValidateGroup'] = ".null_string($_POST['ValidateGroup']).";\n\$Settings['AdminValidate'] = ".null_string($_POST['AdminValidate']).";\n\$Settings['TestReferer'] = ".null_string($_POST['TestReferer']).";\n\$Settings['DefaultTheme'] = ".null_string($_POST['DefaultTheme']).";\n\$Settings['DefaultTimeZone'] = ".null_string($_POST['YourOffSet'].":".$_POST['MinOffSet']).";\n\$Settings['DefaultDST'] = ".null_string($_POST['DST']).";\n\$Settings['use_hashtype'] = ".null_string($Settings['use_hashtype']).";\n\$Settings['charset'] = ".null_string($Settings['charset']).";\n\$Settings['add_power_by'] = ".null_string($Settings['add_power_by']).";\n\$Settings['send_pagesize'] = ".null_string($Settings['send_pagesize']).";\n\$Settings['max_posts'] = ".null_string($_POST['max_posts']).";\n\$Settings['max_topics'] = ".null_string($_POST['max_topics']).";\n\$Settings['max_memlist'] = ".null_string($_POST['max_memlist']).";\n\$Settings['max_pmlist'] = ".null_string($_POST['max_pmlist']).";\n\$Settings['hot_topic_num'] = ".null_string($_POST['hot_topic_num']).";\n\$Settings['qstr'] = ".null_string($Settings['qstr']).";\n\$Settings['qsep'] = ".null_string($Settings['qsep']).";\n\$Settings['file_ext'] = ".null_string($Settings['file_ext']).";\n\$Settings['rss_ext'] = ".null_string($Settings['rss_ext']).";\n\$Settings['js_ext'] = ".null_string($Settings['js_ext']).";\n\$Settings['showverinfo'] = ".null_string($Settings['showverinfo']).";\n\$Settings['enable_rss'] = ".null_string($_POST['enable_rss']).";\n\$Settings['enable_search'] = ".null_string($_POST['enable_search']).";\n\$Settings['sessionid_in_urls'] = ".null_string($Settings['sessionid_in_urls']).";\n\$Settings['fixpathinfo'] = ".null_string($Settings['fixpathinfo']).";\n\$Settings['fixbasedir'] = ".null_string($Settings['fixbasedir']).";\n\$Settings['fixcookiedir'] = ".null_string($Settings['fixcookiedir']).";\n\$Settings['enable_pathinfo'] = ".null_string($Settings['enable_pathinfo']).";\n\$Settings['rssurl'] = ".null_string($Settings['rssurl']).";\n\$Settings['board_offline'] = ".null_string($Settings['board_offline']).";\n\$Settings['BoardUUID'] = ".null_string($Settings['BoardUUID']).";\n\$Settings['KarmaBoostDays'] = ".null_string($Settings['KarmaBoostDays']).";\n\$Settings['KBoostPercent'] = ".null_string($Settings['KBoostPercent']).";\n".$pretext2[1]."\n\$SettInfo['board_name'] = ".null_string($SettInfo['board_name']).";\n\$SettInfo['Author'] = ".null_string($SettInfo['Author']).";\n\$SettInfo['Keywords'] = ".null_string($SettInfo['Keywords']).";\n\$SettInfo['Description'] = ".null_string($SettInfo['Description']).";\n".$pretext2[2]."\n\$SettDir['maindir'] = ".null_string($SettDir['maindir']).";\n\$SettDir['inc'] = ".null_string($SettDir['inc']).";\n\$SettDir['misc'] = ".null_string($SettDir['misc']).";\n\$SettDir['sql'] = ".null_string($SettDir['sql']).";\n\$SettDir['admin'] = ".null_string($SettDir['admin']).";\n\$SettDir['sqldumper'] = ".null_string($SettDir['sqldumper']).";\n\$SettDir['mod'] = ".null_string($SettDir['mod']).";\n\$SettDir['themes'] = ".null_string($SettDir['themes']).";\n".$pretext2[3]."\n?>";
+$BoardSettings=$pretext2[0]."\n".
+"\$Settings['sqlhost'] = ".null_string($Settings['sqlhost']).";\n".
+"\$Settings['sqldb'] = ".null_string($Settings['sqldb']).";\n".
+"\$Settings['sqltable'] = ".null_string($Settings['sqltable']).";\n".
+"\$Settings['sqluser'] = ".null_string($Settings['sqluser']).";\n".
+"\$Settings['sqlpass'] = ".null_string($Settings['sqlpass']).";\n".
+"\$Settings['sqltype'] = ".null_string($Settings['sqltype']).";\n".
+"\$Settings['board_name'] = ".null_string($Settings['board_name']).";\n".
+"\$Settings['idbdir'] = ".null_string($Settings['idbdir']).";\n".
+"\$Settings['idburl'] = ".null_string($_POST['BoardURL']).";\n".
+"\$Settings['enable_https'] = ".null_string($_POST['enable_https']).";\n".
+"\$Settings['weburl'] = ".null_string($_POST['WebURL']).";\n".
+"\$Settings['use_gzip'] = ".null_string($_POST['UseGzip']).";\n".
+"\$Settings['html_type'] = ".null_string($_POST['HTMLType']).";\n".
+"\$Settings['html_level'] = ".null_string($_POST['HTMLLevel']).";\n".
+"\$Settings['output_type'] = ".null_string($_POST['OutPutType']).";\n".
+"\$Settings['GuestGroup'] = ".null_string($_POST['GuestGroup']).";\n".
+"\$Settings['MemberGroup'] = ".null_string($_POST['MemberGroup']).";\n".
+"\$Settings['ValidateGroup'] = ".null_string($_POST['ValidateGroup']).";\n".
+"\$Settings['AdminValidate'] = ".null_string($_POST['AdminValidate']).";\n".
+"\$Settings['TestReferer'] = ".null_string($_POST['TestReferer']).";\n".
+"\$Settings['DefaultTheme'] = ".null_string($_POST['DefaultTheme']).";\n".
+"\$Settings['DefaultTimeZone'] = ".null_string($_POST['YourOffSet'].":".$_POST['MinOffSet']).";\n".
+"\$Settings['DefaultDST'] = ".null_string($_POST['DST']).";\n".
+"\$Settings['use_hashtype'] = ".null_string($Settings['use_hashtype']).";\n".
+"\$Settings['charset'] = ".null_string($Settings['charset']).";\n".
+"\$Settings['add_power_by'] = ".null_string($Settings['add_power_by']).";\n".
+"\$Settings['send_pagesize'] = ".null_string($Settings['send_pagesize']).";\n".
+"\$Settings['max_posts'] = ".null_string($_POST['max_posts']).";\n".
+"\$Settings['max_topics'] = ".null_string($_POST['max_topics']).";\n".
+"\$Settings['max_memlist'] = ".null_string($_POST['max_memlist']).";\n".
+"\$Settings['max_pmlist'] = ".null_string($_POST['max_pmlist']).";\n".
+"\$Settings['hot_topic_num'] = ".null_string($_POST['hot_topic_num']).";\n".
+"\$Settings['qstr'] = ".null_string($Settings['qstr']).";\n".
+"\$Settings['qsep'] = ".null_string($Settings['qsep']).";\n".
+"\$Settings['file_ext'] = ".null_string($Settings['file_ext']).";\n".
+"\$Settings['rss_ext'] = ".null_string($Settings['rss_ext']).";\n".
+"\$Settings['js_ext'] = ".null_string($Settings['js_ext']).";\n".
+"\$Settings['showverinfo'] = ".null_string($Settings['showverinfo']).";\n".
+"\$Settings['vercheck'] = ".null_string($Settings['vercheck']).";\n".
+"\$Settings['enable_rss'] = ".null_string($_POST['enable_rss']).";\n".
+"\$Settings['enable_search'] = ".null_string($_POST['enable_search']).";\n".
+"\$Settings['sessionid_in_urls'] = ".null_string($Settings['sessionid_in_urls']).";\n".
+"\$Settings['fixpathinfo'] = ".null_string($Settings['fixpathinfo']).";\n".
+"\$Settings['fixbasedir'] = ".null_string($Settings['fixbasedir']).";\n".
+"\$Settings['fixcookiedir'] = ".null_string($Settings['fixcookiedir']).";\n".
+"\$Settings['enable_pathinfo'] = ".null_string($Settings['enable_pathinfo']).";\n".
+"\$Settings['rssurl'] = ".null_string($Settings['rssurl']).";\n".
+"\$Settings['board_offline'] = ".null_string($Settings['board_offline']).";\n".
+"\$Settings['BoardUUID'] = ".null_string($Settings['BoardUUID']).";\n".
+"\$Settings['KarmaBoostDays'] = ".null_string($Settings['KarmaBoostDays']).";\n".
+"\$Settings['KBoostPercent'] = ".null_string($Settings['KBoostPercent']).";\n".$pretext2[1]."\n".
+"\$SettInfo['board_name'] = ".null_string($SettInfo['board_name']).";\n".
+"\$SettInfo['Author'] = ".null_string($SettInfo['Author']).";\n".
+"\$SettInfo['Keywords'] = ".null_string($SettInfo['Keywords']).";\n".
+"\$SettInfo['Description'] = ".null_string($SettInfo['Description']).";\n".$pretext2[2]."\n".
+"\$SettDir['maindir'] = ".null_string($SettDir['maindir']).";\n".
+"\$SettDir['inc'] = ".null_string($SettDir['inc']).";\n".
+"\$SettDir['misc'] = ".null_string($SettDir['misc']).";\n".
+"\$SettDir['sql'] = ".null_string($SettDir['sql']).";\n".
+"\$SettDir['admin'] = ".null_string($SettDir['admin']).";\n".
+"\$SettDir['sqldumper'] = ".null_string($SettDir['sqldumper']).";\n".
+"\$SettDir['mod'] = ".null_string($SettDir['mod']).";\n".
+"\$SettDir['themes'] = ".null_string($SettDir['themes']).";\n".$pretext2[3]."\n?>";
 $BoardSettingsBak = $pretext.$settcheck.$BoardSettings;
 $BoardSettings = $pretext.$settcheck.$BoardSettings;
 $fp = fopen("settings.php","w+");
@@ -620,7 +692,70 @@ $SettInfo['Description'] = htmlspecialchars($SettInfo['Description'], ENT_QUOTES
 $SettInfo['Description'] = fixbamps($SettInfo['Description']);
 $SettInfo['Description'] = remove_spaces($SettInfo['Description']);
 $SettInfo['Description'] = str_replace("\&#039;", "&#039;", $SettInfo['Description']);
-$BoardSettings=$pretext2[0]."\n\$Settings['sqlhost'] = ".null_string($_POST['DatabaseHost']).";\n\$Settings['sqldb'] = ".null_string($_POST['DatabaseName']).";\n\$Settings['sqltable'] = ".null_string($_POST['tableprefix']).";\n\$Settings['sqluser'] = ".null_string($_POST['DatabaseUserName']).";\n\$Settings['sqlpass'] = ".null_string($_POST['DatabasePassword']).";\n\$Settings['sqltype'] = ".null_string($Settings['sqltype']).";\n\$Settings['board_name'] = ".null_string($Settings['board_name']).";\n\$Settings['idbdir'] = ".null_string($Settings['idbdir']).";\n\$Settings['idburl'] = ".null_string($Settings['idburl']).";\n\$Settings['enable_https'] = ".null_string($Settings['enable_https']).";\n\$Settings['weburl'] = ".null_string($Settings['weburl']).";\n\$Settings['use_gzip'] = ".null_string($Settings['use_gzip']).";\n\$Settings['html_type'] = ".null_string($Settings['html_type']).";\n\$Settings['html_level'] = ".null_string($Settings['html_level']).";\n\$Settings['output_type'] = ".null_string($Settings['output_type']).";\n\$Settings['GuestGroup'] = ".null_string($Settings['GuestGroup']).";\n\$Settings['MemberGroup'] = ".null_string($Settings['MemberGroup']).";\n\$Settings['ValidateGroup'] = ".null_string($Settings['ValidateGroup']).";\n\$Settings['AdminValidate'] = ".null_string($Settings['AdminValidate']).";\n\$Settings['TestReferer'] = ".null_string($Settings['TestReferer']).";\n\$Settings['DefaultTheme'] = ".null_string($Settings['DefaultTheme']).";\n\$Settings['DefaultTimeZone'] = ".null_string($Settings['DefaultTimeZone']).";\n\$Settings['DefaultDST'] = ".null_string($Settings['DefaultDST']).";\n\$Settings['use_hashtype'] = ".null_string($Settings['use_hashtype']).";\n\$Settings['charset'] = ".null_string($Settings['charset']).";\n\$Settings['add_power_by'] = ".null_string($Settings['add_power_by']).";\n\$Settings['send_pagesize'] = ".null_string($Settings['send_pagesize']).";\n\$Settings['max_posts'] = ".null_string($Settings['max_posts']).";\n\$Settings['max_topics'] = ".null_string($Settings['max_topics']).";\n\$Settings['max_memlist'] = ".null_string($Settings['max_memlist']).";\n\$Settings['max_pmlist'] = ".null_string($Settings['max_pmlist']).";\n\$Settings['hot_topic_num'] = ".null_string($Settings['hot_topic_num']).";\n\$Settings['qstr'] = ".null_string($Settings['qstr']).";\n\$Settings['qsep'] = ".null_string($Settings['qsep']).";\n\$Settings['file_ext'] = ".null_string($Settings['file_ext']).";\n\$Settings['rss_ext'] = ".null_string($Settings['rss_ext']).";\n\$Settings['js_ext'] = ".null_string($Settings['js_ext']).";\n\$Settings['showverinfo'] = ".null_string($Settings['showverinfo']).";\n\$Settings['enable_rss'] = ".null_string($Settings['enable_rss']).";\n\$Settings['enable_search'] = ".null_string($Settings['enable_search']).";\n\$Settings['sessionid_in_urls'] = ".null_string($Settings['sessionid_in_urls']).";\n\$Settings['fixpathinfo'] = ".null_string($Settings['fixpathinfo']).";\n\$Settings['fixbasedir'] = ".null_string($Settings['fixbasedir']).";\n\$Settings['fixcookiedir'] = ".null_string($Settings['fixcookiedir']).";\n\$Settings['enable_pathinfo'] = ".null_string($Settings['enable_pathinfo']).";\n\$Settings['rssurl'] = ".null_string($Settings['rssurl']).";\n\$Settings['board_offline'] = ".null_string($Settings['board_offline']).";\n\$Settings['BoardUUID'] = ".null_string($Settings['BoardUUID']).";\n\$Settings['KarmaBoostDays'] = ".null_string($Settings['KarmaBoostDays']).";\n\$Settings['KBoostPercent'] = ".null_string($Settings['KBoostPercent']).";\n".$pretext2[1]."\n\$SettInfo['board_name'] = ".null_string($SettInfo['board_name']).";\n\$SettInfo['Author'] = ".null_string($SettInfo['Author']).";\n\$SettInfo['Keywords'] = ".null_string($SettInfo['Keywords']).";\n\$SettInfo['Description'] = ".null_string($SettInfo['Description']).";\n".$pretext2[2]."\n\$SettDir['maindir'] = ".null_string($SettDir['maindir']).";\n\$SettDir['inc'] = ".null_string($SettDir['inc']).";\n\$SettDir['misc'] = ".null_string($SettDir['misc']).";\n\$SettDir['sql'] = ".null_string($SettDir['sql']).";\n\$SettDir['admin'] = ".null_string($SettDir['admin']).";\n\$SettDir['sqldumper'] = ".null_string($SettDir['sqldumper']).";\n\$SettDir['mod'] = ".null_string($SettDir['mod']).";\n\$SettDir['themes'] = ".null_string($SettDir['themes']).";\n".$pretext2[3]."\n?>";
+$BoardSettings=$pretext2[0]."\n".
+"\$Settings['sqlhost'] = ".null_string($_POST['DatabaseHost']).";\n".
+"\$Settings['sqldb'] = ".null_string($_POST['DatabaseName']).";\n".
+"\$Settings['sqltable'] = ".null_string($_POST['tableprefix']).";\n".
+"\$Settings['sqluser'] = ".null_string($_POST['DatabaseUserName']).";\n".
+"\$Settings['sqlpass'] = ".null_string($_POST['DatabasePassword']).";\n".
+"\$Settings['sqltype'] = ".null_string($Settings['sqltype']).";\n".
+"\$Settings['board_name'] = ".null_string($Settings['board_name']).";\n".
+"\$Settings['idbdir'] = ".null_string($Settings['idbdir']).";\n".
+"\$Settings['idburl'] = ".null_string($Settings['idburl']).";\n".
+"\$Settings['enable_https'] = ".null_string($Settings['enable_https']).";\n".
+"\$Settings['weburl'] = ".null_string($Settings['weburl']).";\n".
+"\$Settings['use_gzip'] = ".null_string($Settings['use_gzip']).";\n".
+"\$Settings['html_type'] = ".null_string($Settings['html_type']).";\n".
+"\$Settings['html_level'] = ".null_string($Settings['html_level']).";\n".
+"\$Settings['output_type'] = ".null_string($Settings['output_type']).";\n".
+"\$Settings['GuestGroup'] = ".null_string($Settings['GuestGroup']).";\n".
+"\$Settings['MemberGroup'] = ".null_string($Settings['MemberGroup']).";\n".
+"\$Settings['ValidateGroup'] = ".null_string($Settings['ValidateGroup']).";\n".
+"\$Settings['AdminValidate'] = ".null_string($Settings['AdminValidate']).";\n".
+"\$Settings['TestReferer'] = ".null_string($Settings['TestReferer']).";\n".
+"\$Settings['DefaultTheme'] = ".null_string($Settings['DefaultTheme']).";\n".
+"\$Settings['DefaultTimeZone'] = ".null_string($Settings['DefaultTimeZone']).";\n".
+"\$Settings['DefaultDST'] = ".null_string($Settings['DefaultDST']).";\n".
+"\$Settings['use_hashtype'] = ".null_string($Settings['use_hashtype']).";\n".
+"\$Settings['charset'] = ".null_string($Settings['charset']).";\n".
+"\$Settings['add_power_by'] = ".null_string($Settings['add_power_by']).";\n".
+"\$Settings['send_pagesize'] = ".null_string($Settings['send_pagesize']).";\n".
+"\$Settings['max_posts'] = ".null_string($Settings['max_posts']).";\n".
+"\$Settings['max_topics'] = ".null_string($Settings['max_topics']).";\n".
+"\$Settings['max_memlist'] = ".null_string($Settings['max_memlist']).";\n".
+"\$Settings['max_pmlist'] = ".null_string($Settings['max_pmlist']).";\n".
+"\$Settings['hot_topic_num'] = ".null_string($Settings['hot_topic_num']).";\n".
+"\$Settings['qstr'] = ".null_string($Settings['qstr']).";\n".
+"\$Settings['qsep'] = ".null_string($Settings['qsep']).";\n".
+"\$Settings['file_ext'] = ".null_string($Settings['file_ext']).";\n".
+"\$Settings['rss_ext'] = ".null_string($Settings['rss_ext']).";\n".
+"\$Settings['js_ext'] = ".null_string($Settings['js_ext']).";\n".
+"\$Settings['showverinfo'] = ".null_string($Settings['showverinfo']).";\n".
+"\$Settings['vercheck'] = ".null_string($Settings['vercheck']).";\n".
+"\$Settings['enable_rss'] = ".null_string($Settings['enable_rss']).";\n".
+"\$Settings['enable_search'] = ".null_string($Settings['enable_search']).";\n".
+"\$Settings['sessionid_in_urls'] = ".null_string($Settings['sessionid_in_urls']).";\n".
+"\$Settings['fixpathinfo'] = ".null_string($Settings['fixpathinfo']).";\n".
+"\$Settings['fixbasedir'] = ".null_string($Settings['fixbasedir']).";\n".
+"\$Settings['fixcookiedir'] = ".null_string($Settings['fixcookiedir']).";\n".
+"\$Settings['enable_pathinfo'] = ".null_string($Settings['enable_pathinfo']).";\n".
+"\$Settings['rssurl'] = ".null_string($Settings['rssurl']).";\n".
+"\$Settings['board_offline'] = ".null_string($Settings['board_offline']).";\n".
+"\$Settings['BoardUUID'] = ".null_string($Settings['BoardUUID']).";\n".
+"\$Settings['KarmaBoostDays'] = ".null_string($Settings['KarmaBoostDays']).";\n".
+"\$Settings['KBoostPercent'] = ".null_string($Settings['KBoostPercent']).";\n".$pretext2[1]."\n".
+"\$SettInfo['board_name'] = ".null_string($SettInfo['board_name']).";\n".
+"\$SettInfo['Author'] = ".null_string($SettInfo['Author']).";\n".
+"\$SettInfo['Keywords'] = ".null_string($SettInfo['Keywords']).";\n".
+"\$SettInfo['Description'] = ".null_string($SettInfo['Description']).";\n".$pretext2[2]."\n".
+"\$SettDir['maindir'] = ".null_string($SettDir['maindir']).";\n".
+"\$SettDir['inc'] = ".null_string($SettDir['inc']).";\n".
+"\$SettDir['misc'] = ".null_string($SettDir['misc']).";\n".
+"\$SettDir['sql'] = ".null_string($SettDir['sql']).";\n".
+"\$SettDir['admin'] = ".null_string($SettDir['admin']).";\n".
+"\$SettDir['sqldumper'] = ".null_string($SettDir['sqldumper']).";\n".
+"\$SettDir['mod'] = ".null_string($SettDir['mod']).";\n".
+"\$SettDir['themes'] = ".null_string($SettDir['themes']).";\n".$pretext2[3]."\n?>";
 $BoardSettingsBak = $pretext.$settcheck.$BoardSettings;
 $BoardSettings = $pretext.$settcheck.$BoardSettings;
 $fp = fopen("settings.php","w+");
@@ -704,7 +839,70 @@ $_POST['Description'] = htmlspecialchars($_POST['Description'], ENT_QUOTES, $Set
 $_POST['Description'] = fixbamps($_POST['Description']);
 $_POST['Description'] = remove_spaces($_POST['Description']);
 $_POST['Description'] = str_replace("\&#039;", "&#039;", $_POST['Description']);
-$BoardSettings=$pretext2[0]."\n\$Settings['sqlhost'] = ".null_string($Settings['sqlhost']).";\n\$Settings['sqldb'] = ".null_string($Settings['sqldb']).";\n\$Settings['sqltable'] = ".null_string($Settings['sqltable']).";\n\$Settings['sqluser'] = ".null_string($Settings['sqluser']).";\n\$Settings['sqlpass'] = ".null_string($Settings['sqlpass']).";\n\$Settings['sqltype'] = ".null_string($Settings['sqltype']).";\n\$Settings['board_name'] = ".null_string($_POST['board_name']).";\n\$Settings['idbdir'] = ".null_string($Settings['idbdir']).";\n\$Settings['idburl'] = ".null_string($Settings['idburl']).";\n\$Settings['enable_https'] = ".null_string($Settings['enable_https']).";\n\$Settings['weburl'] = ".null_string($Settings['weburl']).";\n\$Settings['use_gzip'] = ".null_string($Settings['use_gzip']).";\n\$Settings['html_type'] = ".null_string($Settings['html_type']).";\n\$Settings['html_level'] = ".null_string($Settings['html_level']).";\n\$Settings['output_type'] = ".null_string($Settings['output_type']).";\n\$Settings['GuestGroup'] = ".null_string($Settings['GuestGroup']).";\n\$Settings['MemberGroup'] = ".null_string($Settings['MemberGroup']).";\n\$Settings['ValidateGroup'] = ".null_string($Settings['ValidateGroup']).";\n\$Settings['AdminValidate'] = ".null_string($Settings['AdminValidate']).";\n\$Settings['TestReferer'] = ".null_string($Settings['TestReferer']).";\n\$Settings['DefaultTheme'] = ".null_string($Settings['DefaultTheme']).";\n\$Settings['DefaultTimeZone'] = ".null_string($Settings['DefaultTimeZone']).";\n\$Settings['DefaultDST'] = ".null_string($Settings['DefaultDST']).";\n\$Settings['use_hashtype'] = ".null_string($Settings['use_hashtype']).";\n\$Settings['charset'] = ".null_string($Settings['charset']).";\n\$Settings['add_power_by'] = ".null_string($Settings['add_power_by']).";\n\$Settings['send_pagesize'] = ".null_string($Settings['send_pagesize']).";\n\$Settings['max_posts'] = ".null_string($Settings['max_posts']).";\n\$Settings['max_topics'] = ".null_string($Settings['max_topics']).";\n\$Settings['max_memlist'] = ".null_string($Settings['max_memlist']).";\n\$Settings['max_pmlist'] = ".null_string($Settings['max_pmlist']).";\n\$Settings['hot_topic_num'] = ".null_string($Settings['hot_topic_num']).";\n\$Settings['qstr'] = ".null_string($Settings['qstr']).";\n\$Settings['qsep'] = ".null_string($Settings['qsep']).";\n\$Settings['file_ext'] = ".null_string($Settings['file_ext']).";\n\$Settings['rss_ext'] = ".null_string($Settings['rss_ext']).";\n\$Settings['js_ext'] = ".null_string($Settings['js_ext']).";\n\$Settings['showverinfo'] = ".null_string($Settings['showverinfo']).";\n\$Settings['enable_rss'] = ".null_string($Settings['enable_rss']).";\n\$Settings['enable_search'] = ".null_string($Settings['enable_search']).";\n\$Settings['sessionid_in_urls'] = ".null_string($Settings['sessionid_in_urls']).";\n\$Settings['fixpathinfo'] = ".null_string($Settings['fixpathinfo']).";\n\$Settings['fixbasedir'] = ".null_string($Settings['fixbasedir']).";\n\$Settings['fixcookiedir'] = ".null_string($Settings['fixcookiedir']).";\n\$Settings['enable_pathinfo'] = ".null_string($Settings['enable_pathinfo']).";\n\$Settings['rssurl'] = ".null_string($Settings['rssurl']).";\n\$Settings['board_offline'] = ".null_string($Settings['board_offline']).";\n\$Settings['BoardUUID'] = ".null_string($Settings['BoardUUID']).";\n\$Settings['KarmaBoostDays'] = ".null_string($Settings['KarmaBoostDays']).";\n\$Settings['KBoostPercent'] = ".null_string($Settings['KBoostPercent']).";\n".$pretext2[1]."\n\$SettInfo['board_name'] = ".null_string($_POST['board_name']).";\n\$SettInfo['Author'] = ".null_string($_POST['Author']).";\n\$SettInfo['Keywords'] = ".null_string($_POST['Keywords']).";\n\$SettInfo['Description'] = ".null_string($_POST['Description']).";\n".$pretext2[2]."\n\$SettDir['maindir'] = ".null_string($SettDir['maindir']).";\n\$SettDir['inc'] = ".null_string($SettDir['inc']).";\n\$SettDir['misc'] = ".null_string($SettDir['misc']).";\n\$SettDir['sql'] = ".null_string($SettDir['sql']).";\n\$SettDir['admin'] = ".null_string($SettDir['admin']).";\n\$SettDir['sqldumper'] = ".null_string($SettDir['sqldumper']).";\n\$SettDir['mod'] = ".null_string($SettDir['mod']).";\n\$SettDir['themes'] = ".null_string($SettDir['themes']).";\n".$pretext2[3]."\n?>";
+$BoardSettings=$pretext2[0]."\n".
+"\$Settings['sqlhost'] = ".null_string($Settings['sqlhost']).";\n".
+"\$Settings['sqldb'] = ".null_string($Settings['sqldb']).";\n".
+"\$Settings['sqltable'] = ".null_string($Settings['sqltable']).";\n".
+"\$Settings['sqluser'] = ".null_string($Settings['sqluser']).";\n".
+"\$Settings['sqlpass'] = ".null_string($Settings['sqlpass']).";\n".
+"\$Settings['sqltype'] = ".null_string($Settings['sqltype']).";\n".
+"\$Settings['board_name'] = ".null_string($_POST['board_name']).";\n".
+"\$Settings['idbdir'] = ".null_string($Settings['idbdir']).";\n".
+"\$Settings['idburl'] = ".null_string($Settings['idburl']).";\n".
+"\$Settings['enable_https'] = ".null_string($Settings['enable_https']).";\n".
+"\$Settings['weburl'] = ".null_string($Settings['weburl']).";\n".
+"\$Settings['use_gzip'] = ".null_string($Settings['use_gzip']).";\n".
+"\$Settings['html_type'] = ".null_string($Settings['html_type']).";\n".
+"\$Settings['html_level'] = ".null_string($Settings['html_level']).";\n".
+"\$Settings['output_type'] = ".null_string($Settings['output_type']).";\n".
+"\$Settings['GuestGroup'] = ".null_string($Settings['GuestGroup']).";\n".
+"\$Settings['MemberGroup'] = ".null_string($Settings['MemberGroup']).";\n".
+"\$Settings['ValidateGroup'] = ".null_string($Settings['ValidateGroup']).";\n".
+"\$Settings['AdminValidate'] = ".null_string($Settings['AdminValidate']).";\n".
+"\$Settings['TestReferer'] = ".null_string($Settings['TestReferer']).";\n".
+"\$Settings['DefaultTheme'] = ".null_string($Settings['DefaultTheme']).";\n".
+"\$Settings['DefaultTimeZone'] = ".null_string($Settings['DefaultTimeZone']).";\n".
+"\$Settings['DefaultDST'] = ".null_string($Settings['DefaultDST']).";\n".
+"\$Settings['use_hashtype'] = ".null_string($Settings['use_hashtype']).";\n".
+"\$Settings['charset'] = ".null_string($Settings['charset']).";\n".
+"\$Settings['add_power_by'] = ".null_string($Settings['add_power_by']).";\n".
+"\$Settings['send_pagesize'] = ".null_string($Settings['send_pagesize']).";\n".
+"\$Settings['max_posts'] = ".null_string($Settings['max_posts']).";\n".
+"\$Settings['max_topics'] = ".null_string($Settings['max_topics']).";\n".
+"\$Settings['max_memlist'] = ".null_string($Settings['max_memlist']).";\n".
+"\$Settings['max_pmlist'] = ".null_string($Settings['max_pmlist']).";\n".
+"\$Settings['hot_topic_num'] = ".null_string($Settings['hot_topic_num']).";\n".
+"\$Settings['qstr'] = ".null_string($Settings['qstr']).";\n".
+"\$Settings['qsep'] = ".null_string($Settings['qsep']).";\n".
+"\$Settings['file_ext'] = ".null_string($Settings['file_ext']).";\n".
+"\$Settings['rss_ext'] = ".null_string($Settings['rss_ext']).";\n".
+"\$Settings['js_ext'] = ".null_string($Settings['js_ext']).";\n".
+"\$Settings['showverinfo'] = ".null_string($Settings['showverinfo']).";\n".
+"\$Settings['vercheck'] = ".null_string($Settings['vercheck']).";\n".
+"\$Settings['enable_rss'] = ".null_string($Settings['enable_rss']).";\n".
+"\$Settings['enable_search'] = ".null_string($Settings['enable_search']).";\n".
+"\$Settings['sessionid_in_urls'] = ".null_string($Settings['sessionid_in_urls']).";\n".
+"\$Settings['fixpathinfo'] = ".null_string($Settings['fixpathinfo']).";\n".
+"\$Settings['fixbasedir'] = ".null_string($Settings['fixbasedir']).";\n".
+"\$Settings['fixcookiedir'] = ".null_string($Settings['fixcookiedir']).";\n".
+"\$Settings['enable_pathinfo'] = ".null_string($Settings['enable_pathinfo']).";\n".
+"\$Settings['rssurl'] = ".null_string($Settings['rssurl']).";\n".
+"\$Settings['board_offline'] = ".null_string($Settings['board_offline']).";\n".
+"\$Settings['BoardUUID'] = ".null_string($Settings['BoardUUID']).";\n".
+"\$Settings['KarmaBoostDays'] = ".null_string($Settings['KarmaBoostDays']).";\n".
+"\$Settings['KBoostPercent'] = ".null_string($Settings['KBoostPercent']).";\n".$pretext2[1]."\n".
+"\$SettInfo['board_name'] = ".null_string($_POST['board_name']).";\n".
+"\$SettInfo['Author'] = ".null_string($_POST['Author']).";\n".
+"\$SettInfo['Keywords'] = ".null_string($_POST['Keywords']).";\n".
+"\$SettInfo['Description'] = ".null_string($_POST['Description']).";\n".$pretext2[2]."\n".
+"\$SettDir['maindir'] = ".null_string($SettDir['maindir']).";\n".
+"\$SettDir['inc'] = ".null_string($SettDir['inc']).";\n".
+"\$SettDir['misc'] = ".null_string($SettDir['misc']).";\n".
+"\$SettDir['sql'] = ".null_string($SettDir['sql']).";\n".
+"\$SettDir['admin'] = ".null_string($SettDir['admin']).";\n".
+"\$SettDir['sqldumper'] = ".null_string($SettDir['sqldumper']).";\n".
+"\$SettDir['mod'] = ".null_string($SettDir['mod']).";\n".
+"\$SettDir['themes'] = ".null_string($SettDir['themes']).";\n".$pretext2[3]."\n?>";
 $BoardSettingsBak = $pretext.$settcheck.$BoardSettings;
 $BoardSettings = $pretext.$settcheck.$BoardSettings;
 $fp = fopen("settings.php","w+");

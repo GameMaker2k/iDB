@@ -11,12 +11,16 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: forums.php - Last Update: 12/18/2009 SVN 423 - Author: cooldude2k $
+    $FileInfo: forums.php - Last Update: 12/31/2009 SVN 437 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="forums.php"||$File3Name=="/forums.php") {
     require('index.php');
     exit(); }
+if(!isset($ThemeSet['ForumStyle'])) { $ThemeSet['ForumStyle'] = 1; }
+if(!is_numeric($ThemeSet['ForumStyle'])) { $ThemeSet['ForumStyle'] = 1; }
+if($ThemeSet['ForumStyle']>2||$ThemeSet['ForumStyle']<1) {
+	$ThemeSet['ForumStyle'] = 1; }
 $prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."categories\" WHERE \"ShowCategory\"='yes' AND \"InSubCategory\"=0 ORDER BY \"OrderID\" ASC, \"id\" ASC", array());
 $preresult=sql_query($prequery,$SQLStat);
 $prenum=sql_num_rows($preresult);
@@ -192,17 +196,29 @@ if ($ForumType=="subforum") { $PreForum=$ThemeSet['SubForumIcon']; }
 if ($ForumType=="redirect") { $PreForum=$ThemeSet['RedirectIcon']; }
 $ExStr = ""; if ($ForumType!="redirect"&&
     $ForumShowTopics!="no") { $ExStr = "&page=1"; }
+if($ThemeSet['ForumStyle']==1) {
+	$ForumClass[1] = " class=\"TableColumn3\" ";
+	$ForumClass[2] = " class=\"TableColumn3\" ";
+	$ForumClass[3] = " class=\"TableColumn3\" ";
+	$ForumClass[4] = " class=\"TableColumn3\" ";
+	$ForumClass[5] = " class=\"TableColumn3\" "; }
+if($ThemeSet['ForumStyle']==2) {
+	$ForumClass[1] = " class=\"TableColumn3\" ";
+	$ForumClass[2] = " class=\"TableColumn3\" ";
+	$ForumClass[3] = " class=\"TableColumn3Alt\" ";
+	$ForumClass[4] = " class=\"TableColumn3Alt\" ";
+	$ForumClass[5] = " class=\"TableColumn3Alt\" "; }
 ?>
 <tr class="TableRow3" id="Forum<?php echo $ForumID; ?>">
-<td class="TableColumn3"><div class="forumicon">
+<td<?php echo $ForumClass[1]; ?>><div class="forumicon">
 <?php echo $PreForum; ?></div></td>
-<td class="TableColumn3"><div class="forumname"><a href="<?php echo url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$ForumID.$ExStr,$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>"<?php if($ForumType=="redirect") { echo " onclick=\"window.open(this.href);return false;\""; } ?>><?php echo $ForumName; ?></a></div>
+<td<?php echo $ForumClass[2]; ?>><div class="forumname"><a href="<?php echo url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$ForumID.$ExStr,$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>"<?php if($ForumType=="redirect") { echo " onclick=\"window.open(this.href);return false;\""; } ?>><?php echo $ForumName; ?></a></div>
 <div class="forumdescription">
 <?php echo $ForumDescription; ?><br />
 <?php echo $sflist; ?></div></td>
-<td class="TableColumn3" style="text-align: center;"><?php echo $NumTopics; ?></td>
-<td class="TableColumn3" style="text-align: center;"><?php echo $NumPosts; ?></td>
-<td class="TableColumn3"><?php echo $LastTopic; ?></td>
+<td<?php echo $ForumClass[3]; ?>style="text-align: center;"><?php echo $NumTopics; ?></td>
+<td<?php echo $ForumClass[4]; ?>style="text-align: center;"><?php echo $NumPosts; ?></td>
+<td<?php echo $ForumClass[5]; ?>><?php echo $LastTopic; ?></td>
 </tr>
 <?php } ++$i; } sql_free_result($result);
 if($num>=1) {

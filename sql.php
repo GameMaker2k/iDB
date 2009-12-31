@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 12/29/2009 SVN 435 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 12/31/2009 SVN 437 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -112,10 +112,14 @@ if(!isset($_SERVER['HTTPS'])) { $_SERVER['HTTPS'] = "off"; }
 require_once($SettDir['misc'].'utf8.php');
 require_once($SettDir['inc'].'filename.php');
 $iDBVerName = "iDB|".$VER2[1]."|".$VER1[0].".".$VER1[1].".".$VER1[2]."|".$VER2[2]."|".$SubVerN;
-/* This way checks iDB version by sending the iDBVerName to the iDB Version Checker.*/
-$Settings['vercheck'] = 1;
-/* This way checks iDB version by sending the board url to the iDB Version Checker.*/
+/* 
+This way checks iDB version by sending the iDBVerName to the iDB Version Checker.
+$Settings['vercheck'] = 1; 
+This way checks iDB version by sending the board url to the iDB Version Checker.
 $Settings['vercheck'] = 2;
+*/
+if(!isset($Settings['vercheck'])) { 
+	$Settings['vercheck'] = 2; }
 if($Settings['vercheck']!=1&&
 	$Settings['vercheck']!=2) {
 	$Settings['vercheck'] = 2; }

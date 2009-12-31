@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
     $ThemeInfo - Name: iDB Theme - Author: cooldude2k $
-    $FileInfo: settings.php - Last Update: 6/16/2009 SVN 264 - Author: cooldude2k $
+    $FileInfo: settings.php - Last Update: 12/31/2009 SVN 437 - Author: cooldude2k $
 */
 $ThemeSet = array();
 $ThemeSet['ThemeName'] = "iDB Theme";
@@ -55,6 +55,7 @@ $ThemeSet['LineDivider'] = " | ";
 $ThemeSet['ButtonDivider'] = " &nbsp; ";
 $ThemeSet['LineDividerTopic'] = " | ";
 $ThemeSet['TitleDivider'] = "-&gt;";
+$ThemeSet['ForumStyle'] = 1;
 $ThemeSet['ForumIcon'] = "<div style=\"text-align: center; font-size: 11px;\" title=\"Forum\"> (F) </div>";
 $ThemeSet['SubForumIcon'] = "<div style=\"text-align: center; font-size: 11px;\" title=\"SubForum\"> {SF} </div>";
 $ThemeSet['RedirectIcon'] = "<div style=\"text-align: center; font-size: 11px;\" title=\"Redirect Forum\"> [RF] </div>";
