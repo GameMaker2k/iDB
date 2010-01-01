@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2009 iDB Support - http://idb.berlios.de/
-    Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
+    Copyright 2004-2010 iDB Support - http://idb.berlios.de/
+    Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: topics.php - Last Update: 12/17/2009 SVN 418 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 01/01/2010 SVN 438 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -698,7 +698,13 @@ $_POST['TopicPost'] = remove_bad_entities($_POST['TopicPost']);
 //$_POST['TopicPost'] = remove_spaces($_POST['TopicPost']);
 if($_SESSION['UserGroup']==$Settings['GuestGroup']) {
 if(isset($_POST['GuestName'])&&$_POST['GuestName']!=null) {
-setcookie("GuestName", $_POST['GuestName'], time() + (7 * 86400), $cbasedir);
+if($cookieDomain==null) {
+setcookie("GuestName", $_POST['GuestName'], time() + (7 * 86400), $cbasedir); }
+if($cookieDomain!=null) {
+if($cookieSecure===true) {
+setcookie("GuestName", $_POST['GuestName'], time() + (7 * 86400), $cbasedir, $cookieDomain, 1); }
+if($cookieSecure===false) {
+setcookie("GuestName", $_POST['GuestName'], time() + (7 * 86400), $cbasedir, $cookieDomain); } }
 $_SESSION['GuestName']=$_POST['GuestName']; } }
 /*    <_<  iWordFilter  >_>      
    by Kazuki Przyborowski - Cool Dude 2k */

@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2009 iDB Support - http://idb.berlios.de/
-    Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
+    Copyright 2004-2010 iDB Support - http://idb.berlios.de/
+    Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 12/31/2009 SVN 437 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 01/01/2010 SVN 438 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -164,6 +164,7 @@ $cookieDomain = null; $cookieSecure = false;
 if($Settings['idburl']!=null&&$Settings['idburl']!="localhost") {
 $URLsTest = parse_url($Settings['idburl']); 
 $cookieDomain = $URLsTest['host'];
+if($cookieDomain=="localhost") { $cookieDomain = false; }
 if($Settings['enable_https']=="on") {
  if($URLsTest['scheme']=="https") { $cookieSecure = true; }
  if($URLsTest['scheme']!="https") { $cookieSecure = false; } } }

@@ -8,11 +8,11 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2009 iDB Support - http://idb.berlios.de/
-    Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
+    Copyright 2004-2010 iDB Support - http://idb.berlios.de/
+    Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mkconfig.php - Last Update: 12/31/2009 SVN 437 - Author: cooldude2k $
+    $FileInfo: mkconfig.php - Last Update: 01/01/2010 SVN 438 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mkconfig.php"||$File3Name=="/mkconfig.php") {
@@ -49,7 +49,10 @@ if (!is_writable($checkfile)) {
    @chmod("settingsbak.php",0766);
 } else { /* settings.php is writable install iDB. ^_^ */ }
 session_name($_POST['tableprefix']."sess");
+if(preg_match("/\/$/", $_POST['BoardURL'])<1) { 
+	$_POST['BoardURL'] = $_POST['BoardURL']."/"; } 
 $URLsTest = parse_url($_POST['BoardURL']);
+$this_dir = $URLsTest['path'];
 session_set_cookie_params(0, $this_dir, $URLsTest['host']);
 session_cache_limiter("private, must-revalidate");
 header("Cache-Control: private, must-revalidate"); // IE 6 Fix
@@ -194,11 +197,15 @@ $fp = fopen("settingsbak.php","w+");
 fwrite($fp, $BoardSettingsBak);
 fclose($fp);
 if($_POST['storecookie']=="true") {
-//setcookie("MemberName", $_POST['AdminUser'], time() + (7 * 86400), $this_dir, $URLsTest['host']);
-//setcookie("UserID", 1, time() + (7 * 86400), $this_dir, $URLsTest['host']);
-//setcookie("SessPass", $NewPassword, time() + (7 * 86400), $this_dir, $URLsTest['host']); 
-}
-/*mysql_close();*/ $chdel = true;
+if($URLsTest['host']!="localhost") {
+setcookie("MemberName", $_POST['AdminUser'], time() + (7 * 86400), $this_dir, $URLsTest['host']);
+setcookie("UserID", 1, time() + (7 * 86400), $this_dir, $URLsTest['host']);
+setcookie("SessPass", $NewPassword, time() + (7 * 86400), $this_dir, $URLsTest['host']); }
+if($URLsTest['host']=="localhost") {
+setcookie("MemberName", $_POST['AdminUser'], time() + (7 * 86400), $this_dir, false);
+setcookie("UserID", 1, time() + (7 * 86400), $this_dir, false);
+setcookie("SessPass", $NewPassword, time() + (7 * 86400), $this_dir, false); } }
+$chdel = true;
 if($Error!="Yes") {
 if($_POST['unlink']=="true") {
 $chdel1 = @unlink($SetupDir['setup'].'presetup.php'); $chdel2 = @unlink($SetupDir['setup'].'setup.php');
