@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 12/19/2009 SVN 430 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 01/19/2010 SVN 439 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -1047,20 +1047,20 @@ $plusi = 1; $minusi = 12;
 $plusnum = 15; $minusnum = 0;
 while ($minusi > $minusnum) {
 if($TimeZoneArray['hour']==-$minusi) {
-echo "<option selected=\"selected\" value=\"-".$minusi."\">GMT - ".$minusi.":00 hours</option>\n"; }
+echo "<option selected=\"selected\" value=\"-".$minusi."\">UTC - ".$minusi.":00 hours</option>\n"; }
 if($TimeZoneArray['hour']!=-$minusi) {
-echo "<option value=\"-".$minusi."\">GMT - ".$minusi.":00 hours</option>\n"; }
+echo "<option value=\"-".$minusi."\">UTC - ".$minusi.":00 hours</option>\n"; }
 --$minusi; }
 if($TimeZoneArray['hour']==0) { ?>
-<option selected="selected" value="0">GMT +/- 0:00 hours</option>
+<option selected="selected" value="0">UTC +/- 0:00 hours</option>
 <?php } if($TimeZoneArray['hour']!=0) { ?>
-<option value="0">GMT +/- 0:00 hours</option>
+<option value="0">UTC +/- 0:00 hours</option>
 <?php }
 while ($plusi < $plusnum) {
 if($TimeZoneArray['hour']==$plusi) {
-echo "<option selected=\"selected\" value=\"".$plusi."\">GMT + ".$plusi.":00 hours</option>\n"; }
+echo "<option selected=\"selected\" value=\"".$plusi."\">UTC + ".$plusi.":00 hours</option>\n"; }
 if($TimeZoneArray['hour']!=$plusi) {
-echo "<option value=\"".$plusi."\">GMT + ".$plusi.":00 hours</option>\n"; }
+echo "<option value=\"".$plusi."\">UTC + ".$plusi.":00 hours</option>\n"; }
 ++$plusi; }
 ?></select></td>
 </tr><tr>

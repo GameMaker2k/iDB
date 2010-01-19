@@ -12,7 +12,7 @@
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: setup.php - Last Update: 12/29/2009 SVN 435 - Author: cooldude2k $
+    $FileInfo: setup.php - Last Update: 01/19/2010 SVN 439 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="setup.php"||$File3Name=="/setup.php") {
@@ -147,20 +147,20 @@ $plusi = 1; $minusi = 12;
 $plusnum = 15; $minusnum = 0;
 while ($minusi > $minusnum) {
 if($myofftime==-$minusi) {
-echo "<option selected=\"selected\" value=\"-".$minusi."\">GMT - ".$minusi.":00 hours</option>\n"; }
+echo "<option selected=\"selected\" value=\"-".$minusi."\">UTC - ".$minusi.":00 hours</option>\n"; }
 if($myofftime!=-$minusi) {
-echo "<option value=\"-".$minusi."\">GMT - ".$minusi.":00 hours</option>\n"; }
+echo "<option value=\"-".$minusi."\">UTC - ".$minusi.":00 hours</option>\n"; }
 --$minusi; }
 if($myofftime==0) { ?>
-<option selected="selected" value="0">GMT +/- 0:00 hours</option>
+<option selected="selected" value="0">UTC +/- 0:00 hours</option>
 <?php } if($myofftime!=0) { ?>
-<option value="0">GMT +/- 0:00 hours</option>
+<option value="0">UTC +/- 0:00 hours</option>
 <?php }
 while ($plusi < $plusnum) {
 if($myofftime==$plusi) {
-echo "<option selected=\"selected\" value=\"".$plusi."\">GMT + ".$plusi.":00 hours</option>\n"; }
+echo "<option selected=\"selected\" value=\"".$plusi."\">UTC + ".$plusi.":00 hours</option>\n"; }
 if($myofftime!=$plusi) {
-echo "<option value=\"".$plusi."\">GMT + ".$plusi.":00 hours</option>\n"; }
+echo "<option value=\"".$plusi."\">UTC + ".$plusi.":00 hours</option>\n"; }
 ++$plusi; }
 ?></select></td>
 </tr><tr>
