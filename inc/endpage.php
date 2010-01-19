@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: endpage.php - Last Update: 01/19/2010 SVN 439 - Author: cooldude2k $
+    $FileInfo: endpage.php - Last Update: 01/19/2010 SVN 440 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="endpage.php"||$File3Name=="/endpage.php") {
@@ -21,9 +21,11 @@ if(!isset($_GET['time'])) { $_GET['time'] = true; }
 if($_GET['time']=="show"||$_GET['time']==true) {
 if($_SESSION['UserDST']=="on") { $MyDST = $checktimea['hour']+1; }
 if($_SESSION['UserDST']=="off") { $MyDST = $checktimea['hour']; }
+if($MyDST>=0) { $TimeSign = "+"; }
+if($MyDST<0) { $TimeSign = "-"; $MyDST = abs($MyDST); }
 $MyDST = $MyDST.":".$checktimea['minute'];
 $MyTimeNow = GMTimeGet('g:i a',$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$endpagevar=$endpagevar."<br />The time now is ".$MyTimeNow." ".$ThemeSet['LineDivider']." All times are UTC ".$MyDST; }
+$endpagevar=$endpagevar."<br />The time now is ".$MyTimeNow." ".$ThemeSet['LineDivider']." All times are UTC ".$TimeSign." ".$MyDST; }
 function execution_time($starttime) {
 list($uetime, $etime) = explode(" ", microtime());
 $endtime = $uetime + $etime;
