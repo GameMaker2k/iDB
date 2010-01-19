@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 12/18/2009 SVN 426 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 01/19/2010 SVN 441 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -250,7 +250,7 @@ sql_query($dmquery,$SQLStat); }
 <td class="TableMenuColumn4">&nbsp;</td>
 </tr></table></div>
 <?php } if($_POST['act']=="editmember"&&$_POST['update']=="now"&&$_GET['act']=="editmember"&&
-	($_POST['id']=="0"||$_POST['id']=="1"||$_POST['id']=="-1")) {
+	($_POST['id']=="0"||$_POST['id']=="-1")) {
 	$_POST['act'] = null; $_POST['update'] = null; }
 if($_GET['act']=="editmember"&&$_POST['update']!="now"&&!isset($_POST['id'])) { 
 $admincptitle = " ".$ThemeSet['TitleDivider']." Editing Members";
@@ -297,7 +297,7 @@ $_POST['search'] = remove_spaces($_POST['search']);
 	<td style="width: 50%;"><label class="TextBoxLabel" for="id">Member to edit:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="id" id="id">
 <?php 
-$getmemidq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"Name\" LIKE '%s' AND (\"id\"<>-1 AND \"id\"<>1)", array($_POST['search']));
+$getmemidq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"Name\" LIKE '%s' AND (\"id\"<>-1)", array($_POST['search']));
 $getmemidr=sql_query($getmemidq,$SQLStat);
 $getmemidnum=sql_num_rows($getmemidr);
 $getmemidi = 0;
@@ -329,7 +329,7 @@ sql_free_result($getmemidr); ?>
 </table>
 </div>
 <?php } if($_POST['act']=="editmember"&&$_POST['update']!="now"&&$_GET['act']=="editmember"&&
-	($_POST['id']!="0"||$_POST['id']!="1"||$_POST['id']!="-1")) { 
+	($_POST['id']!="0"||$_POST['id']!="-1")) { 
 $admincptitle = " ".$ThemeSet['TitleDivider']." Editing Members";
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_POST['id']));
 $result=sql_query($query,$SQLStat);
@@ -396,6 +396,7 @@ $EditMem['IP']=sql_result($result,0,"IP");
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="MemEmail">Members Email:</label></td>
 	<td style="width: 50%;"><input type="text" name="MemEmail" class="TextBox" id="MemEmail" size="20" value="<?php echo $EditMem['Email']; ?>" /></td>
+<?php if($EditMem['ID']!=1) { ?>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="gid">New Group for Member:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="gid" id="gid">
@@ -418,6 +419,7 @@ if($getgrpidID==$EditMem['GroupID']) {
 <?php ++$getgrpidi; }
 sql_free_result($getgrpidr); ?>
 	</select></td>
+<?php } ?>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="MemHidden">Hidden Member:</label></td>
 	<td style="width: 50%;"><select id="MemHidden" name="MemHidden" class="TextBox">
@@ -456,7 +458,7 @@ sql_free_result($getgrpidr); ?>
 </table>
 </div>
 <?php } if($_POST['act']=="editmember"&&$_POST['update']=="now"&&$_GET['act']=="editmember"&&
-	($_POST['id']!="0"||$_POST['id']!="1"||$_POST['id']!="-1")) { 
+	($_POST['id']!="0"||$_POST['id']!="-1")) { 
 $ggidquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"Name\"='%s' LIMIT 1", array($Settings['GuestGroup']));
 $ggidresult=sql_query($ggidquery,$SQLStat);
 $GuestGroupID=sql_result($ggidresult,0,"id");
@@ -513,12 +515,18 @@ if(!is_numeric($_POST['MemKarma'])) { $_POST['MemKarma'] = "0"; }
 	$_POST['MemBanTime'] = "0"; $BirthMonth="0"; $BirthDay="0"; $BirthYear="0"; }
 	if(count($BirthExpl)!="3") { 
 	$_POST['MemBanTime'] = "0"; $BirthMonth="0"; $BirthDay="0"; $BirthYear="0"; } }
-if($DMemName!==null&&($_POST['id']!="0"||$_POST['id']!="1"||$_POST['id']!="-1")&&
+if($DMemName!==null&&($_POST['id']!="0"||$_POST['id']!="-1")&&
 	($_POST['gid']!=$GuestGroupID||$_POST['gid']!=$ValidateGroupID)) { 
 if($_POST['MemName']==$DMemName||$username_check>=1) {
+if($_POST['id']!=1) {
 $dmquery = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"GroupID\"=%i,\"HiddenMember\"='%s',\"WarnLevel\"=%i,\"BanTime\"=%i,\"PostCount\"=%i,\"Karma\"=%i WHERE \"id\"=%i", array($_POST['gid'],$_POST['MemHidden'],$_POST['MemWarnLevel'],$_POST['MemBanTime'],$_POST['MemPostCount'],$_POST['MemKarma'],$_POST['id'])); }
+if($_POST['id']==1) {
+$dmquery = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"HiddenMember\"='%s',\"WarnLevel\"=%i,\"BanTime\"=%i,\"PostCount\"=%i,\"Karma\"=%i WHERE \"id\"=%i", array($_POST['MemHidden'],$_POST['MemWarnLevel'],$_POST['MemBanTime'],$_POST['MemPostCount'],$_POST['MemKarma'],$_POST['id'])); } }
 if($_POST['MemName']!=$DMemName&&$username_check<1) {
-$dmquery = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"Name\"='%s',\"GroupID\"=%i,\"HiddenMember\"='%s',\"WarnLevel\"=%i,\"BanTime\"=%i,\"PostCount\"=%i,\"Karma\"=%i WHERE \"id\"=%i", array($_POST['MemName'],$_POST['gid'],$_POST['MemHidden'],$_POST['MemWarnLevel'],$_POST['MemBanTime'],$_POST['MemPostCount'],$_POST['MemKarma'],$_POST['id'])); }
+if($_POST['id']!=1) {
+$dmquery = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"Name\"='%s',\"GroupID\"=%i,\"HiddenMember\"='%s',\"WarnLevel\"=%i,\"BanTime\"=%i,\"PostCount\"=%i,\"Karma\"=%i WHERE \"id\"=%i", array($_POST['MemName'],$_POST['gid'],$_POST['MemHidden'],$_POST['MemWarnLevel'],$_POST['MemBanTime'],$_POST['MemPostCount'],$_POST['MemKarma'],$_POST['id'])); } 
+if($_POST['id']==1) {
+$dmquery = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"Name\"='%s',\"HiddenMember\"='%s',\"WarnLevel\"=%i,\"BanTime\"=%i,\"PostCount\"=%i,\"Karma\"=%i WHERE \"id\"=%i", array($_POST['MemName'],$_POST['MemHidden'],$_POST['MemWarnLevel'],$_POST['MemBanTime'],$_POST['MemPostCount'],$_POST['MemKarma'],$_POST['id'])); } }
 sql_query($dmquery,$SQLStat); }
 ?>
 <div class="TableMenuBorder">

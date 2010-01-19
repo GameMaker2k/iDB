@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: groups.php - Last Update: 12/21/2009 SVN 433 - Author: cooldude2k $
+    $FileInfo: groups.php - Last Update: 01/19/2010 SVN 441 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="groups.php"||$File3Name=="/groups.php") {
@@ -432,7 +432,7 @@ if(!isset($_POST['id'])) {
 	<td style="width: 50%;"><label class="TextBoxLabel" for="id">Group to Edit:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="id" id="id">
 <?php 
-$fq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE (\"Name\"<>'%s') ORDER BY \"id\" ASC", array("Admin"));
+$fq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" ORDER BY \"id\" ASC", array(null));
 $fr=sql_query($fq,$SQLStat);
 $ai=sql_num_rows($fr);
 $fi=0;
@@ -461,7 +461,7 @@ sql_free_result($fr); ?>
 </table>
 </div>
 <?php } if(isset($_POST['id'])) { 
-$prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i AND (\"Name\"<>'%s') LIMIT 1", array($_POST['id'], "Admin"));
+$prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i LIMIT 1", array($_POST['id']));
 $preresult=sql_query($prequery,$SQLStat);
 $prenum=sql_num_rows($preresult);
 if($prenum==0) { redirect("location",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],false)); sql_free_result($preresult);
@@ -568,6 +568,7 @@ sql_free_result($preresult);
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="SearchFlood">Search Flood Control in seconds:</label></td>
 	<td style="width: 50%;"><input type="text" name="SearchFlood" class="TextBox" id="SearchFlood" size="20" value="<?php echo $SearchFlood; ?>" /></td>
+<?php if($_POST['id']!=1) { ?>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="PromoteTo">Promote To Group:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="PromoteTo" id="PromoteTo">
@@ -613,6 +614,7 @@ sql_free_result($fr); ?>
 	<option value="yes">yes</option>
 	<option value="no">no</option>
 	</select></td>
+<?php } ?>
 </tr></table>
 <table style="text-align: left;">
 <tr style="text-align: left;">
@@ -678,7 +680,10 @@ $query = sql_pre_query("UPDATE \"".$Settings['sqltable']."permissions\" SET \"Na
 sql_query($query,$SQLStat);
 $query = sql_pre_query("UPDATE \"".$Settings['sqltable']."catpermissions\" SET \"Name\"='%s' WHERE \"Name\"='%s'", array($_POST['GroupName'],$OldGroupName));
 sql_query($query,$SQLStat); }
-$query = sql_pre_query("UPDATE \"".$Settings['sqltable']."groups\" SET \"Name\"='%s',\"NamePrefix\"='%s',\"NameSuffix\"='%s',\"CanViewBoard\"='%s',\"CanViewOffLine\"='%s',\"CanEditProfile\"='%s',\"CanAddEvents\"='%s',\"CanPM\"='%s',\"CanSearch\"='%s',\"FloodControl\"=%i,\"SearchFlood\"=%i,\"PromoteTo\"=%i,\"PromotePosts\"=%i,\"PromoteKarma\"=%i,\"HasModCP\"='%s',\"HasAdminCP\"='%s',\"ViewDBInfo\"='%s' WHERE \"id\"=%i", array($_POST['GroupName'],$_POST['NamePrefix'],$_POST['NameSuffix'],$_POST['CanViewBoard'],$_POST['CanViewOffLine'],$_POST['CanEditProfile'],$_POST['CanAddEvents'],$_POST['CanPM'],$_POST['CanSearch'],$_POST['FloodControl'],$_POST['SearchFlood'],$_POST['PromoteTo'],$_POST['PromotePosts'],$_POST['PromoteKarma'],$_POST['HasModCP'],$_POST['HasAdminCP'],$_POST['ViewDBInfo'],$_POST['id']));
+if($_POST['id']!=1) {
+$query = sql_pre_query("UPDATE \"".$Settings['sqltable']."groups\" SET \"Name\"='%s',\"NamePrefix\"='%s',\"NameSuffix\"='%s',\"CanViewBoard\"='%s',\"CanViewOffLine\"='%s',\"CanEditProfile\"='%s',\"CanAddEvents\"='%s',\"CanPM\"='%s',\"CanSearch\"='%s',\"FloodControl\"=%i,\"SearchFlood\"=%i,\"PromoteTo\"=%i,\"PromotePosts\"=%i,\"PromoteKarma\"=%i,\"HasModCP\"='%s',\"HasAdminCP\"='%s',\"ViewDBInfo\"='%s' WHERE \"id\"=%i", array($_POST['GroupName'],$_POST['NamePrefix'],$_POST['NameSuffix'],$_POST['CanViewBoard'],$_POST['CanViewOffLine'],$_POST['CanEditProfile'],$_POST['CanAddEvents'],$_POST['CanPM'],$_POST['CanSearch'],$_POST['FloodControl'],$_POST['SearchFlood'],$_POST['PromoteTo'],$_POST['PromotePosts'],$_POST['PromoteKarma'],$_POST['HasModCP'],$_POST['HasAdminCP'],$_POST['ViewDBInfo'],$_POST['id'])); }
+if($_POST['id']==1) {
+$query = sql_pre_query("UPDATE \"".$Settings['sqltable']."groups\" SET \"Name\"='%s',\"NamePrefix\"='%s',\"NameSuffix\"='%s',\"CanViewBoard\"='%s',\"CanViewOffLine\"='%s',\"CanEditProfile\"='%s',\"CanAddEvents\"='%s',\"CanPM\"='%s',\"CanSearch\"='%s',\"FloodControl\"=%i,\"SearchFlood\"=%i WHERE \"id\"=%i", array($_POST['GroupName'],$_POST['NamePrefix'],$_POST['NameSuffix'],$_POST['CanViewBoard'],$_POST['CanViewOffLine'],$_POST['CanEditProfile'],$_POST['CanAddEvents'],$_POST['CanPM'],$_POST['CanSearch'],$_POST['FloodControl'],$_POST['SearchFlood'],$_POST['id'])); }
 sql_query($query,$SQLStat); } } }  
 $doupdate = false;
 if(isset($_POST['id'])&&$_POST['subact']=="editnow") { 
