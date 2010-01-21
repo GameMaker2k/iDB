@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 01/01/2010 SVN 438 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 01/20/2010 SVN 442 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -111,26 +111,6 @@ if(!isset($_POST['License'])) { $_POST['License'] = null; }
 if(!isset($_SERVER['HTTPS'])) { $_SERVER['HTTPS'] = "off"; }
 require_once($SettDir['misc'].'utf8.php');
 require_once($SettDir['inc'].'filename.php');
-$iDBVerName = "iDB|".$VER2[1]."|".$VER1[0].".".$VER1[1].".".$VER1[2]."|".$VER2[2]."|".$SubVerN;
-/* 
-This way checks iDB version by sending the iDBVerName to the iDB Version Checker.
-$Settings['vercheck'] = 1; 
-This way checks iDB version by sending the board url to the iDB Version Checker.
-$Settings['vercheck'] = 2;
-*/
-if(!isset($Settings['vercheck'])) { 
-	$Settings['vercheck'] = 2; }
-if($Settings['vercheck']!=1&&
-	$Settings['vercheck']!=2) {
-	$Settings['vercheck'] = 2; }
-if($Settings['vercheck']===2) {
-if($_GET['act']=="versioninfo") { header("Content-Type: text/plain; charset=UTF-8"); ?>
-<charset><?php echo $Settings['charset']; ?></charset> 
-<title><?php echo $Settings['board_name']; ?></title> 
-<?php echo "<name>".$iDBVerName."</name>"; die(); } }
-if($Settings['vercheck']===1) {
-if($_GET['act']=="versioninfo") { header("Content-Type: text/plain; charset=UTF-8");
-header("Location: ".$VerCheckURL."&name=".urlencode($iDBVerName)); die(); } }
 if(!isset($Settings['use_hashtype'])) {
 	$Settings['use_hashtype'] = "sha256"; }
 if(!function_exists('hash')||!function_exists('hash_algos')) {
@@ -152,6 +132,69 @@ if($Settings['use_hashtype']!="md2"&&
 // Check to see if variables are set
 require_once($SettDir['misc'].'setcheck.php');
 require_once($SettDir['inc'].'function.php');
+$iDBVerName = "iDB|".$VER2[1]."|".$VER1[0].".".$VER1[1].".".$VER1[2]."|".$VER2[2]."|".$SubVerN;
+/* 
+This way checks iDB version by sending the iDBVerName to the iDB Version Checker.
+$Settings['vercheck'] = 1; 
+This way checks iDB version by sending the board url to the iDB Version Checker.
+$Settings['vercheck'] = 2;
+*/
+if(!isset($Settings['vercheck'])) { 
+	$Settings['vercheck'] = 2; }
+if($Settings['vercheck']!=1&&
+	$Settings['vercheck']!=2) {
+	$Settings['vercheck'] = 2; }
+if($Settings['vercheck']===2) {
+if($_GET['act']=="vercheckxsl") {
+if(stristr($_SERVER["HTTP_ACCEPT"],"application/xml") ) {
+header("Content-Type: application/xml; charset=UTF-8"); }
+else { header("Content-Type: text/xml; charset=UTF-8"); }
+echo '<?xml version="1.0" encoding="UTF-8"?>';
+echo "\n"; ?>
+
+<html xsl:version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns="http://www.w3.org/1999/xhtml">
+  <body style="font-family:Arial;font-size:12pt;background-color:#EEEEEE">
+    <xsl:for-each select="versioninfo/version">
+      <div style="background-color:teal;color:white;padding:4px">
+        <span style="font-weight:bold">iDB Version Checker</span>
+      </div>
+      <div style="margin-left:20px;margin-bottom:1em;font-size:10pt">
+        <span style="font-style:italic">
+          Board Name: <xsl:value-of select="title"/>
+        </span>
+      </div>
+    </xsl:for-each>
+  </body>
+</html>
+<?php die(); } if($_GET['act']=="versioninfo") {
+if(stristr($_SERVER["HTTP_ACCEPT"],"application/xml") ) {
+header("Content-Type: application/xml; charset=UTF-8"); }
+else { header("Content-Type: text/xml; charset=UTF-8"); }
+echo '<?xml version="1.0" encoding="UTF-8"?>'."\n";
+echo '<?xml-stylesheet type="text/xsl" href="'.url_maker($exfile['index'],$Settings['file_ext'],"act=vercheckxsl",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']).'"?>';
+echo "\n"; ?>
+
+<!DOCTYPE versioninfo [
+<!ELEMENT versioninfo (version*)>
+<!ELEMENT version (charset,title,name)>
+<!ELEMENT charset (#PCDATA)>
+<!ELEMENT title (#PCDATA)>
+<!ELEMENT name (#PCDATA)>
+]>
+
+<versioninfo>
+
+<version>
+<charset><?php echo $Settings['charset']; ?></charset> 
+<title><?php echo $Settings['board_name']; ?></title> 
+<?php echo "<name>".$iDBVerName."</name>\n"; ?>
+</version>
+
+</versioninfo>
+<?php die(); } }
+if($Settings['vercheck']===1) {
+if($_GET['act']=="versioninfo") { header("Content-Type: text/plain; charset=UTF-8");
+header("Location: ".$VerCheckURL."&name=".urlencode($iDBVerName)); die(); } }
 if($Settings['enable_pathinfo']=="on") { 
 	mrstring(); /* Change Path info to Get Vars :P */ }
 // Check to see if variables are set
