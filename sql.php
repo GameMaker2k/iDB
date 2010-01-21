@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 01/20/2010 SVN 442 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 01/20/2010 SVN 443 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -160,7 +160,7 @@ echo "\n"; ?>
       </div>
       <div style="margin-left:20px;margin-bottom:1em;font-size:10pt">
         <span style="font-style:italic">
-          Board Name: <xsl:value-of select="title"/>
+          Board Name: <a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><xsl:value-of select="title"/></a>
         </span>
       </div>
     </xsl:for-each>
