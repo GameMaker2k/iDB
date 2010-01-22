@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 01/20/2010 SVN 443 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 01/21/2010 SVN 445 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -156,7 +156,7 @@ echo "\n"; ?>
   <body style="font-family:Arial;font-size:12pt;background-color:#EEEEEE">
     <xsl:for-each select="versioninfo/version">
       <div style="background-color:teal;color:white;padding:4px">
-        <span style="font-weight:bold">iDB Version Checker</span>
+        <span style="font-weight:bold"><xsl:value-of select="vname"/></span>
       </div>
       <div style="margin-left:20px;margin-bottom:1em;font-size:10pt">
         <span style="font-style:italic">
@@ -170,9 +170,8 @@ echo "\n"; ?>
 if(stristr($_SERVER["HTTP_ACCEPT"],"application/xml") ) {
 header("Content-Type: application/xml; charset=UTF-8"); }
 else { header("Content-Type: text/xml; charset=UTF-8"); }
-echo '<?xml version="1.0" encoding="UTF-8"?>'."\n";
-echo '<?xml-stylesheet type="text/xsl" href="'.url_maker($exfile['index'],$Settings['file_ext'],"act=vercheckxsl",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']).'"?>';
-echo "\n"; ?>
+xml_doc_start("1.0",$Settings['charset']);
+echo '<?xml-stylesheet type="text/xsl" href="'.url_maker($exfile['index'],$Settings['file_ext'],"act=vercheckxsl",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']).'"?>'."\n"; ?>
 
 <!DOCTYPE versioninfo [
 <!ELEMENT versioninfo (version*)>
@@ -180,6 +179,7 @@ echo "\n"; ?>
 <!ELEMENT charset (#PCDATA)>
 <!ELEMENT title (#PCDATA)>
 <!ELEMENT name (#PCDATA)>
+<!ELEMENT vname (#PCDATA)>
 ]>
 
 <versioninfo>
@@ -188,6 +188,7 @@ echo "\n"; ?>
 <charset><?php echo $Settings['charset']; ?></charset> 
 <title><?php echo $Settings['board_name']; ?></title> 
 <?php echo "<name>".$iDBVerName."</name>\n"; ?>
+<vname>iDB Version Checker</vname>
 </version>
 
 </versioninfo>
