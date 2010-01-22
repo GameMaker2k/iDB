@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 01/21/2010 SVN 445 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 01/22/2010 SVN 447 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -147,29 +147,33 @@ if($Settings['vercheck']!=1&&
 if($Settings['vercheck']===2) {
 if($_GET['act']=="vercheckxsl") {
 if(stristr($_SERVER["HTTP_ACCEPT"],"application/xml") ) {
-header("Content-Type: application/xml; charset=UTF-8"); }
-else { header("Content-Type: text/xml; charset=UTF-8"); }
-echo '<?xml version="1.0" encoding="UTF-8"?>';
-echo "\n"; ?>
+header("Content-Type: application/xml; charset=".$Settings['charset']); }
+else { header("Content-Type: text/xml; charset=".$Settings['charset']); }
+xml_doc_start("1.0",$Settings['charset']);
+echo "\n".'<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">'."\n"; ?>
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-<html xsl:version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns="http://www.w3.org/1999/xhtml">
+<xsl:template match="/">
+ <html xsl:version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns="http://www.w3.org/1999/xhtml">
   <body style="font-family:Arial;font-size:12pt;background-color:#EEEEEE">
-    <xsl:for-each select="versioninfo/version">
-      <div style="background-color:teal;color:white;padding:4px">
-        <span style="font-weight:bold"><xsl:value-of select="vname"/></span>
-      </div>
-      <div style="margin-left:20px;margin-bottom:1em;font-size:10pt">
-        <span style="font-style:italic">
-          Board Name: <a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><xsl:value-of select="title"/></a>
-        </span>
-      </div>
-    </xsl:for-each>
+   <xsl:for-each select="versioninfo/version">
+    <div style="background-color:teal;color:white;padding:4px">
+     <span style="font-weight:bold"><xsl:value-of select="vname"/></span>
+    </div>
+    <div style="margin-left:20px;margin-bottom:1em;font-size:10pt">
+     <span style="font-style:italic">
+          Board Name: <a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><xsl:value-of select="title"/></a></span>
+    </div>
+   </xsl:for-each>
   </body>
-</html>
+ </html>
+</xsl:template>
+
+</xsl:stylesheet>
 <?php die(); } if($_GET['act']=="versioninfo") {
 if(stristr($_SERVER["HTTP_ACCEPT"],"application/xml") ) {
-header("Content-Type: application/xml; charset=UTF-8"); }
-else { header("Content-Type: text/xml; charset=UTF-8"); }
+header("Content-Type: application/xml; charset=".$Settings['charset']); }
+else { header("Content-Type: text/xml; charset=".$Settings['charset']); }
 xml_doc_start("1.0",$Settings['charset']);
 echo '<?xml-stylesheet type="text/xsl" href="'.url_maker($exfile['index'],$Settings['file_ext'],"act=vercheckxsl",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']).'"?>'."\n"; ?>
 
@@ -185,15 +189,14 @@ echo '<?xml-stylesheet type="text/xsl" href="'.url_maker($exfile['index'],$Setti
 <versioninfo>
 
 <version>
-<charset><?php echo $Settings['charset']; ?></charset> 
-<title><?php echo $Settings['board_name']; ?></title> 
-<?php echo "<name>".$iDBVerName."</name>\n"; ?>
-<vname>iDB Version Checker</vname>
+ <charset><?php echo $Settings['charset']; ?></charset> 
+  <title><?php echo $Settings['board_name']; ?></title> 
+  <?php echo "  <name>".$iDBVerName."</name>\n"; ?>
+ <vname>iDB Version Checker</vname>
 </version>
 
 </versioninfo>
-<?php die(); } }
-if($Settings['vercheck']===1) {
+<?php die(); } } if($Settings['vercheck']===1) {
 if($_GET['act']=="versioninfo") { header("Content-Type: text/plain; charset=UTF-8");
 header("Location: ".$VerCheckURL."&name=".urlencode($iDBVerName)); die(); } }
 if($Settings['enable_pathinfo']=="on") { 
