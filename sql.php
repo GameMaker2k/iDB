@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 01/22/2010 SVN 447 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 01/22/2010 SVN 448 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -150,7 +150,7 @@ if(stristr($_SERVER["HTTP_ACCEPT"],"application/xml") ) {
 header("Content-Type: application/xml; charset=".$Settings['charset']); }
 else { header("Content-Type: text/xml; charset=".$Settings['charset']); }
 xml_doc_start("1.0",$Settings['charset']);
-echo "\n".'<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">'."\n"; ?>
+echo "\n"; ?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
 <xsl:template match="/">
