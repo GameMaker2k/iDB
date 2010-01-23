@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 01/22/2010 SVN 448 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 01/22/2010 SVN 449 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -179,7 +179,7 @@ echo '<?xml-stylesheet type="text/xsl" href="'.url_maker($exfile['index'],$Setti
 
 <!DOCTYPE versioninfo [
 <!ELEMENT versioninfo (version*)>
-<!ELEMENT version (charset,title,name)>
+<!ELEMENT version (charset,title,name,vname)>
 <!ELEMENT charset (#PCDATA)>
 <!ELEMENT title (#PCDATA)>
 <!ELEMENT name (#PCDATA)>
@@ -191,8 +191,8 @@ echo '<?xml-stylesheet type="text/xsl" href="'.url_maker($exfile['index'],$Setti
 <version>
  <charset><?php echo $Settings['charset']; ?></charset> 
   <title><?php echo $Settings['board_name']; ?></title> 
-  <?php echo "  <name>".$iDBVerName."</name>\n"; ?>
- <vname>iDB Version Checker</vname>
+  <?php echo "<name>".$iDBVerName."</name>\n"; ?>
+  <vname>iDB Version Checker</vname>
 </version>
 
 </versioninfo>
