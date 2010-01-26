@@ -8,11 +8,11 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2009 iDB Support - http://idb.berlios.de/
-    Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
+    Copyright 2004-2010 iDB Support - http://idb.berlios.de/
+    Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: setup.php - Last Update: 01/19/2010 SVN 439 - Author: cooldude2k $
+    $FileInfo: setup.php - Last Update: 01/26/2010 SVN 452 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="setup.php"||$File3Name=="/setup.php") {
@@ -89,7 +89,7 @@ fclose($fp);
 	<td style="width: 50%;"><label class="TextBoxLabel" for="WebURL">Insert The WebSite URL:</label></td>
 	<td style="width: 50%;"><input type="text" class="TextBox" name="WebURL" size="20" id="WebURL" value="<?php echo $prehost.$_SERVER['HTTP_HOST']."/"; ?>" /></td>
 </tr><tr>
-	<td style="width: 50%;"><label class="TextBoxLabel" title="Can save some bandwidth." for="UseGzip">Do you want to HTTP Content Compression:</label></td>
+	<td style="width: 50%;"><label class="TextBoxLabel" title="Can save some bandwidth." for="UseGzip">Enable HTTP Compression:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="GZip" id="UseGzip">
 	<option value="off">No</option>
 	<option value="on">Yes</option>
@@ -103,7 +103,7 @@ fclose($fp);
 	<option value="xhtml11">XHTML 1.1</option>
 	</select></td>
 </tr><tr>
-	<td style="width: 50%;"><label class="TextBoxLabel" for="HTMLLevel">HTML level only for XHTML 1.0:</label></td>
+	<td style="width: 50%;"><label class="TextBoxLabel" for="HTMLLevel">HTML Level only for XHTML 1.0:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="HTMLLevel" id="HTMLLevel">
 	<option value="Transitional">Transitional</option>
 	<option value="Strict">Strict</option>
@@ -185,7 +185,7 @@ echo "<option value=\"".$showmin."\">0:".$showmin." minutes</option>\n"; }
 <option selected="selected" value="on">on</option><?php echo "\n" ?><option value="off">off</option>
 <?php } echo "\n" ?></select></td>
 </tr><tr>
-	<td style="width: 50%;"><label class="TextBoxLabel" for="TestReferer">Test Referering URL with host name:</label></td>
+	<td style="width: 50%;"><label class="TextBoxLabel" for="TestReferer">Test Referering URL:</label></td>
 	<td style="width: 50%;"><select id="TestReferer" name="TestReferer" class="TextBox">
 <option selected="selected" value="off">off</option>
 <option value="on">on</option>
@@ -213,7 +213,7 @@ if ($handle = opendir($skindir)) { $dirnum = null;
    ++$themei; }
 } ?></select></td>
 </tr><tr>
-	<td style="width: 50%;"><label class="TextBoxLabel" title="Might not work" for="unlink">Delete Installer When Done? (Might not work)</label></td>
+	<td style="width: 50%;"><label class="TextBoxLabel" title="Might not work" for="unlink">Delete Installer?</label></td>
 	<td style="width: 50%;"><select id="unlink" name="unlink" class="TextBox">
 <option value="true">Yes</option>
 <option value="false">No</option>
