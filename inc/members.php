@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 01/21/2010 SVN 444 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 01/25/2010 SVN 450 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -266,7 +266,7 @@ if($pagenum>1) {
 <div class="DivPageLinks">&nbsp;</div>
 <?php } }
 if($_GET['act']=="online") {
-if($_GET['list']!="all"&&$_GET['list']!="members") {
+if($_GET['list']!="all"&&$_GET['list']!="members"&&$_GET['list']!="guests") {
 	$_GET['list'] = "members"; }
 //Get SQL LIMIT Number
 $nums = $_GET['page'] * $Settings['max_memlist'];
@@ -278,6 +278,9 @@ $uoltime = $uolcuttime - ini_get("session.gc_maxlifetime");
 if($_GET['list']=="members") {
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"session_data\" NOT LIKE '%s' ORDER BY \"expires\" DESC ".$SQLimit, array($uoltime,"%UserGroup|s:".strlen($Settings['GuestGroup']).":\"".$Settings['GuestGroup']."\";%",$PageLimit,$Settings['max_memlist'])); 
 $rnquery = sql_pre_query("SELECT COUNT(*) FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"session_data\" NOT LIKE '%s'", array($uoltime,"%UserGroup|s:".strlen($Settings['GuestGroup']).":\"".$Settings['GuestGroup']."\";%")); }
+if($_GET['list']=="guests") {
+$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"session_data\" LIKE '%s' ORDER BY \"expires\" DESC ".$SQLimit, array($uoltime,"%UserGroup|s:".strlen($Settings['GuestGroup']).":\"".$Settings['GuestGroup']."\";%",$PageLimit,$Settings['max_memlist'])); 
+$rnquery = sql_pre_query("SELECT COUNT(*) FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"session_data\" LIKE '%s'", array($uoltime,"%UserGroup|s:".strlen($Settings['GuestGroup']).":\"".$Settings['GuestGroup']."\";%")); }
 if($_GET['list']=="all") {
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i ORDER BY \"expires\" DESC ".$SQLimit, array($uoltime,$PageLimit,$Settings['max_memlist'])); 
 $rnquery = sql_pre_query("SELECT COUNT(*) FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i", array($uoltime)); }
@@ -509,6 +512,7 @@ if($CatPermissionInfo['CanViewCategory'][$ChkID]=="no"||
 	$UserSessInfo['ViewingPage'] = url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']);
 	$UserSessInfo['PreViewingTitle'] = "Viewing";
 	$UserSessInfo['ViewingTitle'] = "Board index"; } } }
+if($_GET['list']=="all"||$_GET['list']=="members") {
 if($UserSessInfo['UserGroup']!=$Settings['GuestGroup']) {
 if($AmIHiddenUser=="no"&&$UserSessInfo['UserID']>0) { 
 ?>
@@ -520,13 +524,13 @@ if($AmIHiddenUser=="no"&&$UserSessInfo['UserID']>0) {
 <td class="TableColumn3" style="text-align: center;"><a href="<?php echo url_maker($PreFileName,"no+ext",$PreExpPage,$Settings['qstr'],$Settings['qsep'],null,null); ?>"><?php echo $UserSessInfo['PreViewingTitle']; ?> <?php echo $UserSessInfo['ViewingTitle']; ?></a></td>
 <td class="TableColumn3" style="text-align: center;"><?php echo $session_expires; ?></td>
 </tr>
-<?php } }
+<?php } } }
 if($UserSessInfo['UserGroup']==$Settings['GuestGroup']) {
 if(!isset($UserSessInfo['GuestName'])) { 
 	$UserSessInfo['GuestName'] = "Guest"; }
 if(!isset($UserSessInfo['UserID'])) { 
 	$UserSessInfo['UserID'] = "0"; }
-if($_GET['list']=="all") {
+if($_GET['list']=="all"||$_GET['list']=="guests") {
 ?>
 <tr id="Member<?php echo $i; ?>" class="TableRow3">
 <td class="TableColumn3" style="text-align: center;"><?php echo $UserSessInfo['UserID']; ?></td>
