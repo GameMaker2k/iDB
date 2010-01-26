@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: main.php - Last Update: 12/31/2009 SVN 437 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 01/26/2010 SVN 451 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -238,6 +238,11 @@ while ($mi < $mnum) {
 $MGroups[$mi]=sql_result($mgresults,$mi,"Name");
 ++$mi; }
 sql_free_result($mgresults);
+if($Settings['vercheck']===1) {
+$AdminCheckURL = $VerCheckURL."&amp;name=".urlencode($iDBVerName)."&amp;redirect=on"; }
+if($Settings['vercheck']===2) {
+$Settings['bid'] = base64_encode(urlencode($Settings['idburl']));
+$AdminCheckURL = $VerCheckURL."&amp;bid=".$Settings['bid']."&amp;vercheck=newtype&amp;redirect=on"; }
 ?>
 <div class="TableMenuBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
@@ -261,7 +266,15 @@ sql_free_result($mgresults);
 <td class="TableMenuColumn3">
 <form style="display: inline;" method="post" id="acptool" action="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=settings",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">
 <table style="text-align: left;">
-<tr style="text-align: left;">
+<?php if($GroupInfo['ViewDBInfo']=="yes") { 
+?><tr style="text-align: left;">
+	<td style="width: 50%;"><span class="TextBoxLabel">Forum Software Version:</span></td>
+	<td style="width: 50%;"><?php echo $VerInfo['iDB_Ver_Show']; ?>&nbsp;<a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=vercheck",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>" onclick="window.open(this.href);return false;"><img src="<?php echo $AdminCheckURL; ?>" alt="Version Check: Click to see more info." title="Version Check: Click to see more info." /></a></td>
+</tr><?php if($OSType!=""&&isset($OSType)) { 
+?><tr style="text-align: left;">
+	<td style="width: 50%;"><span class="TextBoxLabel">Server Operating System:</span></td>
+	<td style="width: 50%;"><?php echo $OSType; ?></td>
+</tr><?php } } ?><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="BoardURL">Insert The Board URL:</label></td>
 	<td style="width: 50%;"><input type="text" class="TextBox" name="BoardURL" size="20" id="BoardURL" value="<?php echo $Settings['idburl']; ?>" /></td>
 </tr><tr style="text-align: left;">
@@ -295,7 +308,7 @@ while ($gi < $gnum) { ?>
 <?php ++$gi; } ?>
 </select></td>
 </tr><tr style="text-align: left;">
-	<td style="width: 50%;"><label class="TextBoxLabel" for="AdminValidate">Do you want to validate new members:</label></td>
+	<td style="width: 50%;"><label class="TextBoxLabel" for="AdminValidate">Enable validate new members:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="AdminValidate" id="AdminValidate">
 	<option<?php if($Settings['AdminValidate']=="off") { echo " selected=\"selected\""; } ?> value="off">no</option>
 	<option<?php if($Settings['AdminValidate']=="on") { echo " selected=\"selected\""; } ?> value="on">yes</option>
@@ -366,7 +379,7 @@ while ($gi < $gnum) { ?>
 <option value="30">40</option>
 </select></td>
 </tr><tr style="text-align: left;">
-	<td style="width: 50%;"><label class="TextBoxLabel" title="Can save some bandwidth." for="UseGzip">Do you want to HTTP Content Compression:</label></td>
+	<td style="width: 50%;"><label class="TextBoxLabel" title="Can save some bandwidth." for="UseGzip">Enable HTTP Compression:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="UseGzip" id="UseGzip">
 	<option<?php if($Settings['use_gzip']=="off") { echo " selected=\"selected\""; } ?> value="off">No</option>
 	<option<?php if($Settings['use_gzip']=="on") { echo " selected=\"selected\""; } ?> value="on">Yes</option>
@@ -380,7 +393,7 @@ while ($gi < $gnum) { ?>
 	<option<?php if($Settings['html_type']=="xhtml11") { echo " selected=\"selected\""; } ?> value="xhtml11">XHTML 1.1</option>
 	</select></td>
 </tr><tr style="text-align: left;">
-	<td style="width: 50%;"><label class="TextBoxLabel" for="HTMLLevel">HTML level only for XHTML 1.0:</label></td>
+	<td style="width: 50%;"><label class="TextBoxLabel" for="HTMLLevel">HTML Level only for XHTML 1.0:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="HTMLLevel" id="HTMLLevel">
 	<option<?php if($Settings['html_level']=="Transitional") { echo " selected=\"selected\""; } ?> value="Transitional">Transitional</option>
 	<option<?php if($Settings['html_level']=="Strict") { echo " selected=\"selected\""; } ?> value="Strict">Strict</option>
@@ -435,7 +448,7 @@ echo "<option value=\"".$showmin."\">0:".$showmin." minutes</option>\n"; }
 <option<?php if($Settings['DefaultDST']=="on") { echo " selected=\"selected\""; } ?> value="on">on</option>
 </select></td>
 </tr><tr style="text-align: left;">
-	<td style="width: 50%;"><label class="TextBoxLabel" for="DefaultTheme">Default CSS Theme for board:</label></td>
+	<td style="width: 50%;"><label class="TextBoxLabel" for="DefaultTheme">Default Theme:</label></td>
 	<td style="width: 50%;"><select id="DefaultTheme" name="DefaultTheme" class="TextBox"><?php
 $skindir = dirname(realpath("settings.php"))."/".$SettDir['themes'];
 if ($handle = opendir($skindir)) { $dirnum = null;
@@ -474,7 +487,7 @@ if ($handle = opendir($skindir)) { $dirnum = null;
 	<option<?php if($Settings['enable_search']=="off") { echo " selected=\"selected\""; } ?> value="off">off</option>
 	</select></td>
 </tr><tr style="text-align: left;">
-	<td style="width: 50%;"><label class="TextBoxLabel" for="TestReferer">Test Referering URL with host name:</label></td>
+	<td style="width: 50%;"><label class="TextBoxLabel" for="TestReferer">Test Referering URL:</label></td>
 	<td style="width: 50%;"><select id="TestReferer" name="TestReferer" class="TextBox">
 <option<?php if($Settings['TestReferer']=="on") { echo " selected=\"selected\""; } ?> value="on">on</option>
 <option<?php if($Settings['TestReferer']=="off") { echo " selected=\"selected\""; } ?> value="off">off</option>
@@ -619,9 +632,6 @@ require('settings.php'); $admincptitle = " ".$ThemeSet['TitleDivider']." Databas
 <form style="display: inline;" method="post" id="acptool" action="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=sql",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">
 <table style="text-align: left;">
 <tr style="text-align: left;">
-	<td style="width: 50%;"><span class="TextBoxLabel">Forum Software Version:</span></td>
-	<td style="width: 50%;"><?php echo $VerInfo['iDB_Ver_Show']; ?></td>
-</tr><tr style="text-align: left;">
 	<td style="width: 50%;"><span class="TextBoxLabel">Database Server:</span></td>
 	<td style="width: 50%;"><?php echo $DBType['Server']; ?></td>
 </tr><?php if($Settings['sqltype']=="mysql"||

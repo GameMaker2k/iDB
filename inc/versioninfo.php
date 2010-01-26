@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: versioninfo.php - Last Update: 01/25/2010 SVN 450 - Author: cooldude2k $
+    $FileInfo: versioninfo.php - Last Update: 01/26/2010 SVN 451 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="versioninfo.php"||$File3Name=="/versioninfo.php") {
@@ -27,8 +27,8 @@ function version_info($proname,$subver,$ver,$supver,$reltype,$svnver,$showsvn) {
 	return $return_var; }
 // Version number and date stuff. :P
 $VER1[0] = 0; $VER1[1] = 3; $VER1[2] = 6; $VERFull[1] = $VER1[0].".".$VER1[1].".".$VER1[2];
-$VER2[0] = "Alpha"; $VER2[1] = "Al"; $VER2[2] = "SVN"; $SubVerN = 450; $RName = "iDB"; $SFName = "IntDB";
-$SVNDay[0] = 01; $SVNDay[1] = 25; $SVNDay[2] = 2010; $SVNDay[3] = $SVNDay[0]."/".$SVNDay[1]."/".$SVNDay[2];
+$VER2[0] = "Alpha"; $VER2[1] = "Al"; $VER2[2] = "SVN"; $SubVerN = 451; $RName = "iDB"; $SFName = "IntDB";
+$SVNDay[0] = 01; $SVNDay[1] = 26; $SVNDay[2] = 2010; $SVNDay[3] = $SVNDay[0]."/".$SVNDay[1]."/".$SVNDay[2];
 $VerInfo['iDB_Ver'] = version_info($RName,$VER1[0],$VER1[1],$VER1[2],$VER2[1],$SubVerN,false);
 $VerInfo['iDB_Ver_SVN'] = version_info($RName,$VER1[0],$VER1[1],$VER1[2],$VER2[1],$SubVerN,true);
 $VerInfo['iDB_Full_Ver'] = version_info($RName,$VER1[0],$VER1[1],$VER1[2],$VER2[0],$SubVerN,false);
@@ -47,7 +47,8 @@ $PHPQA = "PHP-Quick-Arcade|http://quickarcade.jcink.com/"; $TFBB = "TextFileBB|h
 $PHPQA = explode("|",$PHPQA); $TFBB = explode("|",$TFBB);
 $PHPQA = "<a href=\"".$PHPQA[1]."\" title=\"".$PHPQA[0]."\" onclick=\"window.open(this.href);return false;\">".$PHPQA[0]."</a>";
 $TFBB = "<a href=\"".$TFBB[1]."\" title=\"".$TFBB[0]."\" onclick=\"window.open(this.href);return false;\">".$TFBB[0]."</a>";
-$PHPV1 = phpversion(); $PHPV2 = "PHP ".$PHPV1; $OSType = PHP_OS; // Check OS Name
+$PHPV1 = phpversion(); $PHPV2 = "PHP ".$PHPV1; $OSType = @php_uname("s"); $OSType .= " ".@php_uname("r");
+$OSType .= " ".@php_uname("m"); if($OSType==""||!isset($OSType)) { $OSType = PHP_OS; } // Check OS Name
 if($OSType=="WINNT") { $OSType="Windows NT"; } if($OSType=="WIN32") { $OSType="Windows 9x"; }
 $OSType2 = $PHPV2." / ".$OSType; $ZENDV1 = zend_version(); $ZENDV2 = "Zend engine ".$ZENDV1;
 // Show or hide the version number
