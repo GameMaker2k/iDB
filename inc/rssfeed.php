@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2009 iDB Support - http://idb.berlios.de/
-    Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
+    Copyright 2004-2010 iDB Support - http://idb.berlios.de/
+    Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: rssfeed.php - Last Update: 12/10/2009 SVN 391 - Author: cooldude2k $
+    $FileInfo: rssfeed.php - Last Update: 01/27/2010 SVN 453 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="rssfeed.php"||$File3Name=="/rssfeed.php") {
@@ -22,8 +22,8 @@ if(!is_numeric($_GET['id'])) { $_GET['id'] = null; }
 $boardsname = htmlentities($Settings['board_name'], ENT_QUOTES, $Settings['charset']);
 $boardsname = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $boardsname);
 $_GET['feedtype'] = strtolower($_GET['feedtype']);
-if($_GET['feedtype']!="rss"&&$_GET['feedtype']!="atom"&&
-	$_GET['feedtype']!="oldrss"&&$_GET['feedtype']!="opensearch") { 
+if($_GET['feedtype']!="rss"&&$_GET['feedtype']!="atom"&&$_GET['feedtype']!="oldrss"&&
+	$_GET['feedtype']!="opml"&&$_GET['feedtype']!="opensearch") { 
 	$_GET['feedtype'] = "rss"; }
 //$basepath = pathinfo($_SERVER['REQUEST_URI']);
 /*if(dirname($_SERVER['REQUEST_URI'])!="."||
@@ -64,6 +64,7 @@ $checkfeedtype = "application/rss+xml";
 if($_GET['feedtype']=="oldrss") { $checkfeedtype = "application/xml"; }
 if($_GET['feedtype']=="rss") { $checkfeedtype = "application/rss+xml"; }
 if($_GET['feedtype']=="atom") { $checkfeedtype = "application/atom+xml"; }
+if($_GET['feedtype']=="opml") { $checkfeedtype = "text/x-opml"; }
 if($_GET['feedtype']=="opensearch") { $checkfeedtype = "application/opensearchdescription+xml"; }
 if(stristr($_SERVER["HTTP_ACCEPT"],$checkfeedtype) ) {
 header("Content-Type: ".$checkfeedtype."; charset=".$Settings['charset']); }
@@ -78,6 +79,9 @@ $prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHE
 $preresult=sql_query($prequery,$SQLStat);
 $prenum=sql_num_rows($preresult);
 $prei=0;
+if($prenum==0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($preresult);
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $ForumID=sql_result($preresult,0,"id");
 $ForumName=sql_result($preresult,0,"Name");
 $ForumName = htmlentities($ForumName, ENT_QUOTES, $Settings['charset']);
@@ -174,6 +178,7 @@ $RSS .= '<item>'."\n".'<pubDate>'.$TheTime.'</pubDate>'."\n".'<author>'.$UsersNa
 ++$i; sql_free_result($presult); }
 sql_free_result($result);
 ++$glti; }
+$endtag = "  <!-- Renee Sabonis ^_^ -->\n";
 xml_doc_start("1.0",$Settings['charset']);
 if($Settings['showverinfo']=="on") { ?>
 <!-- generator="<?php echo $VerInfo['iDB_Ver_Show']; ?>" -->
@@ -224,7 +229,7 @@ if($Settings['showverinfo']=="on") { ?>
 	<title><?php echo $boardsname; ?></title>
 	<link><?php echo $AltBoardURL; ?></link>
    </image>
-   <!-- Renee Sabonis ^_^ -->
+ <?php echo $endtag; ?>
  <?php echo "\n".$RSS."\n"; ?></channel>
 </rss>
 <?php } if($_GET['feedtype']=="atom") { ?>
@@ -240,9 +245,23 @@ if($Settings['showverinfo']=="on") { ?>
    <generator><?php echo $iDB; ?></generator>
    <?php } ?>
   <icon><?php echo $AltBoardURL.$SettDir['inc']; ?>rss.gif</icon>
-  <!-- Renee Sabonis ^_^ -->
+<?php echo $endtag; ?>
  <?php echo "\n".$Atom."\n"; ?>
 </feed>
+<?php } if($_GET['feedtype']=="opml") { ?>
+<opml version="1.0">
+  <head>
+    <dateCreated><?php echo gmdate("d-M-Y"); ?></dateCreated>
+  </head>
+  <body>
+    <?php /*<!--
+	<outline text="<?php echo $ForumName; ?> Topics RSS 1.0 Feed" type="link" url="<?php echo $BoardURL.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>" htmlUrl="<?php echo $BoardURL.url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$ForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>" xmlUrl="<?php echo $BoardURL.url_maker($exfile['rss'],$Settings['rss_ext'],"act=oldrss&id=".$ForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr['rss'],$exqstr['rss']); ?>" />
+	-->*/ ?>
+<outline text="<?php echo $ForumName; ?> Topics RSS 2.0 Feed" type="rss" url="<?php echo $BoardURL.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>" htmlUrl="<?php echo $BoardURL.url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$ForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>" xmlUrl="<?php echo $BoardURL.url_maker($exfile['rss'],$Settings['rss_ext'],"act=rss&id=".$ForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr['rss'],$exqstr['rss']); ?>" />
+    <outline text="<?php echo $ForumName; ?> Topics Atom Feed" type="atom" url="<?php echo $BoardURL.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>" htmlUrl="<?php echo $BoardURL.url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$ForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>" xmlUrl="<?php echo $BoardURL.url_maker($exfile['rss'],$Settings['rss_ext'],"act=atom&id=".$ForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr['rss'],$exqstr['rss']); ?>" />
+  </body>
+</opml>
+<?php echo $endtag; ?>
 <?php } if($_GET['feedtype']=="opensearch") { ?>
 <OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/"
                        xmlns:moz="http://www.mozilla.org/2006/browser/search/">
@@ -256,7 +275,7 @@ if($Settings['showverinfo']=="on") { ?>
   <Param name="type" value="wildcard"/>
   <Param name="page" value="1"/>
 </Url>
-  <!-- Renee Sabonis ^_^ -->
+<?php echo $endtag; ?>
 <moz:SearchForm><?php echo $BoardURL.url_maker("search",$Settings['file_ext'],null,"search","search"); ?></moz:SearchForm>
 </OpenSearchDescription>
 <?php } if($_GET['debug']=="true"||$_GET['debug']=="on") {
