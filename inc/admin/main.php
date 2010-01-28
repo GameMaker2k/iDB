@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2009 iDB Support - http://idb.berlios.de/
-    Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
+    Copyright 2004-2010 iDB Support - http://idb.berlios.de/
+    Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: main.php - Last Update: 01/26/2010 SVN 451 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 01/27/2010 SVN 454 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -239,10 +239,9 @@ $MGroups[$mi]=sql_result($mgresults,$mi,"Name");
 ++$mi; }
 sql_free_result($mgresults);
 if($Settings['vercheck']===1) {
-$AdminCheckURL = $VerCheckURL."&amp;name=".urlencode($iDBVerName)."&amp;redirect=on"; }
+$AdminCheckURL = url_maker($exfile['admin'],$Settings['file_ext'],"act=vercheck&redirect=on",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); }
 if($Settings['vercheck']===2) {
-$Settings['bid'] = base64_encode(urlencode($Settings['idburl']));
-$AdminCheckURL = $VerCheckURL."&amp;bid=".$Settings['bid']."&amp;vercheck=newtype&amp;redirect=on"; }
+$AdminCheckURL = url_maker($exfile['admin'],$Settings['file_ext'],"act=vercheck&vercheck=newtype&redirect=on",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); }
 ?>
 <div class="TableMenuBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
