@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 01/22/2010 SVN 449 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 01/29/2010 SVN 455 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -80,6 +80,9 @@ if(!isset($Settings['sqldb'])) {
 if(file_exists("install.php")) { header('Location: install.php'); die(); } 
 if(!file_exists("install.php")) { header("Content-Type: text/plain; charset=UTF-8");
 echo "403 Error: Sorry could not find install.php\nTry uploading files again and if that dose not work try download iDB again."; die(); } }
+if(isset($Settings['sqldb'])&&
+	function_exists("date_default_timezone_set")) { 
+	@date_default_timezone_set("UTC"); }
 if(!isset($Settings['sqlhost'])) { $Settings['sqlhost'] = "localhost"; }
 if($Settings['fixpathinfo']=="on") {
 	$_SERVER['PATH_INFO'] = $_SERVER['ORIG_PATH_INFO'];
