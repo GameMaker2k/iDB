@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: main.php - Last Update: 01/27/2010 SVN 454 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 03/17/2010 SVN 458 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -122,6 +122,7 @@ $TableChCk = array("categories", "catpermissions", "events", "forums", "groups",
 $TableChCk = array_map("add_prefix",$TableChCk);
 $tcount = count($TableChCk); $ti = 0;
 $TblOptimized = 0;
+if($Settings['sqltype']!="sqlite") {
 while ($ti < $tcount) {
 if(isset($OptimizeAr["Msg_text"])) { unset($OptimizeAr["Msg_text"]); }
 if(isset($OptimizeAr[3])) { unset($OptimizeAr[3]); }
@@ -130,15 +131,15 @@ if($Settings['sqltype']=="mysql"||
 $OptimizeTea = sql_query(sql_pre_query("OPTIMIZE TABLE \"".$TableChCk[$ti]."\"", array(null)),$SQLStat); }
 if($Settings['sqltype']=="pgsql") {
 $OptimizeTea = sql_query(sql_pre_query("VACUUM ANALYZE \"".$TableChCk[$ti]."\"", array(null)),$SQLStat); }
-if($Settings['sqltype']=="sqlite") {
-$OptimizeTea = sql_query(sql_pre_query("VACUUM \"".$TableChCk[$ti]."\"", array(null)),$SQLStat); }
 if($Settings['sqltype']=="mysql"||
 	$Settings['sqltype']=="mysqli") {
 $OptimizeAr = sql_fetch_array($OptimizeTea);
 if(!isset($OptimizeAr["Msg_text"])&&
 	isset($OptimizeAr[3])) { $OptimizeAr["Msg_text"] = $OptimizeAr[3]; }
 if($OptimizeAr["Msg_text"]=="OK") { 
-	++$TblOptimized; } } ++$ti; }
+	++$TblOptimized; } } ++$ti; } }
+if($Settings['sqltype']=="sqlite") {
+$OptimizeTea = sql_query(sql_pre_query("VACUUM", array(null)),$SQLStat); }
 if($Settings['sqltype']=="mysql"||
 	$Settings['sqltype']=="mysqli") {
 $OutPutLog = "MySQL Output: ".$TblOptimized." tables optimized."; }

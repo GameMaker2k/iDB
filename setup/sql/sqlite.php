@@ -8,11 +8,11 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2009 iDB Support - http://idb.berlios.de/
-    Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
+    Copyright 2004-2010 iDB Support - http://idb.berlios.de/
+    Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: sqlite.php - Last Update: 12/19/2009 SVN 431 - Author: cooldude2k $
+    $FileInfo: sqlite.php - Last Update: 03/17/2010 SVN 458 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="sqlite.php"||$File3Name=="/sqlite.php") {
@@ -399,4 +399,5 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."wordfilter\" (\n".
 "  \"WholeWord\" VARCHAR(5) NOT NULL default ''\n".
 ");", array(null));
 sql_query($query,$SQLStat);
+$OptimizeTea = sql_query(sql_pre_query("VACUUM", array(null)),$SQLStat);
 ?>
