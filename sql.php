@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 01/29/2010 SVN 455 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 03/18/2010 SVN 459 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -115,23 +115,23 @@ if(!isset($_SERVER['HTTPS'])) { $_SERVER['HTTPS'] = "off"; }
 require_once($SettDir['misc'].'utf8.php');
 require_once($SettDir['inc'].'filename.php');
 if(!isset($Settings['use_hashtype'])) {
-	$Settings['use_hashtype'] = "sha256"; }
+	$Settings['use_hashtype'] = "sha1"; }
 if(!function_exists('hash')||!function_exists('hash_algos')) {
 if($Settings['use_hashtype']!="md5"&&
-   $Settings['use_hashtype']!="sha1"&&
-   $Settings['use_hashtype']!="sha256") {
-	$Settings['use_hashtype'] = "sha256"; } }
+   $Settings['use_hashtype']!="sha1") {
+	$Settings['use_hashtype'] = "sha1"; } }
 if(function_exists('hash')&&function_exists('hash_algos')) {
 if(!in_array($Settings['use_hashtype'],hash_algos())) {
-	$Settings['use_hashtype'] = "sha256"; }
+	$Settings['use_hashtype'] = "sha1"; }
 if($Settings['use_hashtype']!="md2"&&
    $Settings['use_hashtype']!="md4"&&
    $Settings['use_hashtype']!="md5"&&
    $Settings['use_hashtype']!="sha1"&&
    $Settings['use_hashtype']!="sha256"&&
+   $Settings['use_hashtype']!="sha256"&&
    $Settings['use_hashtype']!="sha386"&&
    $Settings['use_hashtype']!="sha512") {
-	$Settings['use_hashtype'] = "sha256"; } }
+	$Settings['use_hashtype'] = "sha1"; } }
 // Check to see if variables are set
 require_once($SettDir['misc'].'setcheck.php');
 require_once($SettDir['inc'].'function.php');

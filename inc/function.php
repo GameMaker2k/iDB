@@ -8,16 +8,15 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2009 iDB Support - http://idb.berlios.de/
-    Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
+    Copyright 2004-2010 iDB Support - http://idb.berlios.de/
+    Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: function.php - Last Update: 12/19/2009 SVN 431 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 03/18/2010 SVN 459 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
 	require('index.php');
 	exit(); }
-require_once($SettDir['misc'].'sha256.php');
 require_once($SettDir['misc'].'functions.php');
 /* Change Some PHP Settings Fix the & to &amp;
 if($Settings['use_iniset']==true&&$Settings['qstr']!="/") {
