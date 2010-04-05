@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: functions.php - Last Update: 03/18/2010 SVN 459 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 04/05/2010 SVN 460 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -224,8 +224,8 @@ if($dst=="on") { if($dstake!="done") {
 $TCHour = $TCHour + $tsa['hour'];
 $TCMinute = $TCMinute + $tsa['minute'];
 return date($format,mktime($TCHour,$TCMinute,$TCSecond,$TCMonth,$TCDay,$TCYear)); }
-	$Names['D'] = "Dagmara";
-define("_dagmara_", $Names['D']);
+	$Names['SB'] = "Stephanie";
+define("_stephanie_", $Names['SB']);
 // Change Time Stamp to a readable time
 function TimeChange($format,$timestamp,$offset,$minoffset=null,$dst=null) {
 return GMTimeChange($format,$timestamp,$offset,$minoffset,$dst); }

@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2009 iDB Support - http://idb.berlios.de/
-    Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
+    Copyright 2004-2010 iDB Support - http://idb.berlios.de/
+    Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 01/25/2010 SVN 450 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 04/05/2010 SVN 460 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -692,6 +692,9 @@ Title: <?php echo $ViewMem['Title']; ?>
 &nbsp;Post Count: <?php echo $ViewMem['PostCount']; ?><br />
 &nbsp;Karma: <?php echo $ViewMem['Karma']; ?><br />
 &nbsp;Interests: <?php echo $ViewMem['Interests']; ?><br />
+&nbsp;Topics: <?php if($Settings['enable_search']=="on"&&$GroupInfo['CanSearch']=="yes") { ?>
+<a href="<?php echo url_maker($exfile['search'],$Settings['file_ext'],"act=topics&search=%&type=wildcard&msearch=".$ViewMem['Name'],$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search']); ?>">Find Topics</a>
+<?php } ?>
 </td>
 </tr>
 <tr class="TableRow4">
