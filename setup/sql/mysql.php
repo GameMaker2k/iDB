@@ -12,7 +12,7 @@
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mysql.php - Last Update: 03/17/2010 SVN 458 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 04/06/2010 SVN 462 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mysql.php"||$File3Name=="/mysql.php") {
@@ -290,8 +290,8 @@ $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."smileys\" (\"File
 "('lol.png', 'lol', ':lol:', 'smileys/', 'yes', 'yes'),\n".
 "('mad.png', 'Mad', ':mad:', 'smileys/', 'yes', 'yes'),\n".
 "('ninja.png', 'Ninja', ':ninja:', 'smileys/', 'yes', 'yes'),\n".
-"('ohmy.png', 'ohmy', ':o', 'smileys/', 'yes', 'yes'),\n".
 "('ohno.png', 'ohno', ':ohno:', 'smileys/', 'yes', 'yes'),\n".
+"('ohmy.png', 'ohmy', ':o', 'smileys/', 'yes', 'yes'),\n".
 "('sad.png', 'Sad', ':(', 'smileys/', 'yes', 'no'),\n".
 "('sleep.png', 'Sleep', '-_-', 'smileys/', 'yes', 'no'),\n".
 "('smile.png', 'Happy', ':)', 'smileys/', 'yes', 'no'),\n".
