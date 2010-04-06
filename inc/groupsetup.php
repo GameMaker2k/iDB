@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2009 iDB Support - http://idb.berlios.de/
-    Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
+    Copyright 2004-2010 iDB Support - http://idb.berlios.de/
+    Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: groupsetup.php - Last Update: 12/17/2009 SVN 416 - Author: cooldude2k $
+    $FileInfo: groupsetup.php - Last Update: 04/05/2010 SVN 461 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="groupsetup.php"||$File3Name=="/groupsetup.php") {
@@ -243,7 +243,7 @@ $perquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."permissions\
 $peresult=sql_query($perquery,$SQLStat);
 $pernum=sql_num_rows($peresult);
 $peri=0; $PerError = null;
-if($pernum<=0) { $PerError = true; sql_free_result($peresult);
+if($pernum<0) { $PerError = true; sql_free_result($peresult);
 header("Content-Type: text/plain; charset=".$Settings['charset']); 
 ob_clean(); echo "Sorry could not find permission data in database.\nContact the board admin about error."; 
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }

@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2009 iDB Support - http://idb.berlios.de/
-    Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
+    Copyright 2004-2010 iDB Support - http://idb.berlios.de/
+    Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: forums.php - Last Update: 12/19/2009 SVN 429 - Author: cooldude2k $
+    $FileInfo: forums.php - Last Update: 04/05/2010 SVN 461 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="forums.php"||$File3Name=="/forums.php") {
@@ -916,7 +916,9 @@ if ($Error!="Yes") {
 redirect("refresh",$basedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],FALSE),"4");
 $admincptitle = " ".$ThemeSet['TitleDivider']." Updating Settings";
 $query = sql_pre_query("UPDATE \"".$Settings['sqltable']."forums\" SET \"id\"=%i,\"CategoryID\"=%i,\"OrderID\"=%i,\"Name\"='%s',\"ShowForum\"='%s',\"ForumType\"='%s',\"InSubForum\"=%i,\"RedirectURL\"='%s',\"Description\"='%s',\"PostCountAdd\"='%s',\"PostCountView\"=%i,\"KarmaCountView\"=%i,\"CanHaveTopics\"='%s',\"HotTopicPosts\"=%i WHERE \"id\"=%i", array($_POST['ForumID'],$_POST['ForumCatID'],$_POST['OrderID'],$_POST['ForumName'],$_POST['ShowForum'],$_POST['ForumType'],$_POST['InSubForum'],$_POST['RedirectURL'],$_POST['ForumDesc'],$_POST['PostCountAdd'],$_POST['NumPostView'],$_POST['NumKarmaView'],$_POST['CanHaveTopics'],$_POST['NumPostHotTopic'],$_POST['id']));
-sql_query($query,$SQLStat); } } } 
+sql_query($query,$SQLStat);
+$queryz = sql_pre_query("UPDATE \"".$Settings['sqltable']."permissions\" SET \"ForumID\"=%i WHERE \"ForumID\"=%i", array($_POST['ForumID'],$_POST['id']));
+sql_query($queryz,$SQLStat); } } } 
 if($_GET['act']=="fpermissions"&&$_POST['update']!="now") {
 $admincptitle = " ".$ThemeSet['TitleDivider']." Forum Permissions Manager";
 if(!isset($_POST['id'])) {
