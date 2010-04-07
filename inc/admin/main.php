@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: main.php - Last Update: 03/17/2010 SVN 458 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 04/06/2010 SVN 463 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -270,6 +270,9 @@ $AdminCheckURL = url_maker($exfile['admin'],$Settings['file_ext'],"act=vercheck&
 ?><tr style="text-align: left;">
 	<td style="width: 50%;"><span class="TextBoxLabel">Forum Software Version:</span></td>
 	<td style="width: 50%;"><?php echo $VerInfo['iDB_Ver_Show']; ?>&nbsp;<a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=vercheck",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>" onclick="window.open(this.href);return false;"><img src="<?php echo $AdminCheckURL; ?>" alt="Version Check: Click to see more info." title="Version Check: Click to see more info." /></a></td>
+</tr><tr id="clickhere" style="text-align: left;">
+	<td style="width: 50%;"><span class="TextBoxLabel">Version Checker:</span></td>
+	<td style="width: 50%;"><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=settings",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>#iverinfo" onclick="idbvercheck(); document.getElementById('clickhere').style.display = 'none';">Click Here</a></td>
 </tr><?php if($OSType!=""&&isset($OSType)) { 
 ?><tr style="text-align: left;">
 	<td style="width: 50%;"><span class="TextBoxLabel">Server Operating System:</span></td>
@@ -496,6 +499,9 @@ if ($handle = opendir($skindir)) { $dirnum = null;
 <table style="text-align: left;">
 <tr style="text-align: left;">
 <td style="width: 100%;">
+<?php if($GroupInfo['ViewDBInfo']=="yes") { ?>
+<span style="display: none;" id="iverinfo"><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=settings",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>#" onclick="idbvercheck();">Version Checker: Click Here</a><br /><br /></span>
+<?php } ?>
 <input type="hidden" name="act" value="settings" style="display: none;" />
 <input type="hidden" name="update" value="now" style="display: none;" />
 <input type="submit" class="Button" value="Apply" name="Apply_Changes" />

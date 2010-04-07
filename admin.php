@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: admin.php - Last Update: 01/27/2010 SVN 454 - Author: cooldude2k $
+    $FileInfo: admin.php - Last Update: 04/06/2010 SVN 463 - Author: cooldude2k $
 */
 if(ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }
@@ -19,7 +19,15 @@ require('preindex.php');
 $usefileext = $Settings['file_ext'];
 if($ext=="noext"||$ext=="no ext"||$ext=="no+ext") { $usefileext = ""; }
 $filewpath = $exfile['admin'].$usefileext.$_SERVER['PATH_INFO'];
+if($GroupInfo['ViewDBInfo']=="yes") {
+if($_GET['act']=="settings"||$_GET['act']=="sql") {
 ?>
+
+<?php if($Settings['vercheck']===1) { ?>
+<script type="text/javascript" src="<?php echo $VerCheckURL."&amp;name=".urlencode($iDBVerName)."&amp;redirect=js"; ?>"></script>
+<?php } if($Settings['vercheck']===2) { ?>
+<script type="text/javascript" src="<?php echo $VerCheckURL."&amp;bid=".$Settings['bid']."&amp;vercheck=newtype&amp;redirect=js"; ?>"></script>
+<?php } } } ?>
 
 <title> <?php echo $Settings['board_name'].$idbpowertitle; ?> </title>
 </head>
