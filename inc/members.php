@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 04/10/2010 SVN 464 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 04/10/2010 SVN 465 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -900,6 +900,10 @@ if($HashType=="iDBH224") { $YourPassword = b64e_hmac($_POST['userpass'],$JoinedP
 if($HashType=="iDBH256") { $YourPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$HashSalt,"sha256"); }
 if($HashType=="iDBH386") { $YourPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$HashSalt,"sha386"); }
 if($HashType=="iDBH512") { $YourPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$HashSalt,"sha512"); }
+if($HashType=="iDBHRMD128") { $YourPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$HashSalt,"ripemd128"); }
+if($HashType=="iDBHRMD160") { $YourPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$HashSalt,"ripemd160"); }
+if($HashType=="iDBHRMD256") { $YourPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$HashSalt,"ripemd256"); }
+if($HashType=="iDBHRMD320") { $YourPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$HashSalt,"ripemd320"); }
 if($YourPassword!=$YourPassTry) { $passright = false; } 
 if($YourPassword==$YourPassTry) { $passright = true;
 $YourIDM=sql_result($resultlog,$i,"id");
@@ -939,6 +943,14 @@ if($Settings['use_hashtype']=="sha386") { $iDBHash = "iDBH386";
 $NewPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$NewHashSalt,"sha386"); }
 if($Settings['use_hashtype']=="sha512") { $iDBHash = "iDBH512";
 $NewPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$NewHashSalt,"sha512"); }
+if($Settings['use_hashtype']=="ripemd128") { $iDBHash = "iDBHRMD128";
+$NewPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$NewHashSalt,"ripemd128"); }
+if($Settings['use_hashtype']=="ripemd160") { $iDBHash = "iDBHRMD160";
+$NewPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$NewHashSalt,"ripemd160"); }
+if($Settings['use_hashtype']=="ripemd256") { $iDBHash = "iDBHRMD256";
+$NewPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$NewHashSalt,"ripemd256"); }
+if($Settings['use_hashtype']=="ripemd320") { $iDBHash = "iDBHRMD320";
+$NewPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$NewHashSalt,"ripemd320"); }
 $NewDay=GMTimeStamp();
 $NewIP=$_SERVER['REMOTE_ADDR'];
 if($BanError!="yes") {
@@ -1349,6 +1361,14 @@ if($Settings['use_hashtype']=="sha386") { $iDBHash = "iDBH386";
 $NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$HashSalt,"sha386"); }
 if($Settings['use_hashtype']=="sha512") { $iDBHash = "iDBH512";
 $NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$HashSalt,"sha512"); }
+if($Settings['use_hashtype']=="ripemd128") { $iDBHash = "iDBHRMD128";
+$NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$HashSalt,"ripemd128"); }
+if($Settings['use_hashtype']=="ripemd160") { $iDBHash = "iDBHRMD160";
+$NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$HashSalt,"ripemd160"); }
+if($Settings['use_hashtype']=="ripemd256") { $iDBHash = "iDBHRMD256";
+$NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$HashSalt,"ripemd256"); }
+if($Settings['use_hashtype']=="ripemd320") { $iDBHash = "iDBHRMD320";
+$NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$HashSalt,"ripemd320"); }
 $_GET['YourPost'] = $_POST['Signature'];
 //require( './'.$SettDir['misc'].'HTMLTags.php');
 $_GET['YourPost'] = htmlspecialchars($_GET['YourPost'], ENT_QUOTES, $Settings['charset']);

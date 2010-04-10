@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: profilemain.php - Last Update: 04/10/2010 SVN 464 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 04/10/2010 SVN 465 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
@@ -887,6 +887,14 @@ if($OldHashType=="iDBH386") {
 	$YourPassword = b64e_hmac($_POST['OldPass'],$OldJoined,$OldSalt,"sha386"); }
 if($OldHashType=="iDBH512") { 
 	$YourPassword = b64e_hmac($_POST['OldPass'],$OldJoined,$OldSalt,"sha512"); }
+if($OldHashType=="iDBHRMD128") { 
+	$YourPassword = b64e_hmac($_POST['OldPass'],$OldJoined,$OldSalt,"ripemd128"); }
+if($OldHashType=="iDBHRMD160") { 
+	$YourPassword = b64e_hmac($_POST['OldPass'],$OldJoined,$OldSalt,"ripemd160"); }
+if($OldHashType=="iDBHRMD256") { 
+	$YourPassword = b64e_hmac($_POST['OldPass'],$OldJoined,$OldSalt,"ripemd256"); }
+if($OldHashType=="iDBHRMD320") { 
+	$YourPassword = b64e_hmac($_POST['OldPass'],$OldJoined,$OldSalt,"ripemd320"); }
 if($YourPassword!=$OldPassword) { $Error="Yes"; ?>
 <div class="TableMessage" style="text-align: center;">Your old Password did not match.<br />&nbsp;</div>
 <?php } if(pre_strlen($_POST['Password'])>"60") { $Error="Yes"; ?>
@@ -916,6 +924,14 @@ if($YourPassword!=$OldPassword) { $Error="Yes"; ?>
 	$NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$NewSalt,"sha386"); }
 	if($Settings['use_hashtype']=="sha512") { $iDBHash = "iDBH512";
 	$NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$NewSalt,"sha512"); }
+	if($Settings['use_hashtype']=="ripemd128") { $iDBHash = "iDBHRMD128";
+	$NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$NewSalt,"ripemd128"); }
+	if($Settings['use_hashtype']=="ripemd160") { $iDBHash = "iDBHRMD160";
+	$NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$NewSalt,"ripemd160"); }
+	if($Settings['use_hashtype']=="ripemd256") { $iDBHash = "iDBHRMD256";
+	$NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$NewSalt,"ripemd256"); }
+	if($Settings['use_hashtype']=="ripemd320") { $iDBHash = "iDBHRMD320";
+	$NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$NewSalt,"ripemd320"); }
 	$_SESSION['UserPass']=$NewPassword;
 	if($cookieDomain==null) {
 	setcookie("SessPass", $NewPassword, time() + (7 * 86400), $cbasedir); }

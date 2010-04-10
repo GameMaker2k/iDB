@@ -12,7 +12,7 @@
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: setup.php - Last Update: 04/10/2010 SVN 464 - Author: cooldude2k $
+    $FileInfo: setup.php - Last Update: 04/10/2010 SVN 465 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="setup.php"||$File3Name=="/setup.php") {
@@ -121,17 +121,18 @@ fclose($fp);
 <option value="false">No</option>
 </select></td>
 </tr><tr>
-	<td style="width: 50%;"><label class="TextBoxLabel"" for="usehashtype">Hash user passwords with?</label></td>
+	<td style="width: 50%;"><label class="TextBoxLabel" for="usehashtype">Hash user passwords with?</label></td>
 	<td style="width: 50%;"><select id="usehashtype" name="usehashtype" class="TextBox">
-<option value="sha1">SHA1</option>
-<option value="md5">MD5</option>
 <?php // PHP 5 hash algorithms to functions :o 
 if(function_exists('hash')&&function_exists('hash_algos')) {
 if(in_array("md2",hash_algos())) { ?>
 <option value="md2">MD2</option>
 <?php } if(in_array("md4",hash_algos())) { ?>
 <option value="md4">MD4</option>
-<?php } if(in_array("sha224",hash_algos())) { ?>
+<?php } ?>
+<option value="md5">MD5</option>
+<option value="sha1">SHA1</option>
+<?php if(in_array("sha224",hash_algos())) { ?>
 <option value="sha224">SHA224</option>
 <?php } if(in_array("sha256",hash_algos())) { ?>
 <option value="sha256" selected="selected">SHA256</option>
@@ -139,7 +140,19 @@ if(in_array("md2",hash_algos())) { ?>
 <option value="sha384">SHA386</option>
 <?php } if(in_array("sha512",hash_algos())) { ?>
 <option value="sha512">SHA512</option>
-<?php } } ?>
+<?php } if(in_array("ripemd128",hash_algos())) { ?>
+<option value="ripemd128">RIPEMD128</option>
+<?php } if(in_array("ripemd160",hash_algos())) { ?>
+<option value="ripemd160">RIPEMD160</option>
+<?php } if(in_array("ripemd256",hash_algos())) { ?>
+<option value="ripemd256">RIPEMD256</option>
+<?php } if(in_array("ripemd320",hash_algos())) { ?>
+<option value="ripemd320">RIPEMD320</option>
+<?php } } 
+if(!function_exists('hash')&&!function_exists('hash_algos')) { ?>
+<option value="md5">MD5</option>
+<option value="sha1" selected="selected">SHA1</option>
+<?php } ?>
 </select></td>
 </tr><tr>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="YourOffSet">Your TimeZone:</label></td>
