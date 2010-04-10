@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 04/05/2010 SVN 460 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 04/10/2010 SVN 464 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -896,6 +896,7 @@ if($HashType=="iDBH2") { $YourPassword = b64e_hmac($_POST['userpass'],$JoinedPas
 if($HashType=="iDBH4") { $YourPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$HashSalt,"md4"); }
 if($HashType=="iDBH5") { $YourPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$HashSalt,"md5"); }
 if($HashType=="iDBH") { $YourPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$HashSalt,"sha1"); }
+if($HashType=="iDBH224") { $YourPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$HashSalt,"sha224"); }
 if($HashType=="iDBH256") { $YourPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$HashSalt,"sha256"); }
 if($HashType=="iDBH386") { $YourPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$HashSalt,"sha386"); }
 if($HashType=="iDBH512") { $YourPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$HashSalt,"sha512"); }
@@ -930,6 +931,8 @@ if($Settings['use_hashtype']=="md5") { $iDBHash = "iDBH5";
 $NewPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$NewHashSalt,"md5"); }
 if($Settings['use_hashtype']=="sha1") { $iDBHash = "iDBH";
 $NewPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$NewHashSalt,"sha1"); }
+if($Settings['use_hashtype']=="sha224") { $iDBHash = "iDBH224";
+$NewPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$NewHashSalt,"sha224"); }
 if($Settings['use_hashtype']=="sha256") { $iDBHash = "iDBH256";
 $NewPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$NewHashSalt,"sha256"); }
 if($Settings['use_hashtype']=="sha386") { $iDBHash = "iDBH386";
@@ -1338,6 +1341,8 @@ if($Settings['use_hashtype']=="md5") { $iDBHash = "iDBH5";
 $NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$HashSalt,"md5"); }
 if($Settings['use_hashtype']=="sha1") { $iDBHash = "iDBH";
 $NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$HashSalt,"sha1"); }
+if($Settings['use_hashtype']=="sha224") { $iDBHash = "iDBH224";
+$NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$HashSalt,"sha224"); }
 if($Settings['use_hashtype']=="sha256") { $iDBHash = "iDBH256";
 $NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$HashSalt,"sha256"); }
 if($Settings['use_hashtype']=="sha386") { $iDBHash = "iDBH386";

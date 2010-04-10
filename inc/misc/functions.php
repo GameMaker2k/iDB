@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: functions.php - Last Update: 04/05/2010 SVN 460 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 04/10/2010 SVN 464 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -353,6 +353,8 @@ if(in_array("md2",hash_algos())) {
 function md2($data) { return hash("md2",$data); } } 
 if(in_array("md4",hash_algos())) { 
 function md4($data) { return hash("md4",$data); } }
+if(in_array("sha224",hash_algos())) { 
+function sha224($data) { return hash("sha224",$data); } }
 if(in_array("sha256",hash_algos())) { 
 function sha256($data) { return hash("sha256",$data); } }
 if(in_array("sha384",hash_algos())) { 

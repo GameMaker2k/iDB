@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 03/18/2010 SVN 459 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 04/10/2010 SVN 464 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -127,7 +127,7 @@ if($Settings['use_hashtype']!="md2"&&
    $Settings['use_hashtype']!="md4"&&
    $Settings['use_hashtype']!="md5"&&
    $Settings['use_hashtype']!="sha1"&&
-   $Settings['use_hashtype']!="sha256"&&
+   $Settings['use_hashtype']!="sha224"&&
    $Settings['use_hashtype']!="sha256"&&
    $Settings['use_hashtype']!="sha386"&&
    $Settings['use_hashtype']!="sha512") {
