@@ -12,7 +12,7 @@
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: setup.php - Last Update: 04/10/2010 SVN 465 - Author: cooldude2k $
+    $FileInfo: setup.php - Last Update: 04/12/2010 SVN 466 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="setup.php"||$File3Name=="/setup.php") {
@@ -25,6 +25,21 @@ if(!isset($SetupDir['convert'])) { $SetupDir['convert'] = "setup/convert/"; }
 <td class="TableColumn3">
 <?php
 $checkfile="settings.php";
+$iDBRDate = $SVNDay[0]."/".$SVNDay[1]."/".$SVNDay[2];
+$iDBRSVN = $VER2[2]." ".$SubVerN;
+$LastUpdateS = "Last Update: ".$iDBRDate." ".$iDBRSVN;
+$pretext = "<?php\n/*\n    This program is free software; you can redistribute it and/or modify\n    it under the terms of the GNU General Public License as published by\n    the Free Software Foundation; either version 2 of the License, or\n    (at your option) any later version.\n\n    This program is distributed in the hope that it will be useful,\n    but WITHOUT ANY WARRANTY; without even the implied warranty of\n    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n    Revised BSD License for more details.\n\n    Copyright 2004-".$SVNDay[2]." iDB Support - http://idb.berlios.de/\n    Copyright 2004-".$SVNDay[2]." Game Maker 2k - http://gamemaker2k.org/\n    iDB Installer made by Game Maker 2k - http://idb.berlios.net/\n\n    \$FileInfo: settings.php & settingsbak.php - ".$LastUpdateS." - Author: cooldude2k \$\n*/\n";
+$pretext2 = array("/*   Board Setting Section Begins   */\n\$Settings = array();","/*   Board Setting Section Ends  \n     Board Info Section Begins   */\n\$SettInfo = array();","/*   Board Setting Section Ends   \n     Board Dir Section Begins   */\n\$SettDir = array();","/*   Board Dir Section Ends   */");
+$settcheck = "\$File3Name = basename(\$_SERVER['SCRIPT_NAME']);\nif (\$File3Name==\"settings.php\"||\$File3Name==\"/settings.php\"||\n    \$File3Name==\"settingsbak.php\"||\$File3Name==\"/settingsbak.php\") {\n    header('Location: index.php');\n    exit(); }\n";
+$BoardSettingsBak = $pretext.$settcheck;
+$BoardSettings = $pretext.$settcheck;
+$fp = fopen("settings.php","w+");
+fwrite($fp, $BoardSettings);
+fclose($fp);
+//	cp("settings.php","settingsbak.php");
+$fp = fopen("settingsbak.php","w+");
+fwrite($fp, $BoardSettingsBak);
+fclose($fp);
 if (!is_writable($checkfile)) {
    echo "<br />Settings is not writable.";
    chmod("settings.php",0755); $Error="Yes";

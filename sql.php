@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 04/10/2010 SVN 465 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 04/12/2010 SVN 466 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -36,7 +36,8 @@ $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="sql.php"||$File3Name=="/sql.php") {
 	header('Location: index.php');
 	exit(); }
-require('settings.php');
+if(file_exists('settings.php')) {
+	require_once('settings.php'); }
 if(!isset($Settings['idburl'])) { $Settings['idburl'] = null; }
 if(!isset($Settings['fixbasedir'])) { $Settings['fixbasedir'] = null; }
 if(!isset($Settings['fixpathinfo'])) { $Settings['fixpathinfo'] = null; }

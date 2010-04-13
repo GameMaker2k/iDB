@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: function.php - Last Update: 03/18/2010 SVN 459 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 04/12/2010 SVN 466 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -73,13 +73,27 @@ function output_error($message, $level=E_USER_ERROR) {
   function uuid($useold = false,$more_entropy = false,$mtrand = false,$hash = 'sha1',$prefix = '') 
   {
     if($useold===true&&$mtrand===false) {
+	if (function_exists('hash')) {
+	$prehash = hash($hash, rand()); }
+	if (!function_exists('hash')) {
+	$prehash = $hash(rand()); }
 	$chars = uniqid($hash(rand()),$more_entropy); }
     if($useold===false&&$mtrand===false) {
-	$chars = $hash(uniqid(rand(),$more_entropy)); }
+	if (function_exists('hash')) {
+	$chars = hash($hash, uniqid(rand(),$more_entropy)); }
+	if (!function_exists('hash')) {
+	$chars = $hash(uniqid(rand(),$more_entropy)); } }
     if($useold===true&&$mtrand===true) {
+	if (function_exists('hash')) {
+	$prehash = hash($hash, mt_rand()); }
+	if (!function_exists('hash')) {
+	$prehash = $hash(mt_rand()); }
 	$chars = uniqid($hash(mt_rand()),$more_entropy); }
     if($useold===false&&$mtrand===true) {
-	$chars = $hash(uniqid(mt_rand(),$more_entropy)); }
+	if (function_exists('hash')) {
+	$chars = hash($hash, uniqid(mt_rand(),$more_entropy)); }
+	if (!function_exists('hash')) {
+	$chars = $hash(uniqid(mt_rand(),$more_entropy)); } }
     $uuid  = substr($chars,0,8) . '-';
     $uuid .= substr($chars,8,4) . '-';
     $uuid .= substr($chars,12,4) . '-';
