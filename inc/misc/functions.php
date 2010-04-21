@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: functions.php - Last Update: 04/12/2010 SVN 466 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 04/20/2010 SVN 468 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -313,6 +313,25 @@ sql_free_result($gunresult);
 $UsersInfo['Name'] = $UsersName;
 $UsersInfo['Hidden'] = $UsersHidden;
 return $UsersInfo; }
+if(!function_exists('hash_hmac')) {
+function hash_hmac($algo, $data, $key, $raw_output = false) {
+  $blocksize = 64;
+  if (strlen($key)>$blocksize) {
+  if (function_exists('hash')) {
+  $key=pack('H*',hash($hash, $key)); }
+  if (!function_exists('hash')) {
+  $key=pack('H*',$hash($key)); } }
+  $key=str_pad($key, $blocksize, chr(0x00));
+  $ipad=str_repeat(chr(0x36),$blocksize);
+  $opad=str_repeat(chr(0x5c),$blocksize);
+  return hash($algo, ($key^$opad).pack('H*',hash($algo, ($key^$ipad).$data))); } }
+if(!function_exists('hash')) {
+function hash($algo, $data, $raw_output = false) {
+if($algo!="md5"&&$algo!="sha1") { $algo = "md5"; }
+return $algo($data); } }
+if(!function_exists('hash_algos')) {
+function hash_algos() {
+return array(0 => "md5", 1 => "sha1"); } }
 // hmac hash function
 function hmac($data,$key,$hash='sha1',$blocksize=64) {
   if (!function_exists('hash_hmac')) {
@@ -340,8 +359,8 @@ function b64e_rot13_hmac($data,$key,$extdata,$hash='sha1',$blocksize=64) {
 	$extdata2 = hexdec($extdata); $key = $key.$extdata2;
   return base64_encode(hmac($data,$key,$hash,$blocksize).$extdata); }
 // salt hmac hash function
-function salt_hmac($size1=4,$size2=6) {
-$hprand = rand(4,6); $i = 0; $hpass = "";
+function salt_hmac($size1=6,$size2=12) {
+$hprand = rand($size1,$size2); $i = 0; $hpass = "";
 while ($i < $hprand) {
 $hspsrand = rand(1,2);
 if($hspsrand!=1&&$hspsrand!=2) { $hspsrand=1; }

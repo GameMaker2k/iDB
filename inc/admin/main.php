@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: main.php - Last Update: 04/06/2010 SVN 463 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 04/20/2010 SVN 468 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -270,6 +270,9 @@ $AdminCheckURL = url_maker($exfile['admin'],$Settings['file_ext'],"act=vercheck&
 ?><tr style="text-align: left;">
 	<td style="width: 50%;"><span class="TextBoxLabel">Forum Software Version:</span></td>
 	<td style="width: 50%;"><?php echo $VerInfo['iDB_Ver_Show']; ?>&nbsp;<a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=vercheck",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>" onclick="window.open(this.href);return false;"><img src="<?php echo $AdminCheckURL; ?>" alt="Version Check: Click to see more info." title="Version Check: Click to see more info." /></a></td>
+</tr><tr>
+	<td style="width: 50%;"><span class="TextBoxLabel">Forum UUID:</span></td>
+	<td style="width: 50%;"><?php echo $Settings['BoardUUID']; ?></td>
 </tr><tr id="clickhere" style="text-align: left;">
 	<td style="width: 50%;"><span class="TextBoxLabel">Version Checker:</span></td>
 	<td style="width: 50%;"><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=settings",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>#iverinfo" onclick="idbvercheck(); document.getElementById('clickhere').style.display = 'none';">Click Here</a></td>
@@ -519,7 +522,7 @@ if ($handle = opendir($skindir)) { $dirnum = null;
 	$_SESSION['UserGroup']!=$Settings['GuestGroup']&&$GroupInfo['HasAdminCP']=="yes") {
 $_POST  = array_map("rsq", $_POST);
 if(!isset($Settings['BoardUUID'])||$Settings['BoardUUID']===null) {
-	$Settings['BoardUUID'] = uuid(false,true,false,$Settings['use_hashtype'],null); }
+	$Settings['BoardUUID'] = rand_uuid("rand"); }
 $Settings['board_name'] = htmlspecialchars($Settings['board_name'], ENT_QUOTES, $Settings['charset']);
 $Settings['board_name'] = fixbamps($Settings['board_name']);
 $Settings['board_name'] = remove_spaces($Settings['board_name']);
@@ -687,7 +690,7 @@ require('settings.php'); $admincptitle = " ".$ThemeSet['TitleDivider']." Databas
 	$GroupInfo['ViewDBInfo']=="yes") {
 $_POST  = array_map("rsq", $_POST);
 if(!isset($Settings['BoardUUID'])||$Settings['BoardUUID']===null) {
-	$Settings['BoardUUID'] = uuid(false,true,false,$Settings['use_hashtype'],null); }
+	$Settings['BoardUUID'] = rand_uuid("rand"); }
 $Settings['board_name'] = htmlspecialchars($Settings['board_name'], ENT_QUOTES, $Settings['charset']);
 $Settings['board_name'] = fixbamps($Settings['board_name']);
 $Settings['board_name'] = remove_spaces($Settings['board_name']);
@@ -838,7 +841,7 @@ require('settings.php'); $admincptitle = " ".$ThemeSet['TitleDivider']." Board I
 	$_SESSION['UserGroup']!=$Settings['GuestGroup']&&$GroupInfo['HasAdminCP']=="yes") {
 $_POST  = array_map("rsq", $_POST);
 if(!isset($Settings['BoardUUID'])||$Settings['BoardUUID']===null) {
-	$Settings['BoardUUID'] = uuid(false,true,false,$Settings['use_hashtype'],null); }
+	$Settings['BoardUUID'] = rand_uuid("rand"); }
 $_POST['board_name'] = htmlspecialchars($_POST['board_name'], ENT_QUOTES, $Settings['charset']);
 $_POST['board_name'] = fixbamps($_POST['board_name']);
 $_POST['board_name'] = remove_spaces($_POST['board_name']);

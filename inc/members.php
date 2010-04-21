@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 04/10/2010 SVN 465 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 04/20/2010 SVN 468 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -741,7 +741,7 @@ $_SESSION['ViewingFile'] = $exfile['member']; }
 $_SESSION['PreViewingTitle'] = "Act: ";
 $_SESSION['ViewingTitle'] = "Logging in";
 $membertitle = " ".$ThemeSet['TitleDivider']." Login";
-$UFID = uuid(false,true,false,$Settings['use_hashtype'],null);
+$UFID = rand_uuid("rand");
 $_SESSION['UserFormID'] = $UFID;
 ?>
 <div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">Board index</a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Login</a></div>
@@ -1022,7 +1022,7 @@ if($Settings['file_ext']=="no+ext"||$Settings['file_ext']=="no ext") {
 $_SESSION['ViewingFile'] = $exfile['member']; }
 $_SESSION['PreViewingTitle'] = "Act: ";
 $_SESSION['ViewingTitle'] = "Signing up";
-$UFID = uuid(false,true,false,$Settings['use_hashtype'],null);
+$UFID = rand_uuid("rand");
 $_SESSION['UserFormID'] = $UFID;
 ?>
 <div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">Board index</a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=signup",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Signup</a></div>

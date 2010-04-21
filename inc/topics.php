@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: topics.php - Last Update: 01/01/2010 SVN 438 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 04/20/2010 SVN 468 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -513,7 +513,7 @@ redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"a
 if($PermissionInfo['CanMakeTopics'][$ForumID]=="no"||$CanHaveTopics=="no") { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
-$UFID = uuid(false,true,false,$Settings['use_hashtype'],null);
+$UFID = rand_uuid("rand");
 $_SESSION['UserFormID'] = $UFID;
 ?>
 <div class="Table1Border">

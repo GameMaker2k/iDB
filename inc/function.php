@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: function.php - Last Update: 04/12/2010 SVN 466 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 04/20/2010 SVN 468 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -62,46 +62,57 @@ $REFERERurl = null;
 function output_error($message, $level=E_USER_ERROR) {
     $caller = next(debug_backtrace());
     trigger_error($message.' in <strong>'.$caller['function'].'</strong> called from <strong>'.$caller['file'].'</strong> on line <strong>'.$caller['line'].'</strong>'."\n<br />error handler", $level); }
-// http://www.ajaxray.com/blog/2008/02/06/php-uuid-generator-function/
+// http://us.php.net/manual/en/function.uniqid.php#94959
 /**
   * Generates an UUID
   * 
-  * @author     Anis uddin Ahmad <admin@ajaxray.com>
-  * @param      string  an optional prefix
-  * @return     string  the formatted uuid
+  * @author     Andrew Moore
+  * @url        http://us.php.net/manual/en/function.uniqid.php#94959
   */
-  function uuid($useold = false,$more_entropy = false,$mtrand = false,$hash = 'sha1',$prefix = '') 
-  {
-    if($useold===true&&$mtrand===false) {
+function uuid($uuidver = "v4", $rndty = "rand", $namespace = null, $name = null) {
+if($uuidver!="v3"&&$uuidver!="v4"&&$uuidver!="v5") { $uuidver = "v4"; }
+if($uuidver=="v4") {
+    return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+      $rndty(0, 0xffff), $rndty(0, 0xffff),
+      $rndty(0, 0xffff),
+      $rndty(0, 0x0fff) | 0x4000,
+      $rndty(0, 0x3fff) | 0x8000,
+      $rndty(0, 0xffff), $rndty(0, 0xffff), $rndty(0, 0xffff) ); }
+if($uuidver=="v3"||$uuidver=="v5") {
+	if($namespace===null) {
+	$namespace = uuid("v4",$rndty); }
+    $nhex = str_replace(array('-','{','}'), '', $namespace);
+    $nstr = '';
+    for($i = 0; $i < strlen($nhex); $i+=2) {
+      $nstr .= chr(hexdec($nhex[$i].$nhex[$i+1]));
+    }
+	if($name===null) { $name = salt_hmac(); }
+    // Calculate hash value
+	if($uuidver=="v3") {
+	$uuidverid = 0x3000;
 	if (function_exists('hash')) {
-	$prehash = hash($hash, rand()); }
+	$hash = hash("md5", $nstr . $name); }
 	if (!function_exists('hash')) {
-	$prehash = $hash(rand()); }
-	$chars = uniqid($hash(rand()),$more_entropy); }
-    if($useold===false&&$mtrand===false) {
+	$hash = md5($nstr . $name); } }
+	if($uuidver=="v5") {
+	$uuidverid = 0x5000;
 	if (function_exists('hash')) {
-	$chars = hash($hash, uniqid(rand(),$more_entropy)); }
+	$hash = hash("sha1", $nstr . $name); }
 	if (!function_exists('hash')) {
-	$chars = $hash(uniqid(rand(),$more_entropy)); } }
-    if($useold===true&&$mtrand===true) {
-	if (function_exists('hash')) {
-	$prehash = hash($hash, mt_rand()); }
-	if (!function_exists('hash')) {
-	$prehash = $hash(mt_rand()); }
-	$chars = uniqid($hash(mt_rand()),$more_entropy); }
-    if($useold===false&&$mtrand===true) {
-	if (function_exists('hash')) {
-	$chars = hash($hash, uniqid(mt_rand(),$more_entropy)); }
-	if (!function_exists('hash')) {
-	$chars = $hash(uniqid(mt_rand(),$more_entropy)); } }
-    $uuid  = substr($chars,0,8) . '-';
-    $uuid .= substr($chars,8,4) . '-';
-    $uuid .= substr($chars,12,4) . '-';
-    $uuid .= substr($chars,16,4) . '-';
-    $uuid .= substr($chars,20,12);    
-    if(isset($prefix)) { return $prefix . $uuid; }
-    if(!isset($prefix)) { return $uuid; }
-  }
+	$hash = sha1($nstr . $name); } }
+    return sprintf('%08s-%04s-%04x-%04x-%12s',
+      substr($hash, 0, 8),
+      substr($hash, 8, 4),
+      (hexdec(substr($hash, 12, 4)) & 0x0fff) | $uuidverid,
+      (hexdec(substr($hash, 16, 4)) & 0x3fff) | 0x8000,
+      substr($hash, 20, 12) ); } }
+function rand_uuid($rndty = "rand", $namespace = null, $name = null) {
+$rand_array = array(1 => "v3", 2 => "v4", 3 => "v5");
+if($name===null) { $name = salt_hmac(); }
+$my_uuid = $rand_array[$rndty(1,3)];
+if($my_uuid=="v4") { return uuid("v4",$rndty); }
+if($my_uuid=="v3"||$my_uuid=="v5") {
+return uuid($my_uuid,$rndty,$name); } }
 // unserialize sessions variables
 function unserialize_session($data) {
     $vars=preg_split('/([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff^|]*)\|/',

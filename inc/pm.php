@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: pm.php - Last Update: 01/01/2010 SVN 438 - Author: cooldude2k $
+    $FileInfo: pm.php - Last Update: 04/20/2010 SVN 468 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pm.php"||$File3Name=="/pm.php") {
@@ -615,7 +615,7 @@ $QuoteDescription = "Re: ".$QuoteDescription;
 $QuoteTitle = str_replace("Re: ","",$QuoteTitle);
 $QuoteTitle = "Re: ".$QuoteTitle;
 $QuoteReply = null; }
-$UFID = uuid(false,true,false,$Settings['use_hashtype'],null);
+$UFID = rand_uuid("rand");
 $_SESSION['UserFormID'] = $UFID;
 ?>
 <div class="Table1Border">
