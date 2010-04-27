@@ -224,7 +224,7 @@ if($dst=="on") { if($dstake!="done") {
 $TCHour = $TCHour + $tsa['hour'];
 $TCMinute = $TCMinute + $tsa['minute'];
 return date($format,mktime($TCHour,$TCMinute,$TCSecond,$TCMonth,$TCDay,$TCYear)); }
-	$Names['SB'] = "Stephanie";
+	$Names['SB'] = "Stephanie Braun";
 define("_stephanie_", $Names['SB']);
 // Change Time Stamp to a readable time
 function TimeChange($format,$timestamp,$offset,$minoffset=null,$dst=null) {

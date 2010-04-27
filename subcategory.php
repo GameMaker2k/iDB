@@ -8,8 +8,8 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2009 iDB Support - http://idb.berlios.de/
-    Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
+    Copyright 2004-2010 iDB Support - http://idb.berlios.de/
+    Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
     $FileInfo: subcategory.php - Last Update: 11/23/2009 SVN 357 - Author: cooldude2k $
 */
@@ -20,8 +20,7 @@ require('preindex.php');
 $usefileext = $Settings['file_ext'];
 if($ext=="noext"||$ext=="no ext"||$ext=="no+ext") { $usefileext = ""; }
 $filewpath = $exfile['category'].$usefileext.$_SERVER['PATH_INFO'];
-if(!is_numeric($_GET['id']))
-{ $_GET['id']="1"; }
+if(!is_numeric($_GET['id'])) { $_GET['id']="1"; }
 ?>
 
 <title> <?php echo $Settings['board_name'].$idbpowertitle; ?> </title>
@@ -32,8 +31,7 @@ require($SettDir['inc'].'navbar.php'); }
 $CatCheck = null;
 if($_GET['act']==null)
 { $_GET['act']="view"; }
-if(!is_numeric($_GET['id']))
-{ $_GET['id']="1"; }
+if(!is_numeric($_GET['id'])) { $_GET['id']="1"; }
 if($_GET['act']=="view")
 { require($SettDir['inc'].'subcategories.php'); }
 if($_GET['act']=="lowview")

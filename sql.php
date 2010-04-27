@@ -384,11 +384,15 @@ if(!isset($_SESSION['CheckCookie'])) {
 if(isset($_COOKIE['SessPass'])&&isset($_COOKIE['MemberName'])) {
 require($SettDir['inc'].'prelogin.php'); } }
 require($SettDir['inc'].'groupsetup.php');
-if($Settings['board_offline']=="on"&&$GroupInfo['CanViewOffLine']!="yes") {
+if($Settings['board_offline']=="on"&&$GroupInfo['CanViewOffLine']!="yes"&&
+	$_GET['act']!="login"&&$_POST['act']!="loginmember"&&$_GET['act']!="login_now") {
 header("Content-Type: text/plain; charset=".$Settings['charset']); sql_free_result($peresult);
-ob_clean(); if(!isset($Settings['offline_text'])) {
-echo "Sorry the board is off line.\nIf you are a admin you can login by the admin cp."; }
-if(isset($Settings['offline_text'])) { echo $Settings['offline_text']; }
+ob_clean();
+if(!isset($Settings['offline_message'])) { 
+	$Settings['offline_message'] = "Sorry the board is off line.\n".
+	"If you are a admin you can login by the admin cp.\n".
+	$Settings['idburl'].url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); }
+echo $Settings['offline_message'];
 //echo "\n".sql_errorno($SQLStat);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $dayconv = array('second' => 1, 'minute' => 60, 'hour' => 3600, 'day' => 86400, 'week' => 604800, 'month' => 2630880, 'year' => 31570560, 'decade' => 15705600);
