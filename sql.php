@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 04/12/2010 SVN 466 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 04/27/2010 SVN 470 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -32,6 +32,10 @@
 //@ini_set("session.gc_probability", 1);
 //@ini_set("session.gc_divisor", 100);
 //@ini_set("session.gc_maxlifetime", 1440);
+/* Change session hash type here */
+//@ini_set('session.hash_function', 1);
+//@ini_set('session.hash_bits_per_character', 6);
+/* Do not change anything below this line unless you know what you are doing */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="sql.php"||$File3Name=="/sql.php") {
 	header('Location: index.php');
@@ -384,15 +388,11 @@ if(!isset($_SESSION['CheckCookie'])) {
 if(isset($_COOKIE['SessPass'])&&isset($_COOKIE['MemberName'])) {
 require($SettDir['inc'].'prelogin.php'); } }
 require($SettDir['inc'].'groupsetup.php');
-if($Settings['board_offline']=="on"&&$GroupInfo['CanViewOffLine']!="yes"&&
-	$_GET['act']!="login"&&$_POST['act']!="loginmember"&&$_GET['act']!="login_now") {
+if($Settings['board_offline']=="on"&&$GroupInfo['CanViewOffLine']!="yes") {
 header("Content-Type: text/plain; charset=".$Settings['charset']); sql_free_result($peresult);
-ob_clean();
-if(!isset($Settings['offline_message'])) { 
-	$Settings['offline_message'] = "Sorry the board is off line.\n".
-	"If you are a admin you can login by the admin cp.\n".
-	$Settings['idburl'].url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); }
-echo $Settings['offline_message'];
+ob_clean(); if(!isset($Settings['offline_text'])) {
+echo "Sorry the board is off line.\nIf you are a admin you can login by the admin cp."; }
+if(isset($Settings['offline_text'])) { echo $Settings['offline_text']; }
 //echo "\n".sql_errorno($SQLStat);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $dayconv = array('second' => 1, 'minute' => 60, 'hour' => 3600, 'day' => 86400, 'week' => 604800, 'month' => 2630880, 'year' => 31570560, 'decade' => 15705600);

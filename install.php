@@ -8,29 +8,41 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2009 iDB Support - http://idb.berlios.de/
-    Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
+    Copyright 2004-2010 iDB Support - http://idb.berlios.de/
+    Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.de/support/category.php?act=view&id=2
 
-    $FileInfo: install.php - Last Update: 01/26/2010 SVN 451 - Author: cooldude2k $
+    $FileInfo: install.php - Last Update: 04/27/2010 SVN 470 - Author: cooldude2k $
 *//*
 if(ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }
-*/
+*//* Some ini setting changes uncomment if you need them. 
+   Display PHP Errors */
 //ini_set("display_errors", true); 
 //ini_set("display_startup_errors", true);
-error_reporting(E_ALL ^ E_NOTICE);
+@error_reporting(E_ALL ^ E_NOTICE);
 /* Get rid of session id in urls */
 //ini_set("session.use_trans_sid", false);
 //ini_set("session.use_cookies", true);
 //ini_set("session.use_only_cookies", true);
 //ini_set("url_rewriter.tags","");
-set_time_limit(30); ignore_user_abort(true);
+@set_time_limit(30); @ignore_user_abort(true);
 /* Change session garbage collection settings */
 //ini_set("session.gc_probability", 1);
 //ini_set("session.gc_divisor", 100);
 //ini_set("session.gc_maxlifetime", 1440);
-ob_start();
+/* Change session hash type here */
+//@ini_set('session.hash_function', 1);
+//@ini_set('session.hash_bits_per_character', 6);
+/* Do not change anything below this line unless you know what you are doing */
+$Settings['clean_ob'] = "off";
+if($Settings['clean_ob']=="on") {
+/* Check for other output handlers/buffers are open
+   and close and get the contents in an array */
+$numob = count(ob_list_handlers()); $iob = 0; 
+while ($iob < $numob) { 
+	$old_ob_var[$iob] = ob_get_clean(); 
+	++$iob; } } ob_start();
 if(ini_get("register_globals")) { 
 	if(!isset($SettDir['misc'])) { $SettDir['misc'] = "inc/misc/"; }
 	require_once($SettDir['misc'].'killglobals.php'); }

@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: functions.php - Last Update: 04/20/2010 SVN 468 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 04/27/2010 SVN 470 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -224,7 +224,7 @@ if($dst=="on") { if($dstake!="done") {
 $TCHour = $TCHour + $tsa['hour'];
 $TCMinute = $TCMinute + $tsa['minute'];
 return date($format,mktime($TCHour,$TCMinute,$TCSecond,$TCMonth,$TCDay,$TCYear)); }
-	$Names['SB'] = "Stephanie Braun";
+	$Names['SB'] = "Stephanie";
 define("_stephanie_", $Names['SB']);
 // Change Time Stamp to a readable time
 function TimeChange($format,$timestamp,$offset,$minoffset=null,$dst=null) {
@@ -268,10 +268,10 @@ return date($format,mktime(gmdate('h')+$tsa['hour'],gmdate('i')+$tsa['minute'],g
 // Get Server offset
 function GetSeverZone() {
 $TestHour1 = date("H");
-putenv("OTZ=".getenv("TZ"));
-putenv("TZ=GMT");
+@putenv("OTZ=".getenv("TZ"));
+@putenv("TZ=GMT");
 $TestHour2 = date("H");
-putenv("TZ=".getenv("OTZ"));
+@putenv("TZ=".getenv("OTZ"));
 $TestHour3 = $TestHour1-$TestHour2;
 return $TestHour3; }
 // Get Server offset alt version

@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: function.php - Last Update: 04/20/2010 SVN 468 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 04/27/2010 SVN 470 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -151,7 +151,7 @@ if(getenv('PATH_INFO')==null) {
 $myscript = $_SERVER["SCRIPT_NAME"];
 $myphpath = $_SERVER["PHP_SELF"];
 $mypathinfo = str_replace($myscript, "", $myphpath);
-putenv("PATH_INFO=".$mypathinfo); } }
+@putenv("PATH_INFO=".$mypathinfo); } }
 // Change raw post data to POST array
 // Not sure why I made but alwell. :P 
 function parse_post_data()
