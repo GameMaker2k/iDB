@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 04/30/2010 SVN 472 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 04/30/2010 SVN 473 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -457,7 +457,7 @@ if($_GET['theme']==null) {
 		$_GET['theme'] = $_GET['style']; }
 	if($_GET['css']!=null) {
 		$_GET['theme'] = $_GET['css']; } }
-if($Settings['SQLThemes']=="yes") {
+if($Settings['SQLThemes']=="off") {
 if($_GET['theme']!=null) {
 $_GET['theme'] = chack_themes($_GET['theme']);
 if($_GET['theme']=="../"||$_GET['theme']=="./") {
