@@ -12,7 +12,7 @@
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: pgsql.php - Last Update: 04/30/2010 SVN 472 - Author: cooldude2k $
+    $FileInfo: pgsql.php - Last Update: 04/30/2010 SVN 475 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pgsql.php"||$File3Name=="/pgsql.php") {
@@ -163,7 +163,7 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."members\" (\n".
 "  \"MessagesPerPage\" int4 NOT NULL default '0',\n".
 "  \"TimeZone\" varchar(5) NOT NULL default '0',\n".
 "  \"DST\" varchar(5) NOT NULL default '0',\n".
-"  \"UseTheme\" varchar(26) NOT NULL default '0',\n".
+"  \"UseTheme\" varchar(32) NOT NULL default '0',\n".
 "  \"IP\" varchar(20) NOT NULL default '',\n".
 "  \"Salt\" varchar(50) NOT NULL default '',\n".
 "  UNIQUE (\"Name\"),\n".
@@ -305,8 +305,8 @@ sql_query($query,$SQLStat);
 */
 $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."themes\" (\n".
 "  \"id\" SERIAL PRIMARY KEY NOT NULL,\n".
-"  \"Name\" varchar(26) NOT NULL default '',\n".
-"  \"ThemeName\" varchar(26) NOT NULL default '',\n".
+"  \"Name\" varchar(32) NOT NULL default '',\n".
+"  \"ThemeName\" varchar(32) NOT NULL default '',\n".
 "  \"ThemeMaker\" varchar(150) NOT NULL default '',\n".
 "  \"ThemeVersion\" varchar(150) NOT NULL default '',\n".
 "  \"ThemeVersionType\" varchar(150) NOT NULL default '',\n".

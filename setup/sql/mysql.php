@@ -12,7 +12,7 @@
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mysql.php - Last Update: 04/30/2010 SVN 472 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 04/30/2010 SVN 475 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mysql.php"||$File3Name=="/mysql.php") {
@@ -166,7 +166,7 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."memb
 "  \"MessagesPerPage\" int(5) NOT NULL default '0',\n".
 "  \"TimeZone\" varchar(5) COLLATE ".$SQLCollate." NOT NULL default '0',\n".
 "  \"DST\" varchar(5) COLLATE ".$SQLCollate." NOT NULL default '0',\n".
-"  \"UseTheme\" varchar(26) COLLATE ".$SQLCollate." NOT NULL default '0',\n".
+"  \"UseTheme\" varchar(32) COLLATE ".$SQLCollate." NOT NULL default '0',\n".
 "  \"IP\" varchar(20) COLLATE ".$SQLCollate." NOT NULL default '',\n".
 "  \"Salt\" varchar(50) COLLATE ".$SQLCollate." NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\"),\n".
@@ -316,7 +316,7 @@ sql_query($query,$SQLStat);
 */
 $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."themes\" (\n".
 "  \"id\" int(15) NOT NULL auto_increment,\n".
-"  \"Name\" varchar(26) COLLATE ".$SQLCollate." NOT NULL default '',\n".
+"  \"Name\" varchar(32) COLLATE ".$SQLCollate." NOT NULL default '',\n".
 "  \"ThemeName\" varchar(150) COLLATE ".$SQLCollate." NOT NULL default '',\n".
 "  \"ThemeMaker\" varchar(150) COLLATE ".$SQLCollate." NOT NULL default '',\n".
 "  \"ThemeVersion\" varchar(150) COLLATE ".$SQLCollate." NOT NULL default '',\n".
