@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 04/27/2010 SVN 470 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 04/30/2010 SVN 472 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -117,6 +117,9 @@ if(!isset($_GET['debug'])) { $_GET['debug'] = "off"; }
 if(!isset($_GET['post'])) { $_GET['post'] = null; }
 if(!isset($_POST['License'])) { $_POST['License'] = null; }
 if(!isset($_SERVER['HTTPS'])) { $_SERVER['HTTPS'] = "off"; }
+if(!isset($Settings['SQLThemes'])) { $Settings['SQLThemes'] = "off"; }
+if($Settings['SQLThemes']!="on"&&$Settings['SQLThemes']!="off") { 
+	$Settings['SQLThemes'] = "off"; }
 require_once($SettDir['misc'].'utf8.php');
 require_once($SettDir['inc'].'filename.php');
 if(!isset($Settings['use_hashtype'])) {
@@ -454,6 +457,7 @@ if($_GET['theme']==null) {
 		$_GET['theme'] = $_GET['style']; }
 	if($_GET['css']!=null) {
 		$_GET['theme'] = $_GET['css']; } }
+if($Settings['SQLThemes']=="yes") {
 if($_GET['theme']!=null) {
 $_GET['theme'] = chack_themes($_GET['theme']);
 if($_GET['theme']=="../"||$_GET['theme']=="./") {
@@ -471,17 +475,46 @@ if($_GET['theme']==null) {
 if($_SESSION['Theme']!=null) {
 $OldTheme = $_SESSION['Theme'];
 $_SESSION['Theme'] = chack_themes($_SESSION['Theme']);
+if($_SESSION['UserGroup']!=$Settings['GuestGroup']) {
 if($OldTheme!=$_SESSION['Theme']) { 
 $NewDay=GMTimeStamp();
 $qnewskin = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"UseTheme\"='%s',\"LastActive\"='%s' WHERE \"id\"=%i", array($_SESSION['Theme'],$NewDay,$_SESSION['UserID']));
-sql_query($qnewskin,$SQLStat); }
+sql_query($qnewskin,$SQLStat); } }
 $_GET['theme']=$_SESSION['Theme']; }
 if($_SESSION['Theme']==null) {
 $_SESSION['Theme']=$Settings['DefaultTheme'];
 $_GET['theme']=$Settings['DefaultTheme']; } }
 $PreSkin['skindir1'] = $_SESSION['Theme'];
 $PreSkin['skindir2'] = $SettDir['themes'].$_SESSION['Theme'];
-require($SettDir['themes'].$_GET['theme']."/settings.php");
+require($SettDir['inc'].'sqlthemes.php');
+sql_free_result($themeresult); }
+if($Settings['SQLThemes']=="on") {
+if($_GET['theme']!=null) {
+$themequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."themes\" WHERE \"Name\"='%s'", array($_GET['theme'])); }
+if($_GET['theme']==null) { 
+if($_SESSION['Theme']!=null) {
+$themequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."themes\" WHERE \"Name\"='%s'", array($_SESSION['Theme'])); } }
+$themeresult=sql_query($themequery,$SQLStat);
+$themenum=sql_num_rows($themeresult);
+if($themenum<=0) {
+$_GET['theme'] = $Settings['DefaultTheme']; 
+$_SESSION['Theme'] = $Settings['DefaultTheme']; 
+if($_SESSION['UserGroup']!=$Settings['GuestGroup']) {
+$NewDay=GMTimeStamp();
+$qnewskin = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"UseTheme\"='%s',\"LastActive\"='%s' WHERE \"id\"=%i", array($_SESSION['Theme'],$NewDay,$_SESSION['UserID']));
+sql_query($qnewskin,$SQLStat); }
+$themequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."themes\" WHERE \"Name\"='%s'", array($_GET['theme']));
+$themeresult=sql_query($themequery,$SQLStat);
+$themenum=sql_num_rows($themeresult); } 
+else {
+if($_GET['theme']==null) { 
+if($_SESSION['Theme']!=null) {
+$_GET['theme'] = $_SESSION['Theme']; } }
+if($_SESSION['UserGroup']!=$Settings['GuestGroup']) {
+$NewDay=GMTimeStamp();
+$qnewskin = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"UseTheme\"='%s',\"LastActive\"='%s' WHERE \"id\"=%i", array($_GET['theme'],$NewDay,$_SESSION['UserID']));
+sql_query($qnewskin,$SQLStat); } } 
+require($SettDir['themes'].$_GET['theme']."/settings.php"); }
 $_SESSION['Theme'] = $_GET['theme'];
 if(!isset($ThemeSet['TableStyle'])) {
 	$ThemeSet['TableStyle'] = "table"; }

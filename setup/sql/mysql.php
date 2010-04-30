@@ -12,7 +12,7 @@
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mysql.php - Last Update: 04/30/2010 SVN 471 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 04/30/2010 SVN 472 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mysql.php"||$File3Name=="/mysql.php") {
@@ -314,7 +314,6 @@ sql_query($query,$SQLStat);
 $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."tagboard\" VALUES (1,-1,'".$iDB_Author."',".$YourDate.",'Welcome to Your New Tag Board. ^_^','127.0.0.1'), array(null)); 
 sql_query($query,$SQLStat);
 */
-if($_POST['SQLThemes']=="on") {
 $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."themes\" (\n".
 "  \"id\" int(15) NOT NULL auto_increment,\n".
 "  \"Name\" varchar(26) COLLATE ".$SQLCollate." NOT NULL default '',\n".
@@ -372,7 +371,7 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."them
 "  PRIMARY KEY  (\"id\"),\n".
 "  UNIQUE KEY \"Name\" (\"Name\")\n".
 ") ENGINE=MyISAM  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
-sql_query($query,$SQLStat); }
+sql_query($query,$SQLStat);
 $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."topics\" (\n".
 "  \"id\" int(15) NOT NULL auto_increment,\n".
 "  \"ForumID\" int(15) NOT NULL default '0',\n".

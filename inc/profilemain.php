@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: profilemain.php - Last Update: 04/10/2010 SVN 465 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 04/30/2010 SVN 472 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
@@ -443,6 +443,7 @@ echo "<option value=\"".$showmin."\">0:".$showmin." minutes</option>\n";
 	<td style="width: 40%;"><label class="TextBoxLabel" for="skin">Pick a CSS Theme</label></td>
 	<td style="width: 60%;"><select id="skin" name="skin" class="TextBox">
 <option selected="selected" value="<?php echo $_SESSION['Theme']; ?>">Old Value (<?php echo $_SESSION['Theme']; ?>)</option><?php
+if($Settings['SQLThemes']=="off") {
 $skindir = dirname(realpath("settings.php"))."/".$SettDir['themes'];
 if ($handle = opendir($skindir)) { $dirnum = null;
    while (false !== ($file = readdir($handle))) {
@@ -456,7 +457,17 @@ if ($handle = opendir($skindir)) { $dirnum = null;
    $themenum=count($themelist); $themei=0; 
    while ($themei < $themenum) {
    echo $themelist[$themei]."\n";
-   ++$themei; }
+   ++$themei; } } }
+if($Settings['SQLThemes']=="on") {
+$sknquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."themes\" ORDER BY \"id\" ASC, \"Name\" ASC", array(null));
+$sknresult=sql_query($sknquery,$SQLStat);
+$sknum=sql_num_rows($sknresult);
+$skni=0;
+while ($skni < $sknum) {
+$ThemeInfo['Name'] = sql_result($sknresult,$skni,"Name");
+$ThemeInfo['ThemeName'] = sql_result($sknresult,$skni,"ThemeName");
+echo "<option value=\"".$ThemeInfo['Name']."\">".$ThemeInfo['ThemeName']."</option>\n";
+++$skni; }
 } ?></select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 40%;"><label class="TextBoxLabel" for="RepliesPerPage">Replies Per Page:</label></td>
