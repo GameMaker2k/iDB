@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: main.php - Last Update: 04/30/2010 SVN 472 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 04/30/2010 SVN 477 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -456,6 +456,7 @@ echo "<option value=\"".$showmin."\">0:".$showmin." minutes</option>\n"; }
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="DefaultTheme">Default Theme:</label></td>
 	<td style="width: 50%;"><select id="DefaultTheme" name="DefaultTheme" class="TextBox"><?php
+if($Settings['SQLThemes']=="off") {
 $skindir = dirname(realpath("settings.php"))."/".$SettDir['themes'];
 if ($handle = opendir($skindir)) { $dirnum = null;
    while (false !== ($file = readdir($handle))) {
@@ -472,7 +473,20 @@ if ($handle = opendir($skindir)) { $dirnum = null;
    $themenum=count($themelist); $themei=0; 
    while ($themei < $themenum) {
    echo $themelist[$themei]."\n";
-   ++$themei; }
+   ++$themei; } } }
+if($Settings['SQLThemes']=="on") {
+$sknquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."themes\" ORDER BY \"id\" ASC, \"Name\" ASC", array(null));
+$sknresult=sql_query($sknquery,$SQLStat);
+$sknum=sql_num_rows($sknresult);
+$skni=0;
+while ($skni < $sknum) {
+$ThemeInfo['Name'] = sql_result($sknresult,$skni,"Name");
+$ThemeInfo['ThemeName'] = sql_result($sknresult,$skni,"ThemeName");
+if($Settings['DefaultTheme']==$ThemeInfo['Name']) {
+echo "<option selected=\"selected\" value=\"".$ThemeInfo['Name']."\">".$ThemeInfo['ThemeName']."</option>\n"; }
+if($Settings['DefaultTheme']!=$ThemeInfo['Name']) {
+echo "<option value=\"".$ThemeInfo['Name']."\">".$ThemeInfo['ThemeName']."</option>\n"; }
+++$skni; }
 } ?></select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="enable_https">Enable https:</label></td>
