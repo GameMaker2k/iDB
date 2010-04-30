@@ -12,7 +12,7 @@
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: pgsql.php - Last Update: 04/06/2010 SVN 462 - Author: cooldude2k $
+    $FileInfo: pgsql.php - Last Update: 04/30/2010 SVN 471 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pgsql.php"||$File3Name=="/pgsql.php") {
@@ -303,6 +303,64 @@ sql_query($query,$SQLStat);
 $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."tagboard\" VALUES (1,-1,'".$iDB_Author."',".$YourDate.",'Welcome to Your New Tag Board. ^_^','127.0.0.1'), array(null)); 
 sql_query($query,$SQLStat);
 */
+if($_POST['SQLThemes']=="on") {
+$query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."themes\" (\n".
+"  \"id\" SERIAL PRIMARY KEY NOT NULL,\n".
+"  \"Name\" varchar(26) NOT NULL default '',\n".
+"  \"ThemeName\" varchar(26) NOT NULL default '',\n".
+"  \"ThemeMaker\" varchar(150) NOT NULL default '',\n".
+"  \"ThemeVersion\" varchar(150) NOT NULL default '',\n".
+"  \"ThemeVersionType\" varchar(150) NOT NULL default '',\n".
+"  \"ThemeSubVersion\" varchar(150) NOT NULL default '',\n".
+"  \"MakerURL\" varchar(150) NOT NULL default '',\n".
+"  \"CopyRight\" varchar(150) NOT NULL default '',\n".
+"  \"CSS\" varchar(150) NOT NULL default '',\n".
+"  \"CSSType\" varchar(150) NOT NULL default '',\n".
+"  \"FavIcon\" varchar(150) NOT NULL default '',\n".
+"  \"TableStyle\" varchar(150) NOT NULL default '',\n".
+"  \"MiniPageAltStyle\" varchar(150) NOT NULL default '',\n".
+"  \"PreLogo\" varchar(150) NOT NULL default '',\n".
+"  \"Logo\" varchar(150) NOT NULL default '',\n".
+"  \"LogoStyle\" varchar(150) NOT NULL default '',\n".
+"  \"SubLogo\" varchar(150) NOT NULL default '',\n".
+"  \"TopicIcon\" varchar(150) NOT NULL default '',\n".
+"  \"HotTopic\" varchar(150) NOT NULL default '',\n".
+"  \"PinTopic\" varchar(150) NOT NULL default '',\n".
+"  \"HotPinTopic\" varchar(150) NOT NULL default '',\n".
+"  \"ClosedTopic\" varchar(150) NOT NULL default '',\n".
+"  \"HotClosedTopic\" varchar(150) NOT NULL default '',\n".
+"  \"PinClosedTopic\" varchar(150) NOT NULL default '',\n".
+"  \"HotPinClosedTopic\" varchar(150) NOT NULL default '',\n".
+"  \"MessageRead\" varchar(150) NOT NULL default '',\n".
+"  \"MessageUnread\" varchar(150) NOT NULL default '',\n".
+"  \"Profile\" varchar(150) NOT NULL default '',\n".
+"  \"WWW\" varchar(150) NOT NULL default '',\n".
+"  \"PM\" varchar(150) NOT NULL default '',\n".
+"  \"TopicLayout\" varchar(150) NOT NULL default '',\n".
+"  \"AddReply\" varchar(150) NOT NULL default '',\n".
+"  \"FastReply\" varchar(150) NOT NULL default '',\n".
+"  \"NewTopic\" varchar(150) NOT NULL default '',\n".
+"  \"QuoteReply\" varchar(150) NOT NULL default '',\n".
+"  \"EditReply\" varchar(150) NOT NULL default '',\n".
+"  \"DeleteReply\" varchar(150) NOT NULL default '',\n".
+"  \"Report\" varchar(150) NOT NULL default '',\n".
+"  \"LineDivider\" varchar(150) NOT NULL default '',\n".
+"  \"ButtonDivider\" varchar(150) NOT NULL default '',\n".
+"  \"LineDividerTopic\" varchar(150) NOT NULL default '',\n".
+"  \"TitleDivider\" varchar(150) NOT NULL default '',\n".
+"  \"ForumStyle\" varchar(150) NOT NULL default '',\n".
+"  \"ForumIcon\" varchar(150) NOT NULL default '',\n".
+"  \"SubForumIcon\" varchar(150) NOT NULL default '',\n".
+"  \"RedirectIcon\" varchar(150) NOT NULL default '',\n".
+"  \"TitleIcon\" varchar(150) NOT NULL default '',\n".
+"  \"NavLinkIcon\" varchar(150) NOT NULL default '',\n".
+"  \"NavLinkDivider\" varchar(150) NOT NULL default '',\n".
+"  \"StatsIcon\" varchar(150) NOT NULL default '',\n".
+"  \"NoAvatar\" varchar(150) NOT NULL default '',\n".
+"  \"NoAvatarSize\" varchar(150) NOT NULL default '',\n".
+"  UNIQUE (\"Name\")\n".
+");", array(null));
+sql_query($query,$SQLStat); }
 $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."topics\" (\n".
 "  \"id\" SERIAL PRIMARY KEY NOT NULL,\n".
 "  \"ForumID\" int4 NOT NULL default '0',\n".

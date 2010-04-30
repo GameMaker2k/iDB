@@ -12,7 +12,7 @@
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: setup.php - Last Update: 04/14/2010 SVN 467 - Author: cooldude2k $
+    $FileInfo: setup.php - Last Update: 04/30/2010 SVN 471 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="setup.php"||$File3Name=="/setup.php") {
@@ -244,6 +244,12 @@ if ($handle = opendir($skindir)) { $dirnum = null;
    echo $themelist[$themei]."\n";
    ++$themei; }
 } ?></select></td>
+</tr><tr>
+	<td style="width: 50%;"><label class="TextBoxLabel" for="SQLThemes">Store Themes in SQL Database:</label></td>
+	<td style="width: 50%;"><select id="SQLThemes" name="SQLThemes" class="TextBox">
+<option selected="selected" value="off">off</option>
+<option value="on">on</option>
+</select></td>
 </tr><tr>
 	<td style="width: 50%;"><label class="TextBoxLabel" title="Might not work" for="unlink">Delete Installer?</label></td>
 	<td style="width: 50%;"><select id="unlink" name="unlink" class="TextBox">

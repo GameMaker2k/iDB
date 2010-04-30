@@ -12,7 +12,7 @@
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: sqlite.php - Last Update: 04/06/2010 SVN 462 - Author: cooldude2k $
+    $FileInfo: sqlite.php - Last Update: 04/30/2010 SVN 471 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="sqlite.php"||$File3Name=="/sqlite.php") {
@@ -370,6 +370,63 @@ sql_query($query,$SQLStat);
 $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."tagboard\" VALUES (1,-1,'".$iDB_Author."',".$YourDate.",'Welcome to Your New Tag Board. ^_^','127.0.0.1'), array(null)); 
 sql_query($query,$SQLStat);
 */
+if($_POST['SQLThemes']=="on") {
+$query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."themes\" (\n".
+"  \"id\" INTEGER PRIMARY KEY NOT NULL,\n".
+"  \"Name\" UNIQUE NOT NULL default '',\n".
+"  \"ThemeName\" VARCHAR(250) NOT NULL default '',\n".
+"  \"ThemeMaker\" VARCHAR(250) NOT NULL default '',\n".
+"  \"ThemeVersion\" VARCHAR(250) NOT NULL default '',\n".
+"  \"ThemeVersionType\" VARCHAR(250) NOT NULL default '',\n".
+"  \"ThemeSubVersion\" VARCHAR(250) NOT NULL default '',\n".
+"  \"MakerURL\" VARCHAR(250) NOT NULL default '',\n".
+"  \"CopyRight\" VARCHAR(250) NOT NULL default '',\n".
+"  \"CSS\" VARCHAR(250) NOT NULL default '',\n".
+"  \"CSSType\" VARCHAR(250) NOT NULL default '',\n".
+"  \"FavIcon\" VARCHAR(250) NOT NULL default '',\n".
+"  \"TableStyle\" VARCHAR(250) NOT NULL default '',\n".
+"  \"MiniPageAltStyle\" VARCHAR(250) NOT NULL default '',\n".
+"  \"PreLogo\" VARCHAR(250) NOT NULL default '',\n".
+"  \"Logo\" VARCHAR(250) NOT NULL default '',\n".
+"  \"LogoStyle\" VARCHAR(250) NOT NULL default '',\n".
+"  \"SubLogo\" VARCHAR(250) NOT NULL default '',\n".
+"  \"TopicIcon\" VARCHAR(250) NOT NULL default '',\n".
+"  \"HotTopic\" VARCHAR(250) NOT NULL default '',\n".
+"  \"PinTopic\" VARCHAR(250) NOT NULL default '',\n".
+"  \"HotPinTopic\" VARCHAR(250) NOT NULL default '',\n".
+"  \"ClosedTopic\" VARCHAR(250) NOT NULL default '',\n".
+"  \"HotClosedTopic\" VARCHAR(250) NOT NULL default '',\n".
+"  \"PinClosedTopic\" VARCHAR(250) NOT NULL default '',\n".
+"  \"HotPinClosedTopic\" VARCHAR(250) NOT NULL default '',\n".
+"  \"MessageRead\" VARCHAR(250) NOT NULL default '',\n".
+"  \"MessageUnread\" VARCHAR(250) NOT NULL default '',\n".
+"  \"Profile\" VARCHAR(250) NOT NULL default '',\n".
+"  \"WWW\" VARCHAR(250) NOT NULL default '',\n".
+"  \"PM\" VARCHAR(250) NOT NULL default '',\n".
+"  \"TopicLayout\" VARCHAR(250) NOT NULL default '',\n".
+"  \"AddReply\" VARCHAR(250) NOT NULL default '',\n".
+"  \"FastReply\" VARCHAR(250) NOT NULL default '',\n".
+"  \"NewTopic\" VARCHAR(250) NOT NULL default '',\n".
+"  \"QuoteReply\" VARCHAR(250) NOT NULL default '',\n".
+"  \"EditReply\" VARCHAR(250) NOT NULL default '',\n".
+"  \"DeleteReply\" VARCHAR(250) NOT NULL default '',\n".
+"  \"Report\" VARCHAR(250) NOT NULL default '',\n".
+"  \"LineDivider\" VARCHAR(250) NOT NULL default '',\n".
+"  \"ButtonDivider\" VARCHAR(250) NOT NULL default '',\n".
+"  \"LineDividerTopic\" VARCHAR(250) NOT NULL default '',\n".
+"  \"TitleDivider\" VARCHAR(250) NOT NULL default '',\n".
+"  \"ForumStyle\" VARCHAR(250) NOT NULL default '',\n".
+"  \"ForumIcon\" VARCHAR(250) NOT NULL default '',\n".
+"  \"SubForumIcon\" VARCHAR(250) NOT NULL default '',\n".
+"  \"RedirectIcon\" VARCHAR(250) NOT NULL default '',\n".
+"  \"TitleIcon\" VARCHAR(250) NOT NULL default '',\n".
+"  \"NavLinkIcon\" VARCHAR(250) NOT NULL default '',\n".
+"  \"NavLinkDivider\" VARCHAR(250) NOT NULL default '',\n".
+"  \"StatsIcon\" VARCHAR(250) NOT NULL default '',\n".
+"  \"NoAvatar\" VARCHAR(250) NOT NULL default '',\n".
+"  \"NoAvatarSize\" VARCHAR(250) NOT NULL default '',\n".
+");", array(null));
+sql_query($query,$SQLStat); }
 $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."topics\" (\n".
 "  \"id\" INTEGER PRIMARY KEY NOT NULL,\n".
 "  \"ForumID\" INTEGER NOT NULL default '0',\n".
