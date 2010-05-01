@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: function.php - Last Update: 04/27/2010 SVN 470 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 04/30/2010 SVN 478 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -84,7 +84,10 @@ if($uuidver=="v3"||$uuidver=="v5") {
     $nhex = str_replace(array('-','{','}'), '', $namespace);
     $nstr = '';
     for($i = 0; $i < strlen($nhex); $i+=2) {
-      $nstr .= chr(hexdec($nhex[$i].$nhex[$i+1]));
+      if(isset($nhex[$i+1])) {
+	  $nstr .= chr(hexdec($nhex[$i].$nhex[$i+1])); }
+      if(!isset($nhex[$i+1])) {
+	  $nstr .= chr(hexdec($nhex[$i])); }
     }
 	if($name===null) { $name = salt_hmac(); }
     // Calculate hash value

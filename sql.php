@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 04/30/2010 SVN 474 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 04/30/2010 SVN 478 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -488,6 +488,9 @@ $PreSkin['skindir1'] = $_SESSION['Theme'];
 $PreSkin['skindir2'] = $SettDir['themes'].$_SESSION['Theme'];
 require($SettDir['themes'].$_GET['theme']."/settings.php"); }
 if($Settings['SQLThemes']=="on") {
+if($_GET['theme']==null&&$_SESSION['Theme']==null) { 
+	$_GET['theme'] = $Settings['DefaultTheme']; 
+	$_SESSION['Theme'] = $Settings['DefaultTheme']; }
 if($_GET['theme']!=null) {
 $themequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."themes\" WHERE \"Name\"='%s'", array($_GET['theme'])); }
 if($_GET['theme']==null) { 

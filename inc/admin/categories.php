@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: categories.php - Last Update: 04/14/2010 SVN 467 - Author: cooldude2k $
+    $FileInfo: categories.php - Last Update: 04/30/2010 SVN 478 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="categories.php"||$File3Name=="/categories.php") {
@@ -545,7 +545,13 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Updating Settings";
 $query = sql_pre_query("UPDATE \"".$Settings['sqltable']."categories\" SET \"id\"=%i,\"OrderID\"=%i,\"Name\"='%s',\"ShowCategory\"='%s',\"CategoryType\"='%s',\"InSubCategory\"=%i,\"Description\"='%s',\"PostCountView\"=%i,\"KarmaCountView\"=%i WHERE \"id\"=%i", array($_POST['CategoryID'],$_POST['OrderID'],$_POST['CategoryName'],$_POST['ShowCategory'],$_POST['CategoryType'],$_POST['InSubCategory'],$_POST['CategoryDesc'],$_POST['NumPostView'],$_POST['NumKarmaView'],$_POST['id']));
 sql_query($query,$SQLStat); 
 $queryz = sql_pre_query("UPDATE \"".$Settings['sqltable']."catpermissions\" SET \"CategoryID\"=%i WHERE \"CategoryID\"=%i", array($_POST['CategoryID'],$_POST['id']));
-sql_query($queryz,$SQLStat); } } } 
+sql_query($queryz,$SQLStat); 
+$query = sql_pre_query("UPDATE \"".$Settings['sqltable']."forums\" SET \"CategoryID\"=%i WHERE \"CategoryID\"=%i", array($_POST['CategoryID'],$_POST['id']));
+sql_query($query,$SQLStat);
+$query = sql_pre_query("UPDATE \"".$Settings['sqltable']."topics\" SET \"CategoryID\"=%i WHERE \"CategoryID\"=%i", array($_POST['CategoryID'],$_POST['id']));
+sql_query($query,$SQLStat);
+$query = sql_pre_query("UPDATE \"".$Settings['sqltable']."posts\" SET \"CategoryID\"=%i WHERE \"CategoryID\"=%i", array($_POST['CategoryID'],$_POST['id']));
+sql_query($query,$SQLStat); } } } 
 if($_GET['act']=="cpermissions"&&$_POST['update']!="now") {
 $admincptitle = " ".$ThemeSet['TitleDivider']." Category Permissions Manager";
 if(!isset($_POST['id'])) {
