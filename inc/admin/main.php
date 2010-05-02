@@ -415,7 +415,7 @@ while ($gi < $gnum) { ?>
 	<td style="width: 50%;"><select id="YourOffSet" name="YourOffSet" class="TextBox"><?php
 $myofftime = $tsa['hour']; $mydstime = "off";
 $plusi = 1; $minusi = 12;
-$plusnum = 13; $minusnum = 0;
+$plusnum = 15; $minusnum = 0;
 while ($minusi > $minusnum) {
 if($myofftime==-$minusi) {
 echo "<option selected=\"selected\" value=\"-".$minusi."\">GMT - ".$minusi.":00 hours</option>\n"; }
