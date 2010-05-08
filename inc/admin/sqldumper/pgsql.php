@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2009 iDB Support - http://idb.berlios.de/
-    Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
+    Copyright 2004-2010 iDB Support - http://idb.berlios.de/
+    Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sqlite.php - Last Update: 12/14/2009 SVN 406 - Author: cooldude2k $
+    $FileInfo: sqlite.php - Last Update: 05/08/2010 SVN 481 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="sqlite.php"||$File3Name=="/sqlite.php") {
@@ -47,7 +47,7 @@ $TablePreFix = $Settings['sqltable'];
 function add_prefix($tarray) {
 global $TablePreFix;
 return $TablePreFix.$tarray; }
-$TableChCk = array("categories", "catpermissions", "events", "forums", "groups", "members", "messenger", "permissions", "posts", "restrictedwords", "sessions", "smileys", "topics", "wordfilter");
+$TableChCk = array("categories", "catpermissions", "events", "forums", "groups", "members", "messenger", "permissions", "posts", "restrictedwords", "sessions", "smileys", "themes", "topics", "wordfilter");
 $TableChCk = array_map("add_prefix",$TableChCk);
 if(!isset($_GET['outtype'])||$_GET['outtype']=="UTF-8") {
 header("Content-Type: text/plain; charset=UTF-8"); }
