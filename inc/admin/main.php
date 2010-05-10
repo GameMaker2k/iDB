@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: main.php - Last Update: 04/30/2010 SVN 477 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 05/11/2010 SVN 483 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -861,6 +861,10 @@ $_POST['board_name'] = htmlspecialchars($_POST['board_name'], ENT_QUOTES, $Setti
 $_POST['board_name'] = fixbamps($_POST['board_name']);
 $_POST['board_name'] = remove_spaces($_POST['board_name']);
 $_POST['board_name'] = str_replace("\&#039;", "&#039;", $_POST['board_name']);
+if($_POST['board_name']!=$Settings['board_name']&&
+	$Settings['SQLThemes']=="on") {
+	$logoquery = sql_pre_query("UPDATE \"".$Settings['sqltable']."themes\" SET \"Logo\"='%s' WHERE \"Logo\"='%s'", array($_POST['board_name'],$Settings['board_name']));
+	sql_query($logo,$SQLStat); }
 $_POST['Author'] = htmlspecialchars($_POST['Author'], ENT_QUOTES, $Settings['charset']);
 $_POST['Author'] = fixbamps($_POST['Author']);
 $_POST['Author'] = remove_spaces($_POST['Author']);
