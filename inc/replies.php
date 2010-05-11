@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: replies.php - Last Update: 04/20/2010 SVN 468 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 05/10/2010 SVN 484 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -431,10 +431,10 @@ Posts: <?php echo $User1PostCount; ?><br />
 Karma: <?php echo $User1Karma; ?><br />
 Joined: <?php echo $User1Joined; ?><br />
 <?php if($GroupInfo['HasAdminCP']=="yes") { ?>
-User IP: <a onclick="window.open(this.href);return false;" href="http://cqcounter.com/whois/?query=<?php echo $User1IP; ?>">
+User IP: <a onclick="window.open(this.href);return false;" href="<?php echo sprintf($IPCheckURL,$User1IP); ?>">
 <?php echo $User1IP; ?></a><br />
 <?php if($ipshow=="two") { ?>
-Post IP: <a onclick="window.open(this.href);return false;" href="http://cqcounter.com/whois/?query=<?php echo $MyPostIP; ?>">
+Post IP: <a onclick="window.open(this.href);return false;" href="<?php echo sprintf($IPCheckURL,$User1IP); ?>">
 <?php echo $MyPostIP; ?></a><br />
 <?php } } ?><br />
 </td>

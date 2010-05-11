@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 04/20/2010 SVN 468 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 05/10/2010 SVN 484 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -519,7 +519,7 @@ if($AmIHiddenUser=="no"&&$UserSessInfo['UserID']>0) {
 <tr id="Member<?php echo $i; ?>" class="TableRow3">
 <td class="TableColumn3" style="text-align: center;"><?php echo $UserSessInfo['UserID']; ?></td>
 <td class="TableColumn3" style="text-align: center;"><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UserSessInfo['UserID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>"><?php echo $UserSessInfo['MemberName']; ?></a>
-<?php if($GroupInfo['HasAdminCP']=="yes") { ?> ( <a onclick="window.open(this.href);return false;" href="http://cqcounter.com/whois/?query=<?php echo $UserSessInfo['UserIP']; ?>"><?php echo $UserSessInfo['UserIP']; ?></a> )<?php } ?></td>
+<?php if($GroupInfo['HasAdminCP']=="yes") { ?> ( <a onclick="window.open(this.href);return false;" href="<?php echo sprintf($IPCheckURL,$User1IP); ?>"><?php echo $UserSessInfo['UserIP']; ?></a> )<?php } ?></td>
 <td class="TableColumn3" style="text-align: center;"><?php echo $UserSessInfo['UserGroup']; ?></td>
 <td class="TableColumn3" style="text-align: center;"><a href="<?php echo url_maker($PreFileName,"no+ext",$PreExpPage,$Settings['qstr'],$Settings['qsep'],null,null); ?>"><?php echo $UserSessInfo['PreViewingTitle']; ?> <?php echo $UserSessInfo['ViewingTitle']; ?></a></td>
 <td class="TableColumn3" style="text-align: center;"><?php echo $session_expires; ?></td>
@@ -535,7 +535,7 @@ if($_GET['list']=="all"||$_GET['list']=="guests") {
 <tr id="Member<?php echo $i; ?>" class="TableRow3">
 <td class="TableColumn3" style="text-align: center;"><?php echo $UserSessInfo['UserID']; ?></td>
 <td class="TableColumn3" style="text-align: center;"><span><?php echo $UserSessInfo['GuestName']; ?></span>
-<?php if($GroupInfo['HasAdminCP']=="yes") { ?> ( <a onclick="window.open(this.href);return false;" href="http://cqcounter.com/whois/?query=<?php echo $UserSessInfo['UserIP']; ?>"><?php echo $UserSessInfo['UserIP']; ?></a> )<?php } ?></td>
+<?php if($GroupInfo['HasAdminCP']=="yes") { ?> ( <a onclick="window.open(this.href);return false;" href="<?php echo sprintf($IPCheckURL,$User1IP); ?>"><?php echo $UserSessInfo['UserIP']; ?></a> )<?php } ?></td>
 <td class="TableColumn3" style="text-align: center;"><?php echo $UserSessInfo['UserGroup']; ?></td>
 <td class="TableColumn3" style="text-align: center;"><a href="<?php echo url_maker($PreFileName,"no+ext",$PreExpPage,$Settings['qstr'],$Settings['qsep'],null,null); ?>"><?php echo $UserSessInfo['PreViewingTitle']; ?> <?php echo $UserSessInfo['ViewingTitle']; ?></a></td>
 <td class="TableColumn3" style="text-align: center;"><?php echo $session_expires; ?></td>
@@ -678,7 +678,7 @@ $_SESSION['ViewingTitle'] = $ViewMem['Name'];
 Name: <?php echo $ViewMem['Name']; ?><br />
 Title: <?php echo $ViewMem['Title']; ?>
 <?php if($GroupInfo['HasAdminCP']=="yes") { ?>
-<br />User IP: <a onclick="window.open(this.href);return false;" href="http://cqcounter.com/whois/?query=<?php echo $ViewMem['IP']; ?>">
+<br />User IP: <a onclick="window.open(this.href);return false;" href="<?php echo sprintf($IPCheckURL,$User1IP); ?>">
 <?php echo $ViewMem['IP']; echo "</a>"; } ?></div>
 </td>
 <td class="TableColumn3">

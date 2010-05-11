@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: versioninfo.php - Last Update: 05/11/2010 SVN 483 - Author: cooldude2k $
+    $FileInfo: versioninfo.php - Last Update: 05/10/2010 SVN 484 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="versioninfo.php"||$File3Name=="/versioninfo.php") {
@@ -27,8 +27,8 @@ function version_info($proname,$subver,$ver,$supver,$reltype,$svnver,$showsvn) {
 	return $return_var; }
 // Version number and date stuff. :P
 $VER1[0] = 0; $VER1[1] = 3; $VER1[2] = 8; $VERFull[1] = $VER1[0].".".$VER1[1].".".$VER1[2];
-$VER2[0] = "Alpha"; $VER2[1] = "Al"; $VER2[2] = "SVN"; $SubVerN = 483; $RName = "iDB"; $SFName = "IntDB";
-$SVNDay[0] = 05; $SVNDay[1] = 11; $SVNDay[2] = 2010; $SVNDay[3] = $SVNDay[0]."/".$SVNDay[1]."/".$SVNDay[2];
+$VER2[0] = "Alpha"; $VER2[1] = "Al"; $VER2[2] = "SVN"; $SubVerN = 484; $RName = "iDB"; $SFName = "IntDB";
+$SVNDay[0] = 05; $SVNDay[1] = 10; $SVNDay[2] = 2010; $SVNDay[3] = $SVNDay[0]."/".$SVNDay[1]."/".$SVNDay[2];
 $VerInfo['iDB_Ver'] = version_info($RName,$VER1[0],$VER1[1],$VER1[2],$VER2[1],$SubVerN,false);
 $VerInfo['iDB_Ver_SVN'] = version_info($RName,$VER1[0],$VER1[1],$VER1[2],$VER2[1],$SubVerN,true);
 $VerInfo['iDB_Full_Ver'] = version_info($RName,$VER1[0],$VER1[1],$VER1[2],$VER2[0],$SubVerN,false);
@@ -38,8 +38,15 @@ define("_iDB_Full_Ver_", $VerInfo['iDB_Full_Ver']); define("_iDB_Full_Ver_SVN_",
 define("_iDB_Ver_Show_", $VerInfo['iDB_Ver_Show']); define("_iDB_Full_Ver_Show_", $VerInfo['iDB_Full_Ver_Show']);
 $VerInfo['iDB_Ver_Show'] = $VerInfo['iDB_Ver_SVN']; $VerInfo['iDB_Full_Ver_Show'] = $VerInfo['iDB_Full_Ver_SVN'];
 // URLs and names and stuff. :P $KSP = "Kazuki Sabonis Przyborowski";
-$iDBHome = "http://idb.berlios.de/"; $DF2kHome = "http://df2k.berlios.de/";
-$VerCheckURL = $iDBHome."?act=vercheck"; $OrgName = "iDB"; 
+$iDBHome = "http://idb.berlios.de/"; $DF2kHome = "http://df2k.berlios.de/"; $OrgName = "iDB";
+if(!isset($Settings['VerCheckURL'])) {
+$VerCheckURL = $iDBHome."?act=vercheck"; }
+if(isset($Settings['VerCheckURL'])) {
+$VerCheckURL = $Settings['VerCheckURL']; }
+if(!isset($Settings['IPCheckURL'])) {
+$IPCheckURL = 'http://cqcounter.com/whois/?query=%s'; }
+if(isset($Settings['IPCheckURL'])) {
+$IPCheckURL = $Settings['IPCheckURL']; }
 $CD2k = "Kazuki Przyborowski"; $GM2k = "Game Maker 2k"; $iDB_Author = "Kazuki";
 $iDB = "Internet Discussion Boards"; $iTB = "Internet Tag Boards"; $DF2k = "Discussion Forums 2k"; $TB2k = "Tag Boards 2k";
 $iDBURL1 = "<a href=\"".$iDBHome."\" onclick=\"window.open(this.href);return false;\">"; $iDBURL2 = $iDBURL1.$iDB."</a>";
