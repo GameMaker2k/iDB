@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: profilemain.php - Last Update: 04/30/2010 SVN 472 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 05/11/2010 SVN 485 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
@@ -539,10 +539,7 @@ if($_POST['act']=="settings"&&
 	$NewDay=GMTimeStamp();
 	$NewIP=$_SERVER['REMOTE_ADDR'];
 	if(!is_numeric($_POST['YourOffSet'])) { $_POST['YourOffSet'] = "0"; }
-	if($_POST['YourOffSet']>12) { $_POST['YourOffSet'] = "12"; }
-	if($_POST['YourOffSet']<-12) { $_POST['YourOffSet'] = "-12"; }
 	if(!is_numeric($_POST['MinOffSet'])) { $_POST['MinOffSet'] = "00"; }
-	if($_POST['MinOffSet']>59) { $_POST['MinOffSet'] = "59"; }
 	if($_POST['MinOffSet']<0) { $_POST['MinOffSet'] = "00"; }
 	$_POST['YourOffSet'] = $_POST['YourOffSet'].":".$_POST['MinOffSet'];
 	$_SESSION['UserTimeZone'] = $_POST['YourOffSet'];
@@ -790,10 +787,7 @@ if($_POST['act']=="profile"&&
 	if(count($BirthExpl)!="3") { $BirthMonth="0"; $BirthDay="0"; $BirthYear="0"; } }
 	if($_POST['EventDay']==null) { $BirthMonth="0"; $BirthDay="0"; $BirthYear="0"; }
 	if(!is_numeric($_POST['YourOffSet'])) { $_POST['YourOffSet'] = "0"; }
-	if($_POST['YourOffSet']>12) { $_POST['YourOffSet'] = "12"; }
-	if($_POST['YourOffSet']<-12) { $_POST['YourOffSet'] = "-12"; }
 	if(!is_numeric($_POST['MinOffSet'])) { $_POST['MinOffSet'] = "00"; }
-	if($_POST['MinOffSet']>59) { $_POST['MinOffSet'] = "59"; }
 	if($_POST['MinOffSet']<0) { $_POST['MinOffSet'] = "00"; }
 	$_POST['YourOffSet'] = $_POST['YourOffSet'].":".$_POST['MinOffSet'];
 	$_SESSION['UserTimeZone'] = $_POST['YourOffSet'];

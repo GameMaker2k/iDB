@@ -11,30 +11,32 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 04/30/2010 SVN 478 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 05/11/2010 SVN 485 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
-//@ini_set("display_errors", true); 
-//@ini_set("display_startup_errors", true);
+$disfunc = @ini_get("disable_functions");
+if($disfunc!="ini_set") { $disfunc = explode(",",$disfunc); }
+if($disfunc=="ini_set") { $disfunc = array("ini_set"); }
+if(!in_array("ini_set", $disfunc)) {
+@ini_set("display_errors", true); 
+@ini_set("display_startup_errors", true); }
 @error_reporting(E_ALL ^ E_NOTICE);
-//@ini_set("error_prepend_string","<span style=\"color: ff0000;\">");
-//@ini_set("error_append_string","</span>");
-//@ini_set("docref_root","http://us.php.net/manual-lookup.php?pattern=");
-//@ini_set("docref_ext","");
 /* Get rid of session id in urls */
-//@ini_set("session.use_trans_sid", false);
-//@ini_set("session.use_cookies", true);
-//@ini_set("session.use_only_cookies", true);
-//@ini_set("url_rewriter.tags","");
+if(!in_array("ini_set", $disfunc)) {
+@ini_set("session.use_trans_sid", false);
+@ini_set("session.use_cookies", true);
+@ini_set("session.use_only_cookies", true);
+@ini_set("url_rewriter.tags",""); }
 @set_time_limit(30); @ignore_user_abort(true);
 /* Change session garbage collection settings */
-//@ini_set("session.gc_probability", 1);
-//@ini_set("session.gc_divisor", 100);
-//@ini_set("session.gc_maxlifetime", 1440);
+if(!in_array("ini_set", $disfunc)) {
+@ini_set("session.gc_probability", 1);
+@ini_set("session.gc_divisor", 100);
+@ini_set("session.gc_maxlifetime", 1440);
 /* Change session hash type here */
-//@ini_set('session.hash_function', 1);
-//@ini_set('session.hash_bits_per_character', 6);
+@ini_set('session.hash_function', 1);
+@ini_set('session.hash_bits_per_character', 6); }
 /* Do not change anything below this line unless you know what you are doing */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="sql.php"||$File3Name=="/sql.php") {
@@ -146,6 +148,7 @@ if($Settings['use_hashtype']!="md2"&&
 	$Settings['use_hashtype'] = "sha1"; } }
 // Check to see if variables are set
 require_once($SettDir['misc'].'setcheck.php');
+$dayconv = array('second' => 1, 'minute' => 60, 'hour' => 3600, 'day' => 86400, 'week' => 604800, 'month' => 2630880, 'year' => 31570560, 'decade' => 15705600);
 require_once($SettDir['inc'].'function.php');
 $iDBVerName = "iDB|".$VER2[1]."|".$VER1[0].".".$VER1[1].".".$VER1[2]."|".$VER2[2]."|".$SubVerN;
 /* 
@@ -398,7 +401,6 @@ echo "Sorry the board is off line.\nIf you are a admin you can login by the admi
 if(isset($Settings['offline_text'])) { echo $Settings['offline_text']; }
 //echo "\n".sql_errorno($SQLStat);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
-$dayconv = array('second' => 1, 'minute' => 60, 'hour' => 3600, 'day' => 86400, 'week' => 604800, 'month' => 2630880, 'year' => 31570560, 'decade' => 15705600);
 //Time Zone Set
 if(!isset($_SESSION['UserTimeZone'])) { 
 	if(isset($Settings['DefaultTimeZone'])) { 
@@ -411,10 +413,7 @@ if(count($checktime)!=2) {
 	if(!isset($checktime[1])) { $checktime[1] = "00"; }
 	$_SESSION['UserTimeZone'] = $checktime[0].":".$checktime[1]; }
 if(!is_numeric($checktime[0])) { $checktime[0] = "0"; }
-if($checktime[0]>12) { $checktime[0] = "12"; $_SESSION['UserTimeZone'] = $checktime[0].":".$checktime[1]; }
-if($checktime[0]<-12) { $checktime[0] = "-12"; $_SESSION['UserTimeZone'] = $checktime[0].":".$checktime[1]; }
 if(!is_numeric($checktime[1])) { $checktime[1] = "00"; }
-if($checktime[1]>59) { $checktime[1] = "59"; $_SESSION['UserTimeZone'] = $checktime[0].":".$checktime[1]; }
 if($checktime[1]<0) { $checktime[1] = "00"; $_SESSION['UserTimeZone'] = $checktime[0].":".$checktime[1]; }
 $checktimea = array("offset" => $_SESSION['UserTimeZone'], "hour" => $checktime[0], "minute" => $checktime[1]);
 if(!isset($_SESSION['UserDST'])) { $_SESSION['UserDST'] = null; }

@@ -12,7 +12,7 @@
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mkconfig.php - Last Update: 05/10/2010 SVN 482 - Author: cooldude2k $
+    $FileInfo: mkconfig.php - Last Update: 05/11/2010 SVN 485 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mkconfig.php"||$File3Name=="/mkconfig.php") {
@@ -148,10 +148,7 @@ echo "<br />".sql_errorno($SQLStat)."\n"; }
 if ($Error!="Yes") {
 $ServerUUID = rand_uuid("rand");
 if(!is_numeric($_POST['YourOffSet'])) { $_POST['YourOffSet'] = "0"; }
-if($_POST['YourOffSet']>12) { $_POST['YourOffSet'] = "12"; }
-if($_POST['YourOffSet']<-12) { $_POST['YourOffSet'] = "-12"; }
 if(!is_numeric($_POST['MinOffSet'])) { $_POST['MinOffSet'] = "00"; }
-if($_POST['MinOffSet']>59) { $_POST['MinOffSet'] = "59"; }
 if($_POST['MinOffSet']<0) { $_POST['MinOffSet'] = "00"; }
 $YourOffSet = $_POST['YourOffSet'].":".$_POST['MinOffSet'];
 $AdminDST = $_POST['DST'];

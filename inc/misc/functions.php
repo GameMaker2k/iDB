@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: functions.php - Last Update: 05/08/2010 SVN 481 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 05/11/2010 SVN 485 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -195,14 +195,11 @@ $text = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $text);
 return $text; }
 	$Names['K'] = "Katarzyna";
 define("_katarzyna_", $Names['K']);
+$utshour = $dayconv['hour'];
+$utsminute = $dayconv['minute'];
 // Change Time Stamp to a readable time
 function GMTimeChange($format,$timestamp,$offset,$minoffset=null,$dst=null) {
-$TCHour = date("H",$timestamp);
-$TCMinute = date("i",$timestamp);
-$TCSecond = date("s",$timestamp);
-$TCMonth = date("n",$timestamp);
-$TCDay = date("d",$timestamp);
-$TCYear = date("Y",$timestamp);
+global $utshour,$utsminute;
 $dstake = null;
 if(!is_numeric($minoffset)) { $minoffset = "00"; }
 $ts_array = explode(":",$offset);
@@ -211,19 +208,18 @@ if(count($ts_array)!=2) {
 	if(!isset($ts_array[1])) { $ts_array[1] = "00"; }
 	$offset = $ts_array[0].":".$ts_array[1]; }
 if(!is_numeric($ts_array[0])) { $ts_array[0] = "0"; }
-if($ts_array[0]>12) { $ts_array[0] = "12"; $offset = $ts_array[0].":".$ts_array[1]; }
-if($ts_array[0]<-12) { $ts_array[0] = "-12"; $offset = $ts_array[0].":".$ts_array[1]; }
 if(!is_numeric($ts_array[1])) { $ts_array[1] = "00"; }
-if($ts_array[1]>59) { $ts_array[1] = "59"; $offset = $ts_array[0].":".$ts_array[1]; }
 if($ts_array[1]<0) { $ts_array[1] = "00"; $offset = $ts_array[0].":".$ts_array[1]; }
 $tsa = array("offset" => $offset, "hour" => $ts_array[0], "minute" => $ts_array[1]);
 //$tsa['minute'] = $tsa['minute'] + $minoffset;
 if($dst!="on"&&$dst!="off") { $dst = "off"; }
 if($dst=="on") { if($dstake!="done") { 
 	$dstake = "done"; $tsa['hour'] = $tsa['hour']+1; } }
-$TCHour = $TCHour + $tsa['hour'];
-$TCMinute = $TCMinute + $tsa['minute'];
-return date($format,mktime($TCHour,$TCMinute,$TCSecond,$TCMonth,$TCDay,$TCYear)); }
+$utimestamp = $tsa['hour'] * $utshour;
+$utimestamp = $utimestamp + $tsa['minute'] * $utsminute;
+$utimestamp = $utimestamp + $minoffset * $utsminute;
+$timestamp = $timestamp + $utimestamp;
+return date($format,$timestamp); }
 	$Names['SB'] = "Stephanie Braun";
 define("_stephanie_", $Names['SB']);
 // Change Time Stamp to a readable time
@@ -245,6 +241,7 @@ function GMTimeGet($format,$offset,$minoffset=null,$dst=null) {
 	return GMTimeChange($format,GMTimeStamp(),$offset,$minoffset,$dst); }
 // Get GMT Time alt version
 function GMTimeGetS($format,$offset,$minoffset=null,$dst=null) {
+global $utshour,$utsminute;
 $dstake = null;
 if(!is_numeric($offset)) { $offset = "0"; }
 if(!is_numeric($minoffset)) { $minoffset = "00"; }
@@ -254,17 +251,18 @@ if(count($ts_array)!=2) {
 	if(!isset($ts_array[1])) { $ts_array[1] = "00"; }
 	$offset = $ts_array[0].":".$ts_array[1]; }
 if(!is_numeric($ts_array[0])) { $ts_array[0] = "0"; }
-if($ts_array[0]>12) { $ts_array[0] = "12"; $offset = $ts_array[0].":".$ts_array[1]; }
-if($ts_array[0]<-12) { $ts_array[0] = "-12"; $offset = $ts_array[0].":".$ts_array[1]; }
 if(!is_numeric($ts_array[1])) { $ts_array[1] = "00"; }
-if($ts_array[1]>59) { $ts_array[1] = "59"; $offset = $ts_array[0].":".$ts_array[1]; }
 if($ts_array[1]<0) { $ts_array[1] = "00"; $offset = $ts_array[0].":".$ts_array[1]; }
 $tsa = array("offset" => $offset, "hour" => $ts_array[0], "minute" => $ts_array[1]);
 //$tsa['minute'] = $tsa['minute'] + $minoffset;
 if($dst!="on"&&$dst!="off") { $dst = "off"; }
 if($dst=="on") { if($dstake!="done") { 
 	$dstake = "done"; $tsa['hour'] = $tsa['hour']+1; } }
-return date($format,mktime(gmdate('h')+$tsa['hour'],gmdate('i')+$tsa['minute'],gmdate('s'),gmdate('n'),gmdate('j'),gmdate('Y'))); }
+$utimestamp = $tsa['hour'] * $utshour;
+$utimestamp = $utimestamp + $tsa['minute'] * $utsminute;
+$utimestamp = $utimestamp + $minoffset * $utsminute;
+$timestamp = $timestamp + $utimestamp;
+return date($format,mktime()+$timestamp); }
 // Get Server offset
 function GetSeverZone() {
 $TestHour1 = date("H");
