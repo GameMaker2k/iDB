@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: main.php - Last Update: 05/11/2010 SVN 483 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 05/11/2010 SVN 486 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -225,10 +225,7 @@ if(count($ts_array)!=2) {
 	if(!isset($ts_array[1])) { $ts_array[1] = "00"; }
 	$Settings['DefaultTimeZone'] = $ts_array[0].":".$ts_array[1]; }
 if(!is_numeric($ts_array[0])) { $ts_array[0] = "0"; }
-if($ts_array[0]>12) { $ts_array[0] = "12"; $Settings['DefaultTimeZone'] = $ts_array[0].":".$ts_array[1]; }
-if($ts_array[0]<-12) { $ts_array[0] = "-12"; $Settings['DefaultTimeZone'] = $ts_array[0].":".$ts_array[1]; }
 if(!is_numeric($ts_array[1])) { $ts_array[1] = "00"; }
-if($ts_array[1]>59) { $ts_array[1] = "59"; $Settings['DefaultTimeZone'] = $ts_array[0].":".$ts_array[1]; }
 if($ts_array[1]<0) { $ts_array[1] = "00"; $Settings['DefaultTimeZone'] = $ts_array[0].":".$ts_array[1]; }
 $tsa = array("offset" => $Settings['DefaultTimeZone'], "hour" => $ts_array[0], "minute" => $ts_array[1]);
 $mguerys = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE (\"Name\"<>'%s') ORDER BY \"id\" ASC", array("Admin"));
