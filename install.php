@@ -12,28 +12,35 @@
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.de/support/category.php?act=view&id=2
 
-    $FileInfo: install.php - Last Update: 05/11/2010 SVN 485 - Author: cooldude2k $
+    $FileInfo: install.php - Last Update: 05/11/2010 SVN 488 - Author: cooldude2k $
 *//*
 if(ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }
 *//* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
-//@ini_set("display_errors", true); 
-//@ini_set("display_startup_errors", true);
+$disfunc = @ini_get("disable_functions");
+if($disfunc!="ini_set") { $disfunc = explode(",",$disfunc); }
+if($disfunc=="ini_set") { $disfunc = array("ini_set"); }
+if(!in_array("ini_set", $disfunc)) {
+// Uncomment next two lines to show errors
+/*@ini_set("display_errors", true);
+@ini_set("display_startup_errors", true); */ }
 @error_reporting(E_ALL ^ E_NOTICE);
 /* Get rid of session id in urls */
-//@ini_set("session.use_trans_sid", false);
-//@ini_set("session.use_cookies", true);
-//@ini_set("session.use_only_cookies", true);
-//@ini_set("url_rewriter.tags","");
+if(!in_array("ini_set", $disfunc)) {
+@ini_set("session.use_trans_sid", false);
+@ini_set("session.use_cookies", true);
+@ini_set("session.use_only_cookies", true);
+@ini_set("url_rewriter.tags",""); }
 @set_time_limit(30); @ignore_user_abort(true);
 /* Change session garbage collection settings */
-//@ini_set("session.gc_probability", 1);
-//@ini_set("session.gc_divisor", 100);
-//@ini_set("session.gc_maxlifetime", 1440);
+if(!in_array("ini_set", $disfunc)) {
+@ini_set("session.gc_probability", 1);
+@ini_set("session.gc_divisor", 100);
+@ini_set("session.gc_maxlifetime", 1440);
 /* Change session hash type here */
-//@ini_set('session.hash_function', 1);
-//@ini_set('session.hash_bits_per_character', 6);
+@ini_set('session.hash_function', 1);
+@ini_set('session.hash_bits_per_character', 6); }
 /* Do not change anything below this line unless you know what you are doing */
 $Settings['clean_ob'] = "off";
 if($Settings['clean_ob']=="on") {

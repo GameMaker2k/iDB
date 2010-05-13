@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 05/11/2010 SVN 487 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 05/11/2010 SVN 488 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -19,8 +19,9 @@ $disfunc = @ini_get("disable_functions");
 if($disfunc!="ini_set") { $disfunc = explode(",",$disfunc); }
 if($disfunc=="ini_set") { $disfunc = array("ini_set"); }
 if(!in_array("ini_set", $disfunc)) {
-@ini_set("display_errors", true); 
-@ini_set("display_startup_errors", true); }
+// Uncomment next two lines to show errors
+/*@ini_set("display_errors", true);
+@ini_set("display_startup_errors", true); */ }
 @error_reporting(E_ALL ^ E_NOTICE);
 /* Get rid of session id in urls */
 if(!in_array("ini_set", $disfunc)) {
