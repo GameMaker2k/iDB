@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: mysql.php - Last Update: 05/08/2010 SVN 481 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 05/14/2010 SVN 489 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mysql.php"||$File3Name=="/mysql.php") {
@@ -140,22 +140,22 @@ $trowrvalue = sql_escape_string($trownew[$trowrname],$SQLStat);
 if($_GET['outtype']=="UTF-8"&&$Settings['charset']!="UTF-8") {
 $trowrvalue = utf8_encode($trowrvalue); }
 $trowrvalue = str_replace( array("\n", "\r"), array('\n', '\r'), $trowrvalue);
-if($kazuki_p===0) {
-if($il===0) { $srow = "INSERT DELAYED IGNORE INTO \"".$TableNames[$renee_s]."\" ("; }
+/*if($kazuki_p===0) {*/
+if($il===0) { $srow = "INSERT INTO \"".$TableNames[$renee_s]."\" ("; }
 if($il<$tnums&&$il!=$tnums) { $srow .= "\"".$trowrname."\", "; }
-if($il==$tnums) { $srow .= "\"".$trowrname."\") VALUES"; } }
+if($il==$tnums) { $srow .= "\"".$trowrname."\") VALUES"; } /*}*/
 if($il===0) { $srowvalue = "("; }
 if(!is_numeric($trowrvalue)) { $trowrvalue = "'".$trowrvalue."'"; }
 if($il<$tnums) { $srowvalue .= $trowrvalue.", "; }
 if($il==$tnums) { $srowvalue .= $trowrvalue;
-if($kazuki_p<$tnumz) { $srowvalue .= "),"; }
-if($kazuki_p==$tnumz) { $srowvalue .= ");"; } }
+/*if($kazuki_p<$tnumz) { $srowvalue .= "),"; }*/
+/*if($kazuki_p==$tnumz) {*/ $srowvalue .= ");"; /*}*/ }
 ++$il; }
 if($kazuki_p===0) {
 echo "--\n";
 echo "-- Dumping data for table \"".$TableNames[$renee_s]."\"\n";
-echo "--\n\n";
-echo $srow."\n"; }
+echo "--\n\n"; }
+echo $srow."\n"; /*}*/
 echo $srowvalue."\n";
 if($kazuki_p==$tnumz&&$renee_s<$tnum) {
 echo "\n-- --------------------------------------------------------\n"; }
