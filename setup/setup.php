@@ -12,7 +12,7 @@
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: setup.php - Last Update: 04/30/2010 SVN 471 - Author: cooldude2k $
+    $FileInfo: setup.php - Last Update: 05/15/2010 SVN 491 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="setup.php"||$File3Name=="/setup.php") {
@@ -116,6 +116,7 @@ fclose($fp);
 	<td style="width: 50%;"><select size="1" class="TextBox" name="HTMLType" id="HTMLType">
 	<option value="xhtml10">XHTML 1.0</option>
 	<option value="xhtml11">XHTML 1.1</option>
+	<option value="html5">HTML 5</option>
 	</select></td>
 </tr><tr>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="HTMLLevel">HTML Level only for XHTML 1.0:</label></td>

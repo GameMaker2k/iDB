@@ -11,36 +11,14 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: xhtml11.php - Last Update: 05/15/2010 SVN 491 - Author: cooldude2k $
+    $FileInfo: html5.php - Last Update: 05/15/2010 SVN 491 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
-if ($File3Name=="xhtml11.php"||$File3Name=="/xhtml11.php") {
+if ($File3Name=="xhtml10.php"||$File3Name=="/xhtml10.php") {
 	require('index.php');
 	exit(); }
-// Check to see if we serv the file as html or xhtml
-// if we do xhtml we also check to see if user's browser 
-// can dispay if or else fallback to html
-if($Settings['output_type']!="xhtml") {
-	$Settings['output_type'] = "xhtml"; }
-if($Settings['output_type']=="html") {
-	$ccstart = "//<!--"; $ccend = "//-->";
-header("Content-Type: text/html; charset=".$Settings['charset']); }
-if($Settings['output_type']=="xhtml") {
-if(stristr($_SERVER["HTTP_ACCEPT"],"application/xhtml+xml")) {
-	$ccstart = "//<![CDATA["; $ccend = "//]]>";
-header("Content-Type: application/xhtml+xml; charset=".$Settings['charset']);
-	xml_doc_start("1.0",$Settings['charset']); }
-else { if (stristr($_SERVER["HTTP_USER_AGENT"],"W3C_Validator")) {
-	$ccstart = "//<![CDATA["; $ccend = "//]]>";
-   header("Content-Type: application/xhtml+xml; charset=".$Settings['charset']);
-	xml_doc_start("1.0",$Settings['charset']);
-} else { $ccstart = "//<!--"; $ccend = "//-->";
-	header("Content-Type: text/html; charset=".$Settings['charset']); } } }
-if($Settings['output_type']!="xhtml") {
-	if($Settings['output_type']!="html") {
-		$ccstart = "//<!--"; $ccend = "//-->";
-header("Content-Type: text/html; charset=".$Settings['charset']); } }
-if($checklowview===true) { $ThemeSet['CSSType'] = "lowview"; }
+$ccstart = "//<!--"; $ccend = "//-->";
+header("Content-Type: text/html; charset=".$Settings['charset']);
 if($checklowview===true&&$_GET['act']=="lowview") { 
    $ThemeSet['CSSType'] = "lowview"; 
    $ThemeSet['ThemeName'] = $OrgName." Low Theme";
@@ -62,8 +40,6 @@ if($ThemeSet['CSSType']!="import"&&
    $ThemeSet['CSSType']!="lowview"&&
    $ThemeSet['CSSType']!="xml") { 
    $ThemeSet['CSSType'] = "import"; }
-if($ThemeSet['CSSType']=="xhtml") {
-   xml_tag_make("xml-stylesheet","type=text/css&href=".$ThemeSet['CSS']); }
 header("Content-Style-Type: text/css");
 header("Content-Script-Type: text/javascript");
 if($Settings['showverinfo']!="on") {
@@ -75,7 +51,7 @@ $csryear = "2004"; $cryear = date("Y"); if($cryear<=2004) { $cryear = "2005"; }
 $BSDL = "<a href=\"".url_maker($exfile['index'],$Settings['file_ext'],"act=bsd",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'])."\" title=\"".$RName." is dual-licensed under the Revised BSD License\">BSDL</a>";
 $GPL = "<a href=\"".url_maker($exfile['index'],$Settings['file_ext'],"act=bsd",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'])."\" title=\"".$RName." is dual-licensed under the Gnu General Public License\">GPL</a>";
 $DualLicense = $BSDL." &amp; ".$GPL;
-$endpagevar = "<div class=\"copyright\">Powered by ".$iDBURL1.$RName."</a> &copy; ".$GM2kURL." @ ".$csryear." - ".$extext = null;
+$extext = null;
 if($checklowview!==true) { $extext = "<a href=\"".url_maker($exfile['index'],$Settings['file_ext'],"act=lowview",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'])."\">Low-Version</a>"; }
 if($checklowview===true&&$_GET['act']!="lowview") { $extext = "<a href=\"".url_maker($exfile['index'],$Settings['file_ext'],"act=lowview",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'])."\">Low-Version</a>"; }
 if($checklowview===true&&$_GET['act']=="lowview") {  $extext = "<a href=\"".url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'])."\">High-Version</a>"; }
@@ -94,18 +70,16 @@ if($Settings['idburl']!="localhost"&&$Settings['idburl']!=null) {
 	$AltBoardURL = $BoardURL; } 
 	if($Settings['qstr']=="/") { 
 	$AltBoardURL = preg_replace("/\/$/","",$BoardURL); } }
- // HTML Document Starts, HTML meta tags and other html, head tags ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" 
-   "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+// Get the html level
+if($Settings['html_level']!="Strict") {
+	if($Settings['html_level']!="Transitional") {
+		$Settings['html_level'] = "Transitional"; } }
+// HTML Document Starts
+?>
+<!DOCTYPE html>
+<?php // HTML meta tags and other html, head tags ?>
+<html lang="en">
 <head>
-<meta http-equiv="Content-Language" content="en" />
-<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $Settings['charset']; ?>" />
-<meta http-equiv="Content-Style-Type" content="text/css" />
-<meta http-equiv="Content-Script-Type" content="text/javascript" />
-<meta http-equiv="Cache-Control" content="private, no-cache, must-revalidate" />
-<meta http-equiv="Pragma" content="private, no-cache, must-revalidate" />
-<meta http-equiv="Expires" content="<?php echo gmdate("D, d M Y H:i:s")." GMT"; ?>" />
 <base href="<?php echo $BoardURL; ?>" />
 <?php if($Settings['showverinfo']=="on") { ?>
 <meta name="Generator" content="<?php echo $VerInfo['iDB_Ver_Show']; ?>" />
@@ -140,6 +114,7 @@ if($Settings['idburl']!="localhost"&&$Settings['idburl']!=null) {
 /* Import the theme css file */
 <?php echo "\n@import url(\"".$ThemeSet['CSS']."\");\n"; ?>
 </style><?php } if($ThemeSet['CSSType']=="link") { ?>
+<?php } if($ThemeSet['CSSType']=="link") { ?>
 <link rel="prefetch alternate stylesheet" href="<?php echo $ThemeSet['CSS']; ?>" />
 <link rel="stylesheet" type="text/css" href="<?php echo $ThemeSet['CSS']; ?>" />
 <?php } if($ThemeSet['CSSType']=="lowview") { ?>

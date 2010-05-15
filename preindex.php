@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2009 iDB Support - http://idb.berlios.de/
-    Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
+    Copyright 2004-2010 iDB Support - http://idb.berlios.de/
+    Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: preindex.php - Last Update: 12/14/2009 SVN 406 - Author: cooldude2k $
+    $FileInfo: preindex.php - Last Update: 05/15/2010 SVN 491 - Author: cooldude2k $
 */
 $pretime = explode(" ", microtime());
 $utime = $pretime[0];
@@ -47,6 +47,8 @@ if($Settings['output_type']=="xhtm") {
 	$Settings['output_type'] = "xhtml"; }
 if($Settings['output_type']=="xml+htm") {
 	$Settings['output_type'] = "xhtml"; }
+if($Settings['html_type']=="html5") {
+require($SettDir['inc'].'html5.php'); }
 if($Settings['html_type']=="xhtml10") {
 require($SettDir['inc'].'xhtml10.php'); }
 if($Settings['html_type']=="xhtml11") {
@@ -60,8 +62,9 @@ if (stristr($_SERVER["HTTP_USER_AGENT"],"W3C_Validator")) {
 	   $Settings['html_type']="xhtml10";
 	   $Settings['html_level']="Strict";
 	   require($SettDir['inc'].'xhtml10.php'); } } }
-if($Settings['html_type']!="xhtml10") {
-	if($Settings['html_type']!="xhtml11") {
+if($Settings['html_type']!="xhtml10"&&
+	$Settings['html_type']!="xhtml11"&&
+	$Settings['html_type']!="html5") {
 	$ccstart = "//<!--"; $ccend = "//-->";
-	require($SettDir['inc'].'xhtml10.php'); } }
+	require($SettDir['inc'].'xhtml10.php'); }
 ?>

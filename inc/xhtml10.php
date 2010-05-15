@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2009 iDB Support - http://idb.berlios.de/
-    Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
+    Copyright 2004-2010 iDB Support - http://idb.berlios.de/
+    Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: xhtml10.php - Last Update: 11/26/2009 SVN 364 - Author: cooldude2k $
+    $FileInfo: xhtml10.php - Last Update: 05/15/2010 SVN 491 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="xhtml10.php"||$File3Name=="/xhtml10.php") {
@@ -143,6 +143,7 @@ if($Settings['html_level']=="Strict") { ?>
 <?php } if($Settings['showverinfo']!="on") { ?>
 <link rel="Generator" href="<?php echo $iDBHome; ?>" title="<?php echo $iDB; ?>" />
 <?php } echo "\n"; ?>
+<!-- ^_^ Stephanie Braun -->
 <?php if($ThemeSet['CSSType']=="import") { ?>
 <style type="text/css">
 /* Import the theme css file */
