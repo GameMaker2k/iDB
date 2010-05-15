@@ -78,6 +78,8 @@ if(!is_numeric($KBoostPercent[1])) {
 $Settings['KBoostPercent'] = "6|10"; }
 if(count($KBoostPercent)>2) { 
 $Settings['KBoostPercent'] = "6|10"; }
+if($Settings['html_type']=="html5") {
+$Settings['output_type'] = "html"; }
 if(!isset($Settings['sqltype'])) {
 	$Settings['sqltype'] = "mysql"; }
 $Settings['sqltype'] = strtolower($Settings['sqltype']);
@@ -394,6 +396,7 @@ while ($gi < $gnum) { ?>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="HTMLType" id="HTMLType">
 	<option<?php if($Settings['html_type']=="xhtml10") { echo " selected=\"selected\""; } ?> value="xhtml10">XHTML 1.0</option>
 	<option<?php if($Settings['html_type']=="xhtml11") { echo " selected=\"selected\""; } ?> value="xhtml11">XHTML 1.1</option>
+	<option<?php if($Settings['html_type']=="html5") { echo " selected=\"selected\""; } ?> value="html5">HTML 5</option>
 	</select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="HTMLLevel">HTML Level only for XHTML 1.0:</label></td>
