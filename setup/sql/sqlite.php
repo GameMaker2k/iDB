@@ -12,7 +12,7 @@
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: sqlite.php - Last Update: 04/30/2010 SVN 476 - Author: cooldude2k $
+    $FileInfo: sqlite.php - Last Update: 05/15/2010 SVN 493 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="sqlite.php"||$File3Name=="/sqlite.php") {
@@ -282,7 +282,7 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."restrictedwords\" 
 ");", array(null));
 sql_query($query,$SQLStat);
 $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."sessions\" (\n".
-"  \"session_id\" VARCHAR(150) PRIMARY KEY NOT NULL default '',\n".
+"  \"session_id\" VARCHAR(250) PRIMARY KEY NOT NULL default '',\n".
 "  \"session_data\" TEXT NOT NULL,\n".
 "  \"expires\" INTEGER NOT NULL default '0'\n".
 ");", array(null));

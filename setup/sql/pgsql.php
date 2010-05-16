@@ -12,7 +12,7 @@
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: pgsql.php - Last Update: 04/30/2010 SVN 475 - Author: cooldude2k $
+    $FileInfo: pgsql.php - Last Update: 05/15/2010 SVN 493 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pgsql.php"||$File3Name=="/pgsql.php") {
@@ -253,7 +253,7 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."restrictedwords\" 
 ");", array(null));
 sql_query($query,$SQLStat);
 $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."sessions\" (\n".
-"  \"session_id\" varchar(150) PRIMARY KEY NOT NULL default '',\n".
+"  \"session_id\" VARCHAR(250) PRIMARY KEY NOT NULL default '',\n".
 "  \"session_data\" text NOT NULL,\n".
 "  \"expires\" int4 NOT NULL default '0'\n".
 ");", array(null));
