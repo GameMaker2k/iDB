@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: main.php - Last Update: 05/11/2010 SVN 486 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 05/15/2010 SVN 494 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -242,6 +242,8 @@ if($Settings['vercheck']===1) {
 $AdminCheckURL = url_maker($exfile['admin'],$Settings['file_ext'],"act=vercheck&redirect=on",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); }
 if($Settings['vercheck']===2) {
 $AdminCheckURL = url_maker($exfile['admin'],$Settings['file_ext'],"act=vercheck&vercheck=newtype&redirect=on",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); }
+$AddChkURL = null;
+if(isset($_GET['menu'])&&$_GET['menu']=="main") { $AddChkURL = "&menu=main"; }
 ?>
 <div class="TableMenuBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
@@ -274,7 +276,7 @@ $AdminCheckURL = url_maker($exfile['admin'],$Settings['file_ext'],"act=vercheck&
 	<td style="width: 50%;"><?php echo $Settings['BoardUUID']; ?></td>
 </tr><tr id="clickhere" style="text-align: left;">
 	<td style="width: 50%;"><span class="TextBoxLabel">Version Checker:</span></td>
-	<td style="width: 50%;"><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=settings",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>#iverinfo" onclick="idbvercheck(); document.getElementById('clickhere').style.display = 'none';">Click Here</a></td>
+	<td style="width: 50%;"><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=settings".$AddChkURL,$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>#iverinfo" onclick="idbvercheck(); document.getElementById('clickhere').style.display = 'none';">Click Here</a></td>
 </tr><?php if($OSType!=""&&isset($OSType)) { 
 ?><tr style="text-align: left;">
 	<td style="width: 50%;"><span class="TextBoxLabel">Server Operating System:</span></td>
