@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: forums.php - Last Update: 05/04/2010 SVN 480 - Author: cooldude2k $
+    $FileInfo: forums.php - Last Update: 05/21/2010 SVN 495 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="forums.php"||$File3Name=="/forums.php") {
@@ -349,7 +349,7 @@ sql_free_result($cr); ?>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="InSubForum" id="InSubForum">
 	<option selected="selected" value="0">none</option>
 <?php 
-$fq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"InSubForum\"=0 ORDER BY \"OrderID\" ASC, \"id\" ASC", array(null));
+$fq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"InSubForum\"=0 AND \"ForumType\"='subforum' ORDER BY \"OrderID\" ASC, \"id\" ASC", array(null));
 $fr=sql_query($fq,$SQLStat);
 $ai=sql_num_rows($fr);
 $fi=0;
@@ -805,7 +805,7 @@ sql_free_result($cr); ?>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="InSubForum" id="InSubForum">
 	<option selected="selected" value="0">none</option>
 <?php 
-$fq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"InSubForum\"=0 AND \"id\"<>%i ORDER BY \"OrderID\" ASC, \"id\" ASC", array($ForumID));
+$fq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"InSubForum\"=0 AND \"id\"<>%i AND \"ForumType\"='subforum' ORDER BY \"OrderID\" ASC, \"id\" ASC", array($ForumID));
 $fr=sql_query($fq,$SQLStat);
 $ai=sql_num_rows($fr);
 $fi=0;
