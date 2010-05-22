@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2009 iDB Support - http://idb.berlios.de/
-    Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
+    Copyright 2004-2010 iDB Support - http://idb.berlios.de/
+    Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: forums.php - Last Update: 12/31/2009 SVN 437 - Author: cooldude2k $
+    $FileInfo: forums.php - Last Update: 05/21/2010 SVN 497 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="forums.php"||$File3Name=="/forums.php") {
@@ -108,8 +108,11 @@ $NumPosts = $NumsPosts + $NumPosts;
 $SubsForumID=sql_result($apcresult,$apci,"id");
 $SubsForumName=sql_result($apcresult,$apci,"Name");
 $SubsForumType=sql_result($apcresult,$apci,"ForumType");
+$SubsForumShowTopics=sql_result($result,$i,"CanHaveTopics");
 if(isset($PermissionInfo['CanViewForum'][$SubsForumID])&&
     $PermissionInfo['CanViewForum'][$SubsForumID]=="yes") {
+$ExStr = ""; if ($SubsForumType!="redirect"&&
+    $SubsForumShowTopics!="no") { $ExStr = "&page=1"; }
 $sfurl = "<a href=\"";
 $sfurl = url_maker($exfile[$SubsForumType],$Settings['file_ext'],"act=view&id=".$SubsForumID.$ExStr,$Settings['qstr'],$Settings['qsep'],$prexqstr[$SubsForumType],$exqstr[$SubsForumType]);
 $sfurl = "<a href=\"".$sfurl."\">".$SubsForumName."</a>";
