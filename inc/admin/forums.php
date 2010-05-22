@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: forums.php - Last Update: 05/21/2010 SVN 495 - Author: cooldude2k $
+    $FileInfo: forums.php - Last Update: 05/21/2010 SVN 496 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="forums.php"||$File3Name=="/forums.php") {
@@ -429,7 +429,7 @@ $_POST['ForumDesc'] = stripcslashes(htmlspecialchars($_POST['ForumDesc'], ENT_QU
 //$_POST['ForumDesc'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['ForumDesc']);
 $_POST['ForumDesc'] = remove_spaces($_POST['ForumDesc']);
 $sql_id_check = sql_query(sql_pre_query("SELECT \"id\" FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($_POST['ForumID'])),$SQLStat);
-$sql_order_check = sql_query(sql_pre_query("SELECT \"OrderID\" FROM \"".$Settings['sqltable']."forums\" WHERE \"OrderID\"=%i LIMIT 1", array($_POST['OrderID'])),$SQLStat);
+$sql_order_check = sql_query(sql_pre_query("SELECT \"OrderID\" FROM \"".$Settings['sqltable']."forums\" WHERE \"OrderID\"=%i AND \"CategoryID\"=%i AND \"InSubForum\"=%i LIMIT 1", array($_POST['OrderID'],$_POST['ForumCatID'],$_POST['InSubForum'])),$SQLStat);
 $id_check = sql_num_rows($sql_id_check); $order_check = sql_num_rows($sql_order_check);
 sql_free_result($sql_id_check); sql_free_result($sql_order_check);
 $errorstr = "";
@@ -671,7 +671,7 @@ if(!isset($_POST['id'])) {
 	<td style="width: 50%;"><label class="TextBoxLabel" for="id">Forum to Edit:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="id" id="id">
 <?php 
-$fq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" ORDER BY \"OrderID\" ASC, \"id\" ASC", array(null));
+$fq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" ORDER BY \"id\" ASC, \"OrderID\" ASC", array(null));
 $fr=sql_query($fq,$SQLStat);
 $ai=sql_num_rows($fr);
 $fi=0;
@@ -805,7 +805,7 @@ sql_free_result($cr); ?>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="InSubForum" id="InSubForum">
 	<option selected="selected" value="0">none</option>
 <?php 
-$fq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"InSubForum\"=0 AND \"id\"<>%i AND \"ForumType\"='subforum' ORDER BY \"OrderID\" ASC, \"id\" ASC", array($ForumID));
+$fq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"InSubForum\"=0 AND \"id\"<>%i AND \"ForumType\"='subforum' ORDER BY \"id\" ASC, \"OrderID\" ASC", array($ForumID));
 $fr=sql_query($fq,$SQLStat);
 $ai=sql_num_rows($fr);
 $fi=0;
@@ -881,7 +881,7 @@ $OldID=sql_result($preresult,0,"id");
 $OldOrder=sql_result($preresult,0,"OrderID");
 sql_free_result($preresult);
 $sql_id_check = sql_query(sql_pre_query("SELECT \"id\" FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($_POST['ForumID'])),$SQLStat);
-$sql_order_check = sql_query(sql_pre_query("SELECT \"OrderID\" FROM \"".$Settings['sqltable']."forums\" WHERE \"OrderID\"=%i LIMIT 1", array($_POST['OrderID'])),$SQLStat);
+$sql_order_check = sql_query(sql_pre_query("SELECT \"OrderID\" FROM \"".$Settings['sqltable']."forums\" WHERE \"OrderID\"=%i AND \"CategoryID\"=%i AND \"InSubForum\"=%i LIMIT 1", array($_POST['OrderID'],$_POST['ForumCatID'],$_POST['InSubForum'])),$SQLStat);
 $id_check = sql_num_rows($sql_id_check); $order_check = sql_num_rows($sql_order_check);
 sql_free_result($sql_id_check); sql_free_result($sql_order_check);
 if ($_POST['NumPostView']==null||
@@ -1014,7 +1014,7 @@ sql_free_result($getperidr); ?>
 <tr class="TableMenuRow3">
 <td class="TableMenuColumn3">
 <?php 
-$fq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" ORDER BY \"OrderID\" ASC, \"id\" ASC", array(null));
+$fq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" ORDER BY \"id\" ASC, \"OrderID\" ASC", array(null));
 $fr=sql_query($fq,$SQLStat);
 $ai=sql_num_rows($fr);
 $fi=0;
