@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: main.php - Last Update: 05/15/2010 SVN 494 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 05/27/2010 SVN 501 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -267,7 +267,10 @@ if(isset($_GET['menu'])&&$_GET['menu']=="main") { $AddChkURL = "&menu=main"; }
 <td class="TableMenuColumn3">
 <form style="display: inline;" method="post" id="acptool" action="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=settings",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">
 <table style="text-align: left;">
-<?php if($GroupInfo['ViewDBInfo']=="yes") { 
+<tr>
+	<td style="width: 50%;"><span class="TextBoxLabel">Install Date:</span></td>
+	<td style="width: 50%;"><?php echo GMTimeChange("F j Y, g:i a",$Settings['DefaultDST'],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']); ?></td>
+</tr><?php if($GroupInfo['ViewDBInfo']=="yes") { 
 ?><tr style="text-align: left;">
 	<td style="width: 50%;"><span class="TextBoxLabel">Forum Software Version:</span></td>
 	<td style="width: 50%;"><?php echo $VerInfo['iDB_Ver_Show']; ?>&nbsp;<a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=vercheck",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>" onclick="window.open(this.href);return false;"><img src="<?php echo $AdminCheckURL; ?>" alt="Version Check: Click to see more info." title="Version Check: Click to see more info." /></a></td>
@@ -584,6 +587,7 @@ $BoardSettings=$pretext2[0]."\n".
 "\$Settings['DefaultTheme'] = ".null_string($_POST['DefaultTheme']).";\n".
 "\$Settings['DefaultTimeZone'] = ".null_string($_POST['YourOffSet'].":".$_POST['MinOffSet']).";\n".
 "\$Settings['DefaultDST'] = ".null_string($_POST['DST']).";\n".
+"\$Settings['start_date'] = ".null_string($Settings['start_date']).";\n".
 "\$Settings['use_hashtype'] = ".null_string($Settings['use_hashtype']).";\n".
 "\$Settings['charset'] = ".null_string($Settings['charset']).";\n".
 "\$Settings['add_power_by'] = ".null_string($Settings['add_power_by']).";\n".
@@ -752,6 +756,7 @@ $BoardSettings=$pretext2[0]."\n".
 "\$Settings['DefaultTheme'] = ".null_string($Settings['DefaultTheme']).";\n".
 "\$Settings['DefaultTimeZone'] = ".null_string($Settings['DefaultTimeZone']).";\n".
 "\$Settings['DefaultDST'] = ".null_string($Settings['DefaultDST']).";\n".
+"\$Settings['start_date'] = ".null_string($Settings['start_date']).";\n".
 "\$Settings['use_hashtype'] = ".null_string($Settings['use_hashtype']).";\n".
 "\$Settings['charset'] = ".null_string($Settings['charset']).";\n".
 "\$Settings['add_power_by'] = ".null_string($Settings['add_power_by']).";\n".
@@ -903,6 +908,7 @@ $BoardSettings=$pretext2[0]."\n".
 "\$Settings['DefaultTheme'] = ".null_string($Settings['DefaultTheme']).";\n".
 "\$Settings['DefaultTimeZone'] = ".null_string($Settings['DefaultTimeZone']).";\n".
 "\$Settings['DefaultDST'] = ".null_string($Settings['DefaultDST']).";\n".
+"\$Settings['start_date'] = ".null_string($Settings['start_date']).";\n".
 "\$Settings['use_hashtype'] = ".null_string($Settings['use_hashtype']).";\n".
 "\$Settings['charset'] = ".null_string($Settings['charset']).";\n".
 "\$Settings['add_power_by'] = ".null_string($Settings['add_power_by']).";\n".
