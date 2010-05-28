@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2009 iDB Support - http://idb.berlios.de/
-    Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
+    Copyright 2004-2010 iDB Support - http://idb.berlios.de/
+    Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: mysqli.php - Last Update: 12/17/2009 SVN 417 - Author: cooldude2k $
+    $FileInfo: mysqli.php - Last Update: 05/28/2010 SVN 503 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mysqli.php"||$File3Name=="/mysqli.php") {
@@ -82,7 +82,7 @@ $link = mysqli_connect($server,$username,$password,null,$myport); }
 if($database!==null) {
 $link = mysqli_connect($server,$username,$password,$database,$myport); }
 if ($link===false) {
-    output_error("Not connected: ".sql_error(),E_USER_ERROR);
+    output_error("MySQLi Error ".mysqli_connect_errno().": ".mysqli_connect_error(),E_USER_ERROR);
 	return false; }
 $result = sql_query("SET SESSION SQL_MODE='ANSI_QUOTES';",$link);
 if ($result===false) {
