@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: main.php - Last Update: 05/27/2010 SVN 501 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 05/27/2010 SVN 502 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -103,6 +103,8 @@ if(!isset($Settings['vercheck'])) {
 if($Settings['vercheck']!=1&&
 	$Settings['vercheck']!=2) {
 	$Settings['vercheck'] = 2; }
+if(!isset($Settings['start_date'])) {
+	$Settings['start_date'] = GMTimeStamp(); }
 ?>
 <table class="Table3">
 <tr style="width: 100%; vertical-align: top;">
@@ -269,7 +271,7 @@ if(isset($_GET['menu'])&&$_GET['menu']=="main") { $AddChkURL = "&menu=main"; }
 <table style="text-align: left;">
 <tr>
 	<td style="width: 50%;"><span class="TextBoxLabel">Install Date:</span></td>
-	<td style="width: 50%;"><?php echo GMTimeChange("F j Y, g:i a",$Settings['DefaultDST'],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']); ?></td>
+	<td style="width: 50%;"><?php echo GMTimeChange("F j Y, g:i a",$Settings['start_date'],$Settings['DefaultDST'],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']); ?></td>
 </tr><?php if($GroupInfo['ViewDBInfo']=="yes") { 
 ?><tr style="text-align: left;">
 	<td style="width: 50%;"><span class="TextBoxLabel">Forum Software Version:</span></td>
