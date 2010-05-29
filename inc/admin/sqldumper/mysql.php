@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: mysql.php - Last Update: 05/14/2010 SVN 489 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 05/28/2010 SVN 504 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mysql.php"||$File3Name=="/mysql.php") {
@@ -30,8 +30,50 @@ if(!isset($_GET['outtype'])) { $_GET['outtype'] = "UTF-8"; }
 header("Cache-Control: must-revalidate, post-check=0, pre-check=0"); 
 header("Cache-Control: private",false); 
 header("Content-Description: File Transfer");
-$fname = str_replace("_","", $Settings['sqltable']);
-header("Content-Disposition: attachment; filename=".$fname.".sql");
+if(!isset($_GET['comlevel'])) {
+	$_GET['comlevel'] = -1; }
+if(!is_numeric($_GET['comlevel'])) {
+	$_GET['comlevel'] = -1; }
+if($_GET['comlevel']>9||$_GET['comlevel']<-1) {
+	$_GET['comlevel'] = -1; }
+if(!isset($_GET['compress'])) {
+	$_GET['compress'] = "none"; }
+if($_GET['compress']=="gzip") {
+	$_GET['compress'] = "gzencode"; }
+if($_GET['compress']=="bzip"||
+	$_GET['compress']=="bzip2") {
+	$_GET['compress'] = "bzcompress"; }
+if($_GET['compress']!="none"&&
+	$_GET['compress']!="gzencode"&&
+	$_GET['compress']!="gzcompress"&&
+	$_GET['compress']!="gzdeflate"&&
+	$_GET['compress']!="bzcompress") {
+	$_GET['compress'] = "none"; }
+if(!extension_loaded("zlib")) {
+if($_GET['compress']=="gzencode"&&
+	$_GET['compress']=="gzcompress"&&
+	$_GET['compress']=="gzdeflate") {
+	$_GET['compress'] = "none"; } }
+if(!extension_loaded("bz2")) {
+if($_GET['compress']=="bzcompress") {
+	$_GET['compress'] = "none"; } }
+if($_GET['compress']=="bzcompress") {
+if($_GET['comlevel']>9||$_GET['comlevel']<0) {
+	$_GET['comlevel'] = 4; } }
+$fname = null;
+if(isset($Settings['sqldb'])&&$Settings['sqldb']!="") {
+$fname = str_replace("_","", $Settings['sqldb'])."_"; }
+if($_GET['compress']=="none") {
+$fname .= str_replace("_","", $Settings['sqltable']).".sql"; }
+if($_GET['compress']=="gzencode") {
+$fname .= str_replace("_","", $Settings['sqltable']).".sql.gz"; }
+if($_GET['compress']=="gzcompress") {
+$fname .= str_replace("_","", $Settings['sqltable']).".sql.gz"; }
+if($_GET['compress']=="gzdeflate") {
+$fname .= str_replace("_","", $Settings['sqltable']).".sql.gz"; }
+if($_GET['compress']=="bzcompress") {
+$fname .= str_replace("_","", $Settings['sqltable']).".sql.bz2"; }
+header("Content-Disposition: attachment; filename=".$fname);
 header("Content-Type: application/octet-stream");
 header("Content-Transfer-Encoding: binary");
 $SQLDumper = "SQL Dumper";
@@ -108,27 +150,27 @@ sql_free_result($result2);
 sql_free_result($tabsta);
 ++$l; } $tableout = null;
 $num = count($TableNames); $renee_s = 0;
-echo "-- ".$OrgName." ".$SQLDumper."\n";
-echo "-- version ".$VerInfo['iDB_Ver_SVN']."\n";
-echo "-- ".$iDBHome."support/\n";
-echo "--\n";
-echo "-- Host: ".$Settings['sqlhost']."\n";
-echo "-- Generation Time: ".GMTimeGet('F d, Y \a\t h:i A',$_SESSION['UserTimeZone'],0,$_SESSION['UserDST'])."\n";
-echo "-- Server version: ".sql_server_info($SQLStat)."\n";
-echo "-- PHP Version: ".phpversion()."\n\n";
-echo "SET SQL_MODE=\"NO_AUTO_VALUE_ON_ZERO\";\n";
-echo "SET SESSION SQL_MODE='ANSI_QUOTES';\n\n";
-echo "--\n";
-echo "-- Database: \"".$Settings['sqldb']."\"\n";
-echo "--\n\n";
-echo "-- --------------------------------------------------------\n\n";
+$sqldump = "-- ".$OrgName." ".$SQLDumper."\n";
+$sqldump .= "-- version ".$VerInfo['iDB_Ver_SVN']."\n";
+$sqldump .= "-- ".$iDBHome."support/\n";
+$sqldump .= "--\n";
+$sqldump .= "-- Host: ".$Settings['sqlhost']."\n";
+$sqldump .= "-- Generation Time: ".GMTimeGet('F d, Y \a\t h:i A',$_SESSION['UserTimeZone'],0,$_SESSION['UserDST'])."\n";
+$sqldump .= "-- Server version: ".sql_server_info($SQLStat)."\n";
+$sqldump .= "-- PHP Version: ".phpversion()."\n\n";
+$sqldump .= "SET SQL_MODE=\"NO_AUTO_VALUE_ON_ZERO\";\n";
+$sqldump .= "SET SESSION SQL_MODE='ANSI_QUOTES';\n\n";
+$sqldump .= "--\n";
+$sqldump .= "-- Database: \"".$Settings['sqldb']."\"\n";
+$sqldump .= "--\n\n";
+$sqldump .= "-- --------------------------------------------------------\n\n";
 while ($renee_s < $num) { $tnum = $num - 1;
 $trow = GetAllRows($TableNames[$renee_s]);
 $numz = count($trow); $kazuki_p = 0;
-echo "--\n";
-echo "-- Table structure for table \"".$TableNames[$renee_s]."\"\n";
-echo "--\n\n";
-echo $FullTable[$renee_s]."\n";
+$sqldump .= "--\n";
+$sqldump .= "-- Table structure for table \"".$TableNames[$renee_s]."\"\n";
+$sqldump .= "--\n\n";
+$sqldump .= $FullTable[$renee_s]."\n";
 while ($kazuki_p < $numz) { $tnumz = $numz - 1;
 $srow = null; $srowvalue = null;
 $trownew = $trow[$kazuki_p];
@@ -152,20 +194,25 @@ if($il==$tnums) { $srowvalue .= $trowrvalue;
 /*if($kazuki_p==$tnumz) {*/ $srowvalue .= ");"; /*}*/ }
 ++$il; }
 if($kazuki_p===0) {
-echo "--\n";
-echo "-- Dumping data for table \"".$TableNames[$renee_s]."\"\n";
-echo "--\n\n"; }
-echo $srow."\n"; /*}*/
-echo $srowvalue."\n";
+$sqldump .= "--\n";
+$sqldump .= "-- Dumping data for table \"".$TableNames[$renee_s]."\"\n";
+$sqldump .= "--\n\n"; }
+$sqldump .= $srow."\n"; /*}*/
+$sqldump .= $srowvalue."\n";
 if($kazuki_p==$tnumz&&$renee_s<$tnum) {
-echo "\n-- --------------------------------------------------------\n"; }
+$sqldump .= "\n-- --------------------------------------------------------\n"; }
 ++$kazuki_p; }
 if($numz===0) {
-echo "--\n";
-echo "-- Dumping data for table \"".$TableNames[$renee_s]."\"\n";
-echo "--\n\n";
-echo "\n-- --------------------------------------------------------\n"; }
-echo "\n";
+$sqldump .= "--\n";
+$sqldump .= "-- Dumping data for table \"".$TableNames[$renee_s]."\"\n";
+$sqldump .= "--\n\n";
+$sqldump .= "\n-- --------------------------------------------------------\n"; }
+$sqldump .= "\n";
 ++$renee_s; }
+if($_GET['compress']=="none") { echo $sqldump; }
+if($_GET['compress']=="gzencode") { echo gzencode($sqldump,$_GET['comlevel']); }
+if($_GET['compress']=="gzcompress") { echo gzcompress($sqldump,$_GET['comlevel']); }
+if($_GET['compress']=="gzdeflate") { echo gzdeflate($sqldump,$_GET['comlevel']); }
+if($_GET['compress']=="bzcompress") { echo bzcompress($sqldump,$_GET['comlevel']); }
 fix_amp($Settings['use_gzip'],$GZipEncode['Type']);
 ?>
