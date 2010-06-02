@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: main.php - Last Update: 05/27/2010 SVN 502 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 06/02/2010 SVN 506 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -270,9 +270,13 @@ if(isset($_GET['menu'])&&$_GET['menu']=="main") { $AddChkURL = "&menu=main"; }
 <form style="display: inline;" method="post" id="acptool" action="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=settings",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">
 <table style="text-align: left;">
 <tr>
-	<td style="width: 50%;"><span class="TextBoxLabel">Install Date:</span></td>
-	<td style="width: 50%;"><?php echo GMTimeChange("F j Y, g:i a",$Settings['start_date'],$Settings['DefaultDST'],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']); ?></td>
-</tr><?php if($GroupInfo['ViewDBInfo']=="yes") { 
+	<td style="width: 50%;"><span class="TextBoxLabel" title="Using User Time Zone">[User TimeZone] Install Date:</span></td>
+	<td style="width: 50%;"><?php echo GMTimeChange("F j Y, g:i a",$Settings['start_date'],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']); ?></td>
+</tr><?php if($_SESSION['UserTimeZone']!=$Settings['DefaultTimeZone']||
+	$_SESSION['UserDST']!=$Settings['DefaultDST']) { ?><tr>
+	<td style="width: 50%;"><span class="TextBoxLabel" title="Using Board Time Zone">[Board TimeZone] Install Date:</span></td>
+	<td style="width: 50%;"><?php echo GMTimeChange("F j Y, g:i a",$Settings['start_date'],$Settings['DefaultTimeZone'],0,$Settings['DefaultDST']); ?></td>
+</tr><?php } if($GroupInfo['ViewDBInfo']=="yes") { 
 ?><tr style="text-align: left;">
 	<td style="width: 50%;"><span class="TextBoxLabel">Forum Software Version:</span></td>
 	<td style="width: 50%;"><?php echo $VerInfo['iDB_Ver_Show']; ?>&nbsp;<a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=vercheck",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>" onclick="window.open(this.href);return false;"><img src="<?php echo $AdminCheckURL; ?>" alt="Version Check: Click to see more info." title="Version Check: Click to see more info." /></a></td>
