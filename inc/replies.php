@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: replies.php - Last Update: 05/27/2010 SVN 502 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 06/02/2010 SVN 507 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -23,7 +23,7 @@ if(!is_numeric($_GET['post'])) { $_GET['post'] = null; }
 if(!is_numeric($_GET['page'])) { $_GET['page'] = 1; }
 if(!isset($_GET['modact'])) { $_GET['modact'] = null; }
 if($_GET['modact']=="pin"||$_GET['modact']=="unpin"||$_GET['modact']=="open"||
-	$_GET['modact']=="close"||$_GET['modact']=="edit"||$_GET['modact']=="delete")
+	$_GET['modact']=="move"||$_GET['modact']=="close"||$_GET['modact']=="edit"||$_GET['modact']=="delete")
 		{ $_GET['act'] = $_GET['modact']; }
 $prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"id\"=%i LIMIT 1", array($_GET['id']));
 $preresult=sql_query($prequery,$SQLStat);
@@ -1022,7 +1022,95 @@ redirect("refresh",$basedir.url_maker($exfile['topic'],$Settings['file_ext'],"ac
 <td class="TableColumn4">&nbsp;</td>
 </tr>
 </table></div>
-<?php } } if($_GET['act']=="delete") {
+<?php } } if($_GET['act']=="move") {
+if(!isset($_GET['newid'])) {
+redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($gtsresult);
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
+if(!is_numeric($_GET['newid'])) {
+redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($gtsresult);
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
+$gtsquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"id\"=%i LIMIT 1", array($_GET['id']));
+$gtsresult=sql_query($gtsquery,$SQLStat);
+$gtsnum=sql_num_rows($gtsresult);
+$TTopicID=sql_result($gtsresult,0,"id");
+$OldForumID=sql_result($gtsresult,0,"ForumID");
+$CanMoveTopics = false;
+if($_SESSION['UserGroup']!=$Settings['GuestGroup']) {
+if($PermissionInfo['CanCloseTopics'][$OldForumID]=="yes"&&
+	$PermissionInfo['CanModForum'][$OldForumID]=="yes") { 
+	$CanMoveTopics = true; }
+if($PermissionInfo['CanCloseTopics'][$_GET['newid']]=="yes"&&
+	$PermissionInfo['CanModForum'][$_GET['newid']]=="yes") { 
+	$CanMoveTopics = true; } }
+if($_SESSION['UserID']==0) { $CanMoveTopics = false; }
+if($CanMoveTopics===false||$_GET['newid']==$OldForumID) {
+redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($gtsresult);
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
+sql_free_result($gtsresult);
+if($CanMoveTopics===true) {
+$TNumberPosts = $NumberReplies + 1;
+$mvquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($_GET['newid']));
+$mvresult=sql_query($mvquery,$SQLStat);
+$mvnum=sql_num_rows($mvresult);
+$NumberPosts=sql_result($mvresult,0,"NumPosts");
+$NumberPosts = $NumberPosts + $TNumberPosts;
+$NumberTopics=sql_result($mvresult,0,"NumTopics");
+$NumberTopics = $NumberTopics + 1;
+$NewCatID=sql_result($mvresult,0,"CategoryID");
+if($mvnum<1) {
+redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($gtsresult);
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); sql_free_result($mvresult);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
+sql_free_result($mvresult);
+$recountq = sql_pre_query("UPDATE \"".$Settings['sqltable']."forums\" SET \"NumPosts\"=%i,\"NumTopics\"=%i WHERE \"id\"=%i", array($NumberPosts,$NumberTopics,$_GET['newid']));
+sql_query($recountq,$SQLStat);
+$mvquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($OldForumID));
+$mvresult=sql_query($mvquery,$SQLStat);
+$mvnum=sql_num_rows($mvresult);
+$NumberPosts=sql_result($mvresult,0,"NumPosts");
+$NumberPosts = $NumberPosts - $TNumberPosts;
+$NumberTopics=sql_result($mvresult,0,"NumTopics");
+$NumberTopics = $NumberTopics - 1;
+sql_free_result($mvresult);
+$recountq = sql_pre_query("UPDATE \"".$Settings['sqltable']."forums\" SET \"NumPosts\"=%i,\"NumTopics\"=%i WHERE \"id\"=%i", array($NumberPosts,$NumberTopics,$OldForumID));
+sql_query($recountq,$SQLStat);
+$queryupd = sql_pre_query("UPDATE \"".$Settings['sqltable']."topics\" SET \"ForumID\"=%i,\"CategoryID\"=%i WHERE \"id\"=%i", array($_GET['newid'],$NewCatID,$TTopicID)); 
+sql_query($queryupd,$SQLStat);
+$queryupd = sql_pre_query("UPDATE \"".$Settings['sqltable']."posts\" SET \"ForumID\"=%i,\"CategoryID\"=%i WHERE \"TopicID\"=%i", array($_GET['newid'],$NewCatID,$TTopicID)); 
+sql_query($queryupd,$SQLStat);
+} 
+redirect("refresh",$basedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TTopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],false),"4");
+?>
+<div class="Table1Border">
+<?php if($ThemeSet['TableStyle']=="div") { ?>
+<div class="TableRow1">
+<span style="text-align: left;">
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TTopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a></span></div>
+<?php } ?>
+<table class="Table1">
+<?php if($ThemeSet['TableStyle']=="table") { ?>
+<tr class="TableRow1">
+<td class="TableColumn1"><span style="text-align: left;">
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TTopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a></span>
+</td>
+</tr><?php } ?>
+<tr class="TableRow2">
+<th class="TableColumn2" style="width: 100%; text-align: left;">&nbsp;Move Topic Message: </th>
+</tr>
+<tr class="TableRow3" style="text-align: center;">
+	<td class="TableColumn3" style="text-align: center;"><span class="TableMessage"><br />
+	Topic was successfully moved.<br />
+	Click <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TTopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>">here</a> to go back to topic.<br />&nbsp;
+	</span><br /></td>
+</tr>
+<tr class="TableRow4">
+<td class="TableColumn4">&nbsp;</td>
+</tr>
+</table></div>
+<?php } if($_GET['act']=="delete") {
 $predquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"id\"=%i LIMIT 1", array($_GET['post']));
 $predresult=sql_query($predquery,$SQLStat);
 $prednum=sql_num_rows($predresult);
