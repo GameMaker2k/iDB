@@ -1036,6 +1036,7 @@ $gtsresult=sql_query($gtsquery,$SQLStat);
 $gtsnum=sql_num_rows($gtsresult);
 $TTopicID=sql_result($gtsresult,0,"id");
 $OldForumID=sql_result($gtsresult,0,"ForumID");
+$OldCatID=sql_result($gtsresult,0,"CategoryID");
 $CanMoveTopics = false;
 if($_SESSION['UserGroup']!=$Settings['GuestGroup']) {
 if($PermissionInfo['CanCloseTopics'][$OldForumID]=="yes"&&
@@ -1045,7 +1046,8 @@ if($PermissionInfo['CanCloseTopics'][$_GET['newid']]=="yes"&&
 	$PermissionInfo['CanModForum'][$_GET['newid']]=="yes") { 
 	$CanMoveTopics = true; } }
 if($_SESSION['UserID']==0) { $CanMoveTopics = false; }
-if($CanMoveTopics===false||$_GET['newid']==$OldForumID) {
+//if($CanMoveTopics===false||$_GET['newid']==$OldForumID) {
+if($CanMoveTopics===false) {
 redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($gtsresult);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
@@ -1077,7 +1079,7 @@ $NumberTopics = $NumberTopics - 1;
 sql_free_result($mvresult);
 $recountq = sql_pre_query("UPDATE \"".$Settings['sqltable']."forums\" SET \"NumPosts\"=%i,\"NumTopics\"=%i WHERE \"id\"=%i", array($NumberPosts,$NumberTopics,$OldForumID));
 sql_query($recountq,$SQLStat);
-$queryupd = sql_pre_query("UPDATE \"".$Settings['sqltable']."topics\" SET \"ForumID\"=%i,\"CategoryID\"=%i WHERE \"id\"=%i", array($_GET['newid'],$NewCatID,$TTopicID)); 
+$queryupd = sql_pre_query("UPDATE \"".$Settings['sqltable']."topics\" SET \"ForumID\"=%i,\"CategoryID\"=%i,\"OldForumID\"=%i,\"OldCategoryID\"=%i WHERE \"id\"=%i", array($_GET['newid'],$NewCatID,$OldForumID,$OldCatID,$TTopicID)); 
 sql_query($queryupd,$SQLStat);
 $queryupd = sql_pre_query("UPDATE \"".$Settings['sqltable']."posts\" SET \"ForumID\"=%i,\"CategoryID\"=%i WHERE \"TopicID\"=%i", array($_GET['newid'],$NewCatID,$TTopicID)); 
 sql_query($queryupd,$SQLStat);
