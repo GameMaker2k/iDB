@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2009 iDB Support - http://idb.berlios.de/
-    Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
+    Copyright 2004-2010 iDB Support - http://idb.berlios.de/
+    Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: stats.php - Last Update: 12/10/2009 SVN 391 - Author: cooldude2k $
+    $FileInfo: stats.php - Last Update: 06/04/2010 SVN 510 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="stats.php"||$File3Name=="/stats.php") {
@@ -70,8 +70,11 @@ $rnmresult = sql_query($rnmquery,$SQLStat);
 $nummembers = sql_result($rnmresult,0);
 sql_free_result($rnmresult);
 $NewestMem = array(null);
+$NewestMem['ID'] = "0"; $NewestMem['Name'] = "Anonymous";
+if($nummembers>0) {
 $NewestMem['ID']=sql_result($nmresult,0,"id");
-$NewestMem['Name']=sql_result($nmresult,0,"Name");
+$NewestMem['Name']=sql_result($nmresult,0,"Name"); }
+if($nummembers<=0) { $NewestMem['ID'] = 0; }
 if($NewestMem['ID']<=0) { $NewestMem['ID'] = "0"; $NewestMem['Name'] = "Anonymous"; }
 ?>
 <div class="StatsBorder">
