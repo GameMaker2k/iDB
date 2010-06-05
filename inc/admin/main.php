@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: main.php - Last Update: 06/02/2010 SVN 506 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 06/05/2010 SVN 517 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -105,6 +105,11 @@ if($Settings['vercheck']!=1&&
 	$Settings['vercheck'] = 2; }
 if(!isset($Settings['start_date'])) {
 	$Settings['start_date'] = GMTimeStamp(); }
+if(!isset($Settings['SQLThemes'])) {
+	$Settings['SQLThemes'] = 'off'; }
+if($Settings['SQLThemes']!="on"||
+	$Settings['SQLThemes']!="off") {
+	$Settings['SQLThemes'] = 'off'; }
 ?>
 <table class="Table3">
 <tr style="width: 100%; vertical-align: top;">
@@ -750,6 +755,7 @@ $BoardSettings=$pretext2[0]."\n".
 "\$Settings['idburl'] = ".null_string($Settings['idburl']).";\n".
 "\$Settings['enable_https'] = ".null_string($Settings['enable_https']).";\n".
 "\$Settings['weburl'] = ".null_string($Settings['weburl']).";\n".
+"\$Settings['SQLThemes'] = ".null_string($Settings['SQLThemes']).";\n".
 "\$Settings['use_gzip'] = ".null_string($Settings['use_gzip']).";\n".
 "\$Settings['html_type'] = ".null_string($Settings['html_type']).";\n".
 "\$Settings['html_level'] = ".null_string($Settings['html_level']).";\n".
@@ -902,6 +908,7 @@ $BoardSettings=$pretext2[0]."\n".
 "\$Settings['idburl'] = ".null_string($Settings['idburl']).";\n".
 "\$Settings['enable_https'] = ".null_string($Settings['enable_https']).";\n".
 "\$Settings['weburl'] = ".null_string($Settings['weburl']).";\n".
+"\$Settings['SQLThemes'] = ".null_string($Settings['SQLThemes']).";\n".
 "\$Settings['use_gzip'] = ".null_string($Settings['use_gzip']).";\n".
 "\$Settings['html_type'] = ".null_string($Settings['html_type']).";\n".
 "\$Settings['html_level'] = ".null_string($Settings['html_level']).";\n".
