@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 06/05/2010 SVN 513 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 06/05/2010 SVN 514 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -310,7 +310,7 @@ function sqlsession_read($id) {
 global $sqltable,$SQLStat,$SQLSType,$temp_user_ip,$temp_user_agent;
 $result = sql_query(sql_pre_query("SELECT * FROM \"".$sqltable."sessions\" WHERE \"session_id\" = '%s'", array($id)),$SQLStat);
 if (!sql_num_rows($result)) {
-$time = GMTimeStamp();
+$time = GMTimeStamp() - $maxlifetime;
 sql_query(sql_pre_query("INSERT INTO \"".$sqltable."sessions\" (\"session_id\", \"session_data\", \"user_agent\", \"ip_address\", \"expires\") VALUES\n".
 "('%s', '', '%s', '%s', %i)", array($id,$temp_user_agent,$temp_user_ip,$time)),$SQLStat);
 return '';
@@ -356,7 +356,8 @@ header("Date: ".gmdate("D, d M Y H:i:s")." GMT");
 header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
 header("Expires: ".gmdate("D, d M Y H:i:s")." GMT");
 if(!isset($_COOKIE[$Settings['sqltable']."sess"])) {
-sql_query(sql_pre_query("DELETE FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" < %i OR ip_address='%s'", array(GMTimeStamp(),$temp_user_ip)),$SQLStat); }
+$exptime = GMTimeStamp() - ini_get("session.gc_maxlifetime");
+sql_query(sql_pre_query("DELETE FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" < %i OR ip_address='%s'", array($exptime,$temp_user_ip)),$SQLStat); }
 session_name($Settings['sqltable']."sess");
 session_start();
 //header("Set-Cookie: PHPSESSID=" . session_id() . "; path=".$cbasedir);
