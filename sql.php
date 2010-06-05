@@ -308,9 +308,10 @@ return true; }
 //Session Read Function
 function sqlsession_read($id) {
 global $sqltable,$SQLStat,$SQLSType,$temp_user_ip,$temp_user_agent;
+sql_query(sql_pre_query("DELETE FROM \"".$sqltable."sessions\" WHERE \"session_id\"<>'%s' AND ip_address='%s'", array($id,$temp_user_ip)),$SQLStat);
 $result = sql_query(sql_pre_query("SELECT * FROM \"".$sqltable."sessions\" WHERE \"session_id\" = '%s'", array($id)),$SQLStat);
 if (!sql_num_rows($result)) {
-$time = GMTimeStamp() - $maxlifetime;
+$time = GMTimeStamp();
 sql_query(sql_pre_query("INSERT INTO \"".$sqltable."sessions\" (\"session_id\", \"session_data\", \"user_agent\", \"ip_address\", \"expires\") VALUES\n".
 "('%s', '', '%s', '%s', %i)", array($id,$temp_user_agent,$temp_user_ip,$time)),$SQLStat);
 return '';
