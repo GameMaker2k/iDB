@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 05/11/2010 SVN 488 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 06/05/2010 SVN 512 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -292,55 +292,54 @@ ob_clean(); echo "Sorry could not connect to mysql database.\nContact the board 
 echo "\n".sql_errorno($SQLStat);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $sqltable = $Settings['sqltable'];
-function sqlsession_open( $save_path, $session_name ) {
+$temp_user_ip = $_SERVER['REMOTE_ADDR'];
+if(!isset($_SERVER['HTTP_USER_AGENT'])) {
+	$_SERVER['HTTP_USER_AGENT'] = ""; }
+$temp_user_agent = $_SERVER['HTTP_USER_AGENT'];
+$SQLSType = $Settings['sqltype'];
+//Session Open Function
+function sqlsession_open($save_path, $session_name ) {
 global $sess_save_path;
 $sess_save_path = $save_path;
 return true; }
+//Session Close Function
 function sqlsession_close() {
 return true; }
+//Session Read Function
 function sqlsession_read($id) {
-global $sqltable,$SQLStat,$SQLSType;
-$data = "";
+global $sqltable,$SQLStat,$SQLSType,$temp_user_ip,$temp_user_agent;
+$result = sql_query(sql_pre_query("SELECT * FROM \"".$sqltable."sessions\" WHERE \"session_id\" = '%s'", array($id)),$SQLStat);
+if (!sql_num_rows($result)) {
 $time = GMTimeStamp();
-$sqlr = sql_pre_query("SELECT * FROM \"".$sqltable."sessions\" WHERE \"session_id\" = '%s'", array($id,$time));
-$rs = sql_query($sqlr,$SQLStat);
-$a = sql_num_rows($rs);
-if($a > 0) {
-$row = sql_fetch_assoc($rs);
+sql_query(sql_pre_query("INSERT INTO \"".$sqltable."sessions\" (\"session_id\", \"session_data\", \"user_agent\", \"ip_address\", \"expires\") VALUES\n".
+"('%s', '', '%s', '%s', %i)", array($id,$temp_user_agent,$temp_user_ip,$time)),$SQLStat);
+return '';
+} else {
+$time = GMTimeStamp();
+$predata = sql_num_rows($result);
+$data = "";
+if($predata > 0) {
+$row = sql_fetch_assoc($result);
 $data = $row['session_data']; }
-return $data; }
-$SQLSType = $Settings['sqltype'];
+sql_query(sql_pre_query("UPDATE \"".$sqltable."sessions\" SET \"session_data\"='%s',\"expires\"=%i WHERE \"session_id\"='%s'", array($data,$time,$id)),$SQLStat);
+return $data; } }
+//Session Write Function
 function sqlsession_write($id,$data) {
 global $sqltable,$SQLStat,$SQLSType;
 $time = GMTimeStamp();
-if($SQLSType=="mysql"||
-	$SQLSType=="mysqli") {
-$sqlw = sql_pre_query("REPLACE \"".$sqltable."sessions\" VALUES('$id','$data', $time)", array($id,$data,$time));
-$rs = sql_query($sqlw,$SQLStat); }
-if($SQLSType=="pgsql"||
-	$SQLSType=="sqlite") {
-$sqlr = sql_pre_query("SELECT * FROM \"".$sqltable."sessions\" WHERE \"session_id\" = '%s'", array($id,$time));
-$rs = sql_query($sqlr,$SQLStat);
-$a = sql_num_rows($rs);
-if($a>0) {
-$sqlw = sql_pre_query("UPDATE \"".$sqltable."sessions\" SET \"session_data\"='%s',\"expires\"=%i WHERE \"session_id\"='%s'", array($data,$time,$id));
-$rs = sql_query($sqlw,$SQLStat); }
-if($a<1) {
-$sqlw = sql_pre_query("INSERT INTO \"".$sqltable."sessions\" (\"session_id\", \"session_data\", \"expires\") VALUES\n".
-"('%s', '%s', %i)", array($id,$time,$data)); 
-$rs = sql_query($sqlw,$SQLStat); } }
+$rs = sql_query(sql_pre_query("UPDATE \"".$sqltable."sessions\" SET \"session_data\"='%s',\"expires\"=%i WHERE \"session_id\"='%s'", array($data,$time,$id)),$SQLStat);
 return true; }
+//Session Destroy Function
 function sqlsession_destroy($id) {
 global $sqltable,$SQLStat;
-$sqld = sql_pre_query("DELETE FROM \"".$sqltable."sessions\" WHERE \"session_id\" = '$id'", array($id));
-sql_query($sqld,$SQLStat);
+sql_query(sql_pre_query("DELETE FROM \"".$sqltable."sessions\" WHERE \"session_id\" = '$id'", array($id)),$SQLStat);
 return true; }
+//Session Garbage Collection Function
 function sqlsession_gc($maxlifetime) {
 global $sqltable,$SQLStat;
 $time = GMTimeStamp() - $maxlifetime;
-//$sqlg = sql_pre_query('DELETE FROM \"'.$sqltable.'sessions\" WHERE \"expires\" < UNIX_TIMESTAMP();', array(null));
-$sqlg = sql_pre_query("DELETE FROM \"".$sqltable."sessions\" WHERE \"expires\" < %i", array($time));
-sql_query($sqlg,$SQLStat);
+//sql_query(sql_pre_query('DELETE FROM \"'.$sqltable.'sessions\" WHERE \"expires\" < UNIX_TIMESTAMP();', array(null)),$SQLStat);
+sql_query(sql_pre_query("DELETE FROM \"".$sqltable."sessions\" WHERE \"expires\" < %i", array($time)),$SQLStat);
 return true; }
 session_set_save_handler("sqlsession_open", "sqlsession_close", "sqlsession_read", "sqlsession_write", "sqlsession_destroy", "sqlsession_gc");
 if($cookieDomain==null) {
