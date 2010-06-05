@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 06/05/2010 SVN 512 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 06/05/2010 SVN 513 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -325,9 +325,9 @@ sql_query(sql_pre_query("UPDATE \"".$sqltable."sessions\" SET \"session_data\"='
 return $data; } }
 //Session Write Function
 function sqlsession_write($id,$data) {
-global $sqltable,$SQLStat,$SQLSType;
+global $sqltable,$SQLStat,$SQLSType,$temp_user_ip,$temp_user_agent;
 $time = GMTimeStamp();
-$rs = sql_query(sql_pre_query("UPDATE \"".$sqltable."sessions\" SET \"session_data\"='%s',\"expires\"=%i WHERE \"session_id\"='%s'", array($data,$time,$id)),$SQLStat);
+$rs = sql_query(sql_pre_query("UPDATE \"".$sqltable."sessions\" SET \"session_data\"='%s',\"user_agent\"='%s',\"ip_address\"='%s',\"expires\"=%i WHERE \"session_id\"='%s'", array($data,$temp_user_agent,$temp_user_ip,$time,$id)),$SQLStat);
 return true; }
 //Session Destroy Function
 function sqlsession_destroy($id) {
@@ -355,6 +355,8 @@ header("Pragma: private, no-cache, must-revalidate");
 header("Date: ".gmdate("D, d M Y H:i:s")." GMT");
 header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
 header("Expires: ".gmdate("D, d M Y H:i:s")." GMT");
+if(!isset($_COOKIE[$Settings['sqltable']."sess"])) {
+sql_query(sql_pre_query("DELETE FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" < %i OR ip_address='%s'", array(GMTimeStamp(),$temp_user_ip)),$SQLStat); }
 session_name($Settings['sqltable']."sess");
 session_start();
 //header("Set-Cookie: PHPSESSID=" . session_id() . "; path=".$cbasedir);

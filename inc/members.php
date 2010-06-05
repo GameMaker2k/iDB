@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 06/04/2010 SVN 509 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 06/05/2010 SVN 513 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -412,13 +412,15 @@ if($pagenum>1) {
 while ($i < $num) {
 $AmIHiddenUser = "no";
 $session_data=sql_result($result,$i,"session_data"); 
+$session_user_agent=sql_result($result,$i,"user_agent"); 
+$session_ip_address=sql_result($result,$i,"ip_address"); 
 $session_expires=sql_result($result,$i,"expires"); 
 $session_expires = GMTimeChange("F j Y, g:i a",$session_expires,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $UserSessInfo = unserialize_session($session_data);
 if(!isset($UserSessInfo['UserGroup'])) { 
 	$UserSessInfo['UserGroup'] = $Settings['GuestGroup']; }
-if(!isset($UserSessInfo['UserIP'])) { 
-	$UserSessInfo['UserIP'] = "127.0.0.1"; }
+if(!isset($session_ip_address)) { 
+	$session_ip_address = "127.0.0.1"; }
 if($UserSessInfo['UserGroup']!=$Settings['GuestGroup']) {
 $PreAmIHiddenUser = GetUserName($UserSessInfo['UserID'],$Settings['sqltable'],$SQLStat);
 $AmIHiddenUser = $PreAmIHiddenUser['Hidden']; }
@@ -519,7 +521,7 @@ if($AmIHiddenUser=="no"&&$UserSessInfo['UserID']>0) {
 <tr id="Member<?php echo $i; ?>" class="TableRow3">
 <td class="TableColumn3" style="text-align: center;"><?php echo $UserSessInfo['UserID']; ?></td>
 <td class="TableColumn3" style="text-align: center;"><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UserSessInfo['UserID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>"><?php echo $UserSessInfo['MemberName']; ?></a>
-<?php if($GroupInfo['HasAdminCP']=="yes") { ?> ( <a onclick="window.open(this.href);return false;" href="<?php echo sprintf($IPCheckURL,$UserSessInfo['UserIP']); ?>"><?php echo $UserSessInfo['UserIP']; ?></a> )<?php } ?></td>
+<?php if($GroupInfo['HasAdminCP']=="yes") { ?> ( <a onclick="window.open(this.href);return false;" href="<?php echo sprintf($IPCheckURL,$session_ip_address); ?>"><?php echo $session_ip_address; ?></a> )<?php } ?></td>
 <td class="TableColumn3" style="text-align: center;"><?php echo $UserSessInfo['UserGroup']; ?></td>
 <td class="TableColumn3" style="text-align: center;"><a href="<?php echo url_maker($PreFileName,"no+ext",$PreExpPage,$Settings['qstr'],$Settings['qsep'],null,null); ?>"><?php echo $UserSessInfo['PreViewingTitle']; ?> <?php echo $UserSessInfo['ViewingTitle']; ?></a></td>
 <td class="TableColumn3" style="text-align: center;"><?php echo $session_expires; ?></td>
@@ -535,7 +537,7 @@ if($_GET['list']=="all"||$_GET['list']=="guests") {
 <tr id="Member<?php echo $i; ?>" class="TableRow3">
 <td class="TableColumn3" style="text-align: center;"><?php echo $UserSessInfo['UserID']; ?></td>
 <td class="TableColumn3" style="text-align: center;"><span><?php echo $UserSessInfo['GuestName']; ?></span>
-<?php if($GroupInfo['HasAdminCP']=="yes") { ?> ( <a onclick="window.open(this.href);return false;" href="<?php echo sprintf($IPCheckURL,$UserSessInfo['UserIP']); ?>"><?php echo $UserSessInfo['UserIP']; ?></a> )<?php } ?></td>
+<?php if($GroupInfo['HasAdminCP']=="yes") { ?> ( <a onclick="window.open(this.href);return false;" href="<?php echo sprintf($IPCheckURL,$session_ip_address); ?>"><?php echo $session_ip_address; ?></a> )<?php } ?></td>
 <td class="TableColumn3" style="text-align: center;"><?php echo $UserSessInfo['UserGroup']; ?></td>
 <td class="TableColumn3" style="text-align: center;"><a href="<?php echo url_maker($PreFileName,"no+ext",$PreExpPage,$Settings['qstr'],$Settings['qsep'],null,null); ?>"><?php echo $UserSessInfo['PreViewingTitle']; ?> <?php echo $UserSessInfo['ViewingTitle']; ?></a></td>
 <td class="TableColumn3" style="text-align: center;"><?php echo $session_expires; ?></td>
