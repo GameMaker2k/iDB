@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: function.php - Last Update: 04/30/2010 SVN 478 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 06/07/2010 SVN 519 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -186,6 +186,7 @@ $urlvar[$i] = str_replace($fix1, $fix2, $urlvar[$i]);
 $urlvar[$i] = killbadvars($urlvar[$i]);
 	$_GET[$urlvar[$i]] = $urlvar[$i+1]; }
 ++$i; ++$i; } return true; }
+require_once($SettDir['misc'].'setcheck.php');
 // Redirect to another file with ether timed or nontimed redirect
 function redirect($type,$file,$time=0,$url=null,$dbsr=true) {
 if($type!="location"&&$type!="refresh") { $type=="location"; }

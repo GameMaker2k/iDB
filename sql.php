@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 06/05/2010 SVN 516 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 06/07/2010 SVN 519 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -44,7 +44,10 @@ if ($File3Name=="sql.php"||$File3Name=="/sql.php") {
 	header('Location: index.php');
 	exit(); }
 if(file_exists('settings.php')) {
-	require_once('settings.php'); }
+	require_once('settings.php'); 
+if(!in_array("ini_set", $disfunc)&&$Settings['qstr']!="/"&&$Settings['qstr']!="&") {
+ini_set("arg_separator.output",htmlentities($Settings['qstr'], ENT_QUOTES, $Settings['charset']));
+ini_set("arg_separator.input",$Settings['qstr']); } }
 if(!isset($Settings['idburl'])) { $Settings['idburl'] = null; }
 if(!isset($Settings['fixbasedir'])) { $Settings['fixbasedir'] = null; }
 if(!isset($Settings['fixpathinfo'])) { $Settings['fixpathinfo'] = null; }
@@ -148,7 +151,6 @@ if($Settings['use_hashtype']!="md2"&&
    $Settings['use_hashtype']!="ripemd320") {
 	$Settings['use_hashtype'] = "sha1"; } }
 // Check to see if variables are set
-require_once($SettDir['misc'].'setcheck.php');
 $dayconv = array('second' => 1, 'minute' => 60, 'hour' => 3600, 'day' => 86400, 'week' => 604800, 'month' => 2630880, 'year' => 31570560, 'decade' => 315705600);
 require_once($SettDir['inc'].'function.php');
 $iDBVerName = "iDB|".$VER2[1]."|".$VER1[0].".".$VER1[1].".".$VER1[2]."|".$VER2[2]."|".$SubVerN;
@@ -298,15 +300,15 @@ if(!isset($_SERVER['HTTP_USER_AGENT'])) {
 $temp_user_agent = $_SERVER['HTTP_USER_AGENT'];
 $SQLSType = $Settings['sqltype'];
 //Session Open Function
-function sqlsession_open($save_path, $session_name ) {
+function sql_session_open($save_path, $session_name ) {
 global $sess_save_path;
 $sess_save_path = $save_path;
 return true; }
 //Session Close Function
-function sqlsession_close() {
+function sql_session_close() {
 return true; }
 //Session Read Function
-function sqlsession_read($id) {
+function sql_session_read($id) {
 global $sqltable,$SQLStat,$SQLSType,$temp_user_ip,$temp_user_agent;
 $result = sql_query(sql_pre_query("SELECT * FROM \"".$sqltable."sessions\" WHERE \"session_id\" = '%s'", array($id)),$SQLStat);
 if (!sql_num_rows($result)) {
@@ -325,24 +327,24 @@ $data = $row['session_data']; }
 sql_query(sql_pre_query("UPDATE \"".$sqltable."sessions\" SET \"session_data\"='%s',\"expires\"=%i WHERE \"session_id\"='%s'", array($data,$time,$id)),$SQLStat);
 return $data; } }
 //Session Write Function
-function sqlsession_write($id,$data) {
+function sql_session_write($id,$data) {
 global $sqltable,$SQLStat,$SQLSType,$temp_user_ip,$temp_user_agent;
 $time = GMTimeStamp();
 $rs = sql_query(sql_pre_query("UPDATE \"".$sqltable."sessions\" SET \"session_data\"='%s',\"user_agent\"='%s',\"ip_address\"='%s',\"expires\"=%i WHERE \"session_id\"='%s'", array($data,$temp_user_agent,$temp_user_ip,$time,$id)),$SQLStat);
 return true; }
 //Session Destroy Function
-function sqlsession_destroy($id) {
+function sql_session_destroy($id) {
 global $sqltable,$SQLStat;
 sql_query(sql_pre_query("DELETE FROM \"".$sqltable."sessions\" WHERE \"session_id\" = '$id'", array($id)),$SQLStat);
 return true; }
 //Session Garbage Collection Function
-function sqlsession_gc($maxlifetime) {
+function sql_session_gc($maxlifetime) {
 global $sqltable,$SQLStat;
 $time = GMTimeStamp() - $maxlifetime;
 //sql_query(sql_pre_query('DELETE FROM \"'.$sqltable.'sessions\" WHERE \"expires\" < UNIX_TIMESTAMP();', array(null)),$SQLStat);
 sql_query(sql_pre_query("DELETE FROM \"".$sqltable."sessions\" WHERE \"expires\" < %i", array($time)),$SQLStat);
 return true; }
-session_set_save_handler("sqlsession_open", "sqlsession_close", "sqlsession_read", "sqlsession_write", "sqlsession_destroy", "sqlsession_gc");
+session_set_save_handler("sql_session_open", "sql_session_close", "sql_session_read", "sql_session_write", "sql_session_destroy", "sql_session_gc");
 if($cookieDomain==null) {
 session_set_cookie_params(0, $cbasedir); }
 if($cookieDomain!=null) {
