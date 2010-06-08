@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 06/06/2010 SVN 518 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 06/07/2010 SVN 520 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -565,7 +565,7 @@ $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE
 $result=sql_query($query,$SQLStat);
 $num=sql_num_rows($result);
 $i=0;
-if($num==0||$_GET['id']<=0) { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
+if($num==0||$_GET['id']<=0) { redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $ViewMem['ID']=sql_result($result,$i,"id");
@@ -611,7 +611,7 @@ if(isset($GroupNamePrefix)&&$GroupNamePrefix!=null) {
 if(isset($GroupNameSuffix)&&$GroupNameSuffix!=null) {
 	$ViewMem['Name'] = $ViewMem['Name'].$GroupNameSuffix; }
 */
-if($ViewMem['HiddenMember']=="yes") { redirect("location",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
+if($ViewMem['HiddenMember']=="yes") { redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $membertitle = " ".$ThemeSet['TitleDivider']." ".$ViewMem['Name'];	
@@ -729,12 +729,12 @@ $_SESSION = array();
 $temp_user_ip = $_SERVER['REMOTE_ADDR'];
 $exptime = GMTimeStamp() - ini_get("session.gc_maxlifetime");
 sql_query(sql_pre_query("DELETE FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" < %i OR ip_address='%s'", array($exptime,$temp_user_ip)),$SQLStat);
-redirect("location",$basedir.url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],false));
+redirect("location",$rbasedir.url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],false));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($_GET['act']=="login") {
 if($_SESSION['UserID']!=0&&$_SESSION['UserID']!=null) { 
-redirect("location",$basedir.url_maker($exfile['member'],$Settings['file_ext'],"act=logout",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],false));
+redirect("location",$rbasedir.url_maker($exfile['member'],$Settings['file_ext'],"act=logout",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],false));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($_SESSION['UserID']==0||$_SESSION['UserID']==null) {
@@ -807,7 +807,7 @@ $_SESSION['UserFormID'] = $UFID;
 </table></div>
 <?php } } if($_POST['act']=="loginmember"&&$_GET['act']=="login_now") {
 if($_SESSION['UserID']!=0&&$_SESSION['UserID']!=null) { 
-redirect("location",$basedir.url_maker($exfile['member'],$Settings['file_ext'],"act=logout",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],false));
+redirect("location",$rbasedir.url_maker($exfile['member'],$Settings['file_ext'],"act=logout",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],false));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($_SESSION['UserID']==0||$_SESSION['UserID']==null) {
@@ -873,7 +873,7 @@ if (pre_strlen($_POST['userpass'])>"60") { $Error="Yes";  ?>
 </tr>
 <?php } } $BanError = null;
 if ($Error=="Yes") {
-redirect("refresh",$basedir.url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],false),"4"); }
+redirect("refresh",$rbasedir.url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],false),"4"); }
 if($Error!="Yes"){
 $YourName = stripcslashes(htmlspecialchars($_POST['username'], ENT_QUOTES, $Settings['charset']));
 //$YourName = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $YourName);
@@ -992,7 +992,7 @@ setcookie("SessPass", $NewPassword, time() + (7 * 86400), $cbasedir, $cookieDoma
 //echo "Password was not right or user not found!! <_< ";
 } ?>
 <?php if($passright===true&&$BanError!="yes") {
-redirect("refresh",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false),"3"); ?>
+redirect("refresh",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false),"3"); ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Welcome to the Board <?php echo $_SESSION['MemberName']; ?>. ^_^<br />
@@ -1016,7 +1016,7 @@ redirect("refresh",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"ac
 <?php } } if($_GET['act']=="signup") { 
 $membertitle = " ".$ThemeSet['TitleDivider']." Signing up"; 
 if($_SESSION['UserID']!=0&&$_SESSION['UserID']!=null) { 
-redirect("location",$basedir.url_maker($exfile['member'],$Settings['file_ext'],"act=logout",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],false));
+redirect("location",$rbasedir.url_maker($exfile['member'],$Settings['file_ext'],"act=logout",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],false));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($_SESSION['UserID']==0||$_SESSION['UserID']==null) {
@@ -1165,7 +1165,7 @@ echo "<option value=\"".$showmin."\">0:".$showmin." minutes</option>\n"; }
 <?php } } if($_GET['act']=="makemember") {
 	if($_POST['act']=="makemembers") {
 if($_SESSION['UserID']!=0&&$_SESSION['UserID']!=null) { 
-redirect("location",$basedir.url_maker($exfile['member'],$Settings['file_ext'],"act=logout",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],false));
+redirect("location",$rbasedir.url_maker($exfile['member'],$Settings['file_ext'],"act=logout",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],false));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($_SESSION['UserID']==0||$_SESSION['UserID']==null) {
@@ -1332,7 +1332,7 @@ if ($_POST['TOS']!="Agree") { $Error="Yes";  ?>
 	</span>&nbsp;</td>
 </tr>
 <?php } if ($Error=="Yes") {
-redirect("refresh",$basedir.url_maker($exfile['member'],$Settings['file_ext'],"act=signup",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],FALSE),"4"); ?>
+redirect("refresh",$rbasedir.url_maker($exfile['member'],$Settings['file_ext'],"act=signup",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],FALSE),"4"); ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Click <a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=signup",$Settings['qstr'],$Settings['qsep'],$exqstr['member'],$prexqstr['member']); ?>">here</a> to try again.<br />&nbsp;
@@ -1447,7 +1447,7 @@ if($cookieSecure===false) {
 setcookie("MemberName", $YourNameMr, time() + (7 * 86400), $cbasedir, $cookieDomain);
 setcookie("UserID", $YourIDMr, time() + (7 * 86400), $cbasedir, $cookieDomain);
 setcookie("SessPass", $NewPassword, time() + (7 * 86400), $cbasedir, $cookieDomain); } } }
-redirect("refresh",$basedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],FALSE),"3");
+redirect("refresh",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],FALSE),"3");
 ?>
 <tr>
 	<td><span class="TableMessage">

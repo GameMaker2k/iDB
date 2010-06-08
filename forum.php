@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: forum.php - Last Update: 11/23/2009 SVN 357 - Author: cooldude2k $
+    $FileInfo: forum.php - Last Update: 06/07/2010 SVN 520 - Author: cooldude2k $
 */
 if(ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }
@@ -43,7 +43,7 @@ if($_GET['act']=="view"||$_GET['act']=="create"||
 if($_GET['act']=="lowview")
 { require($SettDir['inc'].'lowtopics.php'); }
 if($_GET['act']=="oldrss"||$_GET['act']=="rss"||$_GET['act']=="atom") {
-redirect("location",$basedir.url_maker($exfile['rss'],$Settings['file_ext'],"act=".$_GET['act']."&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['rss'],$exqstr['rss'],FALSE));
+redirect("location",$rbasedir.url_maker($exfile['rss'],$Settings['file_ext'],"act=".$_GET['act']."&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['rss'],$exqstr['rss'],FALSE));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 require($SettDir['inc'].'endpage.php');

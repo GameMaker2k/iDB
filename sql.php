@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 06/07/2010 SVN 519 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 06/07/2010 SVN 520 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -52,6 +52,7 @@ if(!isset($Settings['idburl'])) { $Settings['idburl'] = null; }
 if(!isset($Settings['fixbasedir'])) { $Settings['fixbasedir'] = null; }
 if(!isset($Settings['fixpathinfo'])) { $Settings['fixpathinfo'] = null; }
 if(!isset($Settings['fixcookiedir'])) { $Settings['fixcookiedir'] = null; }
+if(!isset($Settings['fixredirectdir'])) { $Settings['fixcookiedir'] = null; }
 $Settings['bid'] = base64_encode(urlencode($Settings['idburl']));
 if(!isset($Settings['showverinfo'])) { 
 	$Settings['showverinfo'] = "on"; }
@@ -61,6 +62,8 @@ if($Settings['fixbasedir']=="off") {
 	$Settings['fixbasedir'] = null; }
 if($Settings['fixcookiedir']=="off") {
 	$Settings['fixcookiedir'] = null; }
+if($Settings['fixredirectdir']=="off") {
+	$Settings['fixredirectdir'] = null; }
 if($Settings['idburl']=="localhost") { 
 header("Content-Type: text/plain; charset=UTF-8");
 echo "500 Error: URL is malformed. Try reinstalling iDB."; die(); }
@@ -74,6 +77,11 @@ if($Settings['idburl']!=null&&$Settings['idburl']!="localhost") {
 $PathsTest = parse_url($Settings['idburl']);
 $Settings['fixcookiedir'] = $PathsTest['path']."/"; 
 $Settings['fixcookiedir'] = str_replace("//", "/", $Settings['fixcookiedir']); } }
+if($Settings['fixredirectdir']=="on") {
+if($Settings['idburl']!=null&&$Settings['idburl']!="localhost") {
+$PathsTest = parse_url($Settings['idburl']);
+$Settings['fixredirectdir'] = $PathsTest['path']."/"; 
+$Settings['fixredirectdir'] = str_replace("//", "/", $Settings['fixredirectdir']); } }
 if(!isset($Settings['charset'])) {
 	$Settings['charset'] = "ISO-8859-15"; }
 if(isset($Settings['charset'])) {
@@ -151,6 +159,7 @@ if($Settings['use_hashtype']!="md2"&&
    $Settings['use_hashtype']!="ripemd320") {
 	$Settings['use_hashtype'] = "sha1"; } }
 // Check to see if variables are set
+require_once($SettDir['misc'].'setcheck.php');
 $dayconv = array('second' => 1, 'minute' => 60, 'hour' => 3600, 'day' => 86400, 'week' => 604800, 'month' => 2630880, 'year' => 31570560, 'decade' => 315705600);
 require_once($SettDir['inc'].'function.php');
 $iDBVerName = "iDB|".$VER2[1]."|".$VER1[0].".".$VER1[1].".".$VER1[2]."|".$VER2[2]."|".$SubVerN;
@@ -535,5 +544,5 @@ if($_SESSION['DBName']==null) {
 	$_SESSION['DBName'] = $Settings['sqldb']; }
 if($_SESSION['DBName']!=null) {
 	if($_SESSION['DBName']!=$Settings['sqldb']) {
-redirect("location",$basedir.url_maker($exfile['member'],$Settings['file_ext'],"act=logout",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],false)); } }
+redirect("location",$rbasedir.url_maker($exfile['member'],$Settings['file_ext'],"act=logout",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],false)); } }
 ?>
