@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 06/07/2010 SVN 520 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 06/09/2010 SVN 521 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -403,10 +403,10 @@ if($pagenum>1) {
 </tr><?php } ?>
 <tr id="Member" class="TableRow2">
 <th class="TableColumn2" style="width: 5%;">ID</th>
-<th class="TableColumn2" style="width: 24%;">Member Name</th>
-<th class="TableColumn2" style="width: 24%;">Group Name</th>
-<th class="TableColumn2" style="width: 24%;">Location</th>
-<th class="TableColumn2" style="width: 23%;">Time</th>
+<th class="TableColumn2" style="width: 28%;">Member Name</th>
+<th class="TableColumn2" style="width: 15%;">Group Name</th>
+<th class="TableColumn2" style="width: 28%;">Location</th>
+<th class="TableColumn2" style="width: 24%;">Time</th>
 </tr>
 <?php
 while ($i < $num) {
@@ -533,6 +533,20 @@ if(!isset($UserSessInfo['GuestName'])) {
 if(!isset($UserSessInfo['UserID'])) { 
 	$UserSessInfo['UserID'] = "0"; }
 if($_GET['list']=="all"||$_GET['list']=="guests") {
+if (preg_match("/".preg_quote("Googlebot")."/i", $session_user_agent)) {
+    $UserSessInfo['GuestName'] = "Google"; }
+if (preg_match("/".preg_quote("msnbot")."/i", $session_user_agent)) {
+    $UserSessInfo['GuestName'] = "bing"; }
+if (preg_match("/".preg_quote("Yahoo")."/i", $session_user_agent)) {
+    $UserSessInfo['GuestName'] = "Yahoo"; }
+if (preg_match("/".preg_quote("Ask Jeeves")."/i", $session_user_agent)) {
+    $UserSessInfo['GuestName'] = "Ask Jeeves"; }
+if (preg_match("/".preg_quote("W3C_Validator")."/i", $session_user_agent)) {
+    $UserSessInfo['GuestName'] = "W3C Validator"; }
+if (preg_match("/".preg_quote("W3C-checklink")."/i", $session_user_agent)) {
+    $UserSessInfo['GuestName'] = "W3C Checklink"; }
+if (preg_match("/".preg_quote("ia_archiver")."/i", $session_user_agent)) {
+    $UserSessInfo['GuestName'] = "Alexa"; }
 ?>
 <tr id="Member<?php echo $i; ?>" class="TableRow3">
 <td class="TableColumn3" style="text-align: center;"><?php echo $UserSessInfo['UserID']; ?></td>
