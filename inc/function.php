@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: function.php - Last Update: 06/07/2010 SVN 520 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 06/09/2010 SVN 522 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -133,6 +133,23 @@ function unserialize_session($data) {
 	if(!isset($result)) { $result = null; }
     return $result;
 }
+// User Agent Checker
+function user_agent_check($user_agent) {
+if (preg_match("/".preg_quote("Googlebot")."/i", $user_agent)) {
+    return "Google"; }
+if (preg_match("/".preg_quote("msnbot")."/i", $user_agent)) {
+    return "Bing"; }
+if (preg_match("/".preg_quote("Yahoo")."/i", $user_agent)) {
+    return "Yahoo"; }
+if (preg_match("/".preg_quote("Ask Jeeves")."/i", $user_agent)) {
+    return "Ask Jeeves"; }
+if (preg_match("/".preg_quote("W3C_Validator")."/i", $user_agent)) {
+    return "W3C Validator"; }
+if (preg_match("/".preg_quote("W3C-checklink")."/i", $user_agent)) {
+    return "W3C Checklink"; }
+if (preg_match("/".preg_quote("ia_archiver")."/i", $user_agent)) {
+    return "Alexa"; }
+	return false; }
 // Make the Query String if we are not useing &=
 function qstring($qstr=";",$qsep="=")
 { $_GET = array(); $_GET = null;

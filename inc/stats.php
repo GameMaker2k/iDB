@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: stats.php - Last Update: 06/04/2010 SVN 510 - Author: cooldude2k $
+    $FileInfo: stats.php - Last Update: 06/09/2010 SVN 522 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="stats.php"||$File3Name=="/stats.php") {
@@ -27,22 +27,29 @@ $_SESSION['PreViewingTitle'] = "Viewing";
 $_SESSION['ViewingTitle'] = "Board Stats"; }
 $uolcuttime = GMTimeStamp();
 $uoltime = $uolcuttime - ini_get("session.gc_maxlifetime");
-$uolquery = sql_pre_query("SELECT session_data FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i ORDER BY \"expires\" DESC", array($uoltime));
+$uolquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i ORDER BY \"expires\" DESC", array($uoltime));
 $uolresult=sql_query($uolquery,$SQLStat);
 $uolnum=sql_num_rows($uolresult);
 $uoli=0; $olmn = 0; $olgn = 0; $olan = 0;
 $MembersOnline = null; $GuestsOnline = null;
 while ($uoli < $uolnum) {
 $session_data=sql_result($uolresult,$uoli,"session_data"); 
+$session_user_agent=sql_result($uolresult,$uoli,"user_agent"); 
 $UserSessInfo = unserialize_session($session_data);
 $AmIHiddenUser = "no";
-if($UserSessInfo['UserGroup']!=$Settings['GuestGroup']) {
+$user_agent_check = false;
+if(user_agent_check($session_user_agent)) {
+	$user_agent_check = user_agent_check($session_user_agent); }
+if($UserSessInfo['UserGroup']!=$Settings['GuestGroup']||$user_agent_check!==false) {
 $PreAmIHiddenUser = GetUserName($UserSessInfo['UserID'],$Settings['sqltable'],$SQLStat);
 $AmIHiddenUser = $PreAmIHiddenUser['Hidden'];
-if($AmIHiddenUser=="no"&&$UserSessInfo['UserID']>0) {
+if(($AmIHiddenUser=="no"&&$UserSessInfo['UserID']>0)||$user_agent_check!==false) {
 if($olmn>0) { $MembersOnline .= ", "; }
+if($user_agent_check===false) {
 $MembersOnline .= "<a href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UserSessInfo['UserID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">".$UserSessInfo['MemberName']."</a>"; 
 ++$olmn; }
+if($user_agent_check!==false) {
+$MembersOnline .= "<span>".$user_agent_check."</span>"; } }
 if($UserSessInfo['UserID']<=0||$AmIHiddenUser=="yes") {
 ++$olan; } }
 if($UserSessInfo['UserGroup']==$Settings['GuestGroup']) {
