@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: stats.php - Last Update: 06/09/2010 SVN 522 - Author: cooldude2k $
+    $FileInfo: stats.php - Last Update: 06/09/2010 SVN 523 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="stats.php"||$File3Name=="/stats.php") {
@@ -51,7 +51,8 @@ $MembersOnline .= "<a href=\"".url_maker($exfile['member'],$Settings['file_ext']
 if($user_agent_check!==false) {
 $MembersOnline .= "<span>".$user_agent_check."</span>"; } }
 if($UserSessInfo['UserID']<=0||$AmIHiddenUser=="yes") {
-++$olan; } }
+if($user_agent_check===false) {
+++$olan; } } }
 if($UserSessInfo['UserGroup']==$Settings['GuestGroup']) {
 /*$GuestsOnline .= "<a href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$MemList['ID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">".$MemList['Name']."</a>";*/
 ++$olgn; }
