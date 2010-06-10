@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: stats.php - Last Update: 06/09/2010 SVN 523 - Author: cooldude2k $
+    $FileInfo: stats.php - Last Update: 06/10/2010 SVN 524 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="stats.php"||$File3Name=="/stats.php") {
@@ -30,7 +30,7 @@ $uoltime = $uolcuttime - ini_get("session.gc_maxlifetime");
 $uolquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i ORDER BY \"expires\" DESC", array($uoltime));
 $uolresult=sql_query($uolquery,$SQLStat);
 $uolnum=sql_num_rows($uolresult);
-$uoli=0; $olmn = 0; $olgn = 0; $olan = 0;
+$uoli=0; $olmn = 0; $olgn = 0; $olan = 0; $olmbn = 0;
 $MembersOnline = null; $GuestsOnline = null;
 while ($uoli < $uolnum) {
 $session_data=sql_result($uolresult,$uoli,"session_data"); 
@@ -44,12 +44,13 @@ if($UserSessInfo['UserGroup']!=$Settings['GuestGroup']||$user_agent_check!==fals
 $PreAmIHiddenUser = GetUserName($UserSessInfo['UserID'],$Settings['sqltable'],$SQLStat);
 $AmIHiddenUser = $PreAmIHiddenUser['Hidden'];
 if(($AmIHiddenUser=="no"&&$UserSessInfo['UserID']>0)||$user_agent_check!==false) {
-if($olmn>0) { $MembersOnline .= ", "; }
+if($olmbn>0) { $MembersOnline .= ", "; }
 if($user_agent_check===false) {
 $MembersOnline .= "<a href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UserSessInfo['UserID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">".$UserSessInfo['MemberName']."</a>"; 
-++$olmn; }
+++$olmn; ++$olmbn; }
 if($user_agent_check!==false) {
-$MembersOnline .= "<span>".$user_agent_check."</span>"; } }
+$MembersOnline .= "<span>".$user_agent_check."</span>"; 
+++$olmbn; } }
 if($UserSessInfo['UserID']<=0||$AmIHiddenUser=="yes") {
 if($user_agent_check===false) {
 ++$olan; } } }
