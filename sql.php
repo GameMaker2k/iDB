@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 06/07/2010 SVN 520 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 06/11/2010 SVN 525 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -333,7 +333,7 @@ $data = "";
 if($predata > 0) {
 $row = sql_fetch_assoc($result);
 $data = $row['session_data']; }
-sql_query(sql_pre_query("UPDATE \"".$sqltable."sessions\" SET \"session_data\"='%s',\"expires\"=%i WHERE \"session_id\"='%s'", array($data,$time,$id)),$SQLStat);
+/*sql_query(sql_pre_query("UPDATE \"".$sqltable."sessions\" SET \"session_data\"='%s',\"expires\"=%i WHERE \"session_id\"='%s'", array($data,$time,$id)),$SQLStat);*/
 return $data; } }
 //Session Write Function
 function sql_session_write($id,$data) {
