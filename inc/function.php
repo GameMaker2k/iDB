@@ -153,7 +153,7 @@ if (preg_match("/".preg_quote("Exabot")."/i", $user_agent)) {
     return "Exabot"; }
 if (preg_match("/".preg_quote("Googlebot")."/i", $user_agent)) {
     return "Google"; }
-if (preg_match("/".preg_quote("HTML/XML Validator")."/i", $user_agent)) {
+if (preg_match("|".preg_quote("HTML/XML Validator","|")."|i", $user_agent)) {
     return "HTML/XML Validator"; }
 if (preg_match("/".preg_quote("Lycos")."/i", $user_agent)) {
     return "Lycos"; }
