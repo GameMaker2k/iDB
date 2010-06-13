@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: preindex.php - Last Update: 05/15/2010 SVN 491 - Author: cooldude2k $
+    $FileInfo: preindex.php - Last Update: 06/13/2010 SVN 526 - Author: cooldude2k $
 */
 $pretime = explode(" ", microtime());
 $utime = $pretime[0];
@@ -55,7 +55,9 @@ if($Settings['html_type']=="xhtml11") {
 if(stristr($_SERVER["HTTP_ACCEPT"],"application/xhtml+xml")) {
 $ccstart = "//<![CDATA["; $ccend = "//]]>";
 require($SettDir['inc'].'xhtml11.php'); } else {
-if (stristr($_SERVER["HTTP_USER_AGENT"],"W3C_Validator")) {
+if (stristr($_SERVER["HTTP_USER_AGENT"],"W3C_Validator")||
+	stristr($_SERVER["HTTP_USER_AGENT"],"WDG_Validator")||
+	stristr($_SERVER["HTTP_USER_AGENT"],"WDG_SiteValidator")) {
 	$ccstart = "//<![CDATA["; $ccend = "//]]>";
    require($SettDir['inc'].'xhtml11.php'); } else { 
 	   $ccstart = "//<!--"; $ccend = "//-->";
