@@ -12,7 +12,7 @@
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mkconfig.php - Last Update: 06/07/2010 SVN 520 - Author: cooldude2k $
+    $FileInfo: mkconfig.php - Last Update: 07/01/2010 SVN 528 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mkconfig.php"||$File3Name=="/mkconfig.php") {
@@ -109,7 +109,7 @@ if($_POST['usehashtype']!="md2"&&
    $_POST['usehashtype']!="sha1"&&
    $_POST['usehashtype']!="sha224"&&
    $_POST['usehashtype']!="sha256"&&
-   $_POST['usehashtype']!="sha386"&&
+   $_POST['usehashtype']!="sha384"&&
    $_POST['usehashtype']!="sha512"&&
    $_POST['usehashtype']!="ripemd128"&&
    $_POST['usehashtype']!="ripemd160"&&
@@ -122,7 +122,7 @@ if($_POST['usehashtype']=="md5") { $iDBHashType = "iDBH5"; }
 if($_POST['usehashtype']=="sha1") { $iDBHashType = "iDBH"; }
 if($_POST['usehashtype']=="sha224") { $iDBHashType = "iDBH224"; }
 if($_POST['usehashtype']=="sha256") { $iDBHashType = "iDBH256"; }
-if($_POST['usehashtype']=="sha386") { $iDBHashType = "iDBH386"; }
+if($_POST['usehashtype']=="sha384") { $iDBHashType = "iDBH384"; }
 if($_POST['usehashtype']=="sha512") { $iDBHashType = "iDBH512"; }
 if($_POST['usehashtype']=="ripemd128") { $iDBHashType = "iDBHRMD128"; }
 if($_POST['usehashtype']=="ripemd160") { $iDBHashType = "iDBHRMD160"; }

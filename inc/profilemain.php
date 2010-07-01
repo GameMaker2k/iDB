@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: profilemain.php - Last Update: 06/07/2010 SVN 520 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 07/01/2010 SVN 528 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
@@ -888,8 +888,8 @@ if($OldHashType=="iDBH224") {
 	$YourPassword = b64e_hmac($_POST['OldPass'],$OldJoined,$OldSalt,"sha224"); }
 if($OldHashType=="iDBH256") { 
 	$YourPassword = b64e_hmac($_POST['OldPass'],$OldJoined,$OldSalt,"sha256"); }
-if($OldHashType=="iDBH386") { 
-	$YourPassword = b64e_hmac($_POST['OldPass'],$OldJoined,$OldSalt,"sha386"); }
+if($OldHashType=="iDBH384") { 
+	$YourPassword = b64e_hmac($_POST['OldPass'],$OldJoined,$OldSalt,"sha384"); }
 if($OldHashType=="iDBH512") { 
 	$YourPassword = b64e_hmac($_POST['OldPass'],$OldJoined,$OldSalt,"sha512"); }
 if($OldHashType=="iDBHRMD128") { 
@@ -925,8 +925,8 @@ if($YourPassword!=$OldPassword) { $Error="Yes"; ?>
 	$NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$NewSalt,"sha224"); }
 	if($Settings['use_hashtype']=="sha256") { $iDBHash = "iDBH256";
 	$NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$NewSalt,"sha256"); }
-	if($Settings['use_hashtype']=="sha386") { $iDBHash = "iDBH386";
-	$NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$NewSalt,"sha386"); }
+	if($Settings['use_hashtype']=="sha384") { $iDBHash = "iDBH384";
+	$NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$NewSalt,"sha384"); }
 	if($Settings['use_hashtype']=="sha512") { $iDBHash = "iDBH512";
 	$NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$NewSalt,"sha512"); }
 	if($Settings['use_hashtype']=="ripemd128") { $iDBHash = "iDBHRMD128";
