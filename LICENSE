@@ -1,9 +1,10 @@
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  $FileInfo: LICENSE - Last Update: 03/18/2010 SVN 459 - Author: cooldude2k $ 
+  $FileInfo: LICENSE - Last Update: 08/03/2010 SVN 529 - Author: cooldude2k $ 
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 		    Revised BSD License
-Copyright (c) 2004-2010 Game Maker 2k
-All rights reserved.
+
+Copyright (c) 2004-2010 Game Maker 2k. All rights reserved.
+
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
 
@@ -29,6 +30,10 @@ INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
 CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
 THE POSSIBILITY OF SUCH DAMAGE.
+
+The views and conclusions contained in the software and documentation are those of the
+authors and should not be interpreted as representing official policies, either expressed
+or implied, of <copyright holder>.
 
   Important Note: The Emoticons distributed with the Software were
 created by Jcink; its usage is not governed under the terms of this 
