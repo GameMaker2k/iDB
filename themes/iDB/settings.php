@@ -11,14 +11,14 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
     $ThemeInfo - Name: iDB Theme - Author: cooldude2k $
-    $FileInfo: settings.php - Last Update: 09/08/2010 SVN 530 - Author: cooldude2k $
+    $FileInfo: settings.php - Last Update: 09/08/2010 SVN 532 - Author: cooldude2k $
 */
 $ThemeSet = array();
 $ThemeSet['ThemeName'] = "iDB Theme";
 $ThemeSet['ThemeMaker'] = "Kazuki";
 $ThemeSet['ThemeVersion'] = "0.4.0";
 $ThemeSet['ThemeVersionType'] = "Alpha";
-$ThemeSet['ThemeSubVersion'] = "SVN 530";
+$ThemeSet['ThemeSubVersion'] = "SVN 532";
 $ThemeSet['MakerURL'] = "http://upload.idb.s1.jcink.com/";
 $ThemeSet['CopyRight'] = $ThemeSet['ThemeName']." was made by <a href=\"".$ThemeSet['MakerURL']."\" title=\"".$ThemeSet['ThemeMaker']."\">".$ThemeSet['ThemeMaker']."</a>";
 $ThemeSet['CSS'] = "themes/iDB/css.css";
@@ -59,9 +59,9 @@ $ThemeSet['QuoteReply'] = "Quote";
 $ThemeSet['EditReply'] = "Edit";
 $ThemeSet['DeleteReply'] = "Delete";
 $ThemeSet['Report'] = "Report";
-$ThemeSet['LineDivider'] = " &nbsp;|&nbsp; ";
-$ThemeSet['ButtonDivider'] = " &nbsp; ";
-$ThemeSet['LineDividerTopic'] = " &nbsp;|&nbsp; ";
+$ThemeSet['LineDivider'] = "&nbsp;|&nbsp;";
+$ThemeSet['ButtonDivider'] = "&nbsp;";
+$ThemeSet['LineDividerTopic'] = "&nbsp;|&nbsp;";
 $ThemeSet['TitleDivider'] = "-&gt;";
 $ThemeSet['ForumStyle'] = 1;
 $ThemeSet['ForumIcon'] = "<div style=\"text-align: center; font-size: 11px;\" title=\"Forum\"> (F) </div>";
@@ -69,7 +69,7 @@ $ThemeSet['SubForumIcon'] = "<div style=\"text-align: center; font-size: 11px;\"
 $ThemeSet['RedirectIcon'] = "<div style=\"text-align: center; font-size: 11px;\" title=\"Redirect Forum\"> [RF] </div>";
 $ThemeSet['TitleIcon'] = null;
 $ThemeSet['NavLinkIcon'] = null;
-$ThemeSet['NavLinkDivider'] = " -&gt; ";
+$ThemeSet['NavLinkDivider'] = "&nbsp;-&gt;&nbsp;";
 $ThemeSet['StatsIcon'] = "<div style=\"text-align: center; font-size: 11px;\" title=\"Board Stats\">(S)</div> ";
 $ThemeSet['NoAvatar'] = "themes/iDB/noavatar.png";
 $ThemeSet['NoAvatarSize'] = "100x100";
