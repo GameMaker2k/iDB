@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: replies.php - Last Update: 06/07/2010 SVN 520 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 09/09/2010 SVN 534 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -22,6 +22,8 @@ if(!is_numeric($_GET['id'])) { $_GET['id'] = null; }
 if(!is_numeric($_GET['post'])) { $_GET['post'] = null; }
 if(!is_numeric($_GET['page'])) { $_GET['page'] = 1; }
 if(!isset($_GET['modact'])) { $_GET['modact'] = null; }
+if(!isset($_GET['link'])) { $_GET['link'] = "no"; } 
+if($_GET['link']!="yes"&&$_GET['link']!="no") { $_GET['link'] = "no"; }
 if($_GET['modact']=="pin"||$_GET['modact']=="unpin"||$_GET['modact']=="open"||
 	$_GET['modact']=="move"||$_GET['modact']=="close"||$_GET['modact']=="edit"||$_GET['modact']=="delete")
 		{ $_GET['act'] = $_GET['modact']; }
@@ -1079,7 +1081,10 @@ $NumberTopics = $NumberTopics - 1;
 sql_free_result($mvresult);
 $recountq = sql_pre_query("UPDATE \"".$Settings['sqltable']."forums\" SET \"NumPosts\"=%i,\"NumTopics\"=%i WHERE \"id\"=%i", array($NumberPosts,$NumberTopics,$OldForumID));
 sql_query($recountq,$SQLStat);
-$queryupd = sql_pre_query("UPDATE \"".$Settings['sqltable']."topics\" SET \"ForumID\"=%i,\"CategoryID\"=%i,\"OldForumID\"=%i,\"OldCategoryID\"=%i WHERE \"id\"=%i", array($_GET['newid'],$NewCatID,$OldForumID,$OldCatID,$TTopicID)); 
+if($_GET['link']=="no") {
+$queryupd = sql_pre_query("UPDATE \"".$Settings['sqltable']."topics\" SET \"ForumID\"=%i,\"CategoryID\"=%i,\"OldForumID\"=%i,\"OldCategoryID\"=%i WHERE \"id\"=%i", array($_GET['newid'],$NewCatID,$_GET['newid'],$NewCatID,$TTopicID)); }
+if($_GET['link']=="yes") {
+$queryupd = sql_pre_query("UPDATE \"".$Settings['sqltable']."topics\" SET \"ForumID\"=%i,\"CategoryID\"=%i,\"OldForumID\"=%i,\"OldCategoryID\"=%i WHERE \"id\"=%i", array($_GET['newid'],$NewCatID,$OldForumID,$OldCatID,$TTopicID)); }
 sql_query($queryupd,$SQLStat);
 $queryupd = sql_pre_query("UPDATE \"".$Settings['sqltable']."posts\" SET \"ForumID\"=%i,\"CategoryID\"=%i WHERE \"TopicID\"=%i", array($_GET['newid'],$NewCatID,$TTopicID)); 
 sql_query($queryupd,$SQLStat);

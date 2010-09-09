@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: functions.php - Last Update: 05/11/2010 SVN 485 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 09/09/2010 SVN 534 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -263,6 +263,8 @@ $utimestamp = $utimestamp + $tsa['minute'] * $utsminute;
 $utimestamp = $utimestamp + $minoffset * $utsminute;
 $timestamp = $timestamp + $utimestamp;
 return date($format,mktime()+$timestamp); }
+	$Names['StB'] = "Stevie Braun";
+define("_stevie_", $Names['StB']);
 // Get Server offset
 function GetSeverZone() {
 $TestHour1 = date("H");
