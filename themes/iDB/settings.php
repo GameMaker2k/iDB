@@ -11,14 +11,14 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
     $ThemeInfo - Name: iDB Theme - Author: cooldude2k $
-    $FileInfo: settings.php - Last Update: 12/31/2009 SVN 437 - Author: cooldude2k $
+    $FileInfo: settings.php - Last Update: 09/08/2010 SVN 530 - Author: cooldude2k $
 */
 $ThemeSet = array();
 $ThemeSet['ThemeName'] = "iDB Theme";
 $ThemeSet['ThemeMaker'] = "Kazuki";
-$ThemeSet['ThemeVersion'] = "0.2.5";
-$ThemeSet['ThemeVersionType'] = "Pre-Alpha";
-$ThemeSet['ThemeSubVersion'] = "SVN 222";
+$ThemeSet['ThemeVersion'] = "0.4.0";
+$ThemeSet['ThemeVersionType'] = "Alpha";
+$ThemeSet['ThemeSubVersion'] = "SVN 530";
 $ThemeSet['MakerURL'] = "http://upload.idb.s1.jcink.com/";
 $ThemeSet['CopyRight'] = $ThemeSet['ThemeName']." was made by <a href=\"".$ThemeSet['MakerURL']."\" title=\"".$ThemeSet['ThemeMaker']."\">".$ThemeSet['ThemeMaker']."</a>";
 $ThemeSet['CSS'] = "themes/iDB/css.css";
@@ -38,6 +38,14 @@ $ThemeSet['ClosedTopic'] = "<div style=\"text-align: center; font-size: 11px; te
 $ThemeSet['HotClosedTopic'] = "<div style=\"text-align: center; font-size: 11px; text-decoration: line-through; font-weight: bold;\" title=\"Hot Closed Topic!\"> [T] </div>";
 $ThemeSet['PinClosedTopic'] = "<div style=\"text-align: center; font-size: 11px; text-decoration: line-through;\" title=\"Closed Pinned Topic!\"> [P] </div>";
 $ThemeSet['HotPinClosedTopic'] = "<div style=\"text-align: center; font-size: 11px; text-decoration: line-through; font-weight: bold;\" title=\"Hot Closed Pinned Topic!\"> [P] </div>";
+$ThemeSet['MovedTopicIcon'] = "<div style=\"text-align: center; font-size: 11px;\" title=\"Topic!\"> (~T) </div>";
+$ThemeSet['MovedHotTopic'] = "<div style=\"text-align: center; font-size: 11px; font-weight: bold;\" title=\"Hot Topic!\"> (~T) </div>";
+$ThemeSet['MovedPinTopic'] = "<div style=\"text-align: center; font-size: 11px;\" title=\"Pinned Topic!\"> {~P} </div>";
+$ThemeSet['MovedHotPinTopic'] = "<div style=\"text-align: center; font-size: 11px; font-weight: bold;\" title=\"Hot Pinned Topic!\"> {~P} </div>";
+$ThemeSet['MovedClosedTopic'] = "<div style=\"text-align: center; font-size: 11px; text-decoration: line-through;\" title=\"Closed Topic!\"> [~T] </div>";
+$ThemeSet['MovedHotClosedTopic'] = "<div style=\"text-align: center; font-size: 11px; text-decoration: line-through; font-weight: bold;\" title=\"Hot Closed Topic!\"> [~T] </div>";
+$ThemeSet['MovedPinClosedTopic'] = "<div style=\"text-align: center; font-size: 11px; text-decoration: line-through;\" title=\"Closed Pinned Topic!\"> [~P] </div>";
+$ThemeSet['MovedHotPinClosedTopic'] = "<div style=\"text-align: center; font-size: 11px; text-decoration: line-through; font-weight: bold;\" title=\"Hot Closed Pinned Topic!\"> [~P] </div>";
 $ThemeSet['MessageRead'] = "<div style=\"text-align: center; font-size: 11px;\" title=\"Message!\"> [M] </div>";
 $ThemeSet['MessageUnread'] = "<div style=\"text-align: center; font-size: 11px; font-weight: bold;\" title=\"New Message!\"> (M) </div>";
 $ThemeSet['Profile'] = "Profile";
@@ -51,9 +59,9 @@ $ThemeSet['QuoteReply'] = "Quote";
 $ThemeSet['EditReply'] = "Edit";
 $ThemeSet['DeleteReply'] = "Delete";
 $ThemeSet['Report'] = "Report";
-$ThemeSet['LineDivider'] = " | ";
+$ThemeSet['LineDivider'] = " &nbsp;|&nbsp; ";
 $ThemeSet['ButtonDivider'] = " &nbsp; ";
-$ThemeSet['LineDividerTopic'] = " | ";
+$ThemeSet['LineDividerTopic'] = " &nbsp;|&nbsp; ";
 $ThemeSet['TitleDivider'] = "-&gt;";
 $ThemeSet['ForumStyle'] = 1;
 $ThemeSet['ForumIcon'] = "<div style=\"text-align: center; font-size: 11px;\" title=\"Forum\"> (F) </div>";

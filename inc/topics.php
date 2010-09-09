@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: topics.php - Last Update: 06/07/2010 SVN 520 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 09/08/2010 SVN 530 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -274,6 +274,7 @@ if($pstring!=null||$PermissionInfo['CanMakeTopics'][$ForumID]=="yes"&&$CanHaveTo
 <?php
 while ($i < $num) {
 $TopicID=sql_result($result,$i,"id");
+$OldForumID=sql_result($result,$i,"OldForumID");
 $UsersID=sql_result($result,$i,"UserID");
 $GuestsName=sql_result($result,$i,"GuestName");
 $TheTime=sql_result($result,$i,"TimeStamp");
@@ -416,6 +417,10 @@ if(!is_numeric($PinnedTopic)) { $PinnedTopic = 0; }
 if ($TopicStat>1) { $TopicStat = 1; } 
 if ($TopicStat<0) { $TopicStat = 0; }
 if(!is_numeric($TopicStat)) { $TopicStat = 1; }
+if(!is_numeric($OldForumID)) { $OldForumID = $ForumID; }
+if($OldForumID=="0") { $OldForumID = $ForumID; }
+if ($OldForumID!=$ForumID) {
+$PreTopic = $ThemeSet['TopicIcon'];
 if ($PinnedTopic==1&&$TopicStat==0) {
 	if($NumReply>=$Settings['hot_topic_num']) {
 		$PreTopic=$ThemeSet['HotPinTopic']; }
@@ -435,7 +440,29 @@ if ($PinnedTopic==1&&$TopicStat==1) {
 		if($NumReply>=$Settings['hot_topic_num']) {
 			$PreTopic=$ThemeSet['HotPinClosedTopic']; }
 		if($NumReply<$Settings['hot_topic_num']) {
-			$PreTopic=$ThemeSet['PinClosedTopic']; } }
+			$PreTopic=$ThemeSet['PinClosedTopic']; } } }
+if ($OldForumID==$ForumID) {
+$PreTopic = $ThemeSet['MovedTopicIcon'];
+if ($PinnedTopic==1&&$TopicStat==0) {
+	if($NumReply>=$Settings['hot_topic_num']) {
+		$PreTopic=$ThemeSet['MovedHotPinTopic']; }
+	if($NumReply<$Settings['hot_topic_num']) {
+		$PreTopic=$ThemeSet['MovedPinTopic']; } }
+if ($TopicStat==1&&$PinnedTopic==0) {
+	if($NumReply>=$Settings['hot_topic_num']) {
+		$PreTopic=$ThemeSet['MovedHotClosedTopic']; }
+	if($NumReply<$Settings['hot_topic_num']) {
+		$PreTopic=$ThemeSet['MovedClosedTopic']; } }
+if ($PinnedTopic==0&&$TopicStat==0) {
+		if($NumReply>=$Settings['hot_topic_num']) {
+			$PreTopic=$ThemeSet['MovedHotTopic']; }
+		if($NumReply<$Settings['hot_topic_num']) {
+			$PreTopic=$ThemeSet['MovedTopicIcon']; } }
+if ($PinnedTopic==1&&$TopicStat==1) {
+		if($NumReply>=$Settings['hot_topic_num']) {
+			$PreTopic=$ThemeSet['MovedHotPinClosedTopic']; }
+		if($NumReply<$Settings['hot_topic_num']) {
+			$PreTopic=$ThemeSet['MovedPinClosedTopic']; } } }
 ?>
 <tr class="TableRow3" id="Topic<?php echo $TopicID; ?>">
 <td class="TableColumn3"><div class="topicstate">

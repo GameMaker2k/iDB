@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sqlthemes.php - Last Update: 04/30/2010 SVN 472 - Author: cooldude2k $
+    $FileInfo: sqlthemes.php - Last Update: 09/08/2010 SVN 530 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="sqlthemes.php"||$File3Name=="/sqlthemes.php") {
@@ -53,20 +53,36 @@ $ThemeSet['SubLogo'] = sql_result($themeresult,0,"SubLogo");
 if($ThemeSet['SubLogo']=="") { $ThemeSet['SubLogo'] = null; }
 $ThemeSet['TopicIcon'] = sql_result($themeresult,0,"TopicIcon");
 if($ThemeSet['TopicIcon']=="") { $ThemeSet['TopicIcon'] = null; }
+$ThemeSet['MovedTopicIcon'] = sql_result($themeresult,0,"MovedTopicIcon");
+if($ThemeSet['MovedTopicIcon']=="") { $ThemeSet['MovedTopicIcon'] = $ThemeSet['TopicIcon']; }
 $ThemeSet['HotTopic'] = sql_result($themeresult,0,"HotTopic");
 if($ThemeSet['HotTopic']=="") { $ThemeSet['HotTopic'] = null; }
+$ThemeSet['MovedHotTopic'] = sql_result($themeresult,0,"MovedHotTopic");
+if($ThemeSet['MovedHotTopic']=="") { $ThemeSet['MovedHotTopic'] = $ThemeSet['HotTopic']; }
 $ThemeSet['PinTopic'] = sql_result($themeresult,0,"PinTopic");
 if($ThemeSet['PinTopic']=="") { $ThemeSet['PinTopic'] = null; }
+$ThemeSet['MovedPinTopic'] = sql_result($themeresult,0,"MovedPinTopic");
+if($ThemeSet['MovedPinTopic']=="") { $ThemeSet['MovedPinTopic'] = $ThemeSet['PinTopic']; }
 $ThemeSet['HotPinTopic'] = sql_result($themeresult,0,"HotPinTopic");
 if($ThemeSet['HotPinTopic']=="") { $ThemeSet['HotPinTopic'] = null; }
+$ThemeSet['MovedHotPinTopic'] = sql_result($themeresult,0,"MovedHotPinTopic");
+if($ThemeSet['MovedHotPinTopic']=="") { $ThemeSet['MovedHotPinTopic'] = $ThemeSet['HotPinTopic']; }
 $ThemeSet['ClosedTopic'] = sql_result($themeresult,0,"ClosedTopic");
 if($ThemeSet['ClosedTopic']=="") { $ThemeSet['ClosedTopic'] = null; }
+$ThemeSet['MovedClosedTopic'] = sql_result($themeresult,0,"MovedClosedTopic");
+if($ThemeSet['MovedClosedTopic']=="") { $ThemeSet['MovedClosedTopic'] = $ThemeSet['ClosedTopic']; }
 $ThemeSet['HotClosedTopic'] = sql_result($themeresult,0,"HotClosedTopic");
 if($ThemeSet['HotClosedTopic']=="") { $ThemeSet['HotClosedTopic'] = null; }
+$ThemeSet['MovedHotClosedTopic'] = sql_result($themeresult,0,"MovedHotClosedTopic");
+if($ThemeSet['MovedHotClosedTopic']=="") { $ThemeSet['MovedHotClosedTopic'] = $ThemeSet['HotClosedTopic']; }
 $ThemeSet['PinClosedTopic'] = sql_result($themeresult,0,"PinClosedTopic");
 if($ThemeSet['PinClosedTopic']=="") { $ThemeSet['PinClosedTopic'] = null; }
+$ThemeSet['MovedPinClosedTopic'] = sql_result($themeresult,0,"MovedPinClosedTopic");
+if($ThemeSet['MovedPinClosedTopic']=="") { $ThemeSet['MovedPinClosedTopic'] = $ThemeSet['PinClosedTopic']; }
 $ThemeSet['HotPinClosedTopic'] = sql_result($themeresult,0,"HotPinClosedTopic");
 if($ThemeSet['HotPinClosedTopic']=="") { $ThemeSet['HotPinClosedTopic'] = null; }
+$ThemeSet['MovedHotPinClosedTopic'] = sql_result($themeresult,0,"MovedHotPinClosedTopic");
+if($ThemeSet['MovedHotPinClosedTopic']=="") { $ThemeSet['MovedHotPinClosedTopic'] = $ThemeSet['HotPinClosedTopic']; }
 $ThemeSet['MessageRead'] = sql_result($themeresult,0,"MessageRead");
 if($ThemeSet['MessageRead']=="") { $ThemeSet['MessageRead'] = null; }
 $ThemeSet['MessageUnread'] = sql_result($themeresult,0,"MessageUnread");
