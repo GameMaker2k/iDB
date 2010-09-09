@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: topics.php - Last Update: 09/08/2010 SVN 531 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 09/09/2010 SVN 533 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -422,10 +422,13 @@ if(!is_numeric($OldForumID)) { $OldForumID = $ForumID; }
 if($OldForumID=="0") { $OldForumID = $ForumID; }
 if ($OldForumID!=$ForumID||$TForumID==$ForumID) {
 $PreTopic = $ThemeSet['TopicIcon'];
+$PreTopicText = null;
 if ($PinnedTopic==1&&$TopicStat==0) {
 	if($NumReply>=$Settings['hot_topic_num']) {
+		$PreTopicText = "<span style=\"font-weight: bold;\">Pinned: </span>";
 		$PreTopic=$ThemeSet['HotPinTopic']; }
 	if($NumReply<$Settings['hot_topic_num']) {
+		$PreTopicText = "<span style=\"font-weight: bold;\">Pinned: </span>";
 		$PreTopic=$ThemeSet['PinTopic']; } }
 if ($TopicStat==1&&$PinnedTopic==0) {
 	if($NumReply>=$Settings['hot_topic_num']) {
@@ -439,10 +442,13 @@ if ($PinnedTopic==0&&$TopicStat==0) {
 			$PreTopic=$ThemeSet['TopicIcon']; } }
 if ($PinnedTopic==1&&$TopicStat==1) {
 		if($NumReply>=$Settings['hot_topic_num']) {
+			$PreTopicText = "<span style=\"font-weight: bold;\">Pinned: </span>";
 			$PreTopic=$ThemeSet['HotPinClosedTopic']; }
 		if($NumReply<$Settings['hot_topic_num']) {
+			$PreTopicText = "<span style=\"font-weight: bold;\">Pinned: </span>";
 			$PreTopic=$ThemeSet['PinClosedTopic']; } } }
 if ($OldForumID==$ForumID&&$TForumID!=$ForumID) {
+$PreTopicText = "Moved: ";
 $PreTopic = $ThemeSet['MovedTopicIcon'];
 if ($PinnedTopic==1&&$TopicStat==0) {
 	if($NumReply>=$Settings['hot_topic_num']) {
@@ -469,7 +475,7 @@ if ($PinnedTopic==1&&$TopicStat==1) {
 <td class="TableColumn3"><div class="topicstate">
 <?php echo $PreTopic; ?></div></td>
 <td class="TableColumn3"><div class="topicname">
-<a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a>
+<?php echo $PreTopicText; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a>
 <?php if($prepagelist!==null) { echo $prepagelist; } ?></div>
 <div class="topicdescription"><?php echo $TopicDescription; ?></div></td>
 <td class="TableColumn3" style="text-align: center;"><?php

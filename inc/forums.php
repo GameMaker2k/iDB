@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: forums.php - Last Update: 06/07/2010 SVN 520 - Author: cooldude2k $
+    $FileInfo: forums.php - Last Update: 09/09/2010 SVN 533 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="forums.php"||$File3Name=="/forums.php") {
@@ -144,7 +144,7 @@ sql_free_result($gltforesult);
 ++$glti; } }
 if ($ForumType!="subforum"&&$ForumType!="redirect") { $UseThisFonum = $gltf[0]; }
 if ($ForumType!="redirect") {
-$gltquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"ForumID\"=%i ORDER BY \"LastUpdate\" DESC LIMIT 1", array($UseThisFonum));
+$gltquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE (\"ForumID\"=%i) OR (\"OldForumID\"=%i) ORDER BY \"LastUpdate\" DESC LIMIT 1", array($UseThisFonum,$UseThisFonum));
 $gltresult=sql_query($gltquery,$SQLStat);
 $gltnum=sql_num_rows($gltresult);
 if($gltnum>0){
