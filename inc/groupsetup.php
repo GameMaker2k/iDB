@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: groupsetup.php - Last Update: 06/07/2010 SVN 520 - Author: cooldude2k $
+    $FileInfo: groupsetup.php - Last Update: 09/10/2010 SVN 536 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="groupsetup.php"||$File3Name=="/groupsetup.php") {
@@ -247,6 +247,10 @@ if($pernum<0) { $PerError = true; sql_free_result($peresult);
 header("Content-Type: text/plain; charset=".$Settings['charset']); 
 ob_clean(); echo "Sorry could not find permission data in database.\nContact the board admin about error."; 
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
+$ForumIgnoreList1 = null; $ForumIgnoreList2 = null;
+$ForumIgnoreList3 = null; $ForumIgnoreList4 = null;
+$ModForumIgnoreList1 = null; $ModForumIgnoreList2 = null;
+$ModForumIgnoreList3 = null; $ModForumIgnoreList4 = null;
 if($pernum>=1) { while ($peri < $pernum) {
 $PerForumID=sql_result($peresult,$peri,"ForumID");
 if(!is_numeric($PerForumID)) { $PerError = true; }
@@ -260,6 +264,15 @@ if(!is_numeric($PermissionInfo['ForumID'][$PerForumID])) { $PerError = true; }
 $PermissionInfo['CanViewForum'][$PerForumID]=sql_result($peresult,$peri,"CanViewForum");
 if($PermissionInfo['CanViewForum'][$PerForumID]!="yes"&&$PermissionInfo['CanViewForum'][$PerForumID]!="no") {
 		$PerError = true; }
+if($PermissionInfo['CanViewForum'][$PerForumID]=="no") {
+if(strlen($ForumIgnoreList1)>1) { $ForumIgnoreList1 .= " AND \"id\"<>".$PerForumID; }
+if(strlen($ForumIgnoreList1)<1) { $ForumIgnoreList1 = " \"id\"<>".$PerForumID; }
+if(strlen($ForumIgnoreList2)>1) { $ForumIgnoreList2 .= " AND \"id\"<>".$PerForumID; }
+if(strlen($ForumIgnoreList2)<1) { $ForumIgnoreList2 = " AND \"id\"<>".$PerForumID; }
+if(strlen($ForumIgnoreList3)>1) { $ForumIgnoreList3 .= " AND \"ForumID\"<>".$PerForumID; }
+if(strlen($ForumIgnoreList3)<1) { $ForumIgnoreList3 = " \"ForumID\"<>".$PerForumID; }
+if(strlen($ForumIgnoreList4)>1) { $ForumIgnoreList4 .= " AND \"ForumID\"<>".$PerForumID; }
+if(strlen($ForumIgnoreList4)<1) { $ForumIgnoreList4 = " AND \"ForumID\"<>".$PerForumID; } }
 $PermissionInfo['CanMakeTopics'][$PerForumID]=sql_result($peresult,$peri,"CanMakeTopics");
 if($PermissionInfo['CanMakeTopics'][$PerForumID]!="yes"&&$PermissionInfo['CanMakeTopics'][$PerForumID]!="no") {
 		$PerError = true; }
@@ -308,6 +321,15 @@ if($PermissionInfo['CanUseBBags'][$PerForumID]!="yes"&&$PermissionInfo['CanUseBB
 $PermissionInfo['CanModForum'][$PerForumID]=sql_result($peresult,$peri,"CanModForum");
 if($PermissionInfo['CanModForum'][$PerForumID]!="yes"&&$PermissionInfo['CanModForum'][$PerForumID]!="no") {
 	$PermissionInfo['CanModForum'][$PerForumID] = "no"; }
+if($PermissionInfo['CanModForum'][$PerForumID]=="no") {
+if(strlen($ModForumIgnoreList1)>1) { $ModForumIgnoreList1 .= " AND \"id\"<>".$PerForumID; }
+if(strlen($ModForumIgnoreList1)<1) { $ModForumIgnoreList1 = " \"id\"<>".$PerForumID; }
+if(strlen($ModForumIgnoreList2)>1) { $ModForumIgnoreList2 .= " AND \"id\"<>".$PerForumID; }
+if(strlen($ModForumIgnoreList2)<1) { $ModForumIgnoreList2 = " AND \"id\"<>".$PerForumID; }
+if(strlen($ModForumIgnoreList3)>1) { $ModForumIgnoreList3 .= " AND \"ForumID\"<>".$PerForumID; }
+if(strlen($ModForumIgnoreList3)<1) { $ModForumIgnoreList3 = " \"ForumID\"<>".$PerForumID; }
+if(strlen($ModForumIgnoreList4)>1) { $ModForumIgnoreList4 .= " AND \"ForumID\"<>".$PerForumID; }
+if(strlen($ModForumIgnoreList4)<1) { $ModForumIgnoreList4 = " AND \"ForumID\"<>".$PerForumID; } }
 if($PerError===true) { $peri = $pernum; }
 ++$peri; } if($PerError===true) {
 header("Content-Type: text/plain; charset=".$Settings['charset']); sql_free_result($peresult);
@@ -322,6 +344,8 @@ if($per2num<=0) { $Per2Error = true; sql_free_result($per2esult);
 header("Content-Type: text/plain; charset=".$Settings['charset']); 
 ob_clean(); echo "Sorry could not find permission data in database.\nContact the board admin about error."; 
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
+$CatIgnoreList1 = null; $CatIgnoreList2 = null;
+$CatIgnoreList3 = null; $CatIgnoreList4 = null;
 if($per2num>=1) { while ($per2i < $per2num) {
 $PerCatID=sql_result($per2esult,$per2i,"CategoryID");
 if(!is_numeric($PerCatID)) { $Per2Error = true; }
@@ -334,6 +358,15 @@ $CatPermissionInfo['CategoryID'][$PerCatID]=sql_result($per2esult,$per2i,"Catego
 if(!is_numeric($CatPermissionInfo['CategoryID'][$PerCatID])) { $Per2Error = true; }
 $CatPermissionInfo['CanViewCategory'][$PerCatID]=sql_result($per2esult,$per2i,"CanViewCategory");
 if($CatPermissionInfo['CanViewCategory'][$PerCatID]!="yes"&&$CatPermissionInfo['CanViewCategory'][$PerCatID]!="no") { $Per2Error = true; }
+if($CatPermissionInfo['CanViewCategory'][$PerCatID]=="no") {
+if(strlen($CatIgnoreList1)>1) { $CatIgnoreList1 .= " AND \"id\"<>".$PerCatID; }
+if(strlen($CatIgnoreList1)<1) { $CatIgnoreList1 = " \"id\"<>".$PerCatID; }
+if(strlen($CatIgnoreList2)>1) { $CatIgnoreList2 .= " AND \"id\"<>".$PerCatID; }
+if(strlen($CatIgnoreList2)<1) { $CatIgnoreList2 = " AND \"id\"<>".$PerCatID; }
+if(strlen($CatIgnoreList3)>1) { $CatIgnoreList3 .= " AND \"CategoryID\"<>".$PerCatID; }
+if(strlen($CatIgnoreList3)<1) { $CatIgnoreList3 = " \"CategoryID\"<>".$PerCatID; }
+if(strlen($CatIgnoreList4)>1) { $CatIgnoreList4 .= " AND \"CategoryID\"<>".$PerCatID; }
+if(strlen($CatIgnoreList4)<1) { $CatIgnoreList4 = " AND \"CategoryID\"<>".$PerCatID; } }
 if($Per2Error===true) { $per2i = $per2num; }
 ++$per2i; } if($Per2Error===true) {
 header("Content-Type: text/plain; charset=".$Settings['charset']); sql_free_result($per2esult);
