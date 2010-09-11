@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: lowreplies.php - Last Update: 06/07/2010 SVN 520 - Author: cooldude2k $
+    $FileInfo: lowreplies.php - Last Update: 09/10/2010 SVN 535 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -37,6 +37,10 @@ $TopicID=sql_result($preresult,0,"id");
 $TopicForumID=sql_result($preresult,0,"ForumID");
 $TopicCatID=sql_result($preresult,0,"CategoryID");
 $TopicClosed=sql_result($preresult,0,"Closed");
+if($TopicClosed==3&&$PermissionInfo['CanModForum'][$TopicForumID]=="no") { 
+redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($preresult);
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $NumberReplies=sql_result($preresult,0,"NumReply");
 $ViewTimes=sql_result($preresult,0,"NumViews");
 sql_free_result($preresult);

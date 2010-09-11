@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: lowtopics.php - Last Update: 06/07/2010 SVN 520 - Author: cooldude2k $
+    $FileInfo: lowtopics.php - Last Update: 09/10/2010 SVN 535 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="lowtopics.php"||$File3Name=="/lowtopics.php") {
@@ -161,7 +161,10 @@ $PageLimit = $Settings['max_topics'] * $snumber;
 if($PageLimit<0) { $PageLimit = 0; }
 //End Topic Page Code
 $i=0;
-$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"ForumID\"=%i ORDER BY \"Pinned\" DESC, \"LastUpdate\" DESC ".$SQLimit, array($_GET['id'],$PageLimit,$Settings['max_topics']));
+$ExtraIgnores = null;
+if($PermissionInfo['CanModForum'][$_GET['id']]=="no") {
+	$ExtraIgnores = " AND \"Closed\"<>3"; }
+$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"ForumID\"=%i".$ExtraIgnores." ORDER BY \"Pinned\" DESC, \"LastUpdate\" DESC ".$SQLimit, array($_GET['id'],$PageLimit,$Settings['max_topics']));
 $result=sql_query($query,$SQLStat);
 $num=sql_num_rows($result);
 //List Page Number Code Start
@@ -232,6 +235,8 @@ $pstring = $pstring."<span class=\"pagelinklast\"><a href=\"".url_maker($exfile[
 <?php }
 while ($i < $num) {
 $TopicID=sql_result($result,$i,"id");
+$TForumID=sql_result($result,$i,"ForumID");
+$OldForumID=sql_result($result,$i,"OldForumID");
 $UsersID=sql_result($result,$i,"UserID");
 $GuestsName=sql_result($result,$i,"GuestName");
 $TheTime=sql_result($result,$i,"TimeStamp");
@@ -246,16 +251,17 @@ $TopicDescription=sql_result($result,$i,"Description");
 $PinnedTopic=sql_result($result,$i,"Pinned");
 $TopicStat=sql_result($result,$i,"Closed");
 $PreTopic = null;
-if ($PinnedTopic>1) { $PinnedTopic = 1; } 
+if ($PinnedTopic>2) { $PinnedTopic = 1; } 
 if ($PinnedTopic<0) { $PinnedTopic = 0; }
 if(!is_numeric($PinnedTopic)) { $PinnedTopic = 0; }
-if ($TopicStat>1) { $TopicStat = 1; } 
+if ($TopicStat>3) { $TopicStat = 1; } 
 if ($TopicStat<0) { $TopicStat = 0; }
 if(!is_numeric($TopicStat)) { $TopicStat = 1; }
-if ($PinnedTopic==1) { $PreTopic="Pinned: "; }
+if ($PinnedTopic>0&&$PinnedTopic<3&&) { $PreTopic="<span style=\"font-weight: bold;\">Pinned: </span>"; }
 if ($PinnedTopic==0) { $PreTopic=null; }
+if ($OldForumID==$ForumID&&$TForumID!=$ForumID) { $PreTopic="<span>Moved: </span>"; }
 ?>
-<li><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=lowview&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $PreTopic.$TopicName; ?></a> <span style="color: gray; font-size: 10px;">(<?php echo $NumReply; ?> replies)</span></li>
+<li><?php echo $PreTopic; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=lowview&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a> <span style="color: gray; font-size: 10px;">(<?php echo $NumReply; ?> replies)</span></li>
 <?php ++$i; } ?>
 </ul></div><div>&nbsp;</div>
 <?php sql_free_result($result); } } } ?>

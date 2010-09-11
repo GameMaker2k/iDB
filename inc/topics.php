@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: topics.php - Last Update: 09/09/2010 SVN 533 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 09/10/2010 SVN 535 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -174,7 +174,10 @@ $PageLimit = $Settings['max_topics'] * $snumber;
 if($PageLimit<0) { $PageLimit = 0; }
 //End Topic Page Code
 $i=0;
-$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE (\"ForumID\"=%i) OR (\"OldForumID\"=%i) ORDER BY \"Pinned\" DESC, \"LastUpdate\" DESC ".$SQLimit, array($_GET['id'],$_GET['id'],$PageLimit,$Settings['max_topics']));
+$ExtraIgnores = null;
+if($PermissionInfo['CanModForum'][$_GET['id']]=="no") {
+	$ExtraIgnores = " AND \"Closed\"<>3"; }
+$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE (\"ForumID\"=%i".$ExtraIgnores.") OR (\"OldForumID\"=%i".$ExtraIgnores.") OR (\"Pinned\"=2".$ExtraIgnores.") ORDER BY \"Pinned\" DESC, \"LastUpdate\" DESC ".$SQLimit, array($_GET['id'],$_GET['id'],$PageLimit,$Settings['max_topics']));
 $result=sql_query($query,$SQLStat);
 $num=sql_num_rows($result);
 //List Page Number Code Start
@@ -412,10 +415,10 @@ sql_free_result($glrresult);
 if(!isset($TimeStamp1)) { $TimeStamp1 = null; } if(!isset($LastReply)) { $LastReply = "&nbsp;<br />&nbsp;"; }
 if($TimeStamp1==null) { $LastReply = "&nbsp;<br />&nbsp;"; }
 $PreTopic = $ThemeSet['TopicIcon'];
-if ($PinnedTopic>1) { $PinnedTopic = 1; } 
+if ($PinnedTopic>2) { $PinnedTopic = 1; } 
 if ($PinnedTopic<0) { $PinnedTopic = 0; }
 if(!is_numeric($PinnedTopic)) { $PinnedTopic = 0; }
-if ($TopicStat>1) { $TopicStat = 1; } 
+if ($TopicStat>3) { $TopicStat = 1; } 
 if ($TopicStat<0) { $TopicStat = 0; }
 if(!is_numeric($TopicStat)) { $TopicStat = 1; }
 if(!is_numeric($OldForumID)) { $OldForumID = $ForumID; }
@@ -423,14 +426,14 @@ if($OldForumID=="0") { $OldForumID = $ForumID; }
 if ($OldForumID!=$ForumID||$TForumID==$ForumID) {
 $PreTopic = $ThemeSet['TopicIcon'];
 $PreTopicText = null;
-if ($PinnedTopic==1&&$TopicStat==0) {
+if ($PinnedTopic>0&&$PinnedTopic<3&&$TopicStat==0) {
 	if($NumReply>=$Settings['hot_topic_num']) {
 		$PreTopicText = "<span style=\"font-weight: bold;\">Pinned: </span>";
 		$PreTopic=$ThemeSet['HotPinTopic']; }
 	if($NumReply<$Settings['hot_topic_num']) {
 		$PreTopicText = "<span style=\"font-weight: bold;\">Pinned: </span>";
 		$PreTopic=$ThemeSet['PinTopic']; } }
-if ($TopicStat==1&&$PinnedTopic==0) {
+if ($TopicStat>=0&&$TopicStat<=3&&$PinnedTopic==0) {
 	if($NumReply>=$Settings['hot_topic_num']) {
 		$PreTopic=$ThemeSet['HotClosedTopic']; }
 	if($NumReply<$Settings['hot_topic_num']) {
@@ -440,7 +443,7 @@ if ($PinnedTopic==0&&$TopicStat==0) {
 			$PreTopic=$ThemeSet['HotTopic']; }
 		if($NumReply<$Settings['hot_topic_num']) {
 			$PreTopic=$ThemeSet['TopicIcon']; } }
-if ($PinnedTopic==1&&$TopicStat==1) {
+if ($PinnedTopic>0&&$PinnedTopic<3&&$TopicStat>=0&&$TopicStat<=3) {
 		if($NumReply>=$Settings['hot_topic_num']) {
 			$PreTopicText = "<span style=\"font-weight: bold;\">Pinned: </span>";
 			$PreTopic=$ThemeSet['HotPinClosedTopic']; }
@@ -448,14 +451,14 @@ if ($PinnedTopic==1&&$TopicStat==1) {
 			$PreTopicText = "<span style=\"font-weight: bold;\">Pinned: </span>";
 			$PreTopic=$ThemeSet['PinClosedTopic']; } } }
 if ($OldForumID==$ForumID&&$TForumID!=$ForumID) {
-$PreTopicText = "Moved: ";
+$PreTopicText = "<span>Moved: </span>";
 $PreTopic = $ThemeSet['MovedTopicIcon'];
-if ($PinnedTopic==1&&$TopicStat==0) {
+if ($PinnedTopic>0&&$PinnedTopic<3&&$TopicStat==0) {
 	if($NumReply>=$Settings['hot_topic_num']) {
 		$PreTopic=$ThemeSet['MovedHotPinTopic']; }
 	if($NumReply<$Settings['hot_topic_num']) {
 		$PreTopic=$ThemeSet['MovedPinTopic']; } }
-if ($TopicStat==1&&$PinnedTopic==0) {
+if ($TopicStat>=0&&$TopicStat<=3&&$PinnedTopic==0) {
 	if($NumReply>=$Settings['hot_topic_num']) {
 		$PreTopic=$ThemeSet['MovedHotClosedTopic']; }
 	if($NumReply<$Settings['hot_topic_num']) {
@@ -465,7 +468,7 @@ if ($PinnedTopic==0&&$TopicStat==0) {
 			$PreTopic=$ThemeSet['MovedHotTopic']; }
 		if($NumReply<$Settings['hot_topic_num']) {
 			$PreTopic=$ThemeSet['MovedTopicIcon']; } }
-if ($PinnedTopic==1&&$TopicStat==1) {
+if ($PinnedTopic>0&&$PinnedTopic<3&&$TopicStat>=0&&$TopicStat<=3) {
 		if($NumReply>=$Settings['hot_topic_num']) {
 			$PreTopic=$ThemeSet['MovedHotPinClosedTopic']; }
 		if($NumReply<$Settings['hot_topic_num']) {

@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: subcategories.php - Last Update: 09/09/2010 SVN 533 - Author: cooldude2k $
+    $FileInfo: subcategories.php - Last Update: 09/10/2010 SVN 535 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="subcategories.php"||$File3Name=="/subcategories.php") {
@@ -207,7 +207,10 @@ $gltnum = count($gltf); $glti = 0;
 $OldUpdateTime = 0; $UseThisFonum = null;
 if ($ForumType=="subforum") { 
 while ($glti < $gltnum) {
-$gltfoquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"ForumID\"=%i ORDER BY \"LastUpdate\" DESC LIMIT 1", array($gltf[$glti]));
+$ExtraIgnores = null;
+if($PermissionInfo['CanModForum'][$gltf[$glti]]=="no") {
+	$ExtraIgnores = " AND \"Closed\"<>3"; }
+$gltfoquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"ForumID\"=%i".$ExtraIgnores." ORDER BY \"LastUpdate\" DESC LIMIT 1", array($gltf[$glti]));
 $gltforesult=sql_query($gltfoquery,$SQLStat);
 $gltfonum=sql_num_rows($gltforesult);
 if($gltfonum>0) {
@@ -219,7 +222,10 @@ sql_free_result($gltforesult); }
 ++$glti; } }
 if ($ForumType!="subforum"&&$ForumType!="redirect") { $UseThisFonum = $gltf[0]; }
 if ($ForumType!="redirect") {
-$gltquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE (\"ForumID\"=%i) OR (\"OldForumID\"=%i) ORDER BY \"LastUpdate\" DESC LIMIT 1", array($UseThisFonum,$UseThisFonum));
+$ExtraIgnores = null;
+if($PermissionInfo['CanModForum'][$UseThisFonum]=="no") {
+	$ExtraIgnores = " AND \"Closed\"<>3"; }
+$gltquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE (\"ForumID\"=%i".$ExtraIgnores.") OR (\"OldForumID\"=%i".$ExtraIgnores.") ORDER BY \"LastUpdate\" DESC LIMIT 1", array($UseThisFonum,$UseThisFonum));
 $gltresult=sql_query($gltquery,$SQLStat);
 $gltnum=sql_num_rows($gltresult);
 if($gltnum>0){
