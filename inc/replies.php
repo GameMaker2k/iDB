@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: replies.php - Last Update: 09/10/2010 SVN 535 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 09/11/2010 SVN 537 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -1099,15 +1099,15 @@ $TNumberPosts = $NumberReplies + 1;
 $mvquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($_GET['newid']));
 $mvresult=sql_query($mvquery,$SQLStat);
 $mvnum=sql_num_rows($mvresult);
+if($mvnum<1) {
+redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($gtsresult);
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); sql_free_result($mvresult);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $NumberPosts=sql_result($mvresult,0,"NumPosts");
 $NumberPosts = $NumberPosts + $TNumberPosts;
 $NumberTopics=sql_result($mvresult,0,"NumTopics");
 $NumberTopics = $NumberTopics + 1;
 $NewCatID=sql_result($mvresult,0,"CategoryID");
-if($mvnum<1) {
-redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($gtsresult);
-ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); sql_free_result($mvresult);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 sql_free_result($mvresult);
 $recountq = sql_pre_query("UPDATE \"".$Settings['sqltable']."forums\" SET \"NumPosts\"=%i,\"NumTopics\"=%i WHERE \"id\"=%i", array($NumberPosts,$NumberTopics,$_GET['newid']));
 sql_query($recountq,$SQLStat);
