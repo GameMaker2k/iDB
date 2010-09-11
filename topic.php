@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: topic.php - Last Update: 06/02/2010 SVN 507 - Author: cooldude2k $
+    $FileInfo: topic.php - Last Update: 09/11/2010 SVN 538 - Author: cooldude2k $
 */
 if(ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }
@@ -34,7 +34,7 @@ if(!is_numeric($_GET['id']))
 { $_GET['id']="1"; }
 if($_GET['act']=="view"||$_GET['act']=="create"||$_GET['act']=="delete"||
 	$_GET['act']=="pin"||$_GET['act']=="unpin"||$_GET['act']=="move"||
-	$_GET['act']=="open"||$_GET['act']=="close")
+	$_GET['act']=="open"||$_GET['act']=="close"||$_GET['act']=="announce")
 { require($SettDir['inc'].'replies.php'); }
 if($_GET['act']=="edit"||$_GET['act']=="makereply"||$_POST['act']=="makereplies"||
 	$_GET['act']=="editreply"||$_POST['act']=="editreplies")

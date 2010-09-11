@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: replies.php - Last Update: 09/11/2010 SVN 537 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 09/11/2010 SVN 538 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -27,8 +27,10 @@ if(!isset($_GET['level'])) { $_GET['level'] = 1; }
 if(!is_numeric($_GET['level'])) { $_GET['level'] = 1; }
 if($_GET['link']!="yes"&&$_GET['link']!="no") { $_GET['link'] = "no"; }
 if($_GET['modact']=="pin"||$_GET['modact']=="unpin"||$_GET['modact']=="open"||
-	$_GET['modact']=="move"||$_GET['modact']=="close"||$_GET['modact']=="edit"||$_GET['modact']=="delete")
+	$_GET['modact']=="move"||$_GET['modact']=="close"||$_GET['modact']=="edit"||
+	$_GET['modact']=="delete"||$_GET['modact']=="announce")
 		{ $_GET['act'] = $_GET['modact']; }
+if($_GET['act']=="announce") { $_GET['act'] = "pin"; $_GET['level'] = 2; }
 $prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"id\"=%i LIMIT 1", array($_GET['id']));
 $preresult=sql_query($prequery,$SQLStat);
 $prenum=sql_num_rows($preresult);

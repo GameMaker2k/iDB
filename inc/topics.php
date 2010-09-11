@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: topics.php - Last Update: 09/10/2010 SVN 535 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 09/11/2010 SVN 538 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -449,7 +449,10 @@ if ($PinnedTopic>0&&$PinnedTopic<3&&$TopicStat>=0&&$TopicStat<=3) {
 			$PreTopic=$ThemeSet['HotPinClosedTopic']; }
 		if($NumReply<$Settings['hot_topic_num']) {
 			$PreTopicText = "<span style=\"font-weight: bold;\">Pinned: </span>";
-			$PreTopic=$ThemeSet['PinClosedTopic']; } } }
+			$PreTopic=$ThemeSet['PinClosedTopic']; } } 
+		if($PinnedTopic==2) {
+			$PreTopicText = null;
+			$PreTopic=$ThemeSet['AnnouncementTopic']; } }
 if ($OldForumID==$ForumID&&$TForumID!=$ForumID) {
 $PreTopicText = "<span>Moved: </span>";
 $PreTopic = $ThemeSet['MovedTopicIcon'];

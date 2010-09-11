@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sqlthemes.php - Last Update: 09/08/2010 SVN 530 - Author: cooldude2k $
+    $FileInfo: sqlthemes.php - Last Update: 09/11/2010 SVN 538 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="sqlthemes.php"||$File3Name=="/sqlthemes.php") {
@@ -61,6 +61,8 @@ $ThemeSet['MovedHotTopic'] = sql_result($themeresult,0,"MovedHotTopic");
 if($ThemeSet['MovedHotTopic']=="") { $ThemeSet['MovedHotTopic'] = $ThemeSet['HotTopic']; }
 $ThemeSet['PinTopic'] = sql_result($themeresult,0,"PinTopic");
 if($ThemeSet['PinTopic']=="") { $ThemeSet['PinTopic'] = null; }
+$ThemeSet['AnnouncementTopic'] = sql_result($themeresult,0,"AnnouncementTopic");
+if($ThemeSet['AnnouncementTopic']=="") { $ThemeSet['AnnouncementTopic'] = $ThemeSet['PinTopic']; }
 $ThemeSet['MovedPinTopic'] = sql_result($themeresult,0,"MovedPinTopic");
 if($ThemeSet['MovedPinTopic']=="") { $ThemeSet['MovedPinTopic'] = $ThemeSet['PinTopic']; }
 $ThemeSet['HotPinTopic'] = sql_result($themeresult,0,"HotPinTopic");
