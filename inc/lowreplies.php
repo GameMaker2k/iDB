@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: lowreplies.php - Last Update: 09/10/2010 SVN 535 - Author: cooldude2k $
+    $FileInfo: lowreplies.php - Last Update: 09/10/2010 SVN 536 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -44,7 +44,7 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die
 $NumberReplies=sql_result($preresult,0,"NumReply");
 $ViewTimes=sql_result($preresult,0,"NumViews");
 sql_free_result($preresult);
-$forumcheckx = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i  LIMIT 1", array($TopicForumID));
+$forumcheckx = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2."  LIMIT 1", array($TopicForumID));
 $fmckresult=sql_query($forumcheckx,$SQLStat);
 $ForumName=sql_result($fmckresult,0,"Name");
 $ForumType=sql_result($fmckresult,0,"ForumType");
@@ -52,7 +52,7 @@ $CanHaveTopics=sql_result($fmckresult,0,"CanHaveTopics");
 $ForumPostCountView=sql_result($fmckresult,0,"PostCountView");
 $ForumKarmaCountView=sql_result($fmckresult,0,"KarmaCountView");
 sql_free_result($fmckresult);
-$catcheck = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."categories\" WHERE \"id\"=%i  LIMIT 1", array($TopicCatID));
+$catcheck = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."categories\" WHERE \"id\"=%i".$CatIgnoreList2."  LIMIT 1", array($TopicCatID));
 $catresult=sql_query($catcheck,$SQLStat);
 $CategoryName=sql_result($catresult,0,"Name");
 $CategoryType=sql_result($catresult,0,"CategoryType");

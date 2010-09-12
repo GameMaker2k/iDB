@@ -11,14 +11,14 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: lowsubforums.php - Last Update: 06/07/2010 SVN 520 - Author: cooldude2k $
+    $FileInfo: lowsubforums.php - Last Update: 09/10/2010 SVN 536 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="lowsubforums.php"||$File3Name=="/lowsubforums.php") {
 	require('index.php');
 	exit(); }
 if(!is_numeric($_GET['id'])) { $_GET['id'] = null; }
-$checkquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($_GET['id']));
+$checkquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2." LIMIT 1", array($_GET['id']));
 $checkresult=sql_query($checkquery,$SQLStat);
 $checknum=sql_num_rows($checkresult);
 if($checknum==0) { redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=lowview",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($checkresult);
@@ -59,7 +59,7 @@ redirect("location",$rbasedir.url_maker($exfile['forum'],$Settings['file_ext'],"
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 sql_free_result($checkresult);
-$prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."categories\" WHERE \"ShowCategory\"='yes' AND \"id\"=%i ORDER BY \"OrderID\" ASC, \"id\" ASC", array($CategoryID));
+$prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."categories\" WHERE \"ShowCategory\"='yes' AND \"id\"=%i".$CatIgnoreList2." ORDER BY \"OrderID\" ASC, \"id\" ASC", array($CategoryID));
 $preresult=sql_query($prequery,$SQLStat);
 $prenum=sql_num_rows($preresult);
 $prei=0;
@@ -69,7 +69,7 @@ $CategoryName=sql_result($preresult,0,"Name");
 $CategoryShow=sql_result($preresult,0,"ShowCategory");
 $CategoryDescription=sql_result($preresult,0,"Description");
 if($InSubForum!="0") {
-$isfquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($InSubForum));
+$isfquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2." LIMIT 1", array($InSubForum));
 $isfresult=sql_query($isfquery,$SQLStat);
 $isfnum=sql_num_rows($isfresult);
 if($isfnum>=1) {
@@ -111,7 +111,7 @@ ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($CatPermissionInfo['CanViewCategory'][$CategoryID]=="yes"&&
 	$PermissionInfo['CanViewForum'][$_GET['id']]=="yes") {
-$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"ShowForum\"='yes' AND \"CategoryID\"=%i AND \"InSubForum\"=%i ORDER BY \"OrderID\" ASC, \"id\" ASC", array($CategoryID,$_GET['id']));
+$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"ShowForum\"='yes' AND \"CategoryID\"=%i AND \"InSubForum\"=%i".$ForumIgnoreList2." ORDER BY \"OrderID\" ASC, \"id\" ASC", array($CategoryID,$_GET['id']));
 $result=sql_query($query,$SQLStat);
 $num=sql_num_rows($result);
 $i=0;
@@ -132,7 +132,7 @@ $ForumDescription=sql_result($result,$i,"Description");
 $ForumType = strtolower($ForumType); $sflist = null;
 $gltf = array(null); $gltf[0] = $ForumID;
 if ($ForumType=="subforum") { 
-$apcquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"ShowForum\"='yes' AND \"InSubForum\"=%i ORDER BY \"OrderID\" ASC, \"id\" ASC", array($ForumID));
+$apcquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"ShowForum\"='yes' AND \"InSubForum\"=%i".$ForumIgnoreList2." ORDER BY \"OrderID\" ASC, \"id\" ASC", array($ForumID));
 $apcresult=sql_query($apcquery);
 $apcnum=sql_num_rows($apcresult);
 $apci=0; $apcl=1; if($apcnum>=1) {

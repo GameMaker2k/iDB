@@ -282,7 +282,7 @@ if($_GET['msearch']==null) { ?>
 while ($i < $num) {
 $TopicID=sql_result($result,$i,"id");
 $ForumID=sql_result($result,$i,"ForumID");
-$prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($ForumID));
+$prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2." LIMIT 1", array($ForumID));
 $preresult=sql_query($prequery,$SQLStat);
 $prenum=sql_num_rows($preresult);
 $HotTopicPosts = $Settings['hot_topic_num'];

@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: rssfeed.php - Last Update: 09/10/2010 SVN 535 - Author: cooldude2k $
+    $FileInfo: rssfeed.php - Last Update: 09/10/2010 SVN 536 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="rssfeed.php"||$File3Name=="/rssfeed.php") {
@@ -75,7 +75,7 @@ else { if (stristr($_SERVER["HTTP_USER_AGENT"],"FeedValidator")) {
 } else { header("Content-Type: text/xml; charset=".$Settings['charset']); } } }
 header("Content-Language: en");
 header("Vary: Accept");
-$prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i", array($_GET['id']));
+$prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2."", array($_GET['id']));
 $preresult=sql_query($prequery,$SQLStat);
 $prenum=sql_num_rows($preresult);
 $prei=0;
@@ -102,7 +102,7 @@ ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $gltf = array(null); $gltf[0] = $ForumID;
 if ($ForumType=="subforum") { 
-$apcquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"ShowForum\"='yes' AND \"InSubForum\"=%i ORDER BY \"id\"", array($ForumID));
+$apcquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"ShowForum\"='yes' AND \"InSubForum\"=%i".$ForumIgnoreList2." ORDER BY \"id\"", array($ForumID));
 $apcresult=sql_query($apcquery,$SQLStat);
 $apcnum=sql_num_rows($apcresult);
 $apci=0; $apcl=1; if($apcnum>=1) {

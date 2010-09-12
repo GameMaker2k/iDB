@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: lowtopics.php - Last Update: 09/10/2010 SVN 535 - Author: cooldude2k $
+    $FileInfo: lowtopics.php - Last Update: 09/10/2010 SVN 536 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="lowtopics.php"||$File3Name=="/lowtopics.php") {
@@ -20,7 +20,7 @@ if ($File3Name=="lowtopics.php"||$File3Name=="/lowtopics.php") {
 $pstring = null; $pagenum = null;
 if(!is_numeric($_GET['id'])) { $_GET['id'] = null; }
 if(!is_numeric($_GET['page'])) { $_GET['page'] = 1; }
-$prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($_GET['id']));
+$prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2." LIMIT 1", array($_GET['id']));
 $preresult=sql_query($prequery,$SQLStat);
 $prenum=sql_num_rows($preresult);
 if($prenum==0) { redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=lowview",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($preresult);
@@ -48,7 +48,7 @@ $ForumPostCountView=sql_result($preresult,0,"PostCountView");
 $ForumKarmaCountView=sql_result($preresult,0,"KarmaCountView");
 sql_free_result($preresult);
 $ForumType = strtolower($ForumType); $CanHaveTopics = strtolower($CanHaveTopics);
-$catcheck = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."categories\" WHERE \"id\"=%i  LIMIT 1", array($ForumCatID));
+$catcheck = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."categories\" WHERE \"id\"=%i".$CatIgnoreList2."  LIMIT 1", array($ForumCatID));
 $catresult=sql_query($catcheck,$SQLStat);
 $CategoryName=sql_result($catresult,0,"Name");
 $CategoryType=sql_result($catresult,0,"CategoryType");
@@ -67,7 +67,7 @@ redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"
 if($CategoryKarmaCountView!=0&&$MyKarmaCount<$CategoryKarmaCountView) {
 redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=lowview",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); } }
 if($InSubForum!="0") {
-$isfquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($InSubForum));
+$isfquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2." LIMIT 1", array($InSubForum));
 $isfresult=sql_query($isfquery,$SQLStat);
 $isfnum=sql_num_rows($isfresult);
 if($isfnum>=1) {

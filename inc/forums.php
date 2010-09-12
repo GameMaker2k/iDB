@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: forums.php - Last Update: 09/10/2010 SVN 535 - Author: cooldude2k $
+    $FileInfo: forums.php - Last Update: 09/10/2010 SVN 536 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="forums.php"||$File3Name=="/forums.php") {
@@ -21,7 +21,7 @@ if(!isset($ThemeSet['ForumStyle'])) { $ThemeSet['ForumStyle'] = 1; }
 if(!is_numeric($ThemeSet['ForumStyle'])) { $ThemeSet['ForumStyle'] = 1; }
 if($ThemeSet['ForumStyle']>2||$ThemeSet['ForumStyle']<1) {
 	$ThemeSet['ForumStyle'] = 1; }
-$prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."categories\" WHERE \"ShowCategory\"='yes' AND \"InSubCategory\"=0 ORDER BY \"OrderID\" ASC, \"id\" ASC", array());
+$prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."categories\" WHERE \"ShowCategory\"='yes' AND \"InSubCategory\"=0".$CatIgnoreList2." ORDER BY \"OrderID\" ASC, \"id\" ASC", array());
 $preresult=sql_query($prequery,$SQLStat);
 $prenum=sql_num_rows($preresult);
 $prei=0;
@@ -55,7 +55,7 @@ if($CategoryKarmaCountView!=0&&$MyKarmaCount<$CategoryKarmaCountView) {
 redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); } }
 if(isset($CatPermissionInfo['CanViewCategory'][$CategoryID])&&
     $CatPermissionInfo['CanViewCategory'][$CategoryID]=="yes") {
-$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"ShowForum\"='yes' AND \"CategoryID\"=%i AND \"InSubForum\"=0 ORDER BY \"OrderID\" ASC, \"id\" ASC", array($CategoryID));
+$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"ShowForum\"='yes' AND \"CategoryID\"=%i AND \"InSubForum\"=0".$ForumIgnoreList2." ORDER BY \"OrderID\" ASC, \"id\" ASC", array($CategoryID));
 $result=sql_query($query,$SQLStat);
 $num=sql_num_rows($result);
 $i=0;
@@ -96,7 +96,7 @@ $ForumDescription=sql_result($result,$i,"Description");
 $ForumType = strtolower($ForumType); $sflist = null;
 $gltf = array(null); $gltf[0] = $ForumID;
 if ($ForumType=="subforum") {
-$apcquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"ShowForum\"='yes' AND \"InSubForum\"=%i ORDER BY \"OrderID\" ASC, \"id\" ASC", array($ForumID));
+$apcquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"ShowForum\"='yes' AND \"InSubForum\"=%i".$ForumIgnoreList2." ORDER BY \"OrderID\" ASC, \"id\" ASC", array($ForumID));
 $apcresult=sql_query($apcquery,$SQLStat);
 $apcnum=sql_num_rows($apcresult);
 $apci=0; $apcl=1; if($apcnum>=1) {

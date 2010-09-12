@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: replies.php - Last Update: 09/11/2010 SVN 538 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 09/10/2010 SVN 536 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -53,7 +53,7 @@ if(isset($_GET['post'])&&$_GET['post']!==null) {
 $NumberReplies=1; }
 $ViewTimes=sql_result($preresult,0,"NumViews");
 sql_free_result($preresult);
-$forumcheckx = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i  LIMIT 1", array($TopicForumID));
+$forumcheckx = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2."  LIMIT 1", array($TopicForumID));
 $fmckresult=sql_query($forumcheckx,$SQLStat);
 $ForumName=sql_result($fmckresult,0,"Name");
 $ForumType=sql_result($fmckresult,0,"ForumType");
@@ -61,7 +61,7 @@ $CanHaveTopics=sql_result($fmckresult,0,"CanHaveTopics");
 $ForumPostCountView=sql_result($fmckresult,0,"PostCountView");
 $ForumKarmaCountView=sql_result($fmckresult,0,"KarmaCountView");
 sql_free_result($fmckresult);
-$catcheck = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."categories\" WHERE \"id\"=%i  LIMIT 1", array($TopicCatID));
+$catcheck = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."categories\" WHERE \"id\"=%i".$CatIgnoreList2."  LIMIT 1", array($TopicCatID));
 $catresult=sql_query($catcheck,$SQLStat);
 $CategoryName=sql_result($catresult,0,"Name");
 $CategoryType=sql_result($catresult,0,"CategoryType");
@@ -577,12 +577,12 @@ if($CatPermissionInfo['CanViewCategory'][$QuoteReplyCID]=="no") {
 	$QuoteReply = null; $QuoteDescription = null; } } }
 if($GroupInfo['HasAdminCP']!="yes"||$GroupInfo['HasModCP']!="yes") {
 if($_GET['post']!=null&&$num>=1) {
-$rforumcheck = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i  LIMIT 1", array($QuoteReplyFID));
+$rforumcheck = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2."  LIMIT 1", array($QuoteReplyFID));
 $rfmckresult=sql_query($rforumcheck,$SQLStat);
 $rForumPostCountView=sql_result($rfmckresult,0,"PostCountView");
 $rForumKarmaCountView=sql_result($rfmckresult,0,"KarmaCountView");
 sql_free_result($rfmckresult);
-$rcatcheck = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."categories\" WHERE \"id\"=%i  LIMIT 1", array($QuoteReplyCID));
+$rcatcheck = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."categories\" WHERE \"id\"=%i".$CatIgnoreList2."  LIMIT 1", array($QuoteReplyCID));
 $rcatresult=sql_query($rcatcheck,$SQLStat);
 $rCategoryPostCountView=sql_result($rcatresult,0,"PostCountView");
 $rCategoryKarmaCountView=sql_result($rcatresult,0,"KarmaCountView");
@@ -856,7 +856,7 @@ redirect("refresh",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"a
 	</span><br /></td>
 </tr>
 <?php } if ($Error!="Yes") { $LastActive = GMTimeStamp();
-$gnrquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($TopicForumID));
+$gnrquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2." LIMIT 1", array($TopicForumID));
 $gnrresult=sql_query($gnrquery,$SQLStat); $gnrnum=sql_num_rows($gnrresult);
 $NumberPosts=sql_result($gnrresult,0,"NumPosts"); 
 $PostCountAdd=sql_result($gnrresult,0,"PostCountAdd"); 
@@ -1098,7 +1098,7 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die
 sql_free_result($gtsresult);
 if($CanMoveTopics===true) {
 $TNumberPosts = $NumberReplies + 1;
-$mvquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($_GET['newid']));
+$mvquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2." LIMIT 1", array($_GET['newid']));
 $mvresult=sql_query($mvquery,$SQLStat);
 $mvnum=sql_num_rows($mvresult);
 if($mvnum<1) {
@@ -1113,7 +1113,7 @@ $NewCatID=sql_result($mvresult,0,"CategoryID");
 sql_free_result($mvresult);
 $recountq = sql_pre_query("UPDATE \"".$Settings['sqltable']."forums\" SET \"NumPosts\"=%i,\"NumTopics\"=%i WHERE \"id\"=%i", array($NumberPosts,$NumberTopics,$_GET['newid']));
 sql_query($recountq,$SQLStat);
-$mvquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($OldForumID));
+$mvquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2." LIMIT 1", array($OldForumID));
 $mvresult=sql_query($mvquery,$SQLStat);
 $mvnum=sql_num_rows($mvresult);
 $NumberPosts=sql_result($mvresult,0,"NumPosts");
@@ -1187,7 +1187,7 @@ $delquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHER
 $delresult=sql_query($delquery,$SQLStat);
 $delnum=sql_num_rows($delresult);
 $DelTopic = false;
-$gnrquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($ReplyForumID));
+$gnrquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2." LIMIT 1", array($ReplyForumID));
 $gnrresult=sql_query($gnrquery,$SQLStat); $gnrnum=sql_num_rows($gnrresult);
 $NumberPosts=sql_result($gnrresult,0,"NumPosts"); $NumberTopics=sql_result($gnrresult,0,"NumTopics"); 
 sql_free_result($gnrresult);
