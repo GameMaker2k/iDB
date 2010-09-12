@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: xhtml10.php - Last Update: 05/15/2010 SVN 491 - Author: cooldude2k $
+    $FileInfo: xhtml10.php - Last Update: 09/12/2010 SVN 542 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="xhtml10.php"||$File3Name=="/xhtml10.php") {
@@ -57,7 +57,8 @@ if($checklowview===true&&$_GET['act']=="lowview") {
 if($ThemeSet['CSSType']!="import"&&
    $ThemeSet['CSSType']!="link"&&
    $ThemeSet['CSSType']!="lowview"&&
-   $ThemeSet['CSSType']!="xml") { 
+   $ThemeSet['CSSType']!="xml"&&
+   $ThemeSet['CSSType']!="sql") { 
    $ThemeSet['CSSType'] = "import"; }
 if($ThemeSet['CSSType']=="xhtml") {
    xml_tag_make("xml-stylesheet","type=text/css&href=".$ThemeSet['CSS']); }
@@ -148,7 +149,11 @@ if($Settings['html_level']=="Strict") { ?>
 <style type="text/css">
 /* Import the theme css file */
 <?php echo "\n@import url(\"".$ThemeSet['CSS']."\");\n"; ?>
-</style><?php } if($ThemeSet['CSSType']=="link") { ?>
+</style>
+<?php } if($ThemeSet['CSSType']=="sql") { ?>
+<style type="text/css">
+<?php echo $ThemeSet['CSS']; ?>
+</style>
 <?php } if($ThemeSet['CSSType']=="link") { ?>
 <link rel="prefetch alternate stylesheet" href="<?php echo $ThemeSet['CSS']; ?>" />
 <link rel="stylesheet" type="text/css" href="<?php echo $ThemeSet['CSS']; ?>" />

@@ -12,7 +12,7 @@
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mysql.php - Last Update: 09/11/2010 SVN 538 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 09/12/2010 SVN 542 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mysql.php"||$File3Name=="/mysql.php") {
@@ -326,7 +326,7 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."them
 "  \"ThemeSubVersion\" varchar(150) COLLATE ".$SQLCollate." NOT NULL default '',\n".
 "  \"MakerURL\" varchar(150) COLLATE ".$SQLCollate." NOT NULL default '',\n".
 "  \"CopyRight\" varchar(150) COLLATE ".$SQLCollate." NOT NULL default '',\n".
-"  \"CSS\" varchar(150) COLLATE ".$SQLCollate." NOT NULL default '',\n".
+"  \"CSS\" text COLLATE ".$SQLCollate." NOT NULL,\n".
 "  \"CSSType\" varchar(150) COLLATE ".$SQLCollate." NOT NULL default '',\n".
 "  \"FavIcon\" varchar(150) COLLATE ".$SQLCollate." NOT NULL default '',\n".
 "  \"TableStyle\" varchar(150) COLLATE ".$SQLCollate." NOT NULL default '',\n".

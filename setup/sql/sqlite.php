@@ -12,7 +12,7 @@
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: sqlite.php - Last Update: 09/11/2010 SVN 538 - Author: cooldude2k $
+    $FileInfo: sqlite.php - Last Update: 09/12/2010 SVN 542 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="sqlite.php"||$File3Name=="/sqlite.php") {
@@ -382,7 +382,7 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."themes\" (\n".
 "  \"ThemeSubVersion\" VARCHAR(150) NOT NULL default '',\n".
 "  \"MakerURL\" VARCHAR(150) NOT NULL default '',\n".
 "  \"CopyRight\" VARCHAR(150) NOT NULL default '',\n".
-"  \"CSS\" VARCHAR(150) NOT NULL default '',\n".
+"  \"CSS\" TEXT NOT NULL,\n".
 "  \"CSSType\" VARCHAR(150) NOT NULL default '',\n".
 "  \"FavIcon\" VARCHAR(150) NOT NULL default '',\n".
 "  \"TableStyle\" VARCHAR(150) NOT NULL default '',\n".

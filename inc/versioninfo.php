@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: versioninfo.php - Last Update: 09/11/2010 SVN 541 - Author: cooldude2k $
+    $FileInfo: versioninfo.php - Last Update: 09/12/2010 SVN 542 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="versioninfo.php"||$File3Name=="/versioninfo.php") {
@@ -27,8 +27,8 @@ function version_info($proname,$subver,$ver,$supver,$reltype,$svnver,$showsvn) {
 	return $return_var; }
 // Version number and date stuff. :P
 $VER1[0] = 0; $VER1[1] = 4; $VER1[2] = 1; $VERFull[1] = $VER1[0].".".$VER1[1].".".$VER1[2];
-$VER2[0] = "Alpha"; $VER2[1] = "Al"; $VER2[2] = "SVN"; $SubVerN = 541; $RName = "iDB"; $SFName = "IntDB";
-$SVNDay[0] = 09; $SVNDay[1] = 11; $SVNDay[2] = 2010; $SVNDay[3] = $SVNDay[0]."/".$SVNDay[1]."/".$SVNDay[2];
+$VER2[0] = "Alpha"; $VER2[1] = "Al"; $VER2[2] = "SVN"; $SubVerN = 542; $RName = "iDB"; $SFName = "IntDB";
+$SVNDay[0] = 09; $SVNDay[1] = 12; $SVNDay[2] = 2010; $SVNDay[3] = $SVNDay[0]."/".$SVNDay[1]."/".$SVNDay[2];
 $VerInfo['iDB_Ver'] = version_info($RName,$VER1[0],$VER1[1],$VER1[2],$VER2[1],$SubVerN,false);
 $VerInfo['iDB_Ver_SVN'] = version_info($RName,$VER1[0],$VER1[1],$VER1[2],$VER2[1],$SubVerN,true);
 $VerInfo['iDB_Full_Ver'] = version_info($RName,$VER1[0],$VER1[1],$VER1[2],$VER2[0],$SubVerN,false);

@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: main.php - Last Update: 06/07/2010 SVN 520 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 09/12/2010 SVN 542 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -29,6 +29,7 @@ redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if(!isset($_POST['update'])) { $_POST['update'] = null; }
+if($_GET['act']=="resyncthemes"&&$Settings['SQLThemes']!="on") { $_GET['act'] = "view"; }
 $iDBRDate = $SVNDay[0]."/".$SVNDay[1]."/".$SVNDay[2];
 $iDBRSVN = $VER2[2]." ".$SubVerN;
 $OutPutLog = null;
@@ -107,7 +108,7 @@ if(!isset($Settings['start_date'])) {
 	$Settings['start_date'] = GMTimeStamp(); }
 if(!isset($Settings['SQLThemes'])) {
 	$Settings['SQLThemes'] = 'off'; }
-if($Settings['SQLThemes']!="on"||
+if($Settings['SQLThemes']!="on"&&
 	$Settings['SQLThemes']!="off") {
 	$Settings['SQLThemes'] = 'off'; }
 ?>
@@ -121,6 +122,47 @@ $time = GMTimeStamp() - ini_get("session.gc_maxlifetime");
 //$sqlg = sql_pre_query('DELETE FROM \"'.$Settings['sqltable'].'sessions\" WHERE \"expires\" < UNIX_TIMESTAMP();', array(null));
 $sqlgc = sql_pre_query("DELETE FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" < %i", array($time));
 sql_query($sqlgc,$SQLStat);
+$_GET['act'] = "optimize";
+$_POST['update'] = "now"; $_GET['act'] = "view"; }
+if($_GET['act']=="resyncthemes"&&$GroupInfo['ViewDBInfo']=="yes"&&$Settings['SQLThemes']=="on") {
+$time = GMTimeStamp() - ini_get("session.gc_maxlifetime");
+//$sqlg = sql_pre_query('DELETE FROM \"'.$Settings['sqltable'].'sessions\" WHERE \"expires\" < UNIX_TIMESTAMP();', array(null));
+if($Settings['sqltype']=="mysql"||
+	$Settings['sqltype']=="mysqli") {
+$sqlgc = sql_pre_query("TRUNCATE TABLE \"".$Settings['sqltable']."themes\"", array(null));
+sql_query($sqlgc,$SQLStat);
+$sqlgc = sql_pre_query("ALTER TABLE \"".$Settings['sqltable']."themes\" AUTO_INCREMENT=1", array(null));
+sql_query($sqlgc,$SQLStat); }
+if($Settings['sqltype']=="pgsql") {
+$sqlgc = sql_pre_query("TRUNCATE TABLE \"".$Settings['sqltable']."themes\"", array(null));
+sql_query($sqlgc,$SQLStat);
+$sqlgc = sql_pre_query("SELECT setval('".$Settings['sqltable']."themes_id_seq', 1, false);", array(null));
+sql_query($sqlgc,$SQLStat); }
+if($Settings['sqltype']=="sqlite") {
+$sqlgc = sql_pre_query("DELETE FROM \"".$Settings['sqltable']."themes\";", array(null));
+sql_query($sqlgc,$SQLStat); }
+$skindir = dirname(realpath("sql.php"))."/".$SettDir['themes'];
+if ($handle = opendir($skindir)) { $dirnum = null;
+   while (false !== ($file = readdir($handle))) {
+	   if ($dirnum==null) { $dirnum = 0; }
+	   if (file_exists($skindir.$file."/info.php")) {
+		   if ($file != "." && $file != "..") {
+	   include($skindir.$file."/info.php");
+       $themelist[$dirnum] =  $file;
+	   ++$dirnum; } } }
+   closedir($handle); asort($themelist);
+   $themenum=count($themelist); $themei=0; 
+   while ($themei < $themenum) {
+   include($skindir.$themelist[$themei]."/settings.php");
+   $query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."themes\" (\"Name\", \"ThemeName\", \"ThemeMaker\", \"ThemeVersion\", \"ThemeVersionType\", \"ThemeSubVersion\", \"MakerURL\", \"CopyRight\", \"CSS\", \"CSSType\", \"FavIcon\", \"TableStyle\", \"MiniPageAltStyle\", \"PreLogo\", \"Logo\", \"LogoStyle\", \"SubLogo\", \"TopicIcon\", \"MovedTopicIcon\", \"HotTopic\", \"MovedHotTopic\", \"PinTopic\", \"AnnouncementTopic\", \"MovedPinTopic\", \"HotPinTopic\", \"MovedHotPinTopic\", \"ClosedTopic\", \"MovedClosedTopic\", \"HotClosedTopic\", \"MovedHotClosedTopic\", \"PinClosedTopic\", \"MovedPinClosedTopic\", \"HotPinClosedTopic\", \"MovedHotPinClosedTopic\", \"MessageRead\", \"MessageUnread\", \"Profile\", \"WWW\", \"PM\", \"TopicLayout\", \"AddReply\", \"FastReply\", \"NewTopic\", \"QuoteReply\", \"EditReply\", \"DeleteReply\", \"Report\", \"LineDivider\", \"ButtonDivider\", \"LineDividerTopic\", \"TitleDivider\", \"ForumStyle\", \"ForumIcon\", \"SubForumIcon\", \"RedirectIcon\", \"TitleIcon\", \"NavLinkIcon\", \"NavLinkDivider\", \"StatsIcon\", \"NoAvatar\", \"NoAvatarSize\") VALUES\n".
+   "('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');", array($themelist[$themei], $ThemeSet['ThemeName'], $ThemeSet['ThemeMaker'], $ThemeSet['ThemeVersion'], $ThemeSet['ThemeVersionType'], $ThemeSet['ThemeSubVersion'], $ThemeSet['MakerURL'], $ThemeSet['CopyRight'], $ThemeSet['CSS'], $ThemeSet['CSSType'], $ThemeSet['FavIcon'], $ThemeSet['TableStyle'], $ThemeSet['MiniPageAltStyle'], $ThemeSet['PreLogo'], $ThemeSet['Logo'], $ThemeSet['LogoStyle'], $ThemeSet['SubLogo'], $ThemeSet['TopicIcon'], $ThemeSet['MovedTopicIcon'], $ThemeSet['HotTopic'], $ThemeSet['MovedHotTopic'], $ThemeSet['PinTopic'], $ThemeSet['AnnouncementTopic'], $ThemeSet['MovedPinTopic'], $ThemeSet['HotPinTopic'], $ThemeSet['MovedHotPinTopic'], $ThemeSet['ClosedTopic'], $ThemeSet['MovedClosedTopic'], $ThemeSet['HotClosedTopic'], $ThemeSet['MovedHotClosedTopic'], $ThemeSet['PinClosedTopic'], $ThemeSet['MovedPinClosedTopic'], $ThemeSet['HotPinClosedTopic'], $ThemeSet['MovedHotPinClosedTopic'], $ThemeSet['MessageRead'], $ThemeSet['MessageUnread'], $ThemeSet['Profile'], $ThemeSet['WWW'], $ThemeSet['PM'], $ThemeSet['TopicLayout'], $ThemeSet['AddReply'], $ThemeSet['FastReply'], $ThemeSet['NewTopic'], $ThemeSet['QuoteReply'], $ThemeSet['EditReply'], $ThemeSet['DeleteReply'], $ThemeSet['Report'], $ThemeSet['LineDivider'], $ThemeSet['ButtonDivider'], $ThemeSet['LineDividerTopic'], $ThemeSet['TitleDivider'], $ThemeSet['ForumStyle'], $ThemeSet['ForumIcon'], $ThemeSet['SubForumIcon'], $ThemeSet['RedirectIcon'], $ThemeSet['TitleIcon'], $ThemeSet['NavLinkIcon'], $ThemeSet['NavLinkDivider'], $ThemeSet['StatsIcon'], $ThemeSet['NoAvatar'], $ThemeSet['NoAvatarSize']));
+   sql_query($query,$SQLStat);
+   ++$themei; } }
+$themequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."themes\" WHERE \"Name\"='%s'", array($_GET['theme']));
+$themeresult=sql_query($themequery,$SQLStat);
+$themenum=sql_num_rows($themeresult);
+require($SettDir['inc'].'sqlthemes.php');
+$_GET['act'] = "optimize";
 $_POST['update'] = "now"; $_GET['act'] = "view"; }
 if($_GET['act']=="optimize"&&$GroupInfo['ViewDBInfo']=="yes") {
 $TablePreFix = $Settings['sqltable'];

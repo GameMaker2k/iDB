@@ -64,15 +64,19 @@ if ($File3Name=="table.php"||$File3Name=="/table.php") {
 <td class="TableSMenuColumn3"><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=sql",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">SQL Settings</a></td>
 </tr><tr class="TableSMenuRow3">
 <td class="TableSMenuColumn3"><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=vercheck",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>" onclick="window.open(this.href);return false;">Version Checker</a></td>
-</tr><tr class="TableSMenuRow3">
 <?php if($Settings['sqltype']=="mysql"||
 	$Settings['sqltype']=="mysqli"||
 	$Settings['sqltype']=="pgsql"||
 	$Settings['sqltype']=="sqlite") { ?>
+</tr><tr class="TableSMenuRow3">
 <td class="TableSMenuColumn3"><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=sqldumper",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">SQL Dumper</a></td>
 <?php } ?>
 </tr><tr class="TableSMenuRow3">
 <td class="TableSMenuColumn3"><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=delsessions",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Clean Sessions</a></td>
+<?php if($Settings['SQLThemes']=="on") { ?>
+</tr><tr class="TableSMenuRow3">
+<td class="TableSMenuColumn3"><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=resyncthemes",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Resync Themes</a></td>
+<?php } ?>
 </tr><tr class="TableSMenuRow3">
 <td class="TableSMenuColumn3"><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=optimize",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Optimize Tables</a></td>
 <?php } ?>
