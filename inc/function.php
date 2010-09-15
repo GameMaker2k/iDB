@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: function.php - Last Update: 06/13/2010 SVN 526 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 09/15/2010 SVN 544 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -133,55 +133,6 @@ function unserialize_session($data) {
 	if(!isset($result)) { $result = null; }
     return $result;
 }
-// User Agent Checker
-function user_agent_check($user_agent) {
-if (preg_match("/".preg_quote("ia_archiver")."/i", $user_agent)) {
-    return "Alexa"; }
-if (preg_match("/".preg_quote("AltaVista")."/i", $user_agent)) {
-    return "AltaVista"; }
-if (preg_match("/".preg_quote("Ask Jeeves")."/i", $user_agent)) {
-    return "Ask Jeeves"; }
-if (preg_match("/".preg_quote("Baiduspider")."/i", $user_agent)) {
-    return "Baidu"; }
-if (preg_match("/".preg_quote("msnbot")."/i", $user_agent)) {
-    return "Bing"; }
-if (preg_match("/".preg_quote("CSE HTML Validator")."/i", $user_agent)) {
-    return "CSE HTML Validator"; }
-if (preg_match("/".preg_quote("discobot")."/i", $user_agent)) {
-    return "DiscoveryEngine"; }
-if (preg_match("/".preg_quote("Exabot")."/i", $user_agent)) {
-    return "Exabot"; }
-if (preg_match("/".preg_quote("Googlebot")."/i", $user_agent)) {
-    return "Google"; }
-if (preg_match("|".preg_quote("HTML/XML Validator","|")."|i", $user_agent)) {
-    return "HTML/XML Validator"; }
-if (preg_match("/".preg_quote("Lycos")."/i", $user_agent)) {
-    return "Lycos"; }
-if (preg_match("/".preg_quote("montastic-webmonitor")."/i", $user_agent)) {
-    return "Montastic"; }
-if (preg_match("/".preg_quote("Sosospider")."/i", $user_agent)) {
-    return "Soso"; }
-if (preg_match("/".preg_quote("Speedy Spider")."/i", $user_agent)) {
-    return "Speedy"; }
-if (preg_match("/".preg_quote("TotalValidator")."/i", $user_agent)) {
-    return "Total Validator"; }
-if (preg_match("/".preg_quote("Yahoo")."/i", $user_agent)) {
-    return "Yahoo"; }
-if (preg_match("/".preg_quote("Yandex")."/i", $user_agent)) {
-    return "Yandex"; }
-if (preg_match("/".preg_quote("FeedValidator")."/i", $user_agent)) {
-    return "W3C Validator"; }
-if (preg_match("/".preg_quote("W3C_CSS_Validator")."/i", $user_agent)) {
-    return "W3C Validator"; }
-if (preg_match("/".preg_quote("W3C_Validator")."/i", $user_agent)) {
-    return "W3C Validator"; }
-if (preg_match("/".preg_quote("W3C-checklink")."/i", $user_agent)) {
-    return "W3C Checklink"; }
-if (preg_match("/".preg_quote("WDG_SiteValidator")."/i", $user_agent)) {
-    return "WDG Validator"; }
-if (preg_match("/".preg_quote("WDG_Validator")."/i", $user_agent)) {
-    return "WDG Validator"; }
-	return false; }
 // Make the Query String if we are not useing &=
 function qstring($qstr=";",$qsep="=")
 { $_GET = array(); $_GET = null;

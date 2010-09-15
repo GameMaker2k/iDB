@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 07/01/2010 SVN 528 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 09/15/2010 SVN 544 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -229,6 +229,8 @@ echo '<?xml-stylesheet type="text/xsl" href="'.url_maker($exfile['index'],$Setti
 <?php die(); } } if($Settings['vercheck']===1) {
 if($_GET['act']=="versioninfo") { header("Content-Type: text/plain; charset=UTF-8");
 header("Location: ".$VerCheckURL."&name=".urlencode($iDBVerName)); die(); } }
+if($_GET['act']=="homepage") { header("Content-Type: text/plain; charset=UTF-8");
+header("Location: ".$Settings['weburl']); die(); }
 if($Settings['enable_pathinfo']=="on") { 
 	mrstring(); /* Change Path info to Get Vars :P */ }
 // Check to see if variables are set
