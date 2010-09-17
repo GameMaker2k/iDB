@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 09/15/2010 SVN 544 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 09/16/2010 SVN 547 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -64,6 +64,10 @@ if($Settings['fixcookiedir']=="off") {
 	$Settings['fixcookiedir'] = null; }
 if($Settings['fixredirectdir']=="off") {
 	$Settings['fixredirectdir'] = null; }
+$OldSettings['fixpathinfo'] = $Settings['fixpathinfo'];
+$OldSettings['fixbasedir'] = $Settings['fixbasedir'];
+$OldSettings['fixcookiedir'] = $Settings['fixcookiedir'];
+$OldSettings['fixredirectdir'] = $Settings['fixredirectdir'];
 if($Settings['idburl']=="localhost") { 
 header("Content-Type: text/plain; charset=UTF-8");
 echo "500 Error: URL is malformed. Try reinstalling iDB."; die(); }

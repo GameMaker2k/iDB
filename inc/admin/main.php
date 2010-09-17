@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: main.php - Last Update: 09/15/2010 SVN 546 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 09/16/2010 SVN 547 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -190,10 +190,10 @@ $BoardSettings=$pretext2[0]."\n".
 "\$Settings['enable_rss'] = ".null_string($Settings['enable_rss']).";\n".
 "\$Settings['enable_search'] = ".null_string($Settings['enable_search']).";\n".
 "\$Settings['sessionid_in_urls'] = ".null_string($Settings['sessionid_in_urls']).";\n".
-"\$Settings['fixpathinfo'] = ".null_string($Settings['fixpathinfo']).";\n".
-"\$Settings['fixbasedir'] = ".null_string($Settings['fixbasedir']).";\n".
-"\$Settings['fixcookiedir'] = ".null_string($Settings['fixcookiedir']).";\n".
-"\$Settings['fixredirectdir'] = ".null_string($Settings['fixredirectdir']).";\n".
+"\$Settings['fixpathinfo'] = ".null_string($OldSettings['fixpathinfo']).";\n".
+"\$Settings['fixbasedir'] = ".null_string($OldSettings['fixbasedir']).";\n".
+"\$Settings['fixcookiedir'] = ".null_string($OldSettings['fixcookiedir']).";\n".
+"\$Settings['fixredirectdir'] = ".null_string($OldSettings['fixredirectdir']).";\n".
 "\$Settings['enable_pathinfo'] = ".null_string($Settings['enable_pathinfo']).";\n".
 "\$Settings['rssurl'] = ".null_string($Settings['rssurl']).";\n".
 "\$Settings['board_offline'] = ".null_string($Settings['board_offline']).";\n".
@@ -762,10 +762,10 @@ $BoardSettings=$pretext2[0]."\n".
 "\$Settings['enable_rss'] = ".null_string($_POST['enable_rss']).";\n".
 "\$Settings['enable_search'] = ".null_string($_POST['enable_search']).";\n".
 "\$Settings['sessionid_in_urls'] = ".null_string($Settings['sessionid_in_urls']).";\n".
-"\$Settings['fixpathinfo'] = ".null_string($Settings['fixpathinfo']).";\n".
-"\$Settings['fixbasedir'] = ".null_string($Settings['fixbasedir']).";\n".
-"\$Settings['fixcookiedir'] = ".null_string($Settings['fixcookiedir']).";\n".
-"\$Settings['fixredirectdir'] = ".null_string($Settings['fixredirectdir']).";\n".
+"\$Settings['fixpathinfo'] = ".null_string($OldSettings['fixpathinfo']).";\n".
+"\$Settings['fixbasedir'] = ".null_string($OldSettings['fixbasedir']).";\n".
+"\$Settings['fixcookiedir'] = ".null_string($OldSettings['fixcookiedir']).";\n".
+"\$Settings['fixredirectdir'] = ".null_string($OldSettings['fixredirectdir']).";\n".
 "\$Settings['enable_pathinfo'] = ".null_string($Settings['enable_pathinfo']).";\n".
 "\$Settings['rssurl'] = ".null_string($Settings['rssurl']).";\n".
 "\$Settings['board_offline'] = ".null_string($Settings['board_offline']).";\n".
@@ -933,10 +933,10 @@ $BoardSettings=$pretext2[0]."\n".
 "\$Settings['enable_rss'] = ".null_string($Settings['enable_rss']).";\n".
 "\$Settings['enable_search'] = ".null_string($Settings['enable_search']).";\n".
 "\$Settings['sessionid_in_urls'] = ".null_string($Settings['sessionid_in_urls']).";\n".
-"\$Settings['fixpathinfo'] = ".null_string($Settings['fixpathinfo']).";\n".
-"\$Settings['fixbasedir'] = ".null_string($Settings['fixbasedir']).";\n".
-"\$Settings['fixcookiedir'] = ".null_string($Settings['fixcookiedir']).";\n".
-"\$Settings['fixredirectdir'] = ".null_string($Settings['fixredirectdir']).";\n".
+"\$Settings['fixpathinfo'] = ".null_string($OldSettings['fixpathinfo']).";\n".
+"\$Settings['fixbasedir'] = ".null_string($OldSettings['fixbasedir']).";\n".
+"\$Settings['fixcookiedir'] = ".null_string($OldSettings['fixcookiedir']).";\n".
+"\$Settings['fixredirectdir'] = ".null_string($OldSettings['fixredirectdir']).";\n".
 "\$Settings['enable_pathinfo'] = ".null_string($Settings['enable_pathinfo']).";\n".
 "\$Settings['rssurl'] = ".null_string($Settings['rssurl']).";\n".
 "\$Settings['board_offline'] = ".null_string($Settings['board_offline']).";\n".
@@ -1087,10 +1087,10 @@ $BoardSettings=$pretext2[0]."\n".
 "\$Settings['enable_rss'] = ".null_string($Settings['enable_rss']).";\n".
 "\$Settings['enable_search'] = ".null_string($Settings['enable_search']).";\n".
 "\$Settings['sessionid_in_urls'] = ".null_string($Settings['sessionid_in_urls']).";\n".
-"\$Settings['fixpathinfo'] = ".null_string($Settings['fixpathinfo']).";\n".
-"\$Settings['fixbasedir'] = ".null_string($Settings['fixbasedir']).";\n".
-"\$Settings['fixcookiedir'] = ".null_string($Settings['fixcookiedir']).";\n".
-"\$Settings['fixredirectdir'] = ".null_string($Settings['fixredirectdir']).";\n".
+"\$Settings['fixpathinfo'] = ".null_string($OldSettings['fixpathinfo']).";\n".
+"\$Settings['fixbasedir'] = ".null_string($OldSettings['fixbasedir']).";\n".
+"\$Settings['fixcookiedir'] = ".null_string($OldSettings['fixcookiedir']).";\n".
+"\$Settings['fixredirectdir'] = ".null_string($OldSettings['fixredirectdir']).";\n".
 "\$Settings['enable_pathinfo'] = ".null_string($Settings['enable_pathinfo']).";\n".
 "\$Settings['rssurl'] = ".null_string($Settings['rssurl']).";\n".
 "\$Settings['board_offline'] = ".null_string($Settings['board_offline']).";\n".
