@@ -12,7 +12,7 @@
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mysql.php - Last Update: 09/12/2010 SVN 542 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 09/17/2010 SVN 549 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mysql.php"||$File3Name=="/mysql.php") {
@@ -22,6 +22,8 @@ if(!isset($SetupDir['setup'])) { $SetupDir['setup'] = "setup/"; }
 if(!isset($SetupDir['convert'])) { $SetupDir['convert'] = "setup/convert/"; }
 $query=sql_pre_query("ALTER DATABASE \"".$_POST['DatabaseName']."\" DEFAULT CHARACTER SET ".$SQLCharset." COLLATE ".$SQLCollate.";", array(null));
 sql_query($query,$SQLStat);
+// You can set this to MyISAM or MARIA
+$SQLStorageEngine = "MyISAM"; 
 $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."categories\" (\n".
 "  \"id\" int(15) NOT NULL auto_increment,\n".
 "  \"OrderID\" int(15) NOT NULL default '0',\n".
@@ -34,7 +36,7 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."cate
 "  \"KarmaCountView\" int(15) NOT NULL default '0',\n".
 "  \"Description\" text COLLATE ".$SQLCollate." NOT NULL,\n".
 "  PRIMARY KEY  (\"id\")\n".
-") ENGINE=MyISAM  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
+") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
 sql_query($query,$SQLStat);
 $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."categories\" (\"OrderID\", \"Name\", \"ShowCategory\", \"CategoryType\", \"SubShowForums\", \"InSubCategory\", \"PostCountView\", \"KarmaCountView\", \"Description\")\n". 
 "VALUES (1, 'A Test Category', 'yes', 'category', 'yes', 0, 0, 0, 'A test category that may be removed at any time.');", array(null));
@@ -46,7 +48,7 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."catp
 "  \"CategoryID\" int(15) NOT NULL default '0',\n".
 "  \"CanViewCategory\" varchar(5) COLLATE ".$SQLCollate." NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\")\n".
-") ENGINE=MyISAM  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
+") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
 sql_query($query,$SQLStat);
 $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."catpermissions\" (\"PermissionID\", \"Name\", \"CategoryID\", \"CanViewCategory\") VALUES\n".
 "(1, 'Admin', 1, 'yes'),\n".
@@ -71,7 +73,7 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."even
 "  \"EventYear\" int(5) NOT NULL default '0',\n".
 "  \"EventYearEnd\" int(5) NOT NULL default '0',\n".
 "  PRIMARY KEY  (\"id\")\n".
-") ENGINE=MyISAM  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
+") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
 sql_query($query,$SQLStat);
 $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."events\" (\"UserID\", \"GuestName\", \"EventName\", \"EventText\", \"TimeStamp\", \"TimeStampEnd\", \"EventMonth\", \"EventMonthEnd\", \"EventDay\", \"EventDayEnd\", \"EventYear\", \"EventYearEnd\") VALUES\n".
 "(-1, '".$iDB_Author."', 'iDB Install', 'This is the start date of your board. ^_^', %i, %i, %i, %i, %i, %i, %i, %i);", array($YourDate,$YourDateEnd,$EventMonth,$EventMonthEnd,$EventDay,$EventDayEnd,$EventYear,$EventYearEnd));
@@ -96,7 +98,7 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."foru
 "  \"NumPosts\" int(15) NOT NULL default '0',\n".
 "  \"NumTopics\" int(15) NOT NULL default '0',\n".
 "  PRIMARY KEY  (\"id\")\n".
-") ENGINE=MyISAM  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
+") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
 sql_query($query,$SQLStat);
 $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."forums\" (\"CategoryID\", \"OrderID\", \"Name\", \"ShowForum\", \"ForumType\", \"InSubForum\", \"RedirectURL\", \"Redirects\", \"NumViews\", \"Description\", \"PostCountAdd\", \"PostCountView\", \"KarmaCountView\", \"CanHaveTopics\", \"HotTopicPosts\", \"NumPosts\", \"NumTopics\") VALUES\n".
 "(1, 1, 'A Test Forum', 'yes', 'forum', 0, 'http://', 0, 0, 'A test forum that may be removed at any time.', 'off', 0, 0, 'yes', 15, 1, 1);", array(null));
@@ -123,7 +125,7 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."grou
 "  \"ViewDBInfo\" varchar(5) COLLATE ".$SQLCollate." NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\"),\n".
 "  UNIQUE KEY \"Name\" (\"Name\")\n".
-") ENGINE=MyISAM  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
+") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
 sql_query($query,$SQLStat);
 $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."groups\" (\"Name\", \"PermissionID\", \"NamePrefix\", \"NameSuffix\", \"CanViewBoard\", \"CanViewOffLine\", \"CanEditProfile\", \"CanAddEvents\", \"CanPM\", \"CanSearch\", \"FloodControl\", \"SearchFlood\", \"PromoteTo\", \"PromotePosts\", \"PromoteKarma\", \"HasModCP\", \"HasAdminCP\", \"ViewDBInfo\") VALUES\n".
 "('Admin', 1, '', '', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 30, 30, 0, 0, 0, 'yes', 'yes', 'yes'),\n".
@@ -172,7 +174,7 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."memb
 "  PRIMARY KEY  (\"id\"),\n".
 "  UNIQUE KEY \"Name\" (\"Name\"),\n".
 "  UNIQUE KEY \"Email\" (\"Email\")\n".
-") ENGINE=MyISAM  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
+") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
 sql_query($query,$SQLStat);
 $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."members\" (\"id\", \"Name\", \"UserPassword\", \"HashType\", \"Email\", \"GroupID\", \"Validated\", \"HiddenMember\", \"WarnLevel\", \"Interests\", \"Title\", \"Joined\", \"LastActive\", \"LastPostTime\", \"BanTime\", \"BirthDay\", \"BirthMonth\", \"BirthYear\", \"Signature\", \"Notes\", \"Avatar\", \"AvatarSize\", \"Website\", \"Gender\", \"PostCount\", \"Karma\", \"KarmaUpdate\", \"RepliesPerPage\", \"TopicsPerPage\", \"MessagesPerPage\", \"TimeZone\", \"DST\", \"UseTheme\", \"IP\", \"Salt\") VALUES\n".
 "(-1, 'Guest', '%s', '".$iDBHashType."', '%s', 4, 'no', 'yes', 0, 'Guest Account', 'Guest', %i, %i, '0', '0', '0', '0', '0', '[B]Test[/B] :)', 'Your Notes', 'http://', '100x100', '%s', 'UnKnow', 1, 0, 0, 10, 10, 10, '%s', '%s', '".$_POST['DefaultTheme']."', '127.0.0.1', '%s'),\n".
@@ -189,7 +191,7 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."mess
 "  \"DateSend\" int(15) NOT NULL default '0',\n".
 "  \"Read\" int(5) NOT NULL default '0',\n".
 "  PRIMARY KEY  (\"id\")\n".
-") ENGINE=MyISAM  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
+") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
 sql_query($query,$SQLStat);
 $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."messenger\" (\"SenderID\", \"ReciverID\", \"GuestName\", \"MessageTitle\", \"MessageText\", \"Description\", \"DateSend\", \"Read\") VALUES\n".
 "(-1, 1, '".$iDB_Author."', 'Welcome', 'Welcome to your new Internet Discussion Board! :)\r\nThis is a Test PM. :P ', 'Welcome %s', %i, 0);", array($_POST['AdminUser'],$YourDate));
@@ -217,7 +219,7 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."perm
 "  \"CanUseBBags\" varchar(5) COLLATE ".$SQLCollate." NOT NULL default '',\n".
 "  \"CanModForum\" varchar(5) COLLATE ".$SQLCollate." NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\")\n".
-") ENGINE=MyISAM  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
+") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
 sql_query($query,$SQLStat);
 $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."permissions\" (\"PermissionID\", \"Name\", \"ForumID\", \"CanViewForum\", \"CanMakeTopics\", \"CanMakeReplys\", \"CanMakeReplysCT\", \"CanEditTopics\", \"CanEditTopicsCT\", \"CanEditReplys\", \"CanEditReplysCT\", \"CanDeleteTopics\", \"CanDeleteTopicsCT\", \"CanDeleteReplys\", \"CanDeleteReplysCT\", \"CanCloseTopics\", \"CanPinTopics\", \"CanDohtml\", \"CanUseBBags\", \"CanModForum\") VALUES\n".
 "(1, 'Admin', 1, 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes'),\n".
@@ -243,7 +245,7 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."post
 "  \"IP\" varchar(20) COLLATE ".$SQLCollate." NOT NULL default '',\n".
 "  \"EditIP\" varchar(20) COLLATE ".$SQLCollate." NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\")\n".
-") ENGINE=MyISAM  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
+") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
 sql_query($query,$SQLStat);
 $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."posts\" (\"TopicID\", \"ForumID\", \"CategoryID\", \"UserID\", \"GuestName\", \"TimeStamp\", \"LastUpdate\", \"EditUser\", \"EditUserName\", \"Post\", \"Description\", \"IP\", \"EditIP\") VALUES\n".
 "(1, 1, 1, -1, '".$iDB_Author."', %i, %i, 1, '".$_POST['AdminUser']."', 'Welcome to your new Internet Discussion Board! :) ', 'Welcome %s', '127.0.0.1', '127.0.0.1');", array($YourDate,$YourEditDate,$_POST['AdminUser'])); 
@@ -258,7 +260,7 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."rest
 "  \"CaseInsensitive\" varchar(5) COLLATE ".$SQLCollate." NOT NULL default '',\n".
 "  \"WholeWord\" varchar(5) COLLATE ".$SQLCollate." NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\")\n".
-") ENGINE=MyISAM  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
+") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
 sql_query($query,$SQLStat);
 $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."sessions\" (\n".
 "  \"session_id\" VARCHAR(250) COLLATE ".$SQLCollate." NOT NULL default '',\n".
@@ -267,7 +269,7 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."sess
 "  \"ip_address\" varchar(20) COLLATE ".$SQLCollate." NOT NULL default '',\n".
 "  \"expires\" int(15) NOT NULL default '0',\n".
 "  PRIMARY KEY  (\"session_id\")\n".
-") ENGINE=MyISAM DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
+") ENGINE=".$SQLStorageEngine." DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
 sql_query($query,$SQLStat);
 $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."smileys\" (\n".
 "  \"id\" int(15) NOT NULL auto_increment,\n".
@@ -278,7 +280,7 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."smil
 "  \"Display\" varchar(5) COLLATE ".$SQLCollate." NOT NULL default '',\n".
 "  \"ReplaceCI\" varchar(5) COLLATE ".$SQLCollate." NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\")\n".
-") ENGINE=MyISAM  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
+") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
 sql_query($query,$SQLStat);
 $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."smileys\" (\"FileName\", \"SmileName\", \"SmileText\", \"Directory\", \"Display\", \"ReplaceCI\") VALUES\n".
 "('angry.png', 'Angry', ':angry:', 'smileys/', 'yes', 'yes'),\n".
@@ -311,7 +313,7 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."tagb
 "  \"Post\" text COLLATE ".$SQLCollate." NOT NULL,\n".
 "  \"IP\" varchar(20) COLLATE ".$SQLCollate." NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\")\n".
-") ENGINE=MyISAM  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
+") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
 sql_query($query,$SQLStat);
 $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."tagboard\" VALUES (1,-1,'".$iDB_Author."',".$YourDate.",'Welcome to Your New Tag Board. ^_^','127.0.0.1'), array(null)); 
 sql_query($query,$SQLStat);
@@ -381,7 +383,7 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."them
 "  \"NoAvatarSize\" varchar(150) COLLATE ".$SQLCollate." NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\"),\n".
 "  UNIQUE KEY \"Name\" (\"Name\")\n".
-") ENGINE=MyISAM  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
+") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
 sql_query($query,$SQLStat);
 $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."topics\" (\n".
 "  \"id\" int(15) NOT NULL auto_increment,\n".
@@ -400,7 +402,7 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."topi
 "  \"Pinned\" int(5) NOT NULL default '0',\n".
 "  \"Closed\" int(5) NOT NULL default '0',\n".
 "  PRIMARY KEY  (\"id\")\n".
-") ENGINE=MyISAM  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
+") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
 sql_query($query,$SQLStat);
 $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."topics\" (\"ForumID\", \"CategoryID\", \"OldForumID\", \"OldCategoryID\", \"UserID\", \"GuestName\", \"TimeStamp\", \"LastUpdate\", \"TopicName\", \"Description\", \"NumReply\", \"NumViews\", \"Pinned\", \"Closed\") VALUES\n".
 "(1, 1, 1, 1, -1, '".$iDB_Author."', %i, %i, 'Welcome', 'Welcome %s', 0, 0, 1, 1);", array($YourDate,$YourDate,$_POST['AdminUser']));
@@ -412,7 +414,7 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."word
 "  \"CaseInsensitive\" varchar(5) COLLATE ".$SQLCollate." NOT NULL default '',\n".
 "  \"WholeWord\" varchar(5) COLLATE ".$SQLCollate." NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\")\n".
-") ENGINE=MyISAM  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
+") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$SQLCharset." COLLATE=".$SQLCollate.";", array(null));
 sql_query($query,$SQLStat);
 $TableChCk = array("categories", "catpermissions", "events", "forums", "groups", "members", "messenger", "permissions", "posts", "restrictedwords", "sessions", "smileys", "topics", "wordfilter");
 $TablePreFix = $_POST['tableprefix'];
