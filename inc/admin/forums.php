@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: forums.php - Last Update: 06/07/2010 SVN 520 - Author: cooldude2k $
+    $FileInfo: forums.php - Last Update: 09/18/2010 SVN 552 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="forums.php"||$File3Name=="/forums.php") {
@@ -920,7 +920,7 @@ sql_query($query,$SQLStat);
 if($_POST['ForumID']!=$_POST['id']) { 
 $query = sql_pre_query("UPDATE \"".$Settings['sqltable']."forums\" SET \"InSubForum\"=%i WHERE \"InSubForum\"=%i", array($_POST['ForumID'],$_POST['id']));
 sql_query($query,$SQLStat);
-$query = sql_pre_query("UPDATE \"".$Settings['sqltable']."topics\" SET \"ForumID\"=%i WHERE \"ForumID\"=%i", array($_POST['ForumID'],$_POST['id']));
+$query = sql_pre_query("UPDATE \"".$Settings['sqltable']."topics\" SET \"ForumID\"=%i,\"OldForumID\"=%i WHERE \"ForumID\"=%i", array($_POST['ForumID'],$_POST['ForumID'],$_POST['id']));
 sql_query($query,$SQLStat);
 $query = sql_pre_query("UPDATE \"".$Settings['sqltable']."posts\" SET \"ForumID\"=%i WHERE \"ForumID\"=%i", array($_POST['ForumID'],$_POST['id']));
 sql_query($query,$SQLStat); }

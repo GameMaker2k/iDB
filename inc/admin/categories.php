@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: categories.php - Last Update: 06/07/2010 SVN 520 - Author: cooldude2k $
+    $FileInfo: categories.php - Last Update: 09/18/2010 SVN 552 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="categories.php"||$File3Name=="/categories.php") {
@@ -548,7 +548,7 @@ $queryz = sql_pre_query("UPDATE \"".$Settings['sqltable']."catpermissions\" SET 
 sql_query($queryz,$SQLStat); 
 $query = sql_pre_query("UPDATE \"".$Settings['sqltable']."forums\" SET \"CategoryID\"=%i WHERE \"CategoryID\"=%i", array($_POST['CategoryID'],$_POST['id']));
 sql_query($query,$SQLStat);
-$query = sql_pre_query("UPDATE \"".$Settings['sqltable']."topics\" SET \"CategoryID\"=%i WHERE \"CategoryID\"=%i", array($_POST['CategoryID'],$_POST['id']));
+$query = sql_pre_query("UPDATE \"".$Settings['sqltable']."topics\" SET \"CategoryID\"=%i,\"OldCategoryID\"=%i WHERE \"CategoryID\"=%i", array($_POST['CategoryID'],$_POST['CategoryID'],$_POST['id']));
 sql_query($query,$SQLStat);
 $query = sql_pre_query("UPDATE \"".$Settings['sqltable']."posts\" SET \"CategoryID\"=%i WHERE \"CategoryID\"=%i", array($_POST['CategoryID'],$_POST['id']));
 sql_query($query,$SQLStat); } } } 
