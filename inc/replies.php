@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: replies.php - Last Update: 09/10/2010 SVN 536 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 09/17/2010 SVN 551 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -1466,14 +1466,14 @@ $gtsquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHE
 $gtsresult=sql_query($gtsquery,$SQLStat);
 $gtsnum=sql_num_rows($gtsresult);
 $TUsersID=sql_result($gtsresult,0,"UserID");
+$TForumID=sql_result($gtsresult,0,"ForumID");
+$TClosed=sql_result($gtsresult,0,"Closed");
 if($_SESSION['UserID']!=$TUsersID) { $ShowEditTopic = null; }
 if($PermissionInfo['CanModForum'][$TopicForumID]=="yes"&&
 	$PermissionInfo['CanEditTopics'][$TopicForumID]=="yes") { 
 	$ShowEditTopic = true; } 
 if($PermissionInfo['CanEditTopicsClose'][$TopicForumID]=="no"&&$TopicClosed==1) {
 	$ShowEditTopic = null; } }
-$TForumID=sql_result($gtsresult,0,"ForumID");
-$TClosed=sql_result($gtsresult,0,"Closed");
 if($TopicClosed==2&&$PermissionInfo['CanModForum'][$TForumID]=="no") { 
 redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($preresult);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
