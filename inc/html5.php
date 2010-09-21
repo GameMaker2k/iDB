@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: html5.php - Last Update: 09/12/2010 SVN 542 - Author: cooldude2k $
+    $FileInfo: html5.php - Last Update: 09/21/2010 SVN 553 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="xhtml10.php"||$File3Name=="/xhtml10.php") {
@@ -81,6 +81,8 @@ if($Settings['html_level']!="Strict") {
 <?php // HTML meta tags and other html, head tags ?>
 <html lang="en">
 <head>
+<meta charset="<?php echo $Settings['charset']; ?>">
+<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $Settings['charset']; ?>">
 <base href="<?php echo $BoardURL; ?>" />
 <?php if($Settings['showverinfo']=="on") { ?>
 <meta name="Generator" content="<?php echo $VerInfo['iDB_Ver_Show']; ?>" />
