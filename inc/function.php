@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: function.php - Last Update: 09/15/2010 SVN 544 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 09/21/2010 SVN 554 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -65,6 +65,41 @@ $REFERERurl = null;
 function output_error($message, $level=E_USER_ERROR) {
     $caller = next(debug_backtrace());
     trigger_error($message.' in <strong>'.$caller['function'].'</strong> called from <strong>'.$caller['file'].'</strong> on line <strong>'.$caller['line'].'</strong>'."\n<br />error handler", $level); }
+// Untar a File
+function untar($tarfile,$outdir) {
+if($outdir!=""&&!file_exists($outdir)) {
+	mkdir($outdir); }
+$thandle = fopen($tarfile, "r");
+while (!feof($thandle)) {
+	$FileName = $outdir.trim(fread($thandle,100));
+	$FileMode = trim(fread($thandle,8));
+	$OwnerID = trim(fread($thandle,8));
+	$GroupID = trim(fread($thandle,8));
+	$FileSize = octdec(trim(fread($thandle,12)));
+	$LastEdit = trim(fread($thandle,12));
+	$Checksum = trim(fread($thandle,8));
+	$FileType = trim(fread($thandle,1));
+	fseek($thandle,355,SEEK_CUR);
+	if($FileType=="0") {
+		$FileContent = fread($thandle,$FileSize); }
+	if($FileType=="5") {
+		$FileContent = null; }
+	if($FileType=="0") {
+		$subhandle = fopen($FileName, "a+");
+		fwrite($subhandle,$FileContent,$FileSize);
+		fclose($subhandle); }
+	if($FileType=="5") {
+		mkdir($FileName); }
+	touch($FileName,$LastEdit);
+	if($FileType=="0") {
+		$CheckSize = 512;
+		while ($CheckSize<$FileSize) {
+			if($CheckSize<$FileSize) {
+			$CheckSize = $CheckSize + 512; } }
+		$SeekSize = $CheckSize - $FileSize;
+		fseek($thandle,$SeekSize,SEEK_CUR); } }
+	fclose($thandle); 
+	return true; }
 // http://us.php.net/manual/en/function.uniqid.php#94959
 /**
   * Generates an UUID
