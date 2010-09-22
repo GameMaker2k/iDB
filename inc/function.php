@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: function.php - Last Update: 09/21/2010 SVN 554 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 09/21/2010 SVN 555 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -67,10 +67,12 @@ function output_error($message, $level=E_USER_ERROR) {
     trigger_error($message.' in <strong>'.$caller['function'].'</strong> called from <strong>'.$caller['file'].'</strong> on line <strong>'.$caller['line'].'</strong>'."\n<br />error handler", $level); }
 // Untar a File
 function untar($tarfile,$outdir) {
+$TarSize = filesize($tarfile);
+$TarSizeEnd = $TarSize - 1024;
 if($outdir!=""&&!file_exists($outdir)) {
 	mkdir($outdir); }
 $thandle = fopen($tarfile, "r");
-while (!feof($thandle)) {
+while (ftell($thandle)<$TarSizeEnd) {
 	$FileName = $outdir.trim(fread($thandle,100));
 	$FileMode = trim(fread($thandle,8));
 	$OwnerID = trim(fread($thandle,8));
