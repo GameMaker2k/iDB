@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: function.php - Last Update: 09/21/2010 SVN 555 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 09/21/2010 SVN 556 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -65,16 +65,21 @@ $REFERERurl = null;
 function output_error($message, $level=E_USER_ERROR) {
     $caller = next(debug_backtrace());
     trigger_error($message.' in <strong>'.$caller['function'].'</strong> called from <strong>'.$caller['file'].'</strong> on line <strong>'.$caller['line'].'</strong>'."\n<br />error handler", $level); }
-// Untar a File
-function untar($tarfile,$outdir) {
+// PHP iUnTAR Version 2.7
+function untar($tarfile,$outdir="./",$chmod=null) {
 $TarSize = filesize($tarfile);
 $TarSizeEnd = $TarSize - 1024;
 if($outdir!=""&&!file_exists($outdir)) {
-	mkdir($outdir); }
+	mkdir($outdir); 
+	chmod($outdir,0777); }
 $thandle = fopen($tarfile, "r");
 while (ftell($thandle)<$TarSizeEnd) {
 	$FileName = $outdir.trim(fread($thandle,100));
 	$FileMode = trim(fread($thandle,8));
+	if($chmod===null) {
+		$FileCHMOD = "0".substr($FileMode,-3); }
+	if($chmod!==null) {
+		$FileCHMOD = $chmod; }
 	$OwnerID = trim(fread($thandle,8));
 	$GroupID = trim(fread($thandle,8));
 	$FileSize = octdec(trim(fread($thandle,12)));
@@ -92,7 +97,8 @@ while (ftell($thandle)<$TarSizeEnd) {
 		fclose($subhandle); }
 	if($FileType=="5") {
 		mkdir($FileName); }
-	touch($FileName,$LastEdit);
+	chmod($FileName,$FileCHMOD);
+	//touch($FileName,$LastEdit);
 	if($FileType=="0") {
 		$CheckSize = 512;
 		while ($CheckSize<$FileSize) {
