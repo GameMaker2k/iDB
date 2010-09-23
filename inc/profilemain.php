@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: profilemain.php - Last Update: 07/01/2010 SVN 528 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 09/22/2010 SVN 557 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
@@ -434,8 +434,8 @@ echo "<option value=\"".$plusi."\">UTC + ".$plusi.":00 hours</option>\n"; }
 <?php
 $mini = 0; $minnum = 60;
 while ($mini < $minnum) {
-if(pre_strlen($mini)==2) { $showmin = $mini; }
-if(pre_strlen($mini)==1) { $showmin = "0".$mini; }
+if(strlen($mini)==2) { $showmin = $mini; }
+if(strlen($mini)==1) { $showmin = "0".$mini; }
 echo "<option value=\"".$showmin."\">0:".$showmin." minutes</option>\n";
 ++$mini; }
 ?></select></td>
@@ -639,8 +639,8 @@ echo "<option value=\"".$plusi."\">GMT + ".$plusi.":00 hours</option>\n";
 <?php
 $mini = 0; $minnum = 60;
 while ($mini < $minnum) {
-if(pre_strlen($mini)==2) { $showmin = $mini; }
-if(pre_strlen($mini)==1) { $showmin = "0".$mini; }
+if(strlen($mini)==2) { $showmin = $mini; }
+if(strlen($mini)==1) { $showmin = "0".$mini; }
 echo "<option value=\"".$showmin."\">0:".$showmin." minutes</option>\n";
 ++$mini; }
 ?></select></td>
