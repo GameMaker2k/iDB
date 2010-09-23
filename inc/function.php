@@ -65,19 +65,18 @@ $REFERERurl = null;
 function output_error($message, $level=E_USER_ERROR) {
     $caller = next(debug_backtrace());
     trigger_error($message.' in <strong>'.$caller['function'].'</strong> called from <strong>'.$caller['file'].'</strong> on line <strong>'.$caller['line'].'</strong>'."\n<br />error handler", $level); }
-// PHP iUnTAR Version 2.7
+// PHP iUnTAR Version 2.8
 function untar($tarfile,$outdir="./",$chmod=null) {
 $TarSize = filesize($tarfile);
 $TarSizeEnd = $TarSize - 1024;
 if($outdir!=""&&!file_exists($outdir)) {
-	mkdir($outdir); 
-	chmod($outdir,0777); }
+	mkdir($outdir,0777); }
 $thandle = fopen($tarfile, "r");
 while (ftell($thandle)<$TarSizeEnd) {
 	$FileName = $outdir.trim(fread($thandle,100));
 	$FileMode = trim(fread($thandle,8));
 	if($chmod===null) {
-		$FileCHMOD = "0".substr($FileMode,-3); }
+		$FileCHMOD = octdec("0".substr($FileMode,-3)); }
 	if($chmod!==null) {
 		$FileCHMOD = $chmod; }
 	$OwnerID = trim(fread($thandle,8));
@@ -94,10 +93,10 @@ while (ftell($thandle)<$TarSizeEnd) {
 	if($FileType=="0") {
 		$subhandle = fopen($FileName, "a+");
 		fwrite($subhandle,$FileContent,$FileSize);
-		fclose($subhandle); }
+		fclose($subhandle); 
+		chmod($FileName,$FileCHMOD); }
 	if($FileType=="5") {
-		mkdir($FileName); }
-	chmod($FileName,$FileCHMOD);
+		mkdir($FileName,$FileCHMOD); }
 	//touch($FileName,$LastEdit);
 	if($FileType=="0") {
 		$CheckSize = 512;
