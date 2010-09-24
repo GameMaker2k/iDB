@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: function.php - Last Update: 09/23/2010 SVN 559 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 09/23/2010 SVN 560 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -65,7 +65,7 @@ $REFERERurl = null;
 function output_error($message, $level=E_USER_ERROR) {
     $caller = next(debug_backtrace());
     trigger_error($message.' in <strong>'.$caller['function'].'</strong> called from <strong>'.$caller['file'].'</strong> on line <strong>'.$caller['line'].'</strong>'."\n<br />error handler", $level); }
-// PHP iUnTAR Version 2.9
+// PHP iUnTAR Version 3.0
 function untar($tarfile,$outdir="./",$chmod=null) {
 $TarSize = filesize($tarfile);
 $TarSizeEnd = $TarSize - 1024;
@@ -89,6 +89,10 @@ while (ftell($thandle)<$TarSizeEnd) {
 	fseek($thandle,255,SEEK_CUR);
 	if($FileType=="0") {
 		$FileContent = fread($thandle,$FileSize); }
+	if($FileType=="1") {
+		$FileContent = null; }
+	if($FileType=="2") {
+		$FileContent = null; }
 	if($FileType=="5") {
 		$FileContent = null; }
 	if($FileType=="0") {
@@ -96,6 +100,10 @@ while (ftell($thandle)<$TarSizeEnd) {
 		fwrite($subhandle,$FileContent,$FileSize);
 		fclose($subhandle); 
 		chmod($FileName,$FileCHMOD); }
+	if($FileType=="1") {
+		link($FileName,$LinkedFile); }
+	if($FileType=="2") {
+		symlink($LinkedFile,$FileName); }
 	if($FileType=="5") {
 		mkdir($FileName,$FileCHMOD); }
 	//touch($FileName,$LastEdit);
