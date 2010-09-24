@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: function.php - Last Update: 09/21/2010 SVN 556 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 09/23/2010 SVN 559 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -65,7 +65,7 @@ $REFERERurl = null;
 function output_error($message, $level=E_USER_ERROR) {
     $caller = next(debug_backtrace());
     trigger_error($message.' in <strong>'.$caller['function'].'</strong> called from <strong>'.$caller['file'].'</strong> on line <strong>'.$caller['line'].'</strong>'."\n<br />error handler", $level); }
-// PHP iUnTAR Version 2.8
+// PHP iUnTAR Version 2.9
 function untar($tarfile,$outdir="./",$chmod=null) {
 $TarSize = filesize($tarfile);
 $TarSizeEnd = $TarSize - 1024;
@@ -85,7 +85,8 @@ while (ftell($thandle)<$TarSizeEnd) {
 	$LastEdit = trim(fread($thandle,12));
 	$Checksum = trim(fread($thandle,8));
 	$FileType = trim(fread($thandle,1));
-	fseek($thandle,355,SEEK_CUR);
+	$LinkedFile = trim(fread($thandle,100));
+	fseek($thandle,255,SEEK_CUR);
 	if($FileType=="0") {
 		$FileContent = fread($thandle,$FileSize); }
 	if($FileType=="5") {
