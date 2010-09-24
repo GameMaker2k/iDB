@@ -12,7 +12,7 @@
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mkconfig.php - Last Update: 09/24/2010 SVN 561 - Author: cooldude2k $
+    $FileInfo: mkconfig.php - Last Update: 09/24/2010 SVN 562 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mkconfig.php"||$File3Name=="/mkconfig.php") {
@@ -284,7 +284,7 @@ $BoardSettings=$pretext2[0]."\n".
 "\$SettInfo['Description'] = '".$_POST['NewBoardName'].",".$_POST['AdminUser']."';\n".$pretext2[2]."\n".
 "\$SettDir['maindir'] = '".$idbdir."';\n".
 "\$SettDir['inc'] = 'inc/';\n".
-"\$SettDir['inc'] = 'archive/';\n".
+"\$SettDir['archive'] = 'archive/';\n".
 "\$SettDir['misc'] = 'inc/misc/';\n".
 "\$SettDir['sql'] = 'inc/misc/sql/';\n".
 "\$SettDir['admin'] = 'inc/admin/';\n".

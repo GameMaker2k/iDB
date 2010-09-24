@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: main.php - Last Update: 09/24/2010 SVN 561 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 09/24/2010 SVN 562 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -224,6 +224,71 @@ fwrite($fp, $BoardSettingsBak);
 fclose($fp);
 $Settings['SQLThemes'] = "on";
 $_POST['update'] = "now"; $_GET['act'] = "resyncthemes"; }
+if(($_GET['act']=="themelist"&&$GroupInfo['ViewDBInfo']=="yes")||
+	($_GET['act']=="gettheme"&&$_POST['act']=="gettheme"&&$GroupInfo['ViewDBInfo']=="yes")) {
+if($_GET['act']=="gettheme"&&$_POST['act']=="gettheme"&&$_POST['GetTheme']==null) {
+$_GET['act'] = "themelist"; $_POST['act'] = ""; }
+if($_GET['act']=="gettheme"&&$_POST['act']=="gettheme"&&$_POST['GetTheme']=="None") {
+$_GET['act'] = "themelist"; $_POST['act'] = ""; }
+$conn_id = ftp_connect("ftp.berlios.de",21,90);
+ftp_login($conn_id, "anonymous", "anonymous");
+ftp_pasv($conn_id, true);
+if($_GET['act']=="themelist") {
+ftp_chdir($conn_id, "/pub/idb/themes/"); }
+if($_GET['act']=="gettheme"&&$_POST['act']=="gettheme") {
+ftp_chdir($conn_id, "/pub/idb/themes/".$_POST['GetTheme']."/"); 
+ftp_get($conn_id, $SettDir['archive'].$_POST['GetTheme'].".tar", "./".$_POST['GetTheme'].".tar", FTP_BINARY); 
+untar($SettDir['archive'].$_POST['GetTheme'].".tar",$SettDir['themes'].$_POST['GetTheme']."/");
+unlink($SettDir['archive'].$_POST['GetTheme'].".tar"); 
+if($Settings['SQLThemes']=="off") { $_POST['update'] = "now"; }
+if($Settings['SQLThemes']=="on") {
+$_POST['update'] = "now"; $_GET['act'] = "resyncthemes"; } }
+if($_GET['act']=="themelist") {
+$themelist = ftp_nlist($conn_id, ".");
+$it = 0; $numt = count($themelist);
+$themeact = url_maker($exfile['admin'],$Settings['file_ext'],"act=gettheme",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']);
+$admincptitle = " ".$ThemeSet['TitleDivider']." Theme Setup";
+?>
+</td>
+	<td style="width: 85%; vertical-align: top;">
+<div class="TableMenuBorder">
+<?php if($ThemeSet['TableStyle']=="div") { ?>
+<div class="TableMenuRow1">
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo $themeact; ?>">Theme Setup</a></div>
+<?php } ?>
+<table class="TableMenu" style="width: 100%;">
+<?php if($ThemeSet['TableStyle']=="table") { ?>
+<tr class="TableMenuRow1">
+<td class="TableMenuColumn1"><span style="float: left;">
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo $themeact; ?>">Theme Setup</a>
+</span><span style="float: right;">&nbsp;</span></td>
+</tr><?php } ?>
+<tr id="ProfileTitle" class="TableMenuRow2">
+<th class="TableMenuColumn2">Theme Setup</th>
+</tr>
+<tr class="TableMenuRow3" id="NotePadRow">
+<td class="TableMenuColumn3">
+<form style="display: inline;" method="post" action="<?php echo $themeact; ?>"><div style="text-align: center;">
+<label class="TextBoxLabel" for="GetTheme">Install Theme:</label><br />
+<select size="1" name="GetTheme" id="GetTheme" class="TextBox">
+<option value="None">None</option>
+<?php
+while ($it < $numt) {
+if(!file_exists($SettDir['themes'].$themelist[$it])) {
+echo "<option value=\"".$themelist[$it]."\">".$themelist[$it]."</option>\n"; }
+++$it; }
+?>
+</select><br />
+<input type="hidden" name="act" value="gettheme" style="display: none;" />
+<input type="submit" value="Install" />
+</div></form></td>
+</tr>
+<tr id="ProfileEnd" class="TableMenuRow4">
+<td class="TableMenuColumn4">&nbsp;</td>
+</tr>
+</table>
+</div>
+<?php } ftp_close($conn_id); }
 if($_GET['act']=="resyncthemes"&&$GroupInfo['ViewDBInfo']=="yes"&&$Settings['SQLThemes']=="on") {
 $time = GMTimeStamp() - ini_get("session.gc_maxlifetime");
 //$sqlg = sql_pre_query('DELETE FROM \"'.$Settings['sqltable'].'sessions\" WHERE \"expires\" < UNIX_TIMESTAMP();', array(null));
