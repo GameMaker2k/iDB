@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: main.php - Last Update: 09/16/2010 SVN 547 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 09/24/2010 SVN 561 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -206,6 +206,7 @@ $BoardSettings=$pretext2[0]."\n".
 "\$SettInfo['Description'] = ".null_string($SettInfo['Description']).";\n".$pretext2[2]."\n".
 "\$SettDir['maindir'] = ".null_string($SettDir['maindir']).";\n".
 "\$SettDir['inc'] = ".null_string($SettDir['inc']).";\n".
+"\$SettDir['archive'] = ".null_string($SettDir['archive']).";\n".
 "\$SettDir['misc'] = ".null_string($SettDir['misc']).";\n".
 "\$SettDir['sql'] = ".null_string($SettDir['sql']).";\n".
 "\$SettDir['admin'] = ".null_string($SettDir['admin']).";\n".
@@ -778,6 +779,7 @@ $BoardSettings=$pretext2[0]."\n".
 "\$SettInfo['Description'] = ".null_string($SettInfo['Description']).";\n".$pretext2[2]."\n".
 "\$SettDir['maindir'] = ".null_string($SettDir['maindir']).";\n".
 "\$SettDir['inc'] = ".null_string($SettDir['inc']).";\n".
+"\$SettDir['archive'] = ".null_string($SettDir['archive']).";\n".
 "\$SettDir['misc'] = ".null_string($SettDir['misc']).";\n".
 "\$SettDir['sql'] = ".null_string($SettDir['sql']).";\n".
 "\$SettDir['admin'] = ".null_string($SettDir['admin']).";\n".
@@ -949,6 +951,7 @@ $BoardSettings=$pretext2[0]."\n".
 "\$SettInfo['Description'] = ".null_string($SettInfo['Description']).";\n".$pretext2[2]."\n".
 "\$SettDir['maindir'] = ".null_string($SettDir['maindir']).";\n".
 "\$SettDir['inc'] = ".null_string($SettDir['inc']).";\n".
+"\$SettDir['archive'] = ".null_string($SettDir['archive']).";\n".
 "\$SettDir['misc'] = ".null_string($SettDir['misc']).";\n".
 "\$SettDir['sql'] = ".null_string($SettDir['sql']).";\n".
 "\$SettDir['admin'] = ".null_string($SettDir['admin']).";\n".
@@ -1103,6 +1106,7 @@ $BoardSettings=$pretext2[0]."\n".
 "\$SettInfo['Description'] = ".null_string($_POST['Description']).";\n".$pretext2[2]."\n".
 "\$SettDir['maindir'] = ".null_string($SettDir['maindir']).";\n".
 "\$SettDir['inc'] = ".null_string($SettDir['inc']).";\n".
+"\$SettDir['archive'] = ".null_string($SettDir['archive']).";\n".
 "\$SettDir['misc'] = ".null_string($SettDir['misc']).";\n".
 "\$SettDir['sql'] = ".null_string($SettDir['sql']).";\n".
 "\$SettDir['admin'] = ".null_string($SettDir['admin']).";\n".
