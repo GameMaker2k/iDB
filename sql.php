@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 09/24/2010 SVN 561 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 09/29/2010 SVN 563 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -112,7 +112,7 @@ if($Settings['fixpathinfo']=="on") {
 	putenv("PATH_INFO=".$_SERVER['ORIG_PATH_INFO']); }
 // Check to see if variables are set
 if(!isset($SettDir['inc'])) { $SettDir['inc'] = "inc/"; }
-if(!isset($SettDir['archive'])) { $SettDir['inc'] = "archive/"; }
+if(!isset($SettDir['archive'])) { $SettDir['archive'] = "archive/"; }
 if(!isset($SettDir['misc'])) { $SettDir['misc'] = "inc/misc/"; }
 if(!isset($SettDir['sql'])) { $SettDir['sql'] = "inc/misc/sql/"; }
 if(!isset($SettDir['admin'])) { $SettDir['admin'] = "inc/admin/"; }
