@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: preindex.php - Last Update: 06/13/2010 SVN 526 - Author: cooldude2k $
+    $FileInfo: preindex.php - Last Update: 09/30/2010 SVN 564 - Author: cooldude2k $
 */
 $pretime = explode(" ", microtime());
 $utime = $pretime[0];
@@ -35,6 +35,12 @@ if(!isset($checklowview)) {
 	$checklowview = false; }
 if($checklowview!==false&&$checklowview!==true) {
 	$checklowview = false; }
+if($_GET['act']=="lofi"||$_GET['act']=="lo-fi"||
+	$_GET['act']=="LoFi"||$_GET['act']=="Lo-Fi"||
+	$_GET['act']=="lores"||$_GET['act']=="lo-res"||
+	$_GET['act']=="LoRes"||$_GET['act']=="Lo-Res"||
+	$_GET['act']=="LowView"||$_GET['act']=="low-view"||
+	$_GET['act']=="Low-View") { $_GET['act'] = "lowview"; }
 if($_GET['act']!="lowview") { 
 	$checklowview = false; }
 if($Settings['enable_rss']=="on") {
