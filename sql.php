@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 09/29/2010 SVN 563 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 09/02/2010 SVN 565 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -314,6 +314,11 @@ $temp_user_ip = $_SERVER['REMOTE_ADDR'];
 if(!isset($_SERVER['HTTP_USER_AGENT'])) {
 	$_SERVER['HTTP_USER_AGENT'] = ""; }
 $temp_user_agent = $_SERVER['HTTP_USER_AGENT'];
+if($Settings['file_ext']!="no+ext"&&$Settings['file_ext']!="no ext") {
+$MkIndexFile = $exfile['index'].$Settings['file_ext']; }
+if($Settings['file_ext']=="no+ext"||$Settings['file_ext']=="no ext") {
+$MkIndexFile = $exfile['index']; }
+$temp_session_data = "ViewingPage|s:9:\"?act=view\";ViewingFile|s:".strlen($MkIndexFile).":\"".$MkIndexFile."\";PreViewingTitle|s:7:\"Viewing\";ViewingTitle|s:11:\"Board index\";UserID|s:1:\"0\";UserIP|s:".strlen($_SERVER['REMOTE_ADDR']).":\"".$_SERVER['REMOTE_ADDR']."\";UserGroup|s:".strlen($Settings['GuestGroup']).":\"".$Settings['GuestGroup']."\";UserGroupID|s:1:\"4\";UserTimeZone|s:".strlen($Settings['DefaultTimeZone']).":\"".$Settings['DefaultTimeZone']."\";UserDST|s:".strlen($Settings['DefaultDST']).":\"".$Settings['DefaultDST']."\";";
 $SQLSType = $Settings['sqltype'];
 //Session Open Function
 function sql_session_open($save_path, $session_name ) {
@@ -325,13 +330,13 @@ function sql_session_close() {
 return true; }
 //Session Read Function
 function sql_session_read($id) {
-global $sqltable,$SQLStat,$SQLSType,$temp_user_ip,$temp_user_agent;
+global $sqltable,$SQLStat,$SQLSType,$temp_user_ip,$temp_user_agent,$temp_session_data;
 $result = sql_query(sql_pre_query("SELECT * FROM \"".$sqltable."sessions\" WHERE \"session_id\" = '%s'", array($id)),$SQLStat);
 if (!sql_num_rows($result)) {
 sql_query(sql_pre_query("DELETE FROM \"".$sqltable."sessions\" WHERE \"session_id\"<>'%s' AND ip_address='%s'", array($id,$temp_user_ip)),$SQLStat);
 $time = GMTimeStamp();
 sql_query(sql_pre_query("INSERT INTO \"".$sqltable."sessions\" (\"session_id\", \"session_data\", \"user_agent\", \"ip_address\", \"expires\") VALUES\n".
-"('%s', '', '%s', '%s', %i)", array($id,$temp_user_agent,$temp_user_ip,$time)),$SQLStat);
+"('%s', '%s', '%s', '%s', %i)", array($id,$temp_session_data,$temp_user_agent,$temp_user_ip,$time)),$SQLStat);
 return '';
 } else {
 $time = GMTimeStamp();

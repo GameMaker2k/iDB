@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: forums.php - Last Update: 09/10/2010 SVN 536 - Author: cooldude2k $
+    $FileInfo: forums.php - Last Update: 09/02/2010 SVN 565 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="forums.php"||$File3Name=="/forums.php") {
@@ -144,7 +144,9 @@ if($NewUpdateTime>$OldUpdateTime) {
     $UseThisFonum = $gltf[$glti];
 $OldUpdateTime = $NewUpdateTime; } }
 sql_free_result($gltforesult);
-++$glti; } }
+++$glti; } 
+if($UseThisFonum==0) {
+	$UseThisFonum = $gltf[0]; } }
 if ($ForumType!="subforum"&&$ForumType!="redirect") { $UseThisFonum = $gltf[0]; }
 if ($ForumType!="redirect") {
 $ExtraIgnores = null;
