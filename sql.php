@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 09/02/2010 SVN 565 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 09/03/2010 SVN 567 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -19,8 +19,9 @@ $disfunc = @ini_get("disable_functions");
 if($disfunc!="ini_set") { $disfunc = explode(",",$disfunc); }
 if($disfunc=="ini_set") { $disfunc = array("ini_set"); }
 if(!in_array("ini_set", $disfunc)) {
-// Uncomment next two lines to show errors
-/*@ini_set("display_errors", true);
+// Uncomment next few lines to show errors
+/*@ini_set("track_errors", true);
+@ini_set("display_errors", true);
 @ini_set("display_startup_errors", true); */ }
 @error_reporting(E_ALL ^ E_NOTICE);
 /* Get rid of session id in urls */
@@ -28,7 +29,8 @@ if(!in_array("ini_set", $disfunc)) {
 @ini_set("session.use_trans_sid", false);
 @ini_set("session.use_cookies", true);
 @ini_set("session.use_only_cookies", true);
-@ini_set("url_rewriter.tags",""); }
+@ini_set("url_rewriter.tags",""); 
+@ini_set("ignore_user_abort", 1); }
 @set_time_limit(30); @ignore_user_abort(true);
 /* Change session garbage collection settings */
 if(!in_array("ini_set", $disfunc)) {
@@ -36,8 +38,8 @@ if(!in_array("ini_set", $disfunc)) {
 @ini_set("session.gc_divisor", 100);
 @ini_set("session.gc_maxlifetime", 1440);
 /* Change session hash type here */
-@ini_set('session.hash_function', 1);
-@ini_set('session.hash_bits_per_character', 6); }
+@ini_set("session.hash_function", 1);
+@ini_set("session.hash_bits_per_character", 6); }
 /* Do not change anything below this line unless you know what you are doing */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="sql.php"||$File3Name=="/sql.php") {
