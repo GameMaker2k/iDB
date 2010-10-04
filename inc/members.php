@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 09/04/2010 SVN 569 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 09/04/2010 SVN 571 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -1383,9 +1383,9 @@ $NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$HashSalt,"ripemd25
 if($Settings['use_hashtype']=="ripemd320") { $iDBHash = "iDBHRMD320";
 $NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$HashSalt,"ripemd320"); }
 if($Settings['use_hashtype']=="salsa10") { $iDBHash = "iDBHRMD320";
-$NewPassword = b64e_hmac($_POST['Password'],,$_POST['Joined'],$HashSalt,"salsa10"); }
+$NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$HashSalt,"salsa10"); }
 if($Settings['use_hashtype']=="salsa20") { $iDBHash = "iDBHRMD320";
-$NewPassword = b64e_hmac($_POST['Password'],,$_POST['Joined'],$HashSalt,"salsa20"); }
+$NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$HashSalt,"salsa20"); }
 $_GET['YourPost'] = $_POST['Signature'];
 //require( './'.$SettDir['misc'].'HTMLTags.php');
 $_GET['YourPost'] = htmlspecialchars($_GET['YourPost'], ENT_QUOTES, $Settings['charset']);
