@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 09/22/2010 SVN 557 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 09/04/2010 SVN 568 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -911,6 +911,8 @@ if($HashType=="iDBHRMD128") { $YourPassword = b64e_hmac($_POST['userpass'],$Join
 if($HashType=="iDBHRMD160") { $YourPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$HashSalt,"ripemd160"); }
 if($HashType=="iDBHRMD256") { $YourPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$HashSalt,"ripemd256"); }
 if($HashType=="iDBHRMD320") { $YourPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$HashSalt,"ripemd320"); }
+if($HashType=="iDBHSALSA10") { $YourPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$HashSalt,"salsa10"); }
+if($HashType=="iDBHSALSA20") { $YourPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$HashSalt,"salsa20"); }
 if($YourPassword!=$YourPassTry) { $passright = false; } 
 if($YourPassword==$YourPassTry) { $passright = true;
 $YourIDM=sql_result($resultlog,$i,"id");
@@ -958,6 +960,10 @@ if($Settings['use_hashtype']=="ripemd256") { $iDBHash = "iDBHRMD256";
 $NewPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$NewHashSalt,"ripemd256"); }
 if($Settings['use_hashtype']=="ripemd320") { $iDBHash = "iDBHRMD320";
 $NewPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$NewHashSalt,"ripemd320"); }
+if($Settings['use_hashtype']=="salsa10") { $iDBHash = "iDBHRMD320";
+$NewPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$NewHashSalt,"salsa10"); }
+if($Settings['use_hashtype']=="salsa20") { $iDBHash = "iDBHRMD320";
+$NewPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$NewHashSalt,"salsa20"); }
 $NewDay=GMTimeStamp();
 $NewIP=$_SERVER['REMOTE_ADDR'];
 if($BanError!="yes") {
