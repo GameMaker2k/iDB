@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: topics.php - Last Update: 09/10/2010 SVN 536 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 09/05/2010 SVN 572 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -177,7 +177,7 @@ $i=0;
 $ExtraIgnores = null;
 if($PermissionInfo['CanModForum'][$_GET['id']]=="no") {
 	$ExtraIgnores = " AND \"Closed\"<>3"; }
-$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE (\"ForumID\"=%i".$ExtraIgnores.") OR (\"OldForumID\"=%i".$ExtraIgnores.") OR (\"Pinned\"=2".$ExtraIgnores.") ORDER BY \"Pinned\" DESC, \"LastUpdate\" DESC ".$SQLimit, array($_GET['id'],$_GET['id'],$PageLimit,$Settings['max_topics']));
+$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE (\"ForumID\"=%i".$ExtraIgnores.$ForumIgnoreList4.") OR (\"OldForumID\"=%i".$ExtraIgnores.$ForumIgnoreList4.") OR (\"Pinned\"=2".$ExtraIgnores.$ForumIgnoreList4.") ORDER BY \"Pinned\" DESC, \"LastUpdate\" DESC ".$SQLimit, array($_GET['id'],$_GET['id'],$PageLimit,$Settings['max_topics']));
 $result=sql_query($query,$SQLStat);
 $num=sql_num_rows($result);
 //List Page Number Code Start

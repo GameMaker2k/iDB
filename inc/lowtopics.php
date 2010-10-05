@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: lowtopics.php - Last Update: 09/10/2010 SVN 536 - Author: cooldude2k $
+    $FileInfo: lowtopics.php - Last Update: 09/05/2010 SVN 572 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="lowtopics.php"||$File3Name=="/lowtopics.php") {
@@ -164,7 +164,7 @@ $i=0;
 $ExtraIgnores = null;
 if($PermissionInfo['CanModForum'][$_GET['id']]=="no") {
 	$ExtraIgnores = " AND \"Closed\"<>3"; }
-$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"ForumID\"=%i".$ExtraIgnores." ORDER BY \"Pinned\" DESC, \"LastUpdate\" DESC ".$SQLimit, array($_GET['id'],$PageLimit,$Settings['max_topics']));
+$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"ForumID\"=%i".$ExtraIgnores.$ForumIgnoreList4." ORDER BY \"Pinned\" DESC, \"LastUpdate\" DESC ".$SQLimit, array($_GET['id'],$PageLimit,$Settings['max_topics']));
 $result=sql_query($query,$SQLStat);
 $num=sql_num_rows($result);
 //List Page Number Code Start
@@ -257,7 +257,7 @@ if(!is_numeric($PinnedTopic)) { $PinnedTopic = 0; }
 if ($TopicStat>3) { $TopicStat = 1; } 
 if ($TopicStat<0) { $TopicStat = 0; }
 if(!is_numeric($TopicStat)) { $TopicStat = 1; }
-if ($PinnedTopic>0&&$PinnedTopic<3&&) { $PreTopic="<span style=\"font-weight: bold;\">Pinned: </span>"; }
+if ($PinnedTopic>0&&$PinnedTopic<3) { $PreTopic="<span style=\"font-weight: bold;\">Pinned: </span>"; }
 if ($PinnedTopic==0) { $PreTopic=null; }
 if ($OldForumID==$ForumID&&$TForumID!=$ForumID) { $PreTopic="<span>Moved: </span>"; }
 ?>
