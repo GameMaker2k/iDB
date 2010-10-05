@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2009 iDB Support - http://idb.berlios.de/
-    Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
+    Copyright 2004-2010 iDB Support - http://idb.berlios.de/
+    Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: index.php - Last Update: 09/05/2010 SVN 574 - Author: cooldude2k $
+    $FileInfo: index.php - Last Update: 09/05/2010 SVN 575 - Author: cooldude2k $
 */
 if(ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }
@@ -21,14 +21,24 @@ $usefileext = $Settings['file_ext'];
 if($ext=="noext"||$ext=="no ext"||$ext=="no+ext") { $usefileext = ""; }
 $filewpath = $exfile['index'].$usefileext.$_SERVER['PATH_INFO'];
 
+if(isset($_GET['showcategory'])&&is_numeric($_GET['showcategory'])) {
+redirect("location",$rbasedir.url_maker($exfile['category'],$Settings['file_ext'],"act=view&id=".$_GET['showcategory'],$Settings['qstr'],$Settings['qsep'],$prexqstr['category'],$exqstr['category'],FALSE));
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
+
 if(isset($_GET['showforum'])&&is_numeric($_GET['showforum'])) {
 redirect("location",$rbasedir.url_maker($exfile['forum'],$Settings['file_ext'],"act=view&id=".$_GET['showforum'],$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum'],FALSE));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 
 if(isset($_GET['showtopic'])&&is_numeric($_GET['showtopic'])) {
+if(isset($_GET['showpost'])&&is_numeric($_GET['showpost'])) {
+redirect("location",$rbasedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['showtopic']."&post=".$_GET['showpost'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],FALSE));
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); }
+if(!isset($_GET['showpost'])) { $_GET['showpost'] = null; }
+if(!isset($_GET['showpost'])||!is_numeric($_GET['showpost'])) {
 redirect("location",$rbasedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['showtopic'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],FALSE));
-ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); }
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 
 if(isset($_GET['showuser'])&&is_numeric($_GET['showuser'])) {
@@ -36,8 +46,8 @@ redirect("location",$rbasedir.url_maker($exfile['member'],$Settings['file_ext'],
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 
-if(isset($_GET['showcategory'])&&is_numeric($_GET['showcategory'])) {
-redirect("location",$rbasedir.url_maker($exfile['category'],$Settings['file_ext'],"act=view&id=".$_GET['showcategory'],$Settings['qstr'],$Settings['qsep'],$prexqstr['category'],$exqstr['category'],FALSE));
+if(isset($_GET['showevent'])&&is_numeric($_GET['showevent'])) {
+redirect("location",$rbasedir.url_maker($exfile['event'],$Settings['file_ext'],"act=view&id=".$_GET['showevent'],$Settings['qstr'],$Settings['qsep'],$prexqstr['event'],$exqstr['event'],FALSE));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 ?>
