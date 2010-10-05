@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: index.php - Last Update: 11/23/2009 SVN 357 - Author: cooldude2k $
+    $FileInfo: index.php - Last Update: 09/05/2010 SVN 574 - Author: cooldude2k $
 */
 if(ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }
@@ -20,6 +20,26 @@ require('preindex.php');
 $usefileext = $Settings['file_ext'];
 if($ext=="noext"||$ext=="no ext"||$ext=="no+ext") { $usefileext = ""; }
 $filewpath = $exfile['index'].$usefileext.$_SERVER['PATH_INFO'];
+
+if(isset($_GET['showforum'])&&is_numeric($_GET['showforum'])) {
+redirect("location",$rbasedir.url_maker($exfile['forum'],$Settings['file_ext'],"act=view&id=".$_GET['showforum'],$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum'],FALSE));
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
+
+if(isset($_GET['showtopic'])&&is_numeric($_GET['showtopic'])) {
+redirect("location",$rbasedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['showtopic'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],FALSE));
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
+
+if(isset($_GET['showuser'])&&is_numeric($_GET['showuser'])) {
+redirect("location",$rbasedir.url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$_GET['showuser'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],FALSE));
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
+
+if(isset($_GET['showcategory'])&&is_numeric($_GET['showcategory'])) {
+redirect("location",$rbasedir.url_maker($exfile['category'],$Settings['file_ext'],"act=view&id=".$_GET['showcategory'],$Settings['qstr'],$Settings['qsep'],$prexqstr['category'],$exqstr['category'],FALSE));
+ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 ?>
 
 <title> <?php echo $Settings['board_name'].$idbpowertitle; ?> </title>
