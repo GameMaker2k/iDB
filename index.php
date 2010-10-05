@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: index.php - Last Update: 09/05/2010 SVN 575 - Author: cooldude2k $
+    $FileInfo: index.php - Last Update: 09/05/2010 SVN 576 - Author: cooldude2k $
 */
 if(ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }
@@ -37,7 +37,9 @@ redirect("location",$rbasedir.url_maker($exfile['topic'],$Settings['file_ext'],"
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); }
 if(!isset($_GET['showpost'])) { $_GET['showpost'] = null; }
 if(!isset($_GET['showpost'])||!is_numeric($_GET['showpost'])) {
-redirect("location",$rbasedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['showtopic'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],FALSE));
+if(!isset($_GET['showpage'])) { $_GET['showpage'] = 1; }
+if(!isset($_GET['showpage'])||!is_numeric($_GET['showpage'])) { $_GET['showpage'] = 1; }
+redirect("location",$rbasedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['showtopic']."&page=".$_GET['showpage'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],FALSE));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); }
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 
