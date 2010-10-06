@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: lowreplies.php - Last Update: 09/05/2010 SVN 572 - Author: cooldude2k $
+    $FileInfo: lowreplies.php - Last Update: 09/06/2010 SVN 578 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -41,7 +41,10 @@ if($TopicClosed==3&&$PermissionInfo['CanModForum'][$TopicForumID]=="no") {
 redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($preresult);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
-$NumberReplies=sql_result($preresult,0,"NumReply");
+if(!isset($_GET['post'])||$_GET['post']!==null) {
+$NumberReplies=sql_result($preresult,0,"NumReply"); }
+if(isset($_GET['post'])&&$_GET['post']!==null) {
+$NumberReplies=1; }
 $ViewTimes=sql_result($preresult,0,"NumViews");
 sql_free_result($preresult);
 $forumcheckx = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList1."  LIMIT 1", array($TopicForumID));
@@ -140,7 +143,10 @@ $PageLimit = $Settings['max_posts'] * $snumber;
 if($PageLimit<0) { $PageLimit = 0; }
 //End Reply Page Code
 $i=0;
-$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" ASC ".$SQLimit, array($_GET['id'],$PageLimit,$Settings['max_posts']));
+if(!isset($_GET['post'])||$_GET['post']!==null) {
+$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" ASC ".$SQLimit, array($_GET['id'],$PageLimit,$Settings['max_posts'])); }
+if(isset($_GET['post'])&&$_GET['post']!==null) {
+$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i AND \"id\"=%i ORDER BY \"TimeStamp\" ASC ".$SQLimit, array($_GET['id'],$_GET['post'],$PageLimit,$Settings['max_posts'])); }
 $result=sql_query($query,$SQLStat);
 $num=sql_num_rows($result);
 if($num==0) { redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=lowview",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
@@ -309,7 +315,7 @@ $eunum = sql_num_rows($euresult); }
 	if($MyEditUserID==$MyUserID) {
 	$EditUserID = $User1ID;
 	$EditUserGroupID = $User1GroupID;
-	$EditUserHidden=$User1Hidden;
+	//$EditUserHidden=$User1Hidden;
 	$EditUserName = $User1Name;
 	$EditUserGroup=$User1Group;
 	$EditUserNamePrefix=null;
@@ -361,8 +367,8 @@ if($_SESSION['UserID']==0) {
 	$CanEditReply = false; $CanDeleteReply = false; }
 $ReplyNum = $i + $PageLimit + 1;
 ?>
-<div style="border:1px solid #E6E3E4; padding:1px; margin-bottom: 15px;">
-<div style="border: 1px solid #E6E3E4; padding:1px; margin-bottom: 15px; background-color: #E6E3E4; padding: 6px;">
+<div style="border:1px solid #E6E3E4; padding:1px; margin-bottom: 15px;" id="reply<?php echo $ReplyNum; ?>">
+<div style="border: 1px solid #E6E3E4; padding:1px; margin-bottom: 15px; background-color: #E6E3E4; padding: 6px;" id="post<?php echo $MyPostID; ?>">
 <div style="font-weight: bold; font-size: 0.8em; width: auto; float: left;"><?php echo $User1Name; ?></div>
 <div style="width:auto; font-size: 0.8em; color: gray; text-align:right;"><?php echo $MyTimeStamp; ?></div>
 </div>
