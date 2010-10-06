@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: lowsubforums.php - Last Update: 09/10/2010 SVN 536 - Author: cooldude2k $
+    $FileInfo: lowsubforums.php - Last Update: 09/06/2010 SVN 579 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="lowsubforums.php"||$File3Name=="/lowsubforums.php") {
@@ -174,7 +174,7 @@ $ExStr = ""; if ($ForumType!="redirect"&&
 	$ForumShowTopics!="no") { $ExStr = "&page=1"; }
 ?>
 <ul style="list-style-type: none;"><li>
-<a href="<?php echo url_maker($exfile[$ForumType],$Settings['file_ext'],"act=lowview&id=".$ForumID.$ExStr,$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>"<?php if($ForumType=="redirect") { echo " onclick=\"window.open(this.href);return false;\""; } ?>><?php echo $ForumName; ?> <span style="color: gray; font-size: 10px;"><?php echo $shownum; ?></span></a></li>
+<a href="<?php echo url_maker($exfile[$ForumType],$Settings['file_ext'],"act=lowview&id=".$ForumID.$ExStr,$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>"<?php if($ForumType=="redirect") { echo " onclick=\"window.open(this.href);return false;\""; } ?>><?php echo $ForumName; ?></a> <span style="color: gray; font-size: 10px;"><?php echo $shownum; ?></span></li>
 <?php echo $sflist; ?></ul>
 <?php ++$i; } sql_free_result($result);
 ?>
