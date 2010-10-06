@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: main.php - Last Update: 09/24/2010 SVN 562 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 09/05/2010 SVN 577 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -711,7 +711,7 @@ echo "<option value=\"".$ThemeInfo['Name']."\">".$ThemeInfo['ThemeName']."</opti
 ++$skni; }
 } ?></select></td>
 </tr><tr style="text-align: left;">
-	<td style="width: 50%;"><label class="TextBoxLabel" for="enable_https">Enable https:</label></td>
+	<td style="width: 50%;"><label class="TextBoxLabel" for="enable_https">Enable HTTPS:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="enable_https" id="enable_https">
 	<option<?php if($Settings['enable_https']=="on") { echo " selected=\"selected\""; } ?> value="on">on</option>
 	<option<?php if($Settings['enable_https']=="off") { echo " selected=\"selected\""; } ?> value="off">off</option>
