@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: topic.php - Last Update: 09/11/2010 SVN 538 - Author: cooldude2k $
+    $FileInfo: topic.php - Last Update: 09/06/2010 SVN 581 - Author: cooldude2k $
 */
 if(ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }
@@ -68,6 +68,8 @@ if($_GET['act']=="open") {
 change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." Opening a Topic",$Settings['use_gzip'],$GZipEncode['Type']); }
 if($_GET['act']=="close") {
 change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." Closing a Topic",$Settings['use_gzip'],$GZipEncode['Type']); }
+if($_GET['act']=="move") {
+change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." Moving a Topic",$Settings['use_gzip'],$GZipEncode['Type']); }
 if($_GET['act']=="makereply"&&$_POST['act']=="makereplies") {
 change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." Replying to ".$TopicName,$Settings['use_gzip'],$GZipEncode['Type']); }
 ?>
