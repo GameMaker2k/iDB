@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: lowcategories.php - Last Update: 09/10/2010 SVN 536 - Author: cooldude2k $
+    $FileInfo: lowcategories.php - Last Update: 09/06/2010 SVN 580 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="lowcategories.php"||$File3Name=="/lowcategories.php") {
@@ -123,7 +123,7 @@ $ExStr = ""; if ($SubsForumType!="redirect"&&
     $SubsForumShowTopics!="no") { $ExStr = "&page=1"; }
 $shownum = null;
 if ($SubsForumType=="redirect") { $shownum = "(".$NumRedirects." redirects)"; }
-if ($SubsForumType!="redirect") { $shownum = "(".$NumPosts." posts)"; }
+if ($SubsForumType!="redirect") { $shownum = "(".$NumsPosts." posts)"; }
 $sfurl = "<a href=\"";
 $sfurl = url_maker($exfile[$SubsForumType],$Settings['file_ext'],"act=lowview&id=".$SubsForumID.$ExStr,$Settings['qstr'],$Settings['qsep'],$prexqstr[$SubsForumType],$exqstr[$SubsForumType]);
 $sfurl = "<li><ul style=\"list-style-type: none;\"><li><a href=\"".$sfurl."\">".$SubsForumName."</a><span style=\"color: gray; font-size: 10px;\">".$shownum."</span></li></ul></li>";
