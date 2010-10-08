@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: messages.php - Last Update: 09/08/2010 SVN 583 - Author: cooldude2k $
+    $FileInfo: messages.php - Last Update: 09/08/2010 SVN 584 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="messages.php"||$File3Name=="/messages.php") {
@@ -416,7 +416,7 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die
 while ($is < $num) {
 $PMID=sql_result($result,$is,"id");
 $SenderID=sql_result($result,$is,"SenderID");
-$SenderIP=sql_result($result,$i,"IP");
+$SenderIP=sql_result($result,$is,"IP");
 $PreSenderName = GetUserName($SenderID,$Settings['sqltable'],$SQLStat);
 if($PreSenderName['Name']===null) { $SenderID = -1;
 $PreSenderName = GetUserName($SenderID,$Settings['sqltable'],$SQLStat); }
