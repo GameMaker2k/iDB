@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: replies.php - Last Update: 09/05/2010 SVN 572 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 09/08/2010 SVN 583 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -448,7 +448,7 @@ Joined: <?php echo $User1Joined; ?><br />
 User IP: <a onclick="window.open(this.href);return false;" href="<?php echo sprintf($IPCheckURL,$User1IP); ?>">
 <?php echo $User1IP; ?></a><br />
 <?php if($ipshow=="two") { ?>
-Post IP: <a onclick="window.open(this.href);return false;" href="<?php echo sprintf($IPCheckURL,$User1IP); ?>">
+Post IP: <a onclick="window.open(this.href);return false;" href="<?php echo sprintf($IPCheckURL,$MyPostIP); ?>">
 <?php echo $MyPostIP; ?></a><br />
 <?php } } ?><br />
 </td>

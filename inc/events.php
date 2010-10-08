@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: events.php - Last Update: 06/07/2010 SVN 520 - Author: cooldude2k $
+    $FileInfo: events.php - Last Update: 09/08/2010 SVN 583 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="events.php"||$File3Name=="/events.php") {
@@ -32,6 +32,7 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die
 <?php
 while ($is < $num) {
 $EventID=sql_result($result,$is,"id");
+$EventIP=sql_result($result,$i,"IP");
 $EventUser=sql_result($result,$is,"UserID");
 $EventGuest=sql_result($result,$is,"GuestName");
 $EventName=sql_result($result,$is,"EventName");
@@ -41,6 +42,7 @@ $EventStart=sql_result($result,$is,"TimeStamp");
 $EventEnd=sql_result($result,$is,"TimeStampEnd");
 $EventStart = GMTimeChange("M. j Y",$EventStart,null);
 $EventEnd = GMTimeChange("M. j Y",$EventEnd,null);
+$ipshow = "two";
 $_SESSION['ViewingPage'] = url_maker(null,"no+ext","act=view&id=".$_GET['id'],"&","=",$prexqstr['event'],$exqstr['event']);
 if($Settings['file_ext']!="no+ext"&&$Settings['file_ext']!="no ext") {
 $_SESSION['ViewingFile'] = $exfile['event'].$Settings['file_ext']; }
@@ -59,6 +61,7 @@ $rei=0;
 $User1ID=$EventUser;
 $User1Name=sql_result($reresult,$rei,"Name");
 $User1IP=sql_result($reresult,$rei,"IP");
+if($User1IP==$EventIP) { $ipshow = "one"; }
 $User1Email=sql_result($reresult,$rei,"Email");
 $User1Title=sql_result($reresult,$rei,"Title");
 $User1Joined=sql_result($reresult,$rei,"Joined");
@@ -153,7 +156,10 @@ Joined: <?php echo $User1Joined; ?><br />
 <?php if($GroupInfo['HasAdminCP']=="yes") { ?>
 User IP: <a onclick="window.open(this.href);return false;" href="<?php echo sprintf($IPCheckURL,$User1IP); ?>">
 <?php echo $User1IP; ?></a><br />
-<?php } ?><br />
+<?php if($ipshow=="two") { ?>
+Event IP: <a onclick="window.open(this.href);return false;" href="<?php echo sprintf($IPCheckURL,$EventIP); ?>">
+<?php echo $EventIP; ?></a><br />
+<?php } } ?><br />
 </td>
 <td class="TableInfoColumn3" style="vertical-align: middle;">
 <div class="eventpost"><?php echo $EventText; ?></div>
@@ -643,10 +649,11 @@ $EventDayEnd=GMTimeChange("d",$TimeSOut,0,0,"off");
 $EventYear=GMTimeChange("Y",$TimeSIn,0,0,"off");
 $EventYearEnd=GMTimeChange("Y",$TimeSOut,0,0,"off");
 $User1ID=$MyUserID;
+$User1IP=$_SERVER['REMOTE_ADDR'];
 if($_SESSION['UserGroup']==$Settings['GuestGroup']) { $User1Name = $_POST['GuestName']; }
 if($_SESSION['UserGroup']!=$Settings['GuestGroup']) { $User1Name = $_SESSION['MemberName']; }
-$query = sql_pre_query("INSERT INTO ".$Settings['sqltable']."events (\"UserID\", \"GuestName\", \"EventName\", \"EventText\", \"TimeStamp\", \"TimeStampEnd\", \"EventMonth\", \"EventMonthEnd\", \"EventDay\", \"EventDayEnd\", \"EventYear\", \"EventYearEnd\") VALUES\n".
-"(%i, '%s', '%s', '%s', %i, %i, %i, %i, %i, %i, %i, %i)", array($User1ID,$User1Name,$_POST['EventName'],$_POST['EventText'],$TimeSIn,$TimeSOut,$EventMonth,$EventMonthEnd,$EventDay,$EventDayEnd,$EventYear,$EventYearEnd));
+$query = sql_pre_query("INSERT INTO ".$Settings['sqltable']."events (\"UserID\", \"GuestName\", \"EventName\", \"EventText\", \"TimeStamp\", \"TimeStampEnd\", \"EventMonth\", \"EventMonthEnd\", \"EventDay\", \"EventDayEnd\", \"EventYear\", \"EventYearEnd\", \"IP\") VALUES\n".
+"(%i, '%s', '%s', '%s', %i, %i, %i, %i, %i, %i, %i, %i, '%s')", array($User1ID,$User1Name,$_POST['EventName'],$_POST['EventText'],$TimeSIn,$TimeSOut,$EventMonth,$EventMonthEnd,$EventDay,$EventDayEnd,$EventYear,$EventYearEnd,$User1IP));
 sql_query($query,$SQLStat);
 $eventid = sql_get_next_id($Settings['sqltable'],"events",$SQLStat);
 redirect("refresh",$rbasedir.url_maker($exfile['event'],$Settings['file_ext'],"act=event&id=".$eventid,$Settings['qstr'],$Settings['qsep'],$prexqstr['event'],$exqstr['event'],FALSE),"3");

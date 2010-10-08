@@ -11,10 +11,10 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: pm.php - Last Update: 06/07/2010 SVN 520 - Author: cooldude2k $
+    $FileInfo: messages.php - Last Update: 09/08/2010 SVN 583 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
-if ($File3Name=="pm.php"||$File3Name=="/pm.php") {
+if ($File3Name=="messages.php"||$File3Name=="/messages.php") {
 	require('index.php');
 	exit(); }
 if(!is_numeric($_GET['id'])) { $_GET['id'] = null; }
@@ -187,6 +187,7 @@ if($pagenum>1) {
 while ($i < $num) {
 $PMID=sql_result($result,$i,"id");
 $SenderID=sql_result($result,$i,"SenderID");
+$SenderIP=sql_result($result,$i,"IP");
 $PreSenderName = GetUserName($SenderID,$Settings['sqltable'],$SQLStat);
 if($PreSenderName['Name']===null) { $SenderID = -1;
 $PreSenderName = GetUserName($SenderID,$Settings['sqltable'],$SQLStat); }
@@ -357,6 +358,7 @@ if($pagenum>1) {
 while ($i < $num) {
 $PMID=sql_result($result,$i,"id");
 $SenderID=sql_result($result,$i,"SenderID");
+$SenderIP=sql_result($result,$i,"IP");
 $PreSenderName = GetUserName($SenderID,$Settings['sqltable'],$SQLStat);
 if($PreSenderName['Name']===null) { $SenderID = -1;
 $PreSenderName = GetUserName($SenderID,$Settings['sqltable'],$SQLStat); }
@@ -414,6 +416,7 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die
 while ($is < $num) {
 $PMID=sql_result($result,$is,"id");
 $SenderID=sql_result($result,$is,"SenderID");
+$SenderIP=sql_result($result,$i,"IP");
 $PreSenderName = GetUserName($SenderID,$Settings['sqltable'],$SQLStat);
 if($PreSenderName['Name']===null) { $SenderID = -1;
 $PreSenderName = GetUserName($SenderID,$Settings['sqltable'],$SQLStat); }
@@ -432,6 +435,7 @@ $DateSend=GMTimeChange("F j, Y, g:i a",$DateSend,$_SESSION['UserTimeZone'],0,$_S
 $MessageText=sql_result($result,$is,"MessageText");
 $MessageText = preg_replace("/\<br\>/", "<br />", nl2br($MessageText));
 $MessageDesc=sql_result($result,$is,"Description");
+$ipshow = "two";
 $requery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i", array($SenderID));
 $reresult=sql_query($requery,$SQLStat);
 $renum=sql_num_rows($reresult);
@@ -446,6 +450,7 @@ $User1ID=$SenderID;
 $User1Name=sql_result($reresult,$rei,"Name");
 $SenderName = $User1Name;
 $User1IP=sql_result($reresult,$rei,"IP");
+if($User1IP==$SenderIP) { $ipshow = "one"; }
 $User1Email=sql_result($reresult,$rei,"Email");
 $User1Title=sql_result($reresult,$rei,"Title");
 $User1Joined=sql_result($reresult,$rei,"Joined");
@@ -552,7 +557,10 @@ Joined: <?php echo $User1Joined; ?><br />
 <?php if($GroupInfo['HasAdminCP']=="yes") { ?>
 User IP: <a onclick="window.open(this.href);return false;" href="<?php echo sprintf($IPCheckURL,$User1IP); ?>">
 <?php echo $User1IP; ?></a><br />
-<?php } ?><br />
+<?php if($ipshow=="two") { ?>
+Message IP: <a onclick="window.open(this.href);return false;" href="<?php echo sprintf($IPCheckURL,$SenderIP); ?>">
+<?php echo $SenderIP; ?></a><br />
+<?php } } ?><br />
 </td>
 <td class="TableInfoMiniColumn3" style="vertical-align: middle;">
 <div class="pmpost"><?php echo $MessageText; ?></div>
@@ -976,8 +984,9 @@ redirect("refresh",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"a
 <?php } if ($Error!="Yes") { $LastActive = GMTimeStamp();
 if($_SESSION['UserGroup']==$Settings['GuestGroup']) { $User1Name = $_POST['GuestName']; }
 if($_SESSION['UserGroup']!=$Settings['GuestGroup']) { $User1Name = $_SESSION['MemberName']; }
-$query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."messenger\" (\"SenderID\", \"ReciverID\", \"GuestName\", \"MessageTitle\", \"MessageText\", \"Description\", \"DateSend\", \"Read\") VALUES 
-(%i, %i, '%s', '%s', '%s', '%s', %i, %i)", array($_SESSION['UserID'],$SendMessageToID,$_SESSION['MemberName'],$_POST['MessageName'],$_POST['Message'],$_POST['MessageDesc'],$LastActive,0));
+$User1IP=$_SERVER['REMOTE_ADDR'];
+$query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."messenger\" (\"SenderID\", \"ReciverID\", \"GuestName\", \"MessageTitle\", \"MessageText\", \"Description\", \"DateSend\", \"Read\", \"IP\") VALUES 
+(%i, %i, '%s', '%s', '%s', '%s', %i, %i, '%s')", array($_SESSION['UserID'],$SendMessageToID,$_SESSION['MemberName'],$_POST['MessageName'],$_POST['Message'],$_POST['MessageDesc'],$LastActive,0,$User1IP));
 sql_query($query,$SQLStat);
 $messageid = sql_get_next_id($Settings['sqltable'],"messenger",$SQLStat);
 ?><tr>
