@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: events.php - Last Update: 09/08/2010 SVN 583 - Author: cooldude2k $
+    $FileInfo: events.php - Last Update: 10/09/2010 SVN 586 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="events.php"||$File3Name=="/events.php") {
@@ -163,7 +163,7 @@ Event IP: <a onclick="window.open(this.href);return false;" href="<?php echo spr
 </td>
 <td class="TableInfoColumn3" style="vertical-align: middle;">
 <div class="eventpost"><?php echo $EventText; ?></div>
-<?php if(isset($User1Signature)) { ?> <br />--------------------
+<?php if(isset($User1Signature)&&$User1Signature!="") { ?> <br />--------------------
 <div class="signature"><?php echo $User1Signature; ?></div><?php } ?>
 </td>
 </tr>
