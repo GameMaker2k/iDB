@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2009 iDB Support - http://idb.berlios.de/
-    Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
+    Copyright 2004-2010 iDB Support - http://idb.berlios.de/
+    Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: calendars.php - Last Update: 12/10/2009 SVN 393 - Author: cooldude2k $
+    $FileInfo: calendars.php - Last Update: 10/12/2010 SVN 587 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="calendars.php"||$File3Name=="/calendars.php") {
@@ -102,14 +102,7 @@ if ($EventsName[$BirthDay] == null) {
 	$EventsName[$BirthDay] = "<span title=\"".$oldusername."'s birthday.\">".$UserNamebd1."</span>"; }
 ++$bdi; } 
 sql_free_result($bdresult);
-$MyDays = array();
-$MyDays[] = "Sunday";
-$MyDays[] = "Monday";
-$MyDays[] = "Tuesday";
-$MyDays[] = "Wednesday";
-$MyDays[] = "Thursday";
-$MyDays[] = "Friday";
-$MyDays[] = "Saturday";
+$MyDays = array("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday");
 $DayNames = "";
 foreach ($MyDays as $x => $y) {
     $DayNames .= '<th class="CalTableColumn2" style="width: 12%;">' . $y . '</th>'."\r\n";
