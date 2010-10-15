@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: mysql.php - Last Update: 12/17/2009 SVN 417 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 10/14/2010 SVN 588 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mysql.php"||$File3Name=="/mysql.php") {
@@ -82,7 +82,7 @@ $dlink = mysql_select_db($database,$link);
 if ($dlink===false) {
     output_error("Can't use database ".$database.": ".sql_error(),E_USER_ERROR);
 	return false; } }
-$result = sql_query("SET SESSION SQL_MODE='ANSI_QUOTES';",$link);
+$result = sql_query("SET SESSION SQL_MODE='ANSI_QUOTES,NO_AUTO_VALUE_ON_ZERO';",$link);
 if ($result===false) {
     output_error("SQL Error: ".sql_error(),E_USER_ERROR);
 	return false; }

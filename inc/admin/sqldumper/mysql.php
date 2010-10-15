@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: mysql.php - Last Update: 06/07/2010 SVN 520 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 10/14/2010 SVN 588 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mysql.php"||$File3Name=="/mysql.php") {
@@ -158,8 +158,7 @@ $sqldump .= "-- Host: ".$Settings['sqlhost']."\n";
 $sqldump .= "-- Generation Time: ".GMTimeGet('F d, Y \a\t h:i A',$_SESSION['UserTimeZone'],0,$_SESSION['UserDST'])."\n";
 $sqldump .= "-- Server version: ".sql_server_info($SQLStat)."\n";
 $sqldump .= "-- PHP Version: ".phpversion()."\n\n";
-$sqldump .= "SET SQL_MODE=\"NO_AUTO_VALUE_ON_ZERO\";\n";
-$sqldump .= "SET SESSION SQL_MODE='ANSI_QUOTES';\n\n";
+$sqldump .= "SET SESSION SQL_MODE='ANSI_QUOTES,NO_AUTO_VALUE_ON_ZERO';\n\n";
 $sqldump .= "--\n";
 $sqldump .= "-- Database: \"".$Settings['sqldb']."\"\n";
 $sqldump .= "--\n\n";
