@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: stats.php - Last Update: 06/10/2010 SVN 524 - Author: cooldude2k $
+    $FileInfo: stats.php - Last Update: 10/20/2010 SVN 5894 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="stats.php"||$File3Name=="/stats.php") {
@@ -59,11 +59,11 @@ if($UserSessInfo['UserGroup']==$Settings['GuestGroup']) {
 ++$olgn; }
 ++$uoli; }
 if($_GET['act']=="view"||$_GET['act']=="stats") {
-$ntquery = sql_pre_query("SELECT COUNT(*) FROM \"".$Settings['sqltable']."topics\"", array(null));
+$ntquery = sql_pre_query("SELECT COUNT(*) FROM \"".$Settings['sqltable']."topics\"".$ForumIgnoreList3, array(null));
 $ntresult = sql_query($ntquery,$SQLStat);
 $numtopics = sql_result($ntresult,0);
 sql_free_result($ntresult);
-$npquery = sql_pre_query("SELECT COUNT(*) FROM \"".$Settings['sqltable']."posts\"", array(null));
+$npquery = sql_pre_query("SELECT COUNT(*) FROM \"".$Settings['sqltable']."posts\"".$ForumIgnoreList3, array(null));
 $npresult = sql_query($npquery,$SQLStat);
 $numposts = sql_result($npresult,0);
 sql_free_result($npresult);
@@ -92,14 +92,13 @@ if($NewestMem['ID']<=0) { $NewestMem['ID'] = "0"; $NewestMem['Name'] = "Anonymou
 <span style="text-align: left;">
 <?php echo $ThemeSet['TitleIcon']; ?><a id="bstats" href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=stats",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>#bstats">Board Statistics</a></span></div>
 <?php } ?>
-<table class="TableStats1">
+<table id="BoardStats" class="TableStats1">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableStatsRow1">
 <td class="TableStatsColumn1" colspan="2"><span style="text-align: left;">
 <?php echo $ThemeSet['TitleIcon']; ?><a id="bstats" href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=stats",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>#bstats">Board Statistics</a></span>
 </td>
 </tr><?php } ?>
-
 <tr id="Stats1" class="TableStatsRow2">
 <td class="TableStatsColumn2" colspan="2" style="width: 100%; font-weight: bold;"><?php echo $uolnum; ?> users online</td>
 </tr>
@@ -120,7 +119,7 @@ if($NewestMem['ID']<=0) { $NewestMem['ID'] = "0"; $NewestMem['Name'] = "Anonymou
 <?php echo $ThemeSet['StatsIcon']; ?></div></td>
 <td style="width: 96%;" class="TableStatsColumn3"><div class="statsinfo">
 &nbsp;Our members have made a total of <?php echo $numposts; ?> posts<br />
-&nbsp;We have a total of <?php echo $numtopics; ?> topics made<br />
+&nbsp;Our members have made a total of <?php echo $numtopics; ?> topics<br />
 &nbsp;We have <?php echo $nummembers; ?> registered members<br />
 &nbsp;Our newest member is <a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$NewestMem['ID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>"><?php echo $NewestMem['Name']; ?></a>
 </div></td>

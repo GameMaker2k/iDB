@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: groupsetup.php - Last Update: 09/05/2010 SVN 572 - Author: cooldude2k $
+    $FileInfo: groupsetup.php - Last Update: 10/20/2010 SVN 589 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="groupsetup.php"||$File3Name=="/groupsetup.php") {
@@ -271,11 +271,11 @@ if(strlen($ForumIgnoreList1)<1) { $ForumIgnoreList1 = " \"id\"<>".$PerForumID; }
 if(strlen($ForumIgnoreList2)>1) { $ForumIgnoreList2 .= " AND \"id\"<>".$PerForumID; }
 if(strlen($ForumIgnoreList2)<1) { $ForumIgnoreList2 = " AND \"id\"<>".$PerForumID; }
 if(strlen($ForumIgnoreList3)>1) { $ForumIgnoreList3 .= " AND \"ForumID\"<>".$PerForumID; }
-if(strlen($ForumIgnoreList3)<1) { $ForumIgnoreList3 = " \"ForumID\"<>".$PerForumID; }
+if(strlen($ForumIgnoreList3)<1) { $ForumIgnoreList3 = " WHERE \"ForumID\"<>".$PerForumID; }
 if(strlen($ForumIgnoreList4)>1) { $ForumIgnoreList4 .= " AND \"ForumID\"<>".$PerForumID; }
 if(strlen($ForumIgnoreList4)<1) { $ForumIgnoreList4 = " AND \"ForumID\"<>".$PerForumID; }
 if(strlen($ForumIgnoreList5)>1) { $ForumIgnoreList5 .= " AND \"OldForumID\"<>".$PerForumID; }
-if(strlen($ForumIgnoreList5)<1) { $ForumIgnoreList5 = " \"OldForumID\"<>".$PerForumID; }
+if(strlen($ForumIgnoreList5)<1) { $ForumIgnoreList5 = " WHERE \"OldForumID\"<>".$PerForumID; }
 if(strlen($ForumIgnoreList6)>1) { $ForumIgnoreList6 .= " AND \"OldForumID\"<>".$PerForumID; }
 if(strlen($ForumIgnoreList6)<1) { $ForumIgnoreList6 = " AND \"OldForumID\"<>".$PerForumID; } }
 $PermissionInfo['CanMakeTopics'][$PerForumID]=sql_result($peresult,$peri,"CanMakeTopics");
@@ -332,7 +332,7 @@ if(strlen($ModForumIgnoreList1)<1) { $ModForumIgnoreList1 = " \"id\"<>".$PerForu
 if(strlen($ModForumIgnoreList2)>1) { $ModForumIgnoreList2 .= " AND \"id\"<>".$PerForumID; }
 if(strlen($ModForumIgnoreList2)<1) { $ModForumIgnoreList2 = " AND \"id\"<>".$PerForumID; }
 if(strlen($ModForumIgnoreList3)>1) { $ModForumIgnoreList3 .= " AND \"ForumID\"<>".$PerForumID; }
-if(strlen($ModForumIgnoreList3)<1) { $ModForumIgnoreList3 = " \"ForumID\"<>".$PerForumID; }
+if(strlen($ModForumIgnoreList3)<1) { $ModForumIgnoreList3 = " WHERE \"ForumID\"<>".$PerForumID; }
 if(strlen($ModForumIgnoreList4)>1) { $ModForumIgnoreList4 .= " AND \"ForumID\"<>".$PerForumID; }
 if(strlen($ModForumIgnoreList4)<1) { $ModForumIgnoreList4 = " AND \"ForumID\"<>".$PerForumID; } }
 if($PerError===true) { $peri = $pernum; }
@@ -370,11 +370,11 @@ if(strlen($CatIgnoreList1)<1) { $CatIgnoreList1 = " \"id\"<>".$PerCatID; }
 if(strlen($CatIgnoreList2)>1) { $CatIgnoreList2 .= " AND \"id\"<>".$PerCatID; }
 if(strlen($CatIgnoreList2)<1) { $CatIgnoreList2 = " AND \"id\"<>".$PerCatID; }
 if(strlen($CatIgnoreList3)>1) { $CatIgnoreList3 .= " AND \"CategoryID\"<>".$PerCatID; }
-if(strlen($CatIgnoreList3)<1) { $CatIgnoreList3 = " \"CategoryID\"<>".$PerCatID; }
+if(strlen($CatIgnoreList3)<1) { $CatIgnoreList3 = " WHERE \"CategoryID\"<>".$PerCatID; }
 if(strlen($CatIgnoreList4)>1) { $CatIgnoreList4 .= " AND \"CategoryID\"<>".$PerCatID; }
 if(strlen($CatIgnoreList4)<1) { $CatIgnoreList4 = " AND \"CategoryID\"<>".$PerCatID; }
 if(strlen($CatIgnoreList5)>1) { $CatIgnoreList5 .= " AND \"OldCategoryID\"<>".$PerCatID; }
-if(strlen($CatIgnoreList5)<1) { $CatIgnoreList5 = " \"OldCategoryID\"<>".$PerCatID; }
+if(strlen($CatIgnoreList5)<1) { $CatIgnoreList5 = " WHERE \"OldCategoryID\"<>".$PerCatID; }
 if(strlen($CatIgnoreList6)>1) { $CatIgnoreList6 .= " AND \"OldCategoryID\"<>".$PerCatID; }
 if(strlen($CatIgnoreList6)<1) { $CatIgnoreList6 = " AND \"OldCategoryID\"<>".$PerCatID; } }
 if($Per2Error===true) { $per2i = $per2num; }
