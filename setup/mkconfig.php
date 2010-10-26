@@ -12,7 +12,7 @@
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mkconfig.php - Last Update: 09/05/2010 SVN 577 - Author: cooldude2k $
+    $FileInfo: mkconfig.php - Last Update: 10/26/2010 SVN 591 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mkconfig.php"||$File3Name=="/mkconfig.php") {
@@ -62,9 +62,9 @@ $Settings['enable_https'] = "off";
 if($URLsTest['scheme']=="https") {
 	$Settings['enable_https'] = "on"; }
 session_set_cookie_params(0, $this_dir, $URLsTest['host']);
-session_cache_limiter("private, must-revalidate");
-header("Cache-Control: private, must-revalidate"); // IE 6 Fix
-header("Pragma: private, must-revalidate");
+session_cache_limiter("private, no-cache, no-store, must-revalidate, pre-check=0, post-check=0, max-age=0");
+header("Cache-Control: private, no-cache, no-store, must-revalidate, pre-check=0, post-check=0, max-age=0");
+header("Pragma: private, no-cache, no-store, must-revalidate, pre-check=0, post-check=0, max-age=0");
 header("Date: ".gmdate("D, d M Y H:i:s")." GMT");
 header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
 header("Expires: ".gmdate("D, d M Y H:i:s")." GMT");

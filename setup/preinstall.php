@@ -11,7 +11,7 @@
     Copyright 2004-2009 iDB Support - http://idb.berlios.de/
     Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: preinstall.php - Last Update: 12/13/2009 SVN 404 - Author: cooldude2k $
+    $FileInfo: preinstall.php - Last Update: 10/26/2010 SVN 591 - Author: cooldude2k $
 */
 error_reporting(E_ALL ^ E_NOTICE);
 /* Some ini setting changes uncomment if you need them. */
@@ -21,8 +21,8 @@ if ($File3Name=="preinstall.php"||$File3Name=="/preinstall.php") {
 	header('Location: index.php');
 	exit(); }
 
-header("Cache-Control: private, must-revalidate"); // IE 6 Fix
-header("Pragma: private, must-revalidate");
+header("Cache-Control: private, no-cache, no-store, must-revalidate, pre-check=0, post-check=0, max-age=0");
+header("Pragma: private, no-cache, no-store, must-revalidate, pre-check=0, post-check=0, max-age=0");
 header("Date: ".gmdate("D, d M Y H:i:s")." GMT");
 header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
 header("Expires: ".gmdate("D, d M Y H:i:s")." GMT");

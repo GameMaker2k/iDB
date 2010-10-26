@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 09/04/2010 SVN 568 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 10/26/2010 SVN 591 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -377,9 +377,9 @@ if($cookieSecure===true) {
 session_set_cookie_params(0, $cbasedir, $cookieDomain, 1); }
 if($cookieSecure===false) {
 session_set_cookie_params(0, $cbasedir, $cookieDomain); } }
-session_cache_limiter("private, no-cache, must-revalidate");
-header("Cache-Control: private, no-cache, must-revalidate");
-header("Pragma: private, no-cache, must-revalidate");
+session_cache_limiter("private, no-cache, no-store, must-revalidate, pre-check=0, post-check=0, max-age=0");
+header("Cache-Control: private, no-cache, no-store, must-revalidate, pre-check=0, post-check=0, max-age=0");
+header("Pragma: private, no-cache, no-store, must-revalidate, pre-check=0, post-check=0, max-age=0");
 header("Date: ".gmdate("D, d M Y H:i:s")." GMT");
 header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
 header("Expires: ".gmdate("D, d M Y H:i:s")." GMT");
