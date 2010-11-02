@@ -12,7 +12,7 @@
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mkconfig.php - Last Update: 10/26/2010 SVN 591 - Author: cooldude2k $
+    $FileInfo: mkconfig.php - Last Update: 11/02/2010 SVN 594 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mkconfig.php"||$File3Name=="/mkconfig.php") {
@@ -85,6 +85,7 @@ if ($_POST['AdminPasswords']!=$_POST['ReaPassword']) { $Error="Yes";
 echo "<br />Your passwords did not match."; }
 if($_POST['HTMLType']=="xhtml11") { $_POST['HTMLLevel'] = "Strict"; }
 if($_POST['HTMLType']=="html5") { $_POST['OutPutType'] = "html"; }
+if($_POST['HTMLType']=="xhtml5") { $_POST['OutPutType'] = "xhtml"; }
 $_POST['BoardURL'] = htmlentities($_POST['BoardURL'], ENT_QUOTES, $Settings['charset']);
 $_POST['BoardURL'] = remove_spaces($_POST['BoardURL']);
 $_POST['BoardURL'] = addslashes($_POST['BoardURL']);

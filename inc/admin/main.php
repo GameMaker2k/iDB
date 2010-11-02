@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: main.php - Last Update: 09/05/2010 SVN 577 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 11/02/2010 SVN 594 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -619,6 +619,7 @@ while ($gi < $gnum) { ?>
 	<option<?php if($Settings['html_type']=="xhtml10") { echo " selected=\"selected\""; } ?> value="xhtml10">XHTML 1.0</option>
 	<option<?php if($Settings['html_type']=="xhtml11") { echo " selected=\"selected\""; } ?> value="xhtml11">XHTML 1.1</option>
 	<option<?php if($Settings['html_type']=="html5") { echo " selected=\"selected\""; } ?> value="html5">HTML 5</option>
+	<option<?php if($Settings['html_type']=="xhtml5") { echo " selected=\"selected\""; } ?> value="xhtml5">XHTML 5</option>
 	</select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="HTMLLevel">HTML Level only for XHTML 1.0:</label></td>
@@ -783,6 +784,9 @@ $_POST['BoardURL'] = htmlentities($_POST['BoardURL'], ENT_QUOTES, $Settings['cha
 $_POST['BoardURL'] = remove_spaces($_POST['BoardURL']);
 $_POST['WebURL'] = htmlentities($_POST['WebURL'], ENT_QUOTES, $Settings['charset']);
 $_POST['WebURL'] = remove_spaces($_POST['WebURL']);
+if($_POST['HTMLType']=="xhtml11") { $_POST['HTMLLevel'] = "Strict"; }
+if($_POST['HTMLType']=="html5") { $_POST['OutPutType'] = "html"; }
+if($_POST['HTMLType']=="xhtml5") { $_POST['OutPutType'] = "xhtml"; }
 $BoardSettings=$pretext2[0]."\n".
 "\$Settings['sqlhost'] = ".null_string($Settings['sqlhost']).";\n".
 "\$Settings['sqldb'] = ".null_string($Settings['sqldb']).";\n".
