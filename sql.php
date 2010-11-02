@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 10/26/2010 SVN 591 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 11/02/2010 SVN 592 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -294,6 +294,8 @@ if($GZipEncode['Type']!="gzip") { if($GZipEncode['Type']!="deflate") { $GZipEnco
 	header("Content-Encoding: deflate"); } }
 /* if(eregi("msie",$browser) && !eregi("opera",$browser)){
 header('P3P: CP="NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM"'); } */
+if(strpos($_SERVER['HTTP_USER_AGENT'], 'chromeframe')) {
+	header('X-UA-Compatible: chrome=1'); }
 // Some http stuff
 $SQLStat = sql_connect_db($Settings['sqlhost'],$Settings['sqluser'],$Settings['sqlpass'],$Settings['sqldb']);
 $SQLCollate = "latin1_general_ci";
