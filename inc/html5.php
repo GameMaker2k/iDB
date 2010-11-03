@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: html5.php - Last Update: 11/02/2010 SVN 594 - Author: cooldude2k $
+    $FileInfo: html5.php - Last Update: 11/02/2010 SVN 595 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="xhtml10.php"||$File3Name=="/xhtml10.php") {
@@ -27,12 +27,10 @@ header("Content-Type: text/html; charset=".$Settings['charset']); }
 if($Settings['output_type']=="xhtml") {
 if(stristr($_SERVER["HTTP_ACCEPT"],"application/xhtml+xml")) {
 	$ccstart = "//<![CDATA["; $ccend = "//]]>"; $XHTML5 = true;
-	header("Content-Type: application/xhtml+xml; charset=".$Settings['charset']);
-	xml_doc_start("1.0",$Settings['charset']); }
+	header("Content-Type: application/xhtml+xml; charset=".$Settings['charset']); }
 else { if (stristr($_SERVER["HTTP_USER_AGENT"],"W3C_Validator")) {
 	$ccstart = "//<![CDATA["; $ccend = "//]]>"; $XHTML5 = true;
    header("Content-Type: application/xhtml+xml; charset=".$Settings['charset']);
-	xml_doc_start("1.0",$Settings['charset']);
 } else { $ccstart = "//<!--"; $ccend = "//-->"; $XHTML5 = false;
 	header("Content-Type: text/html; charset=".$Settings['charset']); } } }
 if($Settings['output_type']!="xhtml") {
@@ -102,6 +100,73 @@ if($XHTML5===false) {
 <?php // HTML meta tags and other html, head tags ?>
 <html lang="en">
 <?php } if($XHTML5===true) { ?>
+<!DOCTYPE html [
+<!ENTITY nbsp "&#160;">
+<!ENTITY copy "&#169;">
+<!ENTITY reg "&#174;">
+<!ENTITY Aacute "&#193;">
+<!ENTITY aacute "&#225;">
+<!ENTITY Agrave "&#224;">
+<!ENTITY agrave "&#192;">
+<!ENTITY Acirc "&#194;">
+<!ENTITY acirc "&#226;">
+<!ENTITY Auml "&#196;">
+<!ENTITY auml "&#228;">
+<!ENTITY Atilde "&#195;">
+<!ENTITY atilde "&#227;">
+<!ENTITY Aring "&#197;">
+<!ENTITY aring "&#229;">
+<!ENTITY Aelig "&#198;">
+<!ENTITY aelig "&#230;">
+<!ENTITY Ccedil "&#199;">
+<!ENTITY ccedil "&#231;">
+<!ENTITY Eth "&#208;">
+<!ENTITY eth "&#240;">
+<!ENTITY Eacute "&#201;">
+<!ENTITY eacute "&#233;">
+<!ENTITY Egrave "&#200;">
+<!ENTITY egrave "&#232;">
+<!ENTITY Ecirc "&#202;">
+<!ENTITY ecirc "&#234;">
+<!ENTITY Euml "&#203;">
+<!ENTITY euml "&#235;">
+<!ENTITY Iacute "&#205;">
+<!ENTITY iacute "&#237;">
+<!ENTITY Igrave "&#204;">
+<!ENTITY igrave "&#236;">
+<!ENTITY Icirc "&#206;">
+<!ENTITY icirc "&#238;">
+<!ENTITY Iuml "&#207;">
+<!ENTITY iuml "&#239;">
+<!ENTITY Ntilde "&#209;">
+<!ENTITY ntilde "&#241;">
+<!ENTITY Oacute "&#211;">
+<!ENTITY oacute "&#243;">
+<!ENTITY Ograve "&#210;">
+<!ENTITY ograve "&#242;">
+<!ENTITY Ocirc "&#212;">
+<!ENTITY ocirc "&#244;">
+<!ENTITY Ouml "&#214;">
+<!ENTITY ouml "&#246;">
+<!ENTITY Otilde "&#213;">
+<!ENTITY otilde "&#245;">
+<!ENTITY Oslash "&#216;">
+<!ENTITY oslash "&#248;">
+<!ENTITY szlig "&#223;">
+<!ENTITY Thorn "&#222;">
+<!ENTITY thorn "&#254;">
+<!ENTITY Uacute "&#218;">
+<!ENTITY uacute "&#250;">
+<!ENTITY Ugrave "&#217;">
+<!ENTITY ugrave "&#249;">
+<!ENTITY Ucirc "&#219;">
+<!ENTITY ucirc "&#251;">
+<!ENTITY Uuml "&#220;">
+<!ENTITY uuml "&#252;">
+<!ENTITY Yacute "&#221;">
+<!ENTITY yacute "&#253;">
+<!ENTITY yuml "&#255;">
+]>
 <html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <?php } ?>
 <head>
