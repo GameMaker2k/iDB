@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: groupsetup.php - Last Update: 10/20/2010 SVN 589 - Author: cooldude2k $
+    $FileInfo: groupsetup.php - Last Update: 11/05/2010 SVN 596 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="groupsetup.php"||$File3Name=="/groupsetup.php") {
@@ -153,6 +153,12 @@ if($GroupInfo['CanPM']!="yes"&&$GroupInfo['CanPM']!="no") {
 $GroupInfo['CanSearch']=sql_result($gruresult,0,"CanSearch");
 if($GroupInfo['CanSearch']!="yes"&&$GroupInfo['CanSearch']!="no") {
 		$GruError = true; }
+$GroupInfo['CanDoHTML']=sql_result($gruresult,0,"CanDoHTML");
+if($GroupInfo['CanDoHTML']!="yes"&&$GroupInfo['CanDoHTML']!="no") {
+	$GroupInfo['CanDoHTML'] = "no"; }
+$GroupInfo['CanUseBBags']=sql_result($gruresult,0,"CanUseBBags");
+if($GroupInfo['CanUseBBags']!="yes"&&$GroupInfo['CanUseBBags']!="no") {
+	$GroupInfo['CanUseBBags'] = "no"; }
 $GroupInfo['PromoteTo']=sql_result($gruresult,0,"PromoteTo");
 $GroupInfo['PromotePosts']=sql_result($gruresult,0,"PromotePosts");
 if(!is_numeric($GroupInfo['PromotePosts'])) { 
@@ -317,9 +323,9 @@ if($PermissionInfo['CanCloseTopics'][$PerForumID]!="yes"&&$PermissionInfo['CanCl
 $PermissionInfo['CanPinTopics'][$PerForumID]=sql_result($peresult,$peri,"CanPinTopics");
 if($PermissionInfo['CanPinTopics'][$PerForumID]!="yes"&&$PermissionInfo['CanPinTopics'][$PerForumID]!="no") {
 	$PermissionInfo['CanPinTopics'][$PerForumID] = "no"; }
-$PermissionInfo['CanDohtml'][$PerForumID]=sql_result($peresult,$peri,"CanDohtml");
-if($PermissionInfo['CanDohtml'][$PerForumID]!="yes"&&$PermissionInfo['CanDohtml'][$PerForumID]!="no") {
-	$PermissionInfo['CanDohtml'][$PerForumID] = "no"; }
+$PermissionInfo['CanDoHTML'][$PerForumID]=sql_result($peresult,$peri,"CanDoHTML");
+if($PermissionInfo['CanDoHTML'][$PerForumID]!="yes"&&$PermissionInfo['CanDoHTML'][$PerForumID]!="no") {
+	$PermissionInfo['CanDoHTML'][$PerForumID] = "no"; }
 $PermissionInfo['CanUseBBags'][$PerForumID]=sql_result($peresult,$peri,"CanUseBBags");
 if($PermissionInfo['CanUseBBags'][$PerForumID]!="yes"&&$PermissionInfo['CanUseBBags'][$PerForumID]!="no") {
 	$PermissionInfo['CanUseBBags'][$PerForumID] = "no"; }

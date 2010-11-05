@@ -11,13 +11,14 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: function.php - Last Update: 09/23/2010 SVN 560 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 11/05/2010 SVN 596 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
 	require('index.php');
 	exit(); }
 require_once($SettDir['misc'].'functions.php');
+require_once($SettDir['misc'].'ibbcode.php');
 /* Change Some PHP Settings Fix the & to &amp;
 if($Settings['use_iniset']==true&&$Settings['qstr']!="/") {
 ini_set("arg_separator.output",htmlentities($Settings['qstr'], ENT_QUOTES, $Settings['charset']));
