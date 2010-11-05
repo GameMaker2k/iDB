@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: replies.php - Last Update: 11/05/2010 SVN 597 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 11/05/2010 SVN 598 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -386,8 +386,8 @@ $eunum = sql_num_rows($euresult); }
 	$MySubPost = "<div class=\"EditReply\"><br />This post has been edited by <b>".$EditUserName."</b> on ".$MyEditTime."</div>"; }
 $MyPost = url2link($MyPost);
 $MyPost = text2icons($MyPost,$Settings['sqltable'],$SQLStat);
-if($User1CanUseBBags1=="yes") { $MyPostt = bbcode_parser($MyPostt); }
-if($User1CanDoHTML1=="yes") { $MyPostt = do_html_bbcode($MyPostt); }
+if($User1CanUseBBags1=="yes") { $MyPost = bbcode_parser($MyPost); }
+if($User1CanDoHTML1=="yes") { $MyPost = do_html_bbcode($MyPost); }
 if($MySubPost!=null) { $MyPost = $MyPost."\n".$MySubPost; }
 $User1Signature = preg_replace("/\<br\>/", "<br />", nl2br($User1Signature));
 $User1Signature = url2link($User1Signature);
