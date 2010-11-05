@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: messages.php - Last Update: 10/09/2010 SVN 586 - Author: cooldude2k $
+    $FileInfo: messages.php - Last Update: 11/05/2010 SVN 597 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="messages.php"||$File3Name=="/messages.php") {
@@ -461,6 +461,12 @@ $SenderHidden = $User1Hidden;
 $gquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i", array($User1GroupID));
 $gresult=sql_query($gquery,$SQLStat);
 $User1Group=sql_result($gresult,0,"Name");
+$User1CanDoHTML=sql_result($gresult,0,"CanDoHTML");
+if($User1CanDoHTML!="yes"&&$User1CanDoHTML!="no") {
+	$User1CanDoHTML = "no"; }
+$User1CanUseBBags=sql_result($gresult,0,"CanUseBBags");
+if($User1CanUseBBags!="yes"&&$User1CanUseBBags!="no") {
+	$User1CanUseBBags = "no"; }
 $GroupNamePrefix=sql_result($gresult,0,"NamePrefix");
 $GroupNameSuffix=sql_result($gresult,0,"NameSuffix");
 sql_free_result($gresult);
@@ -497,8 +503,13 @@ if(isset($GroupNameSuffix)&&$GroupNameSuffix!=null) {
 	$User1Name = $User1Name.$GroupNameSuffix; }
 $MessageText = url2link($MessageText);
 $MessageText = text2icons($MessageText,$Settings['sqltable'],$SQLStat);
+if($User1CanUseBBags=="yes") { $MessageText = bbcode_parser($MessageText); }
+if($User1CanDoHTML=="yes") { $MessageText = do_html_bbcode($MessageText); }
 $User1Signature = preg_replace("/\<br\>/", "<br />", nl2br($User1Signature));
+$User1Signature = url2link($User1Signature);
 $User1Signature = text2icons($User1Signature,$Settings['sqltable'],$SQLStat);
+if($User1CanUseBBags=="yes") { $User1Signature = bbcode_parser($User1Signature); }
+if($User1CanDoHTML=="yes") { $User1Signature = do_html_bbcode($User1Signature); }
 ?>
 <div class="TableInfoMini1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>

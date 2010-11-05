@@ -11,7 +11,7 @@
     Copyright 2004-2010 iDB Support - http://idb.berlios.de/
     Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: lowreplies.php - Last Update: 09/06/2010 SVN 578 - Author: cooldude2k $
+    $FileInfo: lowreplies.php - Last Update: 11/05/2010 SVN 597 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -262,9 +262,26 @@ $User1GroupID=sql_result($reresult,$rei,"GroupID");
 $gquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i LIMIT 1", array($User1GroupID));
 $gresult=sql_query($gquery,$SQLStat);
 $User1Group=sql_result($gresult,0,"Name");
+$User1CanDoHTML=sql_result($gresult,0,"CanDoHTML");
+if($User1CanDoHTML!="yes"&&$User1CanDoHTML!="no") {
+	$User1CanDoHTML = "no"; }
+$User1CanUseBBags=sql_result($gresult,0,"CanUseBBags");
+if($User1CanUseBBags!="yes"&&$User1CanUseBBags!="no") {
+	$User1CanUseBBags = "no"; }
 $GroupNamePrefix=sql_result($gresult,0,"NamePrefix");
 $GroupNameSuffix=sql_result($gresult,0,"NameSuffix");
+$User1PermissionID=sql_result($gresult,0,"PermissionID");
 sql_free_result($gresult);
+$per1query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i LIMIT 1", array($User1PermissionID));
+$per1esult=sql_query($per1query,$SQLStat);
+$per1num=sql_num_rows($per1esult);
+$User1CanDoHTML1=sql_result($per1esult,0,"CanDoHTML");
+if($User1CanDoHTML1!="yes"&&$User1CanDoHTML1!="no") {
+	$User1CanDoHTML1 = "no"; }
+$User1CanUseBBags1=sql_result($per1esult,0,"CanUseBBags");
+if($User1CanUseBBags1!="yes"&&$User1CanUseBBags1!="no") {
+	$User1CanUseBBags1 = "no"; }
+sql_free_result($per1esult);
 $User1Signature=sql_result($reresult,$rei,"Signature");
 $User1Avatar=sql_result($reresult,$rei,"Avatar");
 $User1AvatarSize=sql_result($reresult,$rei,"AvatarSize");
@@ -351,10 +368,14 @@ $GroupNameSuffix=sql_result($gresult,0,"NameSuffix");
 sql_free_result($gresult); }
 $MyPost = url2link($MyPost);
 $MyPost = text2icons($MyPost,$Settings['sqltable'],$SQLStat);
+if($User1CanUseBBags1=="yes") { $MyPostt = bbcode_parser($MyPostt); }
+if($User1CanDoHTML1=="yes") { $MyPostt = do_html_bbcode($MyPostt); }
 if($MySubPost!=null) { $MyPost = $MyPost."\n".$MySubPost; }
 $User1Signature = preg_replace("/\<br\>/", "<br />", nl2br($User1Signature));
 $User1Signature = url2link($User1Signature);
 $User1Signature = text2icons($User1Signature,$Settings['sqltable'],$SQLStat);
+if($User1CanUseBBags=="yes") { $User1Signature = bbcode_parser($User1Signature); }
+if($User1CanDoHTML=="yes") { $User1Signature = do_html_bbcode($User1Signature); }
 $CanEditReply = false; $CanDeleteReply = false;
 if($_SESSION['UserGroup']!=$Settings['GuestGroup']) {
 if($PermissionInfo['CanEditReplys'][$MyForumID]=="yes"&&
