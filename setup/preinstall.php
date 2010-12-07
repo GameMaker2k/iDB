@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2009 iDB Support - http://idb.berlios.de/
-    Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
+    Copyright 2004-2011 iDB Support - http://idb.berlios.de/
+    Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: preinstall.php - Last Update: 10/26/2010 SVN 591 - Author: cooldude2k $
+    $FileInfo: preinstall.php - Last Update: 12/07/2010 SVN 600 - Author: cooldude2k $
 */
 error_reporting(E_ALL ^ E_NOTICE);
 /* Some ini setting changes uncomment if you need them. */

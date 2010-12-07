@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2010 iDB Support - http://idb.berlios.de/
-    Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
+    Copyright 2004-2011 iDB Support - http://idb.berlios.de/
+    Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: mysql.php - Last Update: 10/14/2010 SVN 588 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 12/07/2010 SVN 600 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mysql.php"||$File3Name=="/mysql.php") {

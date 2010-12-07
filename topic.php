@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2009 iDB Support - http://idb.berlios.de/
-    Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
+    Copyright 2004-2011 iDB Support - http://idb.berlios.de/
+    Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: topic.php - Last Update: 09/06/2010 SVN 581 - Author: cooldude2k $
+    $FileInfo: topic.php - Last Update: 12/07/2010 SVN 600 - Author: cooldude2k $
 */
 if(ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }

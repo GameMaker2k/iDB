@@ -8,17 +8,17 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2009 iDB Support - http://idb.berlios.de/
-    Copyright 2004-2009 Game Maker 2k - http://gamemaker2k.org/
+    Copyright 2004-2011 iDB Support - http://idb.berlios.de/
+    Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
     $ThemeInfo - Name: iDB Theme - Author: cooldude2k $
-    $FileInfo: settings.php - Last Update: 09/11/2010 SVN 538 - Author: cooldude2k $
+    $FileInfo: settings.php - Last Update: 12/07/2010 SVN 600 - Author: cooldude2k $
 */
 $ThemeSet = array();
 $ThemeSet['ThemeName'] = "iDB Theme";
 $ThemeSet['ThemeMaker'] = "Kazuki";
-$ThemeSet['ThemeVersion'] = "0.4.0";
+$ThemeSet['ThemeVersion'] = "0.4.2";
 $ThemeSet['ThemeVersionType'] = "Alpha";
-$ThemeSet['ThemeSubVersion'] = "SVN 538";
+$ThemeSet['ThemeSubVersion'] = "SVN 600";
 $ThemeSet['MakerURL'] = "http://upload.idb.s1.jcink.com/";
 $ThemeSet['CopyRight'] = $ThemeSet['ThemeName']." was made by <a href=\"".$ThemeSet['MakerURL']."\" title=\"".$ThemeSet['ThemeMaker']."\">".$ThemeSet['ThemeMaker']."</a>";
 $ThemeSet['CSS'] = "themes/iDB/css.css";

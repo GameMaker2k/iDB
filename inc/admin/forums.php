@@ -8,8 +8,8 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2010 iDB Support - http://idb.berlios.de/
-    Copyright 2004-2010 Game Maker 2k - http://gamemaker2k.org/
+    Copyright 2004-2011 iDB Support - http://idb.berlios.de/
+    Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
     $FileInfo: forums.php - Last Update: 11/05/2010 SVN 596- Author: cooldude2k $
 */
