@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: function.php - Last Update: 12/15/2010 SVN 602 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 12/16/2010 SVN 603 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -66,13 +66,15 @@ $REFERERurl = null;
 function output_error($message, $level=E_USER_ERROR) {
     $caller = next(debug_backtrace());
     trigger_error($message.' in <strong>'.$caller['function'].'</strong> called from <strong>'.$caller['file'].'</strong> on line <strong>'.$caller['line'].'</strong>'."\n<br />error handler", $level); }
-// PHP iUnTAR Version 4.0
+// PHP iUnTAR Version 4.2
 // license: Revised BSD license
-function untar($tarfile,$outdir="./",$chmod=null,$extract=true) {
+function untar($tarfile,$outdir="./",$chmod=null,$extract=true,$lsonly=false) {
 $TarSize = filesize($tarfile);
 $TarSizeEnd = $TarSize - 1024;
 if($extract!==true&&$extract!==false) {
 	$extract = false; }
+if($lsonly!==true&&$lsonly!==false) {
+	$lsonly = false; }
 if($outdir!=""&&!file_exists($outdir)&&$extract===true) {
         mkdir($outdir,0777); }
 $thandle = fopen($tarfile, "r");
@@ -94,7 +96,10 @@ while (ftell($thandle)<$TarSizeEnd) {
         $LinkedFile = trim(fread($thandle,100));
         fseek($thandle,255,SEEK_CUR);
         if($FileType=="0"||$FileType=="7") {
-				$FileContent = fread($thandle,$FileSize); }
+				if($lsonly===true) {
+				fseek($thandle,$FileSize,SEEK_CUR); }
+				if($lsonly===false) {
+				$FileContent = fread($thandle,$FileSize); } }
         if($FileType=="1") {
                 $FileContent = null; }
         if($FileType=="2") {
@@ -106,49 +111,17 @@ while (ftell($thandle)<$TarSizeEnd) {
                 $subhandle = fopen($FileName, "a+");
                 fwrite($subhandle,$FileContent,$FileSize);
                 fclose($subhandle);
-                chmod($FileName,$FileCHMOD); }
-			if($extract===false) { 
-				$FileArray[$i]['FileName'] = $FileName;
-				$FileArray[$i]['FileMode'] = $FileMode;
-				$FileArray[$i]['OwnerID'] = $OwnerID;
-				$FileArray[$i]['GroupID'] = $GroupID;
-				$FileArray[$i]['FileSize'] = $FileSize;
-				$FileArray[$i]['LastEdit'] = $LastEdit;
-				$FileArray[$i]['Checksum'] = $Checksum;
-				$FileArray[$i]['FileType'] = $FileType;
-				$FileArray[$i]['LinkedFile'] = $LinkedFile;
-				$FileArray[$i]['FileContent'] = $FileContent; } }
+                chmod($FileName,$FileCHMOD); } }
         if($FileType=="1") {
 			if($extract===true) {
-                link($FileName,$LinkedFile); }
-			if($extract===false) { 
-				$FileArray[$i]['FileName'] = $FileName;
-				$FileArray[$i]['FileMode'] = $FileMode;
-				$FileArray[$i]['OwnerID'] = $OwnerID;
-				$FileArray[$i]['GroupID'] = $GroupID;
-				$FileArray[$i]['FileSize'] = $FileSize;
-				$FileArray[$i]['LastEdit'] = $LastEdit;
-				$FileArray[$i]['Checksum'] = $Checksum;
-				$FileArray[$i]['FileType'] = $FileType;
-				$FileArray[$i]['LinkedFile'] = $LinkedFile;
-				$FileArray[$i]['FileContent'] = $FileContent; } }
+                link($FileName,$LinkedFile); } }
         if($FileType=="2") {
 			if($extract===true) {
-                symlink($LinkedFile,$FileName); }
-			if($extract===false) { 
-				$FileArray[$i]['FileName'] = $FileName;
-				$FileArray[$i]['FileMode'] = $FileMode;
-				$FileArray[$i]['OwnerID'] = $OwnerID;
-				$FileArray[$i]['GroupID'] = $GroupID;
-				$FileArray[$i]['FileSize'] = $FileSize;
-				$FileArray[$i]['LastEdit'] = $LastEdit;
-				$FileArray[$i]['Checksum'] = $Checksum;
-				$FileArray[$i]['FileType'] = $FileType;
-				$FileArray[$i]['LinkedFile'] = $LinkedFile;
-				$FileArray[$i]['FileContent'] = $FileContent; } }
+                symlink($LinkedFile,$FileName); } }
         if($FileType=="5") {
 			if($extract===true) {
-                mkdir($FileName,$FileCHMOD); } 
+                mkdir($FileName,$FileCHMOD); } }
+        if($FileType=="0"||$FileType=="1"||$FileType=="2"||$FileType=="5"||$FileType=="7") {
 			if($extract===false) { 
 				$FileArray[$i]['FileName'] = $FileName;
 				$FileArray[$i]['FileMode'] = $FileMode;
@@ -159,7 +132,8 @@ while (ftell($thandle)<$TarSizeEnd) {
 				$FileArray[$i]['Checksum'] = $Checksum;
 				$FileArray[$i]['FileType'] = $FileType;
 				$FileArray[$i]['LinkedFile'] = $LinkedFile;
-				$FileArray[$i]['FileContent'] = $FileContent; } }
+				if($lsonly===false) {
+				$FileArray[$i]['FileContent'] = $FileContent; } } }
         //touch($FileName,$LastEdit);
 		if($extract===false) { ++$i; }
         if($FileType=="0"||$FileType=="7") {
@@ -386,10 +360,10 @@ if($opennew===false) {
 $outlink = "<a href=\"".$outurl."\">".$outurl."</a>"; }
 return $outlink; }
 function url2link($string) {
-return preg_replace_callback("/([a-zA-Z]+)\:\/\/([a-z0-9\-\.]+)(\:[0-9]+)?\/([A-Za-z0-9\.\/%\?\-_;]+)?(\?)?([A-Za-z0-9\.\/%&=\?\-_;]+)?(\#)?([A-Za-z0-9\.\/%&=\?\-_;]+)?/is", "pre_url2link", $string); }
+return preg_replace_callback("/([a-zA-Z]+)\:\/\/([a-z0-9\-\.]+)(\:[0-9]+)?\/([A-Za-z0-9\.\/%\?\-_\:;]+)?(\?)?([A-Za-z0-9\.\/%&=\?\-_\:;]+)?(\#)?([A-Za-z0-9\.\/%&=\?\-_\:;]+)?/is", "pre_url2link", $string); }
 function urlcheck($string) {
 global $BoardURL;
-$retnum = preg_match_all("/([a-zA-Z]+)\:\/\/([a-z0-9\-\.]+)(\:[0-9]+)?\/([A-Za-z0-9\.\/%\?\-_;]+)?(\?)?([A-Za-z0-9\.\/%&=\?\-_;]+)?(\#)?([A-Za-z0-9\.\/%&=\?\-_;]+)?/is", $string, $urlcheck); 
+$retnum = preg_match_all("/([a-zA-Z]+)\:\/\/([a-z0-9\-\.]+)(\:[0-9]+)?\/([A-Za-z0-9\.\/%\?\-_\:;]+)?(\?)?([A-Za-z0-9\.\/%&=\?\-_\:;]+)?(\#)?([A-Za-z0-9\.\/%&=\?\-_\:;]+)?/is", $string, $urlcheck); 
 if(isset($urlcheck[0][0])) { $url = $urlcheck[0][0]; }
 if(!isset($urlcheck[0][0])) { $url = $BoardURL; }
 return $url; }
