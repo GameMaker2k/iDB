@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: iuntar.php - Last Update: 12/19/2010 SVN 605 - Author: cooldude2k $
+    $FileInfo: iuntar.php - Last Update: 12/22/2010 SVN 606 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="iuntar.php"||$File3Name=="/iuntar.php") {
@@ -44,8 +44,8 @@ while (ftell($thandle)<$TarSizeEnd) {
 		$OwnerID = trim(fread($thandle,8));
 		$GroupID = trim(fread($thandle,8));
 		$FileSize = octdec(trim(fread($thandle,12)));
-		$LastEdit = trim(fread($thandle,12));
-		$Checksum = trim(fread($thandle,8));
+		$LastEdit = octdec(trim(fread($thandle,12)));
+		$Checksum = octdec(trim(fread($thandle,8)));
 		$FileType = trim(fread($thandle,1));
 		$LinkedFile = trim(fread($thandle,100));
 		fseek($thandle,255,SEEK_CUR);
