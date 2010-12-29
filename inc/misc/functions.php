@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: functions.php - Last Update: 12/07/2010 SVN 600 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 12/28/2010 SVN 607 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -103,8 +103,8 @@ if($use_gzip=="on") {
 	$goutput = gzcompress($output); }
 	echo $goutput; } }
 $foo="bar"; $$foo="foo";
-	$Names['KP'] = "Kazuki Przyborowski";
-define("_kazuki_", $Names['KP']);
+	$Names['KSP'] = "Kazuki Suzuki Przyborowski";
+define("_kazuki_", $Names['KSP']);
 // Kill bad vars for some functions
 function killbadvars($varname) {
 $badphp1 = array('$'); $badphp2 = array(null);
@@ -297,7 +297,7 @@ $phpsrcs = file_get_source($filename,TRUE);
 $phpsrcs = preg_replace("/\<font color=\"(.*?)\"\>/i", "<span style=\"color: \\1;\">", $phpsrcs);
 $phpsrcs = preg_replace("/\<\/font>/i", "</span>", $phpsrcs);
 return $phpsrcs; }
-// Check to see if the user is hidden/shy. >_> | ^_^ | <_<
+// Check to see if the user is hidden/shy/timid. >_> | ^_^ | <_<
 function GetUserName($idu,$sqlt,$link=null) { $UsersName = null;
 global $SQLStat;
 if(!isset($link)) { $link = $SQLStat; }
@@ -308,7 +308,7 @@ $gunnum=sql_num_rows($gunresult);
 $UsersHidden = "yes";
 if($gunnum>0){
 $UsersName=sql_result($gunresult,0,"Name");
-// Am i still hidden. o_O <_< I see you.
+// Am i still hidden. o_O <_< I can see you.
 $UsersHidden=sql_result($gunresult,0,"HiddenMember"); }
 sql_free_result($gunresult);
 $UsersInfo['Name'] = $UsersName;
