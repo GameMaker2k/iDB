@@ -12,7 +12,7 @@
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mysql.php - Last Update: 12/07/2010 SVN 600 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 01/08/2011 SVN 610 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mysql.php"||$File3Name=="/mysql.php") {
@@ -116,6 +116,7 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."grou
 "  \"CanAddEvents\" varchar(5) COLLATE ".$SQLCollate." NOT NULL default '',\n".
 "  \"CanPM\" varchar(5) COLLATE ".$SQLCollate." NOT NULL default '',\n".
 "  \"CanSearch\" varchar(5) COLLATE ".$SQLCollate." NOT NULL default '',\n".
+"  \"CanDoHTML\" varchar(5) COLLATE ".$SQLCollate." NOT NULL default '',\n".
 "  \"CanUseBBags\" varchar(5) COLLATE ".$SQLCollate." NOT NULL default '',\n".
 "  \"CanModForum\" varchar(5) COLLATE ".$SQLCollate." NOT NULL default '',\n".
 "  \"FloodControl\" int(5) NOT NULL default '0',\n".
