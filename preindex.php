@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: preindex.php - Last Update: 12/07/2010 SVN 600 - Author: cooldude2k $
+    $FileInfo: preindex.php - Last Update: 01/09/2011 SVN 611 - Author: cooldude2k $
 */
 $pretime = explode(" ", microtime());
 $utime = $pretime[0];
@@ -45,7 +45,14 @@ if($_GET['act']!="lowview") {
 	$checklowview = false; }
 if($Settings['enable_rss']=="on") {
 if(!isset($_GET['feed'])) { $_GET['feed'] = null; }
-if($_GET['feed']=="rss"||$_GET['act']=="Feed"||$_GET['feed']=="atom") {
+if($_GET['feed']=="rss"||$_GET['act']=="feed"||
+	$_GET['feed']=="oldrss"||$_GET['feed']=="atom"||
+	$_GET['feed']=="opml"||$_GET['feed']=="opensearch") {
+	$_GET['feedtype'] = $_GET['feed']; }
+if($_GET['feed']=="rss"||$_GET['act']=="Feed"||
+	$_GET['feed']=="oldrss"||$_GET['feed']=="atom"||
+	$_GET['feed']=="opml"||$_GET['feed']=="opensearch"||
+	$_GET['act']=="feed") {
 	require($SettDir['inc'].'rssfeed.php'); } }
 if($Settings['output_type']=="htm") {
 	$Settings['output_type'] = "html"; }
