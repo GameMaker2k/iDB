@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: functions.php - Last Update: 01/01/2010 SVN 608- Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 01/15/2011 SVN 612 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -399,7 +399,13 @@ function ripemd320($data) { return hash("ripemd320",$data); } }
 if(in_array("salsa10",hash_algos())) { 
 function salsa10($data) { return hash("salsa10",$data); } }
 if(in_array("salsa20",hash_algos())) { 
-function salsa20($data) { return hash("salsa20",$data); } } }
+function salsa20($data) { return hash("salsa20",$data); } } 
+if(in_array("snefru",hash_algos())) { 
+function snefru($data) { return hash("snefru",$data); } }
+if(in_array("snefru256",hash_algos())) { 
+function snefru256($data) { return hash("snefru256",$data); } }
+if(in_array("gost",hash_algos())) { 
+function gost($data) { return hash("gost",$data); } } }
 // Try and convert IPB 2.0.0 style passwords to iDB style passwords
 function hash2xkey($data,$key,$hash1='md5',$hash2='md5') {
   return $hash1($hash2($key).$hash2($data)); }
