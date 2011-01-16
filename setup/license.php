@@ -12,7 +12,7 @@
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: license.php - Last Update: 12/07/2010 SVN 600 - Author: cooldude2k $
+    $FileInfo: license.php - Last Update: 01/16/2011 SVN 613 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="presetup.php"||$File3Name=="/presetup.php") {
@@ -27,8 +27,7 @@ if(!isset($SetupDir['convert'])) { $SetupDir['convert'] = "setup/convert/"; }
 <table style="text-align: left;">
 <tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="LicenseBox">License - Please read fully and check 'I agree' box ONLY if you agree to license</label><br />
-	<textarea rows="34" id="LicenseBox" name="LicenseBox" class="TextBox" cols="79" readonly="readonly" accesskey="L">
-	<?php echo stripcslashes(htmlspecialchars(file_get_contents("LICENSE"), ENT_QUOTES, $Settings['charset'])); ?></textarea><br />
+	<textarea rows="34" id="LicenseBox" name="LicenseBox" class="TextBox" cols="79" readonly="readonly" accesskey="L"><?php echo stripcslashes(htmlspecialchars(file_get_contents("LICENSE"), ENT_QUOTES, $Settings['charset'])); ?></textarea><br />
 	<input type="checkbox" class="TextBox" name="License" value="Agree" id="License" /><label class="TextBoxLabel" for="License">I Agree</label><br/></td>
 </tr></table>
 <table style="text-align: left;">
