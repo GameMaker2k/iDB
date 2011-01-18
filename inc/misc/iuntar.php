@@ -11,13 +11,13 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: iuntar.php - Last Update: 01/01/2010 SVN 608 - Author: cooldude2k $
+    $FileInfo: iuntar.php - Last Update: 01/17/2011 SVN 616 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="iuntar.php"||$File3Name=="/iuntar.php") {
 	require('index.php');
 	exit(); }
-// PHP iUnTAR Version 4.5
+// PHP iUnTAR Version 4.6
 // license: Revised BSD license
 function untar($tarfile,$outdir="./",$chmod=null,$extract=true,$lsonly=false,$findfile=null) {
 $TarSize = filesize($tarfile);
@@ -34,9 +34,13 @@ $thandle = fopen($tarfile, "r");
 if($extract===false) {
 	$FileArray = null; $i = 0; }
 $outdir = preg_replace('{/$}', '', $outdir)."/";
+if(isset($findfile)) {
+$qfindfile = preg_quote($findfile,"/"); }
+if(!isset($findfile)) {
+$qfindfile = null; }
 while (ftell($thandle)<$TarSizeEnd) {
 	$FileName = $outdir.trim(fread($thandle,100));
-	if($findfile!==null&&$findfile!=$FileName) {
+	if($findfile!==null&&!preg_match("/".$qfindfile."/",$FileName)) {
 		fseek($thandle,8,SEEK_CUR);
 		fseek($thandle,8,SEEK_CUR);
 		fseek($thandle,8,SEEK_CUR);
@@ -48,7 +52,7 @@ while (ftell($thandle)<$TarSizeEnd) {
 		fseek($thandle,255,SEEK_CUR); 
 		if($FileType=="0"||$FileType=="7") {
 			fseek($thandle,$FileSize,SEEK_CUR); } }
-	if($findfile===null||$findfile==$FileName) {
+	if($findfile===null||preg_match("/".$qfindfile."/",$FileName)) {
 	$FileMode = trim(fread($thandle,8));
 	if($chmod===null) {
 		$FileCHMOD = octdec("0".substr($FileMode,-3)); }
@@ -62,7 +66,7 @@ while (ftell($thandle)<$TarSizeEnd) {
 		$FileType = trim(fread($thandle,1));
 		$LinkedFile = trim(fread($thandle,100));
 		fseek($thandle,255,SEEK_CUR); }
-		if($findfile===null||$findfile==$FileName) {
+		if($findfile===null||preg_match("/".$qfindfile."/",$FileName)) {
 		if($FileType=="0"||$FileType=="7") {
 			if($lsonly===true) {
 			fseek($thandle,$FileSize,SEEK_CUR); }
@@ -104,6 +108,7 @@ while (ftell($thandle)<$TarSizeEnd) {
 				$FileArray[$i]['FileContent'] = $FileContent; } } } }
 		//touch($FileName,$LastEdit);
 		if($extract===false&&$findfile===null) { ++$i; }
+		if($findfile!==null&&preg_match("/".$qfindfile."/",$FileName)) { ++$i; }
 		if($FileType=="0"||$FileType=="7") {
 			$CheckSize = 512;
 			while ($CheckSize<$FileSize) {
@@ -116,4 +121,6 @@ while (ftell($thandle)<$TarSizeEnd) {
 			return true; }
 		if($extract===false) {
 			return $FileArray; } }
+function iuntar($tarfile,$outdir="./",$chmod=null,$extract=true,$lsonly=false,$findfile=null) {
+	return untar($tarfile,$outdir,$chmod,$extract,$lsonly,$findfile); }
 ?>
