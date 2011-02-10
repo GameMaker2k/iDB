@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: versioninfo.php - Last Update: 01/17/2011 SVN 616 - Author: cooldude2k $
+    $FileInfo: versioninfo.php - Last Update: 02/09/2011 SVN 618 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="versioninfo.php"||$File3Name=="/versioninfo.php") {
@@ -26,9 +26,15 @@ function version_info($proname,$subver,$ver,$supver,$reltype,$svnver,$showsvn) {
 	if($showsvn!==true&&$showsvn!==null) { $return_var .= " ".$showsvn." ".$svnver; }
 	return $return_var; }
 // Version number and date stuff. :P
-$VER1[0] = 0; $VER1[1] = 4; $VER1[2] = 2; $VERFull[1] = $VER1[0].".".$VER1[1].".".$VER1[2];
-$VER2[0] = "Alpha"; $VER2[1] = "Al"; $VER2[2] = "SVN"; $SubVerN = 616; $RName = "iDB"; $SFName = "IntDB";
-$SVNDay[0] = 01; $SVNDay[1] = 17; $SVNDay[2] = 2011; $SVNDay[3] = $SVNDay[0]."/".$SVNDay[1]."/".$SVNDay[2];
+$VER1[0] = 0; $VER1[1] = 4; $VER1[2] = 3; $VERFull[1] = $VER1[0].".".$VER1[1].".".$VER1[2];
+$VER2[0] = "Alpha"; $VER2[1] = "Al"; $VER2[2] = "SVN"; $SubVerN = 618;
+$SVNDay[0] = 02; $SVNDay[1] = 09; $SVNDay[2] = 2011; $SVNDay[3] = $SVNDay[0]."/".$SVNDay[1]."/".$SVNDay[2];
+$AltName = "RDB"; $AltName2 = "ReneeDB"; $RName = "iDB"; $SFName = "IntDB";
+$RFullName = "Internet Discussion Boards"; $AltFullName = "Renee Discussion Boards";
+if(!isset($Settings['usealtname'])) { $Settings['usealtname'] = "no"; }
+if(isset($Settings['usealtname'])&&$Settings['usealtname']=="yes") {
+	//$RName = $AltName; $SFName = $AltName2; $RFullName = $AltFullName;
+	$RName = $AltName2; $SFName = $AltName; $RFullName = $AltFullName; }
 $VerInfo['iDB_Ver'] = version_info($RName,$VER1[0],$VER1[1],$VER1[2],$VER2[1],$SubVerN,false);
 $VerInfo['iDB_Ver_SVN'] = version_info($RName,$VER1[0],$VER1[1],$VER1[2],$VER2[1],$SubVerN,true);
 $VerInfo['iDB_Full_Ver'] = version_info($RName,$VER1[0],$VER1[1],$VER1[2],$VER2[0],$SubVerN,false);
