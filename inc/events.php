@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: events.php - Last Update: 12/07/2010 SVN 600 - Author: cooldude2k $
+    $FileInfo: events.php - Last Update: 02/17/2011 SVN 619 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="events.php"||$File3Name=="/events.php") {
@@ -32,7 +32,7 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die
 <?php
 while ($is < $num) {
 $EventID=sql_result($result,$is,"id");
-$EventIP=sql_result($result,$i,"IP");
+$EventIP=sql_result($result,$is,"IP");
 $EventUser=sql_result($result,$is,"UserID");
 $EventGuest=sql_result($result,$is,"GuestName");
 $EventName=sql_result($result,$is,"EventName");
