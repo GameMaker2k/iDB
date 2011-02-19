@@ -43,8 +43,13 @@ $VerInfo['iDB_Ver_Show'] = $VerInfo['iDB_Ver_SVN']; $VerInfo['iDB_Full_Ver_Show'
 define("_iDB_Ver_", $VerInfo['iDB_Ver']); define("_iDB_Ver_SVN_", $VerInfo['iDB_Ver_SVN']);
 define("_iDB_Full_Ver_", $VerInfo['iDB_Full_Ver']); define("_iDB_Full_Ver_SVN_", $VerInfo['iDB_Full_Ver_SVN']);
 define("_iDB_Ver_Show_", $VerInfo['iDB_Ver_Show']); define("_iDB_Full_Ver_Show_", $VerInfo['iDB_Full_Ver_Show']);
-// URLs and names and stuff. :P $KSP = "Kazuki Sabonis Przyborowski";
-$iDBHome = "http://idb.berlios.de/"; $DF2kHome = "http://df2k.berlios.de/"; $OrgName = "iDB";
+/* 
+URLs and names and stuff. :P 
+$KSP = "Kazuki Sabonis Przyborowski";
+$KSPAlt = "Kazuki Suzuki Przyborowski";
+*/
+$iDBHome = "http://idb.berlios.de/"; $DF2kHome = "http://df2k.berlios.de/"; 
+$OrgName = "iDB"; $AltOrgName = "RDB"; $AltiDB = "Renee Discussion Boards";
 if(!isset($Settings['VerCheckURL'])) {
 $VerCheckURL = $iDBHome."?act=vercheck"; }
 if(isset($Settings['VerCheckURL'])) {
@@ -57,7 +62,9 @@ $IPCheckURL = 'http://cqcounter.com/whois/?query=%s'; }
 if(isset($Settings['IPCheckURL'])) {
 $IPCheckURL = $Settings['IPCheckURL']; }
 $CD2k = "Kazuki Przyborowski"; $GM2k = "Game Maker 2k"; $iDB_Author = "Kazuki";
-$iDB = "Internet Discussion Boards"; $iTB = "Internet Tag Boards"; $DF2k = "Discussion Forums 2k"; $TB2k = "Tag Boards 2k";
+$iDB = "Internet Discussion Boards"; $iTB = "Internet Tag Boards"; 
+$DF2k = "Discussion Forums 2k"; $TB2k = "Tag Boards 2k";
+if($Settings['usealtname']=="yes") { $iDB = $AltiDB; $OrgName = $AltOrgName; }
 $iDBURL1 = "<a href=\"".$iDBHome."\" onclick=\"window.open(this.href);return false;\">"; $iDBURL2 = $iDBURL1.$iDB."</a>";
 $DF2kURL1 = "<a href=\"".$DF2kHome."\" onclick=\"window.open(this.href);return false;\">"; $DF2kURL2 = $DF2kURL1.$DF2k."</a>";
 $GM2kURL = "<a href=\"".$iDBHome."support/category.php?act=view&amp;id=2\" title=\"".$GM2k."\" onclick=\"window.open(this.href);return false;\">".$GM2k."</a>";
