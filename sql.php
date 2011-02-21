@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 01/15/2011 SVN 612 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 02/21/2011 SVN 622 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -264,7 +264,7 @@ $File1Name = dirname($_SERVER['SCRIPT_NAME'])."/";
 $File2Name = $_SERVER['SCRIPT_NAME'];
 $File3Name=str_replace($File1Name, null, $File2Name);
 if ($File3Name=="sql.php"||$File3Name=="/sql.php") {
-	require($SettDir['inc'].'forbidden.php');
+	header('Location: index.php');
 	exit(); }
 //error_reporting(E_ERROR);
 // Check if gzip is on and if user's browser can accept gzip pages
