@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: functions.php - Last Update: 01/15/2011 SVN 612 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 02/25/2011 SVN 624 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -51,6 +51,7 @@ if ($_GET['act']=="phpcredits") { phpcredits(); exit(); }
 // Renee Marilyn Sabonis is the best ever. ^_^
 	$Names['RS'] = "Renee Sabonis";
 define("_renee_", $Names['RS']);
+$CD2k_Loves="Renee Sabonis"; $I_Love="Renee Sabonis";
 // Change the title and gzip page
 function change_title($new_title,$use_gzip="off",$gzip_type="gzip") {
 global $Settings;
