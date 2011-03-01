@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: functions.php - Last Update: 02/25/2011 SVN 624 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 03/01/2011 SVN 625 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -368,7 +368,8 @@ while ($i < $hprand) {
 $hspsrand = rand(1,2);
 if($hspsrand!=1&&$hspsrand!=2) { $hspsrand=1; }
 if($hspsrand==1) { $hpass .= chr(rand(48,57)); }
-if($hspsrand==2) { $hpass .= chr(rand(65,70)); }
+/* if($hspsrand==2) { $hpass .= chr(rand(65,70)); } */
+if($hspsrand==2) { $hpass .= chr(rand(97,102)); }
 ++$i; } return $hpass; }
 /* is_empty by M at http://us2.php.net/manual/en/function.empty.php#74093 */
 function is_empty($var) {
