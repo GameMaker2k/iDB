@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 04/04/2011 SVN 6252 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 04/05/2011 SVN 627 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -300,6 +300,36 @@ if($GZipEncode['Type']!="gzip") { if($GZipEncode['Type']!="deflate") { $GZipEnco
 header('P3P: CP="NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM"'); } */
 // Some http stuff
 $SQLStat = sql_connect_db($Settings['sqlhost'],$Settings['sqluser'],$Settings['sqlpass'],$Settings['sqldb']);
+if(isset($Settings['sql_collate'])&&!isset($Settings['sql_charset'])) {
+	if($Settings['sql_collate']=="ascii_bin"||
+		$Settings['sql_collate']=="ascii_generel_ci") {
+		$Settings['sql_charset'] = "ascii"; }
+	if($Settings['sql_collate']=="latin1_bin"||
+		$Settings['sql_collate']=="latin1_general_ci"||
+		$Settings['sql_collate']=="latin1_general_cs") {
+		$Settings['sql_charset'] = "latin1"; }
+	if($Settings['sql_collate']=="utf8_bin"||
+		$Settings['sql_collate']=="utf8_general_ci"||
+		$Settings['sql_collate']=="utf8_unicode_ci") {
+		$Settings['sql_charset'] = "utf8"; } }
+if(isset($Settings['sql_collate'])&&isset($Settings['sql_charset'])) {
+	if($Settings['sql_charset']=="ascii") {
+	if($Settings['sql_collate']!="ascii_bin"&&
+		$Settings['sql_collate']!="ascii_generel_ci") {
+		$Settings['sql_collate'] = "ascii_generel_ci"; } }
+	if($Settings['sql_charset']=="latin1") {
+	if($Settings['sql_collate']!="latin1_bin"&&
+		$Settings['sql_collate']!="latin1_general_ci"&&
+		$Settings['sql_collate']!="latin1_general_cs") {
+		$Settings['sql_collate'] = "latin1_general_ci"; } }
+	if($Settings['sql_charset']=="utf8") {
+	if($Settings['sql_collate']!="utf8_bin"&&
+		$Settings['sql_collate']!="utf8_general_ci"&&
+		$Settings['sql_collate']!="utf8_unicode_ci") {
+		$Settings['sql_collate'] = "utf8_unicode_ci"; } }
+	$SQLCollate = $Settings['sql_collate'];
+	$SQLCharset = $Settings['sql_charset']; }
+if(!isset($Settings['sql_collate'])||!isset($Settings['sql_charset'])) {
 $SQLCollate = "latin1_general_ci";
 $SQLCharset = "latin1"; 
 if($Settings['charset']=="ISO-8859-1") {
@@ -310,7 +340,9 @@ if($Settings['charset']=="ISO-8859-15") {
 	$SQLCharset = "latin1"; }
 if($Settings['charset']=="UTF-8") {
 	$SQLCollate = "utf8_unicode_ci";
-	$SQLCharset = "utf8"; }
+	$SQLCharset = "utf8"; } 
+$Settings['sql_collate'] = $SQLCollate;
+$Settings['sql_charset'] = $SQLCharset; }
 sql_set_charset($SQLCharset,$SQLStat);
 if($SQLStat===false) {
 header("Content-Type: text/plain; charset=".$Settings['charset']); sql_free_result($peresult);

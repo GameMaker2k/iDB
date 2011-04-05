@@ -12,7 +12,7 @@
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: setup.php - Last Update: 02/25/2011 SVN 623 - Author: cooldude2k $
+    $FileInfo: setup.php - Last Update: 04/05/2011 SVN 627 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="setup.php"||$File3Name=="/setup.php") {
@@ -106,7 +106,22 @@ fclose($fp);
 </tr><tr>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="WebURL">Insert The WebSite URL:</label></td>
 	<td style="width: 50%;"><input type="text" class="TextBox" name="WebURL" size="20" id="WebURL" value="<?php echo $prehost.$_SERVER['HTTP_HOST']."/"; ?>" /></td>
-</tr><tr>
+</tr><?php if($_POST['DatabaseType']=="mysql"||$_POST['DatabaseType']=="mysqli") { ?><tr>
+	<td style="width: 50%;"><label class="TextBoxLabel" for="sqlcollate">MySQL Collate:</label></td>
+	<td style="width: 50%;"><select size="1" class="TextBox" name="sqlcollate" id="sqlcollate">
+	<?php if($_POST['charset']=="ISO-8859-1"||$_POST['charset']=="ISO-8859-15") { ?>
+	<option value="latin1_general_ci">Latin1 Case-Insensitive</option>
+	<option value="latin1_general_cs">Latin1 Case-Sensitive</option>
+	<option value="latin1_bin">Latin1 Binary</option>
+	<option value="ascii_generel_ci">ASCII Case-Insensitive</option>
+	<option value="ascii_bin">ASICC Binary</option>
+	<?php } if($_POST['charset']=="UTF-8") { ?>
+	<option value="utf8_unicode_ci">UTF-8 Unicode Case-Insensitive</option>
+	<option value="utf8_general_ci">UTF-8 General Case-Insensitive</option>
+	<option value="utf8_bin">UTF-8 Binary</option>
+	<?php } ?>
+	</select></td>
+</tr><?php } ?><tr>
 	<td style="width: 50%;"><label class="TextBoxLabel" title="Can save some bandwidth." for="UseGzip">Enable HTTP Compression:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="GZip" id="UseGzip">
 	<option value="off">No</option>
