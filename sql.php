@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 02/21/2011 SVN 622 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 04/04/2011 SVN 6252 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -30,6 +30,7 @@ if(!in_array("ini_set", $disfunc)) {
 @ini_set("session.use_cookies", true);
 @ini_set("session.use_only_cookies", true);
 @ini_set("url_rewriter.tags",""); 
+ini_set('zend.ze1_compatibility_mode', 0);
 @ini_set("ignore_user_abort", 1); }
 @set_time_limit(30); @ignore_user_abort(true);
 /* Change session garbage collection settings */

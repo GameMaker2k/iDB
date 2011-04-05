@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: searches.php - Last Update: 12/28/2010 SVN 607 - Author: cooldude2k $
+    $FileInfo: searches.php - Last Update: 04/04/2011 SVN 625 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="searches.php"||$File3Name=="/searches.php") {
@@ -97,6 +97,7 @@ if($memsinum==0) { $memsid = -1; }
 if($memsinum!=0) {
 $memsid=sql_result($memsiresult,$memsi,"id"); 
 sql_free_result($memsiresult); } }
+if(!isset($_GET['memid'])) { $_GET['memid'] = null; }
 if(!is_numeric($_GET['memid'])||$_GET['memid']<1) { 
 	$_GET['memid'] = null; }
 if($_GET['memid']!=null&&is_numeric($_GET['memid'])) {
