@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: html5.php - Last Update: 12/07/2010 SVN 600 - Author: cooldude2k $
+    $FileInfo: html5.php - Last Update: 04/05/2011 SVN 628 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="xhtml10.php"||$File3Name=="/xhtml10.php") {
@@ -173,10 +173,26 @@ if($XHTML5===false) {
 <?php if($XHTML5===false) { ?>
 <meta charset="<?php echo $Settings['charset']; ?>">
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $Settings['charset']; ?>">
-<?php } if($XHTML5===true) { ?>
+<?php 
+if(!isset($_SERVER['HTTP_USER_AGENT'])) {
+	$_SERVER['HTTP_USER_AGENT'] = ""; }
+if(strpos($_SERVER['HTTP_USER_AGENT'], "msie") && 
+	!strpos($_SERVER['HTTP_USER_AGENT'], "opera")){ ?>
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+<?php } if(strpos($_SERVER['HTTP_USER_AGENT'], "chromeframe")) { ?>
+<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+<?php } } if($XHTML5===true) { ?>
 <meta charset="<?php echo $Settings['charset']; ?>" />
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $Settings['charset']; ?>" />
-<?php } ?>
+<?php 
+if(!isset($_SERVER['HTTP_USER_AGENT'])) {
+	$_SERVER['HTTP_USER_AGENT'] = ""; }
+if(strpos($_SERVER['HTTP_USER_AGENT'], "msie") && 
+	!strpos($_SERVER['HTTP_USER_AGENT'], "opera")){ ?>
+<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+<?php } if(strpos($_SERVER['HTTP_USER_AGENT'], "chromeframe")) { ?>
+<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+<?php } } ?>
 <base href="<?php echo $BoardURL; ?>" />
 <?php if($Settings['showverinfo']=="on") { ?>
 <meta name="Generator" content="<?php echo $VerInfo['iDB_Ver_Show']; ?>" />
