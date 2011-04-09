@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 01/15/2011 SVN 612 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 04/09/2011 SVN 629 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -895,7 +895,9 @@ $YourPassTry=sql_result($resultlog,$i,"UserPassword");
 $HashType=sql_result($resultlog,$i,"HashType");
 $JoinedPass=sql_result($resultlog,$i,"Joined");
 $HashSalt=sql_result($resultlog,$i,"Salt");
-$UpdateHash = false;
+$UpdateHash = false; $YourPassword = null;
+if($HashType=="NoHash") { $YourPassword = $_POST['userpass']; }
+if($HashType=="NoHASH") { $YourPassword = $_POST['userpass']; }
 if($HashType=="ODFH") { $YourPassword = PassHash2x($_POST['userpass']); }
 if($HashType=="IPB2") { $YourPassword = hash2xkey($_POST['userpass'],$HashSalt); }
 if($HashType=="DF4H") { $YourPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$HashSalt,"sha1"); }
