@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: groups.php - Last Update: 12/07/2010 SVN 600 - Author: cooldude2k $
+    $FileInfo: groups.php - Last Update: 04/19/2011 SVN 630 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="groups.php"||$File3Name=="/groups.php") {
@@ -223,9 +223,13 @@ $sql_id_check = sql_query(sql_pre_query("SELECT \"id\" FROM \"".$Settings['sqlta
 $name_check = sql_num_rows($sql_name_check); $id_check = sql_num_rows($sql_id_check);
 sql_free_result($sql_name_check);
 $errorstr = "";
+if (!isset($_POST['PromotePosts'])) {
+	$_POST['PromotePosts'] = 0; }
 if ($_POST['PromotePosts']==null||
 	!is_numeric($_POST['PromotePosts'])) {
 	$_POST['PromotePosts'] = 0; }
+if (!isset($_POST['PromoteKarma'])) {
+	$_POST['PromoteKarma'] = 0; }
 if ($_POST['PromoteKarma']==null||
 	!is_numeric($_POST['PromoteKarma'])) {
 	$_POST['NPromoteKarma'] = 0; }
@@ -685,9 +689,13 @@ $sql_name_check = sql_query(sql_pre_query("SELECT \"Name\" FROM \"".$Settings['s
 $name_check = sql_num_rows($sql_name_check);
 sql_free_result($sql_name_check); }
 $errorstr = "";
+if (!isset($_POST['PromotePosts'])) {
+	$_POST['PromotePosts'] = 0; }
 if ($_POST['PromotePosts']==null||
 	!is_numeric($_POST['PromotePosts'])) {
 	$_POST['PromotePosts'] = 0; }
+if (!isset($_POST['PromoteKarma'])) {
+	$_POST['PromoteKarma'] = 0; }
 if ($_POST['PromoteKarma']==null||
 	!is_numeric($_POST['PromoteKarma'])) {
 	$_POST['NPromoteKarma'] = 0; }
