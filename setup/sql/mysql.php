@@ -12,7 +12,7 @@
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mysql.php - Last Update: 04/05/2011 SVN 627 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 04/23/2011 SVN 635 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mysql.php"||$File3Name=="/mysql.php") {
@@ -22,8 +22,26 @@ if(!isset($SetupDir['setup'])) { $SetupDir['setup'] = "setup/"; }
 if(!isset($SetupDir['convert'])) { $SetupDir['convert'] = "setup/convert/"; }
 $query=sql_pre_query("ALTER DATABASE \"".$_POST['DatabaseName']."\" DEFAULT CHARACTER SET ".$Settings['sql_charset']." COLLATE ".$Settings['sql_collate'].";", array(null));
 sql_query($query,$SQLStat);
-// You can set this to MyISAM or MARIA
-$SQLStorageEngine = "MyISAM"; 
+if(isset($Settings['sql_storage_engine'])) {
+$result = sql_query(sql_pre_query("SHOW ENGINES;", array(null)),$SQLStat);
+$num = sql_num_rows($result);
+$i = 0; $SQLEngines = null;
+while ($i < $num) {
+$SQLEngines[$i] = sql_result($result,$i,"Engine");
+++$i; }
+if (!in_array($Settings['sql_storage_engine'], $SQLEngines)) {
+    $Settings['sql_storage_engine'] = "MyISAM"; } }
+if(!isset($Settings['sql_storage_engine'])) {
+	$Settings['sql_storage_engine'] = "MyISAM"; }
+// You can set this to MyISAM or Maria/Aria
+if($Settings['sql_storage_engine']=="CSV") {
+	$SQLStorageEngine = "CSV"; }
+if($Settings['sql_storage_engine']=="Maria") {
+	$SQLStorageEngine = "Maria"; }
+if($Settings['sql_storage_engine']=="Aria") {
+	$SQLStorageEngine = "Aria"; }
+if($Settings['sql_storage_engine']=="MyISAM") {
+	$SQLStorageEngine = "MyISAM"; }
 $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."categories\" (\n".
 "  \"id\" int(15) NOT NULL auto_increment,\n".
 "  \"OrderID\" int(15) NOT NULL default '0',\n".
