@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 04/09/2011 SVN 629 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 04/30/2011 SVN 636 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -623,8 +623,8 @@ $ViewMem['Avatar']=$ThemeSet['NoAvatar'];
 $ViewMem['AvatarSize']=$ThemeSet['NoAvatarSize']; }
 $AvatarSize1=explode("x", $ViewMem['AvatarSize']);
 $AvatarSize1W=$AvatarSize1[0]; $AvatarSize1H=$AvatarSize1[1];
-$ViewMem['Signature'] = url2link($ViewMem['Signature']);
 $ViewMem['Signature'] = text2icons($ViewMem['Signature'],$Settings['sqltable'],$SQLStat);
+$ViewMem['Signature'] = url2link($ViewMem['Signature']);
 if($_GET['view']==null) { $_GET['view'] = "profile"; }
 if($_GET['view']!="profile"&&$_GET['view']!="avatar"&&
 	$_GET['view']!="website"&&$_GET['view']!="homepage") { $_GET['view'] = "profile"; }

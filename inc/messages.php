@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: messages.php - Last Update: 12/07/2010 SVN 600 - Author: cooldude2k $
+    $FileInfo: messages.php - Last Update: 04/30/2011 SVN 636 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="messages.php"||$File3Name=="/messages.php") {
@@ -501,15 +501,15 @@ if(isset($GroupNamePrefix)&&$GroupNamePrefix!=null) {
 	$User1Name = $GroupNamePrefix.$User1Name; }
 if(isset($GroupNameSuffix)&&$GroupNameSuffix!=null) {
 	$User1Name = $User1Name.$GroupNameSuffix; }
-$MessageText = url2link($MessageText);
 $MessageText = text2icons($MessageText,$Settings['sqltable'],$SQLStat);
 if($User1CanUseBBags=="yes") { $MessageText = bbcode_parser($MessageText); }
 if($User1CanDoHTML=="yes") { $MessageText = do_html_bbcode($MessageText); }
+$MessageText = url2link($MessageText);
 $User1Signature = preg_replace("/\<br\>/", "<br />", nl2br($User1Signature));
-$User1Signature = url2link($User1Signature);
 $User1Signature = text2icons($User1Signature,$Settings['sqltable'],$SQLStat);
 if($User1CanUseBBags=="yes") { $User1Signature = bbcode_parser($User1Signature); }
 if($User1CanDoHTML=="yes") { $User1Signature = do_html_bbcode($User1Signature); }
+$User1Signature = url2link($User1Signature);
 ?>
 <div class="TableInfoMini1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>

@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: function.php - Last Update: 04/04/2011 SVN 625 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 04/30/2011 SVN 636 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -281,7 +281,7 @@ if($opennew===false) {
 $outlink = "<a href=\"".$outurl."\">".$outurl."</a>"; }
 return $outlink; }
 function url2link($string) {
-return preg_replace_callback("/([a-zA-Z]+)\:\/\/([a-z0-9\-\.]+)(\:[0-9]+)?\/([A-Za-z0-9\.\/%\?\-_\:;\~]+)?(\?)?([A-Za-z0-9\.\/%&=\?\-_\:;]+)?(\#)?([A-Za-z0-9\.\/%&=\?\-_\:;]+)?/is", "pre_url2link", $string); }
+return preg_replace_callback("/(?<![\">])\b([a-zA-Z]+)\:\/\/([a-z0-9\-\.]+)(\:[0-9]+)?\/([A-Za-z0-9\.\/%\?\-_\:;\~]+)?(\?)?([A-Za-z0-9\.\/%&=\?\-_\:;]+)?(\#)?([A-Za-z0-9\.\/%&=\?\-_\:;]+)?/is", "pre_url2link", $string); }
 function urlcheck($string) {
 global $BoardURL;
 $retnum = preg_match_all("/([a-zA-Z]+)\:\/\/([a-z0-9\-\.]+)(\:[0-9]+)?\/([A-Za-z0-9\.\/%\?\-_\:;\~]+)?(\?)?([A-Za-z0-9\.\/%&=\?\-_\:;]+)?(\#)?([A-Za-z0-9\.\/%&=\?\-_\:;]+)?/is", $string, $urlcheck); 

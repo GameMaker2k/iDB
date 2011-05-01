@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: ibbcode.php - Last Update: 04/19/2011 SVN 633 - Author: cooldude2k $
+    $FileInfo: ibbcode.php - Last Update: 04/30/2011 SVN 636 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="ibbcode.php"||$File3Name=="/ibbcode.php") {
@@ -46,9 +46,22 @@ $text = preg_replace("/\[I\](.*?)\[\/I\]/is", "<span style=\"font-style: italic;
 $text = preg_replace("/\[S\](.*?)\[\/S\]/is", "<span style=\"font-style: strike;\">\\1</span>", $text);
 $text = preg_replace("/\[U\](.*?)\[\/U\]/is", "<span style=\"text-decoration: underline;\">\\1</span>", $text);
 $text = preg_replace("/\[O\](.*?)\[\/O\]/is", "<span style=\"text-decoration: overline;\">\\1</span>", $text);
-$text = preg_replace("/\[CENTER\](.*?)\[\/CENTER\]/is", "<span style=\"\">\\1</span>", $text);
-$text = preg_replace("/\[SIZE\=([0-9]+)\](.*?)\[\/SIZE\]/is", "<span style=\"\">\\1</span>", $text);
-$text = preg_replace("/\[COLOR\=([A-Za-z]+)\](.*?)\[\/COLOR\]/is", "<span style=\"\">\\1</span>", $text);
+$text = preg_replace("/\[CENTER\](.*?)\[\/CENTER\]/is", "<span style=\"text-align: center;\">\\1</span>", $text);
+$text = preg_replace("/\[SIZE\=([0-9]+)\](.*?)\[\/SIZE\]/is", "<span style=\"font-size: \\1;\">\\2</span>", $text);
+$text = preg_replace("/\[COLOR\=([A-Za-z]+)\](.*?)\[\/COLOR\]/is", "<span style=\"color: \\1;\">\\2</span>", $text);
+// Pre URL and IMG tags
+function urlcheck2($matches) {
+global $BoardURL;
+$retnum = preg_match_all("/([a-zA-Z]+)\:\/\/([a-z0-9\-\.]+)(\:[0-9]+)?\/([A-Za-z0-9\.\/%\?\-_\:;\~]+)?(\?)?([A-Za-z0-9\.\/%&=\?\-_\:;]+)?(\#)?([A-Za-z0-9\.\/%&=\?\-_\:;]+)?/is", $matches[1], $urlcheck); 
+if(isset($urlcheck[0][0])) { 
+$matches[0] = preg_replace("/\[URL\](.*?)\[\/URL\]/is", " \\1", $matches[0]);
+$matches[0] = preg_replace("/\[URL\=(.*?)\](.*?)\[\/URL\]/is", "<a href=\"\\1\">\\2</a>", $matches[0]);
+$matches[0] = preg_replace("/\[IMG](.*?)\[\/IMG\]/is", "<img src=\"\\1\">", $matches[0]); }
+return $matches[0]; }
+// Sub URL and IMG tags
+$text = preg_replace_callback("/\[URL](.*?)\[\/URL\]/is", "urlcheck2", $text);
+$text = preg_replace_callback("/\[URL\=(.*?)\](.*?)\[\/URL\]/is", "urlcheck2", $text);
+$text = preg_replace_callback("/\[IMG](.*?)\[\/IMG\]/is", "urlcheck2", $text);
 return $text;
 }
 ?>
