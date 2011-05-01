@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: ibbcode.php - Last Update: 04/30/2011 SVN 637 - Author: cooldude2k $
+    $FileInfo: ibbcode.php - Last Update: 05/01/2011 SVN 638 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="ibbcode.php"||$File3Name=="/ibbcode.php") {
@@ -27,6 +27,7 @@ $BoardCharSet = $Settings['charset'];
 function html_decode($matches)
 {
 global $BoardCharSet;
+$matches[1] = str_replace(array("\r", "\r\n", "\n"), " ", $matches[1]);
 return html_entity_decode($matches[1], ENT_QUOTES, $BoardCharSet);
 }
 function do_html_bbcode($text)

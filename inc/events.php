@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: events.php - Last Update: 04/30/2011 SVN 636 - Author: cooldude2k $
+    $FileInfo: events.php - Last Update: 05/01/2011 SVN 638 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="events.php"||$File3Name=="/events.php") {
@@ -37,7 +37,6 @@ $EventUser=sql_result($result,$is,"UserID");
 $EventGuest=sql_result($result,$is,"GuestName");
 $EventName=sql_result($result,$is,"EventName");
 $EventText=sql_result($result,$is,"EventText");
-$EventText = preg_replace("/\<br\>/", "<br />", nl2br($EventText));
 $EventStart=sql_result($result,$is,"TimeStamp");
 $EventEnd=sql_result($result,$is,"TimeStampEnd");
 $EventStart = GMTimeChange("M. j Y",$EventStart,null);
@@ -108,9 +107,10 @@ if(isset($GroupNamePrefix)&&$GroupNamePrefix!=null) {
 	$User1Name = $GroupNamePrefix.$User1Name; }
 if(isset($GroupNameSuffix)&&$GroupNameSuffix!=null) {
 	$User1Name = $User1Name.$GroupNameSuffix; }
-$EventText = text2icons($EventText,$Settings['sqltable'],$SQLStat);
 if($User1CanUseBBags=="yes") { $EventText = bbcode_parser($EventText); }
 if($User1CanDoHTML=="yes") { $EventText = do_html_bbcode($EventText); }
+$EventText = text2icons($EventText,$Settings['sqltable'],$SQLStat);
+$EventText = preg_replace("/\<br\>/", "<br />", nl2br($EventText));
 $EventText = url2link($EventText);
 $User1Signature = preg_replace("/\<br\>/", "<br />", nl2br($User1Signature));
 $User1Signature = text2icons($User1Signature,$Settings['sqltable'],$SQLStat);
