@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: main.php - Last Update: 04/05/2011 SVN 627 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 05/02/2011 SVN 641 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -112,6 +112,12 @@ if(!isset($Settings['SQLThemes'])) {
 if($Settings['SQLThemes']!="on"&&
 	$Settings['SQLThemes']!="off") {
 	$Settings['SQLThemes'] = 'off'; }
+if(!isset($Settings['board_name'])&&isset($SettInfo['board_name'])) {
+	$Settings['board_name'] = $SettInfo['board_name']; }
+if(!isset($SettInfo['board_name'])&&isset($Settings['board_name'])) {
+	$SettInfo['board_name'] = $Settings['board_name']; }
+if($Settings['board_name']!=$SettInfo['board_name']) {
+	$SettInfo['board_name'] = $Settings['board_name']; }
 ?>
 <table class="Table3">
 <tr style="width: 100%; vertical-align: top;">
