@@ -12,7 +12,7 @@
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 	iBBCode / iBBTags by Kazuki Przyborowski - http://idb.berlios.net/
 
-    $FileInfo: ibbcode.php - Last Update: 05/02/2011 SVN 646 - Author: cooldude2k $
+    $FileInfo: ibbcode.php - Last Update: 05/02/2011 SVN 647 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="ibbcode.php"||$File3Name=="/ibbcode.php") {
@@ -25,29 +25,30 @@ Thanks for the Help of czambran at:
 http://www.phpfreaks.com/forums/index.php?action=profile;u=15535
 */ 
 $BoardCharSet = $Settings['charset'];
-function do_html_bbcode($text)
-{
-$text = preg_replace_callback("/\[DoHTML\](.*?)\[\/DoHTML\]/is","html_decode",$text);
-return $text;
-}
-function html_decode($matches)
-{
-global $BoardCharSet;
-$matches[1] = str_replace(array("\r", "\r\n", "\n"), " ", $matches[1]);
-return html_entity_decode($matches[1], ENT_QUOTES, $BoardCharSet);
-}
-function bbcode_rot13($matches)
-{ return str_rot13($matches[1]); }
-function bbcode_base64encode($matches)
-{ return base64_encode($matches[1]); }
-function bbcode_base64decode($matches)
-{ return base64_decode($matches[1]); }
-function bbcode_urlencode($matches)
-{ return urlencode($matches[1]); }
-function bbcode_urldecode($matches)
-{ return urldecode($matches[1]); }
-function bbcode_date_time($matches)
-{ return GMTimeGet($matches[1],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']); }
+function do_html_bbcode($text) {
+	$text = preg_replace_callback("/\[DoHTML\](.*?)\[\/DoHTML\]/is","html_decode",$text);
+	return $text; }
+function html_decode($matches) {
+	global $BoardCharSet;
+	$matches[1] = str_replace(array("\r", "\r\n", "\n"), " ", $matches[1]);
+	return html_entity_decode($matches[1], ENT_QUOTES, $BoardCharSet); }
+function bbcode_rot13($matches) { 
+	return str_rot13($matches[1]); }
+function bbcode_base64encode($matches) { 
+	return base64_encode($matches[1]); }
+function bbcode_base64decode($matches) { 
+	return base64_decode($matches[1]); }
+function bbcode_urlencode($matches) { 
+	return urlencode($matches[1]); }
+function bbcode_urldecode($matches) { 
+	return urldecode($matches[1]); }
+function bbcode_date_time($matches) { 
+	return GMTimeGet($matches[1],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']); }
+function bbcode_random($matches) { 
+	if(!isset($matches[2])) {
+	return rand(0,$matches[1]); }
+	if(isset($matches[2])) {
+	return rand($matches[1],$matches[2]); } }
 // Pre URL and IMG tags
 if(!function_exists("urlcheck2")) {
 function urlcheck2($matches) {
@@ -59,8 +60,7 @@ $matches[0] = preg_replace("/\[URL\=(.*?)\](.*?)\[\/URL\]/is", "<a href=\"\\1\">
 $matches[0] = preg_replace("/\[IMG](.*?)\[\/IMG\]/is", "<img src=\"\\1\" alt=\"user posted image\" title=\"user posted image\" />", $matches[0]); 
 $matches[0] = preg_replace("/\[IMG=(.*?)]([A-Za-z0-9\.\/%\?\-_\:;\~\s]+)\[\/IMG\]/is", "<img src=\"\\1\" alt=\"\\2\" title=\"\\2\" />", $matches[0]); }
 return $matches[0]; } }
-function bbcode_parser($text)
-{
+function bbcode_parser($text) {
 global $Settings;
 $text = preg_replace("/\[EmbedVideo\=([A-Za-z0-9\.\-_]+)\]([A-Za-z0-9\.\-_]+)\[\/EmbedVideo\]/is", "[\\1]\\2[/\\1]", $text);
 $text = preg_replace("/\[YouTube\]([A-Za-z0-9\.\-_]+)\[\/YouTube\]/is", "\n<object type=\"application/x-shockwave-flash\" width=\"480\" height=\"385\" data=\"http://www.youtube.com/v/\\1?fs=1&amp;hl=en_US\">\n<param name=\"\\1\" value=\"http://www.youtube.com/v/\\1?fs=1&amp;hl=en_US\" />\n</object>\n", $text);
@@ -80,6 +80,9 @@ $text = preg_replace("/\[TIME\]/is", GMTimeGet('g:i a',$_SESSION['UserTimeZone']
 //$text = preg_replace("/\[TIME\=(.*?)\]/is", GMTimeGet("${1}",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']), $text);
 $text = preg_replace_callback("/\[DATE\=(.*?)\]/is", "bbcode_date_time", $text);
 $text = preg_replace_callback("/\[TIME\=(.*?)\]/is", "bbcode_date_time", $text);
+$text = preg_replace_callback("/\[RAND\=([\-]?[0-9]+)\]/is", "bbcode_random", $text);
+$text = preg_replace_callback("/\[RAND\=([\-]?[0-9]+),([\-]?[0-9]+)\]/is", "bbcode_random", $text);
+$text = preg_replace("/\[Entity\=([A-Za-z0-9\#]+)\]/is", "&\\1;", $text);
 $text = preg_replace("/\{BoardName\}/is", $Settings['board_name'], $text);
 $text = preg_replace("/\{BoardURL\}/is", $Settings['idburl'], $text);
 $text = preg_replace("/\{WebSiteURL\}/is", $Settings['weburl'], $text);
@@ -89,6 +92,9 @@ $text = preg_replace("/\{TIME\}/is", GMTimeGet('M j Y',$_SESSION['UserTimeZone']
 //$text = preg_replace("/\{TIME\=(.*?)\}/is", GMTimeGet("${1}",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']), $text);
 $text = preg_replace_callback("/\{DATE\=(.*?)\}/is", "bbcode_date_time", $text);
 $text = preg_replace_callback("/\{TIME\=(.*?)\}/is", "bbcode_date_time", $text);
+$text = preg_replace_callback("/\{RAND\=([\-]?[0-9]+)\}/is", "bbcode_random", $text);
+$text = preg_replace_callback("/\{RAND\=([\-]?[0-9]+),([\-]?[0-9]+)\}/is", "bbcode_random", $text);
+$text = preg_replace("/\{Entity\=([A-Za-z0-9\#]+)\}/is", "&\\1;", $text);
 $text = preg_replace("/\[B\](.*?)\[\/B\]/is", "<span style=\"font-weight: bold;\">\\1</span>", $text);
 $text = preg_replace("/\[I\](.*?)\[\/I\]/is", "<span style=\"font-style: italic;\">\\1</span>", $text);
 $text = preg_replace("/\[S\](.*?)\[\/S\]/is", "<span style=\"font-style: strike;\">\\1</span>", $text);
@@ -100,6 +106,16 @@ $text = preg_replace("/\[SIZE\=([0-9]+)\%\](.*?)\[\/SIZE\]/is", "<span style=\"f
 $text = preg_replace("/\[SIZE\=([0-9]+)(em|pt|px)\](.*?)\[\/SIZE\]/is", "<span style=\"font-size: \\1\\2;\">\\3</span>", $text);
 $text = preg_replace("/\[COLOR\=([A-Za-z0-9]+)\](.*?)\[\/COLOR\]/is", "<span style=\"color: \\1;\">\\2</span>", $text);
 $text = preg_replace("/\[COLOR\=\#([A-Za-z0-9]+)\](.*?)\[\/COLOR\]/is", "<span style=\"color: #\\1;\">\\2</span>", $text);
+$text = preg_replace("/\[COLOR\=rgb\(([0-9\,\s]+)\)\](.*?)\[\/COLOR\]/is", "<span style=\"color: rgb(\\1);\">\\2</span>", $text);
+$text = preg_replace("/\[BGCOLOR\=([A-Za-z0-9]+)\](.*?)\[\/BGCOLOR\]/is", "<span style=\"background-color: \\1;\">\\2</span>", $text);
+$text = preg_replace("/\[BGCOLOR\=\#([A-Za-z0-9]+)\](.*?)\[\/BGCOLOR\]/is", "<span style=\"background-color: #\\1;\">\\2</span>", $text);
+$text = preg_replace("/\[BGCOLOR\=rgb\(([0-9\,\s]+)\)\](.*?)\[\/BGCOLOR\]/is", "<span style=\"background-color: rgb(\\1);\">\\2</span>", $text);
+$text = preg_replace("/\[COLOUR\=([A-Za-z0-9]+)\](.*?)\[\/COLOUR\]/is", "<span style=\"color: \\1;\">\\2</span>", $text);
+$text = preg_replace("/\[COLOUR\=\#([A-Za-z0-9]+)\](.*?)\[\/COLOUR\]/is", "<span style=\"color: #\\1;\">\\2</span>", $text);
+$text = preg_replace("/\[COLOUR\=rgb\(([0-9\,\s]+)\)\](.*?)\[\/COLOUR\]/is", "<span style=\"color: rgb(\\1);\">\\2</span>", $text);
+$text = preg_replace("/\[BGCOLOUR\=([A-Za-z0-9]+)\](.*?)\[\/BGCOLOUR\]/is", "<span style=\"background-color: \\1;\">\\2</span>", $text);
+$text = preg_replace("/\[BGCOLOUR\=\#([A-Za-z0-9]+)\](.*?)\[\/BGCOLOUR\]/is", "<span style=\"background-color: #\\1;\">\\2</span>", $text);
+$text = preg_replace("/\[BGCOLOUR\=rgb\(([0-9\,\s]+)\)\](.*?)\[\/BGCOLOUR\]/is", "<span style=\"background-color: rgb(\\1);\">\\2</span>", $text);
 $text = preg_replace("/\[ALIGN=(.*?)\](.*?)\[\/ALIGN\]/is", "<span style=\"text-align: \\1;\">\\2</span>", $text);
 // Sub URL and IMG tags
 $text = preg_replace_callback("/\[URL](.*?)\[\/URL\]/is", "urlcheck2", $text);
@@ -112,6 +128,6 @@ $text = preg_replace_callback("/\[BASE64\](.*?)\[\/BASE64\]/is","bbcode_base64en
 $text = preg_replace_callback("/\[BASE64=ENCODE\](.*?)\[\/BASE64\]/is","bbcode_base64encode",$text);
 $text = preg_replace_callback("/\[BASE64=DECODE\](.*?)\[\/BASE64\]/is","bbcode_base64decode",$text);
 $text = preg_replace_callback("/\[ROT13\](.*?)\[\/ROT13\]/is","bbcode_rot13",$text);
-return $text;
-}
+return $text; }
+function ibbcode_parser($text) { return bbcode_parser($text); }
 ?>
