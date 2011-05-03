@@ -12,7 +12,7 @@
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 	iBBCode / iBBTags by Kazuki Przyborowski - http://idb.berlios.net/
 
-    $FileInfo: ibbcode.php - Last Update: 05/02/2011 SVN 647 - Author: cooldude2k $
+    $FileInfo: ibbcode.php - Last Update: 05/02/2011 SVN 648 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="ibbcode.php"||$File3Name=="/ibbcode.php") {
@@ -74,26 +74,26 @@ $text = preg_replace("/\[SUB\](.*?)\[\/SUB\]/is", "<sub>\\1</sub>", $text);
 $text = preg_replace("/\[BoardName\]/is", $Settings['board_name'], $text);
 $text = preg_replace("/\[BoardURL\]/is", $Settings['idburl'], $text);
 $text = preg_replace("/\[WebSiteURL\]/is", $Settings['weburl'], $text);
+$text = preg_replace("/\{BoardName\}/is", $Settings['board_name'], $text);
+$text = preg_replace("/\{BoardURL\}/is", $Settings['idburl'], $text);
+$text = preg_replace("/\{WebSiteURL\}/is", $Settings['weburl'], $text);
 $text = preg_replace("/\[DATE\]/is", GMTimeGet('M j Y',$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']), $text);
 //$text = preg_replace("/\[DATE\=(.*?)\]/is", GMTimeGet("${1}",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']), $text);
 $text = preg_replace("/\[TIME\]/is", GMTimeGet('g:i a',$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']), $text);
 //$text = preg_replace("/\[TIME\=(.*?)\]/is", GMTimeGet("${1}",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']), $text);
 $text = preg_replace_callback("/\[DATE\=(.*?)\]/is", "bbcode_date_time", $text);
 $text = preg_replace_callback("/\[TIME\=(.*?)\]/is", "bbcode_date_time", $text);
-$text = preg_replace_callback("/\[RAND\=([\-]?[0-9]+)\]/is", "bbcode_random", $text);
-$text = preg_replace_callback("/\[RAND\=([\-]?[0-9]+),([\-]?[0-9]+)\]/is", "bbcode_random", $text);
-$text = preg_replace("/\[Entity\=([A-Za-z0-9\#]+)\]/is", "&\\1;", $text);
-$text = preg_replace("/\{BoardName\}/is", $Settings['board_name'], $text);
-$text = preg_replace("/\{BoardURL\}/is", $Settings['idburl'], $text);
-$text = preg_replace("/\{WebSiteURL\}/is", $Settings['weburl'], $text);
 $text = preg_replace("/\{DATE\}/is", GMTimeGet('g:i a',$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']), $text);
 //$text = preg_replace("/\{DATE\=(.*?)\}/is", GMTimeGet("${1}",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']), $text);
 $text = preg_replace("/\{TIME\}/is", GMTimeGet('M j Y',$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']), $text);
 //$text = preg_replace("/\{TIME\=(.*?)\}/is", GMTimeGet("${1}",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']), $text);
 $text = preg_replace_callback("/\{DATE\=(.*?)\}/is", "bbcode_date_time", $text);
 $text = preg_replace_callback("/\{TIME\=(.*?)\}/is", "bbcode_date_time", $text);
+$text = preg_replace_callback("/\[RAND\=([\-]?[0-9]+)\]/is", "bbcode_random", $text);
+$text = preg_replace_callback("/\[RAND\=([\-]?[0-9]+),([\-]?[0-9]+)\]/is", "bbcode_random", $text);
 $text = preg_replace_callback("/\{RAND\=([\-]?[0-9]+)\}/is", "bbcode_random", $text);
 $text = preg_replace_callback("/\{RAND\=([\-]?[0-9]+),([\-]?[0-9]+)\}/is", "bbcode_random", $text);
+$text = preg_replace("/\[Entity\=([A-Za-z0-9\#]+)\]/is", "&\\1;", $text);
 $text = preg_replace("/\{Entity\=([A-Za-z0-9\#]+)\}/is", "&\\1;", $text);
 $text = preg_replace("/\[B\](.*?)\[\/B\]/is", "<span style=\"font-weight: bold;\">\\1</span>", $text);
 $text = preg_replace("/\[I\](.*?)\[\/I\]/is", "<span style=\"font-style: italic;\">\\1</span>", $text);
