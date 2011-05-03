@@ -12,7 +12,7 @@
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 	iBBCode / iBBTags by Kazuki Przyborowski - http://idb.berlios.net/
 
-    $FileInfo: ibbcode.php - Last Update: 05/02/2011 SVN 644 - Author: cooldude2k $
+    $FileInfo: ibbcode.php - Last Update: 05/02/2011 SVN 645 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="ibbcode.php"||$File3Name=="/ibbcode.php") {
@@ -57,8 +57,6 @@ $matches[0] = preg_replace("/\[URL\=(.*?)\](.*?)\[\/URL\]/is", "<a href=\"\\1\">
 $matches[0] = preg_replace("/\[IMG](.*?)\[\/IMG\]/is", "<img src=\"\\1\" alt=\"user posted image\" title=\"user posted image\" />", $matches[0]); 
 $matches[0] = preg_replace("/\[IMG=(.*?)]([A-Za-z0-9\.\/%\?\-_\:;\~\s]+)\[\/IMG\]/is", "<img src=\"\\1\" alt=\"\\2\" title=\"\\2\" />", $matches[0]); }
 return $matches[0]; } }
-$UsersSettings['UserTimeZone'] = $_SESSION['UserTimeZone'];
-$UsersSettings['UserDST'] = $_SESSION['UserDST'];
 function bbcode_parser($text)
 {
 global $Settings;
