@@ -12,7 +12,7 @@
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 	iBBCode / iBBTags by Kazuki Przyborowski - http://idb.berlios.net/
 
-    $FileInfo: ibbcode.php - Last Update: 05/02/2011 SVN 645 - Author: cooldude2k $
+    $FileInfo: ibbcode.php - Last Update: 05/02/2011 SVN 646 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="ibbcode.php"||$File3Name=="/ibbcode.php") {
@@ -46,11 +46,13 @@ function bbcode_urlencode($matches)
 { return urlencode($matches[1]); }
 function bbcode_urldecode($matches)
 { return urldecode($matches[1]); }
+function bbcode_date_time($matches)
+{ return GMTimeGet($matches[1],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']); }
 // Pre URL and IMG tags
 if(!function_exists("urlcheck2")) {
 function urlcheck2($matches) {
 global $BoardURL;
-$retnum = preg_match_all("/([a-zA-Z]+)\:\/\/([a-z0-9\-\.]+)(\:[0-9]+)?\/([A-Za-z0-9\.\/%\?\-_\:;\~]+)?(\?)?([A-Za-z0-9\.\/%&=\?\-_\:;]+)?(\#)?([A-Za-z0-9\.\/%&=\?\-_\:;]+)?/is", $matches[1], $urlcheck); 
+$retnum = preg_match_all("/([a-zA-Z]+)\:\/\/([a-z0-9\-\.]+)(\:[0-9]+)?\/([A-Za-z0-9\.\/%\?\-_\:;\~]+)?(\?)?([A-Za-z0-9\.\/%&=\?\-_\:;\+]+)?(\#)?([A-Za-z0-9\.\/%&=\?\-_\:;\+]+)?/is", $matches[1], $urlcheck); 
 if(isset($urlcheck[0][0])) { 
 $matches[0] = preg_replace("/\[URL\](.*?)\[\/URL\]/is", " \\1", $matches[0]);
 $matches[0] = preg_replace("/\[URL\=(.*?)\](.*?)\[\/URL\]/is", "<a href=\"\\1\">\\2</a>", $matches[0]);
@@ -73,16 +75,20 @@ $text = preg_replace("/\[BoardName\]/is", $Settings['board_name'], $text);
 $text = preg_replace("/\[BoardURL\]/is", $Settings['idburl'], $text);
 $text = preg_replace("/\[WebSiteURL\]/is", $Settings['weburl'], $text);
 $text = preg_replace("/\[DATE\]/is", GMTimeGet('M j Y',$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']), $text);
-$text = preg_replace("/\[DATE\=(.*?)\]/is", GMTimeGet('\\1',$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']), $text);
+//$text = preg_replace("/\[DATE\=(.*?)\]/is", GMTimeGet("${1}",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']), $text);
 $text = preg_replace("/\[TIME\]/is", GMTimeGet('g:i a',$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']), $text);
-$text = preg_replace("/\[TIME\=(.*?)\]/is", GMTimeGet('\\1',$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']), $text);
+//$text = preg_replace("/\[TIME\=(.*?)\]/is", GMTimeGet("${1}",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']), $text);
+$text = preg_replace_callback("/\[DATE\=(.*?)\]/is", "bbcode_date_time", $text);
+$text = preg_replace_callback("/\[TIME\=(.*?)\]/is", "bbcode_date_time", $text);
 $text = preg_replace("/\{BoardName\}/is", $Settings['board_name'], $text);
 $text = preg_replace("/\{BoardURL\}/is", $Settings['idburl'], $text);
 $text = preg_replace("/\{WebSiteURL\}/is", $Settings['weburl'], $text);
 $text = preg_replace("/\{DATE\}/is", GMTimeGet('g:i a',$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']), $text);
-$text = preg_replace("/\{DATE\=(.*?)\}/is", GMTimeGet('\\1',$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']), $text);
+//$text = preg_replace("/\{DATE\=(.*?)\}/is", GMTimeGet("${1}",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']), $text);
 $text = preg_replace("/\{TIME\}/is", GMTimeGet('M j Y',$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']), $text);
-$text = preg_replace("/\{TIME\=(.*?)\}/is", GMTimeGet('\\1',$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']), $text);
+//$text = preg_replace("/\{TIME\=(.*?)\}/is", GMTimeGet("${1}",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']), $text);
+$text = preg_replace_callback("/\{DATE\=(.*?)\}/is", "bbcode_date_time", $text);
+$text = preg_replace_callback("/\{TIME\=(.*?)\}/is", "bbcode_date_time", $text);
 $text = preg_replace("/\[B\](.*?)\[\/B\]/is", "<span style=\"font-weight: bold;\">\\1</span>", $text);
 $text = preg_replace("/\[I\](.*?)\[\/I\]/is", "<span style=\"font-style: italic;\">\\1</span>", $text);
 $text = preg_replace("/\[S\](.*?)\[\/S\]/is", "<span style=\"font-style: strike;\">\\1</span>", $text);
