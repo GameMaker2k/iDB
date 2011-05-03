@@ -12,7 +12,7 @@
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 	iBBCode / iBBTags by Kazuki Przyborowski - http://idb.berlios.net/
 
-    $FileInfo: ibbcode.php - Last Update: 05/02/2011 SVN 643 - Author: cooldude2k $
+    $FileInfo: ibbcode.php - Last Update: 05/02/2011 SVN 644 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="ibbcode.php"||$File3Name=="/ibbcode.php") {
@@ -61,7 +61,7 @@ $UsersSettings['UserTimeZone'] = $_SESSION['UserTimeZone'];
 $UsersSettings['UserDST'] = $_SESSION['UserDST'];
 function bbcode_parser($text)
 {
-global $Settings,$UserSetting;
+global $Settings;
 $text = preg_replace("/\[EmbedVideo\=([A-Za-z0-9\.\-_]+)\]([A-Za-z0-9\.\-_]+)\[\/EmbedVideo\]/is", "[\\1]\\2[/\\1]", $text);
 $text = preg_replace("/\[YouTube\]([A-Za-z0-9\.\-_]+)\[\/YouTube\]/is", "\n<object type=\"application/x-shockwave-flash\" width=\"480\" height=\"385\" data=\"http://www.youtube.com/v/\\1?fs=1&amp;hl=en_US\">\n<param name=\"\\1\" value=\"http://www.youtube.com/v/\\1?fs=1&amp;hl=en_US\" />\n</object>\n", $text);
 $text = preg_replace("/\[DailyMotion\]([A-Za-z0-9\.\-_]+)\[\/DailyMotion\]/is", "\n<object type=\"application/x-shockwave-flash\" width=\"480\" height=\"385\" data=\"http://www.dailymotion.com/swf/video/\\1\">\n<param name=\"\\1\" value=\"http://www.dailymotion.com/swf/video/\\1\" />\n<param name=\"allowFullScreen\" value=\"true\" />\n<param name=\"allowScriptAccess\" value=\"always\" />\n<param name=\"wmode\" value=\"transparent\" />\n</object>\n", $text);
@@ -74,13 +74,17 @@ $text = preg_replace("/\[SUB\](.*?)\[\/SUB\]/is", "<sub>\\1</sub>", $text);
 $text = preg_replace("/\[BoardName\]/is", $Settings['board_name'], $text);
 $text = preg_replace("/\[BoardURL\]/is", $Settings['idburl'], $text);
 $text = preg_replace("/\[WebSiteURL\]/is", $Settings['weburl'], $text);
-$text = preg_replace("/\[DATE\]/is", GMTimeGet('g:i a',$UsersSettings['UserTimeZone'],0,$UsersSettings['UserDST']), $text);
-$text = preg_replace("/\[DATE\=(.*?)\]/is", GMTimeGet('\\1',$UsersSettings['UserTimeZone'],0,$UsersSettings['UserDST']), $text);
+$text = preg_replace("/\[DATE\]/is", GMTimeGet('M j Y',$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']), $text);
+$text = preg_replace("/\[DATE\=(.*?)\]/is", GMTimeGet('\\1',$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']), $text);
+$text = preg_replace("/\[TIME\]/is", GMTimeGet('g:i a',$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']), $text);
+$text = preg_replace("/\[TIME\=(.*?)\]/is", GMTimeGet('\\1',$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']), $text);
 $text = preg_replace("/\{BoardName\}/is", $Settings['board_name'], $text);
 $text = preg_replace("/\{BoardURL\}/is", $Settings['idburl'], $text);
 $text = preg_replace("/\{WebSiteURL\}/is", $Settings['weburl'], $text);
-$text = preg_replace("/\{DATE\}/is", GMTimeGet('g:i a',$UsersSettings['UserTimeZone'],0,$UsersSettings['UserDST']), $text);
-$text = preg_replace("/\{DATE\=(.*?)\}/is", GMTimeGet('\\1',$UsersSettings['UserTimeZone'],0,$UsersSettings['UserDST']), $text);
+$text = preg_replace("/\{DATE\}/is", GMTimeGet('g:i a',$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']), $text);
+$text = preg_replace("/\{DATE\=(.*?)\}/is", GMTimeGet('\\1',$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']), $text);
+$text = preg_replace("/\{TIME\}/is", GMTimeGet('M j Y',$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']), $text);
+$text = preg_replace("/\{TIME\=(.*?)\}/is", GMTimeGet('\\1',$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']), $text);
 $text = preg_replace("/\[B\](.*?)\[\/B\]/is", "<span style=\"font-weight: bold;\">\\1</span>", $text);
 $text = preg_replace("/\[I\](.*?)\[\/I\]/is", "<span style=\"font-style: italic;\">\\1</span>", $text);
 $text = preg_replace("/\[S\](.*?)\[\/S\]/is", "<span style=\"font-style: strike;\">\\1</span>", $text);
