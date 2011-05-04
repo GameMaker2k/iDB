@@ -12,7 +12,7 @@
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 	iBBCode / iBBTags by Kazuki Przyborowski - http://idb.berlios.net/
 
-    $FileInfo: ibbcode.php - Last Update: 05/02/2011 SVN 648 - Author: cooldude2k $
+    $FileInfo: ibbcode.php - Last Update: 05/04/2011 SVN 649 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="ibbcode.php"||$File3Name=="/ibbcode.php") {
@@ -96,11 +96,17 @@ $text = preg_replace_callback("/\{RAND\=([\-]?[0-9]+),([\-]?[0-9]+)\}/is", "bbco
 $text = preg_replace("/\[Entity\=([A-Za-z0-9\#]+)\]/is", "&\\1;", $text);
 $text = preg_replace("/\{Entity\=([A-Za-z0-9\#]+)\}/is", "&\\1;", $text);
 $text = preg_replace("/\[B\](.*?)\[\/B\]/is", "<span style=\"font-weight: bold;\">\\1</span>", $text);
+$text = preg_replace("/\[BOLD\](.*?)\[\/BOLD\]/is", "<span style=\"font-weight: bold;\">\\1</span>", $text);
 $text = preg_replace("/\[I\](.*?)\[\/I\]/is", "<span style=\"font-style: italic;\">\\1</span>", $text);
+$text = preg_replace("/\[ITALIC\](.*?)\[\/ITALIC\]/is", "<span style=\"font-style: italic;\">\\1</span>", $text);
+$text = preg_replace("/\[OBLIQUE\](.*?)\[\/OBLIQUE\]/is", "<span style=\"font-style: oblique;\">\\1</span>", $text);
 $text = preg_replace("/\[S\](.*?)\[\/S\]/is", "<span style=\"font-style: strike;\">\\1</span>", $text);
+$text = preg_replace("/\[STRIKE\](.*?)\[\/STRIKE\]/is", "<span style=\"font-style: strike;\">\\1</span>", $text);
 $text = preg_replace("/\[U\](.*?)\[\/U\]/is", "<span style=\"text-decoration: underline;\">\\1</span>", $text);
 $text = preg_replace("/\[O\](.*?)\[\/O\]/is", "<span style=\"text-decoration: overline;\">\\1</span>", $text);
 $text = preg_replace("/\[CENTER\](.*?)\[\/CENTER\]/is", "<span style=\"text-align: center;\">\\1</span>", $text);
+$text = preg_replace("/\[LTR\](.*?)\[\/LTR\]/is", "<span style=\"direction: rtl;\">\\1</span>", $text);
+$text = preg_replace("/\[FONT\=([A-Za-z0-9\,\s]+)\](.*?)\[\/FONT\]/is", "<span style=\"font-family: \\1px;\">\\2</span>", $text);
 $text = preg_replace("/\[SIZE\=([0-9]+)\](.*?)\[\/SIZE\]/is", "<span style=\"font-size: \\1px;\">\\2</span>", $text);
 $text = preg_replace("/\[SIZE\=([0-9]+)\%\](.*?)\[\/SIZE\]/is", "<span style=\"font-size: \\1%;\">\\2</span>", $text);
 $text = preg_replace("/\[SIZE\=([0-9]+)(em|pt|px)\](.*?)\[\/SIZE\]/is", "<span style=\"font-size: \\1\\2;\">\\3</span>", $text);
@@ -116,7 +122,9 @@ $text = preg_replace("/\[COLOUR\=rgb\(([0-9\,\s]+)\)\](.*?)\[\/COLOUR\]/is", "<s
 $text = preg_replace("/\[BGCOLOUR\=([A-Za-z0-9]+)\](.*?)\[\/BGCOLOUR\]/is", "<span style=\"background-color: \\1;\">\\2</span>", $text);
 $text = preg_replace("/\[BGCOLOUR\=\#([A-Za-z0-9]+)\](.*?)\[\/BGCOLOUR\]/is", "<span style=\"background-color: #\\1;\">\\2</span>", $text);
 $text = preg_replace("/\[BGCOLOUR\=rgb\(([0-9\,\s]+)\)\](.*?)\[\/BGCOLOUR\]/is", "<span style=\"background-color: rgb(\\1);\">\\2</span>", $text);
-$text = preg_replace("/\[ALIGN=(.*?)\](.*?)\[\/ALIGN\]/is", "<span style=\"text-align: \\1;\">\\2</span>", $text);
+$text = preg_replace("/\[ALIGN=(left|center|right|justify)\](.*?)\[\/ALIGN\]/is", "<div style=\"text-align: \\1;\">\\2</div>", $text);
+$text = preg_replace("/\[VALIGN=(.*?)\](.*?)\[\/VALIGN\]/is", "<div style=\"vertical-align: \\1;\">\\2</div>", $text);
+$text = preg_replace("/\[FLOAT=(left|right)\](.*?)\[\/FLOAT\]/is", "<div style=\"float: \\1;\">\\2</div>", $text);
 // Sub URL and IMG tags
 $text = preg_replace_callback("/\[URL](.*?)\[\/URL\]/is", "urlcheck2", $text);
 $text = preg_replace_callback("/\[URL\=(.*?)\](.*?)\[\/URL\]/is", "urlcheck2", $text);
