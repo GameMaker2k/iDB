@@ -12,7 +12,7 @@
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 	iBBCode / iBBTags by Kazuki Przyborowski - http://idb.berlios.net/
 
-    $FileInfo: ibbcode.php - Last Update: 05/04/2011 SVN 649 - Author: cooldude2k $
+    $FileInfo: ibbcode.php - Last Update: 05/04/2011 SVN 650 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="ibbcode.php"||$File3Name=="/ibbcode.php") {
@@ -25,13 +25,18 @@ Thanks for the Help of czambran at:
 http://www.phpfreaks.com/forums/index.php?action=profile;u=15535
 */ 
 $BoardCharSet = $Settings['charset'];
-function do_html_bbcode($text) {
-	$text = preg_replace_callback("/\[DoHTML\](.*?)\[\/DoHTML\]/is","html_decode",$text);
-	return $text; }
 function html_decode($matches) {
 	global $BoardCharSet;
 	$matches[1] = str_replace(array("\r", "\r\n", "\n"), " ", $matches[1]);
 	return html_entity_decode($matches[1], ENT_QUOTES, $BoardCharSet); }
+function do_html_bbcode($text) {
+	return preg_replace_callback("/\[DoHTML\](.*?)\[\/DoHTML\]/is","html_decode",$text); }
+function exec_php($matches) {
+	ob_start();
+	eval($matches[1]);
+	return ob_get_clean(); }
+function php_execute($text) {
+	return preg_replace_callback("/\[ExecPHP\](.*?)\[\/ExecPHP\]/is","php_execute",$text); }
 function bbcode_rot13($matches) { 
 	return str_rot13($matches[1]); }
 function bbcode_base64encode($matches) { 
@@ -136,6 +141,7 @@ $text = preg_replace_callback("/\[BASE64\](.*?)\[\/BASE64\]/is","bbcode_base64en
 $text = preg_replace_callback("/\[BASE64=ENCODE\](.*?)\[\/BASE64\]/is","bbcode_base64encode",$text);
 $text = preg_replace_callback("/\[BASE64=DECODE\](.*?)\[\/BASE64\]/is","bbcode_base64decode",$text);
 $text = preg_replace_callback("/\[ROT13\](.*?)\[\/ROT13\]/is","bbcode_rot13",$text);
+$text = preg_replace("/\[JavaScript\](.*?)\[\/JavaScript\]/is","[DoHTML]\n&lt;script type=&quot;text/javascript&quot;&gt;\n\\1\n&lt;/script&gt;\n[/DoHTML]",$text);
 return $text; }
 function ibbcode_parser($text) { return bbcode_parser($text); }
 ?>

@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: replies.php - Last Update: 05/01/2011 SVN 638 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 05/04/2011 SVN 650 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -385,14 +385,18 @@ $eunum = sql_num_rows($euresult); }
 	$MySubPost = "<div class=\"EditReply\"><br />This post has been edited by <b>".$EditUserName."</b> on ".$MyEditTime."</div>"; }
 $MyPost = text2icons($MyPost,$Settings['sqltable'],$SQLStat);
 if($User1CanUseBBags1=="yes") { $MyPost = bbcode_parser($MyPost); }
+if($User1CanDoHTML1=="no") {
+$MyPost = preg_replace("/\[DoHTML\](.*?)\[\/DoHTML\]/is","<span style=\"color: red; font-weight: bold;\">ERROR:</span> cannot execute html.",$MyPost); }
 if($User1CanDoHTML1=="yes") { $MyPost = do_html_bbcode($MyPost); }
 $MyPost = preg_replace("/\<br\>/", "<br />", nl2br($MyPost));
 $MyPost = url2link($MyPost);
 if($MySubPost!=null) { $MyPost = $MyPost."\n".$MySubPost; }
-$User1Signature = preg_replace("/\<br\>/", "<br />", nl2br($User1Signature));
-$User1Signature = text2icons($User1Signature,$Settings['sqltable'],$SQLStat);
 if($User1CanUseBBags=="yes") { $User1Signature = bbcode_parser($User1Signature); }
+if($User1CanDoHTML1=="no") {
+$User1Signature = preg_replace("/\[DoHTML\](.*?)\[\/DoHTML\]/is","<span style=\"color: red; font-weight: bold;\">ERROR:</span> cannot execute html.",$User1Signature); }
 if($User1CanDoHTML=="yes") { $User1Signature = do_html_bbcode($User1Signature); }
+$User1Signature = text2icons($User1Signature,$Settings['sqltable'],$SQLStat);
+$User1Signature = preg_replace("/\<br\>/", "<br />", nl2br($User1Signature));
 $User1Signature = url2link($User1Signature);
 $CanEditReply = false; $CanDeleteReply = false;
 if($_SESSION['UserGroup']!=$Settings['GuestGroup']) {

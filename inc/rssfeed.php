@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: rssfeed.php - Last Update: 04/30/2011 SVN 636 - Author: cooldude2k $
+    $FileInfo: rssfeed.php - Last Update: 05/04/2011 SVN 650 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="rssfeed.php"||$File3Name=="/rssfeed.php") {
@@ -130,9 +130,6 @@ $pquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE 
 $presult=sql_query($pquery,$SQLStat);
 $pnum=sql_num_rows($presult);
 $MyDescription=sql_result($presult,0,"Post");
-$MyDescription = preg_replace("/\<br\>/", "<br />", nl2br($MyDescription));
-$MyDescription = text2icons($MyDescription,$Settings['sqltable'],$SQLStat);
-$MyDescription = url2link($MyDescription);
 $UsersID=sql_result($result,$i,"UserID");
 $GuestsName=sql_result($result,$i,"GuestName");
 $requery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($UsersID));
@@ -152,7 +149,20 @@ $gresult=sql_query($gquery,$SQLStat);
 $UsersGroup=sql_result($gresult,0,"Name");
 $GroupNamePrefix=sql_result($gresult,0,"NamePrefix");
 $GroupNameSuffix=sql_result($gresult,0,"NameSuffix");
+$User1CanDoHTML=sql_result($gresult,0,"CanDoHTML");
+if($User1CanDoHTML!="yes"&&$User1CanDoHTML!="no") {
+	$User1CanDoHTML = "no"; }
+$User1CanUseBBags=sql_result($gresult,0,"CanUseBBags");
+if($User1CanUseBBags!="yes"&&$User1CanUseBBags!="no") {
+	$User1CanUseBBags = "no"; }
 sql_free_result($gresult);
+if($User1CanUseBBags=="yes") { $MyDescription = bbcode_parser($MyDescription); }
+if($User1CanDoHTML=="no") {
+$MyDescription = preg_replace("/\[DoHTML\](.*?)\[\/DoHTML\]/is","<span style=\"color: red; font-weight: bold;\">ERROR:</span> cannot execute html.",$MyDescription); }
+if($User1CanDoHTML=="yes") { $MyDescription = do_html_bbcode($MyDescription); }
+$MyDescription = text2icons($MyDescription,$Settings['sqltable'],$SQLStat);
+$MyDescription = preg_replace("/\<br\>/", "<br />", nl2br($MyDescription));
+$MyDescription = url2link($MyDescription);
 if(isset($GroupNamePrefix)&&$GroupNamePrefix!=null) {
 	$UsersName = $GroupNamePrefix.$UsersName; }
 if(isset($GroupNameSuffix)&&$GroupNameSuffix!=null) {
