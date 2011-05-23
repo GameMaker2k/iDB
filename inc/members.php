@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 04/30/2011 SVN 636 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 05/22/2011 SVN 651 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -1421,6 +1421,21 @@ $Website = remove_spaces($Website);
 $gquerys = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"Name\"='%s' LIMIT 1", array($yourgroup));
 $gresults=sql_query($gquerys,$SQLStat);
 $yourgroup=sql_result($gresults,0,"id");
+$PreUserPer['CanViewBoard']=sql_result($gresults,0,"CanViewBoard");
+$PreUserPer['CanViewOffLine']=sql_result($gresults,0,"CanViewOffLine");
+$PreUserPer['CanEditProfile']=sql_result($gresults,0,"CanEditProfile");
+$PreUserPer['CanAddEvents']=sql_result($gresults,0,"CanAddEvents");
+$PreUserPer['CanPM']=sql_result($gresults,0,"CanPM");
+$PreUserPer['CanSearch']=sql_result($gresults,0,"CanSearch");
+$PreUserPer['CanExecPHP']=sql_result($gresults,0,"CanExecPHP");
+$PreUserPer['CanDoHTML']=sql_result($gresults,0,"CanDoHTML");
+$PreUserPer['CanUseBBags']=sql_result($gresults,0,"CanUseBBags");
+$PreUserPer['CanModForum']=sql_result($gresults,0,"CanModForum");
+$PreUserPer['FloodControl']=sql_result($gresults,0,"FloodControl");
+$PreUserPer['SearchFlood']=sql_result($gresults,0,"SearchFlood");
+$PreUserPer['HasModCP']=sql_result($gresults,0,"HasModCP");
+$PreUserPer['HasAdminCP']=sql_result($gresults,0,"HasAdminCP");
+$PreUserPer['ViewDBInfo']=sql_result($gresults,0,"ViewDBInfo");
 sql_free_result($gresults);
 $_POST['Interests'] = remove_spaces($_POST['Interests']);
 $_POST['Title'] = remove_spaces($_POST['Title']);
@@ -1436,6 +1451,9 @@ $query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."members\" (\"Name
 "('%s', '%s', '%s', '%s', '%s', '%s', '%s', %i, '%s', '%s', %i, %i, '0', '0', '0', '0', '0', '%s', '%s', '%s', '%s', '%s', '%s', %i, 0, 0, 10, 10, 10, '%s', '%s', '%s', '%s', '%s')", array($Name,$NewPassword,$iDBHash,$_POST['Email'],$yourgroup,$ValidateStats,$HideMe,"0",$_POST['Interests'],$_POST['Title'],$_POST['Joined'],$_POST['LastActive'],$NewSignature,'Your Notes',$Avatar,"100x100",$Website,$_POST['YourGender'],$_POST['PostCount'],$_POST['YourOffSet'],$_POST['DST'],$Settings['DefaultTheme'],$_POST['UserIP'],$HashSalt));
 sql_query($query,$SQLStat);
 $yourid = sql_get_next_id($Settings['sqltable'],"members",$SQLStat);
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."mempermissions\" (\"id\", \"CanViewBoard\", \"CanViewOffLine\", \"CanEditProfile\", \"CanAddEvents\", \"CanPM\", \"CanSearch\", \"CanExecPHP\", \"CanDoHTML\", \"CanUseBBags\", \"CanModForum\", \"FloodControl\", \"SearchFlood\", \"HasModCP\", \"HasAdminCP\", \"ViewDBInfo\") VALUES\n". 
+"(%i, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %i, %i, '%s', '%s', '%s')", array($yourid,$PreUserPer['CanViewBoard'], $PreUserPer['CanViewOffLine'], $PreUserPer['CanEditProfile'], $PreUserPer['CanAddEvents'], $PreUserPer['CanPM'], $PreUserPer['CanSearch'], $PreUserPer['CanExecPHP'], $PreUserPer['CanDoHTML'], $PreUserPer['CanUseBBags'], $PreUserPer['CanModForum'], $PreUserPer['FloodControl'], $PreUserPer['SearchFlood'], $PreUserPer['HasModCP'], $PreUserPer['HasAdminCP'], $PreUserPer['ViewDBInfo']));
+sql_query($query,$SQLStat);
 $querylogr = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s' AND \"UserPassword\"='%s' LIMIT 1", array($Name,$NewPassword));
 $resultlogr=sql_query($querylogr,$SQLStat);
 $numlogr=sql_num_rows($resultlogr);

@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: messages.php - Last Update: 05/04/2011 SVN 650 - Author: cooldude2k $
+    $FileInfo: messages.php - Last Update: 05/22/2011 SVN 651 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="messages.php"||$File3Name=="/messages.php") {
@@ -439,6 +439,9 @@ $requery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHE
 $reresult=sql_query($requery,$SQLStat);
 $renum=sql_num_rows($reresult);
 $rei=0;
+$memrequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."mempermissions\" WHERE \"id\"=%i LIMIT 1", array($SenderID));
+$memreresult=sql_query($memrequery,$SQLStat);
+$memrenum=sql_num_rows($memreresult);
 if($_SESSION['UserID']!=$ReciverID&&
 	$_SESSION['UserID']!=$SenderID) {
 redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
@@ -452,6 +455,16 @@ $User1IP=sql_result($reresult,$rei,"IP");
 if($User1IP==$SenderIP) { $ipshow = "one"; }
 $User1Email=sql_result($reresult,$rei,"Email");
 $User1Title=sql_result($reresult,$rei,"Title");
+$PreUserCanExecPHP=sql_result($memreresult,$rei,"CanExecPHP");
+if($PreUserCanExecPHP!="yes"&&$PreUserCanExecPHP!="no") {
+	$PreUserCanExecPHP = "no"; }
+$PreUserCanDoHTML=sql_result($memreresult,$rei,"CanDoHTML");
+if($PreUserCanDoHTML!="yes"&&$PreUserCanDoHTML!="no") {
+	$PreUserCanDoHTML = "no"; }
+$PreUserCanUseBBags=sql_result($memreresult,$rei,"CanUseBBags");
+if($PreUserCanUseBBags!="yes"&&$PreUserCanUseBBags!="no") {
+	$PreUserCanUseBBags = "no"; }
+sql_free_result($memreresult);
 $User1Joined=sql_result($reresult,$rei,"Joined");
 $User1Joined=GMTimeChange("M j Y",$User1Joined,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $User1GroupID=sql_result($reresult,$rei,"GroupID");
@@ -460,10 +473,16 @@ $SenderHidden = $User1Hidden;
 $gquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i", array($User1GroupID));
 $gresult=sql_query($gquery,$SQLStat);
 $User1Group=sql_result($gresult,0,"Name");
-$User1CanDoHTML=sql_result($gresult,0,"CanDoHTML");
+//$User1CanExecPHP=sql_result($gresult,0,"CanExecPHP");
+$User1CanExecPHP = $PreUserCanExecPHP;
+if($User1CanExecPHP!="yes"&&$User1CanExecPHP!="no") {
+	$User1CanExecPHP = "no"; }
+//$User1CanDoHTML=sql_result($gresult,0,"CanDoHTML");
+$User1CanDoHTML = $PreUserCanDoHTML;
 if($User1CanDoHTML!="yes"&&$User1CanDoHTML!="no") {
 	$User1CanDoHTML = "no"; }
-$User1CanUseBBags=sql_result($gresult,0,"CanUseBBags");
+//$User1CanUseBBags=sql_result($gresult,0,"CanUseBBags");
+$User1CanUseBBags = $PreUserCanUseBBags;
 if($User1CanUseBBags!="yes"&&$User1CanUseBBags!="no") {
 	$User1CanUseBBags = "no"; }
 $GroupNamePrefix=sql_result($gresult,0,"NamePrefix");
@@ -502,12 +521,18 @@ if(isset($GroupNameSuffix)&&$GroupNameSuffix!=null) {
 	$User1Name = $User1Name.$GroupNameSuffix; }
 $MessageText = text2icons($MessageText,$Settings['sqltable'],$SQLStat);
 if($User1CanUseBBags=="yes") { $MessageText = bbcode_parser($MessageText); }
+if($User1CanExecPHP=="no") {
+$MessageText = preg_replace("/\[ExecPHP\](.*?)\[\/ExecPHP\]/is","<span style=\"color: red; font-weight: bold;\">ERROR:</span> cannot execute php code.",$MessageText); }
+if($User1CanExecPHP=="yes") { $MessageText = php_execute($MessageText); }
 if($User1CanDoHTML=="no") {
 $MessageText = preg_replace("/\[DoHTML\](.*?)\[\/DoHTML\]/is","<span style=\"color: red; font-weight: bold;\">ERROR:</span> cannot execute html.",$MessageText); }
 if($User1CanDoHTML=="yes") { $MessageText = do_html_bbcode($MessageText); }
 $MessageText = preg_replace("/\<br\>/", "<br />", nl2br($MessageText));
 $MessageText = url2link($MessageText);
 if($User1CanUseBBags=="yes") { $User1Signature = bbcode_parser($User1Signature); }
+if($User1CanExecPHP=="no") {
+$User1Signature = preg_replace("/\[ExecPHP\](.*?)\[\/ExecPHP\]/is","<span style=\"color: red; font-weight: bold;\">ERROR:</span> cannot execute php code.",$User1Signature); }
+if($User1CanExecPHP=="yes") { $User1Signature = php_execute($User1Signature); }
 if($User1CanDoHTML=="no") {
 $User1Signature = preg_replace("/\[DoHTML\](.*?)\[\/DoHTML\]/is","<span style=\"color: red; font-weight: bold;\">ERROR:</span> cannot execute html.",$User1Signature); }
 if($User1CanDoHTML=="yes") { $User1Signature = do_html_bbcode($User1Signature); }

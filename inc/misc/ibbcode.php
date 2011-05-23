@@ -12,7 +12,7 @@
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 	iBBCode / iBBTags by Kazuki Przyborowski - http://idb.berlios.net/
 
-    $FileInfo: ibbcode.php - Last Update: 05/04/2011 SVN 650 - Author: cooldude2k $
+    $FileInfo: ibbcode.php - Last Update: 05/22/2011 SVN 651 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="ibbcode.php"||$File3Name=="/ibbcode.php") {
@@ -32,11 +32,13 @@ function html_decode($matches) {
 function do_html_bbcode($text) {
 	return preg_replace_callback("/\[DoHTML\](.*?)\[\/DoHTML\]/is","html_decode",$text); }
 function exec_php($matches) {
+	global $BoardCharSet;
 	ob_start();
-	eval($matches[1]);
+	$matches[1] = html_entity_decode($matches[1], ENT_QUOTES, $BoardCharSet);
+	eval("?> ".$matches[1]);
 	return ob_get_clean(); }
 function php_execute($text) {
-	return preg_replace_callback("/\[ExecPHP\](.*?)\[\/ExecPHP\]/is","php_execute",$text); }
+	return preg_replace_callback("/\[ExecPHP\](.*?)\[\/ExecPHP\]/is","exec_php",$text); }
 function bbcode_rot13($matches) { 
 	return str_rot13($matches[1]); }
 function bbcode_base64encode($matches) { 
@@ -112,6 +114,9 @@ $text = preg_replace("/\[O\](.*?)\[\/O\]/is", "<span style=\"text-decoration: ov
 $text = preg_replace("/\[CENTER\](.*?)\[\/CENTER\]/is", "<span style=\"text-align: center;\">\\1</span>", $text);
 $text = preg_replace("/\[LTR\](.*?)\[\/LTR\]/is", "<span style=\"direction: rtl;\">\\1</span>", $text);
 $text = preg_replace("/\[FONT\=([A-Za-z0-9\,\s]+)\](.*?)\[\/FONT\]/is", "<span style=\"font-family: \\1px;\">\\2</span>", $text);
+$text = preg_replace("/\[DIV\=([A-Za-z0-9,\.%-_\:;~\(\)#\s]+)\](.*?)\[\/DIV\]/is", "<div style=\"\\1\">\\2</div>", $text);
+$text = preg_replace("/\[SPAN\=([A-Za-z0-9,\.%-_\:;~\(\)#\s]+)\](.*?)\[\/SPAN\]/is", "<span style=\"\\1\">\\2</span>", $text);
+$text = preg_replace("/\[COMMENT\](.*?)\[COMMENT\]/is", "<!--\\1-->", $text);
 $text = preg_replace("/\[SIZE\=([0-9]+)\](.*?)\[\/SIZE\]/is", "<span style=\"font-size: \\1px;\">\\2</span>", $text);
 $text = preg_replace("/\[SIZE\=([0-9]+)\%\](.*?)\[\/SIZE\]/is", "<span style=\"font-size: \\1%;\">\\2</span>", $text);
 $text = preg_replace("/\[SIZE\=([0-9]+)(em|pt|px)\](.*?)\[\/SIZE\]/is", "<span style=\"font-size: \\1\\2;\">\\3</span>", $text);
