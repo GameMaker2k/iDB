@@ -12,7 +12,7 @@
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 	iBBCode / iBBTags by Kazuki Przyborowski - http://idb.berlios.net/
 
-    $FileInfo: ibbcode.php - Last Update: 05/22/2011 SVN 651 - Author: cooldude2k $
+    $FileInfo: ibbcode.php - Last Update: 05/23/2011 SVN 654 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="ibbcode.php"||$File3Name=="/ibbcode.php") {
@@ -35,7 +35,7 @@ function exec_php($matches) {
 	global $BoardCharSet;
 	ob_start();
 	$matches[1] = html_entity_decode($matches[1], ENT_QUOTES, $BoardCharSet);
-	eval("?> ".$matches[1]);
+	@eval("?> ".$matches[1]);
 	return ob_get_clean(); }
 function php_execute($text) {
 	return preg_replace_callback("/\[ExecPHP\](.*?)\[\/ExecPHP\]/is","exec_php",$text); }
