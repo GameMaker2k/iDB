@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: messages.php - Last Update: 05/23/2011 SVN 652 - Author: cooldude2k $
+    $FileInfo: messages.php - Last Update: 05/23/2011 SVN 653 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="messages.php"||$File3Name=="/messages.php") {
@@ -474,7 +474,7 @@ $gquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE
 $gresult=sql_query($gquery,$SQLStat);
 $User1Group=sql_result($gresult,0,"Name");
 $User1CanExecPHP = $PreUserCanExecPHP;
-if($PreUserCanUseBBags=="group") {
+if($PreUserCanExecPHP=="group") {
 $User1CanExecPHP=sql_result($gresult,0,"CanExecPHP"); }
 if($User1CanExecPHP!="yes"&&$User1CanExecPHP!="no") {
 	$User1CanExecPHP = "no"; }
@@ -522,7 +522,6 @@ if(isset($GroupNamePrefix)&&$GroupNamePrefix!=null) {
 	$User1Name = $GroupNamePrefix.$User1Name; }
 if(isset($GroupNameSuffix)&&$GroupNameSuffix!=null) {
 	$User1Name = $User1Name.$GroupNameSuffix; }
-$MessageText = text2icons($MessageText,$Settings['sqltable'],$SQLStat);
 if($User1CanUseBBags=="yes") { $MessageText = bbcode_parser($MessageText); }
 if($User1CanExecPHP=="no") {
 $MessageText = preg_replace("/\[ExecPHP\](.*?)\[\/ExecPHP\]/is","<span style=\"color: red; font-weight: bold;\">ERROR:</span> cannot execute php code.",$MessageText); }
@@ -530,6 +529,7 @@ if($User1CanExecPHP=="yes") { $MessageText = php_execute($MessageText); }
 if($User1CanDoHTML=="no") {
 $MessageText = preg_replace("/\[DoHTML\](.*?)\[\/DoHTML\]/is","<span style=\"color: red; font-weight: bold;\">ERROR:</span> cannot execute html.",$MessageText); }
 if($User1CanDoHTML=="yes") { $MessageText = do_html_bbcode($MessageText); }
+$MessageText = text2icons($MessageText,$Settings['sqltable'],$SQLStat);
 $MessageText = preg_replace("/\<br\>/", "<br />", nl2br($MessageText));
 $MessageText = url2link($MessageText);
 if($User1CanUseBBags=="yes") { $User1Signature = bbcode_parser($User1Signature); }

@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: events.php - Last Update: 05/23/2011 SVN 652 - Author: cooldude2k $
+    $FileInfo: events.php - Last Update: 05/23/2011 SVN 653 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="events.php"||$File3Name=="/events.php") {
@@ -84,7 +84,7 @@ $gresult=sql_query($gquery,$SQLStat);
 $User1Hidden=sql_result($reresult,$rei,"HiddenMember");
 $User1Group=sql_result($gresult,0,"Name");
 $User1CanExecPHP = $PreUserCanExecPHP;
-if($PreUserCanUseBBags=="group") {
+if($PreUserCanExecPHP=="group") {
 $User1CanExecPHP=sql_result($gresult,0,"CanExecPHP"); }
 if($User1CanExecPHP!="yes"&&$User1CanExecPHP!="no") {
 	$User1CanExecPHP = "no"; }
