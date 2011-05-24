@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: replies.php - Last Update: 05/22/2011 SVN 651 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 05/23/2011 SVN 652 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -296,13 +296,13 @@ if($User1IP==$MyPostIP) { $ipshow = "one"; }
 $User1Email=sql_result($reresult,$rei,"Email");
 $User1Title=sql_result($reresult,$rei,"Title");
 $PreUserCanExecPHP=sql_result($memreresult,$rei,"CanExecPHP");
-if($PreUserCanExecPHP!="yes"&&$PreUserCanExecPHP!="no") {
+if($PreUserCanExecPHP!="yes"&&$PreUserCanExecPHP!="no"&&$PreUserCanExecPHP!="group") {
 	$PreUserCanExecPHP = "no"; }
 $PreUserCanDoHTML=sql_result($memreresult,$rei,"CanDoHTML");
-if($PreUserCanDoHTML!="yes"&&$PreUserCanDoHTML!="no") {
+if($PreUserCanDoHTML!="yes"&&$PreUserCanDoHTML!="no"&&$PreUserCanDoHTML!="group") {
 	$PreUserCanDoHTML = "no"; }
 $PreUserCanUseBBags=sql_result($memreresult,$rei,"CanUseBBags");
-if($PreUserCanUseBBags!="yes"&&$PreUserCanUseBBags!="no") {
+if($PreUserCanUseBBags!="yes"&&$PreUserCanUseBBags!="no"&&$PreUserCanUseBBags!="group") {
 	$PreUserCanUseBBags = "no"; }
 sql_free_result($memreresult);
 $User1Joined=sql_result($reresult,$rei,"Joined");
@@ -312,16 +312,19 @@ $User1GroupID=sql_result($reresult,$rei,"GroupID");
 $gquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i LIMIT 1", array($User1GroupID));
 $gresult=sql_query($gquery,$SQLStat);
 $User1Group=sql_result($gresult,0,"Name");
-//$User1CanExecPHP=sql_result($gresult,0,"CanExecPHP");
 $User1CanExecPHP = $PreUserCanExecPHP;
+if($PreUserCanUseBBags=="group") {
+$User1CanExecPHP=sql_result($gresult,0,"CanExecPHP"); }
 if($User1CanExecPHP!="yes"&&$User1CanExecPHP!="no") {
 	$User1CanExecPHP = "no"; }
-//$User1CanDoHTML=sql_result($gresult,0,"CanDoHTML");
 $User1CanDoHTML = $PreUserCanDoHTML;
+if($PreUserCanDoHTML=="group") {
+$User1CanDoHTML=sql_result($gresult,0,"CanDoHTML"); }
 if($User1CanDoHTML!="yes"&&$User1CanDoHTML!="no") {
 	$User1CanDoHTML = "no"; }
-//$User1CanUseBBags=sql_result($gresult,0,"CanUseBBags");
 $User1CanUseBBags = $PreUserCanUseBBags;
+if($User1CanUseBBags=="group") {
+$User1CanUseBBags=sql_result($gresult,0,"CanUseBBags"); }
 if($User1CanUseBBags!="yes"&&$User1CanUseBBags!="no") {
 	$User1CanUseBBags = "no"; }
 $GroupNamePrefix=sql_result($gresult,0,"NamePrefix");
