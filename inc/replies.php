@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: replies.php - Last Update: 05/23/2011 SVN 653 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 05/23/2011 SVN 655 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -602,6 +602,7 @@ $QuoteReplyFID=sql_result($result,0,"ForumID");
 $QuoteReplyCID=sql_result($result,0,"CategoryID");
 $QuoteUserID=sql_result($result,0,"UserID");
 $QuoteReply=sql_result($result,0,"Post");
+$QuoteReply = preg_replace("/\[ExecPHP\](.*?)\[\/ExecPHP\]/is","",$QuoteReply);
 $QuoteDescription=sql_result($result,0,"Description");
 $QuoteGuestName=sql_result($result,0,"GuestName");
 $requery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($QuoteUserID));
