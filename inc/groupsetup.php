@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: groupsetup.php - Last Update: 12/07/2010 SVN 600 - Author: cooldude2k $
+    $FileInfo: groupsetup.php - Last Update: 05/24/2011 SVN 656 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="groupsetup.php"||$File3Name=="/groupsetup.php") {
@@ -123,6 +123,12 @@ if($grunum<=0) { $GruError = true; sql_free_result($gruresult);
 header("Content-Type: text/plain; charset=".$Settings['charset']); 
 ob_clean(); echo "Sorry could not find group data in database.\nContact the board admin about error."; 
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
+if($_SESSION['UserID']!=0) {
+$memprequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."mempermissions\" WHERE \"id\"=%i LIMIT 1", array($_SESSION['UserID'])); }
+if($_SESSION['UserID']==0) {
+$memprequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."mempermissions\" WHERE \"id\"=%i LIMIT 1", array(-1)); }
+$mempreresult=sql_query($memprequery,$SQLStat);
+$memprenum=sql_num_rows($mempreresult);
 if($grunum>=1) {
 $GroupInfo['ID']=sql_result($gruresult,0,"id");
 if(!is_numeric($GroupInfo['ID'])) { $GruError = true; }
@@ -131,34 +137,79 @@ $GroupInfo['PermissionID']=sql_result($gruresult,0,"PermissionID");
 if(!is_numeric($GroupInfo['PermissionID'])) { $GruError = true; }
 $GroupInfo['NamePrefix']=sql_result($gruresult,0,"NamePrefix");
 $GroupInfo['NameSuffix']=sql_result($gruresult,0,"NameSuffix");
+$GroupInfo['CanViewBoard']=sql_result($mempreresult,0,"CanViewBoard");
+if($GroupInfo['CanViewBoard']!="yes"&&$GroupInfo['CanViewBoard']!="no"&&$GroupInfo['CanViewBoard']!="group") {
+		$GruError = true; }
+if($GroupInfo['CanViewBoard']=="group") {
 $GroupInfo['CanViewBoard']=sql_result($gruresult,0,"CanViewBoard");
 if($GroupInfo['CanViewBoard']!="yes"&&$GroupInfo['CanViewBoard']!="no") {
+		$GruError = true; } }
+$GroupInfo['CanViewOffLine']=sql_result($mempreresult,0,"CanViewOffLine");
+if($GroupInfo['CanViewOffLine']!="yes"&&$GroupInfo['CanViewOffLine']!="no"&&$GroupInfo['CanViewOffLine']!="group") {
 		$GruError = true; }
+if($GroupInfo['CanViewOffLine']=="group") {
 $GroupInfo['CanViewOffLine']=sql_result($gruresult,0,"CanViewOffLine");
 if($GroupInfo['CanViewOffLine']!="yes"&&$GroupInfo['CanViewOffLine']!="no") {
-		$GruError = true; }
-$GroupInfo['FloodControl']=sql_result($gruresult,0,"FloodControl");
+		$GruError = true; } }
+$GroupInfo['FloodControl']=sql_result($mempreresult,0,"FloodControl");
 if(!is_numeric($GroupInfo['FloodControl'])) { $GroupInfo['FloodControl'] = 30; }
-$GroupInfo['SearchFlood']=sql_result($gruresult,0,"SearchFlood");
+if($GroupInfo['FloodControl']==-1) {
+$GroupInfo['FloodControl']=sql_result($gruresult,0,"FloodControl");
+if(!is_numeric($GroupInfo['FloodControl'])) { $GroupInfo['FloodControl'] = 30; } }
+$GroupInfo['SearchFlood']=sql_result($mempreresult,0,"SearchFlood");
 if(!is_numeric($GroupInfo['SearchFlood'])) { $GroupInfo['SearchFlood'] = 30; }
+if($GroupInfo['SearchFlood']==-1) {
+$GroupInfo['SearchFlood']=sql_result($gruresult,0,"SearchFlood");
+if(!is_numeric($GroupInfo['SearchFlood'])) { $GroupInfo['SearchFlood'] = 30; } }
+$GroupInfo['CanEditProfile']=sql_result($mempreresult,0,"CanEditProfile");
+if($GroupInfo['CanEditProfile']!="yes"&&$GroupInfo['CanEditProfile']!="no"&&$GroupInfo['CanEditProfile']!="group") {
+		$GruError = true; }
+if($GroupInfo['CanEditProfile']=="group") {
 $GroupInfo['CanEditProfile']=sql_result($gruresult,0,"CanEditProfile");
 if($GroupInfo['CanEditProfile']!="yes"&&$GroupInfo['CanEditProfile']!="no") {
+		$GruError = true; } }
+$GroupInfo['CanAddEvents']=sql_result($mempreresult,0,"CanAddEvents");
+if($GroupInfo['CanAddEvents']!="yes"&&$GroupInfo['CanAddEvents']!="no"&&$GroupInfo['CanAddEvents']!="group") {
 		$GruError = true; }
+if($GroupInfo['CanAddEvents']=="group") {
 $GroupInfo['CanAddEvents']=sql_result($gruresult,0,"CanAddEvents");
 if($GroupInfo['CanAddEvents']!="yes"&&$GroupInfo['CanAddEvents']!="no") {
+		$GruError = true; } }
+$GroupInfo['CanPM']=sql_result($mempreresult,0,"CanPM");
+if($GroupInfo['CanPM']!="yes"&&$GroupInfo['CanPM']!="no"&&$GroupInfo['CanPM']!="group") {
 		$GruError = true; }
+if($GroupInfo['CanPM']=="group") {
 $GroupInfo['CanPM']=sql_result($gruresult,0,"CanPM");
 if($GroupInfo['CanPM']!="yes"&&$GroupInfo['CanPM']!="no") {
+		$GruError = true; } }
+$GroupInfo['CanSearch']=sql_result($mempreresult,0,"CanSearch");
+if($GroupInfo['CanSearch']!="yes"&&$GroupInfo['CanSearch']!="no"&&$GroupInfo['CanSearch']!="group") {
 		$GruError = true; }
+if($GroupInfo['CanSearch']=="group") {
 $GroupInfo['CanSearch']=sql_result($gruresult,0,"CanSearch");
 if($GroupInfo['CanSearch']!="yes"&&$GroupInfo['CanSearch']!="no") {
-		$GruError = true; }
+		$GruError = true; } }
+$GroupInfo['CanExecPHP']=sql_result($mempreresult,0,"CanExecPHP");
+if($GroupInfo['CanExecPHP']!="yes"&&$GroupInfo['CanExecPHP']!="no"&&$GroupInfo['CanExecPHP']!="group") {
+	$GroupInfo['CanExecPHP'] = "no"; }
+if($GroupInfo['CanExecPHP']=="group") {
+$GroupInfo['CanExecPHP']=sql_result($gruresult,0,"CanExecPHP");
+if($GroupInfo['CanExecPHP']!="yes"&&$GroupInfo['CanExecPHP']!="no") {
+	$GroupInfo['CanExecPHP'] = "no"; } }
+$GroupInfo['CanDoHTML']=sql_result($mempreresult,0,"CanDoHTML");
+if($GroupInfo['CanDoHTML']!="yes"&&$GroupInfo['CanDoHTML']!="no"&&$GroupInfo['CanDoHTML']!="group") {
+	$GroupInfo['CanDoHTML'] = "no"; }
+if($GroupInfo['CanDoHTML']=="group") {
 $GroupInfo['CanDoHTML']=sql_result($gruresult,0,"CanDoHTML");
 if($GroupInfo['CanDoHTML']!="yes"&&$GroupInfo['CanDoHTML']!="no") {
-	$GroupInfo['CanDoHTML'] = "no"; }
+	$GroupInfo['CanDoHTML'] = "no"; } }
+$GroupInfo['CanUseBBags']=sql_result($mempreresult,0,"CanUseBBags");
+if($GroupInfo['CanUseBBags']!="yes"&&$GroupInfo['CanUseBBags']!="no"&&$GroupInfo['CanUseBBags']!="group") {
+	$GroupInfo['CanUseBBags'] = "no"; }
+if($GroupInfo['CanUseBBags']=="group") {
 $GroupInfo['CanUseBBags']=sql_result($gruresult,0,"CanUseBBags");
 if($GroupInfo['CanUseBBags']!="yes"&&$GroupInfo['CanUseBBags']!="no") {
-	$GroupInfo['CanUseBBags'] = "no"; }
+	$GroupInfo['CanUseBBags'] = "no"; } }
 $GroupInfo['PromoteTo']=sql_result($gruresult,0,"PromoteTo");
 $GroupInfo['PromotePosts']=sql_result($gruresult,0,"PromotePosts");
 if(!is_numeric($GroupInfo['PromotePosts'])) { 
@@ -226,17 +277,30 @@ if($GroupInfo['PromotePosts']==0&&$GroupInfo['PromoteTo']!=0&&$MyKarmaCount>=$Gr
 	if($group_check > 0) {
 	$queryupgrade = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"GroupID\"=%i WHERE \"id\"=%i", array($GroupInfo['PromoteTo'],$_SESSION['UserID']));
 	sql_query($queryupgrade,$SQLStat); } } }
+$GroupInfo['HasModCP']=sql_result($mempreresult,0,"HasModCP");
+if($GroupInfo['HasModCP']!="yes"&&$GroupInfo['HasModCP']!="no"&&$GroupInfo['HasModCP']!="group") {
+	$GroupInfo['HasModCP'] = "no"; }
+if($GroupInfo['HasModCP']=="group") {
 $GroupInfo['HasModCP']=sql_result($gruresult,0,"HasModCP");
 if($GroupInfo['HasModCP']!="yes"&&$GroupInfo['HasModCP']!="no") {
-	$GroupInfo['HasModCP'] = "no"; }
+	$GroupInfo['HasModCP'] = "no"; } }
+$GroupInfo['HasAdminCP']=sql_result($mempreresult,0,"HasAdminCP");
+if($GroupInfo['HasAdminCP']!="yes"&&$GroupInfo['HasAdminCP']!="no"&&$GroupInfo['HasAdminCP']!="group") {
+	$GroupInfo['HasAdminCP'] = "no"; }
+if($GroupInfo['HasAdminCP']=="group") {
 $GroupInfo['HasAdminCP']=sql_result($gruresult,0,"HasAdminCP");
 if($GroupInfo['HasAdminCP']!="yes"&&$GroupInfo['HasAdminCP']!="no") {
-	$GroupInfo['HasAdminCP'] = "no"; }
+	$GroupInfo['HasAdminCP'] = "no"; } }
+$GroupInfo['ViewDBInfo']=sql_result($mempreresult,0,"ViewDBInfo");
+if($GroupInfo['ViewDBInfo']!="yes"&&$GroupInfo['ViewDBInfo']!="no"&&$GroupInfo['ViewDBInfo']!="group") {
+	$GroupInfo['ViewDBInfo'] = "no"; }
+if($GroupInfo['ViewDBInfo']=="group") {
 $GroupInfo['ViewDBInfo']=sql_result($gruresult,0,"ViewDBInfo"); 
 if($GroupInfo['ViewDBInfo']!="yes"&&$GroupInfo['ViewDBInfo']!="no") {
-	$GroupInfo['ViewDBInfo'] = "no"; }
+	$GroupInfo['ViewDBInfo'] = "no"; } }
 if($GruError==true) {
-header("Content-Type: text/plain; charset=".$Settings['charset']); sql_free_result($gruresult);
+header("Content-Type: text/plain; charset=".$Settings['charset']); 
+sql_free_result($gruresult); sql_free_result($mempreresult);
 ob_clean(); echo "Sorry could not load all group data in database.\nContact the board admin about error."; 
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); } }
 sql_free_result($gruresult);
