@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: function.php - Last Update: 05/02/2011 SVN 646 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 05/25/2011 SVN 658 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -142,7 +142,7 @@ function qstring($qstr=";",$qsep="=")
 { $_GET = array(); $_GET = null;
 if (!isset($_SERVER['QUERY_STRING'])) {
 $_SERVER['QUERY_STRING'] = getenv('QUERY_STRING'); }
-ini_get("arg_separator.input", $qstr);
+ini_set("arg_separator.input", $qstr);
 $_SERVER['QUERY_STRING'] = urldecode($_SERVER['QUERY_STRING']);
 $preqs = explode($qstr,$_SERVER["QUERY_STRING"]);
 $qsnum = count($preqs); $qsi = 0;
@@ -154,6 +154,16 @@ $preqst[0] = killbadvars($preqst[0]);
 if($preqst[0]!=null) {
 $_GET[$preqst[0]] = $preqst[1]; }
 ++$qsi; } return true; }
+if($Settings['qstr']!="&"&&
+	$Settings['qstr']!="/") {
+qstring($Settings['qstr'],$Settings['qsep']); 
+if(!isset($_GET['page'])) { $_GET['page'] = null; }
+if(!isset($_GET['act'])) { $_GET['act'] = null; }
+if(!isset($_POST['act'])) { $_POST['act'] = null; }
+if(!isset($_GET['id'])) { $_GET['id'] = null; } 
+if(!isset($_GET['debug'])) { $_GET['debug'] = "false"; }
+if(!isset($_GET['post'])) { $_GET['post'] = null; }
+if(!isset($_POST['License'])) { $_POST['License'] = null; } }
 if($_SERVER['PATH_INFO']==null) {
 	if(getenv('PATH_INFO')!=null&&getenv('PATH_INFO')!="1") {
 $_SERVER['PATH_INFO'] = getenv('PATH_INFO'); }

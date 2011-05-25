@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: setcheck.php - Last Update: 12/07/2010 SVN 600 - Author: cooldude2k $
+    $FileInfo: setcheck.php - Last Update: 05/25/2011 SVN 658 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="setcheck.php"||$File3Name=="/setcheck.php") {
@@ -126,16 +126,16 @@ if($Settings['qsep']==$Settings['qstr']) {
 if($Settings['qstr']=="/"||
 	$Settings['qstr']=="&") {
 	$Settings['qsep'] = "="; }
-if($Settings['qstr']!="&"&&
+/*if($Settings['qstr']!="&"&&
 	$Settings['qstr']!="/") {
-qstring($Settings['qstr'],$Settings['qsep']);
+qstring($Settings['qstr'],$Settings['qsep']); }*/
 if(!isset($_GET['page'])) { $_GET['page'] = null; }
 if(!isset($_GET['act'])) { $_GET['act'] = null; }
 if(!isset($_POST['act'])) { $_POST['act'] = null; }
 if(!isset($_GET['id'])) { $_GET['id'] = null; } 
 if(!isset($_GET['debug'])) { $_GET['debug'] = "false"; }
 if(!isset($_GET['post'])) { $_GET['post'] = null; }
-if(!isset($_POST['License'])) { $_POST['License'] = null; } }
+if(!isset($_POST['License'])) { $_POST['License'] = null; }
 if(!isset($Settings['enable_https'])) {
   $Settings['enable_https'] = "off";  }
 if($Settings['enable_https']!="on"&&
