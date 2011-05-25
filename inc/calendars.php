@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: calendars.php - Last Update: 12/07/2010 SVN 600 - Author: cooldude2k $
+    $FileInfo: calendars.php - Last Update: 05/24/2011 SVN 657 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="calendars.php"||$File3Name=="/calendars.php") {
@@ -52,12 +52,18 @@ $EventName=sql_result($result,$is,"EventName");
 $EventText=sql_result($result,$is,"EventText");
 $EventStart=sql_result($result,$is,"TimeStamp");
 $EventEnd=sql_result($result,$is,"TimeStampEnd");
-$EventMonth=sql_result($result,$is,"EventMonth");
-$EventMonthEnd=sql_result($result,$is,"EventMonthEnd");
-$EventDay=sql_result($result,$is,"EventDay");
-$EventDayEnd=sql_result($result,$is,"EventDayEnd");
-$EventYear=sql_result($result,$is,"EventYear");
-$EventYearEnd=sql_result($result,$is,"EventYearEnd");
+//$EventMonth=sql_result($result,$is,"EventMonth");
+$EventMonth=GMTimeChange("m",$EventStart,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+//$EventMonthEnd=sql_result($result,$is,"EventMonthEnd");
+$EventMonthEnd=GMTimeChange("m",$EventEnd,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+//$EventDay=sql_result($result,$is,"EventDay");
+$EventDay=GMTimeChange("d",$EventStart,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+//$EventDayEnd=sql_result($result,$is,"EventDayEnd");
+$EventDayEnd=GMTimeChange("d",$EventEnd,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+//$EventYear=sql_result($result,$is,"EventYear");
+$EventYear=GMTimeChange("Y",$EventStart,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+//$EventYearEnd=sql_result($result,$is,"EventYearEnd");
+$EventYearEnd=GMTimeChange("Y",$EventEnd,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 if($EventMonthEnd!=$MyMonth) { $EventDayEnd = $CountDays; }
 if($EventMonth<$MyMonth) { $EventDay = 1; }
 $oldeventname=$EventName;
