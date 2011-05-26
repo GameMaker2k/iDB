@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 12/07/2010 SVN 600 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 05/26/2011 SVN 659 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -223,6 +223,8 @@ $DMemName = GetUserName($_POST['id'],$Settings['sqltable']);
 $DMemName = $DMemName['Name'];
 if($DMemName!==null&&($_POST['id']!="0"||$_POST['id']!="1"||$_POST['id']!="-1")) { 
 $dmquery = sql_pre_query("DELETE FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i", array($_POST['id']));
+sql_query($dmquery,$SQLStat);
+$dmquery = sql_pre_query("DELETE FROM \"".$Settings['sqltable']."mempermissions\" WHERE \"id\"=%i", array($_POST['id']));
 sql_query($dmquery,$SQLStat); }
 ?>
 <div class="TableMenuBorder">
