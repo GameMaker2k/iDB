@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 05/23/2011 SVN 652 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 06/09/2011 SVN 662 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -1451,6 +1451,15 @@ $query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."members\" (\"Name
 "('%s', '%s', '%s', '%s', '%s', '%s', '%s', %i, '%s', '%s', %i, %i, '0', '0', '0', '0', '0', '%s', '%s', '%s', '%s', '%s', '%s', %i, 0, 0, 10, 10, 10, '%s', '%s', '%s', '%s', '%s')", array($Name,$NewPassword,$iDBHash,$_POST['Email'],$yourgroup,$ValidateStats,$HideMe,"0",$_POST['Interests'],$_POST['Title'],$_POST['Joined'],$_POST['LastActive'],$NewSignature,'Your Notes',$Avatar,"100x100",$Website,$_POST['YourGender'],$_POST['PostCount'],$_POST['YourOffSet'],$_POST['DST'],$Settings['DefaultTheme'],$_POST['UserIP'],$HashSalt));
 sql_query($query,$SQLStat);
 $yourid = sql_get_next_id($Settings['sqltable'],"members",$SQLStat);
+$idquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s' AND \"UserPassword\"='%s' AND \"Email\"='%s' AND \"IP\"='%s' AND \"Salt\"='%s' LIMIT 1", array($Name,$NewPassword,$_POST['Email'],$_POST['UserIP'],$HashSalt));
+$idresult=sql_query($idquery,$SQLStat);
+$idnum=sql_num_rows($idresult);
+$idcheck = $yourid;
+if($idnum>=1) {
+$idncheck = sql_result($idresult,0,"id"); 
+$idncheck = intval($idncheck); }
+sql_free_result($idresult);
+if($yourid!=$idncheck) { $yourid = $idncheck; }
 $query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."mempermissions\" (\"id\", \"CanViewBoard\", \"CanViewOffLine\", \"CanEditProfile\", \"CanAddEvents\", \"CanPM\", \"CanSearch\", \"CanExecPHP\", \"CanDoHTML\", \"CanUseBBags\", \"CanModForum\", \"FloodControl\", \"SearchFlood\", \"HasModCP\", \"HasAdminCP\", \"ViewDBInfo\") VALUES\n". 
 "(%i, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %i, %i, '%s', '%s', '%s')", array($yourid, "group", "group", "group", "group", "group", "group", "group", "group", "group", "group", -1, -1, "group", "group", "group"));
 //"(%i, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %i, %i, '%s', '%s', '%s')", array($yourid, $PreUserPer['CanViewBoard'], $PreUserPer['CanViewOffLine'], $PreUserPer['CanEditProfile'], $PreUserPer['CanAddEvents'], $PreUserPer['CanPM'], $PreUserPer['CanSearch'], $PreUserPer['CanExecPHP'], $PreUserPer['CanDoHTML'], $PreUserPer['CanUseBBags'], $PreUserPer['CanModForum'], $PreUserPer['FloodControl'], $PreUserPer['SearchFlood'], $PreUserPer['HasModCP'], $PreUserPer['HasAdminCP'], $PreUserPer['ViewDBInfo']));

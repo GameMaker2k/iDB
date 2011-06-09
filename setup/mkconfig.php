@@ -12,7 +12,7 @@
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mkconfig.php - Last Update: 04/05/2011 SVN 627 - Author: cooldude2k $
+    $FileInfo: mkconfig.php - Last Update: 06/09/2011 SVN 662 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mkconfig.php"||$File3Name=="/mkconfig.php") {
@@ -368,12 +368,13 @@ $chdel7 = @unlink($SetupDir['setup'].'preinstall.php'); $chdel8 = @unlink($Setup
 if($ConvertInfo['ConvertFile']!=null) { $chdel0 = @unlink($ConvertInfo['ConvertFile']); }
 $chdel9 = @unlink($SetupDir['convert'].'info.php'); 
 $chdel14 = @unlink($SetupDir['sql'].'pgsql.php'); $chdel15 = @unlink($SetupDir['sql'].'sqlite.php');
+$chdel19 = @unlink($SetupDir['sql'].'index.php');
 $chdel10 = @rmdir($SetupDir['convert']); $chdel16 = @rmdir($SetupDir['sql']); $chdel11 = @rmdir('setup');
 $chdel12 = @unlink('install.php'); } }
 if($chdel1===false||$chdel2===false||$chdel3===false||$chdel4===false) { $chdel = false; }
 if($chdel5===false||$chdel6===false||$chdel7===false||$chdel8===false) { $chdel = false; }
 if($chdel9===false||$chdel10===false||$chdel11===false||$chdel12===false) { $chdel = false; }
-if($chdel4===false||$chdel15===false||$chdel16===false) { $chdel = false; }
+if($chdel4===false||$chdel15===false||$chdel16===false||$chdel19===false) { $chdel = false; }
 if($ConvertInfo['ConvertFile']!=null) { if($chdel0===false) { $chdel = false; } }
 ?><span class="TableMessage">
 <br />Install Finish <a href="index.php?act=view">Click here</a> to goto board. ^_^</span>

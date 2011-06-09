@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: replies.php - Last Update: 05/23/2011 SVN 655 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 06/09/2011 SVN 662 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -1073,7 +1073,7 @@ if($PermissionInfo['CanCloseTopics'][$TForumID]=="yes"&&
 	$CanCloseTopics = true; } }
 if($_GET['level']<1) { $_GET['level'] = 1; }
 if($_GET['level']>3) { $_GET['level'] = 1; }
-if($PermissionInfo['CanModForum'][$UseThisFonum]=="no") {
+if($PermissionInfo['CanModForum'][$TForumID]=="no") {
 if($_GET['level']>1) { $_GET['level'] = 1; } }
 if($_SESSION['UserID']==0) { $CanCloseTopics = false; }
 if($CanCloseTopics===false) {
