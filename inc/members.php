@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 06/09/2011 SVN 662 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 06/10/2011 SVN 663 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -1172,6 +1172,9 @@ echo "<option value=\"".$showmin."\">0:".$showmin." minutes</option>\n"; }
 <input maxlength="25" type="text" class="TextBox" name="signcode" size="20" id="signcode" value="Enter SignCode" /><br /><?php } ?>
 <input type="hidden" style="display: none;" name="act" value="makemembers" />
 <input type="hidden" style="display: none;" name="fid" value="<?php echo $UFID; ?>" />
+<?php if(isset($_GET['referrerid'])&&is_numeric($_GET['referrerid'])) { ?>
+<input type="hidden" style="display: none;" name="referrerid" value="<?php echo $_GET['referrerid']; ?>" />
+<?php } ?>
 <input type="submit" class="Button" value="Sign UP" />
 </td></tr>
 </table>
@@ -1464,6 +1467,17 @@ $query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."mempermissions\" 
 "(%i, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %i, %i, '%s', '%s', '%s')", array($yourid, "group", "group", "group", "group", "group", "group", "group", "group", "group", "group", -1, -1, "group", "group", "group"));
 //"(%i, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %i, %i, '%s', '%s', '%s')", array($yourid, $PreUserPer['CanViewBoard'], $PreUserPer['CanViewOffLine'], $PreUserPer['CanEditProfile'], $PreUserPer['CanAddEvents'], $PreUserPer['CanPM'], $PreUserPer['CanSearch'], $PreUserPer['CanExecPHP'], $PreUserPer['CanDoHTML'], $PreUserPer['CanUseBBags'], $PreUserPer['CanModForum'], $PreUserPer['FloodControl'], $PreUserPer['SearchFlood'], $PreUserPer['HasModCP'], $PreUserPer['HasAdminCP'], $PreUserPer['ViewDBInfo']));
 sql_query($query,$SQLStat);
+if(isset($_POST['referrerid'])&&is_numeric($_POST['referrerid'])) {
+	$rfidquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_POST['referrerid']));
+	$rfidresult=sql_query($rfidquery,$SQLStat);
+	$rfidnum=sql_num_rows($rfidresult);
+	if($rfidnum>=1) {
+		$rfidKarma=sql_result($rfidresult,0,"Karma");
+		sql_free_result($rfidresult);
+		if(!is_numeric($rfidKarma)) { $rfidKarma = 0; }
+		$rfidKarma = $rfidKarma + 1;
+		$querykup = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"Karma\"=%i WHERE \"id\"=%i", array($rfidKarma,$_POST['referrerid']));
+		sql_query($querykup,$SQLStat); } }
 $querylogr = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s' AND \"UserPassword\"='%s' LIMIT 1", array($Name,$NewPassword));
 $resultlogr=sql_query($querylogr,$SQLStat);
 $numlogr=sql_num_rows($resultlogr);
