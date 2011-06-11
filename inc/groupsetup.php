@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: groupsetup.php - Last Update: 05/24/2011 SVN 656 - Author: cooldude2k $
+    $FileInfo: groupsetup.php - Last Update: 06/11/2011 SVN 666 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="groupsetup.php"||$File3Name=="/groupsetup.php") {
@@ -348,6 +348,9 @@ if(strlen($ForumIgnoreList5)>1) { $ForumIgnoreList5 .= " AND \"OldForumID\"<>".$
 if(strlen($ForumIgnoreList5)<1) { $ForumIgnoreList5 = " WHERE \"OldForumID\"<>".$PerForumID; }
 if(strlen($ForumIgnoreList6)>1) { $ForumIgnoreList6 .= " AND \"OldForumID\"<>".$PerForumID; }
 if(strlen($ForumIgnoreList6)<1) { $ForumIgnoreList6 = " AND \"OldForumID\"<>".$PerForumID; } }
+$PermissionInfo['CanMakePolls'][$PerForumID]=sql_result($peresult,$peri,"CanMakePolls");
+if($PermissionInfo['CanMakePolls'][$PerForumID]!="yes"&&$PermissionInfo['CanMakePolls'][$PerForumID]!="no") {
+		$PerError = true; }
 $PermissionInfo['CanMakeTopics'][$PerForumID]=sql_result($peresult,$peri,"CanMakeTopics");
 if($PermissionInfo['CanMakeTopics'][$PerForumID]!="yes"&&$PermissionInfo['CanMakeTopics'][$PerForumID]!="no") {
 		$PerError = true; }
