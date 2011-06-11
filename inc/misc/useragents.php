@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: useragents.php - Last Update: 01/20/2011 SVN 617 - Author: cooldude2k $
+    $FileInfo: useragents.php - Last Update: 06/11/2011 SVN 665 - Author: cooldude2k $
 */
 // User Agent Checker
 function user_agent_check($user_agent) {
@@ -31,6 +31,8 @@ if (preg_match("/".preg_quote("Baiduspider")."/i", $user_agent)) {
     return "Baidu"; }
 if (preg_match("/".preg_quote("BaiduImagespider")."/i", $user_agent)) {
     return "Baidu"; }
+if (preg_match("/".preg_quote("bingbot")."/i", $user_agent)) {
+    return "Bing"; }
 if (preg_match("/".preg_quote("msnbot")."/i", $user_agent)) {
     return "Bing"; }
 if (preg_match("/".preg_quote("CCBot")."/i", $user_agent)) {
@@ -62,7 +64,7 @@ if (preg_match("/".preg_quote("Googlebot")."/i", $user_agent)) {
 if (preg_match("/".preg_quote("Mediapartners-Google")."/i", $user_agent)) {
     return "Google"; }
 if (preg_match("/".preg_quote("Grub")."/i", $user_agent)) {
-    return "Grub"; }
+    return "GrubBot"; }
 if (preg_match("/".preg_quote("Hailoobot")."/i", $user_agent)) {
     return "Hailoo"; }
 if (preg_match("|".preg_quote("HTML/XML Validator","|")."|i", $user_agent)) {
@@ -75,6 +77,8 @@ if (preg_match("/".preg_quote("IRLbot")."/i", $user_agent)) {
     return "IRLbot"; }
 if (preg_match("/".preg_quote("Lycos")."/i", $user_agent)) {
     return "Lycos"; }
+if (preg_match("/".preg_quote("montastic-monitor")."/i", $user_agent)) {
+    return "Montastic"; }
 if (preg_match("/".preg_quote("montastic-webmonitor")."/i", $user_agent)) {
     return "Montastic"; }
 if (preg_match("/".preg_quote("NetSprint")."/i", $user_agent)) {
@@ -83,12 +87,14 @@ if (preg_match("/".preg_quote("mozDex")."/i", $user_agent)) {
     return "Mozdex"; }
 if (preg_match("/".preg_quote("MP3Bot")."/i", $user_agent)) {
     return "MP3Realm"; }
+if (preg_match("/".preg_quote("NaverBot")."/i", $user_agent)) {
+    return "NaverBot"; }
 if (preg_match("/".preg_quote("Openbot")."/i", $user_agent)) {
     return "OpenFind"; }
 if (preg_match("/".preg_quote("PicoSearch")."/i", $user_agent)) {
     return "PicoSearch"; }
 if (preg_match("/".preg_quote("QweeryBot")."/i", $user_agent)) {
-    return "Qweery"; }
+    return "QweeryBot"; }
 if (preg_match("/".preg_quote("smerity")."/i", $user_agent)) {
     return "Schwa Lab"; }
 if (preg_match("/".preg_quote("ScoutJet")."/i", $user_agent)) {
@@ -107,6 +113,10 @@ if (preg_match("/".preg_quote("Spider_Monkey")."/i", $user_agent)) {
     return "SpiderMonkey"; }
 if (preg_match("/".preg_quote("Szukacz")."/i", $user_agent)) {
     return "Szukacz.pl"; }
+if (preg_match("/".preg_quote("tangyang9@gmail.com")."/i", $user_agent)) {
+    return "tangyangbot"; }
+if (preg_match("/".preg_quote("Thriceler")."/i", $user_agent)) {
+    return "Thriceler"; }
 if (preg_match("/".preg_quote("TotalValidator")."/i", $user_agent)) {
     return "Total Validator"; }
 if (preg_match("/".preg_quote("Ultraseek")."/i", $user_agent)) {
@@ -131,6 +141,8 @@ if (preg_match("/".preg_quote("HTTP Compression Test")."/i", $user_agent)) {
     return "WhatsMyIP"; }
 if (preg_match("/".preg_quote("WhatsMyIP.org")."/i", $user_agent)) {
     return "WhatsMyIP"; }
+if (preg_match("/".preg_quote("WTABOT")."/i", $user_agent)) {
+    return "WTABOT"; }
 if (preg_match("/".preg_quote("Yahoo")."/i", $user_agent)) {
     return "Yahoo"; }
 if (preg_match("/".preg_quote("Yandex")."/i", $user_agent)) {
