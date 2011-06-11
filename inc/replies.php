@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: replies.php - Last Update: 06/09/2011 SVN 662 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 06/10/2011 SVN 664 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -469,7 +469,7 @@ echo "<span>".$User1Name."</span>"; }
 <?php if(isset($ThemeSet['Report'])&&$ThemeSet['Report']!=null) { ?>
 <a href="#Act/Report"><?php echo $ThemeSet['Report']; ?></a>
 <?php } if($CanEditReply===true&&isset($ThemeSet['EditReply'])&&$ThemeSet['EditReply']!=null) {
-echo $ThemeSet['LineDividerTopic']; echo "<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=edit&id=".$MyTopicID."&post=".$MyPostID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">".$ThemeSet['EditReply']; ?></a>
+echo $ThemeSet['LineDividerTopic']; echo "<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=edit&id=".$MyTopicID."&post=".$MyPostID."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">".$ThemeSet['EditReply']; ?></a>
 <?php } if($CanDeleteReply===true&&isset($ThemeSet['DeleteReply'])&&$ThemeSet['DeleteReply']!=null) { 
 echo $ThemeSet['LineDividerTopic']; echo "<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=delete&id=".$MyTopicID."&post=".$MyPostID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">".$ThemeSet['DeleteReply']; ?></a>
 <?php } if($CanMakeReply=="yes"&&isset($ThemeSet['QuoteReply'])&&$ThemeSet['QuoteReply']!=null) { 
@@ -1467,7 +1467,9 @@ sql_free_result($renee_result);
 <textarea rows="10" name="ReplyPost" id="ReplyPost" cols="40" class="TextBox"><?php echo $ReplyPost; ?></textarea><br />
 <input type="hidden" name="act" value="editreplies" style="display: none;" />
 <input type="hidden" style="display: none;" name="fid" value="<?php echo $UFID; ?>" />
-<?php if($_SESSION['UserGroup']!=$Settings['GuestGroup']) { ?>
+<?php if(isset($_GET['page'])&&is_numeric($_GET['page'])) { ?>
+<input type="hidden" style="display: none;" name="page" value="<?php echo $_GET['page']; ?>" />
+<?php } if($_SESSION['UserGroup']!=$Settings['GuestGroup']) { ?>
 <input type="hidden" name="GuestName" value="null" style="display: none;" />
 <?php } ?>
 <input type="submit" class="Button" value="Edit Reply" name="edit_reply" />
@@ -1779,11 +1781,14 @@ if($ShowEditTopic===true) {
 $queryupd = sql_pre_query("UPDATE \"".$Settings['sqltable']."topics\" SET \"TopicName\"='%s',\"Description\"='%s' WHERE \"id\"=%i", array($_POST['TopicName'],$_POST['ReplyDesc'],$TopicID));
 sql_query($queryupd,$SQLStat); } } 
 redirect(url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],FALSE).$Settings['qstr']."#post".$_GET['post'],"3");
+$erpage = "&page=1";
+if(isset($_POST['page'])&&is_numeric($_POST['page'])) {
+	$erpage = "&page=".$_POST['page']; }
 ?>
 <tr>
 	<td><span class="TableMessage"><br />
 	Reply to Topic <?php echo $TopicName; ?> was edited.<br />
-	Click <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']).$qstrhtml."&#35;post".$_GET['post']; ?>">here</a> to view topic.<br />&nbsp;
+	Click <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID.$erpage,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']).$qstrhtml."&#35;post".$_GET['post']; ?>">here</a> to view topic.<br />&nbsp;
 	</span><br /></td>
 </tr>
 </table>
