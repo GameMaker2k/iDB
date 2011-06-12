@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: useragents.php - Last Update: 06/11/2011 SVN 665 - Author: cooldude2k $
+    $FileInfo: useragents.php - Last Update: 06/12/2011 SVN 668 - Author: cooldude2k $
 */
 // User Agent Checker
 function user_agent_check($user_agent) {
@@ -45,6 +45,8 @@ if (preg_match("/".preg_quote("DnsQueries")."/i", $user_agent)) {
     return "DNSQueries"; }
 if (preg_match("/".preg_quote("Exabot")."/i", $user_agent)) {
     return "Exabot"; }
+if (preg_match("/".preg_quote("Ezooms")."/i", $user_agent)) {
+    return "Ezooms"; }
 if (preg_match("/".preg_quote("facebookexternalhit")."/i", $user_agent)) {
     return "Facebook"; }
 if (preg_match("/".preg_quote("GIDBot")."/i", $user_agent)) {
@@ -66,7 +68,7 @@ if (preg_match("/".preg_quote("Mediapartners-Google")."/i", $user_agent)) {
 if (preg_match("/".preg_quote("Grub")."/i", $user_agent)) {
     return "GrubBot"; }
 if (preg_match("/".preg_quote("Hailoobot")."/i", $user_agent)) {
-    return "Hailoo"; }
+    return "Hailoobot"; }
 if (preg_match("|".preg_quote("HTML/XML Validator","|")."|i", $user_agent)) {
     return "HTML/XML Validator"; }
 if (preg_match("|".preg_quote("iDB-VerCheck","|")."|i", $user_agent)) {
