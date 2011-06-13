@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: function.php - Last Update: 06/13/2011 SVN 669 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 06/13/2011 SVN 670 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -209,11 +209,13 @@ if($type!="location"&&$type!="refresh") { $type=="location"; }
 if($url!=null) { $file = $url.$file; }
 if($dbsr===true) { $file = str_replace("//", "/", $file); }
 if($type=="refresh") { header("Refresh: ".$time."; URL=".$file); }
+if($type=="location") { idb_log_maker(302,"-"); }
 if($type=="location") { session_write_close(); 
 header("Location: ".$file); } return true; }
 function redirects($type,$url,$time=0) {
 if($type!="location"&&$type!="refresh") { $type=="location"; }
 if($type=="refresh") { header("Refresh: ".$time."; URL=".$url); }
+if($type=="location") { idb_log_maker(302,"-"); }
 if($type=="location") { header("Location: ".$url); } return true; }
 // Make xhtml tags
 function html_tag_make($name="br",$emptytag=true,$attbvar=null,$attbval=null,$extratest=null) {
@@ -420,7 +422,7 @@ $qsep = htmlentities($qsep, ENT_QUOTES, $icharset); }
 $OldBoardQuery = preg_replace("/".$pregqstr."/isxS", $qstr, $_SERVER['QUERY_STRING']);
 $BoardQuery = "?".$OldBoardQuery;
 return $BoardQuery; }
-function apache_log_maker($logtxt,$logfile=null) {
+function apache_log_maker($logtxt,$logfile=null,$status=200,$contentsize="-") {
 global $Settings;
 if(!isset($_SERVER['HTTP_REFERER'])) { $URL_REFERER = "-"; }
 if(isset($_SERVER['HTTP_REFERER'])) { $URL_REFERER = $_SERVER['HTTP_REFERER']; }
@@ -429,9 +431,9 @@ $logtxt = preg_replace("/".preg_quote("%l", "/")."/s", "-", $logtxt);
 $logtxt = preg_replace("/".preg_quote("%u", "/")."/s", "-", $logtxt);
 $logtxt = preg_replace("/".preg_quote("%t", "/")."/s", "[".date("d/M/Y:H:i:s O")."]", $logtxt);
 $logtxt = preg_replace("/".preg_quote("%r", "/")."/s", $_SERVER["REQUEST_METHOD"]." ".$_SERVER["REQUEST_URI"], $logtxt);
-$logtxt = preg_replace("/".preg_quote("%s", "/")."/s", "200", $logtxt);
-$logtxt = preg_replace("/".preg_quote("%>s", "/")."/s", "200", $logtxt);
-$logtxt = preg_replace("/".preg_quote("%b", "/")."/s", "-", $logtxt);
+$logtxt = preg_replace("/".preg_quote("%s", "/")."/s", $status, $logtxt);
+$logtxt = preg_replace("/".preg_quote("%>s", "/")."/s", $status, $logtxt);
+$logtxt = preg_replace("/".preg_quote("%b", "/")."/s", $contentsize, $logtxt);
 $logtxt = preg_replace("/".preg_quote("%{Referer}i", "/")."/s", $URL_REFERER, $logtxt);
 $logtxt = preg_replace("/".preg_quote("%{User-Agent}i", "/")."/s", $_SERVER["HTTP_USER_AGENT"], $logtxt);
 if(isset($logfile)&&$logfile!==null) {
@@ -440,4 +442,14 @@ if(isset($logfile)&&$logfile!==null) {
 	fwrite($fp, $logtxtnew, strlen($logtxtnew));
 	fclose($fp); }
 return $logtxt; }
+function idb_log_maker($status=200,$contentsize="-") {
+global $Settings,$SettDir;
+if(!isset($Settings['log_http_request'])) {
+	$Settings['log_http_request'] = "off"; }
+if(isset($Settings['log_http_request'])&&$Settings['log_http_request']=="on"&&
+	$Settings['log_http_request']!==null&&$Settings['log_http_request']!="off") {
+return apache_log_maker("%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"", $SettDir['logs'].$Settings['sqltable'].date("m-d-Y").".log",$status,$contentsize); }
+if(isset($Settings['log_http_request'])&&$Settings['log_http_request']!="on"&&
+	$Settings['log_http_request']!==null&&$Settings['log_http_request']!="off") {
+return apache_log_maker("%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"", $SettDir['logs'].$Settings['log_http_request'],$status,$contentsize); } }
 ?>

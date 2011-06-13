@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 06/13/2011 SVN 669 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 06/13/2011 SVN 670 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -175,14 +175,6 @@ if($Settings['use_hashtype']!="md2"&&
 require_once($SettDir['misc'].'setcheck.php');
 $dayconv = array('second' => 1, 'minute' => 60, 'hour' => 3600, 'day' => 86400, 'week' => 604800, 'month' => 2630880, 'year' => 31570560, 'decade' => 315705600);
 require_once($SettDir['inc'].'function.php');
-if(!isset($Settings['log_http_request'])) {
-	$Settings['log_http_request'] = "off"; }
-if(isset($Settings['log_http_request'])&&$Settings['log_http_request']=="on"&&
-	$Settings['log_http_request']!==null&&$Settings['log_http_request']!="off") {
-apache_log_maker("%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"", $SettDir['logs'].$Settings['sqltable'].date("m-d-Y").".log"); }
-if(isset($Settings['log_http_request'])&&$Settings['log_http_request']!="on"&&
-	$Settings['log_http_request']!==null&&$Settings['log_http_request']!="off") {
-apache_log_maker("%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"", $SettDir['logs'].$Settings['log_http_request']); }
 $iDBVerName = "iDB|".$VER2[1]."|".$VER1[0].".".$VER1[1].".".$VER1[2]."|".$VER2[2]."|".$SubVerN;
 /* 
 This way checks iDB version by sending the iDBVerName to the iDB Version Checker.
