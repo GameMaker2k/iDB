@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: function.php - Last Update: 05/25/2011 SVN 658 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 06/13/2011 SVN 669 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -420,4 +420,24 @@ $qsep = htmlentities($qsep, ENT_QUOTES, $icharset); }
 $OldBoardQuery = preg_replace("/".$pregqstr."/isxS", $qstr, $_SERVER['QUERY_STRING']);
 $BoardQuery = "?".$OldBoardQuery;
 return $BoardQuery; }
+function apache_log_maker($logtxt,$logfile=null) {
+global $Settings;
+if(!isset($_SERVER['HTTP_REFERER'])) { $URL_REFERER = "-"; }
+if(isset($_SERVER['HTTP_REFERER'])) { $URL_REFERER = $_SERVER['HTTP_REFERER']; }
+$logtxt = preg_replace("/".preg_quote("%h", "/")."/s", $_SERVER['REMOTE_ADDR'], $logtxt);
+$logtxt = preg_replace("/".preg_quote("%l", "/")."/s", "-", $logtxt);
+$logtxt = preg_replace("/".preg_quote("%u", "/")."/s", "-", $logtxt);
+$logtxt = preg_replace("/".preg_quote("%t", "/")."/s", "[".date("d/M/Y:H:i:s O")."]", $logtxt);
+$logtxt = preg_replace("/".preg_quote("%r", "/")."/s", $_SERVER["REQUEST_METHOD"]." ".$_SERVER["REQUEST_URI"], $logtxt);
+$logtxt = preg_replace("/".preg_quote("%s", "/")."/s", "200", $logtxt);
+$logtxt = preg_replace("/".preg_quote("%>s", "/")."/s", "200", $logtxt);
+$logtxt = preg_replace("/".preg_quote("%b", "/")."/s", "-", $logtxt);
+$logtxt = preg_replace("/".preg_quote("%{Referer}i", "/")."/s", $URL_REFERER, $logtxt);
+$logtxt = preg_replace("/".preg_quote("%{User-Agent}i", "/")."/s", $_SERVER["HTTP_USER_AGENT"], $logtxt);
+if(isset($logfile)&&$logfile!==null) {
+	$fp = fopen($logfile, "a+");
+	$logtxtnew = $logtxt."\r\n";
+	fwrite($fp, $logtxtnew, strlen($logtxtnew));
+	fclose($fp); }
+return $logtxt; }
 ?>
