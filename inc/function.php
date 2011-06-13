@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: function.php - Last Update: 06/13/2011 SVN 670 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 06/13/2011 SVN 671 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -448,7 +448,7 @@ if(!isset($Settings['log_http_request'])) {
 	$Settings['log_http_request'] = "off"; }
 if(isset($Settings['log_http_request'])&&$Settings['log_http_request']=="on"&&
 	$Settings['log_http_request']!==null&&$Settings['log_http_request']!="off") {
-return apache_log_maker("%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"", $SettDir['logs'].$Settings['sqltable'].date("m-d-Y").".log",$status,$contentsize); }
+return apache_log_maker("%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"", $SettDir['logs'].$Settings['sqltable'].date("YW").".log",$status,$contentsize); }
 if(isset($Settings['log_http_request'])&&$Settings['log_http_request']!="on"&&
 	$Settings['log_http_request']!==null&&$Settings['log_http_request']!="off") {
 return apache_log_maker("%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"", $SettDir['logs'].$Settings['log_http_request'],$status,$contentsize); } }
