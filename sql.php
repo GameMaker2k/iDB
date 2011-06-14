@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 06/13/2011 SVN 670 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 06/14/2011 SVN 672 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -347,7 +347,7 @@ sql_set_charset($SQLCharset,$SQLStat);
 if($SQLStat===false) {
 header("Content-Type: text/plain; charset=".$Settings['charset']); sql_free_result($peresult);
 ob_clean(); echo "Sorry could not connect to mysql database.\nContact the board admin about error. Error log below.";
-echo "\n".sql_errorno($SQLStat);
+echo "\n".sql_errorno($SQLStat); $urlstatus = 503;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $sqltable = $Settings['sqltable'];
 $temp_user_ip = $_SERVER['REMOTE_ADDR'];
@@ -470,7 +470,7 @@ if($Settings['board_offline']=="on"&&$GroupInfo['CanViewOffLine']!="yes") {
 header("Content-Type: text/plain; charset=".$Settings['charset']); sql_free_result($peresult);
 ob_clean(); if(!isset($Settings['offline_text'])) {
 echo "Sorry the board is off line.\nIf you are a admin you can login by the admin cp."; }
-if(isset($Settings['offline_text'])) { echo $Settings['offline_text']; }
+if(isset($Settings['offline_text'])) { echo $Settings['offline_text']; } $urlstatus = 503;
 //echo "\n".sql_errorno($SQLStat);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 //Time Zone Set

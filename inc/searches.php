@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: searches.php - Last Update: 04/04/2011 SVN 625 - Author: cooldude2k $
+    $FileInfo: searches.php - Last Update: 06/14/2011 SVN 672 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="searches.php"||$File3Name=="/searches.php") {
@@ -21,7 +21,7 @@ if($Settings['enable_search']=="off"||
 	$GroupInfo['CanSearch']=="no") {
 redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 header("Content-Type: text/plain; charset=".$Settings['charset']);
-ob_clean(); echo "Sorry you do not have permission to do a search."; 
+ob_clean(); echo "Sorry you do not have permission to do a search."; $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $pagenum = null;
 if($Settings['enable_search']=="on"||
@@ -165,7 +165,7 @@ if($pnum<$Settings['max_topics']&&$pnum>0) {
 $num=sql_num_rows($result);
 if($num<=0) { 
 redirect("location",$rbasedir.url_maker($exfile['search'],$Settings['file_ext'],"act=topics",$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search'],false));
-header("Content-Type: text/plain; charset=".$Settings['charset']);
+header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 ob_clean(); echo "Sorry could not find any search results."; sql_free_result($result);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $i=0;

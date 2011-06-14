@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: functions.php - Last Update: 06/13/2011 SVN 670 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 06/14/2011 SVN 672 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -54,7 +54,8 @@ define("_renee_", $Names['RS']);
 $CD2k_Loves="Renee Sabonis"; $I_Love="Renee Sabonis";
 // Change the title and gzip page
 function change_title($new_title,$use_gzip="off",$gzip_type="gzip") {
-global $Settings;
+global $Settings,$urlstatus;
+if(!isset($urlstatus)||!is_numeric($urlstatus)) { $urlstatus = 200; }
 if($gzip_type!="gzip") { if($gzip_type!="deflate") { $gzip_type = "gzip"; } }
 $output = ob_get_clean();
 $output = preg_replace("/<title>(.*?)<\/title>/i", "<title>".$new_title."</title>", $output);
@@ -64,18 +65,19 @@ $output = preg_replace("/&PHPSESSID/", "&amp;PHPSESSID", $output);
 $qstrcode = htmlentities($Settings['qstr'], ENT_QUOTES, $Settings['charset']);
 $output = str_replace($Settings['qstr'].$SessName, $qstrcode.$SessName, $output);
 if($use_gzip!="on") {
-	idb_log_maker(200,strlen($output));
+	idb_log_maker($urlstatus,strlen($output));
 	echo $output; }
 if($use_gzip=="on") {
 	if($gzip_type=="gzip") {
 	$goutput = gzencode($output); }
 	if($gzip_type=="deflate") {
 	$goutput = gzcompress($output); }
-	idb_log_maker(200,strlen($goutput));
+	idb_log_maker($urlstatus,strlen($goutput));
 	echo $goutput; } }
 // Fix amp => (&) to &amp; and gzip page
 function fix_amp($use_gzip="off",$gzip_type="gzip") {
-global $Settings;
+global $Settings,$urlstatus;
+if(!isset($urlstatus)||!is_numeric($urlstatus)) { $urlstatus = 200; }
 if($gzip_type!="gzip") { if($gzip_type!="deflate") { $gzip_type = "gzip"; } }
 $output = ob_get_clean();
 /* Change Some PHP Settings Fix the &PHPSESSID to &amp;PHPSESSID */
@@ -84,31 +86,32 @@ $output = preg_replace("/&PHPSESSID/", "&amp;PHPSESSID", $output);
 $qstrcode = htmlentities($Settings['qstr'], ENT_QUOTES, $Settings['charset']);
 $output = str_replace($Settings['qstr'].$SessName, $qstrcode.$SessName, $output);
 if($use_gzip!="on") {
-	idb_log_maker(200,strlen($output));
+	idb_log_maker($urlstatus,strlen($output));
 	echo $output; }
 if($use_gzip=="on") {
 	if($gzip_type=="gzip") {
 	$goutput = gzencode($output); }
 	if($gzip_type=="deflate") {
 	$goutput = gzcompress($output); }
-	idb_log_maker(200,strlen($goutput));
+	idb_log_maker($urlstatus,strlen($goutput));
 	echo $goutput; } }
 	$Names['RJ'] = "Rene Johnson";
 define("_rene_", $Names['RJ']);
 // GZip page for faster download
 function gzip_page($use_gzip="off",$gzip_type="gzip") {
-global $Settings;
+global $Settings,$urlstatus;
+if(!isset($urlstatus)||!is_numeric($urlstatus)) { $urlstatus = 200; }
 $output = ob_get_clean();
 if($gzip_type!="gzip") { if($gzip_type!="deflate") { $gzip_type = "gzip"; } }
 if($use_gzip!="on") {
-	idb_log_maker(200,strlen($output));
+	idb_log_maker($urlstatus,strlen($output));
 	echo $output; }
 if($use_gzip=="on") {
 	if($gzip_type=="gzip") {
 	$goutput = gzencode($output); }
 	if($gzip_type=="deflate") {
 	$goutput = gzcompress($output); }
-	idb_log_maker(200,strlen($goutput));
+	idb_log_maker($urlstatus,strlen($goutput));
 	echo $goutput; } }
 $foo="bar"; $$foo="foo";
 	$Names['KSP'] = "Kazuki Suzuki Przyborowski";
