@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: rssfeed.php - Last Update: 06/14/2011 SVN 672 - Author: cooldude2k $
+    $FileInfo: rssfeed.php - Last Update: 06/15/2011 SVN 674 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="rssfeed.php"||$File3Name=="/rssfeed.php") {
@@ -75,6 +75,7 @@ else { if (stristr($_SERVER["HTTP_USER_AGENT"],"FeedValidator")) {
 } else { header("Content-Type: text/xml; charset=".$Settings['charset']); } } }
 header("Content-Language: en");
 header("Vary: Accept");
+if($_GET['feedtype']=="oldrss"||$_GET['feedtype']=="rss"||$_GET['feedtype']=="atom"||$_GET['feedtype']=="opml") { 
 $prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2."", array($_GET['id']));
 $preresult=sql_query($prequery,$SQLStat);
 $prenum=sql_num_rows($preresult);
@@ -144,13 +145,13 @@ $memreresult=sql_query($memrequery,$SQLStat);
 $memrenum=sql_num_rows($memreresult);
 $UsersName=sql_result($reresult,0,"Name");
 $UsersGroupID=sql_result($reresult,0,"GroupID");
-$PreUserCanExecPHP=sql_result($memreresult,$rei,"CanExecPHP");
+$PreUserCanExecPHP=sql_result($memreresult,0,"CanExecPHP");
 if($PreUserCanExecPHP!="yes"&&$PreUserCanExecPHP!="no"&&$PreUserCanExecPHP!="group") {
 	$PreUserCanExecPHP = "no"; }
-$PreUserCanDoHTML=sql_result($memreresult,$rei,"CanDoHTML");
+$PreUserCanDoHTML=sql_result($memreresult,0,"CanDoHTML");
 if($PreUserCanDoHTML!="yes"&&$PreUserCanDoHTML!="no"&&$PreUserCanDoHTML!="group") {
 	$PreUserCanDoHTML = "no"; }
-$PreUserCanUseBBags=sql_result($memreresult,$rei,"CanUseBBags");
+$PreUserCanUseBBags=sql_result($memreresult,0,"CanUseBBags");
 if($PreUserCanUseBBags!="yes"&&$PreUserCanUseBBags!="no"&&$PreUserCanUseBBags!="group") {
 	$PreUserCanUseBBags = "no"; }
 sql_free_result($memreresult);
@@ -215,7 +216,7 @@ $CDataDescription = "<![CDATA[\n".$MyDescription."\n]]>";
 $RSS .= '<item>'."\n".'<pubDate>'.$TheTime.'</pubDate>'."\n".'<author>'.$UsersName.'</author>'."\n".'<title>'.$TopicName.'</title>'."\n".'<description>'.$CDataDescription.'</description>'."\n".'<link>'.$BoardURL.url_maker($exfilerss['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstrrss['topic'],$exqstrrss['topic']).'</link>'."\n".'<guid>'.$BoardURL.url_maker($exfilerss['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstrrss['topic'],$exqstrrss['topic']).'</guid>'."\n".'</item>'."\n"; } }
 ++$i; sql_free_result($presult); }
 sql_free_result($result);
-++$glti; }
+++$glti; } }
 $endtag = "  <!-- Renee Sabonis ^_^ -->\n";
 xml_doc_start("1.0",$Settings['charset']);
 if($Settings['showverinfo']=="on") { ?>
