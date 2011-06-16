@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: html5.php - Last Update: 04/05/2011 SVN 628 - Author: cooldude2k $
+    $FileInfo: html5.php - Last Update: 06/16/2011 SVN 675 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="xhtml10.php"||$File3Name=="/xhtml10.php") {
@@ -203,10 +203,7 @@ if(strpos($_SERVER['HTTP_USER_AGENT'], "msie") &&
 <meta name="Keywords" content="<?php echo $SettInfo['Keywords']; ?>" />
 <meta name="Description" content="<?php echo $SettInfo['Description']; ?>" />
 <meta name="ROBOTS" content="Index, FOLLOW" />
-<meta name="revisit-after" content="1 days" />
 <meta name="GOOGLEBOT" content="Index, FOLLOW" />
-<meta name="resource-type" content="document" />
-<meta name="distribution" content="global" />
 <?php if($Settings['showverinfo']=="on") { ?>
 <!-- generator="<?php echo $VerInfo['iDB_Ver_Show']; ?>" -->
 <?php } if($Settings['showverinfo']!="on") { ?>
@@ -214,13 +211,7 @@ if(strpos($_SERVER['HTTP_USER_AGENT'], "msie") &&
 <?php } echo "\n"; ?>
 
 <script type="text/javascript" src="<?php echo url_maker($exfilejs['javascript'],$Settings['js_ext'],null,$Settings['qstr'],$Settings['qsep'],$prexqstrjs['javascript'],$exqstrjs['javascript']); ?>"></script>
-<link rel="Start" href="<?php echo $AltBoardURL.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>" title="<?php echo $Settings['board_name'].$idbpowertitle; ?>" />
-<link rel="Copyright" href="<?php echo $AltBoardURL.url_maker($exfile['index'],$Settings['file_ext'],"act=bsd",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>" title="Copyright Notice" />
-<?php if($Settings['showverinfo']=="on") { ?>
-<link rel="Generator" href="<?php echo $iDBHome; ?>" title="<?php echo $VerInfo['iDB_Ver_Show']; ?>" />
-<?php } if($Settings['showverinfo']!="on") { ?>
-<link rel="Generator" href="<?php echo $iDBHome; ?>" title="<?php echo $iDB; ?>" />
-<?php } echo "\n"; ?>
+<?php echo "\n"; ?>
 <!-- ^_^ Stephanie Braun -->
 <?php if($ThemeSet['CSSType']=="import") { ?>
 <style type="text/css">

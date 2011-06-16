@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: xhtml11.php - Last Update: 04/05/2011 SVN 628 - Author: cooldude2k $
+    $FileInfo: xhtml11.php - Last Update: 06/16/2011 SVN 675 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="xhtml11.php"||$File3Name=="/xhtml11.php") {
@@ -104,8 +104,11 @@ if($Settings['idburl']!="localhost"&&$Settings['idburl']!=null) {
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $Settings['charset']; ?>" />
 <meta http-equiv="Content-Style-Type" content="text/css" />
 <meta http-equiv="Content-Script-Type" content="text/javascript" />
-<meta http-equiv="Cache-Control" content="private, no-cache, must-revalidate" />
-<meta http-equiv="Pragma" content="private, no-cache, must-revalidate" />
+<meta http-equiv="Cache-Control" content="private, no-cache, must-revalidate, pre-check=0, post-check=0, max-age=0" />
+<meta http-equiv="Pragma" content="private, no-cache, must-revalidate, pre-check=0, post-check=0, max-age=0" />
+<meta http-equiv="Expires" content="<?php echo gmdate("D, d M Y H:i:s")." GMT"; ?>" />
+<meta http-equiv="P3P" content='CP="IDC DSP COR ADM DEVi TAIi PSA PSD IVAi IVDi CONi HIS OUR IND CNT"' /> 
+<meta http-equiv="P3P" name="CP" content="IDC DSP COR ADM DEVi TAIi PSA PSD IVAi IVDi CONi HIS OUR IND CNT" />
 <meta http-equiv="Expires" content="<?php echo gmdate("D, d M Y H:i:s")." GMT"; ?>" />
 <?php 
 if(!isset($_SERVER['HTTP_USER_AGENT'])) {
