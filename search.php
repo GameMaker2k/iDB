@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: search.php - Last Update: 06/14/2011 SVN 672 - Author: cooldude2k $
+    $FileInfo: search.php - Last Update: 06/17/2011 SVN 676 - Author: cooldude2k $
 */
 if(ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }
@@ -19,6 +19,7 @@ require('preindex.php');
 $usefileext = $Settings['file_ext'];
 if($ext=="noext"||$ext=="no ext"||$ext=="no+ext") { $usefileext = ""; }
 $filewpath = $exfile['search'].$usefileext.$_SERVER['PATH_INFO'];
+$idbactcheck = array("topic", "topics");
 ?>
 
 <link rel="search" type="application/opensearchdescription+xml" title="<?php echo $Settings['board_name']." ".$ThemeSet['TitleDivider']; ?> Search" href="<?php echo url_maker($exfile['rss'],$Settings['rss_ext'],"act=opensearch",$Settings['qstr'],$Settings['qsep'],$prexqstr['rss'],$exqstr['rss']); ?>" />
@@ -47,6 +48,8 @@ if(!isset($_POST['act'])) { $_POST['act'] = null; }
 if($_GET['act']==null||$_GET['act']=="topic"||
 	$_POST['act']=="topic"||$_POST['act']=="topics")
 	{	$_GET['act']="topics";	}
+if(!in_array($_GET['act'], $idbactcheck))
+{ $_GET['act']="topics"; }
 if(!isset($_GET['msearch'])) { $_GET['msearch'] = null; }
 if(!isset($_POST['msearch'])) { $_POST['msearch'] = null; }
 if($_GET['msearch']==null&&

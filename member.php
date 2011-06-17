@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: member.php - Last Update: 12/07/2010 SVN 600 - Author: cooldude2k $
+    $FileInfo: member.php - Last Update: 06/17/2011 SVN 676 - Author: cooldude2k $
 */
 if(ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }
@@ -21,6 +21,9 @@ if($ext=="noext"||$ext=="no ext"||$ext=="no+ext") { $usefileext = ""; }
 $filewpath = $exfile['member'].$Settings['file_ext'].$_SERVER['PATH_INFO'];
 if($_GET['act']==null) { $_GET['act'] = "login"; }
 if(!isset($_GET['view'])) { $_GET['view'] = null; }
+$idbactcheck = array("view", "signup", "login", "logout", "online", "list", "makemember", "makemembers");
+if(!in_array($_GET['act'], $idbactcheck))
+{ $_GET['act']="login"; }
 ?>
 
 <title> <?php echo $Settings['board_name'].$idbpowertitle; ?> </title>
