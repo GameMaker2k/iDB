@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: function.php - Last Update: 06/14/2011 SVN 672 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 06/18/2011 SVN 678 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -425,14 +425,33 @@ function apache_log_maker($logtxt,$logfile=null,$status=200,$contentsize="-") {
 global $Settings;
 if(!isset($_SERVER['HTTP_REFERER'])) { $URL_REFERER = "-"; }
 if(isset($_SERVER['HTTP_REFERER'])) { $URL_REFERER = $_SERVER['HTTP_REFERER']; }
+if(!isset($_SERVER['PHP_AUTH_USER'])) { $AUTH_USER = "-"; }
+if(isset($_SERVER['PHP_AUTH_USER'])) { $AUTH_USER = $_SERVER['PHP_AUTH_USER']; }
+$LOG_QUERY_STRING = "";
+if($_SERVER["QUERY_STRING"]!=="") {
+$LOG_QUERY_STRING = "?".$_SERVER["QUERY_STRING"]; }
+$oldcontentsize = $contentsize;
+if($contentsize===0) { $contentsize = "-"; }
 $logtxt = preg_replace("/".preg_quote("%h", "/")."/s", $_SERVER['REMOTE_ADDR'], $logtxt);
+$logtxt = preg_replace("/".preg_quote("%a", "/")."/s", $_SERVER['REMOTE_ADDR'], $logtxt);
+$logtxt = preg_replace("/".preg_quote("%A", "/")."/s", $_SERVER["SERVER_ADDR"], $logtxt);
 $logtxt = preg_replace("/".preg_quote("%l", "/")."/s", "-", $logtxt);
-$logtxt = preg_replace("/".preg_quote("%u", "/")."/s", "-", $logtxt);
+$logtxt = preg_replace("/".preg_quote("%u", "/")."/s", $AUTH_USER, $logtxt);
+$logtxt = preg_replace("/".preg_quote("%f", "/")."/s", $_SERVER["SCRIPT_FILENAME"], $logtxt);
+$logtxt = preg_replace("/".preg_quote("%H", "/")."/s", $_SERVER["SERVER_PROTOCOL"], $logtxt);
+$logtxt = preg_replace("/".preg_quote("%m", "/")."/s", $_SERVER["REQUEST_METHOD"], $logtxt);
+$logtxt = preg_replace("/".preg_quote("%p", "/")."/s", $_SERVER["SERVER_PORT"], $logtxt);
+$logtxt = preg_replace("/".preg_quote("%q", "/")."/s", $LOG_QUERY_STRING, $logtxt);
+$logtxt = preg_replace("/".preg_quote("%U", "/")."/s", $_SERVER["PHP_SELF"], $logtxt);
+// Not what it should be but PHP dose not have variable to get Apache ServerName config value. :( 
+$logtxt = preg_replace("/".preg_quote("%v", "/")."/s", $_SERVER["SERVER_NAME"], $logtxt);
+$logtxt = preg_replace("/".preg_quote("%V", "/")."/s", $_SERVER["SERVER_NAME"], $logtxt);
 $logtxt = preg_replace("/".preg_quote("%t", "/")."/s", "[".date("d/M/Y:H:i:s O")."]", $logtxt);
-$logtxt = preg_replace("/".preg_quote("%r", "/")."/s", $_SERVER["REQUEST_METHOD"]." ".$_SERVER["REQUEST_URI"], $logtxt);
+$logtxt = preg_replace("/".preg_quote("%r", "/")."/s", $_SERVER["REQUEST_METHOD"]." ".$_SERVER["REQUEST_URI"]." ".$_SERVER["SERVER_PROTOCOL"], $logtxt);
 $logtxt = preg_replace("/".preg_quote("%s", "/")."/s", $status, $logtxt);
 $logtxt = preg_replace("/".preg_quote("%>s", "/")."/s", $status, $logtxt);
 $logtxt = preg_replace("/".preg_quote("%b", "/")."/s", $contentsize, $logtxt);
+$logtxt = preg_replace("/".preg_quote("%B", "/")."/s", $oldcontentsize, $logtxt);
 $logtxt = preg_replace("/".preg_quote("%{Referer}i", "/")."/s", $URL_REFERER, $logtxt);
 $logtxt = preg_replace("/".preg_quote("%{User-Agent}i", "/")."/s", $_SERVER["HTTP_USER_AGENT"], $logtxt);
 if(isset($logfile)&&$logfile!==null) {
@@ -445,10 +464,12 @@ function idb_log_maker($status=200,$contentsize="-") {
 global $Settings,$SettDir;
 if(!isset($Settings['log_http_request'])) {
 	$Settings['log_http_request'] = "off"; }
+if(!isset($Settings['log_config_format'])) {
+	$Settings['log_config_format'] = "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\""; }
 if(isset($Settings['log_http_request'])&&$Settings['log_http_request']=="on"&&
 	$Settings['log_http_request']!==null&&$Settings['log_http_request']!="off") {
-return apache_log_maker("%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"", $SettDir['logs'].$Settings['sqltable'].date("YW").".log",$status,$contentsize); }
+return apache_log_maker($Settings['log_config_format'], $SettDir['logs'].$Settings['sqltable'].date("YW").".log", $status, $contentsize); }
 if(isset($Settings['log_http_request'])&&$Settings['log_http_request']!="on"&&
 	$Settings['log_http_request']!==null&&$Settings['log_http_request']!="off") {
-return apache_log_maker("%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"", $SettDir['logs'].$Settings['log_http_request'],$status,$contentsize); } }
+return apache_log_maker($Settings['log_config_format'], $SettDir['logs'].$Settings['log_http_request'], $status, $contentsize); } }
 ?>

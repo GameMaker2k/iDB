@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: versioninfo.php - Last Update: 06/18/2011 SVN 677 - Author: cooldude2k $
+    $FileInfo: versioninfo.php - Last Update: 06/18/2011 SVN 678 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="versioninfo.php"||$File3Name=="/versioninfo.php") {
@@ -27,7 +27,7 @@ function version_info($proname,$subver,$ver,$supver,$reltype,$svnver,$showsvn) {
 	return $return_var; }
 // Version number and date stuff. :P
 $VER1[0] = 0; $VER1[1] = 4; $VER1[2] = 5; $VERFull[1] = $VER1[0].".".$VER1[1].".".$VER1[2];
-$VER2[0] = "Alpha"; $VER2[1] = "Al"; $VER2[2] = "SVN"; $SubVerN = 677;
+$VER2[0] = "Alpha"; $VER2[1] = "Al"; $VER2[2] = "SVN"; $SubVerN = 678;
 $SVNDay[0] = 06; $SVNDay[1] = 18; $SVNDay[2] = 2011; $SVNDay[3] = $SVNDay[0]."/".$SVNDay[1]."/".$SVNDay[2];
 $AltName = "RDB"; $AltName2 = "ReneeDB"; $RName = "iDB"; $SFName = "IntDB";
 $RFullName = "Internet Discussion Boards"; $AltFullName = "Renee Discussion Boards";
@@ -50,16 +50,20 @@ $KSPAlt = "Kazuki Suzuki Przyborowski";
 */
 $iDBHome = "http://idb.berlios.de/"; $DF2kHome = "http://df2k.berlios.de/"; 
 $OrgName = "iDB"; $AltOrgName = "RDB"; $AltiDB = "Renee Discussion Boards";
-if(!isset($Settings['VerCheckURL'])) {
+if(!isset($Settings['VerCheckURL'])||
+	$Settings['VerCheckURL']==="") {
 $VerCheckURL = $iDBHome."?act=vercheck"; }
-if(isset($Settings['VerCheckURL'])) {
+if(isset($Settings['VerCheckURL'])&&
+	$Settings['VerCheckURL']!=="") {
 $VerCheckURL = $Settings['VerCheckURL']; }
 $VerCheckQuery = parse_url($VerCheckURL);
 $VerCheckQuery = $VerCheckQuery['query'];
 if($VerCheckQuery=="") { $VerCheckURL = $VerCheckURL."?"; }
-if(!isset($Settings['IPCheckURL'])) {
+if(!isset($Settings['IPCheckURL'])||
+	$Settings['IPCheckURL']==="") {
 $IPCheckURL = 'http://cqcounter.com/whois/?query=%s'; }
-if(isset($Settings['IPCheckURL'])) {
+if(isset($Settings['IPCheckURL'])&&
+	$Settings['IPCheckURL']!=="") {
 $IPCheckURL = $Settings['IPCheckURL']; }
 $CD2k = "Kazuki Przyborowski"; $GM2k = "Game Maker 2k"; $iDB_Author = "Kazuki";
 $iDB = "Internet Discussion Boards"; $iTB = "Internet Tag Boards"; 
