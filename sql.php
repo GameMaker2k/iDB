@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 06/16/2011 SVN 675 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 06/18/2011 SVN 677 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -213,7 +213,8 @@ echo "\n"; ?>
 </xsl:template>
 
 </xsl:stylesheet>
-<?php die(); } if($_GET['act']=="versioninfo") {
+<?php gzip_page("off",$GZipEncode['Type']); session_write_close(); die(); } 
+if($_GET['act']=="versioninfo") {
 if(stristr($_SERVER["HTTP_ACCEPT"],"application/xml") ) {
 header("Content-Type: application/xml; charset=".$Settings['charset']); }
 else { header("Content-Type: text/xml; charset=".$Settings['charset']); }
@@ -239,11 +240,14 @@ echo '<?xml-stylesheet type="text/xsl" href="'.url_maker($exfile['index'],$Setti
 </version>
 
 </versioninfo>
-<?php die(); } } if($Settings['vercheck']===1) {
+<?php gzip_page("off",$GZipEncode['Type']); session_write_close(); die(); } } 
+if($Settings['vercheck']===1) {
 if($_GET['act']=="versioninfo") { header("Content-Type: text/plain; charset=UTF-8");
-header("Location: ".$VerCheckURL."&name=".urlencode($iDBVerName)); die(); } }
+header("Location: ".$VerCheckURL."&name=".urlencode($iDBVerName)); $urlstatus = 302;
+gzip_page("off",$GZipEncode['Type']); session_write_close(); die(); } }
 if($_GET['act']=="homepage") { header("Content-Type: text/plain; charset=UTF-8");
-header("Location: ".$Settings['weburl']); die(); }
+header("Location: ".$Settings['weburl']); $urlstatus = 302;
+gzip_page("off",$GZipEncode['Type']); session_write_close(); die(); }
 if($Settings['enable_pathinfo']=="on") { 
 	mrstring(); /* Change Path info to Get Vars :P */ }
 // Check to see if variables are set

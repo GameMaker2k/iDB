@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: stats.php - Last Update: 12/07/2010 SVN 600 - Author: cooldude2k $
+    $FileInfo: stats.php - Last Update: 06/18/2011 SVN 677 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="stats.php"||$File3Name=="/stats.php") {
@@ -35,6 +35,7 @@ $MembersOnline = null; $GuestsOnline = null;
 while ($uoli < $uolnum) {
 $session_data=sql_result($uolresult,$uoli,"session_data"); 
 $session_user_agent=sql_result($uolresult,$uoli,"user_agent"); 
+$session_ip_address=sql_result($uolresult,$uoli,"ip_address");
 $UserSessInfo = unserialize_session($session_data);
 $AmIHiddenUser = "no";
 $user_agent_check = false;
@@ -46,16 +47,28 @@ $AmIHiddenUser = $PreAmIHiddenUser['Hidden'];
 if(($AmIHiddenUser=="no"&&$UserSessInfo['UserID']>0)||$user_agent_check!==false) {
 if($olmbn>0) { $MembersOnline .= ", "; }
 if($user_agent_check===false) {
-$MembersOnline .= "<a href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UserSessInfo['UserID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">".$UserSessInfo['MemberName']."</a>"; 
+$uatitleadd = null;
+if($GroupInfo['HasAdminCP']=="yes") { $uatitleadd = " title=\"".$session_user_agent."\""; }
+$MembersOnline .= "<a".$uatitleadd." href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UserSessInfo['UserID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">".$UserSessInfo['MemberName']."</a>"; 
+if($GroupInfo['HasAdminCP']=="yes") {
+$MembersOnline .= " (<a title=\"".$session_ip_address."\" onclick=\"window.open(this.href);return false;\" href=\"".sprintf($IPCheckURL,$session_ip_address)."\">".$session_ip_address."</a>)"; }
 ++$olmn; ++$olmbn; }
 if($user_agent_check!==false) {
-$MembersOnline .= "<span>".$user_agent_check."</span>"; 
+$uatitleadd = null;
+if($GroupInfo['HasAdminCP']=="yes") { $uatitleadd = " title=\"".$session_user_agent."\""; }
+$MembersOnline .= "<span".$uatitleadd.">".$user_agent_check."</span>"; 
+if($GroupInfo['HasAdminCP']=="yes") {
+$MembersOnline .= " (<a title=\"".$session_ip_address."\" onclick=\"window.open(this.href);return false;\" href=\"".sprintf($IPCheckURL,$session_ip_address)."\">".$session_ip_address."</a>)"; }
 ++$olmbn; } }
 if($UserSessInfo['UserID']<=0||$AmIHiddenUser=="yes") {
 if($user_agent_check===false) {
 ++$olan; } } }
 if($UserSessInfo['UserGroup']==$Settings['GuestGroup']) {
-/*$GuestsOnline .= "<a href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$MemList['ID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">".$MemList['Name']."</a>";*/
+/*$uatitleadd = null;
+if($GroupInfo['HasAdminCP']=="yes") { $uatitleadd = " title=\"".$session_user_agent."\""; }
+$GuestsOnline .= "<a".$uatitleadd." href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$MemList['ID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">".$MemList['Name']."</a>";
+if($GroupInfo['HasAdminCP']=="yes") {
+$GuestsOnline .= " (<a title=\"".$session_ip_address."\" onclick=\"window.open(this.href);return false;\" href=\"".sprintf($IPCheckURL,$session_ip_address)."\">".$session_ip_address."</a>)"; } */
 ++$olgn; }
 ++$uoli; }
 if($_GET['act']=="view"||$_GET['act']=="stats") {
@@ -82,9 +95,15 @@ $NewestMem = array(null);
 $NewestMem['ID'] = "0"; $NewestMem['Name'] = "Anonymous";
 if($nummembers>0) {
 $NewestMem['ID']=sql_result($nmresult,0,"id");
-$NewestMem['Name']=sql_result($nmresult,0,"Name"); }
+$NewestMem['Name']=sql_result($nmresult,0,"Name");
+$NewestMem['IP']=sql_result($nmresult,0,"IP"); }
 if($nummembers<=0) { $NewestMem['ID'] = 0; }
-if($NewestMem['ID']<=0) { $NewestMem['ID'] = "0"; $NewestMem['Name'] = "Anonymous"; }
+if($NewestMem['ID']<=0) { $NewestMem['ID'] = "0"; $NewestMem['Name'] = "Anonymous"; $NewestMem['IP'] = "127.0.0.1"; }
+$NewestMemTitle = null;
+$NewestMemExtraIP = null;
+if($GroupInfo['HasAdminCP']=="yes") {
+$NewestMemTitle = " title=\"".$NewestMem['IP']."\"";
+$NewestMemExtraIP = " (<a title=\"".$NewestMem['IP']."\" onclick=\"window.open(this.href);return false;\" href=\"".sprintf($IPCheckURL,$NewestMem['IP'])."\">".$NewestMem['IP']."</a>)"; }
 ?>
 <div class="StatsBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
@@ -121,7 +140,7 @@ if($NewestMem['ID']<=0) { $NewestMem['ID'] = "0"; $NewestMem['Name'] = "Anonymou
 &nbsp;Our members have made a total of <?php echo $numposts; ?> posts<br />
 &nbsp;Our members have made a total of <?php echo $numtopics; ?> topics<br />
 &nbsp;We have <?php echo $nummembers; ?> registered members<br />
-&nbsp;Our newest member is <a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$NewestMem['ID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>"><?php echo $NewestMem['Name']; ?></a>
+&nbsp;Our newest member is <a<?php echo $NewestMemTitle; ?> href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$NewestMem['ID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>"><?php echo $NewestMem['Name']; ?></a><?php echo $NewestMemExtraIP; ?>
 </div></td>
 </tr>
 <tr id="Stats5" class="TableStatsRow4">
