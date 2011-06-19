@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: function.php - Last Update: 06/18/2011 SVN 678 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 06/18/2011 SVN 679 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -421,7 +421,62 @@ $qsep = htmlentities($qsep, ENT_QUOTES, $icharset); }
 $OldBoardQuery = preg_replace("/".$pregqstr."/isxS", $qstr, $_SERVER['QUERY_STRING']);
 $BoardQuery = "?".$OldBoardQuery;
 return $BoardQuery; }
-function apache_log_maker($logtxt,$logfile=null,$status=200,$contentsize="-") {
+function get_server_values($matches) {
+	$return_text = "-";
+	if(isset($_SERVER[$matches[1]])) { $return_text = $_SERVER[$matches[1]]; }
+	if(!isset($_SERVER[$matches[1]])) { $return_text = "-"; }
+	return $return_text; }
+function get_cookie_values($matches) {
+	$return_text = null;
+	if(isset($_COOKIE[$matches[1]])) { $return_text = $_COOKIE[$matches[1]]; }
+	if(!isset($_COOKIE[$matches[1]])) { $return_text = null; }
+	return $return_text; }
+function get_env_values($matches) {
+	$return_text = getenv($matches[1]);
+	if(!isset($return_text)) { $return_text = "-"; }
+	return $return_text; }
+function get_time($matches) {
+	return date(convert_strftime($matches[1])); }
+function convert_strftime($strftime) {
+$strftime = str_replace("%a", "D", $strftime);
+$strftime = str_replace("%A", "l", $strftime);
+$strftime = str_replace("%d", "d", $strftime);
+$strftime = str_replace("%e", "j", $strftime);
+$strftime = str_replace("%j", "z", $strftime);
+$strftime = str_replace("%u", "w", $strftime);
+$strftime = str_replace("%w", "w", $strftime);
+$strftime = str_replace("%U", "W", $strftime);
+$strftime = str_replace("%V", "W", $strftime);
+$strftime = str_replace("%W", "W", $strftime);
+$strftime = str_replace("%b", "M", $strftime);
+$strftime = str_replace("%B", "F", $strftime);
+$strftime = str_replace("%h", "M", $strftime);
+$strftime = str_replace("%m", "m", $strftime);
+$strftime = str_replace("%g", "y", $strftime);
+$strftime = str_replace("%G", "Y", $strftime);
+$strftime = str_replace("%y", "y", $strftime);
+$strftime = str_replace("%Y", "Y", $strftime);
+$strftime = str_replace("%H", "H", $strftime);
+$strftime = str_replace("%I", "h", $strftime);
+$strftime = str_replace("%l", "g", $strftime);
+$strftime = str_replace("%M", "i", $strftime);
+$strftime = str_replace("%p", "A", $strftime);
+$strftime = str_replace("%P", "a", $strftime);
+$strftime = str_replace("%r", "h:i:s A", $strftime);
+$strftime = str_replace("%R", "H:i", $strftime);
+$strftime = str_replace("%S", "s", $strftime);
+$strftime = str_replace("%T", "H:i:s", $strftime);
+$strftime = str_replace("%X", "H:i:s", $strftime);
+$strftime = str_replace("%z", "O", $strftime);
+$strftime = str_replace("%Z", "O", $strftime);
+$strftime = str_replace("%c", "D M j H:i:s Y", $strftime);
+$strftime = str_replace("%D", "m/d/y", $strftime);
+$strftime = str_replace("%F", "Y-m-d", $strftime);
+$strftime = str_replace("%x", "m/d/y", $strftime);
+$strftime = str_replace("%n", "\n", $strftime);
+$strftime = str_replace("%t", "\t", $strftime);
+return $strftime; }
+function apache_log_maker($logtxt,$logfile=null,$status=200,$contentsize="-",$headersize=0) {
 global $Settings;
 if(!isset($_SERVER['HTTP_REFERER'])) { $URL_REFERER = "-"; }
 if(isset($_SERVER['HTTP_REFERER'])) { $URL_REFERER = $_SERVER['HTTP_REFERER']; }
@@ -431,29 +486,38 @@ $LOG_QUERY_STRING = "";
 if($_SERVER["QUERY_STRING"]!=="") {
 $LOG_QUERY_STRING = "?".$_SERVER["QUERY_STRING"]; }
 $oldcontentsize = $contentsize;
+if($oldcontentsize=="-") { $oldcontentsize = 0; }
 if($contentsize===0) { $contentsize = "-"; }
-$logtxt = preg_replace("/".preg_quote("%h", "/")."/s", $_SERVER['REMOTE_ADDR'], $logtxt);
+if($contentsize=="-"&&$headersize!==0) { $fullsitesize = $headersize; }
+if($contentsize!="-"&&$headersize!==0) { $fullsitesize = $contentsize + $headersize; }
+$HTTP_REQUEST_LINE = $_SERVER["REQUEST_METHOD"]." ".$_SERVER["REQUEST_URI"]." ".$_SERVER["SERVER_PROTOCOL"];
 $logtxt = preg_replace("/".preg_quote("%a", "/")."/s", $_SERVER['REMOTE_ADDR'], $logtxt);
 $logtxt = preg_replace("/".preg_quote("%A", "/")."/s", $_SERVER["SERVER_ADDR"], $logtxt);
-$logtxt = preg_replace("/".preg_quote("%l", "/")."/s", "-", $logtxt);
-$logtxt = preg_replace("/".preg_quote("%u", "/")."/s", $AUTH_USER, $logtxt);
+$logtxt = preg_replace("/".preg_quote("%B", "/")."/s", $oldcontentsize, $logtxt);
+$logtxt = preg_replace("/".preg_quote("%b", "/")."/s", $contentsize, $logtxt);
+$logtxt = preg_replace_callback("/".preg_quote("%{", "/")."([^\}]*)".preg_quote("}C", "/")."/s", "get_env_values", $logtxt);
+$logtxt = preg_replace_callback("/".preg_quote("%{", "/")."([^\}]*)".preg_quote("}e", "/")."/s", "get_env_values", $logtxt);
 $logtxt = preg_replace("/".preg_quote("%f", "/")."/s", $_SERVER["SCRIPT_FILENAME"], $logtxt);
+$logtxt = preg_replace("/".preg_quote("%h", "/")."/s", $_SERVER['REMOTE_ADDR'], $logtxt);
 $logtxt = preg_replace("/".preg_quote("%H", "/")."/s", $_SERVER["SERVER_PROTOCOL"], $logtxt);
+$logtxt = preg_replace("/".preg_quote("%{Referer}i", "/")."/s", $URL_REFERER, $logtxt);
+$logtxt = preg_replace("/".preg_quote("%{User-Agent}i", "/")."/s", $_SERVER["HTTP_USER_AGENT"], $logtxt);
+$logtxt = preg_replace_callback("/".preg_quote("%{", "/")."([^\}]*)".preg_quote("}i", "/")."/s", "get_server_values", $logtxt);
+$logtxt = preg_replace("/".preg_quote("%l", "/")."/s", "-", $logtxt);
 $logtxt = preg_replace("/".preg_quote("%m", "/")."/s", $_SERVER["REQUEST_METHOD"], $logtxt);
 $logtxt = preg_replace("/".preg_quote("%p", "/")."/s", $_SERVER["SERVER_PORT"], $logtxt);
 $logtxt = preg_replace("/".preg_quote("%q", "/")."/s", $LOG_QUERY_STRING, $logtxt);
-$logtxt = preg_replace("/".preg_quote("%U", "/")."/s", $_SERVER["PHP_SELF"], $logtxt);
-// Not what it should be but PHP dose not have variable to get Apache ServerName config value. :( 
-$logtxt = preg_replace("/".preg_quote("%v", "/")."/s", $_SERVER["SERVER_NAME"], $logtxt);
-$logtxt = preg_replace("/".preg_quote("%V", "/")."/s", $_SERVER["SERVER_NAME"], $logtxt);
-$logtxt = preg_replace("/".preg_quote("%t", "/")."/s", "[".date("d/M/Y:H:i:s O")."]", $logtxt);
-$logtxt = preg_replace("/".preg_quote("%r", "/")."/s", $_SERVER["REQUEST_METHOD"]." ".$_SERVER["REQUEST_URI"]." ".$_SERVER["SERVER_PROTOCOL"], $logtxt);
+$logtxt = preg_replace("/".preg_quote("%r", "/")."/s", $HTTP_REQUEST_LINE, $logtxt);
 $logtxt = preg_replace("/".preg_quote("%s", "/")."/s", $status, $logtxt);
 $logtxt = preg_replace("/".preg_quote("%>s", "/")."/s", $status, $logtxt);
-$logtxt = preg_replace("/".preg_quote("%b", "/")."/s", $contentsize, $logtxt);
-$logtxt = preg_replace("/".preg_quote("%B", "/")."/s", $oldcontentsize, $logtxt);
-$logtxt = preg_replace("/".preg_quote("%{Referer}i", "/")."/s", $URL_REFERER, $logtxt);
-$logtxt = preg_replace("/".preg_quote("%{User-Agent}i", "/")."/s", $_SERVER["HTTP_USER_AGENT"], $logtxt);
+$logtxt = preg_replace("/".preg_quote("%t", "/")."/s", "[".date("d/M/Y:H:i:s O")."]", $logtxt);
+$logtxt = preg_replace_callback("/".preg_quote("%{", "/")."([^\}]*)".preg_quote("}t", "/")."/s", "get_time", $logtxt);
+$logtxt = preg_replace("/".preg_quote("%u", "/")."/s", $AUTH_USER, $logtxt);
+$logtxt = preg_replace("/".preg_quote("%U", "/")."/s", $_SERVER["PHP_SELF"], $logtxt);
+$logtxt = preg_replace("/".preg_quote("%v", "/")."/s", $_SERVER["SERVER_NAME"], $logtxt);
+$logtxt = preg_replace("/".preg_quote("%V", "/")."/s", $_SERVER["SERVER_NAME"], $logtxt);
+// Not what it should be but PHP dose not have variable to get Apache ServerName config value. :( 
+$logtxt = preg_replace("/".preg_quote("%O", "/")."/s", $fullsitesize, $logtxt);
 if(isset($logfile)&&$logfile!==null) {
 	$fp = fopen($logfile, "a+");
 	$logtxtnew = $logtxt."\r\n";
@@ -468,8 +532,8 @@ if(!isset($Settings['log_config_format'])) {
 	$Settings['log_config_format'] = "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\""; }
 if(isset($Settings['log_http_request'])&&$Settings['log_http_request']=="on"&&
 	$Settings['log_http_request']!==null&&$Settings['log_http_request']!="off") {
-return apache_log_maker($Settings['log_config_format'], $SettDir['logs'].$Settings['sqltable'].date("YW").".log", $status, $contentsize); }
+return apache_log_maker($Settings['log_config_format'], $SettDir['logs'].$Settings['sqltable'].date("YW").".log", $status, $contentsize, strlen(implode("\r\n",headers_list())."\r\n\r\n")); }
 if(isset($Settings['log_http_request'])&&$Settings['log_http_request']!="on"&&
 	$Settings['log_http_request']!==null&&$Settings['log_http_request']!="off") {
-return apache_log_maker($Settings['log_config_format'], $SettDir['logs'].$Settings['log_http_request'], $status, $contentsize); } }
+return apache_log_maker($Settings['log_config_format'], $SettDir['logs'].$Settings['log_http_request'], $status, $contentsize, strlen(implode("\r\n",headers_list())."\r\n\r\n")); } }
 ?>
