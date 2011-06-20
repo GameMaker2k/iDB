@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: function.php - Last Update: 06/18/2011 SVN 679 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 06/18/2011 SVN 680 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -435,6 +435,13 @@ function get_env_values($matches) {
 	$return_text = getenv($matches[1]);
 	if(!isset($return_text)) { $return_text = "-"; }
 	return $return_text; }
+function get_setting_values($matches) {
+	global $Settings;
+	$return_text = null;
+	$matches[1] = str_replace("sqlpass", "sqluser", $matches[1]);
+	if(isset($Settings[$matches[1]])) { $return_text = $Settings[$matches[1]]; }
+	if(!isset($Settings[$matches[1]])) { $return_text = null; }
+	return $return_text; }
 function get_time($matches) {
 	return date(convert_strftime($matches[1])); }
 function convert_strftime($strftime) {
@@ -518,6 +525,7 @@ $logtxt = preg_replace("/".preg_quote("%v", "/")."/s", $_SERVER["SERVER_NAME"], 
 $logtxt = preg_replace("/".preg_quote("%V", "/")."/s", $_SERVER["SERVER_NAME"], $logtxt);
 // Not what it should be but PHP dose not have variable to get Apache ServerName config value. :( 
 $logtxt = preg_replace("/".preg_quote("%O", "/")."/s", $fullsitesize, $logtxt);
+$logtxt = preg_replace_callback("/".preg_quote("%{", "/")."([^\}]*)".preg_quote("}s", "/")."/s", "get_setting_values", $logtxt);
 if(isset($logfile)&&$logfile!==null) {
 	$fp = fopen($logfile, "a+");
 	$logtxtnew = $logtxt."\r\n";
@@ -535,5 +543,7 @@ if(isset($Settings['log_http_request'])&&$Settings['log_http_request']=="on"&&
 return apache_log_maker($Settings['log_config_format'], $SettDir['logs'].$Settings['sqltable'].date("YW").".log", $status, $contentsize, strlen(implode("\r\n",headers_list())."\r\n\r\n")); }
 if(isset($Settings['log_http_request'])&&$Settings['log_http_request']!="on"&&
 	$Settings['log_http_request']!==null&&$Settings['log_http_request']!="off") {
+$Settings['log_http_request'] = preg_replace_callback("/".preg_quote("%{", "/")."([^\}]*)".preg_quote("}t", "/")."/s", "get_time", $Settings['log_http_request']);
+$Settings['log_http_request'] = preg_replace_callback("/".preg_quote("%{", "/")."([^\}]*)".preg_quote("}s", "/")."/s", "get_setting_values", $Settings['log_http_request']);
 return apache_log_maker($Settings['log_config_format'], $SettDir['logs'].$Settings['log_http_request'], $status, $contentsize, strlen(implode("\r\n",headers_list())."\r\n\r\n")); } }
 ?>
