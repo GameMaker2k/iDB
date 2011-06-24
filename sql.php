@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 06/18/2011 SVN 677 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 06/24/2011 SVN 682 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -30,7 +30,7 @@ if(!in_array("ini_set", $disfunc)) {
 @ini_set("session.use_cookies", true);
 @ini_set("session.use_only_cookies", true);
 @ini_set("url_rewriter.tags",""); 
-ini_set('zend.ze1_compatibility_mode', 0);
+@ini_set('zend.ze1_compatibility_mode', 0);
 @ini_set("ignore_user_abort", 1); }
 @set_time_limit(30); @ignore_user_abort(true);
 /* Change session garbage collection settings */
@@ -175,6 +175,17 @@ if($Settings['use_hashtype']!="md2"&&
 require_once($SettDir['misc'].'setcheck.php');
 $dayconv = array('second' => 1, 'minute' => 60, 'hour' => 3600, 'day' => 86400, 'week' => 604800, 'month' => 2630880, 'year' => 31570560, 'decade' => 315705600);
 require_once($SettDir['inc'].'function.php');
+if(!in_array("ini_set", $disfunc)) {
+// Set user agent if we can use ini_set and have to do any http requests. :P 
+$iverstring = "FR 0.0.0 ".$VER2[2]." 0";
+if($Settings['hideverinfohttp']=="off") {
+	$iverstring = $VER2[1]." ".$VER1[0].".".$VER1[1].".".$VER1[2]." ".$VER2[2]." ".$SubVerN; }
+if($Settings['hideverinfohttp']=="on") {
+	$iverstring = "FR 0.0.0 ".$VER2[2]." 0"; }
+$qstrtest = htmlentities($Settings['qstr'], ENT_QUOTES, $Settings['charset']);
+$qseptest = htmlentities($Settings['qsep'], ENT_QUOTES, $Settings['charset']);
+$isiteurl = $Settings['idburl']."?act".$qseptest."view";
+@ini_set("user_agent", "Mozilla/5.0 (compatible; iDB/".$iverstring."; +".$isiteurl.")"); }
 $iDBVerName = "iDB|".$VER2[1]."|".$VER1[0].".".$VER1[1].".".$VER1[2]."|".$VER2[2]."|".$SubVerN;
 /* 
 This way checks iDB version by sending the iDBVerName to the iDB Version Checker.
