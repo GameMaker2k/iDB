@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: useragents.php -Last Update: 06/14/2011 SVN 673 - Author: cooldude2k $
+    $FileInfo: useragents.php - Last Update: 06/23/2011 SVN 681 - Author: cooldude2k $
 */
 // User Agent Checker
 function user_agent_check($user_agent) {
@@ -47,6 +47,8 @@ if (preg_match("/".preg_quote("Cityreview Robot", "/")."/i", $user_agent)) {
     return "Cityreview"; }
 if (preg_match("/".preg_quote("CCBot", "/")."/i", $user_agent)) {
     return "CommonCrawl"; }
+if (preg_match("/".preg_quote("cmsworldmap.com", "/")."/i", $user_agent)) {
+    return "CMSWorldMap"; }
 if (preg_match("/".preg_quote("CSE HTML Validator", "/")."/i", $user_agent)) {
     return "CSE HTML Validator"; }
 if (preg_match("/".preg_quote("discobot", "/")."/i", $user_agent)) {
@@ -57,6 +59,8 @@ if (preg_match("/".preg_quote("Domnutch-Bot", "/")."/i", $user_agent)) {
     return "Nutch"; }
 if (preg_match("/".preg_quote("DotBot", "/")."/i", $user_agent)) {
     return "DotBot"; }
+if (preg_match("/".preg_quote("DuckDuckBot", "/")."/i", $user_agent)) {
+    return "DuckDuckGo"; }
 if (preg_match("/".preg_quote("Exabot", "/")."/i", $user_agent)) {
     return "Exabot"; }
 if (preg_match("/".preg_quote("Ezooms", "/")."/i", $user_agent)) {
@@ -121,6 +125,8 @@ if (preg_match("/".preg_quote("NaverBot", "/")."/i", $user_agent)) {
     return "NaverBot"; }
 if (preg_match("/".preg_quote("NetSprint", "/")."/i", $user_agent)) {
     return "NetSprint"; }
+if (preg_match("/".preg_quote("NextGenSearchBot", "/")."/i", $user_agent)) {
+    return "ZoomInfo"; }
 if (preg_match("/".preg_quote("; oBot\/", "/")."/i", $user_agent)) {
     return "oBot"; }
 if (preg_match("/".preg_quote("Openbot", "/")."/i", $user_agent)) {
