@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 06/24/2011 SVN 682 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 06/28/2011 SVN 684 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -48,6 +48,10 @@ if ($File3Name=="sql.php"||$File3Name=="/sql.php") {
 	exit(); }
 if(file_exists('settings.php')) {
 	require_once('settings.php'); 
+	if(file_exists('extrasettings.php')) {
+		require_once('extrasettings.php'); }
+	if(file_exists('extendsettings.php')) {
+		require_once('extendsettings.php'); }
 if(!in_array("ini_set", $disfunc)&&$Settings['qstr']!="/"&&$Settings['qstr']!="&") {
 ini_set("arg_separator.output",htmlentities($Settings['qstr'], ENT_QUOTES, $Settings['charset']));
 ini_set("arg_separator.input",$Settings['qstr']); } }

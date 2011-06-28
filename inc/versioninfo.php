@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: versioninfo.php - Last Update: 06/24/2011 SVN 683 - Author: cooldude2k $
+    $FileInfo: versioninfo.php - Last Update: 06/28/2011 SVN 684 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="versioninfo.php"||$File3Name=="/versioninfo.php") {
@@ -27,11 +27,33 @@ function version_info($proname,$subver,$ver,$supver,$reltype,$svnver,$showsvn) {
 	return $return_var; }
 // Version number and date stuff. :P
 $VER1[0] = 0; $VER1[1] = 4; $VER1[2] = 5; $VERFull[1] = $VER1[0].".".$VER1[1].".".$VER1[2];
-$VER2[0] = "Alpha"; $VER2[1] = "Al"; $VER2[2] = "SVN"; $SubVerN = 683;
-$SVNDay[0] = 06; $SVNDay[1] = 24; $SVNDay[2] = 2011; $SVNDay[3] = $SVNDay[0]."/".$SVNDay[1]."/".$SVNDay[2];
+$VER2[0] = "Alpha"; $VER2[1] = "Al"; $VER2[2] = "SVN"; $SubVerN = 684;
+$SVNDay[0] = 06; $SVNDay[1] = 28; $SVNDay[2] = 2011; $SVNDay[3] = $SVNDay[0]."/".$SVNDay[1]."/".$SVNDay[2];
 $AltName = "RDB"; $AltName2 = "ReneeDB"; $RName = "iDB"; $SFName = "IntDB";
 $RFullName = "Internet Discussion Boards"; $AltFullName = "Renee Discussion Boards";
 if(!isset($Settings['usealtname'])) { $Settings['usealtname'] = "no"; }
+if(isset($Settings['usealtname'])&&$Settings['usealtname']=="yes") {
+if(isset($iDBAltName['VER1'][0])) { $VER1[0] = $iDBAltName['VER1'][0]; }
+if(isset($iDBAltName['VER1'][1])) { $VER1[1] = $iDBAltName['VER1'][1]; }
+if(isset($iDBAltName['VER1'][2])) { $VER1[2] = $iDBAltName['VER1'][2]; }
+if(isset($iDBAltName['VER1'][0])&&
+	isset($iDBAltName['VER1'][1])&&
+	isset($iDBAltName['VER1'][2])) { 
+	$VERFull[1] = $VER1[0].".".$VER1[1].".".$VER1[2]; }
+if(isset($iDBAltName['VER2'][0])) { $VER2[0] = $iDBAltName['VER2'][0]; }
+if(isset($iDBAltName['VER2'][1])) { $VER2[1] = $iDBAltName['VER2'][1]; }
+if(isset($iDBAltName['VER2'][2])) { $VER2[2] = $iDBAltName['VER2'][2]; }
+if(isset($iDBAltName['SubVerN'])) { $SubVerN = $iDBAltName['SubVerN']; }
+if(isset($iDBAltName['SVNDay'][0])) { $SVNDay[0] = $iDBAltName['SVNDay'][0]; }
+if(isset($iDBAltName['SVNDay'][1])) { $SVNDay[1] = $iDBAltName['SVNDay'][1]; }
+if(isset($iDBAltName['SVNDay'][2])) { $SVNDay[2] = $iDBAltName['SVNDay'][2]; }
+if(isset($iDBAltName['SVNDay'][0])&&
+	isset($iDBAltName['SVNDay'][1])&&
+	isset($iDBAltName['SVNDay'][2])) { 
+	$SVNDay[3] = $SVNDay[0]."/".$SVNDay[1]."/".$SVNDay[2]; }
+if(isset($iDBAltName['AltName'])) { $AltName = $iDBAltName['AltName']; }
+if(isset($iDBAltName['AltName2'])) { $AltName2 = $iDBAltName['AltName2']; }
+if(isset($iDBAltName['AltFullName'])) { $AltFullName = $iDBAltName['AltFullName']; } }
 if(isset($Settings['usealtname'])&&$Settings['usealtname']=="yes") {
 	//$RName = $AltName; $SFName = $AltName2; $RFullName = $AltFullName;
 	$RName = $AltName2; $SFName = $AltName; $RFullName = $AltFullName; }

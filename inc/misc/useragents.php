@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: useragents.php - Last Update: 06/23/2011 SVN 681 - Author: cooldude2k $
+    $FileInfo: useragents.php - Last Update: 06/28/2011 SVN 684 - Author: cooldude2k $
 */
 // User Agent Checker
 function user_agent_check($user_agent) {
@@ -215,6 +215,8 @@ if (preg_match("/".preg_quote("Yandex", "/")."/i", $user_agent)) {
     return "Yandex"; }
 if (preg_match("/".preg_quote("YoudaoBot", "/")."/i", $user_agent)) {
     return "YoudaoBot"; }
+if (preg_match("/".preg_quote("YodaoBot", "/")."/i", $user_agent)) {
+    return "YodaoBot"; }
 if (preg_match("/".preg_quote("Yeti", "/")."/i", $user_agent)) {
     return "NHN Naver"; }
 	return false; }
