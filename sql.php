@@ -11,11 +11,13 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 06/29/2011 SVN 686 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 06/29/2011 SVN 687 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
 $disfunc = @ini_get("disable_functions");
+$disfunc = @trim($disfunc);
+$disfunc = @preg_replace("/([\\s+|\\t+|\\n+|\\r+|\\0+|\\x0B+])/i", "", $disfunc);
 if($disfunc!="ini_set") { $disfunc = explode(",",$disfunc); }
 if($disfunc=="ini_set") { $disfunc = array("ini_set"); }
 if(!in_array("ini_set", $disfunc)) {
@@ -312,13 +314,14 @@ if(strstr($_SERVER['HTTP_ACCEPT_ENCODING'], "gzip")) { $Settings['use_gzip'] = "
 if($Settings['use_gzip']=="deflate") {
 if(strstr($_SERVER['HTTP_ACCEPT_ENCODING'], "deflate")) { $Settings['use_gzip'] = "on";
 	$GZipEncode['Type'] = "deflate"; } else { $Settings['use_gzip'] = "off"; } }
+function idb_output_handler($buffer) { return $buffer; }
 if($Settings['clean_ob']=="on") {
 /* Check for other output handlers/buffers are open
    and close and get the contents in an array */
 $numob = count(ob_list_handlers()); $iob = 0; 
 while ($iob < $numob) { 
 	$old_ob_var[$iob] = ob_get_clean(); 
-	++$iob; } } ob_start();
+	++$iob; } } ob_start("idb_output_handler");
 if($Settings['use_gzip']=="on") { 
 if($GZipEncode['Type']!="gzip") { if($GZipEncode['Type']!="deflate") { $GZipEncode['Type'] = "gzip"; } }
 	if($GZipEncode['Type']=="gzip") {
