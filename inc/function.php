@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: function.php - Last Update: 06/18/2011 SVN 680 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 06/29/2011 SVN 688 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -445,6 +445,7 @@ function get_setting_values($matches) {
 function get_time($matches) {
 	return date(convert_strftime($matches[1])); }
 function convert_strftime($strftime) {
+$strftime = str_replace("%%", "{percent\}p", $strftime);
 $strftime = str_replace("%a", "D", $strftime);
 $strftime = str_replace("%A", "l", $strftime);
 $strftime = str_replace("%d", "d", $strftime);
@@ -482,6 +483,7 @@ $strftime = str_replace("%F", "Y-m-d", $strftime);
 $strftime = str_replace("%x", "m/d/y", $strftime);
 $strftime = str_replace("%n", "\n", $strftime);
 $strftime = str_replace("%t", "\t", $strftime);
+$logtxt = preg_replace("/\{percent\}p/s", "%", $logtxt);
 return $strftime; }
 function apache_log_maker($logtxt,$logfile=null,$status=200,$contentsize="-",$headersize=0) {
 global $Settings;
@@ -498,34 +500,35 @@ if($contentsize===0) { $contentsize = "-"; }
 if($contentsize=="-"&&$headersize!==0) { $fullsitesize = $headersize; }
 if($contentsize!="-"&&$headersize!==0) { $fullsitesize = $contentsize + $headersize; }
 $HTTP_REQUEST_LINE = $_SERVER["REQUEST_METHOD"]." ".$_SERVER["REQUEST_URI"]." ".$_SERVER["SERVER_PROTOCOL"];
-$logtxt = preg_replace("/".preg_quote("%a", "/")."/s", $_SERVER['REMOTE_ADDR'], $logtxt);
-$logtxt = preg_replace("/".preg_quote("%A", "/")."/s", $_SERVER["SERVER_ADDR"], $logtxt);
-$logtxt = preg_replace("/".preg_quote("%B", "/")."/s", $oldcontentsize, $logtxt);
-$logtxt = preg_replace("/".preg_quote("%b", "/")."/s", $contentsize, $logtxt);
-$logtxt = preg_replace_callback("/".preg_quote("%{", "/")."([^\}]*)".preg_quote("}C", "/")."/s", "get_env_values", $logtxt);
-$logtxt = preg_replace_callback("/".preg_quote("%{", "/")."([^\}]*)".preg_quote("}e", "/")."/s", "get_env_values", $logtxt);
-$logtxt = preg_replace("/".preg_quote("%f", "/")."/s", $_SERVER["SCRIPT_FILENAME"], $logtxt);
-$logtxt = preg_replace("/".preg_quote("%h", "/")."/s", $_SERVER['REMOTE_ADDR'], $logtxt);
-$logtxt = preg_replace("/".preg_quote("%H", "/")."/s", $_SERVER["SERVER_PROTOCOL"], $logtxt);
-$logtxt = preg_replace("/".preg_quote("%{Referer}i", "/")."/s", $URL_REFERER, $logtxt);
-$logtxt = preg_replace("/".preg_quote("%{User-Agent}i", "/")."/s", $_SERVER["HTTP_USER_AGENT"], $logtxt);
-$logtxt = preg_replace_callback("/".preg_quote("%{", "/")."([^\}]*)".preg_quote("}i", "/")."/s", "get_server_values", $logtxt);
-$logtxt = preg_replace("/".preg_quote("%l", "/")."/s", "-", $logtxt);
-$logtxt = preg_replace("/".preg_quote("%m", "/")."/s", $_SERVER["REQUEST_METHOD"], $logtxt);
-$logtxt = preg_replace("/".preg_quote("%p", "/")."/s", $_SERVER["SERVER_PORT"], $logtxt);
-$logtxt = preg_replace("/".preg_quote("%q", "/")."/s", $LOG_QUERY_STRING, $logtxt);
-$logtxt = preg_replace("/".preg_quote("%r", "/")."/s", $HTTP_REQUEST_LINE, $logtxt);
-$logtxt = preg_replace("/".preg_quote("%s", "/")."/s", $status, $logtxt);
-$logtxt = preg_replace("/".preg_quote("%>s", "/")."/s", $status, $logtxt);
-$logtxt = preg_replace("/".preg_quote("%t", "/")."/s", "[".date("d/M/Y:H:i:s O")."]", $logtxt);
-$logtxt = preg_replace_callback("/".preg_quote("%{", "/")."([^\}]*)".preg_quote("}t", "/")."/s", "get_time", $logtxt);
-$logtxt = preg_replace("/".preg_quote("%u", "/")."/s", $AUTH_USER, $logtxt);
-$logtxt = preg_replace("/".preg_quote("%U", "/")."/s", $_SERVER["PHP_SELF"], $logtxt);
-$logtxt = preg_replace("/".preg_quote("%v", "/")."/s", $_SERVER["SERVER_NAME"], $logtxt);
-$logtxt = preg_replace("/".preg_quote("%V", "/")."/s", $_SERVER["SERVER_NAME"], $logtxt);
+$logtxt = preg_replace("/%%/s", "{percent}p", $logtxt);
+$logtxt = preg_replace("/%([\<\>]*?)a/s", $_SERVER['REMOTE_ADDR'], $logtxt);
+$logtxt = preg_replace("/%([\<\>]*?)A/s", $_SERVER["SERVER_ADDR"], $logtxt);
+$logtxt = preg_replace("/%([\<\>]*?)B/s", $oldcontentsize, $logtxt);
+$logtxt = preg_replace("/%([\<\>]*?)b/s", $contentsize, $logtxt);
+$logtxt = preg_replace_callback("/%([\<\>]*?)\{([^\}]*)\}C/s", "get_env_values", $logtxt);
+$logtxt = preg_replace_callback("/%([\<\>]*?)\{([^\}]*)\}e/s", "get_env_values", $logtxt);
+$logtxt = preg_replace("/%([\<\>]*?)f/s", $_SERVER["SCRIPT_FILENAME"], $logtxt);
+$logtxt = preg_replace("/%([\<\>]*?)h/s", $_SERVER['REMOTE_ADDR'], $logtxt);
+$logtxt = preg_replace("/%([\<\>]*?)H/s", $_SERVER["SERVER_PROTOCOL"], $logtxt);
+$logtxt = preg_replace("/%([\<\>]*?)\{Referer\}i/s", $URL_REFERER, $logtxt);
+$logtxt = preg_replace("/%([\<\>]*?)\{User-Agent\}i/s", $_SERVER["HTTP_USER_AGENT"], $logtxt);
+$logtxt = preg_replace_callback("/%([\<\>]*?)\{([^\}]*)\}i/s", "get_server_values", $logtxt);
+$logtxt = preg_replace("/%([\<\>]*?)l/s", "-", $logtxt);
+$logtxt = preg_replace("/%([\<\>]*?)m/s", $_SERVER["REQUEST_METHOD"], $logtxt);
+$logtxt = preg_replace("/%([\<\>]*?)p/s", $_SERVER["SERVER_PORT"], $logtxt);
+$logtxt = preg_replace("/%([\<\>]*?)q/s", $LOG_QUERY_STRING, $logtxt);
+$logtxt = preg_replace("/%([\<\>]*?)r/s", $HTTP_REQUEST_LINE, $logtxt);
+$logtxt = preg_replace("/%([\<\>]*?)s/s", $status, $logtxt);
+$logtxt = preg_replace("/%([\<\>]*?)t/s", "[".date("d/M/Y:H:i:s O")."]", $logtxt);
+$logtxt = preg_replace_callback("/%([\<\>]*?)\{([^\}]*)\}t/s", "get_time", $logtxt);
+$logtxt = preg_replace("/%([\<\>]*?)u/s", $AUTH_USER, $logtxt);
+$logtxt = preg_replace("/%([\<\>]*?)U/s", $_SERVER["PHP_SELF"], $logtxt);
+$logtxt = preg_replace("/%([\<\>]*?)v/s", $_SERVER["SERVER_NAME"], $logtxt);
+$logtxt = preg_replace("/%([\<\>]*?)V/s", $_SERVER["SERVER_NAME"], $logtxt);
 // Not what it should be but PHP dose not have variable to get Apache ServerName config value. :( 
-$logtxt = preg_replace("/".preg_quote("%O", "/")."/s", $fullsitesize, $logtxt);
-$logtxt = preg_replace_callback("/".preg_quote("%{", "/")."([^\}]*)".preg_quote("}s", "/")."/s", "get_setting_values", $logtxt);
+$logtxt = preg_replace("/%([\<\>]*?)O/s", $fullsitesize, $logtxt);
+$logtxt = preg_replace_callback("/%([\<\>]*?)\{([^\}]*)\}s/s", "get_setting_values", $logtxt);
+$logtxt = preg_replace("/\{percent\}p/s", "%", $logtxt);
 if(isset($logfile)&&$logfile!==null) {
 	$fp = fopen($logfile, "a+");
 	$logtxtnew = $logtxt."\r\n";
