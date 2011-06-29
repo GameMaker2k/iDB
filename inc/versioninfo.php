@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: versioninfo.php - Last Update: 06/28/2011 SVN 684 - Author: cooldude2k $
+    $FileInfo: versioninfo.php - Last Update: 06/29/2011 SVN 686 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="versioninfo.php"||$File3Name=="/versioninfo.php") {
@@ -27,10 +27,11 @@ function version_info($proname,$subver,$ver,$supver,$reltype,$svnver,$showsvn) {
 	return $return_var; }
 // Version number and date stuff. :P
 $VER1[0] = 0; $VER1[1] = 4; $VER1[2] = 5; $VERFull[1] = $VER1[0].".".$VER1[1].".".$VER1[2];
-$VER2[0] = "Alpha"; $VER2[1] = "Al"; $VER2[2] = "SVN"; $SubVerN = 684;
-$SVNDay[0] = 06; $SVNDay[1] = 28; $SVNDay[2] = 2011; $SVNDay[3] = $SVNDay[0]."/".$SVNDay[1]."/".$SVNDay[2];
+$VER2[0] = "Alpha"; $VER2[1] = "Al"; $VER2[2] = "SVN"; $SubVerN = 686;
+$SVNDay[0] = 06; $SVNDay[1] = 29; $SVNDay[2] = 2011; $SVNDay[3] = $SVNDay[0]."/".$SVNDay[1]."/".$SVNDay[2];
 $AltName = "RDB"; $AltName2 = "ReneeDB"; $RName = "iDB"; $SFName = "IntDB";
 $RFullName = "Internet Discussion Boards"; $AltFullName = "Renee Discussion Boards";
+$VerCheckName = "iDB"; $AltVerCheckName = "RDB";
 if(!isset($Settings['usealtname'])) { $Settings['usealtname'] = "no"; }
 if(isset($Settings['usealtname'])&&$Settings['usealtname']=="yes") {
 if(isset($iDBAltName['VER1'][0])) { $VER1[0] = $iDBAltName['VER1'][0]; }
@@ -53,14 +54,15 @@ if(isset($iDBAltName['SVNDay'][0])&&
 	$SVNDay[3] = $SVNDay[0]."/".$SVNDay[1]."/".$SVNDay[2]; }
 if(isset($iDBAltName['AltName'])) { $AltName = $iDBAltName['AltName']; }
 if(isset($iDBAltName['AltName2'])) { $AltName2 = $iDBAltName['AltName2']; }
-if(isset($iDBAltName['AltFullName'])) { $AltFullName = $iDBAltName['AltFullName']; } }
+if(isset($iDBAltName['AltFullName'])) { $AltFullName = $iDBAltName['AltFullName']; } 
+if(isset($iDBAltName['AltVerCheckName'])) { $AltVerCheckName = $iDBAltName['AltVerCheckName']; } }
 if(isset($Settings['usealtname'])&&$Settings['usealtname']=="yes") {
-	//$RName = $AltName; $SFName = $AltName2; $RFullName = $AltFullName;
-	$RName = $AltName2; $SFName = $AltName; $RFullName = $AltFullName; }
+	//$RName = $AltName; $SFName = $AltName2; $RFullName = $AltFullName; $VerCheckName = $AltVerCheckName;
+	$RName = $AltName2; $SFName = $AltName; $RFullName = $AltFullName; $VerCheckName = $AltVerCheckName; }
 $VerInfo['iDB_Ver'] = version_info($RName,$VER1[0],$VER1[1],$VER1[2],$VER2[1],$SubVerN,false);
-$VerInfo['iDB_Ver_SVN'] = version_info($RName,$VER1[0],$VER1[1],$VER1[2],$VER2[1],$SubVerN,true);
+$VerInfo['iDB_Ver_SVN'] = version_info($RName,$VER1[0],$VER1[1],$VER1[2],$VER2[1],$SubVerN,$VER2[2]);
 $VerInfo['iDB_Full_Ver'] = version_info($RName,$VER1[0],$VER1[1],$VER1[2],$VER2[0],$SubVerN,false);
-$VerInfo['iDB_Full_Ver_SVN'] = version_info($RName,$VER1[0],$VER1[1],$VER1[2],$VER2[0],$SubVerN,true);
+$VerInfo['iDB_Full_Ver_SVN'] = version_info($RName,$VER1[0],$VER1[1],$VER1[2],$VER2[0],$SubVerN,$VER2[2]);
 $VerInfo['iDB_Ver_Show'] = $VerInfo['iDB_Ver_SVN']; $VerInfo['iDB_Full_Ver_Show'] = $VerInfo['iDB_Full_Ver_SVN'];
 define("_iDB_Ver_", $VerInfo['iDB_Ver']); define("_iDB_Ver_SVN_", $VerInfo['iDB_Ver_SVN']);
 define("_iDB_Full_Ver_", $VerInfo['iDB_Full_Ver']); define("_iDB_Full_Ver_SVN_", $VerInfo['iDB_Full_Ver_SVN']);
@@ -72,6 +74,11 @@ $KSPAlt = "Kazuki Suzuki Przyborowski";
 */
 $iDBHome = "http://idb.berlios.de/"; $DF2kHome = "http://df2k.berlios.de/"; 
 $OrgName = "iDB"; $AltOrgName = "RDB"; $AltiDB = "Renee Discussion Boards";
+$AltSQLDumper = null;
+if(isset($Settings['usealtname'])&&$Settings['usealtname']=="yes") {
+if(isset($iDBAltName['AltOrgName'])) { $AltOrgName = $iDBAltName['AltOrgName']; }
+if(isset($iDBAltName['AltiDB'])) { $AltiDB = $iDBAltName['AltiDB']; }
+if(isset($iDBAltName['AltSQLDumperName'])) { $AltSQLDumper = $iDBAltName['AltSQLDumperName']; } }
 if(!isset($Settings['VerCheckURL'])||
 	$Settings['VerCheckURL']==="") {
 $VerCheckURL = $iDBHome."?act=vercheck"; }

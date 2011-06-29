@@ -12,7 +12,7 @@
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: sqlite.php - Last Update: 06/11/2011 SVN 667 - Author: cooldude2k $
+    $FileInfo: sqlite.php - Last Update: 06/28/2011 SVN 685 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="sqlite.php"||$File3Name=="/sqlite.php") {
@@ -159,7 +159,7 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."members\" (\n".
 "  \"Name\" VARCHAR(150) UNIQUE NOT NULL default '',\n".
 "  \"UserPassword\" VARCHAR(250) NOT NULL default '',\n".
 "  \"HashType\" VARCHAR(50) NOT NULL default '',\n".
-"  \"Email\" VARCHAR(150) UNIQUE NOT NULL default '',\n".
+"  \"Email\" VARCHAR(256) UNIQUE NOT NULL default '',\n".
 "  \"GroupID\" INTEGER NOT NULL default '0',\n".
 "  \"Validated\" VARCHAR(20) NOT NULL default '',\n".
 "  \"HiddenMember\" VARCHAR(20) NOT NULL default '',\n".

@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 06/28/2011 SVN 684 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 06/29/2011 SVN 686 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -19,13 +19,21 @@ $disfunc = @ini_get("disable_functions");
 if($disfunc!="ini_set") { $disfunc = explode(",",$disfunc); }
 if($disfunc=="ini_set") { $disfunc = array("ini_set"); }
 if(!in_array("ini_set", $disfunc)) {
-// Uncomment next few lines to show errors
-/*@ini_set("track_errors", true);
-@ini_set("display_errors", true);
-@ini_set("display_startup_errors", true); */ }
+@ini_set("html_errors", false);
+@ini_set("track_errors", false);
+@ini_set("display_errors", false);
+@ini_set("report_memleaks", false);
+@ini_set("display_startup_errors", false);
+//@ini_set("error_log","logs/error.log"); 
+@ini_set("docref_ext", "");
+@ini_set("docref_root", "http://php.net/"); }
 @error_reporting(E_ALL ^ E_NOTICE);
 /* Get rid of session id in urls */
 if(!in_array("ini_set", $disfunc)) {
+@ini_set("date.timezone","UTC"); 
+@ini_set("default_mimetype","text/html"); 
+@ini_set("zlib.output_compression", false);
+@ini_set("zlib.output_compression_level", -1);
 @ini_set("session.use_trans_sid", false);
 @ini_set("session.use_cookies", true);
 @ini_set("session.use_only_cookies", true);
@@ -104,7 +112,8 @@ if($Settings['charset']!="ISO-8859-15"&&$Settings['charset']!="ISO-8859-1"&&
 	$Settings['charset']!="Shift_JIS"&&$Settings['charset']!="EUC-JP") {
 	$Settings['charset'] = "ISO-8859-15"; } }
 	$chkcharset = $Settings['charset'];
-@ini_set('default_charset', $Settings['charset']);
+if(!in_array("ini_set", $disfunc)) {
+@ini_set('default_charset', $Settings['charset']); }
 //session_save_path($SettDir['inc']."temp/");
 if(!isset($Settings['sqldb'])) { 
 if(file_exists("install.php")) { header('Location: install.php'); die(); } 
@@ -189,8 +198,8 @@ if($Settings['hideverinfohttp']=="on") {
 $qstrtest = htmlentities($Settings['qstr'], ENT_QUOTES, $Settings['charset']);
 $qseptest = htmlentities($Settings['qsep'], ENT_QUOTES, $Settings['charset']);
 $isiteurl = $Settings['idburl']."?act".$qseptest."view";
-@ini_set("user_agent", "Mozilla/5.0 (compatible; iDB/".$iverstring."; +".$isiteurl.")"); }
-$iDBVerName = "iDB|".$VER2[1]."|".$VER1[0].".".$VER1[1].".".$VER1[2]."|".$VER2[2]."|".$SubVerN;
+@ini_set("user_agent", "Mozilla/5.0 (compatible; ".$VerCheckName."/".$iverstring."; +".$isiteurl.")"); }
+$iDBVerName = $VerCheckName."|".$VER2[1]."|".$VER1[0].".".$VER1[1].".".$VER1[2]."|".$VER2[2]."|".$SubVerN;
 /* 
 This way checks iDB version by sending the iDBVerName to the iDB Version Checker.
 $Settings['vercheck'] = 1; 
@@ -251,7 +260,7 @@ echo '<?xml-stylesheet type="text/xsl" href="'.url_maker($exfile['index'],$Setti
  <charset><?php echo $Settings['charset']; ?></charset> 
   <title><?php echo $Settings['board_name']; ?></title> 
   <?php echo "<name>".$iDBVerName."</name>\n"; ?>
-  <vname>iDB Version Checker</vname>
+  <vname><?php echo $VerCheckName; ?> Version Checker</vname>
 </version>
 
 </versioninfo>
@@ -279,7 +288,8 @@ if($cookieDomain=="localhost") { $cookieDomain = false; }
 if($Settings['enable_https']=="on") {
  if($URLsTest['scheme']=="https") { $cookieSecure = true; }
  if($URLsTest['scheme']!="https") { $cookieSecure = false; } } }
-@ini_set("default_charset",$Settings['charset']);
+if(!in_array("ini_set", $disfunc)) {
+@ini_set('default_charset', $Settings['charset']); }
 $File1Name = dirname($_SERVER['SCRIPT_NAME'])."/";
 $File2Name = $_SERVER['SCRIPT_NAME'];
 $File3Name=str_replace($File1Name, null, $File2Name);
@@ -365,7 +375,7 @@ $Settings['sql_charset'] = $SQLCharset; }
 sql_set_charset($SQLCharset,$SQLStat);
 if($SQLStat===false) {
 header("Content-Type: text/plain; charset=".$Settings['charset']); sql_free_result($peresult);
-ob_clean(); echo "Sorry could not connect to mysql database.\nContact the board admin about error. Error log below.";
+ob_clean(); echo "Sorry could not connect to sql database.\nContact the board admin about error. Error log below.";
 echo "\n".sql_errorno($SQLStat); $urlstatus = 503;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $sqltable = $Settings['sqltable'];

@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: mysql.php - Last Update: 06/11/2011 SVN 666 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 06/29/2011 SVN 686 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mysql.php"||$File3Name=="/mysql.php") {
@@ -76,7 +76,10 @@ $fname .= str_replace("_","", $Settings['sqltable']).".sql.bz2"; }
 header("Content-Disposition: attachment; filename=".$fname);
 header("Content-Type: application/octet-stream");
 header("Content-Transfer-Encoding: binary");
-$SQLDumper = "SQL Dumper";
+if(!isset($AltSQLDumper)||$AltSQLDumper===null) {
+	$SQLDumper = "SQL Dumper"; }
+if(isset($AltSQLDumper)&&$AltSQLDumper!==null) {
+	$SQLDumper = $AltSQLDumper; }
 function GetAllRows($table) { $rene_j = 0; $trowout = null;
 global $SQLStat;
 $tresult = sql_query("SELECT * FROM \"".$table."\"",$SQLStat);

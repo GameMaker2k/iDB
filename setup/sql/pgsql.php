@@ -12,7 +12,7 @@
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: pgsql.php - Last Update: 06/11/2011 SVN 667 - Author: cooldude2k $
+    $FileInfo: pgsql.php - Last Update: 06/28/2011 SVN 685 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pgsql.php"||$File3Name=="/pgsql.php") {
@@ -140,7 +140,7 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."members\" (\n".
 "  \"Name\" varchar(150) NOT NULL default '',\n".
 "  \"UserPassword\" varchar(250) NOT NULL default '',\n".
 "  \"HashType\" varchar(50) NOT NULL default '',\n".
-"  \"Email\" varchar(150) NOT NULL default '',\n".
+"  \"Email\" varchar(256) NOT NULL default '',\n".
 "  \"GroupID\" numeric(15) NOT NULL default '0',\n".
 "  \"Validated\" varchar(20) NOT NULL default '',\n".
 "  \"HiddenMember\" varchar(20) NOT NULL default '',\n".

@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: functions.php - Last Update: 06/14/2011 SVN 672 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 06/29/2011 SVN 686 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -31,8 +31,16 @@ if ($File3Name==$FileName||$File3Name=="/".$FileName) {
 CheckFile("functions.php");
 require($SettDir['misc']."compression.php");
 if($Settings['sqltype']=="mysql") {
+if(!in_array("ini_set", $disfunc)) {
+@ini_set("mysql.default_host",$Settings['sqlhost']);
+@ini_set("mysql.default_user",$Settings['sqluser']);
+@ini_set("mysql.default_password",$Settings['sqlpass']); }
 require($SettDir['sql']."mysql.php"); }
 if($Settings['sqltype']=="mysqli") {
+if(!in_array("ini_set", $disfunc)) {
+@ini_set("mysqli.default_host",$Settings['sqlhost']);
+@ini_set("mysqli.default_user",$Settings['sqluser']);
+@ini_set("mysqli.default_pw",$Settings['sqlpass']); }
 require($SettDir['sql']."mysqli.php"); }
 if($Settings['sqltype']=="pgsql") {
 require($SettDir['sql']."pgsql.php"); }

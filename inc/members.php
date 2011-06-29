@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 06/14/2011 SVN 672 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 06/28/2011 SVN 685 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -779,7 +779,7 @@ $_SESSION['UserFormID'] = $UFID;
 <table style="text-align: left;">
 <tr style="text-align: left;">
 	<td style="width: 30%;"><label class="TextBoxLabel" for="username">Enter UserName: </label></td>
-	<td style="width: 70%;"><input maxlength="24" class="TextBox" id="username" type="text" name="username" /></td>
+	<td style="width: 70%;"><input maxlength="256" class="TextBox" id="username" type="text" name="username" /></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 30%;"><label class="TextBoxLabel" for="userpass">Enter Password: </label></td>
 	<td style="width: 70%;"><input maxlength="30" class="TextBox" id="userpass" type="password" name="userpass" /></td>
