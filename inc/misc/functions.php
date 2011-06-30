@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: functions.php - Last Update: 06/29/2011 SVN 686 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 06/30/2011 SVN 689 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -73,6 +73,9 @@ $output = preg_replace("/&PHPSESSID/", "&amp;PHPSESSID", $output);
 $qstrcode = htmlentities($Settings['qstr'], ENT_QUOTES, $Settings['charset']);
 $output = str_replace($Settings['qstr'].$SessName, $qstrcode.$SessName, $output);
 if($use_gzip!="on") {
+	if($Settings['send_pagesize']=="on") {
+	@header("Content-Length: ".decoct(strlen($output))); 
+	@header("Content-MD5: ".base64_encode(md5($output))); }
 	idb_log_maker($urlstatus,strlen($output));
 	echo $output; }
 if($use_gzip=="on") {
@@ -80,6 +83,9 @@ if($use_gzip=="on") {
 	$goutput = gzencode($output); }
 	if($gzip_type=="deflate") {
 	$goutput = gzcompress($output); }
+	if($Settings['send_pagesize']=="on") {
+	@header("Content-Length: ".decoct(strlen($goutput))); 
+	@header("Content-MD5: ".base64_encode(md5($goutput))); }
 	idb_log_maker($urlstatus,strlen($goutput));
 	echo $goutput; } }
 // Fix amp => (&) to &amp; and gzip page
@@ -94,6 +100,9 @@ $output = preg_replace("/&PHPSESSID/", "&amp;PHPSESSID", $output);
 $qstrcode = htmlentities($Settings['qstr'], ENT_QUOTES, $Settings['charset']);
 $output = str_replace($Settings['qstr'].$SessName, $qstrcode.$SessName, $output);
 if($use_gzip!="on") {
+	if($Settings['send_pagesize']=="on") {
+	@header("Content-Length: ".decoct(strlen($output))); 
+	@header("Content-MD5: ".base64_encode(md5($output))); }
 	idb_log_maker($urlstatus,strlen($output));
 	echo $output; }
 if($use_gzip=="on") {
@@ -101,6 +110,9 @@ if($use_gzip=="on") {
 	$goutput = gzencode($output); }
 	if($gzip_type=="deflate") {
 	$goutput = gzcompress($output); }
+	if($Settings['send_pagesize']=="on") {
+	@header("Content-Length: ".decoct(strlen($goutput))); 
+	@header("Content-MD5: ".base64_encode(md5($goutput))); }
 	idb_log_maker($urlstatus,strlen($goutput));
 	echo $goutput; } }
 	$Names['RJ'] = "Rene Johnson";
@@ -112,6 +124,9 @@ if(!isset($urlstatus)||!is_numeric($urlstatus)) { $urlstatus = 200; }
 $output = ob_get_clean();
 if($gzip_type!="gzip") { if($gzip_type!="deflate") { $gzip_type = "gzip"; } }
 if($use_gzip!="on") {
+	if($Settings['send_pagesize']=="on") {
+	@header("Content-Length: ".decoct(strlen($output))); 
+	@header("Content-MD5: ".base64_encode(md5($output))); }
 	idb_log_maker($urlstatus,strlen($output));
 	echo $output; }
 if($use_gzip=="on") {
@@ -119,6 +134,9 @@ if($use_gzip=="on") {
 	$goutput = gzencode($output); }
 	if($gzip_type=="deflate") {
 	$goutput = gzcompress($output); }
+	if($Settings['send_pagesize']=="on") {
+	@header("Content-Length: ".decoct(strlen($goutput))); 
+	@header("Content-MD5: ".base64_encode(md5($goutput))); }
 	idb_log_maker($urlstatus,strlen($goutput));
 	echo $goutput; } }
 $foo="bar"; $$foo="foo";
