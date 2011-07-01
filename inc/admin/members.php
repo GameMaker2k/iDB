@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 06/14/2011 SVN 672 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 07/01/2011 SVN 691 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -147,7 +147,7 @@ sql_query($query,$SQLStat); }
 <tr class="TableMenuRow3" id="ProfileUpdate">
 <td class="TableMenuColumn3">
 <div style="text-align: center;">
-	<br /><?php echo $VMemName; ?> was validated successfully. <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=members",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to back to admin cp.<br />&nbsp;
+	<br /><?php echo $VMemName; ?> was validated successfully.<br /> <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=members",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to back to admin cp.<br />&nbsp;
 	</div>
 </td></tr>
 <tr id="ProfileTitleEnd" class="TableMenuRow4">
@@ -245,7 +245,7 @@ sql_query($dmquery,$SQLStat); }
 <tr class="TableMenuRow3" id="ProfileUpdate">
 <td class="TableMenuColumn3">
 <div style="text-align: center;">
-	<br /><?php echo $DMemName; ?> was deleted successfully. <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=members",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to back to admin cp.<br />&nbsp;
+	<br /><?php echo $DMemName; ?> was deleted successfully.<br /> <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=members",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to back to admin cp.<br />&nbsp;
 	</div>
 </td></tr>
 <tr id="ProfileTitleEnd" class="TableMenuRow4">

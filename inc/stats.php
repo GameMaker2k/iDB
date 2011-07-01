@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: stats.php - Last Update: 06/18/2011 SVN 677 - Author: cooldude2k $
+    $FileInfo: stats.php - Last Update: 07/01/2011 SVN 691 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="stats.php"||$File3Name=="/stats.php") {
@@ -104,6 +104,33 @@ $NewestMemExtraIP = null;
 if($GroupInfo['HasAdminCP']=="yes") {
 $NewestMemTitle = " title=\"".$NewestMem['IP']."\"";
 $NewestMemExtraIP = " (<a title=\"".$NewestMem['IP']."\" onclick=\"window.open(this.href);return false;\" href=\"".sprintf($IPCheckURL,$NewestMem['IP'])."\">".$NewestMem['IP']."</a>)"; }
+$bdMonthChCk = GMTimeGet("m",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$bdDayChCk = GMTimeGet("d",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+if($Settings['AdminValidate']=="on") {
+$bdquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"BirthDay\"=%i AND \"BirthMonth\"=%i AND \"HiddenMember\"='no' AND \"Validated\"='yes' AND \"GroupID\"<>%i ORDER BY \"id\"", array($bdDayChCk,$bdMonthChCk,$Settings['ValidateGroup'])); } 
+if($Settings['AdminValidate']!="on") {
+$bdquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"BirthDay\"=%i AND \"BirthMonth\"=%i AND \"HiddenMember\"='no' ORDER BY \"id\"", array($bdDayChCk,$bdMonthChCk)); } 
+$bdresult = sql_query($bdquery,$SQLStat);
+$bdmembers = sql_num_rows($bdresult); $bdi = 0;
+if($bdmembers>0) { $bdstring = $bdmembers." member(s) have a birthday today"; }
+if($bdmembers<=0) { $bdstring = "<div>&nbsp;</div>No members have a birthday today<div>&nbsp;</div>"; }
+while ($bdi < $bdmembers) {
+$bdmemberz = $bdmembers - 1;
+$birthday['ID']=sql_result($bdresult,$bdi,"id");
+$birthday['Name']=sql_result($bdresult,$bdi,"Name");
+$birthday['IP']=sql_result($bdresult,$bdi,"IP");
+$birthday['BirthYear']=sql_result($bdresult,$bdi,"BirthYear");
+$bdThisYear = GMTimeGet("Y",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$birthday['Age'] = $bdThisYear - $birthday['BirthYear'];
+$bdMemTitle = null;
+if($GroupInfo['HasAdminCP']=="yes") {
+$bdMemTitle = " title=\"".$birthday['IP']."\""; }
+if($bdi===0) { $bdstring = $bdstring."\n<br />"; }
+$bdMemURL = "<a".$bdMemTitle." href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$birthday['ID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">".$birthday['Name']."</a>";
+if($bdi<$bdmemberz) { $bdstring = $bdstring.$bdMemURL." (<span style=\"font-weight: bold;\">".$birthday['Age']."</span>), "; }
+if($bdi==$bdmemberz) { $bdstring = $bdstring.$bdMemURL." (<span style=\"font-weight: bold;\">".$birthday['Age']."</span>)"; }
+++$bdi; }
+sql_free_result($bdresult);
 ?>
 <div class="StatsBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
@@ -131,9 +158,19 @@ $NewestMemExtraIP = " (<a title=\"".$NewestMem['IP']."\" onclick=\"window.open(t
 </div></td>
 </tr>
 <tr id="Stats3" class="TableStatsRow2">
-<td class="TableStatsColumn2" colspan="2" style="width: 100%; font-weight: bold;">Board Stats</td>
+<td class="TableStatsColumn2" colspan="2" style="width: 100%; font-weight: bold;">Today's Birthdays</td>
 </tr>
 <tr class="TableStatsRow3" id="Stats4">
+<td style="width: 4%;" class="TableStatsColumn3"><div class="statsicon">
+<?php echo $ThemeSet['StatsIcon']; ?></div></td>
+<td style="width: 96%;" class="TableStatsColumn3"><div class="statsinfo">
+<?php echo $bdstring; ?>
+</div></td>
+</tr>
+<tr id="Stats5" class="TableStatsRow2">
+<td class="TableStatsColumn2" colspan="2" style="width: 100%; font-weight: bold;">Board Stats</td>
+</tr>
+<tr class="TableStatsRow3" id="Stats6">
 <td style="width: 4%;" class="TableStatsColumn3"><div class="statsicon">
 <?php echo $ThemeSet['StatsIcon']; ?></div></td>
 <td style="width: 96%;" class="TableStatsColumn3"><div class="statsinfo">
@@ -143,7 +180,7 @@ $NewestMemExtraIP = " (<a title=\"".$NewestMem['IP']."\" onclick=\"window.open(t
 &nbsp;Our newest member is <a<?php echo $NewestMemTitle; ?> href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$NewestMem['ID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>"><?php echo $NewestMem['Name']; ?></a><?php echo $NewestMemExtraIP; ?>
 </div></td>
 </tr>
-<tr id="Stats5" class="TableStatsRow4">
+<tr id="Stats7" class="TableStatsRow4">
 <td class="TableStatsColumn4" colspan="2">&nbsp;</td>
 </tr>
 </table></div>
