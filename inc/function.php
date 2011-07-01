@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: function.php - Last Update: 06/29/2011 SVN 688 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 07/01/2011 SVN 690 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -505,7 +505,7 @@ $logtxt = preg_replace("/%([\<\>]*?)a/s", $_SERVER['REMOTE_ADDR'], $logtxt);
 $logtxt = preg_replace("/%([\<\>]*?)A/s", $_SERVER["SERVER_ADDR"], $logtxt);
 $logtxt = preg_replace("/%([\<\>]*?)B/s", $oldcontentsize, $logtxt);
 $logtxt = preg_replace("/%([\<\>]*?)b/s", $contentsize, $logtxt);
-$logtxt = preg_replace_callback("/%([\<\>]*?)\{([^\}]*)\}C/s", "get_env_values", $logtxt);
+$logtxt = preg_replace_callback("/%([\<\>]*?)\{([^\}]*)\}C/s", "get_cookie_values", $logtxt);
 $logtxt = preg_replace_callback("/%([\<\>]*?)\{([^\}]*)\}e/s", "get_env_values", $logtxt);
 $logtxt = preg_replace("/%([\<\>]*?)f/s", $_SERVER["SCRIPT_FILENAME"], $logtxt);
 $logtxt = preg_replace("/%([\<\>]*?)h/s", $_SERVER['REMOTE_ADDR'], $logtxt);

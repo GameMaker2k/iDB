@@ -11,23 +11,23 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
     $ThemeInfo - Name: iDB Gray - Author: cooldude2k $
-    $FileInfo: settings.php - Last Update: 12/07/2010 SVN 600 - Author: cooldude2k $
+    $FileInfo: settings.php - Last Update: 07/01/2011 SVN 690 - Author: cooldude2k $
 */
 $ThemeSet = array();
 $ThemeSet['ThemeName'] = "iDB Gray Theme";
 $ThemeSet['ThemeMaker'] = "Kazuki";
-$ThemeSet['ThemeVersion'] = "0.4.2";
+$ThemeSet['ThemeVersion'] = "0.4.6";
 $ThemeSet['ThemeVersionType'] = "Alpha";
-$ThemeSet['ThemeSubVersion'] = "SVN 600";
+$ThemeSet['ThemeSubVersion'] = "SVN 690";
 $ThemeSet['MakerURL'] = "http://upload.idb.s1.jcink.com/";
-$ThemeSet['CopyRight'] = $ThemeSet['ThemeName']." was made by <a href=\"".$ThemeSet['MakerURL']."\" title=\"".$ThemeSet['ThemeMaker']."\">".$ThemeSet['ThemeMaker']."</a>";
+$ThemeSet['CopyRight'] = "%{ThemeName}T was made by <a href=\"%{MakerURL}T\" title=\"%{ThemeMaker}T\">%{ThemeMaker}T</a>";
 $ThemeSet['CSS'] = "themes/Gray/css.css";
 $ThemeSet['CSSType'] = "include";
 $ThemeSet['FavIcon'] = "themes/Gray/favicon.ico";
 $ThemeSet['TableStyle'] = "table";
 $ThemeSet['MiniPageAltStyle'] = "off";
 $ThemeSet['PreLogo'] = "<div style=\"text-align: center;\">";
-$ThemeSet['Logo'] = $Settings['board_name'];
+$ThemeSet['Logo'] = "%{board_name}s";
 $ThemeSet['LogoStyle'] = "font-size: 40px; font-family: verdana, arial, sans-serif; color: black;";
 $ThemeSet['SubLogo'] = "</div>";
 $ThemeSet['TopicIcon'] = "<div style=\"text-align: center; font-size: 11px;\" title=\"Topic!\"> (T) </div>";

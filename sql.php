@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 06/29/2011 SVN 687 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 07/01/2011 SVN 690 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -623,6 +623,20 @@ sql_query($qnewskin,$SQLStat); } }
 require($SettDir['inc'].'sqlthemes.php');
 sql_free_result($themeresult); }
 $_SESSION['Theme'] = $_GET['theme'];
+function get_theme_values($matches) {
+	global $ThemeSet;
+	$return_text = null;
+	if(isset($ThemeSet[$matches[1]])) { $return_text = $ThemeSet[$matches[1]]; }
+	if(!isset($ThemeSet[$matches[1]])) { $return_text = null; }
+	return $return_text; }
+foreach($ThemeSet AS $key => $value) {
+	$ThemeSet[$key] = preg_replace("/%%/s", "{percent}p", $ThemeSet[$key]);
+	$ThemeSet[$key] = preg_replace_callback("/%\{([^\}]*)\}T/s", "get_theme_values", $ThemeSet[$key]);
+	$ThemeSet[$key] = preg_replace_callback("/%\{([^\}]*)\}e/s", "get_env_values", $ThemeSet[$key]);
+	$ThemeSet[$key] = preg_replace_callback("/%\{([^\}]*)\}i/s", "get_server_values", $ThemeSet[$key]);
+	$ThemeSet[$key] = preg_replace_callback("/%\{([^\}]*)\}s/s", "get_setting_values", $ThemeSet[$key]);
+	$ThemeSet[$key] = preg_replace_callback("/%\{([^\}]*)\}t/s", "get_time", $ThemeSet[$key]); 
+	$ThemeSet[$key] = preg_replace("/\{percent\}p/s", "%", $ThemeSet[$key]); }
 if(!isset($ThemeSet['TableStyle'])) {
 	$ThemeSet['TableStyle'] = "table"; }
 if(isset($ThemeSet['TableStyle'])) {

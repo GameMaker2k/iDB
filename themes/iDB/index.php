@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
     $ThemeInfo - Name: iDB Theme - Author: cooldude2k $
-    $FileInfo: index.php - Last Update: 12/07/2010 SVN 600 - Author: cooldude2k $
+    $FileInfo: index.php - Last Update: 07/01/2011 SVN 690 - Author: cooldude2k $
 */
 header('Location: ../../index.php');
 ?>

@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: calendars.php - Last Update: 06/03/2011 SVN 660 - Author: cooldude2k $
+    $FileInfo: calendars.php - Last Update: 07/01/2011 SVN 690 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="calendars.php"||$File3Name=="/calendars.php") {
@@ -25,19 +25,29 @@ $_SESSION['ViewingFile'] = $exfile['calendar']; }
 $_SESSION['PreViewingTitle'] = "Viewing";
 $_SESSION['ViewingTitle'] = "Calendar";
 if(!isset($_GET['HighligtDay'])) { $_GET['HighligtDay'] = null; }
+if(!isset($_GET['calmadd'])) { $_GET['calmadd'] = 0; }
+if(!is_numeric($_GET['calmadd'])) { $_GET['calmadd'] = 0; }
+$nextcalm = $_GET['calmadd'] + 1;
+$backcalm = $_GET['calmadd'] - 1;
+$calmounthaddd = $_GET['calmadd'] * $dayconv['month'];
+// Extra month stuff
+$MyRealMonthNum1 = GMTimeGet("m",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$MyRealYear = GMTimeGet("Y",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 // Count the Days in this month
-$MyTimeStamp = GMTimeStamp();
-$CountDays = GMTimeGet("t",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$MyDay = GMTimeGet("j",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$MyDay2 = GMTimeGet("jS",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$MyDayNum = GMTimeGet("d",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$MyDayName = GMTimeGet("l",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$MyYear = GMTimeGet("Y",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$MyYear2 = GMTimeGet("y",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$MyMonth = GMTimeGet("m",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$MyTimeStamp = GMTimeStamp() + $calmounthaddd;
+$CountDays = GMTimeGet("t",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST'],$calmounthaddd);
+$MyDay = GMTimeGet("j",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST'],$calmounthaddd);
+$MyDay2 = GMTimeGet("jS",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST'],$calmounthaddd);
+$MyDayNum = GMTimeGet("d",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST'],$calmounthaddd);
+$MyDayName = GMTimeGet("l",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST'],$calmounthaddd);
+$MyYear = GMTimeGet("Y",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST'],$calmounthaddd);
+$MyYear2 = GMTimeGet("y",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST'],$calmounthaddd);
+$MyMonth = GMTimeGet("m",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST'],$calmounthaddd);
 $MyTimeStamp1 = mktime(0,0,0,$MyMonth,1,$MyYear);
 $MyTimeStamp2 = mktime(23,59,59,$MyMonth,$CountDays,$MyYear);
-$MyMonthName = GMTimeGet("F",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$MyMonthName = GMTimeGet("F",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST'],$calmounthaddd);
+$MyMonthNum1 = GMTimeGet("m",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST'],$calmounthaddd);
+$MyMonthNum2 = GMTimeGet("n",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST'],$calmounthaddd);
 $FirstDayThisMonth = date("w", mktime(0, 0, 0, $MyMonth, 1, $MyYear));
 $EventsName = array();
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."events\" WHERE (\"EventMonth\">=%i AND \"EventYear\"<%i AND \"EventYearEnd\">=%i) OR (\"EventMonth\"<=%i AND \"EventMonthEnd\">=%i AND \"EventYearEnd\">=%i) OR (\"EventMonth\"<=%i AND \"EventMonthEnd\"<=%i AND \"EventYear\"<=%i AND \"EventYearEnd\">%i)",  array($MyMonth,$MyYear,$MyYear,$MyMonth,$MyMonth,$MyYear,$MyMonth,$MyMonth,$MyYear,$MyYear));
@@ -124,7 +134,7 @@ for ($i; $i <= ($CountDays + $FirstDayThisMonth) ;$i++) {
 if ($ii == 8) {
 $WeekDays .= "</tr><tr class=\"CalTableRow3\">"."\r\n";
 $ii = 1; }
- if ($MyDay == $Day_i) {
+ if ($MyDay == $Day_i && $MyMonthNum1 == $MyRealMonthNum1 && $MyYear == $MyRealYear) {
 $Extra = 'CalTableColumn3Current'; }
 else {
 $Extra = 'CalTableColumn3'; }
@@ -145,16 +155,16 @@ $WeekDays .= '<td class="CalTableColumn3Blank" style="text-align: center;" colsp
 <div class="CalTable1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="CalTableRow1" style="font-weight: bold;">
-<span style="float: left;"><?php echo $ThemeSet['TitleIcon']; ?><?php echo "Today is ".$MyDayName." the ".$MyDay2." of ".$MyMonthName.", ".$MyYear; ?></span>
-<span style="float: right;"><?php echo "The time is ".GMTimeGet('g:i a',$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']); ?>&nbsp;</span>&nbsp;</div>
+<span style="float: left;"><?php echo $ThemeSet['TitleIcon']; ?><?php echo "Viewing ".$MyMonthName." ".$MyYear; ?>&nbsp;</span>&nbsp;
+<span style="float: right;">&nbsp;<a href="<?php echo url_maker($exfile['calendar'],$Settings['file_ext'],"act=view&calmadd=".$backcalm,$Settings['qstr'],$Settings['qsep'],$prexqstr['calendar'],$exqstr['calendar']); ?>">&lt;</a><?php echo $ThemeSet['LineDivider']; ?><a href="<?php echo url_maker($exfile['calendar'],$Settings['file_ext'],"act=view&calmadd=".$nextcalm,$Settings['qstr'],$Settings['qsep'],$prexqstr['calendar'],$exqstr['calendar']); ?>">&gt;</a>&nbsp;</span>&nbsp;</div>
 <?php } ?>
 <table class="CalTable1">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="CalTableRow1">
 <th class="CalTableColumn1" colspan="7">
-<span style="float: left;"><?php echo $ThemeSet['TitleIcon']; ?><?php echo "Today is ".$MyDayName." the ".$MyDay2." of ".$MyMonthName.", ".$MyYear; ?></span>
-<span style="float: right;"><?php echo "The time is ".GMTimeGet('g:i a',$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']); ?>&nbsp;</span>
-&nbsp;</th>
+<span style="float: left;"><?php echo $ThemeSet['TitleIcon']; ?><?php echo "Viewing ".$MyMonthName." ".$MyYear; ?>&nbsp;</span>&nbsp;
+<span style="float: right;">&nbsp;<a href="<?php echo url_maker($exfile['calendar'],$Settings['file_ext'],"act=view&calmadd=".$backcalm,$Settings['qstr'],$Settings['qsep'],$prexqstr['calendar'],$exqstr['calendar']); ?>">&lt;</a><?php echo $ThemeSet['LineDivider']; ?><a href="<?php echo url_maker($exfile['calendar'],$Settings['file_ext'],"act=view&calmadd=".$nextcalm,$Settings['qstr'],$Settings['qsep'],$prexqstr['calendar'],$exqstr['calendar']); ?>">&gt;</a>&nbsp;</span>&nbsp;
+</th>
 </tr><?php } ?>
 <tr class="CalTableRow2">
 <?php echo $DayNames; ?>

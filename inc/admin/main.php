@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: main.php - Last Update: 06/18/2011 SVN 678 - Author: cooldude2k $
+    $FileInfo: main.php - ['ThemeSubVersion'] = "SVN 690"; - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -329,11 +329,12 @@ $skindir = dirname(realpath("sql.php"))."/".$SettDir['themes'];
 if ($handle = opendir($skindir)) { $dirnum = null;
    while (false !== ($file = readdir($handle))) {
 	   if ($dirnum==null) { $dirnum = 0; }
+	   if (is_dir($skindir.$file)) {
 	   if (file_exists($skindir.$file."/info.php")) {
 		   if ($file != "." && $file != "..") {
 	   include($skindir.$file."/info.php");
        $themelist[$dirnum] =  $file;
-	   ++$dirnum; } } }
+	   ++$dirnum; } } } }
    closedir($handle); asort($themelist);
    $themenum=count($themelist); $themei=0; 
    while ($themei < $themenum) {

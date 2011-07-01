@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: functions.php - Last Update: 06/30/2011 SVN 689 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 07/01/2011 SVN 690 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -275,8 +275,12 @@ return mktime($GMTHour,$GMTMinute,$GMTSecond,$GMTMonth,$GMTDay,$GMTYear); }
 // Make a GMT Time Stamp alt version
 function GMTimeStampS() { return time() - date('Z', time()); }
 // Get GMT Time
-function GMTimeGet($format,$offset,$minoffset=null,$dst=null) { 
-	return GMTimeChange($format,GMTimeStamp(),$offset,$minoffset,$dst); }
+function GMTimeGet($format,$offset,$minoffset=null,$dst=null,$taddon=null) {
+	if(!is_numeric($taddon)) { $taddon = null; }
+	if($taddon!==null) {
+	return GMTimeChange($format,GMTimeStamp()+$taddon,$offset,$minoffset,$dst); }
+	if($taddon===null) {
+	return GMTimeChange($format,GMTimeStamp(),$offset,$minoffset,$dst); } }
 // Get GMT Time alt version
 function GMTimeGetS($format,$offset,$minoffset=null,$dst=null) {
 global $utshour,$utsminute;
