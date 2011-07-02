@@ -12,26 +12,39 @@
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.de/support/category.php?act=view&id=2
 
-    $FileInfo: install.php - Last Update: 12/07/2010 SVN 600 - Author: cooldude2k $
+    $FileInfo: install.php - Last Update: 07/02/2011 SVN 694 - Author: cooldude2k $
 *//*
 if(ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }
 *//* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
 $disfunc = @ini_get("disable_functions");
+$disfunc = @trim($disfunc);
+$disfunc = @preg_replace("/([\\s+|\\t+|\\n+|\\r+|\\0+|\\x0B+])/i", "", $disfunc);
 if($disfunc!="ini_set") { $disfunc = explode(",",$disfunc); }
 if($disfunc=="ini_set") { $disfunc = array("ini_set"); }
 if(!in_array("ini_set", $disfunc)) {
-// Uncomment next two lines to show errors
-/*@ini_set("display_errors", true);
-@ini_set("display_startup_errors", true); */ }
+@ini_set("html_errors", false);
+@ini_set("track_errors", false);
+@ini_set("display_errors", false);
+@ini_set("report_memleaks", false);
+@ini_set("display_startup_errors", false);
+//@ini_set("error_log","logs/error.log"); 
+@ini_set("docref_ext", "");
+@ini_set("docref_root", "http://php.net/"); }
 @error_reporting(E_ALL ^ E_NOTICE);
 /* Get rid of session id in urls */
 if(!in_array("ini_set", $disfunc)) {
+@ini_set("date.timezone","UTC"); 
+@ini_set("default_mimetype","text/html"); 
+@ini_set("zlib.output_compression", false);
+@ini_set("zlib.output_compression_level", -1);
 @ini_set("session.use_trans_sid", false);
 @ini_set("session.use_cookies", true);
 @ini_set("session.use_only_cookies", true);
-@ini_set("url_rewriter.tags",""); }
+@ini_set("url_rewriter.tags",""); 
+@ini_set('zend.ze1_compatibility_mode', 0);
+@ini_set("ignore_user_abort", 1); }
 @set_time_limit(30); @ignore_user_abort(true);
 /* Change session garbage collection settings */
 if(!in_array("ini_set", $disfunc)) {
@@ -39,17 +52,22 @@ if(!in_array("ini_set", $disfunc)) {
 @ini_set("session.gc_divisor", 100);
 @ini_set("session.gc_maxlifetime", 1440);
 /* Change session hash type here */
-@ini_set('session.hash_function', 1);
-@ini_set('session.hash_bits_per_character', 6); }
+@ini_set("session.hash_function", 1);
+@ini_set("session.hash_bits_per_character", 6); }
+if(file_exists('extrasettings.php')) {
+	require_once('extrasettings.php'); }
+if(file_exists('extendsettings.php')) {
+	require_once('extendsettings.php'); }
 /* Do not change anything below this line unless you know what you are doing */
-$Settings['clean_ob'] = "off";
+if(!isset($Settings['clean_ob'])) { $Settings['clean_ob'] = "off"; }
+function idb_output_handler($buffer) { return $buffer; }
 if($Settings['clean_ob']=="on") {
 /* Check for other output handlers/buffers are open
    and close and get the contents in an array */
 $numob = count(ob_list_handlers()); $iob = 0; 
 while ($iob < $numob) { 
 	$old_ob_var[$iob] = ob_get_clean(); 
-	++$iob; } } ob_start();
+	++$iob; } } ob_start("idb_output_handler");
 if(ini_get("register_globals")) { 
 	if(!isset($SettDir['misc'])) { $SettDir['misc'] = "inc/misc/"; }
 	require_once($SettDir['misc'].'killglobals.php'); }
@@ -110,6 +128,21 @@ require($SetupDir['setup'].'preinstall.php');
 require_once($SettDir['misc'].'utf8.php');
 require_once($SettDir['inc'].'filename.php');
 require_once($SettDir['inc'].'function.php');
+$Settings['board_name'] = "Installing ".$RName; 
+function get_theme_values($matches) {
+	global $ThemeSet;
+	$return_text = null;
+	if(isset($ThemeSet[$matches[1]])) { $return_text = $ThemeSet[$matches[1]]; }
+	if(!isset($ThemeSet[$matches[1]])) { $return_text = null; }
+	return $return_text; }
+foreach($ThemeSet AS $key => $value) {
+	$ThemeSet[$key] = preg_replace("/%%/s", "{percent}p", $ThemeSet[$key]);
+	$ThemeSet[$key] = preg_replace_callback("/%\{([^\}]*)\}T/s", "get_theme_values", $ThemeSet[$key]);
+	$ThemeSet[$key] = preg_replace_callback("/%\{([^\}]*)\}e/s", "get_env_values", $ThemeSet[$key]);
+	$ThemeSet[$key] = preg_replace_callback("/%\{([^\}]*)\}i/s", "get_server_values", $ThemeSet[$key]);
+	$ThemeSet[$key] = preg_replace_callback("/%\{([^\}]*)\}s/s", "get_setting_values", $ThemeSet[$key]);
+	$ThemeSet[$key] = preg_replace_callback("/%\{([^\}]*)\}t/s", "get_time", $ThemeSet[$key]); 
+	$ThemeSet[$key] = preg_replace("/\{percent\}p/s", "%", $ThemeSet[$key]); }
 require($SetupDir['convert'].'info.php');
 require($SettDir['inc'].'xhtml10.php');
 $Error = null; $_GET['time'] = false;

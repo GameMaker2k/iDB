@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: versioninfo.php - Last Update: 07/02/2011 SVN 693 - Author: cooldude2k $
+    $FileInfo: versioninfo.php - Last Update: 07/02/2011 SVN 694 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="versioninfo.php"||$File3Name=="/versioninfo.php") {
@@ -27,11 +27,12 @@ function version_info($proname,$subver,$ver,$supver,$reltype,$svnver,$showsvn) {
 	return $return_var; }
 // Version number and date stuff. :P
 $VER1[0] = 0; $VER1[1] = 4; $VER1[2] = 6; $VERFull[1] = $VER1[0].".".$VER1[1].".".$VER1[2];
-$VER2[0] = "Alpha"; $VER2[1] = "Al"; $VER2[2] = "SVN"; $SubVerN = 693;
+$VER2[0] = "Alpha"; $VER2[1] = "Al"; $VER2[2] = "SVN"; $SubVerN = 694;
 $SVNDay[0] = 07; $SVNDay[1] = 02; $SVNDay[2] = 2011; $SVNDay[3] = $SVNDay[0]."/".$SVNDay[1]."/".$SVNDay[2];
 $AltName = "RDB"; $AltName2 = "ReneeDB"; $RName = "iDB"; $SFName = "IntDB";
-$RFullName = "Internet Discussion Boards"; $AltFullName = "Renee Discussion Boards";
-$VerCheckName = "iDB"; $AltVerCheckName = "RDB";
+$RFullName = "Internet Discussion Boards"; $AltFullName = "Renee Discussion Boards"; $AltGM2k = "ReneeDB Team";
+$VerCheckName = "iDB"; $AltVerCheckName = "RDB"; $AltiDBHome = "http://duckduckgo.com/?q=ReneeDB";
+$AltGM2kHome = "http://duckduckgo.com/?q=ReneeDB"; $AltGM2kURL = "<a href=\"".$AltGM2kHome."\" title=\"".$AltGM2k."\" onclick=\"window.open(this.href);return false;\">".$AltGM2k."</a>";
 if(!isset($Settings['usealtname'])) { $Settings['usealtname'] = "no"; }
 if(isset($Settings['usealtname'])&&$Settings['usealtname']=="yes") {
 if(isset($iDBAltName['VER1'][0])) { $VER1[0] = $iDBAltName['VER1'][0]; }
@@ -55,7 +56,12 @@ if(isset($iDBAltName['SVNDay'][0])&&
 if(isset($iDBAltName['AltName'])) { $AltName = $iDBAltName['AltName']; }
 if(isset($iDBAltName['AltName2'])) { $AltName2 = $iDBAltName['AltName2']; }
 if(isset($iDBAltName['AltFullName'])) { $AltFullName = $iDBAltName['AltFullName']; } 
-if(isset($iDBAltName['AltVerCheckName'])) { $AltVerCheckName = $iDBAltName['AltVerCheckName']; } }
+if(isset($iDBAltName['AltVerCheckName'])) { $AltVerCheckName = $iDBAltName['AltVerCheckName']; } 
+if(isset($iDBAltName['AltiDBHome'])) { $AltiDBHome = $iDBAltName['AltiDBHome']; } 
+if(isset($iDBAltName['AltGM2k'])) { $AltGM2k = $iDBAltName['AltGM2k']; } 
+if(isset($iDBAltName['AltGM2kHome'])) { $AltGM2kHome = $iDBAltName['AltGM2kHome']; } 
+if(isset($iDBAltName['AltGM2kURL'])) { $AltGM2kURL = $iDBAltName['AltGM2kURL']; } 
+if(isset($iDBAltName['VerCheckURL'])) { $Settings['VerCheckURL'] = $iDBAltName['VerCheckURL']; } }
 if(isset($Settings['usealtname'])&&$Settings['usealtname']=="yes") {
 	//$RName = $AltName; $SFName = $AltName2; $RFullName = $AltFullName; $VerCheckName = $AltVerCheckName;
 	$RName = $AltName2; $SFName = $AltName; $RFullName = $AltFullName; $VerCheckName = $AltVerCheckName; }
@@ -100,12 +106,15 @@ $DF2k = "Discussion Forums 2k"; $TB2k = "Tag Boards 2k";
 if($Settings['usealtname']=="yes") { $iDB = $AltiDB; $OrgName = $AltOrgName; }
 $iDBURL1 = "<a href=\"".$iDBHome."\" onclick=\"window.open(this.href);return false;\">"; $iDBURL2 = $iDBURL1.$iDB."</a>";
 $DF2kURL1 = "<a href=\"".$DF2kHome."\" onclick=\"window.open(this.href);return false;\">"; $DF2kURL2 = $DF2kURL1.$DF2k."</a>";
-$GM2kURL = "<a href=\"".$iDBHome."support/category.php?act=view&amp;id=2\" title=\"".$GM2k."\" onclick=\"window.open(this.href);return false;\">".$GM2k."</a>";
+$GM2kHome = $iDBHome."support/category.php?act=view&amp;id=2";
+$GM2kURL = "<a href=\"".$GM2kHome."\" title=\"".$GM2k."\" onclick=\"window.open(this.href);return false;\">".$GM2k."</a>";
 $iDBURL3 = "<a href=\"".$iDBHome."\" title=\"".$iDB."\" onclick=\"window.open(this.href);return false;\">".$iDB."</a>";
 $PHPQA = "PHP-Quick-Arcade|http://quickarcade.jcink.com/"; $TFBB = "TextFileBB|https://launchpad.net/tfbb";
 $PHPQA = explode("|",$PHPQA); $TFBB = explode("|",$TFBB);
 $PHPQA = "<a href=\"".$PHPQA[1]."\" title=\"".$PHPQA[0]."\" onclick=\"window.open(this.href);return false;\">".$PHPQA[0]."</a>";
 $TFBB = "<a href=\"".$TFBB[1]."\" title=\"".$TFBB[0]."\" onclick=\"window.open(this.href);return false;\">".$TFBB[0]."</a>";
+if(isset($Settings['usealtname'])&&$Settings['usealtname']=="yes") { 
+	$iDBHome = $AltiDBHome; $GM2k = $AltGM2k; $GM2kHome = $AltGM2kHome; $GM2kURL = $AltGM2kURL; }
 $PHPV1 = phpversion(); $PHPV2 = "PHP ".$PHPV1; $OSType = @php_uname("s"); $OSType .= " ".@php_uname("r");
 $OSType .= " ".@php_uname("m"); if($OSType==""||!isset($OSType)) { $OSType = PHP_OS; } // Check OS Name
 if($OSType=="WINNT") { $OSType="Windows NT"; } if($OSType=="WIN32") { $OSType="Windows 9x"; }
