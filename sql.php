@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 07/01/2011 SVN 690 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 07/02/2011 SVN 692 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -410,7 +410,7 @@ function sql_session_read($id) {
 global $sqltable,$SQLStat,$SQLSType,$temp_user_ip,$temp_user_agent,$temp_session_data;
 $result = sql_query(sql_pre_query("SELECT * FROM \"".$sqltable."sessions\" WHERE \"session_id\" = '%s'", array($id)),$SQLStat);
 if (!sql_num_rows($result)) {
-sql_query(sql_pre_query("DELETE FROM \"".$sqltable."sessions\" WHERE \"session_id\"<>'%s' AND \"ip_address\"='%s'", array($id,$temp_user_ip)),$SQLStat);
+sql_query(sql_pre_query("DELETE FROM \"".$sqltable."sessions\" WHERE \"session_id\"<>'%s' AND \"ip_address\"='%s' AND \"user_agent\"='%s'", array($id,$temp_user_ip,$temp_user_agent)),$SQLStat);
 $time = GMTimeStamp();
 sql_query(sql_pre_query("INSERT INTO \"".$sqltable."sessions\" (\"session_id\", \"session_data\", \"user_agent\", \"ip_address\", \"expires\") VALUES\n".
 "('%s', '%s', '%s', '%s', %i)", array($id,$temp_session_data,$temp_user_agent,$temp_user_ip,$time)),$SQLStat);
@@ -459,7 +459,7 @@ header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
 header("Expires: ".gmdate("D, d M Y H:i:s")." GMT");
 if(!isset($_COOKIE[$Settings['sqltable']."sess"])) {
 $exptime = GMTimeStamp() - ini_get("session.gc_maxlifetime");
-sql_query(sql_pre_query("DELETE FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" < %i OR \"ip_address\"='%s'", array($exptime,$temp_user_ip)),$SQLStat); }
+sql_query(sql_pre_query("DELETE FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" < %i OR \"ip_address\"='%s' AND \"user_agent\"='%s'", array($exptime,$temp_user_ip,$temp_user_agent)),$SQLStat); }
 session_name($Settings['sqltable']."sess");
 session_start();
 //header("Set-Cookie: PHPSESSID=" . session_id() . "; path=".$cbasedir);
