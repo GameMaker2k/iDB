@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: stats.php - Last Update: 07/01/2011 SVN 691 - Author: cooldude2k $
+    $FileInfo: stats.php - Last Update: 07/02/2011 SVN 693 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="stats.php"||$File3Name=="/stats.php") {
@@ -113,7 +113,7 @@ $bdquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHE
 $bdresult = sql_query($bdquery,$SQLStat);
 $bdmembers = sql_num_rows($bdresult); $bdi = 0;
 if($bdmembers>0) { $bdstring = $bdmembers." member(s) have a birthday today"; }
-if($bdmembers<=0) { $bdstring = "<div>&nbsp;</div>No members have a birthday today<div>&nbsp;</div>"; }
+if($bdmembers<=0) { $bdstring = "<div>&nbsp;</div>&nbsp;No members have a birthday today<div>&nbsp;</div>"; }
 while ($bdi < $bdmembers) {
 $bdmemberz = $bdmembers - 1;
 $birthday['ID']=sql_result($bdresult,$bdi,"id");
@@ -125,7 +125,7 @@ $birthday['Age'] = $bdThisYear - $birthday['BirthYear'];
 $bdMemTitle = null;
 if($GroupInfo['HasAdminCP']=="yes") {
 $bdMemTitle = " title=\"".$birthday['IP']."\""; }
-if($bdi===0) { $bdstring = $bdstring."\n<br />"; }
+if($bdi===0) { $bdstring = $bdstring."\n<br />&nbsp;"; }
 $bdMemURL = "<a".$bdMemTitle." href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$birthday['ID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">".$birthday['Name']."</a>";
 if($bdi<$bdmemberz) { $bdstring = $bdstring.$bdMemURL." (<span style=\"font-weight: bold;\">".$birthday['Age']."</span>), "; }
 if($bdi==$bdmemberz) { $bdstring = $bdstring.$bdMemURL." (<span style=\"font-weight: bold;\">".$birthday['Age']."</span>)"; }
