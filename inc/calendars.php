@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: calendars.php - Last Update: 07/01/2011 SVN 691 - Author: cooldude2k $
+    $FileInfo: calendars.php - Last Update: 07/04/2011 SVN 695 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="calendars.php"||$File3Name=="/calendars.php") {
@@ -32,7 +32,7 @@ $backcalm = $_GET['calmadd'] - 1;
 if($_GET['calmadd']===0||$_GET['calmadd']=="0") {
 $calmounthaddd = ($_GET['calmadd'] * $dayconv['month']); }
 if($_GET['calmadd']!==0&&$_GET['calmadd']!="0") {
-$calmounthaddd = ($_GET['calmadd'] * $dayconv['month']) + ($dayconv['day'] * 2); }
+$calmounthaddd = ($_GET['calmadd'] * $dayconv['month']) + ($dayconv['day'] * 1); }
 // Extra month stuff
 $MyRealMonthNum1 = GMTimeGet("m",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $MyRealYear = GMTimeGet("Y",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);

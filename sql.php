@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 07/02/2011 SVN 692 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 07/04/2011 SVN 695 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -188,7 +188,7 @@ if($Settings['use_hashtype']!="md2"&&
 	$Settings['use_hashtype'] = "sha1"; } }
 // Check to see if variables are set
 require_once($SettDir['misc'].'setcheck.php');
-$dayconv = array('second' => 1, 'minute' => 60, 'hour' => 3600, 'day' => 86400, 'week' => 604800, 'month' => 2630880, 'year' => 31570560, 'decade' => 315705600);
+$dayconv = array("year" => 29030400, "month" => 2419200, "week" => 604800, "day" => 86400, "hour" => 3600 "minute" => 60, "second" => 1);
 require_once($SettDir['inc'].'function.php');
 if(!in_array("ini_set", $disfunc)) {
 // Set user agent if we can use ini_set and have to do any http requests. :P 
