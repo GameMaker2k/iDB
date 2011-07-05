@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 07/04/2011 SVN 695 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 07/04/2011 SVN 696 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -73,12 +73,23 @@ if(!isset($Settings['fixredirectdir'])) { $Settings['fixcookiedir'] = null; }
 $Settings['bid'] = base64_encode(urlencode($Settings['idburl']));
 if(!isset($Settings['showverinfo'])) { 
 	$Settings['showverinfo'] = "on"; }
+if(!isset($Settings['sqldb'])) {
+header("Content-Type: text/plain; charset=UTF-8");
+header('Location: install.php'); }
+if(!isset($Settings['fixpathinfo'])) {
+	$Settings['fixpathinfo'] = "off"; }
 if($Settings['fixpathinfo']=="off") {
 	$Settings['fixpathinfo'] = null; }
+if(!isset($Settings['fixbasedir'])) {
+	$Settings['fixbasedir'] = "off"; }
 if($Settings['fixbasedir']=="off") {
 	$Settings['fixbasedir'] = null; }
+if(!isset($Settings['fixcookiedir'])) {
+	$Settings['fixcookiedir'] = "off"; }
 if($Settings['fixcookiedir']=="off") {
 	$Settings['fixcookiedir'] = null; }
+if(!isset($Settings['fixredirectdir'])) {
+	$Settings['fixredirectdir'] = "off"; }
 if($Settings['fixredirectdir']=="off") {
 	$Settings['fixredirectdir'] = null; }
 $OldSettings['fixpathinfo'] = $Settings['fixpathinfo'];
@@ -188,7 +199,7 @@ if($Settings['use_hashtype']!="md2"&&
 	$Settings['use_hashtype'] = "sha1"; } }
 // Check to see if variables are set
 require_once($SettDir['misc'].'setcheck.php');
-$dayconv = array("year" => 29030400, "month" => 2419200, "week" => 604800, "day" => 86400, "hour" => 3600 "minute" => 60, "second" => 1);
+$dayconv = array("year" => 29030400, "month" => 2419200, "week" => 604800, "day" => 86400, "hour" => 3600, "minute" => 60, "second" => 1);
 require_once($SettDir['inc'].'function.php');
 if(!in_array("ini_set", $disfunc)) {
 // Set user agent if we can use ini_set and have to do any http requests. :P 
