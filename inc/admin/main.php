@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: main.php - ['ThemeSubVersion'] = "SVN 690"; - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 07/08/2011 SVN 697 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -88,7 +88,8 @@ $Settings['sqltype'] = strtolower($Settings['sqltype']);
 if($Settings['sqltype']!="mysql"&&
 	$Settings['sqltype']!="mysqli"&&
 	$Settings['sqltype']!="pgsql"&&
-	$Settings['sqltype']!="sqlite") {
+	$Settings['sqltype']!="sqlite"&&
+	$Settings['sqltype']!="cubrid") {
 	$Settings['sqltype'] = "mysql"; }
 if($Settings['sqltype']=="mysql"||
 	$Settings['sqltype']=="mysqli") {
@@ -100,6 +101,9 @@ $DBType['Client'] = "PostgreSQL version ".sql_client_info($SQLStat); }
 if($Settings['sqltype']=="sqlite") {
 $DBType['Server'] = "SQLite version ".sql_server_info($SQLStat);
 $DBType['Client'] = sql_client_info($SQLStat); }
+if($Settings['sqltype']=="cubrid") {
+$DBType['Server'] = "CUBRID version ".sql_server_info($SQLStat);
+$DBType['Client'] = "CUBRID version ".sql_client_info($SQLStat); }
 if(!isset($Settings['vercheck'])) { 
 	$Settings['vercheck'] = 2; }
 if($Settings['vercheck']!=1&&
@@ -312,7 +316,8 @@ if($_GET['act']=="resyncthemes"&&$GroupInfo['ViewDBInfo']=="yes"&&$Settings['SQL
 $time = GMTimeStamp() - ini_get("session.gc_maxlifetime");
 //$sqlg = sql_pre_query('DELETE FROM \"'.$Settings['sqltable'].'sessions\" WHERE \"expires\" < UNIX_TIMESTAMP();', array(null));
 if($Settings['sqltype']=="mysql"||
-	$Settings['sqltype']=="mysqli") {
+	$Settings['sqltype']=="mysqli"||
+	$Settings['sqltype']=="cubrid") {
 $sqlgc = sql_pre_query("TRUNCATE TABLE \"".$Settings['sqltable']."themes\"", array(null));
 sql_query($sqlgc,$SQLStat);
 $sqlgc = sql_pre_query("ALTER TABLE \"".$Settings['sqltable']."themes\" AUTO_INCREMENT=1", array(null));
@@ -362,12 +367,14 @@ while ($ti < $tcount) {
 if(isset($OptimizeAr["Msg_text"])) { unset($OptimizeAr["Msg_text"]); }
 if(isset($OptimizeAr[3])) { unset($OptimizeAr[3]); }
 if($Settings['sqltype']=="mysql"||
-	$Settings['sqltype']=="mysqli") {
+	$Settings['sqltype']=="mysqli"||
+	$Settings['sqltype']=="cubrid") {
 $OptimizeTea = sql_query(sql_pre_query("OPTIMIZE TABLE \"".$TableChCk[$ti]."\"", array(null)),$SQLStat); }
 if($Settings['sqltype']=="pgsql") {
 $OptimizeTea = sql_query(sql_pre_query("VACUUM ANALYZE \"".$TableChCk[$ti]."\"", array(null)),$SQLStat); }
 if($Settings['sqltype']=="mysql"||
-	$Settings['sqltype']=="mysqli") {
+	$Settings['sqltype']=="mysqli"||
+	$Settings['sqltype']=="cubrid") {
 $OptimizeAr = sql_fetch_array($OptimizeTea);
 if(!isset($OptimizeAr["Msg_text"])&&
 	isset($OptimizeAr[3])) { $OptimizeAr["Msg_text"] = $OptimizeAr[3]; }
@@ -376,7 +383,8 @@ if($OptimizeAr["Msg_text"]=="OK") {
 if($Settings['sqltype']=="sqlite") {
 $OptimizeTea = sql_query(sql_pre_query("VACUUM", array(null)),$SQLStat); }
 if($Settings['sqltype']=="mysql"||
-	$Settings['sqltype']=="mysqli") {
+	$Settings['sqltype']=="mysqli"||
+	$Settings['sqltype']=="cubrid") {
 $OutPutLog = "MySQL Output: ".$TblOptimized." tables optimized."; }
 if($Settings['sqltype']=="pgsql") {
 $OutPutLog = "PGSQL Output: All tables optimized."; }
@@ -920,7 +928,8 @@ require('settings.php'); $admincptitle = " ".$ThemeSet['TitleDivider']." Databas
 	<td style="width: 50%;"><?php echo $DBType['Server']; ?></td>
 </tr><?php if($Settings['sqltype']=="mysql"||
 	$Settings['sqltype']=="mysqli"||
-	$Settings['sqltype']=="pgsql") { 
+	$Settings['sqltype']=="pgsql"||
+	$Settings['sqltype']=="cubrid") { 
 ?><tr style="text-align: left;">
 	<td style="width: 50%;"><span class="TextBoxLabel">Database Client:</span></td>
 	<td style="width: 50%;"><?php echo $DBType['Client']; ?></td>

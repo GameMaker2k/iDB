@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: setcheck.php - Last Update: 05/25/2011 SVN 658 - Author: cooldude2k $
+    $FileInfo: setcheck.php - Last Update: 07/08/2011 SVN 697 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="setcheck.php"||$File3Name=="/setcheck.php") {
@@ -32,11 +32,13 @@ $Settings['sqltype'] = strtolower($Settings['sqltype']);
 if($Settings['sqltype']!="mysql"&&
 	$Settings['sqltype']!="mysqli"&&
 	$Settings['sqltype']!="pgsql"&&
-	$Settings['sqltype']!="sqlite") {
+	$Settings['sqltype']!="sqlite"&&
+	$Settings['sqltype']!="cubrid") {
 	$Settings['sqltype'] = "mysql"; }
 if($Settings['sqltype']=="mysql"||
 	$Settings['sqltype']=="mysqli"||
-	$Settings['sqltype']=="sqlite") {
+	$Settings['sqltype']=="sqlite"||
+	$Settings['sqltype']=="cubrid") {
 	$SQLimit = "LIMIT %i,%i"; }
 if($Settings['sqltype']=="pgsql") {
 	$SQLimit = "OFFSET %i LIMIT %i"; }

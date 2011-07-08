@@ -11,13 +11,13 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sqlite.php - Last Update: 12/07/2010 SVN 600 - Author: cooldude2k $
+    $FileInfo: sqlite.php - Last Update: 07/08/2011 SVN 697 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="sqlite.php"||$File3Name=="/sqlite.php") {
 	@header('Location: index.php');
 	exit(); }
-// MySQL Functions.
+// SQLite Functions.
 function sql_error($link=null) {
 global $SQLStat;
 if(isset($link)) {
@@ -66,7 +66,7 @@ if ($num===false) {
     output_error("SQL Error: ".sql_error(),E_USER_ERROR);
 	return false; }
 	return $num; }
-// Connect to pgsql database
+// Connect to sqlite database
 function sql_connect_db($server,$username,$password,$database=null,$new_link=false) {
 if($new_link!==true) { $new_link = false; }
 if($database===null) {

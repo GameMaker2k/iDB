@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: functions.php - Last Update: 07/01/2011 SVN 690 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 07/08/2011 SVN 697 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -46,6 +46,8 @@ if($Settings['sqltype']=="pgsql") {
 require($SettDir['sql']."pgsql.php"); }
 if($Settings['sqltype']=="sqlite") {
 require($SettDir['sql']."sqlite.php"); }
+if($Settings['sqltype']=="cubrid") {
+require($SettDir['sql']."cubrid.php"); }
 require($SettDir['misc']."useragents.php");
 /* 
 if ($_GET['act']=="DeleteSession") { session_destroy(); }

@@ -12,7 +12,7 @@
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: presetup.php - Last Update: 12/07/2010 SVN 600 - Author: cooldude2k $
+    $FileInfo: presetup.php - Last Update: 07/08/2011 SVN 697 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="presetup.php"||$File3Name=="/presetup.php") {
@@ -52,8 +52,11 @@ if($Error!="Yes") {
 	<option value="pgsql">PostgreSQL Database</option>
 	<?php } if(function_exists("sqlite_open")) { ?>
 	<option value="sqlite">SQLite Database</option>
+	<?php } if(function_exists("cubrid_connect")) { ?>
+	<option value="cubrid">CUBRID Database</option>
 	<?php } if(!function_exists("mysql_connect")&&!function_exists("mysqli_connect")&&
-	!function_exists("pg_connect")&&!function_exists("sqlite_open")) { ?>
+	!function_exists("pg_connect")&&!function_exists("sqlite_open")&&
+	!function_exists("cubrid_connect")) { ?>
 	<option value="none">No Database Available</option>
 	<?php } ?>
 	</select></td>

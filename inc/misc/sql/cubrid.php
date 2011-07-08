@@ -11,45 +11,32 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: pgsql.php - Last Update: 07/08/2011 SVN 697 - Author: cooldude2k $
+    $FileInfo: cubrid.php - Last Update: 07/08/2011 SVN 697 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
-if ($File3Name=="pgsql.php"||$File3Name=="/pgsql.php") {
+if ($File3Name=="cubrid.php"||$File3Name=="/cubrid.php") {
 	@header('Location: index.php');
 	exit(); }
-// PostgreSQL Functions.
+// CUBRID Functions.
 function sql_error($link=null) {
-if(isset($link)) {
-	$result = pg_last_error($link); }
-if(!isset($link)) {
-	$result = pg_last_error(); }
-if ($result=="") {
-	return ""; }
+	$result = cubrid_error_msg();
 	return $result; }
 function sql_errno($link=null) {
-if(isset($link)) {
-	$result = pg_last_error($link); }
-if(!isset($link)) {
-	$result = pg_last_error(); }
-if ($result===0) {
-	return 0; }
+	$result = cubrid_error_code();
 	return $result; }
 function sql_errorno($link=null) {
-if(isset($link)) {
-	$result = pg_last_error($link); }
-if(!isset($link)) {
-	$result = pg_last_error(); }
-if ($result=="") {
-	return ""; }
+	$result = sql_error();
+	$resultno = sql_errno();
+	$result = $resultno.": ".$result;
 	return $result; }
 // Execute a query :P
 $NumQueries = 0;
 function sql_query($query,$link=null) {
 global $NumQueries;
 if(isset($link)) {
-	$result = pg_query($link,$query); }
+	$result = cubrid_query($query,$link); }
 if(!isset($link)) {
-	$result = pg_query(null,$query); }
+	$result = cubrid_query($query); }
 if ($result===false) {
     output_error("SQL Error: ".sql_error(),E_USER_ERROR);
 	return false; }
@@ -58,83 +45,73 @@ if ($result!==false) {
 	return $result; } }
 //Fetch Number of Rows
 function sql_num_rows($result) {
-$num = pg_num_rows($result);
+$num = cubrid_num_rows($result);
 if ($num===false) {
     output_error("SQL Error: ".sql_error(),E_USER_ERROR);
 	return false; }
 	return $num; }
-// Connect to pgsql database
+// Connect to mysql database
 function sql_connect_db($server,$username,$password,$database=null,$new_link=false) {
 if($new_link!==true) { $new_link = false; }
-$pgport = "5432";
+if($database===null) {
+return true; }
+if($database!==null) {
+$myport = "30000";
 $hostex = explode(":", $server);
 if(isset($hostex[1])&&
 	!is_numeric($hostex[1])) {
-	$hostex[1] = $pgport; }
+	$hostex[1] = $myport; }
 if(isset($hostex[1])) { 
 	$server = $hostex[0];
-	$pgport = $hostex[1]; }
-$pgstring = null;
-if($database===null) {
-$pgstring = "host=".$server." port=".$pgport." user=".$username." password=".$password; }
-if($database!==null) {
-$pgstring = "host=".$server." port=".$pgport." dbname=".$database." user=".$username." password=".$password; }
-$link = pg_connect($pgstring);
+	$myport = $hostex[1]; }
+$link = cubrid_connect($server,$myport,$database,$username,$password); }
 if ($link===false) {
-    output_error("Not connected: ".sql_error(),E_USER_ERROR);
+    output_error("Not connected: ".$sqliteerror,E_USER_ERROR);
 	return false; }
 return $link; }
 // Query Results :P
 function sql_result($result,$row,$field=0) {
-if(is_numeric($field)) {
-$value = pg_fetch_result($result, $row, $field); }
-if(!is_numeric($field)) {
-$value = pg_fetch_result($result, $row, "\"".$field."\""); }
+$value = cubrid_result($result, $row, $field);
 if ($value===false) { 
     output_error("SQL Error: ".sql_error(),E_USER_ERROR);
 	return false; }
 	return $value; }
 // Free Results :P
 function sql_free_result($result) {
-$fresult = pg_free_result($result);
+$fresult = cubrid_free_result($result);
 if ($fresult===false) {
     output_error("SQL Error: ".sql_error(),E_USER_ERROR);
 	return false; }
 if ($fresult===true) {
 	return true; } }
 //Fetch Results to Array
-function sql_fetch_array($result,$result_type=MYSQL_BOTH) {
-$row = pg_fetch_array($result,$result_type);
+function sql_fetch_array($result,$result_type=CUBRID_BOTH) {
+$row = cubrid_fetch_array($result,$result_type);
 	return $row; }
 //Fetch Results to Associative Array
 function sql_fetch_assoc($result) {
-$row = pg_fetch_assoc($result);
+$row = cubrid_fetch_assoc($result);
 	return $row; }
 //Fetch Row Results
 function sql_fetch_row($result) {
-$row = pg_fetch_row($result);
+$row = cubrid_fetch_row($result);
 	return $row; }
 //Get Server Info
 function sql_server_info($link=null) {
 if(isset($link)) {
-	$result = pg_version($link); }
+	$result = cubrid_get_server_info($link); }
 if(!isset($link)) {
-	$result = pg_version(); }
-	return $result['server']; }
+	$result = cubrid_get_server_info(); }
+	return $result; }
 //Get Client Info
 function sql_client_info($link=null) {
-if(isset($link)) {
-	$result = pg_version($link); }
-if(!isset($link)) {
-	$result = pg_version(); }
-	return $result['client']; }
+	$result = cubrid_get_client_info();
+	return $result; }
 function sql_escape_string($string,$link=null) {
-global $SQLStat;
-if(!isset($link)) { $link = $SQLStat; }
 if(isset($link)) {
-	$string = pg_escape_string($link,$string); }
+	$string = cubrid_real_escape_string($string,$link); }
 if(!isset($link)) {
-	$string = pg_escape_string($SQLStat,$string); }
+	$string = cubrid_real_escape_string($string); }
 if ($string===false) {
     output_error("SQL Error: ".sql_error(),E_USER_ERROR);
 	return false; }
@@ -198,13 +175,8 @@ if ($result===false) {
 */
 // Get next id for stuff
 function sql_get_next_id($tablepre,$table,$link=null) {
-   $getnextidq = sql_pre_query("SELECT currval('".$tablepre.$table."_id_seq');", array());
-if(!isset($link)) {
-	$result = sql_query($getnextidq); }
-if(isset($link)) {
-	$getnextidr = sql_query($getnextidq,$link); } 
-	return sql_result($getnextidr,0);
-	sql_free_result($getnextidr); }
+	$nid = cubrid_insert_id($link);
+	return $nid; }
 // Get number of rows for table
 function sql_get_num_rows($tablepre,$table,$link=null) {
    $getnextidq = sql_pre_query("SHOW TABLE STATUS LIKE '".$tablepre.$table."'", array());
