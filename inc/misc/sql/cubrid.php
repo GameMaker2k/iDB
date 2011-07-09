@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: cubrid.php - Last Update: 07/08/2011 SVN 697 - Author: cooldude2k $
+    $FileInfo: cubrid.php - Last Update: 07/08/2011 SVN 698 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="cubrid.php"||$File3Name=="/cubrid.php") {
@@ -64,13 +64,16 @@ if(isset($hostex[1])&&
 if(isset($hostex[1])) { 
 	$server = $hostex[0];
 	$myport = $hostex[1]; }
-$link = cubrid_connect($server,$myport,$database,$username,$password); }
+$link = cubrid_connect($server,$myport,$database,$username,$password); 
+cubrid_set_autocommit($link,CUBRID_AUTOCOMMIT_TRUE); }
 if ($link===false) {
     output_error("Not connected: ".$sqliteerror,E_USER_ERROR);
 	return false; }
 return $link; }
 // Query Results :P
 function sql_result($result,$row,$field=0) {
+if(isset($field)&&!is_numeric($field)) {
+	$field = strtolower($field); }
 $value = cubrid_result($result, $row, $field);
 if ($value===false) { 
     output_error("SQL Error: ".sql_error(),E_USER_ERROR);
@@ -79,6 +82,10 @@ if ($value===false) {
 // Free Results :P
 function sql_free_result($result) {
 $fresult = cubrid_free_result($result);
+if ($fresult===false) {
+    output_error("SQL Error: ".sql_error(),E_USER_ERROR);
+	return false; }
+$fresult = cubrid_close_request($result);
 if ($fresult===false) {
     output_error("SQL Error: ".sql_error(),E_USER_ERROR);
 	return false; }
