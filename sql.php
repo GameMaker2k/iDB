@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 07/04/2011 SVN 696 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 07/09/2011 SVN 700 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -415,6 +415,8 @@ $sess_save_path = $save_path;
 return true; }
 //Session Close Function
 function sql_session_close() {
+global $SQLStat;
+sql_disconnect_db($SQLStat);
 return true; }
 //Session Read Function
 function sql_session_read($id) {

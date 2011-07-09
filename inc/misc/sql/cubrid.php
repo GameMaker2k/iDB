@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: cubrid.php - Last Update: 07/08/2011 SVN 699 - Author: cooldude2k $
+    $FileInfo: cubrid.php - Last Update: 07/09/2011 SVN 700 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="cubrid.php"||$File3Name=="/cubrid.php") {
@@ -70,6 +70,8 @@ if ($link===false) {
     output_error("Not connected: ".$sqliteerror,E_USER_ERROR);
 	return false; }
 return $link; }
+function sql_disconnect_db($link=null) {
+return cubrid_disconnect($link); }
 // Query Results :P
 function sql_result($result,$row,$field=0) {
 if(isset($field)&&!is_numeric($field)) {
