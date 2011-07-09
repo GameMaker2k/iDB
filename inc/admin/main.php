@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: main.php - Last Update: 07/08/2011 SVN 697 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 07/09/2011 SVN 702 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -93,17 +93,18 @@ if($Settings['sqltype']!="mysql"&&
 	$Settings['sqltype'] = "mysql"; }
 if($Settings['sqltype']=="mysql"||
 	$Settings['sqltype']=="mysqli") {
-$DBType['Server'] = "MySQL version ".sql_server_info($SQLStat);
-$DBType['Client'] = "MySQL version ".sql_client_info($SQLStat); }
+$DBType['Server'] = "MySQL ".sql_server_info($SQLStat);
+$DBType['Client'] = "MySQL ".sql_client_info($SQLStat); }
 if($Settings['sqltype']=="pgsql") {
-$DBType['Server'] = "PostgreSQL version ".sql_server_info($SQLStat);
-$DBType['Client'] = "PostgreSQL version ".sql_client_info($SQLStat); }
+$DBType['Server'] = "Postgres ".sql_server_info($SQLStat);
+$DBType['Client'] = "Postgres ".sql_client_info($SQLStat); }
 if($Settings['sqltype']=="sqlite") {
-$DBType['Server'] = "SQLite version ".sql_server_info($SQLStat);
+$DBType['Server'] = "SQLite ".sql_server_info($SQLStat);
 $DBType['Client'] = sql_client_info($SQLStat); }
 if($Settings['sqltype']=="cubrid") {
-$DBType['Server'] = "CUBRID version ".sql_server_info($SQLStat);
-$DBType['Client'] = "CUBRID version ".sql_client_info($SQLStat); }
+$DBType['Server'] = "CUBRID ".sql_server_info($SQLStat);
+$DBType['Client'] = "CUBRID ".sql_client_info($SQLStat); 
+$DBType['PHP'] = "CUBRID ".cubrid_version(); }
 if(!isset($Settings['vercheck'])) { 
 	$Settings['vercheck'] = 2; }
 if($Settings['vercheck']!=1&&
@@ -353,6 +354,7 @@ $themeresult=sql_query($themequery,$SQLStat);
 $themenum=sql_num_rows($themeresult);
 require($SettDir['inc'].'sqlthemes.php');
 $_POST['update'] = "now"; $_GET['act'] = "optimize"; }
+if($_GET['act']=="optimize"&&$Settings['sqltype']=="cubrid") { $_GET['act'] = "view"; }
 if($_GET['act']=="optimize"&&$GroupInfo['ViewDBInfo']=="yes") {
 $TablePreFix = $Settings['sqltable'];
 function add_prefix($tarray) {
@@ -937,6 +939,9 @@ require('settings.php'); $admincptitle = " ".$ThemeSet['TitleDivider']." Databas
 ?><tr style="text-align: left;">
 	<td style="width: 50%;"><span class="TextBoxLabel">Database File Size:</span></td>
 	<td style="width: 50%;"><?php echo sprintf("%u", filesize($Settings['sqldb']))." bytes"; ?></td>
+</tr><?php } if($Settings['sqltype']=="cubrid") { ?><tr style="text-align: left;">
+	<td style="width: 50%;"><span class="TextBoxLabel">CUBRID PHP:</span></td>
+	<td style="width: 50%;"><?php echo $DBType['PHP']; ?></td>
 </tr><?php } ?><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="DatabaseUserName">Insert Database User Name:</label></td>
 	<td style="width: 50%;"><input type="text" name="DatabaseUserName" class="TextBox" id="DatabaseUserName" size="20" value="<?php echo $Settings['sqluser']; ?>" /></td>
