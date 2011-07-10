@@ -12,7 +12,7 @@
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: cubrid.php - Last Update: 06/28/2011 SVN 685 - Author: cooldude2k $
+    $FileInfo: cubrid.php - Last Update: 07/09/2011 SVN 703 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="cubrid.php"||$File3Name=="/cubrid.php") {
@@ -438,7 +438,7 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."wordfilter\" (\n".
 "  \"WholeWord\" varchar(5) NOT NULL default ''\n".
 ");", array(null));
 sql_query($query,$SQLStat);
-/*
+
 $TableChCk = array("categories", "catpermissions", "events", "forums", "groups", "members", "mempermissions", "messenger", "permissions", "polls", "posts", "restrictedwords", "sessions", "smileys", "topics", "wordfilter");
 $TablePreFix = $_POST['tableprefix'];
 function add_prefix($tarray) {
@@ -447,7 +447,6 @@ return $TablePreFix.$tarray; }
 $TableChCk = array_map("add_prefix",$TableChCk);
 $tcount = count($TableChCk); $ti = 0;
 while ($ti < $tcount) {
-$OptimizeTea = sql_query(sql_pre_query("OPTIMIZE TABLE \"".$TableChCk[$ti]."\"", array(null)),$SQLStat);
+$OptimizeTea = sql_query(sql_pre_query("UPDATE STATISTICS ON \"".$TableChCk[$ti]."\"", array(null)),$SQLStat);
 ++$ti; }
-*/
 ?>

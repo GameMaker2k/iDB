@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: main.php - Last Update: 07/09/2011 SVN 702 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 07/09/2011 SVN 703 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -354,7 +354,6 @@ $themeresult=sql_query($themequery,$SQLStat);
 $themenum=sql_num_rows($themeresult);
 require($SettDir['inc'].'sqlthemes.php');
 $_POST['update'] = "now"; $_GET['act'] = "optimize"; }
-if($_GET['act']=="optimize"&&$Settings['sqltype']=="cubrid") { $_GET['act'] = "view"; }
 if($_GET['act']=="optimize"&&$GroupInfo['ViewDBInfo']=="yes") {
 $TablePreFix = $Settings['sqltable'];
 function add_prefix($tarray) {
@@ -369,9 +368,10 @@ while ($ti < $tcount) {
 if(isset($OptimizeAr["Msg_text"])) { unset($OptimizeAr["Msg_text"]); }
 if(isset($OptimizeAr[3])) { unset($OptimizeAr[3]); }
 if($Settings['sqltype']=="mysql"||
-	$Settings['sqltype']=="mysqli"||
-	$Settings['sqltype']=="cubrid") {
+	$Settings['sqltype']=="mysqli") {
 $OptimizeTea = sql_query(sql_pre_query("OPTIMIZE TABLE \"".$TableChCk[$ti]."\"", array(null)),$SQLStat); }
+if($Settings['sqltype']=="cubrid") {
+$OptimizeTea = sql_query(sql_pre_query("UPDATE STATISTICS ON \"".$TableChCk[$ti]."\"", array(null)),$SQLStat); }
 if($Settings['sqltype']=="pgsql") {
 $OptimizeTea = sql_query(sql_pre_query("VACUUM ANALYZE \"".$TableChCk[$ti]."\"", array(null)),$SQLStat); }
 if($Settings['sqltype']=="mysql"||
@@ -392,6 +392,8 @@ if($Settings['sqltype']=="pgsql") {
 $OutPutLog = "PGSQL Output: All tables optimized."; }
 if($Settings['sqltype']=="sqlite") {
 $OutPutLog = "SQLite Output: All tables optimized."; }
+if($Settings['sqltype']=="cubrid") {
+$OutPutLog = "CUBRID Output: All tables optimized."; }
 $_POST['update'] = "now"; $_GET['act'] = "view"; }
 ?>
 </td>
