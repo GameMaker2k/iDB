@@ -12,7 +12,7 @@
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mkconfig.php - Last Update: 07/09/2011 SVN 700 - Author: cooldude2k $
+    $FileInfo: mkconfig.php - Last Update: 07/10/2011 SVN 704 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mkconfig.php"||$File3Name=="/mkconfig.php") {
@@ -34,6 +34,13 @@ $Settings['vercheck'] = 2;
 if(!isset($_POST['SQLThemes'])) { $_POST['SQLThemes'] = "off"; }
 if($_POST['SQLThemes']!="on"&&$_POST['SQLThemes']!="off") { 
 	$_POST['SQLThemes'] = "off"; }
+$disfunc = @ini_get("disable_functions");
+$disfunc = @trim($disfunc);
+$disfunc = @preg_replace("/([\\s+|\\t+|\\n+|\\r+|\\0+|\\x0B+])/i", "", $disfunc);
+if($disfunc!="ini_set") { $disfunc = explode(",",$disfunc); }
+if($disfunc=="ini_set") { $disfunc = array("ini_set"); }
+if(!in_array("ini_set", $disfunc)) {
+	@ini_set("date.timezone","UTC"); }
 if(function_exists("date_default_timezone_set")) { 
 	@date_default_timezone_set("UTC"); }
 ?>
