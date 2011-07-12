@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 07/11/2011 SVN 705 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 07/11/2011 SVN 706 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -485,9 +485,11 @@ $iDBSessCloseDB = false;
 output_reset_rewrite_vars();
 require($SettDir['inc'].'prelogin.php'); 
 session_write_close(); } }
+session_set_save_handler("sql_session_open", "sql_session_close", "sql_session_read", "sql_session_write", "sql_session_destroy", "sql_session_gc");
 session_name($Settings['sqltable']."sess");
 session_start();
 $iDBSessCloseDB = true;
+output_reset_rewrite_vars();
 //@register_shutdown_function("session_write_close");
 //header("Set-Cookie: PHPSESSID=" . session_id() . "; path=".$cbasedir);
 output_reset_rewrite_vars();
