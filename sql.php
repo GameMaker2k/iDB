@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 07/09/2011 SVN 700 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 07/11/2011 SVN 705 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -414,9 +414,11 @@ global $sess_save_path;
 $sess_save_path = $save_path;
 return true; }
 //Session Close Function
+$iDBSessCloseDB = true;
 function sql_session_close() {
-global $SQLStat;
-sql_disconnect_db($SQLStat);
+global $SQLStat,$iDBSessCloseDB;
+if($iDBSessCloseDB===true) {
+sql_disconnect_db($SQLStat); }
 return true; }
 //Session Read Function
 function sql_session_read($id) {
@@ -455,6 +457,7 @@ $time = GMTimeStamp() - $maxlifetime;
 //sql_query(sql_pre_query('DELETE FROM \"'.$sqltable.'sessions\" WHERE \"expires\" < UNIX_TIMESTAMP();', array(null)),$SQLStat);
 sql_query(sql_pre_query("DELETE FROM \"".$sqltable."sessions\" WHERE \"expires\" < %i", array($time)),$SQLStat);
 return true; }
+if (session_id()) { session_destroy(); }
 session_set_save_handler("sql_session_open", "sql_session_close", "sql_session_read", "sql_session_write", "sql_session_destroy", "sql_session_gc");
 if($cookieDomain==null) {
 session_set_cookie_params(0, $cbasedir); }
@@ -473,8 +476,19 @@ header("Expires: ".gmdate("D, d M Y H:i:s")." GMT");
 if(!isset($_COOKIE[$Settings['sqltable']."sess"])) {
 $exptime = GMTimeStamp() - ini_get("session.gc_maxlifetime");
 sql_query(sql_pre_query("DELETE FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" < %i OR \"ip_address\"='%s' AND \"user_agent\"='%s'", array($exptime,$temp_user_ip,$temp_user_agent)),$SQLStat); }
+if(!isset($_SESSION['CheckCookie'])) {
+if(isset($_COOKIE['SessPass'])&&isset($_COOKIE['MemberName'])) {
+session_set_save_handler("sql_session_open", "sql_session_close", "sql_session_read", "sql_session_write", "sql_session_destroy", "sql_session_gc");
 session_name($Settings['sqltable']."sess");
 session_start();
+$iDBSessCloseDB = false;
+output_reset_rewrite_vars();
+require($SettDir['inc'].'prelogin.php'); 
+session_write_close(); } }
+session_name($Settings['sqltable']."sess");
+session_start();
+$iDBSessCloseDB = true;
+//@register_shutdown_function("session_write_close");
 //header("Set-Cookie: PHPSESSID=" . session_id() . "; path=".$cbasedir);
 output_reset_rewrite_vars();
 if($_GET['act']=="bsdl"||$_GET['act']=="BSDL"||$_GET['act']=="license"||
@@ -508,9 +522,6 @@ if($_GET['act']=="MkCaptcha"||$_GET['act']=="Captcha") {
 	$oPhpCaptcha->SetOwnerText("Fake Code: ".$RandNum);
 	$oPhpCaptcha->UseColour(true);
 	$oPhpCaptcha->Create(); session_write_close(); die(); } }
-if(!isset($_SESSION['CheckCookie'])) {
-if(isset($_COOKIE['SessPass'])&&isset($_COOKIE['MemberName'])) {
-require($SettDir['inc'].'prelogin.php'); } }
 require($SettDir['inc'].'groupsetup.php');
 if($Settings['board_offline']=="on"&&$GroupInfo['CanViewOffLine']!="yes") {
 header("Content-Type: text/plain; charset=".$Settings['charset']); sql_free_result($peresult);

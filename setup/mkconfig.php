@@ -12,7 +12,7 @@
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mkconfig.php - Last Update: 07/10/2011 SVN 704 - Author: cooldude2k $
+    $FileInfo: mkconfig.php - Last Update: 07/11/2011 SVN 705 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mkconfig.php"||$File3Name=="/mkconfig.php") {
@@ -60,6 +60,7 @@ if (!is_writable($checkfile)) {
    @chmod("settings.php",0766); $Error="Yes";
    @chmod("settingsbak.php",0766);
 } else { /* settings.php is writable install iDB. ^_^ */ }
+if (session_id()) { session_destroy(); }
 session_name($_POST['tableprefix']."sess");
 if(preg_match("/\/$/", $_POST['BoardURL'])<1) { 
 	$_POST['BoardURL'] = $_POST['BoardURL']."/"; } 
@@ -76,6 +77,7 @@ header("Date: ".gmdate("D, d M Y H:i:s")." GMT");
 header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
 header("Expires: ".gmdate("D, d M Y H:i:s")." GMT");
 session_start();
+//@register_shutdown_function("session_write_close");
 if (pre_strlen($_POST['AdminPasswords'])<"3") { $Error="Yes";
 echo "<br />Your password is too small."; }
 if (pre_strlen($_POST['AdminUser'])<"3") { $Error="Yes";

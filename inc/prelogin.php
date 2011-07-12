@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: prelogin.php - Last Update: 06/14/2011 SVN 672 - Author: cooldude2k $
+    $FileInfo: prelogin.php - Last Update: 07/11/2011 SVN 705 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="prelogin.php"||$File3Name=="/prelogin.php") {
@@ -70,8 +70,8 @@ if($cookieSecure===false) {
 setcookie("MemberName", $YourNameAM, time() + (7 * 86400), $cbasedir, $cookieDomain);
 setcookie("UserID", $YourIDAM, time() + (7 * 86400), $cbasedir, $cookieDomain);
 setcookie("SessPass", $YourPassAM, time() + (7 * 86400), $cbasedir, $cookieDomain); } }
-redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); $urlstatus = 302;
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die();
+/*redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); $urlstatus = 302;
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die();*/
 } } if($numlog2<=0||$numlog2>1||$BanError=="yes") { session_unset();
 if($cookieDomain==null) {
 setcookie("MemberName", null, GMTimeStamp() - 3600, $cbasedir);
