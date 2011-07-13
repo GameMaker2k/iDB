@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 06/28/2011 SVN 685 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 07/13/2011 SVN 710 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -896,11 +896,20 @@ $i=0;
 $YourName=sql_result($resultlog,$i,"Name");
 $YourPassTry=sql_result($resultlog,$i,"UserPassword");
 $HashType=sql_result($resultlog,$i,"HashType");
+$HashType=str_replace("IntDBH", "iDBH", $HashType);
 $JoinedPass=sql_result($resultlog,$i,"Joined");
 $HashSalt=sql_result($resultlog,$i,"Salt");
 $UpdateHash = false; $YourPassword = null;
+//Used if you forget your password will change on next login.
 if($HashType=="NoHash") { $YourPassword = $_POST['userpass']; }
 if($HashType=="NoHASH") { $YourPassword = $_POST['userpass']; }
+if($HashType=="PlainText") { $YourPassword = $_POST['userpass']; }
+//Used to not allow guest user number -1 to login.
+if($HashType=="NoPass") { $YourPassword = null; $UpdateHash = false; }
+if($HashType=="NoPassword") { $YourPassword = null; $UpdateHash = false; }
+if($HashType=="GuestPass") { $YourPassword = null; $UpdateHash = false; }
+if($HashType=="GuestPassword") { $YourPassword = null; $UpdateHash = false; }
+//iDB hashing system
 if($HashType=="ODFH") { $YourPassword = PassHash2x($_POST['userpass']); }
 if($HashType=="IPB2") { $YourPassword = hash2xkey($_POST['userpass'],$HashSalt); }
 if($HashType=="DF4H") { $YourPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$HashSalt,"sha1"); }
@@ -922,6 +931,10 @@ if($HashType=="iDBHSALSA20") { $YourPassword = b64e_hmac($_POST['userpass'],$Joi
 if($HashType=="iDBHSFRU") { $YourPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$HashSalt,"snefru"); }
 if($HashType=="iDBHSFRU256") { $YourPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$HashSalt,"snefru256"); }
 if($HashType=="iDBHGOST") { $YourPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$HashSalt,"gost"); }
+if($HashType=="NoPass") { $YourPassword = "iDB"; $YourPassTry = "IntDB"; }
+if($HashType=="NoPassword") { $YourPassword = "iDB"; $YourPassTry = "IntDB"; }
+if($HashType=="GuestPass") { $YourPassword = "iDB"; $YourPassTry = "IntDB"; }
+if($HashType=="GuestPassword") { $YourPassword = "iDB"; $YourPassTry = "IntDB"; }
 if($YourPassword!=$YourPassTry) { $passright = false; } 
 if($YourPassword==$YourPassTry) { $passright = true;
 $YourIDM=sql_result($resultlog,$i,"id");
