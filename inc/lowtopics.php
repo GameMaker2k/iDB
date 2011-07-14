@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: lowtopics.php - Last Update: 06/14/2011 SVN 672 - Author: cooldude2k $
+    $FileInfo: lowtopics.php - Last Update: 07/14/2011 SVN 711 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="lowtopics.php"||$File3Name=="/lowtopics.php") {
@@ -264,4 +264,7 @@ if ($OldForumID==$ForumID&&$TForumID!=$ForumID) { $PreTopic="<span>Moved: </span
 <li><?php echo $PreTopic; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=lowview&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a> <span style="color: gray; font-size: 10px;">(<?php echo $NumReply; ?> replies)</span></li>
 <?php ++$i; } ?>
 </ul></div><div>&nbsp;</div>
+<div style="font-size: 11px; font-weight: bold; padding: 10px; border: 1px solid gray;">
+<?php echo $pstring; ?></div>
+<div>&nbsp;</div>
 <?php sql_free_result($result); } } } ?>

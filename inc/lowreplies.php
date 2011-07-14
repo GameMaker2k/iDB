@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: lowreplies.php - Last Update: 06/14/2011 SVN 672 - Author: cooldude2k $
+    $FileInfo: lowreplies.php - Last Update: 07/14/2011 SVN 711 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -163,7 +163,7 @@ if($_GET['page']>$pagenum) {
 	$_GET['page'] = $pagenum; }
 $pagei=0; $pstring = null;
 if($pagenum>1) {
-$pstring = "<div style=\"\" class=\"PageList\"><span class=\"pagelink\">".$pagenum." Pages:</span> "; }
+$pstring = "<div class=\"PageList\"><span class=\"pagelink\">".$pagenum." Pages:</span> "; }
 if($_GET['page']<4) { $Pagez[0] = null; }
 if($_GET['page']>=4) { $Pagez[0] = "First"; }
 if($_GET['page']>=3) {
@@ -427,4 +427,7 @@ $ReplyNum = $i + $PageLimit + 1;
 </div>
 <div style="padding: 6px; font-size: 0.8em;"><?php echo $MyPost; ?></div></div>
 <?php ++$i; } sql_free_result($result); 
-?></div><div>&nbsp;</div><?php } } ?>
+?></div><div>&nbsp;</div>
+<div style="font-size: 11px; font-weight: bold; padding: 10px; border: 1px solid gray;">
+<?php echo $pstring; ?></div>
+<div>&nbsp;</div><?php } } ?>
