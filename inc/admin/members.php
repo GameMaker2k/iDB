@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 07/01/2011 SVN 691 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 07/14/2011 SVN 714 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -369,6 +369,22 @@ $EditMem['Karma']=sql_result($result,0,"Karma");
 $EditMem['TimeZone']=sql_result($result,0,"TimeZone");
 $EditMem['DST']=sql_result($result,0,"DST");
 $EditMem['IP']=sql_result($result,0,"IP");
+$mpquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."mempermissions\" WHERE \"id\"=%i LIMIT 1", array($_POST['id']));
+$mpresult=sql_query($mpquery,$SQLStat);
+$mpnum=sql_num_rows($mpresult);
+$EditMemPerm['CanViewBoard'] = sql_result($mpresult,0,"CanViewBoard");
+$EditMemPerm['CanViewOffLine'] = sql_result($mpresult,0,"CanViewOffLine");
+$EditMemPerm['CanEditProfile'] = sql_result($mpresult,0,"CanEditProfile");
+$EditMemPerm['CanAddEvents'] = sql_result($mpresult,0,"CanAddEvents");
+$EditMemPerm['CanPM'] = sql_result($mpresult,0,"CanPM");
+$EditMemPerm['CanSearch'] = sql_result($mpresult,0,"CanSearch");
+$EditMemPerm['CanDoHTML'] = sql_result($mpresult,0,"CanDoHTML");
+$EditMemPerm['CanUseBBags'] = sql_result($mpresult,0,"CanUseBBags");
+$EditMemPerm['FloodControl'] = sql_result($mpresult,0,"FloodControl");
+$EditMemPerm['SearchFlood'] = sql_result($mpresult,0,"SearchFlood");
+$EditMemPerm['HasModCP'] = sql_result($mpresult,0,"HasModCP");
+$EditMemPerm['HasAdminCP'] = sql_result($mpresult,0,"HasAdminCP");
+$EditMemPerm['ViewDBInfo'] = sql_result($mpresult,0,"ViewDBInfo");
 ?>
 <div class="TableMenuBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
@@ -441,6 +457,92 @@ sql_free_result($getgrpidr); ?>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="MemKarma">Members Karma Count:</label></td>
 	<td style="width: 50%;"><input type="text" name="MemKarma" class="TextBox" id="MemKarma" size="20" value="<?php echo $EditMem['Karma']; ?>" /></td>
+</tr><tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="CanViewBoard">Can View Board:</label></td>
+	<td style="width: 50%;"><select size="1" class="TextBox" name="CanViewBoard" id="CanViewBoard">
+	<option selected="selected" value="<?php echo $EditMemPerm['CanViewBoard']; ?>">Old Value (<?php echo $EditMemPerm['CanViewBoard']; ?>)</option>
+	<option value="group">use group info</option>
+	<option value="yes">yes</option>
+	<option value="no">no</option>
+	</select></td>
+</tr><tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="CanViewOffLine">Can View OffLine Board:</label></td>
+	<td style="width: 50%;"><select size="1" class="TextBox" name="CanViewOffLine" id="CanViewOffLine">
+	<option selected="selected" value="<?php echo $EditMemPerm['CanViewOffLine']; ?>">Old Value (<?php echo $EditMemPerm['CanViewOffLine']; ?>)</option>
+	<option value="group">use group info</option>
+	<option value="yes">yes</option>
+	<option value="no">no</option>
+	</select></td>
+</tr><tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="CanEditProfile">Can Edit Profile:</label></td>
+	<td style="width: 50%;"><select size="1" class="TextBox" name="CanEditProfile" id="CanEditProfile">
+	<option selected="selected" value="<?php echo $EditMemPerm['CanEditProfile']; ?>">Old Value (<?php echo $EditMemPerm['CanEditProfile']; ?>)</option>
+	<option value="group">use group info</option>
+	<option value="yes">yes</option>
+	<option value="no">no</option>
+	</select></td>
+</tr><tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="CanAddEvents">Can Add Events:</label></td>
+	<td style="width: 50%;"><select size="1" class="TextBox" name="CanAddEvents" id="CanAddEvents">
+	<option selected="selected" value="<?php echo $EditMemPerm['CanAddEvents']; ?>">Old Value (<?php echo $EditMemPerm['CanAddEvents']; ?>)</option>
+	<option value="group">use group info</option>
+	<option value="yes">yes</option>
+	<option value="no">no</option>
+	</select></td>
+</tr><tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="CanPM">Can PM:</label></td>
+	<td style="width: 50%;"><select size="1" class="TextBox" name="CanPM" id="CanPM">
+	<option selected="selected" value="<?php echo $EditMemPerm['CanPM']; ?>">Old Value (<?php echo $EditMemPerm['CanPM']; ?>)</option>
+	<option value="group">use group info</option>
+	<option value="yes">yes</option>
+	<option value="no">no</option>
+	</select></td>
+</tr><tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="CanSearch">Can Search:</label></td>
+	<td style="width: 50%;"><select size="1" class="TextBox" name="CanSearch" id="CanSearch">
+	<option selected="selected" value="<?php echo $EditMemPerm['CanSearch']; ?>">Old Value (<?php echo $EditMemPerm['CanSearch']; ?>)</option>
+	<option value="group">use group info</option>
+	<option value="yes">yes</option>
+	<option value="no">no</option>
+	</select></td>
+</tr><tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="CanDoHTML">Can DoHTML:</label></td>
+	<td style="width: 50%;"><select size="1" class="TextBox" name="CanDoHTML" id="CanDoHTML">
+	<option <?php if($EditMemPerm['CanDoHTML']=="group") { echo "selected=\"selected\" "; } ?>value="group">use group info</option>
+	<option <?php if($EditMemPerm['CanDoHTML']=="yes") { echo "selected=\"selected\" "; } ?>value="yes">yes</option>
+	<option <?php if($EditMemPerm['CanDoHTML']=="no") { echo "selected=\"selected\" "; } ?>value="no">no</option>
+	</select></td>
+</tr><tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="CanUseBBags">Can use BBags:</label></td>
+	<td style="width: 50%;"><select size="1" class="TextBox" name="CanUseBBags" id="CanUseBBags">
+	<option <?php if($EditMemPerm['CanUseBBags']=="group") { echo "selected=\"selected\" "; } ?>value="group">use group info</option>
+	<option <?php if($EditMemPerm['CanUseBBags']=="yes") { echo "selected=\"selected\" "; } ?>value="yes">yes</option>
+	<option <?php if($EditMemPerm['CanUseBBags']=="no") { echo "selected=\"selected\" "; } ?>value="no">no</option>
+	</select></td>
+</tr><tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="FloodControl">Flood Control in seconds:</label></td>
+	<td style="width: 50%;"><input type="text" name="FloodControl" class="TextBox" id="FloodControl" size="20" value="<?php echo $EditMemPerm['FloodControl']; ?>" /></td>
+</tr><tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="SearchFlood">Search Flood Control in seconds:</label></td>
+	<td style="width: 50%;"><input type="text" name="SearchFlood" class="TextBox" id="SearchFlood" size="20" value="<?php echo $EditMemPerm['SearchFlood']; ?>" /></td>
+<?php if($_POST['id']!=1) { ?>
+</tr><tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="HasAdminCP">Can view Admin CP:</label></td>
+	<td style="width: 50%;"><select size="1" class="TextBox" name="HasAdminCP" id="HasAdminCP">
+	<option selected="selected" value="<?php echo $EditMemPerm['HasAdminCP']; ?>">Old Value (<?php echo $EditMemPerm['HasAdminCP']; ?>)</option>
+	<option value="group">use group info</option>
+	<option value="yes">yes</option>
+	<option value="no">no</option>
+	</select></td>
+</tr><tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="ViewDBInfo">Can view Database info:</label></td>
+	<td style="width: 50%;"><select size="1" class="TextBox" name="ViewDBInfo" id="ViewDBInfo">
+	<option selected="selected" value="<?php echo $EditMemPerm['ViewDBInfo']; ?>">Old Value (<?php echo $EditMemPerm['ViewDBInfo']; ?>)</option>
+	<option value="group">use group info</option>
+	<option value="yes">yes</option>
+	<option value="no">no</option>
+	</select></td>
+<?php } ?>
 </tr></table>
 <table style="text-align: left;">
 <tr style="text-align: left;">
@@ -521,15 +623,20 @@ if($DMemName!==null&&($_POST['id']!="0"||$_POST['id']!="-1")&&
 	($_POST['gid']!=$GuestGroupID||$_POST['gid']!=$ValidateGroupID)) { 
 if($_POST['MemName']==$DMemName||$username_check>=1) {
 if($_POST['id']!=1) {
-$dmquery = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"GroupID\"=%i,\"HiddenMember\"='%s',\"WarnLevel\"=%i,\"BanTime\"=%i,\"PostCount\"=%i,\"Karma\"=%i WHERE \"id\"=%i", array($_POST['gid'],$_POST['MemHidden'],$_POST['MemWarnLevel'],$_POST['MemBanTime'],$_POST['MemPostCount'],$_POST['MemKarma'],$_POST['id'])); }
+$dmquery = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"GroupID\"=%i,\"HiddenMember\"='%s',\"WarnLevel\"=%i,\"BanTime\"=%i,\"PostCount\"=%i,\"Karma\"=%i WHERE \"id\"=%i", array($_POST['gid'],$_POST['MemHidden'],$_POST['MemWarnLevel'],$_POST['MemBanTime'],$_POST['MemPostCount'],$_POST['MemKarma'],$_POST['id'])); 
+$dpmquery = sql_pre_query("UPDATE \"".$Settings['sqltable']."mempermissions\" SET \"CanViewBoard\"='%s',\"CanViewOffLine\"='%s',\"CanEditProfile\"='%s',\"CanAddEvents\"='%s',\"CanPM\"='%s',\"CanSearch\"='%s',\"CanDoHTML\"='%s',\"CanUseBBags\"='%s',\"FloodControl\"=%i,\"SearchFlood\"=%i,\"HasModCP\"='%s',\"HasAdminCP\"='%s',\"ViewDBInfo\"='%s' WHERE \"id\"=%i", array($_POST['CanViewBoard'],$_POST['CanViewOffLine'],$_POST['CanEditProfile'],$_POST['CanAddEvents'],$_POST['CanPM'],$_POST['CanSearch'],$_POST['CanDoHTML'],$_POST['CanUseBBags'],$_POST['FloodControl'],$_POST['SearchFlood'],$_POST['HasModCP'],$_POST['HasAdminCP'],$_POST['ViewDBInfo'],$_POST['id'])); }
 if($_POST['id']==1) {
-$dmquery = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"HiddenMember\"='%s',\"WarnLevel\"=%i,\"BanTime\"=%i,\"PostCount\"=%i,\"Karma\"=%i WHERE \"id\"=%i", array($_POST['MemHidden'],$_POST['MemWarnLevel'],$_POST['MemBanTime'],$_POST['MemPostCount'],$_POST['MemKarma'],$_POST['id'])); } }
+$dmquery = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"HiddenMember\"='%s',\"WarnLevel\"=%i,\"BanTime\"=%i,\"PostCount\"=%i,\"Karma\"=%i WHERE \"id\"=%i", array($_POST['MemHidden'],$_POST['MemWarnLevel'],$_POST['MemBanTime'],$_POST['MemPostCount'],$_POST['MemKarma'],$_POST['id'])); 
+$dpmquery = sql_pre_query("UPDATE \"".$Settings['sqltable']."mempermissions\" SET \"CanViewBoard\"='%s',\"CanViewOffLine\"='%s',\"CanEditProfile\"='%s',\"CanAddEvents\"='%s',\"CanPM\"='%s',\"CanSearch\"='%s',\"CanDoHTML\"='%s',\"CanUseBBags\"='%s',\"FloodControl\"=%i,\"SearchFlood\"=%i WHERE \"id\"=%i", array($_POST['CanViewBoard'],$_POST['CanViewOffLine'],$_POST['CanEditProfile'],$_POST['CanAddEvents'],$_POST['CanPM'],$_POST['CanSearch'],$_POST['CanDoHTML'],$_POST['CanUseBBags'],$_POST['FloodControl'],$_POST['SearchFlood'],$_POST['id'])); } }
 if($_POST['MemName']!=$DMemName&&$username_check<1) {
 if($_POST['id']!=1) {
-$dmquery = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"Name\"='%s',\"GroupID\"=%i,\"HiddenMember\"='%s',\"WarnLevel\"=%i,\"BanTime\"=%i,\"PostCount\"=%i,\"Karma\"=%i WHERE \"id\"=%i", array($_POST['MemName'],$_POST['gid'],$_POST['MemHidden'],$_POST['MemWarnLevel'],$_POST['MemBanTime'],$_POST['MemPostCount'],$_POST['MemKarma'],$_POST['id'])); } 
+$dmquery = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"Name\"='%s',\"GroupID\"=%i,\"HiddenMember\"='%s',\"WarnLevel\"=%i,\"BanTime\"=%i,\"PostCount\"=%i,\"Karma\"=%i WHERE \"id\"=%i", array($_POST['MemName'],$_POST['gid'],$_POST['MemHidden'],$_POST['MemWarnLevel'],$_POST['MemBanTime'],$_POST['MemPostCount'],$_POST['MemKarma'],$_POST['id'])); 
+$dpmquery = sql_pre_query("UPDATE \"".$Settings['sqltable']."mempermissions\" SET \"CanViewBoard\"='%s',\"CanViewOffLine\"='%s',\"CanEditProfile\"='%s',\"CanAddEvents\"='%s',\"CanPM\"='%s',\"CanSearch\"='%s',\"CanDoHTML\"='%s',\"CanUseBBags\"='%s',\"FloodControl\"=%i,\"SearchFlood\"=%i,\"HasModCP\"='%s',\"HasAdminCP\"='%s',\"ViewDBInfo\"='%s' WHERE \"id\"=%i", array($_POST['CanViewBoard'],$_POST['CanViewOffLine'],$_POST['CanEditProfile'],$_POST['CanAddEvents'],$_POST['CanPM'],$_POST['CanSearch'],$_POST['CanDoHTML'],$_POST['CanUseBBags'],$_POST['FloodControl'],$_POST['SearchFlood'],$_POST['HasModCP'],$_POST['HasAdminCP'],$_POST['ViewDBInfo'],$_POST['id'])); } 
 if($_POST['id']==1) {
-$dmquery = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"Name\"='%s',\"HiddenMember\"='%s',\"WarnLevel\"=%i,\"BanTime\"=%i,\"PostCount\"=%i,\"Karma\"=%i WHERE \"id\"=%i", array($_POST['MemName'],$_POST['MemHidden'],$_POST['MemWarnLevel'],$_POST['MemBanTime'],$_POST['MemPostCount'],$_POST['MemKarma'],$_POST['id'])); } }
-sql_query($dmquery,$SQLStat); }
+$dmquery = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"Name\"='%s',\"HiddenMember\"='%s',\"WarnLevel\"=%i,\"BanTime\"=%i,\"PostCount\"=%i,\"Karma\"=%i WHERE \"id\"=%i", array($_POST['MemName'],$_POST['MemHidden'],$_POST['MemWarnLevel'],$_POST['MemBanTime'],$_POST['MemPostCount'],$_POST['MemKarma'],$_POST['id'])); 
+$dpmquery = sql_pre_query("UPDATE \"".$Settings['sqltable']."mempermissions\" SET \"CanViewBoard\"='%s',\"CanViewOffLine\"='%s',\"CanEditProfile\"='%s',\"CanAddEvents\"='%s',\"CanPM\"='%s',\"CanSearch\"='%s',\"CanDoHTML\"='%s',\"CanUseBBags\"='%s',\"FloodControl\"=%i,\"SearchFlood\"=%i WHERE \"id\"=%i", array($_POST['CanViewBoard'],$_POST['CanViewOffLine'],$_POST['CanEditProfile'],$_POST['CanAddEvents'],$_POST['CanPM'],$_POST['CanSearch'],$_POST['CanDoHTML'],$_POST['CanUseBBags'],$_POST['FloodControl'],$_POST['SearchFlood'],$_POST['id'])); } }
+sql_query($dmquery,$SQLStat);
+sql_query($dpmquery,$SQLStat); }
 ?>
 <div class="TableMenuBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
