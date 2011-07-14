@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: groups.php - Last Update: 07/14/2011 SVN 712 - Author: cooldude2k $
+    $FileInfo: groups.php - Last Update: 07/14/2011 SVN 713 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="groups.php"||$File3Name=="/groups.php") {
@@ -67,7 +67,11 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Adding new Group";
 	<td style="width: 50%;"><select size="1" class="TextBox" name="GroupPerm" id="GroupPerm">
 	<option selected="selected" value="0">none</option>
 <?php 
-$getperidq = sql_pre_query("SELECT DISTINCT \"PermissionID\" FROM \"".$Settings['sqltable']."permissions\"", array(null));
+if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"||
+	$Settings['sqltype']=="pgsql"||$Settings['sqltype']=="sqlite") {
+$getperidq = sql_pre_query("SELECT DISTINCT \"PermissionID\" FROM \"".$Settings['sqltable']."permissions\"", array(null)); }
+if($Settings['sqltype']=="cubrid") {
+$getperidq = sql_pre_query("SELECT DISTINCT \"permissionid\" FROM \"".$Settings['sqltable']."permissions\"", array(null)); }
 $getperidr=sql_query($getperidq,$SQLStat);
 $getperidnum=sql_num_rows($getperidr);
 $getperidi = 0;

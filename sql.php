@@ -418,7 +418,7 @@ $iDBSessCloseDB = true;
 function sql_session_close() {
 global $SQLStat,$iDBSessCloseDB;
 if($iDBSessCloseDB===true) {
-sql_disconnect_db($SQLStat); }
+/*sql_disconnect_db($SQLStat);*/ }
 return true; }
 //Session Read Function
 function sql_session_read($id) {
@@ -490,7 +490,8 @@ session_name($Settings['sqltable']."sess");
 session_start();
 $iDBSessCloseDB = true;
 output_reset_rewrite_vars();
-//@register_shutdown_function("session_write_close");
+@register_shutdown_function("session_write_close");
+@register_shutdown_function("sql_disconnect_db",$SQLStat);
 //header("Set-Cookie: PHPSESSID=" . session_id() . "; path=".$cbasedir);
 output_reset_rewrite_vars();
 if($_GET['act']=="bsdl"||$_GET['act']=="BSDL"||$_GET['act']=="license"||
