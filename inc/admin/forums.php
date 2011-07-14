@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: forums.php - Last Update: 06/14/2011 SVN 672 - Author: cooldude2k $
+    $FileInfo: forums.php - Last Update: 07/14/2011 SVN 712 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="forums.php"||$File3Name=="/forums.php") {
@@ -474,15 +474,15 @@ $getperidnum=sql_num_rows($getperidr);
 $getperidi = 0; 
 $nextperid = null;
 /*
-if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"
-	||$Settings['sqltype']=="pgsql") {
+if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"||
+	$Settings['sqltype']=="pgsql"||$Settings['sqltype']=="cubrid") {
 $nextperid = sql_get_next_id($Settings['sqltable'],"permissions",$SQLStat); }
 if($Settings['sqltype']=="sqlite") {
 $nextperid = sql_get_next_id($Settings['sqltable'],"\"permissions\"",$SQLStat); }
 */
 while ($getperidi < $getperidnum) {
-if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"
-	||$Settings['sqltype']=="pgsql") {
+if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"||
+	$Settings['sqltype']=="pgsql"||$Settings['sqltype']=="cubrid") {
 $getperidID=sql_result($getperidr,$getperidi,"PermissionID"); }
 if($Settings['sqltype']=="sqlite") {
 $getperidID=sql_result($getperidr,$getperidi,"\"PermissionID\""); }
@@ -963,8 +963,8 @@ $getperidr=sql_query($getperidq,$SQLStat);
 $getperidnum=sql_num_rows($getperidr);
 $getperidi = 0;
 while ($getperidi < $getperidnum) {
-if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"
-	||$Settings['sqltype']=="pgsql") {
+if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"||
+	$Settings['sqltype']=="pgsql"||$Settings['sqltype']=="cubrid") {
 $getperidID=sql_result($getperidr,$getperidi,"PermissionID"); }
 if($Settings['sqltype']=="sqlite") {
 $getperidID=sql_result($getperidr,$getperidi,"\"PermissionID\""); }
