@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: groupsetup.php - Last Update: 06/14/2011 SVN 672 - Author: cooldude2k $
+    $FileInfo: groupsetup.php - Last Update: 07/14/2011 SVN 716 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="groupsetup.php"||$File3Name=="/groupsetup.php") {
@@ -133,8 +133,10 @@ if($grunum>=1) {
 $GroupInfo['ID']=sql_result($gruresult,0,"id");
 if(!is_numeric($GroupInfo['ID'])) { $GruError = true; }
 $GroupInfo['Name']=sql_result($gruresult,0,"Name");
+$GroupInfo['PermissionID']=sql_result($mempreresult,0,"PermissionID");
+if(!is_numeric($GroupInfo['PermissionID'])||$GroupInfo['PermissionID']=="0") {
 $GroupInfo['PermissionID']=sql_result($gruresult,0,"PermissionID");
-if(!is_numeric($GroupInfo['PermissionID'])) { $GruError = true; }
+if(!is_numeric($GroupInfo['PermissionID'])) { $GruError = true; } }
 $GroupInfo['NamePrefix']=sql_result($gruresult,0,"NamePrefix");
 $GroupInfo['NameSuffix']=sql_result($gruresult,0,"NameSuffix");
 $GroupInfo['CanViewBoard']=sql_result($mempreresult,0,"CanViewBoard");
