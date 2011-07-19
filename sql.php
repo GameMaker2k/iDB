@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 07/14/2011 SVN 718 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 07/18/2011 SVN 719 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -214,7 +214,20 @@ if($Settings['hideverinfohttp']=="on") {
 $qstrtest = htmlentities($Settings['qstr'], ENT_QUOTES, $Settings['charset']);
 $qseptest = htmlentities($Settings['qsep'], ENT_QUOTES, $Settings['charset']);
 $isiteurl = $Settings['idburl']."?act".$qseptest."view";
-@ini_set("user_agent", "Mozilla/5.0 (compatible; ".$VerCheckName."/".$iverstring."; +".$isiteurl.")"); }
+@ini_set("user_agent", "Mozilla/5.0 (compatible; ".$VerCheckName."/".$iverstring."; +".$isiteurl.")"); 
+if (function_exists("stream_context_create")) {
+$iopts = array(
+  'http' => array(
+    'method' => "GET",
+    'header' => "Accept-Language: *\r\n".
+                "User-Agent: Mozilla/5.0 (compatible; ".$VerCheckName."/".$iverstring."; +".$isiteurl.")\r\n".
+                "Accept: */*\r\n".
+                "Connection: keep-alive\r\n".
+                "Referer: ".$isiteurl."\r\n".
+                "From: ".$isiteurl."\r\n"
+  )
+);
+$icontext = stream_context_create($iopts); } }
 $iDBVerName = $VerCheckName."|".$VER2[1]."|".$VER1[0].".".$VER1[1].".".$VER1[2]."|".$VER2[2]."|".$SubVerN;
 /* 
 This way checks iDB version by sending the iDBVerName to the iDB Version Checker.
@@ -485,6 +498,7 @@ session_set_save_handler("sql_session_open", "sql_session_close", "sql_session_r
 session_name($Settings['sqltable']."sess");
 session_start();
 $iDBSessCloseDB = false;
+$_SESSION['ShowActHidden'] = "no";
 output_reset_rewrite_vars();
 require($SettDir['inc'].'prelogin.php'); 
 session_write_close(); } }

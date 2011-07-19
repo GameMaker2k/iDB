@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: lowsubcategories.php - Last Update: 07/14/2011 SVN 717 - Author: cooldude2k $
+    $FileInfo: lowsubcategories.php - Last Update: 07/18/2011 SVN 719 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="lowsubcategories.php"||$File3Name=="/lowsubcategories.php") {
@@ -28,6 +28,7 @@ if($checknum>=1) {
 $CategoryID=sql_result($checkresult,0,"id");
 $CategoryName=sql_result($checkresult,0,"Name");
 $CategoryShow=sql_result($checkresult,0,"ShowCategory");
+if($CategoryShow=="yes") { $_SESSION['ShowActHidden'] = "yes"; }
 $CategoryType=sql_result($checkresult,0,"CategoryType");
 $InSubCategory=sql_result($checkresult,0,"InSubCategory");
 $SubShowForums=sql_result($checkresult,0,"SubShowForums");

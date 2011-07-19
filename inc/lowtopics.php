@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: lowtopics.php - Last Update: 07/14/2011 SVN 717 - Author: cooldude2k $
+    $FileInfo: lowtopics.php - Last Update: 07/18/2011 SVN 719 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="lowtopics.php"||$File3Name=="/lowtopics.php") {
@@ -31,6 +31,8 @@ $ForumID=sql_result($preresult,0,"id");
 $ForumCatID=sql_result($preresult,0,"CategoryID");
 $ForumName=sql_result($preresult,0,"Name");
 $ForumType=sql_result($preresult,0,"ForumType");
+$ForumShow=sql_result($preresult,0,"ShowForum");
+if($ForumShow=="yes") { $_SESSION['ShowActHidden'] = "yes"; }
 $InSubForum=sql_result($preresult,0,"InSubForum");
 $RedirectURL=sql_result($preresult,0,"RedirectURL");
 $RedirectTimes=sql_result($preresult,0,"Redirects");
@@ -51,6 +53,8 @@ $ForumType = strtolower($ForumType); $CanHaveTopics = strtolower($CanHaveTopics)
 $catcheck = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."categories\" WHERE \"id\"=%i".$CatIgnoreList2."  LIMIT 1", array($ForumCatID));
 $catresult=sql_query($catcheck,$SQLStat);
 $CategoryName=sql_result($catresult,0,"Name");
+$CategoryShow=sql_result($catresult,0,"ShowCategory");
+if($CategoryShow=="yes") { $_SESSION['ShowActHidden'] = "yes"; }
 $CategoryType=sql_result($catresult,0,"CategoryType");
 $CategoryPostCountView=sql_result($catresult,0,"PostCountView");
 $CategoryKarmaCountView=sql_result($catresult,0,"KarmaCountView");

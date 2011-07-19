@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 07/14/2011 SVN 717 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 07/18/2011 SVN 719 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -416,7 +416,9 @@ $session_user_agent=sql_result($result,$i,"user_agent");
 $session_ip_address=sql_result($result,$i,"ip_address"); 
 $session_expires=sql_result($result,$i,"expires"); 
 $session_expires = GMTimeChange("F j Y, g:i a",$session_expires,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+if(isset($UserSessInfo)) { $UserSessInfo = null; }
 $UserSessInfo = unserialize_session($session_data);
+if(!isset($UserSessInfo['ShowActHidden'])) { $UserSessInfo['ShowActHidden'] = "no"; }
 if(!isset($UserSessInfo['UserGroup'])) { 
 	$UserSessInfo['UserGroup'] = $Settings['GuestGroup']; }
 if(!isset($session_ip_address)) { 
@@ -458,11 +460,15 @@ $TopicForumID=0;
 $TopicCatID=0; }
 if($CatPermissionInfo['CanViewCategory'][$TopicCatID]=="no"||
 	$CatPermissionInfo['CanViewCategory'][$TopicCatID]!="yes") {
+	$PreFileName = $exfile['index'].$Settings['file_ext'];
+	$PreExpPage = "act=view";
 	$UserSessInfo['ViewingPage'] = url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']);
 	$UserSessInfo['PreViewingTitle'] = "Viewing";
 	$UserSessInfo['ViewingTitle'] = "Board index"; }
 if($PermissionInfo['CanViewForum'][$TopicForumID]=="no"||
 	$PermissionInfo['CanViewForum'][$TopicForumID]!="yes") {
+	$PreFileName = $exfile['index'].$Settings['file_ext'];
+	$PreExpPage = "act=view";
 	$UserSessInfo['ViewingPage'] = url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']);
 	$UserSessInfo['PreViewingTitle'] = "Viewing";
 	$UserSessInfo['ViewingTitle'] = "Board index"; } } }
@@ -475,11 +481,15 @@ $ForumCatID=sql_result($preresult,0,"CategoryID");
 sql_free_result($preresult);
 if($CatPermissionInfo['CanViewCategory'][$ForumCatID]=="no"||
 	$CatPermissionInfo['CanViewCategory'][$ForumCatID]!="yes") {
+	$PreFileName = $exfile['index'].$Settings['file_ext'];
+	$PreExpPage = "act=view";
 	$UserSessInfo['ViewingPage'] = url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']);
 	$UserSessInfo['PreViewingTitle'] = "Viewing";
 	$UserSessInfo['ViewingTitle'] = "Board index"; }
 if($PermissionInfo['CanViewForum'][$ChkID]=="no"||
 	$PermissionInfo['CanViewForum'][$ChkID]!="yes") {
+	$PreFileName = $exfile['index'].$Settings['file_ext'];
+	$PreExpPage = "act=view";
 	$UserSessInfo['ViewingPage'] = url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']);
 	$UserSessInfo['PreViewingTitle'] = "Viewing";
 	$UserSessInfo['ViewingTitle'] = "Board index"; } } }
@@ -492,11 +502,15 @@ $ForumCatID=sql_result($preresult,0,"CategoryID");
 sql_free_result($preresult);
 if($CatPermissionInfo['CanViewCategory'][$ForumCatID]=="no"||
 	$CatPermissionInfo['CanViewCategory'][$ForumCatID]!="yes") {
+	$PreFileName = $exfile['index'].$Settings['file_ext'];
+	$PreExpPage = "act=view";
 	$UserSessInfo['ViewingPage'] = url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']);
 	$UserSessInfo['PreViewingTitle'] = "Viewing";
 	$UserSessInfo['ViewingTitle'] = "Board index"; }
 if($PermissionInfo['CanViewForum'][$ChkID]=="no"||
 	$PermissionInfo['CanViewForum'][$ChkID]!="yes") {
+	$PreFileName = $exfile['index'].$Settings['file_ext'];
+	$PreExpPage = "act=view";
 	$UserSessInfo['ViewingPage'] = url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']);
 	$UserSessInfo['PreViewingTitle'] = "Viewing";
 	$UserSessInfo['ViewingTitle'] = "Board index"; } } }
@@ -504,6 +518,8 @@ if($PreFileName==$exfile['category'].$Settings['file_ext']) {
 if(isset($ChkID["id"])) { $ChkID = $ChkID["id"]; 
 if($CatPermissionInfo['CanViewCategory'][$ChkID]=="no"||
 	$CatPermissionInfo['CanViewCategory'][$ChkID]!="yes") {
+	$PreFileName = $exfile['index'].$Settings['file_ext'];
+	$PreExpPage = "act=view";
 	$UserSessInfo['ViewingPage'] = url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']);
 	$UserSessInfo['PreViewingTitle'] = "Viewing";
 	$UserSessInfo['ViewingTitle'] = "Board index"; } } }
@@ -511,9 +527,15 @@ if($PreFileName==$exfile['subcategory'].$Settings['file_ext']) {
 if(isset($ChkID["id"])) { $ChkID = $ChkID["id"]; 
 if($CatPermissionInfo['CanViewCategory'][$ChkID]=="no"||
 	$CatPermissionInfo['CanViewCategory'][$ChkID]!="yes") {
+	$PreFileName = $exfile['index'].$Settings['file_ext'];
+	$PreExpPage = "act=view";
 	$UserSessInfo['ViewingPage'] = url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']);
 	$UserSessInfo['PreViewingTitle'] = "Viewing";
 	$UserSessInfo['ViewingTitle'] = "Board index"; } } }
+if($GroupInfo['HasAdminCP']!="yes"&&$UserSessInfo['ShowActHidden']=="yes") {
+	$PreFileName = $exfile['index'].$Settings['file_ext'];
+	$PreExpPage = "act=view";
+	$UserSessInfo['ViewingPage'] = url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); }
 if($_GET['list']=="all"||$_GET['list']=="members") {
 if($UserSessInfo['UserGroup']!=$Settings['GuestGroup']) {
 if($AmIHiddenUser=="no"&&$UserSessInfo['UserID']>0) { 
