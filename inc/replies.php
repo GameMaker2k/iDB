@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: replies.php - Last Update: 07/18/2011 SVN 719 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 07/18/2011 SVN 720 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -279,7 +279,7 @@ $MyTimeStamp=sql_result($result,$i,"TimeStamp");
 $MyEditTime=sql_result($result,$i,"LastUpdate");
 $MyEditUserID=sql_result($result,$i,"EditUser");
 $MyEditUserName=sql_result($result,$i,"EditUserName");
-$MyTimeStamp=GMTimeChange("M j Y, g:i a",$MyTimeStamp,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$MyTimeStamp=GMTimeChange("M j Y, ".$Settings['idb_time_format'],$MyTimeStamp,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $MyPost=sql_result($result,$i,"Post");
 $MyDescription=sql_result($result,$i,"Description");
 $requery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($MyUserID));
@@ -407,7 +407,7 @@ $eunum = sql_num_rows($euresult); }
 		$EditUserName = $EditUserNamePrefix.$EditUserName; }
 	if(isset($GroupNameSuffix)&&$GroupNameSuffix!=null) {
 		$EditUserName = $EditUserName.$EditUserNameSuffix; }
-	$MyEditTime = GMTimeChange("M j Y, g:i a",$MyEditTime,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+	$MyEditTime = GMTimeChange("M j Y, ".$Settings['idb_time_format'],$MyEditTime,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 	$MySubPost = "<div class=\"EditReply\"><br />This post has been edited by <b>".$EditUserName."</b> on ".$MyEditTime."</div>"; }
 if($User1CanUseBBags1=="yes") { $MyPost = bbcode_parser($MyPost); }
 if($User1CanExecPHP=="no") {

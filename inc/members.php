@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 07/18/2011 SVN 719 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 07/18/2011 SVN 720 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -208,9 +208,9 @@ $MemList['WarnLevel']=sql_result($result,$i,"WarnLevel");
 $MemList['Interests']=sql_result($result,$i,"Interests");
 $MemList['Title']=sql_result($result,$i,"Title");
 $MemList['Joined']=sql_result($result,$i,"Joined");
-$MemList['Joined']=GMTimeChange("F j Y, g:i a",$MemList['Joined'],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$MemList['Joined']=GMTimeChange("F j Y, ".$Settings['idb_time_format'],$MemList['Joined'],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $MemList['LastActive']=sql_result($result,$i,"LastActive");
-$MemList['LastActive']=GMTimeChange("F j Y, g:i a",$MemList['LastActive'],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$MemList['LastActive']=GMTimeChange("F j Y, ".$Settings['idb_time_format'],$MemList['LastActive'],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $MemList['Website']=sql_result($result,$i,"Website");
 $MemList['Website'] = urlcheck($MemList['Website']);
 $BoardWWWChCk = parse_url($Settings['idburl']);
@@ -415,7 +415,7 @@ $session_data=sql_result($result,$i,"session_data");
 $session_user_agent=sql_result($result,$i,"user_agent"); 
 $session_ip_address=sql_result($result,$i,"ip_address"); 
 $session_expires=sql_result($result,$i,"expires"); 
-$session_expires = GMTimeChange("F j Y, g:i a",$session_expires,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$session_expires = GMTimeChange("F j Y, ".$Settings['idb_time_format'],$session_expires,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 if(isset($UserSessInfo)) { $UserSessInfo = null; }
 $UserSessInfo = unserialize_session($session_data);
 if(!isset($UserSessInfo['ShowActHidden'])) { $UserSessInfo['ShowActHidden'] = "no"; }
@@ -604,9 +604,9 @@ $ViewMem['WarnLevel']=sql_result($result,$i,"WarnLevel");
 $ViewMem['Interests']=sql_result($result,$i,"Interests");
 $ViewMem['Title']=sql_result($result,$i,"Title");
 $ViewMem['Joined']=sql_result($result,$i,"Joined");
-$ViewMem['Joined']=GMTimeChange("M j Y, g:i a",$ViewMem['Joined'],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$ViewMem['Joined']=GMTimeChange("M j Y, ".$Settings['idb_time_format'],$ViewMem['Joined'],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $ViewMem['LastActive']=sql_result($result,$i,"LastActive");
-$ViewMem['LastActive']=GMTimeChange("M j Y, g:i a",$ViewMem['LastActive'],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$ViewMem['LastActive']=GMTimeChange("M j Y, ".$Settings['idb_time_format'],$ViewMem['LastActive'],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $ViewMem['Website']=sql_result($result,$i,"Website");
 $ViewMem['Website'] = urlcheck($ViewMem['Website']);
 $BoardWWWChCk = parse_url($Settings['idburl']);
@@ -716,7 +716,7 @@ Title: <?php echo $ViewMem['Title']; ?>
 &nbsp;User Group: <?php echo $ViewMem['Group']; ?><br />
 &nbsp;User Joined: <?php echo $ViewMem['Joined']; ?><br />
 &nbsp;Last Active: <?php echo $ViewMem['LastActive']; ?><br />
-&nbsp;User Time: <?php echo GMTimeGet("M j Y, g:i a",$ViewMem['TimeZone'],0,$ViewMem['DST']); ?><br />
+&nbsp;User Time: <?php echo GMTimeGet("M j Y, ".$Settings['idb_time_format'],$ViewMem['TimeZone'],0,$ViewMem['DST']); ?><br />
 &nbsp;User Website: <a href="<?php echo $ViewMem['Website']; ?>"<?php echo $opennew; ?>>Website</a><br />
 &nbsp;Post Count: <?php echo $ViewMem['PostCount']; ?><br />
 &nbsp;Karma: <?php echo $ViewMem['Karma']; ?><br />

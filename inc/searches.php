@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: searches.php - Last Update: 07/14/2011 SVN 717 - Author: cooldude2k $
+    $FileInfo: searches.php - Last Update: 07/18/2011 SVN 720 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="searches.php"||$File3Name=="/searches.php") {
@@ -310,7 +310,7 @@ $CategoryID=sql_result($result,$i,"CategoryID");
 $UsersID=sql_result($result,$i,"UserID");
 $GuestsName=sql_result($result,$i,"GuestName");
 $TheTime=sql_result($result,$i,"TimeStamp");
-$TheTime=GMTimeChange("F j Y, g:i a",$TheTime,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$TheTime=GMTimeChange("F j Y, ".$Settings['idb_time_format'],$TheTime,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $NumReply=sql_result($result,$i,"NumReply");
 $NumberPosts=$NumReply + 1;
 $prepagelist = null;
@@ -402,7 +402,7 @@ $ReplyID1=sql_result($glrresult,0,"id");
 $UsersID1=sql_result($glrresult,0,"UserID");
 $GuestsName1=sql_result($glrresult,0,"GuestName");
 $TimeStamp1=sql_result($glrresult,0,"TimeStamp");
-$TimeStamp1=GMTimeChange("F j Y, g:i a",$TimeStamp1,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$TimeStamp1=GMTimeChange("F j Y, ".$Settings['idb_time_format'],$TimeStamp1,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $PreUsersName1 = GetUserName($UsersID1,$Settings['sqltable'],$SQLStat);
 if($PreUsersName1['Name']===null) { $UsersID1 = -1;
 $PreUsersName1 = GetUserName($UsersID1,$Settings['sqltable'],$SQLStat); }

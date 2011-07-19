@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 07/18/2011 SVN 719 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 07/18/2011 SVN 720 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -71,6 +71,7 @@ if(!isset($Settings['fixpathinfo'])) { $Settings['fixpathinfo'] = null; }
 if(!isset($Settings['fixcookiedir'])) { $Settings['fixcookiedir'] = null; }
 if(!isset($Settings['fixredirectdir'])) { $Settings['fixcookiedir'] = null; }
 $Settings['bid'] = base64_encode(urlencode($Settings['idburl']));
+if(!isset($Settings['idb_time_format'])) { $Settings['idb_time_format'] = "g:i A"; }
 if(!isset($Settings['showverinfo'])) { 
 	$Settings['showverinfo'] = "on"; }
 if(!isset($Settings['sqldb'])) {

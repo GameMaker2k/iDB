@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: messages.php - Last Update: 07/14/2011 SVN 717 - Author: cooldude2k $
+    $FileInfo: messages.php - Last Update: 07/18/2011 SVN 720 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="messages.php"||$File3Name=="/messages.php") {
@@ -203,7 +203,7 @@ $PMGuest=sql_result($result,$i,"GuestName");
 $MessageName=sql_result($result,$i,"MessageTitle");
 $MessageDesc=sql_result($result,$i,"Description");
 $DateSend=sql_result($result,$i,"DateSend");
-$DateSend=GMTimeChange("F j, Y, g:i a",$DateSend,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$DateSend=GMTimeChange("F j Y, ".$Settings['idb_time_format'],$DateSend,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $MessageStat=sql_result($result,$i,"Read");
 if($SenderName=="Guest") { $SenderName=$PMGuest;
 if($SenderName==null) { $SenderName="Guest"; } }
@@ -374,7 +374,7 @@ $PMGuest=sql_result($result,$i,"GuestName");
 $MessageName=sql_result($result,$i,"MessageTitle");
 $MessageDesc=sql_result($result,$i,"Description");
 $DateSend=sql_result($result,$i,"DateSend");
-$DateSend=GMTimeChange("F j, Y, g:i a",$DateSend,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$DateSend=GMTimeChange("F j Y, ".$Settings['idb_time_format'],$DateSend,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $MessageStat=sql_result($result,$i,"Read");
 if($SenderName=="Guest") { $SenderName=$PMGuest;
 if($SenderName==null) { $SenderName="Guest"; } }
@@ -431,7 +431,7 @@ $ReciverHidden = $PreReciverName['Hidden'];
 $PMGuest=sql_result($result,$is,"GuestName");
 $MessageName=sql_result($result,$is,"MessageTitle");
 $DateSend=sql_result($result,$is,"DateSend");
-$DateSend=GMTimeChange("F j, Y, g:i a",$DateSend,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$DateSend=GMTimeChange("F j Y, ".$Settings['idb_time_format'],$DateSend,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $MessageText=sql_result($result,$is,"MessageText");
 $MessageDesc=sql_result($result,$is,"Description");
 $ipshow = "two";
