@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: function.php - Last Update: 07/20/2011 SVN 7220 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 07/20/2011 SVN 723 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -124,18 +124,33 @@ if($my_uuid=="v4") { return uuid("v4",$rndty); }
 if($my_uuid=="v3"||$my_uuid=="v5") {
 return uuid($my_uuid,$rndty,$name); } }
 // unserialize sessions variables
-function unserialize_session($data) {
-    $vars=preg_split('/([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff^|]*)\|/',
-              $data,-1,PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
-    $i = 0;
-    for($i=0; isset($vars[$i]); $i++) {
-	$l = $i + 1;
-	if(!isset($vars[$i])) { $vars[$i] = null; }
-	if(!isset($vars[$l])) { $vars[$l] = null; }
-	$result[$vars[$i]]=unserialize($vars[$l]);
-	$i++; }
-	if(!isset($result)) { $result = null; }
-    return $result;
+// By: jason@joeymail.net
+// URL: http://us2.php.net/manual/en/function.session-decode.php#101687
+function unserialize_session($data)
+{
+    if(  strlen( $data) == 0)
+    {
+        return array();
+    }
+    // match all the session keys and offsets
+    preg_match_all('/(^|;|\})([a-zA-Z0-9_]+)\|/i', $data, $matchesarray, PREG_OFFSET_CAPTURE);
+    $returnArray = array();
+    $lastOffset = null;
+    $currentKey = '';
+    foreach ( $matchesarray[2] as $value )
+    {
+        $offset = $value[1];
+        if(!is_null( $lastOffset))
+        {
+            $valueText = substr($data, $lastOffset, $offset - $lastOffset );
+            $returnArray[$currentKey] = unserialize($valueText);
+        }
+        $currentKey = $value[0];
+        $lastOffset = $offset + strlen( $currentKey )+1;
+    }
+    $valueText = substr($data, $lastOffset );
+    $returnArray[$currentKey] = unserialize($valueText);
+    return $returnArray;
 }
 // Make the Query String if we are not useing &=
 function qstring($qstr=";",$qsep="=")
@@ -292,10 +307,10 @@ if($opennew===false) {
 $outlink = "<a href=\"".$outurl."\">".$outurl."</a>"; }
 return $outlink; }
 function url2link($string) {
-return preg_replace_callback("/(?<![\">])\b([a-zA-Z]+)\:\/\/([a-z0-9\-\.]+)(\:[0-9]+)?\/([A-Za-z0-9\.\/%\?\-_\:;\~]+)?(\?)?([A-Za-z0-9\.\/%&=\?\-_\:;\+]+)?(\#)?([A-Za-z0-9\.\/%&=\?\-_\:;\+]+)?/is", "pre_url2link", $string); }
+return preg_replace_callback("/(?<![\">])\b([a-zA-Z]+)\:\/\/([a-z0-9\-\.]+)(\:[0-9]+)?\/([A-Za-z0-9\.\/%\?\-_\:;\~]+)?(\?)?([A-Za-z0-9\.\/%&\=\?\-_\:;\+]+)?(\#)?([A-Za-z0-9\.\/%&\=\?\-_\:;\+]+)?/is", "pre_url2link", $string); }
 function urlcheck($string) {
 global $BoardURL;
-$retnum = preg_match_all("/([a-zA-Z]+)\:\/\/([a-z0-9\-\.]+)(\:[0-9]+)?\/([A-Za-z0-9\.\/%\?\-_\:;\~]+)?(\?)?([A-Za-z0-9\.\/%&=\?\-_\:;\+]+)?(\#)?([A-Za-z0-9\.\/%&=\?\-_\:;\+]+)?/is", $string, $urlcheck); 
+$retnum = preg_match_all("/([a-zA-Z]+)\:\/\/([a-z0-9\-\.]+)(\:[0-9]+)?\/([A-Za-z0-9\.\/%\?\-_\:;\~]+)?(\?)?([A-Za-z0-9\.\/%&\=\?\-_\:;\+]+)?(\#)?([A-Za-z0-9\.\/%&\=\?\-_\:;\+]+)?/is", $string, $urlcheck); 
 if(isset($urlcheck[0][0])) { $url = $urlcheck[0][0]; }
 if(!isset($urlcheck[0][0])) { $url = $BoardURL; }
 return $url; }

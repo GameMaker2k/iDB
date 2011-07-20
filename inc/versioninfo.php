@@ -11,7 +11,7 @@
     Copyright 2008-2011 iDB Support - http://idb.berlios.de/
     Copyright 2008-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: versioninfo.php - Last Update: 07/20/2011 SVN 722 - Author: cooldude2k $
+    $FileInfo: versioninfo.php - Last Update: 07/20/2011 SVN 723 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="versioninfo.php"||$File3Name=="/versioninfo.php") {
@@ -27,7 +27,7 @@ function version_info($proname,$subver,$ver,$supver,$reltype,$svnver,$showsvn) {
 	return $return_var; }
 // Version number and date stuff. :P
 $VER1[0] = 0; $VER1[1] = 4; $VER1[2] = 7; $VERFull[1] = $VER1[0].".".$VER1[1].".".$VER1[2];
-$VER2[0] = "Alpha"; $VER2[1] = "Al"; $VER2[2] = "SVN"; $SubVerN = 722;
+$VER2[0] = "Alpha"; $VER2[1] = "Al"; $VER2[2] = "SVN"; $SubVerN = 723;
 $SVNDay[0] = 07; $SVNDay[1] = 20; $SVNDay[2] = 2011; $SVNDay[3] = $SVNDay[0]."/".$SVNDay[1]."/".$SVNDay[2];
 $AltName = "RDB"; $AltName2 = "ReneeDB"; $RName = "iDB"; $SFName = "IntDB";
 $RFullName = "Internet Discussion Boards"; $AltFullName = "Renee Discussion Boards"; $AltGM2k = "ReneeDB Team";
