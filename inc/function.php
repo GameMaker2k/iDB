@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: function.php - Last Update: 07/01/2011 SVN 690 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 07/20/2011 SVN 7220 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -314,7 +314,7 @@ $ckskindir = dirname(realpath("settings.php"))."/".$ThemeDir;
 if ($handle = opendir($ckskindir)) { $dirnum = null;
    while (false !== ($ckfile = readdir($handle))) {
 	   if ($dirnum==null) { $dirnum = 0; }
-	   if (file_exists($ckskindir.$ckfile."/info.php")) {
+	   if (is_dir($ckskindir.$ckfile)&&file_exists($ckskindir.$ckfile."/info.php")) {
 		   if ($ckfile != "." && $ckfile != "..") {
 	   //include($ckskindir.$ckfile."/info.php");
        $cktheme[$dirnum] =  $ckfile;
@@ -499,6 +499,7 @@ if($oldcontentsize=="-") { $oldcontentsize = 0; }
 if($contentsize===0) { $contentsize = "-"; }
 if($contentsize=="-"&&$headersize!==0) { $fullsitesize = $headersize; }
 if($contentsize!="-"&&$headersize!==0) { $fullsitesize = $contentsize + $headersize; }
+if($status=="302") { $contentsize = "-"; }
 $HTTP_REQUEST_LINE = $_SERVER["REQUEST_METHOD"]." ".$_SERVER["REQUEST_URI"]." ".$_SERVER["SERVER_PROTOCOL"];
 $logtxt = preg_replace("/%%/s", "{percent}p", $logtxt);
 $logtxt = preg_replace("/%([\<\>]*?)a/s", $_SERVER['REMOTE_ADDR'], $logtxt);
