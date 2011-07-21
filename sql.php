@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 07/18/2011 SVN 720 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 07/21/2011 SVN 725 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -27,6 +27,7 @@ if(!in_array("ini_set", $disfunc)) {
 @ini_set("report_memleaks", false);
 @ini_set("display_startup_errors", false);
 //@ini_set("error_log","logs/error.log"); 
+//@ini_set("log_errors","On"); 
 @ini_set("docref_ext", "");
 @ini_set("docref_root", "http://php.net/"); }
 @error_reporting(E_ALL ^ E_NOTICE);
@@ -609,7 +610,7 @@ if($Settings['SQLThemes']=="off") {
 if($_GET['theme']!=null) {
 $_GET['theme'] = chack_themes($_GET['theme']);
 if($_GET['theme']=="../"||$_GET['theme']=="./") {
-$_GET['theme']="iDB"; $_SESSION['Theme']="iDB"; }
+$_GET['theme']=$Settings['DefaultTheme']; $_SESSION['Theme']=$Settings['DefaultTheme']; }
 if (file_exists($SettDir['themes'].$_GET['theme']."/settings.php")) {
 if($_SESSION['UserGroup']!=$Settings['GuestGroup']) {
 $NewDay=GMTimeStamp();

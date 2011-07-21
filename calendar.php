@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: calendar.php - Last Update: 06/17/2011 SVN 676 - Author: cooldude2k $
+    $FileInfo: calendar.php - Last Update: 07/21/2011 SVN 725 - Author: cooldude2k $
 */
 if(ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }
@@ -36,10 +36,7 @@ if($_GET['act']=="view")
 { require($SettDir['inc'].'calendars.php'); }
 if($_GET['act']=="create") 
 { require($SettDir['inc'].'events.php'); }
-require($SettDir['inc'].'endpage.php'); ?>
-</body>
-</html>
-<?php
+require($SettDir['inc'].'endpage.php'); 
 if($_GET['act']=="view") {
 change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." Viewing Calendar",$Settings['use_gzip'],$GZipEncode['Type']); }
 if($_GET['act']=="create") {

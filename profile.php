@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: profile.php - Last Update: 06/17/2011 SVN 676 - Author: cooldude2k $
+    $FileInfo: profile.php - Last Update: 07/21/2011 SVN 725 - Author: cooldude2k $
 */
 if(ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }
@@ -45,11 +45,6 @@ $_GET['act']=="userinfo")
 { require($SettDir['inc'].'profilemain.php'); } } 
 require($SettDir['inc'].'endpage.php'); 
 if(!isset($profiletitle)) { $profiletitle = null; }
-?>
-
-</body>
-</html>
-<?php 
 if($profiletitle==null) {
 fix_amp($Settings['use_gzip'],$GZipEncode['Type']); }
 if($profiletitle!=null) {

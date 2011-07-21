@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: messenger.php - Last Update: 06/17/2011 SVN 676 - Author: cooldude2k $
+    $FileInfo: messenger.php - Last Update: 07/21/2011 SVN 725 - Author: cooldude2k $
 */
 if(ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }
@@ -48,11 +48,6 @@ if($_GET['act']=="read"||$_GET['act']=="create"||
 { require($SettDir['inc'].'messages.php'); } }
 require($SettDir['inc'].'endpage.php');
 if(!isset($MessageName)) { $MessageName = null; }
-?>
-
-</body>
-</html>
-<?php 
 if($_GET['act']=="read") {
 change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." ".$MessageName,$Settings['use_gzip'],$GZipEncode['Type']); }
 if($_GET['act']=="viewsent") { 

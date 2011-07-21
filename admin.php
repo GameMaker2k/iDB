@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: admin.php - Last Update: 06/14/2011 SVN 672 - Author: cooldude2k $
+    $FileInfo: admin.php - Last Update: 07/21/2011 SVN 725 - Author: cooldude2k $
 */
 if(ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }
@@ -108,10 +108,6 @@ if($_GET['act']=="addgroup"||
 require($SettDir['admin'].'groups.php'); }
 require($SettDir['inc'].'endpage.php'); 
 if(!isset($admincptitle)) { $admincptitle = null; }
-?>
-</body>
-</html>
-<?php
 if($admincptitle==null) {
 change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." Admin CP",$Settings['use_gzip'],$GZipEncode['Type']); }
 if($admincptitle!=null) {

@@ -12,7 +12,7 @@
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.de/support/category.php?act=view&id=2
 
-    $FileInfo: install.php - Last Update: 07/10/2011 SVN 704 - Author: cooldude2k $
+    $FileInfo: install.php - Last Update: 07/21/2011 SVN 725 - Author: cooldude2k $
 *//*
 if(ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }
@@ -30,6 +30,7 @@ if(!in_array("ini_set", $disfunc)) {
 @ini_set("report_memleaks", false);
 @ini_set("display_startup_errors", false);
 //@ini_set("error_log","logs/error.log"); 
+//@ini_set("log_errors","On");
 @ini_set("docref_ext", "");
 @ini_set("docref_root", "http://php.net/"); }
 @error_reporting(E_ALL ^ E_NOTICE);
@@ -220,7 +221,7 @@ if ($Error=="Yes") { ?>
 </tr>
 </table></div>
 <div>&nbsp;</div>
-<?php require($SettDir['inc'].'endpage.php'); ?>
-</body>
-</html>
-<?php fix_amp(null); ?>
+<?php 
+require($SettDir['inc'].'endpage.php'); 
+fix_amp(null);
+?>

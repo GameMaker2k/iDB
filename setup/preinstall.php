@@ -11,9 +11,9 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: preinstall.php - Last Update: 07/08/2011 SVN 697 - Author: cooldude2k $
+    $FileInfo: preinstall.php - Last Update: 07/21/2011 SVN 725 - Author: cooldude2k $
 */
-error_reporting(E_ALL ^ E_NOTICE);
+//error_reporting(E_ALL ^ E_NOTICE);
 /* Some ini setting changes uncomment if you need them. */
 //ini_set('session.use_trans_sid', false);
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
@@ -44,8 +44,12 @@ if($Settings['sqltype']!="mysql"&&
 	$Settings['sqltype']!="sqlite"&&
 	$Settings['sqltype']!="cubrid") {
 	$Settings['sqltype'] = "mysql"; } }
+if($iDBTheme!="iDB") {
+if(file_exists($SettDir['themes'].$iDBTheme."/settings.php")) {
+	require($SettDir['themes'].$iDBTheme."/settings.php"); } }
+if($iDBTheme=="iDB") {
 if(file_exists($SettDir['themes']."iDB/settings.php")) {
 	require($SettDir['themes']."iDB/settings.php"); }
 if(!file_exists($SettDir['themes']."iDB/settings.php")) {
-	require($SettDir['themes']."Gray/settings.php"); }
+	require($SettDir['themes']."Gray/settings.php"); } }
 ?>
