@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: topics.php - Last Update: 07/18/2011 SVN 720 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 07/20/2011 SVN 724 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -20,6 +20,8 @@ if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
 $pstring = null; $pagenum = null;
 if(!is_numeric($_GET['id'])) { $_GET['id'] = null; }
 if(!is_numeric($_GET['page'])) { $_GET['page'] = 1; }
+if(!isset($_GET['st'])) { $_GET['st'] = 0; }
+if(!is_numeric($_GET['st'])) { $_GET['st'] = 0; }
 $prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2." LIMIT 1", array($_GET['id']));
 $preresult=sql_query($prequery,$SQLStat);
 $prenum=sql_num_rows($preresult);
@@ -156,7 +158,10 @@ $num=$NumberTopics;
 if(!isset($Settings['max_topics'])) { $Settings['max_topics'] = 10; }
 if($_GET['page']==null) { $_GET['page'] = 1; } 
 if($_GET['page']<=0) { $_GET['page'] = 1; }
-$nums = $_GET['page'] * $Settings['max_topics'];
+if($_GET['st']<=0||!isset($_GET['st'])) {
+$nums = $_GET['page'] * $Settings['max_topics']; }
+if($_GET['st']>0&&isset($_GET['st'])) {
+$nums = $_GET['st']; }
 if($nums>$num) { $nums = $num; }
 $numz = $nums - $Settings['max_topics'];
 if($numz<=0) { $numz = 0; }
@@ -174,7 +179,10 @@ if($pnum<$Settings['max_topics']&&$pnum>0) {
 	$pnum = $pnum - $pnum; 
 	$Pages[$l] = $l; ++$l; } }
 $snumber = $_GET['page'] - 1;
-$PageLimit = $Settings['max_topics'] * $snumber;
+if($_GET['st']<=0||!isset($_GET['st'])) {
+$PageLimit = $Settings['max_topics'] * $snumber; }
+if($_GET['st']>0&&isset($_GET['st'])) {
+$PageLimit = $_GET['st']; }
 if($PageLimit<0) { $PageLimit = 0; }
 //End Topic Page Code
 $i=0;

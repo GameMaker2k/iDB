@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: replies.php - Last Update: 07/18/2011 SVN 720 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 07/20/2011 SVN 724 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -21,6 +21,8 @@ $pstring = null; $pagenum = null;
 if(!is_numeric($_GET['id'])) { $_GET['id'] = null; }
 if(!is_numeric($_GET['post'])) { $_GET['post'] = null; }
 if(!is_numeric($_GET['page'])) { $_GET['page'] = 1; }
+if(!isset($_GET['st'])) { $_GET['st'] = 0; }
+if(!is_numeric($_GET['st'])) { $_GET['st'] = 0; }
 if(!isset($_GET['modact'])) { $_GET['modact'] = null; }
 if(!isset($_GET['link'])) { $_GET['link'] = "no"; } 
 if(!isset($_GET['level'])) { $_GET['level'] = 1; } 
@@ -146,7 +148,10 @@ $num=$NumberReplies+1;
 if(!isset($Settings['max_posts'])) { $Settings['max_posts'] = 10; }
 if($_GET['page']==null) { $_GET['page'] = 1; } 
 if($_GET['page']<=0) { $_GET['page'] = 1; }
-$nums = $_GET['page'] * $Settings['max_posts'];
+if($_GET['st']<=0||!isset($_GET['st'])) {
+$nums = $_GET['page'] * $Settings['max_posts']; }
+if($_GET['st']>0&&isset($_GET['st'])) {
+$nums = $_GET['st']; }
 if($nums>$num) { $nums = $num; }
 $numz = $nums - $Settings['max_posts'];
 if($numz<=0) { $numz = 0; }
@@ -164,7 +169,10 @@ if($pnum<$Settings['max_posts']&&$pnum>0) {
 	$pnum = $pnum - $pnum; 
 	$Pages[$l] = $l; ++$l; } }
 $snumber = $_GET['page'] - 1;
-$PageLimit = $Settings['max_posts'] * $snumber;
+if($_GET['st']<=0||!isset($_GET['st'])) {
+$PageLimit = $Settings['max_posts'] * $snumber; }
+if($_GET['st']>0&&isset($_GET['st'])) {
+$PageLimit = $_GET['st']; }
 if($PageLimit<0) { $PageLimit = 0; }
 //End Reply Page Code
 $i=0;
