@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: main.php - Last Update: 07/21/2011 SVN 726 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 07/22/2011 SVN 728 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -719,7 +719,7 @@ $skindir = dirname(realpath("settings.php"))."/".$SettDir['themes'];
 if ($handle = opendir($skindir)) { $dirnum = null;
    while (false !== ($file = readdir($handle))) {
 	   if ($dirnum==null) { $dirnum = 0; }
-	   if (file_exists($skindir.$file."/info.php")) {
+	   if (is_dir($skindir.$file)&&file_exists($skindir.$file."/info.php")) {
 		   if ($file != "." && $file != "..") {
 	   include($skindir.$file."/info.php");
 	   if($Settings['DefaultTheme']==$file) {
@@ -770,6 +770,18 @@ echo "<option value=\"".$ThemeInfo['Name']."\">".$ThemeInfo['ThemeName']."</opti
 <option<?php if($Settings['TestReferer']=="on") { echo " selected=\"selected\""; } ?> value="on">on</option>
 <option<?php if($Settings['TestReferer']=="off") { echo " selected=\"selected\""; } ?> value="off">off</option>
 </select></td>
+</tr><tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="iDBTimeFormat">Insert the time format to be used for iDB:</label></td>
+	<td style="width: 50%;"><input type="text" class="TextBox" name="iDBTimeFormat" size="20" id="iDBTimeFormat" value="<?php echo htmlentities($Settings['idb_time_format'], ENT_QUOTES, $Settings['charset']); ?>" /></td>
+</tr><tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="iDBHTTPLogger">Log Every HTTP Requests:</label></td>
+	<td style="width: 50%;"><select id="iDBHTTPLogger" name="iDBHTTPLogger" class="TextBox">
+<option<?php if($Settings['log_http_request']=="on") { echo " selected=\"selected\""; } ?> value="on">on</option>
+<option<?php if($Settings['log_http_request']=="off") { echo " selected=\"selected\""; } ?> value="off">off</option>
+</select></td>
+</tr><tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="iDBLoggerFormat">Insert The Format for HTTP Logger:</label></td>
+	<td style="width: 50%;"><input type="text" class="TextBox" name="iDBLoggerFormat" size="20" id="iDBLoggerFormat" value="<?php echo htmlentities($Settings['log_config_format'], ENT_QUOTES, $Settings['charset']); ?>" /></td>
 </tr></table>
 <table style="text-align: left;">
 <tr style="text-align: left;">
@@ -819,6 +831,10 @@ $_POST['BoardURL'] = htmlentities($_POST['BoardURL'], ENT_QUOTES, $Settings['cha
 $_POST['BoardURL'] = remove_spaces($_POST['BoardURL']);
 $_POST['WebURL'] = htmlentities($_POST['WebURL'], ENT_QUOTES, $Settings['charset']);
 $_POST['WebURL'] = remove_spaces($_POST['WebURL']);
+$_POST['iDBTimeFormat'] = convert_strftime($_POST['iDBTimeFormat']);
+$Settings['idb_time_format'] = $_POST['iDBTimeFormat'];
+$Settings['log_http_request'] = $_POST['iDBHTTPLogger'];
+$Settings['log_config_format'] = $_POST['iDBLoggerFormat'];
 if($_POST['HTMLType']=="xhtml11") { $_POST['HTMLLevel'] = "Strict"; }
 if($_POST['HTMLType']=="html5") { $_POST['OutPutType'] = "html"; }
 if($_POST['HTMLType']=="xhtml5") { $_POST['OutPutType'] = "xhtml"; }

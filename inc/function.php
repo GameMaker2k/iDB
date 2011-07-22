@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: function.php - Last Update: 07/20/2011 SVN 723 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 07/22/2011 SVN 728 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -498,7 +498,7 @@ $strftime = str_replace("%F", "Y-m-d", $strftime);
 $strftime = str_replace("%x", "m/d/y", $strftime);
 $strftime = str_replace("%n", "\n", $strftime);
 $strftime = str_replace("%t", "\t", $strftime);
-$logtxt = preg_replace("/\{percent\}p/s", "%", $logtxt);
+$strftime = preg_replace("/\{percent\}p/s", "%", $strftime);
 return $strftime; }
 function apache_log_maker($logtxt,$logfile=null,$status=200,$contentsize="-",$headersize=0) {
 global $Settings;
