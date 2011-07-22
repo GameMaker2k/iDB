@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: main.php - Last Update: 07/09/2011 SVN 703 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 07/21/2011 SVN 726 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -129,6 +129,8 @@ if(!isset($Settings['IPCheckURL'])) {
 	$Settings['IPCheckURL'] = ""; }
 if(!isset($Settings['log_config_format'])) {
 	$Settings['log_config_format'] = "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\""; }
+if(!isset($Settings['idb_time_format'])) { 
+	$Settings['idb_time_format'] = "g:i A"; }
 ?>
 <table class="Table3">
 <tr style="width: 100%; vertical-align: top;">
@@ -188,6 +190,7 @@ $BoardSettings=$pretext2[0]."\n".
 "\$Settings['DefaultTimeZone'] = ".null_string($Settings['DefaultTimeZone']).";\n".
 "\$Settings['DefaultDST'] = ".null_string($Settings['DefaultDST']).";\n".
 "\$Settings['start_date'] = ".null_string($Settings['start_date']).";\n".
+"\$Settings['idb_time_format'] = ".null_string($Settings['idb_time_format']).";\n".
 "\$Settings['use_hashtype'] = ".null_string($Settings['use_hashtype']).";\n".
 "\$Settings['charset'] = ".null_string($Settings['charset']).";\n".
 "\$Settings['sql_collate'] = ".null_string($Settings['sql_collate']).";\n".
@@ -845,6 +848,7 @@ $BoardSettings=$pretext2[0]."\n".
 "\$Settings['DefaultTimeZone'] = ".null_string($_POST['YourOffSet'].":".$_POST['MinOffSet']).";\n".
 "\$Settings['DefaultDST'] = ".null_string($_POST['DST']).";\n".
 "\$Settings['start_date'] = ".null_string($Settings['start_date']).";\n".
+"\$Settings['idb_time_format'] = ".null_string($Settings['idb_time_format']).";\n".
 "\$Settings['use_hashtype'] = ".null_string($Settings['use_hashtype']).";\n".
 "\$Settings['charset'] = ".null_string($Settings['charset']).";\n".
 "\$Settings['sql_collate'] = ".null_string($Settings['sql_collate']).";\n".
@@ -1028,6 +1032,7 @@ $BoardSettings=$pretext2[0]."\n".
 "\$Settings['DefaultTimeZone'] = ".null_string($Settings['DefaultTimeZone']).";\n".
 "\$Settings['DefaultDST'] = ".null_string($Settings['DefaultDST']).";\n".
 "\$Settings['start_date'] = ".null_string($Settings['start_date']).";\n".
+"\$Settings['idb_time_format'] = ".null_string($Settings['idb_time_format']).";\n".
 "\$Settings['use_hashtype'] = ".null_string($Settings['use_hashtype']).";\n".
 "\$Settings['charset'] = ".null_string($Settings['charset']).";\n".
 "\$Settings['sql_collate'] = ".null_string($Settings['sql_collate']).";\n".
@@ -1190,6 +1195,7 @@ $BoardSettings=$pretext2[0]."\n".
 "\$Settings['DefaultTimeZone'] = ".null_string($Settings['DefaultTimeZone']).";\n".
 "\$Settings['DefaultDST'] = ".null_string($Settings['DefaultDST']).";\n".
 "\$Settings['start_date'] = ".null_string($Settings['start_date']).";\n".
+"\$Settings['idb_time_format'] = ".null_string($Settings['idb_time_format']).";\n".
 "\$Settings['use_hashtype'] = ".null_string($Settings['use_hashtype']).";\n".
 "\$Settings['charset'] = ".null_string($Settings['charset']).";\n".
 "\$Settings['sql_collate'] = ".null_string($Settings['sql_collate']).";\n".
