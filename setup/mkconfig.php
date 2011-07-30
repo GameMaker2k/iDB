@@ -12,7 +12,7 @@
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mkconfig.php - Last Update: 07/30/2011 SVN 729 - Author: cooldude2k $
+    $FileInfo: mkconfig.php - Last Update: 07/30/2011 SVN 730 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mkconfig.php"||$File3Name=="/mkconfig.php") {
@@ -380,21 +380,26 @@ setcookie("SessPass", $NewPassword, time() + (7 * 86400), $this_dir, false); } }
 $chdel = true;
 if($Error!="Yes") {
 if($_POST['unlink']=="true") {
-$chdel1 = @unlink($SetupDir['setup'].'presetup.php'); $chdel2 = @unlink($SetupDir['setup'].'setup.php');
-$chdel3 = @unlink($SetupDir['setup'].'mkconfig.php'); $chdel4 = @unlink($SetupDir['sql'].'mysql.php');
-$chdel5 = @unlink($SetupDir['setup'].'index.php'); $chdel6 = @unlink($SetupDir['setup'].'license.php');
-$chdel7 = @unlink($SetupDir['setup'].'preinstall.php'); $chdel8 = @unlink($SetupDir['convert'].'index.php');
-if($ConvertInfo['ConvertFile']!=null) { $chdel0 = @unlink($ConvertInfo['ConvertFile']); }
-$chdel9 = @unlink($SetupDir['convert'].'info.php'); 
-$chdel14 = @unlink($SetupDir['sql'].'pgsql.php'); $chdel15 = @unlink($SetupDir['sql'].'sqlite.php');
-$chdel19 = @unlink($SetupDir['sql'].'index.php'); $chdel20 = @unlink($SetupDir['sql'].'cubrid.php');
-$chdel10 = @rmdir($SetupDir['convert']); $chdel16 = @rmdir($SetupDir['sql']); $chdel11 = @rmdir('setup');
-$chdel12 = @unlink('install.php'); } }
-if($chdel1===false||$chdel2===false||$chdel3===false||$chdel4===false) { $chdel = false; }
-if($chdel5===false||$chdel6===false||$chdel7===false||$chdel8===false) { $chdel = false; }
-if($chdel9===false||$chdel10===false||$chdel11===false||$chdel12===false) { $chdel = false; }
-if($chdel4===false||$chdel15===false||$chdel16===false||$chdel19===false) { $chdel = false; }
-if($ConvertInfo['ConvertFile']!=null) { if($chdel0===false) { $chdel = false; } }
+if($ConvertInfo['ConvertFile']!=null) { 
+if(!@unlink($ConvertInfo['ConvertFile'])) { $chdel = false; } }
+if(!@unlink($SetupDir['convert'].'index.php')) { $chdel = false; }
+if(!@unlink($SetupDir['convert'].'info.php')) { $chdel = false; }
+if(!@rmdir($SetupDir['convert'])) { $chdel = false; }
+if(!@unlink($SetupDir['sql'].'cubrid.php')) { $chdel = false; }
+if(!@unlink($SetupDir['sql'].'index.php')) { $chdel = false; }
+if(!@unlink($SetupDir['sql'].'mysql.php')) { $chdel = false; }
+if(!@unlink($SetupDir['sql'].'pgsql.php')) { $chdel = false; }
+if(!@unlink($SetupDir['sql'].'sqlite.php')) { $chdel = false; }
+if(!@rmdir($SetupDir['sql'])) { $chdel = false; }
+if(!@unlink($SetupDir['setup'].'index.php')) { $chdel = false; }
+if(!@unlink($SetupDir['setup'].'license.php')) { $chdel = false; }
+if(!@unlink($SetupDir['setup'].'mkconfig.php')) { $chdel = false; }
+if(!@unlink($SetupDir['setup'].'preinstall.php')) { $chdel = false; }
+if(!@unlink($SetupDir['setup'].'presetup.php')) { $chdel = false; }
+if(!@unlink($SetupDir['setup'].'setup.php')) { $chdel = false; }
+if(!@unlink($SetupDir['setup'].'xhtml10.php')) { $chdel = false; }
+if(!@rmdir('setup')) { $chdel = false; }
+if(!@unlink('install.php')) { $chdel = false; } } }
 ?><span class="TableMessage">
 <br />Install Finish <a href="index.php?act=view">Click here</a> to goto board. ^_^</span>
 <?php if($chdel===false) { ?><span class="TableMessage">

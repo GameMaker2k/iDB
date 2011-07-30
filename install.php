@@ -12,7 +12,7 @@
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.de/support/category.php?act=view&id=2
 
-    $FileInfo: install.php - Last Update: 07/21/2011 SVN 725 - Author: cooldude2k $
+    $FileInfo: install.php - Last Update: 07/30/2011 SVN 730 - Author: cooldude2k $
 *//*
 if(ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }
@@ -145,7 +145,7 @@ foreach($ThemeSet AS $key => $value) {
 	$ThemeSet[$key] = preg_replace_callback("/%\{([^\}]*)\}t/s", "get_time", $ThemeSet[$key]); 
 	$ThemeSet[$key] = preg_replace("/\{percent\}p/s", "%", $ThemeSet[$key]); }
 require($SetupDir['convert'].'info.php');
-require($SettDir['inc'].'xhtml10.php');
+require($SetupDir['setup'].'xhtml10.php');
 $Error = null; $_GET['time'] = false;
 ?>
 
@@ -223,5 +223,9 @@ if ($Error=="Yes") { ?>
 <div>&nbsp;</div>
 <?php 
 require($SettDir['inc'].'endpage.php'); 
+?>
+</body>
+</html>
+<?php
 fix_amp(null);
 ?>
