@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: profile.php - Last Update: 07/21/2011 SVN 725 - Author: cooldude2k $
+    $FileInfo: profile.php - Last Update: 07/30/2011 SVN 729 - Author: cooldude2k $
 */
 if(ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }
@@ -21,11 +21,18 @@ if($ext=="noext"||$ext=="no ext"||$ext=="no+ext") { $usefileext = ""; }
 $filewpath = $exfile['profile'].$usefileext.$_SERVER['PATH_INFO'];
 $idbactcheck = array("view", "signature", "avatar", "settings", "profile", "userinfo");
 ?>
-
+<?php $iWrappers['EXTRALINKS'] = null;
+ob_start("idb_suboutput_handler"); ?>
 <title> <?php echo $Settings['board_name'].$idbpowertitle; ?> </title>
+<?php $iWrappers['TITLETAG'] = ob_get_clean(); 
+ob_start("idb_suboutput_handler"); ?>
 </head>
 <body>
-<?php require($SettDir['inc'].'navbar.php');
+<?php $iWrappers['BODYTAG'] = ob_get_clean();
+ob_start("idb_suboutput_handler");
+require($SettDir['inc'].'navbar.php');
+$iWrappers['NAVBAR'] = ob_get_clean();
+ob_start("idb_suboutput_handler");
 if($_SESSION['UserGroup']==$Settings['GuestGroup']||$GroupInfo['CanEditProfile']=="no") {
 redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
@@ -43,8 +50,18 @@ $_GET['act']=="settings"||
 $_GET['act']=="profile"||
 $_GET['act']=="userinfo")
 { require($SettDir['inc'].'profilemain.php'); } } 
+$iWrappers['CONTENT'] = ob_get_clean();
+ob_start("idb_suboutput_handler");
 require($SettDir['inc'].'endpage.php'); 
+$iWrappers['COPYRIGHT'] = ob_get_clean();
+ob_start("idb_suboutput_handler");
 if(!isset($profiletitle)) { $profiletitle = null; }
+?>
+</body>
+</html>
+<?php 
+$iWrappers['HTMLEND'] = ob_get_clean();
+require($SettDir['inc'].'iwrapper.php');
 if($profiletitle==null) {
 fix_amp($Settings['use_gzip'],$GZipEncode['Type']); }
 if($profiletitle!=null) {

@@ -11,14 +11,14 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
     $ThemeInfo - Name: iDB Gray - Author: cooldude2k $
-    $FileInfo: info.php - Last Update: 07/01/2011 SVN 690 - Author: cooldude2k $
+    $FileInfo: info.php - Last Update: 07/30/2011 SVN 729 - Author: cooldude2k $
 */
 $ThemeInfo = array();
 $ThemeInfo['ThemeName'] = "iDB Gray Theme";
 $ThemeInfo['ThemeMaker'] = "Kazuki";
-$ThemeInfo['ThemeVersion'] = "0.4.6";
+$ThemeInfo['ThemeVersion'] = "0.4.7";
 $ThemeInfo['ThemeVersionType'] = "Alpha";
-$ThemeInfo['ThemeSubVersion'] = "SVN 690";
+$ThemeInfo['ThemeSubVersion'] = "SVN 729";
 $ThemeInfo['MakerURL'] = "http://upload.idb.s1.jcink.com/";
 $ThemeInfo['CopyRight'] = "%{ThemeName}T was made by <a href=\"%{MakerURL}T\" title=\"%{ThemeMaker}T\">%{ThemeMaker}T</a>";
 ?>

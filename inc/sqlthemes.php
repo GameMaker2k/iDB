@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sqlthemes.php - Last Update: 12/07/2010 SVN 600 - Author: cooldude2k $
+    $FileInfo: sqlthemes.php - Last Update: 07/30/2011 SVN 729 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="sqlthemes.php"||$File3Name=="/sqlthemes.php") {
@@ -33,6 +33,10 @@ $ThemeSet['MakerURL'] = sql_result($themeresult,0,"MakerURL");
 if($ThemeSet['MakerURL']=="") { $ThemeSet['MakerURL'] = null; }
 $ThemeSet['CopyRight'] = sql_result($themeresult,0,"CopyRight");
 if($ThemeSet['CopyRight']=="") { $ThemeSet['CopyRight'] = null; }
+
+$ThemeSet['WrapperString'] = sql_result($themeresult,0,"WrapperString");
+if($ThemeSet['WrapperString']=="") { $ThemeSet['WrapperString'] = null; }
+
 $ThemeSet['CSS'] = sql_result($themeresult,0,"CSS");
 if($ThemeSet['CSS']=="") { $ThemeSet['CSS'] = null; }
 $ThemeSet['CSSType'] = sql_result($themeresult,0,"CSSType");

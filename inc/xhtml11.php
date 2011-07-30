@@ -11,12 +11,13 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: xhtml11.php - Last Update: 07/02/2011 SVN 694 - Author: cooldude2k $
+    $FileInfo: xhtml11.php - Last Update: 07/30/2011 SVN 729 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="xhtml11.php"||$File3Name=="/xhtml11.php") {
 	require('index.php');
 	exit(); }
+ob_start("idb_suboutput_handler");
 // Check to see if we serv the file as html or xhtml
 // if we do xhtml we also check to see if user's browser 
 // can dispay if or else fallback to html
@@ -100,6 +101,8 @@ if($Settings['idburl']!="localhost"&&$Settings['idburl']!=null) {
    "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
+<?php $iWrappers['HTMLSTART'] = ob_get_clean(); 
+ob_start("idb_suboutput_handler"); ?>
 <meta http-equiv="Content-Language" content="en" />
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $Settings['charset']; ?>" />
 <meta http-equiv="Content-Style-Type" content="text/css" />
@@ -118,7 +121,8 @@ if(strpos($_SERVER['HTTP_USER_AGENT'], "msie") &&
 <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
 <?php } if(strpos($_SERVER['HTTP_USER_AGENT'], "chromeframe")) { ?>
 <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
-<?php } ?>
+<?php } $iWrappers['HTTPEQUIV'] = ob_get_clean(); 
+ob_start("idb_suboutput_handler"); ?>
 <base href="<?php echo $BoardURL; ?>" />
 <?php if($Settings['showverinfo']=="on") { ?>
 <meta name="Generator" content="<?php echo $VerInfo['iDB_Ver_Show']; ?>" />
@@ -137,17 +141,21 @@ if(strpos($_SERVER['HTTP_USER_AGENT'], "msie") &&
 <!-- generator="<?php echo $VerInfo['iDB_Ver_Show']; ?>" -->
 <?php } if($Settings['showverinfo']!="on") { ?>
 <!-- generator="<?php echo $iDB; ?>" -->
-<?php } echo "\n"; ?>
+<?php } echo "\n"; $iWrappers['METATAGS'] = ob_get_clean(); 
+ob_start("idb_suboutput_handler"); ?>
 
 <script type="text/javascript" src="<?php echo url_maker($exfilejs['javascript'],$Settings['js_ext'],null,$Settings['qstr'],$Settings['qsep'],$prexqstrjs['javascript'],$exqstrjs['javascript']); ?>"></script>
+<?php echo "\n"; $iWrappers['JAVASCRIPT'] = ob_get_clean(); 
+ob_start("idb_suboutput_handler"); ?>
 <link rel="Start" href="<?php echo $AltBoardURL.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>" title="<?php echo $Settings['board_name'].$idbpowertitle; ?>" />
 <link rel="Copyright" href="<?php echo $AltBoardURL.url_maker($exfile['index'],$Settings['file_ext'],"act=bsd",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>" title="Copyright Notice" />
 <?php if($Settings['showverinfo']=="on") { ?>
 <link rel="Generator" href="<?php echo $iDBHome; ?>" title="<?php echo $VerInfo['iDB_Ver_Show']; ?>" />
 <?php } if($Settings['showverinfo']!="on") { ?>
 <link rel="Generator" href="<?php echo $iDBHome; ?>" title="<?php echo $iDB; ?>" />
-<?php } echo "\n"; ?>
 <!-- ^_^ Stephanie Braun -->
+<?php } echo "\n"; $iWrappers['LINKTAGS'] = ob_get_clean(); 
+ob_start("idb_suboutput_handler"); ?>
 <?php if($ThemeSet['CSSType']=="import") { ?>
 <style type="text/css">
 /* Import the theme css file */
@@ -183,8 +191,11 @@ color: #000000;
 font-size: 9px;
 }
 </style>
-<?php } if($ThemeSet['FavIcon']!=null) { ?>
+<?php } $iWrappers['CSSTHEME'] = ob_get_clean();
+ob_start("idb_suboutput_handler");
+if($ThemeSet['FavIcon']!=null) { ?>
 <link rel="icon" href="<?php echo $ThemeSet['FavIcon']; ?>" />
 <link rel="shortcut icon" href="<?php echo $ThemeSet['FavIcon']; ?>" />
 <?php } ?>
 <!-- Renee Sabonis ^_^ -->
+<?php $iWrappers['FAVICON'] = ob_get_clean(); ?>

@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: member.php - Last Update: 07/21/2011 SVN 725 - Author: cooldude2k $
+    $FileInfo: member.php - Last Update: 07/30/2011 SVN 729 - Author: cooldude2k $
 */
 if(ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }
@@ -25,11 +25,16 @@ $idbactcheck = array("view", "signup", "login", "login_now", "logout", "online",
 if(!in_array($_GET['act'], $idbactcheck))
 { $_GET['act']="login"; }
 ?>
-
+<?php $iWrappers['EXTRALINKS'] = null;
+ob_start("idb_suboutput_handler"); ?>
 <title> <?php echo $Settings['board_name'].$idbpowertitle; ?> </title>
+<?php $iWrappers['TITLETAG'] = ob_get_clean(); 
+ob_start("idb_suboutput_handler"); ?>
 </head>
 <body>
-<?php if($_GET['act']=="register")
+<?php $iWrappers['BODYTAG'] = ob_get_clean();
+ob_start("idb_suboutput_handler");
+if($_GET['act']=="register")
 { $_GET['act']="signup"; }
 if($_GET['act']=="signin")
 { $_GET['act']="login"; }
@@ -38,6 +43,8 @@ if($_GET['act']=="signout")
 if(!is_numeric($_GET['id']))
 { $_GET['id']="1"; }
 require($SettDir['inc'].'navbar.php');
+$iWrappers['NAVBAR'] = ob_get_clean();
+ob_start("idb_suboutput_handler");
 if($_GET['act']=="login"||
 $_GET['act']=="online"||
 $_POST['act']=="loginmember"||
@@ -49,9 +56,19 @@ $_GET['act']=="signup")
 { require($SettDir['inc'].'members.php'); } 
 if($_GET['act']=="makemember") {
 if($_POST['act']=="makemembers") {
-require($SettDir['inc'].'members.php'); } } 
+require($SettDir['inc'].'members.php'); } }
+$iWrappers['CONTENT'] = ob_get_clean();
+ob_start("idb_suboutput_handler");
 require($SettDir['inc'].'endpage.php');
+$iWrappers['COPYRIGHT'] = ob_get_clean();
+ob_start("idb_suboutput_handler");
 if(!isset($membertitle)) { $membertitle = null; }
+?>
+</body>
+</html>
+<?php 
+$iWrappers['HTMLEND'] = ob_get_clean();
+require($SettDir['inc'].'iwrapper.php');
 if($membertitle==null) {
 fix_amp($Settings['use_gzip'],$GZipEncode['Type']); }
 if($membertitle!=null) {

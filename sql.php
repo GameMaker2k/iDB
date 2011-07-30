@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 07/21/2011 SVN 725 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 07/30/2011 SVN 729 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -343,7 +343,9 @@ if(strstr($_SERVER['HTTP_ACCEPT_ENCODING'], "gzip")) { $Settings['use_gzip'] = "
 if($Settings['use_gzip']=="deflate") {
 if(strstr($_SERVER['HTTP_ACCEPT_ENCODING'], "deflate")) { $Settings['use_gzip'] = "on";
 	$GZipEncode['Type'] = "deflate"; } else { $Settings['use_gzip'] = "off"; } }
+$iWrappers = array(null);
 function idb_output_handler($buffer) { return $buffer; }
+function idb_suboutput_handler($buffer) { return $buffer; }
 if($Settings['clean_ob']=="on") {
 /* Check for other output handlers/buffers are open
    and close and get the contents in an array */

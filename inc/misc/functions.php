@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: functions.php - Last Update: 07/08/2011 SVN 697 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 07/30/2011 SVN 729 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -67,7 +67,7 @@ function change_title($new_title,$use_gzip="off",$gzip_type="gzip") {
 global $Settings,$urlstatus;
 if(!isset($urlstatus)||!is_numeric($urlstatus)) { $urlstatus = 200; }
 if($gzip_type!="gzip") { if($gzip_type!="deflate") { $gzip_type = "gzip"; } }
-$output = ob_get_clean();
+$output = trim(ob_get_clean());
 $output = preg_replace("/<title>(.*?)<\/title>/i", "<title>".$new_title."</title>", $output);
 /* Change Some PHP Settings Fix the &PHPSESSID to &amp;PHPSESSID */
 $SessName = session_name();
@@ -95,7 +95,7 @@ function fix_amp($use_gzip="off",$gzip_type="gzip") {
 global $Settings,$urlstatus;
 if(!isset($urlstatus)||!is_numeric($urlstatus)) { $urlstatus = 200; }
 if($gzip_type!="gzip") { if($gzip_type!="deflate") { $gzip_type = "gzip"; } }
-$output = ob_get_clean();
+$output = trim(ob_get_clean());
 /* Change Some PHP Settings Fix the &PHPSESSID to &amp;PHPSESSID */
 $SessName = session_name();
 $output = preg_replace("/&PHPSESSID/", "&amp;PHPSESSID", $output);
@@ -123,7 +123,7 @@ define("_rene_", $Names['RJ']);
 function gzip_page($use_gzip="off",$gzip_type="gzip") {
 global $Settings,$urlstatus;
 if(!isset($urlstatus)||!is_numeric($urlstatus)) { $urlstatus = 200; }
-$output = ob_get_clean();
+$output = trim(ob_get_clean());
 if($gzip_type!="gzip") { if($gzip_type!="deflate") { $gzip_type = "gzip"; } }
 if($use_gzip!="on") {
 	if($Settings['send_pagesize']=="on") {

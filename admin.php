@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: admin.php - Last Update: 07/21/2011 SVN 725 - Author: cooldude2k $
+    $FileInfo: admin.php - Last Update: 07/30/2011 SVN 729 - Author: cooldude2k $
 */
 if(ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }
@@ -23,16 +23,23 @@ if($GroupInfo['ViewDBInfo']=="yes") {
 if($_GET['act']=="settings"||$_GET['act']=="sql") {
 ?>
 
-<?php if($Settings['vercheck']===1) { ?>
+<?php $iWrappers['EXTRALINKS'] = null;
+if($Settings['vercheck']===1) { 
+ob_start("idb_suboutput_handler"); ?>
 <script type="text/javascript" src="<?php echo $VerCheckURL."&amp;name=".urlencode($iDBVerName)."&amp;redirect=js"; ?>"></script>
-<?php } if($Settings['vercheck']===2) { ?>
+<?php $iWrappers['EXTRALINKS'] = ob_get_clean(); } if($Settings['vercheck']===2) { 
+ob_start("idb_suboutput_handler"); ?>
 <script type="text/javascript" src="<?php echo $VerCheckURL."&amp;bid=".$Settings['bid']."&amp;vercheck=newtype&amp;redirect=js"; ?>"></script>
-<?php } } } ?>
-
+<?php $iWrappers['EXTRALINKS'] = ob_get_clean(); } } } ?>
+<?php
+ob_start("idb_suboutput_handler"); ?>
 <title> <?php echo $Settings['board_name'].$idbpowertitle; ?> </title>
+<?php $iWrappers['TITLETAG'] = ob_get_clean(); 
+ob_start("idb_suboutput_handler"); ?>
 </head>
 <body>
-<?php
+<?php $iWrappers['BODYTAG'] = ob_get_clean();
+ob_start("idb_suboutput_handler");
 $_SESSION['ViewingPage'] = url_maker(null,"no+ext","act=view","&","=",$prexqstr['index'],$exqstr['index']);
 if($Settings['file_ext']!="no+ext"&&$Settings['file_ext']!="no ext") {
 $_SESSION['ViewingFile'] = $exfile['index'].$Settings['file_ext']; }
@@ -45,6 +52,8 @@ if(!isset($_POST['subact'])) { $_POST['subact'] = null; }
 if(!isset($_GET['menu'])) { $_GET['menu'] = null; }
 $AdminMenu = null;
 require($SettDir['inc'].'navbar.php');
+$iWrappers['NAVBAR'] = ob_get_clean();
+ob_start("idb_suboutput_handler");
 if($_SESSION['UserGroup']==$Settings['GuestGroup']||$GroupInfo['HasAdminCP']=="no") {
 redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
@@ -106,8 +115,18 @@ if($_GET['act']=="addgroup"||
 	$_GET['act']=="deletegroup")
 { $AdminMenu = "groups";
 require($SettDir['admin'].'groups.php'); }
+$iWrappers['CONTENT'] = ob_get_clean();
+ob_start("idb_suboutput_handler");
 require($SettDir['inc'].'endpage.php'); 
+$iWrappers['COPYRIGHT'] = ob_get_clean();
+ob_start("idb_suboutput_handler");
 if(!isset($admincptitle)) { $admincptitle = null; }
+?>
+</body>
+</html>
+<?php
+$iWrappers['HTMLEND'] = ob_get_clean();
+require($SettDir['inc'].'iwrapper.php');
 if($admincptitle==null) {
 change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." Admin CP",$Settings['use_gzip'],$GZipEncode['Type']); }
 if($admincptitle!=null) {

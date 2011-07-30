@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: html5.php - Last Update: 07/02/2011 SVN 694 - Author: cooldude2k $
+    $FileInfo: html5.php - Last Update: 07/30/2011 SVN 729 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="xhtml10.php"||$File3Name=="/xhtml10.php") {
@@ -94,6 +94,7 @@ if($Settings['html_level']!="Strict") {
 	if($Settings['html_level']!="Transitional") {
 		$Settings['html_level'] = "Transitional"; } }
 // HTML Document Starts
+ob_start("idb_suboutput_handler");
 if($XHTML5===false) {
 ?>
 <!DOCTYPE html>
@@ -170,7 +171,9 @@ if($XHTML5===false) {
 <html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <?php } ?>
 <head>
-<?php if($XHTML5===false) { ?>
+<?php $iWrappers['HTMLSTART'] = ob_get_clean();
+ob_start("idb_suboutput_handler");
+if($XHTML5===false) { ?>
 <meta charset="<?php echo $Settings['charset']; ?>">
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $Settings['charset']; ?>">
 <?php 
@@ -192,7 +195,8 @@ if(strpos($_SERVER['HTTP_USER_AGENT'], "msie") &&
 <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
 <?php } if(strpos($_SERVER['HTTP_USER_AGENT'], "chromeframe")) { ?>
 <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
-<?php } } ?>
+<?php } } $iWrappers['HTTPEQUIV'] = ob_get_clean(); 
+ob_start("idb_suboutput_handler"); ?>
 <base href="<?php echo $BoardURL; ?>" />
 <?php if($Settings['showverinfo']=="on") { ?>
 <meta name="Generator" content="<?php echo $VerInfo['iDB_Ver_Show']; ?>" />
@@ -208,7 +212,8 @@ if(strpos($_SERVER['HTTP_USER_AGENT'], "msie") &&
 <!-- generator="<?php echo $VerInfo['iDB_Ver_Show']; ?>" -->
 <?php } if($Settings['showverinfo']!="on") { ?>
 <!-- generator="<?php echo $iDB; ?>" -->
-<?php } echo "\n"; ?>
+<?php } echo "\n"; $iWrappers['METATAGS'] = ob_get_clean(); 
+ob_start("idb_suboutput_handler"); ?>
 
 <script type="text/javascript" src="<?php echo url_maker($exfilejs['javascript'],$Settings['js_ext'],null,$Settings['qstr'],$Settings['qsep'],$prexqstrjs['javascript'],$exqstrjs['javascript']); ?>"></script>
 <?php echo "\n"; ?>
@@ -248,8 +253,11 @@ color: #000000;
 font-size: 9px;
 }
 </style>
-<?php } if($ThemeSet['FavIcon']!=null) { ?>
+<?php } $iWrappers['CSSTHEME'] = ob_get_clean();
+ob_start("idb_suboutput_handler");
+if($ThemeSet['FavIcon']!=null) { ?>
 <link rel="icon" href="<?php echo $ThemeSet['FavIcon']; ?>" />
 <link rel="shortcut icon" href="<?php echo $ThemeSet['FavIcon']; ?>" />
 <?php } ?>
 <!-- Renee Sabonis ^_^ -->
+<?php $iWrappers['FAVICON'] = ob_get_clean(); ?>

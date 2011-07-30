@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: index.php - Last Update: 07/21/2011 SVN 725 - Author: cooldude2k $
+    $FileInfo: index.php - Last Update: 07/30/2011 SVN 729 - Author: cooldude2k $
 */
 if(ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }
@@ -61,12 +61,19 @@ ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 ?>
 
+<?php $iWrappers['EXTRALINKS'] = null;
+ob_start("idb_suboutput_handler"); ?>
 <title> <?php echo $Settings['board_name'].$idbpowertitle; ?> </title>
+<?php $iWrappers['TITLETAG'] = ob_get_clean(); 
+ob_start("idb_suboutput_handler"); ?>
 </head>
 <body>
-<?php if($_GET['act']!="lowview") {
+<?php $iWrappers['BODYTAG'] = ob_get_clean();
+ob_start("idb_suboutput_handler");
+if($_GET['act']!="lowview") {
 require($SettDir['inc'].'navbar.php'); }
-
+$iWrappers['NAVBAR'] = ob_get_clean();
+ob_start("idb_suboutput_handler");
 if($_GET['act']==null)
 { $_GET['act']="view"; }
 if(!in_array($_GET['act'], $idbactcheck))
@@ -77,6 +84,14 @@ if($_GET['act']=="lowview")
 { require($SettDir['inc'].'lowforums.php'); }
 if($_GET['act']=="view"||$_GET['act']=="stats")
 { require($SettDir['inc'].'stats.php'); }
+$iWrappers['CONTENT'] = ob_get_clean();
+ob_start("idb_suboutput_handler");
 require($SettDir['inc'].'endpage.php');
-fix_amp($Settings['use_gzip'],$GZipEncode['Type']); 
+$iWrappers['COPYRIGHT'] = ob_get_clean();
+ob_start("idb_suboutput_handler");
 ?>
+</body>
+</html>
+<?php $iWrappers['HTMLEND'] = ob_get_clean();
+require($SettDir['inc'].'iwrapper.php');
+fix_amp($Settings['use_gzip'],$GZipEncode['Type']); ?>

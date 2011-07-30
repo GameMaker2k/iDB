@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: topic.php - Last Update: 07/21/2011 SVN 725 - Author: cooldude2k $
+    $FileInfo: topic.php - Last Update: 07/30/2011 SVN 729 - Author: cooldude2k $
 */
 if(ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }
@@ -22,12 +22,19 @@ if($ext=="noext"||$ext=="no ext"||$ext=="no+ext") { $usefileext = ""; }
 $filewpath = $exfile['topic'].$usefileext.$_SERVER['PATH_INFO'];
 $idbactcheck = array("view", "create", "delete", "pin", "unpin", "move", "open", "close", "announce", "edit", "makereply", "editreply", "lowview");
 ?>
-
+<?php $iWrappers['EXTRALINKS'] = null;
+ob_start("idb_suboutput_handler"); ?>
 <title> <?php echo $Settings['board_name'].$idbpowertitle; ?> </title>
+<?php $iWrappers['TITLETAG'] = ob_get_clean(); 
+ob_start("idb_suboutput_handler"); ?>
 </head>
 <body>
-<?php if($_GET['act']!="lowview") {
+<?php $iWrappers['BODYTAG'] = ob_get_clean();
+ob_start("idb_suboutput_handler");
+if($_GET['act']!="lowview") {
 require($SettDir['inc'].'navbar.php'); }
+$iWrappers['NAVBAR'] = ob_get_clean();
+ob_start("idb_suboutput_handler");
 $ForumCheck = null;
 if($_GET['act']==null)
 { $_GET['act']="view"; }
@@ -44,8 +51,18 @@ if($_GET['act']=="edit"||$_GET['act']=="makereply"||$_POST['act']=="makereplies"
 { require($SettDir['inc'].'replies.php'); }
 if($_GET['act']=="lowview")
 { require($SettDir['inc'].'lowreplies.php'); }
+$iWrappers['CONTENT'] = ob_get_clean();
+ob_start("idb_suboutput_handler");
 require($SettDir['inc'].'endpage.php');
+$iWrappers['COPYRIGHT'] = ob_get_clean();
+ob_start("idb_suboutput_handler");
 if(!isset($TopicName)) { $TopicName = null; }
+?>
+</body>
+</html>
+<?php 
+$iWrappers['HTMLEND'] = ob_get_clean();
+require($SettDir['inc'].'iwrapper.php');
 if($_GET['act']=="view") {
 change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." ".$TopicName,$Settings['use_gzip'],$GZipEncode['Type']); } 
 if($_GET['act']=="lowview") {

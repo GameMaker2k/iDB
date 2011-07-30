@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: endpage.php - Last Update: 07/21/2011 SVN 725 - Author: cooldude2k $
+    $FileInfo: endpage.php - Last Update: 07/30/2011 SVN 729 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="endpage.php"||$File3Name=="/endpage.php") {
@@ -35,10 +35,6 @@ if($_GET['debug']=="true"||$_GET['debug']=="on") {
 	$endpagevar=$endpagevar."<br />\nNumber of Queries: ".$NumQueries." ".$ThemeSet['LineDivider']." Execution Time: ".execution_time($starttime).$ThemeSet['LineDivider']."<a href=\"http://validator.w3.org/check/referer?verbose=1\" title=\"Validate HTML\" onclick=\"window.open(this.href);return false;\">HTML</a>".$ThemeSet['LineDivider']."<a href=\"http://jigsaw.w3.org/css-validator/check/referer?profile=css3\" title=\"Validate CSS\" onclick=\"window.open(this.href);return false;\">CSS</a>"; }
 	$endpagevar=$endpagevar."</div>\n";
 echo $endpagevar;
-?>
-</body>
-</html>
-<?php
 session_write_close();
 //session_write_close();
 ?>
