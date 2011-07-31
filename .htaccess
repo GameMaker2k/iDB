@@ -1,11 +1,11 @@
  <FilesMatch "settings.php">
-    Order allow,deny
+    Order Deny,Allow
     Deny from all
     Satisfy All
  </FilesMatch>
 
  <FilesMatch "settingsbak.php">
-    Order allow,deny
+    Order Deny,Allow
     Deny from all
     Satisfy All
  </FilesMatch>
