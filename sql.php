@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 07/30/2011 SVN 729 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 07/31/2011 SVN 733 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -206,103 +206,6 @@ if($Settings['use_hashtype']!="md2"&&
 require_once($SettDir['misc'].'setcheck.php');
 $dayconv = array("year" => 29030400, "month" => 2419200, "week" => 604800, "day" => 86400, "hour" => 3600, "minute" => 60, "second" => 1);
 require_once($SettDir['inc'].'function.php');
-if(!in_array("ini_set", $disfunc)) {
-// Set user agent if we can use ini_set and have to do any http requests. :P 
-$iverstring = "FR 0.0.0 ".$VER2[2]." 0";
-if($Settings['hideverinfohttp']=="off") {
-	$iverstring = $VER2[1]." ".$VER1[0].".".$VER1[1].".".$VER1[2]." ".$VER2[2]." ".$SubVerN; }
-if($Settings['hideverinfohttp']=="on") {
-	$iverstring = "FR 0.0.0 ".$VER2[2]." 0"; }
-$qstrtest = htmlentities($Settings['qstr'], ENT_QUOTES, $Settings['charset']);
-$qseptest = htmlentities($Settings['qsep'], ENT_QUOTES, $Settings['charset']);
-$isiteurl = $Settings['idburl']."?act".$qseptest."view";
-@ini_set("user_agent", "Mozilla/5.0 (compatible; ".$VerCheckName."/".$iverstring."; +".$isiteurl.")"); 
-if (function_exists("stream_context_create")) {
-$iopts = array(
-  'http' => array(
-    'method' => "GET",
-    'header' => "Accept-Language: *\r\n".
-                "User-Agent: Mozilla/5.0 (compatible; ".$VerCheckName."/".$iverstring."; +".$isiteurl.")\r\n".
-                "Accept: */*\r\n".
-                "Connection: keep-alive\r\n".
-                "Referer: ".$isiteurl."\r\n".
-                "From: ".$isiteurl."\r\n"
-  )
-);
-$icontext = stream_context_create($iopts); } }
-$iDBVerName = $VerCheckName."|".$VER2[1]."|".$VER1[0].".".$VER1[1].".".$VER1[2]."|".$VER2[2]."|".$SubVerN;
-/* 
-This way checks iDB version by sending the iDBVerName to the iDB Version Checker.
-$Settings['vercheck'] = 1; 
-This way checks iDB version by sending the board url to the iDB Version Checker.
-$Settings['vercheck'] = 2;
-*/
-if(!isset($Settings['vercheck'])) { 
-	$Settings['vercheck'] = 2; }
-if($Settings['vercheck']!=1&&
-	$Settings['vercheck']!=2) {
-	$Settings['vercheck'] = 2; }
-if($Settings['vercheck']===2) {
-if($_GET['act']=="vercheckxsl") {
-if(stristr($_SERVER["HTTP_ACCEPT"],"application/xml") ) {
-header("Content-Type: application/xml; charset=".$Settings['charset']); }
-else { header("Content-Type: text/xml; charset=".$Settings['charset']); }
-xml_doc_start("1.0",$Settings['charset']);
-echo "\n"; ?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-
-<xsl:template match="/">
- <html xsl:version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns="http://www.w3.org/1999/xhtml">
-  <body style="font-family:Arial;font-size:12pt;background-color:#EEEEEE">
-   <xsl:for-each select="versioninfo/version">
-    <div style="background-color:teal;color:white;padding:4px">
-     <span style="font-weight:bold"><xsl:value-of select="vname"/></span>
-    </div>
-    <div style="margin-left:20px;margin-bottom:1em;font-size:10pt">
-     <span style="font-style:italic">
-          Board Name: <a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><xsl:value-of select="title"/></a></span>
-    </div>
-   </xsl:for-each>
-  </body>
- </html>
-</xsl:template>
-
-</xsl:stylesheet>
-<?php gzip_page("off",$GZipEncode['Type']); session_write_close(); die(); } 
-if($_GET['act']=="versioninfo") {
-if(stristr($_SERVER["HTTP_ACCEPT"],"application/xml") ) {
-header("Content-Type: application/xml; charset=".$Settings['charset']); }
-else { header("Content-Type: text/xml; charset=".$Settings['charset']); }
-xml_doc_start("1.0",$Settings['charset']);
-echo '<?xml-stylesheet type="text/xsl" href="'.url_maker($exfile['index'],$Settings['file_ext'],"act=vercheckxsl",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']).'"?>'."\n"; ?>
-
-<!DOCTYPE versioninfo [
-<!ELEMENT versioninfo (version*)>
-<!ELEMENT version (charset,title,name,vname)>
-<!ELEMENT charset (#PCDATA)>
-<!ELEMENT title (#PCDATA)>
-<!ELEMENT name (#PCDATA)>
-<!ELEMENT vname (#PCDATA)>
-]>
-
-<versioninfo>
-
-<version>
- <charset><?php echo $Settings['charset']; ?></charset> 
-  <title><?php echo $Settings['board_name']; ?></title> 
-  <?php echo "<name>".$iDBVerName."</name>\n"; ?>
-  <vname><?php echo $VerCheckName; ?> Version Checker</vname>
-</version>
-
-</versioninfo>
-<?php gzip_page("off",$GZipEncode['Type']); session_write_close(); die(); } } 
-if($Settings['vercheck']===1) {
-if($_GET['act']=="versioninfo") { header("Content-Type: text/plain; charset=UTF-8");
-header("Location: ".$VerCheckURL."&name=".urlencode($iDBVerName)); $urlstatus = 302;
-gzip_page("off",$GZipEncode['Type']); session_write_close(); die(); } }
-if($_GET['act']=="homepage") { header("Content-Type: text/plain; charset=UTF-8");
-header("Location: ".$Settings['weburl']); $urlstatus = 302;
-gzip_page("off",$GZipEncode['Type']); session_write_close(); die(); }
 if($Settings['enable_pathinfo']=="on") { 
 	mrstring(); /* Change Path info to Get Vars :P */ }
 // Check to see if variables are set
@@ -501,6 +404,7 @@ if(isset($_COOKIE['SessPass'])&&isset($_COOKIE['MemberName'])) {
 session_set_save_handler("sql_session_open", "sql_session_close", "sql_session_read", "sql_session_write", "sql_session_destroy", "sql_session_gc");
 session_name($Settings['sqltable']."sess");
 session_start();
+if(!isset($_SESSION['UserFormID'])) { $_SESSION['UserFormID'] = null; }
 $iDBSessCloseDB = false;
 $_SESSION['ShowActHidden'] = "no";
 output_reset_rewrite_vars();
@@ -509,11 +413,108 @@ session_write_close(); } }
 session_set_save_handler("sql_session_open", "sql_session_close", "sql_session_read", "sql_session_write", "sql_session_destroy", "sql_session_gc");
 session_name($Settings['sqltable']."sess");
 session_start();
+if(!isset($_SESSION['UserFormID'])) { $_SESSION['UserFormID'] = null; }
 $iDBSessCloseDB = true;
 output_reset_rewrite_vars();
 //@register_shutdown_function("session_write_close");
 //header("Set-Cookie: PHPSESSID=" . session_id() . "; path=".$cbasedir);
-output_reset_rewrite_vars();
+if(!in_array("ini_set", $disfunc)) {
+// Set user agent if we can use ini_set and have to do any http requests. :P 
+$iverstring = "FR 0.0.0 ".$VER2[2]." 0";
+if($Settings['hideverinfohttp']=="off") {
+	$iverstring = $VER2[1]." ".$VER1[0].".".$VER1[1].".".$VER1[2]." ".$VER2[2]." ".$SubVerN; }
+if($Settings['hideverinfohttp']=="on") {
+	$iverstring = "FR 0.0.0 ".$VER2[2]." 0"; }
+$qstrtest = htmlentities($Settings['qstr'], ENT_QUOTES, $Settings['charset']);
+$qseptest = htmlentities($Settings['qsep'], ENT_QUOTES, $Settings['charset']);
+$isiteurl = $Settings['idburl']."?act".$qseptest."view";
+@ini_set("user_agent", "Mozilla/5.0 (compatible; ".$VerCheckName."/".$iverstring."; +".$isiteurl.")"); 
+if (function_exists("stream_context_create")) {
+$iopts = array(
+  'http' => array(
+    'method' => "GET",
+    'header' => "Accept-Language: *\r\n".
+                "User-Agent: Mozilla/5.0 (compatible; ".$VerCheckName."/".$iverstring."; +".$isiteurl.")\r\n".
+                "Accept: */*\r\n".
+                "Connection: keep-alive\r\n".
+                "Referer: ".$isiteurl."\r\n".
+                "From: ".$isiteurl."\r\n"
+  )
+);
+$icontext = stream_context_create($iopts); } }
+$iDBVerName = $VerCheckName."|".$VER2[1]."|".$VER1[0].".".$VER1[1].".".$VER1[2]."|".$VER2[2]."|".$SubVerN;
+/* 
+This way checks iDB version by sending the iDBVerName to the iDB Version Checker.
+$Settings['vercheck'] = 1; 
+This way checks iDB version by sending the board url to the iDB Version Checker.
+$Settings['vercheck'] = 2;
+*/
+if(!isset($Settings['vercheck'])) { 
+	$Settings['vercheck'] = 2; }
+if($Settings['vercheck']!=1&&
+	$Settings['vercheck']!=2) {
+	$Settings['vercheck'] = 2; }
+if($Settings['vercheck']===2) {
+if($_GET['act']=="vercheckxsl") {
+if(stristr($_SERVER["HTTP_ACCEPT"],"application/xml") ) {
+header("Content-Type: application/xml; charset=".$Settings['charset']); }
+else { header("Content-Type: text/xml; charset=".$Settings['charset']); }
+xml_doc_start("1.0",$Settings['charset']);
+echo "\n"; ?>
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+
+<xsl:template match="/">
+ <html xsl:version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns="http://www.w3.org/1999/xhtml">
+  <body style="font-family:Arial;font-size:12pt;background-color:#EEEEEE">
+   <xsl:for-each select="versioninfo/version">
+    <div style="background-color:teal;color:white;padding:4px">
+     <span style="font-weight:bold"><xsl:value-of select="vname"/></span>
+    </div>
+    <div style="margin-left:20px;margin-bottom:1em;font-size:10pt">
+     <span style="font-style:italic">
+          Board Name: <a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><xsl:value-of select="title"/></a></span>
+    </div>
+   </xsl:for-each>
+  </body>
+ </html>
+</xsl:template>
+
+</xsl:stylesheet>
+<?php gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); } 
+if($_GET['act']=="versioninfo") {
+if(stristr($_SERVER["HTTP_ACCEPT"],"application/xml") ) {
+header("Content-Type: application/xml; charset=".$Settings['charset']); }
+else { header("Content-Type: text/xml; charset=".$Settings['charset']); }
+xml_doc_start("1.0",$Settings['charset']);
+echo '<?xml-stylesheet type="text/xsl" href="'.url_maker($exfile['index'],$Settings['file_ext'],"act=vercheckxsl",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']).'"?>'."\n"; ?>
+
+<!DOCTYPE versioninfo [
+<!ELEMENT versioninfo (version*)>
+<!ELEMENT version (charset,title,name,vname)>
+<!ELEMENT charset (#PCDATA)>
+<!ELEMENT title (#PCDATA)>
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT vname (#PCDATA)>
+]>
+
+<versioninfo>
+
+<version>
+ <charset><?php echo $Settings['charset']; ?></charset> 
+  <title><?php echo $Settings['board_name']; ?></title> 
+  <?php echo "<name>".$iDBVerName."</name>\n"; ?>
+  <vname><?php echo $VerCheckName; ?> Version Checker</vname>
+</version>
+
+</versioninfo>
+<?php gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); } } 
+if($Settings['vercheck']===1) {
+if($_GET['act']=="versioninfo") { header("Content-Type: text/plain; charset=UTF-8");
+header("Location: ".$VerCheckURL."&name=".urlencode($iDBVerName)); $urlstatus = 302;
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); } }
+if($_GET['act']=="homepage") { header("Content-Type: text/plain; charset=UTF-8");
+header("Location: ".$Settings['weburl']); $urlstatus = 302;
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($_GET['act']=="bsdl"||$_GET['act']=="BSDL"||$_GET['act']=="license"||
 	$_GET['act']=="LICENSE"||$_GET['act']=="License") { $_GET['act']="bsd"; }
 if($_GET['act']=="bsd") {

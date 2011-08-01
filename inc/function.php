@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: function.php - Last Update: 07/22/2011 SVN 728 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 07/31/2011 SVN 733 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -506,6 +506,34 @@ if(!isset($_SERVER['HTTP_REFERER'])) { $URL_REFERER = "-"; }
 if(isset($_SERVER['HTTP_REFERER'])) { $URL_REFERER = $_SERVER['HTTP_REFERER']; }
 if(!isset($_SERVER['PHP_AUTH_USER'])) { $AUTH_USER = "-"; }
 if(isset($_SERVER['PHP_AUTH_USER'])) { $AUTH_USER = $_SERVER['PHP_AUTH_USER']; }
+$LogMemName = "-";
+if(!isset($_SESSION['MemberName'])) {
+	$_SESSION['MemberName'] = null; }
+if($_SESSION['MemberName']===null) {
+	$LogMemName = "-"; }
+if(isset($_SESSION['MemberName'])&&$_SESSION['MemberName']!==null) {
+	$LogMemName = $_SESSION['MemberName']; }
+$LogMemID = "-";
+if(!isset($_SESSION['UserID'])) {
+	$_SESSION['UserID'] = 0; }
+if($_SESSION['UserID']===null||$_SESSION['UserID']===0) {
+	$LogMemID = "-"; }
+if(isset($_SESSION['UserID'])&&$_SESSION['UserID']!==null&&$_SESSION['UserID']!==0) {
+	$LogMemID = $_SESSION['UserID']; }
+$LogGroupName = "-";
+if(!isset($_SESSION['UserGroup'])) {
+	$LogGroupName = "-"; }
+if(isset($_SESSION['UserGroup'])&&$_SESSION['UserGroup']===null) {
+	$LogGroupName = "-"; }
+if(isset($_SESSION['UserGroup'])&&$_SESSION['UserGroup']!==null) {
+	$LogGroupName = $_SESSION['UserGroup']; }
+$LogGroupID = "-";
+if(!isset($_SESSION['UserGroupID'])) {
+	$LogGroupID = "-"; }
+if(isset($_SESSION['UserGroupID'])&&$_SESSION['UserGroupID']===null) {
+	$LogGroupID = "-"; }
+if(isset($_SESSION['UserGroupID'])&&$_SESSION['UserGroupID']!==null) {
+	$LogGroupID = $_SESSION['UserGroupID']; }
 $LOG_QUERY_STRING = "";
 if($_SERVER["QUERY_STRING"]!=="") {
 $LOG_QUERY_STRING = "?".$_SERVER["QUERY_STRING"]; }
@@ -544,6 +572,14 @@ $logtxt = preg_replace("/%([\<\>]*?)V/s", $_SERVER["SERVER_NAME"], $logtxt);
 // Not what it should be but PHP dose not have variable to get Apache ServerName config value. :( 
 $logtxt = preg_replace("/%([\<\>]*?)O/s", $fullsitesize, $logtxt);
 $logtxt = preg_replace_callback("/%([\<\>]*?)\{([^\}]*)\}s/s", "get_setting_values", $logtxt);
+$logtxt = preg_replace("/\%\{UserName\}m/s", $LogMemName, $logtxt);
+$logtxt = preg_replace("/\%\{MemberName\}m/s", $LogMemName, $logtxt);
+$logtxt = preg_replace("/\%\{UserID\}m/s", $LogMemID, $logtxt);
+$logtxt = preg_replace("/\%\{MemberID\}m/s", $LogMemID, $logtxt);
+$logtxt = preg_replace("/\%\{UserGroup\}m/s", $LogGroupName, $logtxt);
+$logtxt = preg_replace("/\%\{MemberGroup\}m/s", $LogGroupName, $logtxt);
+$logtxt = preg_replace("/\%\{UserGroupID\}m/s", $LogGroupID, $logtxt);
+$logtxt = preg_replace("/\%\{MemberGroupID\}m/s", $LogGroupID, $logtxt);
 $logtxt = preg_replace("/\{percent\}p/s", "%", $logtxt);
 if(isset($logfile)&&$logfile!==null) {
 	$fp = fopen($logfile, "a+");
