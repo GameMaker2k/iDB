@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 07/31/2011 SVN 733 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 08/01/2011 SVN 734 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -438,10 +438,17 @@ $iopts = array(
                 "Accept: */*\r\n".
                 "Connection: keep-alive\r\n".
                 "Referer: ".$isiteurl."\r\n".
-                "From: ".$isiteurl."\r\n"
+                "From: ".$isiteurl."\r\n".
+                "Via: ".$_SERVER['REMOTE_ADDR']."\r\n".
+                "Forwarded: ".$_SERVER['REMOTE_ADDR']."\r\n".
+                "X-Forwarded-For: ".$_SERVER['REMOTE_ADDR']."\r\n".
+                "Client-IP: ".$_SERVER['REMOTE_ADDR']."\r\n"
   )
 );
-$icontext = stream_context_create($iopts); } }
+$icontext = stream_context_create($iopts); 
+function file_get_contents_alt($filename,$use_include_path=null,$offset=-1,$maxlen=null) {
+global $icontext;
+return file_get_contents($filename,$icontext,$use_include_path,$offset,$maxlen); } } }
 $iDBVerName = $VerCheckName."|".$VER2[1]."|".$VER1[0].".".$VER1[1].".".$VER1[2]."|".$VER2[2]."|".$SubVerN;
 /* 
 This way checks iDB version by sending the iDBVerName to the iDB Version Checker.
