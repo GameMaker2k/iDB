@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: stats.php - Last Update: 07/14/2011 SVN 717 - Author: cooldude2k $
+    $FileInfo: stats.php - Last Update: 08/02/2011 SVN 738 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="stats.php"||$File3Name=="/stats.php") {
@@ -41,6 +41,7 @@ $session_data=sql_result($uolresult,$uoli,"session_data");
 $session_user_agent=sql_result($uolresult,$uoli,"user_agent"); 
 $session_ip_address=sql_result($uolresult,$uoli,"ip_address");
 $UserSessInfo = unserialize_session($session_data);
+if(!isset($UserSessInfo['UserGroup'])) { $UserSessInfo['UserGroup'] = $Settings['GuestGroup']; }
 $AmIHiddenUser = "no";
 $user_agent_check = false;
 if(user_agent_check($session_user_agent)) {

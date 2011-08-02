@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 08/01/2011 SVN 734 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 08/02/2011 SVN 738 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -427,7 +427,7 @@ if($Settings['hideverinfohttp']=="on") {
 	$iverstring = "FR 0.0.0 ".$VER2[2]." 0"; }
 $qstrtest = htmlentities($Settings['qstr'], ENT_QUOTES, $Settings['charset']);
 $qseptest = htmlentities($Settings['qsep'], ENT_QUOTES, $Settings['charset']);
-$isiteurl = $Settings['idburl']."?act".$qseptest."view";
+$isiteurl = $Settings['idburl'].url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']);
 @ini_set("user_agent", "Mozilla/5.0 (compatible; ".$VerCheckName."/".$iverstring."; +".$isiteurl.")"); 
 if (function_exists("stream_context_create")) {
 $iopts = array(
@@ -448,7 +448,10 @@ $iopts = array(
 $icontext = stream_context_create($iopts); 
 function file_get_contents_alt($filename,$use_include_path=null,$offset=-1,$maxlen=null) {
 global $icontext;
-return file_get_contents($filename,$icontext,$use_include_path,$offset,$maxlen); } } }
+if($maxlen!==null) {
+return file_get_contents($filename,$use_include_path,$icontext,$offset,$maxlen); }
+if($maxlen===null) {
+return file_get_contents($filename,$use_include_path,$icontext,$offset); } } } }
 $iDBVerName = $VerCheckName."|".$VER2[1]."|".$VER1[0].".".$VER1[1].".".$VER1[2]."|".$VER2[2]."|".$SubVerN;
 /* 
 This way checks iDB version by sending the iDBVerName to the iDB Version Checker.
