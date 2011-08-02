@@ -12,7 +12,7 @@
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: setup.php - Last Update: 08/01/2011 SVN 735 - Author: cooldude2k $
+    $FileInfo: setup.php - Last Update: 08/02/2011 SVN 737 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="setup.php"||$File3Name=="/setup.php") {
@@ -262,7 +262,7 @@ echo "<option value=\"".$showmin."\">0:".$showmin." minutes</option>\n"; }
 </select></td>
 </tr><tr>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="iDBLoggerFormat">Insert The Format for HTTP Logger:</label></td>
-	<td style="width: 50%;"><input type="text" class="TextBox" name="iDBLoggerFormat" size="20" id="iDBLoggerFormat" value="<?php echo "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\""; ?>" /></td>
+	<td style="width: 50%;"><input type="text" class="TextBox" name="iDBLoggerFormat" size="20" id="iDBLoggerFormat" value="<?php echo "%h %l %u %t &quot;%r&quot; %&gt;s %b &quot;%{Referer}i&quot; &quot;%{User-Agent}i&quot;"; ?>" /></td>
 </tr><tr>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="DefaultTheme">Default Theme</label></td>
 	<td style="width: 50%;"><select id="DefaultTheme" name="DefaultTheme" class="TextBox"><?php
