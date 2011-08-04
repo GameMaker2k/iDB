@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: replies.php - Last Update: 07/21/2011 SVN 726 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 08/03/2011 SVN 739 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -474,8 +474,7 @@ echo "<span>".$User1Name."</span>"; }
 ?></td>
 <td class="TableInfoColumn2" style="vertical-align: middle;">
 <div style="float: left; text-align: left;">
-<a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&post=".$MyPostID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>" style="vertical-align: middle;">
-<span style="font-weight: bold;">Time Posted: </span><?php echo $MyTimeStamp; ?></a>
+<span style="font-weight: bold; vertical-align: middle;">Time Posted: </span><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&post=".$MyPostID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>" style="vertical-align: middle;"><?php echo $MyTimeStamp; ?></a>
 </div>
 <div style="float: right;">
 <?php if(isset($ThemeSet['Report'])&&$ThemeSet['Report']!=null) { ?>
@@ -525,7 +524,7 @@ Post IP: <a onclick="window.open(this.href);return false;" href="<?php echo spri
 </tr>
 <tr class="TableInfoRow4">
 <td class="TableInfoColumn4" colspan="2">
-<span style="text-align: left;">&nbsp;<a href="<?php
+<span style="text-align: left; float: left;">&nbsp;<a href="<?php
 if($User1ID>0&&$User1Hidden=="no"&&isset($ThemeSet['Profile'])&&$ThemeSet['Profile']!=null) {
 echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$User1ID,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); }
 if(($User1ID<=0||$User1Hidden=="yes")&&isset($ThemeSet['Profile'])&&$ThemeSet['Profile']!=null) {
@@ -538,6 +537,8 @@ echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=create&id=".$User
 if(($User1ID<=0||$User1Hidden=="yes")&&isset($ThemeSet['PM'])&&$ThemeSet['PM']!=null) {
 echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); }
 ?>"><?php echo $ThemeSet['PM']; ?></a></span>
+<span style="text-align: right; float: right; font-weight: bold;"><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&post=".$MyPostID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>" title="Link to post #<?php echo $ReplyNum; ?>" style="vertical-align: middle; font-weight: bold;">
+#<?php echo $ReplyNum; ?></a>&nbsp;</span>
 </td>
 </tr>
 </table></div>
