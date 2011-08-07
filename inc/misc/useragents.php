@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: useragents.php - Last Update: 06/30/2011 SVN 689 - Author: cooldude2k $
+    $FileInfo: useragents.php - Last Update: 08/07/2011 SVN 744 - Author: cooldude2k $
 */
 // User Agent Checker
 function user_agent_check($user_agent) {
@@ -104,6 +104,8 @@ if (preg_match("/".preg_quote("Huaweisymantecspider", "/")."/i", $user_agent)) {
     return "Huaweisymantecspider"; }
 if (preg_match("|".preg_quote("iDB-VerCheck", "|")."|i", $user_agent)) {
     return "iDB Version Checker"; }
+if (preg_match("|".preg_quote("iDB-Forum", "|")."|i", $user_agent)) {
+    return "iDB Message Board"; }
 if (preg_match("/".preg_quote("Infoseek", "/")."/i", $user_agent)) {
     return "InfoSeek"; }
 if (preg_match("/".preg_quote("IRLbot", "/")."/i", $user_agent)) {

@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 08/06/2011 SVN 743 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 08/07/2011 SVN 744 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -429,13 +429,13 @@ if($Settings['hideverinfohttp']=="on") {
 $qstrtest = htmlentities($Settings['qstr'], ENT_QUOTES, $Settings['charset']);
 $qseptest = htmlentities($Settings['qsep'], ENT_QUOTES, $Settings['charset']);
 $isiteurl = $Settings['idburl'].url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']);
-@ini_set("user_agent", "Mozilla/5.0 (compatible; ".$VerCheckName."/".$iverstring."; +".$isiteurl.")"); 
+@ini_set("user_agent", "Mozilla/5.0 (compatible; ".$UserAgentName."/".$iverstring."; +".$isiteurl.")"); 
 if (function_exists("stream_context_create")) {
 $iopts = array(
   'http' => array(
     'method' => "GET",
     'header' => "Accept-Language: *\r\n".
-                "User-Agent: Mozilla/5.0 (compatible; ".$VerCheckName."/".$iverstring."; +".$isiteurl.")\r\n".
+                "User-Agent: Mozilla/5.0 (compatible; ".$UserAgentName."/".$iverstring."; +".$isiteurl.")\r\n".
                 "Accept: */*\r\n".
                 "Connection: keep-alive\r\n".
                 "Referer: ".$isiteurl."\r\n".

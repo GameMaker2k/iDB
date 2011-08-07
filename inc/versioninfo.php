@@ -11,7 +11,7 @@
     Copyright 2008-2011 iDB Support - http://idb.berlios.de/
     Copyright 2008-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: versioninfo.php - Last Update: 08/06/2011 SVN 743 - Author: cooldude2k $
+    $FileInfo: versioninfo.php - Last Update: 08/07/2011 SVN 744 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="versioninfo.php"||$File3Name=="/versioninfo.php") {
@@ -27,13 +27,14 @@ function version_info($proname,$subver,$ver,$supver,$reltype,$svnver,$showsvn) {
 	return $return_var; }
 // Version number and date stuff. :P
 $VER1[0] = 0; $VER1[1] = 4; $VER1[2] = 7; $VERFull[1] = $VER1[0].".".$VER1[1].".".$VER1[2];
-$VER2[0] = "Alpha"; $VER2[1] = "Al"; $VER2[2] = "SVN"; $SubVerN = 743;
-$SVNDay[0] = 08; $SVNDay[1] = 06; $SVNDay[2] = 2011; $SVNDay[3] = $SVNDay[0]."/".$SVNDay[1]."/".$SVNDay[2];
+$VER2[0] = "Alpha"; $VER2[1] = "Al"; $VER2[2] = "SVN"; $SubVerN = 744;
+$SVNDay[0] = 08; $SVNDay[1] = 07; $SVNDay[2] = 2011; $SVNDay[3] = $SVNDay[0]."/".$SVNDay[1]."/".$SVNDay[2];
 $AltName = "RDB"; $AltName2 = "ReneeDB"; $RName = "iDB"; $SFName = "IntDB";
 $RFullName = "Internet Discussion Boards"; $AltFullName = "Renee Discussion Boards"; $AltGM2k = "ReneeDB Team";
 $VerCheckName = "iDB"; $AltVerCheckName = "RDB"; $AltiDBHome = "http://duckduckgo.com/?q=ReneeDB";
 $AltGM2kHome = "http://duckduckgo.com/?q=ReneeDB"; $AltGM2kURL = "<a href=\"".$AltGM2kHome."\" title=\"".$AltGM2k."\" onclick=\"window.open(this.href);return false;\">".$AltGM2k."</a>";
-$iDBTheme = "iDB"; $AltiDBTheme = "Gray";
+$iDBTheme = "iDB"; $AltiDBTheme = "Gray"; 
+$UserAgentName = "iDB-Forum"; $AltUserAgentName = "RDB-Forum";
 if(!isset($Settings['usealtname'])) { $Settings['usealtname'] = "no"; }
 if(isset($Settings['usealtname'])&&$Settings['usealtname']=="yes") {
 if(isset($iDBAltName['VER1'][0])) { $VER1[0] = $iDBAltName['VER1'][0]; }
@@ -58,6 +59,7 @@ if(isset($iDBAltName['AltName'])) { $AltName = $iDBAltName['AltName']; }
 if(isset($iDBAltName['AltName2'])) { $AltName2 = $iDBAltName['AltName2']; }
 if(isset($iDBAltName['AltFullName'])) { $AltFullName = $iDBAltName['AltFullName']; } 
 if(isset($iDBAltName['AltVerCheckName'])) { $AltVerCheckName = $iDBAltName['AltVerCheckName']; } 
+if(isset($iDBAltName['AltUserAgentName'])) { $AltUserAgentName = $iDBAltName['AltUserAgentName']; } 
 if(isset($iDBAltName['AltiDBHome'])) { $AltiDBHome = $iDBAltName['AltiDBHome']; } 
 if(isset($iDBAltName['AltGM2k'])) { $AltGM2k = $iDBAltName['AltGM2k']; } 
 if(isset($iDBAltName['AltGM2kHome'])) { $AltGM2kHome = $iDBAltName['AltGM2kHome']; } 
@@ -65,8 +67,7 @@ if(isset($iDBAltName['AltGM2kURL'])) { $AltGM2kURL = $iDBAltName['AltGM2kURL']; 
 if(isset($iDBAltName['AltiDBTheme'])) { $AltiDBTheme = $iDBAltName['AltiDBTheme']; } 
 if(isset($iDBAltName['VerCheckURL'])) { $Settings['VerCheckURL'] = $iDBAltName['VerCheckURL']; } }
 if(isset($Settings['usealtname'])&&$Settings['usealtname']=="yes") {
-	//$RName = $AltName; $SFName = $AltName2; $RFullName = $AltFullName; $VerCheckName = $AltVerCheckName;
-	$RName = $AltName2; $SFName = $AltName; $RFullName = $AltFullName; $VerCheckName = $AltVerCheckName; }
+	$RName = $AltName2; $SFName = $AltName; $RFullName = $AltFullName; $VerCheckName = $AltVerCheckName; $UserAgentName = $AltUserAgentName; }
 $VerInfo['iDB_Ver'] = version_info($RName,$VER1[0],$VER1[1],$VER1[2],$VER2[1],$SubVerN,false);
 $VerInfo['iDB_Ver_SVN'] = version_info($RName,$VER1[0],$VER1[1],$VER1[2],$VER2[1],$SubVerN,$VER2[2]);
 $VerInfo['iDB_Full_Ver'] = version_info($RName,$VER1[0],$VER1[1],$VER1[2],$VER2[0],$SubVerN,false);
