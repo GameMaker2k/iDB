@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: function.php - Last Update: 07/31/2011 SVN 733 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 08/06/2011 SVN 741 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -20,6 +20,29 @@ if ($File3Name=="function.php"||$File3Name=="/function.php") {
 require_once($SettDir['misc'].'functions.php');
 require_once($SettDir['misc'].'ibbcode.php');
 require_once($SettDir['misc'].'iuntar.php');
+/* In php 6 and up the function get_magic_quotes_gpc dose not exist. 
+   here we make a fake version that always sends false out. :P */
+if(!function_exists('get_magic_quotes_gpc')) {
+function get_magic_quotes_gpc() { return false; } }
+/**
+ * Undo the damage of magic_quotes_gpc if in effect
+ * @return bool
+ * @link http://www.charles-reace.com/blog/2010/07/13/undoing-magic-quotes/
+ */
+function fix_magic_quotes()
+{
+   if (get_magic_quotes_gpc()) {
+      $func = create_function(
+         '&$val, $key',
+         'if(!is_numeric($val)) {$val = stripslashes($val);}'
+      );
+      array_walk_recursive($_GET, $func);
+      array_walk_recursive($_POST, $func);
+      array_walk_recursive($_COOKIE, $func);
+   }
+   return true;
+}
+fix_magic_quotes();
 /* Change Some PHP Settings Fix the & to &amp;
 if($Settings['use_iniset']==true&&$Settings['qstr']!="/") {
 ini_set("arg_separator.output",htmlentities($Settings['qstr'], ENT_QUOTES, $Settings['charset']));

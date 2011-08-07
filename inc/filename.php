@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: filename.php - Last Update: 12/07/2010 SVN 600 - Author: cooldude2k $
+    $FileInfo: filename.php - Last Update: 08/06/2011 SVN 741 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="filename.php"||$File3Name=="/filename.php") {
@@ -39,10 +39,6 @@ if($Settings['idburl']!="localhost"&&$Settings['idburl']!=null) {
 	$rssurlon = "on"; $rssurl = $Settings['idburl']; }
 if($Settings['rssurl']!=null&&$Settings['rssurl']!="") {
 	$rssurlon = "on"; $rssurl = $Settings['rssurl']; }
-/* In php 6 and up the function get_magic_quotes_gpc dose not exist. 
-   here we make a fake version that always sends false out. :P */
-if(!function_exists('get_magic_quotes_gpc')) {
-function get_magic_quotes_gpc() { return false; } }
 require_once($SettDir['inc'].'versioninfo.php');
 //File naming stuff. <_< 
 $exfile = array(); $exfilerss = array();
