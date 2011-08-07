@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 07/18/2011 SVN 720 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 08/06/2011 SVN 743 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -208,9 +208,9 @@ $MemList['WarnLevel']=sql_result($result,$i,"WarnLevel");
 $MemList['Interests']=sql_result($result,$i,"Interests");
 $MemList['Title']=sql_result($result,$i,"Title");
 $MemList['Joined']=sql_result($result,$i,"Joined");
-$MemList['Joined']=GMTimeChange("F j Y, ".$Settings['idb_time_format'],$MemList['Joined'],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$MemList['Joined']=GMTimeChange($Settings['idb_date_format'].", ".$Settings['idb_time_format'],$MemList['Joined'],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $MemList['LastActive']=sql_result($result,$i,"LastActive");
-$MemList['LastActive']=GMTimeChange("F j Y, ".$Settings['idb_time_format'],$MemList['LastActive'],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$MemList['LastActive']=GMTimeChange($Settings['idb_date_format'].", ".$Settings['idb_time_format'],$MemList['LastActive'],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $MemList['Website']=sql_result($result,$i,"Website");
 $MemList['Website'] = urlcheck($MemList['Website']);
 $BoardWWWChCk = parse_url($Settings['idburl']);
@@ -415,7 +415,7 @@ $session_data=sql_result($result,$i,"session_data");
 $session_user_agent=sql_result($result,$i,"user_agent"); 
 $session_ip_address=sql_result($result,$i,"ip_address"); 
 $session_expires=sql_result($result,$i,"expires"); 
-$session_expires = GMTimeChange("F j Y, ".$Settings['idb_time_format'],$session_expires,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$session_expires = GMTimeChange($Settings['idb_date_format'].", ".$Settings['idb_time_format'],$session_expires,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 if(isset($UserSessInfo)) { $UserSessInfo = null; }
 $UserSessInfo = unserialize_session($session_data);
 if(!isset($UserSessInfo['ShowActHidden'])) { $UserSessInfo['ShowActHidden'] = "no"; }

@@ -12,7 +12,7 @@
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: setup.php - Last Update: 08/02/2011 SVN 737 - Author: cooldude2k $
+    $FileInfo: setup.php - Last Update: 08/06/2011 SVN 743 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="setup.php"||$File3Name=="/setup.php") {
@@ -246,8 +246,11 @@ echo "<option value=\"".$showmin."\">0:".$showmin." minutes</option>\n"; }
 <option selected="selected" value="on">on</option><?php echo "\n" ?><option value="off">off</option>
 <?php } echo "\n" ?></select></td>
 </tr><tr>
-	<td style="width: 50%;"><label class="TextBoxLabel" for="iDBTimeFormat">Insert the time format to be used for iDB:</label></td>
+	<td style="width: 50%;"><label class="TextBoxLabel" for="iDBTimeFormat">Insert time format string:</label></td>
 	<td style="width: 50%;"><input type="text" class="TextBox" name="iDBTimeFormat" size="20" id="iDBTimeFormat" value="<?php echo "g:i A"; ?>" /></td>
+</tr><tr>
+	<td style="width: 50%;"><label class="TextBoxLabel" for="iDBDateFormat">Insert date format string:</label></td>
+	<td style="width: 50%;"><input type="text" class="TextBox" name="iDBDateFormat" size="20" id="iDBDateFormat" value="<?php echo "F j Y"; ?>" /></td>
 </tr><tr>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="TestReferer">Test Referering URL:</label></td>
 	<td style="width: 50%;"><select id="TestReferer" name="TestReferer" class="TextBox">

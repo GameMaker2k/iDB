@@ -12,7 +12,7 @@
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mkconfig.php - Last Update: 08/01/2011 SVN 735 - Author: cooldude2k $
+    $FileInfo: mkconfig.php - Last Update: 08/06/2011 SVN 743 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mkconfig.php"||$File3Name=="/mkconfig.php") {
@@ -226,6 +226,13 @@ $KarmaBoostDay = $EventMonth.$EventDay;
 $Settings['idb_time_format'] = "g:i A";
 if(!isset($_POST['iDBTimeFormat'])) { 
 	$_POST['iDBTimeFormat'] = "g:i A"; }
+if(isset($_POST['iDBTimeFormat'])) { 
+	$_POST['iDBTimeFormat'] = convert_strftime($_POST['iDBTimeFormat']); }
+$Settings['idb_date_format'] = "F j Y";
+if(!isset($_POST['iDBDateFormat'])) { 
+	$_POST['iDBDateFormat'] = "F j Y"; }
+if(isset($_POST['iDBDateFormat'])) { 
+	$_POST['iDBDateFormat'] = convert_strftime($_POST['iDBDateFormat']); }
 if(!isset($_POST['iDBHTTPLogger'])) { 
 	$_POST['iDBHTTPLogger'] = "off"; }
 if(isset($_POST['iDBHTTPLogger'])&&$_POST['iDBHTTPLogger']!="on"&&$_POST['iDBHTTPLogger']!="off") {
@@ -233,6 +240,7 @@ if(isset($_POST['iDBHTTPLogger'])&&$_POST['iDBHTTPLogger']!="on"&&$_POST['iDBHTT
 if(!isset($_POST['iDBLoggerFormat'])) { 
 	$_POST['iDBLoggerFormat'] = "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\""; }
 $Settings['idb_time_format'] = $_POST['iDBTimeFormat'];
+$Settings['idb_date_format'] = $_POST['iDBDateFormat'];
 $NewPassword = b64e_hmac($_POST['AdminPasswords'],$YourDate,$YourSalt,$_POST['usehashtype']);
 //$Name = stripcslashes(htmlspecialchars($AdminUser, ENT_QUOTES, $Settings['charset']));
 //$YourWebsite = "http://".$_SERVER['HTTP_HOST'].$this_dir."index.php?act=view";
@@ -319,6 +327,7 @@ $BoardSettings=$pretext2[0]."\n".
 "\$Settings['DefaultDST'] = '".$AdminDST."';\n".
 "\$Settings['start_date'] = ".$YourDate.";\n".
 "\$Settings['idb_time_format'] = '".$Settings['idb_time_format']."';\n".
+"\$Settings['idb_date_format'] = '".$Settings['idb_date_format']."';\n".
 "\$Settings['use_hashtype'] = '".$_POST['usehashtype']."';\n".
 "\$Settings['charset'] = '".$Settings['charset']."';\n".
 "\$Settings['sql_collate'] = '".$Settings['sql_collate']."';\n".

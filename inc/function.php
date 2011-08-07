@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: function.php - Last Update: 08/06/2011 SVN 741 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 08/06/2011 SVN 743 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -608,7 +608,8 @@ if(isset($logfile)&&$logfile!==null) {
 	$fp = fopen($logfile, "a+");
 	$logtxtnew = $logtxt."\r\n";
 	fwrite($fp, $logtxtnew, strlen($logtxtnew));
-	fclose($fp); }
+	fclose($fp); 
+	@chmod($logfile, 0666); }
 return $logtxt; }
 function idb_log_maker($status=200,$contentsize="-") {
 global $Settings,$SettDir;

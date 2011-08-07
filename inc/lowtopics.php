@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: lowtopics.php - Last Update: 07/20/2011 SVN 724 - Author: cooldude2k $
+    $FileInfo: lowtopics.php - Last Update: 08/06/2011 SVN 743 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="lowtopics.php"||$File3Name=="/lowtopics.php") {
@@ -252,7 +252,7 @@ $OldForumID=sql_result($result,$i,"OldForumID");
 $UsersID=sql_result($result,$i,"UserID");
 $GuestsName=sql_result($result,$i,"GuestName");
 $TheTime=sql_result($result,$i,"TimeStamp");
-$TheTime=GMTimeChange("F j Y, ".$Settings['idb_time_format'],$TheTime,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$TheTime=GMTimeChange($Settings['idb_date_format'].", ".$Settings['idb_time_format'],$TheTime,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $NumReply=sql_result($result,$i,"NumReply");
 $NumberPosts=$NumReply + 1;
 $prepagelist = null;

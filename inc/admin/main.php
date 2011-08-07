@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: main.php - Last Update: 08/06/2011 SVN 742 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 08/06/2011 SVN 743 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -131,6 +131,8 @@ if(!isset($Settings['log_config_format'])) {
 	$Settings['log_config_format'] = "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\""; }
 if(!isset($Settings['idb_time_format'])) { 
 	$Settings['idb_time_format'] = "g:i A"; }
+if(!isset($Settings['idb_date_format'])) { 
+	$Settings['idb_date_format'] = "F j Y"; }
 ?>
 <table class="Table3">
 <tr style="width: 100%; vertical-align: top;">
@@ -191,6 +193,7 @@ $BoardSettings=$pretext2[0]."\n".
 "\$Settings['DefaultDST'] = ".null_string($Settings['DefaultDST']).";\n".
 "\$Settings['start_date'] = ".null_string($Settings['start_date']).";\n".
 "\$Settings['idb_time_format'] = ".null_string($Settings['idb_time_format']).";\n".
+"\$Settings['idb_date_format'] = ".null_string($Settings['idb_date_format']).";\n".
 "\$Settings['use_hashtype'] = ".null_string($Settings['use_hashtype']).";\n".
 "\$Settings['charset'] = ".null_string($Settings['charset']).";\n".
 "\$Settings['sql_collate'] = ".null_string($Settings['sql_collate']).";\n".
@@ -517,11 +520,11 @@ if(isset($_GET['menu'])&&$_GET['menu']=="main") { $AddChkURL = "&menu=main"; }
 <table style="text-align: left;">
 <tr>
 	<td style="width: 50%;"><span class="TextBoxLabel" title="Using User Time Zone">[User TimeZone] Install Date:</span></td>
-	<td style="width: 50%;"><?php echo GMTimeChange("F j Y, ".$Settings['idb_time_format'],$Settings['start_date'],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']); ?></td>
+	<td style="width: 50%;"><?php echo GMTimeChange($Settings['idb_date_format'].", ".$Settings['idb_time_format'],$Settings['start_date'],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']); ?></td>
 </tr><?php if($_SESSION['UserTimeZone']!=$Settings['DefaultTimeZone']||
 	$_SESSION['UserDST']!=$Settings['DefaultDST']) { ?><tr>
 	<td style="width: 50%;"><span class="TextBoxLabel" title="Using Board Time Zone">[Board TimeZone] Install Date:</span></td>
-	<td style="width: 50%;"><?php echo GMTimeChange("F j Y, ".$Settings['idb_time_format'],$Settings['start_date'],$Settings['DefaultTimeZone'],0,$Settings['DefaultDST']); ?></td>
+	<td style="width: 50%;"><?php echo GMTimeChange($Settings['idb_date_format'].", ".$Settings['idb_time_format'],$Settings['start_date'],$Settings['DefaultTimeZone'],0,$Settings['DefaultDST']); ?></td>
 </tr><?php } if($GroupInfo['ViewDBInfo']=="yes") { 
 ?><tr style="text-align: left;">
 	<td style="width: 50%;"><span class="TextBoxLabel">Forum Software Version:</span></td>
@@ -771,8 +774,11 @@ echo "<option value=\"".$ThemeInfo['Name']."\">".$ThemeInfo['ThemeName']."</opti
 <option<?php if($Settings['TestReferer']=="off") { echo " selected=\"selected\""; } ?> value="off">off</option>
 </select></td>
 </tr><tr style="text-align: left;">
-	<td style="width: 50%;"><label class="TextBoxLabel" for="iDBTimeFormat">Insert the time format to be used for iDB:</label></td>
+	<td style="width: 50%;"><label class="TextBoxLabel" for="iDBTimeFormat">Insert time format string:</label></td>
 	<td style="width: 50%;"><input type="text" class="TextBox" name="iDBTimeFormat" size="20" id="iDBTimeFormat" value="<?php echo htmlentities($Settings['idb_time_format'], ENT_QUOTES, $Settings['charset']); ?>" /></td>
+</tr><tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="iDBDateFormat">Insert date format string:</label></td>
+	<td style="width: 50%;"><input type="text" class="TextBox" name="iDBDateFormat" size="20" id="iDBDateFormat" value="<?php echo htmlentities($Settings['idb_date_format'], ENT_QUOTES, $Settings['charset']); ?>" /></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="iDBHTTPLogger">Log Every HTTP Requests:</label></td>
 	<td style="width: 50%;"><select id="iDBHTTPLogger" name="iDBHTTPLogger" class="TextBox">
@@ -832,7 +838,9 @@ $_POST['BoardURL'] = remove_spaces($_POST['BoardURL']);
 $_POST['WebURL'] = htmlentities($_POST['WebURL'], ENT_QUOTES, $Settings['charset']);
 $_POST['WebURL'] = remove_spaces($_POST['WebURL']);
 $_POST['iDBTimeFormat'] = convert_strftime($_POST['iDBTimeFormat']);
+$_POST['iDBDateFormat'] = convert_strftime($_POST['iDBDateFormat']);
 $Settings['idb_time_format'] = $_POST['iDBTimeFormat'];
+$Settings['idb_date_format'] = $_POST['iDBDateFormat'];
 $Settings['log_http_request'] = $_POST['iDBHTTPLogger'];
 $Settings['log_config_format'] = $_POST['iDBLoggerFormat'];
 if($_POST['HTMLType']=="xhtml11") { $_POST['HTMLLevel'] = "Strict"; }
@@ -865,6 +873,7 @@ $BoardSettings=$pretext2[0]."\n".
 "\$Settings['DefaultDST'] = ".null_string($_POST['DST']).";\n".
 "\$Settings['start_date'] = ".null_string($Settings['start_date']).";\n".
 "\$Settings['idb_time_format'] = ".null_string($Settings['idb_time_format']).";\n".
+"\$Settings['idb_date_format'] = ".null_string($Settings['idb_date_format']).";\n".
 "\$Settings['use_hashtype'] = ".null_string($Settings['use_hashtype']).";\n".
 "\$Settings['charset'] = ".null_string($Settings['charset']).";\n".
 "\$Settings['sql_collate'] = ".null_string($Settings['sql_collate']).";\n".
@@ -1049,6 +1058,7 @@ $BoardSettings=$pretext2[0]."\n".
 "\$Settings['DefaultDST'] = ".null_string($Settings['DefaultDST']).";\n".
 "\$Settings['start_date'] = ".null_string($Settings['start_date']).";\n".
 "\$Settings['idb_time_format'] = ".null_string($Settings['idb_time_format']).";\n".
+"\$Settings['idb_date_format'] = ".null_string($Settings['idb_date_format']).";\n".
 "\$Settings['use_hashtype'] = ".null_string($Settings['use_hashtype']).";\n".
 "\$Settings['charset'] = ".null_string($Settings['charset']).";\n".
 "\$Settings['sql_collate'] = ".null_string($Settings['sql_collate']).";\n".
@@ -1212,6 +1222,7 @@ $BoardSettings=$pretext2[0]."\n".
 "\$Settings['DefaultDST'] = ".null_string($Settings['DefaultDST']).";\n".
 "\$Settings['start_date'] = ".null_string($Settings['start_date']).";\n".
 "\$Settings['idb_time_format'] = ".null_string($Settings['idb_time_format']).";\n".
+"\$Settings['idb_date_format'] = ".null_string($Settings['idb_date_format']).";\n".
 "\$Settings['use_hashtype'] = ".null_string($Settings['use_hashtype']).";\n".
 "\$Settings['charset'] = ".null_string($Settings['charset']).";\n".
 "\$Settings['sql_collate'] = ".null_string($Settings['sql_collate']).";\n".
