@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: messages.php - Last Update: 08/06/2011 SVN 743 - Author: cooldude2k $
+    $FileInfo: messages.php - Last Update: 08/08/2011 SVN 745 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="messages.php"||$File3Name=="/messages.php") {
@@ -502,6 +502,8 @@ $User1AvatarSize=$ThemeSet['NoAvatarSize']; }
 $AvatarSize1=explode("x", $User1AvatarSize);
 $AvatarSize1W=$AvatarSize1[0]; $AvatarSize1H=$AvatarSize1[1];
 $User1Website=sql_result($reresult,$rei,"Website");
+if($User1Website=="http://") { 
+	$User1Website = $Settings['idburl']; }
 $User1Website = urlcheck($User1Website);
 $BoardWWWChCk = parse_url($Settings['idburl']);
 $User1WWWChCk = parse_url($User1Website);
