@@ -12,7 +12,7 @@
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 	iBBCode / iBBTags by Kazuki Przyborowski - http://idb.berlios.net/
 
-    $FileInfo: ibbcode.php - Last Update: 08/01/2011 SVN 734 - Author: cooldude2k $
+    $FileInfo: ibbcode.php - Last Update: 08/10/2011 SVN 747 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="ibbcode.php"||$File3Name=="/ibbcode.php") {
@@ -61,12 +61,12 @@ function bbcode_random($matches) {
 if(!function_exists("urlcheck2")) {
 function urlcheck2($matches) {
 global $BoardURL;
-$retnum = preg_match_all("/([a-zA-Z]+)\:\/\/([a-z0-9\-\.]+)(\:[0-9]+)?\/([A-Za-z0-9\.\/%\?\-_\:;\~]+)?(\?)?([A-Za-z0-9\.\/%&\=\?\-_\:;\+]+)?(\#)?([A-Za-z0-9\.\/%&\=\?\-_\:;\+]+)?/is", $matches[1], $urlcheck); 
+$retnum = preg_match_all("/([a-zA-Z]+)\:\/\/([a-z0-9\-\.@\:]+)(\:[0-9]+)?\/([A-Za-z0-9\.\/%\?\!\$\(\)\*\-_\:;,\+\@~]+)?(\?)?([A-Za-z0-9\.\/%&\=\?\!\$\(\)\*\-_\:;,\+\@~]+)?(\#)?([A-Za-z0-9\.\/%&\=\?\!\$\(\)\*\-_\:;,\+\@~]+)?/is", $matches[1], $urlcheck); 
 if(isset($urlcheck[0][0])) { 
 $matches[0] = preg_replace("/\[URL\](.*?)\[\/URL\]/is", " \\1", $matches[0]);
 $matches[0] = preg_replace("/\[URL\=(.*?)\](.*?)\[\/URL\]/is", "<a href=\"\\1\">\\2</a>", $matches[0]);
 $matches[0] = preg_replace("/\[IMG](.*?)\[\/IMG\]/is", "<img src=\"\\1\" alt=\"user posted image\" title=\"user posted image\" />", $matches[0]); 
-$matches[0] = preg_replace("/\[IMG\=(.*?)]([A-Za-z0-9\.\/%\?\-_\:;\~\s]+)\[\/IMG\]/is", "<img src=\"\\1\" alt=\"\\2\" title=\"\\2\" />", $matches[0]); }
+$matches[0] = preg_replace("/\[IMG\=(.*?)]([A-Za-z0-9\.\/%\?\!\$\(\)\*\-_\:;,\+\@~\s]+)\[\/IMG\]/is", "<img src=\"\\1\" alt=\"\\2\" title=\"\\2\" />", $matches[0]); }
 return $matches[0]; } }
 function bbcode_parser($text) {
 global $Settings;
@@ -175,7 +175,7 @@ $text = preg_replace("/\[URL\=&quot;(.*?)&quot;\](.*?)\[\/URL\]/is", "[URL=\\1]\
 $text = preg_replace_callback("/\[URL\=(.*?)\](.*?)\[\/URL\]/is", "urlcheck2", $text);
 $text = preg_replace_callback("/\[IMG](.*?)\[\/IMG\]/is", "urlcheck2", $text);
 $text = preg_replace("/\[IMG\=&quot;(.*?)&quot;\](.*?)\[\/IMG\]/is", "[IMG=\\1]\\2[/IMG]", $text);
-$text = preg_replace_callback("/\[IMG\=(.*?)]([A-Za-z0-9\.\/%\?\-_\:;\~\s]+)\[\/IMG\]/is", "urlcheck2", $text);
+$text = preg_replace_callback("/\[IMG\=(.*?)](.*?)\[\/IMG\]/is", "urlcheck2", $text);
 $text = preg_replace_callback("/\[URLENCODE\](.*?)\[\/URLENCODE\]/is","bbcode_urlencode",$text);
 $text = preg_replace_callback("/\[URLDECODE\](.*?)\[\/URLDECODE\]/is","bbcode_urldecode",$text);
 $text = preg_replace_callback("/\[BASE64\](.*?)\[\/BASE64\]/is","bbcode_base64encode",$text);
