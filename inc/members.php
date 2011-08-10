@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 08/08/2011 SVN 745 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 08/09/2011 SVN 746 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -610,8 +610,8 @@ $ViewMem['Joined']=GMTimeChange("M j Y, ".$Settings['idb_time_format'],$ViewMem[
 $ViewMem['LastActive']=sql_result($result,$i,"LastActive");
 $ViewMem['LastActive']=GMTimeChange("M j Y, ".$Settings['idb_time_format'],$ViewMem['LastActive'],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $ViewMem['Website']=sql_result($result,$i,"Website");
-if($MemList['Website']=="http://") { 
-	$MemList['Website'] = $Settings['idburl']; }
+if($ViewMem['Website']=="http://") { 
+	$ViewMem['Website'] = $Settings['idburl']; }
 $ViewMem['Website'] = urlcheck($ViewMem['Website']);
 $BoardWWWChCk = parse_url($Settings['idburl']);
 $MemsWWWChCk = parse_url($ViewMem['Website']);
