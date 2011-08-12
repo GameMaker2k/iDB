@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: profilemain.php - Last Update: 07/14/2011 SVN 717 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 08/12/2011 SVN 748 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
@@ -377,6 +377,10 @@ $num=sql_num_rows($result);
 $i=0;
 $YourID=sql_result($result,$i,"id");
 $User1TimeZone=sql_result($result,$i,"TimeZone"); 
+$User1DateFormat=sql_result($result,$i,"DateFormat");
+$User1DateFormat = htmlspecialchars($User1DateFormat, ENT_QUOTES, $Settings['charset']);
+$User1TimeFormat=sql_result($result,$i,"TimeFormat");
+$User1TimeFormat= htmlspecialchars($User1TimeFormat, ENT_QUOTES, $Settings['charset']);
 $tsa_mem = explode(":",$User1TimeZone);
 $TimeZoneArray = array("offset" => $User1TimeZone, "hour" => $tsa_mem[0], "minute" => $tsa_mem[1]);
 $User1DST=sql_result($result,$i,"DST");
@@ -439,6 +443,12 @@ if(strlen($mini)==1) { $showmin = "0".$mini; }
 echo "<option value=\"".$showmin."\">0:".$showmin." minutes</option>\n";
 ++$mini; }
 ?></select></td>
+</tr><tr style="text-align: left;">
+	<td style="width: 40%;"><label class="TextBoxLabel" for="iDBTimeFormat">Insert time format string:</label></td>
+	<td style="width: 60%;"><input type="text" class="TextBox" name="iDBTimeFormat" id="iDBTimeFormat" value="<?php echo $User1DateFormat; ?>" /></td>
+</tr><tr style="text-align: left;">
+	<td style="width: 40%;"><label class="TextBoxLabel" for="iDBDateFormat">Insert date format string:</label></td>
+	<td style="width: 60%;"><input type="text" class="TextBox" name="iDBDateFormat" id="iDBDateFormat" value="<?php echo $User1TimeFormat; ?>" /></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 40%;"><label class="TextBoxLabel" for="skin">Pick a CSS Theme</label></td>
 	<td style="width: 60%;"><select id="skin" name="skin" class="TextBox">
@@ -547,7 +557,7 @@ if($_POST['act']=="settings"&&
 	if(!is_numeric($_POST['RepliesPerPage'])) { $_POST['RepliesPerPage'] = "10"; }
 	if(!is_numeric($_POST['TopicsPerPage'])) { $_POST['TopicsPerPage'] = "10"; }
 	if(!is_numeric($_POST['MessagesPerPage'])) { $_POST['MessagesPerPage'] = "10"; }
-	$querynewskin = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"UseTheme\"='%s',\"TimeZone\"='%s',\"DST\"='%s',\"LastActive\"=%i,\"RepliesPerPage\"=%i,\"TopicsPerPage\"=%i,\"MessagesPerPage\"=%i,\"IP\"='%s' WHERE \"id\"=%i", array(chack_themes($_POST['skin']),$_POST['YourOffSet'],$_POST['DST'],$NewDay,$_POST['RepliesPerPage'],$_POST['TopicsPerPage'],$_POST['MessagesPerPage'],$NewIP,$_SESSION['UserID']));
+	$querynewskin = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"UseTheme\"='%s',\"TimeZone\"='%s',\"DateFormat\"='%s',\"TimeFormat\"='%s',\"DST\"='%s',\"LastActive\"=%i,\"RepliesPerPage\"=%i,\"TopicsPerPage\"=%i,\"MessagesPerPage\"=%i,\"IP\"='%s' WHERE \"id\"=%i", array(chack_themes($_POST['skin']),$_POST['YourOffSet'],$_POST['iDBTimeFormat'],$_POST['iDBDateFormat'],$_POST['DST'],$NewDay,$_POST['RepliesPerPage'],$_POST['TopicsPerPage'],$_POST['MessagesPerPage'],$NewIP,$_SESSION['UserID']));
 	sql_query($querynewskin,$SQLStat); } } }
 if($_GET['act']=="profile") {
 if($_POST['update']!="now") {
@@ -562,6 +572,10 @@ $User1Website=sql_result($result,$i,"Website");
 $User1Website = urlcheck($User1Website);
 $User1Gender=sql_result($result,$i,"Gender");
 $User1TimeZone=sql_result($result,$i,"TimeZone");
+$User1DateFormat=sql_result($result,$i,"DateFormat");
+$User1DateFormat = htmlspecialchars($User1DateFormat, ENT_QUOTES, $Settings['charset']);
+$User1TimeFormat=sql_result($result,$i,"TimeFormat");
+$User1TimeFormat= htmlspecialchars($User1TimeFormat, ENT_QUOTES, $Settings['charset']);
 $BirthDay=sql_result($result,$i,"BirthDay");
 $BirthMonth=sql_result($result,$i,"BirthMonth");
 $BirthYear=sql_result($result,$i,"BirthYear");
@@ -644,6 +658,12 @@ if(strlen($mini)==1) { $showmin = "0".$mini; }
 echo "<option value=\"".$showmin."\">0:".$showmin." minutes</option>\n";
 ++$mini; }
 ?></select></td>
+</tr><tr style="text-align: left;">
+	<td style="width: 40%;"><label class="TextBoxLabel" for="iDBTimeFormat">Insert time format string:</label></td>
+	<td style="width: 60%;"><input type="text" class="TextBox" name="iDBTimeFormat" id="iDBTimeFormat" value="<?php echo $User1DateFormat; ?>" /></td>
+</tr><tr style="text-align: left;">
+	<td style="width: 40%;"><label class="TextBoxLabel" for="iDBDateFormat">Insert date format string:</label></td>
+	<td style="width: 60%;"><input type="text" class="TextBox" name="iDBDateFormat" id="iDBDateFormat" value="<?php echo $User1TimeFormat; ?>" /></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 40%;"><label class="TextBoxLabel" for="YourGender">Your Gender:</label></td>
 	<td style="width: 60%;"><select id="YourGender" name="YourGender" class="TextBox">
@@ -795,7 +815,7 @@ if($_POST['act']=="profile"&&
 	$NewDay=GMTimeStamp();
 	$NewIP=$_SERVER['REMOTE_ADDR'];
 	$_POST['Website'] = urlcheck($_POST['Website']);
-	$querynewprofile = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"Interests\"='%s',\"Title\"='%s',\"Website\"='%s',\"TimeZone\"='%s',\"Gender\"='%s',\"DST\"='%s',\"LastActive\"=%i,\"BirthMonth\"=%i,\"BirthDay\"=%i,\"BirthYear\"=%i,\"RepliesPerPage\"=%i,\"TopicsPerPage\"=%i,\"MessagesPerPage\"=%i,\"IP\"='%s' WHERE \"id\"=%i", array($_POST['Interests'],$_POST['Title'],$_POST['Website'],$_POST['YourOffSet'],$_POST['YourGender'],$_POST['DST'],$NewDay,$BirthMonth,$BirthDay,$BirthYear,$_POST['RepliesPerPage'],$_POST['TopicsPerPage'],$_POST['MessagesPerPage'],$NewIP,$_SESSION['UserID']));
+	$querynewprofile = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"Interests\"='%s',\"Title\"='%s',\"Website\"='%s',\"TimeZone\"='%s',\"DateFormat\"='%s',\"TimeFormat\"='%s',\"Gender\"='%s',\"DST\"='%s',\"LastActive\"=%i,\"BirthMonth\"=%i,\"BirthDay\"=%i,\"BirthYear\"=%i,\"RepliesPerPage\"=%i,\"TopicsPerPage\"=%i,\"MessagesPerPage\"=%i,\"IP\"='%s' WHERE \"id\"=%i", array($_POST['Interests'],$_POST['Title'],$_POST['Website'],$_POST['YourOffSet'],$_POST['iDBTimeFormat'],$_POST['iDBDateFormat'],$_POST['YourGender'],$_POST['DST'],$NewDay,$BirthMonth,$BirthDay,$BirthYear,$_POST['RepliesPerPage'],$_POST['TopicsPerPage'],$_POST['MessagesPerPage'],$NewIP,$_SESSION['UserID']));
 	sql_query($querynewprofile,$SQLStat); } } }
 if($_GET['act']=="userinfo") {
 if($_POST['update']!="now") {

@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: messages.php - Last Update: 08/08/2011 SVN 745 - Author: cooldude2k $
+    $FileInfo: messages.php - Last Update: 08/12/2011 SVN 748 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="messages.php"||$File3Name=="/messages.php") {
@@ -203,7 +203,7 @@ $PMGuest=sql_result($result,$i,"GuestName");
 $MessageName=sql_result($result,$i,"MessageTitle");
 $MessageDesc=sql_result($result,$i,"Description");
 $DateSend=sql_result($result,$i,"DateSend");
-$DateSend=GMTimeChange($Settings['idb_date_format'].", ".$Settings['idb_time_format'],$DateSend,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$DateSend=GMTimeChange($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat'],$DateSend,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $MessageStat=sql_result($result,$i,"Read");
 if($SenderName=="Guest") { $SenderName=$PMGuest;
 if($SenderName==null) { $SenderName="Guest"; } }
@@ -374,7 +374,7 @@ $PMGuest=sql_result($result,$i,"GuestName");
 $MessageName=sql_result($result,$i,"MessageTitle");
 $MessageDesc=sql_result($result,$i,"Description");
 $DateSend=sql_result($result,$i,"DateSend");
-$DateSend=GMTimeChange($Settings['idb_date_format'].", ".$Settings['idb_time_format'],$DateSend,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$DateSend=GMTimeChange($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat'],$DateSend,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $MessageStat=sql_result($result,$i,"Read");
 if($SenderName=="Guest") { $SenderName=$PMGuest;
 if($SenderName==null) { $SenderName="Guest"; } }
@@ -431,7 +431,7 @@ $ReciverHidden = $PreReciverName['Hidden'];
 $PMGuest=sql_result($result,$is,"GuestName");
 $MessageName=sql_result($result,$is,"MessageTitle");
 $DateSend=sql_result($result,$is,"DateSend");
-$DateSend=GMTimeChange($Settings['idb_date_format'].", ".$Settings['idb_time_format'],$DateSend,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$DateSend=GMTimeChange($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat'],$DateSend,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $MessageText=sql_result($result,$is,"MessageText");
 $MessageDesc=sql_result($result,$is,"Description");
 $ipshow = "two";
@@ -466,7 +466,7 @@ if($PreUserCanUseBBags!="yes"&&$PreUserCanUseBBags!="no"&&$PreUserCanUseBBags!="
 	$PreUserCanUseBBags = "no"; }
 sql_free_result($memreresult);
 $User1Joined=sql_result($reresult,$rei,"Joined");
-$User1Joined=GMTimeChange($Settings['idb_date_format'],$User1Joined,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$User1Joined=GMTimeChange($_SESSION['iDBDateFormat'],$User1Joined,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $User1GroupID=sql_result($reresult,$rei,"GroupID");
 $User1Hidden=sql_result($reresult,$rei,"HiddenMember");
 $SenderHidden = $User1Hidden;

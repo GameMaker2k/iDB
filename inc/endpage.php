@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: endpage.php - Last Update: 08/06/2011 SVN 743 - Author: cooldude2k $
+    $FileInfo: endpage.php - Last Update: 08/12/2011 SVN 748 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="endpage.php"||$File3Name=="/endpage.php") {
@@ -24,8 +24,8 @@ if($_SESSION['UserDST']=="off") { $MyDST = $checktimea['hour']; }
 if($MyDST>=0) { $TimeSign = "+"; }
 if($MyDST<0) { $TimeSign = "-"; $MyDST = abs($MyDST); }
 $MyDST = $MyDST.":".$checktimea['minute'];
-$MyTimeNow = GMTimeGet($Settings['idb_time_format'],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$MyFullTimeNow = GMTimeGet($Settings['idb_date_format'].", ".$Settings['idb_time_format'],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$MyTimeNow = GMTimeGet($_SESSION['iDBTimeFormat'],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$MyFullTimeNow = GMTimeGet($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat'],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $endpagevar=$endpagevar."<br />The time now is <span class=\"ctimenow\" title=\"".$MyFullTimeNow."\">".$MyTimeNow."</span> ".$ThemeSet['LineDivider']." All times are UTC ".$TimeSign." ".$MyDST; }
 function execution_time($starttime) {
 list($uetime, $etime) = explode(" ", microtime());

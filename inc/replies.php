@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: replies.php - Last Update: 08/10/2011 SVN 747 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 08/12/2011 SVN 748 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -287,7 +287,7 @@ $MyTimeStamp=sql_result($result,$i,"TimeStamp");
 $MyEditTime=sql_result($result,$i,"LastUpdate");
 $MyEditUserID=sql_result($result,$i,"EditUser");
 $MyEditUserName=sql_result($result,$i,"EditUserName");
-$MyTimeStamp=GMTimeChange($Settings['idb_date_format'].", ".$Settings['idb_time_format'],$MyTimeStamp,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$MyTimeStamp=GMTimeChange($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat'],$MyTimeStamp,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $MyPost=sql_result($result,$i,"Post");
 $MyDescription=sql_result($result,$i,"Description");
 $requery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($MyUserID));
@@ -318,7 +318,7 @@ if($PreUserCanUseBBags!="yes"&&$PreUserCanUseBBags!="no"&&$PreUserCanUseBBags!="
 	$PreUserCanUseBBags = "no"; }
 sql_free_result($memreresult);
 $User1Joined=sql_result($reresult,$rei,"Joined");
-$User1Joined=GMTimeChange($Settings['idb_date_format'],$User1Joined,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$User1Joined=GMTimeChange($_SESSION['iDBDateFormat'],$User1Joined,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $User1Hidden=sql_result($reresult,$rei,"HiddenMember");
 $User1GroupID=sql_result($reresult,$rei,"GroupID");
 $gquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i LIMIT 1", array($User1GroupID));
@@ -417,7 +417,7 @@ $eunum = sql_num_rows($euresult); }
 		$EditUserName = $EditUserNamePrefix.$EditUserName; }
 	if(isset($GroupNameSuffix)&&$GroupNameSuffix!=null) {
 		$EditUserName = $EditUserName.$EditUserNameSuffix; }
-	$MyEditTime = GMTimeChange($Settings['idb_date_format'].", ".$Settings['idb_time_format'],$MyEditTime,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+	$MyEditTime = GMTimeChange($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat'],$MyEditTime,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 	$MySubPost = "<div class=\"EditReply\"><br />This post has been edited by <b>".$EditUserName."</b> on ".$MyEditTime."</div>"; }
 if($User1CanUseBBags1=="yes") { $MyPost = bbcode_parser($MyPost); }
 if($User1CanExecPHP=="no") {

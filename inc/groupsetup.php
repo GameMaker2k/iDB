@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: groupsetup.php - Last Update: 07/14/2011 SVN 716 - Author: cooldude2k $
+    $FileInfo: groupsetup.php - Last Update: 08/12/2011 SVN 748 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="groupsetup.php"||$File3Name=="/groupsetup.php") {
@@ -42,6 +42,8 @@ $ChkUsrGroup=sql_result($resultchkusr,0,"GroupID");
 $ChkUsrGroupID=$ChkUsrGroup;
 $ChkUsrPass=sql_result($resultchkusr,0,"UserPassword");
 $ChkUsrTimeZone=sql_result($resultchkusr,0,"TimeZone");
+$ChkUsrDateFormat=sql_result($resultchkusr,0,"DateFormat");
+$ChkUsrTimeFormat=sql_result($resultchkusr,0,"TimeFormat");
 $ChkUsrTheme=sql_result($resultchkusr,0,"UseTheme");
 $ChkUsrLastPostTime=sql_result($resultchkusr,0,"LastPostTime");
 $MyPostCountChk=sql_result($resultchkusr,0,"PostCount");
@@ -69,6 +71,8 @@ $_SESSION['MemberName']=$ChkUsrName;
 $_SESSION['UserID']=$ChkUsrID;
 $_SESSION['UserIP']=$_SERVER['REMOTE_ADDR'];
 $_SESSION['UserTimeZone']=$ChkUsrTimeZone;
+$_SESSION['iDBDateFormat']=$ChkUsrDateFormat;
+$_SESSION['iDBTimeFormat']=$ChkUsrTimeFormat;
 $_SESSION['UserGroup']=$ChkUsrGroup;
 $_SESSION['UserGroupID']=$ChkUsrGroupID;
 $_SESSION['UserDST']=$ChkUsrDST;

@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 08/07/2011 SVN 744 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 08/12/2011 SVN 748 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -565,6 +565,17 @@ echo "Sorry the board is off line.\nIf you are a admin you can login by the admi
 if(isset($Settings['offline_text'])) { echo $Settings['offline_text']; } $urlstatus = 503;
 //echo "\n".sql_errorno($SQLStat);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
+//Time Format Set
+if(!isset($_SESSION['iDBDateFormat'])) { 
+	if(isset($Settings['idb_date_format'])) { 
+	$_SESSION['iDBDateFormat'] = $Settings['idb_date_format'];
+	if(!isset($Settings['idb_date_format'])) { 
+	$_SESSION['iDBDateFormat'] = "g:i A"; } } }
+if(!isset($_SESSION['iDBTimeFormat'])) { 
+	if(isset($Settings['idb_time_format'])) { 
+	$_SESSION['iDBTimeFormat'] = $Settings['idb_time_format'];
+	if(!isset($Settings['idb_time_format'])) { 
+	$_SESSION['iDBTimeFormat'] = "F j Y"; } } }
 //Time Zone Set
 if(!isset($_SESSION['UserTimeZone'])) { 
 	if(isset($Settings['DefaultTimeZone'])) { 

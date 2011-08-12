@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 08/09/2011 SVN 746 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 08/12/2011 SVN 748 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -208,9 +208,9 @@ $MemList['WarnLevel']=sql_result($result,$i,"WarnLevel");
 $MemList['Interests']=sql_result($result,$i,"Interests");
 $MemList['Title']=sql_result($result,$i,"Title");
 $MemList['Joined']=sql_result($result,$i,"Joined");
-$MemList['Joined']=GMTimeChange($Settings['idb_date_format'].", ".$Settings['idb_time_format'],$MemList['Joined'],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$MemList['Joined']=GMTimeChange($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat'],$MemList['Joined'],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $MemList['LastActive']=sql_result($result,$i,"LastActive");
-$MemList['LastActive']=GMTimeChange($Settings['idb_date_format'].", ".$Settings['idb_time_format'],$MemList['LastActive'],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$MemList['LastActive']=GMTimeChange($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat'],$MemList['LastActive'],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $MemList['Website']=sql_result($result,$i,"Website");
 if($MemList['Website']=="http://") { 
 	$MemList['Website'] = $Settings['idburl']; }
@@ -417,7 +417,7 @@ $session_data=sql_result($result,$i,"session_data");
 $session_user_agent=sql_result($result,$i,"user_agent"); 
 $session_ip_address=sql_result($result,$i,"ip_address"); 
 $session_expires=sql_result($result,$i,"expires"); 
-$session_expires = GMTimeChange($Settings['idb_date_format'].", ".$Settings['idb_time_format'],$session_expires,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$session_expires = GMTimeChange($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat'],$session_expires,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 if(isset($UserSessInfo)) { $UserSessInfo = null; }
 $UserSessInfo = unserialize_session($session_data);
 if(!isset($UserSessInfo['ShowActHidden'])) { $UserSessInfo['ShowActHidden'] = "no"; }
@@ -606,9 +606,9 @@ $ViewMem['WarnLevel']=sql_result($result,$i,"WarnLevel");
 $ViewMem['Interests']=sql_result($result,$i,"Interests");
 $ViewMem['Title']=sql_result($result,$i,"Title");
 $ViewMem['Joined']=sql_result($result,$i,"Joined");
-$ViewMem['Joined']=GMTimeChange("M j Y, ".$Settings['idb_time_format'],$ViewMem['Joined'],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$ViewMem['Joined']=GMTimeChange("M j Y, ".$_SESSION['iDBTimeFormat'],$ViewMem['Joined'],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $ViewMem['LastActive']=sql_result($result,$i,"LastActive");
-$ViewMem['LastActive']=GMTimeChange("M j Y, ".$Settings['idb_time_format'],$ViewMem['LastActive'],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$ViewMem['LastActive']=GMTimeChange("M j Y, ".$_SESSION['iDBTimeFormat'],$ViewMem['LastActive'],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $ViewMem['Website']=sql_result($result,$i,"Website");
 if($ViewMem['Website']=="http://") { 
 	$ViewMem['Website'] = $Settings['idburl']; }
@@ -720,7 +720,7 @@ Title: <?php echo $ViewMem['Title']; ?>
 &nbsp;User Group: <?php echo $ViewMem['Group']; ?><br />
 &nbsp;User Joined: <?php echo $ViewMem['Joined']; ?><br />
 &nbsp;Last Active: <?php echo $ViewMem['LastActive']; ?><br />
-&nbsp;User Time: <?php echo GMTimeGet("M j Y, ".$Settings['idb_time_format'],$ViewMem['TimeZone'],0,$ViewMem['DST']); ?><br />
+&nbsp;User Time: <?php echo GMTimeGet("M j Y, ".$_SESSION['iDBTimeFormat'],$ViewMem['TimeZone'],0,$ViewMem['DST']); ?><br />
 &nbsp;User Website: <a href="<?php echo $ViewMem['Website']; ?>"<?php echo $opennew; ?>>Website</a><br />
 &nbsp;Post Count: <?php echo $ViewMem['PostCount']; ?><br />
 &nbsp;Karma: <?php echo $ViewMem['Karma']; ?><br />
@@ -1492,8 +1492,8 @@ if(!is_numeric($_POST['MinOffSet'])) { $_POST['MinOffSet'] = "00"; }
 if($_POST['MinOffSet']>59) { $_POST['MinOffSet'] = "59"; }
 if($_POST['MinOffSet']<0) { $_POST['MinOffSet'] = "00"; }
 $_POST['YourOffSet'] = $_POST['YourOffSet'].":".$_POST['MinOffSet'];
-$query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."members\" (\"Name\", \"UserPassword\", \"HashType\", \"Email\", \"GroupID\", \"Validated\", \"HiddenMember\", \"WarnLevel\", \"Interests\", \"Title\", \"Joined\", \"LastActive\", \"LastPostTime\", \"BanTime\", \"BirthDay\", \"BirthMonth\", \"BirthYear\", \"Signature\", \"Notes\", \"Avatar\", \"AvatarSize\", \"Website\", \"Gender\", \"PostCount\", \"Karma\", \"KarmaUpdate\", \"RepliesPerPage\", \"TopicsPerPage\", \"MessagesPerPage\", \"TimeZone\", \"DST\", \"UseTheme\", \"IP\", \"Salt\") VALUES\n". 
-"('%s', '%s', '%s', '%s', '%s', '%s', '%s', %i, '%s', '%s', %i, %i, '0', '0', '0', '0', '0', '%s', '%s', '%s', '%s', '%s', '%s', %i, 0, 0, 10, 10, 10, '%s', '%s', '%s', '%s', '%s')", array($Name,$NewPassword,$iDBHash,$_POST['Email'],$yourgroup,$ValidateStats,$HideMe,"0",$_POST['Interests'],$_POST['Title'],$_POST['Joined'],$_POST['LastActive'],$NewSignature,'Your Notes',$Avatar,"100x100",$Website,$_POST['YourGender'],$_POST['PostCount'],$_POST['YourOffSet'],$_POST['DST'],$Settings['DefaultTheme'],$_POST['UserIP'],$HashSalt));
+$query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."members\" (\"Name\", \"UserPassword\", \"HashType\", \"Email\", \"GroupID\", \"Validated\", \"HiddenMember\", \"WarnLevel\", \"Interests\", \"Title\", \"Joined\", \"LastActive\", \"LastPostTime\", \"BanTime\", \"BirthDay\", \"BirthMonth\", \"BirthYear\", \"Signature\", \"Notes\", \"Avatar\", \"AvatarSize\", \"Website\", \"Gender\", \"PostCount\", \"Karma\", \"KarmaUpdate\", \"RepliesPerPage\", \"TopicsPerPage\", \"MessagesPerPage\", \"TimeZone\", \"DateFormat\", \"TimeFormat\", \"DST\", \"UseTheme\", \"IP\", \"Salt\") VALUES\n". 
+"('%s', '%s', '%s', '%s', '%s', '%s', '%s', %i, '%s', '%s', %i, %i, '0', '0', '0', '0', '0', '%s', '%s', '%s', '%s', '%s', '%s', %i, 0, 0, 10, 10, 10, '%s', '%s', '%s', '%s', '%s', '%s', '%s')", array($Name,$NewPassword,$iDBHash,$_POST['Email'],$yourgroup,$ValidateStats,$HideMe,"0",$_POST['Interests'],$_POST['Title'],$_POST['Joined'],$_POST['LastActive'],$NewSignature,'Your Notes',$Avatar,"100x100",$Website,$_POST['YourGender'],$_POST['PostCount'],$_POST['YourOffSet'],$Settings['idb_date_format'],$Settings['idb_time_format'],$_POST['DST'],$Settings['DefaultTheme'],$_POST['UserIP'],$HashSalt));
 sql_query($query,$SQLStat);
 $yourid = sql_get_next_id($Settings['sqltable'],"members",$SQLStat);
 $idquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s' AND \"UserPassword\"='%s' AND \"Email\"='%s' AND \"IP\"='%s' AND \"Salt\"='%s' LIMIT 1", array($Name,$NewPassword,$_POST['Email'],$_POST['UserIP'],$HashSalt));

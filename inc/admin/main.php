@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: main.php - Last Update: 08/06/2011 SVN 743 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 08/12/2011 SVN 748 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -520,11 +520,11 @@ if(isset($_GET['menu'])&&$_GET['menu']=="main") { $AddChkURL = "&menu=main"; }
 <table style="text-align: left;">
 <tr>
 	<td style="width: 50%;"><span class="TextBoxLabel" title="Using User Time Zone">[User TimeZone] Install Date:</span></td>
-	<td style="width: 50%;"><?php echo GMTimeChange($Settings['idb_date_format'].", ".$Settings['idb_time_format'],$Settings['start_date'],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']); ?></td>
+	<td style="width: 50%;"><?php echo GMTimeChange($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat'],$Settings['start_date'],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']); ?></td>
 </tr><?php if($_SESSION['UserTimeZone']!=$Settings['DefaultTimeZone']||
 	$_SESSION['UserDST']!=$Settings['DefaultDST']) { ?><tr>
 	<td style="width: 50%;"><span class="TextBoxLabel" title="Using Board Time Zone">[Board TimeZone] Install Date:</span></td>
-	<td style="width: 50%;"><?php echo GMTimeChange($Settings['idb_date_format'].", ".$Settings['idb_time_format'],$Settings['start_date'],$Settings['DefaultTimeZone'],0,$Settings['DefaultDST']); ?></td>
+	<td style="width: 50%;"><?php echo GMTimeChange($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat'],$Settings['start_date'],$Settings['DefaultTimeZone'],0,$Settings['DefaultDST']); ?></td>
 </tr><?php } if($GroupInfo['ViewDBInfo']=="yes") { 
 ?><tr style="text-align: left;">
 	<td style="width: 50%;"><span class="TextBoxLabel">Forum Software Version:</span></td>
