@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: admin.php - Last Update: 07/30/2011 SVN 729 - Author: cooldude2k $
+    $FileInfo: admin.php - Last Update: 08/13/2011 SVN 750 - Author: cooldude2k $
 */
 if(ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }
@@ -68,11 +68,13 @@ if($_GET['act']=="vercheck"&&$GroupInfo['ViewDBInfo']=="yes") {
 	if($Settings['vercheck']===1) {
 	$addredirect = null;
 	if(isset($_GET['redirect'])) { $addredirect = "&redirect=".urlencode($_GET['redirect']); }
-	header("Location: ".$VerCheckURL."&name=".urlencode($iDBVerName).$addredirect); }
+	header("Location: ".$VerCheckURL."&name=".urlencode($iDBVerName).$addredirect); $urlstatus = 302; 
+	gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 	if($Settings['vercheck']===2) {
 	$addredirect = null;
 	if(isset($_GET['redirect'])) { $addredirect = "&redirect=".urlencode($_GET['redirect']); }
-	header("Location: ".$VerCheckURL."&bid=".$Settings['bid']."&vercheck=newtype".$addredirect); } }
+	header("Location: ".$VerCheckURL."&bid=".$Settings['bid']."&vercheck=newtype".$addredirect); $urlstatus = 302; 
+	gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); } }
 if($_GET['act']=="view")
 { $AdminMenu = "menu";
 if($_GET['menu']==null) {
