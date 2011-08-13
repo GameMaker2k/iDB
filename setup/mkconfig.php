@@ -12,7 +12,7 @@
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mkconfig.php - Last Update: 08/06/2011 SVN 743 - Author: cooldude2k $
+    $FileInfo: mkconfig.php - Last Update: 08/12/2011 SVN 749 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mkconfig.php"||$File3Name=="/mkconfig.php") {
@@ -262,6 +262,22 @@ if($csrand==3) { $gpass .= chr(rand(97,122)); }
 ++$i; } $GuestPassword = b64e_hmac($gpass,$YourDate,$GSalt,$_POST['usehashtype']);
 $url_this_dir = "http://".$_SERVER['HTTP_HOST'].$this_dir."index.php?act=view";
 $YourIP = $_SERVER['REMOTE_ADDR'];
+if($Settings['sqltype']!="cubrid") {
+@unlink($SettDir['sqldumper'].'cubrid.php');
+@unlink($SettDir['sql'].'cubrid.php'); }
+if($Settings['sqltype']!="mysql"&&
+	$Settings['sqltype']!="mysqli") {
+@unlink($SettDir['sqldumper'].'mysql.php'); }
+if($Settings['sqltype']!="mysql") {
+@unlink($SettDir['sql'].'mysql.php'); }
+if($Settings['sqltype']!="mysqli") {
+@unlink($SettDir['sql'].'mysqli.php'); }
+if($Settings['sqltype']!="pgsql") {
+@unlink($SettDir['sqldumper'].'pgsql.php');
+@unlink($SettDir['sql'].'pgsql.php'); }
+if($Settings['sqltype']!="sqlite") {
+@unlink($SettDir['sqldumper'].'sqlite.php');
+@unlink($SettDir['sql'].'sqlite.php'); }
 if($Settings['sqltype']=="mysql"||
 	$Settings['sqltype']=="mysqli") {
 require($SetupDir['sql'].'mysql.php'); }
