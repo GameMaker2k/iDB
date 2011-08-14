@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: admin.php - Last Update: 08/15/2011 SVN 751 - Author: cooldude2k $
+    $FileInfo: admin.php - Last Update: 08/15/2011 SVN 752 - Author: cooldude2k $
 */
 if(ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }
@@ -26,10 +26,10 @@ if($_GET['act']=="settings"||$_GET['act']=="sql") {
 <?php $iWrappers['EXTRALINKS'] = null;
 if($Settings['vercheck']===1) { 
 ob_start("idb_suboutput_handler"); ?>
-<script type="text/javascript" src="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=vercheck&redirect=on",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>"></script>
+<script type="text/javascript" src="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=vercheck&redirect=js",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>"></script>
 <?php $iWrappers['EXTRALINKS'] = ob_get_clean(); } if($Settings['vercheck']===2) { 
 ob_start("idb_suboutput_handler"); ?>
-<script type="text/javascript" src="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=vercheck&vercheck=newtype&redirect=on",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>"></script>
+<script type="text/javascript" src="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=vercheck&vercheck=newtype&redirect=js",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>"></script>
 <?php $iWrappers['EXTRALINKS'] = ob_get_clean(); } } } ?>
 <?php
 ob_start("idb_suboutput_handler"); ?>
