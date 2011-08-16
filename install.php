@@ -12,7 +12,7 @@
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.de/support/category.php?act=view&id=2
 
-    $FileInfo: install.php - Last Update: 07/30/2011 SVN 730 - Author: cooldude2k $
+    $FileInfo: install.php - Last Update: 08/16/2011 SVN 753 - Author: cooldude2k $
 *//*
 if(ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }
@@ -129,6 +129,10 @@ require($SetupDir['setup'].'preinstall.php');
 require_once($SettDir['misc'].'utf8.php');
 require_once($SettDir['inc'].'filename.php');
 require_once($SettDir['inc'].'function.php');
+if($_GET['act']=="README"||$_GET['act']=="ReadME") { $_GET['act']="readme"; }
+if($_GET['act']=="readme"||$_GET['act']=="ReadMe") {
+header("Content-Type: text/plain; charset=".$Settings['charset']);
+require("README"); fix_amp(null); die(); }
 $Settings['board_name'] = "Installing ".$RName; 
 function get_theme_values($matches) {
 	global $ThemeSet;
