@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: cubrid.php - Last Update: 07/09/2011 SVN 703 - Author: cooldude2k $
+    $FileInfo: cubrid.php - Last Update: 08/17/2011 SVN 754 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="cubrid.php"||$File3Name=="/cubrid.php") {
@@ -19,6 +19,7 @@ if ($File3Name=="cubrid.php"||$File3Name=="/cubrid.php") {
 	exit(); }
 
 //Nothing here for now :P 
+echo $TheProgrammerNaps;
 redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die();
