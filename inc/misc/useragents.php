@@ -24,6 +24,8 @@ if (preg_match("/".preg_quote("; 008/", "/")."/i", $user_agent)) {
     return "80legs"; }
 if (preg_match("/".preg_quote("AboutUsBot", "/")."/i", $user_agent)) {
     return "AboutUs"; }
+if (preg_match("/".preg_quote("AhrefsBot", "/")."/i", $user_agent)) {
+    return "Ahrefs"; }
 if (preg_match("/".preg_quote("ia_archiver", "/")."/i", $user_agent)) {
     return "Alexa"; }
 if (preg_match("/".preg_quote("aiHitBot", "/")."/i", $user_agent)) {
