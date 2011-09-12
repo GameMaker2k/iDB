@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: profilemain.php - Last Update: 08/12/2011 SVN 749 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 09/11/2011 SVN 756 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
@@ -936,6 +936,12 @@ if($OldHashType=="iDBHSFRU256") {
 	$YourPassword = b64e_hmac($_POST['OldPass'],$OldJoined,$OldSalt,"snefru256"); }
 if($OldHashType=="iDBHGOST") { 
 	$YourPassword = b64e_hmac($_POST['OldPass'],$OldJoined,$OldSalt,"gost"); }
+if($HashType=="iDBHJOAAT") { 
+	$YourPassword = b64e_hmac($_POST['OldPass'],$OldJoined,$OldSalt,"joaat"); }
+if($HashType=="iDBHFNV132") { 
+	$YourPassword = b64e_hmac($_POST['OldPass'],$OldJoined,$OldSalt,"fnv132"); }
+if($HashType=="iDBHFNV164") { 
+	$YourPassword = b64e_hmac($_POST['OldPass'],$OldJoined,$OldSalt,"fnv164"); }
 if($YourPassword!=$OldPassword) { $Error="Yes"; ?>
 <div class="TableMessage" style="text-align: center;">Your old Password did not match.<br />&nbsp;</div>
 <?php } if(pre_strlen($_POST['Password'])>"60") { $Error="Yes"; ?>
@@ -983,6 +989,12 @@ if($YourPassword!=$OldPassword) { $Error="Yes"; ?>
 	$NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$NewSalt,"snefru256"); }
 	if($Settings['use_hashtype']=="gost") { $iDBHash = "iDBHGOST";
 	$NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$NewSalt,"gost"); }
+	if($Settings['use_hashtype']=="joaat") { $iDBHash = "iDBHJOAAT";
+	$NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$NewSalt,"joaat"); }
+	if($Settings['use_hashtype']=="fnv132") { $iDBHash = "iDBHFNV132";
+	$NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$NewSalt,"fnv132"); }
+	if($Settings['use_hashtype']=="fnv164") { $iDBHash = "iDBHFNV164";
+	$NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$NewSalt,"fnv164"); }
 	$_SESSION['UserPass']=$NewPassword;
 	if($cookieDomain==null) {
 	setcookie("SessPass", $NewPassword, time() + (7 * 86400), $cbasedir); }

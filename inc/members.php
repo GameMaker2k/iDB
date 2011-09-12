@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 08/12/2011 SVN 748 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 09/11/2011 SVN 756 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -957,6 +957,9 @@ if($HashType=="iDBHSALSA20") { $YourPassword = b64e_hmac($_POST['userpass'],$Joi
 if($HashType=="iDBHSFRU") { $YourPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$HashSalt,"snefru"); }
 if($HashType=="iDBHSFRU256") { $YourPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$HashSalt,"snefru256"); }
 if($HashType=="iDBHGOST") { $YourPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$HashSalt,"gost"); }
+if($HashType=="iDBHJOAAT") { $YourPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$HashSalt,"joaat"); }
+if($HashType=="iDBHFNV132") { $YourPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$HashSalt,"fnv132"); }
+if($HashType=="iDBHFNV164") { $YourPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$HashSalt,"fnv164"); }
 if($HashType=="NoPass") { $YourPassword = "iDB"; $YourPassTry = "IntDB"; }
 if($HashType=="NoPassword") { $YourPassword = "iDB"; $YourPassTry = "IntDB"; }
 if($HashType=="GuestPass") { $YourPassword = "iDB"; $YourPassTry = "IntDB"; }
@@ -1018,6 +1021,12 @@ if($Settings['use_hashtype']=="snefru256") { $iDBHash = "iDBHSFRU256";
 $NewPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$NewHashSalt,"snefru256"); }
 if($Settings['use_hashtype']=="gost") { $iDBHash = "iDBHGOST";
 $NewPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$NewHashSalt,"gost"); }
+if($Settings['use_hashtype']=="joaat") { $iDBHash = "iDBHJOAAT";
+$NewPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$NewHashSalt,"joaat"); }
+if($Settings['use_hashtype']=="fnv132") { $iDBHash = "iDBHFNV132";
+$NewPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$NewHashSalt,"fnv132"); }
+if($Settings['use_hashtype']=="fnv164") { $iDBHash = "iDBHFNV164";
+$NewPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$NewHashSalt,"fnv164"); }
 $NewDay=GMTimeStamp();
 $NewIP=$_SERVER['REMOTE_ADDR'];
 if($BanError!="yes") {
@@ -1449,6 +1458,12 @@ if($Settings['use_hashtype']=="snefru256") { $iDBHash = "iDBHSFRU256";
 $NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$HashSalt,"snefru256"); }
 if($Settings['use_hashtype']=="gost") { $iDBHash = "iDBHGOST";
 $NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$HashSalt,"gost"); }
+if($Settings['use_hashtype']=="joaat") { $iDBHash = "iDBHJOAAT";
+$NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$NewHashSalt,"joaat"); }
+if($Settings['use_hashtype']=="fnv132") { $iDBHash = "iDBHFNV132";
+$NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$NewHashSalt,"fnv132"); }
+if($Settings['use_hashtype']=="fnv164") { $iDBHash = "iDBHFNV164";
+$NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$NewHashSalt,"fnv164"); }
 $_GET['YourPost'] = $_POST['Signature'];
 //require( './'.$SettDir['misc'].'HTMLTags.php');
 $_GET['YourPost'] = htmlspecialchars($_GET['YourPost'], ENT_QUOTES, $Settings['charset']);
