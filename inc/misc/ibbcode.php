@@ -12,7 +12,7 @@
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 	iBBCode / iBBTags by Kazuki Przyborowski - http://idb.berlios.net/
 
-    $FileInfo: ibbcode.php - Last Update: 09/16/2011 SVN 757 - Author: cooldude2k $
+    $FileInfo: ibbcode.php - Last Update: 09/16/2011 SVN 758 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="ibbcode.php"||$File3Name=="/ibbcode.php") {
@@ -74,7 +74,7 @@ $text = preg_replace("/\[EmbedVideo\=&quot;([A-Za-z0-9\.\-_]+)&quot;\]([A-Za-z0-
 $text = preg_replace("/\[EmbedVideo\=([A-Za-z0-9\.\-_]+)\]([A-Za-z0-9\.\-_]+)\[\/EmbedVideo\]/is", "[\\1]\\2[/\\1]", $text);
 $text = preg_replace("/\[EmbedMusic\=&quot;([A-Za-z0-9\.\-_]+)&quot;\]([A-Za-z0-9\.\-_]+)\[\/EmbedMusic\]/is", "[\\1]\\2[/\\1]", $text);
 $text = preg_replace("/\[EmbedMusic\=([A-Za-z0-9\.\-_]+)\]([A-Za-z0-9\.\-_]+)\[\/EmbedMusic\]/is", "[\\1]\\2[/\\1]", $text);
-$text = preg_replace("/\[Kiwi6\]([A-Za-z0-9\.\-_]+)\[\/Kiwi6\]/is", "\n<object type=\"application/x-shockwave-flash\" height=\"24\" width=\"290\" data=\"http://kiwi6.com/swf/player.swf\">\n<param name=\"movie\" value=\"http://kiwi6.com/swf/player.swf\" />\n<param name=\"FlashVars\" value=\"playerID=audioplayer&amp;soundFile=http://k003.kiwi6.com/uploads/hotlink/\\1\" />\n<param name=\"quality\" value=\"high\" />\n<param name=\"menu\" value=\"false\" />\n<param name=\"allowscriptaccess\" value=\"always\" />\n<param name=\"wmode\" value=\"transparent\" />\n</object>\n", $text);
+$text = preg_replace("/\[Kiwi6\]([A-Za-z0-9\.\-_]+)\[\/Kiwi6\]/is", "\n<object type=\"application/x-shockwave-flash\" height=\"24\" width=\"290\" data=\"http://kiwi6.com/swf/player.swf\">\n<param name=\"movie\" value=\"http://kiwi6.com/swf/player.swf\" />\n<param name=\"FlashVars\" value=\"playerID=audioplayer&amp;soundFile=http%3A%2F%2Fk003.kiwi6.com%2Fuploads%2Fhotlink%2F\\1\" />\n<param name=\"quality\" value=\"high\" />\n<param name=\"menu\" value=\"false\" />\n<param name=\"allowscriptaccess\" value=\"always\" />\n<param name=\"wmode\" value=\"transparent\" />\n</object>\n", $text);
 $text = preg_replace("/\[YouTube\]([A-Za-z0-9\.\-_]+)\[\/YouTube\]/is", "\n<object type=\"application/x-shockwave-flash\" width=\"480\" height=\"385\" data=\"http://www.youtube.com/v/\\1?fs=1&amp;hl=en_US\">\n<param name=\"\\1\" value=\"http://www.youtube.com/v/\\1?fs=1&amp;hl=en_US\" />\n</object>\n", $text);
 $text = preg_replace("/\[DailyMotion\]([A-Za-z0-9\.\-_]+)\[\/DailyMotion\]/is", "\n<object type=\"application/x-shockwave-flash\" width=\"480\" height=\"385\" data=\"http://www.dailymotion.com/swf/video/\\1\">\n<param name=\"\\1\" value=\"http://www.dailymotion.com/swf/video/\\1\" />\n<param name=\"allowFullScreen\" value=\"true\" />\n<param name=\"allowScriptAccess\" value=\"always\" />\n<param name=\"wmode\" value=\"transparent\" />\n</object>\n", $text);
 $text = preg_replace("/\[Vimeo\]([A-Za-z0-9\.\-_]+)\[\/Vimeo\]/is", "\n<object type=\"application/x-shockwave-flash\" width=\"400\" height=\"225\" data=\"http://vimeo.com/moogaloop.swf?clip_id=\\1&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=1&amp;color=00adef&amp;fullscreen=1&amp;autoplay=0&amp;loop=0\">\n<param name=\"\\1\" value=\"http://vimeo.com/moogaloop.swf?clip_id=\\1&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=1&amp;color=00adef&amp;fullscreen=1&amp;autoplay=0&amp;loop=0\" />\n<param name=\"allowfullscreen\" value=\"true\" />\n<param name=\"allowscriptaccess\" value=\"always\" />\n</object>\n", $text);
