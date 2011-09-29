@@ -12,7 +12,7 @@
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mysql.php - Last Update: 08/12/2011 SVN 748 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 09/29/2011 SVN 760 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mysql.php"||$File3Name=="/mysql.php") {
@@ -331,6 +331,7 @@ sql_query($query,$SQLStat);
 $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."sessions\" (\n".
 "  \"session_id\" VARCHAR(250) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"session_data\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
+"  \"serialized_data\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
 "  \"user_agent\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
 "  \"ip_address\" varchar(20) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"expires\" int(15) NOT NULL default '0',\n".

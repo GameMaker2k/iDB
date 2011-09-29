@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 09/11/2011 SVN 756 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 09/29/2011 SVN 760 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -335,6 +335,18 @@ $MkIndexFile = $exfile['index'].$Settings['file_ext']; }
 if($Settings['file_ext']=="no+ext"||$Settings['file_ext']=="no ext") {
 $MkIndexFile = $exfile['index']; }
 $temp_session_data = "ViewingPage|s:9:\"?act=view\";ViewingFile|s:".strlen($MkIndexFile).":\"".$MkIndexFile."\";PreViewingTitle|s:7:\"Viewing\";ViewingTitle|s:11:\"Board index\";UserID|s:1:\"0\";UserIP|s:".strlen($_SERVER['REMOTE_ADDR']).":\"".$_SERVER['REMOTE_ADDR']."\";UserGroup|s:".strlen($Settings['GuestGroup']).":\"".$Settings['GuestGroup']."\";UserGroupID|s:1:\"4\";UserTimeZone|s:".strlen($Settings['DefaultTimeZone']).":\"".$Settings['DefaultTimeZone']."\";UserDST|s:".strlen($Settings['DefaultDST']).":\"".$Settings['DefaultDST']."\";";
+$alt_temp_session_data['ViewingPage'] = "?act=view";
+$alt_temp_session_data['ViewingFile'] = $MkIndexFile;
+$alt_temp_session_data['PreViewingTitle'] = "Viewing";
+$alt_temp_session_data['ViewingTitle'] = "Board index";
+$alt_temp_session_data['UserID'] = "0";
+$alt_temp_session_data['UserIP'] = $_SERVER['REMOTE_ADDR'];
+$alt_temp_session_data['UserGroupID'] = "4";
+$alt_temp_session_data['UserTimeZone'] = $Settings['DefaultTimeZone'];
+$alt_temp_session_data['UserDST'] = $Settings['DefaultDST'];
+$alttemp_session_data = serialize($alt_temp_session_data);
+$alt_temp_session_data = $alttemp_session_data;
+$alttemp_session_data = null;
 $SQLSType = $Settings['sqltype'];
 //Session Open Function
 function sql_session_open($save_path, $session_name ) {
@@ -350,13 +362,13 @@ sql_disconnect_db($SQLStat); }
 return true; }
 //Session Read Function
 function sql_session_read($id) {
-global $sqltable,$SQLStat,$SQLSType,$temp_user_ip,$temp_user_agent,$temp_session_data;
+global $sqltable,$SQLStat,$SQLSType,$temp_user_ip,$temp_user_agent,$temp_session_data,$alt_temp_session_data;
 $result = sql_query(sql_pre_query("SELECT * FROM \"".$sqltable."sessions\" WHERE \"session_id\" = '%s'", array($id)),$SQLStat);
 if (!sql_num_rows($result)) {
 sql_query(sql_pre_query("DELETE FROM \"".$sqltable."sessions\" WHERE \"session_id\"<>'%s' AND \"ip_address\"='%s' AND \"user_agent\"='%s'", array($id,$temp_user_ip,$temp_user_agent)),$SQLStat);
 $time = GMTimeStamp();
-sql_query(sql_pre_query("INSERT INTO \"".$sqltable."sessions\" (\"session_id\", \"session_data\", \"user_agent\", \"ip_address\", \"expires\") VALUES\n".
-"('%s', '%s', '%s', '%s', %i)", array($id,$temp_session_data,$temp_user_agent,$temp_user_ip,$time)),$SQLStat);
+sql_query(sql_pre_query("INSERT INTO \"".$sqltable."sessions\" (\"session_id\", \"session_data\", \"serialized_data\", \"user_agent\", \"ip_address\", \"expires\") VALUES\n".
+"('%s', '%s', '%s', '%s', '%s', %i)", array($id,$temp_session_data,$alt_temp_session_data,$temp_user_agent,$temp_user_ip,$time)),$SQLStat);
 return '';
 } else {
 $time = GMTimeStamp();
@@ -371,7 +383,7 @@ return $data; } }
 function sql_session_write($id,$data) {
 global $sqltable,$SQLStat,$SQLSType,$temp_user_ip,$temp_user_agent;
 $time = GMTimeStamp();
-$rs = sql_query(sql_pre_query("UPDATE \"".$sqltable."sessions\" SET \"session_data\"='%s',\"user_agent\"='%s',\"ip_address\"='%s',\"expires\"=%i WHERE \"session_id\"='%s'", array($data,$temp_user_agent,$temp_user_ip,$time,$id)),$SQLStat);
+$rs = sql_query(sql_pre_query("UPDATE \"".$sqltable."sessions\" SET \"session_data\"='%s',\"serialized_data\"='%s',\"user_agent\"='%s',\"ip_address\"='%s',\"expires\"=%i WHERE \"session_id\"='%s'", array($data,serialize($_SESSION),$temp_user_agent,$temp_user_ip,$time,$id)),$SQLStat);
 return true; }
 //Session Destroy Function
 function sql_session_destroy($id) {

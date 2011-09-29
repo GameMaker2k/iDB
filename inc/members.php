@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 09/11/2011 SVN 756 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 09/29/2011 SVN 760 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -278,11 +278,11 @@ $i=0;
 $uolcuttime = GMTimeStamp();
 $uoltime = $uolcuttime - ini_get("session.gc_maxlifetime");
 if($_GET['list']=="members") {
-$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"session_data\" NOT LIKE '%s' ORDER BY \"expires\" DESC ".$SQLimit, array($uoltime,"%UserGroup|s:".strlen($Settings['GuestGroup']).":\"".$Settings['GuestGroup']."\";%",$PageLimit,$Settings['max_memlist'])); 
-$rnquery = sql_pre_query("SELECT COUNT(*) FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"session_data\" NOT LIKE '%s'", array($uoltime,"%UserGroup|s:".strlen($Settings['GuestGroup']).":\"".$Settings['GuestGroup']."\";%")); }
+$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"serialized_data\" NOT LIKE '%s' ORDER BY \"expires\" DESC ".$SQLimit, array($uoltime,"%UserGroup|s:".strlen($Settings['GuestGroup']).":\"".$Settings['GuestGroup']."\";%",$PageLimit,$Settings['max_memlist'])); 
+$rnquery = sql_pre_query("SELECT COUNT(*) FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"serialized_data\" NOT LIKE '%s'", array($uoltime,"%UserGroup|s:".strlen($Settings['GuestGroup']).":\"".$Settings['GuestGroup']."\";%")); }
 if($_GET['list']=="guests") {
-$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"session_data\" LIKE '%s' ORDER BY \"expires\" DESC ".$SQLimit, array($uoltime,"%UserGroup|s:".strlen($Settings['GuestGroup']).":\"".$Settings['GuestGroup']."\";%",$PageLimit,$Settings['max_memlist'])); 
-$rnquery = sql_pre_query("SELECT COUNT(*) FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"session_data\" LIKE '%s'", array($uoltime,"%UserGroup|s:".strlen($Settings['GuestGroup']).":\"".$Settings['GuestGroup']."\";%")); }
+$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"serialized_data\" LIKE '%s' ORDER BY \"expires\" DESC ".$SQLimit, array($uoltime,"%UserGroup|s:".strlen($Settings['GuestGroup']).":\"".$Settings['GuestGroup']."\";%",$PageLimit,$Settings['max_memlist'])); 
+$rnquery = sql_pre_query("SELECT COUNT(*) FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"serialized_data\" LIKE '%s'", array($uoltime,"%UserGroup|s:".strlen($Settings['GuestGroup']).":\"".$Settings['GuestGroup']."\";%")); }
 if($_GET['list']=="all") {
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i ORDER BY \"expires\" DESC ".$SQLimit, array($uoltime,$PageLimit,$Settings['max_memlist'])); 
 $rnquery = sql_pre_query("SELECT COUNT(*) FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i", array($uoltime)); }
@@ -413,13 +413,15 @@ if($pagenum>1) {
 <?php
 while ($i < $num) {
 $AmIHiddenUser = "no";
-$session_data=sql_result($result,$i,"session_data"); 
+$session_data=sql_result($result,$i,"session_data");
+$serialized_data=sql_result($result,$i,"serialized_data");
 $session_user_agent=sql_result($result,$i,"user_agent"); 
 $session_ip_address=sql_result($result,$i,"ip_address"); 
 $session_expires=sql_result($result,$i,"expires"); 
 $session_expires = GMTimeChange($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat'],$session_expires,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 if(isset($UserSessInfo)) { $UserSessInfo = null; }
-$UserSessInfo = unserialize_session($session_data);
+//$UserSessInfo = unserialize_session($session_data);
+$UserSessInfo = unserialize($serialized_data);
 if(!isset($UserSessInfo['ShowActHidden'])) { $UserSessInfo['ShowActHidden'] = "no"; }
 if(!isset($UserSessInfo['UserGroup'])) { 
 	$UserSessInfo['UserGroup'] = $Settings['GuestGroup']; }

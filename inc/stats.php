@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: stats.php - Last Update: 08/02/2011 SVN 738 - Author: cooldude2k $
+    $FileInfo: stats.php - Last Update: 09/29/2011 SVN 760 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="stats.php"||$File3Name=="/stats.php") {
@@ -38,9 +38,11 @@ $uoli=0; $olmn = 0; $olgn = 0; $olan = 0; $olmbn = 0;
 $MembersOnline = null; $GuestsOnline = null;
 while ($uoli < $uolnum) {
 $session_data=sql_result($uolresult,$uoli,"session_data"); 
+$serialized_data=sql_result($uolresult,$uoli,"serialized_data");
 $session_user_agent=sql_result($uolresult,$uoli,"user_agent"); 
 $session_ip_address=sql_result($uolresult,$uoli,"ip_address");
-$UserSessInfo = unserialize_session($session_data);
+//$UserSessInfo = unserialize_session($session_data);
+$UserSessInfo = unserialize($serialized_data);
 if(!isset($UserSessInfo['UserGroup'])) { $UserSessInfo['UserGroup'] = $Settings['GuestGroup']; }
 $AmIHiddenUser = "no";
 $user_agent_check = false;
