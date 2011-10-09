@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: main.php - Last Update: 08/12/2011 SVN 748 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 10/09/2011 SVN 761 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -539,7 +539,13 @@ if(isset($_GET['menu'])&&$_GET['menu']=="main") { $AddChkURL = "&menu=main"; }
 ?><tr style="text-align: left;">
 	<td style="width: 50%;"><span class="TextBoxLabel">Server Operating System:</span></td>
 	<td style="width: 50%;"><?php echo $OSType; ?></td>
-</tr><?php } } ?><tr style="text-align: left;">
+</tr><?php } ?><tr style="text-align: left;">
+	<td style="width: 50%;"><span class="TextBoxLabel">Current PHP Version:</span></td>
+	<td style="width: 50%;"><?php echo "PHP Version ".phpversion(); ?></td>
+</tr><tr style="text-align: left;">
+	<td style="width: 50%;"><span class="TextBoxLabel">Zend Engine Version:</span></td>
+	<td style="width: 50%;"><?php echo "Zend Version ".zend_version(); ?></td>
+</tr><?php } ?><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="BoardURL">Insert The Board URL:</label></td>
 	<td style="width: 50%;"><input type="text" class="TextBox" name="BoardURL" size="20" id="BoardURL" value="<?php echo $Settings['idburl']; ?>" /></td>
 </tr><tr style="text-align: left;">
