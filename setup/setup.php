@@ -12,7 +12,7 @@
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: setup.php - Last Update: 09/11/2011 SVN 756 - Author: cooldude2k $
+    $FileInfo: setup.php - Last Update: 10/10/2011 SVN 762 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="setup.php"||$File3Name=="/setup.php") {
@@ -171,10 +171,6 @@ if(in_array("md2",hash_algos())) { ?>
 <option value="gost">GOST</option>
 <?php } if(in_array("joaat",hash_algos())) { ?>
 <option value="joaat">JOAAT</option>
-<?php } if(in_array("fnv132",hash_algos())) { ?>
-<option value="fnv132">FNV132</option>
-<?php } if(in_array("fnv164",hash_algos())) { ?>
-<option value="fnv164">FNV164</option>
 <?php } if(in_array("sha1",hash_algos())) { ?>
 <option value="sha1">SHA1</option>
 <?php } if(in_array("sha224",hash_algos())) { ?>

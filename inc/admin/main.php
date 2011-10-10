@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: main.php - Last Update: 10/09/2011 SVN 761 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 10/10/2011 SVN 762 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -552,6 +552,51 @@ if(isset($_GET['menu'])&&$_GET['menu']=="main") { $AddChkURL = "&menu=main"; }
 	<td style="width: 50%;"><label class="TextBoxLabel" for="WebURL">Insert The WebSite URL:</label></td>
 	<td style="width: 50%;"><input type="text" class="TextBox" name="WebURL" size="20" id="WebURL" value="<?php echo $Settings['weburl']; ?>" /></td>
 </tr><tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="PassHashType">Hash passwords with:</label></td>
+	<td style="width: 50%;"><select id="PassHashType" name="PassHashType" class="TextBox">
+<?php // PHP 5 hash algorithms to functions :o 
+if(function_exists('hash')&&function_exists('hash_algos')) {
+if(in_array("md2",hash_algos())) { ?>
+<option<?php if($Settings['use_hashtype']=="md2") { echo " selected=\"selected\""; } ?> value="md2">MD2</option>
+<?php } if(in_array("md4",hash_algos())) { ?>
+<option<?php if($Settings['use_hashtype']=="md4") { echo " selected=\"selected\""; } ?> value="md4">MD4</option>
+<?php } if(in_array("md5",hash_algos())) { ?>
+<option<?php if($Settings['use_hashtype']=="md5") { echo " selected=\"selected\""; } ?> value="md5">MD5</option>
+<?php } if(in_array("gost",hash_algos())) { ?>
+<option<?php if($Settings['use_hashtype']=="gost") { echo " selected=\"selected\""; } ?> value="gost">GOST</option>
+<?php } if(in_array("joaat",hash_algos())) { ?>
+<option<?php if($Settings['use_hashtype']=="joaat") { echo " selected=\"selected\""; } ?> value="joaat">JOAAT</option>
+<?php } if(in_array("sha1",hash_algos())) { ?>
+<option<?php if($Settings['use_hashtype']=="sha1") { echo " selected=\"selected\""; } ?> value="sha1">SHA1</option>
+<?php } if(in_array("sha224",hash_algos())) { ?>
+<option<?php if($Settings['use_hashtype']=="sha224") { echo " selected=\"selected\""; } ?> value="sha224">SHA224</option>
+<?php } if(in_array("sha256",hash_algos())) { ?>
+<option<?php if($Settings['use_hashtype']=="sha256") { echo " selected=\"selected\""; } ?> value="sha256">SHA256</option>
+<?php } if(in_array("sha384",hash_algos())) { ?>
+<option<?php if($Settings['use_hashtype']=="sha384") { echo " selected=\"selected\""; } ?> value="sha384">SHA384</option>
+<?php } if(in_array("sha512",hash_algos())) { ?>
+<option<?php if($Settings['use_hashtype']=="sha512") { echo " selected=\"selected\""; } ?> value="sha512">SHA512</option>
+<?php } if(in_array("salsa10",hash_algos())) { ?>
+<option<?php if($Settings['use_hashtype']=="salsa10") { echo " selected=\"selected\""; } ?> value="salsa10">SALSA10</option>
+<?php } if(in_array("salsa20",hash_algos())) { ?>
+<option<?php if($Settings['use_hashtype']=="salsa20") { echo " selected=\"selected\""; } ?> value="salsa20">SALSA20</option>
+<?php } if(in_array("snefru256",hash_algos())) { ?>
+<option<?php if($Settings['use_hashtype']=="snefru256") { echo " selected=\"selected\""; } ?> value="snefru256">SNEFRU256</option>
+<?php } if(in_array("ripemd128",hash_algos())) { ?>
+<option<?php if($Settings['use_hashtype']=="ripemd128") { echo " selected=\"selected\""; } ?> value="ripemd128">RIPEMD128</option>
+<?php } if(in_array("ripemd160",hash_algos())) { ?>
+<option<?php if($Settings['use_hashtype']=="ripemd160") { echo " selected=\"selected\""; } ?> value="ripemd160">RIPEMD160</option>
+<?php } if(in_array("ripemd256",hash_algos())) { ?>
+<option<?php if($Settings['use_hashtype']=="ripemd256") { echo " selected=\"selected\""; } ?> value="ripemd256">RIPEMD256</option>
+<?php } if(in_array("ripemd320",hash_algos())) { ?>
+<option<?php if($Settings['use_hashtype']=="ripemd320") { echo " selected=\"selected\""; } ?> value="ripemd320">RIPEMD320</option>
+<?php } } 
+if(!function_exists('hash')&&!function_exists('hash_algos')) { ?>
+<option<?php if($Settings['use_hashtype']=="md5") { echo " selected=\"selected\""; } ?> value="md5">MD5</option>
+<option<?php if($Settings['use_hashtype']=="sha1") { echo " selected=\"selected\""; } ?> value="sha1">SHA1</option>
+<?php } ?>
+</select></td>
+</tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="GuestGroup">Insert The Guest Group:</label></td>
 	<td style="width: 50%;"><select id="GuestGroup" name="GuestGroup" class="TextBox">
 <option selected="selected" value="<?php echo $Settings['GuestGroup']; ?>">Old Value (<?php echo $Settings['GuestGroup']; ?>)</option>
@@ -852,6 +897,34 @@ $Settings['log_config_format'] = $_POST['iDBLoggerFormat'];
 if($_POST['HTMLType']=="xhtml11") { $_POST['HTMLLevel'] = "Strict"; }
 if($_POST['HTMLType']=="html5") { $_POST['OutPutType'] = "html"; }
 if($_POST['HTMLType']=="xhtml5") { $_POST['OutPutType'] = "xhtml"; }
+if(!isset($_POST['PassHashType'])) {
+	$_POST['PassHashType'] = "sha1"; }
+if(!function_exists('hash')||!function_exists('hash_algos')) {
+if($_POST['PassHashType']!="md5"&&
+   $_POST['PassHashType']!="sha1") {
+	$_POST['PassHashType'] = "sha1"; } }
+if(function_exists('hash')&&function_exists('hash_algos')) {
+if(!in_array($_POST['PassHashType'],hash_algos())) {
+	$_POST['PassHashType'] = "sha1"; }
+if($_POST['PassHashType']!="md2"&&
+   $_POST['PassHashType']!="md4"&&
+   $_POST['PassHashType']!="md5"&&
+   $_POST['PassHashType']!="sha1"&&
+   $_POST['PassHashType']!="sha224"&&
+   $_POST['PassHashType']!="sha256"&&
+   $_POST['PassHashType']!="sha384"&&
+   $_POST['PassHashType']!="sha512"&&
+   $_POST['PassHashType']!="ripemd128"&&
+   $_POST['PassHashType']!="ripemd160"&&
+   $_POST['PassHashType']!="ripemd256"&&
+   $_POST['PassHashType']!="ripemd320"&&
+   $_POST['PassHashType']!="salsa10"&&
+   $_POST['PassHashType']!="salsa20"&&
+   $_POST['PassHashType']!="snefru"&&
+   $_POST['PassHashType']!="snefru256"&&
+   $_POST['PassHashType']!="gost"&&
+   $_POST['PassHashType']!="joaat") {
+	$_POST['PassHashType'] = "sha1"; } }
 $BoardSettings=$pretext2[0]."\n".
 "\$Settings['sqlhost'] = ".null_string($Settings['sqlhost']).";\n".
 "\$Settings['sqldb'] = ".null_string($Settings['sqldb']).";\n".
@@ -880,7 +953,7 @@ $BoardSettings=$pretext2[0]."\n".
 "\$Settings['start_date'] = ".null_string($Settings['start_date']).";\n".
 "\$Settings['idb_time_format'] = ".null_string($Settings['idb_time_format']).";\n".
 "\$Settings['idb_date_format'] = ".null_string($Settings['idb_date_format']).";\n".
-"\$Settings['use_hashtype'] = ".null_string($Settings['use_hashtype']).";\n".
+"\$Settings['use_hashtype'] = ".null_string($_POST['PassHashType']).";\n".
 "\$Settings['charset'] = ".null_string($Settings['charset']).";\n".
 "\$Settings['sql_collate'] = ".null_string($Settings['sql_collate']).";\n".
 "\$Settings['sql_charset'] = ".null_string($Settings['sql_charset']).";\n".

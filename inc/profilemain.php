@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: profilemain.php - Last Update: 09/11/2011 SVN 756 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 10/10/2011 SVN 762 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
@@ -936,12 +936,8 @@ if($OldHashType=="iDBHSFRU256") {
 	$YourPassword = b64e_hmac($_POST['OldPass'],$OldJoined,$OldSalt,"snefru256"); }
 if($OldHashType=="iDBHGOST") { 
 	$YourPassword = b64e_hmac($_POST['OldPass'],$OldJoined,$OldSalt,"gost"); }
-if($HashType=="iDBHJOAAT") { 
+if($OldHashType=="iDBHJOAAT") { 
 	$YourPassword = b64e_hmac($_POST['OldPass'],$OldJoined,$OldSalt,"joaat"); }
-if($HashType=="iDBHFNV132") { 
-	$YourPassword = b64e_hmac($_POST['OldPass'],$OldJoined,$OldSalt,"fnv132"); }
-if($HashType=="iDBHFNV164") { 
-	$YourPassword = b64e_hmac($_POST['OldPass'],$OldJoined,$OldSalt,"fnv164"); }
 if($YourPassword!=$OldPassword) { $Error="Yes"; ?>
 <div class="TableMessage" style="text-align: center;">Your old Password did not match.<br />&nbsp;</div>
 <?php } if(pre_strlen($_POST['Password'])>"60") { $Error="Yes"; ?>
@@ -956,45 +952,41 @@ if($YourPassword!=$OldPassword) { $Error="Yes"; ?>
 	if($_POST['Password']!="") {
 	$NewSalt = salt_hmac(); $NewDay = GMTimeStamp();
 	if($Settings['use_hashtype']=="md2") { $iDBHash = "iDBH2";
-	$NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$NewSalt,"md2"); }
+	$NewPassword = b64e_hmac($_POST['Password'],$OldJoined,$NewSalt,"md2"); }
 	if($Settings['use_hashtype']=="md4") { $iDBHash = "iDBH4";
-	$NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$NewSalt,"md4"); }
+	$NewPassword = b64e_hmac($_POST['Password'],$OldJoined,$NewSalt,"md4"); }
 	if($Settings['use_hashtype']=="md5") { $iDBHash = "iDBH5";
-	$NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$NewSalt,"md5"); }
+	$NewPassword = b64e_hmac($_POST['Password'],$OldJoined,$NewSalt,"md5"); }
 	if($Settings['use_hashtype']=="sha1") { $iDBHash = "iDBH";
-	$NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$NewSalt,"sha1"); }
+	$NewPassword = b64e_hmac($_POST['Password'],$OldJoined,$NewSalt,"sha1"); }
 	if($Settings['use_hashtype']=="sha224") { $iDBHash = "iDBH224";
-	$NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$NewSalt,"sha224"); }
+	$NewPassword = b64e_hmac($_POST['Password'],$OldJoined,$NewSalt,"sha224"); }
 	if($Settings['use_hashtype']=="sha256") { $iDBHash = "iDBH256";
-	$NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$NewSalt,"sha256"); }
+	$NewPassword = b64e_hmac($_POST['Password'],$OldJoined,$NewSalt,"sha256"); }
 	if($Settings['use_hashtype']=="sha384") { $iDBHash = "iDBH384";
-	$NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$NewSalt,"sha384"); }
+	$NewPassword = b64e_hmac($_POST['Password'],$OldJoined,$NewSalt,"sha384"); }
 	if($Settings['use_hashtype']=="sha512") { $iDBHash = "iDBH512";
-	$NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$NewSalt,"sha512"); }
+	$NewPassword = b64e_hmac($_POST['Password'],$OldJoined,$NewSalt,"sha512"); }
 	if($Settings['use_hashtype']=="ripemd128") { $iDBHash = "iDBHRMD128";
-	$NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$NewSalt,"ripemd128"); }
+	$NewPassword = b64e_hmac($_POST['Password'],$OldJoined,$NewSalt,"ripemd128"); }
 	if($Settings['use_hashtype']=="ripemd160") { $iDBHash = "iDBHRMD160";
-	$NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$NewSalt,"ripemd160"); }
+	$NewPassword = b64e_hmac($_POST['Password'],$OldJoined,$NewSalt,"ripemd160"); }
 	if($Settings['use_hashtype']=="ripemd256") { $iDBHash = "iDBHRMD256";
-	$NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$NewSalt,"ripemd256"); }
+	$NewPassword = b64e_hmac($_POST['Password'],$OldJoined,$NewSalt,"ripemd256"); }
 	if($Settings['use_hashtype']=="ripemd320") { $iDBHash = "iDBHRMD320";
-	$NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$NewSalt,"ripemd320"); }
+	$NewPassword = b64e_hmac($_POST['Password'],$OldJoined,$NewSalt,"ripemd320"); }
 	if($Settings['use_hashtype']=="salsa10") { $iDBHash = "iDBHSALSA10";
-	$NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$NewSalt,"salsa10"); }
+	$NewPassword = b64e_hmac($_POST['Password'],$OldJoined,$NewSalt,"salsa10"); }
 	if($Settings['use_hashtype']=="salsa20") { $iDBHash = "iDBHSALSA20";
-	$NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$NewSalt,"salsa20"); }
+	$NewPassword = b64e_hmac($_POST['Password'],$OldJoined,$NewSalt,"salsa20"); }
 	if($Settings['use_hashtype']=="snefru") { $iDBHash = "iDBHSFRU";
-	$NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$NewSalt,"snefru"); }
+	$NewPassword = b64e_hmac($_POST['Password'],$OldJoined,$NewSalt,"snefru"); }
 	if($Settings['use_hashtype']=="snefru256") { $iDBHash = "iDBHSFRU256";
-	$NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$NewSalt,"snefru256"); }
+	$NewPassword = b64e_hmac($_POST['Password'],$OldJoined,$NewSalt,"snefru256"); }
 	if($Settings['use_hashtype']=="gost") { $iDBHash = "iDBHGOST";
-	$NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$NewSalt,"gost"); }
+	$NewPassword = b64e_hmac($_POST['Password'],$OldJoined,$NewSalt,"gost"); }
 	if($Settings['use_hashtype']=="joaat") { $iDBHash = "iDBHJOAAT";
-	$NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$NewSalt,"joaat"); }
-	if($Settings['use_hashtype']=="fnv132") { $iDBHash = "iDBHFNV132";
-	$NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$NewSalt,"fnv132"); }
-	if($Settings['use_hashtype']=="fnv164") { $iDBHash = "iDBHFNV164";
-	$NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$NewSalt,"fnv164"); }
+	$NewPassword = b64e_hmac($_POST['Password'],$OldJoined,$NewSalt,"joaat"); }
 	$_SESSION['UserPass']=$NewPassword;
 	if($cookieDomain==null) {
 	setcookie("SessPass", $NewPassword, time() + (7 * 86400), $cbasedir); }
@@ -1005,7 +997,7 @@ if($YourPassword!=$OldPassword) { $Error="Yes"; ?>
 	setcookie("SessPass", $NewPassword, time() + (7 * 86400), $cbasedir, $cookieDomain); } } }
 	$_POST['Email'] = remove_spaces($_POST['Email']);
 	if($_POST['Password']!="") {
-	$querynewuserinfo = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"UserPassword\"='%s',\"HashType\"='iDBH',\"Email\"='%s',\"LastActive\"=%i,\"IP\"='%s',\"Salt\"='%s' WHERE \"id\"=%i", array($NewPassword,$_POST['Email'],$NewDay,$NewIP,$NewSalt,$_SESSION['UserID']));
+	$querynewuserinfo = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"UserPassword\"='%s',\"HashType\"='%s',\"Email\"='%s',\"LastActive\"=%i,\"IP\"='%s',\"Salt\"='%s' WHERE \"id\"=%i", array($NewPassword,$iDBHash,$_POST['Email'],$NewDay,$NewIP,$NewSalt,$_SESSION['UserID']));
 	sql_query($querynewuserinfo,$SQLStat); }
 	if($_POST['Password']=="") {
 	echo $querynewuserinfo = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"Email\"='%s',\"LastActive\"=%i,\"IP\"='%s' WHERE \"id\"=%i", array($_POST['Email'],$NewDay,$NewIP,$_SESSION['UserID']));
