@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 10/10/2011 SVN 762 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 10/25/2011 SVN 764 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -67,6 +67,8 @@ if(!in_array("ini_set", $disfunc)&&$Settings['qstr']!="/"&&$Settings['qstr']!="&
 ini_set("arg_separator.output",htmlentities($Settings['qstr'], ENT_QUOTES, $Settings['charset']));
 ini_set("arg_separator.input",$Settings['qstr']); } }
 if(!isset($Settings['idburl'])) { $Settings['idburl'] = null; }
+if(isset($Settings['BoardUUID'])) { $Settings['BoardUUID'] = base64_decode($Settings['BoardUUID']); 
+header("Board-Unique-ID: ".$Settings['BoardUUID']); }
 if(!isset($Settings['fixbasedir'])) { $Settings['fixbasedir'] = null; }
 if(!isset($Settings['fixpathinfo'])) { $Settings['fixpathinfo'] = null; }
 if(!isset($Settings['fixcookiedir'])) { $Settings['fixcookiedir'] = null; }

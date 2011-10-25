@@ -12,7 +12,7 @@
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mkconfig.php - Last Update: 10/10/2011 SVN 762 - Author: cooldude2k $
+    $FileInfo: mkconfig.php - Last Update: 10/25/2011 SVN 764 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mkconfig.php"||$File3Name=="/mkconfig.php") {
@@ -378,7 +378,7 @@ $BoardSettings=$pretext2[0]."\n".
 "\$Settings['IPCheckURL'] = '';\n".
 "\$Settings['log_http_request'] = '".$_POST['iDBHTTPLogger']."';\n".
 "\$Settings['log_config_format'] = '".$_POST['iDBLoggerFormat']."';\n".
-"\$Settings['BoardUUID'] = '".$ServerUUID."';\n".
+"\$Settings['BoardUUID'] = '".base64_encode($ServerUUID)."';\n".
 "\$Settings['KarmaBoostDays'] = '".$KarmaBoostDay."';\n".
 "\$Settings['KBoostPercent'] = '6|10';\n".$pretext2[1]."\n".
 "\$SettInfo['board_name'] = '".$_POST['NewBoardName']."';\n".
