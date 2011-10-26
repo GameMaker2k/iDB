@@ -12,7 +12,7 @@
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.de/support/category.php?act=view&id=2
 
-    $FileInfo: install.php - Last Update: 08/16/2011 SVN 753 - Author: cooldude2k $
+    $FileInfo: install.php - Last Update: 10/26/2011 SVN 765 - Author: cooldude2k $
 *//*
 if(ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }
@@ -33,7 +33,8 @@ if(!in_array("ini_set", $disfunc)) {
 //@ini_set("log_errors","On");
 @ini_set("docref_ext", "");
 @ini_set("docref_root", "http://php.net/"); }
-@error_reporting(E_ALL ^ E_NOTICE);
+if(!defined("E_DEPRECATED")) { define("E_DEPRECATED", 0); }
+@error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
 /* Get rid of session id in urls */
 if(!in_array("ini_set", $disfunc)) {
 //@ini_set("date.timezone","UTC"); 
