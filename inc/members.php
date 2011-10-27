@@ -829,6 +829,7 @@ $_SESSION['UserFormID'] = $UFID;
 <td style="width: 100%;">
 <input type="hidden" name="act" value="loginmember" style="display: none;" />
 <input type="hidden" style="display: none;" name="fid" value="<?php echo $UFID; ?>" />
+<input type="hidden" style="display: none;" name="ubid" value="<?php echo $Settings['BoardUUID']; ?>" />
 <input class="Button" type="submit" value="Log in" />
 </td></tr></table>
 </form>
@@ -892,6 +893,12 @@ if (pre_strlen($_POST['userpass'])>"60") { $Error="Yes";  ?>
 	</span>&nbsp;</td>
 </tr>
 <?php } if($_POST['fid']!=$_SESSION['UserFormID']) { $Error="Yes";  ?>
+<tr>
+	<td><span class="TableMessage">
+	<br />Sorry the referering url dose not match our host name.<br />
+	</span>&nbsp;</td>
+</tr>
+<?php } if($_POST['ubid']!=$Settings['BoardUUID']) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Sorry the referering url dose not match our host name.<br />
@@ -1219,6 +1226,7 @@ echo "<option value=\"".$showmin."\">0:".$showmin." minutes</option>\n"; }
 <input maxlength="25" type="text" class="TextBox" name="signcode" size="20" id="signcode" value="Enter SignCode" /><br /><?php } ?>
 <input type="hidden" style="display: none;" name="act" value="makemembers" />
 <input type="hidden" style="display: none;" name="fid" value="<?php echo $UFID; ?>" />
+<input type="hidden" style="display: none;" name="ubid" value="<?php echo $Settings['BoardUUID']; ?>" />
 <?php if(isset($_GET['referrerid'])&&is_numeric($_GET['referrerid'])) { ?>
 <input type="hidden" style="display: none;" name="referrerid" value="<?php echo $_GET['referrerid']; ?>" />
 <?php } ?>
@@ -1283,6 +1291,12 @@ require($SettDir['inc']."captcha.php"); }
 	</span>&nbsp;</td>
 </tr>
 <?php } if($_POST['fid']!=$_SESSION['UserFormID']) { $Error="Yes";  ?>
+<tr>
+	<td><span class="TableMessage">
+	<br />Sorry the referering url dose not match our host name.<br />
+	</span>&nbsp;</td>
+</tr>
+<?php } if($_POST['ubid']!=$Settings['BoardUUID']) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Sorry the referering url dose not match our host name.<br />

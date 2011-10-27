@@ -750,6 +750,7 @@ sql_free_result($renee_result);
 <?php } ?>
 <input type="submit" class="Button" value="Send Message" name="send_message" />
 <input type="hidden" style="display: none;" name="fid" value="<?php echo $UFID; ?>" />
+<input type="hidden" style="display: none;" name="ubid" value="<?php echo $Settings['BoardUUID']; ?>" />
 <input type="reset" value="Reset Form" class="Button" name="Reset_Form" />
 </td></tr></table>
 </form></td></tr>
@@ -797,6 +798,12 @@ require($SettDir['inc']."captcha.php"); }
 	</span>&nbsp;</td>
 </tr>
 <?php } if($_POST['fid']!=$_SESSION['UserFormID']) { $Error="Yes";  ?>
+<tr>
+	<td><span class="TableMessage">
+	<br />Sorry the referering url dose not match our host name.<br />
+	</span>&nbsp;</td>
+</tr>
+<?php } if($_POST['ubid']!=$Settings['BoardUUID']) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Sorry the referering url dose not match our host name.<br />

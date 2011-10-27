@@ -315,6 +315,7 @@ sql_free_result($renee_result);
 <?php } ?>
 <input type="hidden" name="act" value="makeevents" style="display: none;" />
 <input type="hidden" style="display: none;" name="fid" value="<?php echo $UFID; ?>" />
+<input type="hidden" style="display: none;" name="ubid" value="<?php echo $Settings['BoardUUID']; ?>" />
 <?php if($_SESSION['UserGroup']!=$Settings['GuestGroup']) { ?>
 <input type="hidden" name="GuestName" value="null" style="display: none;" />
 <?php } ?>
@@ -379,6 +380,12 @@ require($SettDir['inc']."captcha.php"); }
 	</span>&nbsp;</td>
 </tr>
 <?php } if($_POST['fid']!=$_SESSION['UserFormID']) { $Error="Yes";  ?>
+<tr>
+	<td><span class="TableMessage">
+	<br />Sorry the referering url dose not match our host name.<br />
+	</span>&nbsp;</td>
+</tr>
+<?php } if($_POST['ubid']!=$Settings['BoardUUID']) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Sorry the referering url dose not match our host name.<br />
