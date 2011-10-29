@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: events.php - Last Update: 08/12/2011 SVN 748 - Author: cooldude2k $
+    $FileInfo: events.php - Last Update: 10/29/2011 SVN 768 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="events.php"||$File3Name=="/events.php") {
@@ -39,8 +39,8 @@ $EventName=sql_result($result,$is,"EventName");
 $EventText=sql_result($result,$is,"EventText");
 $EventStart=sql_result($result,$is,"TimeStamp");
 $EventEnd=sql_result($result,$is,"TimeStampEnd");
-$EventStart = GMTimeChange("M. j Y",$EventStart,null);
-$EventEnd = GMTimeChange("M. j Y",$EventEnd,null);
+$EventStart = GMTimeChange($_SESSION['iDBDateFormat'],$EventStart,null);
+$EventEnd = GMTimeChange($_SESSION['iDBDateFormat'],$EventEnd,null);
 $ipshow = "two";
 $_SESSION['ViewingPage'] = url_maker(null,"no+ext","act=view&id=".$_GET['id'],"&","=",$prexqstr['event'],$exqstr['event']);
 if($Settings['file_ext']!="no+ext"&&$Settings['file_ext']!="no ext") {
