@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: subforums.php - Last Update: 08/12/2011 SVN 748 - Author: cooldude2k $
+    $FileInfo: subforums.php - Last Update: 11/17/2011 SVN 770 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="subforums.php"||$File3Name=="/subforums.php") {
@@ -33,7 +33,7 @@ $ForumID=sql_result($checkresult,0,"id");
 $ForumName=sql_result($checkresult,0,"Name");
 $ForumType=sql_result($checkresult,0,"ForumType");
 $ForumShow=sql_result($checkresult,0,"ShowForum");
-if($ForumShow=="yes") { $_SESSION['ShowActHidden'] = "yes"; }
+if($ForumShow=="no") { $_SESSION['ShowActHidden'] = "yes"; }
 $InSubForum=sql_result($checkresult,0,"InSubForum");
 $CategoryID=sql_result($checkresult,0,"CategoryID");
 $RedirectURL=sql_result($checkresult,0,"RedirectURL");
@@ -73,7 +73,7 @@ $CategoryID=sql_result($preresult,0,"id");
 $CategoryType=sql_result($preresult,0,"CategoryType");
 $CategoryName=sql_result($preresult,0,"Name");
 $CategoryShow=sql_result($preresult,0,"ShowCategory");
-if($CategoryShow=="yes") { $_SESSION['ShowActHidden'] = "yes"; }
+if($CategoryShow=="no") { $_SESSION['ShowActHidden'] = "yes"; }
 $CategoryDescription=sql_result($preresult,0,"Description");
 if($InSubForum!="0") {
 $isfquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2." LIMIT 1", array($InSubForum));
@@ -119,6 +119,7 @@ $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE 
 $result=sql_query($query,$SQLStat);
 $num=sql_num_rows($result);
 $i=0;
+if($num>=1) {
 ?>
 <div class="Table1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
@@ -296,7 +297,7 @@ if($ThemeSet['ForumStyle']==2) {
 </tr>
 </table></div>
 <div class="DivSubForums">&nbsp;</div>
-<?php } sql_free_result($preresult);
+<?php } } sql_free_result($preresult);
 $ForumCheck = "skip";
 if($CanHaveTopics!="yes") { 
 	$ForumName = $SForumName; }

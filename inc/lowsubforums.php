@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: lowsubforums.php - Last Update: 07/18/2011 SVN 719 - Author: cooldude2k $
+    $FileInfo: lowsubforums.php - Last Update: 11/17/2011 SVN 770 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="lowsubforums.php"||$File3Name=="/lowsubforums.php") {
@@ -29,7 +29,7 @@ $ForumID=sql_result($checkresult,0,"id");
 $ForumName=sql_result($checkresult,0,"Name");
 $ForumType=sql_result($checkresult,0,"ForumType");
 $ForumShow=sql_result($checkresult,0,"ShowForum");
-if($ForumShow=="yes") { $_SESSION['ShowActHidden'] = "yes"; }
+if($ForumShow=="no") { $_SESSION['ShowActHidden'] = "yes"; }
 $InSubForum=sql_result($checkresult,0,"InSubForum");
 $CategoryID=sql_result($checkresult,0,"CategoryID");
 $RedirectURL=sql_result($checkresult,0,"RedirectURL");
@@ -69,7 +69,7 @@ $CategoryID=sql_result($preresult,0,"id");
 $CategoryType=sql_result($preresult,0,"CategoryType");
 $CategoryName=sql_result($preresult,0,"Name");
 $CategoryShow=sql_result($preresult,0,"ShowCategory");
-if($CategoryShow=="yes") { $_SESSION['ShowActHidden'] = "yes"; }
+if($CategoryShow=="no") { $_SESSION['ShowActHidden'] = "yes"; }
 $CategoryDescription=sql_result($preresult,0,"Description");
 if($InSubForum!="0") {
 $isfquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2." LIMIT 1", array($InSubForum));
@@ -95,8 +95,6 @@ $_SESSION['ViewingTitle'] = $ForumName;
 <div style="font-size: 1.0em; font-weight: bold; margin-bottom: 10px; padding-top: 3px; width: auto;">Full Version: <a href="<?php echo url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$ForumID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>"><?php echo $ForumName; ?></a></div>
 <div style="font-size: 11px; font-weight: bold; padding: 10px; border: 1px solid gray;"><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=lowview",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $Settings['board_name']; ?></a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile[$CategoryType],$Settings['file_ext'],"act=lowview&id=".$CategoryID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$CategoryType],$exqstr[$CategoryType]); ?>"><?php echo $CategoryName; ?></a><?php if($InSubForum!="0") { echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile[$isfForumType],$Settings['file_ext'],"act=view&id=".$isfForumID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr[$isfForumType],$exqstr[$isfForumType]); ?>"><?php echo $isfForumName; ?></a><?php } echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile[$ForumType],$Settings['file_ext'],"act=lowview&id=".$ForumID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>"><?php echo $ForumName; ?></a></div>
 <div>&nbsp;</div>
-<div style="padding: 10px; border: 1px solid gray;">
-<ul style="list-style-type: none;">
 <?php
 if(!isset($CatPermissionInfo['CanViewCategory'][$CategoryID])) {
 	$CatPermissionInfo['CanViewCategory'][$CategoryID] = "no"; }
@@ -118,7 +116,10 @@ $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE 
 $result=sql_query($query,$SQLStat);
 $num=sql_num_rows($result);
 $i=0;
+if($num>=1) {
 ?>
+<div style="padding: 10px; border: 1px solid gray;">
+<ul style="list-style-type: none;">
 <li style="font-weight: bold;"><a href="<?php echo url_maker($exfile[$ForumType],$Settings['file_ext'],"act=lowview&id=".$ForumID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>"><?php echo $ForumName; ?></a></li><li>
 <?php
 while ($i < $num) {
@@ -183,10 +184,10 @@ $ExStr = ""; if ($ForumType!="redirect"&&
 ?>
 </li></ul></div>
 <div>&nbsp;</div>
-<?php } sql_free_result($preresult);
+<?php } } sql_free_result($preresult);
 $ForumCheck = "skip";
 if($CanHaveTopics!="yes") { 
 	$ForumName = $SForumName; }
 if($CanHaveTopics!="no") {
-require($SettDir['inc'].'topics.php'); } }
+require($SettDir['inc'].'lowtopics.php'); } }
 ?>

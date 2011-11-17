@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: lowforums.php - Last Update: 07/18/2011 SVN 719 - Author: cooldude2k $
+    $FileInfo: lowforums.php - Last Update: 11/17/2011 SVN 770 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="lowforums.php"||$File3Name=="/lowforums.php") {
@@ -39,7 +39,7 @@ while ($prei < $prenum) {
 $CategoryID=sql_result($preresult,$prei,"id");
 $CategoryName=sql_result($preresult,$prei,"Name");
 $CategoryShow=sql_result($preresult,$prei,"ShowCategory");
-if($CategoryShow=="yes") { $_SESSION['ShowActHidden'] = "yes"; }
+if($CategoryShow=="no") { $_SESSION['ShowActHidden'] = "yes"; }
 $CategoryType=sql_result($preresult,$prei,"CategoryType");
 $SubShowForums=sql_result($preresult,$prei,"SubShowForums");
 $CategoryDescription=sql_result($preresult,$prei,"Description");
@@ -67,7 +67,7 @@ while ($i < $num) {
 $ForumID=sql_result($result,$i,"id");
 $ForumName=sql_result($result,$i,"Name");
 $ForumShow=sql_result($result,$i,"ShowForum");
-if($ForumShow=="yes") { $_SESSION['ShowActHidden'] = "yes"; }
+if($ForumShow=="no") { $_SESSION['ShowActHidden'] = "yes"; }
 $ForumType=sql_result($result,$i,"ForumType");
 $ForumShowTopics=sql_result($result,$i,"CanHaveTopics");
 $ForumShowTopics = strtolower($ForumShowTopics);
