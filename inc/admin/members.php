@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 07/14/2011 SVN 716 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 11/19/2011 SVN 771 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -381,6 +381,8 @@ $EditMemPerm['CanPM'] = sql_result($mpresult,0,"CanPM");
 $EditMemPerm['CanSearch'] = sql_result($mpresult,0,"CanSearch");
 $EditMemPerm['CanDoHTML'] = sql_result($mpresult,0,"CanDoHTML");
 $EditMemPerm['CanUseBBags'] = sql_result($mpresult,0,"CanUseBBags");
+$EditMemPerm['CanViewIPAddress'] = sql_result($mpresult,0,"CanViewIPAddress");
+$EditMemPerm['CanViewUserAgent'] = sql_result($mpresult,0,"CanViewUserAgent");
 $EditMemPerm['FloodControl'] = sql_result($mpresult,0,"FloodControl");
 $EditMemPerm['SearchFlood'] = sql_result($mpresult,0,"SearchFlood");
 $EditMemPerm['HasModCP'] = sql_result($mpresult,0,"HasModCP");
@@ -409,7 +411,11 @@ $EditMemPerm['ViewDBInfo'] = sql_result($mpresult,0,"ViewDBInfo");
 <td class="TableMenuColumn3">
 <form style="display: inline;" method="post" id="acptool" action="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=editmember",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">
 <table style="text-align: left;">
+<?php if($GroupInfo['CanViewIPAddress']=="yes") { ?>
 <tr style="text-align: left;">
+	<td style="width: 50%;"><span class="TextBoxLabel">Members IP:</span></td>
+	<td style="width: 50%;"><a onclick="window.open(this.href);return false;" href="<?php echo sprintf($IPCheckURL,$EditMem['IP']); ?>"><?php echo $EditMem['IP']; ?></a></td>
+</tr><?php } ?><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="MemName">Members Name:</label></td>
 	<td style="width: 50%;"><input type="text" name="MemName" class="TextBox" id="MemName" size="20" value="<?php echo $EditMem['Name']; ?>" /></td>
 </tr><tr style="text-align: left;">
@@ -552,6 +558,20 @@ sql_free_result($getperidr); ?>
 	<option <?php if($EditMemPerm['CanUseBBags']=="no") { echo "selected=\"selected\" "; } ?>value="no">no</option>
 	</select></td>
 </tr><tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="CanViewIPAddress">Can view IP Address:</label></td>
+	<td style="width: 50%;"><select size="1" class="TextBox" name="CanViewIPAddress" id="CanViewIPAddress">
+	<option <?php if($EditMemPerm['CanViewIPAddress']=="group") { echo "selected=\"selected\" "; } ?>value="group">use group info</option>
+	<option <?php if($EditMemPerm['CanViewIPAddress']=="yes") { echo "selected=\"selected\" "; } ?>value="yes">yes</option>
+	<option <?php if($EditMemPerm['CanViewIPAddress']=="no") { echo "selected=\"selected\" "; } ?>value="no">no</option>
+	</select></td>
+</tr><tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="CanViewUserAgent">Can view user agent:</label></td>
+	<td style="width: 50%;"><select size="1" class="TextBox" name="CanViewUserAgent" id="CanViewUserAgent">
+	<option <?php if($EditMemPerm['CanViewUserAgent']=="group") { echo "selected=\"selected\" "; } ?>value="group">use group info</option>
+	<option <?php if($EditMemPerm['CanViewUserAgent']=="yes") { echo "selected=\"selected\" "; } ?>value="yes">yes</option>
+	<option <?php if($EditMemPerm['CanViewUserAgent']=="no") { echo "selected=\"selected\" "; } ?>value="no">no</option>
+	</select></td>
+</tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="FloodControl">Flood Control in seconds:</label></td>
 	<td style="width: 50%;"><input type="text" name="FloodControl" class="TextBox" id="FloodControl" size="20" value="<?php echo $EditMemPerm['FloodControl']; ?>" /></td>
 </tr><tr style="text-align: left;">
@@ -664,18 +684,18 @@ if($_POST['MemName']==$DMemName||$username_check>=1) {
 if($_POST['id']!=1) {
 if(!is_numeric($_POST['MemPermID'])) { $_POST['MemPermID'] = "0"; }
 $dmquery = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"GroupID\"=%i,\"HiddenMember\"='%s',\"WarnLevel\"=%i,\"BanTime\"=%i,\"PostCount\"=%i,\"Karma\"=%i WHERE \"id\"=%i", array($_POST['gid'],$_POST['MemHidden'],$_POST['MemWarnLevel'],$_POST['MemBanTime'],$_POST['MemPostCount'],$_POST['MemKarma'],$_POST['id'])); 
-$dpmquery = sql_pre_query("UPDATE \"".$Settings['sqltable']."mempermissions\" SET \"PermissionID\"=%i,\"CanViewBoard\"='%s',\"CanViewOffLine\"='%s',\"CanEditProfile\"='%s',\"CanAddEvents\"='%s',\"CanPM\"='%s',\"CanSearch\"='%s',\"CanDoHTML\"='%s',\"CanUseBBags\"='%s',\"FloodControl\"=%i,\"SearchFlood\"=%i,\"HasModCP\"='%s',\"HasAdminCP\"='%s',\"ViewDBInfo\"='%s' WHERE \"id\"=%i", array($_POST['MemPermID'],$_POST['CanViewBoard'],$_POST['CanViewOffLine'],$_POST['CanEditProfile'],$_POST['CanAddEvents'],$_POST['CanPM'],$_POST['CanSearch'],$_POST['CanDoHTML'],$_POST['CanUseBBags'],$_POST['FloodControl'],$_POST['SearchFlood'],$_POST['HasModCP'],$_POST['HasAdminCP'],$_POST['ViewDBInfo'],$_POST['id'])); }
+$dpmquery = sql_pre_query("UPDATE \"".$Settings['sqltable']."mempermissions\" SET \"PermissionID\"=%i,\"CanViewBoard\"='%s',\"CanViewOffLine\"='%s',\"CanEditProfile\"='%s',\"CanAddEvents\"='%s',\"CanPM\"='%s',\"CanSearch\"='%s',\"CanDoHTML\"='%s',\"CanUseBBags\"='%s',\"CanViewIPAddress\"='%s',\"CanViewUserAgent\"='%s',\"FloodControl\"=%i,\"SearchFlood\"=%i,\"HasModCP\"='%s',\"HasAdminCP\"='%s',\"ViewDBInfo\"='%s' WHERE \"id\"=%i", array($_POST['MemPermID'],$_POST['CanViewBoard'],$_POST['CanViewOffLine'],$_POST['CanEditProfile'],$_POST['CanAddEvents'],$_POST['CanPM'],$_POST['CanSearch'],$_POST['CanDoHTML'],$_POST['CanUseBBags'],$_POST['CanViewIPAddress'],$_POST['CanViewUserAgent'],$_POST['FloodControl'],$_POST['SearchFlood'],$_POST['HasModCP'],$_POST['HasAdminCP'],$_POST['ViewDBInfo'],$_POST['id'])); }
 if($_POST['id']==1) {
 $dmquery = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"HiddenMember\"='%s',\"WarnLevel\"=%i,\"BanTime\"=%i,\"PostCount\"=%i,\"Karma\"=%i WHERE \"id\"=%i", array($_POST['MemHidden'],$_POST['MemWarnLevel'],$_POST['MemBanTime'],$_POST['MemPostCount'],$_POST['MemKarma'],$_POST['id'])); 
-$dpmquery = sql_pre_query("UPDATE \"".$Settings['sqltable']."mempermissions\" SET \"CanViewBoard\"='%s',\"CanViewOffLine\"='%s',\"CanEditProfile\"='%s',\"CanAddEvents\"='%s',\"CanPM\"='%s',\"CanSearch\"='%s',\"CanDoHTML\"='%s',\"CanUseBBags\"='%s',\"FloodControl\"=%i,\"SearchFlood\"=%i WHERE \"id\"=%i", array($_POST['CanViewBoard'],$_POST['CanViewOffLine'],$_POST['CanEditProfile'],$_POST['CanAddEvents'],$_POST['CanPM'],$_POST['CanSearch'],$_POST['CanDoHTML'],$_POST['CanUseBBags'],$_POST['FloodControl'],$_POST['SearchFlood'],$_POST['id'])); } }
+$dpmquery = sql_pre_query("UPDATE \"".$Settings['sqltable']."mempermissions\" SET \"CanViewBoard\"='%s',\"CanViewOffLine\"='%s',\"CanEditProfile\"='%s',\"CanAddEvents\"='%s',\"CanPM\"='%s',\"CanSearch\"='%s',\"CanDoHTML\"='%s',\"CanUseBBags\"='%s',\"CanViewIPAddress\"='%s',\"CanViewUserAgent\"='%s',\"FloodControl\"=%i,\"SearchFlood\"=%i WHERE \"id\"=%i", array($_POST['CanViewBoard'],$_POST['CanViewOffLine'],$_POST['CanEditProfile'],$_POST['CanAddEvents'],$_POST['CanPM'],$_POST['CanSearch'],$_POST['CanDoHTML'],$_POST['CanUseBBags'],$_POST['CanViewIPAddress'],$_POST['CanViewUserAgent'],$_POST['FloodControl'],$_POST['SearchFlood'],$_POST['id'])); } }
 if($_POST['MemName']!=$DMemName&&$username_check<1) {
 if($_POST['id']!=1) {
 if(!is_numeric($_POST['MemPermID'])) { $_POST['MemPermID'] = "0"; }
 $dmquery = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"Name\"='%s',\"GroupID\"=%i,\"HiddenMember\"='%s',\"WarnLevel\"=%i,\"BanTime\"=%i,\"PostCount\"=%i,\"Karma\"=%i WHERE \"id\"=%i", array($_POST['MemName'],$_POST['gid'],$_POST['MemHidden'],$_POST['MemWarnLevel'],$_POST['MemBanTime'],$_POST['MemPostCount'],$_POST['MemKarma'],$_POST['id'])); 
-$dpmquery = sql_pre_query("UPDATE \"".$Settings['sqltable']."mempermissions\" SET \"PermissionID\"=%i,\"CanViewBoard\"='%s',\"CanViewOffLine\"='%s',\"CanEditProfile\"='%s',\"CanAddEvents\"='%s',\"CanPM\"='%s',\"CanSearch\"='%s',\"CanDoHTML\"='%s',\"CanUseBBags\"='%s',\"FloodControl\"=%i,\"SearchFlood\"=%i,\"HasModCP\"='%s',\"HasAdminCP\"='%s',\"ViewDBInfo\"='%s' WHERE \"id\"=%i", array($_POST['MemPermID'],$_POST['CanViewBoard'],$_POST['CanViewOffLine'],$_POST['CanEditProfile'],$_POST['CanAddEvents'],$_POST['CanPM'],$_POST['CanSearch'],$_POST['CanDoHTML'],$_POST['CanUseBBags'],$_POST['FloodControl'],$_POST['SearchFlood'],$_POST['HasModCP'],$_POST['HasAdminCP'],$_POST['ViewDBInfo'],$_POST['id'])); } 
+$dpmquery = sql_pre_query("UPDATE \"".$Settings['sqltable']."mempermissions\" SET \"PermissionID\"=%i,\"CanViewBoard\"='%s',\"CanViewOffLine\"='%s',\"CanEditProfile\"='%s',\"CanAddEvents\"='%s',\"CanPM\"='%s',\"CanSearch\"='%s',\"CanDoHTML\"='%s',\"CanUseBBags\"='%s',\"CanViewIPAddress\"='%s',\"CanViewUserAgent\"='%s',\"FloodControl\"=%i,\"SearchFlood\"=%i,\"HasModCP\"='%s',\"HasAdminCP\"='%s',\"ViewDBInfo\"='%s' WHERE \"id\"=%i", array($_POST['MemPermID'],$_POST['CanViewBoard'],$_POST['CanViewOffLine'],$_POST['CanEditProfile'],$_POST['CanAddEvents'],$_POST['CanPM'],$_POST['CanSearch'],$_POST['CanDoHTML'],$_POST['CanUseBBags'],$_POST['CanViewIPAddress'],$_POST['CanViewUserAgent'],$_POST['FloodControl'],$_POST['SearchFlood'],$_POST['HasModCP'],$_POST['HasAdminCP'],$_POST['ViewDBInfo'],$_POST['id'])); } 
 if($_POST['id']==1) {
 $dmquery = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"Name\"='%s',\"HiddenMember\"='%s',\"WarnLevel\"=%i,\"BanTime\"=%i,\"PostCount\"=%i,\"Karma\"=%i WHERE \"id\"=%i", array($_POST['MemName'],$_POST['MemHidden'],$_POST['MemWarnLevel'],$_POST['MemBanTime'],$_POST['MemPostCount'],$_POST['MemKarma'],$_POST['id'])); 
-$dpmquery = sql_pre_query("UPDATE \"".$Settings['sqltable']."mempermissions\" SET \"CanViewBoard\"='%s',\"CanViewOffLine\"='%s',\"CanEditProfile\"='%s',\"CanAddEvents\"='%s',\"CanPM\"='%s',\"CanSearch\"='%s',\"CanDoHTML\"='%s',\"CanUseBBags\"='%s',\"FloodControl\"=%i,\"SearchFlood\"=%i WHERE \"id\"=%i", array($_POST['CanViewBoard'],$_POST['CanViewOffLine'],$_POST['CanEditProfile'],$_POST['CanAddEvents'],$_POST['CanPM'],$_POST['CanSearch'],$_POST['CanDoHTML'],$_POST['CanUseBBags'],$_POST['FloodControl'],$_POST['SearchFlood'],$_POST['id'])); } }
+$dpmquery = sql_pre_query("UPDATE \"".$Settings['sqltable']."mempermissions\" SET \"CanViewBoard\"='%s',\"CanViewOffLine\"='%s',\"CanEditProfile\"='%s',\"CanAddEvents\"='%s',\"CanPM\"='%s',\"CanSearch\"='%s',\"CanDoHTML\"='%s',\"CanUseBBags\"='%s',\"CanViewIPAddress\"='%s',\"CanViewUserAgent\"='%s',\"FloodControl\"=%i,\"SearchFlood\"=%i WHERE \"id\"=%i", array($_POST['CanViewBoard'],$_POST['CanViewOffLine'],$_POST['CanEditProfile'],$_POST['CanAddEvents'],$_POST['CanPM'],$_POST['CanSearch'],$_POST['CanDoHTML'],$_POST['CanUseBBags'],$_POST['CanViewIPAddress'],$_POST['CanViewUserAgent'],$_POST['FloodControl'],$_POST['SearchFlood'],$_POST['id'])); } }
 sql_query($dmquery,$SQLStat);
 sql_query($dpmquery,$SQLStat); }
 ?>

@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: stats.php - Last Update: 09/29/2011 SVN 760 - Author: cooldude2k $
+    $FileInfo: stats.php - Last Update: 11/19/2011 SVN 771 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="stats.php"||$File3Name=="/stats.php") {
@@ -55,16 +55,16 @@ if(($AmIHiddenUser=="no"&&$UserSessInfo['UserID']>0)||$user_agent_check!==false)
 if($olmbn>0) { $MembersOnline .= ", "; }
 if($user_agent_check===false) {
 $uatitleadd = null;
-if($GroupInfo['HasAdminCP']=="yes") { $uatitleadd = " title=\"".$session_user_agent."\""; }
+if($GroupInfo['CanViewUserAgent']=="yes") { $uatitleadd = " title=\"".$session_user_agent."\""; }
 $MembersOnline .= "<a".$uatitleadd." href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UserSessInfo['UserID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">".$UserSessInfo['MemberName']."</a>"; 
-if($GroupInfo['HasAdminCP']=="yes") {
+if($GroupInfo['CanViewIPAddress']=="yes") {
 $MembersOnline .= " (<a title=\"".$session_ip_address."\" onclick=\"window.open(this.href);return false;\" href=\"".sprintf($IPCheckURL,$session_ip_address)."\">".$session_ip_address."</a>)"; }
 ++$olmn; ++$olmbn; }
 if($user_agent_check!==false) {
 $uatitleadd = null;
-if($GroupInfo['HasAdminCP']=="yes") { $uatitleadd = " title=\"".$session_user_agent."\""; }
+if($GroupInfo['CanViewUserAgent']=="yes") { $uatitleadd = " title=\"".$session_user_agent."\""; }
 $MembersOnline .= "<span".$uatitleadd.">".$user_agent_check."</span>"; 
-if($GroupInfo['HasAdminCP']=="yes") {
+if($GroupInfo['CanViewIPAddress']=="yes") {
 $MembersOnline .= " (<a title=\"".$session_ip_address."\" onclick=\"window.open(this.href);return false;\" href=\"".sprintf($IPCheckURL,$session_ip_address)."\">".$session_ip_address."</a>)"; }
 ++$olmbn; } }
 if($UserSessInfo['UserID']<=0||$AmIHiddenUser=="yes") {
@@ -72,9 +72,9 @@ if($user_agent_check===false) {
 ++$olan; } } }
 if($UserSessInfo['UserGroup']==$Settings['GuestGroup']) {
 /*$uatitleadd = null;
-if($GroupInfo['HasAdminCP']=="yes") { $uatitleadd = " title=\"".$session_user_agent."\""; }
+if($GroupInfo['CanViewUserAgent']=="yes") { $uatitleadd = " title=\"".$session_user_agent."\""; }
 $GuestsOnline .= "<a".$uatitleadd." href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$MemList['ID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">".$MemList['Name']."</a>";
-if($GroupInfo['HasAdminCP']=="yes") {
+if($GroupInfo['CanViewIPAddress']=="yes") {
 $GuestsOnline .= " (<a title=\"".$session_ip_address."\" onclick=\"window.open(this.href);return false;\" href=\"".sprintf($IPCheckURL,$session_ip_address)."\">".$session_ip_address."</a>)"; } */
 ++$olgn; }
 ++$uoli; }
@@ -108,7 +108,7 @@ if($nummembers<=0) { $NewestMem['ID'] = 0; }
 if($NewestMem['ID']<=0) { $NewestMem['ID'] = "0"; $NewestMem['Name'] = "Anonymous"; $NewestMem['IP'] = "127.0.0.1"; }
 $NewestMemTitle = null;
 $NewestMemExtraIP = null;
-if($GroupInfo['HasAdminCP']=="yes") {
+if($GroupInfo['CanViewIPAddress']=="yes") {
 $NewestMemTitle = " title=\"".$NewestMem['IP']."\"";
 $NewestMemExtraIP = " (<a title=\"".$NewestMem['IP']."\" onclick=\"window.open(this.href);return false;\" href=\"".sprintf($IPCheckURL,$NewestMem['IP'])."\">".$NewestMem['IP']."</a>)"; }
 $bdMonthChCk = GMTimeGet("m",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);

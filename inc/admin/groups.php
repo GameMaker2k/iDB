@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: groups.php - Last Update: 10/24/2011 SVN 763 - Author: cooldude2k $
+    $FileInfo: groups.php - Last Update: 11/19/2011 SVN 771 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="groups.php"||$File3Name=="/groups.php") {
@@ -190,6 +190,18 @@ sql_free_result($fr); ?>
 	<option value="on">yes</option>
 	</select></td>
 </tr><tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="CanViewIPAddress">Can view IP Address:</label></td>
+	<td style="width: 50%;"><select size="1" class="TextBox" name="CanViewIPAddress" id="CanViewIPAddress">
+	<option value="yes">yes</option>
+	<option value="no">no</option>
+	</select></td>
+</tr><tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="CanViewUserAgent">Can view user agent:</label></td>
+	<td style="width: 50%;"><select size="1" class="TextBox" name="CanViewUserAgent" id="CanViewUserAgent">
+	<option value="yes">yes</option>
+	<option value="no">no</option>
+	</select></td>
+</tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="ViewDBInfo">Can view Database info:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="ViewDBInfo" id="ViewDBInfo">
 	<option selected="selected" value="off">no</option>
@@ -249,8 +261,8 @@ $errorstr = $errorstr."Your Group Name is too big.<br />\n"; }
 if ($Error!="Yes") {
 redirect("refresh",$rbasedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=groups",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],FALSE),"4");
 $admincptitle = " ".$ThemeSet['TitleDivider']." Updating Settings";
-$query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."groups\" (\"Name\", \"PermissionID\", \"NamePrefix\", \"NameSuffix\", \"CanViewBoard\", \"CanViewOffLine\", \"CanEditProfile\", \"CanAddEvents\", \"CanPM\", \"CanSearch\", \"CanExecPHP\", \"CanDoHTML\", \"CanUseBBags\", \"CanModForum\", \"FloodControl\", \"SearchFlood\", \"PromoteTo\", \"PromotePosts\", \"PromoteKarma\", \"HasModCP\", \"HasAdminCP\", \"ViewDBInfo\") VALUES\n".
-"('%s', %i, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', 'no', '%s', '%s', '%s', %i, %i, %i, %i, %i, '%s', '%s', '%s')", array($_POST['GroupName'],$_POST['PermissionID'],$_POST['NamePrefix'],$_POST['NameSuffix'],$_POST['CanViewBoard'],$_POST['CanViewOffLine'],$_POST['CanEditProfile'],$_POST['CanAddEvents'],$_POST['CanPM'],$_POST['CanSearch'],$_POST['CanDoHTML'],$_POST['CanUseBBags'],$_POST['HasModCP'],$_POST['FloodControl'],$_POST['SearchFlood'],$_POST['PromoteTo'],$_POST['PromotePosts'],$_POST['PromoteKarma'],$_POST['HasModCP'],$_POST['HasAdminCP'],$_POST['ViewDBInfo']));
+$query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."groups\" (\"Name\", \"PermissionID\", \"NamePrefix\", \"NameSuffix\", \"CanViewBoard\", \"CanViewOffLine\", \"CanEditProfile\", \"CanAddEvents\", \"CanPM\", \"CanSearch\", \"CanExecPHP\", \"CanDoHTML\", \"CanUseBBags\", \"CanModForum\", \"CanViewIPAddress\", \"CanViewUserAgent\", \"FloodControl\", \"SearchFlood\", \"PromoteTo\", \"PromotePosts\", \"PromoteKarma\", \"HasModCP\", \"HasAdminCP\", \"ViewDBInfo\") VALUES\n".
+"('%s', %i, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', 'no', '%s', '%s', '%s', '%s', '%s', %i, %i, %i, %i, %i, '%s', '%s', '%s')", array($_POST['GroupName'],$_POST['PermissionID'],$_POST['NamePrefix'],$_POST['NameSuffix'],$_POST['CanViewBoard'],$_POST['CanViewOffLine'],$_POST['CanEditProfile'],$_POST['CanAddEvents'],$_POST['CanPM'],$_POST['CanSearch'],$_POST['CanDoHTML'],$_POST['CanUseBBags'],$_POST['HasModCP'],$_POST['CanViewIPAddress'],$_POST['CanViewUserAgent'],$_POST['FloodControl'],$_POST['SearchFlood'],$_POST['PromoteTo'],$_POST['PromotePosts'],$_POST['PromoteKarma'],$_POST['HasModCP'],$_POST['HasAdminCP'],$_POST['ViewDBInfo']));
 sql_query($query,$SQLStat);
 if(!is_numeric($_POST['GroupPerm'])) { $_POST['GroupPerm'] = "0"; }
 $getperidq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" ORDER BY \"id\" ASC", array(null));
@@ -503,6 +515,8 @@ $CanPM = sql_result($preresult,0,"CanPM");
 $CanSearch = sql_result($preresult,0,"CanSearch");
 $CanDoHTML = sql_result($preresult,0,"CanDoHTML");
 $CanUseBBags = sql_result($preresult,0,"CanUseBBags");
+$CanViewIPAddress = sql_result($preresult,0,"CanViewIPAddress");
+$CanViewUserAgent = sql_result($preresult,0,"CanViewUserAgent");
 $FloodControl = sql_result($preresult,0,"FloodControl");
 $SearchFlood = sql_result($preresult,0,"SearchFlood");
 $PromoteTo = sql_result($preresult,0,"PromoteTo");
@@ -644,6 +658,20 @@ sql_free_result($fr); ?>
 	<option value="no">no</option>
 	</select></td>
 </tr><tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="CanViewIPAddress">Can view IP Address:</label></td>
+	<td style="width: 50%;"><select size="1" class="TextBox" name="CanViewIPAddress" id="CanViewIPAddress">
+	<option selected="selected" value="<?php echo $CanViewIPAddress; ?>">Old Value (<?php echo $CanViewIPAddress; ?>)</option>
+	<option value="yes">yes</option>
+	<option value="no">no</option>
+	</select></td>
+</tr><tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="CanViewUserAgent">Can view user agent:</label></td>
+	<td style="width: 50%;"><select size="1" class="TextBox" name="CanViewUserAgent" id="CanViewUserAgent">
+	<option selected="selected" value="<?php echo $CanViewUserAgent; ?>">Old Value (<?php echo $CanViewUserAgent; ?>)</option>
+	<option value="yes">yes</option>
+	<option value="no">no</option>
+	</select></td>
+</tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="ViewDBInfo">Can view Database info:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="ViewDBInfo" id="ViewDBInfo">
 	<option selected="selected" value="<?php echo $ViewDBInfo; ?>">Old Value (<?php echo $ViewDBInfo; ?>)</option>
@@ -721,9 +749,9 @@ sql_query($query,$SQLStat);
 $query = sql_pre_query("UPDATE \"".$Settings['sqltable']."catpermissions\" SET \"Name\"='%s' WHERE \"Name\"='%s'", array($_POST['GroupName'],$OldGroupName));
 sql_query($query,$SQLStat); }
 if($_POST['id']!=1) {
-$query = sql_pre_query("UPDATE \"".$Settings['sqltable']."groups\" SET \"Name\"='%s',\"NamePrefix\"='%s',\"NameSuffix\"='%s',\"CanViewBoard\"='%s',\"CanViewOffLine\"='%s',\"CanEditProfile\"='%s',\"CanAddEvents\"='%s',\"CanPM\"='%s',\"CanSearch\"='%s',\"CanDoHTML\"='%s',\"CanUseBBags\"='%s',\"FloodControl\"=%i,\"SearchFlood\"=%i,\"PromoteTo\"=%i,\"PromotePosts\"=%i,\"PromoteKarma\"=%i,\"HasModCP\"='%s',\"HasAdminCP\"='%s',\"ViewDBInfo\"='%s' WHERE \"id\"=%i", array($_POST['GroupName'],$_POST['NamePrefix'],$_POST['NameSuffix'],$_POST['CanViewBoard'],$_POST['CanViewOffLine'],$_POST['CanEditProfile'],$_POST['CanAddEvents'],$_POST['CanPM'],$_POST['CanSearch'],$_POST['CanDoHTML'],$_POST['CanUseBBags'],$_POST['FloodControl'],$_POST['SearchFlood'],$_POST['PromoteTo'],$_POST['PromotePosts'],$_POST['PromoteKarma'],$_POST['HasModCP'],$_POST['HasAdminCP'],$_POST['ViewDBInfo'],$_POST['id'])); }
+$query = sql_pre_query("UPDATE \"".$Settings['sqltable']."groups\" SET \"Name\"='%s',\"NamePrefix\"='%s',\"NameSuffix\"='%s',\"CanViewBoard\"='%s',\"CanViewOffLine\"='%s',\"CanEditProfile\"='%s',\"CanAddEvents\"='%s',\"CanPM\"='%s',\"CanSearch\"='%s',\"CanDoHTML\"='%s',\"CanUseBBags\"='%s',CanViewIPAddress='%s',CanViewUserAgent='%s',\"FloodControl\"=%i,\"SearchFlood\"=%i,\"PromoteTo\"=%i,\"PromotePosts\"=%i,\"PromoteKarma\"=%i,\"HasModCP\"='%s',\"HasAdminCP\"='%s',\"ViewDBInfo\"='%s' WHERE \"id\"=%i", array($_POST['GroupName'],$_POST['NamePrefix'],$_POST['NameSuffix'],$_POST['CanViewBoard'],$_POST['CanViewOffLine'],$_POST['CanEditProfile'],$_POST['CanAddEvents'],$_POST['CanPM'],$_POST['CanSearch'],$_POST['CanDoHTML'],$_POST['CanUseBBags'],$_POST['CanViewIPAddress'],$_POST['CanViewUserAgent'],$_POST['FloodControl'],$_POST['SearchFlood'],$_POST['PromoteTo'],$_POST['PromotePosts'],$_POST['PromoteKarma'],$_POST['HasModCP'],$_POST['HasAdminCP'],$_POST['ViewDBInfo'],$_POST['id'])); }
 if($_POST['id']==1) {
-$query = sql_pre_query("UPDATE \"".$Settings['sqltable']."groups\" SET \"Name\"='%s',\"NamePrefix\"='%s',\"NameSuffix\"='%s',\"CanViewBoard\"='%s',\"CanViewOffLine\"='%s',\"CanEditProfile\"='%s',\"CanAddEvents\"='%s',\"CanPM\"='%s',\"CanSearch\"='%s',\"CanDoHTML\"='%s',\"CanUseBBags\"='%s',\"FloodControl\"=%i,\"SearchFlood\"=%i WHERE \"id\"=%i", array($_POST['GroupName'],$_POST['NamePrefix'],$_POST['NameSuffix'],$_POST['CanViewBoard'],$_POST['CanViewOffLine'],$_POST['CanEditProfile'],$_POST['CanAddEvents'],$_POST['CanPM'],$_POST['CanSearch'],$_POST['CanDoHTML'],$_POST['CanUseBBags'],$_POST['FloodControl'],$_POST['SearchFlood'],$_POST['id'])); }
+$query = sql_pre_query("UPDATE \"".$Settings['sqltable']."groups\" SET \"Name\"='%s',\"NamePrefix\"='%s',\"NameSuffix\"='%s',\"CanViewBoard\"='%s',\"CanViewOffLine\"='%s',\"CanEditProfile\"='%s',\"CanAddEvents\"='%s',\"CanPM\"='%s',\"CanSearch\"='%s',\"CanDoHTML\"='%s',\"CanUseBBags\"='%s',CanViewIPAddress='%s',CanViewUserAgent='%s',\"FloodControl\"=%i,\"SearchFlood\"=%i WHERE \"id\"=%i", array($_POST['GroupName'],$_POST['NamePrefix'],$_POST['NameSuffix'],$_POST['CanViewBoard'],$_POST['CanViewOffLine'],$_POST['CanEditProfile'],$_POST['CanAddEvents'],$_POST['CanPM'],$_POST['CanSearch'],$_POST['CanDoHTML'],$_POST['CanUseBBags'],$_POST['CanViewIPAddress'],$_POST['CanViewUserAgent'],$_POST['FloodControl'],$_POST['SearchFlood'],$_POST['id'])); }
 sql_query($query,$SQLStat); } } }  
 $doupdate = false;
 if(isset($_POST['id'])&&$_POST['subact']=="editnow") { 

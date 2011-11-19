@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: groupsetup.php - Last Update: 08/12/2011 SVN 748 - Author: cooldude2k $
+    $FileInfo: groupsetup.php - Last Update: 11/19/2011 SVN 771 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="groupsetup.php"||$File3Name=="/groupsetup.php") {
@@ -297,6 +297,20 @@ if($GroupInfo['HasAdminCP']=="group") {
 $GroupInfo['HasAdminCP']=sql_result($gruresult,0,"HasAdminCP");
 if($GroupInfo['HasAdminCP']!="yes"&&$GroupInfo['HasAdminCP']!="no") {
 	$GroupInfo['HasAdminCP'] = "no"; } }
+$GroupInfo['CanViewIPAddress']=sql_result($mempreresult,0,"CanViewIPAddress");
+if($GroupInfo['CanViewIPAddress']!="yes"&&$GroupInfo['CanViewIPAddress']!="no"&&$GroupInfo['CanViewIPAddress']!="group") {
+	$GroupInfo['CanViewIPAddress'] = "no"; }
+if($GroupInfo['CanViewIPAddress']=="group") {
+$GroupInfo['CanViewIPAddress']=sql_result($gruresult,0,"CanViewIPAddress");
+if($GroupInfo['CanViewIPAddress']!="yes"&&$GroupInfo['CanViewIPAddress']!="no") {
+	$GroupInfo['CanViewIPAddress'] = "no"; } }
+$GroupInfo['CanViewUserAgent']=sql_result($mempreresult,0,"CanViewUserAgent");
+if($GroupInfo['CanViewUserAgent']!="yes"&&$GroupInfo['CanViewUserAgent']!="no"&&$GroupInfo['CanViewUserAgent']!="group") {
+	$GroupInfo['CanViewUserAgent'] = "no"; }
+if($GroupInfo['CanViewUserAgent']=="group") {
+$GroupInfo['CanViewUserAgent']=sql_result($gruresult,0,"CanViewUserAgent");
+if($GroupInfo['CanViewUserAgent']!="yes"&&$GroupInfo['CanViewUserAgent']!="no") {
+	$GroupInfo['CanViewUserAgent'] = "no"; } }
 $GroupInfo['ViewDBInfo']=sql_result($mempreresult,0,"ViewDBInfo");
 if($GroupInfo['ViewDBInfo']!="yes"&&$GroupInfo['ViewDBInfo']!="no"&&$GroupInfo['ViewDBInfo']!="group") {
 	$GroupInfo['ViewDBInfo'] = "no"; }

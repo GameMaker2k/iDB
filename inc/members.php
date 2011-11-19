@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 10/10/2011 SVN 762 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 11/19/2011 SVN 771 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -547,7 +547,7 @@ if($AmIHiddenUser=="no"&&$UserSessInfo['UserID']>0) {
 <tr id="Member<?php echo $i; ?>" class="TableRow3">
 <td class="TableColumn3" style="text-align: center;"><?php echo $UserSessInfo['UserID']; ?></td>
 <td class="TableColumn3" style="text-align: center;"><a<?php if($GroupInfo['HasAdminCP']=="yes") { ?> title="<?php echo $session_user_agent; ?>"<?php } ?> href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UserSessInfo['UserID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>"><?php echo $UserSessInfo['MemberName']; ?></a>
-<?php if($GroupInfo['HasAdminCP']=="yes") { ?> ( <a title="<?php echo $session_ip_address; ?>" onclick="window.open(this.href);return false;" href="<?php echo sprintf($IPCheckURL,$session_ip_address); ?>"><?php echo $session_ip_address; ?></a> )<?php } ?></td>
+<?php if($GroupInfo['CanViewIPAddress']=="yes") { ?> ( <a title="<?php echo $session_ip_address; ?>" onclick="window.open(this.href);return false;" href="<?php echo sprintf($IPCheckURL,$session_ip_address); ?>"><?php echo $session_ip_address; ?></a> )<?php } ?></td>
 <td class="TableColumn3" style="text-align: center;"><?php echo $UserSessInfo['UserGroup']; ?></td>
 <td class="TableColumn3" style="text-align: center;"><a href="<?php echo url_maker($PreFileName,"no+ext",$PreExpPage,$Settings['qstr'],$Settings['qsep'],null,null); ?>"><?php echo $UserSessInfo['PreViewingTitle']; ?> <?php echo $UserSessInfo['ViewingTitle']; ?></a></td>
 <td class="TableColumn3" style="text-align: center;"><?php echo $session_expires; ?></td>
@@ -565,7 +565,7 @@ if(user_agent_check($session_user_agent)) {
 <tr id="Member<?php echo $i; ?>" class="TableRow3">
 <td class="TableColumn3" style="text-align: center;"><?php echo $UserSessInfo['UserID']; ?></td>
 <td class="TableColumn3" style="text-align: center;"><span<?php if($GroupInfo['HasAdminCP']=="yes") { ?> title="<?php echo $session_user_agent; ?>"<?php } ?>><?php echo $UserSessInfo['GuestName']; ?></span>
-<?php if($GroupInfo['HasAdminCP']=="yes") { ?> ( <a title="<?php echo $session_ip_address; ?>" onclick="window.open(this.href);return false;" href="<?php echo sprintf($IPCheckURL,$session_ip_address); ?>"><?php echo $session_ip_address; ?></a> )<?php } ?></td>
+<?php if($GroupInfo['CanViewIPAddress']=="yes") { ?> ( <a title="<?php echo $session_ip_address; ?>" onclick="window.open(this.href);return false;" href="<?php echo sprintf($IPCheckURL,$session_ip_address); ?>"><?php echo $session_ip_address; ?></a> )<?php } ?></td>
 <td class="TableColumn3" style="text-align: center;"><?php echo $UserSessInfo['UserGroup']; ?></td>
 <td class="TableColumn3" style="text-align: center;"><a href="<?php echo url_maker($PreFileName,"no+ext",$PreExpPage,$Settings['qstr'],$Settings['qsep'],null,null); ?>"><?php echo $UserSessInfo['PreViewingTitle']; ?> <?php echo $UserSessInfo['ViewingTitle']; ?></a></td>
 <td class="TableColumn3" style="text-align: center;"><?php echo $session_expires; ?></td>
@@ -712,7 +712,7 @@ $_SESSION['ViewingTitle'] = $ViewMem['Name'];
 <div style="text-align: center;">
 Name: <?php echo $ViewMem['Name']; ?><br />
 Title: <?php echo $ViewMem['Title']; ?>
-<?php if($GroupInfo['HasAdminCP']=="yes") { ?>
+<?php if($GroupInfo['CanViewIPAddress']=="yes") { ?>
 <br />User IP: <a onclick="window.open(this.href);return false;" href="<?php echo sprintf($IPCheckURL,$ViewMem['IP']); ?>">
 <?php echo $ViewMem['IP']; echo "</a>"; } ?></div>
 </td>
@@ -1526,8 +1526,8 @@ $idncheck = sql_result($idresult,0,"id");
 $idncheck = intval($idncheck); }
 sql_free_result($idresult);
 if($yourid!=$idncheck) { $yourid = $idncheck; }
-$query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."mempermissions\" (\"id\", \"PermissionID\", \"CanViewBoard\", \"CanViewOffLine\", \"CanEditProfile\", \"CanAddEvents\", \"CanPM\", \"CanSearch\", \"CanExecPHP\", \"CanDoHTML\", \"CanUseBBags\", \"CanModForum\", \"FloodControl\", \"SearchFlood\", \"HasModCP\", \"HasAdminCP\", \"ViewDBInfo\") VALUES\n". 
-"(%i, %i, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %i, %i, '%s', '%s', '%s')", array($yourid, 0, "group", "group", "group", "group", "group", "group", "group", "group", "group", "group", -1, -1, "group", "group", "group"));
+$query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."mempermissions\" (\"id\", \"PermissionID\", \"CanViewBoard\", \"CanViewOffLine\", \"CanEditProfile\", \"CanAddEvents\", \"CanPM\", \"CanSearch\", \"CanExecPHP\", \"CanDoHTML\", \"CanUseBBags\", \"CanModForum\", \"CanViewIPAddress\", \"CanViewUserAgent\", \"FloodControl\, \"SearchFlood\", \"HasModCP\", \"HasAdminCP\", \"ViewDBInfo\") VALUES\n". 
+"(%i, %i, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %i, %i, '%s', '%s', '%s')", array($yourid, 0, "group", "group", "group", "group", "group", "group", "group", "group", "group", "group", "group", "group", -1, -1, "group", "group", "group"));
 //"(%i, %i, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %i, %i, '%s', '%s', '%s')", array($yourid, 0, $PreUserPer['CanViewBoard'], $PreUserPer['CanViewOffLine'], $PreUserPer['CanEditProfile'], $PreUserPer['CanAddEvents'], $PreUserPer['CanPM'], $PreUserPer['CanSearch'], $PreUserPer['CanExecPHP'], $PreUserPer['CanDoHTML'], $PreUserPer['CanUseBBags'], $PreUserPer['CanModForum'], $PreUserPer['FloodControl'], $PreUserPer['SearchFlood'], $PreUserPer['HasModCP'], $PreUserPer['HasAdminCP'], $PreUserPer['ViewDBInfo']));
 sql_query($query,$SQLStat);
 if(isset($_POST['referrerid'])&&is_numeric($_POST['referrerid'])) {

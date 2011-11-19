@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: replies.php - Last Update: 11/17/2011 SVN 770 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 11/19/2011 SVN 771 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -510,7 +510,7 @@ if($User1ID<=0||$User1Hidden=="yes") { echo 0; }
 Posts: <?php echo $User1PostCount; ?><br />
 Karma: <?php echo $User1Karma; ?><br />
 Joined: <?php echo $User1Joined; ?><br />
-<?php if($GroupInfo['HasAdminCP']=="yes") { ?>
+<?php if($GroupInfo['CanViewIPAddress']=="yes") { ?>
 User IP: <a onclick="window.open(this.href);return false;" href="<?php echo sprintf($IPCheckURL,$User1IP); ?>">
 <?php echo $User1IP; ?></a><br />
 <?php if($ipshow=="two") { ?>
