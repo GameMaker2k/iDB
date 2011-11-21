@@ -39,6 +39,15 @@ color: #606060;
 text-decoration: none;
 }
 
+.NavLinks {
+font-weight: bold;
+padding: 6px 0px 6px 0px;
+}
+
+.forumname {
+font-weight: bold;
+}
+
 .NavBar2 a:link, .NavBar2 a:visited, .NavBar2 a:active, .NavBar2 a:hover {
 text-decoration: none;
 color: #000000;
