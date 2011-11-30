@@ -11,7 +11,7 @@
     Copyright 2004-2011 iDB Support - http://idb.berlios.de/
     Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: subforums.php - Last Update: 11/17/2011 SVN 770 - Author: cooldude2k $
+    $FileInfo: subforums.php - Last Update: 11/29/2011 SVN 775 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="subforums.php"||$File3Name=="/subforums.php") {
@@ -168,14 +168,15 @@ $NumPosts = $NumsPosts + $NumPosts;
 $SubsForumID=sql_result($apcresult,$apci,"id");
 $SubsForumName=sql_result($apcresult,$apci,"Name");
 $SubsForumType=sql_result($apcresult,$apci,"ForumType");
-$SubsForumShowTopics=sql_result($result,$i,"CanHaveTopics");
+$SubsForumShowTopics=sql_result($apcresult,$apci,"CanHaveTopics");
+$SubsForumDescription=sql_result($apcresult,$apci,"Description");
 if(isset($PermissionInfo['CanViewForum'][$SubsForumID])&&
 	$PermissionInfo['CanViewForum'][$SubsForumID]=="yes") {
 $ExStr = ""; if ($SubsForumType!="redirect"&&
     $SubsForumShowTopics!="no") { $ExStr = "&page=1"; }
-$sfurl = "<a href=\"";
+//$sfurl = "<a href=\"";
 $sfurl = url_maker($exfile[$SubsForumType],$Settings['file_ext'],"act=view&id=".$SubsForumID.$ExStr,$Settings['qstr'],$Settings['qsep'],$prexqstr[$SubsForumType],$exqstr[$SubsForumType]);
-$sfurl = "<a href=\"".$sfurl."\">".$SubsForumName."</a>";
+$sfurl = "<a title=\"".$SubsForumDescription."\" href=\"".$sfurl."\">".$SubsForumName."</a>";
 if($apcl==1) {
 $sflist = "Subforums:";
 $sflist = $sflist." ".$sfurl; }
