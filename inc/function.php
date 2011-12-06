@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2011 iDB Support - http://idb.berlios.de/
-    Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
+    Copyright 2004-2012 iDB Support - http://idb.berlios.de/
+    Copyright 2004-2012 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: function.php - Last Update: 08/10/2011 SVN 747 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 12/29/2012 SVN 776 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -606,8 +606,10 @@ $logtxt = preg_replace("/\%\{MemberGroupID\}m/s", $LogGroupID, $logtxt);
 $logtxt = preg_replace("/\{percent\}p/s", "%", $logtxt);
 if(isset($logfile)&&$logfile!==null) {
 	$fp = fopen($logfile, "a+");
-	$logtxtnew = $logtxt."\r\n";
-	fwrite($fp, $logtxtnew, strlen($logtxtnew));
+	if (flock($fp, LOCK_EX)) {
+		$logtxtnew = $logtxt."\r\n";
+		fwrite($fp, $logtxtnew, strlen($logtxtnew)); 
+		flock($fp, LOCK_UN); }
 	fclose($fp); 
 	@chmod($logfile, 0666); }
 return $logtxt; }
