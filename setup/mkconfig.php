@@ -8,11 +8,11 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2011 iDB Support - http://idb.berlios.de/
-    Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
+    Copyright 2004-2012 iDB Support - http://idb.berlios.de/
+    Copyright 2004-2012 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mkconfig.php - Last Update: 10/25/2011 SVN 764 - Author: cooldude2k $
+    $FileInfo: mkconfig.php - Last Update: 12/29/2011 SVN 778 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mkconfig.php"||$File3Name=="/mkconfig.php") {
@@ -394,6 +394,7 @@ $BoardSettings=$pretext2[0]."\n".
 "\$SettDir['admin'] = 'inc/admin/';\n".
 "\$SettDir['sqldumper'] = 'inc/admin/sqldumper/';\n".
 "\$SettDir['mod'] = 'inc/mod/';\n".
+"\$SettDir['mplayer'] = 'inc/mplayer/';\n".
 "\$SettDir['themes'] = 'themes/';\n".$pretext2[3]."\n?>";
 $BoardSettingsBak = $pretext.$settcheck.$BoardSettings;
 $BoardSettings = $pretext.$settcheck.$BoardSettings;

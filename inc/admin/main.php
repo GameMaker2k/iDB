@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2011 iDB Support - http://idb.berlios.de/
-    Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
+    Copyright 2004-2012 iDB Support - http://idb.berlios.de/
+    Copyright 2004-2012 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: main.php - Last Update: 10/25/2011 SVN 764 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 12/29/2011 SVN 778 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -242,6 +242,7 @@ $BoardSettings=$pretext2[0]."\n".
 "\$SettDir['admin'] = ".null_string($SettDir['admin']).";\n".
 "\$SettDir['sqldumper'] = ".null_string($SettDir['sqldumper']).";\n".
 "\$SettDir['mod'] = ".null_string($SettDir['mod']).";\n".
+"\$SettDir['mplayer'] = ".null_string($SettDir['mplayer']).";\n".
 "\$SettDir['themes'] = ".null_string($SettDir['themes']).";\n".$pretext2[3]."\n?>";
 $BoardSettingsBak = $pretext.$settcheck.$BoardSettings;
 $BoardSettings = $pretext.$settcheck.$BoardSettings;

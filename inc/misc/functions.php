@@ -8,8 +8,8 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2011 iDB Support - http://idb.berlios.de/
-    Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
+    Copyright 2004-2012 iDB Support - http://idb.berlios.de/
+    Copyright 2004-2012 Game Maker 2k - http://gamemaker2k.org/
 
     $FileInfo: functions.php - Last Update: 10/10/2011 SVN 762 - Author: cooldude2k $
 */
@@ -61,7 +61,12 @@ if ($_GET['act']=="phpcredits") { phpcredits(); exit(); }
 // Renee Marilyn Sabonis is the best ever. ^_^
 	$Names['RS'] = "Renee Sabonis";
 define("_renee_", $Names['RS']);
-$CD2k_Loves="Renee Sabonis"; $I_Love="Renee Sabonis";
+$CD2k_Loves=$Names['RS']; $I_Love=$Names['RS'];
+function header_protocol($header) {
+if(isset($_SERVER['SERVER_PROTOCOL'])&&strstr($_SERVER['SERVER_PROTOCOL'],"/1.0")) {
+	return "HTTP/1.0 ".$header; }
+else {
+	return "HTTP/1.1 ".$header; } }
 // Change the title and gzip page
 function change_title($new_title,$use_gzip="off",$gzip_type="gzip") {
 global $Settings,$urlstatus;
