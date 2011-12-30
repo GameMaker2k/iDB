@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2011 iDB Support - http://idb.berlios.de/
-    Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
+    Copyright 2004-2012 iDB Support - http://idb.berlios.de/
+    Copyright 2004-2012 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: useragents.php - Last Update: 09/21/2011 SVN 759 - Author: cooldude2k $
+    $FileInfo: useragents.php - Last Update: 12/30/2011 SVN 780 - Author: cooldude2k $
 */
 // User Agent Checker
 function user_agent_check($user_agent) {
@@ -22,6 +22,8 @@ if($Settings['log_spiders_bots']!=="yes") {
 	return false; }
 if (preg_match("/".preg_quote("; 008/", "/")."/i", $user_agent)) {
     return "80legs"; }
+if (preg_match("/".preg_quote("Aboundex", "/")."/i", $user_agent)) {
+    return "Aboundex"; }
 if (preg_match("/".preg_quote("AboutUsBot", "/")."/i", $user_agent)) {
     return "AboutUs"; }
 if (preg_match("/".preg_quote("AhrefsBot", "/")."/i", $user_agent)) {
@@ -76,6 +78,8 @@ if (preg_match("/".preg_quote("facebookexternalhit", "/")."/i", $user_agent)) {
     return "Facebook"; }
 if (preg_match("/".preg_quote("Feedtrace-bot", "/")."/i", $user_agent)) {
     return "FeedtraceBot"; }
+if (preg_match("/".preg_quote("FreeWebMonitoring", "/")."/i", $user_agent)) {
+    return "FreeWebMonitoring"; }
 if (preg_match("/".preg_quote("FlightDeckReportsBot", "/")."/i", $user_agent)) {
     return "FlightDeck Reports"; }
 if (preg_match("/".preg_quote("GIDBot", "/")."/i", $user_agent)) {
