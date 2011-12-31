@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2011 iDB Support - http://idb.berlios.de/
-    Copyright 2004-2011 Game Maker 2k - http://gamemaker2k.org/
+    Copyright 2004-2012 iDB Support - http://idb.berlios.de/
+    Copyright 2004-2012 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: preindex.php - Last Update: 07/09/2011 SVN 702 - Author: cooldude2k $
+    $FileInfo: preindex.php - Last Update: 12/30/2011 SVN 781 - Author: cooldude2k $
 */
 $pretime = explode(" ", microtime());
 $utime = $pretime[0];

@@ -1,5 +1,5 @@
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//        $FileInfo: README - Last Update: 12/07/2010 SVN 600 - Author: cooldude2k $          
+//        $FileInfo: README - Last Update: 12/30/2011 SVN 781 - Author: cooldude2k $          
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //                       __________________________________________
 //                      //        Internet Discussion Boards      \\
@@ -19,7 +19,7 @@
 //                     ||              Renate ( unknown )          ||
 //                     ||             Jonathan ( unknown )         ||
 //                     ||             czambran ( unknown )         ||
-//                      \\       (c) 2004-2011 Game Maker 2k      //
+//                      \\       (c) 2004-2012 Game Maker 2k      //
 //                       """"""""""""""""""""""""""""""""""""""""""
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // UTF8 helper functions
@@ -34,8 +34,8 @@
 // Copyright (C) 2005-2006, Edward Eliot.
 // All rights reserved.
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// Copyright 2004-2011 Cool Dude 2k - http://intdb.sourceforge.net/ http://idb.berlios.net/
-// Copyright 2004-2011 Game Maker 2k - http://upload.idb.s1.jcink.com/ 
+// Copyright 2004-2012 Cool Dude 2k - http://intdb.sourceforge.net/ http://idb.berlios.net/
+// Copyright 2004-2012 Game Maker 2k - http://upload.idb.s1.jcink.com/ 
 // http://s1.jcink.com/s/host/idb/  http://idb.everywebhost.com/  http://cooldude2k.id.funpic.org/
 //  	        Game Maker 2k Copyright 2000-2009 Cool Dude 2k (Kazuki Przyborowski), René Johnson
 // Emoticons made by Jcink for TextfileBB (https://launchpad.net/tfbb) Under GPL License
@@ -44,7 +44,7 @@
 // How to delete installer if error happens:
 // Delete install.php file and the setup folder/dir and everyting inside it also.
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// DejaVu fonts 2.26 (c)2004-2011 DejaVu fonts team
+// DejaVu fonts 2.26 (c)2004-2012 DejaVu fonts team
 // The DejaVu fonts are a font family based on the Bitstream Vera Fonts
 // (http://gnome.org/fonts/). Its purpose is to provide a wider range of
 // characters (see status.txt for more information) while maintaining the
