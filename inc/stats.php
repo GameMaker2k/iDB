@@ -11,7 +11,7 @@
     Copyright 2004-2012 iDB Support - http://idb.berlios.de/
     Copyright 2004-2012 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: stats.php - Last Update: 12/30/2011 SVN 781 - Author: cooldude2k $
+    $FileInfo: stats.php - Last Update: 01/01/2012 SVN 784 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="stats.php"||$File3Name=="/stats.php") {
@@ -55,14 +55,14 @@ if(($AmIHiddenUser=="no"&&$UserSessInfo['UserID']>0)||$user_agent_check!==false)
 if($olmbn>0) { $MembersOnline .= ", "; }
 if($user_agent_check===false) {
 $uatitleadd = null;
-if($GroupInfo['CanViewUserAgent']=="yes") { $uatitleadd = " title=\"".$session_user_agent."\""; }
+if($GroupInfo['CanViewUserAgent']=="yes") { $uatitleadd = " title=\"".htmlentities($session_user_agent, ENT_QUOTES, $Settings['charset'])."\""; }
 $MembersOnline .= "<a".$uatitleadd." href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UserSessInfo['UserID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">".$UserSessInfo['MemberName']."</a>"; 
 if($GroupInfo['CanViewIPAddress']=="yes") {
 $MembersOnline .= " (<a title=\"".$session_ip_address."\" onclick=\"window.open(this.href);return false;\" href=\"".sprintf($IPCheckURL,$session_ip_address)."\">".$session_ip_address."</a>)"; }
 ++$olmn; ++$olmbn; }
 if($user_agent_check!==false) {
 $uatitleadd = null;
-if($GroupInfo['CanViewUserAgent']=="yes") { $uatitleadd = " title=\"".$session_user_agent."\""; }
+if($GroupInfo['CanViewUserAgent']=="yes") { $uatitleadd = " title=\"".htmlentities($session_user_agent, ENT_QUOTES, $Settings['charset'])."\""; }
 $MembersOnline .= "<span".$uatitleadd.">".$user_agent_check."</span>"; 
 if($GroupInfo['CanViewIPAddress']=="yes") {
 $MembersOnline .= " (<a title=\"".$session_ip_address."\" onclick=\"window.open(this.href);return false;\" href=\"".sprintf($IPCheckURL,$session_ip_address)."\">".$session_ip_address."</a>)"; }
@@ -72,7 +72,7 @@ if($user_agent_check===false) {
 ++$olan; } } }
 if($UserSessInfo['UserGroup']==$Settings['GuestGroup']) {
 /*$uatitleadd = null;
-if($GroupInfo['CanViewUserAgent']=="yes") { $uatitleadd = " title=\"".$session_user_agent."\""; }
+if($GroupInfo['CanViewUserAgent']=="yes") { $uatitleadd = " title=\"".htmlentities($session_user_agent, ENT_QUOTES, $Settings['charset'])."\""; }
 $GuestsOnline .= "<a".$uatitleadd." href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$MemList['ID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">".$MemList['Name']."</a>";
 if($GroupInfo['CanViewIPAddress']=="yes") {
 $GuestsOnline .= " (<a title=\"".$session_ip_address."\" onclick=\"window.open(this.href);return false;\" href=\"".sprintf($IPCheckURL,$session_ip_address)."\">".$session_ip_address."</a>)"; } */

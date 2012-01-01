@@ -11,7 +11,7 @@
     Copyright 2004-2012 iDB Support - http://idb.berlios.de/
     Copyright 2004-2012 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 12/30/2011 SVN 781 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 01/01/2012 SVN 784 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -546,7 +546,7 @@ if($AmIHiddenUser=="no"&&$UserSessInfo['UserID']>0) {
 ?>
 <tr id="Member<?php echo $i; ?>" class="TableRow3">
 <td class="TableColumn3" style="text-align: center;"><?php echo $UserSessInfo['UserID']; ?></td>
-<td class="TableColumn3" style="text-align: center;"><a<?php if($GroupInfo['HasAdminCP']=="yes") { ?> title="<?php echo $session_user_agent; ?>"<?php } ?> href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UserSessInfo['UserID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>"><?php echo $UserSessInfo['MemberName']; ?></a>
+<td class="TableColumn3" style="text-align: center;"><a<?php if($GroupInfo['HasAdminCP']=="yes") { ?> title="<?php echo htmlentities($session_user_agent, ENT_QUOTES, $Settings['charset']); ?>"<?php } ?> href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UserSessInfo['UserID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>"><?php echo $UserSessInfo['MemberName']; ?></a>
 <?php if($GroupInfo['CanViewIPAddress']=="yes") { ?> ( <a title="<?php echo $session_ip_address; ?>" onclick="window.open(this.href);return false;" href="<?php echo sprintf($IPCheckURL,$session_ip_address); ?>"><?php echo $session_ip_address; ?></a> )<?php } ?></td>
 <td class="TableColumn3" style="text-align: center;"><?php echo $UserSessInfo['UserGroup']; ?></td>
 <td class="TableColumn3" style="text-align: center;"><a href="<?php echo url_maker($PreFileName,"no+ext",$PreExpPage,$Settings['qstr'],$Settings['qsep'],null,null); ?>"><?php echo $UserSessInfo['PreViewingTitle']; ?> <?php echo $UserSessInfo['ViewingTitle']; ?></a></td>
@@ -564,7 +564,7 @@ if(user_agent_check($session_user_agent)) {
 ?>
 <tr id="Member<?php echo $i; ?>" class="TableRow3">
 <td class="TableColumn3" style="text-align: center;"><?php echo $UserSessInfo['UserID']; ?></td>
-<td class="TableColumn3" style="text-align: center;"><span<?php if($GroupInfo['HasAdminCP']=="yes") { ?> title="<?php echo $session_user_agent; ?>"<?php } ?>><?php echo $UserSessInfo['GuestName']; ?></span>
+<td class="TableColumn3" style="text-align: center;"><span<?php if($GroupInfo['HasAdminCP']=="yes") { ?> title="<?php echo htmlentities($session_user_agent, ENT_QUOTES, $Settings['charset']); ?>"<?php } ?>><?php echo $UserSessInfo['GuestName']; ?></span>
 <?php if($GroupInfo['CanViewIPAddress']=="yes") { ?> ( <a title="<?php echo $session_ip_address; ?>" onclick="window.open(this.href);return false;" href="<?php echo sprintf($IPCheckURL,$session_ip_address); ?>"><?php echo $session_ip_address; ?></a> )<?php } ?></td>
 <td class="TableColumn3" style="text-align: center;"><?php echo $UserSessInfo['UserGroup']; ?></td>
 <td class="TableColumn3" style="text-align: center;"><a href="<?php echo url_maker($PreFileName,"no+ext",$PreExpPage,$Settings['qstr'],$Settings['qsep'],null,null); ?>"><?php echo $UserSessInfo['PreViewingTitle']; ?> <?php echo $UserSessInfo['ViewingTitle']; ?></a></td>
