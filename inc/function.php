@@ -11,7 +11,7 @@
     Copyright 2004-2012 iDB Support - http://idb.berlios.de/
     Copyright 2004-2012 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: function.php - Last Update: 01/01/2012 SVN 784 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 01/01/2012 SVN 785 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -540,14 +540,17 @@ global $Settings;
 if(!isset($_SERVER['HTTP_REFERER'])) { $LOG_URL_REFERER = "-"; }
 if(isset($_SERVER['HTTP_REFERER'])) { $LOG_URL_REFERER = $_SERVER['HTTP_REFERER']; }
 if($LOG_URL_REFERER==""||$LOG_URL_REFERER==null) { $LOG_URL_REFERER = "-"; }
+if(trim($LOG_URL_REFERER, "\x00..\x1F") == "") { $LOG_URL_REFERER = "-"; }
 $LOG_URL_REFERER = log_fix_quotes($LOG_URL_REFERER);
 if(!isset($_SERVER['PHP_AUTH_USER'])) { $LOG_AUTH_USER = "-"; }
 if(isset($_SERVER['PHP_AUTH_USER'])) { $LOG_AUTH_USER = $_SERVER['PHP_AUTH_USER']; }
 if($LOG_AUTH_USER==""||$LOG_AUTH_USER==null) { $LOG_AUTH_USER = "-"; }
+if(trim($LOG_AUTH_USER, "\x00..\x1F") == "") { $LOG_AUTH_USER = "-"; }
 $LOG_AUTH_USER = log_fix_quotes($LOG_AUTH_USER);
 if(!isset($_SERVER["HTTP_USER_AGENT"])) { $LOG_USER_AGENT = "-"; }
 if(isset($_SERVER["HTTP_USER_AGENT"])) { $LOG_USER_AGENT = $_SERVER["HTTP_USER_AGENT"]; }
 if($LOG_USER_AGENT==""||$LOG_USER_AGENT==null) { $LOG_USER_AGENT = "-"; }
+if(trim($LOG_USER_AGENT, "\x00..\x1F") == "") { $LOG_USER_AGENT = "-"; }
 $LOG_USER_AGENT = log_fix_quotes($LOG_USER_AGENT);
 $LogMemName = "-";
 if(!isset($_SESSION['MemberName'])) {
@@ -556,6 +559,7 @@ if($_SESSION['MemberName']===null) {
 	$LogMemName = "-"; }
 if(isset($_SESSION['MemberName'])&&$_SESSION['MemberName']!==null) {
 	$LogMemName = $_SESSION['MemberName']; }
+if(trim($LogMemName, "\x00..\x1F") == "") { $LogMemName = "-"; }
 $LogMemName = log_fix_quotes($LogMemName);
 $LogMemID = "-";
 if(!isset($_SESSION['UserID'])) {
@@ -564,6 +568,7 @@ if($_SESSION['UserID']===null||$_SESSION['UserID']===0) {
 	$LogMemID = "-"; }
 if(isset($_SESSION['UserID'])&&$_SESSION['UserID']!==null&&$_SESSION['UserID']!==0) {
 	$LogMemID = $_SESSION['UserID']; }
+if(trim($LogMemID, "\x00..\x1F") == "") { $LogMemID = "-"; }
 $LogMemID = log_fix_quotes($LogMemID);
 $LogGroupName = "-";
 if(!isset($_SESSION['UserGroup'])) {
@@ -572,6 +577,7 @@ if(isset($_SESSION['UserGroup'])&&$_SESSION['UserGroup']===null) {
 	$LogGroupName = "-"; }
 if(isset($_SESSION['UserGroup'])&&$_SESSION['UserGroup']!==null) {
 	$LogGroupName = $_SESSION['UserGroup']; }
+if(trim($LogGroupName, "\x00..\x1F") == "") { $LogGroupName = "-"; }
 $LogGroupName = log_fix_quotes($LogGroupName);
 $LogGroupID = "-";
 if(!isset($_SESSION['UserGroupID'])) {
@@ -580,10 +586,12 @@ if(isset($_SESSION['UserGroupID'])&&$_SESSION['UserGroupID']===null) {
 	$LogGroupID = "-"; }
 if(isset($_SESSION['UserGroupID'])&&$_SESSION['UserGroupID']!==null) {
 	$LogGroupID = $_SESSION['UserGroupID']; }
+if(trim($LogGroupID, "\x00..\x1F") == "") { $LogGroupID = "-"; }
 $LogGroupID = log_fix_quotes($LogGroupID);
 $LOG_QUERY_STRING = "";
 if($_SERVER["QUERY_STRING"]!=="") {
 $LOG_QUERY_STRING = "?".$_SERVER["QUERY_STRING"]; }
+if(trim($LOG_QUERY_STRING, "\x00..\x1F") == "") { $LOG_QUERY_STRING = ""; }
 $LOG_QUERY_STRING = log_fix_quotes($LOG_QUERY_STRING);
 $oldcontentsize = $contentsize;
 if($oldcontentsize=="-") { $oldcontentsize = 0; }
