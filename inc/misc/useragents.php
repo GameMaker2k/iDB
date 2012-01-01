@@ -11,7 +11,7 @@
     Copyright 2004-2012 iDB Support - http://idb.berlios.de/
     Copyright 2004-2012 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: useragents.php - Last Update: 12/30/2011 SVN 780 - Author: cooldude2k $
+    $FileInfo: useragents.php - Last Update: 01/01/2012 SVN 783 - Author: cooldude2k $
 */
 // User Agent Checker
 function user_agent_check($user_agent) {
@@ -78,6 +78,8 @@ if (preg_match("/".preg_quote("facebookexternalhit", "/")."/i", $user_agent)) {
     return "Facebook"; }
 if (preg_match("/".preg_quote("Feedtrace-bot", "/")."/i", $user_agent)) {
     return "FeedtraceBot"; }
+if (preg_match("/".preg_quote("findfiles.net", "/")."/i", $user_agent)) {
+    return "FindFiles Bot"; }
 if (preg_match("/".preg_quote("FreeWebMonitoring", "/")."/i", $user_agent)) {
     return "FreeWebMonitoring"; }
 if (preg_match("/".preg_quote("FlightDeckReportsBot", "/")."/i", $user_agent)) {
@@ -132,6 +134,8 @@ if (preg_match("/".preg_quote("montastic-webmonitor", "/")."/i", $user_agent)) {
     return "Montastic"; }
 if (preg_match("/".preg_quote("mozDex", "/")."/i", $user_agent)) {
     return "Mozdex"; }
+if (preg_match("/".preg_quote("Mail.Ru", "/")."/i", $user_agent)) {
+    return "Mail RU"; }
 if (preg_match("/".preg_quote("MP3Bot", "/")."/i", $user_agent)) {
     return "MP3Realm"; }
 if (preg_match("/".preg_quote("mxbot", "/")."/i", $user_agent)) {
@@ -176,6 +180,8 @@ if (preg_match("/".preg_quote("Argus", "/")."/i", $user_agent)) {
     return "Simpy"; }
 if (preg_match("/".preg_quote("seexie.com_bot", "/")."/i", $user_agent)) {
     return "Seexie"; }
+if (preg_match("/".preg_quote("SemrushBot", "/")."/i", $user_agent)) {
+    return "SemrushBot"; }
 if (preg_match("/".preg_quote("SiteBot", "/")."/i", $user_agent)) {
     return "SiteBot"; }
 if (preg_match("/".preg_quote("Sogou", "/")."/i", $user_agent)) {
@@ -190,6 +196,8 @@ if (preg_match("/".preg_quote("SpiderMonkey", "/")."/i", $user_agent)) {
     return "SpiderMonkey"; }
 if (preg_match("/".preg_quote("Spider_Monkey", "/")."/i", $user_agent)) {
     return "SpiderMonkey"; }
+if (preg_match("/".preg_quote("SISTRIX Crawler", "/")."/i", $user_agent)) {
+    return "SISTRIX Crawler"; }
 if (preg_match("/".preg_quote("Szukacz", "/")."/i", $user_agent)) {
     return "Szukacz.pl"; }
 if (preg_match("/".preg_quote("tangyang9@gmail.com", "/")."/i", $user_agent)) {
