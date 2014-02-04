@@ -11,7 +11,7 @@
     Copyright 2004-2012 iDB Support - http://idb.berlios.de/
     Copyright 2004-2012 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: lowtopics.php - Last Update: 12/30/2011 SVN 781 - Author: cooldude2k $
+    $FileInfo: lowtopics.php - Last Update: 02/04/2014 SVN 787 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="lowtopics.php"||$File3Name=="/lowtopics.php") {

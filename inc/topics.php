@@ -11,7 +11,7 @@
     Copyright 2004-2012 iDB Support - http://idb.berlios.de/
     Copyright 2004-2012 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: topics.php - Last Update: 12/30/2011 SVN 781 - Author: cooldude2k $
+    $FileInfo: topics.php - Last Update: 02/04/2014 SVN 787 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="topics.php"||$File3Name=="/topics.php") {
@@ -445,7 +445,7 @@ if ($PinnedTopic>0&&$PinnedTopic<3&&$TopicStat==0) {
 	if($NumReply<$Settings['hot_topic_num']) {
 		$PreTopicText = "<span style=\"font-weight: bold;\">Pinned: </span>";
 		$PreTopic=$ThemeSet['PinTopic']; } }
-if ($TopicStat>=0&&$TopicStat<=3&&$PinnedTopic==0) {
+if ($TopicStat>0&&$TopicStat<=3&&$PinnedTopic==0) {
 	if($NumReply>=$Settings['hot_topic_num']) {
 		$PreTopic=$ThemeSet['HotClosedTopic']; }
 	if($NumReply<$Settings['hot_topic_num']) {
@@ -455,7 +455,7 @@ if ($PinnedTopic==0&&$TopicStat==0) {
 			$PreTopic=$ThemeSet['HotTopic']; }
 		if($NumReply<$Settings['hot_topic_num']) {
 			$PreTopic=$ThemeSet['TopicIcon']; } }
-if ($PinnedTopic>0&&$PinnedTopic<3&&$TopicStat>=0&&$TopicStat<=3) {
+if ($PinnedTopic>0&&$PinnedTopic<3&&$TopicStat>0&&$TopicStat<=3) {
 		if($NumReply>=$Settings['hot_topic_num']) {
 			$PreTopicText = "<span style=\"font-weight: bold;\">Pinned: </span>";
 			$PreTopic=$ThemeSet['HotPinClosedTopic']; }
@@ -473,7 +473,7 @@ if ($PinnedTopic>0&&$PinnedTopic<3&&$TopicStat==0) {
 		$PreTopic=$ThemeSet['MovedHotPinTopic']; }
 	if($NumReply<$Settings['hot_topic_num']) {
 		$PreTopic=$ThemeSet['MovedPinTopic']; } }
-if ($TopicStat>=0&&$TopicStat<=3&&$PinnedTopic==0) {
+if ($TopicStat>0&&$TopicStat<=3&&$PinnedTopic==0) {
 	if($NumReply>=$Settings['hot_topic_num']) {
 		$PreTopic=$ThemeSet['MovedHotClosedTopic']; }
 	if($NumReply<$Settings['hot_topic_num']) {
@@ -483,7 +483,7 @@ if ($PinnedTopic==0&&$TopicStat==0) {
 			$PreTopic=$ThemeSet['MovedHotTopic']; }
 		if($NumReply<$Settings['hot_topic_num']) {
 			$PreTopic=$ThemeSet['MovedTopicIcon']; } }
-if ($PinnedTopic>0&&$PinnedTopic<3&&$TopicStat>=0&&$TopicStat<=3) {
+if ($PinnedTopic>0&&$PinnedTopic<3&&$TopicStat>0&&$TopicStat<=3) {
 		if($NumReply>=$Settings['hot_topic_num']) {
 			$PreTopic=$ThemeSet['MovedHotPinClosedTopic']; }
 		if($NumReply<$Settings['hot_topic_num']) {
