@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2012 iDB Support - http://idb.berlios.de/
-    Copyright 2004-2012 Game Maker 2k - http://gamemaker2k.org/
+    Copyright 2004-2014 iDB Support - http://idb.berlios.de/
+    Copyright 2004-2014 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: calendars.php - Last Update: 12/30/2011 SVN 781 - Author: cooldude2k $
+    $FileInfo: calendars.php - Last Update: 07/10/2014 SVN 788 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="calendars.php"||$File3Name=="/calendars.php") {
@@ -24,15 +24,61 @@ if($Settings['file_ext']=="no+ext"||$Settings['file_ext']=="no ext") {
 $_SESSION['ViewingFile'] = $exfile['calendar']; }
 $_SESSION['PreViewingTitle'] = "Viewing";
 $_SESSION['ViewingTitle'] = "Calendar";
+$_SESSION['ExtraData'] = "currentact:view; currentcategoryid:0; currentforumid:0; currenttopicid:0; currentmessageid:0; currenteventid:0; currentmemberid:0;";
 if(!isset($_GET['HighligtDay'])) { $_GET['HighligtDay'] = null; }
 if(!isset($_GET['calmadd'])) { $_GET['calmadd'] = 0; }
 if(!is_numeric($_GET['calmadd'])) { $_GET['calmadd'] = 0; }
+if((!isset($_GET['calmonth']) && !isset($_GET['calyear'])) && 
+isset($_GET['caldate']) && strlen($_GET['caldate'])==2) {
+$_GET['caldate'] = $_GET['caldate'].GMTimeGet("Y",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST'],$calmounthaddd); }
+if((!isset($_GET['calmonth']) && !isset($_GET['calyear'])) && 
+isset($_GET['caldate']) && strlen($_GET['caldate'])==6) {
+preg_match_all("/([0-9]{2})([0-9]{4})/is", $_GET['caldate'], $datecheck);
+$_GET['calmonth'] = $datecheck[1][0];
+$_GET['calyear'] = $datecheck[2][0]; }
+if((isset($_GET['calmonth']) && isset($_GET['calyear'])) && 
+   (strlen($_GET['calmonth'])==2&&strlen($_GET['calyear'])==4) ) {
+$year1 = date("Y", strtotime($_GET['calyear']."-".$_GET['calmonth']."-01"));
+$year2 = date("Y", GMTimeStamp());
+$month1 = date("m", strtotime($_GET['calyear']."-".$_GET['calmonth']."-01"));
+$month2 = date("m", GMTimeStamp());
+$redirdate = ((($year2 - $year1) * 12) + ($month2 - $month1)) * -1;
+$_GET['calmadd'] = $redirdate; }
 $nextcalm = $_GET['calmadd'] + 1;
 $backcalm = $_GET['calmadd'] - 1;
-if($_GET['calmadd']===0||$_GET['calmadd']=="0") {
-$calmounthaddd = ($_GET['calmadd'] * $dayconv['month']); }
-if($_GET['calmadd']!==0&&$_GET['calmadd']!="0") {
-$calmounthaddd = ($_GET['calmadd'] * $dayconv['month']) + ($dayconv['day'] * 1); }
+$calmcount = abs($_GET['calmadd']);
+$getcurmonth = GMTimeGet("m",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$getcuryear = GMTimeGet("y",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$getcurtmsp = mktime(0, 0, 0, $getcmonth, 1, $getcyear);
+$getnextmsp = mktime(0, 0, 0, ($getcurmonth + $nextcalm), 1, $getcuryear);
+$nexmonthnum = date("m", $getnextmsp);
+$nexyearnum = date("Y", $getnextmsp);
+$nexcaldate = $nexmonthnum.$nexyearnum;
+$getbactmsp = mktime(0, 0, 0, ($getcurmonth + $backcalm), 1, $getcuryear);
+$bacmonthnum = date("m", $getbactmsp);
+$bacyearnum = date("Y", $getbactmsp);
+$baccaldate = $bacmonthnum.$bacyearnum;
+$tmpcalmnum = 0;
+$tmpcalmadd = 0;
+$tmpcalcount = 1;
+if($_GET['calmadd']>0) {
+while($tmpcalcount <= $calmcount) {
+$tmpdaystart = GMTimeGet("d",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST'],$tmpcalmadd);
+$tmpdaycount = GMTimeGet("t",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST'],$tmpcalmadd);
+if($tmpdaystart>=1) { $tmpcalmnum += ($tmpdaycount - $tmpdaystart) + 1; }
+if($tmpdaystart<1) { $tmpcalmnum += $tmpdaycount; }
+$tmpcalmadd = $tmpcalmnum * $dayconv['day'];
+++$tmpcalcount; }
+$calmounthaddd = $tmpcalmadd; }
+if($_GET['calmadd']<0) {
+while($tmpcalcount <= $calmcount) {
+$tmpdaystart = GMTimeGet("d",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST'],$tmpcalmadd);
+$tmpdaycount = GMTimeGet("t",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST'],$tmpcalmadd);
+if($tmpdaystart>=1) { $tmpcalmnum -= $tmpdaystart + 1; }
+if($tmpdaystart<1) { $tmpcalmnum -= $tmpdaycount; }
+$tmpcalmadd = $tmpcalmnum * $dayconv['day'];
+++$tmpcalcount; }
+$calmounthaddd = $tmpcalmadd; }
 // Extra month stuff
 $MyRealMonthNum1 = GMTimeGet("m",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $MyRealYear = GMTimeGet("Y",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
@@ -101,7 +147,7 @@ $NextDay++; } }
 $EventsID[$EventDay] = $EventID;
 ++$is; } 
 sql_free_result($result);
-$bdquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"BirthMonth\"=%i", array($MyMonth));
+$bdquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"BirthMonth\"=%i AND \"BirthYear\"<=%i", array($MyMonth, $MyYear));
 $bdresult=sql_query($bdquery,$SQLStat);
 $bdnum=sql_num_rows($bdresult);
 $bdi=0;
@@ -110,15 +156,16 @@ $UserNamebd=sql_result($bdresult,$bdi,"Name");
 $BirthDay=sql_result($bdresult,$bdi,"BirthDay");
 $BirthMonth=sql_result($bdresult,$bdi,"BirthMonth");
 $BirthYear=sql_result($bdresult,$bdi,"BirthYear");
+$UserCurAge=$MyYear-$BirthYear;
 $oldusername=$UserNamebd;
 $UserNamebd1 = pre_substr($UserNamebd,0,20);
 if (pre_strlen($UserNamebd)>20) { $UserNamebd1 = $UserNamebd1."..."; }
 $UserNamebd=$UserNamebd1;
 if(!isset($EventsName[$BirthDay])) { $EventsName[$BirthDay] = null; }
 if ($EventsName[$BirthDay] != null) {
-	$EventsName[$BirthDay] .= ", <span title=\"".$oldusername."'s birthday.\">".$UserNamebd1."</span>";	 }
+	$EventsName[$BirthDay] .= ", <span title=\"".$oldusername." is ".$UserCurAge." years old\">".$UserNamebd1."</span>";	 }
 if ($EventsName[$BirthDay] == null) {
-	$EventsName[$BirthDay] = "<span title=\"".$oldusername."'s birthday.\">".$UserNamebd1."</span>"; }
+	$EventsName[$BirthDay] = "<span title=\"".$oldusername." is ".$UserCurAge." years old\">".$UserNamebd1."</span>"; }
 ++$bdi; } 
 sql_free_result($bdresult);
 $MyDays = array("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday");
@@ -158,15 +205,15 @@ $WeekDays .= '<td class="CalTableColumn3Blank" style="text-align: center;" colsp
 <div class="CalTable1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="CalTableRow1" style="font-weight: bold;">
-<span style="float: left;"><?php echo $ThemeSet['TitleIcon']; ?><?php echo "Viewing ".$MyMonthName." ".$MyYear; ?>&nbsp;</span>&nbsp;
-<span style="float: right;">&nbsp;<a href="<?php echo url_maker($exfile['calendar'],$Settings['file_ext'],"act=view&calmadd=".$backcalm,$Settings['qstr'],$Settings['qsep'],$prexqstr['calendar'],$exqstr['calendar']); ?>">&lt;</a><?php echo $ThemeSet['LineDivider']; ?><a href="<?php echo url_maker($exfile['calendar'],$Settings['file_ext'],"act=view&calmadd=".$nextcalm,$Settings['qstr'],$Settings['qsep'],$prexqstr['calendar'],$exqstr['calendar']); ?>">&gt;</a>&nbsp;</span>&nbsp;</div>
+<span style="float: left;"><?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['calendar'],$Settings['file_ext'],"act=view&caldate=".$MyMonth.$MyYear,$Settings['qstr'],$Settings['qsep'],$prexqstr['calendar'],$exqstr['calendar']); ?>" title="<?php echo "Viewing ".$MyMonthName." ".$MyYear; ?>"><?php echo "Viewing ".$MyMonthName." ".$MyYear; ?></a>&nbsp;</span>&nbsp;
+<span style="float: right;">&nbsp;<a href="<?php echo url_maker($exfile['calendar'],$Settings['file_ext'],"act=view&caldate=".$baccaldate,$Settings['qstr'],$Settings['qsep'],$prexqstr['calendar'],$exqstr['calendar']); ?>">&lt;</a><?php echo $ThemeSet['LineDivider']; ?><a href="<?php echo url_maker($exfile['calendar'],$Settings['file_ext'],"act=view&caldate=".$nexcaldate,$Settings['qstr'],$Settings['qsep'],$prexqstr['calendar'],$exqstr['calendar']); ?>">&gt;</a>&nbsp;</span>&nbsp;</div>
 <?php } ?>
 <table class="CalTable1">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="CalTableRow1">
 <th class="CalTableColumn1" colspan="7">
 <span style="float: left;"><?php echo $ThemeSet['TitleIcon']; ?><?php echo "Viewing ".$MyMonthName." ".$MyYear; ?>&nbsp;</span>&nbsp;
-<span style="float: right;">&nbsp;<a href="<?php echo url_maker($exfile['calendar'],$Settings['file_ext'],"act=view&calmadd=".$backcalm,$Settings['qstr'],$Settings['qsep'],$prexqstr['calendar'],$exqstr['calendar']); ?>">&lt;</a><?php echo $ThemeSet['LineDivider']; ?><a href="<?php echo url_maker($exfile['calendar'],$Settings['file_ext'],"act=view&calmadd=".$nextcalm,$Settings['qstr'],$Settings['qsep'],$prexqstr['calendar'],$exqstr['calendar']); ?>">&gt;</a>&nbsp;</span>&nbsp;
+<span style="float: right;">&nbsp;<a href="<?php echo url_maker($exfile['calendar'],$Settings['file_ext'],"act=view&caldate=".$baccaldate,$Settings['qstr'],$Settings['qsep'],$prexqstr['calendar'],$exqstr['calendar']); ?>">&lt;</a><?php echo $ThemeSet['LineDivider']; ?><a href="<?php echo url_maker($exfile['calendar'],$Settings['file_ext'],"act=view&caldate=".$nexcaldate,$Settings['qstr'],$Settings['qsep'],$prexqstr['calendar'],$exqstr['calendar']); ?>">&gt;</a>&nbsp;</span>&nbsp;
 </th>
 </tr><?php } ?>
 <tr class="CalTableRow2">

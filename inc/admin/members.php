@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2012 iDB Support - http://idb.berlios.de/
-    Copyright 2004-2012 Game Maker 2k - http://gamemaker2k.org/
+    Copyright 2004-2014 iDB Support - http://idb.berlios.de/
+    Copyright 2004-2014 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 01/01/2012 SVN 782 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 07/10/2014 SVN 788 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -397,7 +397,42 @@ $EditMemPerm['SearchFlood'] = sql_result($mpresult,0,"SearchFlood");
 $EditMemPerm['HasModCP'] = sql_result($mpresult,0,"HasModCP");
 $EditMemPerm['HasAdminCP'] = sql_result($mpresult,0,"HasAdminCP");
 $EditMemPerm['ViewDBInfo'] = sql_result($mpresult,0,"ViewDBInfo");
+$MemIPList[0] = $EditMem['IP'];
+$MemIPArrayNum = 1;
+$MemPostIP = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"UserID\"=%i ORDER BY \"TimeStamp\" ASC ", array($EditMem['ID']));
+$mppresult = sql_query($MemPostIP,$SQLStat);
+$mppnum = sql_num_rows($mppresult);
+$mppi = 0;
+while ($mppi < $mppnum) {
+$MemPostCheckIP=sql_result($mppresult,$mppi,"IP");
+if(!in_array($MemPostCheckIP, $MemIPList)) {
+$MemIPList[$MemIPArrayNum] = $MemPostCheckIP;
+++$MemIPArrayNum; }
+$MemPostCheckEditIP=sql_result($mppresult,$mppi,"EditIP");
+if(!in_array($MemPostCheckEditIP, $MemIPList) && $MemPostCheckEditIP!="0") {
+$MemIPList[$MemIPArrayNum] = $MemPostCheckEditIP;
+++$MemIPArrayNum; }
+++$mppi; }
+sql_free_result($mppresult);
+$MemEventIP = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"UserID\"=%i ORDER BY \"TimeStamp\" ASC ", array($EditMem['ID']));
+$mepresult = sql_query($MemEventIP,$SQLStat);
+$mepnum = sql_num_rows($mepresult);
+$mepi = 0;
+while ($mepi < $mepnum) {
+$MemEventCheckIP=sql_result($mepresult,$mepi,"IP");
+if(!in_array($MemEventCheckIP, $MemIPList)) {
+$MemIPList[$MemIPArrayNum] = $MemEventCheckIP;
+++$MemIPArrayNum; }
+++$mepi; }
+sql_free_result($mepresult);
+$fullistnum = count($MemIPList);
+$fullisti = 0;
+$fulliplist = null;
+while($fullisti < $fullistnum) {
+$fulliplist = $fulliplist." <a onclick=\"window.open(this.href);return false;\" href=\"".sprintf($IPCheckURL,$MemIPList[$fullisti])."\">".$MemIPList[$fullisti]."</a>";
+++$fullisti; }
 ?>
+
 <div class="TableMenuBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableMenuRow1">
@@ -424,7 +459,12 @@ $EditMemPerm['ViewDBInfo'] = sql_result($mpresult,0,"ViewDBInfo");
 <tr style="text-align: left;">
 	<td style="width: 50%;"><span class="TextBoxLabel">Members IP:</span></td>
 	<td style="width: 50%;"><a onclick="window.open(this.href);return false;" href="<?php echo sprintf($IPCheckURL,$EditMem['IP']); ?>"><?php echo $EditMem['IP']; ?></a></td>
-</tr><?php } ?><tr style="text-align: left;">
+</tr>
+<?php if($fulliplist!=null && $fullistnum>1) { ?>
+<tr style="text-align: left;">
+	<td style="width: 50%;"><span class="TextBoxLabel">Members Old IPs:</span></td>
+	<td style="width: 50%;"><?php echo $fulliplist; ?></td>
+</tr><?php } } ?><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="MemName">Members Name:</label></td>
 	<td style="width: 50%;"><input type="text" name="MemName" class="TextBox" id="MemName" size="20" value="<?php echo $EditMem['Name']; ?>" /></td>
 </tr><tr style="text-align: left;">

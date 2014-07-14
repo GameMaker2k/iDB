@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2012 iDB Support - http://idb.berlios.de/
-    Copyright 2004-2012 Game Maker 2k - http://gamemaker2k.org/
+    Copyright 2004-2014 iDB Support - http://idb.berlios.de/
+    Copyright 2004-2014 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: navbar.php - Last Update: 12/30/2011 SVN 781 - Author: cooldude2k $
+    $FileInfo: navbar.php - Last Update: 07/10/2014 SVN 788 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="navbar.php"||$File3Name=="/navbar.php") {
@@ -33,6 +33,9 @@ if($_SESSION['UserGroup']!=$Settings['GuestGroup']) {
 $PreAmIHidden = GetUserName($_SESSION['UserID'],$Settings['sqltable'],$SQLStat);
 $AmIHidden = $PreAmIHidden['Hidden']; }
 // Hide me from everyone! >_> ^_^ <_< 
+$NavBarCurMonth = GMTimeGet("m",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$NavBarCurYear = GMTimeGet("Y",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$NavBarCurDate = $NavBarCurMonth.$NavBarCurYear;
 ?>
 <div class="NavBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
@@ -68,7 +71,7 @@ $AmIHidden = $PreAmIHidden['Hidden']; }
 		if($GroupInfo['CanPM']=="yes") { ?>
 <a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>" title="<?php echo "You have ".$PMNumber." new messages."; ?>">MailBox</a><?php echo $ThemeSet['LineDivider']; ?><?php } } ?>
 <a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=list&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Members</a><?php echo $ThemeSet['LineDivider']; ?>
-<a href="<?php echo url_maker($exfile['calendar'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['calendar'],$exqstr['calendar']); ?>">Calendar</a><?php if(isset($Settings['weburl'])) { echo $ThemeSet['LineDivider']; ?>
+<a href="<?php echo url_maker($exfile['calendar'],$Settings['file_ext'],"act=view&caldate=".$NavBarCurDate,$Settings['qstr'],$Settings['qsep'],$prexqstr['calendar'],$exqstr['calendar']); ?>">Calendar</a><?php if(isset($Settings['weburl'])) { echo $ThemeSet['LineDivider']; ?>
 <a href="<?php echo $Settings['weburl']; ?>">Homepage</a><?php } ?>&nbsp;</span>
 </td></tr>
 </table></div>

@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2012 iDB Support - http://idb.berlios.de/
-    Copyright 2004-2012 Game Maker 2k - http://gamemaker2k.org/
+    Copyright 2004-2014 iDB Support - http://idb.berlios.de/
+    Copyright 2004-2014 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: lowreplies.php - Last Update: 12/30/2011 SVN 781 - Author: cooldude2k $
+    $FileInfo: lowreplies.php - Last Update: 07/10/2014 SVN 788 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -55,9 +55,20 @@ $fmcknum=sql_num_rows($fmckresult);
 if($fmcknum==0) { redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($preresult);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
+$ForumID=sql_result($fmckresult,0,"id");
 $ForumName=sql_result($fmckresult,0,"Name");
 $ForumType=sql_result($fmckresult,0,"ForumType");
 $ForumShow=sql_result($fmckresult,0,"ShowForum");
+$InSubForum=sql_result($fmckresult,0,"InSubForum");
+if($InSubForum!=0) {
+$subforumcheckx = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2."  LIMIT 1", array($InSubForum));
+$subfmckresult=sql_query($subforumcheckx,$SQLStat);
+$subfmcknum=sql_num_rows($subfmckresult);
+$SubForumName=sql_result($subfmckresult,0,"Name");
+$SubForumType=sql_result($subfmckresult,0,"ForumType");
+$InSubCategory=sql_result($catresult,0,"InSubCategory");
+$SubForumShow=sql_result($subfmckresult,0,"ShowForum");
+sql_free_result($subfmckresult); }
 if($ForumShow=="no") { $_SESSION['ShowActHidden'] = "yes"; }
 $CanHaveTopics=sql_result($fmckresult,0,"CanHaveTopics");
 $ForumPostCountView=sql_result($fmckresult,0,"PostCountView");
@@ -65,6 +76,7 @@ $ForumKarmaCountView=sql_result($fmckresult,0,"KarmaCountView");
 sql_free_result($fmckresult);
 $catcheck = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."categories\" WHERE \"id\"=%i".$CatIgnoreList2."  LIMIT 1", array($TopicCatID));
 $catresult=sql_query($catcheck,$SQLStat);
+$CategoryID=sql_result($catresult,0,"id");
 $CategoryName=sql_result($catresult,0,"Name");
 $CategoryShow=sql_result($catresult,0,"ShowCategory");
 if($CategoryShow=="no") { $_SESSION['ShowActHidden'] = "yes"; }
@@ -91,9 +103,10 @@ if($Settings['file_ext']=="no+ext"||$Settings['file_ext']=="no ext") {
 $_SESSION['ViewingFile'] = $exfile['topic']; }
 $_SESSION['PreViewingTitle'] = "Viewing Topic:";
 $_SESSION['ViewingTitle'] = $TopicName;
+$_SESSION['ExtraData'] = "currentact:".$_GET['act']."; currentcategoryid:".$InSubCategory.",".$CategoryID."; currentforumid:".$InSubForum.",".$ForumID."; currenttopicid:".$TopicID."; currentmessageid:0; currenteventid:0; currentmemberid:0;"; 
 ?>
 <div style="font-size: 1.0em; font-weight: bold; margin-bottom: 10px; padding-top: 3px; width: auto;">Full Version: <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a></div>
-<div style="font-size: 11px; font-weight: bold; padding: 10px; border: 1px solid gray;"><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=lowview",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $Settings['board_name']; ?></a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile[$CategoryType],$Settings['file_ext'],"act=lowview&id=".$TopicCatID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$CategoryType],$exqstr[$CategoryType]); ?>"><?php echo $CategoryName; ?></a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile[$ForumType],$Settings['file_ext'],"act=lowview&id=".$TopicForumID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>"><?php echo $ForumName; ?></a></div>
+<div style="font-size: 11px; font-weight: bold; padding: 10px; border: 1px solid gray;"><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=lowview",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $Settings['board_name']; ?></a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile[$CategoryType],$Settings['file_ext'],"act=lowview&id=".$TopicCatID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$CategoryType],$exqstr[$CategoryType]); ?>"><?php echo $CategoryName; ?></a><?php echo $ThemeSet['NavLinkDivider']; if($InSubForum!=0 && $subfmcknum>0) { ?><a href="<?php echo url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$InSubForum."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>"><?php echo $SubForumName; ?></a><?php echo $ThemeSet['NavLinkDivider']; } ?><a href="<?php echo url_maker($exfile[$ForumType],$Settings['file_ext'],"act=lowview&id=".$TopicForumID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>"><?php echo $ForumName; ?></a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a></div>
 <div>&nbsp;</div>
 <?php }
 if(!isset($CatPermissionInfo['CanViewCategory'][$TopicCatID])) {

@@ -1,0 +1,14 @@
+Order Deny,Allow
+Deny from all
+
+ <Files "*">
+    Order Deny,Allow
+    Deny from all
+    Satisfy All
+ </Files>
+
+<FilesMatch "^rss\.gif$">
+    Order Allow,Deny
+    Allow from all
+    Satisfy All
+</FilesMatch>

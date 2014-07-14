@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2012 iDB Support - http://idb.berlios.de/
-    Copyright 2004-2012 Game Maker 2k - http://gamemaker2k.org/
+    Copyright 2004-2014 iDB Support - http://idb.berlios.de/
+    Copyright 2004-2014 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: replies.php - Last Update: 12/30/2011 SVN 781 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 07/10/2014 SVN 788 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -61,9 +61,19 @@ $fmcknum=sql_num_rows($fmckresult);
 if($fmcknum==0) { redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($preresult);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
+$ForumID=sql_result($fmckresult,0,"id");
 $ForumName=sql_result($fmckresult,0,"Name");
 $ForumType=sql_result($fmckresult,0,"ForumType");
 $ForumShow=sql_result($fmckresult,0,"ShowForum");
+$InSubForum=sql_result($fmckresult,0,"InSubForum");
+if($InSubForum!=0) {
+$subforumcheckx = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2."  LIMIT 1", array($InSubForum));
+$subfmckresult=sql_query($subforumcheckx,$SQLStat);
+$subfmcknum=sql_num_rows($subfmckresult);
+$SubForumName=sql_result($subfmckresult,0,"Name");
+$SubForumType=sql_result($subfmckresult,0,"ForumType");
+$SubForumShow=sql_result($subfmckresult,0,"ShowForum");
+sql_free_result($subfmckresult); }
 if($ForumShow=="no") { $_SESSION['ShowActHidden'] = "yes"; }
 $CanHaveTopics=sql_result($fmckresult,0,"CanHaveTopics");
 $ForumPostCountView=sql_result($fmckresult,0,"PostCountView");
@@ -71,10 +81,12 @@ $ForumKarmaCountView=sql_result($fmckresult,0,"KarmaCountView");
 sql_free_result($fmckresult);
 $catcheck = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."categories\" WHERE \"id\"=%i".$CatIgnoreList2."  LIMIT 1", array($TopicCatID));
 $catresult=sql_query($catcheck,$SQLStat);
+$CategoryID=sql_result($catresult,0,"id");
 $CategoryName=sql_result($catresult,0,"Name");
 $CategoryShow=sql_result($catresult,0,"ShowCategory");
 if($CategoryShow=="no") { $_SESSION['ShowActHidden'] = "yes"; }
 $CategoryType=sql_result($catresult,0,"CategoryType");
+$InSubCategory=sql_result($catresult,0,"InSubCategory");
 $CategoryPostCountView=sql_result($catresult,0,"PostCountView");
 $CategoryKarmaCountView=sql_result($catresult,0,"KarmaCountView");
 sql_free_result($catresult);
@@ -91,7 +103,7 @@ if($CategoryKarmaCountView!=0&&$MyKarmaCount<$CategoryKarmaCountView) {
 redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); } }
 if($ForumCheck!="skip") {
 ?>
-<div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $Settings['board_name']; ?></a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile[$CategoryType],$Settings['file_ext'],"act=view&id=".$TopicCatID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$CategoryType],$exqstr[$CategoryType]); ?>"><?php echo $CategoryName; ?></a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$TopicForumID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>"><?php echo $ForumName; ?></a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a></div>
+<div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $Settings['board_name']; ?></a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile[$CategoryType],$Settings['file_ext'],"act=view&id=".$TopicCatID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$CategoryType],$exqstr[$CategoryType]); ?>"><?php echo $CategoryName; ?></a><?php echo $ThemeSet['NavLinkDivider']; if($InSubForum!=0 && $subfmcknum>0) { ?><a href="<?php echo url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$InSubForum."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>"><?php echo $SubForumName; ?></a><?php echo $ThemeSet['NavLinkDivider']; } ?><a href="<?php echo url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$TopicForumID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>"><?php echo $ForumName; ?></a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a></div>
 <div class="DivNavLinks">&nbsp;</div>
 <?php }
 if(!isset($CatPermissionInfo['CanViewCategory'][$TopicCatID])) {
@@ -140,7 +152,8 @@ $_SESSION['ViewingFile'] = $exfile['topic'].$Settings['file_ext']; }
 if($Settings['file_ext']=="no+ext"||$Settings['file_ext']=="no ext") {
 $_SESSION['ViewingFile'] = $exfile['topic']; }
 $_SESSION['PreViewingTitle'] = "Viewing Topic:";
-$_SESSION['ViewingTitle'] = $TopicName; }
+$_SESSION['ViewingTitle'] = $TopicName; 
+$_SESSION['ExtraData'] = "currentact:".$_GET['act']."; currentcategoryid:".$InSubCategory.",".$CategoryID."; currentforumid:".$InSubForum.",".$ForumID."; currenttopicid:".$TopicID."; currentmessageid:0; currenteventid:0; currentmemberid:0;"; }
 if($NumberReplies==null) { 
 	$NumberReplies = 0; }
 $num=$NumberReplies+1;
@@ -1956,4 +1969,117 @@ sql_free_result($renee_result);
 </tr>
 </table></div>
 <div<?php echo $fps; ?>id="MkFastReply" class="MkFastReply">&nbsp;</div>
+<?php }
+$uviewltime = $uviewlcuttime - ini_get("session.gc_maxlifetime");
+$uviewlquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"session_id\"<>'%s' AND \"serialized_data\" LIKE '%s' ORDER BY \"expires\" DESC", array($uviewltime, session_id(), "%currenttopicid:".$TopicID.";%"));
+$uviewlresult=sql_query($uviewlquery,$SQLStat);
+$uviewlnum=sql_num_rows($uviewlresult);
+$uviewli=0; $uviewlmn = 0; $uviewlgn = 0; $uviewlan = 0; $uviewlmbn = 0;
+$MembersViewList = null; $GuestsOnline = null;
+while ($uviewli < $uviewlnum) {
+$session_data=sql_result($uviewlresult,$uviewli,"session_data"); 
+$serialized_data=sql_result($uviewlresult,$uviewli,"serialized_data");
+$session_user_agent=sql_result($uviewlresult,$uviewli,"user_agent"); 
+$session_ip_address=sql_result($uviewlresult,$uviewli,"ip_address");
+//$UserSessInfo = unserialize_session($session_data);
+$UserSessInfo = unserialize($serialized_data);
+if(!isset($UserSessInfo['UserGroup'])) { $UserSessInfo['UserGroup'] = $Settings['GuestGroup']; }
+$AmIHiddenUser = "no";
+$user_agent_check = false;
+if(user_agent_check($session_user_agent)) {
+	$user_agent_check = user_agent_check($session_user_agent); }
+if($UserSessInfo['UserGroup']!=$Settings['GuestGroup']||$user_agent_check!==false) {
+$PreAmIHiddenUser = GetUserName($UserSessInfo['UserID'],$Settings['sqltable'],$SQLStat);
+$AmIHiddenUser = $PreAmIHiddenUser['Hidden'];
+if(($AmIHiddenUser=="no"&&$UserSessInfo['UserID']>0)||$user_agent_check!==false) {
+if($uviewlmbn>0) { $MembersViewList .= ", "; }
+if($user_agent_check===false) {
+$uatitleadd = null;
+if($GroupInfo['CanViewUserAgent']=="yes") { $uatitleadd = " title=\"".htmlentities($session_user_agent, ENT_QUOTES, $Settings['charset'])."\""; }
+$MembersViewList .= "<a".$uatitleadd." href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UserSessInfo['UserID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">".$UserSessInfo['MemberName']."</a>"; 
+if($GroupInfo['CanViewIPAddress']=="yes") {
+$MembersViewList .= " (<a title=\"".$session_ip_address."\" onclick=\"window.open(this.href);return false;\" href=\"".sprintf($IPCheckURL,$session_ip_address)."\">".$session_ip_address."</a>)"; }
+++$uviewlmn; ++$uviewlmbn; }
+if($user_agent_check!==false) {
+$uatitleadd = null;
+if($GroupInfo['CanViewUserAgent']=="yes") { $uatitleadd = " title=\"".htmlentities($session_user_agent, ENT_QUOTES, $Settings['charset'])."\""; }
+$MembersViewList .= "<span".$uatitleadd.">".$user_agent_check."</span>"; 
+if($GroupInfo['CanViewIPAddress']=="yes") {
+$MembersViewList .= " (<a title=\"".$session_ip_address."\" onclick=\"window.open(this.href);return false;\" href=\"".sprintf($IPCheckURL,$session_ip_address)."\">".$session_ip_address."</a>)"; }
+++$uviewlmbn; } }
+if($UserSessInfo['UserID']<=0||$AmIHiddenUser=="yes") {
+if($user_agent_check===false) {
+++$uviewlan; } } }
+if($UserSessInfo['UserGroup']==$Settings['GuestGroup']) {
+/*$uatitleadd = null;
+if($GroupInfo['CanViewUserAgent']=="yes") { $uatitleadd = " title=\"".htmlentities($session_user_agent, ENT_QUOTES, $Settings['charset'])."\""; }
+$GuestsViewList .= "<a".$uatitleadd." href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$MemList['ID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">".$MemList['Name']."</a>";
+if($GroupInfo['CanViewIPAddress']=="yes") {
+$GuestsViewList .= " (<a title=\"".$session_ip_address."\" onclick=\"window.open(this.href);return false;\" href=\"".sprintf($IPCheckURL,$session_ip_address)."\">".$session_ip_address."</a>)"; } */
+++$uviewlgn; }
+++$uviewli; }
+if(!isset($_SESSION['UserGroup'])) { $_SESSION['UserGroup'] = $Settings['GuestGroup']; }
+$AmIHiddenUser = "no";
+$user_agent_check = false;
+if(user_agent_check($_SERVER['HTTP_USER_AGENT'])) {
+	$user_agent_check = user_agent_check($_SERVER['HTTP_USER_AGENT']); }
+if($_SESSION['UserGroup']!=$Settings['GuestGroup']||$user_agent_check!==false) {
+$PreAmIHiddenUser = GetUserName($_SESSION['UserID'],$Settings['sqltable'],$SQLStat);
+$AmIHiddenUser = $PreAmIHiddenUser['Hidden'];
+if(($AmIHiddenUser=="no"&&$_SESSION['UserID']>0)||$user_agent_check!==false) {
+if($uviewlmbn>0) { $MembersViewList = ", ".$MembersViewList; }
+if($user_agent_check===false) {
+$uatitleadd = null;
+if($GroupInfo['CanViewUserAgent']=="yes") { $uatitleadd = " title=\"".htmlentities($_SERVER['HTTP_USER_AGENT'], ENT_QUOTES, $Settings['charset'])."\""; }
+if($GroupInfo['CanViewIPAddress']=="yes") {
+$MembersViewList = " (<a title=\"".$_SERVER['REMOTE_ADDR']."\" onclick=\"window.open(this.href);return false;\" href=\"".sprintf($IPCheckURL,$_SERVER['REMOTE_ADDR'])."\">".$_SERVER['REMOTE_ADDR']."</a>)".$MembersViewList; }
+$MembersViewList = "<a".$uatitleadd." href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$_SESSION['UserID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">".$_SESSION['MemberName']."</a>".$MembersViewList; 
+++$uviewlmn; ++$uviewlmbn; }
+if($user_agent_check!==false) {
+$uatitleadd = null;
+if($GroupInfo['CanViewIPAddress']=="yes") {
+$MembersViewList = " (<a title=\"".$_SERVER['REMOTE_ADDR']."\" onclick=\"window.open(this.href);return false;\" href=\"".sprintf($IPCheckURL,$_SERVER['REMOTE_ADDR'])."\">".$_SERVER['REMOTE_ADDR']."</a>)".$MembersViewList; }
+if($GroupInfo['CanViewUserAgent']=="yes") { $uatitleadd = " title=\"".htmlentities($_SERVER['HTTP_USER_AGENT'], ENT_QUOTES, $Settings['charset'])."\""; }
+$MembersViewList = "<span".$uatitleadd.">".$user_agent_check."</span>".$MembersViewList; 
+++$uviewlmbn; } }
+if($_SESSION['UserID']<=0||$AmIHiddenUser=="yes") {
+if($user_agent_check===false) {
+++$uviewlan; } } }
+if($_SESSION['UserGroup']==$Settings['GuestGroup']) {
+/*$uatitleadd = null;
+if($GroupInfo['CanViewUserAgent']=="yes") { $uatitleadd = " title=\"".htmlentities($_SERVER['HTTP_USER_AGENT'], ENT_QUOTES, $Settings['charset'])."\""; }
+if($GroupInfo['CanViewIPAddress']=="yes") {
+$GuestsViewList = " (<a title=\"".$_SERVER['REMOTE_ADDR']."\" onclick=\"window.open(this.href);return false;\" href=\"".sprintf($IPCheckURL,$_SERVER['REMOTE_ADDR'])."\">".$_SERVER['REMOTE_ADDR']."</a>)".$GuestsViewList; }
+$GuestsViewList = "<a".$uatitleadd." href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$MemList['ID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">".$MemList['Name']."</a>".$GuestsViewList; */
+++$uviewlgn; }
+?>
+<div class="StatsBorder">
+<?php if($ThemeSet['TableStyle']=="div") { ?>
+<div class="TableStatsRow1">
+<span style="text-align: left;">
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$ForumID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>">Topic Statistics</a></span></div>
 <?php } ?>
+<table id="BoardStats" class="TableStats1">
+<?php if($ThemeSet['TableStyle']=="table") { ?>
+<tr class="TableStatsRow1">
+<td class="TableStatsColumn1" colspan="2"><span style="text-align: left;">
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$ForumID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>">Topic Statistics</a></span>
+</td>
+</tr><?php } ?>
+<tr id="Stats1" class="TableStatsRow2">
+<td class="TableStatsColumn2" colspan="2" style="width: 100%; font-weight: bold;"><?php echo $uolnum; ?> users viewing topic</td>
+</tr>
+<tr class="TableStatsRow3" id="Stats2">
+<td style="width: 4%;" class="TableStatsColumn3"><div class="statsicon">
+<?php echo $ThemeSet['StatsIcon']; ?></div></td>
+<td style="width: 96%;" class="TableStatsColumn3"><div class="statsinfo">
+&nbsp;<span style="font-weight: bold;"><?php echo $uviewlgn; ?></span> guests, <span style="font-weight: bold;"><?php echo $uviewlmn; ?></span> members, <span style="font-weight: bold;"><?php echo $uviewlan; ?></span> anonymous members <br />
+<?php if($MembersViewList!=null) { ?>&nbsp;<?php echo $MembersViewList."\n<br />"; } ?>
+</div></td>
+</tr>
+<tr id="Stats7" class="TableStatsRow4">
+<td class="TableStatsColumn4" colspan="2">&nbsp;</td>
+</tr>
+</table></div>
+<div class="DivStats">&nbsp;</div>
+
