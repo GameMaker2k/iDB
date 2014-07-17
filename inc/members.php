@@ -11,7 +11,7 @@
     Copyright 2004-2014 iDB Support - http://idb.berlios.de/
     Copyright 2004-2014 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 07/10/2014 SVN 788 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 07/15/2014 SVN 789 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -190,7 +190,6 @@ if($pagenum>1) {
 </span></td>
 </tr><?php } ?>
 <tr id="Member" class="TableRow2">
-<th class="TableColumn2" style="width: 5%;">ID</th>
 <th class="TableColumn2" style="width: 28%;">Name</th>
 <th class="TableColumn2" style="width: 10%;">Group</th>
 <th class="TableColumn2" style="width: 5%;">Posts</th>
@@ -198,6 +197,7 @@ if($pagenum>1) {
 <th class="TableColumn2" style="width: 20%;">Joined</th>
 <th class="TableColumn2" style="width: 20%;">Last Active</th>
 <th class="TableColumn2" style="width: 7%;">Website</th>
+<th class="TableColumn2" style="width: 5%;">Message</th>
 </tr>
 <?php
 while ($i < $num) {
@@ -205,6 +205,7 @@ $MemList['ID']=sql_result($result,$i,"id");
 $MemList['Name']=sql_result($result,$i,"Name");
 $MemList['Email']=sql_result($result,$i,"Email");
 $MemList['GroupID']=sql_result($result,$i,"GroupID");
+$MemList['HiddenMember']=sql_result($result,$i,"HiddenMember");
 $MemList['WarnLevel']=sql_result($result,$i,"WarnLevel");
 $MemList['Interests']=sql_result($result,$i,"Interests");
 $MemList['Title']=sql_result($result,$i,"Title");
@@ -241,14 +242,18 @@ $membertitle = " ".$ThemeSet['TitleDivider']." Member List";
 if($MemList['Group']!=$Settings['GuestGroup']) {
 ?>
 <tr class="TableRow3" id="Member<?php echo $MemList['ID']; ?>">
-<td class="TableColumn3" style="text-align: center;"><?php echo $MemList['ID']; ?></td>
-<td class="TableColumn3">&nbsp;<a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$MemList['ID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>"><?php echo $MemList['Name']; ?></a></td>
+<td class="TableColumn3" style="text-align: center;">&nbsp;<a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$MemList['ID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>"><?php echo $MemList['Name']; ?></a> <?php if($GroupInfo['CanViewIPAddress']=="yes") { ?> ( <a title="<?php echo $MemList['IP']; ?>" onclick="window.open(this.href);return false;" href="<?php echo sprintf($IPCheckURL,$MemList['IP']); ?>"><?php echo $MemList['IP']; ?></a> )<?php } ?></td>
 <td class="TableColumn3" style="text-align: center;"><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=list&gid=".$MemList['GroupID']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>"><?php echo $MemList['Group']; ?></a></td>
 <td class="TableColumn3" style="text-align: center;"><?php echo $MemList['PostCount']; ?></td>
 <td class="TableColumn3" style="text-align: center;"><?php echo $MemList['Karma']; ?></td>
 <td class="TableColumn3" style="text-align: center;"><?php echo $MemList['Joined']; ?></td>
 <td class="TableColumn3" style="text-align: center;"><?php echo $MemList['LastActive']; ?></td>
 <td class="TableColumn3" style="text-align: center;"><a href="<?php echo $MemList['Website']; ?>"<?php echo $opennew; ?>>Website</a></td>
+<?php if($MemList['ID']>0&&$MemList['HiddenMember']=="no") { ?>
+<td class="TableColumn3" style="text-align: center;"><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=create&id=".$MemList['ID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>"<?php echo $opennew; ?>>PM</a></td>
+<?php } if($MemList['ID']<=0||$MemList['HiddenMember']=="yes") { ?>
+<td class="TableColumn3" style="text-align: center;"><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"<?php echo $opennew; ?>>PM</a></td>
+<?php } ?>
 </tr>
 <?php }
 ++$i; } sql_free_result($result);
@@ -406,15 +411,17 @@ if($pagenum>1) {
 </span></td>
 </tr><?php } ?>
 <tr id="Member" class="TableRow2">
-<th class="TableColumn2" style="width: 5%;">ID</th>
 <th class="TableColumn2" style="width: 28%;">Member Name</th>
-<th class="TableColumn2" style="width: 15%;">Group Name</th>
-<th class="TableColumn2" style="width: 28%;">Location</th>
+<th class="TableColumn2" style="width: 10%;">Group Name</th>
+<th class="TableColumn2" style="width: 26%;">Location</th>
 <th class="TableColumn2" style="width: 24%;">Time</th>
+<th class="TableColumn2" style="width: 7%;">Website</th>
+<th class="TableColumn2" style="width: 5%;">Message</th>
 </tr>
 <?php
 while ($i < $num) {
 $AmIHiddenUser = "no";
+$get_session_id=sql_result($result,$i,"session_id");
 $session_data=sql_result($result,$i,"session_data");
 $serialized_data=sql_result($result,$i,"serialized_data");
 $session_user_agent=sql_result($result,$i,"user_agent"); 
@@ -429,7 +436,40 @@ if(!isset($UserSessInfo['UserGroup'])) {
 	$UserSessInfo['UserGroup'] = $Settings['GuestGroup']; }
 if(!isset($session_ip_address)) { 
 	$session_ip_address = "127.0.0.1"; }
+$ViewSessMem['Website'] = $Settings['idburl'];
+$opennew = null;
 if($UserSessInfo['UserGroup']!=$Settings['GuestGroup']) {
+$sess_query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_GET['id']));
+$sess_result=sql_query($sess_query,$SQLStat);
+$sess_num=sql_num_rows($sess_result);
+$sess_i=0;
+$ViewSessMem['ID']=sql_result($sess_result,$sess_i,"id");
+$ViewSessMem['Name']=sql_result($sess_result,$sess_i,"Name");
+$ViewSessMem['GroupID']=sql_result($sess_result,$sess_i,"GroupID");
+$ViewSessMem['HiddenMember']=sql_result($sess_result,$sess_i,"HiddenMember");
+$ViewSessMem['WarnLevel']=sql_result($sess_result,$sess_i,"WarnLevel");
+$ViewSessMem['Joined']=sql_result($sess_result,$sess_i,"Joined");
+$ViewSessMem['Joined']=GMTimeChange("M j Y, ".$_SESSION['iDBTimeFormat'],$ViewSessMem['Joined'],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$ViewSessMem['LastActive']=sql_result($sess_result,$sess_i,"LastActive");
+$ViewSessMem['LastActive']=GMTimeChange("M j Y, ".$_SESSION['iDBTimeFormat'],$ViewSessMem['LastActive'],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$ViewSessMem['Website']=sql_result($sess_result,$sess_i,"Website");
+if($ViewSessMem['Website']=="http://") { 
+	$ViewSessMem['Website'] = $Settings['idburl']; }
+$ViewSessMem['Website'] = urlcheck($ViewSessMem['Website']);
+$BoardWWWChCk = parse_url($Settings['idburl']);
+$MemsWWWChCk = parse_url($ViewSessMem['Website']);
+$opennew = " onclick=\"window.open(this.href);return false;\"";
+if($BoardWWWChCk['host']==$MemsWWWChCk['host']) {
+	$opennew = null; }
+$ViewSessMem['Gender']=sql_result($sess_result,$sess_i,"Gender");
+$ViewSessMem['PostCount']=sql_result($sess_result,$sess_i,"PostCount");
+$ViewSessMem['Karma']=sql_result($sess_result,$sess_i,"Karma");
+$ViewSessMem['TimeZone']=sql_result($sess_result,$sess_i,"TimeZone");
+$ViewSessMem['DST']=sql_result($sess_result,$sess_i,"DST");
+$ViewSessMem['IP']=sql_result($sess_result,$sess_i,"IP");
+$gsess_query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i LIMIT 1", array($ViewSessMem['GroupID']));
+$gsess_result=sql_query($gsess_query,$SQLStat);
+$ViewSessMem['Group']=sql_result($gsess_result,0,"Name");
 $PreAmIHiddenUser = GetUserName($UserSessInfo['UserID'],$Settings['sqltable'],$SQLStat);
 $AmIHiddenUser = $PreAmIHiddenUser['Hidden']; }
 if(!isset($AmIHiddenUser)) { $AmIHiddenUser = "no"; }
@@ -547,12 +587,17 @@ if($UserSessInfo['UserGroup']!=$Settings['GuestGroup']) {
 if($AmIHiddenUser=="no"&&$UserSessInfo['UserID']>0) { 
 ?>
 <tr id="Member<?php echo $i; ?>" class="TableRow3">
-<td class="TableColumn3" style="text-align: center;"><?php echo $UserSessInfo['UserID']; ?></td>
 <td class="TableColumn3" style="text-align: center;"><a<?php if($GroupInfo['HasAdminCP']=="yes") { ?> title="<?php echo htmlentities($session_user_agent, ENT_QUOTES, $Settings['charset']); ?>"<?php } ?> href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UserSessInfo['UserID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>"><?php echo $UserSessInfo['MemberName']; ?></a>
 <?php if($GroupInfo['CanViewIPAddress']=="yes") { ?> ( <a title="<?php echo $session_ip_address; ?>" onclick="window.open(this.href);return false;" href="<?php echo sprintf($IPCheckURL,$session_ip_address); ?>"><?php echo $session_ip_address; ?></a> )<?php } ?></td>
 <td class="TableColumn3" style="text-align: center;"><?php echo $UserSessInfo['UserGroup']; ?></td>
-<td class="TableColumn3" style="text-align: center;"><a href="<?php echo url_maker($PreFileName,"no+ext",$PreExpPage,$Settings['qstr'],$Settings['qsep'],null,null); ?>"><?php echo $UserSessInfo['PreViewingTitle']; ?> <?php echo $UserSessInfo['ViewingTitle']; ?></a></td>
+<td class="TableColumn3" style="text-align: center;"><?php if($get_session_id!=session_id()) { ?><a href="<?php echo url_maker($PreFileName,"no+ext",$PreExpPage,$Settings['qstr'],$Settings['qsep'],null,null); ?>"><?php echo $UserSessInfo['PreViewingTitle']; ?> <?php echo $UserSessInfo['ViewingTitle']; ?></a><?php } if($get_session_id==session_id()) { ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=online&list=".$_GET['list']."&page=".$_GET['page'],"&","=",$prexqstr['member'],$exqstr['member']); ?>">Viewing Online Member List</a><?php } ?></td>
 <td class="TableColumn3" style="text-align: center;"><?php echo $session_expires; ?></td>
+<td class="TableColumn3" style="text-align: center;"><a href="<?php echo $MemList['Website']; ?>"<?php echo $opennew; ?>>Website</a></td>
+<?php if($UserSessInfo['UserID']>0&&$AmIHiddenUser=="no") { ?>
+<td class="TableColumn3" style="text-align: center;"><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=create&id=".$UserSessInfo['UserID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>"<?php echo $opennew; ?>>PM</a></td>
+<?php } if($UserSessInfo['UserID']<=0||$AmIHiddenUser=="yes") { ?>
+<td class="TableColumn3" style="text-align: center;"><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">PM</a></td>
+<?php } ?>
 </tr>
 <?php } } }
 if($UserSessInfo['UserGroup']==$Settings['GuestGroup']) {
@@ -565,12 +610,17 @@ if(user_agent_check($session_user_agent)) {
 	$UserSessInfo['GuestName'] = user_agent_check($session_user_agent); }
 ?>
 <tr id="Member<?php echo $i; ?>" class="TableRow3">
-<td class="TableColumn3" style="text-align: center;"><?php echo $UserSessInfo['UserID']; ?></td>
 <td class="TableColumn3" style="text-align: center;"><span<?php if($GroupInfo['HasAdminCP']=="yes") { ?> title="<?php echo htmlentities($session_user_agent, ENT_QUOTES, $Settings['charset']); ?>"<?php } ?>><?php echo $UserSessInfo['GuestName']; ?></span>
 <?php if($GroupInfo['CanViewIPAddress']=="yes") { ?> ( <a title="<?php echo $session_ip_address; ?>" onclick="window.open(this.href);return false;" href="<?php echo sprintf($IPCheckURL,$session_ip_address); ?>"><?php echo $session_ip_address; ?></a> )<?php } ?></td>
 <td class="TableColumn3" style="text-align: center;"><?php echo $UserSessInfo['UserGroup']; ?></td>
-<td class="TableColumn3" style="text-align: center;"><a href="<?php echo url_maker($PreFileName,"no+ext",$PreExpPage,$Settings['qstr'],$Settings['qsep'],null,null); ?>"><?php echo $UserSessInfo['PreViewingTitle']; ?> <?php echo $UserSessInfo['ViewingTitle']; ?></a></td>
+<td class="TableColumn3" style="text-align: center;"><?php if($get_session_id!=session_id()) { ?><a href="<?php echo url_maker($PreFileName,"no+ext",$PreExpPage,$Settings['qstr'],$Settings['qsep'],null,null); ?>"><?php echo $UserSessInfo['PreViewingTitle']; ?> <?php echo $UserSessInfo['ViewingTitle']; ?></a><?php } if($get_session_id==session_id()) { ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=online&list=".$_GET['list']."&page=".$_GET['page'],"&","=",$prexqstr['member'],$exqstr['member']); ?>">Viewing Online Member List</a><?php } ?></td>
 <td class="TableColumn3" style="text-align: center;"><?php echo $session_expires; ?></td>
+<td class="TableColumn3" style="text-align: center;"><a href="<?php echo $MemList['Website']; ?>"<?php echo $opennew; ?>>Website</a></td>
+<?php if($UserSessInfo['UserID']>0&&$AmIHiddenUser=="no") { ?>
+<td class="TableColumn3" style="text-align: center;"><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=create&id=".$UserSessInfo['UserID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>"<?php echo $opennew; ?>>PM</a></td>
+<?php } if($UserSessInfo['UserID']<=0||$AmIHiddenUser=="yes") { ?>
+<td class="TableColumn3" style="text-align: center;"><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">PM</a></td>
+<?php } ?>
 </tr>
 <?php } }
 ++$i; }
