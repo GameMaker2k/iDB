@@ -11,7 +11,7 @@
     Copyright 2004-2014 iDB Support - http://idb.berlios.de/
     Copyright 2004-2014 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: searches.php - Last Update: 07/10/2014 SVN 788 - Author: cooldude2k $
+    $FileInfo: searches.php - Last Update: 07/20/2014 SVN 790 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="searches.php"||$File3Name=="/searches.php") {
@@ -85,10 +85,10 @@ if($_GET['act']=="topics") {
 <td class="TableColumn4">&nbsp;</td>
 </tr>
 </table></div>
-<?php } if($_GET['search']!=null&&$_GET['type']!=null) {
+<?php } if(($_GET['search']!=null&&$_GET['type']!=null)||$_GET['type']=="getactive") {
 if(pre_strlen($_GET['msearch'])>="25") { 
 	$_GET['msearch'] = null; }
-if($_GET['msearch']!=null) {
+if(isset($_GET['msearch'])&&$_GET['msearch']!=null) {
 $_GET['memid'] = null;
 $memsiquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s' LIMIT 1", array($_GET['msearch']));
 $memsiresult=sql_query($memsiquery,$SQLStat);
@@ -115,14 +115,14 @@ $nums = $_GET['page'] * $Settings['max_topics'];
 $PageLimit = $nums - $Settings['max_topics'];
 if($PageLimit<0) { $PageLimit = 0; }
 if($_GET['msearch']==null) {
-if($_GET['type']!="wildcard") {
+if($_GET['type']=="normal") {
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\"='%s'".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($_GET['search'],$PageLimit,$Settings['max_topics'])); 
 $rnquery = sql_pre_query("SELECT COUNT(*) FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\"='%s'".$ForumIgnoreList4."", array($_GET['search'])); }
 if($_GET['type']=="wildcard") {
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\" LIKE '%s'".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($_GET['search'],$PageLimit,$Settings['max_topics'])); 
 $rnquery = sql_pre_query("SELECT COUNT(*) FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\" LIKE '%s'".$ForumIgnoreList4."", array($_GET['search'])); } }
 if($_GET['msearch']!=null) {
-if($_GET['type']!="wildcard") {
+if($_GET['type']=="normal") {
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\"='%s' AND \"UserID\"=%i".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($_GET['search'],$memsid,$PageLimit,$Settings['max_topics']));
 $rnquery = sql_pre_query("SELECT COUNT(*) FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\"='%s' AND \"UserID\"=%i".$ForumIgnoreList4."", array($_GET['search']));
 if($memsid==-1) {
@@ -134,6 +134,19 @@ $rnquery = sql_pre_query("SELECT COUNT(*) FROM \"".$Settings['sqltable']."topics
 if($memsid==-1) {
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\" LIKE '%s' AND \"GuestName\"='%s'".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($_GET['search'],$_GET['msearch'],$PageLimit,$Settings['max_topics'])); 
 $rnquery = sql_pre_query("SELECT COUNT(*) FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\" LIKE '%s' AND \"GuestName\"='%s'".$ForumIgnoreList4."", array($_GET['search'],$_GET['msearch'])); } } }
+
+if($_GET['type']=="getactive") {
+
+$active_month = GMTimeGet("m",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$active_day = GMTimeGet("d",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$active_year = GMTimeGet("Y",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+
+$active_start = mktime(0,0,0,$active_month,$active_day,$active_year);
+$active_end = mktime(23,59,59,$active_month,$active_day,$active_year);
+
+$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE (\"TimeStamp\">=%i AND \"TimeStamp\"<=%i) OR (\"LastUpdate\">=%i AND \"LastUpdate\"<=%i)".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($active_start,$active_end,$active_start,$active_end,$PageLimit,$Settings['max_topics']));
+$rnquery = sql_pre_query("SELECT COUNT(*) FROM \"".$Settings['sqltable']."topics\" WHERE (\"TimeStamp\">=%i AND \"TimeStamp\"<=%i) OR (\"LastUpdate\">=%i AND \"LastUpdate\"<=%i)".$ForumIgnoreList4."", array($active_start,$active_end,$active_start,$active_end)); }
+
 $result=sql_query($query,$SQLStat);
 $rnresult=sql_query($rnquery,$SQLStat);
 $NumberTopics = sql_result($rnresult,0);
@@ -266,10 +279,12 @@ if($pagenum>1) {
 <div class="TableRow1">
 <span style="text-align: left;">
 <?php echo $ThemeSet['TitleIcon'];
-if($_GET['msearch']==null) { ?>
+if($_GET['msearch']==null&&$_GET['search']!=null) { ?>
 <a href="<?php echo url_maker($exfile['search'],$Settings['file_ext'],"act=topics&search=".$_GET['search']."&type=".$_GET['type']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search']); ?>">Searching for <?php echo $_GET['search']; ?></a>
-<?php } if($_GET['msearch']!=null) { ?>
+<?php } if($_GET['msearch']!=null&&$_GET['search']!=null) { ?>
 <a href="<?php echo url_maker($exfile['search'],$Settings['file_ext'],"act=topics&search=".$_GET['search']."&type=".$_GET['type']."&msearch=".$_GET['msearch']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search']); ?>">Searching for <?php echo $_GET['search']; ?> by <?php echo $_GET['msearch']; ?></a>
+<?php } if($_GET['type']=="getactive") { ?>
+<a href="<?php echo url_maker($exfile['search'],$Settings['file_ext'],"act=topics&search=".$_GET['search']."&type=".$_GET['type']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search']); ?>">Todays Active Topics</a>
 <?php } ?></span></div>
 <?php } ?>
 <table class="Table1">
@@ -277,10 +292,12 @@ if($_GET['msearch']==null) { ?>
 <tr id="SearchStart" class="TableRow1">
 <td class="TableColumn1" colspan="6"><span style="text-align: left;">
 <?php echo $ThemeSet['TitleIcon'];
-if($_GET['msearch']==null) { ?>
+if($_GET['msearch']==null&&$_GET['search']!=null) { ?>
 <a href="<?php echo url_maker($exfile['search'],$Settings['file_ext'],"act=topics&search=".$_GET['search']."&type=".$_GET['type']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search']); ?>">Searching for <?php echo $_GET['search']; ?></a>
-<?php } if($_GET['msearch']!=null) { ?>
+<?php } if($_GET['msearch']!=null&&$_GET['search']!=null) { ?>
 <a href="<?php echo url_maker($exfile['search'],$Settings['file_ext'],"act=topics&search=".$_GET['search']."&type=".$_GET['type']."&msearch=".$_GET['msearch']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search']); ?>">Searching for <?php echo $_GET['search']; ?> by <?php echo $_GET['msearch']; ?></a>
+<?php } if($_GET['type']=="getactive") { ?>
+<a href="<?php echo url_maker($exfile['search'],$Settings['file_ext'],"act=topics&search=".$_GET['search']."&type=".$_GET['type']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search']); ?>">Todays Active Topics</a>
 <?php } ?></span>
 </td>
 </tr><?php } ?>

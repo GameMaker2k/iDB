@@ -11,10 +11,10 @@
     Copyright 2004-2014 iDB Support - http://idb.berlios.de/
     Copyright 2004-2014 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sqlite.php - Last Update: 07/10/2014 SVN 788 - Author: cooldude2k $
+    $FileInfo: pgsql.php - Last Update: 07/10/2014 SVN 788 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
-if ($File3Name=="sqlite.php"||$File3Name=="/sqlite.php") {
+if ($File3Name=="pgsql.php"||$File3Name=="/pgsql.php") {
 	require('index.php');
 	exit(); }
 

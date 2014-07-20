@@ -11,7 +11,7 @@
     Copyright 2004-2014 iDB Support - http://idb.berlios.de/
     Copyright 2004-2014 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: search.php - Last Update: 07/10/2014 SVN 788 - Author: cooldude2k $
+    $FileInfo: search.php - Last Update: 07/20/2014 SVN 790 - Author: cooldude2k $
 */
 if(ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }
@@ -19,7 +19,7 @@ require('preindex.php');
 $usefileext = $Settings['file_ext'];
 if($ext=="noext"||$ext=="no ext"||$ext=="no+ext") { $usefileext = ""; }
 $filewpath = $exfile['search'].$usefileext.$_SERVER['PATH_INFO'];
-$idbactcheck = array("topic", "topics");
+$idbactcheck = array("topic", "topics", "getactive");
 ob_start("idb_suboutput_handler");
 ?>
 <link rel="search" type="application/opensearchdescription+xml" title="<?php echo $Settings['board_name']." ".$ThemeSet['TitleDivider']; ?> Search" href="<?php echo url_maker($exfile['rss'],$Settings['rss_ext'],"act=opensearch",$Settings['qstr'],$Settings['qsep'],$prexqstr['rss'],$exqstr['rss']); ?>" />
@@ -42,6 +42,11 @@ header("Content-Type: text/plain; charset=".$Settings['charset']);
 ob_clean(); echo "Sorry you do not have permission to do a search."; $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($Settings['enable_search']=="on"||$GroupInfo['CanSearch']=="yes") {
+if($_GET['act']=="getactive") { 
+   $_GET['act'] = "topics"; 
+   $_GET['type'] = "getactive"; }
+if(isset($_GET['type'])&&$_GET['type']=="getactive") { 
+   $_POST['type'] = "getactive"; }
 if(!isset($_GET['search'])) { $_GET['search'] = null; }
 if(!isset($_POST['search'])) { $_POST['search'] = null; }
 if($_GET['search']==null&&
@@ -85,4 +90,6 @@ if($_GET['search']==null&&$_GET['type']==null) {
 change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." Searching",$Settings['use_gzip'],$GZipEncode['Type']); }
 if($_GET['search']!=null&&$_GET['type']!=null) {
 change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." ".$_GET['search'],$Settings['use_gzip'],$GZipEncode['Type']); }
+if($_GET['type']=="getactive") {
+change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." Todays Active Topics",$Settings['use_gzip'],$GZipEncode['Type']); }
 ?>
