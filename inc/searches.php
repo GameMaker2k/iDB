@@ -11,7 +11,7 @@
     Copyright 2004-2014 iDB Support - http://idb.berlios.de/
     Copyright 2004-2014 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: searches.php - Last Update: 07/20/2014 SVN 790 - Author: cooldude2k $
+    $FileInfo: searches.php - Last Update: 07/21/2014 SVN 791 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="searches.php"||$File3Name=="/searches.php") {
@@ -134,19 +134,14 @@ $rnquery = sql_pre_query("SELECT COUNT(*) FROM \"".$Settings['sqltable']."topics
 if($memsid==-1) {
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\" LIKE '%s' AND \"GuestName\"='%s'".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($_GET['search'],$_GET['msearch'],$PageLimit,$Settings['max_topics'])); 
 $rnquery = sql_pre_query("SELECT COUNT(*) FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\" LIKE '%s' AND \"GuestName\"='%s'".$ForumIgnoreList4."", array($_GET['search'],$_GET['msearch'])); } } }
-
 if($_GET['type']=="getactive") {
-
 $active_month = GMTimeGet("m",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $active_day = GMTimeGet("d",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $active_year = GMTimeGet("Y",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-
 $active_start = mktime(0,0,0,$active_month,$active_day,$active_year);
 $active_end = mktime(23,59,59,$active_month,$active_day,$active_year);
-
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE (\"TimeStamp\">=%i AND \"TimeStamp\"<=%i) OR (\"LastUpdate\">=%i AND \"LastUpdate\"<=%i)".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($active_start,$active_end,$active_start,$active_end,$PageLimit,$Settings['max_topics']));
 $rnquery = sql_pre_query("SELECT COUNT(*) FROM \"".$Settings['sqltable']."topics\" WHERE (\"TimeStamp\">=%i AND \"TimeStamp\"<=%i) OR (\"LastUpdate\">=%i AND \"LastUpdate\"<=%i)".$ForumIgnoreList4."", array($active_start,$active_end,$active_start,$active_end)); }
-
 $result=sql_query($query,$SQLStat);
 $rnresult=sql_query($rnquery,$SQLStat);
 $NumberTopics = sql_result($rnresult,0);

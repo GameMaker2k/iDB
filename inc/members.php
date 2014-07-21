@@ -11,7 +11,7 @@
     Copyright 2004-2014 iDB Support - http://idb.berlios.de/
     Copyright 2004-2014 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 07/15/2014 SVN 789 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 07/21/2014 SVN 791 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -20,7 +20,7 @@ if ($File3Name=="members.php"||$File3Name=="/members.php") {
 $pagenum = null;
 if(!is_numeric($_GET['id'])) { $_GET['id'] = null; }
 if(!is_numeric($_GET['page'])) { $_GET['page'] = 1; }
-if($_GET['act']=="list") {
+if($_GET['act']=="list"||$_GET['act']=="getactive") {
 $orderlist = null;
 $orderlist = "order by \"ID\" asc";
 if(!isset($_GET['list'])) { $_GET['list'] = "members"; }
@@ -65,12 +65,25 @@ $nums = $_GET['page'] * $Settings['max_memlist'];
 $PageLimit = $nums - $Settings['max_memlist'];
 if($PageLimit<0) { $PageLimit = 0; }
 $i=0;
+if($_GET['act']=="list") {
 if($_GET['groupid']==null) {
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"<>%i AND \"id\">=0 AND \"HiddenMember\"='no' ".$orderlist." ".$SQLimit, array($GGroup,$PageLimit,$Settings['max_memlist'])); 
 $rnquery = sql_pre_query("SELECT COUNT(*) FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"<>%i AND \"id\">=0 AND \"HiddenMember\"='no'", array($GGroup)); }
 if($_GET['groupid']!=null) {
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"=%i AND \"GroupID\"<>%i AND \"id\">=0 ".$orderlist." ".$SQLimit, array($_GET['groupid'],$GGroup,$PageLimit,$Settings['max_memlist'])); 
-$rnquery = sql_pre_query("SELECT COUNT(*) FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"=%i AND \"GroupID\"<>%i AND \"id\">=0", array($_GET['groupid'],$GGroup)); }
+$rnquery = sql_pre_query("SELECT COUNT(*) FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"=%i AND \"GroupID\"<>%i AND \"id\">=0", array($_GET['groupid'],$GGroup)); } }
+if($_GET['act']=="getactive") {
+$active_month = GMTimeGet("m",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$active_day = GMTimeGet("d",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$active_year = GMTimeGet("Y",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$active_start = mktime(0,0,0,$active_month,$active_day,$active_year);
+$active_end = mktime(23,59,59,$active_month,$active_day,$active_year);
+if($_GET['groupid']==null) {
+$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"<>%i AND \"id\">=0 AND \"HiddenMember\"='no' AND (\"LastActive\">=%i AND \"LastActive\"<=%i) ".$orderlist." ".$SQLimit, array($GGroup,$active_start,$active_end,$PageLimit,$Settings['max_memlist'])); 
+$rnquery = sql_pre_query("SELECT COUNT(*) FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"<>%i AND \"id\">=0 AND \"HiddenMember\"='no' AND (\"LastActive\">=%i AND \"LastActive\"<=%i)", array($GGroup,$active_start,$active_end)); }
+if($_GET['groupid']!=null) {
+$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"=%i AND \"GroupID\"<>%i AND \"id\">=0 AND (\"LastActive\">=%i AND \"LastActive\"<=%i) ".$orderlist." ".$SQLimit, array($_GET['groupid'],$GGroup,$active_start,$active_end,$PageLimit,$Settings['max_memlist'])); 
+$rnquery = sql_pre_query("SELECT COUNT(*) FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"=%i AND \"GroupID\"<>%i AND \"id\">=0 AND (\"LastActive\">=%i AND \"LastActive\"<=%i)", array($_GET['groupid'],$GGroup,$active_start,$active_end)); } }
 $result=sql_query($query,$SQLStat);
 $rnresult=sql_query($rnquery,$SQLStat);
 $NumberMembers = sql_result($rnresult,0);

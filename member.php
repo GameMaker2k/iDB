@@ -11,7 +11,7 @@
     Copyright 2004-2014 iDB Support - http://idb.berlios.de/
     Copyright 2004-2014 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: member.php - Last Update: 07/10/2014 SVN 788 - Author: cooldude2k $
+    $FileInfo: member.php - Last Update: 07/21/2014 SVN 791 - Author: cooldude2k $
 */
 if(ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }
@@ -21,7 +21,7 @@ if($ext=="noext"||$ext=="no ext"||$ext=="no+ext") { $usefileext = ""; }
 $filewpath = $exfile['member'].$Settings['file_ext'].$_SERVER['PATH_INFO'];
 if($_GET['act']==null) { $_GET['act'] = "login"; }
 if(!isset($_GET['view'])) { $_GET['view'] = null; }
-$idbactcheck = array("view", "signup", "login", "login_now", "logout", "online", "list", "makemember", "makemembers");
+$idbactcheck = array("view", "signup", "login", "login_now", "logout", "online", "list", "getactive", "makemember", "makemembers");
 if(!in_array($_GET['act'], $idbactcheck))
 { $_GET['act']="login"; }
 ?>
@@ -51,6 +51,7 @@ $_POST['act']=="loginmember"||
 $_GET['act']=="logout")
 { require($SettDir['inc'].'members.php'); } 
 if($_GET['act']=="list"||
+$_GET['act']=="getactive"||
 $_GET['act']=="view"||
 $_GET['act']=="signup")
 { require($SettDir['inc'].'members.php'); } 
