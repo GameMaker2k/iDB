@@ -11,7 +11,7 @@
     Copyright 2004-2014 iDB Support - http://idb.berlios.de/
     Copyright 2004-2014 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: xhtml10.php - Last Update: 07/10/2014 SVN 788 - Author: cooldude2k $
+    $FileInfo: xhtml10.php - Last Update: 07/21/2014 SVN 793 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="xhtml10.php"||$File3Name=="/xhtml10.php") {
@@ -39,6 +39,7 @@ if($Settings['output_type']!="xhtml") {
 	if($Settings['output_type']!="html") {
 		$ccstart = "//<!--"; $ccend = "//-->";
 header("Content-Type: text/html; charset=".$Settings['charset']); } }
+$Settings['js_ext'] = ".js";
 if($checklowview===true&&$_GET['act']=="lowview") { 
    $ThemeSet['CSSType'] = "lowview"; 
    $ThemeSet['ThemeName'] = $OrgName." Low Theme";

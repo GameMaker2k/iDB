@@ -11,7 +11,7 @@
     Copyright 2004-2014 iDB Support - http://idb.berlios.de/
     Copyright 2004-2014 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: subforums.php - Last Update: 07/10/2014 SVN 788 - Author: cooldude2k $
+    $FileInfo: subforums.php - Last Update: 07/21/2014 SVN 793 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="subforums.php"||$File3Name=="/subforums.php") {
@@ -306,6 +306,7 @@ if($ThemeSet['ForumStyle']==2) {
 $ForumCheck = "skip";
 if($CanHaveTopics!="yes") { 
 $ForumName = $SForumName; $ForumID = $SForumID; $InSubForum = $SFInSubForum;
+$uviewlcuttime = GMTimeStamp();
 $uviewltime = $uviewlcuttime - ini_get("session.gc_maxlifetime");
 if($InSubForum==0) {
 $uviewlquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"session_id\"<>'%s' AND (\"serialized_data\" LIKE '%s' OR \"serialized_data\" LIKE '%s') ORDER BY \"expires\" DESC", array($uviewltime, session_id(), "%currentforumid:0,".$ForumID.";%", "%currentforumid:".$ForumID.",%")); }
@@ -391,6 +392,7 @@ if($GroupInfo['CanViewIPAddress']=="yes") {
 $GuestsViewList = " (<a title=\"".$_SERVER['REMOTE_ADDR']."\" onclick=\"window.open(this.href);return false;\" href=\"".sprintf($IPCheckURL,$_SERVER['REMOTE_ADDR'])."\">".$_SERVER['REMOTE_ADDR']."</a>)".$GuestsViewList; }
 $GuestsViewList = "<a".$uatitleadd." href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$MemList['ID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">".$MemList['Name']."</a>".$GuestsViewList; */
 ++$uviewlgn; }
+++$uviewlnum;
 ?>
 <div class="StatsBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
@@ -406,7 +408,7 @@ $GuestsViewList = "<a".$uatitleadd." href=\"".url_maker($exfile['member'],$Setti
 </td>
 </tr><?php } ?>
 <tr id="Stats1" class="TableStatsRow2">
-<td class="TableStatsColumn2" colspan="2" style="width: 100%; font-weight: bold;"><?php echo $uolnum; ?> users viewing forum</td>
+<td class="TableStatsColumn2" colspan="2" style="width: 100%; font-weight: bold;"><?php echo $uviewlnum; ?> users viewing forum</td>
 </tr>
 <tr class="TableStatsRow3" id="Stats2">
 <td style="width: 4%;" class="TableStatsColumn3"><div class="statsicon">
