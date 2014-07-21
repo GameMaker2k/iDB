@@ -11,7 +11,7 @@
     Copyright 2004-2014 iDB Support - http://idb.berlios.de/
     Copyright 2004-2014 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: stats.php - Last Update: 07/15/2014 SVN 789 - Author: cooldude2k $
+    $FileInfo: stats.php - Last Update: 07/21/2014 SVN 792 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="stats.php"||$File3Name=="/stats.php") {
@@ -139,6 +139,34 @@ if($bdi<$bdmemberz) { $bdstring = $bdstring.$bdMemURL." (<span style=\"font-weig
 if($bdi==$bdmemberz) { $bdstring = $bdstring.$bdMemURL." (<span style=\"font-weight: bold;\" title=\"".$birthday['Name']." is ".$birthday['Age']." years old\">".$birthday['Age']."</span>)"; }
 ++$bdi; }
 sql_free_result($bdresult);
+$active_month = GMTimeGet("m",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$active_day = GMTimeGet("d",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$active_year = GMTimeGet("Y",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$active_start = mktime(0,0,0,$active_month,$active_day,$active_year);
+$active_end = mktime(23,59,59,$active_month,$active_day,$active_year);
+$tdMembersOnline = null;
+$ggquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"Name\"='%s'", array($Settings['GuestGroup']));
+$ggresult=sql_query($ggquery,$SQLStat);
+$GGroup=sql_result($ggresult,0,"id");
+sql_free_result($ggresult);
+$tdquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"<>%i AND \"id\">=0 AND \"HiddenMember\"='no' AND (\"LastActive\">=%i AND \"LastActive\"<=%i) ORDER BY \"LastActive\" DESC", array($GGroup,$active_start,$active_end)); 
+$tdrnquery = sql_pre_query("SELECT COUNT(*) FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"<>%i AND \"id\">=0 AND \"HiddenMember\"='no' AND (\"LastActive\">=%i AND \"LastActive\"<=%i)", array($GGroup,$active_start,$active_end));
+$tdrnresult=sql_query($tdrnquery,$SQLStat);
+$tdNumberMembers=sql_result($tdrnresult,0);
+$tdresult=sql_query($tdquery,$SQLStat);
+$tdnum=sql_num_rows($tdresult);
+$tdi=0;
+while($tdi < $tdnum) {
+$tdMemList['ID']=sql_result($tdresult,$tdi,"id");
+$tdMemList['Name']=sql_result($tdresult,$tdi,"Name");
+$tdMemList['IP']=sql_result($tdresult,$tdi,"IP");
+$tdMemList['LastActive']=sql_result($tdresult,$tdi,"LastActive");
+$tdMemList['LastActive']=GMTimeChange("M j Y, ".$_SESSION['iDBTimeFormat'],$tdMemList['LastActive'],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+if($tdi>0) { $tdMembersOnline .= ", "; }
+$tdMembersOnline .= "<a title=\"".$tdMemList['Name']." was last active at ".$tdMemList['LastActive']."\" href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$tdMemList['ID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">".$tdMemList['Name']."</a>"; 
+if($GroupInfo['CanViewIPAddress']=="yes") {
+$tdMembersOnline .= " (<a title=\"".$tdMemList['IP']."\" onclick=\"window.open(this.href);return false;\" href=\"".sprintf($IPCheckURL,$tdMemList['IP'])."\">".$tdMemList['IP']."</a>)"; }
+++$tdi; }
 ?>
 <div class="StatsBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
@@ -187,6 +215,18 @@ sql_free_result($bdresult);
 &nbsp;Our members have made a total of <?php echo $numtopics; ?> topics<br />
 &nbsp;We have <?php echo $nummembers; ?> registered members<br />
 &nbsp;Our newest member is <a<?php echo $NewestMemTitle; ?> href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$NewestMem['ID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>"><?php echo $NewestMem['Name']; ?></a><?php echo $NewestMemExtraIP; ?>
+</div></td>
+</tr>
+<tr id="Stats5" class="TableStatsRow2">
+<td class="TableStatsColumn2" colspan="2" style="width: 100%; font-weight: bold;">Members Online Today: <?php echo $tdNumberMembers; ?></td>
+</tr>
+<tr class="TableStatsRow3" id="Stats6">
+<td style="width: 4%;" class="TableStatsColumn3"><div class="statsicon">
+<?php echo $ThemeSet['StatsIcon']; ?></div></td>
+<td style="width: 96%;" class="TableStatsColumn3"><div class="statsinfo">
+&nbsp;Number of members online today: <?php echo $tdNumberMembers; ?><br />
+&nbsp;The following members have visited today:<br />
+&nbsp;<?php echo $tdMembersOnline; ?>
 </div></td>
 </tr>
 <tr id="Stats7" class="TableStatsRow4">
