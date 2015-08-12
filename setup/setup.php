@@ -120,6 +120,9 @@ fclose($fp);
 	<option value="utf8_unicode_ci">UTF-8 Unicode Case-Insensitive</option>
 	<option value="utf8_general_ci">UTF-8 General Case-Insensitive</option>
 	<option value="utf8_bin">UTF-8 Binary</option>
+	<option value="utf8mb4_unicode_ci">UTF-8 Multibyte Unicode Case-Insensitive</option>
+	<option value="utf8mb4_general_ci">UTF-8 Multibyte General Case-Insensitive</option>
+	<option value="utf8mb4_bin">UTF-8 Multibyte Binary</option>
 	<?php } ?>
 	</select></td>
 </tr><?php } ?><tr>

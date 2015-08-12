@@ -204,7 +204,7 @@ $tdMembersOnline .= " (<a title=\"".$tdMemList['IP']."\" onclick=\"window.open(t
 <?php echo $bdstring; ?>
 </div></td>
 </tr>
-<tr id="Stats5" class="TableStatsRow2">
+<tr id="Stats4" class="TableStatsRow2">
 <td class="TableStatsColumn2" colspan="2" style="width: 100%; font-weight: bold;">Board Stats</td>
 </tr>
 <tr class="TableStatsRow3" id="Stats6">
@@ -229,7 +229,7 @@ $tdMembersOnline .= " (<a title=\"".$tdMemList['IP']."\" onclick=\"window.open(t
 &nbsp;<?php echo $tdMembersOnline; ?>
 </div></td>
 </tr>
-<tr id="Stats7" class="TableStatsRow4">
+<tr id="Stats6" class="TableStatsRow4">
 <td class="TableStatsColumn4" colspan="2">&nbsp;</td>
 </tr>
 </table></div>

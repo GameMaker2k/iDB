@@ -170,7 +170,10 @@ if(isset($Settings['sql_collate'])&&!isset($Settings['sql_charset'])) {
 		$Settings['sql_charset'] = "latin1"; }
 	if($Settings['sql_collate']=="utf8_bin"||
 		$Settings['sql_collate']=="utf8_general_ci"||
-		$Settings['sql_collate']=="utf8_unicode_ci") {
+		$Settings['sql_collate']=="utf8_unicode_ci"||
+		$Settings['sql_collate']=="utf8mb4_bin"||
+		$Settings['sql_collate']=="utf8mb4_general_ci"||
+		$Settings['sql_collate']=="utf8mb4_unicode_ci") {
 		$Settings['sql_charset'] = "utf8"; } }
 if(isset($Settings['sql_collate'])&&isset($Settings['sql_charset'])) {
 	if($Settings['sql_charset']=="ascii") {
@@ -182,11 +185,22 @@ if(isset($Settings['sql_collate'])&&isset($Settings['sql_charset'])) {
 		$Settings['sql_collate']!="latin1_general_ci"&&
 		$Settings['sql_collate']!="latin1_general_cs") {
 		$Settings['sql_collate'] = "latin1_general_ci"; } }
-	if($Settings['sql_charset']=="utf8") {
+	if($Settings['sql_charset']=="utf8" || $Settings['sql_charset']=="utf8mb4") {
 	if($Settings['sql_collate']!="utf8_bin"&&
 		$Settings['sql_collate']!="utf8_general_ci"&&
-		$Settings['sql_collate']!="utf8_unicode_ci") {
-		$Settings['sql_collate'] = "utf8_unicode_ci"; } }
+		$Settings['sql_collate']!="utf8_unicode_ci"&&
+		$Settings['sql_collate']!="utf8mb4_bin"&&
+		$Settings['sql_collate']!="utf8mb4_general_ci"&&
+		$Settings['sql_collate']!="utf8mb4_unicode_ci") {
+		$Settings['sql_collate'] = "utf8mb4_unicode_ci"; } }
+	if($Settings['sql_collate']=="utf8_bin"||
+		$Settings['sql_collate']=="utf8_general_ci"||
+		$Settings['sql_collate']=="utf8_unicode_ci") {
+		$Settings['sql_charset'] = "utf8"; }
+	if($Settings['sql_collate']=="utf8mb4_bin"||
+		$Settings['sql_collate']=="utf8mb4_general_ci"||
+		$Settings['sql_collate']=="utf8mb4_unicode_ci") {
+		$Settings['sql_charset'] = "utf8mb4"; }
 	$SQLCollate = $Settings['sql_collate'];
 	$SQLCharset = $Settings['sql_charset']; }
 if(!isset($Settings['sql_collate'])||!isset($Settings['sql_charset'])) {
@@ -199,8 +213,8 @@ if($Settings['charset']=="ISO-8859-15") {
 	$SQLCollate = "latin1_general_ci";
 	$SQLCharset = "latin1"; }
 if($Settings['charset']=="UTF-8") {
-	$SQLCollate = "utf8_unicode_ci";
-	$SQLCharset = "utf8"; } 
+	$SQLCollate = "utf8mb4_unicode_ci";
+	$SQLCharset = "utf8mb4"; } 
 $Settings['sql_collate'] = $SQLCollate;
 $Settings['sql_charset'] = $SQLCharset; }
 sql_set_charset($SQLCharset,$SQLStat);
