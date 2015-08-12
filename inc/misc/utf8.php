@@ -37,7 +37,6 @@ if($chkcharset!="UTF-8") { return strlen($str); } }
 function utf8_substr($str,$start)
 {
    preg_match_all("/./su", $str, $ar);
-
    if(func_num_args() >= 3) {
        $end = func_get_arg(2);
        return join("",array_slice($ar[0],$start,$end));
@@ -45,15 +44,16 @@ function utf8_substr($str,$start)
        return join("",array_slice($ar[0],$start));
    }
 }
+
 function pre_substr($string,$start,$length) {
-global $chkcharset;
-if($chkcharset=="UTF-8") {
-if(!defined('UTF8_NOMBSTRING')&&function_exists('mb_substr')) {
-return mb_substr($string,$start,$length,'utf-8'); }
-else { return utf8_substr($string,$start,$length); } }
-if($chkcharset!="UTF-8") { return substr($string,$start,$length); } }
-if(isset($_GET['text'])) {
-echo pre_substr($_GET['text'],0,6); }
+   global $chkcharset;
+   if($chkcharset=="UTF-8") {
+      if(!defined('UTF8_NOMBSTRING')&&function_exists('mb_substr')) {
+      return mb_substr($string,$start,$length,'utf-8'); }
+   else { return utf8_substr($string,$start,$length); } }
+   if($chkcharset!="UTF-8") { return substr($string,$start,$length); } }
+      if(isset($_GET['text'])) {
+   echo pre_substr($_GET['text'],0,6); }
 
 // author: Scott Michael Reynen "scott@randomchaos.com"
 // url: http://www.randomchaos.com/document.php?source=php_and_unicode
@@ -85,7 +85,6 @@ function utf8_to_unicode( $str ) {
   $unicode = array();  
   $values = array();
   $lookingFor = 1;
-  
   for ($i = 0; $i < strlen( $str ); $i++ ) {
     $thisValue = ord( $str[ $i ] );
     if ( $thisValue < 128 ) $unicode[] = $thisValue;

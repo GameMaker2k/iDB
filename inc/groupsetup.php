@@ -41,6 +41,8 @@ $ChkUsrID=sql_result($resultchkusr,0,"id");
 $ChkUsrName=sql_result($resultchkusr,0,"Name");
 $ChkUsrGroup=sql_result($resultchkusr,0,"GroupID");
 $ChkUsrGroupID=$ChkUsrGroup;
+$ChkUsrLevel=sql_result($resultchkusr,0,"LevelID");
+$ChkUsrLevelID=$ChkUsrLevel;
 $ChkUsrPass=sql_result($resultchkusr,0,"UserPassword");
 $ChkUsrTimeZone=sql_result($resultchkusr,0,"TimeZone");
 $ChkUsrDateFormat=sql_result($resultchkusr,0,"DateFormat");
@@ -117,6 +119,25 @@ $gidquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHE
 $gidresult=sql_query($gidquery,$SQLStat);
 $_SESSION['UserGroupID']=sql_result($gidresult,0,"id"); 
 sql_free_result($gidresult); }
+if($_SESSION['UserID']!=0&&$_SESSION['UserID']!=null) {
+$levquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."levels\" WHERE \"id\"=%i LIMIT 1", array($ChkUsrLevelID));
+$levresult=sql_query($levquery,$SQLStat);
+$levnum=sql_num_rows($levresult);
+if($levnum<=0) { $GruError = true; sql_free_result($levresult);
+header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 503;
+ob_clean(); echo "Sorry could not find level data in database.\nContact the board admin about error."; 
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); } }
+if($levnum>=1) {
+$LevelInfo['ID']=sql_result($levresult,0,"id");
+if(!is_numeric($LevelInfo['ID'])) { $GruError = true; }
+$LevelInfo['Name']=sql_result($levresult,0,"Name");
+$LevelInfo['PromoteTo']=sql_result($levresult,0,"PromoteTo");
+$LevelInfo['PromotePosts']=sql_result($levresult,0,"PromotePosts");
+if(!is_numeric($LevelInfo['PromotePosts'])) { 
+	$LevelInfo['PromotePosts'] = 0; $LevelInfo['PromoteTo'] = 0; }
+$LevelInfo['PromoteKarma']=sql_result($levresult,0,"PromoteKarma");
+if(!is_numeric($LevelInfo['PromoteKarma'])) { 
+	$LevelInfo['PromoteKarma'] = 0; $LevelInfo['PromoteTo'] = 0; } }
 // Member Group Setup
 if(!isset($_SESSION['UserGroup'])) { $_SESSION['UserGroup'] = null; }
 if($_SESSION['UserGroup']==null) { 
@@ -270,6 +291,20 @@ if($MyKarmaUpdate<$NewKarmaUpdate&&$MyPostCountChk>0) {
 	$querykarmaup = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"Karma\"=%i,\"KarmaUpdate\"=%i WHERE \"id\"=%i", array($MyKarmaCount,$NewKarmaUpdate,$_SESSION['UserID']));
 	sql_query($querykarmaup,$SQLStat); }
 	$Settings['KarmaBoostDays'] = $Settings['OldKarmaBoostDays'];
+if($LevelInfo['PromoteTo']!=0&&$MyPostCountChk>=$LevelInfo['PromotePosts']) {
+	$sql_level_check = sql_query(sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."levels\" WHERE \"id\"=%i LIMIT 1", array($LevelInfo['PromoteTo'])),$SQLStat);
+	$level_check = sql_num_rows($sql_level_check);
+	sql_free_result($sql_level_check);
+	if($level_check > 0) {
+	$queryupgrade = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"LevelID\"=%i WHERE \"id\"=%i", array($LevelInfo['PromoteTo'],$_SESSION['UserID']));
+	sql_query($queryupgrade,$SQLStat); } }
+if($LevelInfo['PromotePosts']==0&&$LevelInfo['PromoteTo']!=0&&$MyKarmaCount>=$LevelInfo['PromoteKarma']) {
+	$sql_level_check = sql_query(sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."levels\" WHERE \"id\"=%i LIMIT 1", array($LevelInfo['PromoteTo'])),$SQLStat);
+	$level_check = sql_num_rows($sql_level_check);
+	sql_free_result($sql_level_check);
+	if($level_check > 0) {
+	$queryupgrade = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"LevelID\"=%i WHERE \"id\"=%i", array($LevelInfo['PromoteTo'],$_SESSION['UserID']));
+	sql_query($queryupgrade,$SQLStat); } }
 if($GroupInfo['PromoteTo']!=0&&$MyPostCountChk>=$GroupInfo['PromotePosts']) {
 	$sql_group_check = sql_query(sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i LIMIT 1", array($GroupInfo['PromoteTo'])),$SQLStat);
 	$group_check = sql_num_rows($sql_group_check);
@@ -321,10 +356,10 @@ if($GroupInfo['ViewDBInfo']!="yes"&&$GroupInfo['ViewDBInfo']!="no") {
 	$GroupInfo['ViewDBInfo'] = "no"; } }
 if($GruError==true) {
 header("Content-Type: text/plain; charset=".$Settings['charset']); 
-sql_free_result($gruresult); sql_free_result($mempreresult); $urlstatus = 503;
+sql_free_result($gruresult); sql_free_result($levresult); sql_free_result($mempreresult); $urlstatus = 503;
 ob_clean(); echo "Sorry could not load all group data in database.\nContact the board admin about error."; 
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); } }
-sql_free_result($gruresult);
+sql_free_result($gruresult); sql_free_result($levresult);
 if($GroupInfo['CanViewBoard']=="no") { 
 header("Content-Type: text/plain; charset=".$Settings['charset']); 
 ob_clean(); echo "Sorry you can not view the board."; $urlstatus = 503;

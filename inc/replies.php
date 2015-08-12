@@ -333,6 +333,10 @@ sql_free_result($memreresult);
 $User1Joined=sql_result($reresult,$rei,"Joined");
 $User1Joined=GMTimeChange($_SESSION['iDBDateFormat'],$User1Joined,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
 $User1Hidden=sql_result($reresult,$rei,"HiddenMember");
+$User1LevelID=sql_result($reresult,$rei,"LevelID");
+$lquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."levels\" WHERE \"id\"=%i LIMIT 1", array($User1LevelID));
+$lresult=sql_query($lquery,$SQLStat);
+$User1Level=sql_result($lresult,0,"Name");
 $User1GroupID=sql_result($reresult,$rei,"GroupID");
 $gquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i LIMIT 1", array($User1GroupID));
 $gresult=sql_query($gquery,$SQLStat);
@@ -355,7 +359,7 @@ if($User1CanUseBBags!="yes"&&$User1CanUseBBags!="no") {
 $GroupNamePrefix=sql_result($gresult,0,"NamePrefix");
 $GroupNameSuffix=sql_result($gresult,0,"NameSuffix");
 $User1PermissionID=sql_result($gresult,0,"PermissionID");
-sql_free_result($gresult);
+sql_free_result($gresult); sql_free_result($lresult);
 $per1query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i LIMIT 1", array($User1PermissionID));
 $per1esult=sql_query($per1query,$SQLStat);
 $per1num=sql_num_rows($per1esult);
@@ -516,6 +520,7 @@ echo $ThemeSet['LineDividerTopic']; ?><a href="<?php echo url_maker($exfile['top
  </table><br />
 <?php echo $User1Title; ?><br />
 Group: <?php echo $User1Group; ?><br />
+Level: <?php echo $User1Level; ?><br />
 Member: <?php 
 if($User1ID>0&&$User1Hidden=="no") { echo $User1ID; }
 if($User1ID<=0||$User1Hidden=="yes") { echo 0; }

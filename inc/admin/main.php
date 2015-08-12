@@ -366,7 +366,7 @@ $TablePreFix = $Settings['sqltable'];
 function add_prefix($tarray) {
 global $TablePreFix;
 return $TablePreFix.$tarray; }
-$TableChCk = array("categories", "catpermissions", "events", "forums", "groups", "members", "mempermissions", "messenger", "permissions", "polls", "posts", "restrictedwords", "sessions", "smileys", "topics", "wordfilter");
+$TableChCk = array("categories", "catpermissions", "events", "forums", "groups", "levels", "members", "mempermissions", "messenger", "permissions", "polls", "posts", "restrictedwords", "sessions", "smileys", "themes", "topics", "wordfilter");
 $TableChCk = array_map("add_prefix",$TableChCk);
 $tcount = count($TableChCk); $ti = 0;
 $TblOptimized = 0;

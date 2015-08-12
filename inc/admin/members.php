@@ -226,7 +226,6 @@ $dmquery = sql_pre_query("DELETE FROM \"".$Settings['sqltable']."members\" WHERE
 sql_query($dmquery,$SQLStat);
 $dmquery = sql_pre_query("DELETE FROM \"".$Settings['sqltable']."mempermissions\" WHERE \"id\"=%i", array($_POST['id']));
 sql_query($dmquery,$SQLStat); 
-
 $dmgquery = sql_pre_query("UPDATE \"".$Settings['sqltable']."events\" SET \"GuestName\"='%s',\"UserID\"=-1 WHERE \"UserID\"=%i", array($DMemName,$_POST['id']));
 sql_query($dmgquery,$SQLStat);
 $dmgquery = sql_pre_query("UPDATE \"".$Settings['sqltable']."messenger\" SET \"GuestName\"='%s',\"SenderID\"=-1 WHERE \"SenderID\"=%i", array($DMemName,$_POST['id']));
@@ -357,6 +356,11 @@ $gquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE
 $gresult=sql_query($gquery,$SQLStat);
 $EditMem['Group']=sql_result($gresult,0,"Name");
 sql_free_result($gresult);
+$EditMem['LevelID']=sql_result($result,0,"LevelID");
+$lquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."levels\" WHERE \"id\"=%i LIMIT 1", array($EditMem['LevelID']));
+$lresult=sql_query($lquery,$SQLStat);
+$EditMem['Level']=sql_result($lresult,0,"Name");
+sql_free_result($lresult);
 $EditMem['Validated']=sql_result($result,0,"Validated");
 $EditMem['HiddenMember']=sql_result($result,0,"HiddenMember");
 $EditMem['WarnLevel']=sql_result($result,0,"WarnLevel");
@@ -432,7 +436,6 @@ while($fullisti < $fullistnum) {
 $fulliplist = $fulliplist." <a onclick=\"window.open(this.href);return false;\" href=\"".sprintf($IPCheckURL,$MemIPList[$fullisti])."\">".$MemIPList[$fullisti]."</a>";
 ++$fullisti; }
 ?>
-
 <div class="TableMenuBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableMenuRow1">
@@ -492,6 +495,29 @@ if($getgrpidID==$EditMem['GroupID']) {
 <option value="<?php echo $getgrpidID; ?>"<?php echo $GIDselected; ?>><?php echo $getgrpidName; ?></option>
 <?php ++$getgrpidi; }
 sql_free_result($getgrpidr); ?>
+	</select></td>
+<?php /*}*/ ?>
+</tr><tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="lid">New Level for Member:</label></td>
+	<td style="width: 50%;"><select size="1" class="TextBox" name="lid" id="lid">
+<?php 
+$getlevidq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."levels\" WHERE (\"Name\"<>'%s' AND \"id\"<>%i)", array("Guest",-1));
+$getlevidr=sql_query($getlevidq,$SQLStat);
+$getlevidnum=sql_num_rows($getlevidr);
+$getlevidi = 0;
+if($getlevidnum<1) { ?>
+	<option value="0">None</option>
+<?php }
+while ($getlevidi < $getlevidnum) {
+$getlevidID=sql_result($getlevidr,$getlevidi,"id");
+$getlevidName=sql_result($getlevidr,$getlevidi,"Name");
+$LIDselected = null;
+if($getlevidID==$EditMem['LevelID']) { 
+	$LIDselected = " selected=\"selected\""; }
+?>
+<option value="<?php echo $getlevidID; ?>"<?php echo $LIDselected; ?>><?php echo $getlevidName; ?></option>
+<?php ++$getlevidi; }
+sql_free_result($getlevidr); ?>
 	</select></td>
 <?php } ?>
 </tr><tr style="text-align: left;">
@@ -735,7 +761,7 @@ if($DMemName!==null&&($_POST['id']!="0"||$_POST['id']!="-1")&&
 if($_POST['MemName']==$DMemName||$username_check>=1) {
 if($_POST['id']!=1) {
 if(!is_numeric($_POST['MemPermID'])) { $_POST['MemPermID'] = "0"; }
-$dmquery = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"GroupID\"=%i,\"HiddenMember\"='%s',\"WarnLevel\"=%i,\"BanTime\"=%i,\"PostCount\"=%i,\"Karma\"=%i WHERE \"id\"=%i", array($_POST['gid'],$_POST['MemHidden'],$_POST['MemWarnLevel'],$_POST['MemBanTime'],$_POST['MemPostCount'],$_POST['MemKarma'],$_POST['id'])); 
+$dmquery = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"GroupID\"=%i,\"LevelID\"=%i,\"HiddenMember\"='%s',\"WarnLevel\"=%i,\"BanTime\"=%i,\"PostCount\"=%i,\"Karma\"=%i WHERE \"id\"=%i", array($_POST['gid'],$_POST['lid'],$_POST['MemHidden'],$_POST['MemWarnLevel'],$_POST['MemBanTime'],$_POST['MemPostCount'],$_POST['MemKarma'],$_POST['id'])); 
 $dpmquery = sql_pre_query("UPDATE \"".$Settings['sqltable']."mempermissions\" SET \"PermissionID\"=%i,\"CanViewBoard\"='%s',\"CanViewOffLine\"='%s',\"CanEditProfile\"='%s',\"CanAddEvents\"='%s',\"CanPM\"='%s',\"CanSearch\"='%s',\"CanDoHTML\"='%s',\"CanUseBBags\"='%s',\"CanViewIPAddress\"='%s',\"CanViewUserAgent\"='%s',\"FloodControl\"=%i,\"SearchFlood\"=%i,\"HasModCP\"='%s',\"HasAdminCP\"='%s',\"ViewDBInfo\"='%s' WHERE \"id\"=%i", array($_POST['MemPermID'],$_POST['CanViewBoard'],$_POST['CanViewOffLine'],$_POST['CanEditProfile'],$_POST['CanAddEvents'],$_POST['CanPM'],$_POST['CanSearch'],$_POST['CanDoHTML'],$_POST['CanUseBBags'],$_POST['CanViewIPAddress'],$_POST['CanViewUserAgent'],$_POST['FloodControl'],$_POST['SearchFlood'],$_POST['HasModCP'],$_POST['HasAdminCP'],$_POST['ViewDBInfo'],$_POST['id'])); }
 if($_POST['id']==1) {
 $dmquery = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"HiddenMember\"='%s',\"WarnLevel\"=%i,\"BanTime\"=%i,\"PostCount\"=%i,\"Karma\"=%i WHERE \"id\"=%i", array($_POST['MemHidden'],$_POST['MemWarnLevel'],$_POST['MemBanTime'],$_POST['MemPostCount'],$_POST['MemKarma'],$_POST['id'])); 
@@ -743,7 +769,7 @@ $dpmquery = sql_pre_query("UPDATE \"".$Settings['sqltable']."mempermissions\" SE
 if($_POST['MemName']!=$DMemName&&$username_check<1) {
 if($_POST['id']!=1) {
 if(!is_numeric($_POST['MemPermID'])) { $_POST['MemPermID'] = "0"; }
-$dmquery = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"Name\"='%s',\"GroupID\"=%i,\"HiddenMember\"='%s',\"WarnLevel\"=%i,\"BanTime\"=%i,\"PostCount\"=%i,\"Karma\"=%i WHERE \"id\"=%i", array($_POST['MemName'],$_POST['gid'],$_POST['MemHidden'],$_POST['MemWarnLevel'],$_POST['MemBanTime'],$_POST['MemPostCount'],$_POST['MemKarma'],$_POST['id'])); 
+$dmquery = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"Name\"='%s',\"GroupID\"=%i,\"LevelID\"=%i,\"HiddenMember\"='%s',\"WarnLevel\"=%i,\"BanTime\"=%i,\"PostCount\"=%i,\"Karma\"=%i WHERE \"id\"=%i", array($_POST['MemName'],$_POST['gid'],$_POST['lid'],$_POST['MemHidden'],$_POST['MemWarnLevel'],$_POST['MemBanTime'],$_POST['MemPostCount'],$_POST['MemKarma'],$_POST['id'])); 
 $dpmquery = sql_pre_query("UPDATE \"".$Settings['sqltable']."mempermissions\" SET \"PermissionID\"=%i,\"CanViewBoard\"='%s',\"CanViewOffLine\"='%s',\"CanEditProfile\"='%s',\"CanAddEvents\"='%s',\"CanPM\"='%s',\"CanSearch\"='%s',\"CanDoHTML\"='%s',\"CanUseBBags\"='%s',\"CanViewIPAddress\"='%s',\"CanViewUserAgent\"='%s',\"FloodControl\"=%i,\"SearchFlood\"=%i,\"HasModCP\"='%s',\"HasAdminCP\"='%s',\"ViewDBInfo\"='%s' WHERE \"id\"=%i", array($_POST['MemPermID'],$_POST['CanViewBoard'],$_POST['CanViewOffLine'],$_POST['CanEditProfile'],$_POST['CanAddEvents'],$_POST['CanPM'],$_POST['CanSearch'],$_POST['CanDoHTML'],$_POST['CanUseBBags'],$_POST['CanViewIPAddress'],$_POST['CanViewUserAgent'],$_POST['FloodControl'],$_POST['SearchFlood'],$_POST['HasModCP'],$_POST['HasAdminCP'],$_POST['ViewDBInfo'],$_POST['id'])); } 
 if($_POST['id']==1) {
 $dmquery = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"Name\"='%s',\"HiddenMember\"='%s',\"WarnLevel\"=%i,\"BanTime\"=%i,\"PostCount\"=%i,\"Karma\"=%i WHERE \"id\"=%i", array($_POST['MemName'],$_POST['MemHidden'],$_POST['MemWarnLevel'],$_POST['MemBanTime'],$_POST['MemPostCount'],$_POST['MemKarma'],$_POST['id'])); 

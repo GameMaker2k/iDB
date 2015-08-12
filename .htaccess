@@ -1,11 +1,5 @@
- <FilesMatch "settings.php">
-    Order Deny,Allow
-    Deny from all
-    Satisfy All
- </FilesMatch>
-
- <FilesMatch "settingsbak.php">
-    Order Deny,Allow
-    Deny from all
-    Satisfy All
- </FilesMatch>
+#RewriteEngine on
+#RewriteBase   /idb/
+#RewriteRule   ^idb-(admin|calendar|category|event|forum|index|member|messenger|profile|rss|search|subcategory|subforum|topic)(.*)$    $1.php$2
+#RewriteRule   ^intdb-(admin|calendar|category|event|forum|index|member|messenger|profile|rss|search|subcategory|subforum|topic)(.*)$    $1.php$2
+#RewriteRule   ^view-(admin|calendar|category|event|forum|index|member|messenger|profile|rss|search|subcategory|subforum|topic)(.*)$    $1.php$2

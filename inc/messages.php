@@ -468,6 +468,10 @@ if($PreUserCanUseBBags!="yes"&&$PreUserCanUseBBags!="no"&&$PreUserCanUseBBags!="
 sql_free_result($memreresult);
 $User1Joined=sql_result($reresult,$rei,"Joined");
 $User1Joined=GMTimeChange($_SESSION['iDBDateFormat'],$User1Joined,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$User1LevelID=sql_result($reresult,$rei,"LevelID");
+$lquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."levels\" WHERE \"id\"=%i LIMIT 1", array($User1LevelID));
+$lresult=sql_query($lquery,$SQLStat);
+$User1Level=sql_result($lresult,0,"Name");
 $User1GroupID=sql_result($reresult,$rei,"GroupID");
 $User1Hidden=sql_result($reresult,$rei,"HiddenMember");
 $SenderHidden = $User1Hidden;
@@ -491,7 +495,7 @@ if($User1CanUseBBags!="yes"&&$User1CanUseBBags!="no") {
 	$User1CanUseBBags = "no"; }
 $GroupNamePrefix=sql_result($gresult,0,"NamePrefix");
 $GroupNameSuffix=sql_result($gresult,0,"NameSuffix");
-sql_free_result($gresult);
+sql_free_result($gresult); sql_free_result($lresult);
 if($User1Title=="") { $User1Title = $User1Group; }
 $User1Signature=sql_result($reresult,$rei,"Signature");
 $User1Avatar=sql_result($reresult,$rei,"Avatar");
@@ -593,6 +597,7 @@ echo $ThemeSet['LineDividerTopic']; ?><a href="<?php echo url_maker($exfile['mes
  </table><br />
 <?php echo $User1Title; ?><br />
 Group: <?php echo $User1Group; ?><br />
+Level: <?php echo $User1Level; ?><br />
 Member: <?php 
 if($User1ID>0&&$User1Hidden=="no") { echo $User1ID; }
 if($User1ID<=0||$User1Hidden=="yes") { echo 0; }
