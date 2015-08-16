@@ -187,6 +187,7 @@ if($pagenum>1) {
 <?php
 while ($i < $num) {
 $PMID=sql_result($result,$i,"id");
+$PMDiscussionID=sql_result($result,$i,"DiscussionID");
 $SenderID=sql_result($result,$i,"SenderID");
 $SenderIP=sql_result($result,$i,"IP");
 $PreSenderName = GetUserName($SenderID,$Settings['sqltable'],$SQLStat);
@@ -218,7 +219,7 @@ if ($MessageStat==1) {
 <td class="TableMenuColumn3"><div class="messagestate">
 <?php echo $PreMessage; ?></div></td>
 <td class="TableMenuColumn3"><div class="messagename">
-<a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=read&id=".$PMID,$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>"><?php echo $MessageName; ?></a></div>
+<?php if($PMDiscussionID<=0) { ?><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=read&id=".$PMID,$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']).$Settings['qstr']."#message".$PMID; ?>"><?php echo $MessageName; ?></a><?php } if($PMDiscussionID>0) { ?><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=read&id=".$PMDiscussionID,$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']).$Settings['qstr']."#message".$PMID; ?>"><?php echo $MessageName; ?></a><?php } ?></div>
 <div class="messagedesc"><?php echo $MessageDesc; ?></div></td>
 <td class="TableMenuColumn3" style="text-align: center;"><?php
 if($SenderID>0&&$SenderHidden=="no") {
@@ -358,6 +359,7 @@ if($pagenum>1) {
 <?php
 while ($i < $num) {
 $PMID=sql_result($result,$i,"id");
+$PMDiscussionID=sql_result($result,$i,"DiscussionID");
 $SenderID=sql_result($result,$i,"SenderID");
 $SenderIP=sql_result($result,$i,"IP");
 $PreSenderName = GetUserName($SenderID,$Settings['sqltable'],$SQLStat);
@@ -389,7 +391,7 @@ if ($MessageStat==1) {
 <td class="TableMenuColumn3"><div class="messagestate">
 <?php echo $PreMessage; ?></div></td>
 <td class="TableMenuColumn3"><div class="messagename">
-<a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=read&id=".$PMID,$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>"><?php echo $MessageName; ?></a></div>
+<?php if($PMDiscussionID<=0) { ?><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=read&id=".$PMID,$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']).$Settings['qstr']."#message".$PMID; ?>"><?php echo $MessageName; ?></a><?php } if($PMDiscussionID>0) { ?><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=read&id=".$PMDiscussionID,$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']).$Settings['qstr']."#message".$PMID; ?>"><?php echo $MessageName; ?></a><?php } ?></div>
 <div class="messagedesc"><?php echo $MessageDesc; ?></div></td>
 <td class="TableMenuColumn3" style="text-align: center;"><?php
 if($ReciverID>0&&$ReciverHidden=="no") {
@@ -407,7 +409,7 @@ echo "<span>".$ReciverName."</span>"; }
 </tr>
 <?php sql_free_result($result); }
 if($_GET['act']=="read") {
-$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."messenger\" WHERE \"id\"=%i", array($_GET['id']));
+$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."messenger\" WHERE (\"id\"=%i OR \"DiscussionID\"=%i) AND (\"SenderID\"=%i OR \"ReciverID\"=%i)", array($_GET['id'], $_GET['id'], $_SESSION['UserID'], $_SESSION['UserID']));
 $result=sql_query($query,$SQLStat);
 $num=sql_num_rows($result);
 $is=0;
@@ -519,7 +521,6 @@ $User1PostCount=sql_result($reresult,$rei,"PostCount");
 $User1Karma=sql_result($reresult,$rei,"Karma");
 $User1IP=sql_result($reresult,$rei,"IP");
 ++$rei; } sql_free_result($reresult);
-++$is; } sql_free_result($result);
 if($_SESSION['UserID']==$ReciverID) {
 $queryup = sql_pre_query("UPDATE \"".$Settings['sqltable']."messenger\" SET \"Read\"=%i WHERE \"id\"=%i", array(1,$_GET['id']));
 sql_query($queryup,$SQLStat); }
@@ -550,13 +551,13 @@ $User1Signature = text2icons($User1Signature,$Settings['sqltable'],$SQLStat);
 $User1Signature = preg_replace("/\<br\>/", "<br />", nl2br($User1Signature));
 $User1Signature = url2link($User1Signature);
 ?>
-<div class="TableInfoMini1Border">
+<div class="TableInfoMini1Border" id="message<?php echo $PMID; ?>">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableInfoMiniRow1">
 <span style="font-weight: bold; text-align: left;"><?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>"><?php echo $MessageName; ?></a> ( <?php echo $MessageDesc; ?> )</span>
 </div>
 <?php } ?>
-<table class="TableInfoMini1" style="width: 100%;">
+<table class="TableInfoMini1" style="width: 100%;" id="pmessage<?php echo $is+1; ?>">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableInfoMiniRow1">
 <td class="TableInfoMiniColumn1" colspan="2"><span style="font-weight: bold; text-align: left;"><?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>"><?php echo $MessageName; ?></a> ( <?php echo $MessageDesc; ?> )</span>
@@ -579,8 +580,10 @@ echo "<span>".$User1Name."</span>"; }
 <div style="text-align: right;">
 <?php if(isset($ThemeSet['Report'])&&$ThemeSet['Report']!=null) { ?>
 <a href="#Act/Report"><?php echo $ThemeSet['Report']; ?></a>
-<?php } if($GroupInfo['CanPM']=="yes"&&isset($ThemeSet['QuoteReply'])&&$ThemeSet['QuoteReply']!=null) { 
-echo $ThemeSet['LineDividerTopic']; ?><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=create&id=".$User1ID."&post=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>"><?php echo $ThemeSet['QuoteReply']; ?></a>
+<?php } if($GroupInfo['CanPM']=="yes"&&isset($ThemeSet['QuoteReply'])&&$ThemeSet['QuoteReply']!=null) {
+if($_SESSION['UserID']!=$User1ID) { $SendToID = $User1ID; }
+if($_SESSION['UserID']==$User1ID) { $SendToID = $ReciverID; }
+echo $ThemeSet['LineDividerTopic']; ?><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=create&id=".$SendToID."&post=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>"><?php echo $ThemeSet['QuoteReply']; ?></a>
 <?php } ?>&nbsp;</div>
 </td>
 </tr>
@@ -635,11 +638,18 @@ if(($User1ID<=0||$User1Hidden=="yes")&&isset($ThemeSet['PM'])&&$ThemeSet['PM']!=
 echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); }
 ?>"><?php echo $ThemeSet['PM']; ?></a></span>
 </td></tr>
-<?php } ?>
+</table></div>
+<div class="DivReplies">&nbsp;</div>
+<?php ++$is; } ?>
+</td></tr>
+</table>
+<?php sql_free_result($result); }
+if($_GET['act']!="read") { ?>
 </table></div>
 </td></tr>
 </table>
-<?php } if($_GET['act']=="create") { 
+<?php } }
+if($_GET['act']=="create") { 
 $SendMessageTo = null;
 if($_GET['id']!=null&&$_GET['id']!=-1) {
 $requery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i", array($_GET['id']));
@@ -654,14 +664,15 @@ $SendToGroupID = sql_result($reresult,$rei,"GroupID");
 if(!isset($renum)) { $renum = 0; }
 if($renum==0) { $SendMessageTo = null; }
 $QuoteReply = null; $QuoteDescription = null; $QuoteTitle = null;
-if($_GET['post']!=null) {
+if($_GET['post']!=null and is_numeric($_GET['post'])) {
 if(isset($SendMessageTo)) {
 $QuoteUserName = $SendMessageTo; }
 if(!isset($SendMessageTo)) {
 $QuoteUserName = "Unknown"; }
-$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."messenger\" WHERE \"id\"=%i", array($_GET['post']));
+$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."messenger\" WHERE \"id\"=%i AND (\"SenderID\"=%i OR \"ReciverID\"=%i)", array($_GET['post'], $_SESSION['UserID'], $_SESSION['UserID']));
 $result=sql_query($query,$SQLStat);
 $num=sql_num_rows($result);
+if($num>0) {
 $QuoteTitle=sql_result($result,0,"MessageTitle");
 $MessageText=sql_result($result,0,"MessageText");
 $QuoteReply = preg_replace("/\<br\>/", "<br />", nl2br($MessageText));
@@ -673,7 +684,8 @@ $QuoteDescription = str_replace("Re: ","",$QuoteDescription);
 $QuoteDescription = "Re: ".$QuoteDescription;
 $QuoteTitle = str_replace("Re: ","",$QuoteTitle);
 $QuoteTitle = "Re: ".$QuoteTitle;
-$QuoteReply = null; }
+$QuoteReply = null; } }
+if($num==0) { $_GET['post'] = null; }
 $UFID = rand_uuid("rand");
 $_SESSION['UserFormID'] = $UFID;
 ?>
@@ -757,6 +769,11 @@ sql_free_result($renee_result);
 <input type="submit" class="Button" value="Send Message" name="send_message" />
 <input type="hidden" style="display: none;" name="fid" value="<?php echo $UFID; ?>" />
 <input type="hidden" style="display: none;" name="ubid" value="<?php echo $Settings['BoardUUID']; ?>" />
+<?php if($_GET['post']!=null and is_numeric($_GET['post'])) { ?>
+<input type="hidden" style="display: none;" name="post" value="<?php echo $_GET['post']; ?>" />
+<?php } if($_GET['post']==null or !is_numeric($_GET['post'])) { ?>
+<input type="hidden" style="display: none;" name="post" value="0" />
+<?php } ?>
 <input type="reset" value="Reset Form" class="Button" name="Reset_Form" />
 </td></tr></table>
 </form></td></tr>
@@ -858,6 +875,14 @@ if (PhpCaptcha::Validate($_POST['signcode'])) {
 	</span>&nbsp;</td>
 </tr>
 <?php } }
+if(is_numeric($_POST['post'])) { $_POST['post'] = intval($_POST['post'], 10); }
+if(!isset($_POST['post']) or !is_numeric($_POST['post']) or $_POST['post']==null) { $_POST['post'] = 0; }
+if($_POST['post']>0) {
+$querychckm = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."messenger\" WHERE \"id\"=%i AND (\"SenderID\"=%i OR \"ReciverID\"=%i)", array($_POST['post'], $_SESSION['UserID'], $_SESSION['UserID']));
+$resultchckm=sql_query($querychckm,$SQLStat);
+$numchckm=sql_num_rows($resultchckm);
+if($numchckm==0) { $_POST['post'] = 0; } }
+sql_free_result($resultchckm);
 $_POST['MessageName'] = stripcslashes(htmlspecialchars($_POST['MessageName'], ENT_QUOTES, $Settings['charset']));
 //$_POST['MessageName'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['MessageName']);
 $_POST['MessageName'] = remove_spaces($_POST['MessageName']);
@@ -1043,14 +1068,16 @@ redirect("refresh",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"a
 if($_SESSION['UserGroup']==$Settings['GuestGroup']) { $User1Name = $_POST['GuestName']; }
 if($_SESSION['UserGroup']!=$Settings['GuestGroup']) { $User1Name = $_SESSION['MemberName']; }
 $User1IP=$_SERVER['REMOTE_ADDR'];
-$query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."messenger\" (\"SenderID\", \"ReciverID\", \"GuestName\", \"MessageTitle\", \"MessageText\", \"Description\", \"DateSend\", \"Read\", \"IP\") VALUES 
-(%i, %i, '%s', '%s', '%s', '%s', %i, %i, '%s')", array($_SESSION['UserID'],$SendMessageToID,$_SESSION['MemberName'],$_POST['MessageName'],$_POST['Message'],$_POST['MessageDesc'],$LastActive,0,$User1IP));
+$query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."messenger\" (\"DiscussionID\", \"SenderID\", \"ReciverID\", \"GuestName\", \"MessageTitle\", \"MessageText\", \"Description\", \"DateSend\", \"Read\", \"IP\") VALUES 
+(%i, %i, %i, '%s', '%s', '%s', '%s', %i, %i, '%s')", array($_POST['post'],$_SESSION['UserID'],$SendMessageToID,$_SESSION['MemberName'],$_POST['MessageName'],$_POST['Message'],$_POST['MessageDesc'],$LastActive,0,$User1IP));
 sql_query($query,$SQLStat);
 $messageid = sql_get_next_id($Settings['sqltable'],"messenger",$SQLStat);
+$msglinkback = "Click <a href=\"".url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger'])."\">here</a> to go back to mailbox.";
+if($_POST['post']>0) { $msglinkback = "Click <a href=\"".url_maker($exfile['messenger'],$Settings['file_ext'],"act=read&id=".$_POST['post'],$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger'])."\">here</a> to go back to message."; }
 ?><tr>
 	<td><span class="TableMessage"><br />
 	Message sent to user <?php echo $_POST['SendMessageTo']; ?>.<br />
-	Click <a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">here</a> to go back to index.<br />&nbsp;
+	<?php echo $msglinkback; ?><br />&nbsp;
 	</span><br /></td>
 </tr>
 <?php } ?>

@@ -227,6 +227,7 @@ $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."mempermissions\" 
 sql_query($query,$SQLStat);
 $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."messenger\" (\n".
 "  \"id\" SERIAL PRIMARY KEY NOT NULL,\n".
+"  \"DiscussionID\" numeric(15) NOT NULL default '0',\n".
 "  \"SenderID\" numeric(15) NOT NULL default '0',\n".
 "  \"ReciverID\" numeric(15) NOT NULL default '0',\n".
 "  \"GuestName\" varchar(150) NOT NULL default '',\n".
@@ -238,8 +239,8 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."messenger\" (\n".
 "  \"IP\" varchar(50) NOT NULL default ''\n".
 ");", array(null));
 sql_query($query,$SQLStat);
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."messenger\" (\"SenderID\", \"ReciverID\", \"GuestName\", \"MessageTitle\", \"MessageText\", \"Description\", \"DateSend\", \"Read\", \"IP\") VALUES\n".
-"(-1, 1, '".$iDB_Author."', 'Welcome', 'Welcome to your new Internet Discussion Board! :)\r\nThis is a Test PM. :P ', 'Welcome %s', %i, 0, '127.0.0.1');", array($_POST['AdminUser'],$YourDate));
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."messenger\" (\"DiscussionID\", \"SenderID\", \"ReciverID\", \"GuestName\", \"MessageTitle\", \"MessageText\", \"Description\", \"DateSend\", \"Read\", \"IP\") VALUES\n".
+"(0, -1, 1, '".$iDB_Author."', 'Welcome', 'Welcome to your new Internet Discussion Board! :)', 'Welcome %s', %i, 0, '127.0.0.1');", array($_POST['AdminUser'],$YourDate));
 sql_query($query,$SQLStat);
 $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."permissions\" (\n".
 "  \"id\" SERIAL PRIMARY KEY NOT NULL,\n".
