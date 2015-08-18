@@ -8,11 +8,11 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2014 iDB Support - http://idb.berlios.de/
-    Copyright 2004-2014 Game Maker 2k - http://gamemaker2k.org/
+    Copyright 2004-2015 iDB Support - http://idb.berlios.de/
+    Copyright 2004-2015 Game Maker 2k - http://gamemaker2k.org/
 	iBBCode / iBBTags by Kazuki Przyborowski - http://idb.berlios.net/
 
-    $FileInfo: ibbcode.php - Last Update: 07/10/2014 SVN 788 - Author: cooldude2k $
+    $FileInfo: ibbcode.php - Last Update: 08/18/2015 SVN 797 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="ibbcode.php"||$File3Name=="/ibbcode.php") {

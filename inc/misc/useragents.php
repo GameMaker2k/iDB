@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2014 iDB Support - http://idb.berlios.de/
-    Copyright 2004-2014 Game Maker 2k - http://gamemaker2k.org/
+    Copyright 2004-2015 iDB Support - http://idb.berlios.de/
+    Copyright 2004-2015 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: useragents.php - Last Update: 01/01/2012 SVN 783 - Author: cooldude2k $
+    $FileInfo: useragents.php - Last Update: 08/18/2015 SVN 797 - Author: cooldude2k $
 */
 // User Agent Checker
 function user_agent_check($user_agent) {

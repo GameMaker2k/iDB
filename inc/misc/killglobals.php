@@ -8,11 +8,11 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2014 iDB Support - http://idb.berlios.de/
-    Copyright 2004-2014 Game Maker 2k - http://gamemaker2k.org/
+    Copyright 2004-2015 iDB Support - http://idb.berlios.de/
+    Copyright 2004-2015 Game Maker 2k - http://gamemaker2k.org/
 	Kill Register Globals (Register Globals are very lame we dont need them anyways. :P)
 
-    $FileInfo: killglobals.php - Last Update: 07/10/2014 SVN 788 - Author: cooldude2k $
+    $FileInfo: killglobals.php - Last Update: 08/18/2015 SVN 797 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="killqlobals.php"||$File3Name=="/killqlobals.php") {

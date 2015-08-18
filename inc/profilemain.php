@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2014 iDB Support - http://idb.berlios.de/
-    Copyright 2004-2014 Game Maker 2k - http://gamemaker2k.org/
+    Copyright 2004-2015 iDB Support - http://idb.berlios.de/
+    Copyright 2004-2015 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: profilemain.php - Last Update: 07/10/2014 SVN 788 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 08/18/2015 SVN 797 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
@@ -1152,18 +1152,6 @@ if($OldHashType=="iDBHRMD256") {
 	$YourPassword = b64e_hmac($_POST['OldPass'],$OldJoined,$OldSalt,"ripemd256"); }
 if($OldHashType=="iDBHRMD320") { 
 	$YourPassword = b64e_hmac($_POST['OldPass'],$OldJoined,$OldSalt,"ripemd320"); }
-if($OldHashType=="iDBHSALSA10") { 
-	$YourPassword = b64e_hmac($_POST['OldPass'],$OldJoined,$OldSalt,"salsa10"); }
-if($OldHashType=="iDBHSALSA20") { 
-	$YourPassword = b64e_hmac($_POST['OldPass'],$OldJoined,$OldSalt,"salsa20"); }
-if($OldHashType=="iDBHSFRU") { 
-	$YourPassword = b64e_hmac($_POST['OldPass'],$OldJoined,$OldSalt,"snefru"); }
-if($OldHashType=="iDBHSFRU256") { 
-	$YourPassword = b64e_hmac($_POST['OldPass'],$OldJoined,$OldSalt,"snefru256"); }
-if($OldHashType=="iDBHGOST") { 
-	$YourPassword = b64e_hmac($_POST['OldPass'],$OldJoined,$OldSalt,"gost"); }
-if($OldHashType=="iDBHJOAAT") { 
-	$YourPassword = b64e_hmac($_POST['OldPass'],$OldJoined,$OldSalt,"joaat"); }
 if($YourPassword!=$OldPassword) { $Error="Yes"; ?>
 <div class="TableMessage" style="text-align: center;">Your old Password did not match.<br />&nbsp;</div>
 <?php } if(pre_strlen($_POST['Password'])>"60") { $Error="Yes"; ?>
@@ -1201,18 +1189,6 @@ if($YourPassword!=$OldPassword) { $Error="Yes"; ?>
 	$NewPassword = b64e_hmac($_POST['Password'],$OldJoined,$NewSalt,"ripemd256"); }
 	if($Settings['use_hashtype']=="ripemd320") { $iDBHash = "iDBHRMD320";
 	$NewPassword = b64e_hmac($_POST['Password'],$OldJoined,$NewSalt,"ripemd320"); }
-	if($Settings['use_hashtype']=="salsa10") { $iDBHash = "iDBHSALSA10";
-	$NewPassword = b64e_hmac($_POST['Password'],$OldJoined,$NewSalt,"salsa10"); }
-	if($Settings['use_hashtype']=="salsa20") { $iDBHash = "iDBHSALSA20";
-	$NewPassword = b64e_hmac($_POST['Password'],$OldJoined,$NewSalt,"salsa20"); }
-	if($Settings['use_hashtype']=="snefru") { $iDBHash = "iDBHSFRU";
-	$NewPassword = b64e_hmac($_POST['Password'],$OldJoined,$NewSalt,"snefru"); }
-	if($Settings['use_hashtype']=="snefru256") { $iDBHash = "iDBHSFRU256";
-	$NewPassword = b64e_hmac($_POST['Password'],$OldJoined,$NewSalt,"snefru256"); }
-	if($Settings['use_hashtype']=="gost") { $iDBHash = "iDBHGOST";
-	$NewPassword = b64e_hmac($_POST['Password'],$OldJoined,$NewSalt,"gost"); }
-	if($Settings['use_hashtype']=="joaat") { $iDBHash = "iDBHJOAAT";
-	$NewPassword = b64e_hmac($_POST['Password'],$OldJoined,$NewSalt,"joaat"); }
 	$_SESSION['UserPass']=$NewPassword;
 	if($cookieDomain==null) {
 	setcookie("SessPass", $NewPassword, time() + (7 * 86400), $cbasedir); }

@@ -1,5 +1,5 @@
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//        $FileInfo: README - Last Update: 07/10/2014 SVN 788 - Author: cooldude2k $          
+//        $FileInfo: README - Last Update: 08/18/2015 SVN 797 - Author: cooldude2k $          
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //                       __________________________________________
 //                      //        Internet Discussion Boards      \\
@@ -19,7 +19,7 @@
 //                     ||              Renate ( unknown )          ||
 //                     ||             Jonathan ( unknown )         ||
 //                     ||             czambran ( unknown )         ||
-//                      \\       (c) 2004-2014 Game Maker 2k      //
+//                      \\       (c) 2004-2015 Game Maker 2k      //
 //                       """"""""""""""""""""""""""""""""""""""""""
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // UTF8 helper functions
@@ -34,17 +34,17 @@
 // Copyright (C) 2005-2006, Edward Eliot.
 // All rights reserved.
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// Copyright 2004-2014 Cool Dude 2k - http://intdb.sourceforge.net/ http://idb.berlios.net/
-// Copyright 2004-2014 Game Maker 2k - http://upload.idb.s1.jcink.com/ 
+// Copyright 2004-2015 Cool Dude 2k - http://intdb.sourceforge.net/ http://idb.berlios.net/
+// Copyright 2004-2015 Game Maker 2k - http://upload.idb.s1.jcink.com/ 
 // http://s1.jcink.com/s/host/idb/  http://idb.everywebhost.com/  http://cooldude2k.id.funpic.org/
-//  	        Game Maker 2k Copyright 2000-2009 Cool Dude 2k (Kazuki Przyborowski), René Johnson
+//  	        Game Maker 2k Copyright 2000-2009 Cool Dude 2k (Kazuki Przyborowski), Ren Johnson
 // Emoticons made by Jcink for TextfileBB (https://launchpad.net/tfbb) Under GPL License
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // iDB Installer made by Game Maker 2k - http://upload.idb.s1.jcink.com/
 // How to delete installer if error happens:
 // Delete install.php file and the setup folder/dir and everyting inside it also.
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// DejaVu fonts 2.26 (c)2004-2014 DejaVu fonts team
+// DejaVu fonts 2.26 (c)2004-2015 DejaVu fonts team
 // The DejaVu fonts are a font family based on the Bitstream Vera Fonts
 // (http://gnome.org/fonts/). Its purpose is to provide a wider range of
 // characters (see status.txt for more information) while maintaining the

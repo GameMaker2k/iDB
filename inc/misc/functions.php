@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2014 iDB Support - http://idb.berlios.de/
-    Copyright 2004-2014 Game Maker 2k - http://gamemaker2k.org/
+    Copyright 2004-2015 iDB Support - http://idb.berlios.de/
+    Copyright 2004-2015 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: functions.php - Last Update: 07/10/2014 SVN 788 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 08/18/2015 SVN 797 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -58,10 +58,6 @@ if ($_GET['act']=="phpinfo") { phpinfo(); exit(); }
 if ($_GET['act']=="PHPCredits") { phpcredits(); exit(); }
 if ($_GET['act']=="phpcredits") { phpcredits(); exit(); } 
 */
-// Renee Marilyn Sabonis is the best ever. ^_^
-	$Names['RS'] = "Renee Sabonis";
-define("_renee_", $Names['RS']);
-$CD2k_Loves=$Names['RS']; $I_Love=$Names['RS'];
 function header_protocol($header) {
 if(isset($_SERVER['SERVER_PROTOCOL'])&&strstr($_SERVER['SERVER_PROTOCOL'],"/1.0")) {
 	return "HTTP/1.0 ".$header; }
@@ -122,8 +118,6 @@ if($use_gzip=="on") {
 	@header("Content-MD5: ".base64_encode(md5($goutput))); }
 	idb_log_maker($urlstatus,strlen($goutput));
 	echo $goutput; } }
-	$Names['RJ'] = "Rene Johnson";
-define("_rene_", $Names['RJ']);
 // GZip page for faster download
 function gzip_page($use_gzip="off",$gzip_type="gzip") {
 global $Settings,$urlstatus;
@@ -147,8 +141,6 @@ if($use_gzip=="on") {
 	idb_log_maker($urlstatus,strlen($goutput));
 	echo $goutput; } }
 $foo="bar"; $$foo="foo";
-	$Names['KSP'] = "Kazuki Suzuki Przyborowski";
-define("_kazuki_", $Names['KSP']);
 // Kill bad vars for some functions
 function killbadvars($varname) {
 $badphp1 = array('$'); $badphp2 = array(null);
@@ -239,8 +231,6 @@ $text = preg_replace("/".$fixamps1[$ampi]."/i", $fixamps2[$ampi], $text);
 ++$ampi; }
 $text = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $text);
 return $text; }
-	$Names['K'] = "Katarzyna";
-define("_katarzyna_", $Names['K']);
 $utshour = $dayconv['hour'];
 $utsminute = $dayconv['minute'];
 // Change Time Stamp to a readable time
@@ -266,8 +256,6 @@ $utimestamp = $utimestamp + $tsa['minute'] * $utsminute;
 $utimestamp = $utimestamp + $minoffset * $utsminute;
 $timestamp = $timestamp + $utimestamp;
 return date($format,$timestamp); }
-	$Names['SB'] = "Stephanie Braun";
-define("_stephanie_", $Names['SB']);
 // Change Time Stamp to a readable time
 function TimeChange($format,$timestamp,$offset,$minoffset=null,$dst=null) {
 return GMTimeChange($format,$timestamp,$offset,$minoffset,$dst); }
@@ -313,8 +301,6 @@ $utimestamp = $utimestamp + $tsa['minute'] * $utsminute;
 $utimestamp = $utimestamp + $minoffset * $utsminute;
 $timestamp = $timestamp + $utimestamp;
 return date($format,mktime()+$timestamp); }
-	$Names['StB'] = "Stevie Braun";
-define("_stevie_", $Names['StB']);
 // Get Server offset
 function GetSeverZone() {
 $TestHour1 = date("H");
@@ -423,8 +409,6 @@ function is_empty($var) {
     if (((is_null($var) || rtrim($var) == "") &&
 		$var !== false) || (is_array($var) && empty($var))) {
         return true; } else { return false; } }
-	$Names['SK'] = "Sarah Kazakis";
-define("_sarah_", $Names['SK']);
 // PHP 5 hash algorithms to functions :o 
 if(function_exists('hash')&&function_exists('hash_algos')) {
 if(in_array("md2",hash_algos())&&!function_exists("md2")) { 
@@ -450,19 +434,7 @@ function ripemd160($data) { return hash("ripemd160",$data); } }
 if(in_array("ripemd256",hash_algos())&&!function_exists("ripemd256")) { 
 function ripemd256($data) { return hash("ripemd256",$data); } }
 if(in_array("ripemd512",hash_algos())&&!function_exists("ripemd512")) { 
-function ripemd320($data) { return hash("ripemd320",$data); } } 
-if(in_array("salsa10",hash_algos())&&!function_exists("salsa10")) { 
-function salsa10($data) { return hash("salsa10",$data); } }
-if(in_array("salsa20",hash_algos())&&!function_exists("salsa20")) { 
-function salsa20($data) { return hash("salsa20",$data); } } 
-if(in_array("snefru",hash_algos())&&!function_exists("snefru")) { 
-function snefru($data) { return hash("snefru",$data); } }
-if(in_array("snefru256",hash_algos())&&!function_exists("snefru256")) { 
-function snefru256($data) { return hash("snefru256",$data); } }
-if(in_array("gost",hash_algos())&&!function_exists("gost")) { 
-function gost($data) { return hash("gost",$data); } } 
-if(in_array("joaat",hash_algos())&&!function_exists("joaat")) { 
-function joaat($data) { return hash("joaat",$data); } } }
+function ripemd320($data) { return hash("ripemd320",$data); } } }
 // Try and convert IPB 2.0.0 style passwords to iDB style passwords
 function hash2xkey($data,$key,$hash1='md5',$hash2='md5') {
   return $hash1($hash2($key).$hash2($data)); }

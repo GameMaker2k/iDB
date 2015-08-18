@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2014 iDB Support - http://idb.berlios.de/
-    Copyright 2004-2014 Game Maker 2k - http://gamemaker2k.org/
+    Copyright 2004-2015 iDB Support - http://idb.berlios.de/
+    Copyright 2004-2015 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: main.php - Last Update: 07/10/2014 SVN 788 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 08/18/2015 SVN 797 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -643,12 +643,6 @@ if(in_array("md2",hash_algos())) { ?>
 <option<?php if($Settings['use_hashtype']=="sha384") { echo " selected=\"selected\""; } ?> value="sha384">SHA384</option>
 <?php } if(in_array("sha512",hash_algos())) { ?>
 <option<?php if($Settings['use_hashtype']=="sha512") { echo " selected=\"selected\""; } ?> value="sha512">SHA512</option>
-<?php } if(in_array("salsa10",hash_algos())) { ?>
-<option<?php if($Settings['use_hashtype']=="salsa10") { echo " selected=\"selected\""; } ?> value="salsa10">SALSA10</option>
-<?php } if(in_array("salsa20",hash_algos())) { ?>
-<option<?php if($Settings['use_hashtype']=="salsa20") { echo " selected=\"selected\""; } ?> value="salsa20">SALSA20</option>
-<?php } if(in_array("snefru256",hash_algos())) { ?>
-<option<?php if($Settings['use_hashtype']=="snefru256") { echo " selected=\"selected\""; } ?> value="snefru256">SNEFRU256</option>
 <?php } if(in_array("ripemd128",hash_algos())) { ?>
 <option<?php if($Settings['use_hashtype']=="ripemd128") { echo " selected=\"selected\""; } ?> value="ripemd128">RIPEMD128</option>
 <?php } if(in_array("ripemd160",hash_algos())) { ?>
@@ -1034,13 +1028,7 @@ if($_POST['PassHashType']!="md2"&&
    $_POST['PassHashType']!="ripemd128"&&
    $_POST['PassHashType']!="ripemd160"&&
    $_POST['PassHashType']!="ripemd256"&&
-   $_POST['PassHashType']!="ripemd320"&&
-   $_POST['PassHashType']!="salsa10"&&
-   $_POST['PassHashType']!="salsa20"&&
-   $_POST['PassHashType']!="snefru"&&
-   $_POST['PassHashType']!="snefru256"&&
-   $_POST['PassHashType']!="gost"&&
-   $_POST['PassHashType']!="joaat") {
+   $_POST['PassHashType']!="ripemd320") {
 	$_POST['PassHashType'] = "sha1"; } }
 $BoardSettings=$pretext2[0]."\n".
 "\$Settings['sqlhost'] = ".null_string($Settings['sqlhost']).";\n".

@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2014 iDB Support - http://idb.berlios.de/
-    Copyright 2004-2014 Game Maker 2k - http://gamemaker2k.org/
+    Copyright 2004-2015 iDB Support - http://idb.berlios.de/
+    Copyright 2004-2015 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: rssfeed.php - Last Update: 07/10/2014 SVN 788 - Author: cooldude2k $
+    $FileInfo: rssfeed.php - Last Update: 08/18/2015 SVN 797 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="rssfeed.php"||$File3Name=="/rssfeed.php") {
@@ -220,7 +220,7 @@ $RSS .= '<item>'."\n".'<pubDate>'.$TheTime.'</pubDate>'."\n".'<author>'.$UsersNa
 ++$i; sql_free_result($presult); }
 sql_free_result($result);
 ++$glti; } }
-$endtag = "  <!-- Renee Sabonis ^_^ -->\n";
+$endtag = " \n";
 xml_doc_start("1.0",$Settings['charset']);
 if($Settings['showverinfo']=="on") { ?>
 <!-- generator="<?php echo $VerInfo['iDB_Ver_Show']; ?>" -->
@@ -250,7 +250,6 @@ if($Settings['showverinfo']=="on") { ?>
   <link><?php echo $BoardURL.url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$ForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?></link>
   <url><?php echo $AltBoardURL.$SettDir['inc']; ?>rss.gif</url>
 </image>
-<!-- Renee Sabonis ^_^ -->
 <?php echo "\n".$RSS."\n"; ?></rdf:RDF>
 <?php } if($_GET['feedtype']=="rss") { ?>
 <rss version="2.0">

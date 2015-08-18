@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2014 iDB Support - http://idb.berlios.de/
-    Copyright 2004-2014 Game Maker 2k - http://gamemaker2k.org/
+    Copyright 2004-2015 iDB Support - http://idb.berlios.de/
+    Copyright 2004-2015 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 07/10/2014 SVN 788 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 08/18/2015 SVN 797 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -210,13 +210,7 @@ if($Settings['use_hashtype']!="md2"&&
    $Settings['use_hashtype']!="ripemd128"&&
    $Settings['use_hashtype']!="ripemd160"&&
    $Settings['use_hashtype']!="ripemd256"&&
-   $Settings['use_hashtype']!="ripemd320"&&
-   $Settings['use_hashtype']!="salsa10"&&
-   $Settings['use_hashtype']!="salsa20"&&
-   $Settings['use_hashtype']!="snefru"&&
-   $Settings['use_hashtype']!="snefru256"&&
-   $Settings['use_hashtype']!="gost"&&
-   $Settings['use_hashtype']!="joaat") {
+   $Settings['use_hashtype']!="ripemd320") {
 	$Settings['use_hashtype'] = "sha1"; } }
 // Check to see if variables are set
 require_once($SettDir['misc'].'setcheck.php');
