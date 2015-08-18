@@ -33,8 +33,8 @@ if($_SESSION['UserGroup']!=$Settings['GuestGroup']) {
 $PreAmIHidden = GetUserName($_SESSION['UserID'],$Settings['sqltable'],$SQLStat);
 $AmIHidden = $PreAmIHidden['Hidden']; }
 // Hide me from everyone! >_> ^_^ <_< 
-$NavBarCurMonth = GMTimeGet("m",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$NavBarCurYear = GMTimeGet("Y",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$NavBarCurMonth = $usercurtime->format("m");
+$NavBarCurYear = $usercurtime->format("Y");
 $NavBarCurDate = $NavBarCurMonth.$NavBarCurYear;
 ?>
 <div class="NavBorder">

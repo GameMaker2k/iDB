@@ -137,9 +137,20 @@ if(!isset($Settings['sqldb'])) {
 if(file_exists("install.php")) { header('Location: install.php'); die(); } 
 if(!file_exists("install.php")) { header("Content-Type: text/plain; charset=UTF-8");
 echo "403 Error: Sorry could not find install.php\nTry uploading files again and if that dose not work try download iDB again."; die(); } }
-if(isset($Settings['sqldb'])&&
-	function_exists("date_default_timezone_set")) { 
-	@date_default_timezone_set("UTC"); }
+if(isset($Settings['sqldb'])) { 
+	$deftz = new DateTimeZone(date_default_timezone_get());
+	$defcurtime = new DateTime();
+	$defcurtime->setTimezone($deftz);
+	$utctz = new DateTimeZone("UTC");
+	$utccurtime = new DateTime();
+	$utccurtime->setTimestamp($defcurtime->getTimestamp());
+	$utccurtime->setTimezone($utctz);
+	$servtz = new DateTimeZone($Settings['DefaultTimeZone']);
+	$servcurtime = new DateTime();
+	$servcurtime->setTimestamp($defcurtime->getTimestamp());
+	$servcurtime->setTimezone($servtz);
+	$usercurtime = new DateTime();
+	$usercurtime->setTimestamp($defcurtime->getTimestamp()); }
 if(!isset($Settings['sqlhost'])) { $Settings['sqlhost'] = "localhost"; }
 if($Settings['fixpathinfo']=="on") {
 	$_SERVER['PATH_INFO'] = $_SERVER['ORIG_PATH_INFO'];
@@ -350,7 +361,7 @@ if($Settings['file_ext']!="no+ext"&&$Settings['file_ext']!="no ext") {
 $MkIndexFile = $exfile['index'].$Settings['file_ext']; }
 if($Settings['file_ext']=="no+ext"||$Settings['file_ext']=="no ext") {
 $MkIndexFile = $exfile['index']; }
-$temp_session_data = "ViewingPage|s:9:\"?act=view\";ViewingFile|s:".strlen($MkIndexFile).":\"".$MkIndexFile."\";PreViewingTitle|s:7:\"Viewing\";ViewingTitle|s:11:\"Board index\";UserID|s:1:\"0\";UserIP|s:".strlen($_SERVER['REMOTE_ADDR']).":\"".$_SERVER['REMOTE_ADDR']."\";UserGroup|s:".strlen($Settings['GuestGroup']).":\"".$Settings['GuestGroup']."\";UserGroupID|s:1:\"4\";UserTimeZone|s:".strlen($Settings['DefaultTimeZone']).":\"".$Settings['DefaultTimeZone']."\";UserDST|s:".strlen($Settings['DefaultDST']).":\"".$Settings['DefaultDST']."\";";
+$temp_session_data = "ViewingPage|s:9:\"?act=view\";ViewingFile|s:".strlen($MkIndexFile).":\"".$MkIndexFile."\";PreViewingTitle|s:7:\"Viewing\";ViewingTitle|s:11:\"Board index\";UserID|s:1:\"0\";UserIP|s:".strlen($_SERVER['REMOTE_ADDR']).":\"".$_SERVER['REMOTE_ADDR']."\";UserGroup|s:".strlen($Settings['GuestGroup']).":\"".$Settings['GuestGroup']."\";UserGroupID|s:1:\"4\";UserTimeZone|s:".strlen($Settings['DefaultTimeZone']).":\"".$Settings['DefaultTimeZone']."\";";
 $alt_temp_session_data['ViewingPage'] = "?act=view";
 $alt_temp_session_data['ViewingFile'] = $MkIndexFile;
 $alt_temp_session_data['PreViewingTitle'] = "Viewing";
@@ -359,7 +370,6 @@ $alt_temp_session_data['UserID'] = "0";
 $alt_temp_session_data['UserIP'] = $_SERVER['REMOTE_ADDR'];
 $alt_temp_session_data['UserGroupID'] = "4";
 $alt_temp_session_data['UserTimeZone'] = $Settings['DefaultTimeZone'];
-$alt_temp_session_data['UserDST'] = $Settings['DefaultDST'];
 $alttemp_session_data = serialize($alt_temp_session_data);
 $alt_temp_session_data = $alttemp_session_data;
 $alttemp_session_data = null;
@@ -382,12 +392,18 @@ global $sqltable,$SQLStat,$SQLSType,$temp_user_ip,$temp_user_agent,$temp_session
 $result = sql_query(sql_pre_query("SELECT * FROM \"".$sqltable."sessions\" WHERE \"session_id\" = '%s'", array($id)),$SQLStat);
 if (!sql_num_rows($result)) {
 sql_query(sql_pre_query("DELETE FROM \"".$sqltable."sessions\" WHERE \"session_id\"<>'%s' AND \"ip_address\"='%s' AND \"user_agent\"='%s'", array($id,$temp_user_ip,$temp_user_agent)),$SQLStat);
-$time = GMTimeStamp();
+$utctz = new DateTimeZone("UTC");
+$utccurtime = new DateTime();
+$utccurtime->setTimezone($utctz);
+$time = $utccurtime->getTimestamp();
 sql_query(sql_pre_query("INSERT INTO \"".$sqltable."sessions\" (\"session_id\", \"session_data\", \"serialized_data\", \"user_agent\", \"ip_address\", \"expires\") VALUES\n".
 "('%s', '%s', '%s', '%s', '%s', %i)", array($id,$temp_session_data,$alt_temp_session_data,$temp_user_agent,$temp_user_ip,$time)),$SQLStat);
 return '';
 } else {
-$time = GMTimeStamp();
+$utctz = new DateTimeZone("UTC");
+$utccurtime = new DateTime();
+$utccurtime->setTimezone($utctz);
+$time = $utccurtime->getTimestamp();
 $predata = sql_num_rows($result);
 $data = "";
 if($predata > 0) {
@@ -398,7 +414,10 @@ return $data; } }
 //Session Write Function
 function sql_session_write($id,$data) {
 global $sqltable,$SQLStat,$SQLSType,$temp_user_ip,$temp_user_agent;
-$time = GMTimeStamp();
+$utctz = new DateTimeZone("UTC");
+$utccurtime = new DateTime();
+$utccurtime->setTimezone($utctz);
+$time = $utccurtime->getTimestamp();
 $rs = sql_query(sql_pre_query("UPDATE \"".$sqltable."sessions\" SET \"session_data\"='%s',\"serialized_data\"='%s',\"user_agent\"='%s',\"ip_address\"='%s',\"expires\"=%i WHERE \"session_id\"='%s'", array($data,serialize($_SESSION),$temp_user_agent,$temp_user_ip,$time,$id)),$SQLStat);
 return true; }
 //Session Destroy Function
@@ -409,7 +428,10 @@ return true; }
 //Session Garbage Collection Function
 function sql_session_gc($maxlifetime) {
 global $sqltable,$SQLStat;
-$time = GMTimeStamp() - $maxlifetime;
+$utctz = new DateTimeZone("UTC");
+$utccurtime = new DateTime();
+$utccurtime->setTimezone($utctz);
+$time = $utccurtime->getTimestamp() - $maxlifetime;
 //sql_query(sql_pre_query('DELETE FROM \"'.$sqltable.'sessions\" WHERE \"expires\" < UNIX_TIMESTAMP();', array(null)),$SQLStat);
 sql_query(sql_pre_query("DELETE FROM \"".$sqltable."sessions\" WHERE \"expires\" < %i", array($time)),$SQLStat);
 return true; }
@@ -430,7 +452,7 @@ header("Date: ".gmdate("D, d M Y H:i:s")." GMT");
 header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
 header("Expires: ".gmdate("D, d M Y H:i:s")." GMT");
 if(!isset($_COOKIE[$Settings['sqltable']."sess"])) {
-$exptime = GMTimeStamp() - ini_get("session.gc_maxlifetime");
+$exptime = $utccurtime->getTimestamp() - ini_get("session.gc_maxlifetime");
 sql_query(sql_pre_query("DELETE FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" < %i OR \"ip_address\"='%s' AND \"user_agent\"='%s'", array($exptime,$temp_user_ip,$temp_user_agent)),$SQLStat); }
 if(!isset($_SESSION['CheckCookie'])) {
 if(isset($_COOKIE['SessPass'])&&isset($_COOKIE['MemberName'])) {
@@ -613,22 +635,10 @@ if(!isset($_SESSION['UserTimeZone'])) {
 	if(isset($Settings['DefaultTimeZone'])) { 
 	$_SESSION['UserTimeZone'] = $Settings['DefaultTimeZone'];
 	if(!isset($Settings['DefaultTimeZone'])) { 
-	$_SESSION['UserTimeZone'] = SeverOffSet().":00"; } } }
-$checktime = explode(":",$_SESSION['UserTimeZone']);
-if(count($checktime)!=2) {
-	if(!isset($checktime[0])) { $checktime[0] = "0"; }
-	if(!isset($checktime[1])) { $checktime[1] = "00"; }
-	$_SESSION['UserTimeZone'] = $checktime[0].":".$checktime[1]; }
-if(!is_numeric($checktime[0])) { $checktime[0] = "0"; }
-if(!is_numeric($checktime[1])) { $checktime[1] = "00"; }
-if($checktime[1]<0) { $checktime[1] = "00"; $_SESSION['UserTimeZone'] = $checktime[0].":".$checktime[1]; }
-$checktimea = array("offset" => $_SESSION['UserTimeZone'], "hour" => $checktime[0], "minute" => $checktime[1]);
-if(!isset($_SESSION['UserDST'])) { $_SESSION['UserDST'] = null; }
-if($_SESSION['UserDST']==null) {
-if($Settings['DefaultDST']=="off") { 
-	$_SESSION['UserDST'] = "off"; }
-if($Settings['DefaultDST']=="on") { 
-	$_SESSION['UserDST'] = "on"; } }
+	$_SESSION['UserTimeZone'] = date_default_timezone_get(); } } }
+$usertz = new DateTimeZone($_SESSION['UserTimeZone']);
+$usercurtime->setTimestamp($defcurtime->getTimestamp());
+$usercurtime->setTimezone($usertz);
 // Guest Stuff
 if(isset($_SESSION['MemberName'])||
    isset($_COOKIE['MemberName'])) {
@@ -670,7 +680,7 @@ if($_GET['theme']=="../"||$_GET['theme']=="./") {
 $_GET['theme']=$Settings['DefaultTheme']; $_SESSION['Theme']=$Settings['DefaultTheme']; }
 if (file_exists($SettDir['themes'].$_GET['theme']."/settings.php")) {
 if($_SESSION['UserGroup']!=$Settings['GuestGroup']) {
-$NewDay=GMTimeStamp();
+$NewDay=$utccurtime->getTimestamp();
 $qnewskin = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"UseTheme\"='%s',\"LastActive\"='%s' WHERE \"id\"=%i", array($_GET['theme'],$NewDay,$_SESSION['UserID']));
 sql_query($qnewskin,$SQLStat); }
 /* The file Theme Exists */ }
@@ -683,7 +693,7 @@ $OldTheme = $_SESSION['Theme'];
 $_SESSION['Theme'] = chack_themes($_SESSION['Theme']);
 if($_SESSION['UserGroup']!=$Settings['GuestGroup']) {
 if($OldTheme!=$_SESSION['Theme']) { 
-$NewDay=GMTimeStamp();
+$NewDay=$utccurtime->getTimestamp();
 $qnewskin = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"UseTheme\"='%s',\"LastActive\"='%s' WHERE \"id\"=%i", array($_SESSION['Theme'],$NewDay,$_SESSION['UserID']));
 sql_query($qnewskin,$SQLStat); } }
 $_GET['theme']=$_SESSION['Theme']; }
@@ -708,7 +718,7 @@ if($themenum<=0) {
 $_GET['theme'] = $Settings['DefaultTheme']; 
 $_SESSION['Theme'] = $Settings['DefaultTheme']; 
 if($_SESSION['UserGroup']!=$Settings['GuestGroup']) {
-$NewDay=GMTimeStamp();
+$NewDay=$utccurtime->getTimestamp();
 $qnewskin = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"UseTheme\"='%s',\"LastActive\"='%s' WHERE \"id\"=%i", array($_SESSION['Theme'],$NewDay,$_SESSION['UserID']));
 sql_query($qnewskin,$SQLStat); }
 $themequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."themes\" WHERE \"Name\"='%s'", array($_GET['theme']));
@@ -719,7 +729,7 @@ if($_GET['theme']==null) {
 if($_SESSION['Theme']!=null) {
 $_GET['theme'] = $_SESSION['Theme']; } }
 if($_SESSION['UserGroup']!=$Settings['GuestGroup']) {
-$NewDay=GMTimeStamp();
+$NewDay=$utccurtime->getTimestamp();
 $qnewskin = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"UseTheme\"='%s',\"LastActive\"='%s' WHERE \"id\"=%i", array($_GET['theme'],$NewDay,$_SESSION['UserID']));
 sql_query($qnewskin,$SQLStat); } } 
 require($SettDir['inc'].'sqlthemes.php');

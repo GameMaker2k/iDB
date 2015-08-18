@@ -205,7 +205,10 @@ $PMGuest=sql_result($result,$i,"GuestName");
 $MessageName=sql_result($result,$i,"MessageTitle");
 $MessageDesc=sql_result($result,$i,"Description");
 $DateSend=sql_result($result,$i,"DateSend");
-$DateSend=GMTimeChange($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat'],$DateSend,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$tmpusrcurtime = new DateTime();
+$tmpusrcurtime->setTimestamp($DateSend);
+$tmpusrcurtime->setTimezone($usertz);
+$DateSend=$tmpusrcurtime->format($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat']);
 $MessageStat=sql_result($result,$i,"Read");
 if($SenderName=="Guest") { $SenderName=$PMGuest;
 if($SenderName==null) { $SenderName="Guest"; } }
@@ -377,7 +380,10 @@ $PMGuest=sql_result($result,$i,"GuestName");
 $MessageName=sql_result($result,$i,"MessageTitle");
 $MessageDesc=sql_result($result,$i,"Description");
 $DateSend=sql_result($result,$i,"DateSend");
-$DateSend=GMTimeChange($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat'],$DateSend,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$tmpusrcurtime = new DateTime();
+$tmpusrcurtime->setTimestamp($DateSend);
+$tmpusrcurtime->setTimezone($usertz);
+$DateSend=$tmpusrcurtime->format($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat']);
 $MessageStat=sql_result($result,$i,"Read");
 if($SenderName=="Guest") { $SenderName=$PMGuest;
 if($SenderName==null) { $SenderName="Guest"; } }
@@ -434,7 +440,10 @@ $ReciverHidden = $PreReciverName['Hidden'];
 $PMGuest=sql_result($result,$is,"GuestName");
 $MessageName=sql_result($result,$is,"MessageTitle");
 $DateSend=sql_result($result,$is,"DateSend");
-$DateSend=GMTimeChange($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat'],$DateSend,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$tmpusrcurtime = new DateTime();
+$tmpusrcurtime->setTimestamp($DateSend);
+$tmpusrcurtime->setTimezone($usertz);
+$DateSend=$tmpusrcurtime->format($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat']);
 $MessageText=sql_result($result,$is,"MessageText");
 $MessageDesc=sql_result($result,$is,"Description");
 $ipshow = "two";
@@ -469,7 +478,10 @@ if($PreUserCanUseBBags!="yes"&&$PreUserCanUseBBags!="no"&&$PreUserCanUseBBags!="
 	$PreUserCanUseBBags = "no"; }
 sql_free_result($memreresult);
 $User1Joined=sql_result($reresult,$rei,"Joined");
-$User1Joined=GMTimeChange($_SESSION['iDBDateFormat'],$User1Joined,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$tmpusrcurtime = new DateTime();
+$tmpusrcurtime->setTimestamp($User1Joined);
+$tmpusrcurtime->setTimezone($usertz);
+$User1Joined=$tmpusrcurtime->format($_SESSION['iDBDateFormat']);
 $User1LevelID=sql_result($reresult,$rei,"LevelID");
 $lquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."levels\" WHERE \"id\"=%i LIMIT 1", array($User1LevelID));
 $lresult=sql_query($lquery,$SQLStat);
@@ -1064,7 +1076,7 @@ redirect("refresh",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"a
 	<br />Click <a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">here</a> to goto index page.<br />&nbsp;
 	</span><br /></td>
 </tr>
-<?php } if ($Error!="Yes") { $LastActive = GMTimeStamp();
+<?php } if ($Error!="Yes") { $LastActive = $utccurtime->getTimestamp();
 if($_SESSION['UserGroup']==$Settings['GuestGroup']) { $User1Name = $_POST['GuestName']; }
 if($_SESSION['UserGroup']!=$Settings['GuestGroup']) { $User1Name = $_SESSION['MemberName']; }
 $User1IP=$_SERVER['REMOTE_ADDR'];

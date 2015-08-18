@@ -30,7 +30,7 @@ $_SESSION['ExtraData'] = "currentact:".$_GET['act']."; currentcategoryid:0; curr
 <div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $Settings['board_name']; ?></a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=stats",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>#bstats">Board Statistics</a></div>
 <div class="DivNavLinks">&nbsp;</div>
 <?php }
-$uolcuttime = GMTimeStamp();
+$uolcuttime = $utccurtime->getTimestamp();
 $uoltime = $uolcuttime - ini_get("session.gc_maxlifetime");
 $uolquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i ORDER BY \"expires\" DESC", array($uoltime));
 $uolresult=sql_query($uolquery,$SQLStat);
@@ -112,8 +112,8 @@ $NewestMemExtraIP = null;
 if($GroupInfo['CanViewIPAddress']=="yes") {
 $NewestMemTitle = " title=\"".$NewestMem['IP']."\"";
 $NewestMemExtraIP = " (<a title=\"".$NewestMem['IP']."\" onclick=\"window.open(this.href);return false;\" href=\"".sprintf($IPCheckURL,$NewestMem['IP'])."\">".$NewestMem['IP']."</a>)"; }
-$bdMonthChCk = GMTimeGet("m",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$bdDayChCk = GMTimeGet("d",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$bdMonthChCk = $usercurtime->format("m");
+$bdDayChCk = $usercurtime->format("d");
 if($Settings['AdminValidate']=="on") {
 $bdquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"BirthDay\"=%i AND \"BirthMonth\"=%i AND \"HiddenMember\"='no' AND \"Validated\"='yes' AND \"GroupID\"<>%i ORDER BY \"id\"", array($bdDayChCk,$bdMonthChCk,$Settings['ValidateGroup'])); } 
 if($Settings['AdminValidate']!="on") {
@@ -128,7 +128,7 @@ $birthday['ID']=sql_result($bdresult,$bdi,"id");
 $birthday['Name']=sql_result($bdresult,$bdi,"Name");
 $birthday['IP']=sql_result($bdresult,$bdi,"IP");
 $birthday['BirthYear']=sql_result($bdresult,$bdi,"BirthYear");
-$bdThisYear = GMTimeGet("Y",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$bdThisYear = $usercurtime->format("Y");
 $birthday['Age'] = $bdThisYear - $birthday['BirthYear'];
 $bdMemTitle = null;
 if($GroupInfo['HasAdminCP']=="yes") {
@@ -139,9 +139,9 @@ if($bdi<$bdmemberz) { $bdstring = $bdstring.$bdMemURL." (<span style=\"font-weig
 if($bdi==$bdmemberz) { $bdstring = $bdstring.$bdMemURL." (<span style=\"font-weight: bold;\" title=\"".$birthday['Name']." is ".$birthday['Age']." years old\">".$birthday['Age']."</span>)"; }
 ++$bdi; }
 sql_free_result($bdresult);
-$active_month = GMTimeGet("m",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$active_day = GMTimeGet("d",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$active_year = GMTimeGet("Y",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$active_month = $usercurtime->format("m");
+$active_day = $usercurtime->format("d");
+$active_year = $usercurtime->format("Y");
 $active_start = mktime(0,0,0,$active_month,$active_day,$active_year);
 $active_end = mktime(23,59,59,$active_month,$active_day,$active_year);
 $tdMembersOnline = null;
@@ -161,7 +161,10 @@ $tdMemList['ID']=sql_result($tdresult,$tdi,"id");
 $tdMemList['Name']=sql_result($tdresult,$tdi,"Name");
 $tdMemList['IP']=sql_result($tdresult,$tdi,"IP");
 $tdMemList['LastActive']=sql_result($tdresult,$tdi,"LastActive");
-$tdMemList['LastActive']=GMTimeChange("M j Y, ".$_SESSION['iDBTimeFormat'],$tdMemList['LastActive'],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$tmpusrcurtime = new DateTime();
+$tmpusrcurtime->setTimestamp($tdMemList['LastActive']);
+$tmpusrcurtime->setTimezone($usertz);
+$tdMemList['LastActive']=$tmpusrcurtime->format("M j Y, ".$_SESSION['iDBTimeFormat']);
 if($tdi>0) { $tdMembersOnline .= ", "; }
 $tdMembersOnline .= "<a title=\"".$tdMemList['Name']." was last active at ".$tdMemList['LastActive']."\" href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$tdMemList['ID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">".$tdMemList['Name']."</a>"; 
 if($GroupInfo['CanViewIPAddress']=="yes") {

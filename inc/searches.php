@@ -135,9 +135,9 @@ if($memsid==-1) {
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\" LIKE '%s' AND \"GuestName\"='%s'".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($_GET['search'],$_GET['msearch'],$PageLimit,$Settings['max_topics'])); 
 $rnquery = sql_pre_query("SELECT COUNT(*) FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\" LIKE '%s' AND \"GuestName\"='%s'".$ForumIgnoreList4."", array($_GET['search'],$_GET['msearch'])); } } }
 if($_GET['type']=="getactive") {
-$active_month = GMTimeGet("m",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$active_day = GMTimeGet("d",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$active_year = GMTimeGet("Y",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$active_month = $usercurtime->format("m");
+$active_day = $usercurtime->format("d");
+$active_year = $usercurtime->format("Y");
 $active_start = mktime(0,0,0,$active_month,$active_day,$active_year);
 $active_end = mktime(23,59,59,$active_month,$active_day,$active_year);
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE (\"TimeStamp\">=%i AND \"TimeStamp\"<=%i) OR (\"LastUpdate\">=%i AND \"LastUpdate\"<=%i)".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($active_start,$active_end,$active_start,$active_end,$PageLimit,$Settings['max_topics']));
@@ -323,7 +323,10 @@ $CategoryID=sql_result($result,$i,"CategoryID");
 $UsersID=sql_result($result,$i,"UserID");
 $GuestsName=sql_result($result,$i,"GuestName");
 $TheTime=sql_result($result,$i,"TimeStamp");
-$TheTime=GMTimeChange($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat'],$TheTime,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$tmpusrcurtime = new DateTime();
+$tmpusrcurtime->setTimestamp($TheTime);
+$tmpusrcurtime->setTimezone($usertz);
+$TheTime=$tmpusrcurtime->format($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat']);
 $NumReply=sql_result($result,$i,"NumReply");
 $NumberPosts=$NumReply + 1;
 $prepagelist = null;
@@ -415,7 +418,10 @@ $ReplyID1=sql_result($glrresult,0,"id");
 $UsersID1=sql_result($glrresult,0,"UserID");
 $GuestsName1=sql_result($glrresult,0,"GuestName");
 $TimeStamp1=sql_result($glrresult,0,"TimeStamp");
-$TimeStamp1=GMTimeChange($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat'],$TimeStamp1,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$tmpusrcurtime = new DateTime();
+$tmpusrcurtime->setTimestamp($TimeStamp1);
+$tmpusrcurtime->setTimezone($usertz);
+$TimeStamp1=$tmpusrcurtime->format($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat']);
 $PreUsersName1 = GetUserName($UsersID1,$Settings['sqltable'],$SQLStat);
 if($PreUsersName1['Name']===null) { $UsersID1 = -1;
 $PreUsersName1 = GetUserName($UsersID1,$Settings['sqltable'],$SQLStat); }

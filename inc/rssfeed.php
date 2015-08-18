@@ -194,10 +194,13 @@ if(isset($GroupNamePrefix)&&$GroupNamePrefix!=null) {
 if(isset($GroupNameSuffix)&&$GroupNameSuffix!=null) {
 	$UsersName = $UsersName.$GroupNameSuffix; }
 $TheTime=sql_result($result,$i,"TimeStamp");
-$AtomTime=GMTimeChange("Y-m-d\TH:i:s\Z",$TheTime,0);
-//$OldRSSTime=GMTimeChange("Y-m-d\TH:i:s+0:00",$TheTime,0);
+$atomcurtime = new DateTime();
+$atomcurtime->setTimestamp($TheTime);
+$atomcurtime->setTimezone($utctz);
+$AtomTime=$atomcurtime->format("Y-m-d\TH:i:s\Z");
+//$OldRSSTime=$atomcurtime->format("Y-m-d\TH:i:s+0:00");
 $OldRSSTime=$AtomTime;
-$TheTime=GMTimeChange("D, j M Y G:i:s \G\M\T",$TheTime,0);
+$TheTime=$atomcurtime->format("D, j M Y G:i:s \G\M\T");
 $TopicName=sql_result($result,$i,"TopicName");
 $ForumDescription=sql_result($result,$i,"Description");
 if(isset($PermissionInfo['CanViewForum'][$ForumID])&&

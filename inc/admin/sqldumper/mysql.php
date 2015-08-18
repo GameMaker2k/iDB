@@ -158,7 +158,7 @@ $sqldump .= "-- version ".$VerInfo['iDB_Ver_SVN']."\n";
 $sqldump .= "-- ".$iDBHome."support/\n";
 $sqldump .= "--\n";
 $sqldump .= "-- Host: ".$Settings['sqlhost']."\n";
-$sqldump .= "-- Generation Time: ".GMTimeGet('F d, Y \a\t h:i A',$_SESSION['UserTimeZone'],0,$_SESSION['UserDST'])."\n";
+$sqldump .= "-- Generation Time: ".$usercurtime->format('F d, Y \a\t h:i A')."\n";
 $sqldump .= "-- Server version: ".sql_server_info($SQLStat)."\n";
 $sqldump .= "-- PHP Version: ".phpversion()."\n\n";
 $sqldump .= "SET SESSION SQL_MODE='ANSI_QUOTES,NO_AUTO_VALUE_ON_ZERO';\n\n";

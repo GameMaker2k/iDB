@@ -37,7 +37,6 @@ if(!defined("E_DEPRECATED")) { define("E_DEPRECATED", 0); }
 @error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
 /* Get rid of session id in urls */
 if(!in_array("ini_set", $disfunc)) {
-@ini_set("date.timezone","UTC"); 
 @ini_set("default_mimetype","text/html"); 
 @ini_set("zlib.output_compression", false);
 @ini_set("zlib.output_compression_level", -1);
@@ -56,12 +55,21 @@ if(!in_array("ini_set", $disfunc)) {
 /* Change session hash type here */
 @ini_set("session.hash_function", 1);
 @ini_set("session.hash_bits_per_character", 6); }
-if(function_exists("date_default_timezone_set")) { 
-	@date_default_timezone_set("UTC"); }
 if(file_exists('extrasettings.php')) {
 	require_once('extrasettings.php'); }
 if(file_exists('extendsettings.php')) {
 	require_once('extendsettings.php'); }
+$deftz = new DateTimeZone(date_default_timezone_get());
+$defcurtime = new DateTime();
+$defcurtime->setTimezone($deftz);
+$utctz = new DateTimeZone("UTC");
+$utccurtime = new DateTime();
+$utccurtime->setTimestamp($defcurtime->getTimestamp());
+$utccurtime->setTimezone($utctz);
+$servcurtime = new DateTime();
+$servcurtime->setTimestamp($defcurtime->getTimestamp());
+$usercurtime = new DateTime();
+$usercurtime->setTimestamp($defcurtime->getTimestamp());
 /* Do not change anything below this line unless you know what you are doing */
 if(!isset($Settings['clean_ob'])) { $Settings['clean_ob'] = "off"; }
 function idb_output_handler($buffer) { return $buffer; }

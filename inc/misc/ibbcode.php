@@ -51,7 +51,7 @@ function bbcode_urlencode($matches) {
 function bbcode_urldecode($matches) { 
 	return urldecode($matches[1]); }
 function bbcode_date_time($matches) { 
-	return GMTimeGet($matches[1],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']); }
+	return $usercurtime->format($matches[1]); }
 function bbcode_random($matches) { 
 	if(!isset($matches[2])) {
 	return rand(0,$matches[1]); }
@@ -70,6 +70,9 @@ $matches[0] = preg_replace("/\[IMG\=(.*?)]([A-Za-z0-9\.\/%\?\!\$\(\)\*\-_\:;,\+\
 return $matches[0]; } }
 function bbcode_parser($text) {
 global $Settings;
+$usertz = new DateTimeZone($_SESSION['UserTimeZone']);
+$usercurtime = new DateTime();
+$usercurtime->setTimezone($usertz);
 $text = preg_replace("/\[EmbedVideo\=&quot;([A-Za-z0-9\.\-_]+)&quot;\]([A-Za-z0-9\.\-_]+)\[\/EmbedVideo\]/is", "[\\1]\\2[/\\1]", $text);
 $text = preg_replace("/\[EmbedVideo\=([A-Za-z0-9\.\-_]+)\]([A-Za-z0-9\.\-_]+)\[\/EmbedVideo\]/is", "[\\1]\\2[/\\1]", $text);
 $text = preg_replace("/\[EmbedMusic\=&quot;([A-Za-z0-9\.\-_]+)&quot;\]([A-Za-z0-9\.\-_]+)\[\/EmbedMusic\]/is", "[\\1]\\2[/\\1]", $text);
@@ -89,18 +92,18 @@ $text = preg_replace("/\[WebSiteURL\]/is", $Settings['weburl'], $text);
 $text = preg_replace("/\{BoardName\}/is", $Settings['board_name'], $text);
 $text = preg_replace("/\{BoardURL\}/is", $Settings['idburl'], $text);
 $text = preg_replace("/\{WebSiteURL\}/is", $Settings['weburl'], $text);
-$text = preg_replace("/\[DATE\]/is", GMTimeGet('M j Y',$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']), $text);
-//$text = preg_replace("/\[DATE\=(.*?)\]/is", GMTimeGet("${1}",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']), $text);
-$text = preg_replace("/\[TIME\]/is", GMTimeGet('g:i a',$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']), $text);
-//$text = preg_replace("/\[TIME\=(.*?)\]/is", GMTimeGet("${1}",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']), $text);
+$text = preg_replace("/\[DATE\]/is", $usercurtime->format('M j Y'), $text);
+//$text = preg_replace("/\[DATE\=(.*?)\]/is", $usercurtime->format("${1}"), $text);
+$text = preg_replace("/\[TIME\]/is", $usercurtime->format('g:i a'), $text);
+//$text = preg_replace("/\[TIME\=(.*?)\]/is", $usercurtime->format("${1}"), $text);
 $text = preg_replace_callback("/\[DATE\=&quot;(.*?)&quot;\]/is", "bbcode_date_time", $text);
 $text = preg_replace_callback("/\[TIME\=&quot;(.*?)&quot;\]/is", "bbcode_date_time", $text);
 $text = preg_replace_callback("/\[DATE\=(.*?)\]/is", "bbcode_date_time", $text);
 $text = preg_replace_callback("/\[TIME\=(.*?)\]/is", "bbcode_date_time", $text);
-$text = preg_replace("/\{DATE\}/is", GMTimeGet('g:i a',$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']), $text);
-//$text = preg_replace("/\{DATE\=(.*?)\}/is", GMTimeGet("${1}",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']), $text);
-$text = preg_replace("/\{TIME\}/is", GMTimeGet('M j Y',$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']), $text);
-//$text = preg_replace("/\{TIME\=(.*?)\}/is", GMTimeGet("${1}",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']), $text);
+$text = preg_replace("/\{DATE\}/is", $usercurtime->format('g:i a'), $text);
+//$text = preg_replace("/\{DATE\=(.*?)\}/is", $usercurtime->format("${1}"), $text);
+$text = preg_replace("/\{TIME\}/is", $usercurtime->format('M j Y'), $text);
+//$text = preg_replace("/\{TIME\=(.*?)\}/is", $usercurtime->format("${1}"), $text);
 $text = preg_replace_callback("/\{DATE\=&quot;(.*?)\"\}/is", "bbcode_date_time", $text);
 $text = preg_replace_callback("/\{TIME\=&quot;(.*?)\"\}/is", "bbcode_date_time", $text);
 $text = preg_replace_callback("/\[RAND\=&quot;([\-]?[0-9]+)&quot;\]/is", "bbcode_random", $text);

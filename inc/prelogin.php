@@ -38,11 +38,11 @@ $YourDSTAM=sql_result($resultlog2,0,"DST");
 $YourLastPostTime=sql_result($resultlog2,0,"LastPostTime");
 $YourBanTime=sql_result($resultlog2,0,"BanTime");
 sql_free_result($resultlog2);
-$CGMTime = GMTimeStamp();
+$CGMTime = $utccurtime->getTimestamp();
 if($YourBanTime!=0&&$YourBanTime!=null) {
 if($YourBanTime>=$CGMTime) { $BanError = "yes"; } 
 if($YourBanTime<0) { $BanError = "yes"; } }
-$NewDay=GMTimeStamp();
+$NewDay=$utccurtime->getTimestamp();
 $NewIP=$_SERVER['REMOTE_ADDR'];
 if($BanError!="yes") {
 $queryup = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"LastActive\"=%i,\"IP\"='%s' WHERE \"id\"=%i", array($NewDay,$NewIP,$YourIDAM));
@@ -74,25 +74,25 @@ setcookie("SessPass", $YourPassAM, time() + (7 * 86400), $cbasedir, $cookieDomai
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die();*/
 } } if($numlog2<=0||$numlog2>1||$BanError=="yes") { session_unset();
 if($cookieDomain==null) {
-setcookie("MemberName", null, GMTimeStamp() - 3600, $cbasedir);
-setcookie("UserID", null, GMTimeStamp() - 3600, $cbasedir);
-setcookie("SessPass", null, GMTimeStamp() - 3600, $cbasedir);
-setcookie(session_name(), "", GMTimeStamp() - 3600, $cbasedir); }
+setcookie("MemberName", null, $utccurtime->getTimestamp() - 3600, $cbasedir);
+setcookie("UserID", null, $utccurtime->getTimestamp() - 3600, $cbasedir);
+setcookie("SessPass", null, $utccurtime->getTimestamp() - 3600, $cbasedir);
+setcookie(session_name(), "", $utccurtime->getTimestamp() - 3600, $cbasedir); }
 if($cookieDomain!=null) {
 if($cookieSecure===true) {
-setcookie("MemberName", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain, 1);
-setcookie("UserID", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain, 1);
-setcookie("SessPass", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain, 1);
-setcookie(session_name(), "", GMTimeStamp() - 3600, $cbasedir, $cookieDomain, 1); }
+setcookie("MemberName", null, $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain, 1);
+setcookie("UserID", null, $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain, 1);
+setcookie("SessPass", null, $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain, 1);
+setcookie(session_name(), "", $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain, 1); }
 if($cookieSecure===false) {
-setcookie("MemberName", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain);
-setcookie("UserID", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain);
-setcookie("SessPass", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain);
-setcookie(session_name(), "", GMTimeStamp() - 3600, $cbasedir, $cookieDomain); } }
+setcookie("MemberName", null, $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain);
+setcookie("UserID", null, $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain);
+setcookie("SessPass", null, $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain);
+setcookie(session_name(), "", $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain); } }
 unset($_COOKIE[session_name()]);
 $_SESSION = array(); //session_unset(); session_destroy();
 $temp_user_ip = $_SERVER['REMOTE_ADDR'];
-$exptime = GMTimeStamp() - ini_get("session.gc_maxlifetime");
+$exptime = $utccurtime->getTimestamp() - ini_get("session.gc_maxlifetime");
 sql_query(sql_pre_query("DELETE FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" < %i OR ip_address='%s'", array($exptime,$temp_user_ip)),$SQLStat);
 redirect("location",$rbasedir.url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],false)); sql_free_result($resultlog2); sql_free_result($gresult);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;

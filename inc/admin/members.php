@@ -366,9 +366,12 @@ $EditMem['HiddenMember']=sql_result($result,0,"HiddenMember");
 $EditMem['WarnLevel']=sql_result($result,0,"WarnLevel");
 $EditMem['BanTime']=sql_result($result,0,"BanTime");
 if($EditMem['BanTime']!=""&&$EditMem['BanTime']>1) {
-$BanMonth=GMTimeChange("m",$EditMem['BanTime'],0,0,"off");
-$BanDay=GMTimeChange("d",$EditMem['BanTime'],0,0,"off");
-$BanYear=GMTimeChange("Y",$EditMem['BanTime'],0,0,"off");
+$tmpusrcurtime = new DateTime();
+$tmpusrcurtime->setTimestamp($EditMem['BanTime']);
+$tmpusrcurtime->setTimezone($utctz);
+$BanMonth=$tmpusrcurtime->format("m");
+$BanDay=$tmpusrcurtime->format("d");
+$BanYear=$tmpusrcurtime->format("Y");
 $EditMem['BanTime'] = $BanMonth."/".$BanDay."/".$BanYear; }
 $EditMem['Interests']=sql_result($result,0,"Interests");
 $EditMem['Signature']=sql_result($result,0,"Signature");
@@ -743,9 +746,12 @@ if(!is_numeric($_POST['MemKarma'])) { $_POST['MemKarma'] = "0"; }
 	if(pre_strlen($BirthExpl[1])=="1") { $BirthExpl[1] = "0".$BirthExpl[1]; }
 	if(pre_strlen($BirthExpl[0])=="2"&&pre_strlen($BirthExpl[1])=="2"&&pre_strlen($BirthExpl[2])=="4") {
 	$BirthIn = mktime(12,12,12,$BirthExpl[0],$BirthExpl[1],$BirthExpl[2]);
-	$BirthMonth=GMTimeChange("m",$BirthIn,0,0,"off");
-	$BirthDay=GMTimeChange("d",$BirthIn,0,0,"off");
-	$BirthYear=GMTimeChange("Y",$BirthIn,0,0,"off"); 
+	$tmpusrcurtime = new DateTime();
+	$tmpusrcurtime->setTimestamp($BirthIn);
+	$tmpusrcurtime->setTimezone($utctz);
+	$BirthMonth=$tmpusrcurtime->format("m");
+	$BirthDay=$tmpusrcurtime->format("d");
+	$BirthYear=$tmpusrcurtime->format("Y"); 
 	$_POST['MemBanTime'] = $BirthIn; }
 	if(pre_strlen($BirthExpl[0])!="2"||pre_strlen($BirthExpl[1])!="2"||pre_strlen($BirthExpl[2])!="4") { 
 		$_POST['MemBanTime'] = "0"; $BirthMonth="0"; $BirthDay="0"; $BirthYear="0"; } }

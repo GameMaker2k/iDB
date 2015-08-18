@@ -23,9 +23,9 @@ if ($File3Name=="preinstall.php"||$File3Name=="/preinstall.php") {
 
 header("Cache-Control: private, no-cache, no-store, must-revalidate, pre-check=0, post-check=0, max-age=0");
 header("Pragma: private, no-cache, no-store, must-revalidate, pre-check=0, post-check=0, max-age=0");
-header("Date: ".gmdate("D, d M Y H:i:s")." GMT");
-header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
-header("Expires: ".gmdate("D, d M Y H:i:s")." GMT");
+header("Date: ".$utccurtime->format("D, d M Y H:i:s")." GMT");
+header("Last-Modified: ".$utccurtime->format("D, d M Y H:i:s")." GMT");
+header("Expires: ".$utccurtime->format("D, d M Y H:i:s")." GMT");
 output_reset_rewrite_vars();
 if(!isset($SettDir['inc'])) { $SettDir['inc'] = "inc/"; }
 if(!isset($SettDir['misc'])) { $SettDir['misc'] = "inc/misc/"; }

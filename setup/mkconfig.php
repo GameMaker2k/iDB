@@ -39,10 +39,10 @@ $disfunc = @trim($disfunc);
 $disfunc = @preg_replace("/([\\s+|\\t+|\\n+|\\r+|\\0+|\\x0B+])/i", "", $disfunc);
 if($disfunc!="ini_set") { $disfunc = explode(",",$disfunc); }
 if($disfunc=="ini_set") { $disfunc = array("ini_set"); }
-if(!in_array("ini_set", $disfunc)) {
-	@ini_set("date.timezone","UTC"); }
-if(function_exists("date_default_timezone_set")) { 
-	@date_default_timezone_set("UTC"); }
+$servtz = new DateTimeZone($_POST['YourOffSet']);
+$servcurtime->setTimezone($servtz);
+$usertz = new DateTimeZone($_POST['YourOffSet']);
+$usercurtime->setTimezone($usertz);
 ?>
 <tr class="TableRow3" style="text-align: center;">
 <td class="TableColumn3" colspan="2">
@@ -73,9 +73,9 @@ session_set_cookie_params(0, $this_dir, $URLsTest['host']);
 session_cache_limiter("private, no-cache, no-store, must-revalidate, pre-check=0, post-check=0, max-age=0");
 header("Cache-Control: private, no-cache, no-store, must-revalidate, pre-check=0, post-check=0, max-age=0");
 header("Pragma: private, no-cache, no-store, must-revalidate, pre-check=0, post-check=0, max-age=0");
-header("Date: ".gmdate("D, d M Y H:i:s")." GMT");
-header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
-header("Expires: ".gmdate("D, d M Y H:i:s")." GMT");
+header("Date: ".$utccurtime->format("D, d M Y H:i:s")." GMT");
+header("Last-Modified: ".$utccurtime->format("D, d M Y H:i:s")." GMT");
+header("Expires: ".$utccurtime->format("D, d M Y H:i:s")." GMT");
 session_start();
 //@register_shutdown_function("session_write_close");
 if (pre_strlen($_POST['AdminPasswords'])<"3") { $Error="Yes";
@@ -98,7 +98,7 @@ if($_POST['HTMLType']=="xhtml5") { $_POST['OutPutType'] = "xhtml"; }
 $_POST['BoardURL'] = htmlentities($_POST['BoardURL'], ENT_QUOTES, $Settings['charset']);
 $_POST['BoardURL'] = remove_spaces($_POST['BoardURL']);
 $_POST['BoardURL'] = addslashes($_POST['BoardURL']);
-$YourDate = GMTimeStamp();
+$YourDate = $utccurtime->getTimestamp();
 $YourEditDate = $YourDate + $dayconv['minute'];
 $GSalt = salt_hmac(); $YourSalt = salt_hmac();
 /* Fix The User Info for iDB */
@@ -222,22 +222,17 @@ if($SQLStat===false) { $Error="Yes";
 echo "<br />".sql_errorno($SQLStat)."\n"; }
 if ($Error!="Yes") {
 $ServerUUID = rand_uuid("rand");
-if(!is_numeric($_POST['YourOffSet'])) { $_POST['YourOffSet'] = "0"; }
-if(!is_numeric($_POST['MinOffSet'])) { $_POST['MinOffSet'] = "00"; }
-if($_POST['MinOffSet']<0) { $_POST['MinOffSet'] = "00"; }
-$YourOffSet = $_POST['YourOffSet'].":".$_POST['MinOffSet'];
-$AdminDST = $_POST['DST'];
-$MyDay = GMTimeGet("d",$YourOffSet,0,$AdminDST);
-$MyMonth = GMTimeGet("m",$YourOffSet,0,$AdminDST);
-$MyYear = GMTimeGet("Y",$YourOffSet,0,$AdminDST);
+$MyDay = $usercurtime->format("d");
+$MyMonth = $usercurtime->format("m");
+$MyYear = $usercurtime->format("Y");
 $MyYear10 = $MyYear+10;
 $YourDateEnd = $YourDate;
-$EventMonth = GMTimeChange("m",$YourDate,0,0,"off");
-$EventMonthEnd = GMTimeChange("m",$YourDateEnd,0,0,"off");
-$EventDay = GMTimeChange("d",$YourDate,0,0,"off");
-$EventDayEnd = GMTimeChange("d",$YourDateEnd,0,0,"off");
-$EventYear = GMTimeChange("Y",$YourDate,0,0,"off");
-$EventYearEnd = GMTimeChange("Y",$YourDateEnd,0,0,"off");
+$EventMonth = $utccurtime->format("m");
+$EventMonthEnd = $utccurtime->format("m");
+$EventDay = $utccurtime->format("d");
+$EventDayEnd = $utccurtime->format("d");
+$EventYear = $utccurtime->format("Y");
+$EventYearEnd = $utccurtime->format("Y");
 $KarmaBoostDay = $EventMonth.$EventDay;
 $Settings['idb_time_format'] = "g:i A";
 if(!isset($_POST['iDBTimeFormat'])) { 
@@ -266,7 +261,6 @@ $YourWebsite = $_POST['WebURL'];
 $UserIP = $_SERVER['REMOTE_ADDR'];
 $PostCount = 2;
 $Email = "admin@".$_SERVER['HTTP_HOST'];
-$AdminTime = $_POST['YourOffSet'].":".$_POST['MinOffSet'];
 $GEmail = "guest@".$_SERVER['HTTP_HOST'];
 $grand = rand(6,16); $i = 0; $gpass = "";
 while ($i < $grand) {
@@ -355,8 +349,7 @@ $BoardSettings=$pretext2[0]."\n".
 "\$Settings['AdminValidate'] = 'off';\n".
 "\$Settings['TestReferer'] = '".$_POST['TestReferer']."';\n".
 "\$Settings['DefaultTheme'] = '".$_POST['DefaultTheme']."';\n".
-"\$Settings['DefaultTimeZone'] = '".$AdminTime."';\n".
-"\$Settings['DefaultDST'] = '".$AdminDST."';\n".
+"\$Settings['DefaultTimeZone'] = '".$_POST['YourOffSet']."';\n".
 "\$Settings['start_date'] = ".$YourDate.";\n".
 "\$Settings['idb_time_format'] = '".$Settings['idb_time_format']."';\n".
 "\$Settings['idb_date_format'] = '".$Settings['idb_date_format']."';\n".

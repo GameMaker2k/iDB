@@ -206,7 +206,10 @@ $ReplyID=sql_result($glrresult,0,"id");
 $UsersID=sql_result($glrresult,0,"UserID");
 $GuestsName=sql_result($glrresult,0,"GuestName");
 $TimeStamp=sql_result($glrresult,0,"TimeStamp");
-$TimeStamp=GMTimeChange($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat'],$TimeStamp,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$tmpusrcurtime = new DateTime();
+$tmpusrcurtime->setTimestamp($TimeStamp);
+$tmpusrcurtime->setTimezone($usertz);
+$TimeStamp=$tmpusrcurtime->format($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat']);
 sql_free_result($glrresult); }
 $PreUsersName = GetUserName($UsersID,$Settings['sqltable'],$SQLStat);
 if($PreUsersName['Name']===null) { $UsersID = -1;

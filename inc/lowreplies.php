@@ -263,7 +263,10 @@ $MyTimeStamp=sql_result($result,$i,"TimeStamp");
 $MyEditTime=sql_result($result,$i,"LastUpdate");
 $MyEditUserID=sql_result($result,$i,"EditUser");
 $MyEditUserName=sql_result($result,$i,"EditUserName");
-$MyTimeStamp=GMTimeChange($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat'],$MyTimeStamp,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$tmpusrcurtime = new DateTime();
+$tmpusrcurtime->setTimestamp($MyTimeStamp);
+$tmpusrcurtime->setTimezone($usertz);
+$MyTimeStamp=$tmpusrcurtime->format($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat']);
 $MyPost=sql_result($result,$i,"Post");
 $MyDescription=sql_result($result,$i,"Description");
 $requery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($MyUserID));
@@ -294,7 +297,10 @@ if($PreUserCanUseBBags!="yes"&&$PreUserCanUseBBags!="no"&&$PreUserCanUseBBags!="
 	$PreUserCanUseBBags = "no"; }
 sql_free_result($memreresult);
 $User1Joined=sql_result($reresult,$rei,"Joined");
-$User1Joined=GMTimeChange($_SESSION['iDBDateFormat'],$User1Joined,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$tmpusrcurtime = new DateTime();
+$tmpusrcurtime->setTimestamp($User1Joined);
+$tmpusrcurtime->setTimezone($usertz);
+$User1Joined=$tmpusrcurtime->format($_SESSION['iDBDateFormat']);
 $User1GroupID=sql_result($reresult,$rei,"GroupID");
 $gquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i LIMIT 1", array($User1GroupID));
 $gresult=sql_query($gquery,$SQLStat);
@@ -391,7 +397,10 @@ $eunum = sql_num_rows($euresult); }
 		$EditUserName = $EditUserNamePrefix.$EditUserName; }
 	if(isset($GroupNameSuffix)&&$GroupNameSuffix!=null) {
 		$EditUserName = $EditUserName.$EditUserNameSuffix; }
-	$MyEditTime = GMTimeChange($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat'],$MyEditTime,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+	$tmpusrcurtime = new DateTime();
+	$tmpusrcurtime->setTimestamp($MyEditTime);
+	$tmpusrcurtime->setTimezone($usertz);
+	$MyEditTime = $tmpusrcurtime->format($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat']);
 	$MySubPost = "<div class=\"EditReply\"><br />This post has been edited by <b>".$EditUserName."</b> on ".$MyEditTime."</div>"; }
 if($MyEditTime!=$MyTimeStamp&&$MyEditUserID!=0&&$MyEditUserID!=$MyUserID) {
 $requery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($MyUserID));
@@ -405,7 +414,10 @@ if($User1IP==$MyPostIP) { $ipshow = "one"; }
 $User1Email=sql_result($reresult,$rei,"Email");
 $User1Title=sql_result($reresult,$rei,"Title");
 $User1Joined=sql_result($reresult,$rei,"Joined");
-$User1Joined=GMTimeChange($_SESSION['iDBDateFormat'],$User1Joined,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$tmpusrcurtime = new DateTime();
+$tmpusrcurtime->setTimestamp($User1Joined);
+$tmpusrcurtime->setTimezone($usertz);
+$User1Joined=$tmpusrcurtime->format($_SESSION['iDBDateFormat']);
 $User1Hidden=sql_result($reresult,$rei,"HiddenMember");
 $User1GroupID=sql_result($reresult,$rei,"GroupID");
 $gquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i LIMIT 1", array($User1GroupID));

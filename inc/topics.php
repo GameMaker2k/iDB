@@ -297,7 +297,10 @@ $OldForumID=sql_result($result,$i,"OldForumID");
 $UsersID=sql_result($result,$i,"UserID");
 $GuestsName=sql_result($result,$i,"GuestName");
 $TheTime=sql_result($result,$i,"TimeStamp");
-$TheTime=GMTimeChange($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat'],$TheTime,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$tmpusrcurtime = new DateTime();
+$tmpusrcurtime->setTimestamp($TheTime);
+$tmpusrcurtime->setTimezone($usertz);
+$TheTime=$tmpusrcurtime->format($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat']);
 $NumReply=sql_result($result,$i,"NumReply");
 $NumberPosts=$NumReply + 1;
 $prepagelist = null;
@@ -402,7 +405,10 @@ $UsersName1 = $PreUsersName1['Name'];
 $UsersHidden1 = $PreUsersName1['Hidden'];
 $GuestsName1=sql_result($glrresult,0,"GuestName");
 $TimeStamp1=sql_result($glrresult,0,"TimeStamp");
-$TimeStamp1=GMTimeChange($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat'],$TimeStamp1,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']); }
+$tmpusrcurtime = new DateTime();
+$tmpusrcurtime->setTimestamp($TimeStamp1);
+$tmpusrcurtime->setTimezone($usertz);
+$TimeStamp1=$tmpusrcurtime->format($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat']); }
 $NumPages = null; $NumRPosts = $NumReply + 1;
 if(!isset($Settings['max_posts'])) { $Settings['max_posts'] = 10; }
 if($NumRPosts>$Settings['max_posts']) {
@@ -520,7 +526,7 @@ echo "<span>".$UsersName."</span>"; }
 <div class="DivTopics">&nbsp;</div>
 <?php
 sql_free_result($result); }
-if((GMTimeStamp()<$_SESSION['LastPostTime']&&$_SESSION['LastPostTime']!=0)&&($_GET['act']=="create"||$_GET['act']=="maketopic")) { 
+if(($utccurtime->getTimestamp()<$_SESSION['LastPostTime']&&$_SESSION['LastPostTime']!=0)&&($_GET['act']=="create"||$_GET['act']=="maketopic")) { 
 $_GET['act'] = "view"; $_POST['act'] = null; 
 redirect("refresh",$rbasedir.url_maker($exfile['forum'],$Settings['file_ext'],"act=view&id=".$ForumID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum'],FALSE),"3"); ?>
 <div class="Table1Border">
@@ -902,7 +908,7 @@ redirect("refresh",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"a
 	<br />Click <a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">here</a> to goto index page.<br />&nbsp;
 	</span><br /></td>
 </tr>
-<?php } if ($Error!="Yes") { $LastActive = GMTimeStamp();
+<?php } if ($Error!="Yes") { $LastActive = $utccurtime->getTimestamp();
 $requery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($MyUserID));
 $reresult=sql_query($requery,$SQLStat);
 $renum=sql_num_rows($reresult);
@@ -931,7 +937,7 @@ $query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."posts\" (\"TopicI
 "(".$topicid.", %i, %i, %i, '%s', %i, %i, 0, '', '%s', '%s', '%s', '0')", array($ForumID,$ForumCatID,$User1ID,$User1Name,$LastActive,$LastActive,$_POST['TopicPost'],$_POST['TopicDesc'],$User1IP));
 sql_query($query,$SQLStat);
 $postid = sql_get_next_id($Settings['sqltable'],"posts",$SQLStat);
-$_SESSION['LastPostTime'] = GMTimeStamp() + $GroupInfo['FloodControl'];
+$_SESSION['LastPostTime'] = $utccurtime->getTimestamp() + $GroupInfo['FloodControl'];
 if($User1ID!=0&&$User1ID!=-1) {
 $queryupd = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"LastActive\"=%i,\"IP\"='%s',\"PostCount\"=%i,\"LastPostTime\"=%i WHERE \"id\"=%i", array($LastActive,$User1IP,$NewPostCount,$_SESSION['LastPostTime'],$User1ID));
 sql_query($queryupd,$SQLStat); }
@@ -971,7 +977,7 @@ if($pstring!=null||$_GET['act']!="view"||
 <?php /*<div class="DivPageLinks">&nbsp;</div>*/ ?>
 <div class="DivTable2">&nbsp;</div>
 <?php } 
-$uviewlcuttime = GMTimeStamp();
+$uviewlcuttime = $utccurtime->getTimestamp();
 $uviewltime = $uviewlcuttime - ini_get("session.gc_maxlifetime");
 if($InSubForum==0) {
 $uviewlquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"session_id\"<>'%s' AND (\"serialized_data\" LIKE '%s' OR \"serialized_data\" LIKE '%s') ORDER BY \"expires\" DESC", array($uviewltime, session_id(), "%currentforumid:0,".$ForumID.";%", "%currentforumid:".$ForumID.",%")); }

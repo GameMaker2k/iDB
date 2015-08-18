@@ -190,7 +190,7 @@ if($_POST['act']=="view"&&
 	if($CaseInsensitive=="yes"&&$WholeWord!="yes") {
 	$_POST['NotePad'] = preg_replace("/".$Filter."/i", $Replace, $_POST['NotePad']); }
 	++$katarzynas; } sql_free_result($katarzynart);
-	$NewDay=GMTimeStamp();
+	$NewDay=$utccurtime->getTimestamp();
 	$NewIP=$_SERVER['REMOTE_ADDR'];
 	$querynewskin = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"Notes\"='%s',\"LastActive\"=%i,\"IP\"='%s' WHERE \"id\"=%i", array($_POST['NotePad'],$NewDay,$NewIP,$_SESSION['UserID']));
 		sql_query($querynewskin,$SQLStat); } } }
@@ -272,7 +272,7 @@ if($_POST['act']=="signature"&&
 	if($CaseInsensitive=="yes"&&$WholeWord!="yes") {
 	$_POST['Signature'] = preg_replace("/".$Filter."/i", $Replace, $_POST['Signature']); }
 	++$katarzynas; } sql_free_result($katarzynart);
-	$NewDay=GMTimeStamp();
+	$NewDay=$utccurtime->getTimestamp();
 	$NewIP=$_SERVER['REMOTE_ADDR'];
 	$querynewskin = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"Signature\"='%s',\"LastActive\"=%i,\"IP\"='%s' WHERE \"id\"=%i", array($_POST['Signature'],$NewDay,$NewIP,$_SESSION['UserID']));
 	sql_query($querynewskin,$SQLStat); } } }
@@ -365,7 +365,7 @@ if($_POST['Avatar']!=null&&$_POST['AvatarSizeW']!=null&&$_POST['AvatarSizeH']!=n
 	if($_POST['AvatarSizeH']>=100) { $_POST['AvatarSizeH']=100; }
 	$fullavatarsize = $_POST['AvatarSizeW']."x".$_POST['AvatarSizeH'];
 	$_POST['Avatar'] = htmlentities($_POST['Avatar'], ENT_QUOTES, $Settings['charset']);
-	$NewDay=GMTimeStamp();
+	$NewDay=$utccurtime->getTimestamp();
 	$NewIP=$_SERVER['REMOTE_ADDR'];
 	$_POST['Avatar'] = remove_spaces($_POST['Avatar']);
 	$querynewskin = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"Avatar\"='%s',\"AvatarSize\"='%s',\"LastActive\"=%i,\"IP\"='%s' WHERE \"id\"=%i", array($_POST['Avatar'],$fullavatarsize,$NewDay,$NewIP,$_SESSION['UserID']));
@@ -382,11 +382,73 @@ $User1DateFormat=sql_result($result,$i,"DateFormat");
 $User1DateFormat = htmlspecialchars($User1DateFormat, ENT_QUOTES, $Settings['charset']);
 $User1TimeFormat=sql_result($result,$i,"TimeFormat");
 $User1TimeFormat= htmlspecialchars($User1TimeFormat, ENT_QUOTES, $Settings['charset']);
-$tsa_mem = explode(":",$User1TimeZone);
-$TimeZoneArray = array("offset" => $User1TimeZone, "hour" => $tsa_mem[0], "minute" => $tsa_mem[1]);
-$User1DST=sql_result($result,$i,"DST");
 $settingsact = url_maker($exfile['profile'],$Settings['file_ext'],"act=settings",$Settings['qstr'],$Settings['qsep'],$prexqstr['profile'],$exqstr['profile']);
-$profiletitle = " ".$ThemeSet['TitleDivider']." Board Settings"; ?>
+$profiletitle = " ".$ThemeSet['TitleDivider']." Board Settings"; 
+// http://www.tutorialspoint.com/php/php_function_timezone_identifiers_list.htm
+$timezone_identifiers = DateTimeZone::listIdentifiers();
+//$timezone_identifiers = timezone_identifiers_list();
+$zonelist['africa'] = array();
+$zonelist['america'] = array();
+$zonelist['antarctica'] = array();
+$zonelist['asia'] = array();
+$zonelist['atlantic'] = array();
+$zonelist['australia'] = array();
+$zonelist['europe'] = array();
+$zonelist['indian'] = array();
+$zonelist['pacific'] = array();
+$zonelist['etcetera'] = array();
+for ($i=0; $i < count($timezone_identifiers); $i++) {
+    $zonelookup = explode("/", $timezone_identifiers[$i]);
+    if(count($zonelookup)==1) { array_push($zonelist['etcetera'], array($timezone_identifiers[$i], $timezone_identifiers[$i])); }
+    if(count($zonelookup)>1) { 
+        if($zonelookup[0]=="Africa") {
+            if(count($zonelookup)==2) {
+                array_push($zonelist['africa'], array($zonelookup[1], $timezone_identifiers[$i])); }
+            if(count($zonelookup)==3) {
+                array_push($zonelist['africa'], array($zonelookup[2].", ".$zonelookup[1], $timezone_identifiers[$i])); } }
+        if($zonelookup[0]=="America") {
+            if(count($zonelookup)==2) {
+                array_push($zonelist['america'], array($zonelookup[1], $timezone_identifiers[$i])); }
+            if(count($zonelookup)==3) {
+                array_push($zonelist['america'], array($zonelookup[2].", ".$zonelookup[1], $timezone_identifiers[$i])); } }
+        if($zonelookup[0]=="Antarctica") {
+            if(count($zonelookup)==2) {
+                array_push($zonelist['antarctica'], array($zonelookup[1], $timezone_identifiers[$i])); }
+            if(count($zonelookup)==3) {
+                array_push($zonelist['antarctica'], array($zonelookup[2].", ".$zonelookup[1], $timezone_identifiers[$i])); } }
+        if($zonelookup[0]=="Asia") {
+            if(count($zonelookup)==2) {
+                array_push($zonelist['asia'], array($zonelookup[1], $timezone_identifiers[$i])); }
+            if(count($zonelookup)==3) {
+                array_push($zonelist['asia'], array($zonelookup[2].", ".$zonelookup[1], $timezone_identifiers[$i])); } }
+        if($zonelookup[0]=="Atlantic") {
+            if(count($zonelookup)==2) {
+                array_push($zonelist['atlantic'], array($zonelookup[1], $timezone_identifiers[$i])); }
+            if(count($zonelookup)==3) {
+                array_push($zonelist['atlantic'], array($zonelookup[2].", ".$zonelookup[1], $timezone_identifiers[$i])); } }
+        if($zonelookup[0]=="Australia") {
+            if(count($zonelookup)==2) {
+                array_push($zonelist['australia'], array($zonelookup[1], $timezone_identifiers[$i])); }
+            if(count($zonelookup)==3) {
+                array_push($zonelist['australia'], array($zonelookup[2].", ".$zonelookup[1], $timezone_identifiers[$i])); } }
+        if($zonelookup[0]=="Europe") {
+            if(count($zonelookup)==2) {
+                array_push($zonelist['europe'], array($zonelookup[1], $timezone_identifiers[$i])); }
+            if(count($zonelookup)==3) {
+                array_push($zonelist['europe'], array($zonelookup[2].", ".$zonelookup[1], $timezone_identifiers[$i])); } }
+        if($zonelookup[0]=="Indian") {
+            if(count($zonelookup)==2) {
+                array_push($zonelist['indian'], array($zonelookup[1], $timezone_identifiers[$i])); }
+            if(count($zonelookup)==3) {
+                array_push($zonelist['indian'], array($zonelookup[2].", ".$zonelookup[1], $timezone_identifiers[$i])); } }
+        if($zonelookup[0]=="Pacific") {
+            if(count($zonelookup)==2) {
+                array_push($zonelist['pacific'], array($zonelookup[1], $timezone_identifiers[$i])); }
+            if(count($zonelookup)==3) {
+                array_push($zonelist['pacific'], array($zonelookup[2].", ".$zonelookup[1], $timezone_identifiers[$i])); } }
+    }
+}
+?>
 <div class="TableMenuBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableMenuRow1">
@@ -411,39 +473,96 @@ $profiletitle = " ".$ThemeSet['TitleDivider']." Board Settings"; ?>
 <tr style="text-align: left;">
 	<td style="width: 40%;"><label class="TextBoxLabel" for="YourOffSet">Your TimeZone:</label></td>
 	<td style="width: 60%;"><select id="YourOffSet" name="YourOffSet" class="TextBox">
+<optgroup label="Africa">
 <?php
-$plusi = 1; $minusi = 12;
-$plusnum = 15; $minusnum = 0;
-while ($minusi > $minusnum) {
-if($TimeZoneArray['hour']==-$minusi) {
-echo "<option selected=\"selected\" value=\"-".$minusi."\">UTC - ".$minusi.":00 hours</option>\n"; }
-if($TimeZoneArray['hour']!=-$minusi) {
-echo "<option value=\"-".$minusi."\">UTC - ".$minusi.":00 hours</option>\n"; }
---$minusi; }
-if($TimeZoneArray['hour']==0) { ?>
-<option selected="selected" value="0">UTC +/- 0:00 hours</option>
-<?php } if($TimeZoneArray['hour']!=0) { ?>
-<option value="0">UTC +/- 0:00 hours</option>
-<?php }
-while ($plusi < $plusnum) {
-if($TimeZoneArray['hour']==$plusi) {
-echo "<option selected=\"selected\" value=\"".$plusi."\">UTC + ".$plusi.":00 hours</option>\n"; }
-if($TimeZoneArray['hour']!=$plusi) {
-echo "<option value=\"".$plusi."\">UTC + ".$plusi.":00 hours</option>\n"; }
-++$plusi; }
-?></select></td>
-</tr><tr style="text-align: left;">
-	<td style="width: 40%;"><label class="TextBoxLabel" for="MinOffSet">Minute OffSet:</label></td>
-	<td style="width: 60%;"><select id="MinOffSet" name="MinOffSet" class="TextBox">
-<option selected="selected" value="<?php echo $TimeZoneArray['minute']; ?>">Old Value (<?php echo "0:".$TimeZoneArray['minute']." minutes"; ?>)</option>
+$optsel="";
+for ($i=0; $i < count($zonelist['africa']); $i++) {
+    if($User1TimeZone==$zonelist['africa'][$i][1]) { $optsel = " selected=\"selected\""; }
+    echo "<option".$optsel." value=\"".$zonelist['africa'][$i][1]."\">".str_replace("_", " ", $zonelist['africa'][$i][0])."</option>\n"; 
+    $optsel=""; }
+?>
+</optgroup>
+<optgroup label="America">
 <?php
-$mini = 0; $minnum = 60;
-while ($mini < $minnum) {
-if(strlen($mini)==2) { $showmin = $mini; }
-if(strlen($mini)==1) { $showmin = "0".$mini; }
-echo "<option value=\"".$showmin."\">0:".$showmin." minutes</option>\n";
-++$mini; }
-?></select></td>
+$optsel="";
+for ($i=0; $i < count($zonelist['america']); $i++) {
+    if($User1TimeZone==$zonelist['america'][$i][1]) { $optsel = " selected=\"selected\""; }
+    echo "<option".$optsel." value=\"".$zonelist['america'][$i][1]."\">".str_replace("_", " ", $zonelist['america'][$i][0])."</option>\n"; 
+    $optsel=""; }
+?>
+</optgroup>
+<optgroup label="Antarctica">
+<?php
+$optsel="";
+for ($i=0; $i < count($zonelist['antarctica']); $i++) {
+    if($User1TimeZone==$zonelist['antarctica'][$i][1]) { $optsel = " selected=\"selected\""; }
+    echo "<option".$optsel." value=\"".$zonelist['antarctica'][$i][1]."\">".str_replace("_", " ", $zonelist['antarctica'][$i][0])."</option>\n"; 
+    $optsel=""; }
+?>
+</optgroup>
+<optgroup label="Asia">
+<?php
+for ($i=0; $i < count($zonelist['asia']); $i++) {
+    if($User1TimeZone==$zonelist['asia'][$i][1]) { $optsel = " selected=\"selected\""; }
+    echo "<option".$optsel." value=\"".$zonelist['asia'][$i][1]."\">".str_replace("_", " ", $zonelist['asia'][$i][0])."</option>\n"; 
+    $optsel=""; }
+?>
+</optgroup>
+<optgroup label="Atlantic">
+<?php
+$optsel="";
+for ($i=0; $i < count($zonelist['atlantic']); $i++) {
+    if($User1TimeZone==$zonelist['atlantic'][$i][1]) { $optsel = " selected=\"selected\""; }
+    echo "<option".$optsel." value=\"".$zonelist['atlantic'][$i][1]."\">".str_replace("_", " ", $zonelist['atlantic'][$i][0])."</option>\n"; 
+    $optsel=""; }
+?>
+</optgroup>
+<optgroup label="Australia">
+<?php
+$optsel="";
+for ($i=0; $i < count($zonelist['australia']); $i++) {
+    if($User1TimeZone==$zonelist['australia'][$i][1]) { $optsel = " selected=\"selected\""; }
+    echo "<option".$optsel." value=\"".$zonelist['australia'][$i][1]."\">".str_replace("_", " ", $zonelist['australia'][$i][0])."</option>\n"; 
+    $optsel=""; }
+?>
+</optgroup>
+<optgroup label="Europe">
+<?php
+$optsel="";
+for ($i=0; $i < count($zonelist['europe']); $i++) {
+    if($User1TimeZone==$zonelist['europe'][$i][1]) { $optsel = " selected=\"selected\""; }
+    echo "<option".$optsel." value=\"".$zonelist['europe'][$i][1]."\">".str_replace("_", " ", $zonelist['europe'][$i][0])."</option>\n"; 
+    $optsel=""; }
+?>
+</optgroup>
+<optgroup label="Indian">
+<?php
+$optsel="";
+for ($i=0; $i < count($zonelist['indian']); $i++) {
+    if($User1TimeZone==$zonelist['indian'][$i][1]) { $optsel = " selected=\"selected\""; }
+    echo "<option".$optsel." value=\"".$zonelist['indian'][$i][1]."\">".str_replace("_", " ", $zonelist['indian'][$i][0])."</option>\n"; 
+    $optsel=""; }
+?>
+</optgroup>
+<optgroup label="Pacific">
+<?php
+$optsel="";
+for ($i=0; $i < count($zonelist['pacific']); $i++) {
+    if($User1TimeZone==$zonelist['pacific'][$i][1]) { $optsel = " selected=\"selected\""; }
+    echo "<option".$optsel." value=\"".$zonelist['pacific'][$i][1]."\">".str_replace("_", " ", $zonelist['pacific'][$i][0])."</option>\n"; 
+    $optsel=""; }
+?>
+</optgroup>
+<optgroup label="Etcetera">
+<?php
+$optsel="";
+for ($i=0; $i < count($zonelist['etcetera']); $i++) {
+    if($User1TimeZone==$zonelist['etcetera'][$i][1]) { $optsel = " selected=\"selected\""; }
+    echo "<option".$optsel." value=\"".$zonelist['etcetera'][$i][1]."\">".str_replace("_", " ", $zonelist['etcetera'][$i][0])."</option>\n"; 
+    $optsel=""; }
+?>
+</optgroup>
+</select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 40%;"><label class="TextBoxLabel" for="iDBTimeFormat">Insert time format string:</label></td>
 	<td style="width: 60%;"><input type="text" class="TextBox" name="iDBTimeFormat" id="iDBTimeFormat" value="<?php echo $User1DateFormat; ?>" /></td>
@@ -519,14 +638,6 @@ echo "<option value=\"".$ThemeInfo['Name']."\">".$ThemeInfo['ThemeName']."</opti
 <option value="30">35</option>
 <option value="30">40</option>
 </select></td>
-</tr><tr style="text-align: left;">
-	<td style="width: 40%;"><label class="TextBoxLabel" for="DST">Is <span title="Daylight Savings Time">DST</span> / <span title="Summer Time">ST</span> on or off:</label></td>
-	<td style="width: 60%;"><select id="DST" name="DST" class="TextBox"><?php echo "\n" ?>
-<?php if($User1DST=="off"||$User1DST!="on") { ?>
-<option selected="selected" value="off">off</option><?php echo "\n" ?><option value="on">on</option>
-<?php } if($User1DST=="on") { ?>
-<option selected="selected" value="on">on</option><?php echo "\n" ?><option value="off">off</option>
-<?php } echo "\n" ?></select></td>
 </tr></table>
 <table style="text-align: left;">
 <tr style="text-align: left;">
@@ -547,20 +658,17 @@ echo "<option value=\"".$ThemeInfo['Name']."\">".$ThemeInfo['ThemeName']."</opti
 if($_POST['update']=="now") {
 if($_POST['act']=="settings"&&
 	$_SESSION['UserGroup']!=$Settings['GuestGroup']) {
-	$NewDay=GMTimeStamp();
+	$NewDay=$utccurtime->getTimestamp();
 	$NewIP=$_SERVER['REMOTE_ADDR'];
-	if(!is_numeric($_POST['YourOffSet'])) { $_POST['YourOffSet'] = "0"; }
-	if(!is_numeric($_POST['MinOffSet'])) { $_POST['MinOffSet'] = "00"; }
-	if($_POST['MinOffSet']<0) { $_POST['MinOffSet'] = "00"; }
-	$_POST['YourOffSet'] = $_POST['YourOffSet'].":".$_POST['MinOffSet'];
 	$_SESSION['UserTimeZone'] = $_POST['YourOffSet'];
-	$_SESSION['UserDST'] = $_POST['DST'];
+	$usertz = new DateTimeZone($_SESSION['UserTimeZone']);
+	$usercurtime->setTimezone($usertz);
 	if(!is_numeric($_POST['RepliesPerPage'])) { $_POST['RepliesPerPage'] = "10"; }
 	if(!is_numeric($_POST['TopicsPerPage'])) { $_POST['TopicsPerPage'] = "10"; }
 	if(!is_numeric($_POST['MessagesPerPage'])) { $_POST['MessagesPerPage'] = "10"; }
 	$_POST['iDBTimeFormat'] = convert_strftime($_POST['iDBTimeFormat']);
 	$_POST['iDBDateFormat'] = convert_strftime($_POST['iDBDateFormat']);
-	$querynewskin = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"UseTheme\"='%s',\"TimeZone\"='%s',\"DateFormat\"='%s',\"TimeFormat\"='%s',\"DST\"='%s',\"LastActive\"=%i,\"RepliesPerPage\"=%i,\"TopicsPerPage\"=%i,\"MessagesPerPage\"=%i,\"IP\"='%s' WHERE \"id\"=%i", array(chack_themes($_POST['skin']),$_POST['YourOffSet'],$_POST['iDBTimeFormat'],$_POST['iDBDateFormat'],$_POST['DST'],$NewDay,$_POST['RepliesPerPage'],$_POST['TopicsPerPage'],$_POST['MessagesPerPage'],$NewIP,$_SESSION['UserID']));
+	$querynewskin = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"UseTheme\"='%s',\"TimeZone\"='%s',\"DateFormat\"='%s',\"TimeFormat\"='%s',\"LastActive\"=%i,\"RepliesPerPage\"=%i,\"TopicsPerPage\"=%i,\"MessagesPerPage\"=%i,\"IP\"='%s' WHERE \"id\"=%i", array(chack_themes($_POST['skin']),$_POST['YourOffSet'],$_POST['iDBTimeFormat'],$_POST['iDBDateFormat'],$NewDay,$_POST['RepliesPerPage'],$_POST['TopicsPerPage'],$_POST['MessagesPerPage'],$NewIP,$_SESSION['UserID']));
 	sql_query($querynewskin,$SQLStat); } } }
 if($_GET['act']=="profile") {
 if($_POST['update']!="now") {
@@ -593,11 +701,72 @@ if($BirthMonth!=null&&$BirthDay!=null&&$BirthYear!=null) {
 	checkdate($BirthMonth,$BirthDay,$BirthYear)===false) {
 	$BirthMonth = "MM"; $BirthDay = "DD"; $BirthYear = "YYYY"; }
 	$User1Birthday = $BirthMonth."/".$BirthDay."/".$BirthYear; }
-$tsa_mem = explode(":",$User1TimeZone);
-$TimeZoneArray = array("offset" => $User1TimeZone, "hour" => $tsa_mem[0], "minute" => $tsa_mem[1]);
-$User1DST=sql_result($result,$i,"DST");
 $profileact = url_maker($exfile['profile'],$Settings['file_ext'],"act=profile",$Settings['qstr'],$Settings['qsep'],$prexqstr['profile'],$exqstr['profile']);
 $profiletitle = " ".$ThemeSet['TitleDivider']." Profile Editor";
+// http://www.tutorialspoint.com/php/php_function_timezone_identifiers_list.htm
+$timezone_identifiers = DateTimeZone::listIdentifiers();
+//$timezone_identifiers = timezone_identifiers_list();
+$zonelist['africa'] = array();
+$zonelist['america'] = array();
+$zonelist['antarctica'] = array();
+$zonelist['asia'] = array();
+$zonelist['atlantic'] = array();
+$zonelist['australia'] = array();
+$zonelist['europe'] = array();
+$zonelist['indian'] = array();
+$zonelist['pacific'] = array();
+$zonelist['etcetera'] = array();
+for ($i=0; $i < count($timezone_identifiers); $i++) {
+    $zonelookup = explode("/", $timezone_identifiers[$i]);
+    if(count($zonelookup)==1) { array_push($zonelist['etcetera'], array($timezone_identifiers[$i], $timezone_identifiers[$i])); }
+    if(count($zonelookup)>1) { 
+        if($zonelookup[0]=="Africa") {
+            if(count($zonelookup)==2) {
+                array_push($zonelist['africa'], array($zonelookup[1], $timezone_identifiers[$i])); }
+            if(count($zonelookup)==3) {
+                array_push($zonelist['africa'], array($zonelookup[2].", ".$zonelookup[1], $timezone_identifiers[$i])); } }
+        if($zonelookup[0]=="America") {
+            if(count($zonelookup)==2) {
+                array_push($zonelist['america'], array($zonelookup[1], $timezone_identifiers[$i])); }
+            if(count($zonelookup)==3) {
+                array_push($zonelist['america'], array($zonelookup[2].", ".$zonelookup[1], $timezone_identifiers[$i])); } }
+        if($zonelookup[0]=="Antarctica") {
+            if(count($zonelookup)==2) {
+                array_push($zonelist['antarctica'], array($zonelookup[1], $timezone_identifiers[$i])); }
+            if(count($zonelookup)==3) {
+                array_push($zonelist['antarctica'], array($zonelookup[2].", ".$zonelookup[1], $timezone_identifiers[$i])); } }
+        if($zonelookup[0]=="Asia") {
+            if(count($zonelookup)==2) {
+                array_push($zonelist['asia'], array($zonelookup[1], $timezone_identifiers[$i])); }
+            if(count($zonelookup)==3) {
+                array_push($zonelist['asia'], array($zonelookup[2].", ".$zonelookup[1], $timezone_identifiers[$i])); } }
+        if($zonelookup[0]=="Atlantic") {
+            if(count($zonelookup)==2) {
+                array_push($zonelist['atlantic'], array($zonelookup[1], $timezone_identifiers[$i])); }
+            if(count($zonelookup)==3) {
+                array_push($zonelist['atlantic'], array($zonelookup[2].", ".$zonelookup[1], $timezone_identifiers[$i])); } }
+        if($zonelookup[0]=="Australia") {
+            if(count($zonelookup)==2) {
+                array_push($zonelist['australia'], array($zonelookup[1], $timezone_identifiers[$i])); }
+            if(count($zonelookup)==3) {
+                array_push($zonelist['australia'], array($zonelookup[2].", ".$zonelookup[1], $timezone_identifiers[$i])); } }
+        if($zonelookup[0]=="Europe") {
+            if(count($zonelookup)==2) {
+                array_push($zonelist['europe'], array($zonelookup[1], $timezone_identifiers[$i])); }
+            if(count($zonelookup)==3) {
+                array_push($zonelist['europe'], array($zonelookup[2].", ".$zonelookup[1], $timezone_identifiers[$i])); } }
+        if($zonelookup[0]=="Indian") {
+            if(count($zonelookup)==2) {
+                array_push($zonelist['indian'], array($zonelookup[1], $timezone_identifiers[$i])); }
+            if(count($zonelookup)==3) {
+                array_push($zonelist['indian'], array($zonelookup[2].", ".$zonelookup[1], $timezone_identifiers[$i])); } }
+        if($zonelookup[0]=="Pacific") {
+            if(count($zonelookup)==2) {
+                array_push($zonelist['pacific'], array($zonelookup[1], $timezone_identifiers[$i])); }
+            if(count($zonelookup)==3) {
+                array_push($zonelist['pacific'], array($zonelookup[2].", ".$zonelookup[1], $timezone_identifiers[$i])); } }
+    }
+}
 ?>
 <div class="TableMenuBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
@@ -635,32 +804,96 @@ $profiletitle = " ".$ThemeSet['TitleDivider']." Profile Editor";
 </tr><tr style="text-align: left;">
 	<td style="width: 40%;"><label class="TextBoxLabel" for="YourOffSet">Your TimeZone:</label></td>
 	<td style="width: 60%;"><select id="YourOffSet" name="YourOffSet" class="TextBox">
-<option selected="selected" value="<?php echo $TimeZoneArray['hour']; ?>">Old Value (<?php echo $TimeZoneArray['hour'].":00 hours"; ?>)</option>
+<optgroup label="Africa">
 <?php
-$plusi = 1; $minusi = 12;
-$plusnum = 15; $minusnum = 0;
-while ($minusi > $minusnum) {
-echo "<option value=\"-".$minusi."\">GMT - ".$minusi.":00 hours</option>\n";
---$minusi; }
+$optsel="";
+for ($i=0; $i < count($zonelist['africa']); $i++) {
+    if($User1TimeZone==$zonelist['africa'][$i][1]) { $optsel = " selected=\"selected\""; }
+    echo "<option".$optsel." value=\"".$zonelist['africa'][$i][1]."\">".str_replace("_", " ", $zonelist['africa'][$i][0])."</option>\n"; 
+    $optsel=""; }
 ?>
-<option value="0">GMT +/- 0:00 hours</option>
+</optgroup>
+<optgroup label="America">
 <?php
-while ($plusi < $plusnum) {
-echo "<option value=\"".$plusi."\">GMT + ".$plusi.":00 hours</option>\n";
-++$plusi; }
-?></select></td>
-</tr><tr style="text-align: left;">
-	<td style="width: 40%;"><label class="TextBoxLabel" for="MinOffSet">Minute OffSet:</label></td>
-	<td style="width: 60%;"><select id="MinOffSet" name="MinOffSet" class="TextBox">
-<option selected="selected" value="<?php echo $TimeZoneArray['minute']; ?>">Old Value (<?php echo "0:".$TimeZoneArray['minute']." minutes"; ?>)</option>
+$optsel="";
+for ($i=0; $i < count($zonelist['america']); $i++) {
+    if($User1TimeZone==$zonelist['america'][$i][1]) { $optsel = " selected=\"selected\""; }
+    echo "<option".$optsel." value=\"".$zonelist['america'][$i][1]."\">".str_replace("_", " ", $zonelist['america'][$i][0])."</option>\n"; 
+    $optsel=""; }
+?>
+</optgroup>
+<optgroup label="Antarctica">
 <?php
-$mini = 0; $minnum = 60;
-while ($mini < $minnum) {
-if(strlen($mini)==2) { $showmin = $mini; }
-if(strlen($mini)==1) { $showmin = "0".$mini; }
-echo "<option value=\"".$showmin."\">0:".$showmin." minutes</option>\n";
-++$mini; }
-?></select></td>
+$optsel="";
+for ($i=0; $i < count($zonelist['antarctica']); $i++) {
+    if($User1TimeZone==$zonelist['antarctica'][$i][1]) { $optsel = " selected=\"selected\""; }
+    echo "<option".$optsel." value=\"".$zonelist['antarctica'][$i][1]."\">".str_replace("_", " ", $zonelist['antarctica'][$i][0])."</option>\n"; 
+    $optsel=""; }
+?>
+</optgroup>
+<optgroup label="Asia">
+<?php
+for ($i=0; $i < count($zonelist['asia']); $i++) {
+    if($User1TimeZone==$zonelist['asia'][$i][1]) { $optsel = " selected=\"selected\""; }
+    echo "<option".$optsel." value=\"".$zonelist['asia'][$i][1]."\">".str_replace("_", " ", $zonelist['asia'][$i][0])."</option>\n"; 
+    $optsel=""; }
+?>
+</optgroup>
+<optgroup label="Atlantic">
+<?php
+$optsel="";
+for ($i=0; $i < count($zonelist['atlantic']); $i++) {
+    if($User1TimeZone==$zonelist['atlantic'][$i][1]) { $optsel = " selected=\"selected\""; }
+    echo "<option".$optsel." value=\"".$zonelist['atlantic'][$i][1]."\">".str_replace("_", " ", $zonelist['atlantic'][$i][0])."</option>\n"; 
+    $optsel=""; }
+?>
+</optgroup>
+<optgroup label="Australia">
+<?php
+$optsel="";
+for ($i=0; $i < count($zonelist['australia']); $i++) {
+    if($User1TimeZone==$zonelist['australia'][$i][1]) { $optsel = " selected=\"selected\""; }
+    echo "<option".$optsel." value=\"".$zonelist['australia'][$i][1]."\">".str_replace("_", " ", $zonelist['australia'][$i][0])."</option>\n"; 
+    $optsel=""; }
+?>
+</optgroup>
+<optgroup label="Europe">
+<?php
+$optsel="";
+for ($i=0; $i < count($zonelist['europe']); $i++) {
+    if($User1TimeZone==$zonelist['europe'][$i][1]) { $optsel = " selected=\"selected\""; }
+    echo "<option".$optsel." value=\"".$zonelist['europe'][$i][1]."\">".str_replace("_", " ", $zonelist['europe'][$i][0])."</option>\n"; 
+    $optsel=""; }
+?>
+</optgroup>
+<optgroup label="Indian">
+<?php
+$optsel="";
+for ($i=0; $i < count($zonelist['indian']); $i++) {
+    if($User1TimeZone==$zonelist['indian'][$i][1]) { $optsel = " selected=\"selected\""; }
+    echo "<option".$optsel." value=\"".$zonelist['indian'][$i][1]."\">".str_replace("_", " ", $zonelist['indian'][$i][0])."</option>\n"; 
+    $optsel=""; }
+?>
+</optgroup>
+<optgroup label="Pacific">
+<?php
+$optsel="";
+for ($i=0; $i < count($zonelist['pacific']); $i++) {
+    if($User1TimeZone==$zonelist['pacific'][$i][1]) { $optsel = " selected=\"selected\""; }
+    echo "<option".$optsel." value=\"".$zonelist['pacific'][$i][1]."\">".str_replace("_", " ", $zonelist['pacific'][$i][0])."</option>\n"; 
+    $optsel=""; }
+?>
+</optgroup>
+<optgroup label="Etcetera">
+<?php
+$optsel="";
+for ($i=0; $i < count($zonelist['etcetera']); $i++) {
+    if($User1TimeZone==$zonelist['etcetera'][$i][1]) { $optsel = " selected=\"selected\""; }
+    echo "<option".$optsel." value=\"".$zonelist['etcetera'][$i][1]."\">".str_replace("_", " ", $zonelist['etcetera'][$i][0])."</option>\n"; 
+    $optsel=""; }
+?>
+</optgroup>
+</select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 40%;"><label class="TextBoxLabel" for="iDBTimeFormat">Insert time format string:</label></td>
 	<td style="width: 60%;"><input type="text" class="TextBox" name="iDBTimeFormat" id="iDBTimeFormat" value="<?php echo $User1DateFormat; ?>" /></td>
@@ -712,14 +945,6 @@ echo "<option value=\"".$showmin."\">0:".$showmin." minutes</option>\n";
 <option value="25">25</option>
 <option value="30">30</option>
 </select></td>
-</tr><tr style="text-align: left;">
-	<td style="width: 40%;"><label class="TextBoxLabel" for="DST">Is <span title="Daylight Savings Time">DST</span> / <span title="Summer Time">ST</span> on or off:</label></td>
-	<td style="width: 60%;"><select id="DST" name="DST" class="TextBox"><?php echo "\n" ?>
-<?php if($User1DST=="off"||$User1DST!="on") { ?>
-<option selected="selected" value="off">off</option><?php echo "\n" ?><option value="on">on</option>
-<?php } if($User1DST=="on") { ?>
-<option selected="selected" value="on">on</option><?php echo "\n" ?><option value="off">off</option>
-<?php } echo "\n" ?></select></td>
 </tr></table>
 <table style="text-align: left;">
 <tr style="text-align: left;">
@@ -797,9 +1022,12 @@ if($_POST['act']=="profile"&&
 	if(pre_strlen($BirthExpl[1])=="1") { $BirthExpl[1] = "0".$BirthExpl[1]; }
 	if(pre_strlen($BirthExpl[0])=="2"&&pre_strlen($BirthExpl[1])=="2"&&pre_strlen($BirthExpl[2])=="4") {
 	$BirthIn = mktime(12,12,12,$BirthExpl[0],$BirthExpl[1],$BirthExpl[2]);
-	$BirthMonth=GMTimeChange("m",$BirthIn,0,0,"off");
-	$BirthDay=GMTimeChange("d",$BirthIn,0,0,"off");
-	$BirthYear=GMTimeChange("Y",$BirthIn,0,0,"off"); }
+	$eventendcurtime = new DateTime();
+	$eventendcurtime->setTimestamp($BirthIn);
+	$eventendcurtime->setTimezone($utctz);
+	$BirthMonth=$tmpusrcurtime->format("m");
+	$BirthDay=$tmpusrcurtime->format("d");
+	$BirthYear=$tmpusrcurtime->format("Y"); }
 	if(pre_strlen($BirthExpl[0])!="2"||pre_strlen($BirthExpl[1])!="2"||pre_strlen($BirthExpl[2])!="4") { 
 		$BirthMonth="0"; $BirthDay="0"; $BirthYear="0"; } }
 	if (!is_numeric($BirthExpl[0])||!is_numeric($BirthExpl[1])||!is_numeric($BirthExpl[2])) { 
@@ -809,18 +1037,15 @@ if($_POST['act']=="profile"&&
 	$BirthMonth="0"; $BirthDay="0"; $BirthYear="0"; }
 	if(count($BirthExpl)!="3") { $BirthMonth="0"; $BirthDay="0"; $BirthYear="0"; } }
 	if($_POST['EventDay']==null) { $BirthMonth="0"; $BirthDay="0"; $BirthYear="0"; }
-	if(!is_numeric($_POST['YourOffSet'])) { $_POST['YourOffSet'] = "0"; }
-	if(!is_numeric($_POST['MinOffSet'])) { $_POST['MinOffSet'] = "00"; }
-	if($_POST['MinOffSet']<0) { $_POST['MinOffSet'] = "00"; }
-	$_POST['YourOffSet'] = $_POST['YourOffSet'].":".$_POST['MinOffSet'];
 	$_SESSION['UserTimeZone'] = $_POST['YourOffSet'];
-	$_SESSION['UserDST'] = $_POST['DST'];
-	$NewDay=GMTimeStamp();
+	$usertz = new DateTimeZone($_SESSION['UserTimeZone']);
+	$usercurtime->setTimezone($usertz);
+	$NewDay=$utccurtime->getTimestamp();
 	$NewIP=$_SERVER['REMOTE_ADDR'];
 	$_POST['Website'] = urlcheck($_POST['Website']);
 	$_POST['iDBTimeFormat'] = convert_strftime($_POST['iDBTimeFormat']);
 	$_POST['iDBDateFormat'] = convert_strftime($_POST['iDBDateFormat']);
-	$querynewprofile = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"Interests\"='%s',\"Title\"='%s',\"Website\"='%s',\"TimeZone\"='%s',\"DateFormat\"='%s',\"TimeFormat\"='%s',\"Gender\"='%s',\"DST\"='%s',\"LastActive\"=%i,\"BirthMonth\"=%i,\"BirthDay\"=%i,\"BirthYear\"=%i,\"RepliesPerPage\"=%i,\"TopicsPerPage\"=%i,\"MessagesPerPage\"=%i,\"IP\"='%s' WHERE \"id\"=%i", array($_POST['Interests'],$_POST['Title'],$_POST['Website'],$_POST['YourOffSet'],$_POST['iDBTimeFormat'],$_POST['iDBDateFormat'],$_POST['YourGender'],$_POST['DST'],$NewDay,$BirthMonth,$BirthDay,$BirthYear,$_POST['RepliesPerPage'],$_POST['TopicsPerPage'],$_POST['MessagesPerPage'],$NewIP,$_SESSION['UserID']));
+	$querynewprofile = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"Interests\"='%s',\"Title\"='%s',\"Website\"='%s',\"TimeZone\"='%s',\"DateFormat\"='%s',\"TimeFormat\"='%s',\"Gender\"='%s',\"LastActive\"=%i,\"BirthMonth\"=%i,\"BirthDay\"=%i,\"BirthYear\"=%i,\"RepliesPerPage\"=%i,\"TopicsPerPage\"=%i,\"MessagesPerPage\"=%i,\"IP\"='%s' WHERE \"id\"=%i", array($_POST['Interests'],$_POST['Title'],$_POST['Website'],$_POST['YourOffSet'],$_POST['iDBTimeFormat'],$_POST['iDBDateFormat'],$_POST['YourGender'],$NewDay,$BirthMonth,$BirthDay,$BirthYear,$_POST['RepliesPerPage'],$_POST['TopicsPerPage'],$_POST['MessagesPerPage'],$NewIP,$_SESSION['UserID']));
 	sql_query($querynewprofile,$SQLStat); } } }
 if($_GET['act']=="userinfo") {
 if($_POST['update']!="now") {
@@ -951,7 +1176,7 @@ if($YourPassword!=$OldPassword) { $Error="Yes"; ?>
 	$NewIP=$_SERVER['REMOTE_ADDR'];
 	if($Error!="Yes") { 
 	if($_POST['Password']!="") {
-	$NewSalt = salt_hmac(); $NewDay = GMTimeStamp();
+	$NewSalt = salt_hmac(); $NewDay = $utccurtime->getTimestamp();
 	if($Settings['use_hashtype']=="md2") { $iDBHash = "iDBH2";
 	$NewPassword = b64e_hmac($_POST['Password'],$OldJoined,$NewSalt,"md2"); }
 	if($Settings['use_hashtype']=="md4") { $iDBHash = "iDBH4";

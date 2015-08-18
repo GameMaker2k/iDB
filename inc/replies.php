@@ -300,7 +300,10 @@ $MyTimeStamp=sql_result($result,$i,"TimeStamp");
 $MyEditTime=sql_result($result,$i,"LastUpdate");
 $MyEditUserID=sql_result($result,$i,"EditUser");
 $MyEditUserName=sql_result($result,$i,"EditUserName");
-$MyTimeStamp=GMTimeChange($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat'],$MyTimeStamp,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$tmpusrcurtime = new DateTime();
+$tmpusrcurtime->setTimestamp($MyTimeStamp);
+$tmpusrcurtime->setTimezone($usertz);
+$MyTimeStamp=$tmpusrcurtime->format($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat']);
 $MyPost=sql_result($result,$i,"Post");
 $MyDescription=sql_result($result,$i,"Description");
 $requery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($MyUserID));
@@ -331,7 +334,10 @@ if($PreUserCanUseBBags!="yes"&&$PreUserCanUseBBags!="no"&&$PreUserCanUseBBags!="
 	$PreUserCanUseBBags = "no"; }
 sql_free_result($memreresult);
 $User1Joined=sql_result($reresult,$rei,"Joined");
-$User1Joined=GMTimeChange($_SESSION['iDBDateFormat'],$User1Joined,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$tmpusrcurtime = new DateTime();
+$tmpusrcurtime->setTimestamp($User1Joined);
+$tmpusrcurtime->setTimezone($usertz);
+$User1Joined=$tmpusrcurtime->format($_SESSION['iDBDateFormat']);
 $User1Hidden=sql_result($reresult,$rei,"HiddenMember");
 $User1LevelID=sql_result($reresult,$rei,"LevelID");
 $lquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."levels\" WHERE \"id\"=%i LIMIT 1", array($User1LevelID));
@@ -434,7 +440,10 @@ $eunum = sql_num_rows($euresult); }
 		$EditUserName = $EditUserNamePrefix.$EditUserName; }
 	if(isset($GroupNameSuffix)&&$GroupNameSuffix!=null) {
 		$EditUserName = $EditUserName.$EditUserNameSuffix; }
-	$MyEditTime = GMTimeChange($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat'],$MyEditTime,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+	$tmpusrcurtime = new DateTime();
+	$tmpusrcurtime->setTimestamp($MyEditTime);
+	$tmpusrcurtime->setTimezone($usertz);
+	$MyEditTime = $tmpusrcurtime->format($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat']);
 	$MySubPost = "<div class=\"EditReply\"><br />This post has been edited by <b>".$EditUserName."</b> on ".$MyEditTime."</div>"; }
 if($User1CanUseBBags1=="yes") { $MyPost = bbcode_parser($MyPost); }
 if($User1CanExecPHP=="no") {
@@ -564,7 +573,7 @@ echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr
 </table></div>
 <div class="DivReplies">&nbsp;</div>
 <?php ++$i; } sql_free_result($result); } 
-if((GMTimeStamp()<$_SESSION['LastPostTime']&&$_SESSION['LastPostTime']!=0)&&
+if(($utccurtime->getTimestamp()<$_SESSION['LastPostTime']&&$_SESSION['LastPostTime']!=0)&&
 ($_GET['act']=="create"||$_GET['act']=="edit"||$_GET['act']=="makereply"||$_GET['act']=="editreply")) { 
 $_GET['act'] = "view"; $_POST['act'] = null; 
 redirect("refresh",$rbasedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],FALSE),"3"); ?>
@@ -953,7 +962,7 @@ redirect("refresh",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"a
 	<br />Click <a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">here</a> to goto index page.<br />&nbsp;
 	</span><br /></td>
 </tr>
-<?php } if ($Error!="Yes") { $LastActive = GMTimeStamp();
+<?php } if ($Error!="Yes") { $LastActive = $utccurtime->getTimestamp();
 $gnrquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2." LIMIT 1", array($TopicForumID));
 $gnrresult=sql_query($gnrquery,$SQLStat); $gnrnum=sql_num_rows($gnrresult);
 $NumberPosts=sql_result($gnrresult,0,"NumPosts"); 
@@ -984,7 +993,7 @@ $query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."posts\" (\"TopicI
 "(%i, %i, %i, %i, '%s', %i, %i, 0, '', '%s', '%s', '%s', '0')", array($TopicID,$TopicForumID,$TopicCatID,$User1ID,$User1Name,$LastActive,$LastActive,$_POST['ReplyPost'],$_POST['ReplyDesc'],$User1IP));
 sql_query($query,$SQLStat);
 $postid = sql_get_next_id($Settings['sqltable'],"posts",$SQLStat);
-$_SESSION['LastPostTime'] = GMTimeStamp() + $GroupInfo['FloodControl'];
+$_SESSION['LastPostTime'] = $utccurtime->getTimestamp() + $GroupInfo['FloodControl'];
 if($User1ID!=0&&$User1ID!=-1) {
 $queryupd = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"LastActive\"=%i,\"IP\"='%s',\"PostCount\"=%i,\"LastPostTime\"=%i WHERE \"id\"=%i", array($LastActive,$User1IP,$NewPostCount,$_SESSION['LastPostTime'],$User1ID));
 sql_query($queryupd,$SQLStat); }
@@ -1806,7 +1815,7 @@ redirect("refresh",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"a
 	<br />Click <a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">here</a> to goto index page.<br />&nbsp;
 	</span><br /></td>
 </tr>
-<?php } if ($Error!="Yes") { $LastActive = GMTimeStamp();
+<?php } if ($Error!="Yes") { $LastActive = $utccurtime->getTimestamp();
 $requery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_SESSION['UserID']));
 $reresult=sql_query($requery,$SQLStat);
 $renum=sql_num_rows($reresult);
@@ -1818,7 +1827,7 @@ if($_SESSION['UserGroup']==$Settings['GuestGroup']) { $User1Name = $_POST['Guest
 ++$rei; }
 sql_free_result($reresult);
 $EditUserIP=$_SERVER['REMOTE_ADDR'];
-$_SESSION['LastPostTime'] = GMTimeStamp() + $GroupInfo['FloodControl'];
+$_SESSION['LastPostTime'] = $utccurtime->getTimestamp() + $GroupInfo['FloodControl'];
 if($_SESSION['UserID']!=0&&$_SESSION['UserID']!=-1) {
 $queryupd = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"LastActive\"=%i,\"IP\"='%s',\"LastPostTime\"=%i WHERE \"id\"=%i", array($LastActive,$EditUserIP,$_SESSION['LastPostTime'],$_SESSION['UserID']));
 sql_query($queryupd,$SQLStat); }
@@ -1975,7 +1984,7 @@ sql_free_result($renee_result);
 </table></div>
 <div<?php echo $fps; ?>id="MkFastReply" class="MkFastReply">&nbsp;</div>
 <?php }
-$uviewlcuttime = GMTimeStamp();
+$uviewlcuttime = $utccurtime->getTimestamp();
 $uviewltime = $uviewlcuttime - ini_get("session.gc_maxlifetime");
 $uviewlquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"session_id\"<>'%s' AND \"serialized_data\" LIKE '%s' ORDER BY \"expires\" DESC", array($uviewltime, session_id(), "%currenttopicid:".$TopicID.";%"));
 $uviewlresult=sql_query($uviewlquery,$SQLStat);

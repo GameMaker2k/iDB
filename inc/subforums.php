@@ -240,7 +240,10 @@ $ReplyID=sql_result($glrresult,0,"id");
 $UsersID=sql_result($glrresult,0,"UserID");
 $GuestsName=sql_result($glrresult,0,"GuestName");
 $TimeStamp=sql_result($glrresult,0,"TimeStamp");
-$TimeStamp=GMTimeChange($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat'],$TimeStamp,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$tmpusrcurtime = new DateTime();
+$tmpusrcurtime->setTimestamp($TimeStamp);
+$tmpusrcurtime->setTimezone($usertz);
+$TimeStamp=$tmpusrcurtime->format($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat']);
 sql_free_result($glrresult); }
 $PreUsersName = GetUserName($UsersID,$Settings['sqltable'],$SQLStat);
 if($PreUsersName['Name']===null) { $UsersID = -1;
@@ -306,7 +309,7 @@ if($ThemeSet['ForumStyle']==2) {
 $ForumCheck = "skip";
 if($CanHaveTopics!="yes") { 
 $ForumName = $SForumName; $ForumID = $SForumID; $InSubForum = $SFInSubForum;
-$uviewlcuttime = GMTimeStamp();
+$uviewlcuttime = $utccurtime->getTimestamp();
 $uviewltime = $uviewlcuttime - ini_get("session.gc_maxlifetime");
 if($InSubForum==0) {
 $uviewlquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"session_id\"<>'%s' AND (\"serialized_data\" LIKE '%s' OR \"serialized_data\" LIKE '%s') ORDER BY \"expires\" DESC", array($uviewltime, session_id(), "%currentforumid:0,".$ForumID.";%", "%currentforumid:".$ForumID.",%")); }

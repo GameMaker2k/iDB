@@ -59,12 +59,11 @@ $Settings['max_topics'] = $MyTopicsPerPage;
 $MyMessagesPerPage=sql_result($resultchkusr,0,"MessagesPerPage");
 $Settings['max_memlist'] = $MyMessagesPerPage;
 $Settings['max_pmlist'] = $MyMessagesPerPage;
-$ChkUsrDST=sql_result($resultchkusr,0,"DST");
 $svrquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i LIMIT 1", array($ChkUsrGroup));
 $svrgresultkgb=sql_query($svrquery,$SQLStat);
 $ChkUsrGroup=sql_result($svrgresultkgb,0,"Name"); 
 $ChkUsrBanTime=sql_result($resultchkusr,0,"BanTime");
-$ChkUsrGMTime = GMTimeStamp();
+$ChkUsrGMTime = $utccurtime->getTimestamp();
 if($ChkUsrBanTime!=0&&$ChkUsrBanTime!=null) {
 if($ChkUsrBanTime>=$ChkUsrGMTime) { $BanError = "yes"; }
 if($ChkUsrBanTime<0) { $BanError = "yes"; } }
@@ -74,30 +73,32 @@ $_SESSION['MemberName']=$ChkUsrName;
 $_SESSION['UserID']=$ChkUsrID;
 $_SESSION['UserIP']=$_SERVER['REMOTE_ADDR'];
 $_SESSION['UserTimeZone']=$ChkUsrTimeZone;
+$usertz = new DateTimeZone($_SESSION['UserTimeZone']);
+$usercurtime->setTimestamp($defcurtime->getTimestamp());
+$usercurtime->setTimezone($usertz);
 $_SESSION['iDBDateFormat']=$ChkUsrDateFormat;
 $_SESSION['iDBTimeFormat']=$ChkUsrTimeFormat;
 $_SESSION['UserGroup']=$ChkUsrGroup;
 $_SESSION['UserGroupID']=$ChkUsrGroupID;
-$_SESSION['UserDST']=$ChkUsrDST;
 $_SESSION['UserPass']=$ChkUsrPass;
 $_SESSION['LastPostTime'] = $ChkUsrLastPostTime; } }
 if($numchkusr<=0||$numchkusr>1||$BanError=="yes") { session_unset();
 if($cookieDomain==null) {
-setcookie("MemberName", null, GMTimeStamp() - 3600, $cbasedir);
-setcookie("UserID", null, GMTimeStamp() - 3600, $cbasedir);
-setcookie("SessPass", null, GMTimeStamp() - 3600, $cbasedir);
-setcookie(session_name(), "", GMTimeStamp() - 3600, $cbasedir); }
+setcookie("MemberName", null, $utccurtime->getTimestamp() - 3600, $cbasedir);
+setcookie("UserID", null, $utccurtime->getTimestamp() - 3600, $cbasedir);
+setcookie("SessPass", null, $utccurtime->getTimestamp() - 3600, $cbasedir);
+setcookie(session_name(), "", $utccurtime->getTimestamp() - 3600, $cbasedir); }
 if($cookieDomain!=null) {
 if($cookieSecure===true) {
-setcookie("MemberName", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain, 1);
-setcookie("UserID", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain, 1);
-setcookie("SessPass", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain, 1);
-setcookie(session_name(), "", GMTimeStamp() - 3600, $cbasedir, $cookieDomain, 1); }
+setcookie("MemberName", null, $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain, 1);
+setcookie("UserID", null, $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain, 1);
+setcookie("SessPass", null, $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain, 1);
+setcookie(session_name(), "", $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain, 1); }
 if($cookieSecure===false) {
-setcookie("MemberName", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain);
-setcookie("UserID", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain);
-setcookie("SessPass", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain);
-setcookie(session_name(), "", GMTimeStamp() - 3600, $cbasedir, $cookieDomain); } }
+setcookie("MemberName", null, $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain);
+setcookie("UserID", null, $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain);
+setcookie("SessPass", null, $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain);
+setcookie(session_name(), "", $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain); } }
 unset($_COOKIE[session_name()]);
 $_SESSION = array(); session_unset(); session_destroy();
 redirect("location",$rbasedir.url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],false)); sql_free_result($resultchkusr); sql_free_result($svrgresultkgb);
@@ -253,7 +254,7 @@ if(!isset($Settings['KBoostPercent'])) {
 //Update karma and group upgrade on post count or karma count.
 if($_SESSION['UserID']!=0) { $BoostTotal = null;
 $KarmaExp = explode("&",$Settings['KarmaBoostDays']);
-$KarmaNow = GMTimeGet("md",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$KarmaNow = $usercurtime->format("md");
 $kupdate = false;
 if(in_array($KarmaNow,$KarmaExp)) {
 $KarmaNum = count($KarmaExp); 
@@ -265,8 +266,8 @@ $kupdate = true; break 1; }
 ++$Karmai; } }
 if($kupdate===false) {
 $Settings['KarmaBoostDays'] = $KarmaExp[0]; }
-$NewKarmaUpdate = GMTimeGet("Ymd",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$ThisYearUpdate = GMTimeGet("Y",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$NewKarmaUpdate = $usercurtime->format("Ymd");
+$ThisYearUpdate = $usercurtime->format("Y");
 if($MyKarmaUpdate<$NewKarmaUpdate&&$MyPostCountChk>0) { 
 	$KarmaBoostDay = $Settings['KarmaBoostDays'];
 	$KBoostPercent = explode("|",$Settings['KBoostPercent']);

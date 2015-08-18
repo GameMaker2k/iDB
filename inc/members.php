@@ -73,9 +73,9 @@ if($_GET['groupid']!=null) {
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"=%i AND \"GroupID\"<>%i AND \"id\">=0 ".$orderlist." ".$SQLimit, array($_GET['groupid'],$GGroup,$PageLimit,$Settings['max_memlist'])); 
 $rnquery = sql_pre_query("SELECT COUNT(*) FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"=%i AND \"GroupID\"<>%i AND \"id\">=0", array($_GET['groupid'],$GGroup)); } }
 if($_GET['act']=="getactive") {
-$active_month = GMTimeGet("m",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$active_day = GMTimeGet("d",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$active_year = GMTimeGet("Y",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$active_month = $usercurtime->format("m");
+$active_day = $usercurtime->format("d");
+$active_year = $usercurtime->format("Y");
 $active_start = mktime(0,0,0,$active_month,$active_day,$active_year);
 $active_end = mktime(23,59,59,$active_month,$active_day,$active_year);
 if($_GET['groupid']==null) {
@@ -223,9 +223,15 @@ $MemList['WarnLevel']=sql_result($result,$i,"WarnLevel");
 $MemList['Interests']=sql_result($result,$i,"Interests");
 $MemList['Title']=sql_result($result,$i,"Title");
 $MemList['Joined']=sql_result($result,$i,"Joined");
-$MemList['Joined']=GMTimeChange($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat'],$MemList['Joined'],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$tmpusrcurtime = new DateTime();
+$tmpusrcurtime->setTimestamp($MemList['Joined']);
+$tmpusrcurtime->setTimezone($usertz);
+$MemList['Joined']=$tmpusrcurtime->format($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat']);
 $MemList['LastActive']=sql_result($result,$i,"LastActive");
-$MemList['LastActive']=GMTimeChange($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat'],$MemList['LastActive'],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$tmpusrcurtime = new DateTime();
+$tmpusrcurtime->setTimestamp($MemList['LastActive']);
+$tmpusrcurtime->setTimezone($usertz);
+$MemList['LastActive']=$tmpusrcurtime->format($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat']);
 $MemList['Website']=sql_result($result,$i,"Website");
 if($MemList['Website']=="http://") { 
 	$MemList['Website'] = $Settings['idburl']; }
@@ -239,7 +245,6 @@ $MemList['Gender']=sql_result($result,$i,"Gender");
 $MemList['PostCount']=sql_result($result,$i,"PostCount");
 $MemList['Karma']=sql_result($result,$i,"Karma");
 $MemList['TimeZone']=sql_result($result,$i,"TimeZone");
-$MemList['DST']=sql_result($result,$i,"DST");
 $MemList['IP']=sql_result($result,$i,"IP");
 $gquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i LIMIT 1", array($MemList['GroupID']));
 $gresult=sql_query($gquery,$SQLStat);
@@ -294,7 +299,7 @@ $nums = $_GET['page'] * $Settings['max_memlist'];
 $PageLimit = $nums - $Settings['max_memlist'];
 if($PageLimit<0) { $PageLimit = 0; }
 $i=0;
-$uolcuttime = GMTimeStamp();
+$uolcuttime = $utccurtime->getTimestamp();
 $uoltime = $uolcuttime - ini_get("session.gc_maxlifetime");
 if($_GET['list']=="members") {
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"serialized_data\" NOT LIKE '%s' ORDER BY \"expires\" DESC ".$SQLimit, array($uoltime,"%UserGroup|s:".strlen($Settings['GuestGroup']).":\"".$Settings['GuestGroup']."\";%",$PageLimit,$Settings['max_memlist'])); 
@@ -440,7 +445,10 @@ $serialized_data=sql_result($result,$i,"serialized_data");
 $session_user_agent=sql_result($result,$i,"user_agent"); 
 $session_ip_address=sql_result($result,$i,"ip_address"); 
 $session_expires=sql_result($result,$i,"expires"); 
-$session_expires = GMTimeChange($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat'],$session_expires,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$tmpusrcurtime = new DateTime();
+$tmpusrcurtime->setTimestamp($session_expires);
+$tmpusrcurtime->setTimezone($usertz);
+$session_expires = $tmpusrcurtime->format($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat']);
 if(isset($UserSessInfo)) { $UserSessInfo = null; }
 //$UserSessInfo = unserialize_session($session_data);
 $UserSessInfo = unserialize($serialized_data);
@@ -462,9 +470,15 @@ $ViewSessMem['GroupID']=sql_result($sess_result,$sess_i,"GroupID");
 $ViewSessMem['HiddenMember']=sql_result($sess_result,$sess_i,"HiddenMember");
 $ViewSessMem['WarnLevel']=sql_result($sess_result,$sess_i,"WarnLevel");
 $ViewSessMem['Joined']=sql_result($sess_result,$sess_i,"Joined");
-$ViewSessMem['Joined']=GMTimeChange("M j Y, ".$_SESSION['iDBTimeFormat'],$ViewSessMem['Joined'],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$tmpusrcurtime = new DateTime();
+$tmpusrcurtime->setTimestamp($ViewSessMem['Joined']);
+$tmpusrcurtime->setTimezone($usertz);
+$ViewSessMem['Joined']=$tmpusrcurtime->format("M j Y, ".$_SESSION['iDBTimeFormat']);
 $ViewSessMem['LastActive']=sql_result($sess_result,$sess_i,"LastActive");
-$ViewSessMem['LastActive']=GMTimeChange("M j Y, ".$_SESSION['iDBTimeFormat'],$ViewSessMem['LastActive'],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$tmpusrcurtime = new DateTime();
+$tmpusrcurtime->setTimestamp($ViewSessMem['LastActive']);
+$tmpusrcurtime->setTimezone($usertz);
+$ViewSessMem['LastActive']=$tmpusrcurtime->format("M j Y, ".$_SESSION['iDBTimeFormat']);
 $ViewSessMem['Website']=sql_result($sess_result,$sess_i,"Website");
 if($ViewSessMem['Website']=="http://") { 
 	$ViewSessMem['Website'] = $Settings['idburl']; }
@@ -478,7 +492,6 @@ $ViewSessMem['Gender']=sql_result($sess_result,$sess_i,"Gender");
 $ViewSessMem['PostCount']=sql_result($sess_result,$sess_i,"PostCount");
 $ViewSessMem['Karma']=sql_result($sess_result,$sess_i,"Karma");
 $ViewSessMem['TimeZone']=sql_result($sess_result,$sess_i,"TimeZone");
-$ViewSessMem['DST']=sql_result($sess_result,$sess_i,"DST");
 $ViewSessMem['IP']=sql_result($sess_result,$sess_i,"IP");
 $gsess_query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i LIMIT 1", array($ViewSessMem['GroupID']));
 $gsess_result=sql_query($gsess_query,$SQLStat);
@@ -674,9 +687,15 @@ $ViewMem['WarnLevel']=sql_result($result,$i,"WarnLevel");
 $ViewMem['Interests']=sql_result($result,$i,"Interests");
 $ViewMem['Title']=sql_result($result,$i,"Title");
 $ViewMem['Joined']=sql_result($result,$i,"Joined");
-$ViewMem['Joined']=GMTimeChange("M j Y, ".$_SESSION['iDBTimeFormat'],$ViewMem['Joined'],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$tmpusrcurtime = new DateTime();
+$tmpusrcurtime->setTimestamp($ViewMem['Joined']);
+$tmpusrcurtime->setTimezone($usertz);
+$ViewMem['Joined']=$tmpusrcurtime->format("M j Y, ".$_SESSION['iDBTimeFormat']);
 $ViewMem['LastActive']=sql_result($result,$i,"LastActive");
-$ViewMem['LastActive']=GMTimeChange("M j Y, ".$_SESSION['iDBTimeFormat'],$ViewMem['LastActive'],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$tmpusrcurtime = new DateTime();
+$tmpusrcurtime->setTimestamp($ViewMem['LastActive']);
+$tmpusrcurtime->setTimezone($usertz);
+$ViewMem['LastActive']=$tmpusrcurtime->format("M j Y, ".$_SESSION['iDBTimeFormat']);
 $ViewMem['Website']=sql_result($result,$i,"Website");
 if($ViewMem['Website']=="http://") { 
 	$ViewMem['Website'] = $Settings['idburl']; }
@@ -690,7 +709,8 @@ $ViewMem['Gender']=sql_result($result,$i,"Gender");
 $ViewMem['PostCount']=sql_result($result,$i,"PostCount");
 $ViewMem['Karma']=sql_result($result,$i,"Karma");
 $ViewMem['TimeZone']=sql_result($result,$i,"TimeZone");
-$ViewMem['DST']=sql_result($result,$i,"DST");
+$viewmemcurtime = new DateTime();
+$viewmemcurtime->setTimezone($ViewMem['TimeZone']);
 $ViewMem['IP']=sql_result($result,$i,"IP");
 $lquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."levels\" WHERE \"id\"=%i LIMIT 1", array($ViewMem['LevelID']));
 $lresult=sql_query($lquery,$SQLStat);
@@ -794,7 +814,7 @@ Title: <?php echo $ViewMem['Title']; ?>
 &nbsp;User Level: <?php echo $ViewMem['Level']; ?><br />
 &nbsp;User Joined: <?php echo $ViewMem['Joined']; ?><br />
 &nbsp;Last Active: <?php echo $ViewMem['LastActive']; ?><br />
-&nbsp;User Time: <?php echo GMTimeGet("M j Y, ".$_SESSION['iDBTimeFormat'],$ViewMem['TimeZone'],0,$ViewMem['DST']); ?><br />
+&nbsp;User Time: <?php echo $viewmemcurtime->format("M j Y, ".$_SESSION['iDBTimeFormat']); ?><br />
 &nbsp;User Website: <a href="<?php echo $ViewMem['Website']; ?>"<?php echo $opennew; ?>>Website</a><br />
 &nbsp;Post Count: <?php echo $ViewMem['PostCount']; ?><br />
 &nbsp;Karma: <?php echo $ViewMem['Karma']; ?><br />
@@ -812,27 +832,27 @@ Title: <?php echo $ViewMem['Title']; ?>
 if($_GET['act']=="logout") {
 session_unset();
 if($cookieDomain==null) {
-setcookie("MemberName", null, GMTimeStamp() - 3600, $cbasedir);
-setcookie("UserID", null, GMTimeStamp() - 3600, $cbasedir);
-setcookie("SessPass", null, GMTimeStamp() - 3600, $cbasedir);
-setcookie(session_name(), "", GMTimeStamp() - 3600, $cbasedir); }
+setcookie("MemberName", null, $utccurtime->getTimestamp() - 3600, $cbasedir);
+setcookie("UserID", null, $utccurtime->getTimestamp() - 3600, $cbasedir);
+setcookie("SessPass", null, $utccurtime->getTimestamp() - 3600, $cbasedir);
+setcookie(session_name(), "", $utccurtime->getTimestamp() - 3600, $cbasedir); }
 if($cookieDomain!=null) {
 if($cookieSecure===true) {
-setcookie("MemberName", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain, 1);
-setcookie("UserID", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain, 1);
-setcookie("SessPass", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain, 1);
-setcookie(session_name(), "", GMTimeStamp() - 3600, $cbasedir, $cookieDomain, 1); }
+setcookie("MemberName", null, $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain, 1);
+setcookie("UserID", null, $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain, 1);
+setcookie("SessPass", null, $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain, 1);
+setcookie(session_name(), "", $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain, 1); }
 if($cookieSecure===false) {
-setcookie("MemberName", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain);
-setcookie("UserID", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain);
-setcookie("SessPass", null, GMTimeStamp() - 3600, $cbasedir, $cookieDomain);
-setcookie(session_name(), "", GMTimeStamp() - 3600, $cbasedir, $cookieDomain); } }
+setcookie("MemberName", null, $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain);
+setcookie("UserID", null, $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain);
+setcookie("SessPass", null, $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain);
+setcookie(session_name(), "", $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain); } }
 unset($_COOKIE[session_name()]);
 $_SESSION = array();
 //session_unset();
 //session_destroy();
 $temp_user_ip = $_SERVER['REMOTE_ADDR'];
-$exptime = GMTimeStamp() - ini_get("session.gc_maxlifetime");
+$exptime = $utccurtime->getTimestamp() - ini_get("session.gc_maxlifetime");
 sql_query(sql_pre_query("DELETE FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" < %i OR ip_address='%s'", array($exptime,$temp_user_ip)),$SQLStat);
 redirect("location",$rbasedir.url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],false));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
@@ -1055,7 +1075,7 @@ $YourGroupM=sql_result($resultlog,$i,"GroupID");
 $YourGroupIDM=$YourGroupM;
 $YourLastPostTime=sql_result($resultlog,$i,"LastPostTime");
 $YourBanTime=sql_result($resultlog,$i,"BanTime");
-$CGMTime = GMTimeStamp();
+$CGMTime = $utccurtime->getTimestamp();
 if($YourBanTime!=0&&$YourBanTime!=null) {
 if($YourBanTime>=$CGMTime) { $BanError = "yes"; }
 if($YourBanTime<0) { $BanError = "yes"; } }
@@ -1064,7 +1084,6 @@ $gresult=sql_query($gquery,$SQLStat);
 $YourGroupM=sql_result($gresult,0,"Name");
 sql_free_result($gresult);
 $YourTimeZoneM=sql_result($resultlog,$i,"TimeZone");
-$YourDSTM=sql_result($resultlog,$i,"DST");
 $JoinedDate=sql_result($resultlog,$i,"Joined");
 $UseTheme=sql_result($resultlog,$i,"UseTheme");
 $NewHashSalt = salt_hmac();
@@ -1104,7 +1123,7 @@ if($Settings['use_hashtype']=="gost") { $iDBHash = "iDBHGOST";
 $NewPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$NewHashSalt,"gost"); }
 if($Settings['use_hashtype']=="joaat") { $iDBHash = "iDBHJOAAT";
 $NewPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$NewHashSalt,"joaat"); }
-$NewDay=GMTimeStamp();
+$NewDay=$utccurtime->getTimestamp();
 $NewIP=$_SERVER['REMOTE_ADDR'];
 if($BanError!="yes") {
 $queryup = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"UserPassword\"='%s',\"HashType\"='%s',\"LastActive\"=%i,\"IP\"='%s',\"Salt\"='%s' WHERE \"id\"=%i", array($NewPassword,$iDBHash,$NewDay,$NewIP,$NewHashSalt,$YourIDM));
@@ -1116,9 +1135,11 @@ $_SESSION['MemberName']=$YourNameM;
 $_SESSION['UserID']=$YourIDM;
 $_SESSION['UserIP']=$_SERVER['REMOTE_ADDR'];
 $_SESSION['UserTimeZone']=$YourTimeZoneM;
+$usertz = new DateTimeZone($_SESSION['UserTimeZone']);
+$usercurtime->setTimestamp($defcurtime->getTimestamp());
+$usercurtime->setTimezone($usertz);
 $_SESSION['UserGroup']=$YourGroupM;
 $_SESSION['UserGroupID']=$YourGroupIDM;
-$_SESSION['UserDST']=$YourDSTM;
 $_SESSION['UserPass']=$NewPassword;
 $_SESSION['LastPostTime'] = $YourLastPostTime;
 $_SESSION['DBName']=$Settings['sqldb'];
@@ -1178,6 +1199,70 @@ $_SESSION['ViewingTitle'] = "Signing up";
 $_SESSION['ExtraData'] = "currentact:".$_GET['act']."; currentcategoryid:0; currentforumid:0; currenttopicid:0; currentmessageid:0; currenteventid:0; currentmemberid:0;";
 $UFID = rand_uuid("rand");
 $_SESSION['UserFormID'] = $UFID;
+// http://www.tutorialspoint.com/php/php_function_timezone_identifiers_list.htm
+$timezone_identifiers = DateTimeZone::listIdentifiers();
+//$timezone_identifiers = timezone_identifiers_list();
+$zonelist['africa'] = array();
+$zonelist['america'] = array();
+$zonelist['antarctica'] = array();
+$zonelist['asia'] = array();
+$zonelist['atlantic'] = array();
+$zonelist['australia'] = array();
+$zonelist['europe'] = array();
+$zonelist['indian'] = array();
+$zonelist['pacific'] = array();
+$zonelist['etcetera'] = array();
+for ($i=0; $i < count($timezone_identifiers); $i++) {
+    $zonelookup = explode("/", $timezone_identifiers[$i]);
+    if(count($zonelookup)==1) { array_push($zonelist['etcetera'], array($timezone_identifiers[$i], $timezone_identifiers[$i])); }
+    if(count($zonelookup)>1) { 
+        if($zonelookup[0]=="Africa") {
+            if(count($zonelookup)==2) {
+                array_push($zonelist['africa'], array($zonelookup[1], $timezone_identifiers[$i])); }
+            if(count($zonelookup)==3) {
+                array_push($zonelist['africa'], array($zonelookup[2].", ".$zonelookup[1], $timezone_identifiers[$i])); } }
+        if($zonelookup[0]=="America") {
+            if(count($zonelookup)==2) {
+                array_push($zonelist['america'], array($zonelookup[1], $timezone_identifiers[$i])); }
+            if(count($zonelookup)==3) {
+                array_push($zonelist['america'], array($zonelookup[2].", ".$zonelookup[1], $timezone_identifiers[$i])); } }
+        if($zonelookup[0]=="Antarctica") {
+            if(count($zonelookup)==2) {
+                array_push($zonelist['antarctica'], array($zonelookup[1], $timezone_identifiers[$i])); }
+            if(count($zonelookup)==3) {
+                array_push($zonelist['antarctica'], array($zonelookup[2].", ".$zonelookup[1], $timezone_identifiers[$i])); } }
+        if($zonelookup[0]=="Asia") {
+            if(count($zonelookup)==2) {
+                array_push($zonelist['asia'], array($zonelookup[1], $timezone_identifiers[$i])); }
+            if(count($zonelookup)==3) {
+                array_push($zonelist['asia'], array($zonelookup[2].", ".$zonelookup[1], $timezone_identifiers[$i])); } }
+        if($zonelookup[0]=="Atlantic") {
+            if(count($zonelookup)==2) {
+                array_push($zonelist['atlantic'], array($zonelookup[1], $timezone_identifiers[$i])); }
+            if(count($zonelookup)==3) {
+                array_push($zonelist['atlantic'], array($zonelookup[2].", ".$zonelookup[1], $timezone_identifiers[$i])); } }
+        if($zonelookup[0]=="Australia") {
+            if(count($zonelookup)==2) {
+                array_push($zonelist['australia'], array($zonelookup[1], $timezone_identifiers[$i])); }
+            if(count($zonelookup)==3) {
+                array_push($zonelist['australia'], array($zonelookup[2].", ".$zonelookup[1], $timezone_identifiers[$i])); } }
+        if($zonelookup[0]=="Europe") {
+            if(count($zonelookup)==2) {
+                array_push($zonelist['europe'], array($zonelookup[1], $timezone_identifiers[$i])); }
+            if(count($zonelookup)==3) {
+                array_push($zonelist['europe'], array($zonelookup[2].", ".$zonelookup[1], $timezone_identifiers[$i])); } }
+        if($zonelookup[0]=="Indian") {
+            if(count($zonelookup)==2) {
+                array_push($zonelist['indian'], array($zonelookup[1], $timezone_identifiers[$i])); }
+            if(count($zonelookup)==3) {
+                array_push($zonelist['indian'], array($zonelookup[2].", ".$zonelookup[1], $timezone_identifiers[$i])); } }
+        if($zonelookup[0]=="Pacific") {
+            if(count($zonelookup)==2) {
+                array_push($zonelist['pacific'], array($zonelookup[1], $timezone_identifiers[$i])); }
+            if(count($zonelookup)==3) {
+                array_push($zonelist['pacific'], array($zonelookup[2].", ".$zonelookup[1], $timezone_identifiers[$i])); } }
+    }
+}
 ?>
 <div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $Settings['board_name']; ?></a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=signup",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Signup</a></div>
 <div class="DivNavLinks">&nbsp;</div>
@@ -1220,50 +1305,97 @@ $_SESSION['UserFormID'] = $UFID;
 	<td style="width: 70%;"><input type="text" class="TextBox" name="Email" size="20" id="Email" /></td>
 </tr><tr>
 	<td style="width: 30%;"><label class="TextBoxLabel" for="YourOffSet">Your TimeZone:</label></td>
-	<td style="width: 70%;"><select id="YourOffSet" name="YourOffSet" class="TextBox"><?php
-$tsa_mem = explode(":",$Settings['DefaultTimeZone']);
-$TimeZoneArray = array("offset" => $Settings['DefaultTimeZone'], "hour" => $tsa_mem[0], "minute" => $tsa_mem[1]);
-$plusi = 1; $minusi = 12;
-$plusnum = 15; $minusnum = 0;
-while ($minusi > $minusnum) {
-if($TimeZoneArray['hour']==-$minusi) {
-echo "<option selected=\"selected\" value=\"-".$minusi."\">UTC - ".$minusi.":00 hours</option>\n"; }
-if($TimeZoneArray['hour']!=-$minusi) {
-echo "<option value=\"-".$minusi."\">UTC - ".$minusi.":00 hours</option>\n"; }
---$minusi; }
-if($TimeZoneArray['hour']==0) { ?>
-<option selected="selected" value="0">UTC +/- 0:00 hours</option>
-<?php } if($TimeZoneArray['hour']!=0) { ?>
-<option value="0">UTC +/- 0:00 hours</option>
-<?php }
-while ($plusi < $plusnum) {
-if($TimeZoneArray['hour']==$plusi) {
-echo "<option selected=\"selected\" value=\"".$plusi."\">UTC + ".$plusi.":00 hours</option>\n"; }
-if($TimeZoneArray['hour']!=$plusi) {
-echo "<option value=\"".$plusi."\">UTC + ".$plusi.":00 hours</option>\n"; }
-++$plusi; }
-?></select></td>
-</tr><tr>
-	<td style="width: 50%;"><label class="TextBoxLabel" for="MinOffSet">Minute OffSet:</label></td>
-	<td style="width: 50%;"><select id="MinOffSet" name="MinOffSet" class="TextBox"><?php
-$mini = 0; $minnum = 60;
-while ($mini < $minnum) {
-if(strlen($mini)==2) { $showmin = $mini; }
-if(strlen($mini)==1) { $showmin = "0".$mini; }
-if($mini==$TimeZoneArray['minute']) {
-echo "\n<option selected=\"selected\" value=\"".$showmin."\">0:".$showmin." minutes</option>\n"; }
-if($mini!=$TimeZoneArray['minute']) {
-echo "<option value=\"".$showmin."\">0:".$showmin." minutes</option>\n"; }
-++$mini; }
-?></select></td>
-</tr><tr>
-	<td style="width: 30%;"><label class="TextBoxLabel" for="DST">Is <span title="Daylight Savings Time">DST</span> / <span title="Summer Time">ST</span> on or off:</label></td>
-	<td style="width: 70%;"><select id="DST" name="DST" class="TextBox"><?php echo "\n" ?>
-<?php if($Settings['DefaultDST']=="off"||$Settings['DefaultDST']!="on") { ?>
-<option selected="selected" value="off">off</option><?php echo "\n" ?><option value="on">on</option>
-<?php } if($Settings['DefaultDST']=="on") { ?>
-<option selected="selected" value="on">on</option><?php echo "\n" ?><option value="off">off</option>
-<?php } echo "\n" ?></select></td>
+	<td style="width: 70%;"><select id="YourOffSet" name="YourOffSet" class="TextBox">
+<optgroup label="Africa">
+<?php
+$optsel="";
+for ($i=0; $i < count($zonelist['africa']); $i++) {
+    if($Settings['DefaultTimeZone']==$zonelist['africa'][$i][1]) { $optsel = " selected=\"selected\""; }
+    echo "<option".$optsel." value=\"".$zonelist['africa'][$i][1]."\">".str_replace("_", " ", $zonelist['africa'][$i][0])."</option>\n"; 
+    $optsel=""; }
+?>
+</optgroup>
+<optgroup label="America">
+<?php
+$optsel="";
+for ($i=0; $i < count($zonelist['america']); $i++) {
+    if($Settings['DefaultTimeZone']==$zonelist['america'][$i][1]) { $optsel = " selected=\"selected\""; }
+    echo "<option".$optsel." value=\"".$zonelist['america'][$i][1]."\">".str_replace("_", " ", $zonelist['america'][$i][0])."</option>\n"; 
+    $optsel=""; }
+?>
+</optgroup>
+<optgroup label="Antarctica">
+<?php
+$optsel="";
+for ($i=0; $i < count($zonelist['antarctica']); $i++) {
+    if($Settings['DefaultTimeZone']==$zonelist['antarctica'][$i][1]) { $optsel = " selected=\"selected\""; }
+    echo "<option".$optsel." value=\"".$zonelist['antarctica'][$i][1]."\">".str_replace("_", " ", $zonelist['antarctica'][$i][0])."</option>\n"; 
+    $optsel=""; }
+?>
+</optgroup>
+<optgroup label="Asia">
+<?php
+for ($i=0; $i < count($zonelist['asia']); $i++) {
+    if($Settings['DefaultTimeZone']==$zonelist['asia'][$i][1]) { $optsel = " selected=\"selected\""; }
+    echo "<option".$optsel." value=\"".$zonelist['asia'][$i][1]."\">".str_replace("_", " ", $zonelist['asia'][$i][0])."</option>\n"; 
+    $optsel=""; }
+?>
+</optgroup>
+<optgroup label="Atlantic">
+<?php
+$optsel="";
+for ($i=0; $i < count($zonelist['atlantic']); $i++) {
+    if($Settings['DefaultTimeZone']==$zonelist['atlantic'][$i][1]) { $optsel = " selected=\"selected\""; }
+    echo "<option".$optsel." value=\"".$zonelist['atlantic'][$i][1]."\">".str_replace("_", " ", $zonelist['atlantic'][$i][0])."</option>\n"; 
+    $optsel=""; }
+?>
+</optgroup>
+<optgroup label="Australia">
+<?php
+$optsel="";
+for ($i=0; $i < count($zonelist['australia']); $i++) {
+    if($Settings['DefaultTimeZone']==$zonelist['australia'][$i][1]) { $optsel = " selected=\"selected\""; }
+    echo "<option".$optsel." value=\"".$zonelist['australia'][$i][1]."\">".str_replace("_", " ", $zonelist['australia'][$i][0])."</option>\n"; 
+    $optsel=""; }
+?>
+</optgroup>
+<optgroup label="Europe">
+<?php
+$optsel="";
+for ($i=0; $i < count($zonelist['europe']); $i++) {
+    if($Settings['DefaultTimeZone']==$zonelist['europe'][$i][1]) { $optsel = " selected=\"selected\""; }
+    echo "<option".$optsel." value=\"".$zonelist['europe'][$i][1]."\">".str_replace("_", " ", $zonelist['europe'][$i][0])."</option>\n"; 
+    $optsel=""; }
+?>
+</optgroup>
+<optgroup label="Indian">
+<?php
+$optsel="";
+for ($i=0; $i < count($zonelist['indian']); $i++) {
+    if($Settings['DefaultTimeZone']==$zonelist['indian'][$i][1]) { $optsel = " selected=\"selected\""; }
+    echo "<option".$optsel." value=\"".$zonelist['indian'][$i][1]."\">".str_replace("_", " ", $zonelist['indian'][$i][0])."</option>\n"; 
+    $optsel=""; }
+?>
+</optgroup>
+<optgroup label="Pacific">
+<?php
+$optsel="";
+for ($i=0; $i < count($zonelist['pacific']); $i++) {
+    if($Settings['DefaultTimeZone']==$zonelist['pacific'][$i][1]) { $optsel = " selected=\"selected\""; }
+    echo "<option".$optsel." value=\"".$zonelist['pacific'][$i][1]."\">".str_replace("_", " ", $zonelist['pacific'][$i][0])."</option>\n"; 
+    $optsel=""; }
+?>
+</optgroup>
+<optgroup label="Etcetera">
+<?php
+$optsel="";
+for ($i=0; $i < count($zonelist['etcetera']); $i++) {
+    if($Settings['DefaultTimeZone']==$zonelist['etcetera'][$i][1]) { $optsel = " selected=\"selected\""; }
+    echo "<option".$optsel." value=\"".$zonelist['etcetera'][$i][1]."\">".str_replace("_", " ", $zonelist['etcetera'][$i][0])."</option>\n"; 
+    $optsel=""; }
+?>
+</optgroup>
+</select></td>
 </tr><tr>
 	<td style="width: 30%;"><label class="TextBoxLabel" for="YourGender">Your Gender:</label></td>
 	<td style="width: 70%;"><select id="YourGender" name="YourGender" class="TextBox">
@@ -1501,7 +1633,7 @@ redirect("refresh",$rbasedir.url_maker($exfile['member'],$Settings['file_ext'],"
 <?php } if ($Error!="Yes") {
 $_POST['UserIP'] = $_SERVER['REMOTE_ADDR'];
 $_POST['Group'] = $Settings['MemberGroup'];
-$_POST['Joined'] = GMTimeStamp(); $_POST['LastActive'] = GMTimeStamp();
+$_POST['Joined'] = $utccurtime->getTimestamp(); $_POST['LastActive'] = $utccurtime->getTimestamp();
 $_POST['Signature'] = ""; $_POST['Interests'] = "";
 $_POST['Title'] = ""; $_POST['PostCount'] = "0";
 if(!isset($Settings['AdminValidate'])) { $Settings['AdminValidate'] = "off"; }
@@ -1582,15 +1714,8 @@ sql_free_result($gresults);
 $_POST['Interests'] = remove_spaces($_POST['Interests']);
 $_POST['Title'] = remove_spaces($_POST['Title']);
 $_POST['Email'] = remove_spaces($_POST['Email']);
-if(!is_numeric($_POST['YourOffSet'])) { $_POST['YourOffSet'] = "0"; }
-if($_POST['YourOffSet']>12) { $_POST['YourOffSet'] = "12"; }
-if($_POST['YourOffSet']<-12) { $_POST['YourOffSet'] = "-12"; }
-if(!is_numeric($_POST['MinOffSet'])) { $_POST['MinOffSet'] = "00"; }
-if($_POST['MinOffSet']>59) { $_POST['MinOffSet'] = "59"; }
-if($_POST['MinOffSet']<0) { $_POST['MinOffSet'] = "00"; }
-$_POST['YourOffSet'] = $_POST['YourOffSet'].":".$_POST['MinOffSet'];
-$query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."members\" (\"Name\", \"UserPassword\", \"HashType\", \"Email\", \"GroupID\", \"LevelID\", \"Validated\", \"HiddenMember\", \"WarnLevel\", \"Interests\", \"Title\", \"Joined\", \"LastActive\", \"LastPostTime\", \"BanTime\", \"BirthDay\", \"BirthMonth\", \"BirthYear\", \"Signature\", \"Notes\", \"Avatar\", \"AvatarSize\", \"Website\", \"Gender\", \"PostCount\", \"Karma\", \"KarmaUpdate\", \"RepliesPerPage\", \"TopicsPerPage\", \"MessagesPerPage\", \"TimeZone\", \"DateFormat\", \"TimeFormat\", \"DST\", \"UseTheme\", \"IP\", \"Salt\") VALUES\n". 
-"('%s', '%s', '%s', '%s', '%s', '1', '%s', '%s', %i, '%s', '%s', %i, %i, '0', '0', '0', '0', '0', '%s', '%s', '%s', '%s', '%s', '%s', %i, 0, 0, 10, 10, 10, '%s', '%s', '%s', '%s', '%s', '%s', '%s')", array($Name,$NewPassword,$iDBHash,$_POST['Email'],$yourgroup,$ValidateStats,$HideMe,"0",$_POST['Interests'],$_POST['Title'],$_POST['Joined'],$_POST['LastActive'],$NewSignature,'Your Notes',$Avatar,"100x100",$Website,$_POST['YourGender'],$_POST['PostCount'],$_POST['YourOffSet'],$Settings['idb_date_format'],$Settings['idb_time_format'],$_POST['DST'],$Settings['DefaultTheme'],$_POST['UserIP'],$HashSalt));
+$query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."members\" (\"Name\", \"UserPassword\", \"HashType\", \"Email\", \"GroupID\", \"LevelID\", \"Validated\", \"HiddenMember\", \"WarnLevel\", \"Interests\", \"Title\", \"Joined\", \"LastActive\", \"LastPostTime\", \"BanTime\", \"BirthDay\", \"BirthMonth\", \"BirthYear\", \"Signature\", \"Notes\", \"Avatar\", \"AvatarSize\", \"Website\", \"Gender\", \"PostCount\", \"Karma\", \"KarmaUpdate\", \"RepliesPerPage\", \"TopicsPerPage\", \"MessagesPerPage\", \"TimeZone\", \"DateFormat\", \"TimeFormat\", \"UseTheme\", \"IP\", \"Salt\") VALUES\n". 
+"('%s', '%s', '%s', '%s', '%s', '1', '%s', '%s', %i, '%s', '%s', %i, %i, '0', '0', '0', '0', '0', '%s', '%s', '%s', '%s', '%s', '%s', %i, 0, 0, 10, 10, 10, '%s', '%s', '%s', '%s', '%s', '%s')", array($Name,$NewPassword,$iDBHash,$_POST['Email'],$yourgroup,$ValidateStats,$HideMe,"0",$_POST['Interests'],$_POST['Title'],$_POST['Joined'],$_POST['LastActive'],$NewSignature,'Your Notes',$Avatar,"100x100",$Website,$_POST['YourGender'],$_POST['PostCount'],$_POST['YourOffSet'],$Settings['idb_date_format'],$Settings['idb_time_format'],$Settings['DefaultTheme'],$_POST['UserIP'],$HashSalt));
 sql_query($query,$SQLStat);
 $yourid = sql_get_next_id($Settings['sqltable'],"members",$SQLStat);
 $idquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s' AND \"UserPassword\"='%s' AND \"Email\"='%s' AND \"IP\"='%s' AND \"Salt\"='%s' LIMIT 1", array($Name,$NewPassword,$_POST['Email'],$_POST['UserIP'],$HashSalt));
@@ -1630,8 +1755,7 @@ $gquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE
 $gresult=sql_query($gquery,$SQLStat);
 $YourGroupMr=sql_result($gresult,0,"Name");
 sql_free_result($gresult);
-$YourTimeZoneMr=sql_result($resultlogr,$ir,"TimeZone");
-$YourDSTMr=sql_result($resultlogr,$ir,"DST"); }
+$YourTimeZoneMr=sql_result($resultlogr,$ir,"TimeZone"); }
 sql_free_result($resultlogr);
 session_regenerate_id(true);
 $_SESSION['Loggedin']=true;
@@ -1639,7 +1763,9 @@ $_SESSION['MemberName']=$YourNameMr;
 $_SESSION['UserID']=$YourIDMr;
 $_SESSION['UserIP']=$_SERVER['REMOTE_ADDR'];
 $_SESSION['UserTimeZone']=$YourTimeZoneMr;
-$_SESSION['UserDST']=$YourDSTMr;
+$usertz = new DateTimeZone($_SESSION['UserTimeZone']);
+$usercurtime->setTimestamp($defcurtime->getTimestamp());
+$usercurtime->setTimezone($usertz);
 $_SESSION['UserGroup']=$YourGroupMr;
 $_SESSION['UserGroupID']=$YourGroupIDMr;
 $_SESSION['UserPass']=$NewPassword;

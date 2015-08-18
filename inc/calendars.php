@@ -25,12 +25,15 @@ $_SESSION['ViewingFile'] = $exfile['calendar']; }
 $_SESSION['PreViewingTitle'] = "Viewing";
 $_SESSION['ViewingTitle'] = "Calendar";
 $_SESSION['ExtraData'] = "currentact:view; currentcategoryid:0; currentforumid:0; currenttopicid:0; currentmessageid:0; currenteventid:0; currentmemberid:0;";
+$calcurtime = new DateTime();
+$calcurtime->setTimestamp($defcurtime->getTimestamp());
+$calcurtime->setTimezone($usertz);
 if(!isset($_GET['HighligtDay'])) { $_GET['HighligtDay'] = null; }
 if(!isset($_GET['calmadd'])) { $_GET['calmadd'] = 0; }
 if(!is_numeric($_GET['calmadd'])) { $_GET['calmadd'] = 0; }
 if((!isset($_GET['calmonth']) && !isset($_GET['calyear'])) && 
 isset($_GET['caldate']) && strlen($_GET['caldate'])==2) {
-$_GET['caldate'] = $_GET['caldate'].GMTimeGet("Y",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST'],$calmounthaddd); }
+$_GET['caldate'] = $_GET['caldate'].$calcurtime->format("Y"); }
 if((!isset($_GET['calmonth']) && !isset($_GET['calyear'])) && 
 isset($_GET['caldate']) && strlen($_GET['caldate'])==6) {
 preg_match_all("/([0-9]{2})([0-9]{4})/is", $_GET['caldate'], $datecheck);
@@ -39,16 +42,16 @@ $_GET['calyear'] = $datecheck[2][0]; }
 if((isset($_GET['calmonth']) && isset($_GET['calyear'])) && 
    (strlen($_GET['calmonth'])==2&&strlen($_GET['calyear'])==4) ) {
 $year1 = date("Y", strtotime($_GET['calyear']."-".$_GET['calmonth']."-01"));
-$year2 = date("Y", GMTimeStamp());
+$year2 = date("Y", $utccurtime->getTimestamp());
 $month1 = date("m", strtotime($_GET['calyear']."-".$_GET['calmonth']."-01"));
-$month2 = date("m", GMTimeStamp());
+$month2 = date("m", $utccurtime->getTimestamp());
 $redirdate = ((($year2 - $year1) * 12) + ($month2 - $month1)) * -1;
 $_GET['calmadd'] = $redirdate; }
 $nextcalm = $_GET['calmadd'] + 1;
 $backcalm = $_GET['calmadd'] - 1;
 $calmcount = abs($_GET['calmadd']);
-$getcurmonth = GMTimeGet("m",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$getcuryear = GMTimeGet("y",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$getcurmonth = $usercurtime->format("m");
+$getcuryear = $usercurtime->format("y");
 $getcurtmsp = mktime(0, 0, 0, $getcmonth, 1, $getcyear);
 $getnextmsp = mktime(0, 0, 0, ($getcurmonth + $nextcalm), 1, $getcuryear);
 $nexmonthnum = date("m", $getnextmsp);
@@ -63,8 +66,9 @@ $tmpcalmadd = 0;
 $tmpcalcount = 1;
 if($_GET['calmadd']>0) {
 while($tmpcalcount <= $calmcount) {
-$tmpdaystart = GMTimeGet("d",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST'],$tmpcalmadd);
-$tmpdaycount = GMTimeGet("t",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST'],$tmpcalmadd);
+$calcurtime->setTimestamp($defcurtime->getTimestamp()+$tmpcalmadd);
+$tmpdaystart = $calcurtime->format("d");
+$tmpdaycount = $calcurtime->format("t");
 if($tmpdaystart>=1) { $tmpcalmnum += ($tmpdaycount - $tmpdaystart) + 1; }
 if($tmpdaystart<1) { $tmpcalmnum += $tmpdaycount; }
 $tmpcalmadd = $tmpcalmnum * $dayconv['day'];
@@ -72,31 +76,33 @@ $tmpcalmadd = $tmpcalmnum * $dayconv['day'];
 $calmounthaddd = $tmpcalmadd; }
 if($_GET['calmadd']<0) {
 while($tmpcalcount <= $calmcount) {
-$tmpdaystart = GMTimeGet("d",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST'],$tmpcalmadd);
-$tmpdaycount = GMTimeGet("t",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST'],$tmpcalmadd);
+$calcurtime->setTimestamp($defcurtime->getTimestamp()+$tmpcalmadd);
+$tmpdaystart = $calcurtime->format("d");
+$tmpdaycount = $calcurtime->format("t");
 if($tmpdaystart>=1) { $tmpcalmnum -= $tmpdaystart + 1; }
 if($tmpdaystart<1) { $tmpcalmnum -= $tmpdaycount; }
 $tmpcalmadd = $tmpcalmnum * $dayconv['day'];
 ++$tmpcalcount; }
 $calmounthaddd = $tmpcalmadd; }
 // Extra month stuff
-$MyRealMonthNum1 = GMTimeGet("m",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$MyRealYear = GMTimeGet("Y",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$MyRealMonthNum1 = $usercurtime->format("m");
+$MyRealYear = $usercurtime->format("Y");
 // Count the Days in this month
-$MyTimeStamp = GMTimeStamp() + $calmounthaddd;
-$CountDays = GMTimeGet("t",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST'],$calmounthaddd);
-$MyDay = GMTimeGet("j",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST'],$calmounthaddd);
-$MyDay2 = GMTimeGet("jS",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST'],$calmounthaddd);
-$MyDayNum = GMTimeGet("d",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST'],$calmounthaddd);
-$MyDayName = GMTimeGet("l",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST'],$calmounthaddd);
-$MyYear = GMTimeGet("Y",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST'],$calmounthaddd);
-$MyYear2 = GMTimeGet("y",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST'],$calmounthaddd);
-$MyMonth = GMTimeGet("m",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST'],$calmounthaddd);
+$MyTimeStamp = $utccurtime->getTimestamp() + $calmounthaddd;
+$calcurtime->setTimestamp($defcurtime->getTimestamp()+$calmounthaddd);
+$CountDays = $calcurtime->format("t");
+$MyDay = $calcurtime->format("j");
+$MyDay2 = $calcurtime->format("jS");
+$MyDayNum = $calcurtime->format("d");
+$MyDayName = $calcurtime->format("l");
+$MyYear = $calcurtime->format("Y");
+$MyYear2 = $calcurtime->format("y");
+$MyMonth = $calcurtime->format("m");
 $MyTimeStamp1 = mktime(0,0,0,$MyMonth,1,$MyYear);
 $MyTimeStamp2 = mktime(23,59,59,$MyMonth,$CountDays,$MyYear);
-$MyMonthName = GMTimeGet("F",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST'],$calmounthaddd);
-$MyMonthNum1 = GMTimeGet("m",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST'],$calmounthaddd);
-$MyMonthNum2 = GMTimeGet("n",$_SESSION['UserTimeZone'],0,$_SESSION['UserDST'],$calmounthaddd);
+$MyMonthName = $calcurtime->format("F");
+$MyMonthNum1 = $calcurtime->format("m");
+$MyMonthNum2 = $calcurtime->format("n");
 $FirstDayThisMonth = date("w", mktime(0, 0, 0, $MyMonth, 1, $MyYear));
 $EventsName = array();
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."events\" WHERE (\"EventMonth\">=%i AND \"EventYear\"<%i AND \"EventYearEnd\">=%i) OR (\"EventMonth\"<=%i AND \"EventMonthEnd\">=%i AND \"EventYearEnd\">=%i) OR (\"EventMonth\"<=%i AND \"EventMonthEnd\"<=%i AND \"EventYear\"<=%i AND \"EventYearEnd\">%i)",  array($MyMonth,$MyYear,$MyYear,$MyMonth,$MyMonth,$MyYear,$MyMonth,$MyMonth,$MyYear,$MyYear));
@@ -111,18 +117,24 @@ $EventName=sql_result($result,$is,"EventName");
 $EventText=sql_result($result,$is,"EventText");
 $EventStart=sql_result($result,$is,"TimeStamp");
 $EventEnd=sql_result($result,$is,"TimeStampEnd");
+$eventstartcurtime = new DateTime();
+$eventstartcurtime->setTimestamp($EventStart);
+$eventstartcurtime->setTimezone($usertz);
+$eventendcurtime = new DateTime();
+$eventendcurtime->setTimestamp($EventEnd);
+$eventendcurtime->setTimezone($usertz);
 //$EventMonth=sql_result($result,$is,"EventMonth");
-$EventMonth=GMTimeChange("m",$EventStart,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$EventMonth=$eventstartcurtime->format("m");
 //$EventMonthEnd=sql_result($result,$is,"EventMonthEnd");
-$EventMonthEnd=GMTimeChange("m",$EventEnd,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$EventMonthEnd=$eventendcurtime->format("m");
 //$EventDay=sql_result($result,$is,"EventDay");
-$EventDay=GMTimeChange("j",$EventStart,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$EventDay=$eventstartcurtime->format("j");
 //$EventDayEnd=sql_result($result,$is,"EventDayEnd");
-$EventDayEnd=GMTimeChange("j",$EventEnd,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$EventDayEnd=$eventendcurtime->format("j");
 //$EventYear=sql_result($result,$is,"EventYear");
-$EventYear=GMTimeChange("Y",$EventStart,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$EventYear=$eventstartcurtime->format("Y");
 //$EventYearEnd=sql_result($result,$is,"EventYearEnd");
-$EventYearEnd=GMTimeChange("Y",$EventEnd,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$EventYearEnd=$eventendcurtime->format("Y");
 if($EventMonthEnd!=$MyMonth) { $EventDayEnd = $CountDays; }
 if($EventMonth<$MyMonth) { $EventDay = 1; }
 $oldeventname=$EventName;

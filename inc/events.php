@@ -39,8 +39,14 @@ $EventName=sql_result($result,$is,"EventName");
 $EventText=sql_result($result,$is,"EventText");
 $EventStart=sql_result($result,$is,"TimeStamp");
 $EventEnd=sql_result($result,$is,"TimeStampEnd");
-$EventStart = GMTimeChange($_SESSION['iDBDateFormat'],$EventStart,null);
-$EventEnd = GMTimeChange($_SESSION['iDBDateFormat'],$EventEnd,null);
+$eventstartcurtime = new DateTime();
+$eventstartcurtime->setTimestamp($EventStart);
+$eventstartcurtime->setTimezone($usertz);
+$EventStart = $eventstartcurtime->format($_SESSION['iDBDateFormat']);
+$eventendcurtime = new DateTime();
+$eventendcurtime->setTimestamp($EventEnd);
+$eventendcurtime->setTimezone($usertz);
+$EventEnd = $eventendcurtime->format($_SESSION['iDBDateFormat']);
 $ipshow = "two";
 $_SESSION['ViewingPage'] = url_maker(null,"no+ext","act=view&id=".$_GET['id'],"&","=",$prexqstr['event'],$exqstr['event']);
 if($Settings['file_ext']!="no+ext"&&$Settings['file_ext']!="no ext") {
@@ -78,7 +84,10 @@ if($PreUserCanUseBBags!="yes"&&$PreUserCanUseBBags!="no"&&$PreUserCanUseBBags!="
 	$PreUserCanUseBBags = "no"; }
 sql_free_result($memreresult);
 $User1Joined=sql_result($reresult,$rei,"Joined");
-$User1Joined=GMTimeChange($_SESSION['iDBDateFormat'],$User1Joined,$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$tmpusrcurtime = new DateTime();
+$tmpusrcurtime->setTimestamp($User1Joined);
+$tmpusrcurtime->setTimezone($usertz);
+$User1Joined=$tmpusrcurtime->format($_SESSION['iDBDateFormat']);
 $User1GroupID=sql_result($reresult,$rei,"GroupID");
 $gquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i LIMIT 1", array($User1GroupID));
 $gresult=sql_query($gquery,$SQLStat);
@@ -697,12 +706,18 @@ redirect("refresh",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"a
 <?php } if ($Error!="Yes") { 
 $TimeSIn = mktime(0,0,0,$TimeIn[0],$TimeIn[1],$TimeIn[2]);
 $TimeSOut = mktime(23,59,59,$TimeOut[0],$TimeOut[1],$TimeOut[2]);
-$EventMonth=GMTimeChange("m",$TimeSIn,0,0,"off");
-$EventMonthEnd=GMTimeChange("m",$TimeSOut,0,0,"off");
-$EventDay=GMTimeChange("d",$TimeSIn,0,0,"off");
-$EventDayEnd=GMTimeChange("d",$TimeSOut,0,0,"off");
-$EventYear=GMTimeChange("Y",$TimeSIn,0,0,"off");
-$EventYearEnd=GMTimeChange("Y",$TimeSOut,0,0,"off");
+$eventstartcurtime = new DateTime();
+$eventstartcurtime->setTimestamp($TimeSIn);
+$eventstartcurtime->setTimezone($utctz);
+$eventendcurtime = new DateTime();
+$eventendcurtime->setTimestamp($TimeSOut);
+$eventendcurtime->setTimezone($utctz);
+$EventMonth=$eventstartcurtime->format("m");
+$EventMonthEnd=$eventendcurtime->format("m");
+$EventDay=$eventstartcurtime->format("d");
+$EventDayEnd=$eventendcurtime->format("d");
+$EventYear=$eventstartcurtime->format("Y");
+$EventYearEnd=$eventendcurtime->format("Y");
 $User1ID=$MyUserID;
 $User1IP=$_SERVER['REMOTE_ADDR'];
 if($_SESSION['UserGroup']==$Settings['GuestGroup']) { $User1Name = $_POST['GuestName']; }

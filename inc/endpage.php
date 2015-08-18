@@ -19,13 +19,9 @@ if ($File3Name=="endpage.php"||$File3Name=="/endpage.php") {
 	exit(); }
 if(!isset($_GET['time'])) { $_GET['time'] = true; }
 if($_GET['time']=="show"||$_GET['time']==true) {
-if($_SESSION['UserDST']=="on") { $MyDST = $checktimea['hour']+1; }
-if($_SESSION['UserDST']=="off") { $MyDST = $checktimea['hour']; }
-if($MyDST>=0) { $TimeSign = "+"; }
-if($MyDST<0) { $TimeSign = "-"; $MyDST = abs($MyDST); }
-$MyDST = $MyDST.":".$checktimea['minute'];
-$MyTimeNow = GMTimeGet($_SESSION['iDBTimeFormat'],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
-$MyFullTimeNow = GMTimeGet($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat'],$_SESSION['UserTimeZone'],0,$_SESSION['UserDST']);
+$MyDST = $usercurtime->format("P");
+$MyTimeNow = $usercurtime->format($_SESSION['iDBTimeFormat']);
+$MyFullTimeNow = $usercurtime->format($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat']);
 $endpagevar=$endpagevar."<br />The time now is <span class=\"ctimenow\" title=\"".$MyFullTimeNow."\">".$MyTimeNow."</span> ".$ThemeSet['LineDivider']." All times are UTC ".$TimeSign." ".$MyDST; }
 function execution_time($starttime) {
 list($uetime, $etime) = explode(" ", microtime());

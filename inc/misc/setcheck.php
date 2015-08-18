@@ -81,10 +81,7 @@ $oldusername = null; $oldtopicname = null; $ext = null;
 if($Settings['DefaultTheme']==null) {
 	$Settings['DefaultTheme'] = "iDB"; }
 if($Settings['DefaultTimeZone']==null) {
-	$Settings['DefaultTimeZone'] = SeverOffSet(null); }
-if($Settings['DefaultDST']!="on"&&
-	$Settings['DefaultDST']!="off") { 
-	$Settings['DefaultDST'] = "off"; }
+	$Settings['DefaultTimeZone'] = date_default_timezone_get(); }
 if(!isset($Settings['use_captcha'])) {
 	$Settings['use_captcha'] = "off"; }
 if($Settings['use_captcha']!="on"&&
