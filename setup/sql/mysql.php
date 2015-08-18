@@ -168,7 +168,7 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."levels\" (\n".
 "  \"PromoteKarma\" int(15) NOT NULL default '0',\n".
 "  PRIMARY KEY  (\"id\"),\n".
 "  UNIQUE KEY \"Name\" (\"Name\")\n".
-");", array(null));
+") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$Settings['sql_charset']." COLLATE=".$Settings['sql_collate'].";", array(null));
 sql_query($query,$SQLStat);
 $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."levels\" (\"id\", \"Name\", \"PromoteTo\", \"PromotePosts\", \"PromoteKarma\") VALUES\n".
 "(-1, 'Guest', 0, 0, 0),\n".

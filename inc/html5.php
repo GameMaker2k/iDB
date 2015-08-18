@@ -11,7 +11,7 @@
     Copyright 2004-2015 iDB Support - http://idb.berlios.de/
     Copyright 2004-2015 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: html5.php - Last Update: 08/18/2015 SVN 797 - Author: cooldude2k $
+    $FileInfo: html5.php - Last Update: 08/18/2015 SVN 798 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="xhtml10.php"||$File3Name=="/xhtml10.php") {
@@ -257,5 +257,5 @@ ob_start("idb_suboutput_handler");
 if($ThemeSet['FavIcon']!=null) { ?>
 <link rel="icon" href="<?php echo $ThemeSet['FavIcon']; ?>" />
 <link rel="shortcut icon" href="<?php echo $ThemeSet['FavIcon']; ?>" />
-<?php 
+<?php }
 $iWrappers['FAVICON'] = ob_get_clean(); ?>
