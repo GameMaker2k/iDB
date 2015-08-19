@@ -95,10 +95,11 @@ if ($_GET['act']!="Part4"&&$_POST['act']!="Part4") {
 	$preact['idb'] = "installing";	}
 $SetupDir['setup'] = "setup/"; $ConvertDir['setup'] = $SetupDir['setup']; $SetupDir['sql'] = "setup/sql/"; 
 $SetupDir['convert'] = "setup/convert/"; $ConvertDir['convert'] = $SetupDir['convert']; $ConvertDir['sql'] = $SetupDir['sql'];
-$Settings['output_type'] = "html"; $Settings['html_type'] = "xhtml10";
+$Settings['output_type'] = "html"; $Settings['html_type'] = "html5";
 $Settings['board_name'] = "Installing iDB"; 
 if(!isset($Settings['charset'])) {
-	$Settings['charset'] = "ISO-8859-15"; }
+	$Settings['charset'] = "ISO-8859-15"; 
+	header("Content-Type: text/html; charset=ISO-8859-15"); }
 if(isset($Settings['charset'])) {
 if($Settings['charset']!="ISO-8859-15"&&$Settings['charset']!="ISO-8859-1"&&
 	$Settings['charset']!="UTF-8"&&$Settings['charset']!="CP866"&&
@@ -106,7 +107,8 @@ if($Settings['charset']!="ISO-8859-15"&&$Settings['charset']!="ISO-8859-1"&&
 	$Settings['charset']!="KOI8-R"&&$Settings['charset']!="BIG5"&&
 	$Settings['charset']!="GB2312"&&$Settings['charset']!="BIG5-HKSCS"&&
 	$Settings['charset']!="Shift_JIS"&&$Settings['charset']!="EUC-JP") {
-	$Settings['charset'] = "ISO-8859-15"; } }
+	$Settings['charset'] = "ISO-8859-15"; 
+	header("Content-Type: text/html; charset=ISO-8859-15"); } }
 $SQLCharset = "latin1";
 if(isset($_POST['charset'])) { 
 if($_POST['charset']=="ISO-8859-1") {
@@ -160,7 +162,7 @@ foreach($ThemeSet AS $key => $value) {
 	$ThemeSet[$key] = preg_replace_callback("/%\{([^\}]*)\}t/s", "get_time", $ThemeSet[$key]); 
 	$ThemeSet[$key] = preg_replace("/\{percent\}p/s", "%", $ThemeSet[$key]); }
 require($SetupDir['convert'].'info.php');
-require($SetupDir['setup'].'xhtml10.php');
+require($SetupDir['setup'].'html5.php');
 $Error = null; $_GET['time'] = false;
 ?>
 
@@ -177,7 +179,7 @@ $Error = null; $_GET['time'] = false;
 <table class="Table1">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableRow1">
-<td class="TableColumn1" colspan="2"><span style="font-weight: bold; text-align: left;"><?php echo $ThemeSet['TitleIcon']; ?><a href="Install.php">Install <?php echo $VerInfo['iDB_Ver_Show']; ?> </a></span>
+<td class="TableColumn1"><span style="font-weight: bold; text-align: left;"><?php echo $ThemeSet['TitleIcon']; ?><a href="Install.php">Install <?php echo $VerInfo['iDB_Ver_Show']; ?> </a></span>
 </td>
 </tr><?php } ?>
 <tr class="TableRow2">

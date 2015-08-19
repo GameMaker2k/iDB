@@ -375,6 +375,8 @@ if(isset($OptimizeAr["Msg_text"])) { unset($OptimizeAr["Msg_text"]); }
 if(isset($OptimizeAr[3])) { unset($OptimizeAr[3]); }
 if($Settings['sqltype']=="mysql"||
 	$Settings['sqltype']=="mysqli") {
+if(isset($_GET['subact']) && $_GET['subact']=="repair") {
+	$RepairTea = sql_query(sql_pre_query("REPAIR TABLE \"".$TableChCk[$ti]."\"", array(null)),$SQLStat); }
 $OptimizeTea = sql_query(sql_pre_query("OPTIMIZE TABLE \"".$TableChCk[$ti]."\"", array(null)),$SQLStat); }
 if($Settings['sqltype']=="cubrid") {
 $OptimizeTea = sql_query(sql_pre_query("UPDATE STATISTICS ON \"".$TableChCk[$ti]."\"", array(null)),$SQLStat); }
@@ -588,11 +590,17 @@ $usertzstarttime->setTimezone($usertz);
 <table style="text-align: left;">
 <tr>
 	<td style="width: 50%;"><span class="TextBoxLabel" title="Using User Time Zone">[User TimeZone] Install Date:</span></td>
-	<td style="width: 50%;"><?php echo $usertzstarttime->format($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat']); ?></td>
-</tr><?php if($_SESSION['UserTimeZone']!=$Settings['DefaultTimeZone']) { ?><tr>
+	<td style="width: 50%;"><?php echo $usertzstarttime->format($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat']." P"); ?></td>
+</tr><tr>
 	<td style="width: 50%;"><span class="TextBoxLabel" title="Using Board Time Zone">[Board TimeZone] Install Date:</span></td>
-	<td style="width: 50%;"><?php echo $deftzstarttime->format($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat']); ?></td>
-</tr><?php } if($GroupInfo['ViewDBInfo']=="yes") { 
+	<td style="width: 50%;"><?php echo $deftzstarttime->format($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat']." P"); ?></td>
+</tr><tr>
+	<td style="width: 50%;"><span class="TextBoxLabel" title="Using Server Time Zone">[Server TimeZone] Install Date:</span></td>
+	<td style="width: 50%;"><?php echo $servtzstarttime->format($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat']." P"); ?></td>
+</tr><tr>
+	<td style="width: 50%;"><span class="TextBoxLabel" title="Using UTC Time Zone">[UTC TimeZone] Install Date:</span></td>
+	<td style="width: 50%;"><?php echo $utctzstarttime->format($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat']." P"); ?></td>
+</tr><?php if($GroupInfo['ViewDBInfo']=="yes") { 
 ?><tr style="text-align: left;">
 	<td style="width: 50%;"><span class="TextBoxLabel">Forum Software Version:</span></td>
 	<td style="width: 50%;"><?php echo "<span title=\"".$VerInfo['iDB_Full_Ver_Show']."\">".$VerInfo['iDB_Ver_Show']."</span>"; ?><!--&nbsp;<a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=vercheck",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>" onclick="window.open(this.href);return false;"><img src="<?php echo $AdminCheckURL; ?>" alt="Version Check: Click to see more info." title="Version Check: Click to see more info." /></a>--></td>
@@ -766,8 +774,8 @@ while ($gi < $gnum) { ?>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="HTMLType">HTML Type to use:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="HTMLType" id="HTMLType">
-	<option<?php if($Settings['html_type']=="xhtml10") { echo " selected=\"selected\""; } ?> value="xhtml10">XHTML 1.0</option>
-	<option<?php if($Settings['html_type']=="xhtml11") { echo " selected=\"selected\""; } ?> value="xhtml11">XHTML 1.1</option>
+	<!--<option<?php if($Settings['html_type']=="xhtml10") { echo " selected=\"selected\""; } ?> value="xhtml10">XHTML 1.0</option>-->
+	<!--<option<?php if($Settings['html_type']=="xhtml11") { echo " selected=\"selected\""; } ?> value="xhtml11">XHTML 1.1</option>-->
 	<option<?php if($Settings['html_type']=="html5") { echo " selected=\"selected\""; } ?> value="html5">HTML 5</option>
 	<option<?php if($Settings['html_type']=="xhtml5") { echo " selected=\"selected\""; } ?> value="xhtml5">XHTML 5</option>
 	</select></td>

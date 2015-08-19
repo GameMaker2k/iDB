@@ -11,35 +11,32 @@
     Copyright 2004-2015 iDB Support - http://idb.berlios.de/
     Copyright 2004-2015 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: xhtml10.php - Last Update: 08/18/2015 SVN 797 - Author: cooldude2k $
+    $FileInfo: html5.php - Last Update: 08/18/2015 SVN 798 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="xhtml10.php"||$File3Name=="/xhtml10.php") {
 	require('index.php');
 	exit(); }
-
+$XHTML5 = false;
 // Check to see if we serv the file as html or xhtml
 // if we do xhtml we also check to see if user's browser 
 // can dispay if or else fallback to html
 if($Settings['output_type']=="html") {
-	$ccstart = "//<!--"; $ccend = "//-->";
+	$ccstart = "//<!--"; $ccend = "//-->"; $XHTML5 = false;
 header("Content-Type: text/html; charset=".$Settings['charset']); }
 if($Settings['output_type']=="xhtml") {
 if(stristr($_SERVER["HTTP_ACCEPT"],"application/xhtml+xml")) {
-	$ccstart = "//<![CDATA["; $ccend = "//]]>";
-	header("Content-Type: application/xhtml+xml; charset=".$Settings['charset']);
-	xml_doc_start("1.0",$Settings['charset']); }
+	$ccstart = "//<![CDATA["; $ccend = "//]]>"; $XHTML5 = true;
+	header("Content-Type: application/xhtml+xml; charset=".$Settings['charset']); }
 else { if (stristr($_SERVER["HTTP_USER_AGENT"],"W3C_Validator")) {
-	$ccstart = "//<![CDATA["; $ccend = "//]]>";
+	$ccstart = "//<![CDATA["; $ccend = "//]]>"; $XHTML5 = true;
    header("Content-Type: application/xhtml+xml; charset=".$Settings['charset']);
-	xml_doc_start("1.0",$Settings['charset']);
-} else { $ccstart = "//<!--"; $ccend = "//-->";
+} else { $ccstart = "//<!--"; $ccend = "//-->"; $XHTML5 = false;
 	header("Content-Type: text/html; charset=".$Settings['charset']); } } }
 if($Settings['output_type']!="xhtml") {
 	if($Settings['output_type']!="html") {
-		$ccstart = "//<!--"; $ccend = "//-->";
+		$ccstart = "//<!--"; $ccend = "//-->"; $XHTML5 = false;
 header("Content-Type: text/html; charset=".$Settings['charset']); } }
-$Settings['js_ext'] = ".js";
 if($checklowview===true&&$_GET['act']=="lowview") { 
    $ThemeSet['CSSType'] = "lowview"; 
    $ThemeSet['ThemeName'] = $OrgName." Low Theme";
@@ -62,8 +59,6 @@ if($ThemeSet['CSSType']!="import"&&
    $ThemeSet['CSSType']!="xml"&&
    $ThemeSet['CSSType']!="sql") { 
    $ThemeSet['CSSType'] = "import"; }
-if($ThemeSet['CSSType']=="xhtml") {
-   xml_tag_make("xml-stylesheet","type=text/css&href=".$ThemeSet['CSS']); }
 header("Content-Style-Type: text/css");
 header("Content-Script-Type: text/javascript");
 if($Settings['showverinfo']!="on") {
@@ -99,28 +94,96 @@ if($Settings['html_level']!="Strict") {
 	if($Settings['html_level']!="Transitional") {
 		$Settings['html_level'] = "Transitional"; } }
 // HTML Document Starts
-if($Settings['html_level']=="Strict") { ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<?php } if($Settings['html_level']=="Transitional") { ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<?php } if($Settings['html_level']=="Frameset") { ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" 
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
-<?php } // HTML meta tags and other html, head tags ?>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+if($XHTML5===false) {
+?>
+<!DOCTYPE html>
+<?php // HTML meta tags and other html, head tags ?>
+<html lang="en">
+<?php } if($XHTML5===true) { ?>
+<!DOCTYPE html [
+<!ENTITY nbsp "&#160;">
+<!ENTITY copy "&#169;">
+<!ENTITY reg "&#174;">
+<!ENTITY Aacute "&#193;">
+<!ENTITY aacute "&#225;">
+<!ENTITY Agrave "&#224;">
+<!ENTITY agrave "&#192;">
+<!ENTITY Acirc "&#194;">
+<!ENTITY acirc "&#226;">
+<!ENTITY Auml "&#196;">
+<!ENTITY auml "&#228;">
+<!ENTITY Atilde "&#195;">
+<!ENTITY atilde "&#227;">
+<!ENTITY Aring "&#197;">
+<!ENTITY aring "&#229;">
+<!ENTITY Aelig "&#198;">
+<!ENTITY aelig "&#230;">
+<!ENTITY Ccedil "&#199;">
+<!ENTITY ccedil "&#231;">
+<!ENTITY Eth "&#208;">
+<!ENTITY eth "&#240;">
+<!ENTITY Eacute "&#201;">
+<!ENTITY eacute "&#233;">
+<!ENTITY Egrave "&#200;">
+<!ENTITY egrave "&#232;">
+<!ENTITY Ecirc "&#202;">
+<!ENTITY ecirc "&#234;">
+<!ENTITY Euml "&#203;">
+<!ENTITY euml "&#235;">
+<!ENTITY Iacute "&#205;">
+<!ENTITY iacute "&#237;">
+<!ENTITY Igrave "&#204;">
+<!ENTITY igrave "&#236;">
+<!ENTITY Icirc "&#206;">
+<!ENTITY icirc "&#238;">
+<!ENTITY Iuml "&#207;">
+<!ENTITY iuml "&#239;">
+<!ENTITY Ntilde "&#209;">
+<!ENTITY ntilde "&#241;">
+<!ENTITY Oacute "&#211;">
+<!ENTITY oacute "&#243;">
+<!ENTITY Ograve "&#210;">
+<!ENTITY ograve "&#242;">
+<!ENTITY Ocirc "&#212;">
+<!ENTITY ocirc "&#244;">
+<!ENTITY Ouml "&#214;">
+<!ENTITY ouml "&#246;">
+<!ENTITY Otilde "&#213;">
+<!ENTITY otilde "&#245;">
+<!ENTITY Oslash "&#216;">
+<!ENTITY oslash "&#248;">
+<!ENTITY szlig "&#223;">
+<!ENTITY Thorn "&#222;">
+<!ENTITY thorn "&#254;">
+<!ENTITY Uacute "&#218;">
+<!ENTITY uacute "&#250;">
+<!ENTITY Ugrave "&#217;">
+<!ENTITY ugrave "&#249;">
+<!ENTITY Ucirc "&#219;">
+<!ENTITY ucirc "&#251;">
+<!ENTITY Uuml "&#220;">
+<!ENTITY uuml "&#252;">
+<!ENTITY Yacute "&#221;">
+<!ENTITY yacute "&#253;">
+<!ENTITY yuml "&#255;">
+]>
+<html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<?php } ?>
 <head>
-<meta http-equiv="Content-Language" content="en" />
+<?php if($XHTML5===false) { ?>
+<meta charset="<?php echo $Settings['charset']; ?>">
+<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $Settings['charset']; ?>">
+<?php 
+if(!isset($_SERVER['HTTP_USER_AGENT'])) {
+	$_SERVER['HTTP_USER_AGENT'] = ""; }
+if(strpos($_SERVER['HTTP_USER_AGENT'], "msie") && 
+	!strpos($_SERVER['HTTP_USER_AGENT'], "opera")){ ?>
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+<?php } if(strpos($_SERVER['HTTP_USER_AGENT'], "chromeframe")) { ?>
+<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+<?php } } if($XHTML5===true) { ?>
+<meta charset="<?php echo $Settings['charset']; ?>" />
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $Settings['charset']; ?>" />
-<meta http-equiv="Content-Style-Type" content="text/css" />
-<meta http-equiv="Content-Script-Type" content="text/javascript" />
-<meta http-equiv="Cache-Control" content="private, no-cache, must-revalidate, pre-check=0, post-check=0, max-age=0" />
-<meta http-equiv="Pragma" content="private, no-cache, must-revalidate, pre-check=0, post-check=0, max-age=0" />
-<meta http-equiv="Expires" content="<?php echo gmdate("D, d M Y H:i:s")." GMT"; ?>" />
-<meta http-equiv="P3P" content='CP="IDC DSP COR ADM DEVi TAIi PSA PSD IVAi IVDi CONi HIS OUR IND CNT"' /> 
-<meta http-equiv="P3P" name="CP" content="IDC DSP COR ADM DEVi TAIi PSA PSD IVAi IVDi CONi HIS OUR IND CNT" />
-<meta http-equiv="Expires" content="<?php echo gmdate("D, d M Y H:i:s")." GMT"; ?>" />
 <?php 
 if(!isset($_SERVER['HTTP_USER_AGENT'])) {
 	$_SERVER['HTTP_USER_AGENT'] = ""; }
@@ -129,7 +192,7 @@ if(strpos($_SERVER['HTTP_USER_AGENT'], "msie") &&
 <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
 <?php } if(strpos($_SERVER['HTTP_USER_AGENT'], "chromeframe")) { ?>
 <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
-<?php } ?>
+<?php } } ?>
 <base href="<?php echo $BoardURL; ?>" />
 <?php if($Settings['showverinfo']=="on") { ?>
 <meta name="Generator" content="<?php echo $VerInfo['iDB_Ver_Show']; ?>" />
@@ -140,10 +203,7 @@ if(strpos($_SERVER['HTTP_USER_AGENT'], "msie") &&
 <meta name="Keywords" content="<?php echo $SettInfo['Keywords']; ?>" />
 <meta name="Description" content="<?php echo $SettInfo['Description']; ?>" />
 <meta name="ROBOTS" content="Index, FOLLOW" />
-<meta name="revisit-after" content="1 days" />
 <meta name="GOOGLEBOT" content="Index, FOLLOW" />
-<meta name="resource-type" content="document" />
-<meta name="distribution" content="global" />
 <?php if($Settings['showverinfo']=="on") { ?>
 <!-- generator="<?php echo $VerInfo['iDB_Ver_Show']; ?>" -->
 <?php } if($Settings['showverinfo']!="on") { ?>
@@ -151,15 +211,8 @@ if(strpos($_SERVER['HTTP_USER_AGENT'], "msie") &&
 <?php } echo "\n"; ?>
 
 <script type="text/javascript" src="<?php echo url_maker($exfilejs['javascript'],$Settings['js_ext'],null,$Settings['qstr'],$Settings['qsep'],$prexqstrjs['javascript'],$exqstrjs['javascript']); ?>"></script>
-<?php echo "\n"; ?>
-<link rel="Start" href="<?php echo $AltBoardURL.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>" title="<?php echo $Settings['board_name'].$idbpowertitle; ?>" />
-<link rel="Copyright" href="<?php echo $AltBoardURL.url_maker($exfile['index'],$Settings['file_ext'],"act=bsd",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>" title="Copyright Notice" />
-<?php if($Settings['showverinfo']=="on") { ?>
-<link rel="Generator" href="<?php echo $iDBHome; ?>" title="<?php echo $VerInfo['iDB_Ver_Show']; ?>" />
-<?php } if($Settings['showverinfo']!="on") { ?>
-<link rel="Generator" href="<?php echo $iDBHome; ?>" title="<?php echo $iDB; ?>" />
-<?php } echo "\n"; ?>
-<?php if($ThemeSet['CSSType']=="import") { ?>
+<?php echo "\n";
+if($ThemeSet['CSSType']=="import") { ?>
 <style type="text/css">
 /* Import the theme css file */
 <?php echo "\n@import url(\"".$ThemeSet['CSS']."\");\n"; ?>
@@ -194,7 +247,8 @@ color: #000000;
 font-size: 9px;
 }
 </style>
-<?php } if($ThemeSet['FavIcon']!=null) { ?>
+<?php }
+if($ThemeSet['FavIcon']!=null) { ?>
 <link rel="icon" href="<?php echo $ThemeSet['FavIcon']; ?>" />
 <link rel="shortcut icon" href="<?php echo $ThemeSet['FavIcon']; ?>" />
 <?php } ?>

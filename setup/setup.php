@@ -200,8 +200,8 @@ for ($i=0; $i < count($timezone_identifiers); $i++) {
 </tr><tr>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="HTMLType">HTML Type to use:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="HTMLType" id="HTMLType">
-	<option value="xhtml10">XHTML 1.0</option>
-	<option value="xhtml11">XHTML 1.1</option>
+	<!--<option value="xhtml10">XHTML 1.0</option>-->
+	<!--<option value="xhtml11">XHTML 1.1</option>-->
 	<option value="html5">HTML 5</option>
 	<option value="xhtml5">XHTML 5</option>
 	</select></td>

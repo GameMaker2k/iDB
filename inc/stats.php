@@ -11,7 +11,7 @@
     Copyright 2004-2015 iDB Support - http://idb.berlios.de/
     Copyright 2004-2015 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: stats.php - Last Update: 08/18/2015 SVN 797 - Author: cooldude2k $
+    $FileInfo: stats.php - Last Update: 08/19/2015 SVN 799 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="stats.php"||$File3Name=="/stats.php") {
@@ -207,7 +207,7 @@ $tdMembersOnline .= " (<a title=\"".$tdMemList['IP']."\" onclick=\"window.open(t
 <?php echo $bdstring; ?>
 </div></td>
 </tr>
-<tr id="Stats4" class="TableStatsRow2">
+<tr id="Stats5" class="TableStatsRow2">
 <td class="TableStatsColumn2" colspan="2" style="width: 100%; font-weight: bold;">Board Stats</td>
 </tr>
 <tr class="TableStatsRow3" id="Stats6">
@@ -220,10 +220,10 @@ $tdMembersOnline .= " (<a title=\"".$tdMemList['IP']."\" onclick=\"window.open(t
 &nbsp;Our newest member is <a<?php echo $NewestMemTitle; ?> href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$NewestMem['ID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>"><?php echo $NewestMem['Name']; ?></a><?php echo $NewestMemExtraIP; ?>
 </div></td>
 </tr>
-<tr id="Stats5" class="TableStatsRow2">
+<tr id="Stats7" class="TableStatsRow2">
 <td class="TableStatsColumn2" colspan="2" style="width: 100%; font-weight: bold;">Members Online Today: <?php echo $tdNumberMembers; ?></td>
 </tr>
-<tr class="TableStatsRow3" id="Stats6">
+<tr class="TableStatsRow3" id="Stats8">
 <td style="width: 4%;" class="TableStatsColumn3"><div class="statsicon">
 <?php echo $ThemeSet['StatsIcon']; ?></div></td>
 <td style="width: 96%;" class="TableStatsColumn3"><div class="statsinfo">
@@ -232,7 +232,7 @@ $tdMembersOnline .= " (<a title=\"".$tdMemList['IP']."\" onclick=\"window.open(t
 &nbsp;<?php echo $tdMembersOnline; ?>
 </div></td>
 </tr>
-<tr id="Stats6" class="TableStatsRow4">
+<tr id="Stats9" class="TableStatsRow4">
 <td class="TableStatsColumn4" colspan="2">&nbsp;</td>
 </tr>
 </table></div>

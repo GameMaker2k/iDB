@@ -64,27 +64,8 @@ if($Settings['output_type']=="xhtm") {
 if($Settings['output_type']=="xml+htm") {
 	$Settings['output_type'] = "xhtml"; }
 if($Settings['html_type']=="html5"||
-	$Settings['html_type']=="xhtml5") {
+	$Settings['html_type']=="xhtml5"||
+	($Settings['html_type']!="html5"&&
+	 $Settings['html_type']!="xhtml5")) {
 require($SettDir['inc'].'html5.php'); }
-if($Settings['html_type']=="xhtml10") {
-require($SettDir['inc'].'xhtml10.php'); }
-if($Settings['html_type']=="xhtml11") {
-if(stristr($_SERVER["HTTP_ACCEPT"],"application/xhtml+xml")) {
-$ccstart = "//<![CDATA["; $ccend = "//]]>";
-require($SettDir['inc'].'xhtml11.php'); } else {
-if (stristr($_SERVER["HTTP_USER_AGENT"],"W3C_Validator")||
-	stristr($_SERVER["HTTP_USER_AGENT"],"WDG_Validator")||
-	stristr($_SERVER["HTTP_USER_AGENT"],"WDG_SiteValidator")) {
-	$ccstart = "//<![CDATA["; $ccend = "//]]>";
-   require($SettDir['inc'].'xhtml11.php'); } else { 
-	   $ccstart = "//<!--"; $ccend = "//-->";
-	   $Settings['html_type']="xhtml10";
-	   $Settings['html_level']="Strict";
-	   require($SettDir['inc'].'xhtml10.php'); } } }
-if($Settings['html_type']!="xhtml10"&&
-	$Settings['html_type']!="xhtml11"&&
-	$Settings['html_type']!="html5"&&
-	$Settings['html_type']!="xhtml5") {
-	$ccstart = "//<!--"; $ccend = "//-->";
-	require($SettDir['inc'].'xhtml10.php'); }
 ?>

@@ -165,7 +165,7 @@ if($Settings['ValidateGroup']==null&&
 	$Settings['AdminValidate']=="on") {
 $Settings['ValidateGroup'] = "Validate"; }
 if($Settings['html_type']=="html4") { 
-	$Settings['html_type'] = "html10"; }
+	$Settings['html_type'] = "html5"; }
 /*if($_GET['debug']!="off"||$_GET['debug']=="on") {
 	output_add_rewrite_var("amp;debug",$_GET['debug']); }*/
 if (!isset($_GET['action'])) { $_GET['action'] = null; }
