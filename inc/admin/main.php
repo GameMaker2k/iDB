@@ -11,7 +11,7 @@
     Copyright 2004-2015 iDB Support - http://idb.berlios.de/
     Copyright 2004-2015 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: main.php - Last Update: 08/18/2015 SVN 797 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 08/19/2015 SVN 801 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -593,10 +593,10 @@ $usertzstarttime->setTimezone($usertz);
 	<td style="width: 50%;"><?php echo $usertzstarttime->format($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat']." P"); ?></td>
 </tr><tr>
 	<td style="width: 50%;"><span class="TextBoxLabel" title="Using Board Time Zone">[Board TimeZone] Install Date:</span></td>
-	<td style="width: 50%;"><?php echo $deftzstarttime->format($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat']." P"); ?></td>
+	<td style="width: 50%;"><?php echo $servtzstarttime->format($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat']." P"); ?></td>
 </tr><tr>
 	<td style="width: 50%;"><span class="TextBoxLabel" title="Using Server Time Zone">[Server TimeZone] Install Date:</span></td>
-	<td style="width: 50%;"><?php echo $servtzstarttime->format($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat']." P"); ?></td>
+	<td style="width: 50%;"><?php echo $deftzstarttime->format($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat']." P"); ?></td>
 </tr><tr>
 	<td style="width: 50%;"><span class="TextBoxLabel" title="Using UTC Time Zone">[UTC TimeZone] Install Date:</span></td>
 	<td style="width: 50%;"><?php echo $utctzstarttime->format($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat']." P"); ?></td>
@@ -778,12 +778,6 @@ while ($gi < $gnum) { ?>
 	<!--<option<?php if($Settings['html_type']=="xhtml11") { echo " selected=\"selected\""; } ?> value="xhtml11">XHTML 1.1</option>-->
 	<option<?php if($Settings['html_type']=="html5") { echo " selected=\"selected\""; } ?> value="html5">HTML 5</option>
 	<option<?php if($Settings['html_type']=="xhtml5") { echo " selected=\"selected\""; } ?> value="xhtml5">XHTML 5</option>
-	</select></td>
-</tr><tr style="text-align: left;">
-	<td style="width: 50%;"><label class="TextBoxLabel" for="HTMLLevel">HTML Level only for XHTML 1.0:</label></td>
-	<td style="width: 50%;"><select size="1" class="TextBox" name="HTMLLevel" id="HTMLLevel">
-	<option<?php if($Settings['html_level']=="Transitional") { echo " selected=\"selected\""; } ?> value="Transitional">Transitional</option>
-	<option<?php if($Settings['html_level']=="Strict") { echo " selected=\"selected\""; } ?> value="Strict">Strict</option>
 	</select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="OutPutType">Output file as:</label></td>
@@ -1013,7 +1007,6 @@ $Settings['idb_time_format'] = $_POST['iDBTimeFormat'];
 $Settings['idb_date_format'] = $_POST['iDBDateFormat'];
 $Settings['log_http_request'] = $_POST['iDBHTTPLogger'];
 $Settings['log_config_format'] = $_POST['iDBLoggerFormat'];
-if($_POST['HTMLType']=="xhtml11") { $_POST['HTMLLevel'] = "Strict"; }
 if($_POST['HTMLType']=="html5") { $_POST['OutPutType'] = "html"; }
 if($_POST['HTMLType']=="xhtml5") { $_POST['OutPutType'] = "xhtml"; }
 if(!isset($_POST['PassHashType'])) {
@@ -1053,7 +1046,6 @@ $BoardSettings=$pretext2[0]."\n".
 "\$Settings['SQLThemes'] = ".null_string($Settings['SQLThemes']).";\n".
 "\$Settings['use_gzip'] = ".null_string($_POST['UseGzip']).";\n".
 "\$Settings['html_type'] = ".null_string($_POST['HTMLType']).";\n".
-"\$Settings['html_level'] = ".null_string($_POST['HTMLLevel']).";\n".
 "\$Settings['output_type'] = ".null_string($_POST['OutPutType']).";\n".
 "\$Settings['GuestGroup'] = ".null_string($_POST['GuestGroup']).";\n".
 "\$Settings['MemberGroup'] = ".null_string($_POST['MemberGroup']).";\n".

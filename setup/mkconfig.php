@@ -12,7 +12,7 @@
     Copyright 2004-2015 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mkconfig.php - Last Update: 08/18/2015 SVN 797 - Author: cooldude2k $
+    $FileInfo: mkconfig.php - Last Update: 08/19/2015 SVN 801 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mkconfig.php"||$File3Name=="/mkconfig.php") {
@@ -92,7 +92,6 @@ if (pre_strlen($_POST['AdminUser'])>"30") { $Error="Yes";
 echo "<br />Your user name is too big."; }
 if ($_POST['AdminPasswords']!=$_POST['ReaPassword']) { $Error="Yes";
 echo "<br />Your passwords did not match."; }
-if($_POST['HTMLType']=="xhtml11") { $_POST['HTMLLevel'] = "Strict"; }
 if($_POST['HTMLType']=="html5") { $_POST['OutPutType'] = "html"; }
 if($_POST['HTMLType']=="xhtml5") { $_POST['OutPutType'] = "xhtml"; }
 $_POST['BoardURL'] = htmlentities($_POST['BoardURL'], ENT_QUOTES, $Settings['charset']);
@@ -329,7 +328,6 @@ $BoardSettings=$pretext2[0]."\n".
 "\$Settings['SQLThemes'] = '".$_POST['SQLThemes']."';\n".
 "\$Settings['use_gzip'] = '".$_POST['GZip']."';\n".
 "\$Settings['html_type'] = '".$_POST['HTMLType']."';\n".
-"\$Settings['html_level'] = '".$_POST['HTMLLevel']."';\n".
 "\$Settings['output_type'] = '".$_POST['OutPutType']."';\n".
 "\$Settings['GuestGroup'] = 'Guest';\n".
 "\$Settings['MemberGroup'] = 'Member';\n".
@@ -429,7 +427,7 @@ if(!@unlink($SetupDir['setup'].'mkconfig.php')) { $chdel = false; }
 if(!@unlink($SetupDir['setup'].'preinstall.php')) { $chdel = false; }
 if(!@unlink($SetupDir['setup'].'presetup.php')) { $chdel = false; }
 if(!@unlink($SetupDir['setup'].'setup.php')) { $chdel = false; }
-if(!@unlink($SetupDir['setup'].'xhtml10.php')) { $chdel = false; }
+if(!@unlink($SetupDir['setup'].'html5.php')) { $chdel = false; }
 if(!@rmdir('setup')) { $chdel = false; }
 if(!@unlink('install.php')) { $chdel = false; } } }
 ?><span class="TableMessage">

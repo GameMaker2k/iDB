@@ -11,7 +11,7 @@
     Copyright 2004-2015 iDB Support - http://idb.berlios.de/
     Copyright 2004-2015 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: function.php - Last Update: 08/18/2015 SVN 797 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 08/19/2015 SVN 801 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -537,6 +537,12 @@ $strftime = preg_replace("/\{percent\}p/s", "%", $strftime);
 return $strftime; }
 function apache_log_maker($logtxt,$logfile=null,$status=200,$contentsize="-",$headersize=0) {
 global $Settings;
+if(isset($Settings['DefaultTimeZone'])) {
+$servtz = new DateTimeZone($Settings['DefaultTimeZone']); }
+if(!isset($Settings['DefaultTimeZone'])) {
+$servtz = new DateTimeZone(date_default_timezone_get()); }
+$servcurtime = new DateTime();
+$servcurtime->setTimezone($servtz);
 if(!isset($_SERVER['HTTP_REFERER'])) { $LOG_URL_REFERER = "-"; }
 if(isset($_SERVER['HTTP_REFERER'])) { $LOG_URL_REFERER = $_SERVER['HTTP_REFERER']; }
 if($LOG_URL_REFERER==""||$LOG_URL_REFERER==null) { $LOG_URL_REFERER = "-"; }
@@ -620,7 +626,7 @@ $logtxt = preg_replace("/%([\<\>]*?)p/s", $_SERVER["SERVER_PORT"], $logtxt);
 $logtxt = preg_replace("/%([\<\>]*?)q/s", $LOG_QUERY_STRING, $logtxt);
 $logtxt = preg_replace("/%([\<\>]*?)r/s", $HTTP_REQUEST_LINE, $logtxt);
 $logtxt = preg_replace("/%([\<\>]*?)s/s", $status, $logtxt);
-$logtxt = preg_replace("/%([\<\>]*?)t/s", "[".date("d/M/Y:H:i:s O")."]", $logtxt);
+$logtxt = preg_replace("/%([\<\>]*?)t/s", "[".$servcurtime->format("d/M/Y:H:i:s O")."]", $logtxt);
 $logtxt = preg_replace_callback("/%([\<\>]*?)\{([^\}]*)\}t/s", "get_time", $logtxt);
 $logtxt = preg_replace("/%([\<\>]*?)u/s", $LOG_AUTH_USER, $logtxt);
 $logtxt = preg_replace("/%([\<\>]*?)U/s", log_fix_quotes($_SERVER["PHP_SELF"]), $logtxt);
@@ -649,13 +655,19 @@ if(isset($logfile)&&$logfile!==null) {
 return $logtxt; }
 function idb_log_maker($status=200,$contentsize="-") {
 global $Settings,$SettDir;
+if(isset($Settings['DefaultTimeZone'])) {
+$servtz = new DateTimeZone($Settings['DefaultTimeZone']); }
+if(!isset($Settings['DefaultTimeZone'])) {
+$servtz = new DateTimeZone(date_default_timezone_get()); }
+$servcurtime = new DateTime();
+$servcurtime->setTimezone($servtz);
 if(!isset($Settings['log_http_request'])) {
 	$Settings['log_http_request'] = "off"; }
 if(!isset($Settings['log_config_format'])) {
 	$Settings['log_config_format'] = "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\""; }
 if(isset($Settings['log_http_request'])&&$Settings['log_http_request']=="on"&&
 	$Settings['log_http_request']!==null&&$Settings['log_http_request']!="off") {
-return apache_log_maker($Settings['log_config_format'], $SettDir['logs'].$Settings['sqltable'].date("YW").".log", $status, $contentsize, strlen(implode("\r\n",headers_list())."\r\n\r\n")); }
+return apache_log_maker($Settings['log_config_format'], $SettDir['logs'].$Settings['sqltable'].$servcurtime->format("Ym").".log", $status, $contentsize, strlen(implode("\r\n",headers_list())."\r\n\r\n")); }
 if(isset($Settings['log_http_request'])&&$Settings['log_http_request']!="on"&&
 	$Settings['log_http_request']!==null&&$Settings['log_http_request']!="off") {
 $Settings['log_http_request'] = preg_replace_callback("/".preg_quote("%{", "/")."([^\}]*)".preg_quote("}t", "/")."/s", "get_time", $Settings['log_http_request']);

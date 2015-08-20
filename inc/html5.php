@@ -11,7 +11,7 @@
     Copyright 2004-2015 iDB Support - http://idb.berlios.de/
     Copyright 2004-2015 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: html5.php - Last Update: 08/18/2015 SVN 798 - Author: cooldude2k $
+    $FileInfo: html5.php - Last Update: 08/19/2015 SVN 801 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="xhtml10.php"||$File3Name=="/xhtml10.php") {
@@ -95,8 +95,7 @@ if($Settings['html_level']!="Strict") {
 		$Settings['html_level'] = "Transitional"; } }
 // HTML Document Starts
 ob_start("idb_suboutput_handler");
-if($XHTML5===false) {
-?>
+if($XHTML5===false) { ?>
 <!DOCTYPE html>
 <?php // HTML meta tags and other html, head tags ?>
 <html lang="en">
@@ -202,7 +201,7 @@ ob_start("idb_suboutput_handler"); ?>
 <meta name="Generator" content="<?php echo $VerInfo['iDB_Ver_Show']; ?>" />
 <?php } if($Settings['showverinfo']!="on") { ?>
 <meta name="Generator" content="<?php echo $iDB; ?>" />
-<?php } echo "\n"; ?>
+<?php } ?>
 <meta name="Author" content="<?php echo $SettInfo['Author']; ?>" />
 <meta name="Keywords" content="<?php echo $SettInfo['Keywords']; ?>" />
 <meta name="Description" content="<?php echo $SettInfo['Description']; ?>" />
@@ -212,11 +211,15 @@ ob_start("idb_suboutput_handler"); ?>
 <!-- generator="<?php echo $VerInfo['iDB_Ver_Show']; ?>" -->
 <?php } if($Settings['showverinfo']!="on") { ?>
 <!-- generator="<?php echo $iDB; ?>" -->
-<?php } echo "\n"; $iWrappers['METATAGS'] = ob_get_clean(); 
+<?php } $iWrappers['METATAGS'] = ob_get_clean(); 
 ob_start("idb_suboutput_handler"); ?>
-
 <script type="text/javascript" src="<?php echo url_maker($exfilejs['javascript'],$Settings['js_ext'],null,$Settings['qstr'],$Settings['qsep'],$prexqstrjs['javascript'],$exqstrjs['javascript']); ?>"></script>
-<?php echo "\n";
+<?php echo "\n"; $iWrappers['JAVASCRIPT'] = ob_get_clean(); 
+ob_start("idb_suboutput_handler"); ?>
+<link rel="Start" href="<?php echo $AltBoardURL.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>" title="<?php echo $Settings['board_name'].$idbpowertitle; ?>" />
+<link rel="Copyright" href="<?php echo $AltBoardURL.url_maker($exfile['index'],$Settings['file_ext'],"act=bsd",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>" title="Copyright Notice" />
+<?php echo "\n"; $iWrappers['LINKTAGS'] = ob_get_clean(); 
+ob_start("idb_suboutput_handler");
 if($ThemeSet['CSSType']=="import") { ?>
 <style type="text/css">
 /* Import the theme css file */
@@ -257,5 +260,4 @@ ob_start("idb_suboutput_handler");
 if($ThemeSet['FavIcon']!=null) { ?>
 <link rel="icon" href="<?php echo $ThemeSet['FavIcon']; ?>" />
 <link rel="shortcut icon" href="<?php echo $ThemeSet['FavIcon']; ?>" />
-<?php }
-$iWrappers['FAVICON'] = ob_get_clean(); ?>
+<?php } $iWrappers['FAVICON'] = ob_get_clean(); ?>
