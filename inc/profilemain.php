@@ -11,7 +11,7 @@
     Copyright 2004-2015 iDB Support - http://idb.berlios.de/
     Copyright 2004-2015 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: profilemain.php - Last Update: 08/18/2015 SVN 797 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 09/10/2015 SVN 801 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
@@ -1022,9 +1022,9 @@ if($_POST['act']=="profile"&&
 	if(pre_strlen($BirthExpl[1])=="1") { $BirthExpl[1] = "0".$BirthExpl[1]; }
 	if(pre_strlen($BirthExpl[0])=="2"&&pre_strlen($BirthExpl[1])=="2"&&pre_strlen($BirthExpl[2])=="4") {
 	$BirthIn = mktime(12,12,12,$BirthExpl[0],$BirthExpl[1],$BirthExpl[2]);
-	$eventendcurtime = new DateTime();
-	$eventendcurtime->setTimestamp($BirthIn);
-	$eventendcurtime->setTimezone($utctz);
+	$tmpusrcurtime = new DateTime();
+	$tmpusrcurtime->setTimestamp($BirthIn);
+	$tmpusrcurtime->setTimezone($utctz);
 	$BirthMonth=$tmpusrcurtime->format("m");
 	$BirthDay=$tmpusrcurtime->format("d");
 	$BirthYear=$tmpusrcurtime->format("Y"); }

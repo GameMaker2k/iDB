@@ -11,7 +11,7 @@
     Copyright 2004-2015 iDB Support - http://idb.berlios.de/
     Copyright 2004-2015 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: calendars.php - Last Update: 08/18/2015 SVN 797 - Author: cooldude2k $
+    $FileInfo: calendars.php - Last Update: 09/10/2015 SVN 801 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="calendars.php"||$File3Name=="/calendars.php") {
@@ -89,7 +89,8 @@ $MyRealMonthNum1 = $usercurtime->format("m");
 $MyRealYear = $usercurtime->format("Y");
 // Count the Days in this month
 $MyTimeStamp = $utccurtime->getTimestamp() + $calmounthaddd;
-$calcurtime->setTimestamp($defcurtime->getTimestamp()+$calmounthaddd);
+//$calcurtime->setTimestamp($defcurtime->getTimestamp()+$calmounthaddd);
+$calcurtime->setDate($_GET['calyear'], $_GET['calmonth'], 1);
 $CountDays = $calcurtime->format("t");
 $MyDay = $calcurtime->format("j");
 $MyDay2 = $calcurtime->format("jS");
