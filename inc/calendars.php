@@ -11,7 +11,7 @@
     Copyright 2004-2015 iDB Support - http://idb.berlios.de/
     Copyright 2004-2015 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: calendars.php - Last Update: 09/10/2015 SVN 801 - Author: cooldude2k $
+    $FileInfo: calendars.php - Last Update: 09/10/2015 SVN 803 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="calendars.php"||$File3Name=="/calendars.php") {
@@ -105,6 +105,9 @@ $MyMonthName = $calcurtime->format("F");
 $MyMonthNum1 = $calcurtime->format("m");
 $MyMonthNum2 = $calcurtime->format("n");
 $FirstDayThisMonth = date("w", mktime(0, 0, 0, $MyMonth, 1, $MyYear));
+$MyCurDay = $usercurtime->format("j");
+$MyCurYear = $usercurtime->format("Y");
+$MyCurMonth = $usercurtime->format("m");
 $EventsName = array();
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."events\" WHERE (\"EventMonth\">=%i AND \"EventYear\"<%i AND \"EventYearEnd\">=%i) OR (\"EventMonth\"<=%i AND \"EventMonthEnd\">=%i AND \"EventYearEnd\">=%i) OR (\"EventMonth\"<=%i AND \"EventMonthEnd\"<=%i AND \"EventYear\"<=%i AND \"EventYearEnd\">%i)",  array($MyMonth,$MyYear,$MyYear,$MyMonth,$MyMonth,$MyYear,$MyMonth,$MyMonth,$MyYear,$MyYear));
 $result=sql_query($query,$SQLStat);
@@ -197,16 +200,16 @@ for ($i; $i <= ($CountDays + $FirstDayThisMonth) ;$i++) {
 if ($ii == 8) {
 $WeekDays .= "</tr><tr class=\"CalTableRow3\">"."\r\n";
 $ii = 1; }
- if ($MyDay == $Day_i && $MyMonthNum1 == $MyRealMonthNum1 && $MyYear == $MyRealYear) {
+ if ($MyCurDay == $Day_i && $MyCurMonth == $MyRealMonthNum1 && $MyCurYear == $MyRealYear) {
 $Extra = 'CalTableColumn3Current'; }
 else {
 $Extra = 'CalTableColumn3'; }
 if ($Day_i != $_GET['HighligtDay']) {
 if(!isset($EventsName[$Day_i])) { $EventsName[$Day_i] = null; }
 if($EventsName[$Day_i]!=null) { $EventsName[$Day_i] = "&nbsp;( ".$EventsName[$Day_i]." )"; }
-if ($Day_i != $MyDay) {
+if ($Day_i != $MyCurDay) {
 $WeekDays .= '<td class="'.$Extra.'" style="vertical-align: top;"><div class="CalDate">' . $Day_i . '</div>' . $EventsName[$Day_i] . '</td>'."\r\n";	 }	}
-if ($Day_i == $MyDay) {
+if ($Day_i == $MyCurDay) {
 $WeekDays .= '<td class="'.$Extra.'" style="vertical-align: top;"><div class="CalDateCurrent">' . $Day_i  . '</div>' . $EventsName[$Day_i] . '</td>'."\r\n";	 }
 $Day_i++;
 $ii++;
