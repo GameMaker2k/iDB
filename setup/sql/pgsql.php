@@ -12,7 +12,7 @@
     Copyright 2004-2015 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: pgsql.php - Last Update: 08/18/2015 SVN 797 - Author: cooldude2k $
+    $FileInfo: pgsql.php - Last Update: 05/02/2016 SVN 804 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pgsql.php"||$File3Name=="/pgsql.php") {
@@ -70,7 +70,7 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."events\" (\n".
 "  \"EventDayEnd\" numeric(5) NOT NULL default '0',\n".
 "  \"EventYear\" numeric(5) NOT NULL default '0',\n".
 "  \"EventYearEnd\" numeric(5) NOT NULL default '0',\n".
-"  \"IP\" varchar(50) NOT NULL default ''\n".
+"  \"IP\" varchar(64) NOT NULL default ''\n".
 ");", array(null));
 sql_query($query,$SQLStat);
 $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."events\" (\"UserID\", \"GuestName\", \"EventName\", \"EventText\", \"TimeStamp\", \"TimeStampEnd\", \"EventMonth\", \"EventMonthEnd\", \"EventDay\", \"EventDayEnd\", \"EventYear\", \"EventYearEnd\", \"IP\") VALUES\n".
@@ -186,7 +186,7 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."members\" (\n".
 "  \"DateFormat\" VARCHAR(15) NOT NULL default '0',\n".
 "  \"TimeFormat\" VARCHAR(15) NOT NULL default '0',\n".
 "  \"UseTheme\" varchar(32) NOT NULL default '0',\n".
-"  \"IP\" varchar(50) NOT NULL default '',\n".
+"  \"IP\" varchar(64) NOT NULL default '',\n".
 "  \"Salt\" varchar(50) NOT NULL default '',\n".
 "  UNIQUE (\"Name\"),\n".
 "  UNIQUE (\"Email\")\n".
@@ -235,7 +235,7 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."messenger\" (\n".
 "  \"Description\" text NOT NULL,\n".
 "  \"DateSend\" numeric(15) NOT NULL default '0',\n".
 "  \"Read\" numeric(5) NOT NULL default '0',\n".
-"  \"IP\" varchar(50) NOT NULL default ''\n".
+"  \"IP\" varchar(64) NOT NULL default ''\n".
 ");", array(null));
 sql_query($query,$SQLStat);
 $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."messenger\" (\"DiscussionID\", \"SenderID\", \"ReciverID\", \"GuestName\", \"MessageTitle\", \"MessageText\", \"Description\", \"DateSend\", \"Read\", \"IP\") VALUES\n".
@@ -282,7 +282,7 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."polls\" (\n".
 "  \"PollValues\" text NOT NULL,\n".
 "  \"Description\" text NOT NULL,\n".
 "  \"UsersVoted\" text NOT NULL,\n".
-"  \"IP\" varchar(50) NOT NULL default ''\n".
+"  \"IP\" varchar(64) NOT NULL default ''\n".
 ");", array(null));
 sql_query($query,$SQLStat);
 $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."posts\" (\n".
@@ -298,8 +298,8 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."posts\" (\n".
 "  \"EditUserName\" varchar(150) NOT NULL default '',\n".
 "  \"Post\" text NOT NULL,\n".
 "  \"Description\" text NOT NULL,\n".
-"  \"IP\" varchar(50) NOT NULL default '',\n".
-"  \"EditIP\" varchar(50) NOT NULL default ''\n".
+"  \"IP\" varchar(64) NOT NULL default '',\n".
+"  \"EditIP\" varchar(64) NOT NULL default ''\n".
 ");", array(null));
 sql_query($query,$SQLStat);
 $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."posts\" (\"TopicID\", \"ForumID\", \"CategoryID\", \"UserID\", \"GuestName\", \"TimeStamp\", \"LastUpdate\", \"EditUser\", \"EditUserName\", \"Post\", \"Description\", \"IP\", \"EditIP\") VALUES\n".
@@ -321,7 +321,7 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."sessions\" (\n".
 "  \"session_data\" text NOT NULL,\n".
 "  \"serialized_data\" text NOT NULL,\n".
 "  \"user_agent\" text NOT NULL,\n".
-"  \"ip_address\" varchar(20) NOT NULL default '',\n".
+"  \"ip_address\" varchar(64) NOT NULL default '',\n".
 "  \"expires\" numeric(15) NOT NULL default '0'\n".
 ");", array(null));
 sql_query($query,$SQLStat);
@@ -364,7 +364,7 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."tagboard\" (\n".
 "  \"GuestName\" varchar(150) NOT NULL default '',\n".
 "  \"TimeStamp\" numeric(15) NOT NULL default '0',\n".
 "  \"Post\" text NOT NULL,\n".
-"  \"IP\" varchar(50) NOT NULL default ''
+"  \"IP\" varchar(64) NOT NULL default ''
 ");", array(null));
 sql_query($query,$SQLStat);
 $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."tagboard\" VALUES (1,-1,'".$iDB_Author."',".$YourDate.",'Welcome to Your New Tag Board. ^_^','127.0.0.1'), array(null)); 

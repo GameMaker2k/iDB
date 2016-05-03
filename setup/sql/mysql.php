@@ -12,7 +12,7 @@
     Copyright 2004-2015 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mysql.php - Last Update: 08/18/2015 SVN 797 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 05/02/2016 SVN 804 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mysql.php"||$File3Name=="/mysql.php") {
@@ -90,7 +90,7 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."even
 "  \"EventDayEnd\" int(5) NOT NULL default '0',\n".
 "  \"EventYear\" int(5) NOT NULL default '0',\n".
 "  \"EventYearEnd\" int(5) NOT NULL default '0',\n".
-"  \"IP\" varchar(50) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"IP\" varchar(64) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\")\n".
 ") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$Settings['sql_charset']." COLLATE=".$Settings['sql_collate'].";", array(null));
 sql_query($query,$SQLStat);
@@ -210,7 +210,7 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."memb
 "  \"DateFormat\" varchar(15) COLLATE ".$Settings['sql_collate']." NOT NULL default '0',\n".
 "  \"TimeFormat\" varchar(15) COLLATE ".$Settings['sql_collate']." NOT NULL default '0',\n".
 "  \"UseTheme\" varchar(32) COLLATE ".$Settings['sql_collate']." NOT NULL default '0',\n".
-"  \"IP\" varchar(50) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"IP\" varchar(64) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"Salt\" varchar(50) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\"),\n".
 "  UNIQUE KEY \"Name\" (\"Name\"),\n".
@@ -261,7 +261,7 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."mess
 "  \"Description\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
 "  \"DateSend\" int(15) NOT NULL default '0',\n".
 "  \"Read\" int(5) NOT NULL default '0',\n".
-"  \"IP\" varchar(50) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"IP\" varchar(64) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\")\n".
 ") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$Settings['sql_charset']." COLLATE=".$Settings['sql_collate'].";", array(null));
 sql_query($query,$SQLStat);
@@ -310,7 +310,7 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."poll
 "  \"PollValues\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
 "  \"Description\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
 "  \"UsersVoted\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
-"  \"IP\" varchar(50) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"IP\" varchar(64) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\")\n".
 ") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$Settings['sql_charset']." COLLATE=".$Settings['sql_collate'].";", array(null));
 sql_query($query,$SQLStat);
@@ -327,8 +327,8 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."post
 "  \"EditUserName\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"Post\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
 "  \"Description\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
-"  \"IP\" varchar(50) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"EditIP\" varchar(50) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"IP\" varchar(64) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"EditIP\" varchar(64) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\")\n".
 ") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$Settings['sql_charset']." COLLATE=".$Settings['sql_collate'].";", array(null));
 sql_query($query,$SQLStat);
@@ -352,7 +352,7 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."sess
 "  \"session_data\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
 "  \"serialized_data\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
 "  \"user_agent\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
-"  \"ip_address\" varchar(20) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"ip_address\" varchar(64) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"expires\" int(15) NOT NULL default '0',\n".
 "  PRIMARY KEY  (\"session_id\")\n".
 ") ENGINE=".$SQLStorageEngine." DEFAULT CHARSET=".$Settings['sql_charset']." COLLATE=".$Settings['sql_collate'].";", array(null));
@@ -397,7 +397,7 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."tagb
 "  \"GuestName\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"TimeStamp\" int(15) NOT NULL default '0',\n".
 "  \"Post\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
-"  \"IP\" varchar(50) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"IP\" varchar(64) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\")\n".
 ") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$Settings['sql_charset']." COLLATE=".$Settings['sql_collate'].";", array(null));
 sql_query($query,$SQLStat);
