@@ -11,7 +11,7 @@
     Copyright 2004-2015 iDB Support - http://idb.berlios.de/
     Copyright 2004-2015 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: groupsetup.php - Last Update: 08/18/2015 SVN 797 - Author: cooldude2k $
+    $FileInfo: groupsetup.php - Last Update: 05/16/2016 SVN 806 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="groupsetup.php"||$File3Name=="/groupsetup.php") {
@@ -120,6 +120,8 @@ $gidquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHE
 $gidresult=sql_query($gidquery,$SQLStat);
 $_SESSION['UserGroupID']=sql_result($gidresult,0,"id"); 
 sql_free_result($gidresult); }
+if($_SESSION['UserID']==0||$_SESSION['UserID']==null) {
+ $levnum = 0; }
 if($_SESSION['UserID']!=0&&$_SESSION['UserID']!=null) {
 $levquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."levels\" WHERE \"id\"=%i LIMIT 1", array($ChkUsrLevelID));
 $levresult=sql_query($levquery,$SQLStat);
@@ -360,7 +362,9 @@ header("Content-Type: text/plain; charset=".$Settings['charset']);
 sql_free_result($gruresult); sql_free_result($levresult); sql_free_result($mempreresult); $urlstatus = 503;
 ob_clean(); echo "Sorry could not load all group data in database.\nContact the board admin about error."; 
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); } }
-sql_free_result($gruresult); sql_free_result($levresult);
+sql_free_result($gruresult);
+if($_SESSION['UserID']!=0&&$_SESSION['UserID']!=null) {
+ sql_free_result($levresult); }
 if($GroupInfo['CanViewBoard']=="no") { 
 header("Content-Type: text/plain; charset=".$Settings['charset']); 
 ob_clean(); echo "Sorry you can not view the board."; $urlstatus = 503;

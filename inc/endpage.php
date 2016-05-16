@@ -11,7 +11,7 @@
     Copyright 2004-2015 iDB Support - http://idb.berlios.de/
     Copyright 2004-2015 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: endpage.php - Last Update: 08/18/2015 SVN 797 - Author: cooldude2k $
+    $FileInfo: endpage.php - Last Update: 05/16/2016 SVN 806 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="endpage.php"||$File3Name=="/endpage.php") {
@@ -22,6 +22,7 @@ if($_GET['time']=="show"||$_GET['time']==true) {
 $MyDST = $usercurtime->format("P");
 $MyTimeNow = $usercurtime->format($_SESSION['iDBTimeFormat']);
 $MyFullTimeNow = $usercurtime->format($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat']);
+if(!isset($TimeSign)) { $TimeSign = ""; }
 $endpagevar=$endpagevar."<br />The time now is <span class=\"ctimenow\" title=\"".$MyFullTimeNow."\">".$MyTimeNow."</span> ".$ThemeSet['LineDivider']." All times are UTC ".$TimeSign." ".$MyDST; }
 function execution_time($starttime) {
 list($uetime, $etime) = explode(" ", microtime());
