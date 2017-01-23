@@ -11,7 +11,7 @@
     Copyright 2004-2015 iDB Support - http://idb.berlios.de/
     Copyright 2004-2015 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: messages.php - Last Update: 08/18/2015 SVN 797 - Author: cooldude2k $
+    $FileInfo: messages.php - Last Update: 01/23/2017 SVN 808 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="messages.php"||$File3Name=="/messages.php") {
@@ -222,7 +222,7 @@ if ($MessageStat==1) {
 <td class="TableMenuColumn3"><div class="messagestate">
 <?php echo $PreMessage; ?></div></td>
 <td class="TableMenuColumn3"><div class="messagename">
-<?php if($PMDiscussionID<=0) { ?><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=read&id=".$PMID,$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']).$Settings['qstr']."#message".$PMID; ?>"><?php echo $MessageName; ?></a><?php } if($PMDiscussionID>0) { ?><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=read&id=".$PMDiscussionID,$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']).$Settings['qstr']."#message".$PMID; ?>"><?php echo $MessageName; ?></a><?php } ?></div>
+<?php if($PMDiscussionID<=0) { ?><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=read&id=".$PMID,$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']).$qstrhtml."&#35;message".$PMID; ?>"><?php echo $MessageName; ?></a><?php } if($PMDiscussionID>0) { ?><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=read&id=".$PMDiscussionID,$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']).$qstrhtml."&#35;message".$PMID; ?>"><?php echo $MessageName; ?></a><?php } ?></div>
 <div class="messagedesc"><?php echo $MessageDesc; ?></div></td>
 <td class="TableMenuColumn3" style="text-align: center;"><?php
 if($SenderID>0&&$SenderHidden=="no") {
@@ -397,7 +397,7 @@ if ($MessageStat==1) {
 <td class="TableMenuColumn3"><div class="messagestate">
 <?php echo $PreMessage; ?></div></td>
 <td class="TableMenuColumn3"><div class="messagename">
-<?php if($PMDiscussionID<=0) { ?><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=read&id=".$PMID,$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']).$Settings['qstr']."#message".$PMID; ?>"><?php echo $MessageName; ?></a><?php } if($PMDiscussionID>0) { ?><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=read&id=".$PMDiscussionID,$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']).$Settings['qstr']."#message".$PMID; ?>"><?php echo $MessageName; ?></a><?php } ?></div>
+<?php if($PMDiscussionID<=0) { ?><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=read&id=".$PMID,$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']).$qstrhtml."&#35;message".$PMID; ?>"><?php echo $MessageName; ?></a><?php } if($PMDiscussionID>0) { ?><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=read&id=".$PMDiscussionID,$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']).$qstrhtml."&#35;message".$PMID; ?>"><?php echo $MessageName; ?></a><?php } ?></div>
 <div class="messagedesc"><?php echo $MessageDesc; ?></div></td>
 <td class="TableMenuColumn3" style="text-align: center;"><?php
 if($ReciverID>0&&$ReciverHidden=="no") {
