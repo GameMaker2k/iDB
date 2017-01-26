@@ -11,7 +11,7 @@
     Copyright 2004-2015 iDB Support - http://idb.berlios.de/
     Copyright 2004-2015 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: utf8.php - Last Update: 08/18/2015 SVN 797 - Author: cooldude2k $
+    $FileInfo: utf8.php - Last Update: 01/26/2017 SVN 810 - Author: cooldude2k $
 */
 // UTF8 helper functions
 // author: Scott Michael Reynen "scott@randomchaos.com"

@@ -11,7 +11,7 @@
     Copyright 2004-2015 iDB Support - http://idb.berlios.de/
     Copyright 2004-2015 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: replies.php - Last Update: 08/18/2015 SVN 797 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 01/26/2017 SVN 810 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -329,9 +329,9 @@ if($PreUserCanExecPHP!="yes"&&$PreUserCanExecPHP!="no"&&$PreUserCanExecPHP!="gro
 $PreUserCanDoHTML=sql_result($memreresult,$rei,"CanDoHTML");
 if($PreUserCanDoHTML!="yes"&&$PreUserCanDoHTML!="no"&&$PreUserCanDoHTML!="group") {
 	$PreUserCanDoHTML = "no"; }
-$PreUserCanUseBBags=sql_result($memreresult,$rei,"CanUseBBags");
-if($PreUserCanUseBBags!="yes"&&$PreUserCanUseBBags!="no"&&$PreUserCanUseBBags!="group") {
-	$PreUserCanUseBBags = "no"; }
+$PreUserCanUseBBTags=sql_result($memreresult,$rei,"CanUseBBTags");
+if($PreUserCanUseBBTags!="yes"&&$PreUserCanUseBBTags!="no"&&$PreUserCanUseBBTags!="group") {
+	$PreUserCanUseBBTags = "no"; }
 sql_free_result($memreresult);
 $User1Joined=sql_result($reresult,$rei,"Joined");
 $tmpusrcurtime = new DateTime();
@@ -357,11 +357,11 @@ if($PreUserCanDoHTML=="group") {
 $User1CanDoHTML=sql_result($gresult,0,"CanDoHTML"); }
 if($User1CanDoHTML!="yes"&&$User1CanDoHTML!="no") {
 	$User1CanDoHTML = "no"; }
-$User1CanUseBBags = $PreUserCanUseBBags;
-if($User1CanUseBBags=="group") {
-$User1CanUseBBags=sql_result($gresult,0,"CanUseBBags"); }
-if($User1CanUseBBags!="yes"&&$User1CanUseBBags!="no") {
-	$User1CanUseBBags = "no"; }
+$User1CanUseBBTags = $PreUserCanUseBBTags;
+if($User1CanUseBBTags=="group") {
+$User1CanUseBBTags=sql_result($gresult,0,"CanUseBBTags"); }
+if($User1CanUseBBTags!="yes"&&$User1CanUseBBTags!="no") {
+	$User1CanUseBBTags = "no"; }
 $GroupNamePrefix=sql_result($gresult,0,"NamePrefix");
 $GroupNameSuffix=sql_result($gresult,0,"NameSuffix");
 $User1PermissionID=sql_result($gresult,0,"PermissionID");
@@ -372,9 +372,9 @@ $per1num=sql_num_rows($per1esult);
 $User1CanDoHTML1=sql_result($per1esult,0,"CanDoHTML");
 if($User1CanDoHTML1!="yes"&&$User1CanDoHTML1!="no") {
 	$User1CanDoHTML1 = "no"; }
-$User1CanUseBBags1=sql_result($per1esult,0,"CanUseBBags");
-if($User1CanUseBBags1!="yes"&&$User1CanUseBBags1!="no") {
-	$User1CanUseBBags1 = "no"; }
+$User1CanUseBBTags1=sql_result($per1esult,0,"CanUseBBTags");
+if($User1CanUseBBTags1!="yes"&&$User1CanUseBBTags1!="no") {
+	$User1CanUseBBTags1 = "no"; }
 sql_free_result($per1esult);
 if($User1Title=="") { $User1Title = $User1Group; }
 $User1Signature=sql_result($reresult,$rei,"Signature");
@@ -445,7 +445,7 @@ $eunum = sql_num_rows($euresult); }
 	$tmpusrcurtime->setTimezone($usertz);
 	$MyEditTime = $tmpusrcurtime->format($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat']);
 	$MySubPost = "<div class=\"EditReply\"><br />This post has been edited by <b>".$EditUserName."</b> on ".$MyEditTime."</div>"; }
-if($User1CanUseBBags1=="yes") { $MyPost = bbcode_parser($MyPost); }
+if($User1CanUseBBTags1=="yes") { $MyPost = bbcode_parser($MyPost); }
 if($User1CanExecPHP=="no") {
 $MyPost = preg_replace("/\[ExecPHP\](.*?)\[\/ExecPHP\]/is","<span style=\"color: red; font-weight: bold;\">ERROR:</span> cannot execute php code.",$MyPost); }
 if($User1CanExecPHP=="yes") { $MyPost = php_execute($MyPost); }
@@ -456,7 +456,7 @@ $MyPost = text2icons($MyPost,$Settings['sqltable'],$SQLStat);
 $MyPost = preg_replace("/\<br\>/", "<br />", nl2br($MyPost));
 $MyPost = url2link($MyPost);
 if($MySubPost!=null) { $MyPost = $MyPost."\n".$MySubPost; }
-if($User1CanUseBBags=="yes") { $User1Signature = bbcode_parser($User1Signature); }
+if($User1CanUseBBTags=="yes") { $User1Signature = bbcode_parser($User1Signature); }
 if($User1CanExecPHP=="no") {
 $User1Signature = preg_replace("/\[ExecPHP\](.*?)\[\/ExecPHP\]/is","<span style=\"color: red; font-weight: bold;\">ERROR:</span> cannot execute php code.",$User1Signature); }
 if($User1CanExecPHP=="yes") { $User1Signature = php_execute($User1Signature); }

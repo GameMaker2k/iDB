@@ -12,7 +12,7 @@
     Copyright 2004-2015 Game Maker 2k - http://gamemaker2k.org/
 	Kill Register Globals (Register Globals are very lame we dont need them anyways. :P)
 
-    $FileInfo: killglobals.php - Last Update: 08/18/2015 SVN 797 - Author: cooldude2k $
+    $FileInfo: killglobals.php - Last Update: 01/26/2017 SVN 810 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="killqlobals.php"||$File3Name=="/killqlobals.php") {

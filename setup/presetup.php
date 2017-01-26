@@ -12,7 +12,7 @@
     Copyright 2004-2015 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: presetup.php - Last Update: 08/18/2015 SVN 797 - Author: cooldude2k $
+    $FileInfo: presetup.php - Last Update: 01/26/2017 SVN 810 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="presetup.php"||$File3Name=="/presetup.php") {

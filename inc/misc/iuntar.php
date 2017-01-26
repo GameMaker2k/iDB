@@ -12,7 +12,7 @@
     Copyright 2004-2015 Game Maker 2k - http://gamemaker2k.org/
     iUnTar ver. 4.7 by Kazuki Przyborowski & Josep Sanz Campderros
 
-    $FileInfo: iuntar.php - Last Update: 08/18/2015 SVN 797 - Author: cooldude2k $
+    $FileInfo: iuntar.php - Last Update: 01/26/2017 SVN 810 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="iuntar.php"||$File3Name=="/iuntar.php") {

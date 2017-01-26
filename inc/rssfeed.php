@@ -11,7 +11,7 @@
     Copyright 2004-2015 iDB Support - http://idb.berlios.de/
     Copyright 2004-2015 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: rssfeed.php - Last Update: 08/18/2015 SVN 797 - Author: cooldude2k $
+    $FileInfo: rssfeed.php - Last Update: 01/26/2017 SVN 810 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="rssfeed.php"||$File3Name=="/rssfeed.php") {
@@ -151,9 +151,9 @@ if($PreUserCanExecPHP!="yes"&&$PreUserCanExecPHP!="no"&&$PreUserCanExecPHP!="gro
 $PreUserCanDoHTML=sql_result($memreresult,0,"CanDoHTML");
 if($PreUserCanDoHTML!="yes"&&$PreUserCanDoHTML!="no"&&$PreUserCanDoHTML!="group") {
 	$PreUserCanDoHTML = "no"; }
-$PreUserCanUseBBags=sql_result($memreresult,0,"CanUseBBags");
-if($PreUserCanUseBBags!="yes"&&$PreUserCanUseBBags!="no"&&$PreUserCanUseBBags!="group") {
-	$PreUserCanUseBBags = "no"; }
+$PreUserCanUseBBTags=sql_result($memreresult,0,"CanUseBBTags");
+if($PreUserCanUseBBTags!="yes"&&$PreUserCanUseBBTags!="no"&&$PreUserCanUseBBTags!="group") {
+	$PreUserCanUseBBTags = "no"; }
 sql_free_result($memreresult);
 if($UsersName=="Guest") { $UsersName=$GuestsName;
 if($UsersName==null) { $UsersName="Guest"; } }
@@ -171,15 +171,15 @@ if($PreUserCanDoHTML=="group") {
 $User1CanDoHTML=sql_result($gresult,0,"CanDoHTML"); }
 if($User1CanDoHTML!="yes"&&$User1CanDoHTML!="no") {
 	$User1CanDoHTML = "no"; }
-$User1CanUseBBags = $PreUserCanUseBBags;
-if($User1CanUseBBags=="group") {
-$User1CanUseBBags=sql_result($gresult,0,"CanUseBBags"); }
-if($User1CanUseBBags!="yes"&&$User1CanUseBBags!="no") {
-	$User1CanUseBBags = "no"; }
+$User1CanUseBBTags = $PreUserCanUseBBTags;
+if($User1CanUseBBTags=="group") {
+$User1CanUseBBTags=sql_result($gresult,0,"CanUseBBTags"); }
+if($User1CanUseBBTags!="yes"&&$User1CanUseBBTags!="no") {
+	$User1CanUseBBTags = "no"; }
 $GroupNamePrefix=sql_result($gresult,0,"NamePrefix");
 $GroupNameSuffix=sql_result($gresult,0,"NameSuffix");
 sql_free_result($gresult);
-if($User1CanUseBBags=="yes") { $MyDescription = bbcode_parser($MyDescription); }
+if($User1CanUseBBTags=="yes") { $MyDescription = bbcode_parser($MyDescription); }
 if($User1CanExecPHP=="no") {
 $MyDescription = preg_replace("/\[ExecPHP\](.*?)\[\/ExecPHP\]/is","<span style=\"color: red; font-weight: bold;\">ERROR:</span> cannot execute php code.",$MyDescription); }
 if($User1CanExecPHP=="yes") { $MyDescription = php_execute($MyDescription); }

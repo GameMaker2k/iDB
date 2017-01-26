@@ -11,10 +11,10 @@
     Copyright 2004-2015 iDB Support - http://idb.berlios.de/
     Copyright 2004-2015 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: html5.php - Last Update: 05/16/2016 SVN 806 - Author: cooldude2k $
+    $FileInfo: html5.php - Last Update: 01/26/2017 SVN 810 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
-if ($File3Name=="xhtml10.php"||$File3Name=="/xhtml10.php") {
+if ($File3Name=="html5.php"||$File3Name=="/html5.php") {
 	require('index.php');
 	exit(); }
 $XHTML5 = false;
