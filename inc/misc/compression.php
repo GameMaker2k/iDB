@@ -8,8 +8,8 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2015 iDB Support - http://idb.berlios.de/
-    Copyright 2004-2015 Game Maker 2k - http://gamemaker2k.org/
+    Copyright 2004-2017 iDB Support - http://idb.berlios.de/
+    Copyright 2004-2017 Game Maker 2k - http://gamemaker2k.org/
     GZip and Zlib by Jean-loup Gailly (compression) and Mark Adler (decompression) http://www.zlib.net/
 	BZip2 and libbzip2 by Julian Seward http://www.bzip.org/
 
