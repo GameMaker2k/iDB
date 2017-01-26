@@ -43,7 +43,7 @@ if($Settings['sql_storage_engine']=="Aria") {
 if($Settings['sql_storage_engine']=="MyISAM") {
 	$SQLStorageEngine = "MyISAM"; }
 $parsestr = parse_url($YourWebsite);
-if (preg_match("^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$", $parsestr['host'])) {
+if (preg_match("^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$", $parsestr['host']) || $parsestr['host'] == "localhost") {
 	$GuestLocalIP = gethostbyname($parsestr['host']); } else { $GuestLocalIP = $parsestr['host']; }
 $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."categories\" (\n".
 "  \"id\" int(15) NOT NULL auto_increment,\n".
