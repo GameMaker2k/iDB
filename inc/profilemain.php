@@ -1152,6 +1152,8 @@ if($OldHashType=="iDBHRMD256") {
 	$YourPassword = b64e_hmac($_POST['OldPass'],$OldJoined,$OldSalt,"ripemd256"); }
 if($OldHashType=="iDBHRMD320") { 
 	$YourPassword = b64e_hmac($_POST['OldPass'],$OldJoined,$OldSalt,"ripemd320"); }
+if($OldHashType=="iDBCRYPT") { 
+	$YourPassword = neo_b64e_hmac($_POST['OldPass'],$OldJoined,$OldSalt,"bcrypt"); }
 if($YourPassword!=$OldPassword) { $Error="Yes"; ?>
 <div class="TableMessage" style="text-align: center;">Your old Password did not match.<br />&nbsp;</div>
 <?php } if(pre_strlen($_POST['Password'])>"60") { $Error="Yes"; ?>
@@ -1189,6 +1191,8 @@ if($YourPassword!=$OldPassword) { $Error="Yes"; ?>
 	$NewPassword = b64e_hmac($_POST['Password'],$OldJoined,$NewSalt,"ripemd256"); }
 	if($Settings['use_hashtype']=="ripemd320") { $iDBHash = "iDBHRMD320";
 	$NewPassword = b64e_hmac($_POST['Password'],$OldJoined,$NewSalt,"ripemd320"); }
+	if($Settings['use_hashtype']=="bcrypt") { $iDBHash = "iDBCRYPT";
+	$NewPassword = neo_b64e_hmac($_POST['Password'],$OldJoined,$NewSalt,"bcrypt"); }
 	$_SESSION['UserPass']=$NewPassword;
 	if($cookieDomain==null) {
 	setcookie("SessPass", $NewPassword, time() + (7 * 86400), $cbasedir); }
