@@ -250,7 +250,9 @@ if(in_array("md2",hash_algos())) { ?>
 <option value="ripemd256">RIPEMD256</option>
 <?php } if(in_array("ripemd320",hash_algos())) { ?>
 <option value="ripemd320">RIPEMD320</option>
-<?php } } 
+<?php } } if(function_exists('password_hash'))) { ?>
+<option value="bcrypt">BCRYPT</option>
+<?php } 
 if(!function_exists('hash')&&!function_exists('hash_algos')) { ?>
 <option value="md5">MD5</option>
 <option value="sha1" selected="selected">SHA1</option>
