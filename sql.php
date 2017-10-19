@@ -209,7 +209,8 @@ if($Settings['use_hashtype']!="md2"&&
    $Settings['use_hashtype']!="ripemd128"&&
    $Settings['use_hashtype']!="ripemd160"&&
    $Settings['use_hashtype']!="ripemd256"&&
-   $Settings['use_hashtype']!="ripemd320") {
+   $Settings['use_hashtype']!="ripemd320"&&
+   $Settings['use_hashtype']!="bcrypt") {
 	$Settings['use_hashtype'] = "sha1"; } }
 // Check to see if variables are set
 require_once($SettDir['misc'].'setcheck.php');
