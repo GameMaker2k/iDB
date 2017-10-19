@@ -777,6 +777,19 @@ namespace PasswordCompat\binary {
     }
 }
 
+// b64hmac hash function
+function neo_b64e_hmac($data,$key,$extdata,$hash='sha1',$blocksize=64) {
+	$extdata2 = hexdec($extdata); $key = $key.$extdata2;
+  return base64_encode(password_hash($data.$extdata, PASSWORD_BCRYPT)); }
+// b64hmac rot13 hash function
+function neo_b64e_rot13_hmac($data,$key,$extdata,$hash='sha1',$blocksize=64) {
+	$data = str_rot13($data);
+	$extdata2 = hexdec($extdata); $key = $key.$extdata2;
+  return base64_encode(password_hash($data.$extdata, PASSWORD_BCRYPT)); }
+
+if(!function_exists('password_hash')) { 
+function bcrypt($data) { return password_hash($data,PASSWORD_BCRYPT); }
+
 /* str_ireplace for PHP below ver. 5 updated // 
 //       by Kazuki Przyborowski - Cool Dude 2k      //
 //      and upaded by Kazuki Przyborowski again     */
