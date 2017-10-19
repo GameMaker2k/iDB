@@ -128,7 +128,8 @@ if($_POST['usehashtype']!="md2"&&
    $_POST['usehashtype']!="ripemd128"&&
    $_POST['usehashtype']!="ripemd160"&&
    $_POST['usehashtype']!="ripemd256"&&
-   $_POST['usehashtype']!="ripemd320") {
+   $_POST['usehashtype']!="ripemd320"&&
+   $_POST['usehashtype']!="bcrypt") {
 	$_POST['usehashtype'] = "sha1"; } }
 if($_POST['usehashtype']=="md2") { $iDBHashType = "iDBH2"; }
 if($_POST['usehashtype']=="md4") { $iDBHashType = "iDBH4"; }
@@ -142,6 +143,7 @@ if($_POST['usehashtype']=="ripemd128") { $iDBHashType = "iDBHRMD128"; }
 if($_POST['usehashtype']=="ripemd160") { $iDBHashType = "iDBHRMD160"; }
 if($_POST['usehashtype']=="ripemd256") { $iDBHashType = "iDBHRMD256"; }
 if($_POST['usehashtype']=="ripemd320") { $iDBHashType = "iDBHRMD320"; }
+if($_POST['usehashtype']=="bcrypt") { $iDBHashType = "iDBCRYPT"; }
 if ($_POST['AdminUser']=="Guest") { $Error="Yes";
 echo "<br />You can not use Guest as your name."; }
 /* We are done now with fixing the info. ^_^ */
