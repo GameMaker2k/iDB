@@ -30,7 +30,7 @@ $VER1[0] = 0; $VER1[1] = 4; $VER1[2] = 8; $VERFull[1] = $VER1[0].".".$VER1[1].".
 $VER2[0] = "Alpha"; $VER2[1] = "Al"; $VER2[2] = "SVN"; $SubVerN = 813;
 $SVNDay[0] = 1; $SVNDay[1] = 26; $SVNDay[2] = 2017; $SVNDay[3] = $SVNDay[0]."/".$SVNDay[1]."/".$SVNDay[2];
 $AltName = "DF2k"; $AltName2 = "DF2k"; $RName = "iDB"; $SFName = "IntDB";
-$RFullName = "Internet Discussion Boards"; $AltFullName = "Discussion Forums 2k"; $AltGM2k = "DF2k Team";
+$RFullName = "Internet Discussion Boards"; $AltFullName = "Discussion Forums 2k"; $AltGM2k = "Game Maker 2k";
 $VerCheckName = "iDB"; $AltVerCheckName = "DF2k"; $AltiDBHome = "http://df2k.gamemaker2k.org/";
 $AltGM2kHome = "http://df2k.gamemaker2k.org/"; $AltGM2kURL = "<a href=\"".$AltGM2kHome."\" title=\"".$AltGM2k."\" onclick=\"window.open(this.href);return false;\">".$AltGM2k."</a>";
 $iDBTheme = "iDB"; $AltiDBTheme = "Gray"; 
@@ -103,7 +103,8 @@ $IPCheckURL = 'http://cqcounter.com/whois/?query=%s'; }
 if(isset($Settings['IPCheckURL'])&&
 	$Settings['IPCheckURL']!=="") {
 $IPCheckURL = $Settings['IPCheckURL']; }
-$CD2k = "Kazuki Przyborowski"; $GM2k = "Game Maker 2k"; $iDB_Author = "Kazuki";
+$CD2k = "Kazuki Przyborowski"; $CD2k_Full = "Kazuki Suzuki Przyborowski";
+$GM2k = "Game Maker 2k"; $iDB_Author = "Kazuki";
 $iDB = "Internet Discussion Boards"; $iTB = "Internet Tag Boards"; 
 $DF2k = "Discussion Forums 2k"; $TB2k = "Tag Boards 2k";
 $TheProgrammerNaps = "The programmer has a nap. \nHold out! Programmer! ";
