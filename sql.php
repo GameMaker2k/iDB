@@ -191,15 +191,13 @@ require_once($SettDir['misc'].'utf8.php');
 require_once($SettDir['inc'].'filename.php');
 if(!isset($Settings['use_hashtype'])) {
 	$Settings['use_hashtype'] = "sha1"; }
-if(!function_exists('hash')||!function_exists('hash_algos')||!function_exists('password_hash')) {
+if(!function_exists('hash')||!function_exists('hash_algos')) {
 if($Settings['use_hashtype']!="md5"&&
-   $Settings['use_hashtype']!="sha1") {
+   $Settings['use_hashtype']!="sha1"&&
+   $Settings['use_hashtype']!="bcrypt") {
 	$Settings['use_hashtype'] = "sha1"; } }
-if(function_exists('hash')&&function_exists('hash_algos')&&$Settings['use_hashtype']!="bcrypt") {
-if(!in_array($Settings['use_hashtype'],hash_algos())) {
-	$Settings['use_hashtype'] = "sha1"; }
-if(function_exists('password_hash')&&$Settings['use_hashtype']=="bcrypt") {
-if(!in_array($Settings['use_hashtype'],hash_algos())) {
+if((function_exists('hash')&&function_exists('hash_algos'))||function_exists('password_hash')) {
+if(!in_array($Settings['use_hashtype'],hash_algos())&&$Settings['use_hashtype']!="bcrypt") {
 	$Settings['use_hashtype'] = "sha1"; }
 if($Settings['use_hashtype']!="md2"&&
    $Settings['use_hashtype']!="md4"&&
