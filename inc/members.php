@@ -1716,6 +1716,12 @@ if ($_POST['TOS']!="Agree") { $Error="Yes";  ?>
 	<br />You need to enter a password.<br />
 	</span>&nbsp;</td>
 </tr>
+<?php } if (!filter_var($_POST['Email'], FILTER_VALIDATE_EMAIL)) { $Error="Yes";  ?>
+<tr>
+	<td><span class="TableMessage">
+	<br />Your email is not a valid email address.<br />
+	</span>&nbsp;</td>
+</tr>
 <?php } if ($_POST['Email']==null) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
