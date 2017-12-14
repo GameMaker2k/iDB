@@ -983,6 +983,12 @@ for ($i=0; $i < count($zonelist['etcetera']); $i++) {
 if($_POST['update']=="now") {
 if($_POST['act']=="profile"&&
 	$_SESSION['UserGroup']!=$Settings['GuestGroup']) {
+	$Error = "No";
+	if (!filter_var($_POST['Website'], FILTER_VALIDATE_URL)&&($_POST['Website']!="http://"||$_POST['Website']!="https://")) { $Error="Yes";  ?>
+<div class="TableMessage" style="text-align: center;">Your website url is not a valid web url.<br />&nbsp;</div>
+	<?php } if (!filter_var($_POST['Avatar'], FILTER_VALIDATE_URL)&&($_POST['Avatar']!="http://"||$_POST['Avatar']!="https://")) { $Error="Yes";  ?>
+<div class="TableMessage" style="text-align: center;">Your avatar url is not a valid web url.<br />&nbsp;</div>
+	<?php }
 	$_POST['Interests'] = htmlspecialchars($_POST['Interests'], ENT_QUOTES, $Settings['charset']);
 	$_POST['Interests'] = remove_spaces($_POST['Interests']);
 	$_POST['Title'] = htmlspecialchars($_POST['Title'], ENT_QUOTES, $Settings['charset']);
@@ -1063,8 +1069,9 @@ if($_POST['act']=="profile"&&
 	$_POST['Website'] = urlcheck($_POST['Website']);
 	$_POST['iDBTimeFormat'] = convert_strftime($_POST['iDBTimeFormat']);
 	$_POST['iDBDateFormat'] = convert_strftime($_POST['iDBDateFormat']);
+	if($Error!="Yes") { 
 	$querynewprofile = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"Interests\"='%s',\"Title\"='%s',\"Website\"='%s',\"TimeZone\"='%s',\"DateFormat\"='%s',\"TimeFormat\"='%s',\"Gender\"='%s',\"LastActive\"=%i,\"BirthMonth\"=%i,\"BirthDay\"=%i,\"BirthYear\"=%i,\"RepliesPerPage\"=%i,\"TopicsPerPage\"=%i,\"MessagesPerPage\"=%i,\"IP\"='%s' WHERE \"id\"=%i", array($_POST['Interests'],$_POST['Title'],$_POST['Website'],$_POST['YourOffSet'],$_POST['iDBTimeFormat'],$_POST['iDBDateFormat'],$_POST['YourGender'],$NewDay,$BirthMonth,$BirthDay,$BirthYear,$_POST['RepliesPerPage'],$_POST['TopicsPerPage'],$_POST['MessagesPerPage'],$NewIP,$_SESSION['UserID']));
-	sql_query($querynewprofile,$SQLStat); } } }
+	sql_query($querynewprofile,$SQLStat); } } } }
 if($_GET['act']=="userinfo") {
 if($_POST['update']!="now") {
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_SESSION['UserID']));
@@ -1182,8 +1189,6 @@ if($YourPassword!=$OldPassword) { $Error="Yes"; ?>
 <div class="TableMessage" style="text-align: center;">Your passwords did not match.<br />&nbsp;</div>
 <?php } if (!filter_var($_POST['Email'], FILTER_VALIDATE_EMAIL)) { $Error="Yes";  ?>
 <div class="TableMessage" style="text-align: center;">Your email is not a valid email address.<br />&nbsp;</div>
-<?php } if (!filter_var($_POST['Website'], FILTER_VALIDATE_URL)) { $Error="Yes";  ?>
-<div class="TableMessage" style="text-align: center;">Your website url is not a valid web url.<br />&nbsp;</div>
 <?php }
 	$NewIP=$_SERVER['REMOTE_ADDR'];
 	if($Error!="Yes") { 

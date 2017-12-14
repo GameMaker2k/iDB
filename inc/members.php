@@ -1621,10 +1621,16 @@ require($SettDir['inc']."captcha.php"); }
 	<br />Your email is not a valid email address.<br />
 	</span>&nbsp;</td>
 </tr>
-<?php } if (!filter_var($_POST['Website'], FILTER_VALIDATE_URL)) { $Error="Yes";  ?>
+<?php } if (!filter_var($_POST['Website'], FILTER_VALIDATE_URL)&&($_POST['Website']!="http://"||$_POST['Website']!="https://")) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Your website url is not a valid web url.<br />
+	</span>&nbsp;</td>
+</tr>
+<?php } if (!filter_var($_POST['Avatar'], FILTER_VALIDATE_URL)&&($_POST['Avatar']!="http://"||$_POST['Avatar']!="https://")) { $Error="Yes";  ?>
+<tr>
+	<td><span class="TableMessage">
+	<br />Your avatar url is not a valid web url.<br />
 	</span>&nbsp;</td>
 </tr>
 <?php } if($_POST['fid']!=$_SESSION['UserFormID']) { $Error="Yes";  ?>
