@@ -665,7 +665,9 @@ if(in_array("md2",hash_algos())) { ?>
 if(!function_exists('hash')&&!function_exists('hash_algos')) { ?>
 <option<?php if($Settings['use_hashtype']=="md5") { echo " selected=\"selected\""; } ?> value="md5">MD5</option>
 <option<?php if($Settings['use_hashtype']=="sha1") { echo " selected=\"selected\""; } ?> value="sha1">SHA1</option>
-<?php } ?>
+<?php if(function_exists('password_hash')) { ?>
+<option<?php if($Settings['use_hashtype']=="bcrypt") { echo " selected=\"selected\""; } ?> value="bcrypt">BCRYPT</option>
+<?php } } ?>
 </select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="GuestGroup">Insert The Guest Group:</label></td>
