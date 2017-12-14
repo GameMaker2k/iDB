@@ -90,7 +90,7 @@ if (!filter_var($_POST['AdminEmail'], FILTER_VALIDATE_EMAIL)) { $Error="Yes";
 echo "<br />Your email is not a valid email address."; }
 if (!filter_var($_POST['BoardURL'], FILTER_VALIDATE_URL)) { $Error="Yes";
 echo "<br />Your board url is not a valid web url."; }
-if (!filter_var($_POST['WebURL'], FILTER_VALIDATE_URL)) { $Error="Yes";
+if (!filter_var($_POST['WebURL'], FILTER_VALIDATE_URL)&&$_POST['WebURL']!="localhost") { $Error="Yes";
 echo "<br />Your website url is not a valid web url."; }
 if (pre_strlen($_POST['AdminPasswords'])>"60") { $Error="Yes";
 echo "<br />Your password is too big."; }
