@@ -25,7 +25,7 @@ $query=sql_pre_query("ALTER DATABASE \"".$_POST['DatabaseName']."\" DEFAULT CHAR
 sql_query($query,$SQLStat);
 */
 $parsestr = parse_url($YourWebsite);
-if (preg_match("^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$", $parsestr['host']) || $parsestr['host'] == "localhost") {
+if (!filter_var($parsestr['host'], FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6) || $parsestr['host'] == "localhost") {
 	$GuestLocalIP = gethostbyname($parsestr['host']); } else { $GuestLocalIP = $parsestr['host']; }
 $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."categories\" (\n".
 "  \"id\" INTEGER PRIMARY KEY NOT NULL,\n".
