@@ -1064,6 +1064,7 @@ $REFERERurl = null;
 <td class="TableColumn3">
 <table style="width: 100%; height: 25%; text-align: center;">
 <?php
+if(!isset($_POST['loginemail'])) { $_POST['loginemail'] = "false"; }
 if (pre_strlen($_POST['userpass'])>"60") { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
@@ -1074,6 +1075,12 @@ if (pre_strlen($_POST['userpass'])>"60") { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Your user name is too big.<br />
+	</span>&nbsp;</td>
+</tr>
+<?php } if ($_POST['loginemail']=="true"&&filter_var($_POST['loginemail'], FILTER_VALIDATE_EMAIL)) { $Error="Yes";  ?>
+<tr>
+	<td><span class="TableMessage">
+	<br />Your email is not a valid email address.<br />
 	</span>&nbsp;</td>
 </tr>
 <?php } if($_POST['fid']!=$_SESSION['UserFormID']) { $Error="Yes";  ?>
@@ -1103,7 +1110,6 @@ $YourName = stripcslashes(htmlspecialchars($_POST['username'], ENT_QUOTES, $Sett
 //$YourName = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $YourName);
 $YourName = remove_spaces($YourName);
 $passtype="ODFH";
-if(!isset($_POST['loginemail'])) { $_POST['loginemail'] = "false"; }
 if($_POST['loginemail']!="true") {
 $querylog = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s' LIMIT 1", array($YourName)); }
 if($_POST['loginemail']=="true") {
@@ -1613,6 +1619,12 @@ require($SettDir['inc']."captcha.php"); }
 <tr>
 	<td><span class="TableMessage">
 	<br />Your email is not a valid email address.<br />
+	</span>&nbsp;</td>
+</tr>
+<?php } if (!filter_var($_POST['Website'], FILTER_VALIDATE_URL)) { $Error="Yes";  ?>
+<tr>
+	<td><span class="TableMessage">
+	<br />Your website url is not a valid web url.<br />
 	</span>&nbsp;</td>
 </tr>
 <?php } if($_POST['fid']!=$_SESSION['UserFormID']) { $Error="Yes";  ?>
