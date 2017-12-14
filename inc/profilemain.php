@@ -1182,6 +1182,8 @@ if($YourPassword!=$OldPassword) { $Error="Yes"; ?>
 <div class="TableMessage" style="text-align: center;">Your passwords did not match.<br />&nbsp;</div>
 <?php } if (!filter_var($_POST['Email'], FILTER_VALIDATE_EMAIL)) { $Error="Yes";  ?>
 <div class="TableMessage" style="text-align: center;">Your email is not a valid email address.<br />&nbsp;</div>
+<?php } if (!filter_var($_POST['Website'], FILTER_VALIDATE_URL)) { $Error="Yes";  ?>
+<div class="TableMessage" style="text-align: center;">Your website url is not a valid web url.<br />&nbsp;</div>
 <?php }
 	$NewIP=$_SERVER['REMOTE_ADDR'];
 	if($Error!="Yes") { 
