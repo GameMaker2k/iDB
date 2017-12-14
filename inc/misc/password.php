@@ -316,9 +316,4 @@ namespace PasswordCompat\binary {
     }
 }
 
-$File3Name = basename($_SERVER['SCRIPT_NAME']);
-if ($File3Name=="password.php"||$File3Name=="/password.php") {
-	require('index.php');
-	exit(); }
-
 ?>
