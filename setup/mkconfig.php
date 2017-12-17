@@ -51,6 +51,7 @@ $dayconv = array('second' => 1, 'minute' => 60, 'hour' => 3600, 'day' => 86400, 
 $_POST['tableprefix'] = strtolower($_POST['tableprefix']);
 $_POST['tableprefix'] = preg_replace("/[^A-Za-z0-9_$]/", "", $_POST['tableprefix']);
 if($_POST['tableprefix']==null||$_POST['tableprefix']=="_") { $_POST['tableprefix']="idb_"; }
+if(!isset($_POST['sessprefix'])) { $_POST['sessprefix'] = null; }
 if($_POST['sessprefix']==null||$_POST['sessprefix']=="_") { $_POST['sessprefix']="idb_"; }
 $checkfile="settings.php";
 @chmod("settings.php",0766);

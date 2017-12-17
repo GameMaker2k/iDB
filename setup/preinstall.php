@@ -27,6 +27,22 @@ header("Date: ".$utccurtime->format("D, d M Y H:i:s")." GMT");
 header("Last-Modified: ".$utccurtime->format("D, d M Y H:i:s")." GMT");
 header("Expires: ".$utccurtime->format("D, d M Y H:i:s")." GMT");
 output_reset_rewrite_vars();
+if(!isset($Settings['send_pagesize'])) { $Settings['send_pagesize'] = "on"; }
+if(!isset($Settings['fixbasedir'])) { $Settings['fixbasedir'] = null; }
+if(!isset($Settings['fixcookiedir'])) { $Settings['fixcookiedir'] = null; }
+if(!isset($Settings['rssurl'])) { $Settings['rssurl'] = null; }
+if(!isset($Settings['showverinfo'])) { $Settings['showverinfo'] = null; }
+if(!isset($Settings['sqltype'])) { $Settings['sqltype'] = null; }
+if(!isset($Settings['fixredirectdir'])) { $Settings['fixredirectdir'] = null; }
+if(!isset($Settings['file_ext'])) { $Settings['file_ext'] = null; }
+if(!isset($Settings['html_level'])) { $Settings['html_level'] = null; }
+if(!isset($Settings['GuestGroup'])) { $Settings['GuestGroup'] = null; }
+if(!isset($Settings['enable_search'])) { $Settings['enable_search'] = null; }
+if(!isset($Settings['qstr'])) { $Settings['qstr'] = null; }
+if(!isset($_POST['SetupType'])) { $_POST['SetupType'] = "install"; }
+if(!isset($_GET['debug'])) { $_GET['debug'] = null; }
+$checklowview = false;
+$dayconv = array("year" => 29030400, "month" => 2419200, "week" => 604800, "day" => 86400, "hour" => 3600, "minute" => 60, "second" => 1);
 if(!isset($SettDir['inc'])) { $SettDir['inc'] = "inc/"; }
 if(!isset($SettDir['misc'])) { $SettDir['misc'] = "inc/misc/"; }
 if(!isset($SettDir['sql'])) { $SettDir['sql'] = "inc/misc/sql/"; }
