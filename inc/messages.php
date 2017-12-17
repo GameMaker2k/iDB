@@ -715,6 +715,7 @@ $QuoteDescription = "Re: ".$QuoteDescription;
 $QuoteTitle = str_replace("Re: ","",$QuoteTitle);
 $QuoteTitle = "Re: ".$QuoteTitle;
 $QuoteReply = null; } }
+if(!isset($num)) { $num = 0; }
 if($num==0) { $_GET['post'] = null; }
 $UFID = rand_uuid("rand");
 $_SESSION['UserFormID'] = $UFID;
@@ -911,8 +912,8 @@ if($_POST['post']>0) {
 $querychckm = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."messenger\" WHERE \"id\"=%i AND (\"SenderID\"=%i OR \"ReciverID\"=%i)", array($_POST['post'], $_SESSION['UserID'], $_SESSION['UserID']));
 $resultchckm=sql_query($querychckm,$SQLStat);
 $numchckm=sql_num_rows($resultchckm);
-if($numchckm==0) { $_POST['post'] = 0; } }
-sql_free_result($resultchckm);
+if($numchckm==0) { $_POST['post'] = 0; }
+sql_free_result($resultchckm); }
 $_POST['MessageName'] = stripcslashes(htmlspecialchars($_POST['MessageName'], ENT_QUOTES, $Settings['charset']));
 //$_POST['MessageName'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['MessageName']);
 $_POST['MessageName'] = remove_spaces($_POST['MessageName']);
