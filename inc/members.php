@@ -746,7 +746,7 @@ $ViewMem['PostCount']=sql_result($result,$i,"PostCount");
 $ViewMem['Karma']=sql_result($result,$i,"Karma");
 $ViewMem['TimeZone']=sql_result($result,$i,"TimeZone");
 $viewmemcurtime = new DateTime();
-$viewmemcurtime->setTimezone($ViewMem['TimeZone']);
+$viewmemcurtime->setTimezone(new DateTimeZone($ViewMem['TimeZone']));
 $ViewMem['IP']=sql_result($result,$i,"IP");
 $lquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."levels\" WHERE \"id\"=%i LIMIT 1", array($ViewMem['LevelID']));
 $lresult=sql_query($lquery,$SQLStat);
