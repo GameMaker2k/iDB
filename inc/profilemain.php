@@ -346,7 +346,7 @@ $AvatarSize1W=$AvatarSize1[0]; $AvatarSize1H=$AvatarSize1[1];
 <table style="text-align: left;">
 <tr style="text-align: left;">
 	<td style="width: 40%;"><label class="TextBoxLabel" for="Avatar">Your Avatar</label></td>
-	<td style="width: 60%;"><input type="text" class="TextBox" name="Avatar" id="Avatar" value="<?php echo $User1Avatar; ?>" size="20" /></td>
+	<td style="width: 60%;"><input type="url" class="TextBox" name="Avatar" id="Avatar" value="<?php echo $User1Avatar; ?>" size="20" /></td>
 	</tr><tr style="text-align: left;">
 	<td style="width: 40%;"><label class="TextBoxLabel" for="AvatarSizeW">Avatar Width</label></td>
 	<td style="width: 60%;"><select size="1" name="AvatarSizeW" id="AvatarSizeW" class="TextBox">
@@ -815,10 +815,10 @@ for ($i=0; $i < count($timezone_identifiers); $i++) {
 	<td style="width: 60%;"><input type="text" class="TextBox" name="Title" id="Title" value="<?php echo $User1Title; ?>" /></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 40%;"><label class="TextBoxLabel" for="Website">Your Website</label></td>
-	<td style="width: 60%;"><input type="text" class="TextBox" name="Website" id="Website" value="<?php echo $User1Website; ?>" /></td>
+	<td style="width: 60%;"><input type="url" class="TextBox" name="Website" id="Website" value="<?php echo $User1Website; ?>" /></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 40%;"><label class="TextBoxLabel" for="EventDay">Your Birthday</label></td>
-	<td style="width: 60%;"><input maxlength="10" type="text" class="TextBox" name="EventDay" id="EventDay" value="<?php echo $User1Birthday; ?>" /></td>
+	<td style="width: 60%;"><input maxlength="10" type="date" class="TextBox" name="EventDay" id="EventDay" value="<?php echo $User1Birthday; ?>" /></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 40%;"><label class="TextBoxLabel" for="YourOffSet">Your TimeZone:</label></td>
 	<td style="width: 60%;"><select id="YourOffSet" name="YourOffSet" class="TextBox">
@@ -983,6 +983,7 @@ for ($i=0; $i < count($zonelist['etcetera']); $i++) {
 if($_POST['update']=="now") {
 if($_POST['act']=="profile"&&
 	$_SESSION['UserGroup']!=$Settings['GuestGroup']) {
+	if(preg_match("/([0-9]{4})\-([0-9]{2})\-([0-9]{2})/", $_POST['EventDay'])) { $_POST['EventDay'] = preg_replace("/([0-9]{4})\-([0-9]{2})\-([0-9]{2})/", "$2/$3/$1", $_POST['EventDay']); }
 	$Error = "No";
 	if (!filter_var($_POST['Website'], FILTER_VALIDATE_URL)&&($_POST['Website']!="http://"||$_POST['Website']!="https://")) { $Error="Yes";  ?>
 <div class="TableMessage" style="text-align: center;">Your website url is not a valid web url.<br />&nbsp;</div>
@@ -1115,7 +1116,7 @@ $profiletitle = " ".$ThemeSet['TitleDivider']." User Info Editer";
 	<td style="width: 60%;"><input maxlength="30" type="password" class="TextBox" name="RePassword" size="20" id="RePassword" /></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 40%;"><label class="TextBoxLabel" for="Email">Insert Your Email:</label></td>
-	<td style="width: 60%;"><input type="text" class="TextBox" name="Email" size="20" id="Email" value="<?php echo $User1Email; ?>" /></td>
+	<td style="width: 60%;"><input type="email" class="TextBox" name="Email" size="20" id="Email" value="<?php echo $User1Email; ?>" /></td>
 </tr></table>
 <table style="text-align: left;">
 <tr style="text-align: left;">

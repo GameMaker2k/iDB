@@ -79,10 +79,10 @@ if($_GET['act']=="topics") {
 <table style="text-align: left;">
 <tr style="text-align: left;">
 	<td style="width: 30%;"><label class="TextBoxLabel" for="search">Enter SearchTerm: </label></td>
-	<td style="width: 70%;"><input maxlength="35" class="TextBox" id="search" type="text" name="search" /></td>
+	<td style="width: 70%;"><input maxlength="35" class="TextBox" id="search" type="search" name="search" /></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 30%;"><label class="TextBoxLabel" for="msearch">Filter by Member (optional): </label></td>
-	<td style="width: 70%;"><input maxlength="25" class="TextBox" id="msearch" type="text" name="msearch" /></td>
+	<td style="width: 70%;"><input maxlength="25" class="TextBox" id="msearch" type="search" name="msearch" /></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 30%;"><label class="TextBoxLabel" title="Wildcard is %" for="type">Search Type: </label></td>
 	<td style="width: 70%;"><select id="type" name="type" class="TextBox">

@@ -93,7 +93,7 @@ sql_free_result($getperidr); ?>
 	</select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="PermissionID">Permission ID:</label></td>
-	<td style="width: 50%;"><input type="text" name="PermissionID" class="TextBox" id="PermissionID" size="20" /></td>
+	<td style="width: 50%;"><input type="number" name="PermissionID" class="TextBox" id="PermissionID" size="20" /></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="NamePrefix">Name Prefix:</label></td>
 	<td style="width: 50%;"><input type="text" name="NamePrefix" class="TextBox" id="NamePrefix" size="20" /></td>
@@ -173,10 +173,10 @@ sql_free_result($fr); ?>
 	</select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="PromotePosts">Amount of Posts needed:</label></td>
-	<td style="width: 50%;"><input type="text" name="PromotePosts" class="TextBox" id="PromotePosts" size="20" /></td>
+	<td style="width: 50%;"><input type="number" name="PromotePosts" class="TextBox" id="PromotePosts" size="20" /></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="PromoteKarma">Amount of Karma needed:</label></td>
-	<td style="width: 50%;"><input type="text" name="PromoteKarma" class="TextBox" id="PromoteKarma" size="20" /></td>
+	<td style="width: 50%;"><input type="number" name="PromoteKarma" class="TextBox" id="PromoteKarma" size="20" /></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="HasModCP">Can view Mod CP:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="HasModCP" id="HasModCP">
@@ -641,10 +641,10 @@ sql_free_result($fr); ?>
 	</select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="PromotePosts">Amount of Posts needed:</label></td>
-	<td style="width: 50%;"><input type="text" name="PromotePosts" class="TextBox" id="PromotePosts" size="20" value="<?php echo $PromotePosts; ?>" /></td>
+	<td style="width: 50%;"><input type="number" name="PromotePosts" class="TextBox" id="PromotePosts" size="20" value="<?php echo $PromotePosts; ?>" /></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="PromoteKarma">Amount of Karma needed:</label></td>
-	<td style="width: 50%;"><input type="text" name="PromoteKarma" class="TextBox" id="PromoteKarma" size="20" value="<?php echo $PromoteKarma; ?>" /></td>
+	<td style="width: 50%;"><input type="number" name="PromoteKarma" class="TextBox" id="PromoteKarma" size="20" value="<?php echo $PromoteKarma; ?>" /></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="HasModCP">Can view Mod CP:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="HasModCP" id="HasModCP">

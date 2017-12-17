@@ -61,10 +61,10 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Adding new Category";
 <table style="text-align: left;">
 <tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="CategoryID">Insert ID for category:</label></td>
-	<td style="width: 50%;"><input type="text" name="CategoryID" class="TextBox" id="CategoryID" size="20" /></td>
+	<td style="width: 50%;"><input type="number" name="CategoryID" class="TextBox" id="CategoryID" size="20" /></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="OrderID">Insert order id category:</label></td>
-	<td style="width: 50%;"><input type="text" name="OrderID" class="TextBox" id="OrderID" size="20" /></td>
+	<td style="width: 50%;"><input type="number" name="OrderID" class="TextBox" id="OrderID" size="20" /></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="CategoryName">Insert name for category:</label></td>
 	<td style="width: 50%;"><input type="text" name="CategoryName" class="TextBox" id="CategoryName" size="20" /></td>
@@ -105,10 +105,10 @@ sql_free_result($fr); ?>
 	</select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="NumPostView">Number of posts to view category:</label></td>
-	<td style="width: 50%;"><input type="text" class="TextBox" size="20" name="NumPostView" id="NumPostView" /></td>
+	<td style="width: 50%;"><input type="number" class="TextBox" size="20" name="NumPostView" id="NumPostView" /></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="NumKarmaView">Amount of karma to view category:</label></td>
-	<td style="width: 50%;"><input type="text" class="TextBox" size="20" name="NumKarmaView" id="NumKarmaView" /></td>
+	<td style="width: 50%;"><input type="number" class="TextBox" size="20" name="NumKarmaView" id="NumKarmaView" /></td>
 </tr></table>
 <table style="text-align: left;">
 <tr style="text-align: left;">
@@ -430,10 +430,10 @@ $CategoryType = strtolower($CategoryType);
 <table style="text-align: left;">
 <tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="CategoryID">Insert id for category:</label></td>
-	<td style="width: 50%;"><input type="text" name="CategoryID" class="TextBox" id="CategoryID" size="20" value="<?php echo $CategoryID; ?>" /></td>
+	<td style="width: 50%;"><input type="number" name="CategoryID" class="TextBox" id="CategoryID" size="20" value="<?php echo $CategoryID; ?>" /></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="OrderID">Insert order id category:</label></td>
-	<td style="width: 50%;"><input type="text" name="OrderID" class="TextBox" id="OrderID" size="20" value="<?php echo $CategoryOrder; ?>" /></td>
+	<td style="width: 50%;"><input type="number" name="OrderID" class="TextBox" id="OrderID" size="20" value="<?php echo $CategoryOrder; ?>" /></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="CategoryName">Insert name for category:</label></td>
 	<td style="width: 50%;"><input type="text" name="CategoryName" class="TextBox" id="CategoryName" size="20" value="<?php echo $CategoryName; ?>" /></td>
@@ -477,10 +477,10 @@ sql_free_result($fr); ?>
 	</select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="NumPostView">Number of posts to view categories:</label></td>
-	<td style="width: 50%;"><input type="text" class="TextBox" size="20" name="NumPostView" id="NumPostView" value="<?php echo $PostCountView; ?>" /></td>
+	<td style="width: 50%;"><input type="number" class="TextBox" size="20" name="NumPostView" id="NumPostView" value="<?php echo $PostCountView; ?>" /></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="NumKarmaView">Amount of karma to view categories:</label></td>
-	<td style="width: 50%;"><input type="text" class="TextBox" size="20" name="NumKarmaView" id="NumKarmaView" value="<?php echo $KarmaCountView; ?>" /></td>
+	<td style="width: 50%;"><input type="number" class="TextBox" size="20" name="NumKarmaView" id="NumKarmaView" value="<?php echo $KarmaCountView; ?>" /></td>
 </tr></table>
 <table style="text-align: left;">
 <tr style="text-align: left;">

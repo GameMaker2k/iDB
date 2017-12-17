@@ -475,7 +475,7 @@ $fulliplist = $fulliplist." <a onclick=\"window.open(this.href);return false;\" 
 	<td style="width: 50%;"><input type="text" name="MemName" class="TextBox" id="MemName" size="20" value="<?php echo $EditMem['Name']; ?>" /></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="MemEmail">Members Email:</label></td>
-	<td style="width: 50%;"><input type="text" name="MemEmail" class="TextBox" id="MemEmail" size="20" value="<?php echo $EditMem['Email']; ?>" /></td>
+	<td style="width: 50%;"><input type="email" name="MemEmail" class="TextBox" id="MemEmail" size="20" value="<?php echo $EditMem['Email']; ?>" /></td>
 <?php if($EditMem['ID']!=1) { ?>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="gid">New Group for Member:</label></td>
@@ -532,16 +532,16 @@ sql_free_result($getlevidr); ?>
 </select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="MemWarnLevel">Members Warn Level:</label></td>
-	<td style="width: 50%;"><input type="text" name="MemWarnLevel" class="TextBox" id="MemWarnLevel" size="20" value="<?php echo $EditMem['WarnLevel']; ?>" /></td>
+	<td style="width: 50%;"><input type="number" name="MemWarnLevel" class="TextBox" id="MemWarnLevel" size="20" value="<?php echo $EditMem['WarnLevel']; ?>" /></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="MemBanTime" title="Enter date till user is banned in MM/DD/YYYY format. 0 means no ban and -1 means permanent ban.">Members Ban Time:</label></td>
-	<td style="width: 50%;"><input type="text" name="MemBanTime" class="TextBox" id="MemBanTime" size="20" value="<?php echo $EditMem['BanTime']; ?>" /></td>
+	<td style="width: 50%;"><input type="date" name="MemBanTime" class="TextBox" id="MemBanTime" size="20" value="<?php echo $EditMem['BanTime']; ?>" /></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="MemPostCount">Members Post Count:</label></td>
-	<td style="width: 50%;"><input type="text" name="MemPostCount" class="TextBox" id="MemPostCount" size="20" value="<?php echo $EditMem['PostCount']; ?>" /></td>
+	<td style="width: 50%;"><input type="number" name="MemPostCount" class="TextBox" id="MemPostCount" size="20" value="<?php echo $EditMem['PostCount']; ?>" /></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="MemKarma">Members Karma Count:</label></td>
-	<td style="width: 50%;"><input type="text" name="MemKarma" class="TextBox" id="MemKarma" size="20" value="<?php echo $EditMem['Karma']; ?>" /></td>
+	<td style="width: 50%;"><input type="number" name="MemKarma" class="TextBox" id="MemKarma" size="20" value="<?php echo $EditMem['Karma']; ?>" /></td>
 <?php if($EditMem['ID']!=1) { ?>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="MemPermID">Members Permission ID:</label></td>
@@ -733,6 +733,7 @@ if($_POST['MemHidden']!="yes"&&$_POST['MemHidden']!="no") {
 if(!is_numeric($_POST['MemWarnLevel'])) { $_POST['MemWarnLevel'] = "0"; }
 if(!is_numeric($_POST['MemPostCount'])) { $_POST['MemPostCount'] = "0"; }
 if(!is_numeric($_POST['MemKarma'])) { $_POST['MemKarma'] = "0"; }
+if(preg_match("/([0-9]{4})\-([0-9]{2})\-([0-9]{2})/", $_POST['MemBanTime'])) { $_POST['MemBanTime'] = preg_replace("/([0-9]{4})\-([0-9]{2})\-([0-9]{2})/", "$2/$3/$1", $_POST['MemBanTime']); }
 	if($_POST['MemBanTime']!=null&&$_POST['MemBanTime']>1) {
 	$BirthExpl = explode("/",$_POST['MemBanTime']);
 	if(count($BirthExpl)!="3") { 

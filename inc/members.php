@@ -1401,7 +1401,7 @@ for ($i=0; $i < count($timezone_identifiers); $i++) {
 	<td style="width: 70%;"><input maxlength="30" type="password" class="TextBox" name="RePassword" size="20" id="RePassword" /></td>
 </tr><tr>
 	<td style="width: 30%;"><label class="TextBoxLabel" for="Email">Insert Your Email:</label></td>
-	<td style="width: 70%;"><input type="text" class="TextBox" name="Email" size="20" id="Email" /></td>
+	<td style="width: 70%;"><input type="email" class="TextBox" name="Email" size="20" id="Email" /></td>
 </tr><tr>
 	<td style="width: 30%;"><label class="TextBoxLabel" for="YourOffSet">Your TimeZone:</label></td>
 	<td style="width: 70%;"><select id="YourOffSet" name="YourOffSet" class="TextBox">
@@ -1504,10 +1504,10 @@ for ($i=0; $i < count($zonelist['etcetera']); $i++) {
 </select></td>
 </tr><tr>
 	<td style="width: 30%;"><label class="TextBoxLabel" for="Website">Insert your Website:</label></td>
-	<td style="width: 70%;"><input type="text" class="TextBox" name="Website" size="20" value="http://" id="Website" /></td>
+	<td style="width: 70%;"><input type="url" class="TextBox" name="Website" size="20" value="http://" id="Website" /></td>
 </tr><tr>
 	<td style="width: 30%;"><label class="TextBoxLabel" for="Avatar">Insert a URL for Avatar:</label></td>
-	<td style="width: 70%;"><input type="text" class="TextBox" name="Avatar" size="20" value="http://" id="Avatar" /></td>
+	<td style="width: 70%;"><input type="url" class="TextBox" name="Avatar" size="20" value="http://" id="Avatar" /></td>
 </tr><tr>
 	<td style="width: 30%;"><label class="TextBoxLabel" title="Store userinfo as a cookie so you dont need to login again." for="storecookie">Store as cookie?</label></td>
 	<td style="width: 70%;"><select id="storecookie" name="storecookie" class="TextBox">
