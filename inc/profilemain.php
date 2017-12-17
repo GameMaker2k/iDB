@@ -377,6 +377,9 @@ $AvatarSize1W=$AvatarSize1[0]; $AvatarSize1H=$AvatarSize1[1];
 if($_POST['update']=="now") {
 if($_POST['Avatar']!=null&&$_POST['AvatarSizeW']!=null&&$_POST['AvatarSizeH']!=null&&
 	$_SESSION['UserGroup']!=$Settings['GuestGroup']) {
+	if (!filter_var($_POST['Avatar'], FILTER_VALIDATE_URL)&&($_POST['Avatar']!="http://"||$_POST['Avatar']!="https://")) { $Error="Yes";  ?>
+<div class="TableMessage" style="text-align: center;">Your avatar url is not a valid web url.<br />&nbsp;</div>
+	<?php }
 	if(!is_numeric($_POST['AvatarSizeW'])) { $_POST['AvatarSizeW'] = 100; }
 	if($_POST['AvatarSizeW']>=100) { $_POST['AvatarSizeW']=100; }
 	if(!is_numeric($_POST['AvatarSizeH'])) { $_POST['AvatarSizeH'] = 100; }
@@ -386,8 +389,9 @@ if($_POST['Avatar']!=null&&$_POST['AvatarSizeW']!=null&&$_POST['AvatarSizeH']!=n
 	$NewDay=$utccurtime->getTimestamp();
 	$NewIP=$_SERVER['REMOTE_ADDR'];
 	$_POST['Avatar'] = remove_spaces($_POST['Avatar']);
+	if($Error!="Yes") { 
 	$querynewskin = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"Avatar\"='%s',\"AvatarSize\"='%s',\"LastActive\"=%i,\"IP\"='%s' WHERE \"id\"=%i", array($_POST['Avatar'],$fullavatarsize,$NewDay,$NewIP,$_SESSION['UserID']));
-	sql_query($querynewskin,$SQLStat); } } }
+	sql_query($querynewskin,$SQLStat); } } } }
 if($_GET['act']=="settings") {
 if($_POST['update']!="now") {
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_SESSION['UserID']));
@@ -818,7 +822,7 @@ for ($i=0; $i < count($timezone_identifiers); $i++) {
 	<td style="width: 60%;"><input type="url" class="TextBox" name="Website" id="Website" value="<?php echo $User1Website; ?>" /></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 40%;"><label class="TextBoxLabel" for="EventDay">Your Birthday</label></td>
-	<td style="width: 60%;"><input maxlength="10" type="date" class="TextBox" name="EventDay" id="EventDay" value="<?php echo $User1Birthday; ?>" /></td>
+	<td style="width: 60%;"><input maxlength="10" type="date" class="TextBox" name="EventDay" id="EventDay" value="<?php echo preg_replace("/([0-9]{2})\/([0-9]{2})\/([0-9]{4})/", "$3-$1-$2", $User1Birthday); ?>" /></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 40%;"><label class="TextBoxLabel" for="YourOffSet">Your TimeZone:</label></td>
 	<td style="width: 60%;"><select id="YourOffSet" name="YourOffSet" class="TextBox">
@@ -987,8 +991,6 @@ if($_POST['act']=="profile"&&
 	$Error = "No";
 	if (!filter_var($_POST['Website'], FILTER_VALIDATE_URL)&&($_POST['Website']!="http://"||$_POST['Website']!="https://")) { $Error="Yes";  ?>
 <div class="TableMessage" style="text-align: center;">Your website url is not a valid web url.<br />&nbsp;</div>
-	<?php } if (!filter_var($_POST['Avatar'], FILTER_VALIDATE_URL)&&($_POST['Avatar']!="http://"||$_POST['Avatar']!="https://")) { $Error="Yes";  ?>
-<div class="TableMessage" style="text-align: center;">Your avatar url is not a valid web url.<br />&nbsp;</div>
 	<?php }
 	$_POST['Interests'] = htmlspecialchars($_POST['Interests'], ENT_QUOTES, $Settings['charset']);
 	$_POST['Interests'] = remove_spaces($_POST['Interests']);

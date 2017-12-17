@@ -535,7 +535,7 @@ sql_free_result($getlevidr); ?>
 	<td style="width: 50%;"><input type="number" name="MemWarnLevel" class="TextBox" id="MemWarnLevel" size="20" value="<?php echo $EditMem['WarnLevel']; ?>" /></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="MemBanTime" title="Enter date till user is banned in MM/DD/YYYY format. 0 means no ban and -1 means permanent ban.">Members Ban Time:</label></td>
-	<td style="width: 50%;"><input type="date" name="MemBanTime" class="TextBox" id="MemBanTime" size="20" value="<?php echo $EditMem['BanTime']; ?>" /></td>
+	<td style="width: 50%;"><input type="date" name="MemBanTime" class="TextBox" id="MemBanTime" size="20" value="<?php echo preg_replace("/([0-9]{2})\/([0-9]{2})\/([0-9]{4})/", "$3-$1-$2", $EditMem['BanTime']); ?>" /></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="MemPostCount">Members Post Count:</label></td>
 	<td style="width: 50%;"><input type="number" name="MemPostCount" class="TextBox" id="MemPostCount" size="20" value="<?php echo $EditMem['PostCount']; ?>" /></td>
