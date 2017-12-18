@@ -30,9 +30,9 @@ while ($i < $num) {
 $SQLEngines[$i] = sql_result($result,$i,"Engine");
 ++$i; }
 if (!in_array($Settings['sql_storage_engine'], $SQLEngines)) {
-    $Settings['sql_storage_engine'] = "MyISAM"; } }
+    $Settings['sql_storage_engine'] = "InnoDB"; } }
 if(!isset($Settings['sql_storage_engine'])) {
-	$Settings['sql_storage_engine'] = "MyISAM"; }
+	$Settings['sql_storage_engine'] = "InnoDB"; }
 // You can set this to MyISAM or Maria/Aria
 if($Settings['sql_storage_engine']=="CSV") {
 	$SQLStorageEngine = "CSV"; }
@@ -42,6 +42,8 @@ if($Settings['sql_storage_engine']=="Aria") {
 	$SQLStorageEngine = "Aria"; }
 if($Settings['sql_storage_engine']=="MyISAM") {
 	$SQLStorageEngine = "MyISAM"; }
+if($Settings['sql_storage_engine']=="InnoDB") {
+	$SQLStorageEngine = "InnoDB"; }
 $parsestr = parse_url($YourWebsite);
 if (!filter_var($parsestr['host'], FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6) || $parsestr['host'] == "localhost") {
 	$GuestLocalIP = gethostbyname($parsestr['host']); } else { $GuestLocalIP = $parsestr['host']; }
