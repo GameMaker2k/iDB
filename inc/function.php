@@ -354,7 +354,7 @@ if ($handle = opendir($ckskindir)) { $dirnum = null;
 	   if ($dirnum==null) { $dirnum = 0; }
 	   if (is_dir($ckskindir.$ckfile)&&file_exists($ckskindir.$ckfile."/info.php")) {
 		   if ($ckfile != "." && $ckfile != "..") {
-	   //include($ckskindir.$ckfile."/info.php");
+	   //require($ckskindir.$ckfile."/info.php");
        $cktheme[$dirnum] =  $ckfile;
 	   ++$dirnum; } } }
    closedir($handle); asort($cktheme); }

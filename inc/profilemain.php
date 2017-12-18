@@ -602,7 +602,7 @@ if ($handle = opendir($skindir)) { $dirnum = null;
 	   if ($dirnum==null) { $dirnum = 0; }
 	   if (file_exists($skindir.$file."/info.php")) {
 		   if ($file != "." && $file != "..") {
-	   include($skindir.$file."/info.php");
+	   require($skindir.$file."/info.php");
        $themelist[$dirnum] =  "<option value=\"".$file."\">".$ThemeInfo['ThemeName']."</option>";
 	   ++$dirnum; } } }
    closedir($handle); asort($themelist);

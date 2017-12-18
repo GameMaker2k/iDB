@@ -382,7 +382,7 @@ if ($handle = opendir($skindir)) { $dirnum = null;
 	   if ($dirnum==null) { $dirnum = 0; }
 	   if (file_exists($skindir.$file."/info.php")) {
 		   if ($file != "." && $file != "..") {
-	   include($skindir.$file."/info.php");
+	   require($skindir.$file."/info.php");
 	   if($file=="iDB") { 
        $themelist[$dirnum] =  "<option value=\"".$file."\" selected=\"selected\">".$ThemeInfo['ThemeName']."</option>"; }
 	   if($file!="iDB") {
