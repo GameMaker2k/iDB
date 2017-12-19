@@ -67,7 +67,8 @@ if ($File3Name=="table.php"||$File3Name=="/table.php") {
 <?php if($Settings['sqltype']=="mysql"||
 	$Settings['sqltype']=="mysqli"||
 	$Settings['sqltype']=="pgsql"||
-	$Settings['sqltype']=="sqlite") { ?>
+	$Settings['sqltype']=="sqlite"||
+	$Settings['sqltype']=="sqlite3") { ?>
 </tr><tr class="TableSMenuRow3">
 <td class="TableSMenuColumn3"><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=sqldumper",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">SQL Dumper</a></td>
 <?php } ?>

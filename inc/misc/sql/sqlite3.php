@@ -90,6 +90,7 @@ if(!isset($link)) {
 function sql_result($result,$row,$field=0) {
 $check = true;
 $num = 0;
+$result->reset();
 while ($num<$row) {
 	$result->fetchArray();
     $num++; }

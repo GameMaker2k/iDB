@@ -89,6 +89,7 @@ if($Settings['sqltype']!="mysql"&&
 	$Settings['sqltype']!="mysqli"&&
 	$Settings['sqltype']!="pgsql"&&
 	$Settings['sqltype']!="sqlite"&&
+	$Settings['sqltype']!="sqlite3"&&
 	$Settings['sqltype']!="cubrid") {
 	$Settings['sqltype'] = "mysql"; }
 if($Settings['sqltype']=="mysql"||
@@ -98,7 +99,7 @@ $DBType['Client'] = "MySQL ".sql_client_info($SQLStat); }
 if($Settings['sqltype']=="pgsql") {
 $DBType['Server'] = "Postgres ".sql_server_info($SQLStat);
 $DBType['Client'] = "Postgres ".sql_client_info($SQLStat); }
-if($Settings['sqltype']=="sqlite") {
+if($Settings['sqltype']=="sqlite"||$Settings['sqltype']=="sqlite3") {
 $DBType['Server'] = "SQLite ".sql_server_info($SQLStat);
 $DBType['Client'] = sql_client_info($SQLStat); }
 if($Settings['sqltype']=="cubrid") {
@@ -334,7 +335,7 @@ $sqlgc = sql_pre_query("TRUNCATE TABLE \"".$Settings['sqltable']."themes\"", arr
 sql_query($sqlgc,$SQLStat);
 $sqlgc = sql_pre_query("SELECT setval('".$Settings['sqltable']."themes_id_seq', 1, false);", array(null));
 sql_query($sqlgc,$SQLStat); }
-if($Settings['sqltype']=="sqlite") {
+if($Settings['sqltype']=="sqlite"||$Settings['sqltype']=="sqlite3") {
 $sqlgc = sql_pre_query("DELETE FROM \"".$Settings['sqltable']."themes\";", array(null));
 sql_query($sqlgc,$SQLStat); }
 $skindir = dirname(realpath("sql.php"))."/".$SettDir['themes'];
@@ -369,7 +370,7 @@ $TableChCk = array("categories", "catpermissions", "events", "forums", "groups",
 $TableChCk = array_map("add_prefix",$TableChCk);
 $tcount = count($TableChCk); $ti = 0;
 $TblOptimized = 0;
-if($Settings['sqltype']!="sqlite") {
+if($Settings['sqltype']!="sqlite"||$Settings['sqltype']=="sqlite3") {
 while ($ti < $tcount) {
 if(isset($OptimizeAr["Msg_text"])) { unset($OptimizeAr["Msg_text"]); }
 if(isset($OptimizeAr[3])) { unset($OptimizeAr[3]); }
@@ -390,7 +391,7 @@ if(!isset($OptimizeAr["Msg_text"])&&
 	isset($OptimizeAr[3])) { $OptimizeAr["Msg_text"] = $OptimizeAr[3]; }
 if($OptimizeAr["Msg_text"]=="OK") { 
 	++$TblOptimized; } } ++$ti; } }
-if($Settings['sqltype']=="sqlite") {
+if($Settings['sqltype']=="sqlite"||$Settings['sqltype']=="sqlite3") {
 $OptimizeTea = sql_query(sql_pre_query("VACUUM", array(null)),$SQLStat); }
 if($Settings['sqltype']=="mysql"||
 	$Settings['sqltype']=="mysqli"||
@@ -398,7 +399,7 @@ if($Settings['sqltype']=="mysql"||
 $OutPutLog = "MySQL Output: ".$TblOptimized." tables optimized."; }
 if($Settings['sqltype']=="pgsql") {
 $OutPutLog = "PGSQL Output: All tables optimized."; }
-if($Settings['sqltype']=="sqlite") {
+if($Settings['sqltype']=="sqlite"||$Settings['sqltype']=="sqlite3") {
 $OutPutLog = "SQLite Output: All tables optimized."; }
 if($Settings['sqltype']=="cubrid") {
 $OutPutLog = "CUBRID Output: All tables optimized."; }
@@ -1154,7 +1155,7 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Database Manager";
 ?><tr style="text-align: left;">
 	<td style="width: 50%;"><span class="TextBoxLabel">Database Client:</span></td>
 	<td style="width: 50%;"><?php echo $DBType['Client']; ?></td>
-</tr><?php } if($Settings['sqltype']=="sqlite") { 
+</tr><?php } if($Settings['sqltype']=="sqlite"||$Settings['sqltype']=="sqlite3") { 
 ?><tr style="text-align: left;">
 	<td style="width: 50%;"><span class="TextBoxLabel">Database File Size:</span></td>
 	<td style="width: 50%;"><?php echo sprintf("%u", filesize($Settings['sqldb']))." bytes"; ?></td>

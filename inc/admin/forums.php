@@ -469,7 +469,8 @@ $query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."forums\" (\"id\",
 sql_query($query,$SQLStat);
 if(!is_numeric($_POST['CPermissions'])) { $_POST['CPermissions'] = "0"; }
 if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"||
-	$Settings['sqltype']=="pgsql"||$Settings['sqltype']=="sqlite") {
+	$Settings['sqltype']=="pgsql"||$Settings['sqltype']=="sqlite"||
+	$Settings['sqltype']=="sqlite3") {
 $getperidq = sql_pre_query("SELECT DISTINCT \"PermissionID\" FROM \"".$Settings['sqltable']."permissions\" ORDER BY \"PermissionID\" ASC", array(null)); }
 if($Settings['sqltype']=="cubrid") {
 $getperidq = sql_pre_query("SELECT DISTINCT \"permissionid\" FROM \"".$Settings['sqltable']."permissions\" ORDER BY \"PermissionID\" ASC", array(null)); }
@@ -481,14 +482,14 @@ $nextperid = null;
 if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"||
 	$Settings['sqltype']=="pgsql"||$Settings['sqltype']=="cubrid") {
 $nextperid = sql_get_next_id($Settings['sqltable'],"permissions",$SQLStat); }
-if($Settings['sqltype']=="sqlite") {
+if($Settings['sqltype']=="sqlite"||$Settings['sqltype']=="sqlite3") {
 $nextperid = sql_get_next_id($Settings['sqltable'],"\"permissions\"",$SQLStat); }
 */
 while ($getperidi < $getperidnum) {
 if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"||
 	$Settings['sqltype']=="pgsql"||$Settings['sqltype']=="cubrid") {
 $getperidID=sql_result($getperidr,$getperidi,"PermissionID"); }
-if($Settings['sqltype']=="sqlite") {
+if($Settings['sqltype']=="sqlite"||$Settings['sqltype']=="sqlite3") {
 $getperidID=sql_result($getperidr,$getperidi,"\"PermissionID\""); }
 if($_POST['CPermissions']=="0") {
 $getperidq2 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i", array($getperidID)); }
@@ -963,7 +964,8 @@ if(!isset($_POST['id'])) {
 	<td style="width: 50%;"><select size="1" class="TextBox" name="id" id="id">
 <?php 
 if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"||
-	$Settings['sqltype']=="pgsql"||$Settings['sqltype']=="sqlite") {
+	$Settings['sqltype']=="pgsql"||$Settings['sqltype']=="sqlite"||
+	$Settings['sqltype']=="sqlite3") {
 $getperidq = sql_pre_query("SELECT DISTINCT \"PermissionID\" FROM \"".$Settings['sqltable']."permissions\"", array(null)); }
 if($Settings['sqltype']=="cubrid") {
 $getperidq = sql_pre_query("SELECT DISTINCT \"permissionid\" FROM \"".$Settings['sqltable']."permissions\"", array(null)); }
@@ -974,7 +976,7 @@ while ($getperidi < $getperidnum) {
 if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"||
 	$Settings['sqltype']=="pgsql"||$Settings['sqltype']=="cubrid") {
 $getperidID=sql_result($getperidr,$getperidi,"PermissionID"); }
-if($Settings['sqltype']=="sqlite") {
+if($Settings['sqltype']=="sqlite"||$Settings['sqltype']=="sqlite3") {
 $getperidID=sql_result($getperidr,$getperidi,"\"PermissionID\""); }
 $getperidq2 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i ORDER BY \"ForumID\" ASC", array($getperidID));
 $getperidr2=sql_query($getperidq2,$SQLStat);

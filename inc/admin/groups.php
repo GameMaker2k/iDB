@@ -68,7 +68,8 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Adding new Group";
 	<option selected="selected" value="0">none</option>
 <?php 
 if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"||
-	$Settings['sqltype']=="pgsql"||$Settings['sqltype']=="sqlite") {
+	$Settings['sqltype']=="pgsql"||$Settings['sqltype']=="sqlite"||
+	$Settings['sqltype']=="sqlite3") {
 $getperidq = sql_pre_query("SELECT DISTINCT \"PermissionID\" FROM \"".$Settings['sqltable']."permissions\"", array(null)); }
 if($Settings['sqltype']=="cubrid") {
 $getperidq = sql_pre_query("SELECT DISTINCT \"permissionid\" FROM \"".$Settings['sqltable']."permissions\"", array(null)); }
@@ -79,7 +80,7 @@ while ($getperidi < $getperidnum) {
 if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"||
 	$Settings['sqltype']=="pgsql"||$Settings['sqltype']=="cubrid") {
 $getperidID=sql_result($getperidr,$getperidi,"PermissionID"); }
-if($Settings['sqltype']=="sqlite") {
+if($Settings['sqltype']=="sqlite"||$Settings['sqltype']=="sqlite3") {
 $getperidID=sql_result($getperidr,$getperidi,"\"PermissionID\""); }
 $getperidq2 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i ORDER BY \"ForumID\" ASC", array($getperidID));
 $getperidr2=sql_query($getperidq2,$SQLStat);
@@ -274,7 +275,7 @@ $nextperid = null;
 if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"||
 	$Settings['sqltype']=="pgsql"||$Settings['sqltype']=="cubrid") {
 $nextperid = sql_get_next_id($Settings['sqltable'],"permissions",$SQLStat); }
-if($Settings['sqltype']=="sqlite") {
+if($Settings['sqltype']=="sqlite"||$Settings['sqltype']=="sqlite3") {
 $nextperid = sql_get_next_id($Settings['sqltable'],"\"permissions\"",$SQLStat); }
 */
 while ($getperidi < $getperidnum) {
@@ -329,7 +330,7 @@ $nextperid = null;
 if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"||
 	$Settings['sqltype']=="pgsql"||$Settings['sqltype']=="cubrid") {
 $nextperid = sql_get_next_id($Settings['sqltable'],"permissions",$SQLStat); }
-if($Settings['sqltype']=="sqlite") {
+if($Settings['sqltype']=="sqlite"||$Settings['sqltype']=="sqlite3") {
 $nextperid = sql_get_next_id($Settings['sqltable'],"\"permissions\"",$SQLStat); }
 */
 while ($getperidi < $getperidnum) {

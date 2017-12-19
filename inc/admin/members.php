@@ -549,7 +549,8 @@ sql_free_result($getlevidr); ?>
 	<option <?php if($EditMemPerm['PermissionID']=="0") { echo "selected=\"selected\" "; } ?>value="0">use group info</option>
 <?php 
 if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"||
-	$Settings['sqltype']=="pgsql"||$Settings['sqltype']=="sqlite") {
+	$Settings['sqltype']=="pgsql"||$Settings['sqltype']=="sqlite"||
+	$Settings['sqltype']=="sqlite3") {
 $getperidq = sql_pre_query("SELECT DISTINCT \"PermissionID\" FROM \"".$Settings['sqltable']."permissions\"", array(null)); }
 if($Settings['sqltype']=="cubrid") {
 $getperidq = sql_pre_query("SELECT DISTINCT \"permissionid\" FROM \"".$Settings['sqltable']."permissions\"", array(null)); }
@@ -560,7 +561,7 @@ while ($getperidi < $getperidnum) {
 if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"||
 	$Settings['sqltype']=="pgsql"||$Settings['sqltype']=="cubrid") {
 $getperidID=sql_result($getperidr,$getperidi,"PermissionID"); }
-if($Settings['sqltype']=="sqlite") {
+if($Settings['sqltype']=="sqlite"||$Settings['sqltype']=="sqlite3") {
 $getperidID=sql_result($getperidr,$getperidi,"\"PermissionID\""); }
 $getperidq2 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i ORDER BY \"PermissionID\" ASC", array($getperidID));
 $getperidr2=sql_query($getperidq2,$SQLStat);
