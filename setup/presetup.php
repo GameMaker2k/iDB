@@ -52,10 +52,12 @@ if($Error!="Yes") {
 	<option value="pgsql">PostgreSQL Database</option>
 	<?php } if(function_exists("sqlite_open")) { ?>
 	<option value="sqlite">SQLite Database</option>
+	<?php } if(class_exists('SQLite3')) { ?>
+	<option value="sqlite3">SQLite 3 Database</option>
 	<?php } if(function_exists("cubrid_connect")) { ?>
 	<option value="cubrid">CUBRID Database</option>
 	<?php } if(!function_exists("mysql_connect")&&!function_exists("mysqli_connect")&&
-	!function_exists("pg_connect")&&!function_exists("sqlite_open")&&
+	!function_exists("pg_connect")&&!function_exists("sqlite_open")&&!class_exists('SQLite3')&&
 	!function_exists("cubrid_connect")) { ?>
 	<option value="none">No Database Available</option>
 	<?php } ?>

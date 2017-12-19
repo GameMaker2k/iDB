@@ -33,11 +33,13 @@ if($Settings['sqltype']!="mysql"&&
 	$Settings['sqltype']!="mysqli"&&
 	$Settings['sqltype']!="pgsql"&&
 	$Settings['sqltype']!="sqlite"&&
+	$Settings['sqltype']!="sqlite3"&&
 	$Settings['sqltype']!="cubrid") {
 	$Settings['sqltype'] = "mysql"; }
 if($Settings['sqltype']=="mysql"||
 	$Settings['sqltype']=="mysqli"||
 	$Settings['sqltype']=="sqlite"||
+	$Settings['sqltype']=="sqlite3"||
 	$Settings['sqltype']=="cubrid") {
 	$SQLimit = "LIMIT %i,%i"; }
 if($Settings['sqltype']=="pgsql") {

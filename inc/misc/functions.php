@@ -46,6 +46,8 @@ if($Settings['sqltype']=="pgsql") {
 require($SettDir['sql']."pgsql.php"); }
 if($Settings['sqltype']=="sqlite") {
 require($SettDir['sql']."sqlite.php"); }
+if($Settings['sqltype']=="sqlite3") {
+require($SettDir['sql']."sqlite3.php"); }
 if($Settings['sqltype']=="cubrid") {
 require($SettDir['sql']."cubrid.php"); }
 require($SettDir['misc']."useragents.php");

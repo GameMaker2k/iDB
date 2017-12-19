@@ -282,14 +282,17 @@ if($Settings['sqltype']!="pgsql") {
 @unlink($SettDir['sqldumper'].'pgsql.php');
 @unlink($SettDir['sql'].'pgsql.php'); }
 if($Settings['sqltype']!="sqlite") {
-@unlink($SettDir['sqldumper'].'sqlite.php');
+if($Settings['sqltype']!="sqlite3") {
+@unlink($SettDir['sqldumper'].'sqlite.php'); }
 @unlink($SettDir['sql'].'sqlite.php'); }
+if($Settings['sqltype']!="sqlite3") {
+@unlink($SettDir['sql'].'sqlite3.php'); }
 if($Settings['sqltype']=="mysql"||
 	$Settings['sqltype']=="mysqli") {
 require($SetupDir['sql'].'mysql.php'); }
 if($Settings['sqltype']=="pgsql") {
 require($SetupDir['sql'].'pgsql.php'); }
-if($Settings['sqltype']=="sqlite") {
+if($Settings['sqltype']=="sqlite"||$Settings['sqltype']=="sqlite3") {
 require($SetupDir['sql'].'sqlite.php'); }
 if($Settings['sqltype']=="cubrid") {
 require($SetupDir['sql'].'cubrid.php'); }

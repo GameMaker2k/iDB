@@ -29,7 +29,7 @@ if($_GET['act']=="sqldumper"&&$_SESSION['UserGroup']!=$Settings['GuestGroup']&&
 	require($SettDir['sqldumper'].'mysql.php'); }
 	if($Settings['sqltype']=="pgsql") {
 	require($SettDir['sqldumper'].'pgsql.php'); } 
-	if($Settings['sqltype']=="sqlite") {
+	if($Settings['sqltype']=="sqlite"||$Settings['sqltype']=="sqlite3") {
 	require($SettDir['sqldumper'].'sqlite.php'); } 
 	if($Settings['sqltype']=="cubrid") {
 	require($SettDir['sqldumper'].'cubrid.php'); } 

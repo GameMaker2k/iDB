@@ -46,7 +46,7 @@ if (!is_writable($checkfile)) {
    chmod("settingsbak.php",0755);
 } else { /* settings.php is writable install iDB. ^_^ */ }
 if(!function_exists("mysql_connect")&&!function_exists("mysqli_connect")&&
-!function_exists("pg_connect")&&!function_exists("sqlite_open")&&
+!function_exists("pg_connect")&&!function_exists("sqlite_open")&&!class_exists('SQLite3')&&
 !function_exists("cubrid_connect")) { $Error="Yes";
 echo "<span class=\"TableMessage\">You need to enbale a database php extension to install ".$VerInfo['iDB_Ver_Show']." on this server.<br />\n"; 
 echo "You can use MySQL, MySQLi, PostgreSQL, or SQLite</span>"; }

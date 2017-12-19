@@ -11,37 +11,37 @@
     Copyright 2004-2017 iDB Support - http://idb.berlios.de/
     Copyright 2004-2017 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sqlite.php - Last Update: 01/26/2017 SVN 810 - Author: cooldude2k $
+    $FileInfo: sqlite3.php - Last Update: 01/26/2017 SVN 810 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
-if ($File3Name=="sqlite.php"||$File3Name=="/sqlite.php") {
+if ($File3Name=="sqlite3.php"||$File3Name=="/sqlite3.php") {
 	@header('Location: index.php');
 	exit(); }
 // SQLite Functions.
 function sql_error($link=null) {
 global $SQLStat;
 if(isset($link)) {
-	$result = sqlite_error_string(sqlite_last_error($link)); }
+	$result = $link->lastErrorMsg(); }
 if(!isset($link)) {
-	$result = sqlite_error_string(sqlite_last_error($SQLStat)); }
+	$result = $SQLStat->lastErrorMsg(); }
 if ($result=="") {
 	return ""; }
 	return $result; }
 function sql_errno($link=null) {
 global $SQLStat;
 if(isset($link)) {
-	$result = sqlite_last_error($link); }
+	$result = $link->lastErrorCode(); }
 if(!isset($link)) {
-	$result = sqlite_last_error($SQLStat); }
+	$result = $SQLStat->lastErrorCode(); }
 if ($result===0) {
 	return 0; }
 	return $result; }
 function sql_errorno($link=null) {
 global $SQLStat;
 if(isset($link)) {
-	$result = sqlite_last_error($link).": ".sqlite_error_string(sqlite_last_error($link)); }
+	$result = $link->lastErrorCode().": ".$link->lastErrorMsg(); }
 if(!isset($link)) {
-	$result = sqlite_last_error($SQLStat).": ".sqlite_error_string(sqlite_last_error($SQLStat)); }
+	$result = $SQLStat->lastErrorCode().": ".$SQLStat->lastErrorMsg(); }
 if ($result=="") {
 	return ""; }
 	return $result; }
@@ -50,9 +50,9 @@ $NumQueries = 0;
 function sql_query($query,$link=null) {
 global $NumQueries,$SQLStat;
 if(isset($link)) {
-	$result = sqlite_query($link,$query); }
+	$result = $link->query($query); }
 if(!isset($link)) {
-	$result = sqlite_query($SQLStat,$query); }
+	$result = $SQLStat->query($query); }
 if ($result===false) {
     output_error("SQL Error: ".sql_error(),E_USER_ERROR);
 	return false; }
@@ -61,7 +61,11 @@ if ($result!==false) {
 	return $result; } }
 //Fetch Number of Rows
 function sql_num_rows($result) {
-$num = sqlite_num_rows($result);
+$num = 0;
+$result->reset();
+while ($result->fetchArray()) {
+    $num++; }
+$result->reset();
 if ($num===false) {
     output_error("SQL Error: ".sql_error(),E_USER_ERROR);
 	return false; }
@@ -72,20 +76,27 @@ if($new_link!==true) { $new_link = false; }
 if($database===null) {
 return true; }
 if($database!==null) {
-$link = sqlite_open($database,0666,$sqliteerror); }
+$link = new SQLite3($database,SQLITE3_OPEN_READWRITE | SQLITE3_OPEN_CREATE); }
 if ($link===false) {
     output_error("Not connected: ".$sqliteerror,E_USER_ERROR);
 	return false; }
 return $link; }
 function sql_disconnect_db($link=null) {
-return sqlite_close($link); }
+if(isset($link)) {
+	return $link->close(); }
+if(!isset($link)) {
+	return $SQLStat->close(); } }
 // Query Results :P
 function sql_result($result,$row,$field=0) {
-$check = sqlite_seek($result,$row);
+$check = true;
+$num = 0;
+while ($num<$row) {
+	$result->fetchArray();
+    $num++; }
 if ($check===false) {
     output_error("SQL Error: ".sql_error(),E_USER_ERROR);
 	return false; }
-$trow = sqlite_fetch_array($result);
+$trow = $result->fetchArray();
 if(!isset($trow[$field])) { $trow[$field] = null; }
 $retval = $trow[$field]; 
 return $retval; }
@@ -93,26 +104,26 @@ return $retval; }
 function sql_free_result($result) {
 	return true; }
 //Fetch Results to Array
-function sql_fetch_array($result,$result_type=SQLITE_BOTH) {
-$row = sqlite_fetch_array($result,$result_type);
+function sql_fetch_array($result,$result_type=SQLITE3_BOTH) {
+$row = $result->fetchArray($result_type);
 	return $row; }
 //Fetch Results to Associative Array
 function sql_fetch_assoc($result) {
-$row = sqlite_fetch_array($result,SQLITE_ASSOC);
+$row = $result->fetchArray(SQLITE3_ASSOC);
 	return $row; }
 //Fetch Row Results
 function sql_fetch_row($result) {
-$row = sqlite_fetch_array($result,SQLITE_NUM);
+$row = $result->fetchArray(SQLITE3_NUM);
 	return $row; }
 //Get Server Info
 function sql_server_info($link=null) {
-	$result = sqlite_libversion();
+	$result = SQLite3::version()['versionString'];
 	return $result; }
 //Get Client Info
 function sql_client_info($link=null) {
 	return null; }
 function sql_escape_string($string,$link=null) {
-	$string = sqlite_escape_string($string);
+	$string = SQLite3::escapeString($string);
 if ($string===false) {
     output_error("SQL Error: ".sql_error(),E_USER_ERROR);
 	return false; }
@@ -176,7 +187,10 @@ if ($result===false) {
 */
 // Get next id for stuff
 function sql_get_next_id($tablepre,$table,$link=null) {
-	$nid = sqlite_last_insert_rowid($link);
+	if(isset($link)) {
+		$nid = $link->lastInsertRowID(); }
+	if(!isset($link)) {
+		$nid = $SQLStat->lastInsertRowID(); }
 	return $nid; }
 // Get number of rows for table
 function sql_get_num_rows($tablepre,$table,$link=null) {
