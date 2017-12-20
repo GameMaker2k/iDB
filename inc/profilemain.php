@@ -183,18 +183,18 @@ if($_POST['act']=="view"&&
 	//$_POST['Signature'] = remove_bad_entities($_POST['Signature']);
 	/*    <_<  iWordFilter  >_>      
     by Kazuki Przyborowski - Cool Dude 2k */
-	$katarzynaqy=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."wordfilter\"", array(null));
-	$katarzynart=sql_query($katarzynaqy,$SQLStat);
-	$katarzynanm=sql_num_rows($katarzynart);
-	$katarzynas=0;
-	while ($katarzynas < $katarzynanm) {
-	$Filter=sql_result($katarzynart,$katarzynas,"FilterWord");
-	$Replace=sql_result($katarzynart,$katarzynas,"Replacement");
-	$CaseInsensitive=sql_result($katarzynart,$katarzynas,"CaseInsensitive");
+	$melanieqy=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."wordfilter\"", array(null));
+	$melaniert=sql_query($melanieqy,$SQLStat);
+	$melanienm=sql_num_rows($melaniert);
+	$melanies=0;
+	while ($melanies < $melanienm) {
+	$Filter=sql_result($melaniert,$melanies,"FilterWord");
+	$Replace=sql_result($melaniert,$melanies,"Replacement");
+	$CaseInsensitive=sql_result($melaniert,$melanies,"CaseInsensitive");
 	if($CaseInsensitive=="on") { $CaseInsensitive = "yes"; }
 	if($CaseInsensitive=="off") { $CaseInsensitive = "no"; }
 	if($CaseInsensitive!="yes"||$CaseInsensitive!="no") { $CaseInsensitive = "no"; }
-	$WholeWord=sql_result($katarzynart,$katarzynas,"WholeWord");
+	$WholeWord=sql_result($melaniert,$melanies,"WholeWord");
 	if($WholeWord=="on") { $WholeWord = "yes"; }
 	if($WholeWord=="off") { $WholeWord = "no"; }
 	if($WholeWord!="yes"&&$WholeWord!="no") { $WholeWord = "no"; }
@@ -207,7 +207,7 @@ if($_POST['act']=="view"&&
 	$_POST['NotePad'] = preg_replace("/".$Filter."/", $Replace, $_POST['NotePad']); }
 	if($CaseInsensitive=="yes"&&$WholeWord!="yes") {
 	$_POST['NotePad'] = preg_replace("/".$Filter."/i", $Replace, $_POST['NotePad']); }
-	++$katarzynas; } sql_free_result($katarzynart);
+	++$melanies; } sql_free_result($melaniert);
 	$NewDay=$utccurtime->getTimestamp();
 	$NewIP=$_SERVER['REMOTE_ADDR'];
 	$querynewskin = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"Notes\"='%s',\"LastActive\"=%i,\"IP\"='%s' WHERE \"id\"=%i", array($_POST['NotePad'],$NewDay,$NewIP,$_SESSION['UserID']));
@@ -265,18 +265,18 @@ if($_POST['act']=="signature"&&
 	$_POST['Signature'] = remove_bad_entities($_POST['Signature']);
 	/*    <_<  iWordFilter  >_>      
     by Kazuki Przyborowski - Cool Dude 2k */
-	$katarzynaqy=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."wordfilter\"", array(null));
-	$katarzynart=sql_query($katarzynaqy,$SQLStat);
-	$katarzynanm=sql_num_rows($katarzynart);
-	$katarzynas=0;
-	while ($katarzynas < $katarzynanm) {
-	$Filter=sql_result($katarzynart,$katarzynas,"FilterWord");
-	$Replace=sql_result($katarzynart,$katarzynas,"Replacement");
-	$CaseInsensitive=sql_result($katarzynart,$katarzynas,"CaseInsensitive");
+	$melanieqy=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."wordfilter\"", array(null));
+	$melaniert=sql_query($melanieqy,$SQLStat);
+	$melanienm=sql_num_rows($melaniert);
+	$melanies=0;
+	while ($melanies < $melanienm) {
+	$Filter=sql_result($melaniert,$melanies,"FilterWord");
+	$Replace=sql_result($melaniert,$melanies,"Replacement");
+	$CaseInsensitive=sql_result($melaniert,$melanies,"CaseInsensitive");
 	if($CaseInsensitive=="on") { $CaseInsensitive = "yes"; }
 	if($CaseInsensitive=="off") { $CaseInsensitive = "no"; }
 	if($CaseInsensitive!="yes"||$CaseInsensitive!="no") { $CaseInsensitive = "no"; }
-	$WholeWord=sql_result($katarzynart,$katarzynas,"WholeWord");
+	$WholeWord=sql_result($melaniert,$melanies,"WholeWord");
 	if($WholeWord=="on") { $WholeWord = "yes"; }
 	if($WholeWord=="off") { $WholeWord = "no"; }
 	if($WholeWord!="yes"&&$WholeWord!="no") { $WholeWord = "no"; }
@@ -289,7 +289,7 @@ if($_POST['act']=="signature"&&
 	$_POST['Signature'] = preg_replace("/".$Filter."/", $Replace, $_POST['Signature']); }
 	if($CaseInsensitive=="yes"&&$WholeWord!="yes") {
 	$_POST['Signature'] = preg_replace("/".$Filter."/i", $Replace, $_POST['Signature']); }
-	++$katarzynas; } sql_free_result($katarzynart);
+	++$melanies; } sql_free_result($melaniert);
 	$NewDay=$utccurtime->getTimestamp();
 	$NewIP=$_SERVER['REMOTE_ADDR'];
 	$querynewskin = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"Signature\"='%s',\"LastActive\"=%i,\"IP\"='%s' WHERE \"id\"=%i", array($_POST['Signature'],$NewDay,$NewIP,$_SESSION['UserID']));
@@ -1003,18 +1003,18 @@ if($_POST['act']=="profile"&&
 	//$_POST['Signature'] = remove_bad_entities($_POST['Signature']);
 	/*    <_<  iWordFilter  >_>      
     by Kazuki Przyborowski - Cool Dude 2k */
-	$katarzynaqy=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."wordfilter\"", array(null));
-	$katarzynart=sql_query($katarzynaqy,$SQLStat);
-	$katarzynanm=sql_num_rows($katarzynart);
-	$katarzynas=0;
-	while ($katarzynas < $katarzynanm) {
-	$Filter=sql_result($katarzynart,$katarzynas,"FilterWord");
-	$Replace=sql_result($katarzynart,$katarzynas,"Replacement");
-	$CaseInsensitive=sql_result($katarzynart,$katarzynas,"CaseInsensitive");
+	$melanieqy=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."wordfilter\"", array(null));
+	$melaniert=sql_query($melanieqy,$SQLStat);
+	$melanienm=sql_num_rows($melaniert);
+	$melanies=0;
+	while ($melanies < $melanienm) {
+	$Filter=sql_result($melaniert,$melanies,"FilterWord");
+	$Replace=sql_result($melaniert,$melanies,"Replacement");
+	$CaseInsensitive=sql_result($melaniert,$melanies,"CaseInsensitive");
 	if($CaseInsensitive=="on") { $CaseInsensitive = "yes"; }
 	if($CaseInsensitive=="off") { $CaseInsensitive = "no"; }
 	if($CaseInsensitive!="yes"||$CaseInsensitive!="no") { $CaseInsensitive = "no"; }
-	$WholeWord=sql_result($katarzynart,$katarzynas,"WholeWord");
+	$WholeWord=sql_result($melaniert,$melanies,"WholeWord");
 	if($WholeWord=="on") { $WholeWord = "yes"; }
 	if($WholeWord=="off") { $WholeWord = "no"; }
 	if($WholeWord!="yes"&&$WholeWord!="no") { $WholeWord = "no"; }
@@ -1031,7 +1031,7 @@ if($_POST['act']=="profile"&&
 	if($CaseInsensitive=="yes"&&$WholeWord!="yes") {
 	$_POST['Interests'] = preg_replace("/".$Filter."/i", $Replace, $_POST['Interests']); 
 	$_POST['Title'] = preg_replace("/".$Filter."/i", $Replace, $_POST['Title']); }
-	++$katarzynas; } sql_free_result($katarzynart);
+	++$melanies; } sql_free_result($melaniert);
 	if(!is_numeric($_POST['RepliesPerPage'])) { $_POST['RepliesPerPage'] = "10"; }
 	if(!is_numeric($_POST['TopicsPerPage'])) { $_POST['TopicsPerPage'] = "10"; }
 	if(!is_numeric($_POST['MessagesPerPage'])) { $_POST['MessagesPerPage'] = "10"; }

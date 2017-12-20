@@ -615,29 +615,29 @@ $_SESSION['UserFormID'] = $UFID;
 <td class="TableColumn3" style="width: 15%; vertical-align: middle; text-align: center;">
 <div style="width: 100%; height: 160px; overflow: auto;">
 <table style="width: 100%; text-align: center;"><?php
-$renee_query=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."smileys\" WHERE \"Display\"='yes'", array(null));
-$renee_result=sql_query($renee_query,$SQLStat);
-$renee_num=sql_num_rows($renee_result);
-$renee_s=0; $SmileRow=0; $SmileCRow=0;
-while ($renee_s < $renee_num) { ++$SmileRow;
-$FileName=sql_result($renee_result,$renee_s,"FileName");
-$SmileName=sql_result($renee_result,$renee_s,"SmileName");
-$SmileText=sql_result($renee_result,$renee_s,"SmileText");
-$SmileDirectory=sql_result($renee_result,$renee_s,"Directory");
-$ShowSmile=sql_result($renee_result,$renee_s,"Display");
-$ReplaceType=sql_result($renee_result,$renee_s,"ReplaceCI");
+$melanie_query=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."smileys\" WHERE \"Display\"='yes'", array(null));
+$melanie_result=sql_query($melanie_query,$SQLStat);
+$melanie_num=sql_num_rows($melanie_result);
+$melanie_p=0; $SmileRow=0; $SmileCRow=0;
+while ($melanie_p < $melanie_num) { ++$SmileRow;
+$FileName=sql_result($melanie_result,$melanie_p,"FileName");
+$SmileName=sql_result($melanie_result,$melanie_p,"SmileName");
+$SmileText=sql_result($melanie_result,$melanie_p,"SmileText");
+$SmileDirectory=sql_result($melanie_result,$melanie_p,"Directory");
+$ShowSmile=sql_result($melanie_result,$melanie_p,"Display");
+$ReplaceType=sql_result($melanie_result,$melanie_p,"ReplaceCI");
 if($SmileRow==1) { ?><tr>
 	<?php } if($SmileRow<5) { ++$SmileCRow; ?>
 	<td><img src="<?php echo $SmileDirectory."".$FileName; ?>" style="vertical-align: middle; border: 0px; cursor: pointer;" title="<?php echo $SmileName; ?>" alt="<?php echo $SmileName; ?>" onclick="addsmiley('TopicPost','&nbsp;<?php echo htmlspecialchars($SmileText, ENT_QUOTES, $Settings['charset']); ?>&nbsp;')" /></td>
 	<?php } if($SmileRow==5) { ++$SmileCRow; ?>
 	<td><img src="<?php echo $SmileDirectory."".$FileName; ?>" style="vertical-align: middle; border: 0px; cursor: pointer;" title="<?php echo $SmileName; ?>" alt="<?php echo $SmileName; ?>" onclick="addsmiley('TopicPost','&nbsp;<?php echo htmlspecialchars($SmileText, ENT_QUOTES, $Settings['charset']); ?>&nbsp;')" /></td></tr>
 	<?php $SmileCRow=0; $SmileRow=0; }
-++$renee_s; }
+++$melanie_p; }
 if($SmileCRow<5&&$SmileCRow!=0) {
 $SmileCRowL = 5 - $SmileCRow;
 echo "<td colspan=\"".$SmileCRowL."\">&nbsp;</td></tr>"; }
 echo "</table>";
-sql_free_result($renee_result);
+sql_free_result($melanie_result);
 ?></div></td>
 <td class="TableColumn3" style="width: 85%;">
 <form style="display: inline;" method="post" id="MkTopicForm" action="<?php echo url_maker($exfile['forum'],$Settings['file_ext'],"act=maketopic&id=".$ForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum']); ?>">
@@ -794,18 +794,18 @@ setcookie("GuestName", $_POST['GuestName'], time() + (7 * 86400), $cbasedir, $co
 $_SESSION['GuestName']=$_POST['GuestName']; } }
 /*    <_<  iWordFilter  >_>      
    by Kazuki Przyborowski - Cool Dude 2k */
-$katarzynaqy=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."wordfilter\"", array(null));
-$katarzynart=sql_query($katarzynaqy,$SQLStat);
-$katarzynanm=sql_num_rows($katarzynart);
-$katarzynas=0;
-while ($katarzynas < $katarzynanm) {
-$Filter=sql_result($katarzynart,$katarzynas,"FilterWord");
-$Replace=sql_result($katarzynart,$katarzynas,"Replacement");
-$CaseInsensitive=sql_result($katarzynart,$katarzynas,"CaseInsensitive");
+$melanieqy=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."wordfilter\"", array(null));
+$melaniert=sql_query($melanieqy,$SQLStat);
+$melanienm=sql_num_rows($melaniert);
+$melanies=0;
+while ($melanies < $melanienm) {
+$Filter=sql_result($melaniert,$melanies,"FilterWord");
+$Replace=sql_result($melaniert,$melanies,"Replacement");
+$CaseInsensitive=sql_result($melaniert,$melanies,"CaseInsensitive");
 if($CaseInsensitive=="on") { $CaseInsensitive = "yes"; }
 if($CaseInsensitive=="off") { $CaseInsensitive = "no"; }
 if($CaseInsensitive!="yes"||$CaseInsensitive!="no") { $CaseInsensitive = "no"; }
-$WholeWord=sql_result($katarzynart,$katarzynas,"WholeWord");
+$WholeWord=sql_result($melaniert,$melanies,"WholeWord");
 if($WholeWord=="on") { $WholeWord = "yes"; }
 if($WholeWord=="off") { $WholeWord = "no"; }
 if($WholeWord!="yes"&&$WholeWord!="no") { $WholeWord = "no"; }
@@ -822,7 +822,7 @@ $_POST['TopicPost'] = preg_replace("/".$Filter."/", $Replace, $_POST['TopicPost'
 if($CaseInsensitive=="yes"&&$WholeWord!="yes") {
 $_POST['TopicDesc'] = preg_replace("/".$Filter."/i", $Replace, $_POST['TopicDesc']); 
 $_POST['TopicPost'] = preg_replace("/".$Filter."/i", $Replace, $_POST['TopicPost']); }
-++$katarzynas; } sql_free_result($katarzynart);
+++$melanies; } sql_free_result($melaniert);
 $lonewolfqy=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."restrictedwords\" WHERE \"RestrictedTopicName\"='yes' or \"RestrictedUserName\"='yes'", array(null));
 $lonewolfrt=sql_query($lonewolfqy,$SQLStat);
 $lonewolfnm=sql_num_rows($lonewolfrt);

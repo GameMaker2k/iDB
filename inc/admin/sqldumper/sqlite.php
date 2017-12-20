@@ -22,7 +22,7 @@ if($_SESSION['UserGroup']==$Settings['GuestGroup']||$GroupInfo['HasAdminCP']=="n
 redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
-if($Settings['sqltype']!="sqlite") {
+if($Settings['sqltype']!="sqlite"||$Settings['sqltype']!="sqlite3") {
 redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
@@ -127,7 +127,7 @@ $FullTable[$sli] .= "\n);\n";
 */
 ++$sli; }
 $TableNames = $TableChCk;
-$num = count($TableNames); $renee_s = 0;
+$num = count($TableNames); $melanie_p = 0;
 $sqldump = "-- ".$OrgName." ".$SQLDumper."\n";
 $sqldump .= "-- version ".$VerInfo['iDB_Ver_SVN']."\n";
 $sqldump .= "-- ".$iDBHome."support/\n";
@@ -139,13 +139,13 @@ $sqldump .= "--\n";
 $sqldump .= "-- Database: \"".$Settings['sqldb']."\"\n";
 $sqldump .= "--\n\n";
 $sqldump .= "-- --------------------------------------------------------\n\n";
-while ($renee_s < $num) { $tnum = $num - 1;
-$trow = GetAllRows($TableNames[$renee_s]);
+while ($melanie_p < $num) { $tnum = $num - 1;
+$trow = GetAllRows($TableNames[$melanie_p]);
 $numz = count($trow); $kazuki_p = 0;
 $sqldump .= "--\n";
-$sqldump .= "-- Table structure for table \"".$TableNames[$renee_s]."\"\n";
+$sqldump .= "-- Table structure for table \"".$TableNames[$melanie_p]."\"\n";
 $sqldump .= "--\n\n";
-$sqldump .= $FullTable[$renee_s]."\n";
+$sqldump .= $FullTable[$melanie_p]."\n";
 while ($kazuki_p < $numz) { $tnumz = $numz - 1;
 $srow = null; $srowvalue = null;
 $trownew = $trow[$kazuki_p];
@@ -157,7 +157,7 @@ $trowrvalue = sql_escape_string($trownew[$trowrname],$SQLStat);
 if($_GET['outtype']=="UTF-8"&&$Settings['charset']!="UTF-8") {
 $trowrvalue = utf8_encode($trowrvalue); }
 $trowrvalue = str_replace( array("\n", "\r"), array('\n', '\r'), $trowrvalue);
-if($il===0) { $srow = "INSERT INTO \"".$TableNames[$renee_s]."\" ("; }
+if($il===0) { $srow = "INSERT INTO \"".$TableNames[$melanie_p]."\" ("; }
 if($il<$tnums&&$il!=$tnums) { $srow .= "\"".$trowrname."\", "; }
 if($il==$tnums) { $srow .= "\"".$trowrname."\") VALUES"; }
 if($il===0) { $srowvalue = "("; }
@@ -169,20 +169,20 @@ if($kazuki_p==$tnumz) { $srowvalue .= ");"; } }
 ++$il; }
 if($kazuki_p===0) {
 $sqldump .= "--\n";
-$sqldump .= "-- Dumping data for table \"".$TableNames[$renee_s]."\"\n";
+$sqldump .= "-- Dumping data for table \"".$TableNames[$melanie_p]."\"\n";
 $sqldump .= "--\n\n"; }
 $sqldump .= $srow."\n";
 $sqldump .= $srowvalue."\n";
-if($kazuki_p==$tnumz&&$renee_s<$tnum) {
+if($kazuki_p==$tnumz&&$melanie_p<$tnum) {
 $sqldump .= "\n-- --------------------------------------------------------\n"; }
 ++$kazuki_p; }
 if($numz===0) {
 $sqldump .= "--\n";
-$sqldump .= "-- Dumping data for table \"".$TableNames[$renee_s]."\"\n";
+$sqldump .= "-- Dumping data for table \"".$TableNames[$melanie_p]."\"\n";
 $sqldump .= "--\n\n";
 $sqldump .= "\n-- --------------------------------------------------------\n"; }
 $sqldump .= "\n";
-++$renee_s; }
+++$melanie_p; }
 if($_GET['compress']=="none") { echo $sqldump; }
 if($_GET['compress']=="gzencode") { echo gzencode($sqldump,$_GET['comlevel']); }
 if($_GET['compress']=="gzcompress") { echo gzcompress($sqldump,$_GET['comlevel']); }

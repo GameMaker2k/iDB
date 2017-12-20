@@ -274,14 +274,14 @@ function html_tag_make($name="br",$emptytag=true,$attbvar=null,$attbval=null,$ex
 	return $mytag; }
 // Start a xml document
 function xml_tag_make($type,$attbs,$retval=false) {
-	$renee1 = explode("&",$attbs);
-	$reneenum=count($renee1);
-	$reneei=0; $attblist = null;
-	while ($reneei < $reneenum) {
-	$renee2 = explode("=",$renee1[$reneei]);
-	if($renee2[0]!=null||$renee2[1]!=null) {
-	$attblist = $attblist.' '.$renee2[0].'="'.$renee2[1].'"'; }
-	++$reneei; }
+	$melanie1 = explode("&",$attbs);
+	$melanienum=count($melanie1);
+	$melaniei=0; $attblist = null;
+	while ($melaniei < $melanienum) {
+	$melanie2 = explode("=",$melanie1[$melaniei]);
+	if($melanie2[0]!=null||$melanie2[1]!=null) {
+	$attblist = $attblist.' '.$melanie2[0].'="'.$melanie2[1].'"'; }
+	++$melaniei; }
 	if($retval!==false&&$retval!==true) { $retval=false; }
 	if($retval===false) {
 	echo '<?'.$type.$attblist.'?>'."\n"; }

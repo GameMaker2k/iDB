@@ -162,17 +162,17 @@ if(!isset($Settings['DefaultTheme'])) {
 function text2icons($Text,$sqlt,$link=null) {
 global $SQLStat;
 if(!isset($link)) { $link = $SQLStat; }
-$reneequery=sql_pre_query("SELECT * FROM \"".$sqlt."smileys\"", array(null));
-$reneeresult=sql_query($reneequery,$link);
-$reneenum=sql_num_rows($reneeresult);
-$renees=0;
-while ($renees < $reneenum) {
-$FileName=sql_result($reneeresult,$renees,"FileName");
-$SmileName=sql_result($reneeresult,$renees,"SmileName");
-$SmileText=sql_result($reneeresult,$renees,"SmileText");
-$SmileDirectory=sql_result($reneeresult,$renees,"Directory");
-$ShowSmile=sql_result($reneeresult,$renees,"Display");
-$ReplaceType=sql_result($reneeresult,$renees,"ReplaceCI");
+$melaniequery=sql_pre_query("SELECT * FROM \"".$sqlt."smileys\"", array(null));
+$melanieresult=sql_query($melaniequery,$link);
+$melanienum=sql_num_rows($melanieresult);
+$melanies=0;
+while ($melanies < $melanienum) {
+$FileName=sql_result($melanieresult,$melanies,"FileName");
+$SmileName=sql_result($melanieresult,$melanies,"SmileName");
+$SmileText=sql_result($melanieresult,$melanies,"SmileText");
+$SmileDirectory=sql_result($melanieresult,$melanies,"Directory");
+$ShowSmile=sql_result($melanieresult,$melanies,"Display");
+$ReplaceType=sql_result($melanieresult,$melanies,"ReplaceCI");
 if($ReplaceType=="on") { $ReplaceType = "yes"; }
 if($ReplaceType=="off") { $ReplaceType = "no"; }
 if($ReplaceType!="yes"||$ReplaceType!="no") { $ReplaceType = "no"; }
@@ -183,7 +183,7 @@ $Text = str_replace($Smile1, $Smile2, $Text); }
 if($ReplaceType=="yes") {
 	$Smile1 = preg_quote($SmileText,"/");
 $Text = preg_replace("/".$Smile1."/i",$Smile2,$Text); }
-++$renees; } return $Text; }
+++$melanies; } return $Text; }
 // Removes the bad stuff
 function remove_bad_entities($Text) {
 //HTML Entities Dec Version
