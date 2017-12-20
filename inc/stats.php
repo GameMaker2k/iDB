@@ -138,7 +138,7 @@ if($Settings['AdminValidate']!="on") {
 $bdquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"BirthDay\"=%i AND \"BirthMonth\"=%i AND \"HiddenMember\"='no' ORDER BY \"id\"", array($bdDayChCk,$bdMonthChCk)); } 
 $bdresult = sql_query($bdquery,$SQLStat);
 $bdmembers = sql_num_rows($bdresult); $bdi = 0;
-if($bdmembers>0) { $bdstring = $bdmembers." member(s) have a birthday today"; }
+if($bdmembers>0) { $bdstring = "&nbsp;".$bdmembers." member(s) have a birthday today"; }
 if($bdmembers<=0) { $bdstring = "<div>&nbsp;</div>&nbsp;No members have a birthday today<div>&nbsp;</div>"; }
 while ($bdi < $bdmembers) {
 $bdmemberz = $bdmembers - 1;
@@ -157,6 +157,46 @@ if($bdi<$bdmemberz) { $bdstring = $bdstring.$bdMemURL." (<span style=\"font-weig
 if($bdi==$bdmemberz) { $bdstring = $bdstring.$bdMemURL." (<span style=\"font-weight: bold;\" title=\"".$birthday['Name']." is ".$birthday['Age']." years old\">".$birthday['Age']."</span>)"; }
 ++$bdi; }
 sql_free_result($bdresult);
+$evcur_month = $usercurtime->format("m");
+$evcur_day = $usercurtime->format("d");
+$evcur_year = $usercurtime->format("Y");
+$evcur_start = mktime(0,0,0,$evcur_month,$evcur_day,$evcur_year);
+$evcur_start_month = date("m", $evcur_start);
+$evcur_start_day = date("d", $evcur_start);
+$evcur_start_year = date("Y", $evcur_start);
+$evcur_end = mktime(23,59,59,$evcur_month,$evcur_day+15,$evcur_year);
+$evcur_end_month = date("m", $evcur_end);
+$evcur_end_day = date("d", $evcur_end);
+$evcur_end_year = date("Y", $evcur_end);
+$evquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."events\" WHERE (\"TimeStamp\">=%i AND \"TimeStamp\"<=%i) OR (\"TimeStampEnd\">=%i AND \"TimeStampEnd\"<=%i) ORDER BY \"TimeStamp\"", array($evcur_start,$evcur_end,$evcur_start,$evcur_end)); 
+$evresult = sql_query($evquery,$SQLStat);
+$evevents = sql_num_rows($evresult); $evi = 0;
+if($evevents>0) { $evstring = "&nbsp;".$evevents." upcoming events"; }
+if($evevents<=0) { $evstring = "<div>&nbsp;</div>&nbsp;There are no upcoming calendar events<div>&nbsp;</div>"; }
+while ($evi < $evevents) {
+$eveventz = $evevents - 1;
+$getevent['ID']=sql_result($evresult,$evi,"id");
+$getevent['EventName']=sql_result($evresult,$evi,"EventName");
+$getevent['TimeStamp']=sql_result($evresult,$evi,"TimeStamp");
+$getevent['TimeStampEnd']=sql_result($evresult,$evi,"TimeStampEnd");
+$eventstartcurtime = new DateTime();
+$eventstartcurtime->setTimestamp($getevent['TimeStamp']);
+$eventstartcurtime->setTimezone($usertz);
+$eventendcurtime = new DateTime();
+$eventendcurtime->setTimestamp($getevent['TimeStampEnd']);
+$eventendcurtime->setTimezone($usertz);
+$GetEventStart=$eventstartcurtime->format($Settings['idb_date_format']);
+$GetEventEnd=$eventendcurtime->format($Settings['idb_date_format']);
+if($GetEventStart==$GetEventEnd) {
+ $evEventTitle = " title=\"Event Start: ".$GetEventStart."\""; }
+if($GetEventStart!=$GetEventEnd) {
+ $evEventTitle = " title=\"Event Start: ".$GetEventStart." | Event End: ".$GetEventEnd."\""; }
+if($evi===0) { $evstring = $evstring."\n<br />&nbsp;"; }
+$evEventURL = "<a".$evEventTitle." href=\"".url_maker($exfile['event'],$Settings['file_ext'],"act=event&id=".$getevent['ID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['event'],$exqstr['event'])."\">".$getevent['EventName']."</a>";
+if($evi<$eveventz) { $evstring = $evstring.$evEventURL.", "; }
+if($evi==$eveventz) { $evstring = $evstring.$evEventURL; }
+++$evi; }
+sql_free_result($evresult);
 $active_month = $usercurtime->format("m");
 $active_day = $usercurtime->format("d");
 $active_year = $usercurtime->format("Y");
@@ -207,7 +247,7 @@ $tdMembersOnline .= " (<a title=\"".$tdMemList['IP']."\" onclick=\"window.open(t
 </tr>
 <tr class="TableStatsRow3" id="Stats2">
 <td style="width: 4%;" class="TableStatsColumn3"><div class="statsicon">
-<?php echo $ThemeSet['StatsIcon']; ?></div></td>
+<?php echo $ThemeSet['MemberStatsIcon']; ?></div></td>
 <td style="width: 96%;" class="TableStatsColumn3"><div class="statsinfo">
 &nbsp;<span style="font-weight: bold;"><?php echo $olgn; ?></span> guests, <span style="font-weight: bold;"><?php echo $olmn; ?></span> members, <span style="font-weight: bold;"><?php echo $olan; ?></span> anonymous members <br />
 <?php if($MembersOnline==null) { ?>&nbsp;<?php echo "\n<br />"; } ?>
@@ -220,17 +260,27 @@ $tdMembersOnline .= " (<a title=\"".$tdMemList['IP']."\" onclick=\"window.open(t
 </tr>
 <tr class="TableStatsRow3" id="Stats4">
 <td style="width: 4%;" class="TableStatsColumn3"><div class="statsicon">
-<?php echo $ThemeSet['StatsIcon']; ?></div></td>
+<?php echo $ThemeSet['BirthdayStatsIcon']; ?></div></td>
 <td style="width: 96%;" class="TableStatsColumn3"><div class="statsinfo">
 <?php echo $bdstring; ?>
 </div></td>
 </tr>
 <tr id="Stats5" class="TableStatsRow2">
-<td class="TableStatsColumn2" colspan="2" style="width: 100%; font-weight: bold;">Board Stats</td>
+<td class="TableStatsColumn2" colspan="2" style="width: 100%; font-weight: bold;">Upcoming Events</td>
 </tr>
 <tr class="TableStatsRow3" id="Stats6">
 <td style="width: 4%;" class="TableStatsColumn3"><div class="statsicon">
-<?php echo $ThemeSet['StatsIcon']; ?></div></td>
+<?php echo $ThemeSet['EventStatsIcon']; ?></div></td>
+<td style="width: 96%;" class="TableStatsColumn3"><div class="statsinfo">
+<?php echo $evstring; ?>
+</div></td>
+</tr>
+<tr id="Stats7" class="TableStatsRow2">
+<td class="TableStatsColumn2" colspan="2" style="width: 100%; font-weight: bold;">Board Stats</td>
+</tr>
+<tr class="TableStatsRow3" id="Stats8">
+<td style="width: 4%;" class="TableStatsColumn3"><div class="statsicon">
+<?php echo $ThemeSet['BoardStatsIcon']; ?></div></td>
 <td style="width: 96%;" class="TableStatsColumn3"><div class="statsinfo">
 &nbsp;Our members have made a total of <?php echo $numposts; ?> posts<br />
 &nbsp;Our members have made a total of <?php echo $numtopics; ?> topics<br />
@@ -238,12 +288,12 @@ $tdMembersOnline .= " (<a title=\"".$tdMemList['IP']."\" onclick=\"window.open(t
 &nbsp;Our newest member is <a<?php echo $NewestMemTitle; ?> href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$NewestMem['ID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>"><?php echo $NewestMem['Name']; ?></a><?php echo $NewestMemExtraIP; ?>
 </div></td>
 </tr>
-<tr id="Stats7" class="TableStatsRow2">
+<tr id="Stats9" class="TableStatsRow2">
 <td class="TableStatsColumn2" colspan="2" style="width: 100%; font-weight: bold;">Members Online Today: <?php echo $tdNumberMembers; ?></td>
 </tr>
-<tr class="TableStatsRow3" id="Stats8">
+<tr class="TableStatsRow3" id="Stats10">
 <td style="width: 4%;" class="TableStatsColumn3"><div class="statsicon">
-<?php echo $ThemeSet['StatsIcon']; ?></div></td>
+<?php echo $ThemeSet['OnlineStatsIcon']; ?></div></td>
 <td style="width: 96%;" class="TableStatsColumn3"><div class="statsinfo">
 &nbsp;Number of members online today: <?php echo $tdNumberMembers; ?><br />
 &nbsp;The following members have visited today:<br />

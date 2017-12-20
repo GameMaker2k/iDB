@@ -163,6 +163,7 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."members\" (\n".
 "  \"Title\" VARCHAR(150) NOT NULL default '',\n".
 "  \"Joined\" INTEGER NOT NULL default '0',\n".
 "  \"LastActive\" INTEGER NOT NULL default '0',\n".
+"  \"LastLogin\" INTEGER NOT NULL default '0',\n".
 "  \"LastPostTime\" INTEGER NOT NULL default '0',\n".
 "  \"BanTime\" INTEGER NOT NULL default '0',\n".
 "  \"BirthDay\" INTEGER NOT NULL default '0',\n".
@@ -188,9 +189,9 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."members\" (\n".
 "  \"Salt\" VARCHAR(50) NOT NULL default ''\n".
 ");", array(null));
 sql_query($query,$SQLStat);
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."members\" (\"id\", \"Name\", \"UserPassword\", \"HashType\", \"Email\", \"GroupID\", \"LevelID\", \"Validated\", \"HiddenMember\", \"WarnLevel\", \"Interests\", \"Title\", \"Joined\", \"LastActive\", \"LastPostTime\", \"BanTime\", \"BirthDay\", \"BirthMonth\", \"BirthYear\", \"Signature\", \"Notes\", \"Avatar\", \"AvatarSize\", \"Website\", \"Gender\", \"PostCount\", \"Karma\", \"KarmaUpdate\", \"RepliesPerPage\", \"TopicsPerPage\", \"MessagesPerPage\", \"TimeZone\", \"DateFormat\", \"TimeFormat\", \"UseTheme\", \"IP\", \"Salt\") VALUES\n".
-"(-1, 'Guest', '%s', 'GuestPassword', '%s', 4, -1, 'no', 'yes', 0, 'Guest Account', 'Guest', %i, %i, '0', '0', '0', '0', '0', '', 'Your Notes', 'http://', '100x100', '%s', 'UnKnow', 1, 0, 0, 10, 10, 10, '%s', '%s', '%s', '%s', '".$GuestLocalIP."', '%s'),\n".
-"(1, '%s', '%s', '".$iDBHashType."', '%s', 1, 1, 'yes', 'no', 0, '%s', 'Admin', %i, %i, '0', '0', '0', '0', '0', '%s', 'Your Notes', '%s', '100x100', '%s', 'UnKnow', 0, 0, 0, 10, 10, 10, '%s', '%s', '%s', '%s', '%s', '%s');", array($GuestPassword,$GEmail,$YourDate,$YourDate,$YourWebsite,$_POST['YourOffSet'],$_POST['iDBDateFormat'],$_POST['iDBTimeFormat'],$_POST['DefaultTheme'],$GSalt,$_POST['AdminUser'],$NewPassword,$_POST['AdminEmail'],"",$YourDate,$YourDate,"","http://",$YourWebsite,$_POST['YourOffSet'],$_POST['iDBDateFormat'],$_POST['iDBTimeFormat'],$_POST['DefaultTheme'],$UserIP,$YourSalt));
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."members\" (\"id\", \"Name\", \"UserPassword\", \"HashType\", \"Email\", \"GroupID\", \"LevelID\", \"Validated\", \"HiddenMember\", \"WarnLevel\", \"Interests\", \"Title\", \"Joined\", \"LastActive\", \"LastLogin\", \"LastPostTime\", \"BanTime\", \"BirthDay\", \"BirthMonth\", \"BirthYear\", \"Signature\", \"Notes\", \"Avatar\", \"AvatarSize\", \"Website\", \"Gender\", \"PostCount\", \"Karma\", \"KarmaUpdate\", \"RepliesPerPage\", \"TopicsPerPage\", \"MessagesPerPage\", \"TimeZone\", \"DateFormat\", \"TimeFormat\", \"UseTheme\", \"IP\", \"Salt\") VALUES\n".
+"(-1, 'Guest', '%s', 'GuestPassword', '%s', 4, -1, 'no', 'yes', 0, 'Guest Account', 'Guest', %i, %i, %i, '0', '0', '0', '0', '0', '', 'Your Notes', 'http://', '100x100', '%s', 'UnKnow', 1, 0, 0, 10, 10, 10, '%s', '%s', '%s', '%s', '".$GuestLocalIP."', '%s'),\n".
+"(1, '%s', '%s', '".$iDBHashType."', '%s', 1, 1, 'yes', 'no', 0, '%s', 'Admin', %i, %i, %i, '0', '0', '0', '0', '0', '%s', 'Your Notes', '%s', '100x100', '%s', 'UnKnow', 0, 0, 0, 10, 10, 10, '%s', '%s', '%s', '%s', '%s', '%s');", array($GuestPassword,$GEmail,$YourDate,$YourDate,$YourDate,$YourWebsite,$_POST['YourOffSet'],$_POST['iDBDateFormat'],$_POST['iDBTimeFormat'],$_POST['DefaultTheme'],$GSalt,$_POST['AdminUser'],$NewPassword,$_POST['AdminEmail'],"",$YourDate,$YourDate,$YourDate,"","http://",$YourWebsite,$_POST['YourOffSet'],$_POST['iDBDateFormat'],$_POST['iDBTimeFormat'],$_POST['DefaultTheme'],$UserIP,$YourSalt));
 sql_query($query,$SQLStat);
 $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."mempermissions\" (\n".
 "  \"id\" INTEGER AUTO_INCREMENT PRIMARY KEY,\n".
@@ -427,7 +428,11 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."themes\" (\n".
 "  \"TitleIcon\" VARCHAR(150) NOT NULL default '',\n".
 "  \"NavLinkIcon\" VARCHAR(150) NOT NULL default '',\n".
 "  \"NavLinkDivider\" VARCHAR(150) NOT NULL default '',\n".
-"  \"StatsIcon\" VARCHAR(150) NOT NULL default '',\n".
+"  \"BoardStatsIcon\" VARCHAR(150) NOT NULL default '',\n".
+"  \"MemberStatsIcon\" VARCHAR(150) NOT NULL default '',\n".
+"  \"BirthdayStatsIcon\" VARCHAR(150) NOT NULL default '',\n".
+"  \"EventStatsIcon\" VARCHAR(150) NOT NULL default '',\n".
+"  \"OnlineStatsIcon\" VARCHAR(150) NOT NULL default '',\n".
 "  \"NoAvatar\" VARCHAR(150) NOT NULL default '',\n".
 "  \"NoAvatarSize\" VARCHAR(150) NOT NULL default ''\n".
 ");", array(null));

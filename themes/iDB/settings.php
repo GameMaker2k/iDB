@@ -72,7 +72,11 @@ $ThemeSet['RedirectIcon'] = "<div style=\"text-align: center; font-size: 11px;\"
 $ThemeSet['TitleIcon'] = null;
 $ThemeSet['NavLinkIcon'] = null;
 $ThemeSet['NavLinkDivider'] = "&nbsp;-&gt;&nbsp;";
-$ThemeSet['StatsIcon'] = "<div style=\"text-align: center; font-size: 11px;\" title=\"Board Stats\">(S)</div> ";
+$ThemeSet['BoardStatsIcon'] = "<div style=\"text-align: center; font-size: 11px;\" title=\"Board Stats\">(S)</div> ";
+$ThemeSet['MemberStatsIcon'] = "<div style=\"text-align: center; font-size: 11px;\" title=\"Board Stats\">(S)</div> ";
+$ThemeSet['BirthdayStatsIcon'] = "<div style=\"text-align: center; font-size: 11px;\" title=\"Board Stats\">(S)</div> ";
+$ThemeSet['EventStatsIcon'] = "<div style=\"text-align: center; font-size: 11px;\" title=\"Board Stats\">(S)</div> ";
+$ThemeSet['OnlineStatsIcon'] = "<div style=\"text-align: center; font-size: 11px;\" title=\"Board Stats\">(S)</div> ";
 $ThemeSet['NoAvatar'] = "themes/iDB/noavatar.png";
 $ThemeSet['NoAvatarSize'] = "100x100";
 ?>

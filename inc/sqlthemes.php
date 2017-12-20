@@ -135,8 +135,16 @@ $ThemeSet['NavLinkIcon'] = sql_result($themeresult,0,"NavLinkIcon");
 if($ThemeSet['NavLinkIcon']=="") { $ThemeSet['NavLinkIcon'] = null; }
 $ThemeSet['NavLinkDivider'] = sql_result($themeresult,0,"NavLinkDivider");
 if($ThemeSet['NavLinkDivider']=="") { $ThemeSet['NavLinkDivider'] = null; }
-$ThemeSet['StatsIcon'] = sql_result($themeresult,0,"StatsIcon");
-if($ThemeSet['StatsIcon']=="") { $ThemeSet['StatsIcon'] = null; }
+$ThemeSet['BoardStatsIcon'] = sql_result($themeresult,0,"BoardStatsIcon");
+if($ThemeSet['BoardStatsIcon']=="") { $ThemeSet['BoardStatsIcon'] = null; }
+$ThemeSet['MemberStatsIcon'] = sql_result($themeresult,0,"MemberStatsIcon");
+if($ThemeSet['MemberStatsIcon']=="") { $ThemeSet['MemberStatsIcon'] = null; }
+$ThemeSet['BirthdayStatsIcon'] = sql_result($themeresult,0,"BirthdayStatsIcon");
+if($ThemeSet['BirthdayStatsIcon']=="") { $ThemeSet['BirthdayStatsIcon'] = null; }
+$ThemeSet['EventStatsIcon'] = sql_result($themeresult,0,"EventStatsIcon");
+if($ThemeSet['EventStatsIcon']=="") { $ThemeSet['EventStatsIcon'] = null; }
+$ThemeSet['OnlineStatsIcon'] = sql_result($themeresult,0,"OnlineStatsIcon");
+if($ThemeSet['OnlineStatsIcon']=="") { $ThemeSet['OnlineStatsIcon'] = null; }
 $ThemeSet['NoAvatar'] = sql_result($themeresult,0,"NoAvatar");
 if($ThemeSet['NoAvatar']=="") { $ThemeSet['NoAvatar'] = null; }
 $ThemeSet['NoAvatarSize'] = sql_result($themeresult,0,"NoAvatarSize");

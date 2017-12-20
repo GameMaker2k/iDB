@@ -194,6 +194,7 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."memb
 "  \"Title\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"Joined\" int(15) NOT NULL default '0',\n".
 "  \"LastActive\" int(15) NOT NULL default '0',\n".
+"  \"LastLogin\" int(15) NOT NULL default '0',\n".
 "  \"LastPostTime\" int(15) NOT NULL default '0',\n".
 "  \"BanTime\" int(15) NOT NULL default '0',\n".
 "  \"BirthDay\" int(5) NOT NULL default '0',\n".
@@ -222,9 +223,9 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."memb
 "  UNIQUE KEY \"Email\" (\"Email\")\n".
 ") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$Settings['sql_charset']." COLLATE=".$Settings['sql_collate'].";", array(null));
 sql_query($query,$SQLStat);
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."members\" (\"id\", \"Name\", \"UserPassword\", \"HashType\", \"Email\", \"GroupID\", \"LevelID\", \"Validated\", \"HiddenMember\", \"WarnLevel\", \"Interests\", \"Title\", \"Joined\", \"LastActive\", \"LastPostTime\", \"BanTime\", \"BirthDay\", \"BirthMonth\", \"BirthYear\", \"Signature\", \"Notes\", \"Avatar\", \"AvatarSize\", \"Website\", \"Gender\", \"PostCount\", \"Karma\", \"KarmaUpdate\", \"RepliesPerPage\", \"TopicsPerPage\", \"MessagesPerPage\", \"TimeZone\", \"DateFormat\", \"TimeFormat\", \"UseTheme\", \"IP\", \"Salt\") VALUES\n".
-"(-1, 'Guest', '%s', 'GuestPassword', '%s', 4, -1, 'no', 'yes', 0, 'Guest Account', 'Guest', %i, %i, '0', '0', '0', '0', '0', '', 'Your Notes', 'http://', '100x100', '%s', 'UnKnow', 1, 0, 0, 10, 10, 10, '%s', '%s', '%s', '%s', '".$GuestLocalIP."', '%s'),\n".
-"(1, '%s', '%s', '".$iDBHashType."', '%s', 1, 1, 'yes', 'no', 0, '%s', 'Admin', %i, %i, '0', '0', '0', '0', '0', '%s', 'Your Notes', '%s', '100x100', '%s', 'UnKnow', 0, 0, 0, 10, 10, 10, '%s', '%s', '%s', '%s', '%s', '%s');", array($GuestPassword,$GEmail,$YourDate,$YourDate,$YourWebsite,$_POST['YourOffSet'],$_POST['iDBDateFormat'],$_POST['iDBTimeFormat'],$_POST['DefaultTheme'],$GSalt,$_POST['AdminUser'],$NewPassword,$_POST['AdminEmail'],"",$YourDate,$YourDate,"","http://",$YourWebsite,$_POST['YourOffSet'],$_POST['iDBDateFormat'],$_POST['iDBTimeFormat'],$_POST['DefaultTheme'],$UserIP,$YourSalt));
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."members\" (\"id\", \"Name\", \"UserPassword\", \"HashType\", \"Email\", \"GroupID\", \"LevelID\", \"Validated\", \"HiddenMember\", \"WarnLevel\", \"Interests\", \"Title\", \"Joined\", \"LastActive\", \"LastLogin\", \"LastPostTime\", \"BanTime\", \"BirthDay\", \"BirthMonth\", \"BirthYear\", \"Signature\", \"Notes\", \"Avatar\", \"AvatarSize\", \"Website\", \"Gender\", \"PostCount\", \"Karma\", \"KarmaUpdate\", \"RepliesPerPage\", \"TopicsPerPage\", \"MessagesPerPage\", \"TimeZone\", \"DateFormat\", \"TimeFormat\", \"UseTheme\", \"IP\", \"Salt\") VALUES\n".
+"(-1, 'Guest', '%s', 'GuestPassword', '%s', 4, -1, 'no', 'yes', 0, 'Guest Account', 'Guest', %i, %i, %i, '0', '0', '0', '0', '0', '', 'Your Notes', 'http://', '100x100', '%s', 'UnKnow', 1, 0, 0, 10, 10, 10, '%s', '%s', '%s', '%s', '".$GuestLocalIP."', '%s'),\n".
+"(1, '%s', '%s', '".$iDBHashType."', '%s', 1, 1, 'yes', 'no', 0, '%s', 'Admin', %i, %i, %i, '0', '0', '0', '0', '0', '%s', 'Your Notes', '%s', '100x100', '%s', 'UnKnow', 0, 0, 0, 10, 10, 10, '%s', '%s', '%s', '%s', '%s', '%s');", array($GuestPassword,$GEmail,$YourDate,$YourDate,$YourDate,$YourWebsite,$_POST['YourOffSet'],$_POST['iDBDateFormat'],$_POST['iDBTimeFormat'],$_POST['DefaultTheme'],$GSalt,$_POST['AdminUser'],$NewPassword,$_POST['AdminEmail'],"",$YourDate,$YourDate,$YourDate,"","http://",$YourWebsite,$_POST['YourOffSet'],$_POST['iDBDateFormat'],$_POST['iDBTimeFormat'],$_POST['DefaultTheme'],$UserIP,$YourSalt));
 sql_query($query,$SQLStat);
 $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."mempermissions\" (\n".
 "  \"id\" int(15) NOT NULL auto_increment,\n".
@@ -470,7 +471,11 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."them
 "  \"TitleIcon\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"NavLinkIcon\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"NavLinkDivider\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"StatsIcon\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"BoardStatsIcon\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"MemberStatsIcon\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"BirthdayStatsIcon\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"EventStatsIcon\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"OnlineStatsIcon\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"NoAvatar\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"NoAvatarSize\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\"),\n".

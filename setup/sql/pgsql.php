@@ -168,6 +168,7 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."members\" (\n".
 "  \"Title\" varchar(150) NOT NULL default '',\n".
 "  \"Joined\" numeric(15) NOT NULL default '0',\n".
 "  \"LastActive\" numeric(15) NOT NULL default '0',\n".
+"  \"LastLogin\" numeric(15) NOT NULL default '0',\n".
 "  \"LastPostTime\" numeric(15) NOT NULL default '0',\n".
 "  \"BanTime\" numeric(15) NOT NULL default '0',\n".
 "  \"BirthDay\" numeric(5) NOT NULL default '0',\n".
@@ -195,9 +196,9 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."members\" (\n".
 "  UNIQUE (\"Email\")\n".
 ");", array(null));
 sql_query($query,$SQLStat);
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."members\" (\"id\", \"Name\", \"UserPassword\", \"HashType\", \"Email\", \"GroupID\", \"LevelID\", \"Validated\", \"HiddenMember\", \"WarnLevel\", \"Interests\", \"Title\", \"Joined\", \"LastActive\", \"LastPostTime\", \"BanTime\", \"BirthDay\", \"BirthMonth\", \"BirthYear\", \"Signature\", \"Notes\", \"Avatar\", \"AvatarSize\", \"Website\", \"Gender\", \"PostCount\", \"Karma\", \"KarmaUpdate\", \"RepliesPerPage\", \"TopicsPerPage\", \"MessagesPerPage\", \"TimeZone\", \"DateFormat\", \"TimeFormat\", \"UseTheme\", \"IP\", \"Salt\") VALUES\n".
-"(-1, 'Guest', '%s', 'GuestPassword', '%s', 4, -1, 'no', 'yes', 0, 'Guest Account', 'Guest', %i, %i, '0', '0', '0', '0', '0', '', 'Your Notes', 'http://', '100x100', '%s', 'UnKnow', 1, 0, 0, 10, 10, 10, '%s', '%s', '%s', '%s', '".$GuestLocalIP."', '%s'),\n".
-"(1, '%s', '%s', '".$iDBHashType."', '%s', 1, 1, 'yes', 'no', 0, '%s', 'Admin', %i, %i, '0', '0', '0', '0', '0', '%s', 'Your Notes', '%s', '100x100', '%s', 'UnKnow', 0, 0, 0, 10, 10, 10, '%s', '%s', '%s', '%s', '%s', '%s');", array($GuestPassword,$GEmail,$YourDate,$YourDate,$YourWebsite,$_POST['YourOffSet'],$_POST['iDBDateFormat'],$_POST['iDBTimeFormat'],$_POST['DefaultTheme'],$GSalt,$_POST['AdminUser'],$NewPassword,$_POST['AdminEmail'],"",$YourDate,$YourDate,"","http://",$YourWebsite,$_POST['YourOffSet'],$_POST['iDBDateFormat'],$_POST['iDBTimeFormat'],$_POST['DefaultTheme'],$UserIP,$YourSalt));
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."members\" (\"id\", \"Name\", \"UserPassword\", \"HashType\", \"Email\", \"GroupID\", \"LevelID\", \"Validated\", \"HiddenMember\", \"WarnLevel\", \"Interests\", \"Title\", \"Joined\", \"LastActive\", \"LastLogin\", \"LastPostTime\", \"BanTime\", \"BirthDay\", \"BirthMonth\", \"BirthYear\", \"Signature\", \"Notes\", \"Avatar\", \"AvatarSize\", \"Website\", \"Gender\", \"PostCount\", \"Karma\", \"KarmaUpdate\", \"RepliesPerPage\", \"TopicsPerPage\", \"MessagesPerPage\", \"TimeZone\", \"DateFormat\", \"TimeFormat\", \"UseTheme\", \"IP\", \"Salt\") VALUES\n".
+"(-1, 'Guest', '%s', 'GuestPassword', '%s', 4, -1, 'no', 'yes', 0, 'Guest Account', 'Guest', %i, %i, %i, '0', '0', '0', '0', '0', '', 'Your Notes', 'http://', '100x100', '%s', 'UnKnow', 1, 0, 0, 10, 10, 10, '%s', '%s', '%s', '%s', '".$GuestLocalIP."', '%s'),\n".
+"(1, '%s', '%s', '".$iDBHashType."', '%s', 1, 1, 'yes', 'no', 0, '%s', 'Admin', %i, %i, %i, '0', '0', '0', '0', '0', '%s', 'Your Notes', '%s', '100x100', '%s', 'UnKnow', 0, 0, 0, 10, 10, 10, '%s', '%s', '%s', '%s', '%s', '%s');", array($GuestPassword,$GEmail,$YourDate,$YourDate,$YourDate,$YourWebsite,$_POST['YourOffSet'],$_POST['iDBDateFormat'],$_POST['iDBTimeFormat'],$_POST['DefaultTheme'],$GSalt,$_POST['AdminUser'],$NewPassword,$_POST['AdminEmail'],"",$YourDate,$YourDate,$YourDate,"","http://",$YourWebsite,$_POST['YourOffSet'],$_POST['iDBDateFormat'],$_POST['iDBTimeFormat'],$_POST['DefaultTheme'],$UserIP,$YourSalt));
 sql_query($query,$SQLStat);
 $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."mempermissions\" (\n".
 "  \"id\" SERIAL PRIMARY KEY NOT NULL,\n".
@@ -434,7 +435,11 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."themes\" (\n".
 "  \"TitleIcon\" varchar(150) NOT NULL default '',\n".
 "  \"NavLinkIcon\" varchar(150) NOT NULL default '',\n".
 "  \"NavLinkDivider\" varchar(150) NOT NULL default '',\n".
-"  \"StatsIcon\" varchar(150) NOT NULL default '',\n".
+"  \"BoardStatsIcon\" varchar(150) NOT NULL default '',\n".
+"  \"MemberStatsIcon\" varchar(150) NOT NULL default '',\n".
+"  \"BirthdayStatsIcon\" varchar(150) NOT NULL default '',\n".
+"  \"EventStatsIcon\" varchar(150) NOT NULL default '',\n".
+"  \"OnlineStatsIcon\" varchar(150) NOT NULL default '',\n".
 "  \"NoAvatar\" varchar(150) NOT NULL default '',\n".
 "  \"NoAvatarSize\" varchar(150) NOT NULL default '',\n".
 "  UNIQUE (\"Name\")\n".
