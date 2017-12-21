@@ -69,10 +69,10 @@ $NavBarCurDate = $NavBarCurMonth.$NavBarCurYear;
 	if($GroupInfo['CanEditProfile']=="yes") { ?>
 <a href="<?php echo url_maker($exfile['profile'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['profile'],$exqstr['profile']); ?>">Profile</a><?php echo $ThemeSet['LineDivider']; } 
 		if($GroupInfo['CanPM']=="yes") { ?>
-<a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>" title="<?php echo "You have ".$PMNumber." new messages."; ?>">MailBox</a><?php echo $ThemeSet['LineDivider']; ?><?php } } ?>
+<a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>" title="<?php echo "You have ".$PMNumber." new messages."; ?>">MailBox</a><?php echo $ThemeSet['LineDivider']; ?><?php } } if($File3Name!="install.php"&&$File3Name!="/install.php") { ?>
 <a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=list&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Members</a><?php echo $ThemeSet['LineDivider']; ?>
 <a href="<?php echo url_maker($exfile['calendar'],$Settings['file_ext'],"act=view&caldate=".$NavBarCurDate,$Settings['qstr'],$Settings['qsep'],$prexqstr['calendar'],$exqstr['calendar']); ?>">Calendar</a><?php if(isset($Settings['weburl'])) { echo $ThemeSet['LineDivider']; ?>
-<a href="<?php echo $Settings['weburl']; ?>">Homepage</a><?php } ?>&nbsp;</span>
+<a href="<?php echo $Settings['weburl']; ?>">Homepage</a><?php } } ?>&nbsp;</span>
 </td></tr>
 </table></div>
 <div class="DivNavBar">&nbsp;</div>

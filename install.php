@@ -149,6 +149,14 @@ if($_GET['act']=="README"||$_GET['act']=="ReadME") { $_GET['act']="readme"; }
 if($_GET['act']=="readme"||$_GET['act']=="ReadMe") {
 header("Content-Type: text/plain; charset=".$Settings['charset']);
 require("README"); fix_amp(null); die(); }
+if($_GET['act']=="LICENSE"||$_GET['act']=="License") { $_GET['act']="license"; }
+if($_GET['act']=="license"||$_GET['act']=="BSD") {
+header("Content-Type: text/plain; charset=".$Settings['charset']);
+require("LICENSE"); fix_amp(null); die(); }
+if($_GET['act']=="TOS"||$_GET['act']=="ToS") { $_GET['act']="tos"; }
+if($_GET['act']=="tos"||$_GET['act']=="terms") {
+header("Content-Type: text/plain; charset=".$Settings['charset']);
+require("TOS"); fix_amp(null); die(); }
 $Settings['board_name'] = "Installing ".$RName; 
 function get_theme_values($matches) {
 	global $ThemeSet;
@@ -176,13 +184,13 @@ $Error = null; $_GET['time'] = false;
 <div class="Table1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableRow1">
-<span style="font-weight: bold; text-align: left;"><?php echo $ThemeSet['TitleIcon']; ?><a href="Install.php">Install <?php echo $VerInfo['iDB_Ver_Show']; ?> </a></span>
+<span style="font-weight: bold; text-align: left;"><?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker("install",".php","act=Part1","&","=",null,null); ?>">Install <?php echo $VerInfo['iDB_Ver_Show']; ?> </a></span>
 </div>
 <?php } ?>
 <table class="Table1">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableRow1">
-<td class="TableColumn1"><span style="font-weight: bold; text-align: left;"><?php echo $ThemeSet['TitleIcon']; ?><a href="Install.php">Install <?php echo $VerInfo['iDB_Ver_Show']; ?> </a></span>
+<td class="TableColumn1"><span style="font-weight: bold; text-align: left;"><?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker("install",".php","act=Part1","&","=",null,null); ?>">Install <?php echo $VerInfo['iDB_Ver_Show']; ?> </a></span>
 </td>
 </tr><?php } ?>
 <tr class="TableRow2">
@@ -231,13 +239,13 @@ if ($_GET['act']!="Part3"&&$_POST['act']!="Part3") {
 if ($_GET['act']=="Part4"&&$_POST['act']=="Part4") {
    require($SetupDir['setup'].'mkconfig.php'); } } } }
 if ($Error=="Yes") { ?>
-<br />Install Failed with errors. <a href="install.php?act=view">Click here</a> to restart install. &lt;_&lt;
+<br />Install Failed with errors. <a href="<?php echo url_maker("install",".php","act=Part1","&","=",null,null); ?>">Click here</a> to restart install. &lt;_&lt;
 <br /><br />
 </td>
 </tr>
 <?php } ?>
 <tr class="TableRow4">
-<td class="TableColumn4">&nbsp;<a href="install.php?act=ReadMe">Readme.txt</a>&nbsp;</td>
+<td class="TableColumn4">&nbsp;<a href="<?php echo url_maker("install",".php","act=ReadMe","&","=",null,null); ?>">Readme.txt</a>&nbsp;|&nbsp;<a href="<?php echo url_maker("install",".php","act=License","&","=",null,null); ?>">License.txt</a>&nbsp;</td>
 </tr>
 </table></div>
 <div>&nbsp;</div>

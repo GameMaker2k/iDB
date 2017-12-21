@@ -30,7 +30,7 @@ if($Error!="Yes") {
 ?>
 <tr class="TableRow3">
 <td class="TableColumn3">
-<form style="display: inline;" method="post" id="install" action="install.php?act=Part3">
+<form style="display: inline;" method="post" id="install" action="<?php echo url_maker("install",".php","act=Part3","&","=",null,null); ?>">
 <table style="text-align: left;">
 <tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="DatabaseUserName">Insert Database User Name:</label></td>

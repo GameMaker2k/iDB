@@ -77,7 +77,18 @@ header("Pragma: private, no-cache, no-store, must-revalidate, pre-check=0, post-
 header("Date: ".$utccurtime->format("D, d M Y H:i:s")." GMT");
 header("Last-Modified: ".$utccurtime->format("D, d M Y H:i:s")." GMT");
 header("Expires: ".$utccurtime->format("D, d M Y H:i:s")." GMT");
-session_start();
+if (version_compare(phpversion(), '7.0', '<')) { session_start(); } else {
+session_start([
+    'use_trans_sid' => false,
+    'use_cookies' => true,
+    'use_only_cookies' => true,
+    'gc_probability' => 1,
+    'gc_divisor' => 100,
+    'gc_maxlifetime' => 1440,
+    'hash_function' => 1,
+    'hash_bits_per_character' => 6,
+    'name' => $_POST['tableprefix']."sess",
+]); }
 //@register_shutdown_function("session_write_close");
 if (pre_strlen($_POST['AdminPasswords'])<"3") { $Error="Yes";
 echo "<br />Your password is too small."; }

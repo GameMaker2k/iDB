@@ -133,7 +133,7 @@ for ($i=0; $i < count($timezone_identifiers); $i++) {
     }
 }
 ?>
-<form style="display: inline;" method="post" id="install" action="install.php?act=Part4">
+<form style="display: inline;" method="post" id="install" action="<?php echo url_maker("install",".php","act=Part4","&","=",null,null); ?>">
 <table style="text-align: left;">
 <tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="NewBoardName">Insert Board Name:</label></td>

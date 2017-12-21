@@ -79,7 +79,7 @@ if(!isset($Settings['showverinfo'])) {
 	$Settings['showverinfo'] = "on"; }
 if(!isset($Settings['sqldb'])) {
 header("Content-Type: text/plain; charset=UTF-8");
-header('Location: install.php'); }
+header('Location: install.php?act=Part1'); }
 if(!isset($Settings['fixpathinfo'])) {
 	$Settings['fixpathinfo'] = "off"; }
 if($Settings['fixpathinfo']=="off") {
@@ -133,7 +133,7 @@ if(!in_array("ini_set", $disfunc)) {
 @ini_set('default_charset', $Settings['charset']); }
 //session_save_path($SettDir['inc']."temp/");
 if(!isset($Settings['sqldb'])) { 
-if(file_exists("install.php")) { header('Location: install.php'); die(); } 
+if(file_exists("install.php")) { header('Location: install.php?act=Part1'); die(); } 
 if(!file_exists("install.php")) { header("Content-Type: text/plain; charset=UTF-8");
 echo "403 Error: Sorry could not find install.php\nTry uploading files again and if that dose not work try download iDB again."; die(); } }
 if(isset($Settings['sqldb'])) { 
@@ -453,7 +453,18 @@ if(!isset($_SESSION['CheckCookie'])) {
 if(isset($_COOKIE['SessPass'])&&isset($_COOKIE['MemberName'])) {
 session_set_save_handler("sql_session_open", "sql_session_close", "sql_session_read", "sql_session_write", "sql_session_destroy", "sql_session_gc");
 session_name($Settings['sqltable']."sess");
-session_start();
+if (version_compare(phpversion(), '7.0', '<')) { session_start(); } else {
+session_start([
+    'use_trans_sid' => false,
+    'use_cookies' => true,
+    'use_only_cookies' => true,
+    'gc_probability' => 1,
+    'gc_divisor' => 100,
+    'gc_maxlifetime' => 1440,
+    'hash_function' => 1,
+    'hash_bits_per_character' => 6,
+    'name' => $Settings['sqltable']."sess",
+]); }
 if(!isset($_SESSION['UserFormID'])) { $_SESSION['UserFormID'] = null; }
 $iDBSessCloseDB = false;
 $_SESSION['ShowActHidden'] = "no";
@@ -462,7 +473,18 @@ require($SettDir['inc'].'prelogin.php');
 session_write_close(); } }
 session_set_save_handler("sql_session_open", "sql_session_close", "sql_session_read", "sql_session_write", "sql_session_destroy", "sql_session_gc");
 session_name($Settings['sqltable']."sess");
-session_start();
+if (version_compare(phpversion(), '7.0', '<')) { session_start(); } else {
+session_start([
+    'use_trans_sid' => false,
+    'use_cookies' => true,
+    'use_only_cookies' => true,
+    'gc_probability' => 1,
+    'gc_divisor' => 100,
+    'gc_maxlifetime' => 1440,
+    'hash_function' => 1,
+    'hash_bits_per_character' => 6,
+    'name' => $Settings['sqltable']."sess",
+]); }
 if(!isset($_SESSION['UserFormID'])) { $_SESSION['UserFormID'] = null; }
 $iDBSessCloseDB = true;
 output_reset_rewrite_vars();
