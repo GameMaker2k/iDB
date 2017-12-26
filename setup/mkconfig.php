@@ -65,6 +65,43 @@ if (session_id()) { session_destroy(); }
 session_name($_POST['tableprefix']."sess");
 if(preg_match("/\/$/", $_POST['BoardURL'])<1) { 
 	$_POST['BoardURL'] = $_POST['BoardURL']."/"; } 
+function unparse_url($parsed_url) {
+  $scheme   = isset($parsed_url['scheme']) ? $parsed_url['scheme'] . '://' : '';
+  $host     = isset($parsed_url['host']) ? $parsed_url['host'] : '';
+  $port     = isset($parsed_url['port']) ? ':' . $parsed_url['port'] : '';
+  $user     = isset($parsed_url['user']) ? $parsed_url['user'] : '';
+  $pass     = isset($parsed_url['pass']) ? ':' . $parsed_url['pass']  : '';
+  $pass     = ($user || $pass) ? "$pass@" : '';
+  $path     = isset($parsed_url['path']) ? $parsed_url['path'] : '';
+  $query    = isset($parsed_url['query']) ? '?' . $parsed_url['query'] : '';
+  $fragment = isset($parsed_url['fragment']) ? '#' . $parsed_url['fragment'] : '';
+  return $scheme.$user.$pass.$host.$port.$path.$query.$fragment;
+} 
+$OrgBoardURL = $_POST['BoardURL'];
+$PreBestURL = parse_url($_POST['BoardURL']);
+$PreServURL = parse_url((isset($_SERVER['HTTPS']) ? "https" : "http") . "://".$_SERVER['HTTP_HOST'].substr($_SERVER['REQUEST_URI'], 0, strrpos($_SERVER['REQUEST_URI'], '/') + 1));
+if($PreBestURL['host']=="localhost.url"&&str_replace("/", "", $PreBestURL['path'])=="localpath") {
+   $PreBestURL['host'] = $PreServURL['host'];
+   $PreBestURL['path'] = $PreServURL['path'];
+   $_POST['BoardURL'] = unparse_url($PreBestURL); }
+if($PreBestURL['host']=="localhost.url"&&str_replace("/", "", $PreBestURL['path'])!="localpath") {
+   $PreBestURL['host'] = $PreServURL['host'];
+   $_POST['BoardURL'] = unparse_url($PreBestURL); }
+if($PreBestURL['host']!="localhost.url"&&str_replace("/", "", $PreBestURL['path'])=="localpath") {
+   $PreBestURL['path'] = $PreServURL['path'];
+   $_POST['BoardURL'] = unparse_url($PreBestURL); }
+$OrgWebSiteURL = $_POST['WebURL'];
+$PreWestURL = parse_url($_POST['WebURL']);
+if($PreWestURL['host']=="localhost.url"&&str_replace("/", "", $PreWestURL['path'])=="localpath") {
+   $PreWestURL['host'] = $PreServURL['host'];
+   $PreWestURL['path'] = $PreServURL['path'];
+   $_POST['WebURL'] = unparse_url($PreWestURL); }
+if($PreWestURL['host']=="localhost.url"&&str_replace("/", "", $PreWestURL['path'])!="localpath") {
+   $PreWestURL['host'] = $PreServURL['host'];
+   $_POST['WebURL'] = unparse_url($PreWestURL); }
+if($PreWestURL['host']!="localhost.url"&&str_replace("/", "", $PreWestURL['path'])=="localpath") {
+   $PreWestURL['path'] = $PreServURL['path'];
+   $_POST['WebURL'] = unparse_url($PreWestURL); }
 $URLsTest = parse_url($_POST['BoardURL']);
 $this_dir = $URLsTest['path'];
 $Settings['enable_https'] = "off";
@@ -102,7 +139,11 @@ if (!filter_var($_POST['AdminEmail'], FILTER_VALIDATE_EMAIL)) { $Error="Yes";
 echo "<br />Your email is not a valid email address."; }
 if (!filter_var($_POST['BoardURL'], FILTER_VALIDATE_URL)) { $Error="Yes";
 echo "<br />Your board url is not a valid web url."; }
+if (!filter_var($OrgBoardURL, FILTER_VALIDATE_URL)) { $Error="Yes";
+echo "<br />Your board url is not a valid web url."; }
 if (!filter_var($_POST['WebURL'], FILTER_VALIDATE_URL)&&$_POST['WebURL']!="localhost") { $Error="Yes";
+echo "<br />Your website url is not a valid web url."; }
+if (!filter_var($OrgWebSiteURL, FILTER_VALIDATE_URL)&&$OrgWebSiteURL!="localhost") { $Error="Yes";
 echo "<br />Your website url is not a valid web url."; }
 if (pre_strlen($_POST['AdminPasswords'])>"60") { $Error="Yes";
 echo "<br />Your password is too big."; }
@@ -115,6 +156,9 @@ if($_POST['HTMLType']=="xhtml5") { $_POST['OutPutType'] = "xhtml"; }
 $_POST['BoardURL'] = htmlentities($_POST['BoardURL'], ENT_QUOTES, $Settings['charset']);
 $_POST['BoardURL'] = remove_spaces($_POST['BoardURL']);
 $_POST['BoardURL'] = addslashes($_POST['BoardURL']);
+$OrgBoardURL = htmlentities($OrgBoardURL, ENT_QUOTES, $Settings['charset']);
+$OrgBoardURL = remove_spaces($OrgBoardURL);
+$OrgBoardURL = addslashes($OrgBoardURL);
 $YourDate = $utccurtime->getTimestamp();
 $YourEditDate = $YourDate + $dayconv['minute'];
 $GSalt = salt_hmac(); $YourSalt = salt_hmac();
@@ -265,6 +309,8 @@ $NewPassword = b64e_hmac($_POST['AdminPasswords'],$YourDate,$YourSalt,$_POST['us
 $_POST['WebURL'] = htmlentities($_POST['WebURL'], ENT_QUOTES, $Settings['charset']);
 $_POST['WebURL'] = remove_spaces($_POST['WebURL']);
 $YourWebsite = $_POST['WebURL'];
+$OrgWebSiteURL = htmlentities($OrgWebSiteURL, ENT_QUOTES, $Settings['charset']);
+$OrgWebSiteURL = remove_spaces($OrgWebSiteURL);
 $UserIP = $_SERVER['REMOTE_ADDR'];
 $PostCount = 2;
 $Email = "admin@".$_SERVER['HTTP_HOST'];
@@ -345,9 +391,9 @@ $BoardSettings=$pretext2[0]."\n".
 "\$Settings['sqltype'] = '".$_POST['DatabaseType']."';\n".
 "\$Settings['board_name'] = '".$_POST['NewBoardName']."';\n".
 "\$Settings['idbdir'] = '".$idbdir."';\n".
-"\$Settings['idburl'] = '".$_POST['BoardURL']."';\n".
+"\$Settings['idburl'] = '".$OrgBoardURL."';\n".
 "\$Settings['enable_https'] = '".$Settings['enable_https']."';\n".
-"\$Settings['weburl'] = '".$_POST['WebURL']."';\n".
+"\$Settings['weburl'] = '".$OrgWebSiteURL."';\n".
 "\$Settings['SQLThemes'] = '".$_POST['SQLThemes']."';\n".
 "\$Settings['use_gzip'] = '".$_POST['GZip']."';\n".
 "\$Settings['html_type'] = '".$_POST['HTMLType']."';\n".
@@ -422,11 +468,11 @@ $fp = fopen("settingsbak.php","w+");
 fwrite($fp, $BoardSettingsBak);
 fclose($fp);
 if($_POST['storecookie']=="true") {
-if($URLsTest['host']!="localhost") {
+if($URLsTest['host']!="localhost.url") {
 setcookie("MemberName", $_POST['AdminUser'], time() + (7 * 86400), $this_dir, $URLsTest['host']);
 setcookie("UserID", 1, time() + (7 * 86400), $this_dir, $URLsTest['host']);
 setcookie("SessPass", $NewPassword, time() + (7 * 86400), $this_dir, $URLsTest['host']); }
-if($URLsTest['host']=="localhost") {
+if($URLsTest['host']=="localhost.url") {
 setcookie("MemberName", $_POST['AdminUser'], time() + (7 * 86400), $this_dir, false);
 setcookie("UserID", 1, time() + (7 * 86400), $this_dir, false);
 setcookie("SessPass", $NewPassword, time() + (7 * 86400), $this_dir, false); } }

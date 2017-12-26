@@ -566,6 +566,30 @@ $servtzstarttime->setTimezone($servtz);
 $usertzstarttime = new DateTime();
 $usertzstarttime->setTimestamp($Settings['start_date']);
 $usertzstarttime->setTimezone($usertz);
+$PreBorgURL = parse_url($OrgBoardURL);
+$PreBetURL = parse_url($Settings['idburl']);
+if($PreBorgURL['host']=="localhost.url"&&str_replace("/", "", $PreBorgURL['path'])=="localpath") {
+   $PreBetURL['host'] = $PreBorgURL['host'];
+   $PreBetURL['path'] = $PreBorgURL['path'];
+   $Settings['idburl'] = unparse_url($PreBetURL); }
+if($PreBorgURL['host']=="localhost.url"&&str_replace("/", "", $PreBorgURL['path'])!="localpath") {
+   $PreBorgURL['host'] = $PreBorgURL['host'];
+   $Settings['idburl'] = unparse_url($PreBetURL); }
+if($PreBorgURL['host']!="localhost.url"&&str_replace("/", "", $PreBorgURL['path'])=="localpath") {
+   $PreBetURL['path'] = $PreBorgURL['path'];
+   $Settings['idburl'] = unparse_url($PreBetURL); }
+$PreWorgURL = parse_url($PreWestURL);
+$PreBetURL = parse_url($Settings['weburl']);
+if($PreWorgURL['host']=="localhost.url"&&str_replace("/", "", $PreWorgURL['path'])=="localpath") {
+   $PreBetURL['host'] = $PreWorgURL['host'];
+   $PreBetURL['path'] = $PreWorgURL['path'];
+   $Settings['weburl'] = unparse_url($PreBetURL); }
+if($PreWorgURL['host']=="localhost.url"&&str_replace("/", "", $PreWorgURL['path'])!="localpath") {
+   $PreWorgURL['host'] = $PreWorgURL['host'];
+   $Settings['weburl'] = unparse_url($PreBetURL); }
+if($PreWorgURL['host']!="localhost.url"&&str_replace("/", "", $PreWorgURL['path'])=="localpath") {
+   $PreBetURL['path'] = $PreWorgURL['path'];
+   $Settings['weburl'] = unparse_url($PreBetURL); }
 ?>
 <div class="TableMenuBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>

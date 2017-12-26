@@ -69,6 +69,43 @@ ini_set("arg_separator.input",$Settings['qstr']); } }
 if(!isset($Settings['idburl'])) { $Settings['idburl'] = null; }
 if(isset($Settings['BoardUUID'])) { $Settings['BoardUUID'] = base64_decode($Settings['BoardUUID']); 
 header("Board-Unique-ID: ".$Settings['BoardUUID']); }
+function unparse_url($parsed_url) {
+  $scheme   = isset($parsed_url['scheme']) ? $parsed_url['scheme'] . '://' : '';
+  $host     = isset($parsed_url['host']) ? $parsed_url['host'] : '';
+  $port     = isset($parsed_url['port']) ? ':' . $parsed_url['port'] : '';
+  $user     = isset($parsed_url['user']) ? $parsed_url['user'] : '';
+  $pass     = isset($parsed_url['pass']) ? ':' . $parsed_url['pass']  : '';
+  $pass     = ($user || $pass) ? "$pass@" : '';
+  $path     = isset($parsed_url['path']) ? $parsed_url['path'] : '';
+  $query    = isset($parsed_url['query']) ? '?' . $parsed_url['query'] : '';
+  $fragment = isset($parsed_url['fragment']) ? '#' . $parsed_url['fragment'] : '';
+  return $scheme.$user.$pass.$host.$port.$path.$query.$fragment;
+} 
+$OrgBoardURL = $Settings['idburl'];
+$PreBestURL = parse_url($Settings['idburl']);
+$PreServURL = parse_url((isset($_SERVER['HTTPS']) ? "https" : "http") . "://".$_SERVER['HTTP_HOST'].substr($_SERVER['REQUEST_URI'], 0, strrpos($_SERVER['REQUEST_URI'], '/') + 1));
+if($PreBestURL['host']=="localhost.url"&&str_replace("/", "", $PreBestURL['path'])=="localpath") {
+   $PreBestURL['host'] = "localhost";
+   $PreBestURL['path'] = $PreServURL['path'];
+   $Settings['idburl'] = unparse_url($PreBestURL); }
+if($PreBestURL['host']=="localhost.url"&&str_replace("/", "", $PreBestURL['path'])!="localpath") {
+   $PreBestURL['host'] = $PreServURL['host'];
+   $Settings['idburl'] = unparse_url($PreBestURL); }
+if($PreBestURL['host']!="localhost.url"&&str_replace("/", "", $PreBestURL['path'])=="localpath") {
+   $PreBestURL['path'] = $PreServURL['path'];
+   $Settings['idburl'] = unparse_url($PreBestURL); }
+$OrgWebSiteURL = $Settings['weburl'];
+$PreWestURL = parse_url($Settings['weburl']);
+if($PreWestURL['host']=="localhost.url"&&str_replace("/", "", $PreWestURL['path'])=="localpath") {
+   $PreWestURL['host'] = $PreServURL['host'];
+   $PreWestURL['path'] = $PreServURL['path'];
+   $Settings['weburl'] = unparse_url($PreWestURL); }
+if($PreWestURL['host']=="localhost.url"&&str_replace("/", "", $PreWestURL['path'])!="localpath") {
+   $PreWestURL['host'] = $PreServURL['host'];
+   $Settings['weburl'] = unparse_url($PreWestURL); }
+if($PreWestURL['host']!="localhost.url"&&str_replace("/", "", $PreWestURL['path'])=="localpath") {
+   $PreWestURL['path'] = $PreServURL['path'];
+   $Settings['weburl'] = unparse_url($PreWestURL); }
 if(!isset($Settings['fixbasedir'])) { $Settings['fixbasedir'] = null; }
 if(!isset($Settings['fixpathinfo'])) { $Settings['fixpathinfo'] = null; }
 if(!isset($Settings['fixcookiedir'])) { $Settings['fixcookiedir'] = null; }
