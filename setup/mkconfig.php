@@ -187,6 +187,10 @@ if($_POST['usehashtype']!="md2"&&
    $_POST['usehashtype']!="sha256"&&
    $_POST['usehashtype']!="sha384"&&
    $_POST['usehashtype']!="sha512"&&
+   $_POST['usehashtype']!="sha3224"&&
+   $_POST['usehashtype']!="sha3256"&&
+   $_POST['usehashtype']!="sha3384"&&
+   $_POST['usehashtype']!="sha3512"&&
    $_POST['usehashtype']!="ripemd128"&&
    $_POST['usehashtype']!="ripemd160"&&
    $_POST['usehashtype']!="ripemd256"&&
@@ -201,6 +205,10 @@ if($_POST['usehashtype']=="sha224") { $iDBHashType = "iDBH224"; }
 if($_POST['usehashtype']=="sha256") { $iDBHashType = "iDBH256"; }
 if($_POST['usehashtype']=="sha384") { $iDBHashType = "iDBH384"; }
 if($_POST['usehashtype']=="sha512") { $iDBHashType = "iDBH512"; }
+if($_POST['usehashtype']=="sha3224") { $iDBHashType = "iDBH3224"; }
+if($_POST['usehashtype']=="sha3256") { $iDBHashType = "iDBH3256"; }
+if($_POST['usehashtype']=="sha3384") { $iDBHashType = "iDBH3384"; }
+if($_POST['usehashtype']=="sha3512") { $iDBHashType = "iDBH3512"; }
 if($_POST['usehashtype']=="ripemd128") { $iDBHashType = "iDBHRMD128"; }
 if($_POST['usehashtype']=="ripemd160") { $iDBHashType = "iDBHRMD160"; }
 if($_POST['usehashtype']=="ripemd256") { $iDBHashType = "iDBHRMD256"; }

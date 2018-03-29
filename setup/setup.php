@@ -242,6 +242,14 @@ if(in_array("md2",hash_algos())) { ?>
 <option value="sha384">SHA384</option>
 <?php } if(in_array("sha512",hash_algos())) { ?>
 <option value="sha512">SHA512</option>
+<?php } if(in_array("sha3-224",hash_algos())) { ?>
+<option value="sha3224">SHA3-224</option>
+<?php } if(in_array("sha3-256",hash_algos())) { ?>
+<option value="sha3256">SHA3-256</option>
+<?php } if(in_array("sha3-384",hash_algos())) { ?>
+<option value="sha3384">SHA3-384</option>
+<?php } if(in_array("sha3-512",hash_algos())) { ?>
+<option value="sha3512">SHA3-512</option>
 <?php } if(in_array("ripemd128",hash_algos())) { ?>
 <option value="ripemd128">RIPEMD128</option>
 <?php } if(in_array("ripemd160",hash_algos())) { ?>

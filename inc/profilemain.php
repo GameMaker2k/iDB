@@ -1172,6 +1172,14 @@ if($OldHashType=="iDBH384") {
 	$YourPassword = b64e_hmac($_POST['OldPass'],$OldJoined,$OldSalt,"sha384"); }
 if($OldHashType=="iDBH512") { 
 	$YourPassword = b64e_hmac($_POST['OldPass'],$OldJoined,$OldSalt,"sha512"); }
+if($OldHashType=="iDBH3224") { 
+	$YourPassword = b64e_hmac($_POST['OldPass'],$OldJoined,$OldSalt,"sha3-224"); }
+if($OldHashType=="iDBH3256") { 
+	$YourPassword = b64e_hmac($_POST['OldPass'],$OldJoined,$OldSalt,"sha3-256"); }
+if($OldHashType=="iDBH3384") { 
+	$YourPassword = b64e_hmac($_POST['OldPass'],$OldJoined,$OldSalt,"sha3-384"); }
+if($OldHashType=="iDBH3512") { 
+	$YourPassword = b64e_hmac($_POST['OldPass'],$OldJoined,$OldSalt,"sha3-512"); }
 if($OldHashType=="iDBHRMD128") { 
 	$YourPassword = b64e_hmac($_POST['OldPass'],$OldJoined,$OldSalt,"ripemd128"); }
 if($OldHashType=="iDBHRMD160") { 
@@ -1213,6 +1221,14 @@ if($YourPassword!=$OldPassword) { $Error="Yes"; ?>
 	$NewPassword = b64e_hmac($_POST['Password'],$OldJoined,$NewSalt,"sha384"); }
 	if($Settings['use_hashtype']=="sha512") { $iDBHash = "iDBH512";
 	$NewPassword = b64e_hmac($_POST['Password'],$OldJoined,$NewSalt,"sha512"); }
+	if($Settings['use_hashtype']=="sha3224") { $iDBHash = "iDBH3224";
+	$NewPassword = b64e_hmac($_POST['Password'],$OldJoined,$NewSalt,"sha3-224"); }
+	if($Settings['use_hashtype']=="sha3256") { $iDBHash = "iDBH3256";
+	$NewPassword = b64e_hmac($_POST['Password'],$OldJoined,$NewSalt,"sha3-256"); }
+	if($Settings['use_hashtype']=="sha3384") { $iDBHash = "iDBH3384";
+	$NewPassword = b64e_hmac($_POST['Password'],$OldJoined,$NewSalt,"sha3-384"); }
+	if($Settings['use_hashtype']=="sha3512") { $iDBHash = "iDBH3512";
+	$NewPassword = b64e_hmac($_POST['Password'],$OldJoined,$NewSalt,"sha3-512"); }
 	if($Settings['use_hashtype']=="ripemd128") { $iDBHash = "iDBHRMD128";
 	$NewPassword = b64e_hmac($_POST['Password'],$OldJoined,$NewSalt,"ripemd128"); }
 	if($Settings['use_hashtype']=="ripemd160") { $iDBHash = "iDBHRMD160";

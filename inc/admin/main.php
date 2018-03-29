@@ -676,6 +676,14 @@ if(in_array("md2",hash_algos())) { ?>
 <option<?php if($Settings['use_hashtype']=="sha384") { echo " selected=\"selected\""; } ?> value="sha384">SHA384</option>
 <?php } if(in_array("sha512",hash_algos())) { ?>
 <option<?php if($Settings['use_hashtype']=="sha512") { echo " selected=\"selected\""; } ?> value="sha512">SHA512</option>
+<?php } if(in_array("sha3-sha224",hash_algos())) { ?>
+<option<?php if($Settings['use_hashtype']=="sha3224") { echo " selected=\"selected\""; } ?> value="sha3224">SHA3-224</option>
+<?php } if(in_array("sha3-sha256",hash_algos())) { ?>
+<option<?php if($Settings['use_hashtype']=="sha3256") { echo " selected=\"selected\""; } ?> value="sha3256">SHA3-256</option>
+<?php } if(in_array("sha3-sha384",hash_algos())) { ?>
+<option<?php if($Settings['use_hashtype']=="sha3384") { echo " selected=\"selected\""; } ?> value="sha3384">SHA3-384</option>
+<?php } if(in_array("sha3-sha512",hash_algos())) { ?>
+<option<?php if($Settings['use_hashtype']=="sha3512") { echo " selected=\"selected\""; } ?> value="sha3512">SHA3-512</option>
 <?php } if(in_array("ripemd128",hash_algos())) { ?>
 <option<?php if($Settings['use_hashtype']=="ripemd128") { echo " selected=\"selected\""; } ?> value="ripemd128">RIPEMD128</option>
 <?php } if(in_array("ripemd160",hash_algos())) { ?>
@@ -1055,6 +1063,10 @@ if($_POST['PassHashType']!="md2"&&
    $_POST['PassHashType']!="sha256"&&
    $_POST['PassHashType']!="sha384"&&
    $_POST['PassHashType']!="sha512"&&
+   $_POST['PassHashType']!="sha3224"&&
+   $_POST['PassHashType']!="sha3256"&&
+   $_POST['PassHashType']!="sha3384"&&
+   $_POST['PassHashType']!="sha3512"&&
    $_POST['PassHashType']!="ripemd128"&&
    $_POST['PassHashType']!="ripemd160"&&
    $_POST['PassHashType']!="ripemd256"&&

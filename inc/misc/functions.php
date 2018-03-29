@@ -430,6 +430,14 @@ if(in_array("sha384",hash_algos())&&!function_exists("sha384")) {
 function sha384($data) { return hash("sha384",$data); } }
 if(in_array("sha512",hash_algos())&&!function_exists("sha512")) { 
 function sha512($data) { return hash("sha512",$data); } }
+if(in_array("sha3-224",hash_algos())&&!function_exists("sha3-224")) { 
+function sha3224($data) { return hash("sha3-224",$data); } }
+if(in_array("sha3-256",hash_algos())&&!function_exists("sha3-256")) { 
+function sha3256($data) { return hash("sha3-256",$data); } }
+if(in_array("sha3-384",hash_algos())&&!function_exists("sha3-384")) { 
+function sha3384($data) { return hash("sha3-384",$data); } }
+if(in_array("sha3-512",hash_algos())&&!function_exists("sha3-512")) { 
+function sha3512($data) { return hash("sha3-512",$data); } }
 if(in_array("ripemd128",hash_algos())&&!function_exists("ripemd128")) { 
 function ripemd128($data) { return hash("ripemd128",$data); } }
 if(in_array("ripemd160",hash_algos())&&!function_exists("ripemd160")) { 
