@@ -11,7 +11,7 @@
     Copyright 2004-2017 iDB Support - http://idb.berlios.de/
     Copyright 2004-2017 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: profilemain.php - Last Update: 09/10/2015 SVN 801 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 09/10/2018 SVN 867 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
@@ -412,6 +412,7 @@ $timezone_identifiers = DateTimeZone::listIdentifiers();
 $zonelist['africa'] = array();
 $zonelist['america'] = array();
 $zonelist['antarctica'] = array();
+$zonelist['arctic'] = array();
 $zonelist['asia'] = array();
 $zonelist['atlantic'] = array();
 $zonelist['australia'] = array();
@@ -419,6 +420,7 @@ $zonelist['europe'] = array();
 $zonelist['indian'] = array();
 $zonelist['pacific'] = array();
 $zonelist['etcetera'] = array();
+$zonelist['others'] = array();
 for ($i=0; $i < count($timezone_identifiers); $i++) {
     $zonelookup = explode("/", $timezone_identifiers[$i]);
     if(count($zonelookup)==1) { array_push($zonelist['etcetera'], array($timezone_identifiers[$i], $timezone_identifiers[$i])); }
@@ -438,6 +440,11 @@ for ($i=0; $i < count($timezone_identifiers); $i++) {
                 array_push($zonelist['antarctica'], array($zonelookup[1], $timezone_identifiers[$i])); }
             if(count($zonelookup)==3) {
                 array_push($zonelist['antarctica'], array($zonelookup[2].", ".$zonelookup[1], $timezone_identifiers[$i])); } }
+        if($zonelookup[0]=="Arctic") {
+            if(count($zonelookup)==2) {
+                array_push($zonelist['arctic'], array($zonelookup[1], $timezone_identifiers[$i])); }
+            if(count($zonelookup)==3) {
+                array_push($zonelist['arctic'], array($zonelookup[2].", ".$zonelookup[1], $timezone_identifiers[$i])); } }
         if($zonelookup[0]=="Asia") {
             if(count($zonelookup)==2) {
                 array_push($zonelist['asia'], array($zonelookup[1], $timezone_identifiers[$i])); }
@@ -519,6 +526,15 @@ $optsel="";
 for ($i=0; $i < count($zonelist['antarctica']); $i++) {
     if($User1TimeZone==$zonelist['antarctica'][$i][1]) { $optsel = " selected=\"selected\""; }
     echo "<option".$optsel." value=\"".$zonelist['antarctica'][$i][1]."\">".str_replace("_", " ", $zonelist['antarctica'][$i][0])."</option>\n"; 
+    $optsel=""; }
+?>
+</optgroup>
+<optgroup label="Arctic">
+<?php
+$optsel="";
+for ($i=0; $i < count($zonelist['arctic']); $i++) {
+    if($User1TimeZone==$zonelist['arctic'][$i][1]) { $optsel = " selected=\"selected\""; }
+    echo "<option".$optsel." value=\"".$zonelist['arctic'][$i][1]."\">".str_replace("_", " ", $zonelist['arctic'][$i][0])."</option>\n"; 
     $optsel=""; }
 ?>
 </optgroup>
@@ -731,6 +747,7 @@ $timezone_identifiers = DateTimeZone::listIdentifiers();
 $zonelist['africa'] = array();
 $zonelist['america'] = array();
 $zonelist['antarctica'] = array();
+$zonelist['arctic'] = array();
 $zonelist['asia'] = array();
 $zonelist['atlantic'] = array();
 $zonelist['australia'] = array();
@@ -738,6 +755,7 @@ $zonelist['europe'] = array();
 $zonelist['indian'] = array();
 $zonelist['pacific'] = array();
 $zonelist['etcetera'] = array();
+$zonelist['others'] = array();
 for ($i=0; $i < count($timezone_identifiers); $i++) {
     $zonelookup = explode("/", $timezone_identifiers[$i]);
     if(count($zonelookup)==1) { array_push($zonelist['etcetera'], array($timezone_identifiers[$i], $timezone_identifiers[$i])); }
@@ -757,6 +775,11 @@ for ($i=0; $i < count($timezone_identifiers); $i++) {
                 array_push($zonelist['antarctica'], array($zonelookup[1], $timezone_identifiers[$i])); }
             if(count($zonelookup)==3) {
                 array_push($zonelist['antarctica'], array($zonelookup[2].", ".$zonelookup[1], $timezone_identifiers[$i])); } }
+        if($zonelookup[0]=="Arctic") {
+            if(count($zonelookup)==2) {
+                array_push($zonelist['arctic'], array($zonelookup[1], $timezone_identifiers[$i])); }
+            if(count($zonelookup)==3) {
+                array_push($zonelist['arctic'], array($zonelookup[2].", ".$zonelookup[1], $timezone_identifiers[$i])); } }
         if($zonelookup[0]=="Asia") {
             if(count($zonelookup)==2) {
                 array_push($zonelist['asia'], array($zonelookup[1], $timezone_identifiers[$i])); }
@@ -850,6 +873,15 @@ $optsel="";
 for ($i=0; $i < count($zonelist['antarctica']); $i++) {
     if($User1TimeZone==$zonelist['antarctica'][$i][1]) { $optsel = " selected=\"selected\""; }
     echo "<option".$optsel." value=\"".$zonelist['antarctica'][$i][1]."\">".str_replace("_", " ", $zonelist['antarctica'][$i][0])."</option>\n"; 
+    $optsel=""; }
+?>
+</optgroup>
+<optgroup label="Arctic">
+<?php
+$optsel="";
+for ($i=0; $i < count($zonelist['arctic']); $i++) {
+    if($User1TimeZone==$zonelist['arctic'][$i][1]) { $optsel = " selected=\"selected\""; }
+    echo "<option".$optsel." value=\"".$zonelist['arctic'][$i][1]."\">".str_replace("_", " ", $zonelist['arctic'][$i][0])."</option>\n"; 
     $optsel=""; }
 ?>
 </optgroup>
