@@ -11,7 +11,7 @@
     Copyright 2004-2017 iDB Support - http://idb.berlios.de/
     Copyright 2004-2017 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: profilemain.php - Last Update: 09/10/2018 SVN 867 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 09/12/2018 SVN 869 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
@@ -420,7 +420,6 @@ $zonelist['europe'] = array();
 $zonelist['indian'] = array();
 $zonelist['pacific'] = array();
 $zonelist['etcetera'] = array();
-$zonelist['others'] = array();
 for ($i=0; $i < count($timezone_identifiers); $i++) {
     $zonelookup = explode("/", $timezone_identifiers[$i]);
     if(count($zonelookup)==1) { array_push($zonelist['etcetera'], array($timezone_identifiers[$i], $timezone_identifiers[$i])); }
@@ -755,7 +754,6 @@ $zonelist['europe'] = array();
 $zonelist['indian'] = array();
 $zonelist['pacific'] = array();
 $zonelist['etcetera'] = array();
-$zonelist['others'] = array();
 for ($i=0; $i < count($timezone_identifiers); $i++) {
     $zonelookup = explode("/", $timezone_identifiers[$i]);
     if(count($zonelookup)==1) { array_push($zonelist['etcetera'], array($timezone_identifiers[$i], $timezone_identifiers[$i])); }
