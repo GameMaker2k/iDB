@@ -10,7 +10,7 @@
     Copyright 2004-2017 iDB Support - http://idb.berlios.de/
     Copyright 2004-2017 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: javascript.js - Last Update: 01/26/2017 SVN 810 - Author: cooldude2k $
+    $FileInfo: javascript.js - Last Update: 09/12/2018 SVN 870 - Author: cooldude2k $
 */
 function getid(id) {
 var itm;
@@ -42,3 +42,22 @@ var itm;
 itm = document.getElementById(id);
 var pretext = itm.value;
 itm.value = pretext + code; }
+
+function GetUserTimeZone() {
+    if (!Intl || !Intl.DateTimeFormat().resolvedOptions().timeZone) {
+        throw 'Time zones are not available in this environment';
+    }
+
+    try {
+        tzname = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    }
+    catch (ex) {
+        tzname = false;
+        return false;
+    }
+    if()
+    {
+    document.getElementById("YourOffSet").value = tzname;
+    return true;
+    }
+}
