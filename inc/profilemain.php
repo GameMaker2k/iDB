@@ -11,7 +11,7 @@
     Copyright 2004-2017 iDB Support - http://idb.berlios.de/
     Copyright 2004-2017 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: profilemain.php - Last Update: 09/12/2018 SVN 869 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 09/12/2018 SVN 871 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
@@ -311,6 +311,7 @@ if ($Pre1Avatar=="http://"||$Pre1Avatar==null||
 	strtolower($Pre1Avatar)=="noavatar") {
 $Pre1Avatar=$ThemeSet['NoAvatar'];
 $User1AvatarSize=$ThemeSet['NoAvatarSize']; }
+if($User1Avatar=="http://") { $User1Avatar = ""; }
 $AvatarSize1=explode("x", $User1AvatarSize);
 $AvatarSize1W=$AvatarSize1[0]; $AvatarSize1H=$AvatarSize1[1];
 ?>
@@ -377,6 +378,7 @@ $AvatarSize1W=$AvatarSize1[0]; $AvatarSize1H=$AvatarSize1[1];
 if($_POST['update']=="now") {
 if($_POST['Avatar']!=null&&$_POST['AvatarSizeW']!=null&&$_POST['AvatarSizeH']!=null&&
 	$_SESSION['UserGroup']!=$Settings['GuestGroup']) {
+    if($_POST['Avatar']=="") { $_POST['Avatar'] = "http://"; }
 	if (!filter_var($_POST['Avatar'], FILTER_VALIDATE_URL)&&($_POST['Avatar']!="http://"||$_POST['Avatar']!="https://")) { $Error="Yes";  ?>
 <div class="TableMessage" style="text-align: center;">Your avatar url is not a valid web url.<br />&nbsp;</div>
 	<?php }
@@ -718,6 +720,7 @@ $User1Interests=sql_result($result,$i,"Interests");
 $User1Title=sql_result($result,$i,"Title");
 $User1Website=sql_result($result,$i,"Website"); 
 $User1Website = urlcheck($User1Website);
+if($User1Website=="http://") { $User1Website = ""; }
 $User1Gender=sql_result($result,$i,"Gender");
 $User1TimeZone=sql_result($result,$i,"TimeZone");
 $User1DateFormat=sql_result($result,$i,"DateFormat");
@@ -1019,6 +1022,7 @@ if($_POST['act']=="profile"&&
 	$_SESSION['UserGroup']!=$Settings['GuestGroup']) {
 	if(preg_match("/([0-9]{4})\-([0-9]{2})\-([0-9]{2})/", $_POST['EventDay'])) { $_POST['EventDay'] = preg_replace("/([0-9]{4})\-([0-9]{2})\-([0-9]{2})/", "$2/$3/$1", $_POST['EventDay']); }
 	$Error = "No";
+    if($_POST['Website']=="") { $_POST['Website'] = "http://"; }
 	if (!filter_var($_POST['Website'], FILTER_VALIDATE_URL)&&($_POST['Website']!="http://"||$_POST['Website']!="https://")) { $Error="Yes";  ?>
 <div class="TableMessage" style="text-align: center;">Your website url is not a valid web url.<br />&nbsp;</div>
 	<?php }

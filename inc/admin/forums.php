@@ -11,7 +11,7 @@
     Copyright 2004-2017 iDB Support - http://idb.berlios.de/
     Copyright 2004-2017 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: forums.php - Last Update: 01/26/2017 SVN 810 - Author: cooldude2k $
+    $FileInfo: forums.php - Last Update: 09/12/2018 SVN 871 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="forums.php"||$File3Name=="/forums.php") {
@@ -343,7 +343,7 @@ sql_free_result($cr); ?>
 	</select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="RedirectURL">Insert Redirect URL for redirect forum:</label></td>
-	<td style="width: 50%;"><input type="url" name="RedirectURL" class="TextBox" id="RedirectURL" size="20" value="http://" /></td>
+	<td style="width: 50%;"><input type="url" name="RedirectURL" class="TextBox" id="RedirectURL" size="20" value="" /></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="InSubForum">In SubForum:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="InSubForum" id="InSubForum">
@@ -422,6 +422,7 @@ sql_free_result($fr); ?>
 </table>
 </div>
 <?php } if($_POST['act']=="addforum"&&$_POST['update']=="now"&&$_GET['act']=="addforum") {
+if($_POST['RedirectURL']=="") { $_POST['RedirectURL'] = "http://"; }
 $_POST['ForumName'] = stripcslashes(htmlspecialchars($_POST['ForumName'], ENT_QUOTES, $Settings['charset']));
 //$_POST['ForumName'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['ForumName']);
 $_POST['ForumName'] = remove_spaces($_POST['ForumName']);
@@ -724,6 +725,7 @@ $ShowForum=sql_result($preresult,0,"ShowForum");
 $ForumType=sql_result($preresult,0,"ForumType");
 $InSubForum=sql_result($preresult,0,"InSubForum");
 $RedirectURL=sql_result($preresult,0,"RedirectURL");
+if($RedirectURL=="http://") { $RedirectURL = ""; }
 $RedirectTimes=sql_result($preresult,0,"Redirects");
 $NumberViews=sql_result($preresult,0,"NumViews");
 $ForumDescription=sql_result($preresult,0,"Description");
@@ -871,6 +873,7 @@ sql_free_result($fr); ?>
 </div>
 <?php } } } if($_POST['act']=="editforum"&&$_POST['update']=="now"&&$_GET['act']=="editforum"&&
 	isset($_POST['id'])) {
+if($_POST['RedirectURL']=="") { $_POST['RedirectURL'] = "http://"; }
 $_POST['ForumName'] = stripcslashes(htmlspecialchars($_POST['ForumName'], ENT_QUOTES, $Settings['charset']));
 //$_POST['ForumName'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['ForumName']);
 $_POST['ForumName'] = remove_spaces($_POST['ForumName']);

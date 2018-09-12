@@ -11,7 +11,7 @@
     Copyright 2004-2017 iDB Support - http://idb.berlios.de/
     Copyright 2004-2017 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: html5.php - Last Update: 01/26/2017 SVN 810 - Author: cooldude2k $
+    $FileInfo: html5.php - Last Update: 09/12/2018 SVN 871 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="xhtml10.php"||$File3Name=="/xhtml10.php") {
@@ -211,6 +211,10 @@ if(strpos($_SERVER['HTTP_USER_AGENT'], "msie") &&
 <?php } echo "\n"; ?>
 
 <script type="text/javascript" src="<?php echo url_maker($exfilejs['javascript'],$Settings['js_ext'],null,$Settings['qstr'],$Settings['qsep'],$prexqstrjs['javascript'],$exqstrjs['javascript']); ?>"></script>
+<script type="text/javascript">
+ var tzname=Intl.DateTimeFormat().resolvedOptions().timeZone;
+ document.cookie = "getusertz="+tzname;
+</script>
 <?php echo "\n";
 if($ThemeSet['CSSType']=="import") { ?>
 <style type="text/css">

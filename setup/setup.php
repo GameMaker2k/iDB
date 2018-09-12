@@ -12,7 +12,7 @@
     Copyright 2004-2017 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: setup.php - Last Update: 09/12/2018 SVN 869 - Author: cooldude2k $
+    $FileInfo: setup.php - Last Update: 09/12/2018 SVN 871 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="setup.php"||$File3Name=="/setup.php") {
@@ -68,6 +68,9 @@ fclose($fp);
 $fp = fopen("./settingsbak.php","w+");
 fwrite($fp, $BoardSettings);
 fclose($fp);
+$gettzinfofromjs = date_default_timezone_get();
+if(isset($_COOKIE['getusertz']) && in_array($_COOKIE['getusertz'], DateTimeZone::listIdentifiers())) {
+   $gettzinfofromjs = $_COOKIE['getusertz']; }
 // http://www.tutorialspoint.com/php/php_function_timezone_identifiers_list.htm
 $timezone_identifiers = DateTimeZone::listIdentifiers();
 //$timezone_identifiers = timezone_identifiers_list();
@@ -279,7 +282,7 @@ if(!function_exists('hash')&&!function_exists('hash_algos')) { ?>
 <?php
 $optsel="";
 for ($i=0; $i < count($zonelist['africa']); $i++) {
-    if(date_default_timezone_get()==$zonelist['africa'][$i][1]) { $optsel = " selected=\"selected\""; }
+    if($gettzinfofromjs==$zonelist['africa'][$i][1]) { $optsel = " selected=\"selected\""; }
     echo "<option".$optsel." value=\"".$zonelist['africa'][$i][1]."\">".str_replace("_", " ", $zonelist['africa'][$i][0])."</option>\n"; 
     $optsel=""; }
 ?>
@@ -288,7 +291,7 @@ for ($i=0; $i < count($zonelist['africa']); $i++) {
 <?php
 $optsel="";
 for ($i=0; $i < count($zonelist['america']); $i++) {
-    if(date_default_timezone_get()==$zonelist['america'][$i][1]) { $optsel = " selected=\"selected\""; }
+    if($gettzinfofromjs==$zonelist['america'][$i][1]) { $optsel = " selected=\"selected\""; }
     echo "<option".$optsel." value=\"".$zonelist['america'][$i][1]."\">".str_replace("_", " ", $zonelist['america'][$i][0])."</option>\n"; 
     $optsel=""; }
 ?>
@@ -297,7 +300,7 @@ for ($i=0; $i < count($zonelist['america']); $i++) {
 <?php
 $optsel="";
 for ($i=0; $i < count($zonelist['antarctica']); $i++) {
-    if(date_default_timezone_get()==$zonelist['antarctica'][$i][1]) { $optsel = " selected=\"selected\""; }
+    if($gettzinfofromjs==$zonelist['antarctica'][$i][1]) { $optsel = " selected=\"selected\""; }
     echo "<option".$optsel." value=\"".$zonelist['antarctica'][$i][1]."\">".str_replace("_", " ", $zonelist['antarctica'][$i][0])."</option>\n"; 
     $optsel=""; }
 ?>
@@ -306,7 +309,7 @@ for ($i=0; $i < count($zonelist['antarctica']); $i++) {
 <?php
 $optsel="";
 for ($i=0; $i < count($zonelist['arctic']); $i++) {
-    if(date_default_timezone_get()==$zonelist['arctic'][$i][1]) { $optsel = " selected=\"selected\""; }
+    if($gettzinfofromjs==$zonelist['arctic'][$i][1]) { $optsel = " selected=\"selected\""; }
     echo "<option".$optsel." value=\"".$zonelist['arctic'][$i][1]."\">".str_replace("_", " ", $zonelist['arctic'][$i][0])."</option>\n"; 
     $optsel=""; }
 ?>
@@ -314,7 +317,7 @@ for ($i=0; $i < count($zonelist['arctic']); $i++) {
 <optgroup label="Asia">
 <?php
 for ($i=0; $i < count($zonelist['asia']); $i++) {
-    if(date_default_timezone_get()==$zonelist['asia'][$i][1]) { $optsel = " selected=\"selected\""; }
+    if($gettzinfofromjs==$zonelist['asia'][$i][1]) { $optsel = " selected=\"selected\""; }
     echo "<option".$optsel." value=\"".$zonelist['asia'][$i][1]."\">".str_replace("_", " ", $zonelist['asia'][$i][0])."</option>\n"; 
     $optsel=""; }
 ?>
@@ -323,7 +326,7 @@ for ($i=0; $i < count($zonelist['asia']); $i++) {
 <?php
 $optsel="";
 for ($i=0; $i < count($zonelist['atlantic']); $i++) {
-    if(date_default_timezone_get()==$zonelist['atlantic'][$i][1]) { $optsel = " selected=\"selected\""; }
+    if($gettzinfofromjs==$zonelist['atlantic'][$i][1]) { $optsel = " selected=\"selected\""; }
     echo "<option".$optsel." value=\"".$zonelist['atlantic'][$i][1]."\">".str_replace("_", " ", $zonelist['atlantic'][$i][0])."</option>\n"; 
     $optsel=""; }
 ?>
@@ -332,7 +335,7 @@ for ($i=0; $i < count($zonelist['atlantic']); $i++) {
 <?php
 $optsel="";
 for ($i=0; $i < count($zonelist['australia']); $i++) {
-    if(date_default_timezone_get()==$zonelist['australia'][$i][1]) { $optsel = " selected=\"selected\""; }
+    if($gettzinfofromjs==$zonelist['australia'][$i][1]) { $optsel = " selected=\"selected\""; }
     echo "<option".$optsel." value=\"".$zonelist['australia'][$i][1]."\">".str_replace("_", " ", $zonelist['australia'][$i][0])."</option>\n"; 
     $optsel=""; }
 ?>
@@ -341,7 +344,7 @@ for ($i=0; $i < count($zonelist['australia']); $i++) {
 <?php
 $optsel="";
 for ($i=0; $i < count($zonelist['europe']); $i++) {
-    if(date_default_timezone_get()==$zonelist['europe'][$i][1]) { $optsel = " selected=\"selected\""; }
+    if($gettzinfofromjs==$zonelist['europe'][$i][1]) { $optsel = " selected=\"selected\""; }
     echo "<option".$optsel." value=\"".$zonelist['europe'][$i][1]."\">".str_replace("_", " ", $zonelist['europe'][$i][0])."</option>\n"; 
     $optsel=""; }
 ?>
@@ -350,7 +353,7 @@ for ($i=0; $i < count($zonelist['europe']); $i++) {
 <?php
 $optsel="";
 for ($i=0; $i < count($zonelist['indian']); $i++) {
-    if(date_default_timezone_get()==$zonelist['indian'][$i][1]) { $optsel = " selected=\"selected\""; }
+    if($gettzinfofromjs==$zonelist['indian'][$i][1]) { $optsel = " selected=\"selected\""; }
     echo "<option".$optsel." value=\"".$zonelist['indian'][$i][1]."\">".str_replace("_", " ", $zonelist['indian'][$i][0])."</option>\n"; 
     $optsel=""; }
 ?>
@@ -359,7 +362,7 @@ for ($i=0; $i < count($zonelist['indian']); $i++) {
 <?php
 $optsel="";
 for ($i=0; $i < count($zonelist['pacific']); $i++) {
-    if(date_default_timezone_get()==$zonelist['pacific'][$i][1]) { $optsel = " selected=\"selected\""; }
+    if($gettzinfofromjs==$zonelist['pacific'][$i][1]) { $optsel = " selected=\"selected\""; }
     echo "<option".$optsel." value=\"".$zonelist['pacific'][$i][1]."\">".str_replace("_", " ", $zonelist['pacific'][$i][0])."</option>\n"; 
     $optsel=""; }
 ?>
@@ -368,7 +371,7 @@ for ($i=0; $i < count($zonelist['pacific']); $i++) {
 <?php
 $optsel="";
 for ($i=0; $i < count($zonelist['etcetera']); $i++) {
-    if(date_default_timezone_get()==$zonelist['etcetera'][$i][1]) { $optsel = " selected=\"selected\""; }
+    if($gettzinfofromjs==$zonelist['etcetera'][$i][1]) { $optsel = " selected=\"selected\""; }
     echo "<option".$optsel." value=\"".$zonelist['etcetera'][$i][1]."\">".str_replace("_", " ", $zonelist['etcetera'][$i][0])."</option>\n"; 
     $optsel=""; }
 ?>
