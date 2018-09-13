@@ -11,7 +11,7 @@
     Copyright 2004-2017 iDB Support - http://idb.berlios.de/
     Copyright 2004-2017 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: categories.php - Last Update: 01/26/2017 SVN 810 - Author: cooldude2k $
+    $FileInfo: categories.php - Last Update: 09/13/2018 SVN 876 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="categories.php"||$File3Name=="/categories.php") {
@@ -179,9 +179,10 @@ $getperidi = 0;
 $nextperid = null;
 while ($getperidi < $getperidnum) {
 if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"||
-	$Settings['sqltype']=="pgsql"||$Settings['sqltype']=="cubrid") {
+	$Settings['sqltype']=="pgsql"||$Settings['sqltype']=="cubrid"||
+	$Settings['sqltype']=="sqlite3") {
 $getperidID=sql_result($getperidr,$getperidi,"PermissionID"); }
-if($Settings['sqltype']=="sqlite"||$Settings['sqltype']=="sqlite3") {
+if($Settings['sqltype']=="sqlite") {
 $getperidID=sql_result($getperidr,$getperidi,"\"PermissionID\""); }
 $getperidq2 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."catpermissions\" WHERE \"PermissionID\"=%i", array($getperidID));
 $getperidr2=sql_query($getperidq2,$SQLStat);
@@ -598,9 +599,10 @@ $getperidnum=sql_num_rows($getperidr);
 $getperidi = 0;
 while ($getperidi < $getperidnum) {
 if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"||
-	$Settings['sqltype']=="pgsql"||$Settings['sqltype']=="cubrid") {
+	$Settings['sqltype']=="pgsql"||$Settings['sqltype']=="cubrid"||
+	$Settings['sqltype']=="sqlite3") {
 $getperidID=sql_result($getperidr,$getperidi,"PermissionID"); }
-if($Settings['sqltype']=="sqlite"||$Settings['sqltype']=="sqlite3") {
+if($Settings['sqltype']=="sqlite") {
 $getperidID=sql_result($getperidr,$getperidi,"\"PermissionID\""); }
 $getperidq2 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."catpermissions\" WHERE \"PermissionID\"=%i ORDER BY \"CategoryID\" ASC", array($getperidID));
 $getperidr2=sql_query($getperidq2,$SQLStat);
