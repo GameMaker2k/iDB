@@ -11,7 +11,7 @@
     Copyright 2004-2017 iDB Support - http://idb.berlios.de/
     Copyright 2004-2017 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: main.php - Last Update: 09/14/2018 SVN 878 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 09/14/2018 SVN 879 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -682,13 +682,13 @@ if(in_array("md2",hash_algos())) { ?>
 <?php } if(in_array("sha512",hash_algos())) { ?>
 <option<?php if($Settings['use_hashtype']=="sha512") { echo " selected=\"selected\""; } ?> value="sha512">SHA512</option>
 <?php } if(in_array("sha3-224",hash_algos())) { ?>
-<option<?php if($Settings['use_hashtype']=="sha3224") { echo " selected=\"selected\""; } ?> value="sha3224">SHA3-224</option>
+<option<?php if($Settings['use_hashtype']=="sha3-224") { echo " selected=\"selected\""; } ?> value="sha3-224">SHA3-224</option>
 <?php } if(in_array("sha3-256",hash_algos())) { ?>
-<option<?php if($Settings['use_hashtype']=="sha3256") { echo " selected=\"selected\""; } ?> value="sha3256">SHA3-256</option>
+<option<?php if($Settings['use_hashtype']=="sha3-256") { echo " selected=\"selected\""; } ?> value="sha3-256">SHA3-256</option>
 <?php } if(in_array("sha3-384",hash_algos())) { ?>
-<option<?php if($Settings['use_hashtype']=="sha3384") { echo " selected=\"selected\""; } ?> value="sha3384">SHA3-384</option>
+<option<?php if($Settings['use_hashtype']=="sha3-384") { echo " selected=\"selected\""; } ?> value="sha3-384">SHA3-384</option>
 <?php } if(in_array("sha3-512",hash_algos())) { ?>
-<option<?php if($Settings['use_hashtype']=="sha3512") { echo " selected=\"selected\""; } ?> value="sha3512">SHA3-512</option>
+<option<?php if($Settings['use_hashtype']=="sha3-512") { echo " selected=\"selected\""; } ?> value="sha3-512">SHA3-512</option>
 <?php } if(in_array("ripemd128",hash_algos())) { ?>
 <option<?php if($Settings['use_hashtype']=="ripemd128") { echo " selected=\"selected\""; } ?> value="ripemd128">RIPEMD128</option>
 <?php } if(in_array("ripemd160",hash_algos())) { ?>
@@ -1077,10 +1077,10 @@ if($_POST['PassHashType']!="md2"&&
    $_POST['PassHashType']!="sha256"&&
    $_POST['PassHashType']!="sha384"&&
    $_POST['PassHashType']!="sha512"&&
-   $_POST['PassHashType']!="sha3224"&&
-   $_POST['PassHashType']!="sha3256"&&
-   $_POST['PassHashType']!="sha3384"&&
-   $_POST['PassHashType']!="sha3512"&&
+   $_POST['PassHashType']!="sha3-224"&&
+   $_POST['PassHashType']!="sha3-256"&&
+   $_POST['PassHashType']!="sha3-384"&&
+   $_POST['PassHashType']!="sha3-512"&&
    $_POST['PassHashType']!="ripemd128"&&
    $_POST['PassHashType']!="ripemd160"&&
    $_POST['PassHashType']!="ripemd256"&&

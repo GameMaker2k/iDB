@@ -12,7 +12,7 @@
     Copyright 2004-2017 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: setup.php - Last Update: 09/12/2018 SVN 871 - Author: cooldude2k $
+    $FileInfo: setup.php - Last Update: 09/14/2018 SVN 879 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="setup.php"||$File3Name=="/setup.php") {
@@ -252,13 +252,13 @@ if(in_array("md2",hash_algos())) { ?>
 <?php } if(in_array("sha512",hash_algos())) { ?>
 <option value="sha512">SHA512</option>
 <?php } if(in_array("sha3-224",hash_algos())) { ?>
-<option value="sha3224">SHA3-224</option>
+<option value="sha3-224">SHA3-224</option>
 <?php } if(in_array("sha3-256",hash_algos())) { ?>
-<option value="sha3256">SHA3-256</option>
+<option value="sha3-256">SHA3-256</option>
 <?php } if(in_array("sha3-384",hash_algos())) { ?>
-<option value="sha3384">SHA3-384</option>
+<option value="sha3-384">SHA3-384</option>
 <?php } if(in_array("sha3-512",hash_algos())) { ?>
-<option value="sha3512">SHA3-512</option>
+<option value="sha3-512">SHA3-512</option>
 <?php } if(in_array("ripemd128",hash_algos())) { ?>
 <option value="ripemd128">RIPEMD128</option>
 <?php } if(in_array("ripemd160",hash_algos())) { ?>
