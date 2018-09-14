@@ -11,7 +11,7 @@
     Copyright 2004-2017 iDB Support - http://idb.berlios.de/
     Copyright 2004-2017 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: functions.php - Last Update: 09/14/2018 SVN 879 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 09/14/2018 SVN 880 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -353,7 +353,11 @@ $UsersInfo['Name'] = $UsersName;
 $UsersInfo['Hidden'] = $UsersHidden;
 return $UsersInfo; }
 if(!function_exists('hash_hmac')) {
-function hash_hmac($algo, $data, $key, $raw_output = false) {
+function hash_hmac($hash, $data, $key, $raw_output = false) {
+  if($hash=="sha3-224") { $hash = "sha3224"; }
+  if($hash=="sha3-256") { $hash = "sha3256"; }
+  if($hash=="sha3-384") { $hash = "sha3384"; }
+  if($hash=="sha3-512") { $hash = "sha3512"; }
   $blocksize = 64;
   if (strlen($key)>$blocksize) {
   if (function_exists('hash')) {
@@ -373,6 +377,10 @@ function hash_algos() {
 return array(0 => "md5", 1 => "sha1"); } }
 // hmac hash function
 function hmac($data,$key,$hash='sha1',$blocksize=64) {
+  if($hash=="sha3-224") { $hash = "sha3224"; }
+  if($hash=="sha3-256") { $hash = "sha3256"; }
+  if($hash=="sha3-384") { $hash = "sha3384"; }
+  if($hash=="sha3-512") { $hash = "sha3512"; }
   if (!function_exists('hash_hmac')) {
   if (strlen($key)>$blocksize) {
   if (function_exists('hash')) {
@@ -390,10 +398,18 @@ function hmac($data,$key,$hash='sha1',$blocksize=64) {
   return hash_hmac($hash,$data,$key); } }
 // b64hmac hash function
 function b64e_hmac($data,$key,$extdata,$hash='sha1',$blocksize=64) {
+    if($hash=="sha3-224") { $hash = "sha3224"; }
+    if($hash=="sha3-256") { $hash = "sha3256"; }
+    if($hash=="sha3-384") { $hash = "sha3384"; }
+    if($hash=="sha3-512") { $hash = "sha3512"; }
 	$extdata2 = hexdec($extdata); $key = $key.$extdata2;
   return base64_encode(hmac($data,$key,$hash,$blocksize).$extdata); }
 // b64hmac rot13 hash function
 function b64e_rot13_hmac($data,$key,$extdata,$hash='sha1',$blocksize=64) {
+    if($hash=="sha3-224") { $hash = "sha3224"; }
+    if($hash=="sha3-256") { $hash = "sha3256"; }
+    if($hash=="sha3-384") { $hash = "sha3384"; }
+    if($hash=="sha3-512") { $hash = "sha3512"; }
 	$data = str_rot13($data);
 	$extdata2 = hexdec($extdata); $key = $key.$extdata2;
   return base64_encode(hmac($data,$key,$hash,$blocksize).$extdata); }
@@ -430,14 +446,14 @@ if(in_array("sha384",hash_algos())&&!function_exists("sha384")) {
 function sha384($data) { return hash("sha384",$data); } }
 if(in_array("sha512",hash_algos())&&!function_exists("sha512")) { 
 function sha512($data) { return hash("sha512",$data); } }
-if(in_array("sha3-224",hash_algos())&&!function_exists("sha3-224")) { 
-function sha3-224($data) { return hash("sha3-224",$data); } }
-if(in_array("sha3-256",hash_algos())&&!function_exists("sha3-256")) { 
-function sha3-256($data) { return hash("sha3-256",$data); } }
-if(in_array("sha3-384",hash_algos())&&!function_exists("sha3-384")) { 
-function sha3-384($data) { return hash("sha3-384",$data); } }
-if(in_array("sha3-512",hash_algos())&&!function_exists("sha3-512")) { 
-function sha3-512($data) { return hash("sha3-512",$data); } }
+if(in_array("sha3-224",hash_algos())&&!function_exists("sha3224")) { 
+function sha3224($data) { return hash("sha3-224",$data); } }
+if(in_array("sha3-256",hash_algos())&&!function_exists("sha3256")) { 
+function sha3256($data) { return hash("sha3-256",$data); } }
+if(in_array("sha3-384",hash_algos())&&!function_exists("sha3384")) { 
+function sha3384($data) { return hash("sha3-384",$data); } }
+if(in_array("sha3-512",hash_algos())&&!function_exists("sha3512")) { 
+function sha3512($data) { return hash("sha3-512",$data); } }
 if(in_array("ripemd128",hash_algos())&&!function_exists("ripemd128")) { 
 function ripemd128($data) { return hash("ripemd128",$data); } }
 if(in_array("ripemd160",hash_algos())&&!function_exists("ripemd160")) { 
