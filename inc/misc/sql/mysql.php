@@ -11,7 +11,7 @@
     Copyright 2004-2017 iDB Support - http://idb.berlios.de/
     Copyright 2004-2017 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: mysql.php - Last Update: 01/26/2017 SVN 810 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 10/04/2018 SVN 882 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mysql.php"||$File3Name=="/mysql.php") {
@@ -83,6 +83,18 @@ if ($dlink===false) {
     output_error("Can't use database ".$database.": ".sql_error(),E_USER_ERROR);
 	return false; } }
 $result = sql_query("SET SESSION SQL_MODE='ANSI_QUOTES,NO_AUTO_VALUE_ON_ZERO';",$link);
+if ($result===false) {
+    output_error("SQL Error: ".sql_error(),E_USER_ERROR);
+	return false; }
+$result = sql_query("SET innodb_file_format = 'Barracuda';",$link);
+if ($result===false) {
+    output_error("SQL Error: ".sql_error(),E_USER_ERROR);
+	return false; }
+$result = sql_query("SET innodb_large_prefix = 'ON';",$link);
+if ($result===false) {
+    output_error("SQL Error: ".sql_error(),E_USER_ERROR);
+	return false; }
+$result = sql_query("SET innodb_file_per_table = 'ON';",$link);
 if ($result===false) {
     output_error("SQL Error: ".sql_error(),E_USER_ERROR);
 	return false; }
