@@ -11,7 +11,7 @@
     Copyright 2004-2017 iDB Support - http://idb.berlios.de/
     Copyright 2004-2017 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 09/14/2018 SVN 879 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 10/06/2018 SVN 883 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -1653,13 +1653,15 @@ if (pre_strlen($_POST['Password'])>"60") { $Error="Yes";
 	<br />Your email is not a valid email address.<br />
 	</span>&nbsp;</td>
 </tr>
-<?php } if (!filter_var($_POST['Website'], FILTER_VALIDATE_URL)&&($_POST['Website']!="http://"||$_POST['Website']!="https://")) { var_dump($_POST['Website']); $Error="Yes";  ?>
+<?php } if($_POST['Website']=="") { $_POST['Website'] = "http://"; }
+if (!filter_var($_POST['Website'], FILTER_VALIDATE_URL)&&$_POST['Website']!="http://"&&$_POST['Website']!="https://") { var_dump($_POST['Website']); $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Your website url is not a valid web url.<br />
 	</span>&nbsp;</td>
 </tr>
-<?php } if (!filter_var($_POST['Avatar'], FILTER_VALIDATE_URL)&&($_POST['Avatar']!="http://"||$_POST['Avatar']!="https://")) { var_dump($_POST['Avatar']); $Error="Yes";  ?>
+<?php } if($_POST['Avatar']=="") { $_POST['Avatar'] = "http://"; }
+if (!filter_var($_POST['Avatar'], FILTER_VALIDATE_URL)&&$_POST['Avatar']!="http://"&&$_POST['Avatar']!="https://") { var_dump($_POST['Avatar']); $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Your avatar url is not a valid web url.<br />

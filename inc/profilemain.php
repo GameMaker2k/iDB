@@ -11,7 +11,7 @@
     Copyright 2004-2017 iDB Support - http://idb.berlios.de/
     Copyright 2004-2017 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: profilemain.php - Last Update: 09/14/2018 SVN 879 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 10/06/2018 SVN 883 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
@@ -379,7 +379,7 @@ if($_POST['update']=="now") {
 if($_POST['Avatar']!=null&&$_POST['AvatarSizeW']!=null&&$_POST['AvatarSizeH']!=null&&
 	$_SESSION['UserGroup']!=$Settings['GuestGroup']) {
     if($_POST['Avatar']=="") { $_POST['Avatar'] = "http://"; }
-	if (!filter_var($_POST['Avatar'], FILTER_VALIDATE_URL)&&($_POST['Avatar']!="http://"||$_POST['Avatar']!="https://")) { $Error="Yes";  ?>
+	if (!filter_var($_POST['Avatar'], FILTER_VALIDATE_URL)&&$_POST['Avatar']!="http://"&&$_POST['Avatar']!="https://") { $Error="Yes";  ?>
 <div class="TableMessage" style="text-align: center;">Your avatar url is not a valid web url.<br />&nbsp;</div>
 	<?php }
 	if(!is_numeric($_POST['AvatarSizeW'])) { $_POST['AvatarSizeW'] = 100; }
@@ -1023,7 +1023,7 @@ if($_POST['act']=="profile"&&
 	if(preg_match("/([0-9]{4})\-([0-9]{2})\-([0-9]{2})/", $_POST['EventDay'])) { $_POST['EventDay'] = preg_replace("/([0-9]{4})\-([0-9]{2})\-([0-9]{2})/", "$2/$3/$1", $_POST['EventDay']); }
 	$Error = "No";
     if($_POST['Website']=="") { $_POST['Website'] = "http://"; }
-	if (!filter_var($_POST['Website'], FILTER_VALIDATE_URL)&&($_POST['Website']!="http://"||$_POST['Website']!="https://")) { $Error="Yes";  ?>
+	if (!filter_var($_POST['Website'], FILTER_VALIDATE_URL)&&$_POST['Website']!="http://"&&$_POST['Website']!="https://") { $Error="Yes";  ?>
 <div class="TableMessage" style="text-align: center;">Your website url is not a valid web url.<br />&nbsp;</div>
 	<?php }
 	$_POST['Interests'] = htmlspecialchars($_POST['Interests'], ENT_QUOTES, $Settings['charset']);
