@@ -11,7 +11,7 @@
     Copyright 2004-2017 iDB Support - http://idb.berlios.de/
     Copyright 2004-2017 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: functions.php - Last Update: 09/14/2018 SVN 880 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 06/21/2019 SVN 894 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -495,6 +495,26 @@ function neo_b64e_rot13_hmac($data,$key,$extdata,$hash='sha1',$blocksize=64) {
 
 if(!function_exists('password_hash')) { 
 function bcrypt($data) { return password_hash($data,PASSWORD_BCRYPT); } }
+
+/* is_empty by s rotondo90 at gmail com at https://www.php.net/manual/en/function.hash-equals.php#119576*/
+if(!function_exists('hash_equals')) {
+    function hash_equals($known_string, $user_string) {
+        $ret = 0;
+       
+        if (strlen($known_string) !== strlen($user_string)) {
+            $user_string = $known_string;
+            $ret = 1;
+        }
+       
+        $res = $known_string ^ $user_string;
+       
+        for ($i = strlen($res) - 1; $i >= 0; --$i) {
+            $ret |= ord($res[$i]);
+        }
+       
+        return !$ret;
+    }
+}
 
 /* str_ireplace for PHP below ver. 5 updated // 
 //       by Kazuki Przyborowski - Cool Dude 2k      //
