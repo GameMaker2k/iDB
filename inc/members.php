@@ -11,7 +11,7 @@
     Copyright 2004-2017 iDB Support - http://idb.berlios.de/
     Copyright 2004-2017 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: members.php - Last Update: 10/06/2018 SVN 883 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 06/21/2019 SVN 891 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -1160,8 +1160,10 @@ if($HashType=="NoPass") { $YourPassword = "iDB"; $YourPassTry = "IntDB"; }
 if($HashType=="NoPassword") { $YourPassword = "iDB"; $YourPassTry = "IntDB"; }
 if($HashType=="GuestPass") { $YourPassword = "iDB"; $YourPassTry = "IntDB"; }
 if($HashType=="GuestPassword") { $YourPassword = "iDB"; $YourPassTry = "IntDB"; }
-if($YourPassword!=$YourPassTry) { $passright = false; } 
-if($YourPassword==$YourPassTry) { $passright = true;
+/*if($YourPassword!=$YourPassTry) { $passright = false; } 
+if($YourPassword==$YourPassTry) { $passright = true; */
+if(hash_equals($YourPassTry, $YourPassword)==false) { $passright = false; } 
+if(hash_equals($YourPassTry, $YourPassword)==true) { $passright = true;
 $YourIDM=sql_result($resultlog,$i,"id");
 $YourNameM=sql_result($resultlog,$i,"Name");
 $YourPassM=sql_result($resultlog,$i,"UserPassword");
