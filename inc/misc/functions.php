@@ -11,7 +11,7 @@
     Copyright 2004-2017 iDB Support - http://idb.berlios.de/
     Copyright 2004-2017 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: functions.php - Last Update: 06/21/2019 SVN 894 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 06/23/2019 SVN 895 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -352,6 +352,13 @@ sql_free_result($gunresult);
 $UsersInfo['Name'] = $UsersName;
 $UsersInfo['Hidden'] = $UsersHidden;
 return $UsersInfo; }
+if(!function_exists('hash')) {
+function hash($algo, $data, $raw_output = false) {
+if($algo!="md5"&&$algo!="sha1") { $algo = "md5"; }
+return $algo($data); } }
+if(!function_exists('hash_algos')) {
+function hash_algos() {
+return array(0 => "md5", 1 => "sha1"); } }
 if(!function_exists('hash_hmac')) {
 function hash_hmac($hash, $data, $key, $raw_output = false) {
   if($hash=="sha3-224") { $hash = "sha3224"; }
@@ -361,20 +368,21 @@ function hash_hmac($hash, $data, $key, $raw_output = false) {
   $blocksize = 64;
   if (strlen($key)>$blocksize) {
   if (function_exists('hash')) {
+  if($hash=="sha3224") { $hash = "sha3-224"; }
+  if($hash=="sha3256") { $hash = "sha3-256"; }
+  if($hash=="sha3384") { $hash = "sha3-384"; }
+  if($hash=="sha3512") { $hash = "sha3-512"; }
   $key=pack('H*',hash($hash, $key)); }
   if (!function_exists('hash')) {
   $key=pack('H*',$hash($key)); } }
   $key=str_pad($key, $blocksize, chr(0x00));
   $ipad=str_repeat(chr(0x36),$blocksize);
   $opad=str_repeat(chr(0x5c),$blocksize);
-  return hash($algo, ($key^$opad).pack('H*',hash($algo, ($key^$ipad).$data))); } }
-if(!function_exists('hash')) {
-function hash($algo, $data, $raw_output = false) {
-if($algo!="md5"&&$algo!="sha1") { $algo = "md5"; }
-return $algo($data); } }
-if(!function_exists('hash_algos')) {
-function hash_algos() {
-return array(0 => "md5", 1 => "sha1"); } }
+  if($hash=="sha3224") { $hash = "sha3-224"; }
+  if($hash=="sha3256") { $hash = "sha3-256"; }
+  if($hash=="sha3384") { $hash = "sha3-384"; }
+  if($hash=="sha3512") { $hash = "sha3-512"; }
+  return hash($hash, ($key^$opad).pack('H*',hash($hash, ($key^$ipad).$data))); } }
 // hmac hash function
 function hmac($data,$key,$hash='sha1',$blocksize=64) {
   if($hash=="sha3-224") { $hash = "sha3224"; }
@@ -391,25 +399,25 @@ function hmac($data,$key,$hash='sha1',$blocksize=64) {
   $ipad=str_repeat(chr(0x36),$blocksize);
   $opad=str_repeat(chr(0x5c),$blocksize);
   if (function_exists('hash')) {
+  if($hash=="sha3224") { $hash = "sha3-224"; }
+  if($hash=="sha3256") { $hash = "sha3-256"; }
+  if($hash=="sha3384") { $hash = "sha3-384"; }
+  if($hash=="sha3512") { $hash = "sha3-512"; }
   return hash($hash, ($key^$opad).pack('H*',hash($hash, ($key^$ipad).$data))); }
   if (!function_exists('hash')) {
   return $hash(($key^$opad).pack('H*',$hash(($key^$ipad).$data))); } }
   if (function_exists('hash_hmac')) { 
+  if($hash=="sha3224") { $hash = "sha3-224"; }
+  if($hash=="sha3256") { $hash = "sha3-256"; }
+  if($hash=="sha3384") { $hash = "sha3-384"; }
+  if($hash=="sha3512") { $hash = "sha3-512"; }
   return hash_hmac($hash,$data,$key); } }
 // b64hmac hash function
 function b64e_hmac($data,$key,$extdata,$hash='sha1',$blocksize=64) {
-    if($hash=="sha3-224") { $hash = "sha3224"; }
-    if($hash=="sha3-256") { $hash = "sha3256"; }
-    if($hash=="sha3-384") { $hash = "sha3384"; }
-    if($hash=="sha3-512") { $hash = "sha3512"; }
 	$extdata2 = hexdec($extdata); $key = $key.$extdata2;
   return base64_encode(hmac($data,$key,$hash,$blocksize).$extdata); }
 // b64hmac rot13 hash function
 function b64e_rot13_hmac($data,$key,$extdata,$hash='sha1',$blocksize=64) {
-    if($hash=="sha3-224") { $hash = "sha3224"; }
-    if($hash=="sha3-256") { $hash = "sha3256"; }
-    if($hash=="sha3-384") { $hash = "sha3384"; }
-    if($hash=="sha3-512") { $hash = "sha3512"; }
 	$data = str_rot13($data);
 	$extdata2 = hexdec($extdata); $key = $key.$extdata2;
   return base64_encode(hmac($data,$key,$hash,$blocksize).$extdata); }
