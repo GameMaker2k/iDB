@@ -11,7 +11,7 @@
     Copyright 2004-2017 iDB Support - http://idb.berlios.de/
     Copyright 2004-2017 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: function.php - Last Update: 01/26/2017 SVN 810 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 06/23/2019 SVN 896 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -92,6 +92,53 @@ function output_error($message, $level=E_USER_ERROR) {
     trigger_error($message.' in <strong>'.$caller['function'].'</strong> called from <strong>'.$caller['file'].'</strong> on line <strong>'.$caller['line'].'</strong>'."\n<br />error handler", $level); }
 	$Names['D'] = "Dagmara";
 define("_dagmara_", $Names['D']);
+// By s rotondo90 at gmail com at https://www.php.net/manual/en/function.random-int.php#119670
+if (!function_exists('random_int')) {
+    function random_int($min, $max) {
+        if (!function_exists('mcrypt_create_iv')) {
+            trigger_error(
+                'mcrypt must be loaded for random_int to work', 
+                E_USER_WARNING
+            );
+            return null;
+        }
+        
+        if (!is_int($min) || !is_int($max)) {
+            trigger_error('$min and $max must be integer values', E_USER_NOTICE);
+            $min = (int)$min;
+            $max = (int)$max;
+        }
+        
+        if ($min > $max) {
+            trigger_error('$max can\'t be lesser than $min', E_USER_WARNING);
+            return null;
+        }
+        
+        $range = $counter = $max - $min;
+        $bits = 1;
+        
+        while ($counter >>= 1) {
+            ++$bits;
+        }
+        
+        $bytes = (int)max(ceil($bits/8), 1);
+        $bitmask = pow(2, $bits) - 1;
+
+        if ($bitmask >= PHP_INT_MAX) {
+            $bitmask = PHP_INT_MAX;
+        }
+
+        do {
+            $result = hexdec(
+                bin2hex(
+                    mcrypt_create_iv($bytes, MCRYPT_DEV_URANDOM)
+                )
+            ) & $bitmask;
+        } while ($result > $range);
+
+        return $result + $min;
+    }
+}
 // http://us.php.net/manual/en/function.uniqid.php#94959
 /**
   * Generates an UUID
@@ -139,6 +186,56 @@ if($uuidver=="v3"||$uuidver=="v5") {
       (hexdec(substr($hash, 12, 4)) & 0x0fff) | $uuidverid,
       (hexdec(substr($hash, 16, 4)) & 0x3fff) | 0x8000,
       substr($hash, 20, 12) ); } }
+// By info at raymondrodgers dot com at https://www.php.net/manual/en/function.random-int.php#118636
+function generateUUIDv4()
+{
+    if(version_compare(PHP_VERSION,'7.0.0', '<') )
+    {
+        return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+        
+        // 32 bits for "time_low"
+        mt_rand(0, 0xffff), mt_rand(0, 0xffff),
+        
+        // 16 bits for "time_mid"
+        mt_rand(0, 0xffff),
+        
+        // 16 bits for "time_hi_and_version",
+        // four most significant bits holds version number 4
+        mt_rand(0, 0x0fff) | 0x4000,
+        
+        // 16 bits, 8 bits for "clk_seq_hi_res",
+        // 8 bits for "clk_seq_low",
+        // two most significant bits holds zero and one for variant DCE1.1
+        mt_rand(0, 0x3fff) | 0x8000,
+        
+        // 48 bits for "node"
+        mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
+        );
+    }
+    else
+    {
+        return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+        
+        // 32 bits for "time_low"
+        random_int(0, 0xffff), random_int(0, 0xffff),
+        
+        // 16 bits for "time_mid"
+        random_int(0, 0xffff),
+        
+        // 16 bits for "time_hi_and_version",
+        // four most significant bits holds version number 4
+        random_int(0, 0x0fff) | 0x4000,
+        
+        // 16 bits, 8 bits for "clk_seq_hi_res",
+        // 8 bits for "clk_seq_low",
+        // two most significant bits holds zero and one for variant DCE1.1
+        random_int(0, 0x3fff) | 0x8000,
+        
+        // 48 bits for "node"
+        random_int(0, 0xffff), random_int(0, 0xffff), random_int(0, 0xffff)
+        );
+    }
+}
 function rand_uuid($rndty = "rand", $namespace = null, $name = null) {
 $rand_array = array(1 => "v3", 2 => "v4", 3 => "v5");
 if($name===null) { $name = salt_hmac(); }
