@@ -12,7 +12,7 @@
     Copyright 2004-2017 Game Maker 2k - http://gamemaker2k.org/
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: setup.php - Last Update: 09/14/2018 SVN 879 - Author: cooldude2k $
+    $FileInfo: setup.php - Last Update: 06/23/2019 SVN 899 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="setup.php"||$File3Name=="/setup.php") {
@@ -386,14 +386,14 @@ for ($i=0; $i < count($zonelist['etcetera']); $i++) {
 </tr><tr>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="TestReferer">Test Referering URL:</label></td>
 	<td style="width: 50%;"><select id="TestReferer" name="TestReferer" class="TextBox">
-<option selected="selected" value="off">off</option>
-<option value="on">on</option>
+<option selected="selected" value="off">Off</option>
+<option value="on">On</option>
 </select></td>
 </tr><tr>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="iDBHTTPLogger">Log Every HTTP Requests:</label></td>
 	<td style="width: 50%;"><select id="iDBHTTPLogger" name="iDBHTTPLogger" class="TextBox">
-<option value="off">off</option>
-<option value="on">on</option>
+<option value="off">Off</option>
+<option value="on">On</option>
 </select></td>
 </tr><tr>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="iDBLoggerFormat">Insert The Format for HTTP Logger:</label></td>
@@ -423,8 +423,8 @@ if ($handle = opendir($skindir)) { $dirnum = null;
 </tr><tr>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="SQLThemes">Store Themes in SQL Database:</label></td>
 	<td style="width: 50%;"><select id="SQLThemes" name="SQLThemes" class="TextBox">
-<option selected="selected" value="off">off</option>
-<option value="on">on</option>
+<option selected="selected" value="off">Off</option>
+<option value="on">On</option>
 </select></td>
 </tr><tr>
 	<td style="width: 50%;"><label class="TextBoxLabel" title="Might not work" for="unlink">Delete Installer?</label></td>

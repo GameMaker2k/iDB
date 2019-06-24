@@ -11,7 +11,7 @@
     Copyright 2004-2017 iDB Support - http://idb.berlios.de/
     Copyright 2004-2017 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: main.php - Last Update: 09/14/2018 SVN 879 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 06/23/2019 SVN 899 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -737,8 +737,8 @@ while ($gi < $gnum) { ?>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="AdminValidate">Enable validate new members:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="AdminValidate" id="AdminValidate">
-	<option<?php if($Settings['AdminValidate']=="off") { echo " selected=\"selected\""; } ?> value="off">no</option>
-	<option<?php if($Settings['AdminValidate']=="on") { echo " selected=\"selected\""; } ?> value="on">yes</option>
+	<option<?php if($Settings['AdminValidate']=="off") { echo " selected=\"selected\""; } ?> value="off">No</option>
+	<option<?php if($Settings['AdminValidate']=="on") { echo " selected=\"selected\""; } ?> value="on">Yes</option>
 	</select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="max_posts">Max replies per page:</label></td>
@@ -967,26 +967,26 @@ echo "<option value=\"".$ThemeInfo['Name']."\">".$ThemeInfo['ThemeName']."</opti
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="enable_https">Enable HTTPS:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="enable_https" id="enable_https">
-	<option<?php if($Settings['enable_https']=="on") { echo " selected=\"selected\""; } ?> value="on">on</option>
-	<option<?php if($Settings['enable_https']=="off") { echo " selected=\"selected\""; } ?> value="off">off</option>
+	<option<?php if($Settings['enable_https']=="on") { echo " selected=\"selected\""; } ?> value="on">On</option>
+	<option<?php if($Settings['enable_https']=="off") { echo " selected=\"selected\""; } ?> value="off">Off</option>
 	</select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="enable_rss">Enable RSS:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="enable_rss" id="enable_rss">
-	<option<?php if($Settings['enable_rss']=="on") { echo " selected=\"selected\""; } ?> value="on">on</option>
-	<option<?php if($Settings['enable_rss']=="off") { echo " selected=\"selected\""; } ?> value="off">off</option>
+	<option<?php if($Settings['enable_rss']=="on") { echo " selected=\"selected\""; } ?> value="on">On</option>
+	<option<?php if($Settings['enable_rss']=="off") { echo " selected=\"selected\""; } ?> value="off">Off</option>
 	</select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="enable_search">Enable search:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="enable_search" id="enable_search">
-	<option<?php if($Settings['enable_search']=="on") { echo " selected=\"selected\""; } ?> value="on">on</option>
-	<option<?php if($Settings['enable_search']=="off") { echo " selected=\"selected\""; } ?> value="off">off</option>
+	<option<?php if($Settings['enable_search']=="on") { echo " selected=\"selected\""; } ?> value="on">On</option>
+	<option<?php if($Settings['enable_search']=="off") { echo " selected=\"selected\""; } ?> value="off">Off</option>
 	</select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="TestReferer">Test Referering URL:</label></td>
 	<td style="width: 50%;"><select id="TestReferer" name="TestReferer" class="TextBox">
-<option<?php if($Settings['TestReferer']=="on") { echo " selected=\"selected\""; } ?> value="on">on</option>
-<option<?php if($Settings['TestReferer']=="off") { echo " selected=\"selected\""; } ?> value="off">off</option>
+<option<?php if($Settings['TestReferer']=="on") { echo " selected=\"selected\""; } ?> value="on">On</option>
+<option<?php if($Settings['TestReferer']=="off") { echo " selected=\"selected\""; } ?> value="off">Off</option>
 </select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="iDBTimeFormat">Insert time format string:</label></td>
@@ -997,8 +997,8 @@ echo "<option value=\"".$ThemeInfo['Name']."\">".$ThemeInfo['ThemeName']."</opti
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="iDBHTTPLogger">Log Every HTTP Requests:</label></td>
 	<td style="width: 50%;"><select id="iDBHTTPLogger" name="iDBHTTPLogger" class="TextBox">
-<option<?php if($Settings['log_http_request']=="on") { echo " selected=\"selected\""; } ?> value="on">on</option>
-<option<?php if($Settings['log_http_request']=="off") { echo " selected=\"selected\""; } ?> value="off">off</option>
+<option<?php if($Settings['log_http_request']=="on") { echo " selected=\"selected\""; } ?> value="on">On</option>
+<option<?php if($Settings['log_http_request']=="off") { echo " selected=\"selected\""; } ?> value="off">Off</option>
 </select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="iDBLoggerFormat">Insert The Format for HTTP Logger:</label></td>
