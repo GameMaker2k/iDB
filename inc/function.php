@@ -11,7 +11,7 @@
     Copyright 2004-2017 iDB Support - http://idb.berlios.de/
     Copyright 2004-2017 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: function.php - Last Update: 06/23/2019 SVN 896 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 06/23/2019 SVN 898 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -146,7 +146,7 @@ if (!function_exists('random_int')) {
   * @author     Andrew Moore
   * @url        http://us.php.net/manual/en/function.uniqid.php#94959
   */
-function uuid($uuidver = "v4", $rndty = "rand", $namespace = null, $name = null) {
+function uuid_old($uuidver = "v4", $rndty = "rand", $namespace = null, $name = null) {
 if($uuidver!="v3"&&$uuidver!="v4"&&$uuidver!="v5") { $uuidver = "v4"; }
 if($uuidver=="v4") {
     return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
@@ -157,7 +157,7 @@ if($uuidver=="v4") {
       $rndty(0, 0xffff), $rndty(0, 0xffff), $rndty(0, 0xffff) ); }
 if($uuidver=="v3"||$uuidver=="v5") {
 	if($namespace===null) {
-	$namespace = uuid("v4",$rndty); }
+	$namespace = uuid_old("v4",$rndty); }
     $nhex = str_replace(array('-','{','}'), '', $namespace);
     $nstr = '';
     for($i = 0; $i < strlen($nhex); $i+=2) {
@@ -186,6 +186,119 @@ if($uuidver=="v3"||$uuidver=="v5") {
       (hexdec(substr($hash, 12, 4)) & 0x0fff) | $uuidverid,
       (hexdec(substr($hash, 16, 4)) & 0x3fff) | 0x8000,
       substr($hash, 20, 12) ); } }
+class UUID {
+  public static function v3($namespace, $name) {
+    if(!self::is_valid($namespace)) return false;
+
+    // Get hexadecimal components of namespace
+    $nhex = str_replace(array('-','{','}'), '', $namespace);
+
+    // Binary Value
+    $nstr = '';
+
+    // Convert Namespace UUID to bits
+    for($i = 0; $i < strlen($nhex); $i+=2) {
+      $nstr .= chr(hexdec($nhex[$i].$nhex[$i+1]));
+    }
+
+    // Calculate hash value
+    $hash = md5($nstr . $name);
+
+    return sprintf('%08s-%04s-%04x-%04x-%12s',
+
+      // 32 bits for "time_low"
+      substr($hash, 0, 8),
+
+      // 16 bits for "time_mid"
+      substr($hash, 8, 4),
+
+      // 16 bits for "time_hi_and_version",
+      // four most significant bits holds version number 3
+      (hexdec(substr($hash, 12, 4)) & 0x0fff) | 0x3000,
+
+      // 16 bits, 8 bits for "clk_seq_hi_res",
+      // 8 bits for "clk_seq_low",
+      // two most significant bits holds zero and one for variant DCE1.1
+      (hexdec(substr($hash, 16, 4)) & 0x3fff) | 0x8000,
+
+      // 48 bits for "node"
+      substr($hash, 20, 12)
+    );
+  }
+
+  public static function v4() {
+    return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+
+      // 32 bits for "time_low"
+      mt_rand(0, 0xffff), mt_rand(0, 0xffff),
+
+      // 16 bits for "time_mid"
+      mt_rand(0, 0xffff),
+
+      // 16 bits for "time_hi_and_version",
+      // four most significant bits holds version number 4
+      mt_rand(0, 0x0fff) | 0x4000,
+
+      // 16 bits, 8 bits for "clk_seq_hi_res",
+      // 8 bits for "clk_seq_low",
+      // two most significant bits holds zero and one for variant DCE1.1
+      mt_rand(0, 0x3fff) | 0x8000,
+
+      // 48 bits for "node"
+      mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
+    );
+  }
+
+  public static function v5($namespace, $name) {
+    if(!self::is_valid($namespace)) return false;
+
+    // Get hexadecimal components of namespace
+    $nhex = str_replace(array('-','{','}'), '', $namespace);
+
+    // Binary Value
+    $nstr = '';
+
+    // Convert Namespace UUID to bits
+    for($i = 0; $i < strlen($nhex); $i+=2) {
+      $nstr .= chr(hexdec($nhex[$i].$nhex[$i+1]));
+    }
+
+    // Calculate hash value
+    $hash = sha1($nstr . $name);
+
+    return sprintf('%08s-%04s-%04x-%04x-%12s',
+
+      // 32 bits for "time_low"
+      substr($hash, 0, 8),
+
+      // 16 bits for "time_mid"
+      substr($hash, 8, 4),
+
+      // 16 bits for "time_hi_and_version",
+      // four most significant bits holds version number 5
+      (hexdec(substr($hash, 12, 4)) & 0x0fff) | 0x5000,
+
+      // 16 bits, 8 bits for "clk_seq_hi_res",
+      // 8 bits for "clk_seq_low",
+      // two most significant bits holds zero and one for variant DCE1.1
+      (hexdec(substr($hash, 16, 4)) & 0x3fff) | 0x8000,
+
+      // 48 bits for "node"
+      substr($hash, 20, 12)
+    );
+  }
+
+  public static function is_valid($uuid) {
+    return preg_match('/^\{?[0-9a-f]{8}\-?[0-9a-f]{4}\-?[0-9a-f]{4}\-?'.
+                      '[0-9a-f]{4}\-?[0-9a-f]{12}\}?$/i', $uuid) === 1;
+  }
+}
+function uuid($uuidver = "v4", $rndty = "rand", $namespace = null, $name = null) {
+ if($uuidver!="v3"&&$uuidver!="v4"&&$uuidver!="v5") { $uuidver = "v4"; }
+ if($uuidver=="v3") { return UUID::v3(UUID::v4(), salt_hmac()); }
+ if($uuidver=="v3") { return UUID::v4(); }
+ if($uuidver=="v3") { return UUID::v5(UUID::v4(), salt_hmac()); }
+ return false; }
 // By info at raymondrodgers dot com at https://www.php.net/manual/en/function.random-int.php#118636
 function generateUUIDv4()
 {
@@ -236,6 +349,13 @@ function generateUUIDv4()
         );
     }
 }
+function rand_uuid_old($rndty = "rand", $namespace = null, $name = null) {
+$rand_array = array(1 => "v3", 2 => "v4", 3 => "v5");
+if($name===null) { $name = salt_hmac(); }
+$my_uuid = $rand_array[$rndty(1,3)];
+if($my_uuid=="v4") { return uuid_old("v4",$rndty); }
+if($my_uuid=="v3"||$my_uuid=="v5") {
+return uuid_old($my_uuid,$rndty,$name); } }
 function rand_uuid($rndty = "rand", $namespace = null, $name = null) {
 $rand_array = array(1 => "v3", 2 => "v4", 3 => "v5");
 if($name===null) { $name = salt_hmac(); }
