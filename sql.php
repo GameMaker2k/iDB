@@ -11,7 +11,7 @@
     Copyright 2004-2017 iDB Support - http://idb.berlios.de/
     Copyright 2004-2017 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: sql.php - Last Update: 09/14/2018 SVN 879 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 07/31/2019 SVN 902 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -660,7 +660,8 @@ if($Settings['use_captcha']=="on") {
 if($_GET['act']=="MkCaptcha"||$_GET['act']=="Captcha") {
 	if($Settings['captcha_clean']=="on") { ob_clean(); }
 	require($SettDir['inc']."captcha.php");
-	$aFonts = array('inc/fonts/VeraBd.ttf', 'inc/fonts/VeraBI.ttf', 'inc/fonts/VeraIt.ttf', 'inc/fonts/Vera.ttf');
+	$aFontDir = dirname(__FILE__)."/inc/fonts/";
+	$aFonts = array($aFontDir.'VeraBd.ttf', $aFontDir.'VeraBI.ttf', $aFontDir.'VeraIt.ttf', $aFontDir.'Vera.ttf');
 	$oPhpCaptcha = new PhpCaptcha($aFonts, 200, 60);
 	$RNumSize = rand(7,17); $i=0; $RandNum = null;
 	while ($i <= $RNumSize) {
