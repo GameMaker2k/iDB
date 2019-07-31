@@ -55,7 +55,7 @@ function GetUserTimeZone() {
         tzname = false;
         return false;
     }
-    if()
+    if(tzname!=false)
     {
     document.getElementById("YourOffSet").value = tzname;
     return true;
