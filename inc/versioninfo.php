@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2019 iDB Support - http://idb.berlios.de/
-    Copyright 2004-2019 Game Maker 2k - http://gamemaker2k.org/
+    Copyright 2004-2019 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
+    Copyright 2004-2019 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: versioninfo.php - Last Update: 08/01/2019 SVN 904 - Author: cooldude2k $
+    $FileInfo: versioninfo.php - Last Update: 08/02/2019 SVN 905 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="versioninfo.php"||$File3Name=="/versioninfo.php") {
@@ -27,12 +27,12 @@ function version_info($proname,$subver,$ver,$supver,$reltype,$svnver,$showsvn) {
 	return $return_var; }
 // Version number and date stuff. :P
 $VER1[0] = 0; $VER1[1] = 5; $VER1[2] = 2; $VERFull[1] = $VER1[0].".".$VER1[1].".".$VER1[2];
-$VER2[0] = "Alpha"; $VER2[1] = "Al"; $VER2[2] = "SVN"; $SubVerN = 904;
-$SVNDay[0] = 8; $SVNDay[1] = 1; $SVNDay[2] = 2019; $SVNDay[3] = $SVNDay[0]."/".$SVNDay[1]."/".$SVNDay[2];
+$VER2[0] = "Alpha"; $VER2[1] = "Al"; $VER2[2] = "SVN"; $SubVerN = 905;
+$SVNDay[0] = 8; $SVNDay[1] = 2; $SVNDay[2] = 2019; $SVNDay[3] = $SVNDay[0]."/".$SVNDay[1]."/".$SVNDay[2];
 $AltName = "DF2k"; $AltName2 = "DF2k"; $RName = "iDB"; $SFName = "IntDB";
 $RFullName = "Internet Discussion Boards"; $AltFullName = "Discussion Forums 2k"; $AltGM2k = "Game Maker 2k";
-$VerCheckName = "iDB"; $AltVerCheckName = "DF2k"; $AltiDBHome = "http://df2k.gamemaker2k.org/";
-$AltGM2kHome = "http://df2k.gamemaker2k.org/"; $AltGM2kURL = "<a href=\"".$AltGM2kHome."\" title=\"".$AltGM2k."\" onclick=\"window.open(this.href);return false;\">".$AltGM2k."</a>";
+$VerCheckName = "iDB"; $AltVerCheckName = "DF2k"; $AltiDBHome = "https://idb.osdn.jp/";
+$AltGM2kHome = "https://idb.osdn.jp/"; $AltGM2kURL = "<a href=\"".$AltGM2kHome."\" title=\"".$AltGM2k."\" onclick=\"window.open(this.href);return false;\">".$AltGM2k."</a>";
 $iDBTheme = "iDB"; $AltiDBTheme = "Gray"; 
 $UserAgentName = "iDB-Forum"; $AltUserAgentName = "DF2k-Forum";
 if(!isset($Settings['usealtname'])) { $Settings['usealtname'] = "no"; }
@@ -81,7 +81,7 @@ URLs and names and stuff. :P
 $KSP = "Kazuki Suzuki Przyborowski";
 $KSPAlt = "Kazuki Suzuki Przyborowski";
 */
-$iDBHome = "http://ja.gamemaker2k.org/"; $DF2kHome = "http://df2k.gamemaker2k.org/"; 
+$iDBHome = "https://idb.osdn.jp/"; $DF2kHome = "https://idb.osdn.jp/"; 
 $OrgName = "iDB"; $AltOrgName = "DF2k"; $AltiDB = "Discussion Forums 2k";
 $AltSQLDumper = null;
 if(isset($Settings['usealtname'])&&$Settings['usealtname']=="yes") {

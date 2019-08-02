@@ -8,11 +8,11 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2017 iDB Support - http://idb.berlios.de/
-    Copyright 2004-2017 Game Maker 2k - http://gamemaker2k.org/
+    Copyright 2004-2019 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
+    Copyright 2004-2019 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: info.php - Last Update: 01/26/2017 SVN 810 - Author: cooldude2k $
+    $FileInfo: info.php - Last Update: 08/02/2019 SVN 905 - Author: cooldude2k $
 */
 $ConvertInfo = array();
 $ConvertInfo['ConvertFrom'] = null;
@@ -29,7 +29,7 @@ $ConvertInfo['ConvertPreVersion'] = null;
 // $ConvertInfo['ConvertTo'] = "iDB";
 // $ConvertInfo['ConvertName'] = "DF2k to iDB";
 // $ConvertInfo['ConvertMaker'] = "Cool Dude 2k";
-// $ConvertInfo['ConvertMakerURL'] = "http://upload.idb.s1.jcink.com/";
+// $ConvertInfo['ConvertMakerURL'] = "https://idb.osdn.jp/";
 // $ConvertInfo['ConvertFile'] = "setup/convert/convert.php";
 // $ConvertInfo['ConvertVersion'] = "1";
 // $ConvertInfo['ConvertPreVersion'] = "1";

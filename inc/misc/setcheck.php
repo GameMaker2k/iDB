@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2017 iDB Support - http://idb.berlios.de/
-    Copyright 2004-2017 Game Maker 2k - http://gamemaker2k.org/
+    Copyright 2004-2019 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
+    Copyright 2004-2019 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: setcheck.php - Last Update: 01/26/2017 SVN 810 - Author: cooldude2k $
+    $FileInfo: setcheck.php - Last Update: 08/02/2019 SVN 905 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="setcheck.php"||$File3Name=="/setcheck.php") {
@@ -189,8 +189,8 @@ if ($_GET['act']=="LowView"||$_GET['act']=="loview") { $_GET['act']="lowview"; }
 if ($_GET['act']=="iDBInfo") { header('Location: http://sourceforge.net/projects/intdb/'); }
 if ($_GET['act']=="iDBSite") { header('Location: http://intdb.sourceforge.net/'); }
 if ($_GET['act']=="OldiDBInfo") { header('Location: http://developer.berlios.de/projects/idb/'); }
-if ($_GET['act']=="OldiDBSite") { header('Location: http://idb.berlios.de/'); }
+if ($_GET['act']=="OldiDBSite") { header('Location: https://idb.osdn.jp/'); }
 if ($_GET['act']=="DF2kInfo") { header('Location: http://developer.berlios.de/projects/df2k/'); }
 if ($_GET['act']=="DF2kSite") { header('Location: http://df2k.berlios.de/'); }
-if ($_GET['act']=="GM2kSite") { header('Location: http://upload.idb.s1.jcink.com/'); }
+if ($_GET['act']=="GM2kSite") { header('Location: https://idb.osdn.jp/'); }
 ?>

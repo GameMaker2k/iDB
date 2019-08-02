@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2017 iDB Support - http://idb.berlios.de/
-    Copyright 2004-2017 Game Maker 2k - http://gamemaker2k.org/
+    Copyright 2004-2019 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
+    Copyright 2004-2019 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: html5.php - Last Update: 09/12/2018 SVN 871 - Author: cooldude2k $
+    $FileInfo: html5.php - Last Update: 08/02/2019 SVN 905 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="xhtml10.php"||$File3Name=="/xhtml10.php") {

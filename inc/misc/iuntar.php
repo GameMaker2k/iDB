@@ -8,11 +8,11 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
  
-    Copyright 2004-2017 iDB Support - http://idb.berlios.de/
-    Copyright 2004-2017 Game Maker 2k - http://gamemaker2k.org/
+    Copyright 2004-2019 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
+    Copyright 2004-2019 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
     iUnTar ver. 4.7 by Kazuki Przyborowski & Josep Sanz Campderros
 
-    $FileInfo: iuntar.php - Last Update: 01/26/2017 SVN 810 - Author: cooldude2k $
+    $FileInfo: iuntar.php - Last Update: 08/02/2019 SVN 905 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="iuntar.php"||$File3Name=="/iuntar.php") {
@@ -21,7 +21,7 @@ if ($File3Name=="iuntar.php"||$File3Name=="/iuntar.php") {
 
 // PHP iUnTAR Version 4.7
 // license: Revised BSD license
-// Kazuki Przyborowski (http://ja.gamemaker2k.org/)
+// Kazuki Przyborowski (https://idb.osdn.jp/)
 // Josep Sanz Campderros (http://saltos.net/)
 function untar($tarfile,$outdir="./",$chmod=null,$extract=true,$lsonly=false,$findfile=null) {
 $TarSize = filesize($tarfile);
