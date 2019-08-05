@@ -11,7 +11,7 @@
     Copyright 2004-2019 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2019 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: stats.php - Last Update: 08/02/2019 SVN 905 - Author: cooldude2k $
+    $FileInfo: stats.php - Last Update: 08/05/2019 SVN 907 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="stats.php"||$File3Name=="/stats.php") {
@@ -300,7 +300,7 @@ $tdMembersOnline .= " (<a title=\"".$tdMemList['IP']."\" onclick=\"window.open(t
 &nbsp;<?php echo $tdMembersOnline; ?>
 </div></td>
 </tr>
-<tr id="Stats10" class="TableStatsRow4">
+<tr id="Stats11" class="TableStatsRow4">
 <td class="TableStatsColumn4" colspan="2">&nbsp;</td>
 </tr>
 </table></div>
