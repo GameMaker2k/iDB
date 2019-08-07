@@ -11,7 +11,7 @@
     Copyright 2004-2019 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2019 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: functions.php - Last Update: 08/02/2019 SVN 905 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 08/07/2019 SVN 909 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -582,4 +582,11 @@ function dump_extensions($type="var_dump") {
 	if($type=="var_dump") { return var_dump(get_loaded_extensions()); }
 	if($type=="var_export") { return var_export(get_loaded_extensions()); } }
 function count_extensions() {	return count(get_loaded_extensions()); }
+// human_filesize by evgenij at kostanay dot kz 
+// URL: https://www.php.net/manual/en/function.filesize.php#120250
+function human_filesize($bytes, $decimals = 2) {
+    $factor = floor((strlen($bytes) - 1) / 3);
+    if ($factor > 0) $sz = 'KMGT';
+    return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . ' ' . @$sz[$factor - 1] . 'B';
+}
 ?>

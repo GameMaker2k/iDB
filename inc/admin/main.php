@@ -11,7 +11,7 @@
     Copyright 2004-2019 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2019 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: main.php - Last Update: 08/02/2019 SVN 905 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 08/07/2019 SVN 909 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -1209,10 +1209,13 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Database Manager";
 ?><tr style="text-align: left;">
 	<td style="width: 50%;"><span class="TextBoxLabel">Database File Size:</span></td>
 	<td style="width: 50%;"><?php echo sprintf("%u", filesize($Settings['sqldb']))." bytes"; ?></td>
+</tr><tr style="text-align: left;">
+	<td style="width: 50%;"><span class="TextBoxLabel">Human Readable File Size:</span></td>
+	<td style="width: 50%;"><?php echo human_filesize(sprintf("%u", filesize($Settings['sqldb']))); ?></td>
 </tr><?php } if($Settings['sqltype']=="cubrid") { ?><tr style="text-align: left;">
 	<td style="width: 50%;"><span class="TextBoxLabel">CUBRID PHP:</span></td>
 	<td style="width: 50%;"><?php echo $DBType['PHP']; ?></td>
-</tr><?php } ?><tr style="text-align: left;">
+</tr><?php } if($Settings['sqltype']!="sqlite"&&$Settings['sqltype']!="sqlite3") {  ?><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="DatabaseUserName">Insert Database User Name:</label></td>
 	<td style="width: 50%;"><input type="text" name="DatabaseUserName" class="TextBox" id="DatabaseUserName" size="20" value="<?php echo $Settings['sqluser']; ?>" /></td>
 </tr><tr style="text-align: left;">
@@ -1227,10 +1230,21 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Database Manager";
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="tableprefix">Insert Table Prefix:<br /></label></td>
 	<td style="width: 50%;"><input type="text" name="tableprefix" class="TextBox" id="tableprefix" size="20" value="<?php echo $Settings['sqltable']; ?>" /></td>
-</tr></table>
+</tr><?php } if($Settings['sqltype']=="sqlite"||$Settings['sqltype']=="sqlite3") {  ?><tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="DatabaseName">Insert Database FileName:</label></td>
+	<td style="width: 50%;"><input type="text" name="DatabaseName" class="TextBox" id="DatabaseName" size="20" value="<?php echo $Settings['sqldb']; ?>" /></td>
+</tr><tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="tableprefix">Insert Table Prefix:<br /></label></td>
+	<td style="width: 50%;"><input type="text" name="tableprefix" class="TextBox" id="tableprefix" size="20" value="<?php echo $Settings['sqltable']; ?>" /></td>
+</tr><?php } ?></table>
 <table style="text-align: left;">
 <tr style="text-align: left;">
 <td style="width: 100%;">
+<?php if($Settings['sqltype']=="sqlite"||$Settings['sqltype']=="sqlite3") {  ?>
+<input type="hidden" name="DatabaseUserName" class="TextBox" id="DatabaseUserName" size="20" value="<?php echo $Settings['sqluser']; ?>" />
+<input type="hidden" name="DatabasePassword" class="TextBox" id="DatabasePassword" size="20" value="<?php echo $Settings['sqlpass']; ?>" />
+<input type="hidden" name="DatabaseHost" class="TextBox" id="DatabaseHost" size="20" value="<?php echo $Settings['sqlhost']; ?>" />
+<?php } ?>
 <input type="hidden" name="act" value="sql" style="display: none;" />
 <input type="hidden" name="update" value="now" style="display: none;" />
 <input type="submit" class="Button" value="Apply" name="Apply_Changes" />
