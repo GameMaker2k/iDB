@@ -554,6 +554,7 @@ $iopts = array(
                 "From: ".$isiteurl."\r\n".
                 "Via: ".$_SERVER['REMOTE_ADDR']."\r\n".
                 "Forwarded: ".$_SERVER['REMOTE_ADDR']."\r\n".
+                "X-Real-IP: ".$_SERVER['REMOTE_ADDR']."\r\n".
                 "X-Forwarded-For: ".$_SERVER['REMOTE_ADDR']."\r\n".
                 "Client-IP: ".$_SERVER['REMOTE_ADDR']."\r\n"
   )
