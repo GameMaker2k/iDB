@@ -556,6 +556,9 @@ $iopts = array(
                 "Forwarded: ".$_SERVER['REMOTE_ADDR']."\r\n".
                 "X-Real-IP: ".$_SERVER['REMOTE_ADDR']."\r\n".
                 "X-Forwarded-For: ".$_SERVER['REMOTE_ADDR']."\r\n".
+                "X-Forwarded-Host: ".$URLsTest['host']."\r\n".
+                "X-Forwarded-Proto: ".$URLsTest['scheme']."\r\n".
+                "Board-Unique-ID: ".$Settings['BoardUUID']."\r\n".
                 "Client-IP: ".$_SERVER['REMOTE_ADDR']."\r\n"
   )
 );
