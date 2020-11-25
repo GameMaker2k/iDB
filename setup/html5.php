@@ -193,6 +193,7 @@ if(strpos($_SERVER['HTTP_USER_AGENT'], "msie") &&
 <?php } if(strpos($_SERVER['HTTP_USER_AGENT'], "chromeframe")) { ?>
 <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
 <?php } } ?>
+<meta itemprop="url" property="og:url" content="<?php echo $BoardURL; ?>" />
 <base href="<?php echo $BoardURL; ?>" />
 <?php if($Settings['showverinfo']=="on") { ?>
 <meta name="Generator" content="<?php echo $VerInfo['iDB_Ver_Show']; ?>" />
@@ -202,8 +203,12 @@ if(strpos($_SERVER['HTTP_USER_AGENT'], "msie") &&
 <meta name="Author" content="<?php echo $SettInfo['Author']; ?>" />
 <meta name="Keywords" content="<?php echo $SettInfo['Keywords']; ?>" />
 <meta name="Description" content="<?php echo $SettInfo['Description']; ?>" />
+<meta itemprop="description" property="og:description" content="<?php echo $SettInfo['Description']; ?>" />
+<meta itemprop="description" property="twitter:description" content="<?php echo $SettInfo['Description']; ?>" />
 <meta name="ROBOTS" content="Index, FOLLOW" />
 <meta name="GOOGLEBOT" content="Index, FOLLOW" />
+<meta itemprop="type" property="og:type" content="forum" />
+<meta itemprop="card" property="twitter:card" content="forum" />
 <?php if($Settings['showverinfo']=="on") { ?>
 <!-- generator="<?php echo $VerInfo['iDB_Ver_Show']; ?>" -->
 <?php } if($Settings['showverinfo']!="on") { ?>
