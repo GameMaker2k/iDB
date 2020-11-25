@@ -73,6 +73,9 @@ if(!isset($urlstatus)||!is_numeric($urlstatus)) { $urlstatus = 200; }
 if($gzip_type!="gzip") { if($gzip_type!="deflate") { $gzip_type = "gzip"; } }
 $output = trim(ob_get_clean());
 $output = preg_replace("/<title>(.*?)<\/title>/i", "<title>".$new_title."</title>", $output);
+$new_title_html = htmlentities($new_title, ENT_QUOTES, $Settings['charset']);
+$output = preg_replace("/<meta property=\"og:title\" content=\"(.*?)\" \/>/i", "<meta property=\"og:title\" content=\"".$new_title_html."\" />", $output);
+$output = preg_replace("/<meta property=\"twitter:title\" content=\"(.*?)\" \/>/i", "<meta property=\"twitter:title\" content=\"".$new_title_html."\" />", $output);
 /* Change Some PHP Settings Fix the &PHPSESSID to &amp;PHPSESSID */
 $SessName = session_name();
 $output = preg_replace("/&PHPSESSID/", "&amp;PHPSESSID", $output);
