@@ -175,8 +175,11 @@ foreach($ThemeSet AS $key => $value) {
 require($SetupDir['convert'].'info.php');
 require($SetupDir['setup'].'html5.php');
 $Error = null; $_GET['time'] = false;
+$title_html = htmlentities("Installing ".$VerInfo['iDB_Ver_Show'], ENT_QUOTES, $Settings['charset']);
 ?>
-
+<meta itemprop="title" property="og:title" content="<?php echo $title_html; ?>" />
+<meta itemprop="sitename" property="og:site_name" content="<?php echo $title_html; ?>" />
+<meta itemprop="title" property="twitter:title" content="<?php echo $title_html; ?>" />
 <title> <?php echo "Installing ".$VerInfo['iDB_Ver_Show']; ?> </title>
 </head>
 <body>

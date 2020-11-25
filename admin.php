@@ -32,7 +32,12 @@ ob_start("idb_suboutput_handler"); ?>
 <script type="text/javascript" src="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=vercheck&vercheck=newtype&redirect=js",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>"></script>
 <?php $iWrappers['EXTRALINKS'] = ob_get_clean(); } } } ?>
 <?php
-ob_start("idb_suboutput_handler"); ?>
+ob_start("idb_suboutput_handler");
+$title_html = htmlentities($Settings['board_name'].$idbpowertitle, ENT_QUOTES, $Settings['charset']);
+?>
+<meta itemprop="title" property="og:title" content="<?php echo $title_html; ?>" />
+<meta itemprop="sitename" property="og:site_name" content="<?php echo $title_html; ?>" />
+<meta itemprop="title" property="twitter:title" content="<?php echo $title_html; ?>" />
 <title> <?php echo $Settings['board_name'].$idbpowertitle; ?> </title>
 <?php $iWrappers['TITLETAG'] = ob_get_clean(); 
 ob_start("idb_suboutput_handler"); ?>

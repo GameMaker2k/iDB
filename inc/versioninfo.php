@@ -27,7 +27,7 @@ function version_info($proname,$subver,$ver,$supver,$reltype,$svnver,$showsvn) {
 	return $return_var; }
 // Version number and date stuff. :P
 $VER1[0] = 0; $VER1[1] = 5; $VER1[2] = 3; $VERFull[1] = $VER1[0].".".$VER1[1].".".$VER1[2];
-$VER2[0] = "Alpha"; $VER2[1] = "Al"; $VER2[2] = "SVN"; $SubVerN = 910; $GitRevN = "$Id$";
+$VER2[0] = "Alpha"; $VER2[1] = "Al"; $VER2[2] = "SVN"; $SubVerN = 910; $GitRevN = "$Id: d3fbe829af421d577e5dd7fd8f28d2bfabbf12f3 $";
 $SVNDay[0] = 10; $SVNDay[1] = 10; $SVNDay[2] = 2019; $SVNDay[3] = $SVNDay[0]."/".$SVNDay[1]."/".$SVNDay[2];
 $AltName = "DF2k"; $AltName2 = "DF2k"; $RName = "iDB"; $SFName = "IntDB";
 $RFullName = "Internet Discussion Boards"; $AltFullName = "Discussion Forums 2k"; $AltGM2k = "Game Maker 2k";

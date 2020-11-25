@@ -24,7 +24,12 @@ ob_start("idb_suboutput_handler");
 ?>
 <link rel="search" type="application/opensearchdescription+xml" title="<?php echo $Settings['board_name']." ".$ThemeSet['TitleDivider']; ?> Search" href="<?php echo url_maker($exfile['rss'],$Settings['rss_ext'],"act=opensearch",$Settings['qstr'],$Settings['qsep'],$prexqstr['rss'],$exqstr['rss']); ?>" />
 <?php $iWrappers['EXTRALINKS'] = ob_get_clean(); 
-ob_start("idb_suboutput_handler"); ?>
+ob_start("idb_suboutput_handler");
+$title_html = htmlentities($Settings['board_name'].$idbpowertitle, ENT_QUOTES, $Settings['charset']);
+?>
+<meta itemprop="title" property="og:title" content="<?php echo $title_html; ?>" />
+<meta itemprop="sitename" property="og:site_name" content="<?php echo $title_html; ?>" />
+<meta itemprop="title" property="twitter:title" content="<?php echo $title_html; ?>" />
 <title> <?php echo $Settings['board_name'].$idbpowertitle; ?> </title>
 <?php $iWrappers['TITLETAG'] = ob_get_clean(); 
 ob_start("idb_suboutput_handler"); ?>
