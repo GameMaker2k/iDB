@@ -11,7 +11,7 @@
     Copyright 2004-2019 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2019 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: html5.php - Last Update: 11/26/2020 SVN 922 - Author: cooldude2k $
+    $FileInfo: html5.php - Last Update: 11/26/2020 SVN 923 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="xhtml10.php"||$File3Name=="/xhtml10.php") {
@@ -208,7 +208,7 @@ if(strpos($_SERVER['HTTP_USER_AGENT'], "msie") &&
 <meta name="ROBOTS" content="Index, FOLLOW" />
 <meta name="GOOGLEBOT" content="Index, FOLLOW" />
 <meta itemprop="type" property="og:type" content="forum" />
-<meta itemprop="card" property="twitter:card" content="forum" />
+<meta itemprop="card" property="twitter:card" content="summary_large_image" />
 <?php if($Settings['showverinfo']=="on") { ?>
 <!-- generator="<?php echo $VerInfo['iDB_Ver_Show']; ?>" -->
 <?php } if($Settings['showverinfo']!="on") { ?>
@@ -260,6 +260,6 @@ font-size: 9px;
 if($ThemeSet['FavIcon']!=null) { ?>
 <link rel="icon" href="<?php echo $ThemeSet['FavIcon']; ?>" />
 <link rel="shortcut icon" href="<?php echo $ThemeSet['FavIcon']; ?>" />
-<meta itemprop="image" property="og:image" content="<?php echo $ThemeSet['OpenGraph']; ?>" />
-<meta itemprop="image" property="twitter:image" content="<?php echo $ThemeSet['OpenGraph']; ?>" />
+<meta itemprop="image" property="og:image" content="<?php echo $BoardURL.$ThemeSet['OpenGraph']; ?>" />
+<meta itemprop="image" property="twitter:image" content="<?php echo $BoardURL.$ThemeSet['OpenGraph']; ?>" />
 <?php } ?>
