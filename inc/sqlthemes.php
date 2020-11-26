@@ -11,7 +11,7 @@
     Copyright 2004-2019 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2019 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: sqlthemes.php - Last Update: 08/02/2019 SVN 905 - Author: cooldude2k $
+    $FileInfo: sqlthemes.php - Last Update: 11/26/2020 SVN 922 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="sqlthemes.php"||$File3Name=="/sqlthemes.php") {
@@ -41,6 +41,8 @@ $ThemeSet['CSSType'] = sql_result($themeresult,0,"CSSType");
 if($ThemeSet['CSSType']=="") { $ThemeSet['CSSType'] = null; }
 $ThemeSet['FavIcon'] = sql_result($themeresult,0,"FavIcon");
 if($ThemeSet['FavIcon']=="") { $ThemeSet['FavIcon'] = null; }
+$ThemeSet['OpenGraph'] = sql_result($themeresult,0,"OpenGraph");
+if($ThemeSet['OpenGraph']=="") { $ThemeSet['OpenGraph'] = null; }
 $ThemeSet['TableStyle'] = sql_result($themeresult,0,"TableStyle");
 if($ThemeSet['TableStyle']=="") { $ThemeSet['TableStyle'] = null; }
 $ThemeSet['MiniPageAltStyle'] = sql_result($themeresult,0,"MiniPageAltStyle");
