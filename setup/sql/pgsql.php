@@ -12,7 +12,7 @@
     Copyright 2004-2019 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: pgsql.php - Last Update: 08/02/2019 SVN 905 - Author: cooldude2k $
+    $FileInfo: pgsql.php - Last Update: 11/26/2020 SVN 921 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pgsql.php"||$File3Name=="/pgsql.php") {
@@ -388,6 +388,7 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."themes\" (\n".
 "  \"CSS\" text NOT NULL,\n".
 "  \"CSSType\" varchar(150) NOT NULL default '',\n".
 "  \"FavIcon\" varchar(150) NOT NULL default '',\n".
+"  \"OpenGraph\" varchar(150) NOT NULL default '',\n".
 "  \"TableStyle\" varchar(150) NOT NULL default '',\n".
 "  \"MiniPageAltStyle\" varchar(150) NOT NULL default '',\n".
 "  \"PreLogo\" varchar(150) NOT NULL default '',\n".

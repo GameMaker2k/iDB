@@ -11,7 +11,7 @@
     Copyright 2004-2008 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
     Copyright 2004-2008 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
     $ThemeInfo - Name: Random iDB Theme - Author: cooldude2k $
-    $FileInfo: settings.php - Last Update: 08/02/2019 SVN 905 - Author: cooldude2k $
+    $FileInfo: settings.php - Last Update: 11/26/2020 SVN 921 - Author: cooldude2k $
 */
 $ThemeSet = array();
 $ThemeSet['ThemeName'] = "Random iDB Theme";
@@ -25,6 +25,7 @@ $ThemeSet['WrapperString'] = "<% HTMLSTART %>\n<% HTTPEQUIV %>\n<% METATAGS %>\n
 $ThemeSet['CSS'] = "themes/Rand/css.css";
 $ThemeSet['CSSType'] = "include";
 $ThemeSet['FavIcon'] = "themes/Rand/favicon.ico";
+$ThemeSet['OpenGraph'] = "themes/Rand/opengraph.png";
 $ThemeSet['TableStyle'] = "div";
 $ThemeSet['MiniPageAltStyle'] = "off";
 $ThemeSet['PreLogo'] = null;

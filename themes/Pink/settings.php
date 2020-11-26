@@ -11,7 +11,7 @@
     Copyright 2004-2008 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2008 Game Maker 2k - https://idb.osdn.jp/
     $ThemeInfo - Name: iDB Theme - Author: cooldude2k $
-    $FileInfo: settings.php - Last Update: 08/02/2019 SVN 905 - Author: cooldude2k $
+    $FileInfo: settings.php - Last Update: 11/26/2020 SVN 921 - Author: cooldude2k $
 */
 $ThemeSet = array();
 $ThemeSet['ThemeName'] = "iDB Pink Theme";
@@ -25,6 +25,7 @@ $ThemeSet['WrapperString'] = "<% HTMLSTART %>\n<% HTTPEQUIV %>\n<% METATAGS %>\n
 $ThemeSet['CSS'] = "themes/Pink/css.css";
 $ThemeSet['CSSType'] = "include";
 $ThemeSet['FavIcon'] = "themes/Pink/favicon.ico";
+$ThemeSet['OpenGraph'] = "themes/Pink/opengraph.png";
 $ThemeSet['TableStyle'] = "table";
 $ThemeSet['MiniPageAltStyle'] = "off";
 $ThemeSet['PreLogo'] = "<div style=\"text-align: center;\">";
