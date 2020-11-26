@@ -11,7 +11,7 @@
     Copyright 2004-2019 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2019 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: functions.php - Last Update: 08/07/2019 SVN 909 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 11/26/2020 SVN 919 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -74,8 +74,8 @@ if($gzip_type!="gzip") { if($gzip_type!="deflate") { $gzip_type = "gzip"; } }
 $output = trim(ob_get_clean());
 $output = preg_replace("/<title>(.*?)<\/title>/i", "<title>".$new_title."</title>", $output);
 $new_title_html = htmlentities($new_title, ENT_QUOTES, $Settings['charset']);
-$output = preg_replace("/<meta property=\"og:title\" content=\"(.*?)\" \/>/i", "<meta property=\"og:title\" content=\"".$new_title_html."\" />", $output);
-$output = preg_replace("/<meta property=\"twitter:title\" content=\"(.*?)\" \/>/i", "<meta property=\"twitter:title\" content=\"".$new_title_html."\" />", $output);
+$output = preg_replace("/<meta itemprop=\"title\" property=\"og:title\" content=\"(.*?)\" \/>/i", "<meta itemprop=\"title\" property=\"og:title\" content=\"".$new_title_html."\" />", $output);
+$output = preg_replace("/<meta itemprop=\"title\" property=\"twitter:title\" content=\"(.*?)\" \/>/i", "<meta itemprop=\"title\" property=\"twitter:title\" content=\"".$new_title_html."\" />", $output);
 /* Change Some PHP Settings Fix the &PHPSESSID to &amp;PHPSESSID */
 $SessName = session_name();
 $output = preg_replace("/&PHPSESSID/", "&amp;PHPSESSID", $output);
