@@ -11,7 +11,7 @@
     Copyright 2004-2019 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2019 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: html5.php - Last Update: 11/26/2020 SVN 923 - Author: cooldude2k $
+    $FileInfo: html5.php - Last Update: 11/27/2020 SVN 927 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="xhtml10.php"||$File3Name=="/xhtml10.php") {
@@ -173,6 +173,7 @@ if($XHTML5===false) {
 <?php if($XHTML5===false) { ?>
 <meta charset="<?php echo $Settings['charset']; ?>">
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $Settings['charset']; ?>">
+<meta name="language" content="english">
 <?php 
 if(!isset($_SERVER['HTTP_USER_AGENT'])) {
 	$_SERVER['HTTP_USER_AGENT'] = ""; }
@@ -184,6 +185,7 @@ if(strpos($_SERVER['HTTP_USER_AGENT'], "msie") &&
 <?php } } if($XHTML5===true) { ?>
 <meta charset="<?php echo $Settings['charset']; ?>" />
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $Settings['charset']; ?>" />
+<meta name="language" content="english">
 <?php 
 if(!isset($_SERVER['HTTP_USER_AGENT'])) {
 	$_SERVER['HTTP_USER_AGENT'] = ""; }
@@ -201,12 +203,20 @@ if(strpos($_SERVER['HTTP_USER_AGENT'], "msie") &&
 <meta name="Generator" content="<?php echo $iDB; ?>" />
 <?php } echo "\n"; ?>
 <meta name="Author" content="<?php echo $SettInfo['Author']; ?>" />
+<meta name="web_author" content="<?php echo $SettInfo['Author']; ?>" />
+<meta name="rating" content="general" />
+<meta name="Designer" content="<?php echo $ThemeSet['ThemeMaker']; ?>" />
+<meta name="Publisher" content="<?php echo $GM2k; ?>" />
 <meta name="Keywords" content="<?php echo $SettInfo['Keywords']; ?>" />
 <meta name="Description" content="<?php echo $SettInfo['Description']; ?>" />
 <meta itemprop="description" property="og:description" content="<?php echo $SettInfo['Description']; ?>" />
 <meta itemprop="description" property="twitter:description" content="<?php echo $SettInfo['Description']; ?>" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="HandheldFriendly" content="true" />
 <meta name="ROBOTS" content="Index, FOLLOW" />
 <meta name="GOOGLEBOT" content="Index, FOLLOW" />
+<meta name="revisit-after" content="7 days" />
+<meta name="distribution" content="web" />
 <meta itemprop="type" property="og:type" content="forum" />
 <meta itemprop="card" property="twitter:card" content="summary_large_image" />
 <?php if($Settings['showverinfo']=="on") { ?>

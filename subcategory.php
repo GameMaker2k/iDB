@@ -11,7 +11,7 @@
     Copyright 2004-2019 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2019 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: subcategory.php - Last Update: 08/02/2019 SVN 905 - Author: cooldude2k $
+    $FileInfo: subcategory.php - Last Update: 11/27/2020 SVN 925 - Author: cooldude2k $
 */
 if(ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }
@@ -30,6 +30,7 @@ $title_html = htmlentities($Settings['board_name'].$idbpowertitle, ENT_QUOTES, $
 <meta itemprop="title" property="og:title" content="<?php echo $title_html; ?>" />
 <meta itemprop="sitename" property="og:site_name" content="<?php echo $title_html; ?>" />
 <meta itemprop="title" property="twitter:title" content="<?php echo $title_html; ?>" />
+<meta name="title" content="<?php echo $title_html; ?>" />
 <title> <?php echo $Settings['board_name'].$idbpowertitle; ?> </title>
 <?php $iWrappers['TITLETAG'] = ob_get_clean(); 
 ob_start("idb_suboutput_handler"); ?>
