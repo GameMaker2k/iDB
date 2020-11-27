@@ -11,7 +11,7 @@
     Copyright 2004-2019 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2019 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: html5.php - Last Update: 11/27/2020 SVN 927 - Author: cooldude2k $
+    $FileInfo: html5.php - Last Update: 11/27/2020 SVN 928 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="xhtml10.php"||$File3Name=="/xhtml10.php") {
@@ -185,7 +185,7 @@ if(strpos($_SERVER['HTTP_USER_AGENT'], "msie") &&
 <?php } } if($XHTML5===true) { ?>
 <meta charset="<?php echo $Settings['charset']; ?>" />
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $Settings['charset']; ?>" />
-<meta name="language" content="english">
+<meta name="language" content="english" />
 <?php 
 if(!isset($_SERVER['HTTP_USER_AGENT'])) {
 	$_SERVER['HTTP_USER_AGENT'] = ""; }
