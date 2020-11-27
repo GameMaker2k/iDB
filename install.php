@@ -12,7 +12,7 @@
     Copyright 2004-2019 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
     iDB Installer made by Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2support/category.php?act=view&id=2
 
-    $FileInfo: install.php - Last Update: 11/27/2020 SVN 925 - Author: cooldude2k $
+    $FileInfo: install.php - Last Update: 11/27/2020 SVN 926 - Author: cooldude2k $
 *//*
 if(ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }
@@ -98,7 +98,7 @@ if ($_GET['act']!="Part4"&&$_POST['act']!="Part4") {
 $SetupDir['setup'] = "setup/"; $ConvertDir['setup'] = $SetupDir['setup']; $SetupDir['sql'] = "setup/sql/"; 
 $SetupDir['convert'] = "setup/convert/"; $ConvertDir['convert'] = $SetupDir['convert']; $ConvertDir['sql'] = $SetupDir['sql'];
 $Settings['output_type'] = "html"; $Settings['html_type'] = "html5";
-$Settings['board_name'] = "Installing iDB"; 
+$Settings['board_name'] = $iDB;
 if(!isset($Settings['charset'])) {
 	$Settings['charset'] = "ISO-8859-15"; 
 	header("Content-Type: text/html; charset=ISO-8859-15"); }
@@ -157,7 +157,7 @@ if($_GET['act']=="TOS"||$_GET['act']=="ToS") { $_GET['act']="tos"; }
 if($_GET['act']=="tos"||$_GET['act']=="terms") {
 header("Content-Type: text/plain; charset=".$Settings['charset']);
 require("TOS"); fix_amp(null); die(); }
-$Settings['board_name'] = "Installing ".$RName; 
+$Settings['board_name'] = $RFullName;
 function get_theme_values($matches) {
 	global $ThemeSet;
 	$return_text = null;
