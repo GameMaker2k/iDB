@@ -11,7 +11,7 @@
     Copyright 2004-2019 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2019 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: javascript.php - Last Update: 08/02/2019 SVN 905 - Author: cooldude2k $
+    $FileInfo: javascript.php - Last Update: 5/31/2021 SVN 931 - Author: cooldude2k $
 */
 header("Content-Language: en");
 header("Vary: Accept");
@@ -46,5 +46,24 @@ var itm;
 itm = document.getElementById(id);
 var pretext = itm.value;
 itm.value = pretext + code; }
+
+function GetUserTimeZone() {
+    if (!Intl || !Intl.DateTimeFormat().resolvedOptions().timeZone) {
+        throw 'Time zones are not available in this environment';
+    }
+
+    try {
+        tzname = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    }
+    catch (ex) {
+        tzname = false;
+        return false;
+    }
+    if(tzname!=false)
+    {
+    document.getElementById("YourOffSet").value = tzname;
+    return true;
+    }
+}
 
 <?php gzip_page($Settings['use_gzip']); ?>
