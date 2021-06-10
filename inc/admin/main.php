@@ -583,7 +583,8 @@ if($PreBorgURL['host']=="localhost.url"&&str_replace("/", "", $PreBorgURL['path'
 if($PreBorgURL['host']!="localhost.url"&&str_replace("/", "", $PreBorgURL['path'])=="localpath") {
    $PreBetURL['path'] = $PreBorgURL['path'];
    $Settings['idburl'] = unparse_url($PreBetURL); }
-$PreWorgURL = parse_url($PreWestURL);
+//$PreWorgURL = parse_url($PreWestURL);
+$PreWorgURL = parse_url($OrgWebSiteURL);
 $PreBetURL = parse_url($Settings['weburl']);
 if($PreWorgURL['host']=="localhost.url"&&str_replace("/", "", $PreWorgURL['path'])=="localpath") {
    $PreBetURL['host'] = $PreWorgURL['host'];
