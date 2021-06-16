@@ -11,7 +11,7 @@
     Copyright 2004-2019 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2019 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: sql.php - Last Update: 08/02/2019 SVN 905 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 6/16/2021 SVN 934 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -289,11 +289,17 @@ if ($File3Name=="sql.php"||$File3Name=="/sql.php") {
 if($_GET['act']=="MkCaptcha"||$_GET['act']=="Captcha") {
 	$Settings['use_gzip'] = 'off'; }
 if($Settings['use_gzip']=="on") {
-if(strstr($_SERVER['HTTP_ACCEPT_ENCODING'], "gzip")) { 
-	$GZipEncode['Type'] = "gzip"; } else { 
-	if(strstr($_SERVER['HTTP_ACCEPT_ENCODING'], "deflate")) { 
-	$GZipEncode['Type'] = "deflate"; } else { 
-		$Settings['use_gzip'] = "off"; $GZipEncode['Type'] = "none"; } } }
+if(strstr($_SERVER['HTTP_ACCEPT_ENCODING'], "br")&&function_exists('brotli_compress')) { 
+	$GZipEncode['Type'] = "brotli"; } else { 
+	if(strstr($_SERVER['HTTP_ACCEPT_ENCODING'], "gzip")) { 
+		$GZipEncode['Type'] = "gzip"; } else { 
+		if(strstr($_SERVER['HTTP_ACCEPT_ENCODING'], "deflate")) { 
+			$GZipEncode['Type'] = "deflate"; } else { 
+			$Settings['use_gzip'] = "off"; $GZipEncode['Type'] = "none"; } } } }
+if($Settings['use_gzip']=="brotli"&&function_exists('brotli_compress')) {
+if(strstr($_SERVER['HTTP_ACCEPT_ENCODING'], "br")) { $Settings['use_brotli'] = "on";
+	$GZipEncode['Type'] = "brotli"; } else { $Settings['use_gzip'] = "off"; } }
+if($Settings['use_gzip']=="brotli"&&!function_exists('brotli_compress')) { $GZipEncode['Type'] = "gzip"; }
 if($Settings['use_gzip']=="gzip") {
 if(strstr($_SERVER['HTTP_ACCEPT_ENCODING'], "gzip")) { $Settings['use_gzip'] = "on";
 	$GZipEncode['Type'] = "gzip"; } else { $Settings['use_gzip'] = "off"; } }

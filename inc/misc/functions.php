@@ -11,7 +11,7 @@
     Copyright 2004-2019 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2019 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: functions.php - Last Update: 11/27/2020 SVN 925 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 6/16/2021 SVN 934 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -70,7 +70,8 @@ else {
 function change_title($new_title,$use_gzip="off",$gzip_type="gzip") {
 global $Settings,$urlstatus;
 if(!isset($urlstatus)||!is_numeric($urlstatus)) { $urlstatus = 200; }
-if($gzip_type!="gzip") { if($gzip_type!="deflate") { $gzip_type = "gzip"; } }
+if($gzip_type!="gzip"&&$gzip_type!="deflate"&&$gzip_type!="brotli") { $gzip_type = "gzip"; }
+if($gzip_type=="brotli"&&!function_exists('brotli_compress')) { $gzip_type = "gzip"; }
 $output = trim(ob_get_clean());
 $output = preg_replace("/<title>(.*?)<\/title>/i", "<title>".$new_title."</title>", $output);
 $new_title_html = htmlentities($new_title, ENT_QUOTES, $Settings['charset']);
@@ -89,6 +90,10 @@ if($use_gzip!="on") {
 	idb_log_maker($urlstatus,strlen($output));
 	echo $output; }
 if($use_gzip=="on") {
+	if($gzip_type=="brotli"&&function_exists('brotli_compress')) {
+	$goutput = brotli_compress($output); }
+	if($gzip_type=="brotli"&&!function_exists('brotli_compress')) {
+	$gzip_type = "gzip"; }
 	if($gzip_type=="gzip") {
 	$goutput = gzencode($output); }
 	if($gzip_type=="deflate") {
@@ -102,7 +107,8 @@ if($use_gzip=="on") {
 function fix_amp($use_gzip="off",$gzip_type="gzip") {
 global $Settings,$urlstatus;
 if(!isset($urlstatus)||!is_numeric($urlstatus)) { $urlstatus = 200; }
-if($gzip_type!="gzip") { if($gzip_type!="deflate") { $gzip_type = "gzip"; } }
+if($gzip_type!="gzip"&&$gzip_type!="deflate"&&$gzip_type!="brotli") { $gzip_type = "gzip"; }
+if($gzip_type=="brotli"&&!function_exists('brotli_compress')) { $gzip_type = "gzip"; }
 $output = trim(ob_get_clean());
 /* Change Some PHP Settings Fix the &PHPSESSID to &amp;PHPSESSID */
 $SessName = session_name();
@@ -116,6 +122,10 @@ if($use_gzip!="on") {
 	idb_log_maker($urlstatus,strlen($output));
 	echo $output; }
 if($use_gzip=="on") {
+	if($gzip_type=="brotli"&&function_exists('brotli_compress')) {
+	$goutput = brotli_compress($output); }
+	if($gzip_type=="brotli"&&!function_exists('brotli_compress')) {
+	$gzip_type = "gzip"; }
 	if($gzip_type=="gzip") {
 	$goutput = gzencode($output); }
 	if($gzip_type=="deflate") {
@@ -130,7 +140,8 @@ function gzip_page($use_gzip="off",$gzip_type="gzip") {
 global $Settings,$urlstatus;
 if(!isset($urlstatus)||!is_numeric($urlstatus)) { $urlstatus = 200; }
 $output = trim(ob_get_clean());
-if($gzip_type!="gzip") { if($gzip_type!="deflate") { $gzip_type = "gzip"; } }
+if($gzip_type!="gzip"&&$gzip_type!="deflate"&&$gzip_type!="brotli") { $gzip_type = "gzip"; }
+if($gzip_type=="brotli"&&!function_exists('brotli_compress')) { $gzip_type = "gzip"; }
 if($use_gzip!="on") {
 	if($Settings['send_pagesize']=="on") {
 	@header("Content-Length: ".decoct(strlen($output))); 
@@ -138,6 +149,10 @@ if($use_gzip!="on") {
 	idb_log_maker($urlstatus,strlen($output));
 	echo $output; }
 if($use_gzip=="on") {
+	if($gzip_type=="brotli"&&function_exists('brotli_compress')) {
+	$goutput = brotli_compress($output); }
+	if($gzip_type=="brotli"&&!function_exists('brotli_compress')) {
+	$gzip_type = "gzip"; }
 	if($gzip_type=="gzip") {
 	$goutput = gzencode($output); }
 	if($gzip_type=="deflate") {

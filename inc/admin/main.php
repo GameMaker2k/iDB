@@ -11,7 +11,7 @@
     Copyright 2004-2019 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2019 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: main.php - Last Update: 11/26/2020 SVN 921 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 6/16/2021 SVN 934 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -813,6 +813,7 @@ while ($gi < $gnum) { ?>
 	<option<?php if($Settings['use_gzip']=="on") { echo " selected=\"selected\""; } ?> value="on">Yes</option>
 	<option<?php if($Settings['use_gzip']=="gzip") { echo " selected=\"selected\""; } ?> value="gzip">Only GZip</option>
 	<option<?php if($Settings['use_gzip']=="deflate") { echo " selected=\"selected\""; } ?> value="deflate">Only Deflate</option>
+	<option<?php if($Settings['use_gzip']=="brotli") { echo " selected=\"selected\""; } ?> value="brotli">Only Brotli</option>
 	</select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="HTMLType">HTML Type to use:</label></td>
