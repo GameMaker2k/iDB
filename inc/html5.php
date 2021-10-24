@@ -228,6 +228,7 @@ ob_start("idb_suboutput_handler"); ?>
 <!-- generator="<?php echo $iDB; ?>" -->
 <?php } $iWrappers['METATAGS'] = ob_get_clean(); 
 ob_start("idb_suboutput_handler"); ?>
+<link rel="preload" as="script" href=<?php echo url_maker($exfilejs['javascript'],$Settings['js_ext'],null,$Settings['qstr'],$Settings['qsep'],$prexqstrjs['javascript'],$exqstrjs['javascript']); ?>" />
 <script type="text/javascript" src="<?php echo url_maker($exfilejs['javascript'],$Settings['js_ext'],null,$Settings['qstr'],$Settings['qsep'],$prexqstrjs['javascript'],$exqstrjs['javascript']); ?>"></script>
 <script type="text/javascript">
  var tzname=Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -249,6 +250,7 @@ if($ThemeSet['CSSType']=="import") { ?>
 <?php echo $ThemeSet['CSS']; ?>
 </style>
 <?php } if($ThemeSet['CSSType']=="link") { ?>
+<link rel="preload" as="style" href="<?php echo $ThemeSet['CSS']; ?>" />
 <link rel="prefetch alternate stylesheet" href="<?php echo $ThemeSet['CSS']; ?>" />
 <link rel="stylesheet" type="text/css" href="<?php echo $ThemeSet['CSS']; ?>" />
 <?php } if($ThemeSet['CSSType']=="lowview") { ?>
@@ -277,8 +279,11 @@ font-size: 9px;
 <?php } $iWrappers['CSSTHEME'] = ob_get_clean();
 ob_start("idb_suboutput_handler");
 if($ThemeSet['FavIcon']!=null) { ?>
+<link rel="preload" as="image" href="<?php echo $ThemeSet['FavIcon']; ?>" />
 <link rel="icon" href="<?php echo $ThemeSet['FavIcon']; ?>" />
 <link rel="shortcut icon" href="<?php echo $ThemeSet['FavIcon']; ?>" />
+<!--<link rel="preload" as="image" href="<?php echo $BoardURL.$ThemeSet['OpenGraph']; ?>" />
+<link rel="preload" as="image" href="<?php echo $BoardURL.$ThemeSet['OpenGraph']; ?>" />-->
 <meta itemprop="image" property="og:image" content="<?php echo $BoardURL.$ThemeSet['OpenGraph']; ?>" />
 <meta itemprop="image" property="twitter:image" content="<?php echo $BoardURL.$ThemeSet['OpenGraph']; ?>" />
 <?php } $iWrappers['FAVICON'] = ob_get_clean(); ?>
