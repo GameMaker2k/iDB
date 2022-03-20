@@ -12,7 +12,7 @@
     Copyright 2004-2019 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mysql.php - Last Update: 11/26/2020 SVN 921 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 3/20/2022 SVN 935 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mysql.php"||$File3Name=="/mysql.php") {
@@ -205,6 +205,7 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."memb
 "  \"Avatar\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"AvatarSize\" varchar(10) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"Website\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"Location\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"Gender\" varchar(15) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"PostCount\" int(15) NOT NULL default '0',\n".
 "  \"Karma\" int(15) NOT NULL default '0',\n".
@@ -212,10 +213,15 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."memb
 "  \"RepliesPerPage\" int(5) NOT NULL default '0',\n".
 "  \"TopicsPerPage\" int(5) NOT NULL default '0',\n".
 "  \"MessagesPerPage\" int(5) NOT NULL default '0',\n".
-"  \"TimeZone\" varchar(256) COLLATE ".$Settings['sql_collate']." NOT NULL default '0',\n".
-"  \"DateFormat\" varchar(15) COLLATE ".$Settings['sql_collate']." NOT NULL default '0',\n".
-"  \"TimeFormat\" varchar(15) COLLATE ".$Settings['sql_collate']." NOT NULL default '0',\n".
-"  \"UseTheme\" varchar(32) COLLATE ".$Settings['sql_collate']." NOT NULL default '0',\n".
+"  \"TimeZone\" varchar(256) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"DateFormat\" varchar(15) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"TimeFormat\" varchar(15) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"UseTheme\" varchar(32) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+
+"  \"IgnoreSignitures\" varchar(32) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"IgnoreAdvatars\" varchar(32) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"IgnoreUsers\" varchar(32) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+
 "  \"IP\" varchar(64) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"Salt\" varchar(50) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\"),\n".
@@ -223,9 +229,9 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."memb
 "  UNIQUE KEY \"Email\" (\"Email\")\n".
 ") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$Settings['sql_charset']." COLLATE=".$Settings['sql_collate'].";", array(null));
 sql_query($query,$SQLStat);
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."members\" (\"id\", \"Name\", \"UserPassword\", \"HashType\", \"Email\", \"GroupID\", \"LevelID\", \"Validated\", \"HiddenMember\", \"WarnLevel\", \"Interests\", \"Title\", \"Joined\", \"LastActive\", \"LastLogin\", \"LastPostTime\", \"BanTime\", \"BirthDay\", \"BirthMonth\", \"BirthYear\", \"Signature\", \"Notes\", \"Avatar\", \"AvatarSize\", \"Website\", \"Gender\", \"PostCount\", \"Karma\", \"KarmaUpdate\", \"RepliesPerPage\", \"TopicsPerPage\", \"MessagesPerPage\", \"TimeZone\", \"DateFormat\", \"TimeFormat\", \"UseTheme\", \"IP\", \"Salt\") VALUES\n".
-"(-1, 'Guest', '%s', 'GuestPassword', '%s', 4, -1, 'no', 'yes', 0, 'Guest Account', 'Guest', %i, %i, %i, '0', '0', '0', '0', '0', '', 'Your Notes', 'http://', '100x100', '%s', 'UnKnow', 1, 0, 0, 10, 10, 10, '%s', '%s', '%s', '%s', '".$GuestLocalIP."', '%s'),\n".
-"(1, '%s', '%s', '".$iDBHashType."', '%s', 1, 1, 'yes', 'no', 0, '%s', 'Admin', %i, %i, %i, '0', '0', '0', '0', '0', '%s', 'Your Notes', '%s', '100x100', '%s', 'UnKnow', 0, 0, 0, 10, 10, 10, '%s', '%s', '%s', '%s', '%s', '%s');", array($GuestPassword,$GEmail,$YourDate,$YourDate,$YourDate,$YourWebsite,$_POST['YourOffSet'],$_POST['iDBDateFormat'],$_POST['iDBTimeFormat'],$_POST['DefaultTheme'],$GSalt,$_POST['AdminUser'],$NewPassword,$_POST['AdminEmail'],"",$YourDate,$YourDate,$YourDate,"","http://",$YourWebsite,$_POST['YourOffSet'],$_POST['iDBDateFormat'],$_POST['iDBTimeFormat'],$_POST['DefaultTheme'],$UserIP,$YourSalt));
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."members\" (\"id\", \"Name\", \"UserPassword\", \"HashType\", \"Email\", \"GroupID\", \"LevelID\", \"Validated\", \"HiddenMember\", \"WarnLevel\", \"Interests\", \"Title\", \"Joined\", \"LastActive\", \"LastLogin\", \"LastPostTime\", \"BanTime\", \"BirthDay\", \"BirthMonth\", \"BirthYear\", \"Signature\", \"Notes\", \"Avatar\", \"AvatarSize\", \"Website\", \"Location\", \"Gender\", \"PostCount\", \"Karma\", \"KarmaUpdate\", \"RepliesPerPage\", \"TopicsPerPage\", \"MessagesPerPage\", \"TimeZone\", \"DateFormat\", \"TimeFormat\", \"UseTheme\", \"IgnoreSignitures\", \"IgnoreAdvatars\", \"IgnoreUsers\", \"IP\", \"Salt\") VALUES\n".
+"(-1, 'Guest', '%s', 'GuestPassword', '%s', 4, -1, 'no', 'yes', 0, 'Guest Account', 'Guest', %i, %i, %i, '0', '0', '0', '0', '0', '', 'Your Notes', 'http://', '', '100x100', '%s', 'UnKnow', 1, 0, 0, 10, 10, 10, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s'),\n".
+"(1, '%s', '%s', '%s', '%s', 1, 1, 'yes', 'no', 0, '%s', 'Admin', %i, %i, %i, '0', '0', '0', '0', '0', '%s', 'Your Notes', '%s', '', '100x100', '%s', 'UnKnow', 0, 0, 0, 10, 10, 10, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');", array($GuestPassword,$GEmail,$YourDate,$YourDate,$YourDate,$YourWebsite,$_POST['YourOffSet'],$_POST['iDBDateFormat'],$_POST['iDBTimeFormat'],$_POST['DefaultTheme'],'','','',$GuestLocalIP,$GSalt,$_POST['AdminUser'],$NewPassword,$iDBHashType,$_POST['AdminEmail'],"",$YourDate,$YourDate,$YourDate,"","http://",$YourWebsite,$_POST['YourOffSet'],$_POST['iDBDateFormat'],$_POST['iDBTimeFormat'],$_POST['DefaultTheme'],'','','',$UserIP,$YourSalt));
 sql_query($query,$SQLStat);
 $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."mempermissions\" (\n".
 "  \"id\" int(15) NOT NULL auto_increment,\n".
@@ -284,6 +290,7 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."perm
 "  \"CanMakeTopics\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"CanMakeReplys\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"CanMakeReplysCT\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"HideEditPostInfo\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"CanEditTopics\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"CanEditTopicsCT\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"CanEditReplys\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
@@ -292,22 +299,26 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."perm
 "  \"CanDeleteTopicsCT\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"CanDeleteReplys\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"CanDeleteReplysCT\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanDoublePost\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanDoublePostCT\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"GotoEditPost\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"CanCloseTopics\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"CanPinTopics\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"CanExecPHP\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"CanDoHTML\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"CanUseBBTags\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"CanModForum\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanReportPost\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\")\n".
 ") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$Settings['sql_charset']." COLLATE=".$Settings['sql_collate'].";", array(null));
 sql_query($query,$SQLStat);
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."permissions\" (\"PermissionID\", \"Name\", \"ForumID\", \"CanViewForum\", \"CanMakePolls\", \"CanMakeTopics\", \"CanMakeReplys\", \"CanMakeReplysCT\", \"CanEditTopics\", \"CanEditTopicsCT\", \"CanEditReplys\", \"CanEditReplysCT\", \"CanDeleteTopics\", \"CanDeleteTopicsCT\", \"CanDeleteReplys\", \"CanDeleteReplysCT\", \"CanCloseTopics\", \"CanPinTopics\", \"CanExecPHP\", \"CanDoHTML\", \"CanUseBBTags\", \"CanModForum\") VALUES\n".
-"(1, 'Admin', 1, 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes'),\n".
-"(2, 'Moderator', 1, 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'no', 'no', 'yes', 'yes'),\n".
-"(3, 'Member', 1, 'yes', 'yes', 'yes', 'yes', 'no', 'yes', 'no', 'yes', 'no', 'yes', 'no', 'yes', 'no', 'no', 'no', 'no', 'no', 'yes', 'no'),\n".
-"(4, 'Guest', 1, 'yes', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no'),\n".
-"(5, 'Banned', 1, 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no'),\n".
-"(6, 'Validate', 1, 'yes', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no');", array(null)); 
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."permissions\" (\"PermissionID\", \"Name\", \"ForumID\", \"CanViewForum\", \"CanMakePolls\", \"CanMakeTopics\", \"CanMakeReplys\", \"CanMakeReplysCT\", \"HideEditPostInfo\", \"CanEditTopics\", \"CanEditTopicsCT\", \"CanEditReplys\", \"CanEditReplysCT\", \"CanDeleteTopics\", \"CanDeleteTopicsCT\", \"CanDoublePost\", \"CanDoublePostCT\", \"GotoEditPost\", \"CanDeleteReplys\", \"CanDeleteReplysCT\", \"CanCloseTopics\", \"CanPinTopics\", \"CanExecPHP\", \"CanDoHTML\", \"CanUseBBTags\", \"CanModForum\", \"CanReportPost\") VALUES\n".
+"(1, 'Admin', 1, 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'no', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'no', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes'),\n".
+"(2, 'Moderator', 1, 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'no', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'no', 'yes', 'yes', 'yes', 'yes', 'no', 'no', 'yes', 'yes', 'yes'),\n".
+"(3, 'Member', 1, 'yes', 'yes', 'yes', 'yes', 'no', 'yes', 'no', 'no', 'yes', 'no', 'yes', 'no', 'yes', 'yes', 'no', 'yes', 'no', 'no', 'no', 'no', 'no', 'yes', 'no', 'yes'),\n".
+"(4, 'Guest', 1, 'yes', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no'),\n".
+"(5, 'Banned', 1, 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no'),\n".
+"(6, 'Validate', 1, 'yes', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no');", array(null)); 
 sql_query($query,$SQLStat);
 $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."polls\" (\n".
 "  \"id\" int(15) NOT NULL auto_increment,\n".
@@ -354,7 +365,7 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."rest
 ") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$Settings['sql_charset']." COLLATE=".$Settings['sql_collate'].";", array(null));
 sql_query($query,$SQLStat);
 $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."sessions\" (\n".
-"  \"session_id\" VARCHAR(250) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"session_id\" varchar(250) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"session_data\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
 "  \"serialized_data\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
 "  \"user_agent\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
