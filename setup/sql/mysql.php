@@ -12,7 +12,7 @@
     Copyright 2004-2019 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mysql.php - Last Update: 3/20/2022 SVN 935 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 4/2/2022 SVN 940 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mysql.php"||$File3Name=="/mysql.php") {
@@ -217,11 +217,9 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."memb
 "  \"DateFormat\" varchar(15) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"TimeFormat\" varchar(15) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"UseTheme\" varchar(32) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-
 "  \"IgnoreSignitures\" varchar(32) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"IgnoreAdvatars\" varchar(32) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"IgnoreUsers\" varchar(32) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-
 "  \"IP\" varchar(64) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"Salt\" varchar(50) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\"),\n".

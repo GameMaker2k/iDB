@@ -12,7 +12,7 @@
     Copyright 2004-2019 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: cubrid.php - Last Update: 3/20/2022 SVN 935 - Author: cooldude2k $
+    $FileInfo: cubrid.php - Last Update: 4/2/2022 SVN 940 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="cubrid.php"||$File3Name=="/cubrid.php") {
@@ -174,6 +174,7 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."members\" (\n".
 "  \"Avatar\" VARCHAR(150) NOT NULL default '',\n".
 "  \"AvatarSize\" VARCHAR(10) NOT NULL default '',\n".
 "  \"Website\" VARCHAR(150) NOT NULL default '',\n".
+"  \"Location\" VARCHAR(150) NOT NULL default '',\n".
 "  \"Gender\" VARCHAR(15) NOT NULL default '',\n".
 "  \"PostCount\" INTEGER NOT NULL default '0',\n".
 "  \"Karma\" INTEGER NOT NULL default '0',\n".
@@ -185,11 +186,9 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."members\" (\n".
 "  \"DateFormat\" VARCHAR(15) NOT NULL default '',\n".
 "  \"TimeFormat\" VARCHAR(15) NOT NULL default '',\n".
 "  \"UseTheme\" VARCHAR(32) NOT NULL default '',\n".
-
 "  \"IgnoreSignitures\" VARCHAR(32) NOT NULL default '',\n".
 "  \"IgnoreAdvatars\" VARCHAR(32) NOT NULL default '',\n".
 "  \"IgnoreUsers\" VARCHAR(32) NOT NULL default '',\n".
-
 "  \"IP\" VARCHAR(64) NOT NULL default '',\n".
 "  \"Salt\" VARCHAR(50) NOT NULL default ''\n".
 ");", array(null));

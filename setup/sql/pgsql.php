@@ -12,7 +12,7 @@
     Copyright 2004-2019 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: pgsql.php - Last Update: 3/20/2022 SVN 935 - Author: cooldude2k $
+    $FileInfo: pgsql.php - Last Update: 4/2/2022 SVN 940 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pgsql.php"||$File3Name=="/pgsql.php") {
@@ -179,6 +179,7 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."members\" (\n".
 "  \"Avatar\" varchar(150) NOT NULL default '',\n".
 "  \"AvatarSize\" varchar(10) NOT NULL default '',\n".
 "  \"Website\" varchar(150) NOT NULL default '',\n".
+"  \"Location\" varchar(150) NOT NULL default '',\n".
 "  \"Gender\" varchar(15) NOT NULL default '',\n".
 "  \"PostCount\" numeric(15) NOT NULL default '0',\n".
 "  \"Karma\" numeric(15) NOT NULL default '0',\n".
@@ -190,11 +191,9 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."members\" (\n".
 "  \"DateFormat\" VARCHAR(15) NOT NULL default '',\n".
 "  \"TimeFormat\" VARCHAR(15) NOT NULL default '',\n".
 "  \"UseTheme\" varchar(32) NOT NULL default '',\n".
-
 "  \"IgnoreSignitures\" varchar(32) NOT NULL default '',\n".
 "  \"IgnoreAdvatars\" varchar(32) NOT NULL default '',\n".
 "  \"IgnoreUsers\" varchar(32) NOT NULL default '',\n".
-
 "  \"IP\" varchar(64) NOT NULL default '',\n".
 "  \"Salt\" varchar(50) NOT NULL default '',\n".
 "  UNIQUE (\"Name\"),\n".
