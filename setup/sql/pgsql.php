@@ -12,7 +12,7 @@
     Copyright 2004-2019 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: pgsql.php - Last Update: 4/2/2022 SVN 940 - Author: cooldude2k $
+    $FileInfo: pgsql.php - Last Update: 4/2/2022 SVN 941 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pgsql.php"||$File3Name=="/pgsql.php") {
@@ -276,7 +276,7 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."permissions\" (\n"
 "  \"CanExecPHP\" varchar(5) NOT NULL default '',\n".
 "  \"CanDoHTML\" varchar(5) NOT NULL default '',\n".
 "  \"CanUseBBTags\" varchar(5) NOT NULL default '',\n".
-"  \"CanModForum\" varchar(5) NOT NULL default ''\n".
+"  \"CanModForum\" varchar(5) NOT NULL default '',\n".
 "  \"CanReportPost\" varchar(5) NOT NULL default ''\n".
 ");", array(null));
 sql_query($query,$SQLStat);
