@@ -11,7 +11,7 @@
     Copyright 2004-2019 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2019 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: functions.php - Last Update: 6/16/2021 SVN 934 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 4/4/2022 SVN 942 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -83,6 +83,22 @@ $SessName = session_name();
 $output = preg_replace("/&PHPSESSID/", "&amp;PHPSESSID", $output);
 $qstrcode = htmlentities($Settings['qstr'], ENT_QUOTES, $Settings['charset']);
 $output = str_replace($Settings['qstr'].$SessName, $qstrcode.$SessName, $output);
+if (extension_loaded('tidy') && (isset($Settings['clean_html']) && $Settings['clean_html']==true)) {
+ $tidyxhtml = false;
+ if($Settings['output_type']=="html") {
+  $tidyxhtml = false; }
+ if($Settings['output_type']=="xhtml") {
+  $tidyxhtml = true; }
+ if($Settings['output_type']!="html" && $Settings['output_type']!="xhtml") {
+  $tidyxhtml = false; }
+  $config = array(
+            'indent' => true,
+            'clean' => true,
+            'output-xhtml' => $tidyxhtml,
+            'show-body-only' => true,
+            'wrap' => 0);
+ $output = tidy_parse_string($output, $config, 'UTF8');
+ $output ->cleanRepair(); }
 if($use_gzip!="on") {
 	if($Settings['send_pagesize']=="on") {
 	@header("Content-Length: ".decoct(strlen($output))); 
@@ -115,6 +131,22 @@ $SessName = session_name();
 $output = preg_replace("/&PHPSESSID/", "&amp;PHPSESSID", $output);
 $qstrcode = htmlentities($Settings['qstr'], ENT_QUOTES, $Settings['charset']);
 $output = str_replace($Settings['qstr'].$SessName, $qstrcode.$SessName, $output);
+if (extension_loaded('tidy') && (isset($Settings['clean_html']) && $Settings['clean_html']==true)) {
+ $tidyxhtml = false;
+ if($Settings['output_type']=="html") {
+  $tidyxhtml = false; }
+ if($Settings['output_type']=="xhtml") {
+  $tidyxhtml = true; }
+ if($Settings['output_type']!="html" && $Settings['output_type']!="xhtml") {
+  $tidyxhtml = false; }
+  $config = array(
+            'indent' => true,
+            'clean' => true,
+            'output-xhtml' => $tidyxhtml,
+            'show-body-only' => true,
+            'wrap' => 0);
+ $output = tidy_parse_string($output, $config, 'UTF8');
+ $output ->cleanRepair(); }
 if($use_gzip!="on") {
 	if($Settings['send_pagesize']=="on") {
 	@header("Content-Length: ".decoct(strlen($output))); 
@@ -140,6 +172,22 @@ function gzip_page($use_gzip="off",$gzip_type="gzip") {
 global $Settings,$urlstatus;
 if(!isset($urlstatus)||!is_numeric($urlstatus)) { $urlstatus = 200; }
 $output = trim(ob_get_clean());
+if (extension_loaded('tidy') && (isset($Settings['clean_html']) && $Settings['clean_html']==true)) {
+ $tidyxhtml = false;
+ if($Settings['output_type']=="html") {
+  $tidyxhtml = false; }
+ if($Settings['output_type']=="xhtml") {
+  $tidyxhtml = true; }
+ if($Settings['output_type']!="html" && $Settings['output_type']!="xhtml") {
+  $tidyxhtml = false; }
+  $config = array(
+            'indent' => true,
+            'clean' => true,
+            'output-xhtml' => $tidyxhtml,
+            'show-body-only' => true,
+            'wrap' => 0);
+ $output = tidy_parse_string($output, $config, 'UTF8');
+ $output ->cleanRepair(); }
 if($gzip_type!="gzip"&&$gzip_type!="deflate"&&$gzip_type!="brotli") { $gzip_type = "gzip"; }
 if($gzip_type=="brotli"&&!function_exists('brotli_compress')) { $gzip_type = "gzip"; }
 if($use_gzip!="on") {
