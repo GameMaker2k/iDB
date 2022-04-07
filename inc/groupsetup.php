@@ -11,7 +11,7 @@
     Copyright 2004-2019 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2019 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: groupsetup.php - Last Update: 08/02/2019 SVN 905 - Author: cooldude2k $
+    $FileInfo: groupsetup.php - Last Update: 4/6/2022 SVN 944 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="groupsetup.php"||$File3Name=="/groupsetup.php") {
@@ -479,14 +479,18 @@ $PermissionInfo['CanModForum'][$PerForumID]=sql_result($peresult,$peri,"CanModFo
 if($PermissionInfo['CanModForum'][$PerForumID]!="yes"&&$PermissionInfo['CanModForum'][$PerForumID]!="no") {
 	$PermissionInfo['CanModForum'][$PerForumID] = "no"; }
 if($PermissionInfo['CanModForum'][$PerForumID]=="no") {
+if(isset($ModForumIgnoreList1)) {
 if(strlen($ModForumIgnoreList1)>1) { $ModForumIgnoreList1 .= " AND \"id\"<>".$PerForumID; }
-if(strlen($ModForumIgnoreList1)<1) { $ModForumIgnoreList1 = " \"id\"<>".$PerForumID; }
+if(strlen($ModForumIgnoreList1)<1) { $ModForumIgnoreList1 = " \"id\"<>".$PerForumID; } }
+if(isset($ModForumIgnoreList2)) {
 if(strlen($ModForumIgnoreList2)>1) { $ModForumIgnoreList2 .= " AND \"id\"<>".$PerForumID; }
-if(strlen($ModForumIgnoreList2)<1) { $ModForumIgnoreList2 = " AND \"id\"<>".$PerForumID; }
+if(strlen($ModForumIgnoreList2)<1) { $ModForumIgnoreList2 = " AND \"id\"<>".$PerForumID; } }
+if(isset($ModForumIgnoreList3)) {
 if(strlen($ModForumIgnoreList3)>1) { $ModForumIgnoreList3 .= " AND \"ForumID\"<>".$PerForumID; }
-if(strlen($ModForumIgnoreList3)<1) { $ModForumIgnoreList3 = " WHERE \"ForumID\"<>".$PerForumID; }
+if(strlen($ModForumIgnoreList3)<1) { $ModForumIgnoreList3 = " WHERE \"ForumID\"<>".$PerForumID; } }
+if(isset($ModForumIgnoreList4)) {
 if(strlen($ModForumIgnoreList4)>1) { $ModForumIgnoreList4 .= " AND \"ForumID\"<>".$PerForumID; }
-if(strlen($ModForumIgnoreList4)<1) { $ModForumIgnoreList4 = " AND \"ForumID\"<>".$PerForumID; } }
+if(strlen($ModForumIgnoreList4)<1) { $ModForumIgnoreList4 = " AND \"ForumID\"<>".$PerForumID; } } }
 if($PerError===true) { $peri = $pernum; }
 ++$peri; } if($PerError===true) {
 header("Content-Type: text/plain; charset=".$Settings['charset']); sql_free_result($peresult); $urlstatus = 503;

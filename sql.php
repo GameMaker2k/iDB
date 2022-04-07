@@ -11,7 +11,7 @@
     Copyright 2004-2019 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2019 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: sql.php - Last Update: 6/16/2021 SVN 934 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 4/6/2022 SVN 944 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -280,10 +280,14 @@ if(!in_array("ini_set", $disfunc)) {
 @ini_set('default_charset', $Settings['charset']); }
 $File1Name = dirname($_SERVER['SCRIPT_NAME'])."/";
 $File2Name = $_SERVER['SCRIPT_NAME'];
-$File3Name=str_replace($File1Name, null, $File2Name);
+/*$File3Name=str_replace($File1Name, null, $File2Name);
 if ($File3Name=="sql.php"||$File3Name=="/sql.php") {
 	header('Location: index.php');
-	exit(); }
+	exit(); }*/
+$File3Name = basename($_SERVER['SCRIPT_NAME']);
+if ($File3Name=="sql.php"||$File3Name=="/sql.php") {
+    header('Location: index.php');
+    exit(); }
 //error_reporting(E_ERROR);
 // Check if gzip is on and if user's browser can accept gzip pages
 if($_GET['act']=="MkCaptcha"||$_GET['act']=="Captcha") {
@@ -508,8 +512,8 @@ session_start([
     'gc_probability' => 1,
     'gc_divisor' => 100,
     'gc_maxlifetime' => 1440,
-    'hash_function' => 1,
-    'hash_bits_per_character' => 6,
+    //'hash_function' => 1,
+    //'hash_bits_per_character' => 6,
     'name' => $Settings['sqltable']."sess",
 ]); }
 if(!isset($_SESSION['UserFormID'])) { $_SESSION['UserFormID'] = null; }
@@ -528,8 +532,8 @@ session_start([
     'gc_probability' => 1,
     'gc_divisor' => 100,
     'gc_maxlifetime' => 1440,
-    'hash_function' => 1,
-    'hash_bits_per_character' => 6,
+    //'hash_function' => 1,
+    //'hash_bits_per_character' => 6,
     'name' => $Settings['sqltable']."sess",
 ]); }
 if(!isset($_SESSION['UserFormID'])) { $_SESSION['UserFormID'] = null; }
@@ -811,13 +815,14 @@ function get_theme_values($matches) {
 	if(!isset($ThemeSet[$matches[1]])) { $return_text = null; }
 	return $return_text; }
 foreach($ThemeSet AS $key => $value) {
+    if(isset($ThemeSet[$key])) {
 	$ThemeSet[$key] = preg_replace("/%%/s", "{percent}p", $ThemeSet[$key]);
 	$ThemeSet[$key] = preg_replace_callback("/%\{([^\}]*)\}T/s", "get_theme_values", $ThemeSet[$key]);
 	$ThemeSet[$key] = preg_replace_callback("/%\{([^\}]*)\}e/s", "get_env_values", $ThemeSet[$key]);
 	$ThemeSet[$key] = preg_replace_callback("/%\{([^\}]*)\}i/s", "get_server_values", $ThemeSet[$key]);
 	$ThemeSet[$key] = preg_replace_callback("/%\{([^\}]*)\}s/s", "get_setting_values", $ThemeSet[$key]);
 	$ThemeSet[$key] = preg_replace_callback("/%\{([^\}]*)\}t/s", "get_time", $ThemeSet[$key]); 
-	$ThemeSet[$key] = preg_replace("/\{percent\}p/s", "%", $ThemeSet[$key]); }
+	$ThemeSet[$key] = preg_replace("/\{percent\}p/s", "%", $ThemeSet[$key]); } }
 if(!isset($ThemeSet['TableStyle'])) {
 	$ThemeSet['TableStyle'] = "table"; }
 if(isset($ThemeSet['TableStyle'])) {
