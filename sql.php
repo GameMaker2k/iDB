@@ -11,7 +11,7 @@
     Copyright 2004-2019 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2019 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: sql.php - Last Update: 4/6/2022 SVN 944 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 4/6/2022 SVN 946 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -82,28 +82,30 @@ function unparse_url($parsed_url) {
   return $scheme.$user.$pass.$host.$port.$path.$query.$fragment;
 } 
 $OrgBoardURL = $Settings['idburl'];
-$PreBestURL = parse_url($Settings['idburl']);
+if(isset($Settings['idburl'])) {
+$PreBestURL = parse_url($Settings['idburl']); }
 $PreServURL = parse_url((isset($_SERVER['HTTPS']) ? "https" : "http") . "://".$_SERVER['HTTP_HOST'].substr($_SERVER['REQUEST_URI'], 0, strrpos($_SERVER['REQUEST_URI'], '/') + 1));
-if($PreBestURL['host']=="localhost.url"&&str_replace("/", "", $PreBestURL['path'])=="localpath") {
+if(isset($PreBestURL['host'])&&$PreBestURL['host']=="localhost.url"&&str_replace("/", "", $PreBestURL['path'])=="localpath") {
    $PreBestURL['host'] = "localhost";
    $PreBestURL['path'] = $PreServURL['path'];
    $Settings['idburl'] = unparse_url($PreBestURL); }
-if($PreBestURL['host']=="localhost.url"&&str_replace("/", "", $PreBestURL['path'])!="localpath") {
+if(isset($PreBestURL['host'])&&$PreBestURL['host']=="localhost.url"&&str_replace("/", "", $PreBestURL['path'])!="localpath") {
    $PreBestURL['host'] = $PreServURL['host'];
    $Settings['idburl'] = unparse_url($PreBestURL); }
-if($PreBestURL['host']!="localhost.url"&&str_replace("/", "", $PreBestURL['path'])=="localpath") {
+if(isset($PreBestURL['host'])&&$PreBestURL['host']!="localhost.url"&&str_replace("/", "", $PreBestURL['path'])=="localpath") {
    $PreBestURL['path'] = $PreServURL['path'];
    $Settings['idburl'] = unparse_url($PreBestURL); }
 $OrgWebSiteURL = $Settings['weburl'];
-$PreWestURL = parse_url($Settings['weburl']);
-if($PreWestURL['host']=="localhost.url"&&str_replace("/", "", $PreWestURL['path'])=="localpath") {
+if(isset($Settings['idburl'])) {
+$PreWestURL = parse_url($Settings['weburl']); }
+if(isset($PreWestURL['host'])&&$PreWestURL['host']=="localhost.url"&&str_replace("/", "", $PreWestURL['path'])=="localpath") {
    $PreWestURL['host'] = $PreServURL['host'];
    $PreWestURL['path'] = $PreServURL['path'];
    $Settings['weburl'] = unparse_url($PreWestURL); }
-if($PreWestURL['host']=="localhost.url"&&str_replace("/", "", $PreWestURL['path'])!="localpath") {
+if(isset($PreWestURL['host'])&&$PreWestURL['host']=="localhost.url"&&str_replace("/", "", $PreWestURL['path'])!="localpath") {
    $PreWestURL['host'] = $PreServURL['host'];
    $Settings['weburl'] = unparse_url($PreWestURL); }
-if($PreWestURL['host']!="localhost.url"&&str_replace("/", "", $PreWestURL['path'])=="localpath") {
+if(isset($PreWestURL['host'])&&$PreWestURL['host']!="localhost.url"&&str_replace("/", "", $PreWestURL['path'])=="localpath") {
    $PreWestURL['path'] = $PreServURL['path'];
    $Settings['weburl'] = unparse_url($PreWestURL); }
 if(!isset($Settings['fixbasedir'])) { $Settings['fixbasedir'] = null; }

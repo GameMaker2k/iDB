@@ -11,7 +11,7 @@
     Copyright 2004-2019 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2019 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: html5.php - Last Update: 4/6/2022 SVN 944 - Author: cooldude2k $
+    $FileInfo: html5.php - Last Update: 4/6/2022 SVN 946 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="html5.php"||$File3Name=="/html5.php") {

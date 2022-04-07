@@ -11,7 +11,7 @@
     Copyright 2004-2019 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2019 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: navbar.php - Last Update: 08/02/2019 SVN 905 - Author: cooldude2k $
+    $FileInfo: navbar.php - Last Update: 4/6/2022 SVN 946 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="navbar.php"||$File3Name=="/navbar.php") {
@@ -36,6 +36,7 @@ $AmIHidden = $PreAmIHidden['Hidden']; }
 $NavBarCurMonth = $usercurtime->format("m");
 $NavBarCurYear = $usercurtime->format("Y");
 $NavBarCurDate = $NavBarCurMonth.$NavBarCurYear;
+if(!isset($idbpowertitle)) { $idbpowertitle = null; }
 ?>
 <div class="NavBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>

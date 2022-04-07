@@ -11,7 +11,7 @@
     Copyright 2004-2019 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2019 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: html5.php - Last Update: 11/27/2020 SVN 928 - Author: cooldude2k $
+    $FileInfo: html5.php - Last Update: 4/6/2022 SVN 946 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="xhtml10.php"||$File3Name=="/xhtml10.php") {
@@ -201,7 +201,13 @@ if(strpos($_SERVER['HTTP_USER_AGENT'], "msie") &&
 <meta name="Generator" content="<?php echo $VerInfo['iDB_Ver_Show']; ?>" />
 <?php } if($Settings['showverinfo']!="on") { ?>
 <meta name="Generator" content="<?php echo $iDB; ?>" />
-<?php } echo "\n"; ?>
+<?php } echo "\n";
+if(!isset($SettInfo['Author'])) { $SettInfo['Author'] = ""; }
+if(!isset($ThemeSet['ThemeMaker'])) { $ThemeSet['ThemeMaker'] = ""; }
+if(!isset($SettInfo['Keywords'])) { $SettInfo['Keywords'] = ""; }
+if(!isset($SettInfo['Description'])) { $SettInfo['Description'] = ""; }
+if(!isset($Settings['js_ext'])) { $Settings['js_ext'] = ".js"; }
+?>
 <meta name="Author" content="<?php echo $SettInfo['Author']; ?>" />
 <meta name="web_author" content="<?php echo $SettInfo['Author']; ?>" />
 <meta name="rating" content="general" />

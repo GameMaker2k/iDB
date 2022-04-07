@@ -12,7 +12,7 @@
     Copyright 2004-2019 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
     iDB Installer made by Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2support/category.php?act=view&id=2
 
-    $FileInfo: install.php - Last Update: 11/27/2020 SVN 926 - Author: cooldude2k $
+    $FileInfo: install.php - Last Update: 4/6/2022 SVN 946 - Author: cooldude2k $
 *//*
 if(ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }
@@ -30,7 +30,7 @@ if(!in_array("ini_set", $disfunc)) {
 @ini_set("report_memleaks", false);
 @ini_set("display_startup_errors", false);
 //@ini_set("error_log","logs/error.log"); 
-//@ini_set("log_errors","On");
+//@ini_set("log_errors","On"); 
 @ini_set("docref_ext", "");
 @ini_set("docref_root", "http://php.net/"); }
 if(!defined("E_DEPRECATED")) { define("E_DEPRECATED", 0); }
@@ -98,7 +98,8 @@ if ($_GET['act']!="Part4"&&$_POST['act']!="Part4") {
 $SetupDir['setup'] = "setup/"; $ConvertDir['setup'] = $SetupDir['setup']; $SetupDir['sql'] = "setup/sql/"; 
 $SetupDir['convert'] = "setup/convert/"; $ConvertDir['convert'] = $SetupDir['convert']; $ConvertDir['sql'] = $SetupDir['sql'];
 $Settings['output_type'] = "html"; $Settings['html_type'] = "html5";
-$Settings['board_name'] = $iDB;
+if(isset($iD)) {
+$Settings['board_name'] = $iDB; }
 if(!isset($Settings['charset'])) {
 	$Settings['charset'] = "ISO-8859-15"; 
 	header("Content-Type: text/html; charset=ISO-8859-15"); }
@@ -165,13 +166,14 @@ function get_theme_values($matches) {
 	if(!isset($ThemeSet[$matches[1]])) { $return_text = null; }
 	return $return_text; }
 foreach($ThemeSet AS $key => $value) {
+	if(isset($ThemeSet[$key])) {
 	$ThemeSet[$key] = preg_replace("/%%/s", "{percent}p", $ThemeSet[$key]);
 	$ThemeSet[$key] = preg_replace_callback("/%\{([^\}]*)\}T/s", "get_theme_values", $ThemeSet[$key]);
 	$ThemeSet[$key] = preg_replace_callback("/%\{([^\}]*)\}e/s", "get_env_values", $ThemeSet[$key]);
 	$ThemeSet[$key] = preg_replace_callback("/%\{([^\}]*)\}i/s", "get_server_values", $ThemeSet[$key]);
 	$ThemeSet[$key] = preg_replace_callback("/%\{([^\}]*)\}s/s", "get_setting_values", $ThemeSet[$key]);
 	$ThemeSet[$key] = preg_replace_callback("/%\{([^\}]*)\}t/s", "get_time", $ThemeSet[$key]); 
-	$ThemeSet[$key] = preg_replace("/\{percent\}p/s", "%", $ThemeSet[$key]); }
+	$ThemeSet[$key] = preg_replace("/\{percent\}p/s", "%", $ThemeSet[$key]); } }
 require($SetupDir['convert'].'info.php');
 require($SetupDir['setup'].'html5.php');
 $Error = null; $_GET['time'] = false;

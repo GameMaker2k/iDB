@@ -11,7 +11,7 @@
     Copyright 2004-2019 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2019 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: function.php - Last Update: 08/02/2019 SVN 905 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 4/6/2022 SVN 946 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -419,7 +419,7 @@ if(!isset($_GET['id'])) { $_GET['id'] = null; }
 if(!isset($_GET['debug'])) { $_GET['debug'] = "false"; }
 if(!isset($_GET['post'])) { $_GET['post'] = null; }
 if(!isset($_POST['License'])) { $_POST['License'] = null; } }
-if($_SERVER['PATH_INFO']==null) {
+if(isset($_SERVER['PATH_INFO']) && $_SERVER['PATH_INFO']==null) {
 	if(getenv('PATH_INFO')!=null&&getenv('PATH_INFO')!="1") {
 $_SERVER['PATH_INFO'] = getenv('PATH_INFO'); }
 if(getenv('PATH_INFO')==null) {
