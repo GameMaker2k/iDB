@@ -11,7 +11,7 @@
     Copyright 2004-2019 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2019 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: utf8.php - Last Update: 08/02/2019 SVN 905 - Author: cooldude2k $
+    $FileInfo: utf8.php - Last Update: 4/8/2022 SVN 948 - Author: cooldude2k $
 */
 // UTF8 helper functions
 // author: Scott Michael Reynen "scott@randomchaos.com"
@@ -23,13 +23,23 @@ if ($File3Name=="utf8.php"||$File3Name=="/utf8.php") {
 	exit(); }
 
 function utf8_strlen($str) {
-  return strlen(utf8_decode($_GET['text'])); }
+if(isset($str)) {
+return strlen(utf8_decode($str)); }
+if(!isset($str)) {
+return $str; } }
 function pre_strlen($str) {
 global $chkcharset;
 if($chkcharset=="UTF-8") {
 if(!defined('UTF8_NOMBSTRING')&&function_exists('mb_strlen')) {
+if(isset($str)) {
 return mb_strlen($str,'utf-8'); }
-else { return utf8_strlen($str); } }
+if(!isset($str)) {
+return $str; } }
+else { 
+if(isset($str)) {
+return utf8_strlen($str); }
+if(!isset($str)) {
+return $str; } } } }
 if($chkcharset!="UTF-8") { return strlen($str); } }
 
 // utf8_substr by frank at jkelloggs dot dk
