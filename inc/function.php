@@ -11,7 +11,7 @@
     Copyright 2004-2019 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2019 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: function.php - Last Update: 4/6/2022 SVN 946 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 4/8/2022 SVN 947 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -78,8 +78,11 @@ if($Settings['fixredirectdir']!=null) {
 		$rbasedir = $Settings['fixredirectdir']; }
 $BaseURL = $basedir;
 // Get our Host Name and Referer URL's Host Name
-if(!isset($_SERVER['HTTP_REFERER'])) { $_SERVER['HTTP_REFERER'] = null; }
-$REFERERurl = parse_url($_SERVER['HTTP_REFERER']);
+if(!isset($_SERVER['HTTP_REFERER'])) {
+ $REFERERurl = null;
+ $_SERVER['HTTP_REFERER'] = null; }
+if(isset($_SERVER['HTTP_REFERER'])) {
+ $REFERERurl = parse_url($_SERVER['HTTP_REFERER']); }
 if(!isset($REFERERurl['host'])) { $REFERERurl['host'] = null; }
 $URL['REFERER'] = $REFERERurl['host'];
 $URL['HOST'] = $basecheck['host'];

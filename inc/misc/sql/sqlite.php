@@ -11,7 +11,7 @@
     Copyright 2004-2019 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2019 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: sqlite.php - Last Update: 08/02/2019 SVN 905 - Author: cooldude2k $
+    $FileInfo: sqlite.php - Last Update: 4/8/2022 SVN 947 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="sqlite.php"||$File3Name=="/sqlite.php") {
@@ -112,7 +112,8 @@ function sql_server_info($link=null) {
 function sql_client_info($link=null) {
 	return null; }
 function sql_escape_string($string,$link=null) {
-	$string = sqlite_escape_string($string);
+ if(isset($string)) {
+ 	$string = sqlite_escape_string($string); }
 if ($string===false) {
     output_error("SQL Error: ".sql_error(),E_USER_ERROR);
 	return false; }

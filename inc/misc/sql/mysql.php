@@ -11,7 +11,7 @@
     Copyright 2004-2019 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2019 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: mysql.php - Last Update: 08/02/2019 SVN 905 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 4/8/2022 SVN 947 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mysql.php"||$File3Name=="/mysql.php") {
@@ -128,10 +128,11 @@ function sql_client_info($link=null) {
 	$result = mysql_get_client_info();
 	return $result; }
 function sql_escape_string($string,$link=null) {
-if(isset($link)) {
-	$string = mysql_real_escape_string($string,$link); }
-if(!isset($link)) {
-	$string = mysql_real_escape_string($string); }
+if(isset($string)) {
+ if(isset($link)) {
+ 	$string = mysql_real_escape_string($string,$link); }
+ if(!isset($link)) {
+ 	$string = mysql_real_escape_string($string); } }
 if ($string===false) {
     output_error("SQL Error: ".sql_error(),E_USER_ERROR);
 	return false; }

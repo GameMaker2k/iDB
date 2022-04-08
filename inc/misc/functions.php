@@ -11,7 +11,7 @@
     Copyright 2004-2019 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2019 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: functions.php - Last Update: 4/4/2022 SVN 942 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 4/8/2022 SVN 947 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -129,6 +129,7 @@ $output = trim(ob_get_clean());
 /* Change Some PHP Settings Fix the &PHPSESSID to &amp;PHPSESSID */
 $SessName = session_name();
 $output = preg_replace("/&PHPSESSID/", "&amp;PHPSESSID", $output);
+if(!isset($Settings['qstr'])) { $Settings['qstr'] = '&'; }
 $qstrcode = htmlentities($Settings['qstr'], ENT_QUOTES, $Settings['charset']);
 $output = str_replace($Settings['qstr'].$SessName, $qstrcode.$SessName, $output);
 if (extension_loaded('tidy') && (isset($Settings['clean_html']) && $Settings['clean_html']==true)) {
@@ -147,6 +148,7 @@ if (extension_loaded('tidy') && (isset($Settings['clean_html']) && $Settings['cl
             'wrap' => 0);
  $output = tidy_parse_string($output, $config, 'UTF8');
  $output ->cleanRepair(); }
+if(!isset($Settings['send_pagesize'])) { $Settings['send_pagesize'] = "on"; }
 if($use_gzip!="on") {
 	if($Settings['send_pagesize']=="on") {
 	@header("Content-Length: ".decoct(strlen($output))); 

@@ -12,7 +12,7 @@
     Copyright 2004-2019 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mkconfig.php - Last Update: 11/26/2020 SVN 921 - Author: cooldude2k $
+    $FileInfo: mkconfig.php - Last Update: 4/8/2022 SVN 947 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mkconfig.php"||$File3Name=="/mkconfig.php") {
@@ -122,8 +122,8 @@ session_start([
     'gc_probability' => 1,
     'gc_divisor' => 100,
     'gc_maxlifetime' => 1440,
-    'hash_function' => 1,
-    'hash_bits_per_character' => 6,
+    //'hash_function' => 1,
+    //'hash_bits_per_character' => 6,
     'name' => $_POST['tableprefix']."sess",
 ]); }
 //@register_shutdown_function("session_write_close");
