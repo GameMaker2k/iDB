@@ -27,7 +27,7 @@ header("Date: ".$utccurtime->format("D, d M Y H:i:s")." GMT");
 header("Last-Modified: ".$utccurtime->format("D, d M Y H:i:s")." GMT");
 header("Expires: ".$utccurtime->format("D, d M Y H:i:s")." GMT");
 output_reset_rewrite_vars();
-if(!isset($Settings['send_pagesize'])) { $Settings['send_pagesize'] = "on"; }
+if(!isset($Settings['send_pagesize'])) { $Settings['send_pagesize'] = "off"; }
 if(!isset($Settings['fixbasedir'])) { $Settings['fixbasedir'] = null; }
 if(!isset($Settings['fixcookiedir'])) { $Settings['fixcookiedir'] = null; }
 if(!isset($Settings['rssurl'])) { $Settings['rssurl'] = null; }
