@@ -11,7 +11,7 @@
     Copyright 2004-2019 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2019 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: sqlite.php - Last Update: 08/02/2019 SVN 905 - Author: cooldude2k $
+    $FileInfo: sqlite.php - Last Update: 4/8/2022 SVN 951 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="sqlite.php"||$File3Name=="/sqlite.php") {
@@ -80,7 +80,7 @@ if(!isset($AltSQLDumper)||$AltSQLDumper===null) {
 	$SQLDumper = "SQL Dumper"; }
 if(isset($AltSQLDumper)&&$AltSQLDumper!==null) {
 	$SQLDumper = $AltSQLDumper; }
-function GetAllRows($table) { $rene_j = 0; $trowout = null;
+function GetAllRows($table) { $rene_j = 0; $trowout = array();
 global $SQLStat;
 $tresult = sql_query("SELECT * FROM \"".$table."\"",$SQLStat);
 while ($trow = sql_fetch_assoc($tresult)) {

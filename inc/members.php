@@ -11,7 +11,7 @@
     Copyright 2004-2019 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2019 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: members.php - Last Update: 3/20/2022 SVN 935 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 4/8/2022 SVN 951 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -130,7 +130,7 @@ if($nums<$num) { $nextpage = $_GET['page'] + 1; }
 if($nums>=$num) { $nextpage = $_GET['page']; }
 if($numz>=$Settings['max_memlist']) { $backpage = $_GET['page'] - 1; }
 if($_GET['page']<=1) { $backpage = 1; }
-$pnum = $num; $l = 1; $Pages = null;
+$pnum = $num; $l = 1; $Pages = array();;
 while ($pnum>0) {
 if($pnum>=$Settings['max_memlist']) { 
 	$pnum = $pnum - $Settings['max_memlist']; 
@@ -374,7 +374,7 @@ if($nums<$num) { $nextpage = $_GET['page'] + 1; }
 if($nums>=$num) { $nextpage = $_GET['page']; }
 if($numz>=$Settings['max_memlist']) { $backpage = $_GET['page'] - 1; }
 if($_GET['page']<=1) { $backpage = 1; }
-$pnum = $num; $l = 1; $Pages = null;
+$pnum = $num; $l = 1; $Pages = array();;
 while ($pnum>0) {
 if($pnum>=$Settings['max_memlist']) { 
 	$pnum = $pnum - $Settings['max_memlist']; 

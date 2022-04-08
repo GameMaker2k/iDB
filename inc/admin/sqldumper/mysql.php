@@ -11,7 +11,7 @@
     Copyright 2004-2019 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2019 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: mysql.php - Last Update: 08/02/2019 SVN 905 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 4/8/2022 SVN 951 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mysql.php"||$File3Name=="/mysql.php") {
@@ -80,7 +80,7 @@ if(!isset($AltSQLDumper)||$AltSQLDumper===null) {
 	$SQLDumper = "SQL Dumper"; }
 if(isset($AltSQLDumper)&&$AltSQLDumper!==null) {
 	$SQLDumper = $AltSQLDumper; }
-function GetAllRows($table) { $rene_j = 0; $trowout = null;
+function GetAllRows($table) { $rene_j = 0; $trowout = array();
 global $SQLStat;
 $tresult = sql_query("SELECT * FROM \"".$table."\"",$SQLStat);
 while ($trow = sql_fetch_assoc($tresult)) {
@@ -106,7 +106,7 @@ if (!$result) {
 echo "DB Error, could not list tables\n";
 echo 'MySQL Error: ' . sql_error($SQLStat);
 exit; }
-$DropTable = null; $CreateTable = null; $TableNames = null; $l = 0;
+$DropTable = null; $CreateTable = null; $TableNames = array(null); $l = 0;
 while ($row = sql_fetch_row($result)) { 
 if(in_array($row[0],$TableChCk)) {
 $TableNames[$l] = $row[0];

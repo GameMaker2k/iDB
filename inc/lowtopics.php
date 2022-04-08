@@ -11,7 +11,7 @@
     Copyright 2004-2019 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2019 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: lowtopics.php - Last Update: 08/05/2019 SVN 906 - Author: cooldude2k $
+    $FileInfo: lowtopics.php - Last Update: 4/8/2022 SVN 951 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="lowtopics.php"||$File3Name=="/lowtopics.php") {
@@ -178,7 +178,7 @@ if($nums<$num) { $nextpage = $_GET['page'] + 1; }
 if($nums>=$num) { $nextpage = $_GET['page']; }
 if($numz>=$Settings['max_topics']) { $backpage = $_GET['page'] - 1; }
 if($_GET['page']<=1) { $backpage = 1; }
-$pnum = $num; $l = 1; $Pages = null;
+$pnum = $num; $l = 1; $Pages = array();;
 while ($pnum>0) {
 if($pnum>=$Settings['max_topics']) { 
 	$pnum = $pnum - $Settings['max_topics']; 
