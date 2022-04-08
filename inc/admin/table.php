@@ -11,7 +11,7 @@
     Copyright 2004-2019 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2019 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: table.php - Last Update: 08/02/2019 SVN 905 - Author: cooldude2k $
+    $FileInfo: table.php - Last Update: 4/8/2022 SVN 950 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="table.php"||$File3Name=="/table.php") {
@@ -78,13 +78,16 @@ if ($File3Name=="table.php"||$File3Name=="/table.php") {
 </tr><tr class="TableSMenuRow3">
 <td class="TableSMenuColumn3"><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=enablesthemes",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Enable SQLThemes</a></td>
 <?php } ?>
-</tr><tr class="TableSMenuRow3">
+</tr><!--<tr class="TableSMenuRow3">
 <td class="TableSMenuColumn3"><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=themelist",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Download Themes</a></td>
 <?php if($Settings['SQLThemes']=="on") { ?>
-</tr><tr class="TableSMenuRow3">
+</tr>--><tr class="TableSMenuRow3">
 <td class="TableSMenuColumn3"><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=resyncthemes",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Resync Themes</a></td>
-<?php } ?>
+<?php } if($Settings['SQLThemes']=="on") { ?>
 </tr><tr class="TableSMenuRow3">
+<?php } if($Settings['SQLThemes']=="off") { ?>
+</tr>--><tr class="TableSMenuRow3">
+<?php } ?>
 <td class="TableSMenuColumn3"><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=optimize",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Optimize Tables</a></td>
 <?php } ?>
 </tr><tr class="TableSMenuRow3">
