@@ -60,7 +60,7 @@ if(file_exists('extrasettings.php')) {
 if(file_exists('extendsettings.php')) {
 	require_once('extendsettings.php'); }
 if(!isset($Settings['qstr'])) { $Settings['qstr'] = null; }
-if(!isset($Settings['send_pagesize'])) { $Settings['send_pagesize'] = "on"; }
+if(!isset($Settings['send_pagesize'])) { $Settings['send_pagesize'] = "off"; }
 $deftz = new DateTimeZone(date_default_timezone_get());
 $defcurtime = new DateTime();
 $defcurtime->setTimezone($deftz);
