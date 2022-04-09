@@ -11,7 +11,7 @@
     Copyright 2004-2019 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2019 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: function.php - Last Update: 4/8/2022 SVN 947 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 4/9/2022 SVN 948 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -93,8 +93,6 @@ $REFERERurl = null;
 function output_error($message, $level=E_USER_ERROR) {
     $caller = next(debug_backtrace());
     trigger_error($message.' in <strong>'.$caller['function'].'</strong> called from <strong>'.$caller['file'].'</strong> on line <strong>'.$caller['line'].'</strong>'."\n<br />error handler", $level); }
-	$Names['D'] = "Dagmara";
-define("_dagmara_", $Names['D']);
 // By s rotondo90 at gmail com at https://www.php.net/manual/en/function.random-int.php#119670
 if (!function_exists('random_int')) {
     function random_int($min, $max) {

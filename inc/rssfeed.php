@@ -236,7 +236,7 @@ if($Settings['showverinfo']=="on") { ?>
  <title><?php echo $boardsname." ".$ThemeSet['TitleDivider']; ?> Viewing Forum <?php echo $ForumName; ?></title>
   <link><?php echo $BoardURL.url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$ForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?></link>
   <description>RSS Feed of the Topics in Forum <?php echo $ForumName; ?></description>
-  <image rdf:resource="<?php echo $AltBoardURL.$SettDir['inc']; ?>rss.gif" />
+  <image rdf:resource="<?php echo $AltBoardURL.$SettDir['inc']; ?>rss.png" />
  
   <items>
     <rdf:Seq>
@@ -245,10 +245,10 @@ if($Settings['showverinfo']=="on") { ?>
   </items>
 </channel>
 
-<image rdf:about="<?php echo $AltBoardURL.$SettDir['inc']; ?>rss.gif">
+<image rdf:about="<?php echo $AltBoardURL.$SettDir['inc']; ?>rss.png">
   <title><?php echo $boardsname; ?></title>
   <link><?php echo $BoardURL.url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$ForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?></link>
-  <url><?php echo $AltBoardURL.$SettDir['inc']; ?>rss.gif</url>
+  <url><?php echo $AltBoardURL.$SettDir['inc']; ?>rss.png</url>
 </image>
 <?php echo "\n".$RSS."\n"; ?></rdf:RDF>
 <?php } if($_GET['feedtype']=="rss") { ?>
@@ -266,7 +266,7 @@ if($Settings['showverinfo']=="on") { ?>
    <copyright><?php echo $SettInfo['Author']; ?></copyright>
    <ttl>120</ttl>
    <image>
-	<url><?php echo $AltBoardURL.$SettDir['inc']; ?>rss.gif</url>
+	<url><?php echo $AltBoardURL.$SettDir['inc']; ?>rss.png</url>
 	<title><?php echo $boardsname; ?></title>
 	<link><?php echo $AltBoardURL; ?></link>
    </image>
@@ -285,7 +285,7 @@ if($Settings['showverinfo']=="on") { ?>
    <?php } if($Settings['showverinfo']!="on") { ?>
    <generator><?php echo $iDB; ?></generator>
    <?php } ?>
-  <icon><?php echo $AltBoardURL.$SettDir['inc']; ?>rss.gif</icon>
+  <icon><?php echo $AltBoardURL.$SettDir['inc']; ?>rss.png</icon>
 <?php echo $endtag; ?>
  <?php echo "\n".$Atom."\n"; ?>
 </feed>
