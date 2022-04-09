@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2019 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
-    Copyright 2004-2019 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
+    Copyright 2004-2022 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
+    Copyright 2004-2022 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: javascript.php - Last Update: 5/31/2021 SVN 931 - Author: cooldude2k $
+    $FileInfo: javascript.php - Last Update: 4/9/2022 SVN 959 - Author: cooldude2k $
 */
 header("Content-Language: en");
 header("Vary: Accept");

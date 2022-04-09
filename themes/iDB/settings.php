@@ -8,17 +8,17 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2019 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
-    Copyright 2004-2019 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
+    Copyright 2004-2022 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
+    Copyright 2004-2022 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
     $ThemeInfo - Name: iDB Theme - Author: cooldude2k $
-    $FileInfo: settings.php - Last Update: 11/26/2020 SVN 921 - Author: cooldude2k $
+    $FileInfo: settings.php - Last Update: 4/9/2022 SVN 959 - Author: cooldude2k $
 */
 $ThemeSet = array();
 $ThemeSet['ThemeName'] = "iDB Theme";
 $ThemeSet['ThemeMaker'] = "Kazuki";
-$ThemeSet['ThemeVersion'] = "0.4.8";
+$ThemeSet['ThemeVersion'] = "0.5.7";
 $ThemeSet['ThemeVersionType'] = "Alpha";
-$ThemeSet['ThemeSubVersion'] = "SVN 788";
+$ThemeSet['ThemeSubVersion'] = "SVN 958";
 $ThemeSet['MakerURL'] = "https://idb.osdn.jp/";
 $ThemeSet['CopyRight'] = "%{ThemeName}T was made by <a href=\"%{MakerURL}T\" title=\"%{ThemeMaker}T\">%{ThemeMaker}T</a>";
 $ThemeSet['WrapperString'] = "<% HTMLSTART %>\n<% HTTPEQUIV %>\n<% METATAGS %>\n<% JAVASCRIPT %>\n<% LINKTAGS %>\n<% CSSTHEME %>\n<% FAVICON %>\n<% EXTRALINKS %>\n<% TITLETAG %>\n<% BODYTAG %>\n<% NAVBAR %>\n<% CONTENT %>\n<% COPYRIGHT %>\n<% HTMLEND %>";

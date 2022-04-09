@@ -11,7 +11,7 @@
     Copyright 2004-2017 iDB Support - http://idb.berlios.de/
     Copyright 2004-2017 Game Maker 2k - http://gamemaker2k.org/
 
-    $FileInfo: index.php - Last Update: 01/26/2017 SVN 810 - Author: cooldude2k $
+    $FileInfo: index.php - Last Update: 4/9/2022 SVN 959 - Author: cooldude2k $
 */
 header('Location: ../index.php');
 ?>

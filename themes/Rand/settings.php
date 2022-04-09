@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2008 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
-    Copyright 2004-2008 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
+    Copyright 2004-2022 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
+    Copyright 2004-2022 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
     $ThemeInfo - Name: Random iDB Theme - Author: cooldude2k $
-    $FileInfo: settings.php - Last Update: 11/26/2020 SVN 921 - Author: cooldude2k $
+    $FileInfo: settings.php - Last Update: 4/9/2022 SVN 959 - Author: cooldude2k $
 */
 $ThemeSet = array();
 $ThemeSet['ThemeName'] = "Random iDB Theme";
