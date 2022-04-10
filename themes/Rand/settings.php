@@ -11,19 +11,19 @@
     Copyright 2004-2022 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
     Copyright 2004-2022 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
     $ThemeInfo - Name: Random iDB Theme - Author: cooldude2k $
-    $FileInfo: settings.php - Last Update: 4/9/2022 SVN 959 - Author: cooldude2k $
+    $FileInfo: settings.php - Last Update: 4/10/2022 SVN 961 - Author: cooldude2k $
 */
 $ThemeSet = array();
 $ThemeSet['ThemeName'] = "Random iDB Theme";
 $ThemeSet['ThemeMaker'] = "Kazuki";
 $ThemeSet['ThemeVersion'] = "0.4.7";
 $ThemeSet['ThemeVersionType'] = "Alpha";
-$ThemeSet['ThemeSubVersion'] = "SVN 729";
+$ThemeSet['ThemeSubVersion'] = "SVN 961";
 $ThemeSet['MakerURL'] = "http://kazuki.homelinux.org/bbs/category.php?act=view&amp;id=2";
 $ThemeSet['CopyRight'] = "%{ThemeName}T was made by <a href=\"%{MakerURL}T\" title=\"%{ThemeMaker}T\">%{ThemeMaker}T</a>";
 $ThemeSet['WrapperString'] = "<% HTMLSTART %>\n<% HTTPEQUIV %>\n<% METATAGS %>\n<% JAVASCRIPT %>\n<% LINKTAGS %>\n<% CSSTHEME %>\n<% FAVICON %>\n<% EXTRALINKS %>\n<% TITLETAG %>\n<% BODYTAG %>\n<% NAVBAR %>\n<% CONTENT %>\n<% COPYRIGHT %>\n<% HTMLEND %>";
 $ThemeSet['CSS'] = "themes/Rand/css.css";
-$ThemeSet['CSSType'] = "include";
+$ThemeSet['CSSType'] = "link";
 $ThemeSet['FavIcon'] = "themes/Rand/favicon.ico";
 $ThemeSet['OpenGraph'] = "themes/Rand/opengraph.png";
 $ThemeSet['TableStyle'] = "div";

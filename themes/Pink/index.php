@@ -11,7 +11,7 @@
     Copyright 2004-2022 Cool Dude 2k - http://intdb.sourceforge.net/
     Copyright 2004-2022 Game Maker 2k - https://idb.osdn.jp/
     $ThemeInfo - Name: iDB Theme - Author: cooldude2k $
-    $FileInfo: index.php - Last Update: 4/9/2022 SVN 959 - Author: cooldude2k $
+    $FileInfo: index.php - Last Update: 4/10/2022 SVN 961 - Author: cooldude2k $
 */
 header('Location: ../../index.php');
 ?>

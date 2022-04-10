@@ -12,7 +12,7 @@
     Copyright 2004-2022 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: presetup.php - Last Update: 4/9/2022 SVN 959 - Author: cooldude2k $
+    $FileInfo: presetup.php - Last Update: 4/10/2022 SVN 961 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="presetup.php"||$File3Name=="/presetup.php") {
@@ -65,9 +65,9 @@ if($Error!="Yes") {
 </tr><tr>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="charset">Select html charset:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="charset" id="charset">
+	<option value="UTF-8">Unicode (UTF-8)</option>
 	<option value="ISO-8859-15">Latin-9 (ISO-8859-15)</option>
 	<option value="ISO-8859-1">Latin-1 (ISO-8859-1)</option>
-	<option value="UTF-8">Unicode (UTF-8)</option>
 	</select></td>
 	<?php if($ConvertInfo['ConvertFile']!=null) { ?>
 </tr><tr>

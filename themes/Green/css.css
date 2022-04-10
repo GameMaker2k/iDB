@@ -31,11 +31,11 @@ background-color: #000000;
 
 a:link, a:visited, a:active {
 text-decoration: none;
-color: #465584;
+color: #478778;
 }
 
 a:hover {
-color: #6665a4;
+color: #67a798;
 text-decoration: none;
 }
 
@@ -105,7 +105,7 @@ border: 1px solid #506070;
 }
 
 .NavBarRow2, .NavBarColumn2 {
-background-color: #d7e1ed;
+background-color: #afe1af;
 font-size: 11px;
 text-align: left;
 border: 1px solid #506070;
@@ -167,12 +167,12 @@ border: 1px solid #506070;
 .TableStatsRow2, .TableStatsColumn2, .TableInfoMiniRow2, .TableSMenuRow2, 
 .TableSMenuColumn2, .TableMenuRow2, .TableMenuColumn2 {
 padding: 7px;
-background-color: #d7e1ed;
+background-color: #afe1af;
 border: 1px solid #506070;
 }
 
 .TableInfoColumn2, .TableInfoMiniColumn2 {
-background-color: #d7e1ed;
+background-color: #afe1af;
 border: 1px solid #506070;
 }
 
