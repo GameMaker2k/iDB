@@ -88,7 +88,7 @@ display: inline;
 }
 
 .NavBar {
-background-color: #afe1af;
+background-color: #a7b1bd;
 font-size: 11px;
 font-family: verdana, arial, sans-serif;
 color: #000000;
@@ -98,7 +98,7 @@ border-collapse: collapse;
 }
 
 .NavBarRow1, .NavBarColumn1 {
-background-color: #8fc18f;
+background-color: #c7d1dd;
 font-size: 11px;
 text-align: center;
 border: 1px solid #506070;
@@ -117,7 +117,7 @@ color: #FFFFFF;
 
 .Table1, .CalTable1, .TableInfo1, .TableInfoMini1, .TableStats1, 
 .TableSMenu, .TableMenu {
-background-color: #afe1af;
+background-color: #a7b1bd;
 font-size: 11px;
 font-family: verdana, arial, sans-serif;
 color: #000000;
@@ -158,7 +158,7 @@ width: 100%;
 .TableInfoMiniColumn1,.TableSMenuRow1, .TableSMenuColumn1, .TableMenuRow1, 
 .TableMenuColumn1 {
 padding: 8px 0px 8px 5px;
-background-color: #8fc18f;
+background-color: #c7d1dd;
 background-image: url(grad.png);
 border: 1px solid #506070;
 }
@@ -180,7 +180,7 @@ border: 1px solid #506070;
 .TableInfoColumn3, .TableStatsRow3, .TableStatsColumn3, .TableInfoMiniRow3, 
 .TableInfoMiniColumn3,.TableSMenuRow3, .TableSMenuColumn3, .TableMenuRow3, 
 .TableMenuColumn3 {
-background-color: #afe1af;
+background-color: #a7b1bd;
 border: 1px solid #506070;
 }
 
@@ -200,12 +200,12 @@ height: 100px;
 .TableInfoColumn4, .TableStatsRow4, .TableStatsColumn4, .TableInfoMiniRow4, 
 .TableInfoMiniColumn4,.TableSMenuRow4, .TableSMenuColumn4, .TableMenuRow4, 
 .TableMenuColumn4 {
-background-color: #8fc18f;
+background-color: #c7d1dd;
 border: 1px solid #506070;
 }
 
 .TextBox {
-background-color: #8fc18f;
+background-color: #c7d1dd;
 font-size: 13px;
 font-family: Courier, Courier New, Verdana, Arial;
 color: #000000;
@@ -266,7 +266,7 @@ font-size: 15px;
 }
 
 .Button {
-background-color: #8fc18f;
+background-color: #c7d1dd;
 font-size: 13px;
 font-family: Courier, Courier New, Verdana, Arial;
 color: #000000;
