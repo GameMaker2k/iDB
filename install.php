@@ -12,7 +12,7 @@
     Copyright 2004-2022 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
     iDB Installer made by Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2support/category.php?act=view&id=2
 
-    $FileInfo: install.php - Last Update: 4/9/2022 SVN 959 - Author: cooldude2k $
+    $FileInfo: install.php - Last Update: 4/10/2022 SVN 963 - Author: cooldude2k $
 *//*
 if(ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }
@@ -224,26 +224,30 @@ function sql_list_dbs() {
    while( $data = sql_fetch_row($result) ) {
        $array[] = $data[0];
    } return $array; }
+if ($_GET['act']=="Part1"&&$_POST['act']=="Part1") {
 if ($_GET['act']!="Part2"&&$_POST['act']!="Part2") {
 if ($_GET['act']!="Part3"&&$_POST['act']!="Part3") {
 if ($_GET['act']!="Part4"&&$_POST['act']!="Part4") {
-   require($SetupDir['setup'].'license.php'); } } }
+   require($SetupDir['setup'].'license.php'); } } } }
+if ($_GET['act']!="Part1"&&$_POST['act']!="Part1") {
 if ($_GET['act']=="Part2"&&$_POST['act']=="Part2") {
 if ($_GET['act']!="Part3"&&$_POST['act']!="Part3") {
 if ($_GET['act']!="Part4"&&$_POST['act']!="Part4") {
-   require($SetupDir['setup'].'presetup.php'); } } }
+   require($SetupDir['setup'].'presetup.php'); } } } }
 if($_POST['SetupType']=="convert") {
 	require($ConvertInfo['ConvertFile']); }
 if($_POST['SetupType']=="install") {
+if ($_GET['act']!="Part1"&&$_POST['act']!="Part1") {
 if ($_GET['act']!="Part2"&&$_POST['act']!="Part2") {
 if ($_GET['act']=="Part3"&&$_POST['act']=="Part3") {
 if ($_GET['act']!="Part4"&&$_POST['act']!="Part4") {
-   require($SetupDir['setup'].'setup.php'); } } } }
+   require($SetupDir['setup'].'setup.php'); } } } } }
 if($_POST['SetupType']=="install") {
+if ($_GET['act']!="Part1"&&$_POST['act']!="Part1") {
 if ($_GET['act']!="Part2"&&$_POST['act']!="Part2") {
 if ($_GET['act']!="Part3"&&$_POST['act']!="Part3") {
 if ($_GET['act']=="Part4"&&$_POST['act']=="Part4") {
-   require($SetupDir['setup'].'mkconfig.php'); } } } }
+   require($SetupDir['setup'].'mkconfig.php'); } } } } }
 if ($Error=="Yes") { ?>
 <br />Install Failed with errors. <a href="<?php echo url_maker("install",".php","act=Part1","&","=",null,null); ?>">Click here</a> to restart install. &lt;_&lt;
 <br /><br />

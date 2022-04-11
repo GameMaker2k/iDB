@@ -12,7 +12,7 @@
     Copyright 2004-2022 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: info.php - Last Update: 4/9/2022 SVN 959 - Author: cooldude2k $
+    $FileInfo: info.php - Last Update: 4/10/2022 SVN 963 - Author: cooldude2k $
 */
 $ConvertInfo = array();
 $ConvertInfo['ConvertFrom'] = null;
