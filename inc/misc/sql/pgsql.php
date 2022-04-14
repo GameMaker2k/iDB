@@ -85,7 +85,7 @@ if ($link===false) {
 	return false; }
 return $link; }
 function sql_disconnect_db($link=null) {
-return cubrid_disconnect($link); }
+return pg_close($link); }
 // Query Results :P
 function sql_result($result,$row,$field=0) {
 if(is_numeric($field)) {
