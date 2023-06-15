@@ -95,7 +95,10 @@ if(isset($PreBestURL['host'])&&$PreBestURL['host']=="localhost.url"&&str_replace
 if(isset($PreBestURL['host'])&&$PreBestURL['host']!="localhost.url"&&str_replace("/", "", $PreBestURL['path'])=="localpath") {
    $PreBestURL['path'] = $PreServURL['path'];
    $Settings['idburl'] = unparse_url($PreBestURL); }
-$OrgWebSiteURL = $Settings['weburl'];
+if(isset($Settings['weburl'])) {
+ $OrgWebSiteURL = $Settings['weburl']; }
+else {
+ $OrgWebSiteURL = ""; }
 if(isset($Settings['idburl'])) {
 $PreWestURL = parse_url($Settings['weburl']); }
 if(isset($PreWestURL['host'])&&$PreWestURL['host']=="localhost.url"&&str_replace("/", "", $PreWestURL['path'])=="localpath") {

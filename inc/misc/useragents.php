@@ -38,6 +38,8 @@ if (preg_match("/".preg_quote("AltaVista", "/")."/i", $user_agent)) {
     return "AltaVista"; }
 if (preg_match("/".preg_quote("Ask Jeeves", "/")."/i", $user_agent)) {
     return "Ask Jeeves"; }
+if (preg_match("/".preg_quote("Teoma", "/")."/i", $user_agent)) {
+    return "Ask Jeeves"; }
 if (preg_match("/".preg_quote("askpeter_bot", "/")."/i", $user_agent)) {
     return "Ask Peter"; }
 if (preg_match("/".preg_quote("ASPseek", "/")."/i", $user_agent)) {
@@ -46,9 +48,15 @@ if (preg_match("/".preg_quote("Baiduspider", "/")."/i", $user_agent)) {
     return "Baidu"; }
 if (preg_match("/".preg_quote("BaiduImagespider", "/")."/i", $user_agent)) {
     return "Baidu"; }
+if (preg_match("/".preg_quote("Baidu", "/")."/i", $user_agent)) {
+    if (!preg_match("/".preg_quote("BIDUBrowser", "/")."/i", $user_agent)) {
+        return False; }
+    return "Baidu"; }
 if (preg_match("/".preg_quote("bingbot", "/")."/i", $user_agent)) {
     return "Bing"; }
 if (preg_match("/".preg_quote("msnbot", "/")."/i", $user_agent)) {
+    return "Bing"; }
+if (preg_match("/".preg_quote("AdIdxBot", "/")."/i", $user_agent)) {
     return "Bing"; }
 if (preg_match("/".preg_quote("CatchBot", "/")."/i", $user_agent)) {
     return "CatchBot"; }
@@ -94,18 +102,32 @@ if (preg_match("/".preg_quote("mogimogi", "/")."/i", $user_agent)) {
     return "Goo Japan"; }
 if (preg_match("/".preg_quote("AdsBot-Google", "/")."/i", $user_agent)) {
     return "Google"; }
+if (preg_match("/".preg_quote("FeedFetcher-Google", "/")."/i", $user_agent)) {
+    return "Google"; }
+if (preg_match("/".preg_quote("GoogleProducer", "/")."/i", $user_agent)) {
+    return "Google"; }
+if (preg_match("/".preg_quote("Storebot-Google", "/")."/i", $user_agent)) {
+    return "Google"; }
+if (preg_match("/".preg_quote("APIs-Google", "/")."/i", $user_agent)) {
+    return "Google"; }
+if (preg_match("/".preg_quote("Google-InspectionTool", "/")."/i", $user_agent)) {
+    return "Google"; }
 if (preg_match("/".preg_quote("AppEngine-Google", "/")."/i", $user_agent)) {
     return "Google"; }
 if (preg_match("/".preg_quote("Googlebot", "/")."/i", $user_agent)) {
     return "Google"; }
 if (preg_match("/".preg_quote("Mediapartners-Google", "/")."/i", $user_agent)) {
     return "Google"; }
+if (preg_match("/".preg_quote("ChatGPT-User", "/")."/i", $user_agent)) {
+    return "ChatGPT"; }
 if (preg_match("/".preg_quote("Gigabot", "/")."/i", $user_agent)) {
     return "Gigablast"; }
 if (preg_match("/".preg_quote("Grub", "/")."/i", $user_agent)) {
     return "GrubBot"; }
 if (preg_match("/".preg_quote("Hailoobot", "/")."/i", $user_agent)) {
     return "Hailoobot"; }
+if (preg_match("/".preg_quote("AOLBuild", "/")."/i", $user_agent)) {
+    return "AOL"; }
 if (preg_match("|".preg_quote("HTML/XML Validator", "|")."|i", $user_agent)) {
     return "HTML/XML Validator"; }
 if (preg_match("/".preg_quote("Huaweisymantecspider", "/")."/i", $user_agent)) {
@@ -238,7 +260,11 @@ if (preg_match("/".preg_quote("WTABOT", "/")."/i", $user_agent)) {
     return "WTABOT"; }
 if (preg_match("/".preg_quote("Yahoo", "/")."/i", $user_agent)) {
     return "Yahoo"; }
+if (preg_match("/".preg_quote("Slurp", "/")."/i", $user_agent)) {
+    return "Yahoo"; }
 if (preg_match("/".preg_quote("Yandex", "/")."/i", $user_agent)) {
+    return "Yandex"; }
+if (preg_match("/".preg_quote("YaDirectFetcher", "/")."/i", $user_agent)) {
     return "Yandex"; }
 if (preg_match("/".preg_quote("YoudaoBot", "/")."/i", $user_agent)) {
     return "YoudaoBot"; }
