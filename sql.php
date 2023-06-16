@@ -11,7 +11,7 @@
     Copyright 2004-2022 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2022 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: sql.php - Last Update: 4/9/2022 SVN 959 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 4/16/2022 SVN 971 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -63,9 +63,10 @@ if(file_exists('settings.php')) {
 		require_once('extrasettings.php'); }
 	if(file_exists('extendsettings.php')) {
 		require_once('extendsettings.php'); }
+if(isset($Settings['qstr'])&&isset($Settings['qstr'])) {
 if(!in_array("ini_set", $disfunc)&&$Settings['qstr']!="/"&&$Settings['qstr']!="&") {
 ini_set("arg_separator.output",htmlentities($Settings['qstr'], ENT_QUOTES, $Settings['charset']));
-ini_set("arg_separator.input",$Settings['qstr']); } }
+ini_set("arg_separator.input",$Settings['qstr']); } } }
 if(!isset($Settings['idburl'])) { $Settings['idburl'] = null; }
 if(isset($Settings['BoardUUID'])) { $Settings['BoardUUID'] = base64_decode($Settings['BoardUUID']); 
 header("Board-Unique-ID: ".$Settings['BoardUUID']); }

@@ -11,7 +11,7 @@
     Copyright 2004-2022 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2022 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: main.php - Last Update: 4/9/2022 SVN 959 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 4/16/2022 SVN 971 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -392,6 +392,8 @@ if(!isset($OptimizeAr["Msg_text"])&&
 if($OptimizeAr["Msg_text"]=="OK") { 
 	++$TblOptimized; } } ++$ti; } }
 if($Settings['sqltype']=="sqlite"||$Settings['sqltype']=="sqlite3") {
+sql_disconnect_db($SQLStat);
+$SQLStat = sql_connect_db($Settings['sqlhost'],$Settings['sqluser'],$Settings['sqlpass'],$Settings['sqldb']);
 $OptimizeTea = sql_query(sql_pre_query("VACUUM", array(null)),$SQLStat); }
 if($Settings['sqltype']=="mysql"||
 	$Settings['sqltype']=="mysqli"||
