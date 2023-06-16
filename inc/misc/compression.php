@@ -8,12 +8,12 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2022 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
-    Copyright 2004-2022 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
+    Copyright 2004-2023 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
+    Copyright 2004-2023 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
     GZip and Zlib by Jean-loup Gailly (compression) and Mark Adler (decompression) http://www.zlib.net/
 	BZip2 and libbzip2 by Julian Seward http://www.bzip.org/
 
-    $FileInfo: compression.php - Last Update: 4/9/2022 SVN 959 - Author: cooldude2k $
+    $FileInfo: compression.php - Last Update: 6/16/2023 SVN 973 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="compression.php"||$File3Name=="/compression.php") {

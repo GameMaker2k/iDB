@@ -8,8 +8,8 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2022 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
-    Copyright 2004-2022 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
+    Copyright 2004-2023 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
+    Copyright 2004-2023 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
     $FileInfo: sqlite.php - Last Update: 4/16/2022 SVN 972 - Author: cooldude2k $
 */

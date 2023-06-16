@@ -8,10 +8,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     Revised BSD License for more details.
 
-    Copyright 2004-2022 Cool Dude 2k - http://intdb.sourceforge.net/
-    Copyright 2004-2022 Game Maker 2k - https://idb.osdn.jp/
+    Copyright 2004-2023 Cool Dude 2k - http://intdb.sourceforge.net/
+    Copyright 2004-2023 Game Maker 2k - https://idb.osdn.jp/
     $ThemeInfo - Name: iDB Theme - Author: cooldude2k $
-    $FileInfo: index.php - Last Update: 4/10/2022 SVN 961 - Author: cooldude2k $
+    $FileInfo: index.php - Last Update: 6/16/2023 SVN 973 - Author: cooldude2k $
 */
 header('Location: ../../index.php');
 ?>
