@@ -40,6 +40,8 @@ if (preg_match("/".preg_quote("Ask Jeeves", "/")."/i", $user_agent)) {
     return "Ask Jeeves"; }
 if (preg_match("/".preg_quote("Teoma", "/")."/i", $user_agent)) {
     return "Ask Jeeves"; }
+if (preg_match("/".preg_quote("WhatCMS", "/")."/i", $user_agent)) {
+    return "WhatCMS"; }
 if (preg_match("/".preg_quote("askpeter_bot", "/")."/i", $user_agent)) {
     return "Ask Peter"; }
 if (preg_match("/".preg_quote("ASPseek", "/")."/i", $user_agent)) {
