@@ -12,7 +12,7 @@
     Copyright 2004-2023 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: cubrid.php - Last Update: 6/16/2023 SVN 973 - Author: cooldude2k $
+    $FileInfo: cubrid.php - Last Update: 6/16/2023 SVN 974 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="cubrid.php"||$File3Name=="/cubrid.php") {
@@ -346,6 +346,7 @@ $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."smileys\" (\"File
 "('closedeyes.png', 'Sleep', 'v_v', 'smileys/', 'yes', 'no'),\n".
 "('cool.png', 'Cool', 'B)', 'smileys/', 'yes', 'no'),\n".
 "('glare.png', 'Hmph', ':hmph:', 'smileys/', 'yes', 'yes'),\n".
+"('glare.png', 'Hmph', '&lt;_&lt;', 'smileys/', 'no', 'no'),\n".
 "('happy.png', 'Happy', '^_^', 'smileys/', 'yes', 'no'),\n".
 "('hmm.png', 'Hmm', ':unsure:', 'smileys/', 'yes', 'yes'),\n".
 "('huh.png', 'Huh', ':huh:', 'smileys/', 'yes', 'yes'),\n".
