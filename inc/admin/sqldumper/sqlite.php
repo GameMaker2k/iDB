@@ -11,7 +11,7 @@
     Copyright 2004-2022 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2022 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: sqlite.php - Last Update: 4/9/2022 SVN 959 - Author: cooldude2k $
+    $FileInfo: sqlite.php - Last Update: 4/16/2022 SVN 972 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="sqlite.php"||$File3Name=="/sqlite.php") {
@@ -22,7 +22,7 @@ if($_SESSION['UserGroup']==$Settings['GuestGroup']||$GroupInfo['HasAdminCP']=="n
 redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
-if($Settings['sqltype']!="sqlite"||$Settings['sqltype']!="sqlite3") {
+if($Settings['sqltype']!="sqlite"&&$Settings['sqltype']!="sqlite3") {
 redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
