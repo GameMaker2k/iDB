@@ -138,13 +138,18 @@ if(!isset($_GET['debug'])) { $_GET['debug'] = "false"; }
 if(!isset($_GET['post'])) { $_GET['post'] = null; }
 if(!isset($_POST['License'])) { $_POST['License'] = null; }
 if(!isset($Settings['enable_https'])) {
-  if(isset($_SERVER['HTTPS'])) {
+  if(isset($_SERVER['HTTPS'])&&$_SERVER['HTTPS']=="on") {
    $Settings['enable_https'] = "on"; }
-  else(!isset($_SERVER['HTTPS'])) {
+  elseif(isset($_SERVER['HTTPS'])&&$_SERVER['HTTPS']=="off") {
+   $Settings['enable_https'] = "off"; }
+  elseif(isset($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!="on"&&$_SERVER['HTTPS']!="off") {
+   $Settings['enable_https'] = "on"; }
+  elseif(!isset($_SERVER['HTTPS'])) {
    $Settings['enable_https'] = "off"; } }
-if($Settings['enable_https']!="on"&&
+$ServHTTPS = $Settings['enable_https'];
+/*if($Settings['enable_https']!="on"&&
 	$Settings['enable_https']!="off") {
-  $Settings['enable_https'] = "off";  }
+  $Settings['enable_https'] = "off";  }*/
 if(!isset($Settings['file_ext'])||
 	$Settings['file_ext']==null) {
 	$Settings['file_ext'] = ".php"; }
@@ -169,6 +174,10 @@ if($Settings['MemberGroup']==null) {
 if($Settings['ValidateGroup']==null&&
 	$Settings['AdminValidate']=="on") {
 $Settings['ValidateGroup'] = "Validate"; }
+if($Settings['html_type']=="xhtml10") { 
+	$Settings['html_type'] = "xhtml5"; }
+if($Settings['html_type']=="xhtml11") { 
+	$Settings['html_type'] = "xhtml5"; }
 if($Settings['html_type']=="html4") { 
 	$Settings['html_type'] = "html5"; }
 /*if($_GET['debug']!="off"||$_GET['debug']=="on") {

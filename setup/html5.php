@@ -78,8 +78,10 @@ $endpagevar = "<div class=\"copyright\">Powered by ".$iDBURL1.$RName."</a> &copy
 header("Content-Language: en");
 header("Vary: Accept-Encoding");
 // Check if we are on a secure HTTP connection
-if($_SERVER['HTTPS']=="on") { $prehost = "https://"; }
-if($_SERVER['HTTPS']!="on") { $prehost = "http://"; }
+if(isset($_SERVER['HTTPS'])) { $prehost = "https://";; }
+if(isset($_SERVER['HTTPS'])&&$_SERVER['HTTPS']=="on") { $prehost = "https://"; }
+if(isset($_SERVER['HTTPS'])&&$_SERVER['HTTPS']=="off") { $prehost = "http://"; }
+if(!isset($_SERVER['HTTPS'])) { $prehost = "http://"; }
 // Get the board's url
 if($Settings['idburl']=="localhost"||$Settings['idburl']==null) {
 	$BoardURL = $prehost.$_SERVER["HTTP_HOST"].$basedir; }

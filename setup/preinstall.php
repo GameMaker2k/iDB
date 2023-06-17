@@ -41,6 +41,16 @@ if(!isset($Settings['enable_search'])) { $Settings['enable_search'] = null; }
 if(!isset($Settings['qstr'])) { $Settings['qstr'] = null; }
 if(!isset($_POST['SetupType'])) { $_POST['SetupType'] = "install"; }
 if(!isset($_GET['debug'])) { $_GET['debug'] = null; }
+if(!isset($Settings['enable_https'])) {
+  if(isset($_SERVER['HTTPS'])&&$_SERVER['HTTPS']=="on") {
+   $Settings['enable_https'] = "on"; }
+  elseif(isset($_SERVER['HTTPS'])&&$_SERVER['HTTPS']=="off") {
+   $Settings['enable_https'] = "off"; }
+  elseif(isset($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!="on"&&$_SERVER['HTTPS']!="off") {
+   $Settings['enable_https'] = "on"; }
+  elseif(!isset($_SERVER['HTTPS'])) {
+   $Settings['enable_https'] = "off"; } }
+$ServHTTPS = $Settings['enable_https'];
 $checklowview = false;
 $dayconv = array("year" => 29030400, "month" => 2419200, "week" => 604800, "day" => 86400, "hour" => 3600, "minute" => 60, "second" => 1);
 if(!isset($SettDir['inc'])) { $SettDir['inc'] = "inc/"; }

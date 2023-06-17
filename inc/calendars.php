@@ -46,6 +46,10 @@ $_SESSION['ExtraData'] = "currentact:view; currentcategoryid:0; currentforumid:0
 $calcurtime = new DateTime();
 $calcurtime->setTimestamp($defcurtime->getTimestamp());
 $calcurtime->setTimezone($usertz);
+if(!isset($_GET['caldate'])&&(!isset($_GET['calmonth']) && !isset($_GET['calyear']))) { 
+    $_GET['caldate'] = $calcurtime->format("mY"); }
+if(isset($_GET['caldate'])&&!is_numeric($_GET['caldate'])) { 
+    $_GET['caldate'] = $calcurtime->format("mY"); }
 if(!isset($_GET['HighligtDay'])) { $_GET['HighligtDay'] = null; }
 if(!isset($_GET['calmadd'])) { $_GET['calmadd'] = 0; }
 if(!is_numeric($_GET['calmadd'])) { $_GET['calmadd'] = 0; }

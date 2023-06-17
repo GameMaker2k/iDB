@@ -122,9 +122,12 @@ if($_POST['charset']=="UTF-8") {
 	$SQLCharset = "utf8"; }
 	$Settings['charset'] = $_POST['charset']; }
 $ServHTTPS = "off";
-if(isset($_SERVER['HTTPS'])) { $ServHTTPS=="off"; }
+if(isset($_SERVER['HTTPS'])) { $ServHTTPS=="on"; }
+if(isset($_SERVER['HTTPS'])&&$_SERVER['HTTPS']=="on") { $ServHTTPS=="on"; }
+if(isset($_SERVER['HTTPS'])&&$_SERVER['HTTPS']=="off") { $ServHTTPS=="off"; }
+if(!isset($_SERVER['HTTPS'])) { $ServHTTPS=="off"; }
 if($ServHTTPS=="on") { $prehost = "https://"; }
-if($ServHTTPS!="on") { $prehost = "http://"; }
+if($ServHTTPS=="off") { $prehost = "http://"; }
 $this_dir = null;
 if(dirname($_SERVER['SCRIPT_NAME'])!="."||
 	dirname($_SERVER['SCRIPT_NAME'])!=null) {

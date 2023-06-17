@@ -1062,6 +1062,9 @@ $Settings['idb_time_format'] = $_POST['iDBTimeFormat'];
 $Settings['idb_date_format'] = $_POST['iDBDateFormat'];
 $Settings['log_http_request'] = $_POST['iDBHTTPLogger'];
 $Settings['log_config_format'] = $_POST['iDBLoggerFormat'];
+if($_POST['HTMLType']=="html4") { $_POST['OutPutType'] = "html"; }
+if($_POST['HTMLType']=="xhtml10") { $_POST['OutPutType'] = "xhtml"; }
+if($_POST['HTMLType']=="xhtml11") { $_POST['OutPutType'] = "xhtml"; }
 if($_POST['HTMLType']=="html5") { $_POST['OutPutType'] = "html"; }
 if($_POST['HTMLType']=="xhtml5") { $_POST['OutPutType'] = "xhtml"; }
 if(!isset($_POST['PassHashType'])) {
