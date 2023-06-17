@@ -11,7 +11,7 @@
     Copyright 2004-2023 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2023 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: main.php - Last Update: 6/16/2023 SVN 973 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 6/17/2023 SVN 977 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -825,13 +825,13 @@ while ($gi < $gnum) { ?>
 	<option<?php if($Settings['html_type']=="html5") { echo " selected=\"selected\""; } ?> value="html5">HTML 5</option>
 	<option<?php if($Settings['html_type']=="xhtml5") { echo " selected=\"selected\""; } ?> value="xhtml5">XHTML 5</option>
 	</select></td>
-</tr><tr style="text-align: left;">
+</tr><!--<tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="OutPutType">Output file as:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="OutPutType" id="OutPutType">
 	<option<?php if($Settings['output_type']=="html") { echo " selected=\"selected\""; } ?> value="html">HTML</option>
 	<option<?php if($Settings['output_type']=="xhtml") { echo " selected=\"selected\""; } ?> value="xhtml">XHTML</option>
 	</select></td>
-</tr><tr style="text-align: left;">
+</tr>--><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="YourOffSet">Your TimeZone:</label></td>
 	<td style="width: 50%;"><select id="YourOffSet" name="YourOffSet" class="TextBox">
 <optgroup label="Africa">

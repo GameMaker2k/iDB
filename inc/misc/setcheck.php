@@ -11,7 +11,7 @@
     Copyright 2004-2023 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2023 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: setcheck.php - Last Update: 6/16/2023 SVN 973 - Author: cooldude2k $
+    $FileInfo: setcheck.php - Last Update: 6/17/2023 SVN 977 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="setcheck.php"||$File3Name=="/setcheck.php") {
@@ -138,7 +138,10 @@ if(!isset($_GET['debug'])) { $_GET['debug'] = "false"; }
 if(!isset($_GET['post'])) { $_GET['post'] = null; }
 if(!isset($_POST['License'])) { $_POST['License'] = null; }
 if(!isset($Settings['enable_https'])) {
-  $Settings['enable_https'] = "off";  }
+  if(isset($_SERVER['HTTPS'])) {
+   $Settings['enable_https'] = "on"; }
+  else(!isset($_SERVER['HTTPS'])) {
+   $Settings['enable_https'] = "off"; } }
 if($Settings['enable_https']!="on"&&
 	$Settings['enable_https']!="off") {
   $Settings['enable_https'] = "off";  }
