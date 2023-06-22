@@ -11,7 +11,7 @@
     Copyright 2004-2023 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2023 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: function.php - Last Update: 6/16/2023 SVN 973 - Author: cooldude2k $
+    $FileInfo: function.php - Last Update: 6/22/2023 SVN 983 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="function.php"||$File3Name=="/function.php") {
@@ -447,7 +447,10 @@ $_POST[$preqst[0]] = $preqst[1]; }
 ++$qsi; } return true; }
 // Change Path info to Get Vars :
 function mrstring() {
-$urlvar = explode('/',$_SERVER['PATH_INFO']);
+if($_SERVER['PATH_INFO']==null) {
+$urlvar = explode('/',$_SERVER['PATH_INFO']); }
+else {
+$urlvar = null; }
 $num=count($urlvar); $i=1;
 while ($i < $num) {
 //$urlvar[$i] = urldecode($urlvar[$i]);
