@@ -138,14 +138,7 @@ if(!isset($_GET['debug'])) { $_GET['debug'] = "false"; }
 if(!isset($_GET['post'])) { $_GET['post'] = null; }
 if(!isset($_POST['License'])) { $_POST['License'] = null; }
 if(!isset($Settings['enable_https'])) {
-  if(isset($_SERVER['HTTPS'])&&$_SERVER['HTTPS']=="on") {
-   $Settings['enable_https'] = "on"; }
-  elseif(isset($_SERVER['HTTPS'])&&$_SERVER['HTTPS']=="off") {
-   $Settings['enable_https'] = "off"; }
-  elseif(isset($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!="on"&&$_SERVER['HTTPS']!="off") {
-   $Settings['enable_https'] = "on"; }
-  elseif(!isset($_SERVER['HTTPS'])) {
-   $Settings['enable_https'] = "off"; } }
+  $Settings['enable_https'] = "off";  }
 $ServHTTPS = $Settings['enable_https'];
 /*if($Settings['enable_https']!="on"&&
 	$Settings['enable_https']!="off") {
