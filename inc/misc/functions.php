@@ -11,7 +11,7 @@
     Copyright 2004-2023 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2023 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: functions.php - Last Update: 6/16/2023 SVN 980 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 6/22/2023 SVN 984 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -296,7 +296,7 @@ return $Text; }
 // Fix some chars
 function fixbamps($text) {
 $fixamps1 = array("&amp;copy;","&amp;reg;","&amp;trade;","&amp;quot;","&amp;amp;","&amp;lt;","&amp;gt;","&amp;(a|e|i|o|u|y)acute;","&amp;(a|e|i|o|u)grave;","&amp;(a|e|i|o|u)circ;","&amp;(a|e|i|o|u|y)uml;","&amp;(a|o|n)tilde;","&amp;aring;","&amp;aelig;","&amp;ccedil;","&amp;eth;","&amp;oslash;","&amp;szlig;","&amp;thorn;");
-$fixamps2 = array("&copy;","&reg;","&trade;","&quot;","&amp;","&lt;","&gt;","&\\1acute;","&\\1grave;","&\\1circ;","&\\1uml;","&\\1tilde;","&aring;","&aelig;","&ccedil;","&eth;","&oslash;","&szlig;","&thorn;");
+$fixamps2 = array("&#169;","&reg;","&trade;","&quot;","&amp;","&lt;","&gt;","&\\1acute;","&\\1grave;","&\\1circ;","&\\1uml;","&\\1tilde;","&aring;","&aelig;","&ccedil;","&eth;","&oslash;","&szlig;","&thorn;");
 $ampnum = count($fixamps1); $ampi=0;
 while ($ampi < $ampnum) {
 $text = preg_replace("/".$fixamps1[$ampi]."/i", $fixamps2[$ampi], $text);

@@ -11,7 +11,7 @@
     Copyright 2004-2023 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2023 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: lowcategories.php - Last Update: 6/16/2023 SVN 973 - Author: cooldude2k $
+    $FileInfo: lowcategories.php - Last Update: 6/22/2023 SVN 984 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="lowcategories.php"||$File3Name=="/lowcategories.php") {
@@ -94,7 +94,7 @@ sql_free_result($iscresult); }
 ?>
 <div style="font-size: 1.0em; font-weight: bold; margin-bottom: 10px; padding-top: 3px; width: auto;">Full Version: <a href="<?php echo url_maker($exfile[$CategoryType],$Settings['file_ext'],"act=view&id=".$CategoryID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$CategoryType],$exqstr[$CategoryType]); ?>"><?php echo $CategoryName; ?></a></div>
 <div style="font-size: 11px; font-weight: bold; padding: 10px; border: 1px solid gray;"><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=lowview",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $Settings['board_name']; ?></a><?php if($InSubCategory!="0") { echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile[$iscCategoryType],$Settings['file_ext'],"act=lowview&id=".$iscCategoryID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr[$iscCategoryType],$exqstr[$iscCategoryType]); ?>"><?php echo $iscCategoryName; ?></a><?php } echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile[$CategoryType],$Settings['file_ext'],"act=lowview&id=".$CategoryID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$CategoryType],$exqstr[$CategoryType]); ?>"><?php echo $CategoryName; ?></a></div>
-<div>&nbsp;</div>
+<div>&#160;</div>
 <div style="padding: 10px; border: 1px solid gray;">
 <ul style="list-style-type: none;">
 <?php
@@ -156,7 +156,7 @@ $gltf[$apcl] = $SubsForumID; ++$apcl; }
 sql_free_result($apcresult); } }
 if(isset($PermissionInfo['CanViewForum'][$ForumID])&&
 	$PermissionInfo['CanViewForum'][$ForumID]=="yes") {
-$LastTopic = "&nbsp;<br />&nbsp;<br />&nbsp;";
+$LastTopic = "&#160;<br />&#160;<br />&#160;";
 if(!isset($LastTopic)) { $LastTopic = null; }
 $shownum = null;
 if ($ForumType=="redirect") { $shownum = "(".$NumRedirects." redirects)"; }
@@ -174,6 +174,6 @@ $ExStr = ""; if ($ForumType!="redirect"&&
 <?php } ++$i; } sql_free_result($result);
 if($num>=1) { ?>
 </li></ul></div>
-<div>&nbsp;</div>
+<div>&#160;</div>
 <?php } } }
 sql_free_result($preresult); ?>

@@ -11,7 +11,7 @@
     Copyright 2004-2023 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2023 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: mysqli.php - Last Update: 6/16/2023 SVN 973 - Author: cooldude2k $
+    $FileInfo: mysqli.php - Last Update: 6/22/2023 SVN 984 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mysqli.php"||$File3Name=="/mysqli.php") {

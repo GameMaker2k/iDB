@@ -11,7 +11,7 @@
     Copyright 2004-2023 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2023 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: endpage.php - Last Update: 6/16/2023 SVN 973 - Author: cooldude2k $
+    $FileInfo: endpage.php - Last Update: 6/22/2023 SVN 984 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="endpage.php"||$File3Name=="/endpage.php") {
@@ -35,7 +35,7 @@ $endtime = $uetime + $etime;
 return bcsub($endtime, $starttime, 4); }
 if($_GET['debug']=="true"||$_GET['debug']=="on") {
 	$endpagevar=$endpagevar."<br />\nNumber of Queries: ".$NumQueries." ".$ThemeSet['LineDivider']." Execution Time: ".execution_time($starttime).$ThemeSet['LineDivider']."<a href=\"http://validator.w3.org/check/referer?verbose=1\" title=\"Validate HTML\" onclick=\"window.open(this.href);return false;\">HTML</a>".$ThemeSet['LineDivider']."<a href=\"http://jigsaw.w3.org/css-validator/check/referer?profile=css3\" title=\"Validate CSS\" onclick=\"window.open(this.href);return false;\">CSS</a>"; }
-	$endpagevar=$endpagevar."</div><div class=\"DivEndPage\">&nbsp;</div>\n";
+	$endpagevar=$endpagevar."</div><div class=\"DivEndPage\">&#160;</div>\n";
 echo $endpagevar;
 session_write_close();
 //session_write_close();

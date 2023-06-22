@@ -12,7 +12,7 @@
     Copyright 2004-2023 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
     iDB Installer made by Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2support/category.php?act=view&id=2
 
-    $FileInfo: install.php - Last Update: 6/16/2023 SVN 973 - Author: cooldude2k $
+    $FileInfo: install.php - Last Update: 6/22/2023 SVN 984 - Author: cooldude2k $
 *//*
 if(ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }
@@ -204,8 +204,8 @@ $title_html = htmlentities("Installing ".$VerInfo['iDB_Ver_Show'], ENT_QUOTES, $
 </tr><?php } ?>
 <tr class="TableRow2">
 <th class="TableColumn2" style="width: 100%; text-align: left;">
-<span style="float: left;">&nbsp;Inert your install info: </span>
-<span style="float: right;">&nbsp;</span>
+<span style="float: left;">&#160;Inert your install info: </span>
+<span style="float: right;">&#160;</span>
 </th>
 </tr>
 <?php
@@ -258,10 +258,10 @@ if ($Error=="Yes") { ?>
 </tr>
 <?php } ?>
 <tr class="TableRow4">
-<td class="TableColumn4">&nbsp;<a href="<?php echo url_maker("install",".php","act=ReadMe","&","=",null,null); ?>">Readme.txt</a>&nbsp;|&nbsp;<a href="<?php echo url_maker("install",".php","act=License","&","=",null,null); ?>">License.txt</a>&nbsp;</td>
+<td class="TableColumn4">&#160;<a href="<?php echo url_maker("install",".php","act=ReadMe","&","=",null,null); ?>">Readme.txt</a>&#160;|&#160;<a href="<?php echo url_maker("install",".php","act=License","&","=",null,null); ?>">License.txt</a>&#160;</td>
 </tr>
 </table></div>
-<div>&nbsp;</div>
+<div>&#160;</div>
 <?php 
 require($SettDir['inc'].'endpage.php'); 
 ?>

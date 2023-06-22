@@ -11,7 +11,7 @@
     Copyright 2004-2023 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2023 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
     $ThemeInfo - Name: iDB Theme - Author: cooldude2k $
-    $FileInfo: settings.php - Last Update: 6/16/2023 SVN 973 - Author: cooldude2k $
+    $FileInfo: settings.php - Last Update: 6/22/2023 SVN 984 - Author: cooldude2k $
 */
 $ThemeSet = array();
 $ThemeSet['ThemeName'] = "iDB Theme";
@@ -62,9 +62,9 @@ $ThemeSet['QuoteReply'] = "Quote";
 $ThemeSet['EditReply'] = "Edit";
 $ThemeSet['DeleteReply'] = "Delete";
 $ThemeSet['Report'] = "Report";
-$ThemeSet['LineDivider'] = "&nbsp;|&nbsp;";
-$ThemeSet['ButtonDivider'] = "&nbsp;";
-$ThemeSet['LineDividerTopic'] = "&nbsp;|&nbsp;";
+$ThemeSet['LineDivider'] = "&#160;|&#160;";
+$ThemeSet['ButtonDivider'] = "&#160;";
+$ThemeSet['LineDividerTopic'] = "&#160;|&#160;";
 $ThemeSet['TitleDivider'] = "-&gt;";
 $ThemeSet['ForumStyle'] = 1;
 $ThemeSet['ForumIcon'] = "<div style=\"text-align: center; font-size: 11px;\" title=\"Forum\"> (F) </div>";
@@ -72,7 +72,7 @@ $ThemeSet['SubForumIcon'] = "<div style=\"text-align: center; font-size: 11px;\"
 $ThemeSet['RedirectIcon'] = "<div style=\"text-align: center; font-size: 11px;\" title=\"Redirect Forum\"> [RF] </div>";
 $ThemeSet['TitleIcon'] = null;
 $ThemeSet['NavLinkIcon'] = null;
-$ThemeSet['NavLinkDivider'] = "&nbsp;-&gt;&nbsp;";
+$ThemeSet['NavLinkDivider'] = "&#160;-&gt;&#160;";
 $ThemeSet['BoardStatsIcon'] = "<div style=\"text-align: center; font-size: 11px;\" title=\"Board Stats\">(S)</div> ";
 $ThemeSet['MemberStatsIcon'] = "<div style=\"text-align: center; font-size: 11px;\" title=\"Board Stats\">(S)</div> ";
 $ThemeSet['BirthdayStatsIcon'] = "<div style=\"text-align: center; font-size: 11px;\" title=\"Board Stats\">(S)</div> ";

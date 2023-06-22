@@ -11,7 +11,7 @@
     Copyright 2004-2023 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2023 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: forums.php - Last Update: 6/16/2023 SVN 973 - Author: cooldude2k $
+    $FileInfo: forums.php - Last Update: 6/22/2023 SVN 984 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="forums.php"||$File3Name=="/forums.php") {
@@ -65,24 +65,24 @@ sql_free_result($result);
 <tr class="TableMenuRow1">
 <td class="TableMenuColumn1"><span style="float: left;">
 <?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Recounting Topics</a>
-</span><span style="float: right;">&nbsp;</span></td>
+</span><span style="float: right;">&#160;</span></td>
 </tr><?php } ?>
 <tr class="TableMenuRow2">
 <th class="TableMenuColumn2" style="width: 100%; text-align: left;">
-<span style="float: left;">&nbsp;Recounting Topics: </span>
-<span style="float: right;">&nbsp;</span>
+<span style="float: left;">&#160;Recounting Topics: </span>
+<span style="float: right;">&#160;</span>
 </th>
 </tr>
 <tr class="TableMenuRow3">
 <td class="TableMenuColumn3">
 <div style="text-align: center;">
 	<br />Forums Topics &amp; Posts stats recounted.<br />
-	<a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to back to admin cp.<br />&nbsp;
+	<a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to back to admin cp.<br />&#160;
 </div>
 </td>
 </tr>
 <tr class="TableMenuRow4">
-<td class="TableMenuColumn4">&nbsp;</td>
+<td class="TableMenuColumn4">&#160;</td>
 </tr>
 </table>
 </div>
@@ -114,24 +114,24 @@ sql_free_result($result);
 <tr class="TableMenuRow1">
 <td class="TableMenuColumn1"><span style="float: left;">
 <?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Recounting Replies</a>
-</span><span style="float: right;">&nbsp;</span></td>
+</span><span style="float: right;">&#160;</span></td>
 </tr><?php } ?>
 <tr class="TableMenuRow2">
 <th class="TableMenuColumn2" style="width: 100%; text-align: left;">
-<span style="float: left;">&nbsp;Recounting Replies: </span>
-<span style="float: right;">&nbsp;</span>
+<span style="float: left;">&#160;Recounting Replies: </span>
+<span style="float: right;">&#160;</span>
 </th>
 </tr>
 <tr class="TableMenuRow3">
 <td class="TableMenuColumn3">
 <div style="text-align: center;">
 	<br />Topics Replys stats recounted.<br />
-	<a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to back to admin cp.<br />&nbsp;
+	<a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to back to admin cp.<br />&#160;
 </div>
 </td>
 </tr>
 <tr class="TableMenuRow4">
-<td class="TableMenuColumn4">&nbsp;</td>
+<td class="TableMenuColumn4">&#160;</td>
 </tr>
 </table>
 </div>
@@ -175,24 +175,24 @@ sql_free_result($result);
 <tr class="TableMenuRow1">
 <td class="TableMenuColumn1"><span style="float: left;">
 <?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Fixing Topic User Names</a>
-</span><span style="float: right;">&nbsp;</span></td>
+</span><span style="float: right;">&#160;</span></td>
 </tr><?php } ?>
 <tr class="TableMenuRow2">
 <th class="TableMenuColumn2" style="width: 100%; text-align: left;">
-<span style="float: left;">&nbsp;Fixing Topic User Names: </span>
-<span style="float: right;">&nbsp;</span>
+<span style="float: left;">&#160;Fixing Topic User Names: </span>
+<span style="float: right;">&#160;</span>
 </th>
 </tr>
 <tr class="TableMenuRow3">
 <td class="TableMenuColumn3">
 <div style="text-align: center;">
 	<br />Topic User Names fixed.<br />
-	<a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to back to admin cp.<br />&nbsp;
+	<a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to back to admin cp.<br />&#160;
 </div>
 </td>
 </tr>
 <tr class="TableMenuRow4">
-<td class="TableMenuColumn4">&nbsp;</td>
+<td class="TableMenuColumn4">&#160;</td>
 </tr>
 </table>
 </div>
@@ -253,24 +253,24 @@ sql_free_result($result);
 <tr class="TableMenuRow1">
 <td class="TableMenuColumn1"><span style="float: left;">
 <?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Fixing Reply User Names</a>
-</span><span style="float: right;">&nbsp;</span></td>
+</span><span style="float: right;">&#160;</span></td>
 </tr><?php } ?>
 <tr class="TableMenuRow2">
 <th class="TableMenuColumn2" style="width: 100%; text-align: left;">
-<span style="float: left;">&nbsp;Fixing Reply User Names: </span>
-<span style="float: right;">&nbsp;</span>
+<span style="float: left;">&#160;Fixing Reply User Names: </span>
+<span style="float: right;">&#160;</span>
 </th>
 </tr>
 <tr class="TableMenuRow3">
 <td class="TableMenuColumn3">
 <div style="text-align: center;">
 	<br />Reply User Names fixed.<br />
-	<a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to back to admin cp.<br />&nbsp;
+	<a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to back to admin cp.<br />&#160;
 </div>
 </td>
 </tr>
 <tr class="TableMenuRow4">
-<td class="TableMenuColumn4">&nbsp;</td>
+<td class="TableMenuColumn4">&#160;</td>
 </tr>
 </table>
 </div>
@@ -287,12 +287,12 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Adding new Forum";
 <tr class="TableMenuRow1">
 <td class="TableMenuColumn1"><span style="float: left;">
 <?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=addforum",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">iDB Forum Manager</a>
-</span><span style="float: right;">&nbsp;</span></td>
+</span><span style="float: right;">&#160;</span></td>
 </tr><?php } ?>
 <tr class="TableMenuRow2">
 <th class="TableMenuColumn2" style="width: 100%; text-align: left;">
-<span style="float: left;">&nbsp;Adding new Forum: </span>
-<span style="float: right;">&nbsp;</span>
+<span style="float: left;">&#160;Adding new Forum: </span>
+<span style="float: right;">&#160;</span>
 </th>
 </tr>
 <tr class="TableMenuRow3">
@@ -417,7 +417,7 @@ sql_free_result($fr); ?>
 </td>
 </tr>
 <tr class="TableMenuRow4">
-<td class="TableMenuColumn4">&nbsp;</td>
+<td class="TableMenuColumn4">&#160;</td>
 </tr>
 </table>
 </div>
@@ -547,12 +547,12 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Deleting a Forum";
 <tr class="TableMenuRow1">
 <td class="TableMenuColumn1"><span style="float: left;">
 <?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=addforum",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">iDB Forum Manager</a>
-</span><span style="float: right;">&nbsp;</span></td>
+</span><span style="float: right;">&#160;</span></td>
 </tr><?php } ?>
 <tr class="TableMenuRow2">
 <th class="TableMenuColumn2" style="width: 100%; text-align: left;">
-<span style="float: left;">&nbsp;Deleting a Forum: </span>
-<span style="float: right;">&nbsp;</span>
+<span style="float: left;">&#160;Deleting a Forum: </span>
+<span style="float: right;">&#160;</span>
 </th>
 </tr>
 <tr class="TableMenuRow3">
@@ -608,7 +608,7 @@ sql_free_result($fr); ?>
 </td>
 </tr>
 <tr class="TableMenuRow4">
-<td class="TableMenuColumn4">&nbsp;</td>
+<td class="TableMenuColumn4">&#160;</td>
 </tr>
 </table>
 </div>
@@ -665,12 +665,12 @@ if(!isset($_POST['id'])) {
 <tr class="TableMenuRow1">
 <td class="TableMenuColumn1"><span style="float: left;">
 <?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=editforum",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">iDB Forum Manager</a>
-</span><span style="float: right;">&nbsp;</span></td>
+</span><span style="float: right;">&#160;</span></td>
 </tr><?php } ?>
 <tr class="TableMenuRow2">
 <th class="TableMenuColumn2" style="width: 100%; text-align: left;">
-<span style="float: left;">&nbsp;Editing a Forum: </span>
-<span style="float: right;">&nbsp;</span>
+<span style="float: left;">&#160;Editing a Forum: </span>
+<span style="float: right;">&#160;</span>
 </th>
 </tr>
 <tr class="TableMenuRow3">
@@ -707,7 +707,7 @@ sql_free_result($fr); ?>
 </td>
 </tr>
 <tr class="TableMenuRow4">
-<td class="TableMenuColumn4">&nbsp;</td>
+<td class="TableMenuColumn4">&#160;</td>
 </tr>
 </table>
 </div>
@@ -751,12 +751,12 @@ $ForumType = strtolower($ForumType); $CanHaveTopics = strtolower($CanHaveTopics)
 <tr class="TableMenuRow1">
 <td class="TableMenuColumn1"><span style="float: left;">
 <?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=editforum",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">iDB Forum Manager</a>
-</span><span style="float: right;">&nbsp;</span></td>
+</span><span style="float: right;">&#160;</span></td>
 </tr><?php } ?>
 <tr class="TableMenuRow2">
 <th class="TableMenuColumn2" style="width: 100%; text-align: left;">
-<span style="float: left;">&nbsp;Editing a Forum: </span>
-<span style="float: right;">&nbsp;</span>
+<span style="float: left;">&#160;Editing a Forum: </span>
+<span style="float: right;">&#160;</span>
 </th>
 </tr>
 <tr class="TableMenuRow3">
@@ -869,7 +869,7 @@ sql_free_result($fr); ?>
 </td>
 </tr>
 <tr class="TableMenuRow4">
-<td class="TableMenuColumn4">&nbsp;</td>
+<td class="TableMenuColumn4">&#160;</td>
 </tr>
 </table>
 </div>
@@ -952,12 +952,12 @@ if(!isset($_POST['id'])) {
 <tr class="TableMenuRow1">
 <td class="TableMenuColumn1"><span style="float: left;">
 <?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=fpermissions",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Forum Permissions Manager</a>
-</span><span style="float: right;">&nbsp;</span></td>
+</span><span style="float: right;">&#160;</span></td>
 </tr><?php } ?>
 <tr class="TableMenuRow2">
 <th class="TableMenuColumn2" style="width: 100%; text-align: left;">
-<span style="float: left;">&nbsp;Forum Permissions Manager: </span>
-<span style="float: right;">&nbsp;</span>
+<span style="float: left;">&#160;Forum Permissions Manager: </span>
+<span style="float: right;">&#160;</span>
 </th>
 </tr>
 <tr class="TableMenuRow3">
@@ -1006,7 +1006,7 @@ sql_free_result($getperidr); ?>
 </td>
 </tr>
 <tr class="TableMenuRow4">
-<td class="TableMenuColumn4">&nbsp;</td>
+<td class="TableMenuColumn4">&#160;</td>
 </tr>
 </table>
 </div>
@@ -1021,12 +1021,12 @@ sql_free_result($getperidr); ?>
 <tr class="TableMenuRow1">
 <td class="TableMenuColumn1"><span style="float: left;">
 <?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=fpermissions",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Forum Permissions Manager</a>
-</span><span style="float: right;">&nbsp;</span></td>
+</span><span style="float: right;">&#160;</span></td>
 </tr><?php } ?>
 <tr class="TableMenuRow2">
 <th class="TableMenuColumn2" style="width: 100%; text-align: left;">
-<span style="float: left;">&nbsp;Forum Permissions Manager: </span>
-<span style="float: right;">&nbsp;</span>
+<span style="float: left;">&#160;Forum Permissions Manager: </span>
+<span style="float: right;">&#160;</span>
 </th>
 </tr>
 <tr class="TableMenuRow3">
@@ -1075,7 +1075,7 @@ sql_free_result($fr); ?>
 </td>
 </tr>
 <tr class="TableMenuRow4">
-<td class="TableMenuColumn4">&nbsp;</td>
+<td class="TableMenuColumn4">&#160;</td>
 </tr>
 </table>
 </div>
@@ -1124,12 +1124,12 @@ $PermissionName = stripcslashes(htmlspecialchars($PermissionName, ENT_QUOTES, $S
 <tr class="TableMenuRow1">
 <td class="TableMenuColumn1"><span style="float: left;">
 <?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=fpermissions",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Forum Permissions Manager</a>
-</span><span style="float: right;">&nbsp;</span></td>
+</span><span style="float: right;">&#160;</span></td>
 </tr><?php } ?>
 <tr class="TableMenuRow2">
 <th class="TableMenuColumn2" style="width: 100%; text-align: left;">
-<span style="float: left;">&nbsp;Editing Forum Permissions: </span>
-<span style="float: right;">&nbsp;</span>
+<span style="float: left;">&#160;Editing Forum Permissions: </span>
+<span style="float: right;">&#160;</span>
 </th>
 </tr>
 <tr class="TableMenuRow3">
@@ -1275,7 +1275,7 @@ $PermissionName = stripcslashes(htmlspecialchars($PermissionName, ENT_QUOTES, $S
 </td>
 </tr>
 <tr class="TableMenuRow4">
-<td class="TableMenuColumn4">&nbsp;</td>
+<td class="TableMenuColumn4">&#160;</td>
 </tr>
 </table>
 </div>
@@ -1295,12 +1295,12 @@ sql_query($query,$SQLStat); } if(isset($_POST['id'])&&$_POST['subact']=="create"
 <tr class="TableMenuRow1">
 <td class="TableMenuColumn1"><span style="float: left;">
 <?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=fpermissions",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Forum Permissions Manager</a>
-</span><span style="float: right;">&nbsp;</span></td>
+</span><span style="float: right;">&#160;</span></td>
 </tr><?php } ?>
 <tr class="TableMenuRow2">
 <th class="TableMenuColumn2" style="width: 100%; text-align: left;">
-<span style="float: left;">&nbsp;Editing Forum Permissions: </span>
-<span style="float: right;">&nbsp;</span>
+<span style="float: left;">&#160;Editing Forum Permissions: </span>
+<span style="float: right;">&#160;</span>
 </th>
 </tr>
 <tr class="TableMenuRow3">
@@ -1447,7 +1447,7 @@ sql_query($query,$SQLStat); } if(isset($_POST['id'])&&$_POST['subact']=="create"
 </td>
 </tr>
 <tr class="TableMenuRow4">
-<td class="TableMenuColumn4">&nbsp;</td>
+<td class="TableMenuColumn4">&#160;</td>
 </tr>
 </table>
 </div>
@@ -1491,7 +1491,7 @@ if($doupdate===true&&$Error!="Yes") { ?>
 <tr class="TableMenuRow1">
 <td class="TableMenuColumn1"><span style="float: left;">
 <?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Updating Settings</a>
-</span><span style="float: right;">&nbsp;</span></td>
+</span><span style="float: right;">&#160;</span></td>
 </tr><?php } ?>
 <tr id="ProfileTitle" class="TableMenuRow2">
 <th class="TableMenuColumn2">Updating Settings</th>
@@ -1500,29 +1500,29 @@ if($doupdate===true&&$Error!="Yes") { ?>
 <td class="TableMenuColumn3">
 <?php if(isset($_POST['id'])&&$_POST['subact']=="editnow") { ?>
 <div style="text-align: center;">
-	<br />The permission was edited successfully. <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to go back. ^_^<br />&nbsp;
+	<br />The permission was edited successfully. <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to go back. ^_^<br />&#160;
 	</div>
 <?php } if(isset($_POST['id'])&&isset($_POST['permid'])&&$_POST['subact']=="makenow") { ?>
 <div style="text-align: center;">
-	<br />The permission was created successfully. <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to go back. ^_^<br />&nbsp;
+	<br />The permission was created successfully. <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to go back. ^_^<br />&#160;
 	</div>
 <?php } if($_POST['act']=="addforum"&&$_POST['update']=="now"&&$_GET['act']=="addforum") { ?>
 <div style="text-align: center;">
-	<br />The forum was created successfully. <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to go back. ^_^<br />&nbsp;
+	<br />The forum was created successfully. <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to go back. ^_^<br />&#160;
 	</div>
 <?php } if($_GET['act']=="deleteforum"&&$_POST['update']=="now"&&$_GET['act']=="deleteforum") { ?>
 <div style="text-align: center;">
-	<br />The forum was deleted successfully. <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to go back. ^_^<br />&nbsp;
+	<br />The forum was deleted successfully. <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to go back. ^_^<br />&#160;
 	</div>
 <?php } if($_POST['act']=="editforum"&&$_POST['update']=="now"&&$_GET['act']=="editforum"&&
 	isset($_POST['id'])) { ?>
 <div style="text-align: center;">
-	<br />The forum was edited successfully. <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to go back. ^_^<br />&nbsp;
+	<br />The forum was edited successfully. <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to go back. ^_^<br />&#160;
 	</div>
 <?php } ?>
 </td></tr>
 <tr id="ProfileTitleEnd" class="TableMenuRow4">
-<td class="TableMenuColumn4">&nbsp;</td>
+<td class="TableMenuColumn4">&#160;</td>
 </tr></table></div>
 <?php } if ($_GET['act']!=null&&$Error=="Yes") {
 redirect("refresh",$rbasedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],FALSE),"4");
@@ -1538,7 +1538,7 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Updating Settings";
 <tr class="TableMenuRow1">
 <td class="TableMenuColumn1"><span style="float: left;">
 <?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Updating Settings</a>
-</span><span style="float: right;">&nbsp;</span></td>
+</span><span style="float: right;">&#160;</span></td>
 </tr><?php } ?>
 <tr id="ProfileTitle" class="TableMenuRow2">
 <th class="TableMenuColumn2">Updating Settings</th>
@@ -1547,13 +1547,13 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Updating Settings";
 <td class="TableMenuColumn3">
 <div style="text-align: center;">
 	<br /><?php echo $errorstr; ?>
-	<a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to back to admin cp.<br />&nbsp;
+	<a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to back to admin cp.<br />&#160;
 	</div>
 </td></tr>
 <tr id="ProfileTitleEnd" class="TableMenuRow4">
-<td class="TableMenuColumn4">&nbsp;</td>
+<td class="TableMenuColumn4">&#160;</td>
 </tr></table></div>
 <?php } ?>
 </td></tr>
 </table>
-<div>&nbsp;</div>
+<div>&#160;</div>

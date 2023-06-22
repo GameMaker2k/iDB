@@ -11,7 +11,7 @@
     Copyright 2004-2023 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2023 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: navbar.php - Last Update: 6/16/2023 SVN 973 - Author: cooldude2k $
+    $FileInfo: navbar.php - Last Update: 6/22/2023 SVN 984 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="navbar.php"||$File3Name=="/navbar.php") {
@@ -58,7 +58,7 @@ if(!isset($idbpowertitle)) { $idbpowertitle = null; }
 </tr><?php } ?>
 <tr class="NavBarRow2">
 <td id="NavBarLinks" class="NavBarColumn2">
-<span style="float: left;">&nbsp;<?php if(isset($Settings['sqldb'])&&$_SESSION['UserGroup']==$Settings['GuestGroup']) { if(!isset($_SESSION['GuestName'])) { ?>Welcome Guest
+<span style="float: left;">&#160;<?php if(isset($Settings['sqldb'])&&$_SESSION['UserGroup']==$Settings['GuestGroup']) { if(!isset($_SESSION['GuestName'])) { ?>Welcome Guest
 <?php } if(isset($_SESSION['GuestName'])) { ?>Welcome <?php echo $_SESSION['GuestName']; } ?> ( <a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Log in</a><?php echo $ThemeSet['LineDivider']; ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=signup",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Register</a> )
 <?php } if(isset($Settings['sqldb'])&&$_SESSION['UserGroup']!=$Settings['GuestGroup']) { ?>Logged as: <?php if($_SESSION['UserID']>0&&$AmIHidden=="no") { ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$_SESSION['UserID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>"><?php } if($_SESSION['UserID']<0||$AmIHidden=="yes") { echo "<span>"; } echo $_SESSION['MemberName']; ?><?php if($_SESSION['UserID']>0&&$AmIHidden=="no") { ?></a><?php } if($_SESSION['UserID']<0||$AmIHidden=="yes") { echo "</span>"; } ?> ( <a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=logout",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Log out</a><?php if($GroupInfo['HasAdminCP']=="yes") { ?><?php echo $ThemeSet['LineDivider']; ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=main",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Admin CP</a><?php } ?> )<?php } ?></span>
 <span style="float: right;">
@@ -73,7 +73,7 @@ if(!isset($idbpowertitle)) { $idbpowertitle = null; }
 <a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>" title="<?php echo "You have ".$PMNumber." new messages."; ?>">MailBox</a><?php echo $ThemeSet['LineDivider']; ?><?php } } if($File3Name!="install.php"&&$File3Name!="/install.php") { ?>
 <a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=list&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Members</a><?php echo $ThemeSet['LineDivider']; ?>
 <a href="<?php echo url_maker($exfile['calendar'],$Settings['file_ext'],"act=view&caldate=".$NavBarCurDate,$Settings['qstr'],$Settings['qsep'],$prexqstr['calendar'],$exqstr['calendar']); ?>">Calendar</a><?php if(isset($Settings['weburl'])) { echo $ThemeSet['LineDivider']; ?>
-<a href="<?php echo $Settings['weburl']; ?>">Homepage</a><?php } } ?>&nbsp;</span>
+<a href="<?php echo $Settings['weburl']; ?>">Homepage</a><?php } } ?>&#160;</span>
 </td></tr>
 </table></div>
-<div class="DivNavBar">&nbsp;</div>
+<div class="DivNavBar">&#160;</div>

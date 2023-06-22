@@ -11,7 +11,7 @@
     Copyright 2004-2023 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2023 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: members.php - Last Update: 6/16/2023 SVN 973 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 6/22/2023 SVN 984 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -52,12 +52,12 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Validating Members";
 <tr class="TableMenuRow1">
 <td class="TableMenuColumn1"><span style="float: left;">
 <?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=validate",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Validating Members Manager</a>
-</span><span style="float: right;">&nbsp;</span></td>
+</span><span style="float: right;">&#160;</span></td>
 </tr><?php } ?>
 <tr class="TableMenuRow2">
 <th class="TableMenuColumn2" style="width: 100%; text-align: left;">
-<span style="float: left;">&nbsp;Validating Members Manager: </span>
-<span style="float: right;">&nbsp;</span>
+<span style="float: left;">&#160;Validating Members Manager: </span>
+<span style="float: right;">&#160;</span>
 </th>
 </tr>
 <tr class="TableMenuRow3">
@@ -100,7 +100,7 @@ sql_free_result($getmemidr); ?>
 </td>
 </tr>
 <tr class="TableMenuRow4">
-<td class="TableMenuColumn4">&nbsp;</td>
+<td class="TableMenuColumn4">&#160;</td>
 </tr>
 </table>
 </div>
@@ -139,7 +139,7 @@ sql_query($query,$SQLStat); }
 <tr class="TableMenuRow1">
 <td class="TableMenuColumn1"><span style="float: left;">
 <?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=members",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Updating Settings</a>
-</span><span style="float: right;">&nbsp;</span></td>
+</span><span style="float: right;">&#160;</span></td>
 </tr><?php } ?>
 <tr id="ProfileTitle" class="TableMenuRow2">
 <th class="TableMenuColumn2">Updating Settings</th>
@@ -147,11 +147,11 @@ sql_query($query,$SQLStat); }
 <tr class="TableMenuRow3" id="ProfileUpdate">
 <td class="TableMenuColumn3">
 <div style="text-align: center;">
-	<br /><?php echo $VMemName; ?> was validated successfully.<br /> <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=members",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to back to admin cp.<br />&nbsp;
+	<br /><?php echo $VMemName; ?> was validated successfully.<br /> <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=members",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to back to admin cp.<br />&#160;
 	</div>
 </td></tr>
 <tr id="ProfileTitleEnd" class="TableMenuRow4">
-<td class="TableMenuColumn4">&nbsp;</td>
+<td class="TableMenuColumn4">&#160;</td>
 </tr></table></div>
 <?php } if($_POST['act']=="deletemember"&&$_POST['update']=="now"&&$_GET['act']=="deletemember"&&
 	($_POST['id']=="0"||$_POST['id']=="1"||$_POST['id']=="-1")) {
@@ -169,12 +169,12 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Deleting Members";
 <tr class="TableMenuRow1">
 <td class="TableMenuColumn1"><span style="float: left;">
 <?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=deletemember",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Deleting Members Manager</a>
-</span><span style="float: right;">&nbsp;</span></td>
+</span><span style="float: right;">&#160;</span></td>
 </tr><?php } ?>
 <tr class="TableMenuRow2">
 <th class="TableMenuColumn2" style="width: 100%; text-align: left;">
-<span style="float: left;">&nbsp;Deleting Members Manager: </span>
-<span style="float: right;">&nbsp;</span>
+<span style="float: left;">&#160;Deleting Members Manager: </span>
+<span style="float: right;">&#160;</span>
 </th>
 </tr>
 <tr class="TableMenuRow3">
@@ -213,7 +213,7 @@ sql_free_result($getmemidr); ?>
 </td>
 </tr>
 <tr class="TableMenuRow4">
-<td class="TableMenuColumn4">&nbsp;</td>
+<td class="TableMenuColumn4">&#160;</td>
 </tr>
 </table>
 </div>
@@ -245,7 +245,7 @@ sql_query($dmgquery,$SQLStat); }
 <tr class="TableMenuRow1">
 <td class="TableMenuColumn1"><span style="float: left;">
 <?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=members",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Updating Settings</a>
-</span><span style="float: right;">&nbsp;</span></td>
+</span><span style="float: right;">&#160;</span></td>
 </tr><?php } ?>
 <tr id="ProfileTitle" class="TableMenuRow2">
 <th class="TableMenuColumn2">Updating Settings</th>
@@ -253,11 +253,11 @@ sql_query($dmgquery,$SQLStat); }
 <tr class="TableMenuRow3" id="ProfileUpdate">
 <td class="TableMenuColumn3">
 <div style="text-align: center;">
-	<br /><?php echo $DMemName; ?> was deleted successfully.<br /> <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=members",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to back to admin cp.<br />&nbsp;
+	<br /><?php echo $DMemName; ?> was deleted successfully.<br /> <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=members",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to back to admin cp.<br />&#160;
 	</div>
 </td></tr>
 <tr id="ProfileTitleEnd" class="TableMenuRow4">
-<td class="TableMenuColumn4">&nbsp;</td>
+<td class="TableMenuColumn4">&#160;</td>
 </tr></table></div>
 <?php } if($_POST['act']=="editmember"&&$_POST['update']=="now"&&$_GET['act']=="editmember"&&
 	($_POST['id']=="0"||$_POST['id']=="-1")) {
@@ -278,12 +278,12 @@ $_POST['search'] = remove_spaces($_POST['search']);
 <tr class="TableMenuRow1">
 <td class="TableMenuColumn1"><span style="float: left;">
 <?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=editmember",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Editing Members Manager</a>
-</span><span style="float: right;">&nbsp;</span></td>
+</span><span style="float: right;">&#160;</span></td>
 </tr><?php } ?>
 <tr class="TableMenuRow2">
 <th class="TableMenuColumn2" style="width: 100%; text-align: left;">
-<span style="float: left;">&nbsp;Editing Members Manager: </span>
-<span style="float: right;">&nbsp;</span>
+<span style="float: left;">&#160;Editing Members Manager: </span>
+<span style="float: right;">&#160;</span>
 </th>
 </tr>
 <tr class="TableMenuRow3">
@@ -334,7 +334,7 @@ sql_free_result($getmemidr); ?>
 </td>
 </tr>
 <tr class="TableMenuRow4">
-<td class="TableMenuColumn4">&nbsp;</td>
+<td class="TableMenuColumn4">&#160;</td>
 </tr>
 </table>
 </div>
@@ -449,12 +449,12 @@ $fulliplist = $fulliplist." <a onclick=\"window.open(this.href);return false;\" 
 <tr class="TableMenuRow1">
 <td class="TableMenuColumn1"><span style="float: left;">
 <?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=editmember",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Editing Members Manager</a>
-</span><span style="float: right;">&nbsp;</span></td>
+</span><span style="float: right;">&#160;</span></td>
 </tr><?php } ?>
 <tr class="TableMenuRow2">
 <th class="TableMenuColumn2" style="width: 100%; text-align: left;">
-<span style="float: left;">&nbsp;Editing Members Manager: </span>
-<span style="float: right;">&nbsp;</span>
+<span style="float: left;">&#160;Editing Members Manager: </span>
+<span style="float: right;">&#160;</span>
 </th>
 </tr>
 <tr class="TableMenuRow3">
@@ -699,7 +699,7 @@ sql_free_result($getperidr); ?>
 </td>
 </tr>
 <tr class="TableMenuRow4">
-<td class="TableMenuColumn4">&nbsp;</td>
+<td class="TableMenuColumn4">&#160;</td>
 </tr>
 </table>
 </div>
@@ -796,7 +796,7 @@ sql_query($dpmquery,$SQLStat); }
 <tr class="TableMenuRow1">
 <td class="TableMenuColumn1"><span style="float: left;">
 <?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=members",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Updating Settings</a>
-</span><span style="float: right;">&nbsp;</span></td>
+</span><span style="float: right;">&#160;</span></td>
 </tr><?php } ?>
 <tr id="ProfileTitle" class="TableMenuRow2">
 <th class="TableMenuColumn2">Updating Settings</th>
@@ -804,13 +804,13 @@ sql_query($dpmquery,$SQLStat); }
 <tr class="TableMenuRow3" id="ProfileUpdate">
 <td class="TableMenuColumn3">
 <div style="text-align: center;">
-	<br /><?php echo $DMemName; ?>&#39;s member info was changed successfully.<br /> <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=members",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to back to admin cp.<br />&nbsp;
+	<br /><?php echo $DMemName; ?>&#39;s member info was changed successfully.<br /> <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=members",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Click here</a> to back to admin cp.<br />&#160;
 	</div>
 </td></tr>
 <tr id="ProfileTitleEnd" class="TableMenuRow4">
-<td class="TableMenuColumn4">&nbsp;</td>
+<td class="TableMenuColumn4">&#160;</td>
 </tr></table></div>
 <?php } ?>
 </td></tr>
 </table>
-<div>&nbsp;</div>
+<div>&#160;</div>

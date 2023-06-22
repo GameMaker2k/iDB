@@ -11,7 +11,7 @@
     Copyright 2004-2023 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2023 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: calendars.php - Last Update: 6/16/2023 SVN 973 - Author: cooldude2k $
+    $FileInfo: calendars.php - Last Update: 6/22/2023 SVN 984 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="calendars.php"||$File3Name=="/calendars.php") {
@@ -215,7 +215,7 @@ foreach ($MyDays as $x => $y) {
 $WeekDays = "";
 $i = $FirstDayThisMonth + 1;
 if ($FirstDayThisMonth != "0") {
-    $WeekDays .= '<td class="CalTableColumn3Blank" style="text-align: center;" colspan="' . $FirstDayThisMonth . '">&nbsp;</td>'."\r\n";
+    $WeekDays .= '<td class="CalTableColumn3Blank" style="text-align: center;" colspan="' . $FirstDayThisMonth . '">&#160;</td>'."\r\n";
 }
 $Day_i = "1";
 $ii = $i;
@@ -229,7 +229,7 @@ else {
 $Extra = 'CalTableColumn3'; }
 if ($Day_i != $_GET['HighligtDay']) {
 if(!isset($EventsName[$Day_i])) { $EventsName[$Day_i] = null; }
-if($EventsName[$Day_i]!=null) { $EventsName[$Day_i] = "&nbsp;( ".$EventsName[$Day_i]." )"; }
+if($EventsName[$Day_i]!=null) { $EventsName[$Day_i] = "&#160;( ".$EventsName[$Day_i]." )"; }
 if ($Day_i != $MyCurDay) {
 $WeekDays .= '<td class="'.$Extra.'" style="vertical-align: top;"><div class="CalDate">' . $Day_i . '</div>' . $EventsName[$Day_i] . '</td>'."\r\n";	 }	}
 if ($Day_i == $MyCurDay) {
@@ -238,21 +238,21 @@ $Day_i++;
 $ii++;
 }
 if ((8 - $ii) >= "1") {
-$WeekDays .= '<td class="CalTableColumn3Blank" style="text-align: center;" colspan="' . (8 - $ii) . '">&nbsp;</td>'."\r\n"; } ?>
+$WeekDays .= '<td class="CalTableColumn3Blank" style="text-align: center;" colspan="' . (8 - $ii) . '">&#160;</td>'."\r\n"; } ?>
 <div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $Settings['board_name']; ?></a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['calendar'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['calendar'],$exqstr['calendar']); ?>">Calendar</a></div>
-<div class="DivNavLinks">&nbsp;</div>
+<div class="DivNavLinks">&#160;</div>
 <div class="CalTable1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="CalTableRow1" style="font-weight: bold;">
-<span style="float: left;"><?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['calendar'],$Settings['file_ext'],"act=view&caldate=".$MyMonth.$MyYear,$Settings['qstr'],$Settings['qsep'],$prexqstr['calendar'],$exqstr['calendar']); ?>" title="<?php echo "Viewing ".$MyMonthName." ".$MyYear; ?>"><?php echo "Viewing ".$MyMonthName." ".$MyYear; ?></a>&nbsp;</span>&nbsp;
-<span style="float: right;">&nbsp;<a href="<?php echo url_maker($exfile['calendar'],$Settings['file_ext'],"act=view&caldate=".$baccaldate,$Settings['qstr'],$Settings['qsep'],$prexqstr['calendar'],$exqstr['calendar']); ?>">&lt;</a><?php echo $ThemeSet['LineDivider']; ?><a href="<?php echo url_maker($exfile['calendar'],$Settings['file_ext'],"act=view&caldate=".$nexcaldate,$Settings['qstr'],$Settings['qsep'],$prexqstr['calendar'],$exqstr['calendar']); ?>">&gt;</a>&nbsp;</span>&nbsp;</div>
+<span style="float: left;"><?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['calendar'],$Settings['file_ext'],"act=view&caldate=".$MyMonth.$MyYear,$Settings['qstr'],$Settings['qsep'],$prexqstr['calendar'],$exqstr['calendar']); ?>" title="<?php echo "Viewing ".$MyMonthName." ".$MyYear; ?>"><?php echo "Viewing ".$MyMonthName." ".$MyYear; ?></a>&#160;</span>&#160;
+<span style="float: right;">&#160;<a href="<?php echo url_maker($exfile['calendar'],$Settings['file_ext'],"act=view&caldate=".$baccaldate,$Settings['qstr'],$Settings['qsep'],$prexqstr['calendar'],$exqstr['calendar']); ?>">&lt;</a><?php echo $ThemeSet['LineDivider']; ?><a href="<?php echo url_maker($exfile['calendar'],$Settings['file_ext'],"act=view&caldate=".$nexcaldate,$Settings['qstr'],$Settings['qsep'],$prexqstr['calendar'],$exqstr['calendar']); ?>">&gt;</a>&#160;</span>&#160;</div>
 <?php } ?>
 <table class="CalTable1">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="CalTableRow1">
 <th class="CalTableColumn1" colspan="7">
-<span style="float: left;"><?php echo $ThemeSet['TitleIcon']; ?><?php echo "Viewing ".$MyMonthName." ".$MyYear; ?>&nbsp;</span>&nbsp;
-<span style="float: right;">&nbsp;<a href="<?php echo url_maker($exfile['calendar'],$Settings['file_ext'],"act=view&caldate=".$baccaldate,$Settings['qstr'],$Settings['qsep'],$prexqstr['calendar'],$exqstr['calendar']); ?>">&lt;</a><?php echo $ThemeSet['LineDivider']; ?><a href="<?php echo url_maker($exfile['calendar'],$Settings['file_ext'],"act=view&caldate=".$nexcaldate,$Settings['qstr'],$Settings['qsep'],$prexqstr['calendar'],$exqstr['calendar']); ?>">&gt;</a>&nbsp;</span>&nbsp;
+<span style="float: left;"><?php echo $ThemeSet['TitleIcon']; ?><?php echo "Viewing ".$MyMonthName." ".$MyYear; ?>&#160;</span>&#160;
+<span style="float: right;">&#160;<a href="<?php echo url_maker($exfile['calendar'],$Settings['file_ext'],"act=view&caldate=".$baccaldate,$Settings['qstr'],$Settings['qsep'],$prexqstr['calendar'],$exqstr['calendar']); ?>">&lt;</a><?php echo $ThemeSet['LineDivider']; ?><a href="<?php echo url_maker($exfile['calendar'],$Settings['file_ext'],"act=view&caldate=".$nexcaldate,$Settings['qstr'],$Settings['qsep'],$prexqstr['calendar'],$exqstr['calendar']); ?>">&gt;</a>&#160;</span>&#160;
 </th>
 </tr><?php } ?>
 <tr class="CalTableRow2">
@@ -261,7 +261,7 @@ $WeekDays .= '<td class="CalTableColumn3Blank" style="text-align: center;" colsp
 <?php echo $WeekDays; ?>
 </tr>
 <tr class="CalTableRow4">
-<td class="CalTableColumn4" colspan="7">&nbsp;</td>
+<td class="CalTableColumn4" colspan="7">&#160;</td>
 </tr>
 </table></div>
-<div class="DivCalendar">&nbsp;</div>
+<div class="DivCalendar">&#160;</div>

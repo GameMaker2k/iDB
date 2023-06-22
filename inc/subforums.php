@@ -11,7 +11,7 @@
     Copyright 2004-2023 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2023 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: subforums.php - Last Update: 6/16/2023 SVN 973 - Author: cooldude2k $
+    $FileInfo: subforums.php - Last Update: 6/22/2023 SVN 984 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="subforums.php"||$File3Name=="/subforums.php") {
@@ -119,7 +119,7 @@ $_SESSION['ViewingTitle'] = $ForumName;
 $_SESSION['ExtraData'] = "currentact:".$_GET['act']."; currentcategoryid:".$InSubCategory.",".$CategoryID."; currentforumid:".$InSubForum.",".$ForumID."; currenttopicid:0; currentmessageid:0; currenteventid:0; currentmemberid:0;"; 
 ?>
 <div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $Settings['board_name']; ?></a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile[$CategoryType],$Settings['file_ext'],"act=view&id=".$CategoryID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$CategoryType],$exqstr[$CategoryType]); ?>"><?php echo $CategoryName; ?></a><?php if($InSubForum!="0") { echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile[$isfForumType],$Settings['file_ext'],"act=view&id=".$isfForumID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr[$isfForumType],$exqstr[$isfForumType]); ?>"><?php echo $isfForumName; ?></a><?php } echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$ForumID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>"><?php echo $ForumName; ?></a></div>
-<div class="DivNavLinks">&nbsp;</div>
+<div class="DivNavLinks">&#160;</div>
 <?php
 if(!isset($CatPermissionInfo['CanViewCategory'][$CategoryID])) {
 	$CatPermissionInfo['CanViewCategory'][$CategoryID] = "no"; }
@@ -157,7 +157,7 @@ if($num>=1) {
 </td>
 </tr><?php } ?>
 <tr id="ForumStatRow<?php echo $CategoryID; ?>" class="TableRow2">
-<th class="TableColumn2" style="width: 4%;">&nbsp;</th>
+<th class="TableColumn2" style="width: 4%;">&#160;</th>
 <th class="TableColumn2" style="width: 58%;">Forum</th>
 <th class="TableColumn2" style="width: 7%;">Topics</th>
 <th class="TableColumn2" style="width: 7%;">Posts</th>
@@ -209,7 +209,7 @@ $gltf[$apcl] = $SubsForumID; ++$apcl; }
 sql_free_result($apcresult); } }
 if(isset($PermissionInfo['CanViewForum'][$ForumID])&&
 	$PermissionInfo['CanViewForum'][$ForumID]=="yes") {
-$LastTopic = "&nbsp;<br />&nbsp;<br />&nbsp;";
+$LastTopic = "&#160;<br />&#160;<br />&#160;";
 if(!isset($LastTopic)) { $LastTopic = null; }
 $gltnum = count($gltf); $glti = 0; 
 $OldUpdateTime = 0; $UseThisFonum = null;
@@ -283,9 +283,9 @@ if($UsersID==-1) { $UserPre = "Guest:"; }
 if(($UsersID<-1&&$UsersHidden=="yes")||$UsersID==0||($UsersID>0&&$UsersHidden=="yes")) { 
 	$UserPre = "Hidden:"; }
 $LastTopic = $TimeStamp."<br />\nTopic: <a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']).$qstrhtml."&#35;reply".$NumRPosts."\" title=\"".$oldtopicname."\">".$TopicName."</a><br />\n".$UserPre." <span title=\"".$oldusername."\">".$UsersName."</span>"; } }
-if($LastTopic==null) { $LastTopic = "&nbsp;<br />&nbsp;<br />&nbsp;"; }
+if($LastTopic==null) { $LastTopic = "&#160;<br />&#160;<br />&#160;"; }
 sql_free_result($gltresult); }
-if ($ForumType=="redirect") { $LastTopic="&nbsp;<br />Redirects: ".$NumRedirects."<br />&nbsp;"; }
+if ($ForumType=="redirect") { $LastTopic="&#160;<br />Redirects: ".$NumRedirects."<br />&#160;"; }
 $PreForum = $ThemeSet['ForumIcon'];
 if ($ForumType=="forum") { $PreForum=$ThemeSet['ForumIcon']; }
 if ($ForumType=="subforum") { $PreForum=$ThemeSet['SubForumIcon']; }
@@ -319,10 +319,10 @@ if($ThemeSet['ForumStyle']==2) {
 <?php } ++$i; } sql_free_result($result);
 ?>
 <tr id="CatEnd<?php echo $CategoryID; ?>" class="TableRow4">
-<td class="TableColumn4" colspan="5">&nbsp;</td>
+<td class="TableColumn4" colspan="5">&#160;</td>
 </tr>
 </table></div>
-<div class="DivSubForums">&nbsp;</div>
+<div class="DivSubForums">&#160;</div>
 <?php } } sql_free_result($preresult);
 $ForumCheck = "skip";
 if($CanHaveTopics!="yes") { 
@@ -435,15 +435,15 @@ $GuestsViewList = "<a".$uatitleadd." href=\"".url_maker($exfile['member'],$Setti
 <td style="width: 4%;" class="TableStatsColumn3"><div class="statsicon">
 <?php echo $ThemeSet['BoardStatsIcon']; ?></div></td>
 <td style="width: 96%;" class="TableStatsColumn3"><div class="statsinfo">
-&nbsp;<span style="font-weight: bold;"><?php echo $uviewlgn; ?></span> guests, <span style="font-weight: bold;"><?php echo $uviewlmn; ?></span> members, <span style="font-weight: bold;"><?php echo $uviewlan; ?></span> anonymous members <br />
-<?php if($MembersViewList!=null) { ?>&nbsp;<?php echo $MembersViewList."\n<br />"; } ?>
+&#160;<span style="font-weight: bold;"><?php echo $uviewlgn; ?></span> guests, <span style="font-weight: bold;"><?php echo $uviewlmn; ?></span> members, <span style="font-weight: bold;"><?php echo $uviewlan; ?></span> anonymous members <br />
+<?php if($MembersViewList!=null) { ?>&#160;<?php echo $MembersViewList."\n<br />"; } ?>
 </div></td>
 </tr>
 <tr id="Stats7" class="TableStatsRow4">
-<td class="TableStatsColumn4" colspan="2">&nbsp;</td>
+<td class="TableStatsColumn4" colspan="2">&#160;</td>
 </tr>
 </table></div>
-<div class="DivStats">&nbsp;</div>
+<div class="DivStats">&#160;</div>
 <?php }
 if($CanHaveTopics!="no") {
 require($SettDir['inc'].'topics.php'); } }

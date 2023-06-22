@@ -11,7 +11,7 @@
     Copyright 2004-2023 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2023 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: replies.php - Last Update: 6/16/2023 SVN 980 - Author: cooldude2k $
+    $FileInfo: replies.php - Last Update: 6/22/2023 SVN 984 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
@@ -104,7 +104,7 @@ redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"
 if($ForumCheck!="skip") {
 ?>
 <div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $Settings['board_name']; ?></a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile[$CategoryType],$Settings['file_ext'],"act=view&id=".$TopicCatID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$CategoryType],$exqstr[$CategoryType]); ?>"><?php echo $CategoryName; ?></a><?php echo $ThemeSet['NavLinkDivider']; if($InSubForum!=0 && $subfmcknum>0) { ?><a href="<?php echo url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$InSubForum."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>"><?php echo $SubForumName; ?></a><?php echo $ThemeSet['NavLinkDivider']; } ?><a href="<?php echo url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$TopicForumID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>"><?php echo $ForumName; ?></a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a></div>
-<div class="DivNavLinks">&nbsp;</div>
+<div class="DivNavLinks">&#160;</div>
 <?php }
 if(!isset($CatPermissionInfo['CanViewCategory'][$TopicCatID])) {
 	$CatPermissionInfo['CanViewCategory'][$TopicCatID] = "no"; }
@@ -143,7 +143,7 @@ if($TopicClosed==1&&$PermissionInfo['CanMakeReplysClose'][$TopicForumID]=="yes"
  <?php } ?></td>
 </tr>
 </table>
-<div class="DivTable2">&nbsp;</div>
+<div class="DivTable2">&#160;</div>
 <?php } } if($_GET['act']=="view") {
 if($ForumCheck!="skip") {
 if(isset($_SESSION['OldViewingPage'])) { $_SESSION['AncientViewingPage'] = $_SESSION['OldViewingPage']; } else { $_SESSION['AncientViewingPage'] = url_maker(null,"no+ext","act=view","&","=",$prexqstr['index'],$exqstr['index']); }
@@ -302,9 +302,9 @@ if($pstring!=null||$CanMakeReply=="yes"||$CanMakeTopic=="yes") {
 </tr>
 </table>
 <?php }
-/* <div class="DivPageLinks">&nbsp;</div> */
+/* <div class="DivPageLinks">&#160;</div> */
 ?>
-<div class="DivTable2">&nbsp;</div>
+<div class="DivTable2">&#160;</div>
 <?php }
 while ($i < $num) {
 $MyPostID=sql_result($result,$i,"id");
@@ -510,7 +510,7 @@ $ReplyNum = $i + $PageLimit + 1;
 </tr><?php } ?>
 <tr class="TableInfoRow2">
 <td class="TableInfoColumn2" style="vertical-align: middle; width: 160px;">
-&nbsp;<?php
+&#160;<?php
 if($User1ID>0&&$User1Hidden=="no") {
 echo "<a href=\"";
 echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$User1ID,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
@@ -531,7 +531,7 @@ echo $ThemeSet['LineDividerTopic']; echo "<a href=\"".url_maker($exfile['topic']
 echo $ThemeSet['LineDividerTopic']; echo "<a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=delete&id=".$MyTopicID."&post=".$MyPostID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">".$ThemeSet['DeleteReply']; ?></a>
 <?php } if($CanMakeReply=="yes"&&isset($ThemeSet['QuoteReply'])&&$ThemeSet['QuoteReply']!=null) { 
 echo $ThemeSet['LineDividerTopic']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=create&id=".$TopicID."&post=".$MyPostID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $ThemeSet['QuoteReply']; ?></a>
-<?php } ?>&nbsp;</div>
+<?php } ?>&#160;</div>
 </td>
 </tr>
 <tr class="TableInfoRow3">
@@ -571,7 +571,7 @@ Post IP: <a onclick="window.open(this.href);return false;" href="<?php echo spri
 </tr>
 <tr class="TableInfoRow4">
 <td class="TableInfoColumn4" colspan="2">
-<span style="text-align: left; float: left;">&nbsp;<a href="<?php
+<span style="text-align: left; float: left;">&#160;<a href="<?php
 if($User1ID>0&&$User1Hidden=="no"&&isset($ThemeSet['Profile'])&&$ThemeSet['Profile']!=null) {
 echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$User1ID,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); }
 if(($User1ID<=0||$User1Hidden=="yes")&&isset($ThemeSet['Profile'])&&$ThemeSet['Profile']!=null) {
@@ -585,11 +585,11 @@ if(($User1ID<=0||$User1Hidden=="yes")&&isset($ThemeSet['PM'])&&$ThemeSet['PM']!=
 echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); }
 ?>"><?php echo $ThemeSet['PM']; ?></a></span>
 <span style="text-align: right; float: right; font-weight: bold;"><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&post=".$MyPostID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>" title="Link to post #<?php echo $ReplyNum; ?>" style="vertical-align: middle; font-weight: bold;">
-#<?php echo $ReplyNum; ?></a>&nbsp;</span>
+#<?php echo $ReplyNum; ?></a>&#160;</span>
 </td>
 </tr>
 </table></div>
-<div class="DivReplies">&nbsp;</div>
+<div class="DivReplies">&#160;</div>
 <?php ++$i; } sql_free_result($result); } 
 if(($utccurtime->getTimestamp()<$_SESSION['LastPostTime']&&$_SESSION['LastPostTime']!=0)&&
 ($_GET['act']=="create"||$_GET['act']=="edit"||$_GET['act']=="makereply"||$_GET['act']=="editreply")) { 
@@ -609,7 +609,7 @@ redirect("refresh",$rbasedir.url_maker($exfile['topic'],$Settings['file_ext'],"a
 </td>
 </tr><?php } ?>
 <tr class="TableRow2">
-<th class="TableColumn2" style="width: 100%; text-align: left;">&nbsp;Make Reply Message: </th>
+<th class="TableColumn2" style="width: 100%; text-align: left;">&#160;Make Reply Message: </th>
 </tr>
 <tr class="TableRow3">
 <td class="TableColumn3">
@@ -617,16 +617,16 @@ redirect("refresh",$rbasedir.url_maker($exfile['topic'],$Settings['file_ext'],"a
 <tr>
 	<td><span class="TableMessage"><br />
 	You have to wait before making/editing another post.<br />
-	Click <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>">here</a> to view your reply.<br />&nbsp;
+	Click <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>">here</a> to view your reply.<br />&#160;
 	</span><br /></td>
 </tr>
 </table>
 </td></tr>
 <tr class="TableRow4">
-<td class="TableColumn4">&nbsp;</td>
+<td class="TableColumn4">&#160;</td>
 </tr>
 </table></div>
-<div class="DivMkReply">&nbsp;</div>
+<div class="DivMkReply">&#160;</div>
 <?php } if($_GET['act']=="create") {
 if($GroupInfo['HasAdminCP']!="yes"||$GroupInfo['HasModCP']!="yes") {
 if($ForumPostCountView!=0&&$MyPostCountChk<$ForumPostCountView) {
@@ -751,14 +751,14 @@ $ShowSmile=sql_result($melanie_result,$melanie_p,"Display");
 $ReplaceType=sql_result($melanie_result,$melanie_p,"ReplaceCI");
 if($SmileRow==1) { ?><tr>
 	<?php } if($SmileRow<5) { ++$SmileCRow; ?>
-	<td><img src="<?php echo $SmileDirectory."".$FileName; ?>" style="vertical-align: middle; border: 0px; cursor: pointer;" title="<?php echo $SmileName; ?>" alt="<?php echo $SmileName; ?>" onclick="addsmiley('ReplyPost','&nbsp;<?php echo htmlspecialchars($SmileText, ENT_QUOTES, $Settings['charset']); ?>&nbsp;')" /></td>
+	<td><img src="<?php echo $SmileDirectory."".$FileName; ?>" style="vertical-align: middle; border: 0px; cursor: pointer;" title="<?php echo $SmileName; ?>" alt="<?php echo $SmileName; ?>" onclick="addsmiley('ReplyPost','&#160;<?php echo htmlspecialchars($SmileText, ENT_QUOTES, $Settings['charset']); ?>&#160;')" /></td>
 	<?php ++$rose_a; } if($SmileRow==5) { ++$SmileCRow; $rose_a = 0; ?>
-	<td><img src="<?php echo $SmileDirectory."".$FileName; ?>" style="vertical-align: middle; border: 0px; cursor: pointer;" title="<?php echo $SmileName; ?>" alt="<?php echo $SmileName; ?>" onclick="addsmiley('ReplyPost','&nbsp;<?php echo htmlspecialchars($SmileText, ENT_QUOTES, $Settings['charset']); ?>&nbsp;')" /></td></tr>
+	<td><img src="<?php echo $SmileDirectory."".$FileName; ?>" style="vertical-align: middle; border: 0px; cursor: pointer;" title="<?php echo $SmileName; ?>" alt="<?php echo $SmileName; ?>" onclick="addsmiley('ReplyPost','&#160;<?php echo htmlspecialchars($SmileText, ENT_QUOTES, $Settings['charset']); ?>&#160;')" /></td></tr>
 	<?php $SmileCRow=0; $SmileRow=0; }
 ++$melanie_p; }
 if($SmileCRow<5&&$SmileCRow!=0) {
 $SmileCRowL = 5 - $SmileCRow;
-echo "<td colspan=\"".$SmileCRowL."\">&nbsp;</td></tr>"; }
+echo "<td colspan=\"".$SmileCRowL."\">&#160;</td></tr>"; }
 echo "</table>";
 sql_free_result($melanie_result);
 ?></div></td>
@@ -796,10 +796,10 @@ sql_free_result($melanie_result);
 </td></tr></table>
 </form></td></tr>
 <tr id="MkReplyEnd<?php echo $TopicForumID; ?>" class="TableRow4">
-<td class="TableColumn4" colspan="2">&nbsp;</td>
+<td class="TableColumn4" colspan="2">&#160;</td>
 </tr>
 </table></div>
-<div class="DivMkReply">&nbsp;</div>
+<div class="DivMkReply">&#160;</div>
 <?php } if($_GET['act']=="makereply"&&$_POST['act']=="makereplies") {
 if($GroupInfo['HasAdminCP']!="yes"||$GroupInfo['HasModCP']!="yes") {
 if($ForumPostCountView!=0&&$MyPostCountChk<$ForumPostCountView) {
@@ -842,7 +842,7 @@ require($SettDir['inc']."captcha.php"); }
 </td>
 </tr><?php } ?>
 <tr class="TableRow2">
-<th class="TableColumn2" style="width: 100%; text-align: left;">&nbsp;Make Reply Message: </th>
+<th class="TableColumn2" style="width: 100%; text-align: left;">&#160;Make Reply Message: </th>
 </tr>
 <tr class="TableRow3">
 <td class="TableColumn3">
@@ -851,7 +851,7 @@ require($SettDir['inc']."captcha.php"); }
 <tr>
 	<td><span class="TableMessage">
 	<br />Your Reply Description is too big.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
 	$Settings['captcha_guest']=="on") {
@@ -861,33 +861,33 @@ if (PhpCaptcha::Validate($_POST['signcode'])) {
 <tr>
 	<td><span class="TableMessage">
 	<br />Invalid code entered<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
 	pre_strlen($_POST['GuestName'])>"30") { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You Guest Name is too big.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if($_POST['fid']!=$_SESSION['UserFormID']) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Sorry the referering url dose not match our host name.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if($_POST['ubid']!=$Settings['BoardUUID']) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Sorry the referering url dose not match our host name.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if ($Settings['TestReferer']=="on") {
 	if ($URL['HOST']!=$URL['REFERER']) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Sorry the referering url dose not match our host name.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } }
 $_POST['ReplyDesc'] = stripcslashes(htmlspecialchars($_POST['ReplyDesc'], ENT_QUOTES, $Settings['charset']));
@@ -945,39 +945,39 @@ if ($_POST['ReplyDesc']==null) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You need to enter a Reply Description.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
 	$_POST['GuestName']==null) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You need to enter a Guest Name.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="no") { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You do not have permission to make a reply here.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if($PermissionInfo['CanMakeReplysClose'][$TopicForumID]=="no"&&
 	$TopicClosed==1) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You do not have permission to make a reply here.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if ($_POST['ReplyPost']==null) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You need to enter a Reply.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if ($Error=="Yes") {
 redirect("refresh",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false),"4"); ?>
 <tr>
 	<td><span class="TableMessage">
-	<br />Click <a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">here</a> to goto index page.<br />&nbsp;
+	<br />Click <a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">here</a> to goto index page.<br />&#160;
 	</span><br /></td>
 </tr>
 <?php } if ($Error!="Yes") { $LastActive = $utccurtime->getTimestamp();
@@ -1030,17 +1030,17 @@ redirect("refresh",$rbasedir.url_maker($exfile['topic'],$Settings['file_ext'],"a
 ?><tr>
 	<td><span class="TableMessage"><br />
 	Reply to Topic <?php echo $TopicName; ?> was posted.<br />
-	Click <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>&amp;&#35;reply<?php echo $MyPostNum; ?>">here</a> to view your reply.<br />&nbsp;
+	Click <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>&amp;&#35;reply<?php echo $MyPostNum; ?>">here</a> to view your reply.<br />&#160;
 	</span><br /></td>
 </tr>
 <?php } ?>
 </table>
 </td></tr>
 <tr class="TableRow4">
-<td class="TableColumn4">&nbsp;</td>
+<td class="TableColumn4">&#160;</td>
 </tr>
 </table></div>
-<div class="DivMkReply">&nbsp;</div>
+<div class="DivMkReply">&#160;</div>
 <?php } if($_GET['act']=="pin"||$_GET['act']=="unpin") {
 $gtsquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"id\"=%i LIMIT 1", array($_GET['id']));
 $gtsresult=sql_query($gtsquery,$SQLStat);
@@ -1101,16 +1101,16 @@ redirect("refresh",$rbasedir.url_maker($exfile['topic'],$Settings['file_ext'],"a
 </td>
 </tr><?php } ?>
 <tr class="TableRow2">
-<th class="TableColumn2" style="width: 100%; text-align: left;">&nbsp;Pin/Unpin Topic Message: </th>
+<th class="TableColumn2" style="width: 100%; text-align: left;">&#160;Pin/Unpin Topic Message: </th>
 </tr>
 <tr class="TableRow3" style="text-align: center;">
 	<td class="TableColumn3" style="text-align: center;"><span class="TableMessage"><br />
 	Topic was successfully unpinned/pinned.<br />
-	Click <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TTopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>">here</a> to go back to topic.<br />&nbsp;
+	Click <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TTopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>">here</a> to go back to topic.<br />&#160;
 	</span><br /></td>
 </tr>
 <tr class="TableRow4">
-<td class="TableColumn4">&nbsp;</td>
+<td class="TableColumn4">&#160;</td>
 </tr>
 </table></div>
 <?php } } if($_GET['act']=="open"||$_GET['act']=="close") {
@@ -1170,16 +1170,16 @@ redirect("refresh",$rbasedir.url_maker($exfile['topic'],$Settings['file_ext'],"a
 </td>
 </tr><?php } ?>
 <tr class="TableRow2">
-<th class="TableColumn2" style="width: 100%; text-align: left;">&nbsp;Open/Close Topic Message: </th>
+<th class="TableColumn2" style="width: 100%; text-align: left;">&#160;Open/Close Topic Message: </th>
 </tr>
 <tr class="TableRow3" style="text-align: center;">
 	<td class="TableColumn3" style="text-align: center;"><span class="TableMessage"><br />
 	Topic was successfully opened/closed.<br />
-	Click <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TTopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>">here</a> to go back to topic.<br />&nbsp;
+	Click <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TTopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>">here</a> to go back to topic.<br />&#160;
 	</span><br /></td>
 </tr>
 <tr class="TableRow4">
-<td class="TableColumn4">&nbsp;</td>
+<td class="TableColumn4">&#160;</td>
 </tr>
 </table></div>
 <?php } } if($_GET['act']=="move") {
@@ -1272,16 +1272,16 @@ redirect("refresh",$rbasedir.url_maker($exfile['topic'],$Settings['file_ext'],"a
 </td>
 </tr><?php } ?>
 <tr class="TableRow2">
-<th class="TableColumn2" style="width: 100%; text-align: left;">&nbsp;Move Topic Message: </th>
+<th class="TableColumn2" style="width: 100%; text-align: left;">&#160;Move Topic Message: </th>
 </tr>
 <tr class="TableRow3" style="text-align: center;">
 	<td class="TableColumn3" style="text-align: center;"><span class="TableMessage"><br />
 	Topic was successfully moved.<br />
-	Click <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TTopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>">here</a> to go back to topic.<br />&nbsp;
+	Click <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TTopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>">here</a> to go back to topic.<br />&#160;
 	</span><br /></td>
 </tr>
 <tr class="TableRow4">
-<td class="TableColumn4">&nbsp;</td>
+<td class="TableColumn4">&#160;</td>
 </tr>
 </table></div>
 <?php } if($_GET['act']=="delete") {
@@ -1388,16 +1388,16 @@ sql_free_result($delresult);
 </td>
 </tr><?php } ?>
 <tr class="TableRow2">
-<th class="TableColumn2" style="width: 100%; text-align: left;">&nbsp;Delete Reply Message: </th>
+<th class="TableColumn2" style="width: 100%; text-align: left;">&#160;Delete Reply Message: </th>
 </tr>
 <tr class="TableRow3" style="text-align: center;">
 	<td class="TableColumn3" style="text-align: center;"><span class="TableMessage"><br />
 	Reply was deleted successfully.<br />
-	Click <a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">here</a> to go back to index.<br />&nbsp;
+	Click <a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">here</a> to go back to index.<br />&#160;
 	</span><br /></td>
 </tr>
 <tr class="TableRow4">
-<td class="TableColumn4">&nbsp;</td>
+<td class="TableColumn4">&#160;</td>
 </tr>
 </table></div>
 <?php } if($_GET['act']=="edit") {
@@ -1502,9 +1502,9 @@ $SmileDirectory=sql_result($melanie_result,$melanie_p,"Directory");
 $ShowSmile=sql_result($melanie_result,$melanie_p,"Display");
 $ReplaceType=sql_result($melanie_result,$melanie_p,"ReplaceCI");
 if($SmileRow<5) { ?>
-	<img src="<?php echo $SmileDirectory."".$FileName; ?>" style="vertical-align: middle; border: 0px; cursor: pointer;" title="<?php echo $SmileName; ?>" alt="<?php echo $SmileName; ?>" onclick="addsmiley('ReplyPost','&nbsp;<?php echo htmlspecialchars($SmileText, ENT_QUOTES, $Settings['charset']); ?>&nbsp;')" />&nbsp;&nbsp;
+	<img src="<?php echo $SmileDirectory."".$FileName; ?>" style="vertical-align: middle; border: 0px; cursor: pointer;" title="<?php echo $SmileName; ?>" alt="<?php echo $SmileName; ?>" onclick="addsmiley('ReplyPost','&#160;<?php echo htmlspecialchars($SmileText, ENT_QUOTES, $Settings['charset']); ?>&#160;')" />&#160;&#160;
 	<?php } if($SmileRow==5) { ?>
-	<img src="<?php echo $SmileDirectory."".$FileName; ?>" style="vertical-align: middle; border: 0px; cursor: pointer;" title="<?php echo $SmileName; ?>" alt="<?php echo $SmileName; ?>" onclick="addsmiley('ReplyPost','&nbsp;<?php echo htmlspecialchars($SmileText, ENT_QUOTES, $Settings['charset']); ?>&nbsp;')" /><br />
+	<img src="<?php echo $SmileDirectory."".$FileName; ?>" style="vertical-align: middle; border: 0px; cursor: pointer;" title="<?php echo $SmileName; ?>" alt="<?php echo $SmileName; ?>" onclick="addsmiley('ReplyPost','&#160;<?php echo htmlspecialchars($SmileText, ENT_QUOTES, $Settings['charset']); ?>&#160;')" /><br />
 	<?php $SmileRow=1; }
 ++$melanie_p; ++$SmileRow; }
 sql_free_result($melanie_result);
@@ -1545,10 +1545,10 @@ sql_free_result($melanie_result);
 </td></tr></table>
 </form></td></tr>
 <tr id="EditReplyEnd<?php echo $_GET['post']; ?>" class="TableRow4">
-<td class="TableColumn4" colspan="2">&nbsp;</td>
+<td class="TableColumn4" colspan="2">&#160;</td>
 </tr>
 </table></div>
-<div class="DivMkReply">&nbsp;</div>
+<div class="DivMkReply">&#160;</div>
 <?php } if($_GET['act']=="editreply"&&$_POST['act']=="editreplies") {
 if($PermissionInfo['CanEditReplys'][$TopicForumID]=="no"||$_SESSION['UserID']==0) { redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
@@ -1625,7 +1625,7 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die
 </td>
 </tr><?php } ?>
 <tr class="TableRow2">
-<th class="TableColumn2" style="width: 100%; text-align: left;">&nbsp;Edit Reply Message: </th>
+<th class="TableColumn2" style="width: 100%; text-align: left;">&#160;Edit Reply Message: </th>
 </tr>
 <tr class="TableRow3">
 <td class="TableColumn3">
@@ -1634,19 +1634,19 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die
 <tr>
 	<td><span class="TableMessage">
 	<br />Your Reply Description is too big.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if($_POST['fid']!=$_SESSION['UserFormID']) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Sorry the referering url dose not match our host name.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if($_POST['ubid']!=$Settings['BoardUUID']) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Sorry the referering url dose not match our host name.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
 	$Settings['captcha_guest']=="on") {
@@ -1656,28 +1656,28 @@ if (PhpCaptcha::Validate($_POST['signcode'])) {
 <tr>
 	<td><span class="TableMessage">
 	<br />Invalid code entered<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
 	pre_strlen($_POST['GuestName'])>"30") { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You Guest Name is too big.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if($ShowEditTopic===true&&
 	pre_strlen($_POST['TopicName'])>"50") { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You Topic Name is too big.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if ($Settings['TestReferer']=="on") {
 	if ($URL['HOST']!=$URL['REFERER']) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Sorry the referering url dose not match our host name.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } }
 $_POST['ReplyDesc'] = stripcslashes(htmlspecialchars($_POST['ReplyDesc'], ENT_QUOTES, $Settings['charset']));
@@ -1780,57 +1780,57 @@ if ($_POST['ReplyDesc']==null) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You need to enter a Reply Description.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
 	$_POST['GuestName']==null) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You need to enter a Guest Name.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
 	$RGMatches==true) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />This Guest Name is restricted to use.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if($PermissionInfo['CanEditReplys'][$TopicForumID]=="no") { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You do not have permission to edit a reply here.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if($PermissionInfo['CanEditReplysClose'][$TopicForumID]=="no"&&$TopicClosed==1) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You do not have permission to edit a reply here.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if($ShowEditTopic===true&&$_POST['TopicName']==null) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You need to enter a Topic Name.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if ($_POST['ReplyPost']==null) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You need to enter a Reply.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if($RMatches==true) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />This Topic Name is restricted to use.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if ($Error=="Yes") {
 redirect("refresh",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']),"3"); ?>
 <tr>
 	<td><span class="TableMessage">
-	<br />Click <a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">here</a> to goto index page.<br />&nbsp;
+	<br />Click <a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">here</a> to goto index page.<br />&#160;
 	</span><br /></td>
 </tr>
 <?php } if ($Error!="Yes") { $LastActive = $utccurtime->getTimestamp();
@@ -1862,13 +1862,13 @@ if(isset($_POST['page'])&&is_numeric($_POST['page'])) {
 <tr>
 	<td><span class="TableMessage"><br />
 	Reply to Topic <?php echo $TopicName; ?> was edited.<br />
-	Click <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID.$erpage,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']).$qstrhtml."&#35;post".$_GET['post']; ?>">here</a> to view topic.<br />&nbsp;
+	Click <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID.$erpage,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']).$qstrhtml."&#35;post".$_GET['post']; ?>">here</a> to view topic.<br />&#160;
 	</span><br /></td>
 </tr>
 </table>
 </td></tr>
 <tr class="TableRow4">
-<td class="TableColumn4">&nbsp;</td>
+<td class="TableColumn4">&#160;</td>
 </tr>
 </table></div>
 <?php } $frnext = "off";
@@ -1896,7 +1896,7 @@ if($pstring!=null||$CanMakeReply=="yes"||$CanMakeTopic=="yes") {
  <?php } ?></td>
 </tr>
 </table>
-<div class="DivTable2">&nbsp;</div>
+<div class="DivTable2">&#160;</div>
 <?php } }
 if($_GET['act']=="view"&&$CanMakeReply=="yes") {  
 if(!isset($_GET['fastreply'])) { $_GET['fastreply'] = false; }
@@ -1948,14 +1948,14 @@ $ShowSmile=sql_result($melanie_result,$melanie_p,"Display");
 $ReplaceType=sql_result($melanie_result,$melanie_p,"ReplaceCI");
 if($SmileRow==1) { ?><tr>
 	<?php } if($SmileRow<5) { ++$SmileCRow; ?>
-	<td><img src="<?php echo $SmileDirectory."".$FileName; ?>" style="vertical-align: middle; border: 0px; cursor: pointer;" title="<?php echo $SmileName; ?>" alt="<?php echo $SmileName; ?>" onclick="addsmiley('ReplyPost','&nbsp;<?php echo htmlspecialchars($SmileText, ENT_QUOTES, $Settings['charset']); ?>&nbsp;')" /></td>
+	<td><img src="<?php echo $SmileDirectory."".$FileName; ?>" style="vertical-align: middle; border: 0px; cursor: pointer;" title="<?php echo $SmileName; ?>" alt="<?php echo $SmileName; ?>" onclick="addsmiley('ReplyPost','&#160;<?php echo htmlspecialchars($SmileText, ENT_QUOTES, $Settings['charset']); ?>&#160;')" /></td>
 	<?php } if($SmileRow==5) { ++$SmileCRow; ?>
-	<td><img src="<?php echo $SmileDirectory."".$FileName; ?>" style="vertical-align: middle; border: 0px; cursor: pointer;" title="<?php echo $SmileName; ?>" alt="<?php echo $SmileName; ?>" onclick="addsmiley('ReplyPost','&nbsp;<?php echo htmlspecialchars($SmileText, ENT_QUOTES, $Settings['charset']); ?>&nbsp;')" /></td></tr>
+	<td><img src="<?php echo $SmileDirectory."".$FileName; ?>" style="vertical-align: middle; border: 0px; cursor: pointer;" title="<?php echo $SmileName; ?>" alt="<?php echo $SmileName; ?>" onclick="addsmiley('ReplyPost','&#160;<?php echo htmlspecialchars($SmileText, ENT_QUOTES, $Settings['charset']); ?>&#160;')" /></td></tr>
 	<?php $SmileCRow=0; $SmileRow=0; }
 ++$melanie_p; }
 if($SmileCRow<5&&$SmileCRow!=0) {
 $SmileCRowL = 5 - $SmileCRow;
-echo "<td colspan=\"".$SmileCRowL."\">&nbsp;</td></tr>"; }
+echo "<td colspan=\"".$SmileCRowL."\">&#160;</td></tr>"; }
 echo "</table>";
 sql_free_result($melanie_result);
 ?></div></td>
@@ -1997,10 +1997,10 @@ sql_free_result($melanie_result);
 </td></tr></table>
 </form></td></tr>
 <tr id="MkReplyEnd<?php echo $TopicForumID; ?>" class="TableRow4">
-<td class="TableColumn4" colspan="2">&nbsp;</td>
+<td class="TableColumn4" colspan="2">&#160;</td>
 </tr>
 </table></div>
-<div<?php echo $fps; ?>id="MkFastReply" class="MkFastReply">&nbsp;</div>
+<div<?php echo $fps; ?>id="MkFastReply" class="MkFastReply">&#160;</div>
 <?php }
 $uviewlcuttime = $utccurtime->getTimestamp();
 $uviewltime = $uviewlcuttime - ini_get("session.gc_maxlifetime");
@@ -2107,13 +2107,13 @@ $GuestsViewList = "<a".$uatitleadd." href=\"".url_maker($exfile['member'],$Setti
 <td style="width: 4%;" class="TableStatsColumn3"><div class="statsicon">
 <?php echo $ThemeSet['BoardStatsIcon']; ?></div></td>
 <td style="width: 96%;" class="TableStatsColumn3"><div class="statsinfo">
-&nbsp;<span style="font-weight: bold;"><?php echo $uviewlgn; ?></span> guests, <span style="font-weight: bold;"><?php echo $uviewlmn; ?></span> members, <span style="font-weight: bold;"><?php echo $uviewlan; ?></span> anonymous members <br />
-<?php if($MembersViewList!=null) { ?>&nbsp;<?php echo $MembersViewList."\n<br />"; } ?>
+&#160;<span style="font-weight: bold;"><?php echo $uviewlgn; ?></span> guests, <span style="font-weight: bold;"><?php echo $uviewlmn; ?></span> members, <span style="font-weight: bold;"><?php echo $uviewlan; ?></span> anonymous members <br />
+<?php if($MembersViewList!=null) { ?>&#160;<?php echo $MembersViewList."\n<br />"; } ?>
 </div></td>
 </tr>
 <tr id="Stats7" class="TableStatsRow4">
-<td class="TableStatsColumn4" colspan="2">&nbsp;</td>
+<td class="TableStatsColumn4" colspan="2">&#160;</td>
 </tr>
 </table></div>
-<div class="DivStats">&nbsp;</div>
+<div class="DivStats">&#160;</div>
 

@@ -12,7 +12,7 @@
     Copyright 2004-2023 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: index.php - Last Update: 6/16/2023 SVN 973 - Author: cooldude2k $
+    $FileInfo: index.php - Last Update: 6/22/2023 SVN 984 - Author: cooldude2k $
 */
 header('Location: ../index.php');
 ?>

@@ -11,7 +11,7 @@
     Copyright 2004-2023 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2023 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: lowtopics.php - Last Update: 6/16/2023 SVN 973 - Author: cooldude2k $
+    $FileInfo: lowtopics.php - Last Update: 6/22/2023 SVN 984 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="lowtopics.php"||$File3Name=="/lowtopics.php") {
@@ -117,7 +117,7 @@ $_SESSION['ExtraData'] = "currentact:".$_GET['act']."; currentcategoryid:".$InSu
 ?>
 <div style="font-size: 1.0em; font-weight: bold; margin-bottom: 10px; padding-top: 3px; width: auto;">Full Version: <a href="<?php echo url_maker($exfile['forum'],$Settings['file_ext'],"act=view&id=".$ForumID."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum']); ?>"><?php echo $ForumName; ?></a></div>
 <div style="font-size: 11px; font-weight: bold; padding: 10px; border: 1px solid gray;"><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=lowview",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $Settings['board_name']; ?></a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile[$CategoryType],$Settings['file_ext'],"act=lowview&id=".$ForumCatID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$CategoryType],$exqstr[$CategoryType]); ?>"><?php echo $CategoryName; ?></a><?php if($InSubForum!="0") { echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile[$isfForumType],$Settings['file_ext'],"act=lowview&id=".$isfForumID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr[$isfForumType],$exqstr[$isfForumType]); ?>"><?php echo $isfForumName; ?></a><?php } echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile[$ForumType],$Settings['file_ext'],"act=lowview&id=".$ForumID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>"><?php echo $ForumName; ?></a></div>
-<div>&nbsp;</div>
+<div>&#160;</div>
 <?php }
 if(!isset($CatPermissionInfo['CanViewCategory'][$ForumCatID])) {
 	$CatPermissionInfo['CanViewCategory'][$ForumCatID] = "no"; }
@@ -258,11 +258,11 @@ $pstring = $pstring."<span class=\"pagelinklast\"><a href=\"".url_maker($exfile[
 ?>
 <div style="font-size: 11px; font-weight: bold; padding: 10px; border: 1px solid gray;">
 <?php echo $pstring; ?></div>
-<div>&nbsp;</div>
+<div>&#160;</div>
 <div style="padding: 10px; border: 1px solid gray;">
 <?php if($num<=0) { ?>
 <ul style="list-style-type: none;">
-<li>&nbsp;</li>
+<li>&#160;</li>
 <?php } if($num>0) { ?>
 <ul style="list-style-type: decimal;">
 <?php }
@@ -299,8 +299,8 @@ if ($OldForumID==$ForumID&&$TForumID!=$ForumID) { $PreTopic="<span>Moved: </span
 ?>
 <li><?php echo $PreTopic; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=lowview&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a> <span style="color: gray; font-size: 10px;">(<?php echo $NumReply; ?> replies)</span></li>
 <?php ++$i; } ?>
-</ul></div><div>&nbsp;</div>
+</ul></div><div>&#160;</div>
 <div style="font-size: 11px; font-weight: bold; padding: 10px; border: 1px solid gray;">
 <?php echo $pstring; ?></div>
-<div>&nbsp;</div>
+<div>&#160;</div>
 <?php sql_free_result($result); } } } ?>

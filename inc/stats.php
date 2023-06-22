@@ -11,7 +11,7 @@
     Copyright 2004-2023 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2023 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: stats.php - Last Update: 6/16/2023 SVN 973 - Author: cooldude2k $
+    $FileInfo: stats.php - Last Update: 6/22/2023 SVN 984 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="stats.php"||$File3Name=="/stats.php") {
@@ -46,7 +46,7 @@ $_SESSION['ViewingTitle'] = "Board Stats";
 $_SESSION['ExtraData'] = "currentact:".$_GET['act']."; currentcategoryid:0; currentforumid:0; currenttopicid:0; currentmessageid:0; currenteventid:0; currentmemberid:0;";
 ?>
 <div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $Settings['board_name']; ?></a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=stats",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>#bstats">Board Statistics</a></div>
-<div class="DivNavLinks">&nbsp;</div>
+<div class="DivNavLinks">&#160;</div>
 <?php }
 $uolcuttime = $utccurtime->getTimestamp();
 $uoltime = $uolcuttime - ini_get("session.gc_maxlifetime");
@@ -138,8 +138,8 @@ if($Settings['AdminValidate']!="on") {
 $bdquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"BirthDay\"=%i AND \"BirthMonth\"=%i AND \"HiddenMember\"='no' ORDER BY \"id\"", array($bdDayChCk,$bdMonthChCk)); } 
 $bdresult = sql_query($bdquery,$SQLStat);
 $bdmembers = sql_num_rows($bdresult); $bdi = 0;
-if($bdmembers>0) { $bdstring = "&nbsp;".$bdmembers." member(s) have a birthday today"; }
-if($bdmembers<=0) { $bdstring = "<div>&nbsp;</div>&nbsp;No members have a birthday today<div>&nbsp;</div>"; }
+if($bdmembers>0) { $bdstring = "&#160;".$bdmembers." member(s) have a birthday today"; }
+if($bdmembers<=0) { $bdstring = "<div>&#160;</div>&#160;No members have a birthday today<div>&#160;</div>"; }
 while ($bdi < $bdmembers) {
 $bdmemberz = $bdmembers - 1;
 $birthday['ID']=sql_result($bdresult,$bdi,"id");
@@ -151,7 +151,7 @@ $birthday['Age'] = $bdThisYear - $birthday['BirthYear'];
 $bdMemTitle = null;
 if($GroupInfo['HasAdminCP']=="yes") {
 $bdMemTitle = " title=\"".$birthday['IP']."\""; }
-if($bdi===0) { $bdstring = $bdstring."\n<br />&nbsp;"; }
+if($bdi===0) { $bdstring = $bdstring."\n<br />&#160;"; }
 $bdMemURL = "<a".$bdMemTitle." href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$birthday['ID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">".$birthday['Name']."</a>";
 if($bdi<$bdmemberz) { $bdstring = $bdstring.$bdMemURL." (<span style=\"font-weight: bold;\" title=\"".$birthday['Name']." is ".$birthday['Age']." years old\">".$birthday['Age']."</span>), "; }
 if($bdi==$bdmemberz) { $bdstring = $bdstring.$bdMemURL." (<span style=\"font-weight: bold;\" title=\"".$birthday['Name']." is ".$birthday['Age']." years old\">".$birthday['Age']."</span>)"; }
@@ -171,8 +171,8 @@ $evcur_end_year = date("Y", $evcur_end);
 $evquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."events\" WHERE (\"TimeStamp\">=%i AND \"TimeStamp\"<=%i) OR (\"TimeStampEnd\">=%i AND \"TimeStampEnd\"<=%i) ORDER BY \"TimeStamp\"", array($evcur_start,$evcur_end,$evcur_start,$evcur_end)); 
 $evresult = sql_query($evquery,$SQLStat);
 $evevents = sql_num_rows($evresult); $evi = 0;
-if($evevents>0) { $evstring = "&nbsp;".$evevents." upcoming events"; }
-if($evevents<=0) { $evstring = "<div>&nbsp;</div>&nbsp;There are no upcoming calendar events<div>&nbsp;</div>"; }
+if($evevents>0) { $evstring = "&#160;".$evevents." upcoming events"; }
+if($evevents<=0) { $evstring = "<div>&#160;</div>&#160;There are no upcoming calendar events<div>&#160;</div>"; }
 while ($evi < $evevents) {
 $eveventz = $evevents - 1;
 $getevent['ID']=sql_result($evresult,$evi,"id");
@@ -191,7 +191,7 @@ if($GetEventStart==$GetEventEnd) {
  $evEventTitle = " title=\"Event Start: ".$GetEventStart."\""; }
 if($GetEventStart!=$GetEventEnd) {
  $evEventTitle = " title=\"Event Start: ".$GetEventStart." | Event End: ".$GetEventEnd."\""; }
-if($evi===0) { $evstring = $evstring."\n<br />&nbsp;"; }
+if($evi===0) { $evstring = $evstring."\n<br />&#160;"; }
 $evEventURL = "<a".$evEventTitle." href=\"".url_maker($exfile['event'],$Settings['file_ext'],"act=event&id=".$getevent['ID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['event'],$exqstr['event'])."\">".$getevent['EventName']."</a>";
 if($evi<$eveventz) { $evstring = $evstring.$evEventURL.", "; }
 if($evi==$eveventz) { $evstring = $evstring.$evEventURL; }
@@ -249,10 +249,10 @@ $tdMembersOnline .= " (<a title=\"".$tdMemList['IP']."\" onclick=\"window.open(t
 <td style="width: 4%;" class="TableStatsColumn3"><div class="statsicon">
 <?php echo $ThemeSet['MemberStatsIcon']; ?></div></td>
 <td style="width: 96%;" class="TableStatsColumn3"><div class="statsinfo">
-&nbsp;<span style="font-weight: bold;"><?php echo $olgn; ?></span> guests, <span style="font-weight: bold;"><?php echo $olmn; ?></span> members, <span style="font-weight: bold;"><?php echo $olan; ?></span> anonymous members <br />
-<?php if($MembersOnline==null) { ?>&nbsp;<?php echo "\n<br />"; } ?>
-<?php if($MembersOnline!=null) { ?>&nbsp;<?php echo $MembersOnline."\n<br />"; } ?>
-&nbsp;Show detailed by: <a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=online&list=all&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Last Click</a>, <a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=online&list=members&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Member Name</a>
+&#160;<span style="font-weight: bold;"><?php echo $olgn; ?></span> guests, <span style="font-weight: bold;"><?php echo $olmn; ?></span> members, <span style="font-weight: bold;"><?php echo $olan; ?></span> anonymous members <br />
+<?php if($MembersOnline==null) { ?>&#160;<?php echo "\n<br />"; } ?>
+<?php if($MembersOnline!=null) { ?>&#160;<?php echo $MembersOnline."\n<br />"; } ?>
+&#160;Show detailed by: <a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=online&list=all&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Last Click</a>, <a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=online&list=members&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Member Name</a>
 </div></td>
 </tr>
 <tr id="Stats3" class="TableStatsRow2">
@@ -282,10 +282,10 @@ $tdMembersOnline .= " (<a title=\"".$tdMemList['IP']."\" onclick=\"window.open(t
 <td style="width: 4%;" class="TableStatsColumn3"><div class="statsicon">
 <?php echo $ThemeSet['BoardStatsIcon']; ?></div></td>
 <td style="width: 96%;" class="TableStatsColumn3"><div class="statsinfo">
-&nbsp;Our members have made a total of <?php echo $numposts; ?> posts<br />
-&nbsp;Our members have made a total of <?php echo $numtopics; ?> topics<br />
-&nbsp;We have <?php echo $nummembers; ?> registered members<br />
-&nbsp;Our newest member is <a<?php echo $NewestMemTitle; ?> href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$NewestMem['ID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>"><?php echo $NewestMem['Name']; ?></a><?php echo $NewestMemExtraIP; ?>
+&#160;Our members have made a total of <?php echo $numposts; ?> posts<br />
+&#160;Our members have made a total of <?php echo $numtopics; ?> topics<br />
+&#160;We have <?php echo $nummembers; ?> registered members<br />
+&#160;Our newest member is <a<?php echo $NewestMemTitle; ?> href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$NewestMem['ID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>"><?php echo $NewestMem['Name']; ?></a><?php echo $NewestMemExtraIP; ?>
 </div></td>
 </tr>
 <tr id="Stats9" class="TableStatsRow2">
@@ -295,14 +295,14 @@ $tdMembersOnline .= " (<a title=\"".$tdMemList['IP']."\" onclick=\"window.open(t
 <td style="width: 4%;" class="TableStatsColumn3"><div class="statsicon">
 <?php echo $ThemeSet['OnlineStatsIcon']; ?></div></td>
 <td style="width: 96%;" class="TableStatsColumn3"><div class="statsinfo">
-&nbsp;Number of members online today: <?php echo $tdNumberMembers; ?><br />
-&nbsp;The following members have visited today:<br />
-&nbsp;<?php echo $tdMembersOnline; ?>
+&#160;Number of members online today: <?php echo $tdNumberMembers; ?><br />
+&#160;The following members have visited today:<br />
+&#160;<?php echo $tdMembersOnline; ?>
 </div></td>
 </tr>
 <tr id="Stats11" class="TableStatsRow4">
-<td class="TableStatsColumn4" colspan="2">&nbsp;</td>
+<td class="TableStatsColumn4" colspan="2">&#160;</td>
 </tr>
 </table></div>
-<div class="DivStats">&nbsp;</div>
+<div class="DivStats">&#160;</div>
 <?php } ?>

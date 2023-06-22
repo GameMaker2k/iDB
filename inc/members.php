@@ -11,7 +11,7 @@
     Copyright 2004-2023 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2023 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: members.php - Last Update: 6/16/2023 SVN 980 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 6/22/2023 SVN 984 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -198,13 +198,13 @@ $pstring = $pstring."<span class=\"pagelinklast\"><a href=\"".url_maker($exfile[
 	++$pagei; } $pstring = $pstring."</div>"; }
 ?>
 <div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $Settings['board_name']; ?></a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=list&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Member list</a></div>
-<div class="DivNavLinks">&nbsp;</div>
+<div class="DivNavLinks">&#160;</div>
 <?php
 echo $pstring;
 //List Page Number Code end
 if($pagenum>1) {
 ?>
-<div class="DivPageLinks">&nbsp;</div>
+<div class="DivPageLinks">&#160;</div>
 <?php } ?>
 <div class="Table1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
@@ -278,7 +278,7 @@ $membertitle = " ".$ThemeSet['TitleDivider']." Member List";
 if($MemList['Group']!=$Settings['GuestGroup']) {
 ?>
 <tr class="TableRow3" id="Member<?php echo $MemList['ID']; ?>">
-<td class="TableColumn3" style="text-align: center;">&nbsp;<a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$MemList['ID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>"><?php echo $MemList['Name']; ?></a> <?php if($GroupInfo['CanViewIPAddress']=="yes") { ?> ( <a title="<?php echo $MemList['IP']; ?>" onclick="window.open(this.href);return false;" href="<?php echo sprintf($IPCheckURL,$MemList['IP']); ?>"><?php echo $MemList['IP']; ?></a> )<?php } ?></td>
+<td class="TableColumn3" style="text-align: center;">&#160;<a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$MemList['ID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>"><?php echo $MemList['Name']; ?></a> <?php if($GroupInfo['CanViewIPAddress']=="yes") { ?> ( <a title="<?php echo $MemList['IP']; ?>" onclick="window.open(this.href);return false;" href="<?php echo sprintf($IPCheckURL,$MemList['IP']); ?>"><?php echo $MemList['IP']; ?></a> )<?php } ?></td>
 <td class="TableColumn3" style="text-align: center;"><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=list&gid=".$MemList['GroupID']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>"><?php echo $MemList['Group']; ?></a></td>
 <td class="TableColumn3" style="text-align: center;"><?php echo $MemList['PostCount']; ?></td>
 <td class="TableColumn3" style="text-align: center;"><?php echo $MemList['Karma']; ?></td>
@@ -295,19 +295,19 @@ if($MemList['Group']!=$Settings['GuestGroup']) {
 ++$i; } sql_free_result($result);
 ?>
 <tr id="MemEnd" class="TableRow4">
-<td class="TableColumn4" colspan="8">&nbsp;</td>
+<td class="TableColumn4" colspan="8">&#160;</td>
 </tr>
 </table></div>
 <?php 
 if($pagenum>1) {
 ?>
-<div class="DivMembers">&nbsp;</div>
+<div class="DivMembers">&#160;</div>
 <?php }
 echo $pstring;
 //List Page Number Code end
 if($pagenum>1) {
 ?>
-<div class="DivPageLinks">&nbsp;</div>
+<div class="DivPageLinks">&#160;</div>
 <?php } }
 if($_GET['act']=="online") {
 if($_GET['list']!="all"&&$_GET['list']!="members"&&$_GET['list']!="guests") {
@@ -442,13 +442,13 @@ $pstring = $pstring."<span class=\"pagelinklast\"><a href=\"".url_maker($exfile[
 	++$pagei; } $pstring = $pstring."</div>"; }
 ?>
 <div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $Settings['board_name']; ?></a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=online&list=all&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Online Member List</a></div>
-<div class="DivNavLinks">&nbsp;</div>
+<div class="DivNavLinks">&#160;</div>
 <?php
 echo $pstring;
 //List Page Number Code end
 if($pagenum>1) {
 ?>
-<div class="DivPageLinks">&nbsp;</div>
+<div class="DivPageLinks">&#160;</div>
 <?php } ?>
 <div class="Table1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
@@ -688,19 +688,19 @@ if(user_agent_check($session_user_agent)) {
 ++$i; }
 ?>
 <tr id="MemEnd" class="TableRow4">
-<td class="TableColumn4" colspan="8">&nbsp;</td>
+<td class="TableColumn4" colspan="8">&#160;</td>
 </tr>
 </table></div>
 <?php 
 if($pagenum>1) {
 ?>
-<div class="DivMembers">&nbsp;</div>
+<div class="DivMembers">&#160;</div>
 <?php }
 echo $pstring;
 //List Page Number Code end
 if($pagenum>1) {
 ?>
-<div class="DivPageLinks">&nbsp;</div>
+<div class="DivPageLinks">&#160;</div>
 <?php } }
 if($_GET['act']=="view") { 
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_GET['id']));
@@ -824,7 +824,7 @@ $_SESSION['ViewingTitle'] = $ViewMem['Name'];
 $_SESSION['ExtraData'] = "currentact:".$_GET['act']."; currentcategoryid:0; currentforumid:0; currenttopicid:0; currentmessageid:0; currenteventid:0; currentmemberid:".$ViewMem['ID'].";";
 ?>
 <div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $Settings['board_name']; ?></a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Viewing Profile</a></div>
-<div class="DivNavLinks">&nbsp;</div>
+<div class="DivNavLinks">&#160;</div>
 <div class="Table1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableRow1">
@@ -862,24 +862,24 @@ Title: <?php echo $ViewMem['Title']; ?>
 <?php echo $ViewMem['IP']; echo "</a>"; } ?></div>
 </td>
 <td class="TableColumn3">
-&nbsp;User Name: <?php echo $ViewMem['Name']; ?><br />
-&nbsp;User Title: <?php echo $ViewMem['Title']; ?><br />
-&nbsp;User Group: <?php echo $ViewMem['Group']; ?><br />
-&nbsp;User Level: <?php echo $ViewMem['Level']; ?><br />
-&nbsp;User Joined: <?php echo $ViewMem['Joined']; ?><br />
-&nbsp;Last Active: <?php echo $ViewMem['LastActive']; ?><br />
-&nbsp;User Time: <?php echo $viewmemcurtime->format("M j Y, ".$_SESSION['iDBTimeFormat']); ?><br />
-&nbsp;User Website: <a href="<?php echo $ViewMem['Website']; ?>"<?php echo $opennew; ?>>Website</a><br />
-&nbsp;Post Count: <?php echo $ViewMem['PostCount']; ?><br />
-&nbsp;Karma: <?php echo $ViewMem['Karma']; ?><br />
-&nbsp;Interests: <?php echo $ViewMem['Interests']; ?><br />
-&nbsp;Topics: <?php if($Settings['enable_search']=="on"&&$GroupInfo['CanSearch']=="yes") { ?>
+&#160;User Name: <?php echo $ViewMem['Name']; ?><br />
+&#160;User Title: <?php echo $ViewMem['Title']; ?><br />
+&#160;User Group: <?php echo $ViewMem['Group']; ?><br />
+&#160;User Level: <?php echo $ViewMem['Level']; ?><br />
+&#160;User Joined: <?php echo $ViewMem['Joined']; ?><br />
+&#160;Last Active: <?php echo $ViewMem['LastActive']; ?><br />
+&#160;User Time: <?php echo $viewmemcurtime->format("M j Y, ".$_SESSION['iDBTimeFormat']); ?><br />
+&#160;User Website: <a href="<?php echo $ViewMem['Website']; ?>"<?php echo $opennew; ?>>Website</a><br />
+&#160;Post Count: <?php echo $ViewMem['PostCount']; ?><br />
+&#160;Karma: <?php echo $ViewMem['Karma']; ?><br />
+&#160;Interests: <?php echo $ViewMem['Interests']; ?><br />
+&#160;Topics: <?php if($Settings['enable_search']=="on"&&$GroupInfo['CanSearch']=="yes") { ?>
 <a href="<?php echo url_maker($exfile['search'],$Settings['file_ext'],"act=topics&search=%&type=wildcard&memid=".$ViewMem['ID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search']); ?>">Find Topics</a>
 <?php } ?>
 </td>
 </tr>
 <tr class="TableRow4">
-<td class="TableColumn4" colspan="2">&nbsp;</td>
+<td class="TableColumn4" colspan="2">&#160;</td>
 </tr>
 </table></div>
 <?php sql_free_result($result); } 
@@ -948,7 +948,7 @@ $UFID = rand_uuid("rand");
 $_SESSION['UserFormID'] = $UFID;
 ?>
 <div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $Settings['board_name']; ?></a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Login</a></div>
-<div class="DivNavLinks">&nbsp;</div>
+<div class="DivNavLinks">&#160;</div>
 <div class="Table1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableRow1">
@@ -964,7 +964,7 @@ $_SESSION['UserFormID'] = $UFID;
 </span></td>
 </tr><?php } ?>
 <tr class="TableRow2">
-<th class="TableColumn2" style="width: 100%; text-align: left;">&nbsp;Inert your login info: </th>
+<th class="TableColumn2" style="width: 100%; text-align: left;">&#160;Inert your login info: </th>
 </tr>
 <tr class="TableRow3">
 <td class="TableColumn3">
@@ -1001,7 +1001,7 @@ $_SESSION['UserFormID'] = $UFID;
 </td>
 </tr>
 <tr class="TableRow4">
-<td class="TableColumn4">&nbsp;</td>
+<td class="TableColumn4">&#160;</td>
 </tr>
 </table></div>
 <?php } } if($_POST['act']=="loginmember"&&$_GET['act']=="login_now") {
@@ -1043,22 +1043,22 @@ $URL['HOST'] = $_SERVER["SERVER_NAME"];
 $REFERERurl = null;
 ?>
 <div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $Settings['board_name']; ?></a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Login</a></div>
-<div class="DivNavLinks">&nbsp;</div>
+<div class="DivNavLinks">&#160;</div>
 <div class="Table1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableRow1">
-<span style="text-align: left;">&nbsp;<a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Log in</a></span>
+<span style="text-align: left;">&#160;<a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Log in</a></span>
 </div>
 <?php } ?>
 <table class="Table1">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableRow1">
 <td class="TableColumn1">
-<span style="text-align: left;">&nbsp;<a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Log in</a></span>
+<span style="text-align: left;">&#160;<a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Log in</a></span>
 </td>
 </tr><?php } ?>
 <tr class="TableRow2">
-<th class="TableColumn2" style="width: 100%; text-align: left;">&nbsp;Login Message: </th>
+<th class="TableColumn2" style="width: 100%; text-align: left;">&#160;Login Message: </th>
 </tr>
 <tr class="TableRow3">
 <td class="TableColumn3">
@@ -1069,38 +1069,38 @@ if (pre_strlen($_POST['userpass'])>"60") { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Your password is too big.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if (pre_strlen($_POST['username'])>"30") { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Your user name is too big.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if ($_POST['loginemail']=="true"&&filter_var($_POST['loginemail'], FILTER_VALIDATE_EMAIL)) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Your email is not a valid email address.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if($_POST['fid']!=$_SESSION['UserFormID']) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Sorry the referering url dose not match our host name.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if($_POST['ubid']!=$Settings['BoardUUID']) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Sorry the referering url dose not match our host name.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if ($Settings['TestReferer']=="on") {
 	if ($URL['HOST']!=$URL['REFERER']) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Sorry the referering url dose not match our host name.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } } $BanError = null;
 if ($Error=="Yes") {
@@ -1260,21 +1260,21 @@ redirect("refresh",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"a
 <tr>
 	<td><span class="TableMessage">
 	<br />Welcome to the Board <?php echo $_SESSION['MemberName']; ?>. ^_^<br />
-	Click <a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">here</a> to continue to board.<br />&nbsp;
+	Click <a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">here</a> to continue to board.<br />&#160;
 	</span><br /></td>
 </tr>
 <?php } if($passright===false||$BanError=="yes"||$numlog<=0) { ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Password was not right or user not found or user is banned!! &lt;_&lt;<br />
-	Click <a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$exqstr['member'],$prexqstr['member']); ?>">here</a> to try again.<br />&nbsp;
+	Click <a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$exqstr['member'],$prexqstr['member']); ?>">here</a> to try again.<br />&#160;
 	</span><br /></td>
 </tr>
 <?php } } ?>
 </table>
 </td></tr>
 <tr class="TableRow4">
-<td class="TableColumn4">&nbsp;</td>
+<td class="TableColumn4">&#160;</td>
 </tr>
 </table></div>
 <?php } } if($_GET['act']=="signup") { 
@@ -1387,7 +1387,7 @@ for ($i=0; $i < count($timezone_identifiers); $i++) {
 }
 ?>
 <div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $Settings['board_name']; ?></a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=signup",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Signup</a></div>
-<div class="DivNavLinks">&nbsp;</div>
+<div class="DivNavLinks">&#160;</div>
 <div class="Table1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableRow1">
@@ -1403,7 +1403,7 @@ for ($i=0; $i < count($timezone_identifiers); $i++) {
 </span></td>
 </tr><?php } ?>
 <tr class="TableRow2">
-<th class="TableColumn2" style="width: 100%; text-align: left;">&nbsp;Inert your user info: </th>
+<th class="TableColumn2" style="width: 100%; text-align: left;">&#160;Inert your user info: </th>
 </tr>
 <tr class="TableRow3">
 <td class="TableColumn3">
@@ -1575,7 +1575,7 @@ for ($i=0; $i < count($zonelist['etcetera']); $i++) {
 </td>
 </tr>
 <tr class="TableRow4">
-<td class="TableColumn4">&nbsp;</td>
+<td class="TableColumn4">&#160;</td>
 </tr>
 </table></div>
 <?php } } if($_GET['act']=="makemember") {
@@ -1622,21 +1622,21 @@ if($Settings['use_captcha']=="on") {
 require($SettDir['inc']."captcha.php"); }
 ?>
 <div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $Settings['board_name']; ?></a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=signup",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Signup</a></div>
-<div class="DivNavLinks">&nbsp;</div>
+<div class="DivNavLinks">&#160;</div>
 <div class="Table1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableRow1">
 <span style="text-align: left;">
-&nbsp;<a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=signup",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>">Register</a></span></div>
+&#160;<a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=signup",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>">Register</a></span></div>
 <?php } ?>
 <table class="Table1">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableRow1">
 <td class="TableColumn1"><span style="text-align: left;">
-&nbsp;<a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=signup",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>">Register</a></span></td>
+&#160;<a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=signup",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>">Register</a></span></td>
 </tr><?php } ?>
 <tr class="TableRow2">
-<th class="TableColumn2" style="width: 100%; text-align: left;">&nbsp;Signup Message: </th>
+<th class="TableColumn2" style="width: 100%; text-align: left;">&#160;Signup Message: </th>
 </tr>
 <tr class="TableRow3">
 <td class="TableColumn3">
@@ -1647,51 +1647,51 @@ if (pre_strlen($_POST['Password'])>"60") { $Error="Yes";
 <tr>
 	<td><span class="TableMessage">
 	<br />Your password is too big.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if (!filter_var($_POST['Email'], FILTER_VALIDATE_EMAIL)) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Your email is not a valid email address.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if($_POST['Website']=="") { $_POST['Website'] = "http://"; }
 if (!filter_var($_POST['Website'], FILTER_VALIDATE_URL)&&$_POST['Website']!="http://"&&$_POST['Website']!="https://") { var_dump($_POST['Website']); $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Your website url is not a valid web url.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if($_POST['Avatar']=="") { $_POST['Avatar'] = "http://"; }
 if (!filter_var($_POST['Avatar'], FILTER_VALIDATE_URL)&&$_POST['Avatar']!="http://"&&$_POST['Avatar']!="https://") { var_dump($_POST['Avatar']); $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Your avatar url is not a valid web url.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if($_POST['fid']!=$_SESSION['UserFormID']) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Sorry the referering url dose not match our host name.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if($_POST['ubid']!=$Settings['BoardUUID']) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Sorry the referering url dose not match our host name.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if (pre_strlen($_POST['username'])>"30") { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Your user name is too big.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if ($_POST['Password']!=$_POST['RePassword']) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Your passwords did not match.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if($Settings['use_captcha']=="on") {
 if (PhpCaptcha::Validate($_POST['signcode'])) {
@@ -1700,14 +1700,14 @@ if (PhpCaptcha::Validate($_POST['signcode'])) {
 <tr>
 	<td><span class="TableMessage">
 	<br />Invalid code entered<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } } if ($Settings['TestReferer']=="on") {
 	if ($URL['HOST']!=$URL['REFERER']) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Sorry the referering url dose not match our host name.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } }
 if($_POST['Website']=="") { $_POST['Website'] = "http://"; }
@@ -1752,61 +1752,61 @@ if ($_POST['TOS']!="Agree") { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You need to  agree to the tos.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if ($_POST['Name']==null) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You need to enter a name.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if ($_POST['Name']=="ShowMe") { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You need to enter a name.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if ($_POST['Password']==null) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You need to enter a password.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if (!filter_var($_POST['Email'], FILTER_VALIDATE_EMAIL)) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Your email is not a valid email address.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if ($_POST['Email']==null) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You need to enter a email.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if($email_check > 0) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Email address is already used.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if($username_check > 0) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />User Name is already used.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if($RMatches==true) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />This User Name is restricted to use.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if ($Error=="Yes") {
 redirect("refresh",$rbasedir.url_maker($exfile['member'],$Settings['file_ext'],"act=signup",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'],FALSE),"4"); ?>
 <tr>
 	<td><span class="TableMessage">
-	<br />Click <a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=signup",$Settings['qstr'],$Settings['qsep'],$exqstr['member'],$prexqstr['member']); ?>">here</a> to try again.<br />&nbsp;
+	<br />Click <a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=signup",$Settings['qstr'],$Settings['qsep'],$exqstr['member'],$prexqstr['member']); ?>">here</a> to try again.<br />&#160;
 	</span><br /></td>
 </tr>
 <?php } if ($Error!="Yes") {
@@ -1970,17 +1970,17 @@ redirect("refresh",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"a
 	if($Settings['AdminValidate']=="on"||$Settings['AdminValidate']!="off") {
 	echo "<br />The admin has to validate your account befoure you can post.\n";
 	echo "<br />The admin has been notified of your registration.\n"; } ?>
-	<br />&nbsp;
+	<br />&#160;
 	</span><br /></td>
 </tr>
 <?php } ?>
 </table>
 </td></tr>
 <tr class="TableRow4">
-<td class="TableColumn4">&nbsp;</td>
+<td class="TableColumn4">&#160;</td>
 </tr>
 </table></div>
 <?php } } }
 if($pagenum<=1) { ?>
-<div class="DivMembers">&nbsp;</div>
+<div class="DivMembers">&#160;</div>
 <?php } ?>

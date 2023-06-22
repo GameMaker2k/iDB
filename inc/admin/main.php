@@ -11,7 +11,7 @@
     Copyright 2004-2023 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2023 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: main.php - Last Update: 6/21/2023 SVN 980 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 6/22/2023 SVN 984 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -293,7 +293,7 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Theme Setup";
 <tr class="TableMenuRow1">
 <td class="TableMenuColumn1"><span style="float: left;">
 <?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo $themeact; ?>">Theme Setup</a>
-</span><span style="float: right;">&nbsp;</span></td>
+</span><span style="float: right;">&#160;</span></td>
 </tr><?php } ?>
 <tr id="ProfileTitle" class="TableMenuRow2">
 <th class="TableMenuColumn2">Theme Setup</th>
@@ -316,7 +316,7 @@ echo "<option value=\"".$themelist[$it]."\">".$themelist[$it]."</option>\n"; }
 </div></form></td>
 </tr>
 <tr id="ProfileEnd" class="TableMenuRow4">
-<td class="TableMenuColumn4">&nbsp;</td>
+<td class="TableMenuColumn4">&#160;</td>
 </tr>
 </table>
 </div>
@@ -425,7 +425,7 @@ redirect("refresh",$rbasedir.url_maker($exfile['admin'],$Settings['file_ext'],"a
 <tr class="TableMenuRow1">
 <td class="TableMenuColumn1"><span style="float: left;">
 <?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=main",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Updating Settings</a>
-</span><span style="float: right;">&nbsp;</span></td>
+</span><span style="float: right;">&#160;</span></td>
 </tr><?php } ?>
 <tr id="ProfileTitle" class="TableMenuRow2">
 <th class="TableMenuColumn2">Updating Settings</th>
@@ -434,7 +434,7 @@ redirect("refresh",$rbasedir.url_maker($exfile['admin'],$Settings['file_ext'],"a
 <td class="TableMenuColumn3">
 <div style="text-align: center;">
 <?php if(isset($OutPutLog)) { echo "<br />".$OutPutLog; } ?>
-<br />Settings have been updated <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=main",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">click here</a> to go back. ^_^<br />&nbsp;</div>
+<br />Settings have been updated <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=main",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">click here</a> to go back. ^_^<br />&#160;</div>
 <?php } if($_GET['act']=="view"&&$_POST['update']!="now") {
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_SESSION['UserID']));
 $result=sql_query($query,$SQLStat);
@@ -456,7 +456,7 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Admin CP";
 <tr class="TableMenuRow1">
 <td class="TableMenuColumn1"><span style="float: left;">
 <?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo $noteact; ?>">NotePad</a>
-</span><span style="float: right;">&nbsp;</span></td>
+</span><span style="float: right;">&#160;</span></td>
 </tr><?php } ?>
 <tr id="ProfileTitle" class="TableMenuRow2">
 <th class="TableMenuColumn2">NotePad</th>
@@ -468,11 +468,11 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Admin CP";
 <textarea class="TextBox" name="NotePad" id="NotePad" style="width: 75%; height: 128px;" rows="10" cols="84"><?php echo $Notes; ?></textarea>
 <input type="hidden" name="act" value="view" style="display: none;" />
 <input type="hidden" name="update" value="now" style="display: none;" />
-<br /><input type="submit" class="Button" value="Save" />&nbsp;<input class="Button" type="reset" />
+<br /><input type="submit" class="Button" value="Save" />&#160;<input class="Button" type="reset" />
 </div></form></td>
 </tr>
 <tr id="ProfileEnd" class="TableMenuRow4">
-<td class="TableMenuColumn4">&nbsp;</td>
+<td class="TableMenuColumn4">&#160;</td>
 </tr>
 </table>
 </div>
@@ -610,12 +610,12 @@ if($PreWorgURL['host']!="localhost.url"&&str_replace("/", "", $PreWorgURL['path'
 <tr class="TableMenuRow1">
 <td class="TableMenuColumn1"><span style="float: left;">
 <?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=settings",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">iDB Settings Manager</a>
-</span><span style="float: right;">&nbsp;</span></td>
+</span><span style="float: right;">&#160;</span></td>
 </tr><?php } ?>
 <tr class="TableMenuRow2">
 <th class="TableMenuColumn2" style="width: 100%; text-align: left;">
-<span style="float: left;">&nbsp;Editing Setting for iDB: </span>
-<span style="float: right;">&nbsp;</span>
+<span style="float: left;">&#160;Editing Setting for iDB: </span>
+<span style="float: right;">&#160;</span>
 </th>
 </tr>
 <tr class="TableMenuRow3">
@@ -637,7 +637,7 @@ if($PreWorgURL['host']!="localhost.url"&&str_replace("/", "", $PreWorgURL['path'
 </tr><?php if($GroupInfo['ViewDBInfo']=="yes") { 
 ?><tr style="text-align: left;">
 	<td style="width: 50%;"><span class="TextBoxLabel">Forum Software Version:</span></td>
-	<td style="width: 50%;"><?php echo "<span title=\"".$VerInfo['iDB_Full_Ver_Show']."\">".$VerInfo['iDB_Ver_Show']."</span>"; ?><!--&nbsp;<a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=vercheck",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>" onclick="window.open(this.href);return false;"><img src="<?php echo $AdminCheckURL; ?>" alt="Version Check: Click to see more info." title="Version Check: Click to see more info." /></a>--></td>
+	<td style="width: 50%;"><?php echo "<span title=\"".$VerInfo['iDB_Full_Ver_Show']."\">".$VerInfo['iDB_Ver_Show']."</span>"; ?><!--&#160;<a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=vercheck",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>" onclick="window.open(this.href);return false;"><img src="<?php echo $AdminCheckURL; ?>" alt="Version Check: Click to see more info." title="Version Check: Click to see more info." /></a>--></td>
 </tr><tr>
 	<td style="width: 50%;"><span class="TextBoxLabel">Forum UUID:</span></td>
 	<td style="width: 50%;"><?php echo $Settings['BoardUUID']; ?></td>
@@ -1024,7 +1024,7 @@ echo "<option value=\"".$ThemeInfo['Name']."\">".$ThemeInfo['ThemeName']."</opti
 </td>
 </tr>
 <tr class="TableMenuRow4">
-<td class="TableMenuColumn4">&nbsp;</td>
+<td class="TableMenuColumn4">&#160;</td>
 </tr>
 </table>
 </div>
@@ -1191,12 +1191,12 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Database Manager";
 <tr class="TableMenuRow1">
 <td class="TableMenuColumn1"><span style="float: left;">
 <?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=sql",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">iDB Database Manager</a>
-</span><span style="float: right;">&nbsp;</span></td>
+</span><span style="float: right;">&#160;</span></td>
 </tr><?php } ?>
 <tr class="TableMenuRow2">
 <th class="TableMenuColumn2" style="width: 100%; text-align: left;">
-<span style="float: left;">&nbsp;Editing SQL Settings for iDB: </span>
-<span style="float: right;">&nbsp;</span>
+<span style="float: left;">&#160;Editing SQL Settings for iDB: </span>
+<span style="float: right;">&#160;</span>
 </th>
 </tr>
 <tr class="TableMenuRow3">
@@ -1262,7 +1262,7 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Database Manager";
 </td>
 </tr>
 <tr class="TableMenuRow4">
-<td class="TableMenuColumn4">&nbsp;</td>
+<td class="TableMenuColumn4">&#160;</td>
 </tr>
 </table>
 </div>
@@ -1389,12 +1389,12 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Board Info Manager";
 <tr class="TableMenuRow1">
 <td class="TableMenuColumn1"><span style="float: left;">
 <?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=info",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">Board Info Manager</a>
-</span><span style="float: right;">&nbsp;</span></td>
+</span><span style="float: right;">&#160;</span></td>
 </tr><?php } ?>
 <tr class="TableMenuRow2">
 <th class="TableMenuColumn2" style="width: 100%; text-align: left;">
-<span style="float: left;">&nbsp;Editing Board Info: </span>
-<span style="float: right;">&nbsp;</span>
+<span style="float: left;">&#160;Editing Board Info: </span>
+<span style="float: right;">&#160;</span>
 </th>
 </tr>
 <tr class="TableMenuRow3">
@@ -1426,7 +1426,7 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Board Info Manager";
 </td>
 </tr>
 <tr class="TableMenuRow4">
-<td class="TableMenuColumn4">&nbsp;</td>
+<td class="TableMenuColumn4">&#160;</td>
 </tr>
 </table>
 </div>
@@ -1543,8 +1543,8 @@ fclose($fp); } if($_POST['update']=="now"&&$_GET['act']!=null) {
 	$profiletitle = " ".$ThemeSet['TitleDivider']." Updating Settings"; ?>
 </td></tr>
 <tr id="ProfileTitleEnd" class="TableMenuRow4">
-<td class="TableMenuColumn4">&nbsp;</td>
+<td class="TableMenuColumn4">&#160;</td>
 </tr></table></div><?php } ?>
 </td></tr>
 </table>
-<div>&nbsp;</div>
+<div>&#160;</div>

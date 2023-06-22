@@ -11,7 +11,7 @@
     Copyright 2004-2023 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2023 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: profilemain.php - Last Update: 6/16/2023 SVN 980 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 6/22/2023 SVN 984 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
@@ -52,7 +52,7 @@ $_SESSION['ViewingTitle'] = "UserCP";
 $_SESSION['ExtraData'] = "currentact:".$_GET['act']."; currentcategoryid:0; currentforumid:0; currenttopicid:0; currentmessageid:0; currenteventid:0; currentmemberid:0;";
 ?>
 <div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $Settings['board_name']; ?></a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['profile'],$Settings['file_ext'],"act=".$_GET['act'],$Settings['qstr'],$Settings['qsep'],$prexqstr['profile'],$exqstr['profile']); ?>">Profile Editor</a></div>
-<div class="DivNavLinks">&nbsp;</div>
+<div class="DivNavLinks">&#160;</div>
 <table class="Table3">
 <tr style="width: 100%; vertical-align: top;">
 	<td style="width: 15%; vertical-align: top;">
@@ -67,7 +67,7 @@ $_SESSION['ExtraData'] = "currentact:".$_GET['act']."; currentcategoryid:0; curr
 <td class="TableSMenuColumn1"><?php echo $ThemeSet['TitleIcon']; ?>Profile Settings</td>
 </tr><?php } ?>
 <tr class="TableSMenuRow2">
-<td class="TableSMenuColumn2">&nbsp;</td>
+<td class="TableSMenuColumn2">&#160;</td>
 </tr><tr class="TableSMenuRow3">
 <td class="TableSMenuColumn3"><a href="<?php echo url_maker($exfile['profile'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['profile'],$exqstr['profile']); ?>">Edit NotePad</a></td>
 </tr><tr class="TableSMenuRow3">
@@ -77,9 +77,9 @@ $_SESSION['ExtraData'] = "currentact:".$_GET['act']."; currentcategoryid:0; curr
 </tr><tr class="TableSMenuRow3">
 <td class="TableSMenuColumn3"><a href="<?php echo url_maker($exfile['profile'],$Settings['file_ext'],"act=avatar",$Settings['qstr'],$Settings['qsep'],$prexqstr['profile'],$exqstr['profile']); ?>">Edit Avatar</a></td>
 </tr><tr class="TableSMenuRow4">
-<td class="TableSMenuColumn4">&nbsp;</td>
+<td class="TableSMenuColumn4">&#160;</td>
 </tr></table></div>
-<div class="DivSMenu">&nbsp;</div>
+<div class="DivSMenu">&#160;</div>
 <div class="TableSMenuBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableSMenuRow1">
@@ -91,13 +91,13 @@ $_SESSION['ExtraData'] = "currentact:".$_GET['act']."; currentcategoryid:0; curr
 <td class="TableSMenuColumn1"><?php echo $ThemeSet['TitleIcon']; ?>Board Settings</td>
 </tr><?php } ?>
 <tr class="TableSMenuRow2">
-<td class="TableSMenuColumn2">&nbsp;</td>
+<td class="TableSMenuColumn2">&#160;</td>
 </tr><tr class="TableSMenuRow3">
 <td class="TableSMenuColumn3"><a href="<?php echo url_maker($exfile['profile'],$Settings['file_ext'],"act=settings",$Settings['qstr'],$Settings['qsep'],$prexqstr['profile'],$exqstr['profile']); ?>">Board Settings</a></td>
 </tr><tr class="TableSMenuRow3">
 <td class="TableSMenuColumn3"><a href="<?php echo url_maker($exfile['profile'],$Settings['file_ext'],"act=userinfo",$Settings['qstr'],$Settings['qsep'],$prexqstr['profile'],$exqstr['profile']); ?>">Change User Info</a></td>
 </tr><tr class="TableSMenuRow4">
-<td class="TableSMenuColumn4">&nbsp;</td>
+<td class="TableSMenuColumn4">&#160;</td>
 </tr></table></div>
 </td>
 	<td style="width: 85%; vertical-align: top;">
@@ -128,7 +128,7 @@ $profiletitle = " ".$ThemeSet['TitleDivider']." NotePad";
 <tr class="TableMenuRow3" id="ProfileUpdate">
 <td class="TableMenuColumn3">
 <div style="text-align: center;">
-<br />Profile updated <a href="<?php echo $updateact; ?>">click here</a> to go back. ^_^<br />&nbsp;</div>
+<br />Profile updated <a href="<?php echo $updateact; ?>">click here</a> to go back. ^_^<br />&#160;</div>
 <?php } if($_GET['act']=="view") {
 if($_POST['update']!="now") {
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_SESSION['UserID']));
@@ -164,11 +164,11 @@ $notepadact = $noteact; $profiletitle = " ".$ThemeSet['TitleDivider']." NotePad"
 <textarea class="TextBox" name="NotePad" id="NotePad" style="width: 75%; height: 128px;" rows="10" cols="84"><?php echo $Notes; ?></textarea>
 <input type="hidden" name="act" value="view" style="display: none;" />
 <input type="hidden" name="update" value="now" style="display: none;" />
-<br /><input type="submit" class="Button" value="Save" />&nbsp;<input class="Button" type="reset" />
+<br /><input type="submit" class="Button" value="Save" />&#160;<input class="Button" type="reset" />
 </div></form></td>
 </tr>
 <tr id="ProfileEnd" class="TableMenuRow4">
-<td class="TableMenuColumn4">&nbsp;</td>
+<td class="TableMenuColumn4">&#160;</td>
 </tr>
 </table>
 </div>
@@ -247,11 +247,11 @@ $profiletitle = " ".$ThemeSet['TitleDivider']." Signature Editor";
 <textarea class="TextBox" name="Signature" id="Signature" style="width: 75%; height: 128px;" rows="10" cols="84"><?php echo $Signature; ?></textarea>
 <input type="hidden" name="act" value="signature" style="display: none;" />
 <input type="hidden" name="update" value="now" style="display: none;" />
-<br /><input type="submit" class="Button" value="Save" />&nbsp;<input class="Button" type="reset" />
+<br /><input type="submit" class="Button" value="Save" />&#160;<input class="Button" type="reset" />
 </div></form></td>
 </tr>
 <tr id="ProfileEnd" class="TableMenuRow4">
-<td class="TableMenuColumn4">&nbsp;</td>
+<td class="TableMenuColumn4">&#160;</td>
 </tr>
 </table>
 </div>
@@ -370,7 +370,7 @@ $AvatarSize1W=$AvatarSize1[0]; $AvatarSize1H=$AvatarSize1[1];
 </form></td>
 </tr>
 <tr id="ProfileEnd" class="TableMenuRow4">
-<td class="TableMenuColumn4">&nbsp;</td>
+<td class="TableMenuColumn4">&#160;</td>
 </tr>
 </table>
 </div>
@@ -380,7 +380,7 @@ if($_POST['Avatar']!=null&&$_POST['AvatarSizeW']!=null&&$_POST['AvatarSizeH']!=n
 	$_SESSION['UserGroup']!=$Settings['GuestGroup']) {
     if($_POST['Avatar']=="") { $_POST['Avatar'] = "http://"; }
 	if (!filter_var($_POST['Avatar'], FILTER_VALIDATE_URL)&&$_POST['Avatar']!="http://"&&$_POST['Avatar']!="https://") { $Error="Yes";  ?>
-<div class="TableMessage" style="text-align: center;">Your avatar url is not a valid web url.<br />&nbsp;</div>
+<div class="TableMessage" style="text-align: center;">Your avatar url is not a valid web url.<br />&#160;</div>
 	<?php }
 	if(!is_numeric($_POST['AvatarSizeW'])) { $_POST['AvatarSizeW'] = 100; }
 	if($_POST['AvatarSizeW']>=100) { $_POST['AvatarSizeW']=100; }
@@ -689,7 +689,7 @@ echo "<option value=\"".$ThemeInfo['Name']."\">".$ThemeInfo['ThemeName']."</opti
 </form></td>
 </tr>
 <tr id="ProfileEnd" class="TableMenuRow4">
-<td class="TableMenuColumn4">&nbsp;</td>
+<td class="TableMenuColumn4">&#160;</td>
 </tr>
 </table>
 </div>
@@ -1012,7 +1012,7 @@ for ($i=0; $i < count($zonelist['etcetera']); $i++) {
 </form></td>
 </tr>
 <tr id="ProfileEnd" class="TableMenuRow4">
-<td class="TableMenuColumn4">&nbsp;</td>
+<td class="TableMenuColumn4">&#160;</td>
 </tr>
 </table>
 </div>
@@ -1024,7 +1024,7 @@ if($_POST['act']=="profile"&&
 	$Error = "No";
     if($_POST['Website']=="") { $_POST['Website'] = "http://"; }
 	if (!filter_var($_POST['Website'], FILTER_VALIDATE_URL)&&$_POST['Website']!="http://"&&$_POST['Website']!="https://") { $Error="Yes";  ?>
-<div class="TableMessage" style="text-align: center;">Your website url is not a valid web url.<br />&nbsp;</div>
+<div class="TableMessage" style="text-align: center;">Your website url is not a valid web url.<br />&#160;</div>
 	<?php }
 	$_POST['Interests'] = htmlspecialchars($_POST['Interests'], ENT_QUOTES, $Settings['charset']);
 	$_POST['Interests'] = remove_spaces($_POST['Interests']);
@@ -1165,7 +1165,7 @@ $profiletitle = " ".$ThemeSet['TitleDivider']." User Info Editer";
 </form></td>
 </tr>
 <tr id="ProfileEnd" class="TableMenuRow4">
-<td class="TableMenuColumn4">&nbsp;</td>
+<td class="TableMenuColumn4">&#160;</td>
 </tr>
 </table>
 </div>
@@ -1225,15 +1225,15 @@ if($OldHashType=="iDBHRMD320") {
 if($OldHashType=="iDBCRYPT") { 
 	$YourPassword = neo_b64e_hmac($_POST['OldPass'],$OldJoined,$OldSalt,"bcrypt"); }
 if($YourPassword!=$OldPassword) { $Error="Yes"; ?>
-<div class="TableMessage" style="text-align: center;">Your old Password did not match.<br />&nbsp;</div>
+<div class="TableMessage" style="text-align: center;">Your old Password did not match.<br />&#160;</div>
 <?php } if(pre_strlen($_POST['Password'])>"60") { $Error="Yes"; ?>
-<div class="TableMessage" style="text-align: center;">Your password is too big.<br />&nbsp;</div>
+<div class="TableMessage" style="text-align: center;">Your password is too big.<br />&#160;</div>
 <?php } if(pre_strlen($_POST['OldPass'])>"60") { $Error="Yes"; ?>
-<div class="TableMessage" style="text-align: center;">Your old password is too big.<br />&nbsp;</div>
+<div class="TableMessage" style="text-align: center;">Your old password is too big.<br />&#160;</div>
 <?php } if ($_POST['Password']!=$_POST['RePassword']) { $Error="Yes";  ?>
-<div class="TableMessage" style="text-align: center;">Your passwords did not match.<br />&nbsp;</div>
+<div class="TableMessage" style="text-align: center;">Your passwords did not match.<br />&#160;</div>
 <?php } if (!filter_var($_POST['Email'], FILTER_VALIDATE_EMAIL)) { $Error="Yes";  ?>
-<div class="TableMessage" style="text-align: center;">Your email is not a valid email address.<br />&nbsp;</div>
+<div class="TableMessage" style="text-align: center;">Your email is not a valid email address.<br />&#160;</div>
 <?php }
 	$NewIP=$_SERVER['REMOTE_ADDR'];
 	if($Error!="Yes") { 
@@ -1293,8 +1293,8 @@ if($YourPassword!=$OldPassword) { $Error="Yes"; ?>
 	$profiletitle = " ".$ThemeSet['TitleDivider']." Updating Settings"; ?>
 </td></tr>
 <tr id="ProfileTitleEnd" class="TableMenuRow4">
-<td class="TableMenuColumn4">&nbsp;</td>
+<td class="TableMenuColumn4">&#160;</td>
 </tr></table></div><?php } ?>
 </td></tr>
 </table>
-<div class="DivProfile">&nbsp;</div>
+<div class="DivProfile">&#160;</div>

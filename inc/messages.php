@@ -11,7 +11,7 @@
     Copyright 2004-2023 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2023 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: messages.php - Last Update: 6/16/2023 SVN 980 - Author: cooldude2k $
+    $FileInfo: messages.php - Last Update: 6/22/2023 SVN 984 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="messages.php"||$File3Name=="/messages.php") {
@@ -54,7 +54,7 @@ $_SESSION['ExtraData'] = "currentact:".$_GET['act']."; currentcategoryid:0; curr
 if($_GET['act']=="view"||$_GET['act']=="viewsent"||$_GET['act']=="read") {
 ?>
 <div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $Settings['board_name']; ?></a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>">Mailbox</a></div>
-<div class="DivNavLinks">&nbsp;</div>
+<div class="DivNavLinks">&#160;</div>
 <table class="Table3">
 <tr style="width: 100%; vertical-align: top;">
 	<td style="width: 15%; vertical-align: top;">
@@ -69,7 +69,7 @@ if($_GET['act']=="view"||$_GET['act']=="viewsent"||$_GET['act']=="read") {
 <td class="TableSMenuColumn1"><?php echo $ThemeSet['TitleIcon']; ?>Messenger</td>
 </tr><?php } ?>
 <tr class="TableSMenuRow2">
-<td class="TableSMenuColumn2">&nbsp;</td>
+<td class="TableSMenuColumn2">&#160;</td>
 </tr><tr class="TableSMenuRow3">
 <td class="TableSMenuColumn3"><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>">View MailBox</a></td>
 </tr><tr class="TableSMenuRow3">
@@ -77,7 +77,7 @@ if($_GET['act']=="view"||$_GET['act']=="viewsent"||$_GET['act']=="read") {
 </tr><tr class="TableSMenuRow3">
 <td class="TableSMenuColumn3"><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=create",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>">Send Message</a></td>
 </tr><tr class="TableSMenuRow4">
-<td class="TableSMenuColumn4">&nbsp;</td>
+<td class="TableSMenuColumn4">&#160;</td>
 </tr></table></div>
 </td>
 	<td style="width: 85%; vertical-align: top;">
@@ -180,21 +180,21 @@ $pstring = $pstring."<span class=\"pagelinklast\"><a href=\"".url_maker($exfile[
 echo $pstring; 
 if($pagenum>1) {
 ?>
-<div class="DivPageLinks">&nbsp;</div>
+<div class="DivPageLinks">&#160;</div>
 <?php } ?>
 <div class="TableMenuBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableMenuRow1">
 <span style="float: left;">
-<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>">MailBox&nbsp;(<?php echo $PMNumber; ?>)</a>
-</span>&nbsp;</div>
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>">MailBox&#160;(<?php echo $PMNumber; ?>)</a>
+</span>&#160;</div>
 <?php } ?>
 <table class="TableMenu" style="width: 100%;">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableMenuRow1">
 <td class="TableMenuColumn1" colspan="4"><span style="float: left;">
-<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>">MailBox&nbsp;(<?php echo $PMNumber; ?>)</a>
-</span>&nbsp;</td>
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>">MailBox&#160;(<?php echo $PMNumber; ?>)</a>
+</span>&#160;</td>
 </tr><?php } ?>
 <tr id="Messenger" class="TableMenuRow2">
 <th class="TableMenuColumn2" style="width: 4%;">State</th>
@@ -254,7 +254,7 @@ echo "<span>".$SenderName."</span>"; }
 </tr>
 <?php ++$i; } sql_free_result($result); ?>
 <tr id="MessengerEnd" class="TableMenuRow4">
-<td class="TableMenuColumn4" colspan="4">&nbsp;</td>
+<td class="TableMenuColumn4" colspan="4">&#160;</td>
 </tr>
 <?php } 
 if($_GET['act']=="viewsent") {
@@ -355,21 +355,21 @@ $pstring = $pstring."<span class=\"pagelinklast\"><a href=\"".url_maker($exfile[
 echo $pstring; 
 if($pagenum>1) {
 ?>
-<div class="DivPageLinks">&nbsp;</div>
+<div class="DivPageLinks">&#160;</div>
 <?php } ?>
 <div class="TableMenuBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableMenuRow1">
 <span style="float: left;">
-<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=viewsent&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>">MailBox&nbsp;(<?php echo $PMNumber; ?>)</a>
-</span>&nbsp;</div>
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=viewsent&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>">MailBox&#160;(<?php echo $PMNumber; ?>)</a>
+</span>&#160;</div>
 <?php } ?>
 <table class="TableMenu" style="width: 100%;">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableMenuRow1">
 <td class="TableMenuColumn1" colspan="4"><span style="float: left;">
-<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=viewsent&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>">MailBox&nbsp;(<?php echo $PMNumber; ?>)</a>
-</span>&nbsp;</td>
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=viewsent&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>">MailBox&#160;(<?php echo $PMNumber; ?>)</a>
+</span>&#160;</td>
 </tr><?php } ?>
 <tr id="Messenger" class="TableMenuRow2">
 <th class="TableMenuColumn2" style="width: 4%;">State</th>
@@ -429,7 +429,7 @@ echo "<span>".$ReciverName."</span>"; }
 </tr>
 <?php ++$i; } ?>
 <tr id="MessengerEnd" class="TableMenuRow4">
-<td class="TableMenuColumn4" colspan="4">&nbsp;</td>
+<td class="TableMenuColumn4" colspan="4">&#160;</td>
 </tr>
 <?php sql_free_result($result); }
 if($_GET['act']=="read") {
@@ -595,7 +595,7 @@ $User1Signature = url2link($User1Signature);
 </tr><?php } ?>
 <tr class="TableInfoMiniRow2">
 <td class="TableInfoMiniColumn2" style="vertical-align: middle; width: 160px;">
-&nbsp;<?php
+&#160;<?php
 if($User1ID>0&&$User1Hidden=="no") {
 echo "<a href=\"";
 echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$User1ID,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
@@ -614,7 +614,7 @@ echo "<span>".$User1Name."</span>"; }
 if($_SESSION['UserID']!=$User1ID) { $SendToID = $User1ID; }
 if($_SESSION['UserID']==$User1ID) { $SendToID = $ReciverID; }
 echo $ThemeSet['LineDividerTopic']; ?><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=create&id=".$SendToID."&post=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>"><?php echo $ThemeSet['QuoteReply']; ?></a>
-<?php } ?>&nbsp;</div>
+<?php } ?>&#160;</div>
 </td>
 </tr>
 <tr class="TableInfoMiniRow3">
@@ -654,7 +654,7 @@ Message IP: <a onclick="window.open(this.href);return false;" href="<?php echo s
 </tr>
 <tr class="TableInfoMiniRow4">
 <td class="TableInfoMiniColumn4" colspan="2">
-<span style="text-align: left;">&nbsp;<a href="<?php
+<span style="text-align: left;">&#160;<a href="<?php
 if($User1ID>0&&$User1Hidden=="no"&&isset($ThemeSet['Profile'])&&$ThemeSet['Profile']!=null) {
 echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$User1ID,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); }
 if(($User1ID<=0||$User1Hidden=="yes")&&isset($ThemeSet['Profile'])&&$ThemeSet['Profile']!=null) {
@@ -669,7 +669,7 @@ echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr
 ?>"><?php echo $ThemeSet['PM']; ?></a></span>
 </td></tr>
 </table></div>
-<div class="DivReplies">&nbsp;</div>
+<div class="DivReplies">&#160;</div>
 <?php ++$is; } ?>
 </td></tr>
 </table>
@@ -753,14 +753,14 @@ $ShowSmile=sql_result($melanie_result,$melanie_p,"Display");
 $ReplaceType=sql_result($melanie_result,$melanie_p,"ReplaceCI");
 if($SmileRow==1) { ?><tr>
 	<?php } if($SmileRow<5) { ++$SmileCRow; ?>
-	<td><img src="<?php echo $SmileDirectory."".$FileName; ?>" style="vertical-align: middle; border: 0px; cursor: pointer;" title="<?php echo $SmileName; ?>" alt="<?php echo $SmileName; ?>" onclick="addsmiley('ReplyPost','&nbsp;<?php echo htmlspecialchars($SmileText, ENT_QUOTES, $Settings['charset']); ?>&nbsp;')" /></td>
+	<td><img src="<?php echo $SmileDirectory."".$FileName; ?>" style="vertical-align: middle; border: 0px; cursor: pointer;" title="<?php echo $SmileName; ?>" alt="<?php echo $SmileName; ?>" onclick="addsmiley('ReplyPost','&#160;<?php echo htmlspecialchars($SmileText, ENT_QUOTES, $Settings['charset']); ?>&#160;')" /></td>
 	<?php } if($SmileRow==5) { ++$SmileCRow; ?>
-	<td><img src="<?php echo $SmileDirectory."".$FileName; ?>" style="vertical-align: middle; border: 0px; cursor: pointer;" title="<?php echo $SmileName; ?>" alt="<?php echo $SmileName; ?>" onclick="addsmiley('ReplyPost','&nbsp;<?php echo htmlspecialchars($SmileText, ENT_QUOTES, $Settings['charset']); ?>&nbsp;')" /></td></tr>
+	<td><img src="<?php echo $SmileDirectory."".$FileName; ?>" style="vertical-align: middle; border: 0px; cursor: pointer;" title="<?php echo $SmileName; ?>" alt="<?php echo $SmileName; ?>" onclick="addsmiley('ReplyPost','&#160;<?php echo htmlspecialchars($SmileText, ENT_QUOTES, $Settings['charset']); ?>&#160;')" /></td></tr>
 	<?php $SmileCRow=0; $SmileRow=0; }
 ++$melanie_p; }
 if($SmileCRow<5&&$SmileCRow!=0) {
 $SmileCRowL = 5 - $SmileCRow;
-echo "<td colspan=\"".$SmileCRowL."\">&nbsp;</td></tr>"; }
+echo "<td colspan=\"".$SmileCRowL."\">&#160;</td></tr>"; }
 echo "</table>";
 sql_free_result($melanie_result);
 ?></div></td>
@@ -809,7 +809,7 @@ sql_free_result($melanie_result);
 </td></tr></table>
 </form></td></tr>
 <tr id="MkReplyEnd" class="TableRow4">
-<td class="TableColumn4" colspan="2">&nbsp;</td>
+<td class="TableColumn4" colspan="2">&#160;</td>
 </tr>
 </table></div>
 <?php } if($_GET['act']=="sendmessage"&&$_POST['act']=="sendmessages") {
@@ -840,7 +840,7 @@ require($SettDir['inc']."captcha.php"); }
 </td>
 </tr><?php } ?>
 <tr class="TableRow2">
-<th class="TableColumn2" style="width: 100%; text-align: left;">&nbsp;Make Message: </th>
+<th class="TableColumn2" style="width: 100%; text-align: left;">&#160;Make Message: </th>
 </tr>
 <tr class="TableRow3">
 <td class="TableColumn3">
@@ -849,19 +849,19 @@ require($SettDir['inc']."captcha.php"); }
 <tr>
 	<td><span class="TableMessage">
 	<br />Send to user name too big.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if($_POST['fid']!=$_SESSION['UserFormID']) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Sorry the referering url dose not match our host name.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if($_POST['ubid']!=$Settings['BoardUUID']) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Sorry the referering url dose not match our host name.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
 	$Settings['captcha_guest']=="on") {
@@ -871,39 +871,39 @@ if (PhpCaptcha::Validate($_POST['signcode'])) {
 <tr>
 	<td><span class="TableMessage">
 	<br />Invalid code entered<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } } if ($_POST['SendMessageTo']==null) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You need to enter a user name to send message to.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if (pre_strlen($_POST['MessageName'])>="30") { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Message Name is too big.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if (pre_strlen($_POST['MessageDesc'])>="45") { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Message Description is too big.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
 	pre_strlen($_POST['GuestName'])>="25") { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You Guest Name is too big.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if ($Settings['TestReferer']=="on") {
 	if ($URL['HOST']!=$URL['REFERER']) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Sorry the referering url dose not match our host name.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } }
 if(is_numeric($_POST['post'])) { $_POST['post'] = intval($_POST['post'], 10); }
@@ -1042,57 +1042,57 @@ if($renum==0) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Cound not find users name.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if ($_POST['MessageName']==null) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You need to enter a Message Name.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if ($_POST['MessageDesc']==null) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You need to enter a Message Description.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if ($SendUserCanPM=="no") { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />User Name enter can not get messages.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if ($_POST['Message']==null) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You need to enter a Message.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
 	$_POST['GuestName']==null) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You need to enter a Guest Name.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
 	$RGMatches==true) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />This Guest Name is restricted to use.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if($RMatches==true) { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />This Message Name is restricted to use.<br />
-	</span>&nbsp;</td>
+	</span>&#160;</td>
 </tr>
 <?php } if ($Error=="Yes") {
 redirect("refresh",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false),"4"); ?>
 <tr>
 	<td><span class="TableMessage">
-	<br />Click <a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">here</a> to goto index page.<br />&nbsp;
+	<br />Click <a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">here</a> to goto index page.<br />&#160;
 	</span><br /></td>
 </tr>
 <?php } if ($Error!="Yes") { $LastActive = $utccurtime->getTimestamp();
@@ -1108,15 +1108,15 @@ if($_POST['post']>0) { $msglinkback = "Click <a href=\"".url_maker($exfile['mess
 ?><tr>
 	<td><span class="TableMessage"><br />
 	Message sent to user <?php echo $_POST['SendMessageTo']; ?>.<br />
-	<?php echo $msglinkback; ?><br />&nbsp;
+	<?php echo $msglinkback; ?><br />&#160;
 	</span><br /></td>
 </tr>
 <?php } ?>
 </table>
 </td></tr>
 <tr class="TableRow4">
-<td class="TableColumn4">&nbsp;</td>
+<td class="TableColumn4">&#160;</td>
 </tr>
 </table></div>
 <?php } ?>
-<div class="DivMessages">&nbsp;</div>
+<div class="DivMessages">&#160;</div>

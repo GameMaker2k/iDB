@@ -11,7 +11,7 @@
     Copyright 2004-2023 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2023 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
     $ThemeInfo - Name: iDB Gray - Author: cooldude2k $
-    $FileInfo: info.php - Last Update: 6/16/2023 SVN 973 - Author: cooldude2k $
+    $FileInfo: info.php - Last Update: 6/22/2023 SVN 984 - Author: cooldude2k $
 */
 $ThemeInfo = array();
 $ThemeInfo['ThemeName'] = "iDB Gray Theme";

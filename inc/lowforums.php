@@ -11,7 +11,7 @@
     Copyright 2004-2023 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2023 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: lowforums.php - Last Update: 6/16/2023 SVN 973 - Author: cooldude2k $
+    $FileInfo: lowforums.php - Last Update: 6/22/2023 SVN 984 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="lowforums.php"||$File3Name=="/lowforums.php") {
@@ -50,7 +50,7 @@ $_SESSION['ExtraData'] = "currentact:".$_GET['act']."; currentcategoryid:0; curr
 ?>
 <div style="font-size: 1.0em; font-weight: bold; margin-bottom: 10px; padding-top: 3px; width: auto;">Full Version: <a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $Settings['board_name']; ?></a></div>
 <div style="font-size: 11px; font-weight: bold; padding: 10px; border: 1px solid gray;"><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=lowview",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $Settings['board_name']; ?></a></div>
-<div>&nbsp;</div>
+<div>&#160;</div>
 <div style="padding: 10px; border: 1px solid gray;">
 <ul style="list-style-type: none;">
 <?php
@@ -130,7 +130,7 @@ $gltf[$apcl] = $SubsForumID; ++$apcl; }
 sql_free_result($apcresult); } }
 if(isset($PermissionInfo['CanViewForum'][$ForumID])&&
 	$PermissionInfo['CanViewForum'][$ForumID]=="yes") {
-$LastTopic = "&nbsp;<br />&nbsp;<br />&nbsp;";
+$LastTopic = "&#160;<br />&#160;<br />&#160;";
 if(!isset($LastTopic)) { $LastTopic = null; }
 $gltnum = count($gltf); $glti = 0; 
 $OldUpdateTime = 0; $UseThisFonum = null;
@@ -170,4 +170,4 @@ if($num>=1) {
 ++$prei; }
 sql_free_result($preresult); ?>
 </ul></div>
-<div>&nbsp;</div>
+<div>&#160;</div>

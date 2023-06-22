@@ -11,7 +11,7 @@
     Copyright 2004-2023 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2023 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: searches.php - Last Update: 6/16/2023 SVN 973 - Author: cooldude2k $
+    $FileInfo: searches.php - Last Update: 6/22/2023 SVN 984 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="searches.php"||$File3Name=="/searches.php") {
@@ -56,7 +56,7 @@ if($_GET['act']=="topics") {
 	if($_GET['search']==null&&$_GET['type']==null) {
 	?>
 <div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $Settings['board_name']; ?></a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['search'],$Settings['file_ext'],"act=topics",$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search']); ?>">Search topics</a></div>
-<div class="DivNavLinks">&nbsp;</div>
+<div class="DivNavLinks">&#160;</div>
 <div class="Table1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableRow1">
@@ -71,7 +71,7 @@ if($_GET['act']=="topics") {
 </td>
 </tr><?php } ?>
 <tr class="TableRow2">
-<th class="TableColumn2" style="width: 100%; text-align: left;">&nbsp;Search for topic: </th>
+<th class="TableColumn2" style="width: 100%; text-align: left;">&#160;Search for topic: </th>
 </tr>
 <tr class="TableRow3">
 <td class="TableColumn3">
@@ -100,7 +100,7 @@ if($_GET['act']=="topics") {
 </td>
 </tr>
 <tr class="TableRow4">
-<td class="TableColumn4">&nbsp;</td>
+<td class="TableColumn4">&#160;</td>
 </tr>
 </table></div>
 <?php } if(($_GET['search']!=null&&$_GET['type']!=null)||$_GET['type']=="getactive") {
@@ -279,13 +279,13 @@ $pstring = $pstring."<span class=\"pagelinklast\"><a href=\"".url_maker($exfile[
 	++$pagei; } $pstring = $pstring."</div>"; }
 ?>
 <div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $Settings['board_name']; ?></a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['search'],$Settings['file_ext'],"act=topics",$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search']); ?>">Search topics</a></div>
-<div class="DivNavLinks">&nbsp;</div>
+<div class="DivNavLinks">&#160;</div>
 <?php
 echo $pstring;
 //List Page Number Code end
 if($pagenum>1) {
 ?>
-<div class="DivPageLinks">&nbsp;</div>
+<div class="DivPageLinks">&#160;</div>
 <?php } ?>
 <div class="Table1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
@@ -360,7 +360,7 @@ $NumberPages = ceil($NumberPosts/$Settings['max_posts']); }
 if($NumberPosts<=$Settings['max_posts']) {
 $NumberPages = 1; }
 if($NumberPages>4) {
-	$prepagelist = " &nbsp;"; }
+	$prepagelist = " &#160;"; }
 if($NumberPages>=2) {
 	if($ThemeSet['MiniPageAltStyle']=="off") { 
 	$prepagelist = "<span class=\"small\">(Pages: "; }
@@ -427,7 +427,7 @@ if(($PermissionInfo['CanViewForum'][$ForumID]=="yes"&&
 	($PermissionInfo['CanViewForum'][$ForumID]=="yes"&&
 	$CatPermissionInfo['CanViewCategory'][$CategoryID]=="yes"&&
 	$PermissionInfo['CanModForum'][$ForumID]=="yes"&&$TopicStat==3)) {
-$LastReply = "&nbsp;<br />&nbsp;";
+$LastReply = "&#160;<br />&#160;";
 $glrquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" DESC LIMIT 1", array($TopicID));
 $glrresult=sql_query($glrquery,$SQLStat);
 $glrnum=sql_num_rows($glrresult);
@@ -468,7 +468,7 @@ $lul = url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qs
 $luln = url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']).$qstrhtml."&#35;reply".$NumRPosts;
 $LastReply = "Time: <a href=\"".$luln."\">".$TimeStamp1."</a><br />\n".$UserPre." <span title=\"".$oldusername."\">".$UsersName1."</span>"; } }
 sql_free_result($glrresult);
-if($TimeStamp1==null) { $LastReply = "&nbsp;<br />&nbsp;"; }
+if($TimeStamp1==null) { $LastReply = "&#160;<br />&#160;"; }
 $PreTopic = $ThemeSet['TopicIcon'];
 if ($PinnedTopic>0&&$PinnedTopic<3&&$TopicStat==0) {
 	if($NumReply>=$Settings['hot_topic_num']) {
@@ -513,19 +513,19 @@ echo "<span>".$UsersName."</span>"; }
 <?php } ++$i; }
 ?>
 <tr id="SearchEnd" class="TableRow4">
-<td class="TableColumn4" colspan="6">&nbsp;</td>
+<td class="TableColumn4" colspan="6">&#160;</td>
 </tr>
 </table></div>
 <?php if($pagenum>1) { ?>
-<div class="DivSearch">&nbsp;</div>
+<div class="DivSearch">&#160;</div>
 <?php }
 echo $pstring;
 //List Page Number Code end
 if($pagenum>1) {
 ?>
-<div class="DivPageLinks">&nbsp;</div>
+<div class="DivPageLinks">&#160;</div>
 <?php }
 sql_free_result($result); } } } 
 if($pagenum<=1) { ?>
-<div class="DivSearch">&nbsp;</div>
+<div class="DivSearch">&#160;</div>
 <?php } ?>
