@@ -11,7 +11,7 @@
     Copyright 2004-2023 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2023 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: main.php - Last Update: 6/17/2023 SVN 977 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 6/21/2023 SVN 980 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -57,7 +57,8 @@ if($strtype=="integer") {
 	return $string; } 
 	return "null"; }
 function rsq($string) {
-$string = preg_replace("/^(\')|$(\')/i","\'",$string);
+if($string!=null) {
+$string = preg_replace("/^(\')|$(\')/i","\'",$string); }
 return $string; }
 $KarmaExp = explode("&",$Settings['KarmaBoostDays']);
 $KarmaNum = count($KarmaExp); 

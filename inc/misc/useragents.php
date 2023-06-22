@@ -11,7 +11,7 @@
     Copyright 2004-2023 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2023 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: useragents.php - Last Update: 6/16/2023 SVN 973 - Author: cooldude2k $
+    $FileInfo: useragents.php - Last Update: 6/21/2023 SVN 980 - Author: cooldude2k $
 */
 // User Agent Checker
 function user_agent_check($user_agent) {
@@ -138,6 +138,14 @@ if (preg_match("|".preg_quote("iDB-VerCheck", "|")."|i", $user_agent)) {
     return "iDB Version Checker"; }
 if (preg_match("|".preg_quote("iDB-Forum", "|")."|i", $user_agent)) {
     return "iDB Message Board"; }
+if (preg_match("|".preg_quote("DF2k-VerCheck", "|")."|i", $user_agent)) {
+    return "DF2k Version Checker"; }
+if (preg_match("|".preg_quote("DF2k-Forum", "|")."|i", $user_agent)) {
+    return "DF2k Message Board"; }
+if (preg_match("|".preg_quote($UserAgentName, "|")."|i", $user_agent)) {
+    return $RName." Message Board"; }
+if (preg_match("|".preg_quote($AltUserAgentName, "|")."|i", $user_agent)) {
+    return $AltName." Message Board"; }
 if (preg_match("/".preg_quote("Infoseek", "/")."/i", $user_agent)) {
     return "InfoSeek"; }
 if (preg_match("/".preg_quote("IRLbot", "/")."/i", $user_agent)) {
@@ -272,6 +280,10 @@ if (preg_match("/".preg_quote("YoudaoBot", "/")."/i", $user_agent)) {
     return "YoudaoBot"; }
 if (preg_match("/".preg_quote("YodaoBot", "/")."/i", $user_agent)) {
     return "YodaoBot"; }
+if (preg_match("/".preg_quote("PyWWW-Get", "/")."/i", $user_agent)) {
+    return "PyWWW-Get"; }
+if (preg_match("/".preg_quote("curl", "/")."/i", $user_agent)) {
+    return "cURL"; }
 if (preg_match("/".preg_quote("Yeti", "/")."/i", $user_agent)) {
     return "NHN Naver"; }
 	return false; }

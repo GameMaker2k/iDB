@@ -11,7 +11,7 @@
     Copyright 2004-2023 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2023 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: prelogin.php - Last Update: 6/16/2023 SVN 973 - Author: cooldude2k $
+    $FileInfo: prelogin.php - Last Update: 6/16/2023 SVN 980 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="prelogin.php"||$File3Name=="/prelogin.php") {
@@ -67,9 +67,9 @@ setcookie("MemberName", $YourNameAM, time() + (7 * 86400), $cbasedir, $cookieDom
 setcookie("UserID", $YourIDAM, time() + (7 * 86400), $cbasedir, $cookieDomain, 1);
 setcookie("SessPass", $YourPassAM, time() + (7 * 86400), $cbasedir, $cookieDomain, 1); }
 if($cookieSecure===false) {
-setcookie("MemberName", $YourNameAM, time() + (7 * 86400), $cbasedir, $cookieDomain);
-setcookie("UserID", $YourIDAM, time() + (7 * 86400), $cbasedir, $cookieDomain);
-setcookie("SessPass", $YourPassAM, time() + (7 * 86400), $cbasedir, $cookieDomain); } }
+setcookie("MemberName", $YourNameAM, time() + (7 * 86400), $cbasedir, $cookieDomain, 0);
+setcookie("UserID", $YourIDAM, time() + (7 * 86400), $cbasedir, $cookieDomain, 0);
+setcookie("SessPass", $YourPassAM, time() + (7 * 86400), $cbasedir, $cookieDomain, 0); } }
 /*redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die();*/
 } } if($numlog2<=0||$numlog2>1||$BanError=="yes") { session_unset();
@@ -85,10 +85,10 @@ setcookie("UserID", null, $utccurtime->getTimestamp() - 3600, $cbasedir, $cookie
 setcookie("SessPass", null, $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain, 1);
 setcookie(session_name(), "", $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain, 1); }
 if($cookieSecure===false) {
-setcookie("MemberName", null, $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain);
-setcookie("UserID", null, $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain);
-setcookie("SessPass", null, $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain);
-setcookie(session_name(), "", $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain); } }
+setcookie("MemberName", null, $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain, 0);
+setcookie("UserID", null, $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain, 0);
+setcookie("SessPass", null, $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain, 0);
+setcookie(session_name(), "", $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain, 0); } }
 unset($_COOKIE[session_name()]);
 $_SESSION = array(); //session_unset(); session_destroy();
 $temp_user_ip = $_SERVER['REMOTE_ADDR'];

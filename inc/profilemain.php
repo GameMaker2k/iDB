@@ -11,7 +11,7 @@
     Copyright 2004-2023 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2023 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: profilemain.php - Last Update: 6/16/2023 SVN 973 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 6/16/2023 SVN 980 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
@@ -1280,7 +1280,7 @@ if($YourPassword!=$OldPassword) { $Error="Yes"; ?>
 	if($cookieSecure===true) {
 	setcookie("SessPass", $NewPassword, time() + (7 * 86400), $cbasedir, $cookieDomain, 1); }
 	if($cookieSecure===false) {
-	setcookie("SessPass", $NewPassword, time() + (7 * 86400), $cbasedir, $cookieDomain); } } }
+	setcookie("SessPass", $NewPassword, time() + (7 * 86400), $cbasedir, $cookieDomain, 0); } } }
 	$_POST['Email'] = remove_spaces($_POST['Email']);
 	if($_POST['Password']!="") {
 	$querynewuserinfo = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"UserPassword\"='%s',\"HashType\"='%s',\"Email\"='%s',\"LastActive\"=%i,\"IP\"='%s',\"Salt\"='%s' WHERE \"id\"=%i", array($NewPassword,$iDBHash,$_POST['Email'],$NewDay,$NewIP,$NewSalt,$_SESSION['UserID']));
