@@ -11,7 +11,7 @@
     Copyright 2004-2023 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2023 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: forums.php - Last Update: 6/22/2023 SVN 984 - Author: cooldude2k $
+    $FileInfo: forums.php - Last Update: 6/25/2023 SVN 986 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="forums.php"||$File3Name=="/forums.php") {
@@ -348,21 +348,37 @@ sql_free_result($cr); ?>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="InSubForum">In SubForum:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="InSubForum" id="InSubForum">
 	<option selected="selected" value="0">none</option>
-<?php 
-$fq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"InSubForum\"=0 AND \"ForumType\"='subforum' ORDER BY \"OrderID\" ASC, \"id\" ASC", array(null));
+<?php
+$fcq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."categories\" ORDER BY \"OrderID\" ASC, \"id\" ASC", array(null));
+$fcr=sql_query($fcq,$SQLStat);
+$afi=sql_num_rows($fcr);
+$fci=0;
+while ($fci < $afi) {
+$InCategoryID=sql_result($fcr,$fci,"id");
+$InCategoryName=sql_result($fcr,$fci,"Name");
+$InCategoryType=sql_result($fcr,$fci,"CategoryType");
+$fq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"CategoryID\"=%i AND \"InSubForum\"=0 AND \"ForumType\"='subforum' ORDER BY \"CategoryID\" ASC, \"OrderID\" ASC", array($InCategoryID));
 $fr=sql_query($fq,$SQLStat);
 $ai=sql_num_rows($fr);
 $fi=0;
+if($ai>0) { ?>
+<optgroup label="<?php echo htmlentities($InCategoryName, ENT_QUOTES, $Settings['charset']); ?>">
+<?php }
 while ($fi < $ai) {
 $InForumID=sql_result($fr,$fi,"id");
+$InCategoryID=sql_result($fr,$fi,"CategoryID");
 $InForumName=sql_result($fr,$fi,"Name");
 $InForumType=sql_result($fr,$fi,"ForumType");
 $AiFiInSubForum=sql_result($fr,$fi,"InSubForum");
-if ($InForumType!="redirect"&&$AiFiInSubForum=="0") {
 ?>
 	<option value="<?php echo $InForumID; ?>"><?php echo $InForumName; ?></option>
-<?php } ++$fi; }
-sql_free_result($fr); ?>
+<?php ++$fi; }
+sql_free_result($fr);
+++$fci;
+if($ai>0) { ?>
+</optgroup>
+<?php } }
+sql_free_result($fcr); ?>
 	</select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="PostCountAdd">Add to post count:</label></td>
@@ -680,20 +696,37 @@ if(!isset($_POST['id'])) {
 <tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="id">Forum to Edit:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="id" id="id">
-<?php 
-$fq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" ORDER BY \"id\" ASC, \"OrderID\" ASC", array(null));
+<?php
+$fcq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."categories\" ORDER BY \"OrderID\" ASC, \"id\" ASC", array(null));
+$fcr=sql_query($fcq,$SQLStat);
+$afi=sql_num_rows($fcr);
+$fci=0;
+while ($fci < $afi) {
+$InCategoryID=sql_result($fcr,$fci,"id");
+$InCategoryName=sql_result($fcr,$fci,"Name");
+$InCategoryType=sql_result($fcr,$fci,"CategoryType");
+$fq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"CategoryID\"=%i ORDER BY \"CategoryID\" ASC, \"OrderID\" ASC", array($InCategoryID));
 $fr=sql_query($fq,$SQLStat);
 $ai=sql_num_rows($fr);
 $fi=0;
+if($ai>0) { ?>
+<optgroup label="<?php echo htmlentities($InCategoryName, ENT_QUOTES, $Settings['charset']); ?>">
+<?php }
 while ($fi < $ai) {
 $InForumID=sql_result($fr,$fi,"id");
+$InCategoryID=sql_result($fr,$fi,"CategoryID");
 $InForumName=sql_result($fr,$fi,"Name");
 $InForumType=sql_result($fr,$fi,"ForumType");
 $AiFiInSubForum=sql_result($fr,$fi,"InSubForum");
 ?>
 	<option value="<?php echo $InForumID; ?>"><?php echo $InForumName; ?></option>
 <?php ++$fi; }
-sql_free_result($fr); ?>
+sql_free_result($fr);
+++$fci;
+if($ai>0) { ?>
+</optgroup>
+<?php } }
+sql_free_result($fcr); ?>
 	</select></td>
 </tr></table>
 <table style="text-align: left;">
@@ -815,24 +848,37 @@ sql_free_result($cr); ?>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="InSubForum">In SubForum:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="InSubForum" id="InSubForum">
 	<option selected="selected" value="0">none</option>
-<?php 
-$fq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"InSubForum\"=0 AND \"id\"<>%i AND \"ForumType\"='subforum' ORDER BY \"id\" ASC, \"OrderID\" ASC", array($ForumID));
+<?php
+$fcq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."categories\" ORDER BY \"OrderID\" ASC, \"id\" ASC", array(null));
+$fcr=sql_query($fcq,$SQLStat);
+$afi=sql_num_rows($fcr);
+$fci=0;
+while ($fci < $afi) {
+$InCategoryID=sql_result($fcr,$fci,"id");
+$InCategoryName=sql_result($fcr,$fci,"Name");
+$InCategoryType=sql_result($fcr,$fci,"CategoryType");
+$fq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"CategoryID\"=%i AND \"InSubForum\"=0 AND \"ForumType\"='subforum' ORDER BY \"CategoryID\" ASC, \"OrderID\" ASC", array($InCategoryID));
 $fr=sql_query($fq,$SQLStat);
 $ai=sql_num_rows($fr);
 $fi=0;
+if($ai>0) { ?>
+<optgroup label="<?php echo htmlentities($InCategoryName, ENT_QUOTES, $Settings['charset']); ?>">
+<?php }
 while ($fi < $ai) {
 $InForumID=sql_result($fr,$fi,"id");
+$InCategoryID=sql_result($fr,$fi,"CategoryID");
 $InForumName=sql_result($fr,$fi,"Name");
 $InForumType=sql_result($fr,$fi,"ForumType");
 $AiFiInSubForum=sql_result($fr,$fi,"InSubForum");
-if ($InForumType!="redirect"&&$AiFiInSubForum=="0") {
-if($InSubForum==$InForumID) {
 ?>
-	<option value="<?php echo $InForumID; ?>" selected="selected"><?php echo $InForumName; ?></option>
-<?php } if($InSubForum!=$InForumID) { ?>
 	<option value="<?php echo $InForumID; ?>"><?php echo $InForumName; ?></option>
-<?php } } ++$fi; }
-sql_free_result($fr); ?>
+<?php ++$fi; }
+sql_free_result($fr);
+++$fci;
+if($ai>0) { ?>
+</optgroup>
+<?php } }
+sql_free_result($fcr); ?>
 	</select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="PostCountAdd">Add to post count:</label></td>
