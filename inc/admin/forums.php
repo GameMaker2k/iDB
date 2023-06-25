@@ -594,22 +594,39 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Deleting a Forum";
 	<option value="no">no</option>
 	</select></td>
 </tr><tr style="text-align: left;">
-	<td style="width: 50%;"><label class="TextBoxLabel" for="DelID">Delete Forum:</label></td>
+	<td style="width: 50%;"><label class="TextBoxLabel" for="InSubForum">In SubForum:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="DelID" id="DelID">
-<?php 
-$fq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" ORDER BY \"OrderID\" ASC, \"id\" ASC", array(null));
+<?php
+$fcq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."categories\" ORDER BY \"OrderID\" ASC, \"id\" ASC", array(null));
+$fcr=sql_query($fcq,$SQLStat);
+$afi=sql_num_rows($fcr);
+$fci=0;
+while ($fci < $afi) {
+$InCategoryID=sql_result($fcr,$fci,"id");
+$InCategoryName=sql_result($fcr,$fci,"Name");
+$InCategoryType=sql_result($fcr,$fci,"CategoryType");
+$fq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"CategoryID\"=%i ORDER BY \"CategoryID\" ASC, \"OrderID\" ASC", array($InCategoryID));
 $fr=sql_query($fq,$SQLStat);
 $ai=sql_num_rows($fr);
 $fi=0;
+if($ai>0) { ?>
+<optgroup label="<?php echo htmlentities($InCategoryName, ENT_QUOTES, $Settings['charset']); ?>">
+<?php }
 while ($fi < $ai) {
 $InForumID=sql_result($fr,$fi,"id");
+$InCategoryID=sql_result($fr,$fi,"CategoryID");
 $InForumName=sql_result($fr,$fi,"Name");
 $InForumType=sql_result($fr,$fi,"ForumType");
 $AiFiInSubForum=sql_result($fr,$fi,"InSubForum");
 ?>
 	<option value="<?php echo $InForumID; ?>"><?php echo $InForumName; ?></option>
 <?php ++$fi; }
-sql_free_result($fr); ?>
+sql_free_result($fr);
+++$fci;
+if($ai>0) { ?>
+</optgroup>
+<?php } }
+sql_free_result($fcr); ?>
 	</select></td>
 </tr></table>
 <table style="text-align: left;">
