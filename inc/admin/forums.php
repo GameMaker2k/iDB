@@ -11,7 +11,7 @@
     Copyright 2004-2023 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2023 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: forums.php - Last Update: 6/27/2023 SVN 991 - Author: cooldude2k $
+    $FileInfo: forums.php - Last Update: 6/27/2023 SVN 993 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="forums.php"||$File3Name=="/forums.php") {
@@ -307,11 +307,14 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Adding new Forum";
 	<td style="width: 50%;"><input type="number" name="OrderID" class="TextBox" id="OrderID" size="20" /></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="ForumCatID">Select category for forum:</label></td>
-	<td style="width: 50%;"><select size="1" class="TextBox" name="ForumCatID" id="ForumCatID"><optgroup label="<?php echo $Settings['board_name']; ?>">
+	<td style="width: 50%;"><select size="1" class="TextBox" name="ForumCatID" id="ForumCatID">
 <?php 
 $cq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."categories\" ORDER BY \"OrderID\" ASC, \"id\" ASC", array(null));
 $cr=sql_query($cq,$SQLStat);
 $eu=sql_num_rows($cr);
+if($eu>0) { ?>
+	<optgroup label="<?php echo $Settings['board_name']; ?>">
+<?php }
 $nu=0;
 while ($nu < $eu) {
 $InCatID=sql_result($cr,$nu,"id");
@@ -320,8 +323,11 @@ $EuNuMai = "Eu nu mai vreau";
 ?>
 	<option value="<?php echo $InCatID; ?>"><?php echo $InCatName; ?></option>
 <?php ++$nu; }
+if($eu>0) { ?>
+	</optgroup>
+<?php }
 sql_free_result($cr); ?>
-	</optgroup></select></td>
+	</select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="ForumName">Insert name for forum:</label></td>
 	<td style="width: 50%;"><input type="text" name="ForumName" class="TextBox" id="ForumName" size="20" /></td>
@@ -838,11 +844,14 @@ $ForumType = strtolower($ForumType); $CanHaveTopics = strtolower($CanHaveTopics)
 	<td style="width: 50%;"><input type="number" name="OrderID" class="TextBox" id="OrderID" size="20" value="<?php echo $ForumOrder; ?>" /></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="ForumCatID">Select category for forum:</label></td>
-	<td style="width: 50%;"><select size="1" class="TextBox" name="ForumCatID" id="ForumCatID"><optgroup label="<?php echo $Settings['board_name']; ?>">
+	<td style="width: 50%;"><select size="1" class="TextBox" name="ForumCatID" id="ForumCatID">
 <?php 
 $cq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."categories\" ORDER BY \"OrderID\" ASC, \"id\" ASC", array(null));
 $cr=sql_query($cq,$SQLStat);
 $eu=sql_num_rows($cr);
+if($eu>0) { ?>
+	<optgroup label="<?php echo $Settings['board_name']; ?>">
+<?php }
 $nu=0;
 while ($nu < $eu) {
 $InCatID=sql_result($cr,$nu,"id");
@@ -854,6 +863,9 @@ if($ForumCatID==$InCatID) {
 <?php } if($ForumCatID!=$InCatID) { ?>
 	<option value="<?php echo $InCatID; ?>"><?php echo $InCatName; ?></option>
 <?php } ++$nu; }
+if($eu>0) { ?>
+	</optgroup>
+<?php }
 sql_free_result($cr); ?>
 	</optgroup></select></td>
 </tr><tr style="text-align: left;">

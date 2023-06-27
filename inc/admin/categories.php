@@ -11,7 +11,7 @@
     Copyright 2004-2023 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2023 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: categories.php - Last Update: 6/27/2023 SVN 991 - Author: cooldude2k $
+    $FileInfo: categories.php - Last Update: 6/27/2023 SVN 993 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="categories.php"||$File3Name=="/categories.php") {
@@ -87,11 +87,13 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Adding new Category";
 	<td style="width: 50%;"><label class="TextBoxLabel" for="InSubCategory">In SubCategory:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="InSubCategory" id="InSubCategory">
 	<option selected="selected" value="0">none</option>
-    <optgroup label="<?php echo $Settings['board_name']; ?>">
 <?php 
 $fq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."categories\" WHERE \"InSubCategory\"=0 AND \"CategoryType\"='subcategory' ORDER BY \"OrderID\" ASC, \"id\" ASC", array(null));
 $fr=sql_query($fq,$SQLStat);
 $ai=sql_num_rows($fr);
+if($ai>0) { ?>
+	<optgroup label="<?php echo $Settings['board_name']; ?>">
+<?php }
 $fi=0;
 while ($fi < $ai) {
 $InCategoryID=sql_result($fr,$fi,"id");
@@ -102,8 +104,11 @@ if ($AiFiInSubCategory=="0") {
 ?>
 	<option value="<?php echo $InCategoryID; ?>"><?php echo $InCategoryName; ?></option>
 <?php } ++$fi; }
+if($ai>0) { ?>
+	</optgroup>
+<?php }
 sql_free_result($fr); ?>
-	</optgroup></select></td>
+	</select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="NumPostView">Number of posts to view category:</label></td>
 	<td style="width: 50%;"><input type="number" class="TextBox" size="20" name="NumPostView" id="NumPostView" /></td>
@@ -245,11 +250,14 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Deleting a Category";
 	</select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="DelID">Delete Category:</label></td>
-	<td style="width: 50%;"><select size="1" class="TextBox" name="DelID" id="DelID"><optgroup label="<?php echo $Settings['board_name']; ?>">
+	<td style="width: 50%;"><select size="1" class="TextBox" name="DelID" id="DelID">
 <?php 
 $fq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."categories\" ORDER BY \"OrderID\" ASC, \"id\" ASC", array(null));
 $fr=sql_query($fq,$SQLStat);
 $ai=sql_num_rows($fr);
+if($ai>0) { ?>
+	<optgroup label="<?php echo $Settings['board_name']; ?>">
+<?php }
 $fi=0;
 while ($fi < $ai) {
 $InCategoryID=sql_result($fr,$fi,"id");
@@ -259,8 +267,11 @@ $AiFiInSubCategory=sql_result($fr,$fi,"InSubCategory");
 ?>
 	<option value="<?php echo $InCategoryID; ?>"><?php echo $InCategoryName; ?></option>
 <?php ++$fi; }
+if($ai>0) { ?>
+	</optgroup>
+<?php }
 sql_free_result($fr); ?>
-	</optgroup></select></td>
+	</select></td>
 </tr></table>
 <table style="text-align: left;">
 <tr style="text-align: left;">
@@ -356,11 +367,14 @@ if(!isset($_POST['id'])) {
 <table style="text-align: left;">
 <tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="id">Category to Edit:</label></td>
-	<td style="width: 50%;"><select size="1" class="TextBox" name="id" id="id"><optgroup label="<?php echo $Settings['board_name']; ?>">
+	<td style="width: 50%;"><select size="1" class="TextBox" name="id" id="id">
 <?php 
 $fq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."categories\" ORDER BY \"OrderID\" ASC, \"id\" ASC", array(null));
 $fr=sql_query($fq,$SQLStat);
 $ai=sql_num_rows($fr);
+if($ai>0) { ?>
+	<optgroup label="<?php echo $Settings['board_name']; ?>">
+<?php }
 $fi=0;
 while ($fi < $ai) {
 $InCategoryID=sql_result($fr,$fi,"id");
@@ -370,8 +384,11 @@ $AiFiInSubCategory=sql_result($fr,$fi,"InSubCategory");
 ?>
 	<option value="<?php echo $InCategoryID; ?>"><?php echo $InCategoryName; ?></option>
 <?php ++$fi; }
+if($ai>0) { ?>
+	</optgroup>
+<?php }
 sql_free_result($fr); ?>
-	</optgroup></select></td>
+	</select></td>
 </tr></table>
 <table style="text-align: left;">
 <tr style="text-align: left;">
@@ -459,11 +476,13 @@ $CategoryType = strtolower($CategoryType);
 	<td style="width: 50%;"><label class="TextBoxLabel" for="InSubCategory">In SubCategory:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="InSubCategory" id="InSubCategory">
 	<option selected="selected" value="0">none</option>
-    <optgroup label="<?php echo $Settings['board_name']; ?>">
 <?php 
 $fq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."categories\" WHERE \"InSubCategory\"=0 AND \"id\"<>%i AND \"CategoryType\"='subcategory' ORDER BY \"OrderID\" ASC, \"id\" ASC", array($CategoryID));
 $fr=sql_query($fq,$SQLStat);
 $ai=sql_num_rows($fr);
+if($ai>0) { ?>
+	<optgroup label="<?php echo $Settings['board_name']; ?>">
+<?php }
 $fi=0;
 while ($fi < $ai) {
 $InCategoryID=sql_result($fr,$fi,"id");
@@ -477,8 +496,11 @@ if($InSubCategory==$InCategoryID) {
 <?php } if($InSubCategory!=$InCategoryID) { ?>
 	<option value="<?php echo $InCategoryID; ?>"><?php echo $InCategoryName; ?></option>
 <?php } } ++$fi; }
+if($ai>0) { ?>
+	</optgroup>
+<?php }
 sql_free_result($fr); ?>
-	</optgroup></select></td>
+	</select></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="NumPostView">Number of posts to view categories:</label></td>
 	<td style="width: 50%;"><input type="number" class="TextBox" size="20" name="NumPostView" id="NumPostView" value="<?php echo $PostCountView; ?>" /></td>
