@@ -11,7 +11,7 @@
     Copyright 2004-2023 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2023 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: versioninfo.php - Last Update: 6/25/2023 SVN 990 - Author: cooldude2k $
+    $FileInfo: versioninfo.php - Last Update: 6/27/2023 SVN 991 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="versioninfo.php"||$File3Name=="/versioninfo.php") {
@@ -27,8 +27,8 @@ function version_info($proname,$subver,$ver,$supver,$reltype,$svnver,$showsvn) {
 	return $return_var; }
 // Version number and date stuff. :P
 $VER1[0] = 0; $VER1[1] = 6; $VER1[2] = 2; $VERFull[1] = $VER1[0].".".$VER1[1].".".$VER1[2];
-$VER2[0] = "Alpha"; $VER2[1] = "Al"; $VER2[2] = "SVN"; $SubVerN = 990; $GitRevN = '$Id$';
-$SVNDay[0] = 6; $SVNDay[1] = 25; $SVNDay[2] = 2023; $SVNDay[3] = $SVNDay[0]."/".$SVNDay[1]."/".$SVNDay[2];
+$VER2[0] = "Alpha"; $VER2[1] = "Al"; $VER2[2] = "SVN"; $SubVerN = 991; $GitRevN = '$Id$';
+$SVNDay[0] = 6; $SVNDay[1] = 27; $SVNDay[2] = 2023; $SVNDay[3] = $SVNDay[0]."/".$SVNDay[1]."/".$SVNDay[2];
 $AltName = "DF2k"; $AltName2 = "DF2k"; $RName = "iDB"; $SFName = "IntDB";
 $RFullName = "Internet Discussion Boards"; $AltFullName = "Discussion Forums 2k"; $AltGM2k = "Game Maker 2k";
 $VerCheckName = "iDB"; $AltVerCheckName = "DF2k"; $AltiDBHome = "https://idb.osdn.jp/";
