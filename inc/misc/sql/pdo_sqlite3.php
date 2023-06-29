@@ -11,7 +11,7 @@
     Copyright 2004-2023 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2023 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: pdo_sqlite3.php - Last Update: 6/28/2023 SVN 994 - Author: cooldude2k $
+    $FileInfo: pdo_sqlite3.php - Last Update: 6/28/2023 SVN 995 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pdo_sqlite3.php"||$File3Name=="/pdo_sqlite3.php") {
@@ -48,7 +48,6 @@ if ($result=="") {
 // Execute a query :P
 $NumQueries = 0;
 function sql_query($query,$link=null) {
-global $SQLStat;
 global $NumQueries,$SQLStat;
 if(isset($link)) {
 	$result = $link->query($query); }
