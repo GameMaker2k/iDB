@@ -11,7 +11,7 @@
     Copyright 2004-2023 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2023 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: groups.php - Last Update: 6/22/2023 SVN 984 - Author: cooldude2k $
+    $FileInfo: groups.php - Last Update: 6/28/2023 SVN 9944 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="groups.php"||$File3Name=="/groups.php") {
@@ -69,7 +69,7 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Adding new Group";
 <?php 
 if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"||
 	$Settings['sqltype']=="pgsql"||$Settings['sqltype']=="sqlite"||
-	$Settings['sqltype']=="sqlite3") {
+	$Settings['sqltype']=="sqlite3"||$Settings['sqltype']=="pdo_sqlite3") {
 $getperidq = sql_pre_query("SELECT DISTINCT \"PermissionID\" FROM \"".$Settings['sqltable']."permissions\"", array(null)); }
 if($Settings['sqltype']=="cubrid") {
 $getperidq = sql_pre_query("SELECT DISTINCT \"permissionid\" FROM \"".$Settings['sqltable']."permissions\"", array(null)); }
@@ -79,7 +79,7 @@ $getperidi = 0;
 while ($getperidi < $getperidnum) {
 if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"||
 	$Settings['sqltype']=="pgsql"||$Settings['sqltype']=="cubrid"||
-	$Settings['sqltype']=="sqlite3") {
+	$Settings['sqltype']=="sqlite3"||$Settings['sqltype']=="pdo_sqlite3") {
 $getperidID=sql_result($getperidr,$getperidi,"PermissionID"); }
 if($Settings['sqltype']=="sqlite") {
 $getperidID=sql_result($getperidr,$getperidi,"\"PermissionID\""); }
@@ -275,7 +275,7 @@ $nextperid = null;
 /*
 if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"||
 	$Settings['sqltype']=="pgsql"||$Settings['sqltype']=="cubrid"||
-	$Settings['sqltype']=="sqlite3") {
+	$Settings['sqltype']=="sqlite3"||$Settings['sqltype']=="pdo_sqlite3") {
 $nextperid = sql_get_next_id($Settings['sqltable'],"permissions",$SQLStat); }
 if($Settings['sqltype']=="sqlite") {
 $nextperid = sql_get_next_id($Settings['sqltable'],"\"permissions\"",$SQLStat); }
@@ -336,7 +336,7 @@ $nextperid = null;
 /*
 if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"||
 	$Settings['sqltype']=="pgsql"||$Settings['sqltype']=="cubrid"||
-	$Settings['sqltype']=="sqlite3") {
+	$Settings['sqltype']=="sqlite3"||$Settings['sqltype']=="pdo_sqlite3") {
 $nextperid = sql_get_next_id($Settings['sqltable'],"permissions",$SQLStat); }
 if($Settings['sqltype']=="sqlite") {
 $nextperid = sql_get_next_id($Settings['sqltable'],"\"permissions\"",$SQLStat); }

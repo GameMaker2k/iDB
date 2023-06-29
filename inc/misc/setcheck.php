@@ -11,7 +11,7 @@
     Copyright 2004-2023 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2023 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: setcheck.php - Last Update: 6/17/2023 SVN 977 - Author: cooldude2k $
+    $FileInfo: setcheck.php - Last Update: 6/28/2023 SVN 994 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="setcheck.php"||$File3Name=="/setcheck.php") {
@@ -34,12 +34,14 @@ if($Settings['sqltype']!="mysql"&&
 	$Settings['sqltype']!="pgsql"&&
 	$Settings['sqltype']!="sqlite"&&
 	$Settings['sqltype']!="sqlite3"&&
+	$Settings['sqltype']!="pdo_sqlite3"&&
 	$Settings['sqltype']!="cubrid") {
 	$Settings['sqltype'] = "mysql"; }
 if($Settings['sqltype']=="mysql"||
 	$Settings['sqltype']=="mysqli"||
 	$Settings['sqltype']=="sqlite"||
 	$Settings['sqltype']=="sqlite3"||
+	$Settings['sqltype']=="pdo_sqlite3"||
 	$Settings['sqltype']=="cubrid") {
 	$SQLimit = "LIMIT %i,%i"; }
 if($Settings['sqltype']=="pgsql") {

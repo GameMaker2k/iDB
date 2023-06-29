@@ -11,7 +11,7 @@
     Copyright 2004-2023 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2023 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: table.php - Last Update: 6/22/2023 SVN 984 - Author: cooldude2k $
+    $FileInfo: table.php - Last Update: 6/28/2023 SVN 9944 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="table.php"||$File3Name=="/table.php") {
@@ -68,7 +68,8 @@ if ($File3Name=="table.php"||$File3Name=="/table.php") {
 	$Settings['sqltype']=="mysqli"||
 	$Settings['sqltype']=="pgsql"||
 	$Settings['sqltype']=="sqlite"||
-	$Settings['sqltype']=="sqlite3") { ?>
+	$Settings['sqltype']=="sqlite3"||
+	$Settings['sqltype']=="pdo_sqlite3") { ?>
 </tr><tr class="TableSMenuRow3">
 <td class="TableSMenuColumn3"><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=sqldumper",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">SQL Dumper</a></td>
 <?php } ?>

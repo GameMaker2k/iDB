@@ -11,7 +11,7 @@
     Copyright 2004-2023 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2023 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: functions.php - Last Update: 6/22/2023 SVN 984 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 6/28/2023 SVN 9944 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -48,6 +48,8 @@ if($Settings['sqltype']=="sqlite") {
 require($SettDir['sql']."sqlite.php"); }
 if($Settings['sqltype']=="sqlite3") {
 require($SettDir['sql']."sqlite3.php"); }
+if($Settings['sqltype']=="pdo_sqlite3") {
+require($SettDir['sql']."pdo_sqlite3.php"); }
 if($Settings['sqltype']=="cubrid") {
 require($SettDir['sql']."cubrid.php"); }
 require($SettDir['misc']."useragents.php");

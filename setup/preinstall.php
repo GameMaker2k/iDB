@@ -11,7 +11,7 @@
     Copyright 2004-2023 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2023 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: preinstall.php - Last Update: 6/22/2023 SVN 984 - Author: cooldude2k $
+    $FileInfo: preinstall.php - Last Update: 6/28/2023 SVN 9944 - Author: cooldude2k $
 */
 //error_reporting(E_ALL ^ E_NOTICE);
 /* Some ini setting changes uncomment if you need them. */
@@ -70,6 +70,7 @@ if($Settings['sqltype']!="mysql"&&
 	$Settings['sqltype']!="pgsql"&&
 	$Settings['sqltype']!="sqlite"&&
 	$Settings['sqltype']!="sqlite3"&&
+    $Settings['sqltype']!="pdo_sqlite3"&&
 	$Settings['sqltype']!="cubrid") {
 	$Settings['sqltype'] = "mysql"; } }
 $Settings['idb_time_format'] = "g:i A";

@@ -11,7 +11,7 @@
     Copyright 2004-2023 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2023 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: pdo_sqlite3.php - Last Update: 6/22/2023 SVN 984 - Author: cooldude2k $
+    $FileInfo: pdo_sqlite3.php - Last Update: 6/28/2023 SVN 994 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pdo_sqlite3.php"||$File3Name=="/pdo_sqlite3.php") {
@@ -21,33 +21,34 @@ if ($File3Name=="pdo_sqlite3.php"||$File3Name=="/pdo_sqlite3.php") {
 function sql_error($link=null) {
 global $SQLStat;
 if(isset($link)) {
-	$result = $link->lastErrorMsg(); }
+	$result = $link->errorInfo(); }
 if(!isset($link)) {
-	$result = $SQLStat->lastErrorMsg(); }
+	$result = $SQLStat->errorInfo(); }
 if ($result=="") {
 	return ""; }
 	return $result; }
 function sql_errno($link=null) {
 global $SQLStat;
 if(isset($link)) {
-	$result = $link->lastErrorCode(); }
+	$result = $link->errorCode(); }
 if(!isset($link)) {
-	$result = $SQLStat->lastErrorCode(); }
+	$result = $SQLStat->errorCode(); }
 if ($result===0) {
 	return 0; }
 	return $result; }
 function sql_errorno($link=null) {
 global $SQLStat;
 if(isset($link)) {
-	$result = $link->lastErrorCode().": ".$link->lastErrorMsg(); }
+	$result = $link->errorCode().": ".$link->errorInfo(); }
 if(!isset($link)) {
-	$result = $SQLStat->lastErrorCode().": ".$SQLStat->lastErrorMsg(); }
+	$result = $SQLStat->errorCode().": ".$SQLStat->errorInfo(); }
 if ($result=="") {
 	return ""; }
 	return $result; }
 // Execute a query :P
 $NumQueries = 0;
 function sql_query($query,$link=null) {
+global $SQLStat;
 global $NumQueries,$SQLStat;
 if(isset($link)) {
 	$result = $link->query($query); }
@@ -61,43 +62,40 @@ if ($result!==false) {
 	return $result; } }
 //Fetch Number of Rows
 function sql_num_rows($result) {
-$num = 0;
-$result->reset();
-while ($result->fetchArray()) {
-    $num++; }
-$result->reset();
+$num = $result->rowCount();
 if ($num===false) {
     output_error("SQL Error: ".sql_error(),E_USER_ERROR);
 	return false; }
 	return $num; }
 // Connect to sqlite database
 function sql_connect_db($server,$username,$password,$database=null,$new_link=false) {
+global $SQLStat;
 if($new_link!==true) { $new_link = false; }
 if($database===null) {
 return true; }
 if($database!==null) {
-$link = new SQLite3($database,SQLITE3_OPEN_READWRITE | SQLITE3_OPEN_CREATE); }
+$link = new PDO("sqlite:".$database); }
 if ($link===false) {
     output_error("Not connected: ".$sqliteerror,E_USER_ERROR);
 	return false; }
 return $link; }
 function sql_disconnect_db($link=null) {
 if(isset($link)) {
-	return $link->close(); }
+	return $link->closeCursor(); }
 if(!isset($link)) {
-	return $SQLStat->close(); } }
+	return $SQLStat->ccloseCursor(); } }
 // Query Results :P
 function sql_result($result,$row,$field=0) {
 $check = true;
 $num = 0;
 $result->reset();
 while ($num<$row) {
-	$result->fetchArray();
+	$result->fetch(PDO::FETCH_BOTH);
     $num++; }
 if ($check===false) {
     output_error("SQL Error: ".sql_error(),E_USER_ERROR);
 	return false; }
-$trow = $result->fetchArray();
+$trow = $result->fetch(PDO::FETCH_BOTH);
 if(!isset($trow[$field])) { $trow[$field] = null; }
 $retval = $trow[$field]; 
 return $retval; }
@@ -106,26 +104,30 @@ function sql_free_result($result) {
 	return true; }
 //Fetch Results to Array
 function sql_fetch_array($result,$result_type=SQLITE3_BOTH) {
-$row = $result->fetchArray($result_type);
+$row = $result->fetch($result_type);
 	return $row; }
 //Fetch Results to Associative Array
 function sql_fetch_assoc($result) {
-$row = $result->fetchArray(SQLITE3_ASSOC);
+$row = $result->fetch(PDO::FETCH_ASSOC);
 	return $row; }
 //Fetch Row Results
 function sql_fetch_row($result) {
-$row = $result->fetchArray(SQLITE3_NUM);
+$row = $result->fetch(PDO::FETCH_NUM);
 	return $row; }
 //Get Server Info
 function sql_server_info($link=null) {
-	$result = SQLite3::version()['versionString'];
+	$result = $link->query('select sqlite_version()')->fetch()[0];
 	return $result; }
 //Get Client Info
 function sql_client_info($link=null) {
 	return null; }
 function sql_escape_string($string,$link=null) {
- if(isset($string)) {
- 	$string = SQLite3::escapeString($string); }
+global $SQLStat;
+ if(isset($string)&&!is_null($string)) {
+	if(isset($link)) {
+		$string = $link->quote($string); }
+	if(!isset($link)) {
+		$string = $SQLStat->quote($string); } }
 if ($string===false) {
     output_error("SQL Error: ".sql_error(),E_USER_ERROR);
 	return false; }
@@ -189,10 +191,11 @@ if ($result===false) {
 */
 // Get next id for stuff
 function sql_get_next_id($tablepre,$table,$link=null) {
+	global $SQLStat;
 	if(isset($link)) {
-		$nid = $link->lastInsertRowID(); }
+		$nid = $link->lastInsertId(); }
 	if(!isset($link)) {
-		$nid = $SQLStat->lastInsertRowID(); }
+		$nid = $SQLStat->lastInsertId(); }
 	return $nid; }
 // Get number of rows for table
 function sql_get_num_rows($tablepre,$table,$link=null) {
