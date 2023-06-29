@@ -12,7 +12,7 @@
     Copyright 2004-2023 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: presetup.php - Last Update: 6/28/2023 SVN 9944 - Author: cooldude2k $
+    $FileInfo: presetup.php - Last Update: 6/28/2023 SVN 996 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="presetup.php"||$File3Name=="/presetup.php") {
@@ -58,13 +58,13 @@ if($Error!="Yes") {
 	<option value="cubrid">CUBRID Database</option>
 	<?php } if(extension_loaded("PDO")) {
             if(extension_loaded("PDO_MYSQL")) {?>
-	<option value="pdo_mysql">PDO MySQL Database</option>
+	<option value="pdo_mysql">PDO MySQL Database ( WIP! )</option>
 	<?php } if(extension_loaded("PDO_PGSQL")) { ?>
-	<option value="pdo_pgsql">PDO PostgreSQL Database</option>
+	<option value="pdo_pgsql">PDO PostgreSQL Database ( WIP! )</option>
 	<?php } if(extension_loaded("PDO_SQLITE")) { ?>
-	<option value="pdo_sqlite3">PDO SQLite 3 Database</option>
+	<option value="pdo_sqlite3">PDO SQLite 3 Database ( WIP! )</option>
 	<?php } if(extension_loaded("PDO_CUBRID")) { ?>
-	<option value="pdo_cubrid">PDO CUBRID Database</option>
+	<option value="pdo_cubrid">PDO CUBRID Database ( WIP! )</option>
 	<?php } } if(!function_exists("mysql_connect")&&!function_exists("mysqli_connect")&&
 	!function_exists("pg_connect")&&!function_exists("sqlite_open")&&!class_exists('SQLite3')&&
 	!function_exists("cubrid_connect")&&!extension_loaded("PDO")) { ?>
