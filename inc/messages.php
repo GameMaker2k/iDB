@@ -11,7 +11,7 @@
     Copyright 2004-2023 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2023 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: messages.php - Last Update: 6/22/2023 SVN 984 - Author: cooldude2k $
+    $FileInfo: messages.php - Last Update: 6/28/2023 SVN 997 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="messages.php"||$File3Name=="/messages.php") {
@@ -584,13 +584,13 @@ $User1Signature = url2link($User1Signature);
 <div class="TableInfoMini1Border" id="message<?php echo $PMID; ?>">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableInfoMiniRow1">
-<span style="font-weight: bold; text-align: left;"><?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>"><?php echo $MessageName; ?></a> ( <?php echo $MessageDesc; ?> )</span>
+<span style="font-weight: bold; text-align: left;"><?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=read&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>"><?php echo $MessageName; ?></a> ( <?php echo $MessageDesc; ?> )</span>
 </div>
 <?php } ?>
 <table class="TableInfoMini1" style="width: 100%;" id="pmessage<?php echo $is+1; ?>">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableInfoMiniRow1">
-<td class="TableInfoMiniColumn1" colspan="2"><span style="font-weight: bold; text-align: left;"><?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>"><?php echo $MessageName; ?></a> ( <?php echo $MessageDesc; ?> )</span>
+<td class="TableInfoMiniColumn1" colspan="2"><span style="font-weight: bold; text-align: left;"><?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=read&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>"><?php echo $MessageName; ?></a> ( <?php echo $MessageDesc; ?> )</span>
 </td>
 </tr><?php } ?>
 <tr class="TableInfoMiniRow2">
