@@ -475,6 +475,38 @@ if($type!="location"&&$type!="refresh") { $type=="location"; }
 if($type=="refresh") { header("Refresh: ".$time."; URL=".$url); }
 if($type=="location") { idb_log_maker(302,"-"); }
 if($type=="location") { header("Location: ".$url); } return true; }
+// Function to log the web access
+function logWebAccess($logFile, $format = '%h %l %u %t "%r" %>s %b "%{Referer}i" "%{User-Agent}i"')
+{
+    // Get the necessary information from the $_SERVER superglobal array
+    $ip = $_SERVER['REMOTE_ADDR'];
+    $timestamp = date('d/M/Y:H:i:s O');
+    $method = $_SERVER['REQUEST_METHOD'];
+    $uri = $_SERVER['REQUEST_URI'];
+    $protocol = $_SERVER['SERVER_PROTOCOL'];
+    $status = http_response_code();
+    $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '-';
+    $userAgent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '-';
+    // Replace placeholders in the log format with actual values
+    $placeholders = array(
+        '%h' => $ip,
+        '%l' => '-',
+        '%u' => '-',
+        '%t' => "[$timestamp]",
+        '%r' => "$method $uri $protocol",
+        '%>s' => $status,
+        '%b' => '-',
+        '%{Referer}i' => $referer,
+        '%{User-Agent}i' => $userAgent,
+    );
+    $logEntry = strtr($format, $placeholders);
+    // Open the log file in append mode
+    $logFileHandle = fopen($logFile, 'a');
+    // Write the log entry to the file
+    fwrite($logFileHandle, $logEntry . PHP_EOL);
+    // Close the log file
+    fclose($logFileHandle);
+}
 // Make xhtml tags
 function html_tag_make($name="br",$emptytag=true,$attbvar=null,$attbval=null,$extratest=null) {
 	$var_num = count($attbvar); $value_num = count($attbval);
