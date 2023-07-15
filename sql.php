@@ -300,7 +300,9 @@ if($_GET['act']=="MkCaptcha"||$_GET['act']=="Captcha") {
 	$Settings['use_gzip'] = 'off'; }
 if($Settings['use_gzip']=="on") {
 if(strstr($_SERVER['HTTP_ACCEPT_ENCODING'], "br")&&function_exists('brotli_compress')) { 
-	$GZipEncode['Type'] = "brotli"; } else { 
+	$GZipEncode['Type'] = "brotli"; }
+    elseif(strstr($_SERVER['HTTP_ACCEPT_ENCODING'], "zstd")&&function_exists('zstd_compress')) { 
+	$GZipEncode['Type'] = "zstd"; } else { 
 	if(strstr($_SERVER['HTTP_ACCEPT_ENCODING'], "gzip")) { 
 		$GZipEncode['Type'] = "gzip"; } else { 
 		if(strstr($_SERVER['HTTP_ACCEPT_ENCODING'], "deflate")) { 
@@ -309,7 +311,11 @@ if(strstr($_SERVER['HTTP_ACCEPT_ENCODING'], "br")&&function_exists('brotli_compr
 if($Settings['use_gzip']=="brotli"&&function_exists('brotli_compress')) {
 if(strstr($_SERVER['HTTP_ACCEPT_ENCODING'], "br")) { $Settings['use_brotli'] = "on";
 	$GZipEncode['Type'] = "brotli"; } else { $Settings['use_gzip'] = "off"; } }
+if($Settings['use_gzip']=="zstd"&&function_exists('zstd_compress')) {
+if(strstr($_SERVER['HTTP_ACCEPT_ENCODING'], "br")) { $Settings['use_zstd'] = "on";
+	$GZipEncode['Type'] = "zstd"; } else { $Settings['use_gzip'] = "off"; } }
 if($Settings['use_gzip']=="brotli"&&!function_exists('brotli_compress')) { $GZipEncode['Type'] = "gzip"; }
+if($Settings['use_gzip']=="zstd"&&!function_exists('zstd_compress')) { $GZipEncode['Type'] = "gzip"; }
 if($Settings['use_gzip']=="gzip") {
 if(strstr($_SERVER['HTTP_ACCEPT_ENCODING'], "gzip")) { $Settings['use_gzip'] = "on";
 	$GZipEncode['Type'] = "gzip"; } else { $Settings['use_gzip'] = "off"; } }

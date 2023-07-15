@@ -12,7 +12,7 @@
     Copyright 2004-2023 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: setup.php - Last Update: 6/22/2023 SVN 984 - Author: cooldude2k $
+    $FileInfo: setup.php - Last Update: 7/15/2023 SVN 1001 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="setup.php"||$File3Name=="/setup.php") {
@@ -205,7 +205,11 @@ for ($i=0; $i < count($timezone_identifiers); $i++) {
 	<option value="on">Yes</option>
 	<option value="gzip">Only GZip</option>
 	<option value="deflate">Only Deflate</option>
+    <?php if(function_exists('brotli_compress')) { ?>
 	<option value="brotli">Only Brotli</option>
+    <?php } if(function_exists('brotli_compress')) { ?>
+	<option value="zstd">Only Zstandard</option>
+    <?php } ?>
 	</select></td>
 </tr><tr>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="HTMLType">HTML Type to use:</label></td>
