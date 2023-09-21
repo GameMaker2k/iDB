@@ -94,6 +94,8 @@ if($Settings['idburl']!="localhost"&&$Settings['idburl']!=null) {
 	if($Settings['html_level']!="Transitional") {
 		$Settings['html_level'] = "Transitional"; } }*/
 // HTML Document Starts
+if($Settings['enable_https']=="on") { 
+header("Strict-Transport-Security \"max-age=16070400\""); }
 ob_start("idb_suboutput_handler");
 if($XHTML5===false) { ?>
 <!DOCTYPE html>
