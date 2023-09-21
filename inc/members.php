@@ -885,6 +885,7 @@ Title: <?php echo $ViewMem['Title']; ?>
 <?php sql_free_result($result); } 
 if($_GET['act']=="logout") {
 session_unset();
+header("Clear-Site-Data: \"cache\", \"cookies\"");
 if($cookieDomain==null) {
 setcookie("MemberName", null, $utccurtime->getTimestamp() - 3600, $cbasedir);
 setcookie("UserID", null, $utccurtime->getTimestamp() - 3600, $cbasedir);
