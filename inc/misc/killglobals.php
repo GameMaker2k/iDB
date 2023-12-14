@@ -18,7 +18,9 @@ $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="killqlobals.php"||$File3Name=="/killqlobals.php") {
 	require('index.php');
 	exit(); }
+/*
 function unregister_globals() {
+   if (ini_get('register_globals')) {
    $REQUEST = $_REQUEST;
    $GET = $_GET;
    $POST = $_POST;
@@ -39,6 +41,34 @@ function unregister_globals() {
    $_SESSION = $SESSION; }
    $_FILES = $FILES;
    $_ENV = $ENV;
-   $_SERVER = $SERVER; }
+   $_SERVER = $SERVER; } }
 unregister_globals();
+*//*
+unction unregister_globals() {
+    if (ini_get('register_globals')) {
+        foreach (array('_REQUEST', '_GET', '_POST', '_COOKIE', '_FILES', '_ENV', '_SERVER') as $superglobal) {
+            foreach ($GLOBALS[$superglobal] as $key => $value) {
+                unset($GLOBALS[$key]);
+            }
+        }
+        if (isset($_SESSION)) {
+            foreach ($_SESSION as $key => $value) {
+                unset($GLOBALS[$key]);
+            }
+        }
+    }
+}
+unregister_globals();
+*/
+function unregister_globals_advanced() {
+    if (ini_get('register_globals')) {
+        $superglobals = array('_REQUEST', '_GET', '_POST', '_COOKIE', '_SESSION', '_FILES', '_ENV', '_SERVER');
+        foreach ($GLOBALS as $key => $value) {
+            if (!in_array($key, $superglobals) && $key != 'GLOBALS') {
+                unset($GLOBALS[$key]);
+            }
+        }
+    }
+}
+unregister_globals_advanced();
 ?>
