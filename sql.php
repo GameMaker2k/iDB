@@ -350,13 +350,14 @@ if(isset($Settings['sql_collate'])&&!isset($Settings['sql_charset'])) {
 		$Settings['sql_collate']=="latin1_general_ci"||
 		$Settings['sql_collate']=="latin1_general_cs") {
 		$Settings['sql_charset'] = "latin1"; }
-	if($Settings['sql_collate']=="utf8_bin"||
-		$Settings['sql_collate']=="utf8_general_ci"||
-		$Settings['sql_collate']=="utf8_unicode_ci"||
-		$Settings['sql_collate']=="utf8mb4_bin"||
+	if($Settings['sql_collate']=="utf8mb3_bin"||
+		$Settings['sql_collate']=="utf8mb3_general_ci"||
+		$Settings['sql_collate']=="utf8mb3_unicode_ci") {
+		$Settings['sql_charset'] = "utf8mb3"; }
+	if($Settings['sql_collate']=="utf8mb4_bin"||
 		$Settings['sql_collate']=="utf8mb4_general_ci"||
 		$Settings['sql_collate']=="utf8mb4_unicode_ci") {
-		$Settings['sql_charset'] = "utf8"; } }
+		$Settings['sql_charset'] = "utf8mb4"; } }
 if(isset($Settings['sql_collate'])&&isset($Settings['sql_charset'])) {
 	if($Settings['sql_charset']=="ascii") {
 	if($Settings['sql_collate']!="ascii_bin"&&
@@ -368,17 +369,17 @@ if(isset($Settings['sql_collate'])&&isset($Settings['sql_charset'])) {
 		$Settings['sql_collate']!="latin1_general_cs") {
 		$Settings['sql_collate'] = "latin1_general_ci"; } }
 	if($Settings['sql_charset']=="utf8" || $Settings['sql_charset']=="utf8mb4") {
-	if($Settings['sql_collate']!="utf8_bin"&&
-		$Settings['sql_collate']!="utf8_general_ci"&&
-		$Settings['sql_collate']!="utf8_unicode_ci"&&
+	if($Settings['sql_collate']!="utf8mb3_bin"&&
+		$Settings['sql_collate']!="utf8mb3_general_ci"&&
+		$Settings['sql_collate']!="utf8mb3_unicode_ci"&&
 		$Settings['sql_collate']!="utf8mb4_bin"&&
 		$Settings['sql_collate']!="utf8mb4_general_ci"&&
 		$Settings['sql_collate']!="utf8mb4_unicode_ci") {
 		$Settings['sql_collate'] = "utf8mb4_unicode_ci"; } }
-	if($Settings['sql_collate']=="utf8_bin"||
-		$Settings['sql_collate']=="utf8_general_ci"||
-		$Settings['sql_collate']=="utf8_unicode_ci") {
-		$Settings['sql_charset'] = "utf8"; }
+	if($Settings['sql_collate']=="utf8mb3_bin"||
+		$Settings['sql_collate']=="utf8mb3_general_ci"||
+		$Settings['sql_collate']=="utf8mb3_unicode_ci") {
+		$Settings['sql_charset'] = "utf8mb3"; }
 	if($Settings['sql_collate']=="utf8mb4_bin"||
 		$Settings['sql_collate']=="utf8mb4_general_ci"||
 		$Settings['sql_collate']=="utf8mb4_unicode_ci") {

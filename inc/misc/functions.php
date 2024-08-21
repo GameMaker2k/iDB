@@ -271,8 +271,9 @@ if($ReplaceType=="yes") {
 $Text = preg_replace("/".$Smile1."/i",$Smile2,$Text); }
 ++$melanies; } return $Text; }
 // Removes the bad stuff
+// Disabling to relax harsh restrictions ^_^ 
 function remove_bad_entities($Text) {
-//HTML Entities Dec Version
+/*//HTML Entities Dec Version
 $Text = preg_replace("/&#8238;/isU","",$Text);
 $Text = preg_replace("/&#8194;/isU","",$Text);
 $Text = preg_replace("/&#8195;/isU","",$Text);
@@ -297,7 +298,7 @@ $Text = preg_replace("/&thinsp;/isU","",$Text);
 $Text = preg_replace("/&zwnj;/isU","",$Text);
 $Text = preg_replace("/&zwj;/isU","",$Text);
 $Text = preg_replace("/&lrm;/isU","",$Text);
-$Text = preg_replace("/&rlm;/isU","",$Text);
+$Text = preg_replace("/&rlm;/isU","",$Text);*/
 return $Text; }
 // Remove the bad stuff
 function remove_spaces($Text) {

@@ -176,7 +176,7 @@ for ($i=0; $i < count($timezone_identifiers); $i++) {
 	<td style="width: 50%;"><input type="password" class="TextBox" name="ReaPassword" size="20" id="ReaPassword" maxlength="30" /></td>
 </tr><tr>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="BoardURL">Insert The Board URL:</label></td>
-	<td style="width: 50%;"><input type="url" class="TextBox" name="BoardURL" size="20" id="BoardURL" value="<?php echo $prehost.$_SERVER['HTTP_HOST'].$this_dir; ?>" /></td>
+	<td style="width: 50%;"><input type="url" class="TextBox" name="BoardURL" size="20" id="BoardURL" value="<?php echo $prehost.$_SERVER['HTTP_HOST'].str_replace('%2F', '/', rawurlencode($this_dir)); ?>" /></td>
 </tr><tr>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="WebURL">Insert The WebSite URL:</label></td>
 	<td style="width: 50%;"><input type="url" class="TextBox" name="WebURL" size="20" id="WebURL" value="<?php echo $prehost.$_SERVER['HTTP_HOST']."/"; ?>" /></td>
@@ -190,11 +190,11 @@ for ($i=0; $i < count($timezone_identifiers); $i++) {
 	<option value="ascii_generel_ci">ASCII Case-Insensitive</option>
 	<option value="ascii_bin">ASICC Binary</option>
 	<?php } if($_POST['charset']=="UTF-8") { ?>
-	<option value="utf8_unicode_ci">UTF-8 Unicode Case-Insensitive</option>
-	<option value="utf8_general_ci">UTF-8 General Case-Insensitive</option>
-	<option value="utf8_bin">UTF-8 Binary</option>
+	<option value="utf8mb3_unicode_ci">UTF-8 Unicode Case-Insensitive</option>
+	<option value="utf8mb3_general_ci">UTF-8 General Case-Insensitive</option>
+	<option value="utf8mb3_bin">UTF-8 Binary</option>
 	<option value="utf8mb4_unicode_ci">UTF-8 Multibyte Unicode Case-Insensitive</option>
-	<option value="utf8mb4_general_ci">UTF-8 Multibyte General Case-Insensitive</option>
+	<option value="utf8mb4_general_ci" selected="selected">UTF-8 Multibyte General Case-Insensitive</option>
 	<option value="utf8mb4_bin">UTF-8 Multibyte Binary</option>
 	<?php } ?>
 	</select></td>
