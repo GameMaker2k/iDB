@@ -180,6 +180,12 @@ for ($i=0; $i < count($timezone_identifiers); $i++) {
 </tr><tr>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="WebURL">Insert The WebSite URL:</label></td>
 	<td style="width: 50%;"><input type="url" class="TextBox" name="WebURL" size="20" id="WebURL" value="<?php echo $prehost.$_SERVER['HTTP_HOST']."/"; ?>" /></td>
+</tr><tr>
+	<td style="width: 50%;"><label class="TextBoxLabel" for="startblank">Start with test fourm:</label></td>
+	<td style="width: 50%;"><select size="1" class="TextBox" name="startblank" id="startblank">
+	<option value="yes">Yes</option>
+	<option value="no">No</option>
+	</select></td>
 </tr><?php if($_POST['DatabaseType']=="mysql"||$_POST['DatabaseType']=="mysqli") { ?><tr>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="sqlcollate">MySQL Collate:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="sqlcollate" id="sqlcollate">
