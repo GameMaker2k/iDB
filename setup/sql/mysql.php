@@ -125,9 +125,13 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."foru
 "  PRIMARY KEY  (\"id\")\n".
 ") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$Settings['sql_charset']." COLLATE=".$Settings['sql_collate'].";", array(null));
 sql_query($query,$SQLStat);
+if($_POST['startblank']=="yes") {
 $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."forums\" (\"CategoryID\", \"OrderID\", \"Name\", \"ShowForum\", \"ForumType\", \"InSubForum\", \"RedirectURL\", \"Redirects\", \"NumViews\", \"Description\", \"PostCountAdd\", \"PostCountView\", \"KarmaCountView\", \"CanHaveTopics\", \"HotTopicPosts\", \"NumPosts\", \"NumTopics\") VALUES\n".
 "(1, 1, 'A Test Forum', 'yes', 'forum', 0, 'http://', 0, 0, 'A test forum that may be removed at any time.', 'off', 0, 0, 'yes', 15, 1, 1);", array(null));
-sql_query($query,$SQLStat);
+sql_query($query,$SQLStat); } else {
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."forums\" (\"CategoryID\", \"OrderID\", \"Name\", \"ShowForum\", \"ForumType\", \"InSubForum\", \"RedirectURL\", \"Redirects\", \"NumViews\", \"Description\", \"PostCountAdd\", \"PostCountView\", \"KarmaCountView\", \"CanHaveTopics\", \"HotTopicPosts\", \"NumPosts\", \"NumTopics\") VALUES\n".
+"(1, 1, 'A Test Forum', 'yes', 'forum', 0, 'http://', 0, 0, 'A test forum that may be removed at any time.', 'off', 0, 0, 'yes', 15, 0, 0);", array(null));
+sql_query($query,$SQLStat); }
 $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."groups\" (\n".
 "  \"id\" int(15) NOT NULL auto_increment,\n".
 "  \"Name\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
