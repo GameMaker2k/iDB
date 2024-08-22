@@ -181,7 +181,7 @@ for ($i=0; $i < count($timezone_identifiers); $i++) {
 	<td style="width: 50%;"><label class="TextBoxLabel" for="WebURL">Insert The WebSite URL:</label></td>
 	<td style="width: 50%;"><input type="url" class="TextBox" name="WebURL" size="20" id="WebURL" value="<?php echo $prehost.$_SERVER['HTTP_HOST']."/"; ?>" /></td>
 </tr><tr>
-	<td style="width: 50%;"><label class="TextBoxLabel" for="startblank">Start with test fourm:</label></td>
+	<td style="width: 50%;"><label class="TextBoxLabel" for="startblank">Start with test data:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="startblank" id="startblank">
 	<option value="yes">Yes</option>
 	<option value="no">No</option>
