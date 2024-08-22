@@ -151,6 +151,7 @@ if (pre_strlen($_POST['AdminUser'])>"30") { $Error="Yes";
 echo "<br />Your user name is too big."; }
 if ($_POST['AdminPasswords']!=$_POST['ReaPassword']) { $Error="Yes";
 echo "<br />Your passwords did not match."; }
+if($_POST['startblank']!="yes"&&$_POST['startblank']!="no") { $_POST['startblank'] = "yes"; }
 if($_POST['HTMLType']=="html4") { $_POST['OutPutType'] = "html"; }
 if($_POST['HTMLType']=="xhtml10") { $_POST['OutPutType'] = "xhtml"; }
 if($_POST['HTMLType']=="xhtml11") { $_POST['OutPutType'] = "xhtml"; }
