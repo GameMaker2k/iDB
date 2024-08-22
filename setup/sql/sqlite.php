@@ -163,7 +163,7 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."ranks\" (\n".
 "  \"id\" INTEGER PRIMARY KEY NOT NULL,\n".
 "  \"Name\" VARCHAR(150) UNIQUE NOT NULL default '',\n".
 "  \"PromoteKarma\" INTEGER NOT NULL default '0',\n".
-"  \"PromotePosts\" INTEGER NOT NULL default '0',\n".
+"  \"PromotePosts\" INTEGER NOT NULL default '0'\n".
 ");", array(null));
 sql_query($query,$SQLStat);
 $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."ranks\" (\"id\", \"Name\", \"PromoteKarma\", \"PromotePosts\") VALUES (-1, 'Guest', 0, 0);", array(null));

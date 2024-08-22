@@ -144,7 +144,7 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."ranks\" (\n".
 "  \"id\" SERIAL PRIMARY KEY NOT NULL,\n".
 "  \"Name\" varchar(150) NOT NULL default '',\n".
 "  \"PromoteKarma\" numeric(15) NOT NULL default '0',\n".
-"  \"PromotePosts\" numeric(15) NOT NULL default '0',\n".
+"  \"PromotePosts\" numeric(15) NOT NULL default '0'\n".
 ");", array(null));
 sql_query($query,$SQLStat);
 $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."ranks\" (\"id\", \"Name\", \"PromoteKarma\", \"PromotePosts\") VALUES\n".

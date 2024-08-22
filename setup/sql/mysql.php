@@ -170,7 +170,9 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."ranks\" (\n".
 "  \"Name\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"PromoteKarma\" int(15) NOT NULL default '0',\n".
 "  \"PromotePosts\" int(15) NOT NULL default '0',\n".
-");", array(null));
+"  PRIMARY KEY  (\"id\"),\n".
+"  UNIQUE KEY \"Name\" (\"Name\")\n".
+") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$Settings['sql_charset']." COLLATE=".$Settings['sql_collate'].";", array(null));
 sql_query($query,$SQLStat);
 $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."ranks\" (\"id\", \"Name\", \"PromoteKarma\", \"PromotePosts\") VALUES\n".
 "(-1, 'Guest', 0, 0),\n".
