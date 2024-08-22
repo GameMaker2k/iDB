@@ -718,6 +718,7 @@ $ViewMem['AvatarSize']=sql_result($result,$i,"AvatarSize");
 $ViewMem['Email']=sql_result($result,$i,"Email");
 $ViewMem['GroupID']=sql_result($result,$i,"GroupID");
 $ViewMem['LevelID']=sql_result($result,$i,"LevelID");
+$ViewMem['RankID']=sql_result($result,$i,"RankID");
 $ViewMem['HiddenMember']=sql_result($result,$i,"HiddenMember");
 $ViewMem['WarnLevel']=sql_result($result,$i,"WarnLevel");
 $ViewMem['Interests']=sql_result($result,$i,"Interests");
@@ -752,6 +753,10 @@ $lquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."levels\" WHERE
 $lresult=sql_query($lquery,$SQLStat);
 $ViewMem['Level']=sql_result($lresult,0,"Name");
 sql_free_result($lresult);
+$rquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."ranks\" WHERE \"id\"=%i LIMIT 1", array($ViewMem['RankID']));
+$rresult=sql_query($rquery,$SQLStat);
+$ViewMem['Rank']=sql_result($rresult,0,"Name");
+sql_free_result($rresult);
 $gquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i LIMIT 1", array($ViewMem['GroupID']));
 $gresult=sql_query($gquery,$SQLStat);
 $ViewMem['Group']=sql_result($gresult,0,"Name");
@@ -872,6 +877,7 @@ Title: <?php echo $ViewMem['Title']; ?>
 &#160;User Website: <a href="<?php echo $ViewMem['Website']; ?>"<?php echo $opennew; ?>>Website</a><br />
 &#160;Post Count: <?php echo $ViewMem['PostCount']; ?><br />
 &#160;Karma: <?php echo $ViewMem['Karma']; ?><br />
+&#160;Karma Level: <?php echo $ViewMem['Level']; ?><br />
 &#160;Interests: <?php echo $ViewMem['Interests']; ?><br />
 &#160;Topics: <?php if($Settings['enable_search']=="on"&&$GroupInfo['CanSearch']=="yes") { ?>
 <a href="<?php echo url_maker($exfile['search'],$Settings['file_ext'],"act=topics&search=%&type=wildcard&memid=".$ViewMem['ID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search']); ?>">Find Topics</a>
@@ -1892,8 +1898,8 @@ sql_free_result($gresults);
 $_POST['Interests'] = remove_spaces($_POST['Interests']);
 $_POST['Title'] = remove_spaces($_POST['Title']);
 $_POST['Email'] = remove_spaces($_POST['Email']);
-$query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."members\" (\"Name\", \"UserPassword\", \"HashType\", \"Email\", \"GroupID\", \"LevelID\", \"Validated\", \"HiddenMember\", \"WarnLevel\", \"Interests\", \"Title\", \"Joined\", \"LastActive\", \"LastLogin\", \"LastPostTime\", \"BanTime\", \"BirthDay\", \"BirthMonth\", \"BirthYear\", \"Signature\", \"Notes\", \"Avatar\", \"AvatarSize\", \"Website\", \"Location\", \"Gender\", \"PostCount\", \"Karma\", \"KarmaUpdate\", \"RepliesPerPage\", \"TopicsPerPage\", \"MessagesPerPage\", \"TimeZone\", \"DateFormat\", \"TimeFormat\", \"UseTheme\", \"IgnoreSignitures\", \"IgnoreAdvatars\", \"IgnoreUsers\", \"IP\", \"Salt\") VALUES\n". 
-"('%s', '%s', '%s', '%s', '%s', '1', '%s', '%s', %i, '%s', '%s', %i, %i, %i, '0', '0', '0', '0', '0', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %i, 0, 0, 10, 10, 10, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')", array($Name,$NewPassword,$iDBHash,$_POST['Email'],$yourgroup,$ValidateStats,$HideMe,"0",$_POST['Interests'],$_POST['Title'],$_POST['Joined'],$_POST['LastActive'],$_POST['LastActive'],$NewSignature,'Your Notes',$Avatar,"100x100",$Website,'',$_POST['YourGender'],$_POST['PostCount'],$_POST['YourOffSet'],$Settings['idb_date_format'],$Settings['idb_time_format'],$Settings['DefaultTheme'],$_POST['UserIP'],'','','',$HashSalt));
+$query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."members\" (\"Name\", \"UserPassword\", \"HashType\", \"Email\", \"GroupID\", \"LevelID\", \"RankID\", \"Validated\", \"HiddenMember\", \"WarnLevel\", \"Interests\", \"Title\", \"Joined\", \"LastActive\", \"LastLogin\", \"LastPostTime\", \"BanTime\", \"BirthDay\", \"BirthMonth\", \"BirthYear\", \"Signature\", \"Notes\", \"Avatar\", \"AvatarSize\", \"Website\", \"Location\", \"Gender\", \"PostCount\", \"Karma\", \"KarmaUpdate\", \"RepliesPerPage\", \"TopicsPerPage\", \"MessagesPerPage\", \"TimeZone\", \"DateFormat\", \"TimeFormat\", \"UseTheme\", \"IgnoreSignitures\", \"IgnoreAdvatars\", \"IgnoreUsers\", \"IP\", \"Salt\") VALUES\n". 
+"('%s', '%s', '%s', '%s', '%s', '1', 1, '%s', '%s', %i, '%s', '%s', %i, %i, %i, '0', '0', '0', '0', '0', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %i, 0, 0, 10, 10, 10, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')", array($Name,$NewPassword,$iDBHash,$_POST['Email'],$yourgroup,$ValidateStats,$HideMe,"0",$_POST['Interests'],$_POST['Title'],$_POST['Joined'],$_POST['LastActive'],$_POST['LastActive'],$NewSignature,'Your Notes',$Avatar,"100x100",$Website,'',$_POST['YourGender'],$_POST['PostCount'],$_POST['YourOffSet'],$Settings['idb_date_format'],$Settings['idb_time_format'],$Settings['DefaultTheme'],$_POST['UserIP'],'','','',$HashSalt));
 sql_query($query,$SQLStat);
 $yourid = sql_get_next_id($Settings['sqltable'],"members",$SQLStat);
 $idquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s' AND \"UserPassword\"='%s' AND \"Email\"='%s' AND \"IP\"='%s' AND \"Salt\"='%s' LIMIT 1", array($Name,$NewPassword,$_POST['Email'],$_POST['UserIP'],$HashSalt));

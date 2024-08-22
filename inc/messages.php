@@ -504,6 +504,11 @@ $User1LevelID=sql_result($reresult,$rei,"LevelID");
 $lquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."levels\" WHERE \"id\"=%i LIMIT 1", array($User1LevelID));
 $lresult=sql_query($lquery,$SQLStat);
 $User1Level=sql_result($lresult,0,"Name");
+$User1RankID=sql_result($reresult,$rei,"RankID");
+$rquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."ranks\" WHERE \"id\"=%i LIMIT 1", array($User1RankID));
+$rresult=sql_query($rquery,$SQLStat);
+$User1RankID=sql_result($rresult,0,"Name");
+sql_free_result($rresult);
 $User1GroupID=sql_result($reresult,$rei,"GroupID");
 $User1Hidden=sql_result($reresult,$rei,"HiddenMember");
 $SenderHidden = $User1Hidden;
@@ -637,6 +642,7 @@ if($User1ID<=0||$User1Hidden=="yes") { echo 0; }
 ?><br />
 Posts: <?php echo $User1PostCount; ?><br />
 Karma: <?php echo $User1Karma; ?><br />
+Karma Level: <?php echo $User1RankID; ?><br />
 Joined: <?php echo $User1Joined; ?><br />
 <?php if($GroupInfo['CanViewIPAddress']=="yes") { ?>
 User IP: <a onclick="window.open(this.href);return false;" href="<?php echo sprintf($IPCheckURL,$User1IP); ?>">

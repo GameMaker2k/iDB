@@ -61,6 +61,8 @@ $ChkUsrGroup=sql_result($resultchkusr,0,"GroupID");
 $ChkUsrGroupID=$ChkUsrGroup;
 $ChkUsrLevel=sql_result($resultchkusr,0,"LevelID");
 $ChkUsrLevelID=$ChkUsrLevel;
+$ChkUsrRank=sql_result($resultchkusr,0,"RankID");
+$ChkUsrRankID=$ChkUsrRank;
 $ChkUsrPass=sql_result($resultchkusr,0,"UserPassword");
 $ChkUsrTimeZone=sql_result($resultchkusr,0,"TimeZone");
 $ChkUsrDateFormat=sql_result($resultchkusr,0,"DateFormat");
@@ -144,10 +146,10 @@ if($_SESSION['UserID']!=0&&$_SESSION['UserID']!=null) {
 $levquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."levels\" WHERE \"id\"=%i LIMIT 1", array($ChkUsrLevelID));
 $levresult=sql_query($levquery,$SQLStat);
 $levnum=sql_num_rows($levresult);
-if($levnum<=0) { $GruError = true; sql_free_result($levresult);
+/*if($levnum<=0) { $GruError = true; sql_free_result($levresult);
 header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 503;
 ob_clean(); echo "Sorry could not find level data in database.\nContact the board admin about error."; 
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); } }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); } }*/
 if($levnum>=1) {
 $LevelInfo['ID']=sql_result($levresult,0,"id");
 if(!is_numeric($LevelInfo['ID'])) { $GruError = true; }
@@ -159,6 +161,23 @@ if(!is_numeric($LevelInfo['PromotePosts'])) {
 $LevelInfo['PromoteKarma']=sql_result($levresult,0,"PromoteKarma");
 if(!is_numeric($LevelInfo['PromoteKarma'])) { 
 	$LevelInfo['PromoteKarma'] = 0; $LevelInfo['PromoteTo'] = 0; } }
+$ranquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."ranks\" WHERE \"id\"=%i LIMIT 1", array($ChkUsrRankID));
+$ranresult=sql_query($ranquery,$SQLStat);
+$rannum=sql_num_rows($ranresult);
+/*if($rannum<=0) { $GruError = true; sql_free_result($ranresult);
+header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 503;
+ob_clean(); echo "Sorry could not find ranel data in database.\nContact the board admin about error."; 
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); } }*/
+if($rannum>=1) {
+$RankInfo['ID']=sql_result($ranresult,0,"id");
+if(!is_numeric($RankInfo['ID'])) { $GruError = true; }
+$RankInfo['Name']=sql_result($ranresult,0,"Name");
+$RankInfo['PromotePosts']=sql_result($ranresult,0,"PromotePosts");
+if(!is_numeric($RankInfo['PromotePosts'])) { 
+	$RankInfo['PromotePosts'] = 0; $RankInfo['PromoteTo'] = 0; }
+$RankInfo['PromoteKarma']=sql_result($ranresult,0,"PromoteKarma");
+if(!is_numeric($RankInfo['PromoteKarma'])) { 
+	$RankInfo['PromoteKarma'] = 0; $RankInfo['PromoteTo'] = 0; } }
 // Member Group Setup
 if(!isset($_SESSION['UserGroup'])) { $_SESSION['UserGroup'] = null; }
 if($_SESSION['UserGroup']==null) { 

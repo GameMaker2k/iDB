@@ -358,10 +358,15 @@ $tmpusrcurtime->setTimezone($usertz);
 $User1Joined=$tmpusrcurtime->format($_SESSION['iDBDateFormat']);
 $User1Hidden=sql_result($reresult,$rei,"HiddenMember");
 $User1LevelID=sql_result($reresult,$rei,"LevelID");
+$User1RankID=sql_result($reresult,$rei,"RankID");
 $lquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."levels\" WHERE \"id\"=%i LIMIT 1", array($User1LevelID));
 $lresult=sql_query($lquery,$SQLStat);
 $User1Level=sql_result($lresult,0,"Name");
 $User1GroupID=sql_result($reresult,$rei,"GroupID");
+$rquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."ranks\" WHERE \"id\"=%i LIMIT 1", array($User1RankID));
+$rresult=sql_query($rquery,$SQLStat);
+$User1Rank=sql_result($rresult,0,"Name");
+sql_free_result($rresult);
 $gquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i LIMIT 1", array($User1GroupID));
 $gresult=sql_query($gquery,$SQLStat);
 $User1Group=sql_result($gresult,0,"Name");
@@ -554,6 +559,7 @@ if($User1ID<=0||$User1Hidden=="yes") { echo 0; }
 ?><br />
 Posts: <?php echo $User1PostCount; ?><br />
 Karma: <?php echo $User1Karma; ?><br />
+Karma Level: <?php echo $User1Rank; ?><br />
 Joined: <?php echo $User1Joined; ?><br />
 <?php if($GroupInfo['CanViewIPAddress']=="yes") { ?>
 User IP: <a onclick="window.open(this.href);return false;" href="<?php echo sprintf($IPCheckURL,$User1IP); ?>">

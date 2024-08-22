@@ -159,6 +159,43 @@ sql_query($query,$SQLStat);
 $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."groups\" (\"Name\", \"PermissionID\", \"NamePrefix\", \"NameSuffix\", \"CanViewBoard\", \"CanViewOffLine\", \"CanEditProfile\", \"CanAddEvents\", \"CanPM\", \"CanSearch\", \"CanExecPHP\", \"CanDoHTML\", \"CanUseBBTags\", \"CanModForum\", \"CanViewIPAddress\", \"CanViewUserAgent\", \"FloodControl\", \"SearchFlood\", \"PromoteTo\", \"PromotePosts\", \"PromoteKarma\", \"HasModCP\", \"HasAdminCP\", \"ViewDBInfo\") VALUES\n".
 "('Validate', 6, '', '', 'yes', 'no', 'yes', 'no', 'no', 'yes', 'no', 'no', 'no', 'yes', 'no', 'no', 30, 30, 0, 0, 0, 'no', 'no', 'no');", array(null)); 
 sql_query($query,$SQLStat);
+$query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."ranks\" (\n".
+"  \"id\" INTEGER PRIMARY KEY NOT NULL,\n".
+"  \"Name\" VARCHAR(150) UNIQUE NOT NULL default '',\n".
+"  \"PromoteKarma\" INTEGER NOT NULL default '0',\n".
+"  \"PromotePosts\" INTEGER NOT NULL default '0',\n".
+");", array(null));
+sql_query($query,$SQLStat);
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."ranks\" (\"id\", \"Name\", \"PromoteKarma\", \"PromotePosts\") VALUES (-1, 'Guest', 0, 0);", array(null));
+sql_query($query,$SQLStat);
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."ranks\" (\"id\", \"Name\", \"PromoteKarma\", \"PromotePosts\") VALUES (1, 'Provisional', 0, 0);", array(null));
+sql_query($query,$SQLStat);
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."ranks\" (\"id\", \"Name\", \"PromoteKarma\", \"PromotePosts\") VALUES (2, 'New User', 3, 0);", array(null));
+sql_query($query,$SQLStat);
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."ranks\" (\"id\", \"Name\", \"PromoteKarma\", \"PromotePosts\") VALUES (3, 'Rookie User', 10, 0);", array(null));
+sql_query($query,$SQLStat);
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."ranks\" (\"id\", \"Name\", \"PromoteKarma\", \"PromotePosts\") VALUES (4, 'Novice User', 25, 0);", array(null));
+sql_query($query,$SQLStat);
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."ranks\" (\"id\", \"Name\", \"PromoteKarma\", \"PromotePosts\") VALUES (5, 'Regular User', 50, 0);", array(null));
+sql_query($query,$SQLStat);
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."ranks\" (\"id\", \"Name\", \"PromoteKarma\", \"PromotePosts\") VALUES (6, 'Veteran', 100, 0);", array(null));
+sql_query($query,$SQLStat);
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."ranks\" (\"id\", \"Name\", \"PromoteKarma\", \"PromotePosts\") VALUES (7, 'Legend', 250, 0);", array(null));
+sql_query($query,$SQLStat);
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."ranks\" (\"id\", \"Name\", \"PromoteKarma\", \"PromotePosts\") VALUES (8, 'Elite', 500, 0);", array(null));
+sql_query($query,$SQLStat);
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."ranks\" (\"id\", \"Name\", \"PromoteKarma\", \"PromotePosts\") VALUES (9, 'Icon', 1000, 0);", array(null));
+sql_query($query,$SQLStat);
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."ranks\" (\"id\", \"Name\", \"PromoteKarma\", \"PromotePosts\") VALUES (10, 'Idol', 1500, 0);", array(null));
+sql_query($query,$SQLStat);
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."ranks\" (\"id\", \"Name\", \"PromoteKarma\", \"PromotePosts\") VALUES (11, 'Ancient', 2000, 0);", array(null));
+sql_query($query,$SQLStat);
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."ranks\" (\"id\", \"Name\", \"PromoteKarma\", \"PromotePosts\") VALUES (12, 'Sage', 3000, 0);", array(null));
+sql_query($query,$SQLStat);
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."ranks\" (\"id\", \"Name\", \"PromoteKarma\", \"PromotePosts\") VALUES (13, '? Block', 5000, 0);", array(null));
+sql_query($query,$SQLStat);
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."ranks\" (\"id\", \"Name\", \"PromoteKarma\", \"PromotePosts\") VALUES (14, '???', 10000, 0);", array(null));
+sql_query($query,$SQLStat);
 $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."levels\" (\n".
 "  \"id\" INTEGER PRIMARY KEY NOT NULL,\n".
 "  \"Name\" VARCHAR(150) UNIQUE NOT NULL default '',\n".
@@ -181,6 +218,7 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."members\" (\n".
 "  \"Email\" VARCHAR(256) UNIQUE NOT NULL default '',\n".
 "  \"GroupID\" INTEGER NOT NULL default '0',\n".
 "  \"LevelID\" INTEGER NOT NULL default '0',\n".
+"  \"RankID\" INTEGER NOT NULL default '0',\n".
 "  \"Validated\" VARCHAR(20) NOT NULL default '',\n".
 "  \"HiddenMember\" VARCHAR(20) NOT NULL default '',\n".
 "  \"WarnLevel\" INTEGER NOT NULL default '0',\n".
@@ -218,11 +256,11 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."members\" (\n".
 "  \"Salt\" VARCHAR(50) NOT NULL default ''\n".
 ");", array(null));
 sql_query($query,$SQLStat);
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."members\" (\"id\", \"Name\", \"UserPassword\", \"HashType\", \"Email\", \"GroupID\", \"LevelID\", \"Validated\", \"HiddenMember\", \"WarnLevel\", \"Interests\", \"Title\", \"Joined\", \"LastActive\", \"LastLogin\", \"LastPostTime\", \"BanTime\", \"BirthDay\", \"BirthMonth\", \"BirthYear\", \"Signature\", \"Notes\", \"Avatar\", \"AvatarSize\", \"Website\", \"Location\", \"Gender\", \"PostCount\", \"Karma\", \"KarmaUpdate\", \"RepliesPerPage\", \"TopicsPerPage\", \"MessagesPerPage\", \"TimeZone\", \"DateFormat\", \"TimeFormat\", \"UseTheme\", \"IgnoreSignitures\", \"IgnoreAdvatars\", \"IgnoreUsers\", \"IP\", \"Salt\") VALUES\n".
-"(-1, 'Guest', '%s', 'GuestPassword', '%s', 4, -1, 'no', 'yes', 0, 'Guest Account', 'Guest', %i, %i, %i, '0', '0', '0', '0', '0', '', 'Your Notes', 'http://', '', '100x100', '%s', 'UnKnow', 0, 0, 0, 10, 10, 10, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');", array($GuestPassword,$GEmail,$YourDate,$YourDate,$YourDate,$YourWebsite,$_POST['YourOffSet'],$_POST['iDBDateFormat'],$_POST['iDBTimeFormat'],$_POST['DefaultTheme'],'','','',$GuestLocalIP,$GSalt));
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."members\" (\"id\", \"Name\", \"UserPassword\", \"HashType\", \"Email\", \"GroupID\", \"LevelID\", \"RankID\", \"Validated\", \"HiddenMember\", \"WarnLevel\", \"Interests\", \"Title\", \"Joined\", \"LastActive\", \"LastLogin\", \"LastPostTime\", \"BanTime\", \"BirthDay\", \"BirthMonth\", \"BirthYear\", \"Signature\", \"Notes\", \"Avatar\", \"AvatarSize\", \"Website\", \"Location\", \"Gender\", \"PostCount\", \"Karma\", \"KarmaUpdate\", \"RepliesPerPage\", \"TopicsPerPage\", \"MessagesPerPage\", \"TimeZone\", \"DateFormat\", \"TimeFormat\", \"UseTheme\", \"IgnoreSignitures\", \"IgnoreAdvatars\", \"IgnoreUsers\", \"IP\", \"Salt\") VALUES\n".
+"(-1, 'Guest', '%s', 'GuestPassword', '%s', 4, -1, -1, 'no', 'yes', 0, 'Guest Account', 'Guest', %i, %i, %i, '0', '0', '0', '0', '0', '', 'Your Notes', 'http://', '', '100x100', '%s', 'UnKnow', 0, 0, 0, 10, 10, 10, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');", array($GuestPassword,$GEmail,$YourDate,$YourDate,$YourDate,$YourWebsite,$_POST['YourOffSet'],$_POST['iDBDateFormat'],$_POST['iDBTimeFormat'],$_POST['DefaultTheme'],'','','',$GuestLocalIP,$GSalt));
 sql_query($query,$SQLStat);
 $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."members\" (\"id\", \"Name\", \"UserPassword\", \"HashType\", \"Email\", \"GroupID\", \"LevelID\", \"Validated\", \"HiddenMember\", \"WarnLevel\", \"Interests\", \"Title\", \"Joined\", \"LastActive\", \"LastLogin\", \"LastPostTime\", \"BanTime\", \"BirthDay\", \"BirthMonth\", \"BirthYear\", \"Signature\", \"Notes\", \"Avatar\", \"AvatarSize\", \"Website\", \"Location\", \"Gender\", \"PostCount\", \"Karma\", \"KarmaUpdate\", \"RepliesPerPage\", \"TopicsPerPage\", \"MessagesPerPage\", \"TimeZone\", \"DateFormat\", \"TimeFormat\", \"UseTheme\", \"IgnoreSignitures\", \"IgnoreAdvatars\", \"IgnoreUsers\", \"IP\", \"Salt\") VALUES\n".
-"(1, '%s', '%s', '%s', '%s', 1, 1, 'yes', 'no', 0, '%s', 'Admin', %i, %i, %i, '0', '0', '0', '0', '0', '%s', 'Your Notes', '%s', '', '100x100', '%s', 'UnKnow', 0, 0, 0, 10, 10, 10, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');", array($_POST['AdminUser'],$NewPassword,$iDBHashType,$_POST['AdminEmail'],"",$YourDate,$YourDate,$YourDate,"","http://",$YourWebsite,$_POST['YourOffSet'],$_POST['iDBDateFormat'],$_POST['iDBTimeFormat'],$_POST['DefaultTheme'],'','','',$UserIP,$YourSalt));
+"(1, '%s', '%s', '%s', '%s', 1, 1, 1, 'yes', 'no', 0, '%s', 'Admin', %i, %i, %i, '0', '0', '0', '0', '0', '%s', 'Your Notes', '%s', '', '100x100', '%s', 'UnKnow', 0, 0, 0, 10, 10, 10, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');", array($_POST['AdminUser'],$NewPassword,$iDBHashType,$_POST['AdminEmail'],"",$YourDate,$YourDate,$YourDate,"","http://",$YourWebsite,$_POST['YourOffSet'],$_POST['iDBDateFormat'],$_POST['iDBTimeFormat'],$_POST['DefaultTheme'],'','','',$UserIP,$YourSalt));
 sql_query($query,$SQLStat);
 $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."mempermissions\" (\n".
 "  \"id\" INTEGER PRIMARY KEY NOT NULL,\n".
@@ -375,73 +413,74 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."smileys\" (\n".
 "  \"FileName\" TEXT NOT NULL,\n".
 "  \"SmileName\" TEXT NOT NULL,\n".
 "  \"SmileText\" TEXT NOT NULL,\n".
+"  \"EmojiText\" TEXT NOT NULL,\n".
 "  \"Directory\" TEXT NOT NULL,\n".
 "  \"Display\" VARCHAR(5) NOT NULL default '',\n".
 "  \"ReplaceCI\" VARCHAR(5) NOT NULL default ''\n".
 ");", array(null));
 sql_query($query,$SQLStat);
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."smileys\" (\"FileName\", \"SmileName\", \"SmileText\", \"Directory\", \"Display\", \"ReplaceCI\") VALUES\n".
-"('angry.png', 'Angry', ':angry:', 'smileys/', 'yes', 'yes');", array(null));
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."smileys\" (\"FileName\", \"SmileName\", \"SmileText\", \"EmojiText\", \"Directory\", \"Display\", \"ReplaceCI\") VALUES\n".
+"('angry.png', 'Angry', ':angry:', '😠', 'smileys/', 'yes', 'yes');", array(null));
 sql_query($query,$SQLStat);
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."smileys\" (\"FileName\", \"SmileName\", \"SmileText\", \"Directory\", \"Display\", \"ReplaceCI\") VALUES\n".
-"('closedeyes.png', 'Sleep', 'v_v', 'smileys/', 'yes', 'no');", array(null));
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."smileys\" (\"FileName\", \"SmileName\", \"SmileText\", \"EmojiText\", \"Directory\", \"Display\", \"ReplaceCI\") VALUES\n".
+"('closedeyes.png', 'Relieved', 'v_v', '😌', 'smileys/', 'yes', 'no');", array(null));
 sql_query($query,$SQLStat);
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."smileys\" (\"FileName\", \"SmileName\", \"SmileText\", \"Directory\", \"Display\", \"ReplaceCI\") VALUES\n".
-"('cool.png', 'Cool', 'B)', 'smileys/', 'yes', 'no');", array(null));
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."smileys\" (\"FileName\", \"SmileName\", \"SmileText\", \"EmojiText\", \"Directory\", \"Display\", \"ReplaceCI\") VALUES\n".
+"('cool.png', 'Cool', 'B)', '😎', 'smileys/', 'yes', 'no');", array(null));
 sql_query($query,$SQLStat);
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."smileys\" (\"FileName\", \"SmileName\", \"SmileText\", \"Directory\", \"Display\", \"ReplaceCI\") VALUES\n".
-"('glare.png', 'Hmph', ':hmph:', 'smileys/', 'yes', 'yes');", array(null));
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."smileys\" (\"FileName\", \"SmileName\", \"SmileText\", \"EmojiText\", \"Directory\", \"Display\", \"ReplaceCI\") VALUES\n".
+"('glare.png', 'Hmph', ':hmph:', '😑', 'smileys/', 'yes', 'yes');", array(null));
 sql_query($query,$SQLStat);
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."smileys\" (\"FileName\", \"SmileName\", \"SmileText\", \"Directory\", \"Display\", \"ReplaceCI\") VALUES\n".
-"('glare.png', 'Hmph', '&lt;_&lt;', 'smileys/', 'no', 'no');", array(null));
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."smileys\" (\"FileName\", \"SmileName\", \"SmileText\", \"EmojiText\", \"Directory\", \"Display\", \"ReplaceCI\") VALUES\n".
+"('glare.png', 'Hmph', '&lt;_&lt;', '😑', 'smileys/', 'no', 'no');", array(null));
 sql_query($query,$SQLStat);
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."smileys\" (\"FileName\", \"SmileName\", \"SmileText\", \"Directory\", \"Display\", \"ReplaceCI\") VALUES\n".
-"('happy.png', 'Happy', '^_^', 'smileys/', 'yes', 'no');", array(null));
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."smileys\" (\"FileName\", \"SmileName\", \"SmileText\", \"EmojiText\", \"Directory\", \"Display\", \"ReplaceCI\") VALUES\n".
+"('happy.png', 'Happy', '^_^', '😀', 'smileys/', 'yes', 'no');", array(null));
 sql_query($query,$SQLStat);
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."smileys\" (\"FileName\", \"SmileName\", \"SmileText\", \"Directory\", \"Display\", \"ReplaceCI\") VALUES\n".
-"('hmm.png', 'Hmm', ':unsure:', 'smileys/', 'yes', 'yes');", array(null));
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."smileys\" (\"FileName\", \"SmileName\", \"SmileText\", \"EmojiText\", \"Directory\", \"Display\", \"ReplaceCI\") VALUES\n".
+"('hmm.png', 'Hmm', ':unsure:', '🤔', 'smileys/', 'yes', 'yes');", array(null));
 sql_query($query,$SQLStat);
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."smileys\" (\"FileName\", \"SmileName\", \"SmileText\", \"Directory\", \"Display\", \"ReplaceCI\") VALUES\n".
-"('huh.png', 'Huh', ':huh:', 'smileys/', 'yes', 'yes');", array(null));
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."smileys\" (\"FileName\", \"SmileName\", \"SmileText\", \"EmojiText\", \"Directory\", \"Display\", \"ReplaceCI\") VALUES\n".
+"('huh.png', 'Huh', ':huh:', '😕', 'smileys/', 'yes', 'yes');", array(null));
 sql_query($query,$SQLStat);
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."smileys\" (\"FileName\", \"SmileName\", \"SmileText\", \"Directory\", \"Display\", \"ReplaceCI\") VALUES\n".
-"('laugh.png', 'lol', ':laugh:', 'smileys/', 'yes', 'yes');", array(null));
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."smileys\" (\"FileName\", \"SmileName\", \"SmileText\", \"EmojiText\", \"Directory\", \"Display\", \"ReplaceCI\") VALUES\n".
+"('laugh.png', 'lol', ':laugh:', '😆', 'smileys/', 'yes', 'yes');", array(null));
 sql_query($query,$SQLStat);
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."smileys\" (\"FileName\", \"SmileName\", \"SmileText\", \"Directory\", \"Display\", \"ReplaceCI\") VALUES\n".
-"('lol.png', 'lol', ':lol:', 'smileys/', 'yes', 'yes');", array(null));
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."smileys\" (\"FileName\", \"SmileName\", \"SmileText\", \"EmojiText\", \"Directory\", \"Display\", \"ReplaceCI\") VALUES\n".
+"('lol.png', 'lol', ':lol:', '😂', 'smileys/', 'yes', 'yes');", array(null));
 sql_query($query,$SQLStat);
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."smileys\" (\"FileName\", \"SmileName\", \"SmileText\", \"Directory\", \"Display\", \"ReplaceCI\") VALUES\n".
-"('mad.png', 'Mad', ':mad:', 'smileys/', 'yes', 'yes');", array(null));
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."smileys\" (\"FileName\", \"SmileName\", \"SmileText\", \"EmojiText\", \"Directory\", \"Display\", \"ReplaceCI\") VALUES\n".
+"('mad.png', 'Mad', ':mad:', '😡', 'smileys/', 'yes', 'yes');", array(null));
 sql_query($query,$SQLStat);
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."smileys\" (\"FileName\", \"SmileName\", \"SmileText\", \"Directory\", \"Display\", \"ReplaceCI\") VALUES\n".
-"('ninja.png', 'Ninja', ':ninja:', 'smileys/', 'yes', 'yes');", array(null));
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."smileys\" (\"FileName\", \"SmileName\", \"SmileText\", \"EmojiText\", \"Directory\", \"Display\", \"ReplaceCI\") VALUES\n".
+"('ninja.png', 'Ninja', ':ninja:', '🥷', 'smileys/', 'yes', 'yes');", array(null));
 sql_query($query,$SQLStat);
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."smileys\" (\"FileName\", \"SmileName\", \"SmileText\", \"Directory\", \"Display\", \"ReplaceCI\") VALUES\n".
-"('ohno.png', 'ohno', ':ohno:', 'smileys/', 'yes', 'yes');", array(null));
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."smileys\" (\"FileName\", \"SmileName\", \"SmileText\", \"EmojiText\", \"Directory\", \"Display\", \"ReplaceCI\") VALUES\n".
+"('ohno.png', 'ohno', ':ohno:', '😨', 'smileys/', 'yes', 'yes');", array(null));
 sql_query($query,$SQLStat);
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."smileys\" (\"FileName\", \"SmileName\", \"SmileText\", \"Directory\", \"Display\", \"ReplaceCI\") VALUES\n".
-"('ohmy.png', 'ohmy', ':o', 'smileys/', 'yes', 'yes');", array(null));
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."smileys\" (\"FileName\", \"SmileName\", \"SmileText\", \"EmojiText\", \"Directory\", \"Display\", \"ReplaceCI\") VALUES\n".
+"('ohmy.png', 'ohmy', ':o', '😲', 'smileys/', 'yes', 'yes');", array(null));
 sql_query($query,$SQLStat);
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."smileys\" (\"FileName\", \"SmileName\", \"SmileText\", \"Directory\", \"Display\", \"ReplaceCI\") VALUES\n".
-"('sad.png', 'Sad', ':(', 'smileys/', 'yes', 'no');", array(null));
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."smileys\" (\"FileName\", \"SmileName\", \"SmileText\", \"EmojiText\", \"Directory\", \"Display\", \"ReplaceCI\") VALUES\n".
+"('sad.png', 'Sad', ':(', '😢', 'smileys/', 'yes', 'no');", array(null));
 sql_query($query,$SQLStat);
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."smileys\" (\"FileName\", \"SmileName\", \"SmileText\", \"Directory\", \"Display\", \"ReplaceCI\") VALUES\n".
-"('sleep.png', 'Sleep', '-_-', 'smileys/', 'yes', 'no');", array(null));
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."smileys\" (\"FileName\", \"SmileName\", \"SmileText\", \"EmojiText\", \"Directory\", \"Display\", \"ReplaceCI\") VALUES\n".
+"('sleep.png', 'Sleep', '-_-', '😴', 'smileys/', 'yes', 'no');", array(null));
 sql_query($query,$SQLStat);
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."smileys\" (\"FileName\", \"SmileName\", \"SmileText\", \"Directory\", \"Display\", \"ReplaceCI\") VALUES\n".
-"('smile.png', 'Happy', ':)', 'smileys/', 'yes', 'no');", array(null));
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."smileys\" (\"FileName\", \"SmileName\", \"SmileText\", \"EmojiText\", \"Directory\", \"Display\", \"ReplaceCI\") VALUES\n".
+"('smile.png', 'Happy', ':)', '😊', 'smileys/', 'yes', 'no');", array(null));
 sql_query($query,$SQLStat);
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."smileys\" (\"FileName\", \"SmileName\", \"SmileText\", \"Directory\", \"Display\", \"ReplaceCI\") VALUES\n".
-"('sweat.png', 'Sweat', ':sweat:', 'smileys/', 'yes', 'yes');", array(null));
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."smileys\" (\"FileName\", \"SmileName\", \"SmileText\", \"EmojiText\", \"Directory\", \"Display\", \"ReplaceCI\") VALUES\n".
+"('sweat.png', 'Sweat', ':sweat:', '😅', 'smileys/', 'yes', 'yes');", array(null));
 sql_query($query,$SQLStat);
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."smileys\" (\"FileName\", \"SmileName\", \"SmileText\", \"Directory\", \"Display\", \"ReplaceCI\") VALUES\n".
-"('tongue.png', 'Tongue', ':P', 'smileys/', 'yes', 'no');", array(null));
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."smileys\" (\"FileName\", \"SmileName\", \"SmileText\", \"EmojiText\", \"Directory\", \"Display\", \"ReplaceCI\") VALUES\n".
+"('tongue.png', 'Tongue', ':P', '😛', 'smileys/', 'yes', 'no');", array(null));
 sql_query($query,$SQLStat);
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."smileys\" (\"FileName\", \"SmileName\", \"SmileText\", \"Directory\", \"Display\", \"ReplaceCI\") VALUES\n".
-"('wub.png', 'Wub', ':wub:', 'smileys/', 'yes', 'yes');", array(null));
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."smileys\" (\"FileName\", \"SmileName\", \"SmileText\", \"EmojiText\", \"Directory\", \"Display\", \"ReplaceCI\") VALUES\n".
+"('wub.png', 'Wub', ':wub:', '😍', 'smileys/', 'yes', 'yes');", array(null));
 sql_query($query,$SQLStat);
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."smileys\" (\"FileName\", \"SmileName\", \"SmileText\", \"Directory\", \"Display\", \"ReplaceCI\") VALUES\n".
-"('x.png', 'X', ':x:', 'smileys/', 'yes', 'yes');", array(null));
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."smileys\" (\"FileName\", \"SmileName\", \"SmileText\", \"EmojiText\", \"Directory\", \"Display\", \"ReplaceCI\") VALUES\n".
+"('x.png', 'X', ':x:', '😣', 'smileys/', 'yes', 'yes');", array(null));
 sql_query($query,$SQLStat);
 /*
 $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."tagboard\" (\n".
