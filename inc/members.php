@@ -877,7 +877,7 @@ Title: <?php echo $ViewMem['Title']; ?>
 &#160;User Website: <a href="<?php echo $ViewMem['Website']; ?>"<?php echo $opennew; ?>>Website</a><br />
 &#160;Post Count: <?php echo $ViewMem['PostCount']; ?><br />
 &#160;Karma: <?php echo $ViewMem['Karma']; ?><br />
-&#160;Karma Level: <?php echo $ViewMem['Level']; ?><br />
+&#160;Karma Level: <?php echo $ViewMem['Rank']; ?><br />
 &#160;Interests: <?php echo $ViewMem['Interests']; ?><br />
 &#160;Topics: <?php if($Settings['enable_search']=="on"&&$GroupInfo['CanSearch']=="yes") { ?>
 <a href="<?php echo url_maker($exfile['search'],$Settings['file_ext'],"act=topics&search=%&type=wildcard&memid=".$ViewMem['ID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search']); ?>">Find Topics</a>
