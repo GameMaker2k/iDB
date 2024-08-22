@@ -173,13 +173,12 @@ if($rannum>=1) {
 $RankInfo['ID']=sql_result($ranresult,0,"id");
 if(!is_numeric($RankInfo['ID'])) { $GruError = true; }
 $RankInfo['Name']=sql_result($ranresult,0,"Name");
-$RankInfo['PromoteTo']=sql_result($ranresult,0,"PromoteTo");
 $RankInfo['PromotePosts']=sql_result($ranresult,0,"PromotePosts");
 if(!is_numeric($RankInfo['PromotePosts'])) { 
-	$RankInfo['PromotePosts'] = 0; $RankInfo['PromoteTo'] = 0; }
+	$RankInfo['PromotePosts'] = 0; }
 $RankInfo['PromoteKarma']=sql_result($ranresult,0,"PromoteKarma");
 if(!is_numeric($RankInfo['PromoteKarma'])) { 
-	$RankInfo['PromoteKarma'] = 0; $RankInfo['PromoteTo'] = 0; } }
+	$RankInfo['PromoteKarma'] = 0; } }
 // Member Group Setup
 if(!isset($_SESSION['UserGroup'])) { $_SESSION['UserGroup'] = null; }
 if($_SESSION['UserGroup']==null) { 
@@ -333,6 +332,13 @@ if($MyKarmaUpdate<$NewKarmaUpdate&&$MyPostCountChk>0) {
 	$querykarmaup = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"Karma\"=%i,\"KarmaUpdate\"=%i WHERE \"id\"=%i", array($MyKarmaCount,$NewKarmaUpdate,$_SESSION['UserID']));
 	sql_query($querykarmaup,$SQLStat); }
 	$Settings['KarmaBoostDays'] = $Settings['OldKarmaBoostDays'];
+	$sql_rank_check = sql_query(sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."ranks\" WHERE \"PromoteKarma\">=%i AND \"PromotePosts\">=%i AND \"id\"<>%i AND \"id\">0 LIMIT 1", array($MyKarmaCount, $MyPostCountChk, $RankInfo['ID'])),$SQLStat);
+	$rank_check = sql_num_rows($sql_rank_check);
+	if($rank_check > 0) {
+    $NewRankID=sql_result($sql_rank_check,0,"id");
+	$queryupgrade = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"RankID\"=%i WHERE \"id\"=%i", array($NewRankID,$_SESSION['UserID']));
+	sql_query($queryupgrade,$SQLStat); }
+    sql_free_result($sql_rank_check);
 if($LevelInfo['PromoteTo']!=0&&$MyPostCountChk>=$LevelInfo['PromotePosts']) {
 	$sql_level_check = sql_query(sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."levels\" WHERE \"id\"=%i LIMIT 1", array($LevelInfo['PromoteTo'])),$SQLStat);
 	$level_check = sql_num_rows($sql_level_check);
