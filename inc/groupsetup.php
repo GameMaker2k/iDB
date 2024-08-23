@@ -332,13 +332,13 @@ if($MyKarmaUpdate<$NewKarmaUpdate&&$MyPostCountChk>0) {
 	$querykarmaup = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"Karma\"=%i,\"KarmaUpdate\"=%i WHERE \"id\"=%i", array($MyKarmaCount,$NewKarmaUpdate,$_SESSION['UserID']));
 	sql_query($querykarmaup,$SQLStat); }
 	$Settings['KarmaBoostDays'] = $Settings['OldKarmaBoostDays'];
-	$sql_rank_check = sql_query(sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."ranks\" WHERE \"PromoteKarma\">=%i AND \"PromotePosts\">=%i AND \"id\"<>%i AND \"id\">0 LIMIT 1", array($MyKarmaCount, $MyPostCountChk, $RankInfo['ID'])),$SQLStat);
+	$sql_rank_check = sql_query(sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."ranks\" WHERE ( (\"PromoteKarma\">=%i AND \"PromotePosts\">=%i) OR (\"PromoteKarma\"<%i OR \"PromotePosts\"<%i) ) AND \"id\"<>%i AND \"id\">0 LIMIT 1", array($MyKarmaCount, $MyPostCountChk, $MyKarmaCount, $MyPostCountChk, $RankInfo['ID'])),$SQLStat);
 	$rank_check = sql_num_rows($sql_rank_check);
-	if($rank_check > 0) {
-    $NewRankID=sql_result($sql_rank_check,0,"id");
+if($rank_check > 0) {
+        $NewRankID=sql_result($sql_rank_check,0,"id");
 	$queryupgrade = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"RankID\"=%i WHERE \"id\"=%i", array($NewRankID,$_SESSION['UserID']));
 	sql_query($queryupgrade,$SQLStat); }
-    sql_free_result($sql_rank_check);
+        sql_free_result($sql_rank_check);
 if($LevelInfo['PromoteTo']!=0&&$MyPostCountChk>=$LevelInfo['PromotePosts']) {
 	$sql_level_check = sql_query(sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."levels\" WHERE \"id\"=%i LIMIT 1", array($LevelInfo['PromoteTo'])),$SQLStat);
 	$level_check = sql_num_rows($sql_level_check);
