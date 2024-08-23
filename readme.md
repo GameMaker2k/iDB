@@ -1,7 +1,7 @@
 [![Stand With Ukraine](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://stand-with-ukraine.pp.ua)
 
 <pre>//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//        $FileInfo: README - Last Update: 6/22/2023 SVN 984 - Author: cooldude2k $          
+//        $FileInfo: README - Last Update: 8/23/2024 SVN 1023 - Author: cooldude2k $          
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //                       __________________________________________
 //                      //        Internet Discussion Boards      \\
@@ -21,7 +21,7 @@
 //                     ||              Renate ( unknown )          ||
 //                     ||             Jonathan ( unknown )         ||
 //                     ||             czambran ( unknown )         ||
-//                      \\       (c) 2004-2023 Game Maker 2k      //
+//                      \\       (c) 2004-2024 Game Maker 2k      //
 //                       """"""""""""""""""""""""""""""""""""""""""
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // UTF8 helper functions
@@ -36,8 +36,8 @@
 // Copyright (C) 2005-2006, Edward Eliot.
 // All rights reserved.
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// Copyright 2004-2023 Cool Dude 2k - http://intdb.sourceforge.net/ http://idb.berlios.net/
-// Copyright 2004-2023 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2 
+// Copyright 2004-2024 Cool Dude 2k - http://intdb.sourceforge.net/ http://idb.berlios.net/
+// Copyright 2004-2024 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2 
 // http://s1.jcink.com/s/host/idb/  http://idb.everywebhost.com/  http://cooldude2k.id.funpic.org/
 //  	        Game Maker 2k Copyright 2000-2009 Cool Dude 2k (Kazuki Przyborowski), Ren Johnson
 // Emoticons made by Jcink for TextfileBB (https://launchpad.net/tfbb) Under GPL License
@@ -46,7 +46,7 @@
 // How to delete installer if error happens:
 // Delete install.php file and the setup folder/dir and everyting inside it also.
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// DejaVu fonts 2.26 (c)2004-2023 DejaVu fonts team
+// DejaVu fonts 2.26 (c)2004-2024 DejaVu fonts team
 // The DejaVu fonts are a font family based on the Bitstream Vera Fonts
 // (http://gnome.org/fonts/). Its purpose is to provide a wider range of
 // characters (see status.txt for more information) while maintaining the
