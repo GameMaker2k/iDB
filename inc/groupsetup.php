@@ -11,7 +11,7 @@
     Copyright 2004-2024 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2024 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: groupsetup.php - Last Update: 8/23/2024 SVN 1023 - Author: cooldude2k $
+    $FileInfo: groupsetup.php - Last Update: 8/23/2024 SVN 1024 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="groupsetup.php"||$File3Name=="/groupsetup.php") {
@@ -173,6 +173,7 @@ if($rannum>=1) {
 $RankInfo['ID']=sql_result($ranresult,0,"id");
 if(!is_numeric($RankInfo['ID'])) { $GruError = true; }
 $RankInfo['Name']=sql_result($ranresult,0,"Name");
+$RankInfo['PromoteTo']=sql_result($ranresult,0,"PromoteTo");
 $RankInfo['PromotePosts']=sql_result($ranresult,0,"PromotePosts");
 if(!is_numeric($RankInfo['PromotePosts'])) { 
 	$RankInfo['PromotePosts'] = 0; }
@@ -332,36 +333,43 @@ if($MyKarmaUpdate<$NewKarmaUpdate&&$MyPostCountChk>0) {
 	$querykarmaup = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"Karma\"=%i,\"KarmaUpdate\"=%i WHERE \"id\"=%i", array($MyKarmaCount,$NewKarmaUpdate,$_SESSION['UserID']));
 	sql_query($querykarmaup,$SQLStat); }
 	$Settings['KarmaBoostDays'] = $Settings['OldKarmaBoostDays'];
-	$sql_rank_check = sql_query(sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."ranks\" WHERE ( (\"PromoteKarma\">=%i AND \"PromotePosts\">=%i) OR (\"PromoteKarma\"<%i OR \"PromotePosts\"<%i) ) AND \"id\"<>%i AND \"id\">0 LIMIT 1", array($MyKarmaCount, $MyPostCountChk, $MyKarmaCount, $MyPostCountChk, $RankInfo['ID'])),$SQLStat);
-	$rank_check = sql_num_rows($sql_rank_check);
-if($rank_check > 0) {
-        $NewRankID=sql_result($sql_rank_check,0,"id");
-	$queryupgrade = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"RankID\"=%i WHERE \"id\"=%i", array($NewRankID,$_SESSION['UserID']));
-	sql_query($queryupgrade,$SQLStat); }
-        sql_free_result($sql_rank_check);
+if($RankInfo['PromoteTo']!=0&&$MyPostCountChk>=$RankInfo['PromotePosts']) {
+	$sql_level_check = sql_query(sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."ranks\" WHERE \"id\"=%i AND \"id\">0 LIMIT 1", array($RankInfo['PromoteTo'])),$SQLStat);
+	$level_check = sql_num_rows($sql_level_check);
+	sql_free_result($sql_level_check);
+	if($level_check > 0) {
+	$queryupgrade = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"RankID\"=%i WHERE \"id\"=%i", array($RankInfo['PromoteTo'],$_SESSION['UserID']));
+	sql_query($queryupgrade,$SQLStat); } }
+if($RankInfo['PromotePosts']==0&&$RankInfo['PromoteTo']!=0&&$MyKarmaCount>=$RankInfo['PromoteKarma']) {
+	$sql_level_check = sql_query(sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."ranks\" WHERE \"id\"=%i AND \"id\">0 LIMIT 1", array($RankInfo['PromoteTo'])),$SQLStat);
+	$level_check = sql_num_rows($sql_level_check);
+	sql_free_result($sql_level_check);
+	if($level_check > 0) {
+	$queryupgrade = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"RankID\"=%i WHERE \"id\"=%i", array($RankInfo['PromoteTo'],$_SESSION['UserID']));
+	sql_query($queryupgrade,$SQLStat); } }
 if($LevelInfo['PromoteTo']!=0&&$MyPostCountChk>=$LevelInfo['PromotePosts']) {
-	$sql_level_check = sql_query(sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."levels\" WHERE \"id\"=%i LIMIT 1", array($LevelInfo['PromoteTo'])),$SQLStat);
+	$sql_level_check = sql_query(sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."levels\" WHERE \"id\"=%i AND \"id\">0 LIMIT 1", array($LevelInfo['PromoteTo'])),$SQLStat);
 	$level_check = sql_num_rows($sql_level_check);
 	sql_free_result($sql_level_check);
 	if($level_check > 0) {
 	$queryupgrade = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"LevelID\"=%i WHERE \"id\"=%i", array($LevelInfo['PromoteTo'],$_SESSION['UserID']));
 	sql_query($queryupgrade,$SQLStat); } }
 if($LevelInfo['PromotePosts']==0&&$LevelInfo['PromoteTo']!=0&&$MyKarmaCount>=$LevelInfo['PromoteKarma']) {
-	$sql_level_check = sql_query(sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."levels\" WHERE \"id\"=%i LIMIT 1", array($LevelInfo['PromoteTo'])),$SQLStat);
+	$sql_level_check = sql_query(sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."levels\" WHERE \"id\"=%i AND \"id\">0 LIMIT 1", array($LevelInfo['PromoteTo'])),$SQLStat);
 	$level_check = sql_num_rows($sql_level_check);
 	sql_free_result($sql_level_check);
 	if($level_check > 0) {
 	$queryupgrade = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"LevelID\"=%i WHERE \"id\"=%i", array($LevelInfo['PromoteTo'],$_SESSION['UserID']));
 	sql_query($queryupgrade,$SQLStat); } }
 if($GroupInfo['PromoteTo']!=0&&$MyPostCountChk>=$GroupInfo['PromotePosts']) {
-	$sql_group_check = sql_query(sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i LIMIT 1", array($GroupInfo['PromoteTo'])),$SQLStat);
+	$sql_group_check = sql_query(sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i AND \"id\">0 LIMIT 1", array($GroupInfo['PromoteTo'])),$SQLStat);
 	$group_check = sql_num_rows($sql_group_check);
 	sql_free_result($sql_group_check);
 	if($group_check > 0) {
 	$queryupgrade = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"GroupID\"=%i WHERE \"id\"=%i", array($GroupInfo['PromoteTo'],$_SESSION['UserID']));
 	sql_query($queryupgrade,$SQLStat); } }
 if($GroupInfo['PromotePosts']==0&&$GroupInfo['PromoteTo']!=0&&$MyKarmaCount>=$GroupInfo['PromoteKarma']) {
-	$sql_group_check = sql_query(sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i LIMIT 1", array($GroupInfo['PromoteTo'])),$SQLStat);
+	$sql_group_check = sql_query(sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i AND \"id\">0 LIMIT 1", array($GroupInfo['PromoteTo'])),$SQLStat);
 	$group_check = sql_num_rows($sql_group_check);
 	sql_free_result($sql_group_check);
 	if($group_check > 0) {

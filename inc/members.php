@@ -11,7 +11,7 @@
     Copyright 2004-2024 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2024 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: members.php - Last Update: 8/23/2024 SVN 1023 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 8/23/2024 SVN 1024 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -536,6 +536,7 @@ $PreAmIHiddenUser = GetUserName($UserSessInfo['UserID'],$Settings['sqltable'],$S
 $AmIHiddenUser = $PreAmIHiddenUser['Hidden']; }
 if(!isset($AmIHiddenUser)) { $AmIHiddenUser = "no"; }
 if($AmIHiddenUser===null) { $AmIHiddenUser = "no"; }
+if(isset($UserSessInfo['AnonymousLogin']) && $UserSessInfo['AnonymousLogin']=="yes") { $AmIHiddenUser = "yes"; }
 if(!isset($UserSessInfo['ViewingPage'])) {
 	$UserSessInfo['ViewingPage'] = url_maker(null,"no+ext","act=view","&","=",$prexqstr['index'],$exqstr['index']); }
 if(!isset($UserSessInfo['ViewingFile'])) {
@@ -995,6 +996,12 @@ $_SESSION['UserFormID'] = $UFID;
 <option value="false">No</option>
 <option value="true">Yes</option>
 </select></td>
+</tr><tr style="text-align: left;">
+	<td style="width: 30%;"><label class="TextBoxLabel" title="Login anonymously?" for="anonymouslogin">Login anonymously?</label></td>
+	<td style="width: 70%;"><select id="anonymouslogin" name="anonymouslogin" class="TextBox">
+<option value="false">No</option>
+<option value="true">Yes</option>
+</select></td>
 </tr></table>
 <table style="text-align: left;">
 <tr style="text-align: left;">
@@ -1040,6 +1047,9 @@ if($Settings['file_ext']!="no+ext"&&$Settings['file_ext']!="no ext") {
 $_SESSION['ViewingFile'] = $exfile['member'].$Settings['file_ext']; }
 if($Settings['file_ext']=="no+ext"||$Settings['file_ext']=="no ext") {
 $_SESSION['ViewingFile'] = $exfile['member']; }
+if($_POST['anonymouslogin']=="true") {
+$_SESSION['AnonymousLogin'] = "yes"; $_COOKIE['AnonymousLogin'] = "yes"; } else {
+$_SESSION['AnonymousLogin'] = "no"; $_COOKIE['AnonymousLogin'] = "no"; }
 $_SESSION['PreViewingTitle'] = "Act: ";
 $_SESSION['ViewingTitle'] = "Logging in";
 $_SESSION['ExtraData'] = "currentact:".$_GET['act']."; currentcategoryid:0; currentforumid:0; currenttopicid:0; currentmessageid:0; currenteventid:0; currentmemberid:0;";

@@ -11,7 +11,7 @@
     Copyright 2004-2024 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2024 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: prelogin.php - Last Update: 8/23/2024 SVN 1023 - Author: cooldude2k $
+    $FileInfo: prelogin.php - Last Update: 8/23/2024 SVN 1024 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="prelogin.php"||$File3Name=="/prelogin.php") {
@@ -48,6 +48,7 @@ if($BanError!="yes") {
 $queryup = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"LastActive\"=%i,\"IP\"='%s' WHERE \"id\"=%i", array($NewDay,$NewIP,$YourIDAM));
 $_SESSION['Theme']=$UseThemeAM;
 $_SESSION['MemberName']=$_COOKIE['MemberName'];
+if(isset($_COOKIE['AnonymousLogin'])) { $_SESSION['AnonymousLogin'] = $_COOKIE['AnonymousLogin']; }
 $_SESSION['UserID']=$YourIDAM;
 $_SESSION['UserIP']=$_SERVER['REMOTE_ADDR'];
 $_SESSION['UserTimeZone']=$YourTimeZoneAM;
