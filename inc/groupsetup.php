@@ -11,7 +11,7 @@
     Copyright 2004-2024 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2024 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: groupsetup.php - Last Update: 8/23/2024 SVN 1024 - Author: cooldude2k $
+    $FileInfo: groupsetup.php - Last Update: 8/23/2024 SVN 1025 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="groupsetup.php"||$File3Name=="/groupsetup.php") {
@@ -107,17 +107,23 @@ if($cookieDomain==null) {
 setcookie("MemberName", null, $utccurtime->getTimestamp() - 3600, $cbasedir);
 setcookie("UserID", null, $utccurtime->getTimestamp() - 3600, $cbasedir);
 setcookie("SessPass", null, $utccurtime->getTimestamp() - 3600, $cbasedir);
+if(isset($_COOKIE['AnonymousLogin'])) {
+setcookie("AnonymousLogin", null, $utccurtime->getTimestamp() - 3600, $cbasedir); }
 setcookie(session_name(), "", $utccurtime->getTimestamp() - 3600, $cbasedir); }
 if($cookieDomain!=null) {
 if($cookieSecure===true) {
 setcookie("MemberName", null, $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain, 1);
 setcookie("UserID", null, $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain, 1);
 setcookie("SessPass", null, $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain, 1);
+if(isset($_COOKIE['AnonymousLogin'])) {
+setcookie("AnonymousLogin", "", $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain, 1); }
 setcookie(session_name(), "", $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain, 1); }
 if($cookieSecure===false) {
 setcookie("MemberName", null, $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain, 0);
 setcookie("UserID", null, $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain, 0);
 setcookie("SessPass", null, $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain, 0);
+if(isset($_COOKIE['AnonymousLogin'])) {
+setcookie("AnonymousLogin", null, $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain, 0); }
 setcookie(session_name(), "", $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain, 0); } }
 unset($_COOKIE[session_name()]);
 $_SESSION = array(); session_unset(); session_destroy();
