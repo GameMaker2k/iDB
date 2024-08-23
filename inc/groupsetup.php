@@ -329,7 +329,7 @@ if($MyKarmaUpdate<$NewKarmaUpdate&&$MyPostCountChk>0) {
 	$MyKarmaCount = $MyKarmaCount + $BoostTotal; }
 	if($BoostTotal==null) {
 	$MyKarmaCount = $MyKarmaCount + 1; }
-	$querykarmaup = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"Karma\"=%i,\"KarmaUpdate\"=%i WHERE \"id\"=%i", array($MyKarmaCount,$NewKarmaUpdate,$_SESSION['UserID']));
+	$querykarmaup = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"Karma\"=%i,\"KarmaUpdate\"=%i WHERE \"id\"=%i AND \"id\">0", array($MyKarmaCount,$NewKarmaUpdate,$_SESSION['UserID']));
 	sql_query($querykarmaup,$SQLStat); }
 	$Settings['KarmaBoostDays'] = $Settings['OldKarmaBoostDays'];
 	$sql_rank_check = sql_query(sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."ranks\" WHERE \"PromoteKarma\">=%i AND \"PromotePosts\">=%i AND \"id\"<>%i AND \"id\">0 LIMIT 1", array($MyKarmaCount, $MyPostCountChk, $RankInfo['ID'])),$SQLStat);
