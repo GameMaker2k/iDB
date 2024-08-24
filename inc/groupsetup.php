@@ -11,7 +11,7 @@
     Copyright 2004-2024 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2024 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: groupsetup.php - Last Update: 8/23/2024 SVN 1025 - Author: cooldude2k $
+    $FileInfo: groupsetup.php - Last Update: 8/23/2024 SVN 1026 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="groupsetup.php"||$File3Name=="/groupsetup.php") {
@@ -168,6 +168,8 @@ $LevelInfo['PromoteKarma']=sql_result($levresult,0,"PromoteKarma");
 if(!is_numeric($LevelInfo['PromoteKarma'])) { 
 	$LevelInfo['PromoteKarma'] = 0; $LevelInfo['PromoteTo'] = 0; } }
 if($_SESSION['UserID']==0||$_SESSION['UserID']==null) {
+ $rannum = 0; }
+if($_SESSION['UserID']!=0&&$_SESSION['UserID']!=null) {
 $ranquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."ranks\" WHERE \"id\"=%i LIMIT 1", array($ChkUsrRankID));
 $ranresult=sql_query($ranquery,$SQLStat);
 $rannum=sql_num_rows($ranresult);

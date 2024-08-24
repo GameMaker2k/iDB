@@ -11,7 +11,7 @@
     Copyright 2004-2024 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2024 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: members.php - Last Update: 8/23/2024 SVN 1025 - Author: cooldude2k $
+    $FileInfo: members.php - Last Update: 8/23/2024 SVN 1026 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="members.php"||$File3Name=="/members.php") {
@@ -893,6 +893,7 @@ Title: <?php echo $ViewMem['Title']; ?>
 if($_GET['act']=="logout") {
 session_unset();
 header("Clear-Site-Data: \"cache\", \"cookies\"");
+if($cookieDomain==null) {
 setcookie("MemberName", null, $utccurtime->getTimestamp() - 3600, $cbasedir);
 setcookie("UserID", null, $utccurtime->getTimestamp() - 3600, $cbasedir);
 setcookie("SessPass", null, $utccurtime->getTimestamp() - 3600, $cbasedir);
