@@ -12,7 +12,7 @@
     Copyright 2004-2024 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mysql.php - Last Update: 8/23/2024 SVN 1028 - Author: cooldude2k $
+    $FileInfo: mysql.php - Last Update: 8/23/2024 SVN 1029 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mysql.php"||$File3Name=="/mysql.php") {
@@ -210,8 +210,8 @@ sql_query($query,$SQLStat);
 if($_POST['startblank']=="yes") {
 $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."levels\" (\"id\", \"Name\", \"PromoteTo\", \"PromotePosts\", \"PromoteKarma\") VALUES\n".
 "(-1, 'Guest', 0, 0, 0),\n".
-"(1, 'Member', 0, 0, 0);", array(null)); }
-sql_query($query,$SQLStat);
+"(1, 'Member', 0, 0, 0);", array(null));
+sql_query($query,$SQLStat); }
 $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."members\" (\n".
 "  \"id\" int(15) NOT NULL auto_increment,\n".
 "  \"Name\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
