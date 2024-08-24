@@ -12,7 +12,7 @@
     Copyright 2004-2024 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: pgsql.php - Last Update: 8/23/2024 SVN 1024 - Author: cooldude2k $
+    $FileInfo: pgsql.php - Last Update: 8/23/2024 SVN 1027 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pgsql.php"||$File3Name=="/pgsql.php") {
@@ -40,9 +40,10 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."categories\" (\n".
 "  \"Description\" text NOT NULL\n".
 ");", array(null));
 sql_query($query,$SQLStat);
+if($_POST['startblank']=="yes") {
 $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."categories\" (\"OrderID\", \"Name\", \"ShowCategory\", \"CategoryType\", \"SubShowForums\", \"InSubCategory\", \"PostCountView\", \"KarmaCountView\", \"Description\")\n". 
 "VALUES (1, 'A Test Category', 'yes', 'category', 'yes', 0, 0, 0, 'A test category that may be removed at any time.');", array(null));
-sql_query($query,$SQLStat);
+sql_query($query,$SQLStat); }
 $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."catpermissions\" (\n".
 "  \"id\" SERIAL PRIMARY KEY NOT NULL,\n".
 "  \"PermissionID\" numeric(15) NOT NULL default '0',\n".
@@ -51,13 +52,14 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."catpermissions\" (
 "  \"CanViewCategory\" varchar(5) NOT NULL default ''\n".
 ");", array(null));
 sql_query($query,$SQLStat);
+if($_POST['startblank']=="yes") {
 $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."catpermissions\" (\"PermissionID\", \"Name\", \"CategoryID\", \"CanViewCategory\") VALUES\n".
 "(1, 'Admin', 1, 'yes'),\n".
 "(2, 'Moderator', 1, 'yes'),\n".
 "(3, 'Member', 1, 'yes'),\n".
 "(4, 'Guest', 1, 'yes'),\n".
 "(5, 'Banned', 1, 'no'),\n".
-"(6, 'Validate', 1, 'yes');", array(null)); 
+"(6, 'Validate', 1, 'yes');", array(null)); }
 sql_query($query,$SQLStat);
 $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."events\" (\n".
 "  \"id\" SERIAL PRIMARY KEY NOT NULL,\n".
@@ -104,9 +106,6 @@ sql_query($query,$SQLStat);
 if($_POST['startblank']=="yes") {
 $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."forums\" (\"CategoryID\", \"OrderID\", \"Name\", \"ShowForum\", \"ForumType\", \"InSubForum\", \"RedirectURL\", \"Redirects\", \"NumViews\", \"Description\", \"PostCountAdd\", \"PostCountView\", \"KarmaCountView\", \"CanHaveTopics\", \"HotTopicPosts\", \"NumPosts\", \"NumTopics\") VALUES\n".
 "(1, 1, 'A Test Forum', 'yes', 'forum', 0, 'http://', 0, 0, 'A test forum that may be removed at any time.', 'off', 0, 0, 'yes', 15, 1, 1);", array(null));
-sql_query($query,$SQLStat); } else {
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."forums\" (\"CategoryID\", \"OrderID\", \"Name\", \"ShowForum\", \"ForumType\", \"InSubForum\", \"RedirectURL\", \"Redirects\", \"NumViews\", \"Description\", \"PostCountAdd\", \"PostCountView\", \"KarmaCountView\", \"CanHaveTopics\", \"HotTopicPosts\", \"NumPosts\", \"NumTopics\") VALUES\n".
-"(1, 1, 'A Test Forum', 'yes', 'forum', 0, 'http://', 0, 0, 'A test forum that may be removed at any time.', 'off', 0, 0, 'yes', 15, 0, 0);", array(null));
 sql_query($query,$SQLStat); }
 $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."groups\" (\n".
 "  \"id\" SERIAL PRIMARY KEY NOT NULL,\n".
@@ -153,6 +152,7 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."ranks\" (\n".
 "  \"PromotePosts\" numeric(15) NOT NULL default '0'\n".
 ");", array(null));
 sql_query($query,$SQLStat);
+if($_POST['startblank']=="yes") {
 $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."ranks\" (\"id\", \"Name\", \"PromoteTo\", \"PromoteKarma\", \"PromotePosts\") VALUES\n".
 "(-1, 'Guest', 0, 0, 0),\n".
 "(1, 'Provisional', 2, 3, 0),\n".
@@ -169,7 +169,7 @@ $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."ranks\" (\"id\", 
 "(12, 'Sage', 13, 5000, 0),\n".
 "(13, '? Block', 14, 10000, 0),\n".
 "(14, '???', 0, 0, 0);", array(null));
-sql_query($query,$SQLStat);
+sql_query($query,$SQLStat); }
 $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."levels\" (\n".
 "  \"id\" SERIAL PRIMARY KEY NOT NULL,\n".
 "  \"Name\" varchar(150) NOT NULL default '',\n".
@@ -179,10 +179,11 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."levels\" (\n".
 "  UNIQUE (\"Name\")\n".
 ");", array(null));
 sql_query($query,$SQLStat);
+if($_POST['startblank']=="yes") {
 $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."levels\" (\"id\", \"Name\", \"PromoteTo\", \"PromotePosts\", \"PromoteKarma\") VALUES\n".
 "(-1, 'Guest', 0, 0, 0),\n".
 "(1, 'Member', 0, 0, 0);", array(null));
-sql_query($query,$SQLStat);
+sql_query($query,$SQLStat); }
 $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."members\" (\n".
 "  \"id\" SERIAL PRIMARY KEY NOT NULL,\n".
 "  \"Name\" varchar(150) NOT NULL default '',\n".
@@ -312,6 +313,7 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."permissions\" (\n"
 "  \"CanReportPost\" varchar(5) NOT NULL default ''\n".
 ");", array(null));
 sql_query($query,$SQLStat);
+if($_POST['startblank']=="yes") {
 $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."permissions\" (\"PermissionID\", \"Name\", \"ForumID\", \"CanViewForum\", \"CanMakePolls\", \"CanMakeTopics\", \"CanMakeReplys\", \"CanMakeReplysCT\", \"HideEditPostInfo\", \"CanEditTopics\", \"CanEditTopicsCT\", \"CanEditReplys\", \"CanEditReplysCT\", \"CanDeleteTopics\", \"CanDeleteTopicsCT\", \"CanDoublePost\", \"CanDoublePostCT\", \"GotoEditPost\", \"CanDeleteReplys\", \"CanDeleteReplysCT\", \"CanCloseTopics\", \"CanPinTopics\", \"CanExecPHP\", \"CanDoHTML\", \"CanUseBBTags\", \"CanModForum\", \"CanReportPost\") VALUES\n".
 "(1, 'Admin', 1, 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'no', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes'),\n".
 "(2, 'Moderator', 1, 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'no', 'yes', 'yes', 'yes', 'yes', 'no', 'no', 'yes', 'yes', 'yes'),\n".
@@ -319,7 +321,7 @@ $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."permissions\" (\"
 "(4, 'Guest', 1, 'yes', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no'),\n".
 "(5, 'Banned', 1, 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no'),\n".
 "(6, 'Validate', 1, 'yes', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no');", array(null));  
-sql_query($query,$SQLStat);
+sql_query($query,$SQLStat); }
 $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."polls\" (\n".
 "  \"id\" SERIAL PRIMARY KEY NOT NULL,\n".
 "  \"UserID\" numeric(15) NOT NULL default '0',\n".

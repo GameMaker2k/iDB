@@ -11,7 +11,7 @@
     Copyright 2004-2024 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2024 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: groupsetup.php - Last Update: 8/23/2024 SVN 1026 - Author: cooldude2k $
+    $FileInfo: groupsetup.php - Last Update: 8/23/2024 SVN 1027 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="groupsetup.php"||$File3Name=="/groupsetup.php") {
@@ -435,10 +435,10 @@ $perquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."permissions\
 $peresult=sql_query($perquery,$SQLStat);
 $pernum=sql_num_rows($peresult);
 $peri=0; $PerError = null;
-if($pernum<0) { $PerError = true; sql_free_result($peresult);
+/*if($pernum<0) { $PerError = true; sql_free_result($peresult);
 header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 503;
 ob_clean(); echo "Sorry could not find permission data in database.\nContact the board admin about error."; 
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }*/
 $ForumIgnoreList1 = null; $ForumIgnoreList2 = null;
 $ForumIgnoreList3 = null; $ForumIgnoreList4 = null;
 $ForumIgnoreList5 = null; $ForumIgnoreList6 = null;
@@ -544,10 +544,10 @@ $per2query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."catpermissi
 $per2esult=sql_query($per2query,$SQLStat);
 $per2num=sql_num_rows($per2esult);
 $per2i=0; $Per2Error = null;
-if($per2num<=0) { $Per2Error = true; sql_free_result($per2esult);
+/*if($per2num<=0) { $Per2Error = true; sql_free_result($per2esult);
 header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 503;
 ob_clean(); echo "Sorry could not find permission data in database.\nContact the board admin about error."; 
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
+gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }*/
 $CatIgnoreList1 = null; $CatIgnoreList2 = null;
 $CatIgnoreList3 = null; $CatIgnoreList4 = null;
 $CatIgnoreList5 = null; $CatIgnoreList6 = null;
