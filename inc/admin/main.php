@@ -649,6 +649,18 @@ if($PreWorgURL['host']!="localhost.url"&&str_replace("/", "", $PreWorgURL['path'
 ?><tr style="text-align: left;">
 	<td style="width: 50%;"><span class="TextBoxLabel">Server Operating System:</span></td>
 	<td style="width: 50%;"><?php echo $OSType; ?></td>
+</tr><?php } if(isset($_SERVER['SERVER_SOFTWARE'])) { 
+?><tr style="text-align: left;">
+	<td style="width: 50%;"><span class="TextBoxLabel">Server Software:</span></td>
+	<td style="width: 50%;"><?php echo $_SERVER['SERVER_SOFTWARE']; ?></td>
+</tr><?php } if(isset($_SERVER['SERVER_SIGNATURE'])) { 
+?><tr style="text-align: left;">
+	<td style="width: 50%;"><span class="TextBoxLabel">Server Signature:</span></td>
+	<td style="width: 50%;"><?php echo $_SERVER['SERVER_SIGNATURE']; ?></td>
+</tr><?php } if(function_exists('apache_get_version')) { 
+?><tr style="text-align: left;">
+	<td style="width: 50%;"><span class="TextBoxLabel">Apache Version:</span></td>
+	<td style="width: 50%;"><?php echo apache_get_version(); ?></td>
 </tr><?php } ?><tr style="text-align: left;">
 	<td style="width: 50%;"><span class="TextBoxLabel">Current PHP Version:</span></td>
 	<td style="width: 50%;"><?php echo "PHP Version ".phpversion(); ?></td>
