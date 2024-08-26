@@ -39,6 +39,13 @@ if($Settings['idburl']!="localhost"&&$Settings['idburl']!=null) {
 	$rssurlon = "on"; $rssurl = $Settings['idburl']; }
 if($Settings['rssurl']!=null&&$Settings['rssurl']!="") {
 	$rssurlon = "on"; $rssurl = $Settings['rssurl']; }
+function getGitRevision($GitRevN) {
+    // Use a regular expression to extract the revision number
+    if (preg_match('/\$Id:\s+([a-f0-9]{40})\s+\$/', $GitRevN, $matches)) {
+        return $matches[1];
+    }
+    return null; // Return null if no match is found
+}
 require_once($SettDir['inc'].'versioninfo.php');
 //File naming stuff. <_< 
 $exfile = array(); $exfilerss = array();

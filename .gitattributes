@@ -1,1 +1,2 @@
-*.php ident
+*.php -ident
+inc/versioninfo.php ident
