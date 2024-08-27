@@ -639,6 +639,9 @@ if($PreWorgURL['host']!="localhost.url"&&str_replace("/", "", $PreWorgURL['path'
 ?><tr style="text-align: left;">
 	<td style="width: 50%;"><span class="TextBoxLabel">Forum Software Version:</span></td>
 	<td style="width: 50%;"><?php echo "<span title=\"".$VerInfo['iDB_Full_Ver_Show']."\">".$VerInfo['iDB_Ver_Show']."</span>"; ?><!--&#160;<a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=vercheck",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>" onclick="window.open(this.href);return false;"><img src="<?php echo $AdminCheckURL; ?>" alt="Version Check: Click to see more info." title="Version Check: Click to see more info." /></a>--></td>
+</tr><tr style="text-align: left;">
+	<td style="width: 50%;"><span class="TextBoxLabel">Forum Software GIT Revision:</span></td>
+	<td style="width: 50%;"><?php echo "<span title=\"GIT ".$GitRevN."\">".$GitRevN."</span>"; ?><!--&#160;<a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=vercheck",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>" onclick="window.open(this.href);return false;"><img src="<?php echo $AdminCheckURL; ?>" alt="Version Check: Click to see more info." title="Version Check: Click to see more info." /></a>--></td>
 </tr><tr>
 	<td style="width: 50%;"><span class="TextBoxLabel">Forum UUID:</span></td>
 	<td style="width: 50%;"><?php echo $Settings['BoardUUID']; ?></td>
