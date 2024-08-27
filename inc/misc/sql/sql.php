@@ -67,13 +67,22 @@ function call_sql_function($func, $link = null, $sqllib = null, ...$params) {
     if ($prefix) {
         $functionName = $prefix . '_' . $func;
         if (function_exists($functionName)) {
-            return $functionName($link, ...$params);
+            if ($func === 'connect_db') {
+                // Handle connect_db separately to avoid passing link
+                return $functionName(...$params);
+            } elseif ($link !== null) {
+                // Pass the link if it's not null and the function is not connect_db
+                return $functionName($link, ...$params);
+            } else {
+                // If no link is provided, just pass the params
+                return $functionName(...$params);
+            }
         } else {
-            // Handle the case where the function does not exist
-            return null; // or you can log an error, throw an exception, etc.
+            error_log("SQL function $functionName does not exist for $sqllib");
+            throw new Exception("SQL function $functionName not found for library $sqllib.");
         }
     }
-    return null; // or handle the error appropriately
+    throw new Exception("Invalid SQL library: $sqllib");
 }
 
 // Wrapper functions

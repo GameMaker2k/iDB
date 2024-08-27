@@ -69,7 +69,6 @@ if ($num===false) {
 	return $num; }
 // Connect to mysql database
 function mysqli_func_connect_db($server,$username,$password,$database=null,$new_link=false) {
-var_dump($server, $username, $password, $database, $new_link, $sqllib);
 $myport = "3306";
 $hostex = explode(":", $server);
 if(isset($hostex[1])&&
