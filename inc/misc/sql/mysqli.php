@@ -11,14 +11,14 @@
     Copyright 2004-2024 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2024 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: mysqli.php - Last Update: 8/23/2024 SVN 1023 - Author: cooldude2k $
+    $FileInfo: mysqli.php - Last Update: 8/26/2024 SVN 1035 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mysqli.php"||$File3Name=="/mysqli.php") {
 	@header('Location: index.php');
 	exit(); }
 // MySQL Functions.
-function sql_error($link=null) {
+function mysqli_func_error($link=null) {
 if(isset($link)) {
 	$result = mysqli_error($link); }
 if(!isset($link)) {
@@ -26,7 +26,7 @@ if(!isset($link)) {
 if ($result=="") {
 	return ""; }
 	return $result; }
-function sql_errno($link=null) {
+function mysqli_func_errno($link=null) {
 if(isset($link)) {
 	$result = mysqli_errno($link); }
 if(!isset($link)) {
@@ -34,13 +34,13 @@ if(!isset($link)) {
 if ($result===0) {
 	return 0; }
 	return $result; }
-function sql_errorno($link=null) {
+function mysqli_func_errorno($link=null) {
 if(isset($link)) {
-	$result = sql_error($link);
-	$resultno = sql_errno($link); }
+	$result = mysqli_func_error($link);
+	$resultno = mysqli_func_errno($link); }
 if(!isset($link)) {
-	$result = sql_error();
-	$resultno = sql_errno(); }
+	$result = mysqli_func_error();
+	$resultno = mysqli_func_errno(); }
 if ($result==""&&$result===0) {
 	return ""; }
 if ($result!=""&&$result!==0) {
@@ -48,27 +48,28 @@ if ($result!=""&&$result!==0) {
 	return $result; }
 // Execute a query :P
 $NumQueries = 0;
-function sql_query($query,$link=null) {
+function mysqli_func_query($query,$link=null) {
 global $NumQueries;
 if(isset($link)) {
 	$result = mysqli_query($link,$query); }
 if(!isset($link)) {
 	$result = mysqli_query(null,$query); }
 if ($result===false) {
-    output_error("SQL Error: ".sql_error(),E_USER_ERROR);
+    output_error("SQL Error: ".mysqli_func_error(),E_USER_ERROR);
 	return false; }
 if ($result!==false) {
 	++$NumQueries;
 	return $result; } }
 //Fetch Number of Rows
-function sql_num_rows($result) {
+function mysqli_func_num_rows($result) {
 $num = mysqli_num_rows($result);
 if ($num===false) {
-    output_error("SQL Error: ".sql_error(),E_USER_ERROR);
+    output_error("SQL Error: ".mysqli_func_error(),E_USER_ERROR);
 	return false; }
 	return $num; }
 // Connect to mysql database
-function sql_connect_db($server,$username,$password,$database=null,$new_link=false) {
+function mysqli_func_connect_db($server,$username,$password,$database=null,$new_link=false) {
+var_dump($server, $username, $password, $database, $new_link, $sqllib);
 $myport = "3306";
 $hostex = explode(":", $server);
 if(isset($hostex[1])&&
@@ -84,55 +85,55 @@ $link = mysqli_connect($server,$username,$password,$database,$myport); }
 if ($link===false) {
     output_error("MySQLi Error ".mysqli_connect_errno().": ".mysqli_connect_error(),E_USER_ERROR);
 	return false; }
-$result = sql_query("SET SESSION SQL_MODE='ANSI_QUOTES,NO_AUTO_VALUE_ON_ZERO';",$link);
+$result = mysqli_func_query("SET SESSION SQL_MODE='ANSI_QUOTES,NO_AUTO_VALUE_ON_ZERO';",$link);
 if ($result===false) {
-    output_error("SQL Error: ".sql_error(),E_USER_ERROR);
+    output_error("SQL Error: ".mysqli_func_error(),E_USER_ERROR);
 	return false; }
 return $link; }
-function sql_disconnect_db($link=null) {
+function mysqli_func_disconnect_db($link=null) {
 return mysqli_close($link); }
 // Query Results :P
-function sql_result($result,$row,$field=0) {
+function mysqli_func_result($result,$row,$field=0) {
 $check = mysqli_data_seek($result,$row);
 if ($check===false) {
-    output_error("SQL Error: ".sql_error(),E_USER_ERROR);
+    output_error("SQL Error: ".mysqli_func_error(),E_USER_ERROR);
 	return false; }
 $trow = mysqli_fetch_array($result);
 if(!isset($trow[$field])) { $trow[$field] = null; }
 $retval = $trow[$field]; 
 return $retval; }
 // Free Results :P
-function sql_free_result($result) {
+function mysqli_func_free_result($result) {
 $fresult = mysqli_free_result($result);
 if ($fresult===false) {
-    output_error("SQL Error: ".sql_error(),E_USER_ERROR);
+    output_error("SQL Error: ".mysqli_func_error(),E_USER_ERROR);
 	return false; }
 if ($fresult===true) {
 	return true; } }
 //Fetch Results to Array
-function sql_fetch_array($result,$result_type=MYSQLI_BOTH) {
+function mysqli_func_fetch_array($result,$result_type=MYSQLI_BOTH) {
 $row = mysqli_fetch_array($result,$result_type);
 	return $row; }
 //Fetch Results to Associative Array
-function sql_fetch_assoc($result) {
+function mysqli_func_fetch_assoc($result) {
 $row = mysqli_fetch_assoc($result);
 	return $row; }
 //Fetch Row Results
-function sql_fetch_row($result) {
+function mysqli_func_fetch_row($result) {
 $row = mysqli_fetch_row($result);
 	return $row; }
 //Get Server Info
-function sql_server_info($link=null) {
+function mysqli_func_server_info($link=null) {
 if(isset($link)) {
 	$result = mysqli_get_server_info($link); }
 if(!isset($link)) {
 	$result = mysqli_get_server_info(); }
 	return $result; }
 //Get Client Info
-function sql_client_info($link=null) {
+function mysqli_func_client_info($link=null) {
 	$result = mysqli_get_client_info();
 	return $result; }
-function sql_escape_string($string,$link=null) {
+function mysqli_func_escape_string($string,$link=null) {
 global $SQLStat;
 if(isset($string)) {
  if(isset($link)) {
@@ -140,12 +141,12 @@ if(isset($string)) {
  if(!isset($link)) {
  	$string = mysqli_real_escape_string($SQLStat,$string); } }
 if ($string===false) {
-    output_error("SQL Error: ".sql_error(),E_USER_ERROR);
+    output_error("SQL Error: ".mysqli_func_error(),E_USER_ERROR);
 	return false; }
 	return $string; }
 // SafeSQL Lite Source Code by Cool Dude 2k
 // Make SQL Query's safe
-function sql_pre_query($query_string,$query_vars) {
+function mysqli_func_pre_query($query_string,$query_vars) {
    $query_array = array(array("%i","%I","%F","%S"),array("%d","%d","%f","%s"));
    $query_string = str_replace($query_array[0], $query_array[1], $query_string);
    if (get_magic_quotes_gpc()) {
@@ -160,21 +161,21 @@ $query_val[$query_is] = $query_vars[$query_i];
 ++$query_i; }
    $query_val[0] = $query_string;
    return call_user_func_array("sprintf",$query_val); }
-function sql_set_charset($charset,$link=null) {
+function mysqli_func_set_charset($charset,$link=null) {
 if(function_exists('mysqli_set_charset')===false) {
 if(!isset($link)) {
-	$result = sql_query("SET CHARACTER SET '".$charset."'"); }
+	$result = mysqli_func_query("SET CHARACTER SET '".$charset."'"); }
 if(isset($link)) {
-	$result = sql_query("SET CHARACTER SET '".$charset."'",$link); }
+	$result = mysqli_func_query("SET CHARACTER SET '".$charset."'",$link); }
 if ($result===false) {
-    output_error("SQL Error: ".sql_error(),E_USER_ERROR);
+    output_error("SQL Error: ".mysqli_func_error(),E_USER_ERROR);
 	return false; }
 if(!isset($link)) {
-	$result = sql_query("SET NAMES '".$charset."'"); }
+	$result = mysqli_func_query("SET NAMES '".$charset."'"); }
 if(isset($link)) {
-	$result = sql_query("SET NAMES '".$charset."'",$link); } 
+	$result = mysqli_func_query("SET NAMES '".$charset."'",$link); } 
 if ($result===false) {
-    output_error("SQL Error: ".sql_error(),E_USER_ERROR);
+    output_error("SQL Error: ".mysqli_func_error(),E_USER_ERROR);
 	return false; }
 	return true; }
 if(function_exists('mysqli_set_charset')===true) {
@@ -183,33 +184,33 @@ if(isset($link)) {
 if(!isset($link)) {
 	$result = mysqli_set_charset(null,$charset); }
 if ($result===false) {
-    output_error("SQL Error: ".sql_error(),E_USER_ERROR);
+    output_error("SQL Error: ".mysqli_func_error(),E_USER_ERROR);
 	return false; }
 	return true; } }
 /*
 if(function_exists('mysqli_set_charset')===false) {
 function mysqli_set_charset($charset,$link) {
 if(isset($link)) {
-	$result = sql_set_charset($charset,$link); }
+	$result = mysqli_func_set_charset($charset,$link); }
 if(!isset($link)) {
-	$result = sql_set_charset($charset); }
+	$result = mysqli_func_set_charset($charset); }
 if ($result===false) {
-    output_error("SQL Error: ".sql_error(),E_USER_ERROR);
+    output_error("SQL Error: ".mysqli_func_error(),E_USER_ERROR);
 	return false; }
 	return true; } }
 */
 // Get next id for stuff
-function sql_get_next_id($tablepre,$table,$link=null) {
+function mysqli_func_get_next_id($tablepre,$table,$link=null) {
 	$nid = mysqli_insert_id($link);
 	return $nid; }
 // Get number of rows for table
-function sql_get_num_rows($tablepre,$table,$link=null) {
-   $getnextidq = sql_pre_query("SHOW TABLE STATUS LIKE '".$tablepre.$table."'", array());
+function mysqli_func_get_num_rows($tablepre,$table,$link=null) {
+   $getnextidq = mysqli_func_pre_query("SHOW TABLE STATUS LIKE '".$tablepre.$table."'", array());
 if(!isset($link)) {
-	$getnextidr = sql_query($getnextidq); }
+	$getnextidr = mysqli_func_query($getnextidq); }
 if(isset($link)) {
-	$getnextidr = sql_query($getnextidq,$link); } 
-   $getnextid = sql_fetch_assoc($getnextidr);
+	$getnextidr = mysqli_func_query($getnextidq,$link); } 
+   $getnextid = mysqli_func_fetch_assoc($getnextidr);
    return $getnextid['Rows'];
    @sql_free_result($getnextidr); }
 ?>
