@@ -55,10 +55,28 @@ if(!in_array("ini_set", $disfunc)) {
 /* Change session hash type here */
 @ini_set("session.hash_function", 1);
 @ini_set("session.hash_bits_per_character", 6); }
+/* Do not change anything below this line unless you know what you are doing */
 if(file_exists('extrasettings.php')) {
 	require_once('extrasettings.php'); }
 if(file_exists('extendsettings.php')) {
 	require_once('extendsettings.php'); }
+// Custom error handler for non-fatal errors
+function customErrorHandler($errno, $errstr, $errfile, $errline) {
+    // Flush the output buffer if it exists
+    while (ob_get_level()) {
+        ob_end_flush();
+    }
+    // Display the error
+    echo "<b>Error:</b> [$errno] $errstr - $errfile:$errline";
+    // Stop the script for critical errors
+    if ($errno === E_ERROR || $errno === E_PARSE) {
+        die();
+    }
+}
+// Register the error handler
+set_error_handler("customErrorHandler");
+// Register the shutdown function to catch fatal errors
+register_shutdown_function('shutdownHandler');
 if(!isset($Settings['qstr'])) { $Settings['qstr'] = null; }
 if(!isset($Settings['send_pagesize'])) { $Settings['send_pagesize'] = "off"; }
 $deftz = new DateTimeZone(date_default_timezone_get());
