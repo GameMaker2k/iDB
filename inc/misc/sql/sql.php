@@ -98,7 +98,6 @@ function sql_num_rows($result, $sqllib = null) {
 }
 
 function sql_connect_db($server, $username, $password, $database = null, $new_link = false, $sqllib = null) {
-    var_dump($server, $username, $password, $database, $new_link, $sqllib);
 	return call_sql_function('connect_db', null, $sqllib, $server, $username, $password, $database, $new_link);
 }
 
