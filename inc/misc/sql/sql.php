@@ -58,7 +58,7 @@ function get_sql_function_prefix($sqllib) {
 }
 
 // Function to dynamically call the appropriate function based on $sqllib
-function call_sql_function($func, $link = null, $sqllib = null, ...$params) {
+function call_sql_function($func, $sqllib = null, ...$params) {
     if ($sqllib === null) {
         global $Settings;
         $sqllib = $Settings['sqltype'];
@@ -67,16 +67,7 @@ function call_sql_function($func, $link = null, $sqllib = null, ...$params) {
     if ($prefix) {
         $functionName = $prefix . '_' . $func;
         if (function_exists($functionName)) {
-            if ($func === 'connect_db') {
-                // Handle connect_db separately to avoid passing link
-                return $functionName(...$params);
-            } elseif ($link !== null) {
-                // Pass the link if it's not null and the function is not connect_db
-                return $functionName($link, ...$params);
-            } else {
-                // If no link is provided, just pass the params
-                return $functionName(...$params);
-            }
+            return $functionName(...$params);
         } else {
             error_log("SQL function $functionName does not exist for $sqllib");
             throw new Exception("SQL function $functionName not found for library $sqllib.");
@@ -87,74 +78,78 @@ function call_sql_function($func, $link = null, $sqllib = null, ...$params) {
 
 // Wrapper functions
 function sql_error($link = null, $sqllib = null) {
-    return call_sql_function('error', $link, $sqllib);
+    return call_sql_function('error', $sqllib, $link);
 }
 
 function sql_errno($link = null, $sqllib = null) {
-    return call_sql_function('errno', $link, $sqllib);
+    return call_sql_function('errno', $sqllib, $link);
 }
 
 function sql_errorno($link = null, $sqllib = null) {
-    return call_sql_function('errorno', $link, $sqllib);
+    return call_sql_function('errorno', $sqllib, $link);
 }
 
 function sql_query($query, $link = null, $sqllib = null) {
-    return call_sql_function('query', $link, $sqllib, $query);
+    return call_sql_function('query', $sqllib, $query, $link);
 }
 
 function sql_num_rows($result, $sqllib = null) {
-    return call_sql_function('num_rows', null, $sqllib, $result);
+    return call_sql_function('num_rows', $sqllib, $result);
 }
 
 function sql_connect_db($server, $username, $password, $database = null, $new_link = false, $sqllib = null) {
-	return call_sql_function('connect_db', null, $sqllib, $server, $username, $password, $database, $new_link);
+    return call_sql_function('connect_db', $sqllib, $server, $username, $password, $database, $new_link);
+}
+
+function sql_result($result, $row, $field = 0, $sqllib = null) {
+    return call_sql_function('result', $sqllib, $result, $row, $field);
 }
 
 function sql_disconnect_db($link = null, $sqllib = null) {
-    return call_sql_function('disconnect_db', $link, $sqllib);
+    return call_sql_function('disconnect_db', $sqllib, $link);
 }
 
 function sql_free_result($result, $sqllib = null) {
-    return call_sql_function('free_result', null, $sqllib, $result);
+    return call_sql_function('free_result', $sqllib, $result);
 }
 
 function sql_fetch_array($result, $result_type = SQLITE_BOTH, $sqllib = null) {
-    return call_sql_function('fetch_array', null, $sqllib, $result, $result_type);
+    return call_sql_function('fetch_array', $sqllib, $result, $result_type);
 }
 
 function sql_fetch_assoc($result, $sqllib = null) {
-    return call_sql_function('fetch_assoc', null, $sqllib, $result);
+    return call_sql_function('fetch_assoc', $sqllib, $result);
 }
 
 function sql_fetch_row($result, $sqllib = null) {
-    return call_sql_function('fetch_row', null, $sqllib, $result);
+    return call_sql_function('fetch_row', $sqllib, $result);
 }
 
 function sql_server_info($link = null, $sqllib = null) {
-    return call_sql_function('server_info', $link, $sqllib);
+    return call_sql_function('server_info', $sqllib, $link);
 }
 
 function sql_client_info($link = null, $sqllib = null) {
-    return call_sql_function('client_info', $link, $sqllib);
+    return call_sql_function('client_info', $sqllib, $link);
 }
 
 function sql_escape_string($string, $link = null, $sqllib = null) {
-    return call_sql_function('escape_string', $link, $sqllib, $string);
+    return call_sql_function('escape_string', $sqllib, $string, $link);
 }
 
 function sql_pre_query($query_string, $query_vars, $sqllib = null) {
-    return call_sql_function('pre_query', null, $sqllib, $query_string, $query_vars);
+    return call_sql_function('pre_query', $sqllib, $query_string, $query_vars);
 }
 
 function sql_set_charset($charset, $link = null, $sqllib = null) {
-    return call_sql_function('set_charset', $link, $sqllib, $charset);
+    return call_sql_function('set_charset', $sqllib, $charset, $link);
 }
 
 function sql_get_next_id($tablepre, $table, $link = null, $sqllib = null) {
-    return call_sql_function('get_next_id', $link, $sqllib, $tablepre, $table);
+    return call_sql_function('get_next_id', $sqllib, $tablepre, $table, $link);
 }
 
 function sql_get_num_rows($tablepre, $table, $link = null, $sqllib = null) {
-    return call_sql_function('get_num_rows', $link, $sqllib, $tablepre, $table);
+    return call_sql_function('get_num_rows', $sqllib, $tablepre, $table, $link);
 }
 ?>

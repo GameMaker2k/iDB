@@ -281,6 +281,7 @@ if($Settings['charset']=="UTF-8") {
 	$SQLCharset = "utf8mb4"; } 
 $Settings['sql_collate'] = $SQLCollate;
 $Settings['sql_charset'] = $SQLCharset; }
+var_dump($SQLCharset,$SQLStat);
 sql_set_charset($SQLCharset,$SQLStat);
 if($SQLStat===false) { $Error="Yes";
 echo "<br />".sql_errorno($SQLStat)."\n"; }
