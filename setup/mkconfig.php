@@ -338,6 +338,7 @@ if($csrand==3) { $gpass .= chr(rand(97,122)); }
 ++$i; } $GuestPassword = b64e_hmac($gpass,$YourDate,$GSalt,$_POST['usehashtype']);
 $url_this_dir = "http://".$_SERVER['HTTP_HOST'].$this_dir."index.php?act=view";
 $YourIP = $_SERVER['REMOTE_ADDR'];
+/*
 if($Settings['sqltype']!="cubrid") {
 @unlink($SettDir['sqldumper'].'cubrid.php');
 @unlink($SettDir['sql'].'cubrid.php'); }
@@ -366,6 +367,7 @@ if($Settings['sqltype']=="sqlite"||$Settings['sqltype']=="sqlite3"||$Settings['s
 require($SetupDir['sql'].'sqlite.php'); }
 if($Settings['sqltype']=="cubrid") {
 require($SetupDir['sql'].'cubrid.php'); }
+*/
 if($_POST['SQLThemes']=="on") {
 $OldThemeSet = $ThemeSet; 
 $Settings['board_name'] = $_POST['NewBoardName'];
