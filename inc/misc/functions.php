@@ -11,7 +11,7 @@
     Copyright 2004-2024 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2024 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: functions.php - Last Update: 8/26/2024 SVN 1035 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 8/26/2024 SVN 1048 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="functions.php"||$File3Name=="/functions.php") {
@@ -227,7 +227,7 @@ if(!isset($Settings['DefaultTheme'])) {
 function text2icons($Text,$sqlt,$link=null) {
 global $SQLStat;
 if(!isset($link)) { $link = $SQLStat; }
-$melaniequery=sql_pre_query("SELECT * FROM \"".$sqlt."smileys\"", array(null));
+$melaniequery=sql_pre_query("SELECT * FROM \"".$sqlt."smileys\"", null);
 $melanieresult=sql_query($melaniequery,$link);
 $melanienum=sql_num_rows($melanieresult);
 $melanies=0;

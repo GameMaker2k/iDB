@@ -11,7 +11,7 @@
     Copyright 2004-2024 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2024 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: pdo_sqlite3.php - Last Update: 8/26/2024 SVN 1035 - Author: cooldude2k $
+    $FileInfo: pdo_sqlite3.php - Last Update: 8/26/2024 SVN 1048 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pdo_sqlite3.php"||$File3Name=="/pdo_sqlite3.php") {
@@ -134,6 +134,7 @@ if ($string===false) {
 // SafeSQL Lite Source Code by Cool Dude 2k
 // Make SQL Query's safe
 function pdo_sqlite3_func_pre_query($query_string,$query_vars) {
+   if($query_vars==null) { $query_vars = array(null); }
    $query_array = array(array("%i","%I","%F","%S"),array("%d","%d","%f","%s"));
    $query_string = str_replace($query_array[0], $query_array[1], $query_string);
    if (get_magic_quotes_gpc()) {

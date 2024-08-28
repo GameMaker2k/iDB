@@ -11,7 +11,7 @@
     Copyright 2004-2024 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2024 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: stats.php - Last Update: 8/23/2024 SVN 1024 - Author: cooldude2k $
+    $FileInfo: stats.php - Last Update: 8/26/2024 SVN 1048 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="stats.php"||$File3Name=="/stats.php") {
@@ -99,11 +99,11 @@ $GuestsOnline .= " (<a title=\"".$session_ip_address."\" onclick=\"window.open(t
 ++$olgn; }
 ++$uoli; }
 if($_GET['act']=="view"||$_GET['act']=="stats") {
-$ntquery = sql_pre_query("SELECT COUNT(*) FROM \"".$Settings['sqltable']."topics\"".$ForumIgnoreList3, array(null));
+$ntquery = sql_pre_query("SELECT COUNT(*) FROM \"".$Settings['sqltable']."topics\"".$ForumIgnoreList3, null);
 $ntresult = sql_query($ntquery,$SQLStat);
 $numtopics = sql_result($ntresult,0);
 sql_free_result($ntresult);
-$npquery = sql_pre_query("SELECT COUNT(*) FROM \"".$Settings['sqltable']."posts\"".$ForumIgnoreList3, array(null));
+$npquery = sql_pre_query("SELECT COUNT(*) FROM \"".$Settings['sqltable']."posts\"".$ForumIgnoreList3, null);
 $npresult = sql_query($npquery,$SQLStat);
 $numposts = sql_result($npresult,0);
 sql_free_result($npresult);

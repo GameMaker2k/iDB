@@ -11,7 +11,7 @@
     Copyright 2004-2024 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2024 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: prelogin.php - Last Update: 8/23/2024 SVN 1025 - Author: cooldude2k $
+    $FileInfo: prelogin.php - Last Update: 8/26/2024 SVN 1048 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="prelogin.php"||$File3Name=="/prelogin.php") {
@@ -75,26 +75,26 @@ setcookie("SessPass", $YourPassAM, time() + (7 * 86400), $cbasedir, $cookieDomai
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die();*/
 } } if($numlog2<=0||$numlog2>1||$BanError=="yes") { session_unset();
 if($cookieDomain==null) {
-setcookie("MemberName", null, $utccurtime->getTimestamp() - 3600, $cbasedir);
-setcookie("UserID", null, $utccurtime->getTimestamp() - 3600, $cbasedir);
-setcookie("SessPass", null, $utccurtime->getTimestamp() - 3600, $cbasedir);
+setcookie("MemberName", "", $utccurtime->getTimestamp() - 3600, $cbasedir);
+setcookie("UserID", "", $utccurtime->getTimestamp() - 3600, $cbasedir);
+setcookie("SessPass", "", $utccurtime->getTimestamp() - 3600, $cbasedir);
 if(isset($_COOKIE['AnonymousLogin'])) {
-setcookie("AnonymousLogin", null, $utccurtime->getTimestamp() - 3600, $cbasedir); }
+setcookie("AnonymousLogin", "", $utccurtime->getTimestamp() - 3600, $cbasedir); }
 setcookie(session_name(), "", $utccurtime->getTimestamp() - 3600, $cbasedir); }
 if($cookieDomain!=null) {
 if($cookieSecure===true) {
-setcookie("MemberName", null, $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain, 1);
-setcookie("UserID", null, $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain, 1);
-setcookie("SessPass", null, $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain, 1);
+setcookie("MemberName", "", $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain, 1);
+setcookie("UserID", "", $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain, 1);
+setcookie("SessPass", "", $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain, 1);
 if(isset($_COOKIE['AnonymousLogin'])) {
 setcookie("AnonymousLogin", "", $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain, 1); }
 setcookie(session_name(), "", $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain, 1); }
 if($cookieSecure===false) {
-setcookie("MemberName", null, $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain, 0);
-setcookie("UserID", null, $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain, 0);
-setcookie("SessPass", null, $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain, 0);
+setcookie("MemberName", "", $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain, 0);
+setcookie("UserID", "", $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain, 0);
+setcookie("SessPass", "", $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain, 0);
 if(isset($_COOKIE['AnonymousLogin'])) {
-setcookie("AnonymousLogin", null, $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain, 0); }
+setcookie("AnonymousLogin", "", $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain, 0); }
 setcookie(session_name(), "", $utccurtime->getTimestamp() - 3600, $cbasedir, $cookieDomain, 0); } }
 unset($_COOKIE[session_name()]);
 $_SESSION = array(); //session_unset(); session_destroy();

@@ -11,7 +11,7 @@
     Copyright 2004-2024 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2024 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: profilemain.php - Last Update: 8/23/2024 SVN 1023 - Author: cooldude2k $
+    $FileInfo: profilemain.php - Last Update: 8/26/2024 SVN 1048 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="profilemain.php"||$File3Name=="/profilemain.php") {
@@ -183,7 +183,7 @@ if($_POST['act']=="view"&&
 	//$_POST['Signature'] = remove_bad_entities($_POST['Signature']);
 	/*    <_<  iWordFilter  >_>      
     by Kazuki Przyborowski - Cool Dude 2k */
-	$melanieqy=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."wordfilter\"", array(null));
+	$melanieqy=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."wordfilter\"", null);
 	$melaniert=sql_query($melanieqy,$SQLStat);
 	$melanienm=sql_num_rows($melaniert);
 	$melanies=0;
@@ -265,7 +265,7 @@ if($_POST['act']=="signature"&&
 	$_POST['Signature'] = remove_bad_entities($_POST['Signature']);
 	/*    <_<  iWordFilter  >_>      
     by Kazuki Przyborowski - Cool Dude 2k */
-	$melanieqy=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."wordfilter\"", array(null));
+	$melanieqy=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."wordfilter\"", null);
 	$melaniert=sql_query($melanieqy,$SQLStat);
 	$melanienm=sql_num_rows($melaniert);
 	$melanies=0;
@@ -628,7 +628,7 @@ if ($handle = opendir($skindir)) { $dirnum = null;
    echo $themelist[$themei]."\n";
    ++$themei; } } }
 if($Settings['SQLThemes']=="on") {
-$sknquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."themes\" ORDER BY \"id\" ASC, \"Name\" ASC", array(null));
+$sknquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."themes\" ORDER BY \"id\" ASC, \"Name\" ASC", null);
 $sknresult=sql_query($sknquery,$SQLStat);
 $sknum=sql_num_rows($sknresult);
 $skni=0;
@@ -1037,7 +1037,7 @@ if($_POST['act']=="profile"&&
 	//$_POST['Signature'] = remove_bad_entities($_POST['Signature']);
 	/*    <_<  iWordFilter  >_>      
     by Kazuki Przyborowski - Cool Dude 2k */
-	$melanieqy=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."wordfilter\"", array(null));
+	$melanieqy=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."wordfilter\"", null);
 	$melaniert=sql_query($melanieqy,$SQLStat);
 	$melanienm=sql_num_rows($melaniert);
 	$melanies=0;

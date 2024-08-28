@@ -11,7 +11,7 @@
     Copyright 2004-2024 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2024 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: sql.php - Last Update: 8/23/2024 SVN 1023 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 8/26/2024 SVN 1048 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
@@ -69,15 +69,30 @@ function customErrorHandler($errno, $errstr, $errfile, $errline) {
     while (ob_get_level()) {
         ob_end_flush();
     }
+
     // Display the error
     echo "<b>Error:</b> [$errno] $errstr - $errfile:$errline";
-    // Stop the script for critical errors
-    if ($errno === E_ERROR || $errno === E_PARSE) {
-        die();
+    // Depending on the error, you might want to stop the script
+    die();
+}
+// Set the custom error handler
+set_error_handler("customErrorHandler");
+function shutdownHandler() {
+    $last_error = error_get_last();
+
+    // Check if $last_error is not null before accessing its elements
+    if ($last_error !== null) {
+        // Check if the error type is E_ERROR or E_PARSE (fatal errors)
+        if ($last_error['type'] === E_ERROR || $last_error['type'] === E_PARSE) {
+            // Flush the output buffer if it exists
+            while (ob_get_level()) {
+                ob_end_flush();
+            }
+            // Display the error message
+            echo "<b>Fatal Error:</b> {$last_error['message']} - {$last_error['file']}:{$last_error['line']}";
+        }
     }
 }
-// Register the error handler
-set_error_handler("customErrorHandler");
 // Register the shutdown function to catch fatal errors
 register_shutdown_function('shutdownHandler');
 if(isset($Settings['qstr'])&&isset($Settings['qstr'])) {
@@ -508,7 +523,7 @@ $utctz = new DateTimeZone("UTC");
 $utccurtime = new DateTime();
 $utccurtime->setTimezone($utctz);
 $time = $utccurtime->getTimestamp() - $maxlifetime;
-//sql_query(sql_pre_query('DELETE FROM \"'.$sqltable.'sessions\" WHERE \"expires\" < UNIX_TIMESTAMP();', array(null)),$SQLStat);
+//sql_query(sql_pre_query('DELETE FROM \"'.$sqltable.'sessions\" WHERE \"expires\" < UNIX_TIMESTAMP();', null),$SQLStat);
 sql_query(sql_pre_query("DELETE FROM \"".$sqltable."sessions\" WHERE \"expires\" < %i", array($time)),$SQLStat);
 return true; }
 if (session_id()) { session_destroy(); }

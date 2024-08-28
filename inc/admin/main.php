@@ -11,7 +11,7 @@
     Copyright 2004-2024 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2024 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: main.php - Last Update: 8/23/2024 SVN 1023 - Author: cooldude2k $
+    $FileInfo: main.php - Last Update: 8/26/2024 SVN 1048 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="main.php"||$File3Name=="/main.php") {
@@ -144,7 +144,7 @@ if(!isset($Settings['idb_date_format'])) {
 require($SettDir['admin'].'table.php'); 
 if($_GET['act']=="delsessions"&&$GroupInfo['ViewDBInfo']=="yes") {
 $time = $utccurtime->getTimestamp() - ini_get("session.gc_maxlifetime");
-//$sqlg = sql_pre_query('DELETE FROM \"'.$Settings['sqltable'].'sessions\" WHERE \"expires\" < UNIX_TIMESTAMP();', array(null));
+//$sqlg = sql_pre_query('DELETE FROM \"'.$Settings['sqltable'].'sessions\" WHERE \"expires\" < UNIX_TIMESTAMP();', null);
 $sqlgc = sql_pre_query("DELETE FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" < %i", array($time));
 sql_query($sqlgc,$SQLStat);
 $_POST['update'] = "now"; $_GET['act'] = "optimize"; }
@@ -324,21 +324,21 @@ echo "<option value=\"".$themelist[$it]."\">".$themelist[$it]."</option>\n"; }
 <?php } ftp_close($conn_id); }
 if($_GET['act']=="resyncthemes"&&$GroupInfo['ViewDBInfo']=="yes"&&$Settings['SQLThemes']=="on") {
 $time = $utccurtime->getTimestamp() - ini_get("session.gc_maxlifetime");
-//$sqlg = sql_pre_query('DELETE FROM \"'.$Settings['sqltable'].'sessions\" WHERE \"expires\" < UNIX_TIMESTAMP();', array(null));
+//$sqlg = sql_pre_query('DELETE FROM \"'.$Settings['sqltable'].'sessions\" WHERE \"expires\" < UNIX_TIMESTAMP();', null);
 if($Settings['sqltype']=="mysql"||
 	$Settings['sqltype']=="mysqli"||
 	$Settings['sqltype']=="cubrid") {
-$sqlgc = sql_pre_query("TRUNCATE TABLE \"".$Settings['sqltable']."themes\"", array(null));
+$sqlgc = sql_pre_query("TRUNCATE TABLE \"".$Settings['sqltable']."themes\"", null);
 sql_query($sqlgc,$SQLStat);
-$sqlgc = sql_pre_query("ALTER TABLE \"".$Settings['sqltable']."themes\" AUTO_INCREMENT=1", array(null));
+$sqlgc = sql_pre_query("ALTER TABLE \"".$Settings['sqltable']."themes\" AUTO_INCREMENT=1", null);
 sql_query($sqlgc,$SQLStat); }
 if($Settings['sqltype']=="pgsql") {
-$sqlgc = sql_pre_query("TRUNCATE TABLE \"".$Settings['sqltable']."themes\"", array(null));
+$sqlgc = sql_pre_query("TRUNCATE TABLE \"".$Settings['sqltable']."themes\"", null);
 sql_query($sqlgc,$SQLStat);
-$sqlgc = sql_pre_query("SELECT setval('".$Settings['sqltable']."themes_id_seq', 1, false);", array(null));
+$sqlgc = sql_pre_query("SELECT setval('".$Settings['sqltable']."themes_id_seq', 1, false);", null);
 sql_query($sqlgc,$SQLStat); }
 if($Settings['sqltype']=="sqlite"||$Settings['sqltype']=="sqlite3"||$Settings['sqltype']=="pdo_sqlite3") {
-$sqlgc = sql_pre_query("DELETE FROM \"".$Settings['sqltable']."themes\";", array(null));
+$sqlgc = sql_pre_query("DELETE FROM \"".$Settings['sqltable']."themes\";", null);
 sql_query($sqlgc,$SQLStat); }
 $skindir = dirname(realpath("sql.php"))."/".$SettDir['themes'];
 if ($handle = opendir($skindir)) { $dirnum = null;
@@ -379,12 +379,12 @@ if(isset($OptimizeAr[3])) { unset($OptimizeAr[3]); }
 if($Settings['sqltype']=="mysql"||
 	$Settings['sqltype']=="mysqli") {
 if(isset($_GET['subact']) && $_GET['subact']=="repair") {
-	$RepairTea = sql_query(sql_pre_query("REPAIR TABLE \"".$TableChCk[$ti]."\"", array(null)),$SQLStat); }
-$OptimizeTea = sql_query(sql_pre_query("OPTIMIZE TABLE \"".$TableChCk[$ti]."\"", array(null)),$SQLStat); }
+	$RepairTea = sql_query(sql_pre_query("REPAIR TABLE \"".$TableChCk[$ti]."\"", null),$SQLStat); }
+$OptimizeTea = sql_query(sql_pre_query("OPTIMIZE TABLE \"".$TableChCk[$ti]."\"", null),$SQLStat); }
 if($Settings['sqltype']=="cubrid") {
-$OptimizeTea = sql_query(sql_pre_query("UPDATE STATISTICS ON \"".$TableChCk[$ti]."\"", array(null)),$SQLStat); }
+$OptimizeTea = sql_query(sql_pre_query("UPDATE STATISTICS ON \"".$TableChCk[$ti]."\"", null),$SQLStat); }
 if($Settings['sqltype']=="pgsql") {
-$OptimizeTea = sql_query(sql_pre_query("VACUUM ANALYZE \"".$TableChCk[$ti]."\"", array(null)),$SQLStat); }
+$OptimizeTea = sql_query(sql_pre_query("VACUUM ANALYZE \"".$TableChCk[$ti]."\"", null),$SQLStat); }
 if($Settings['sqltype']=="mysql"||
 	$Settings['sqltype']=="mysqli"||
 	$Settings['sqltype']=="cubrid") {
@@ -396,7 +396,7 @@ if($OptimizeAr["Msg_text"]=="OK") {
 if($Settings['sqltype']=="sqlite"||$Settings['sqltype']=="sqlite3"||$Settings['sqltype']=="pdo_sqlite3") {
 sql_disconnect_db($SQLStat);
 $SQLStat = sql_connect_db($Settings['sqlhost'],$Settings['sqluser'],$Settings['sqlpass'],$Settings['sqldb']);
-$OptimizeTea = sql_query(sql_pre_query("VACUUM", array(null)),$SQLStat); }
+$OptimizeTea = sql_query(sql_pre_query("VACUUM", null),$SQLStat); }
 if($Settings['sqltype']=="mysql"||
 	$Settings['sqltype']=="mysqli"||
 	$Settings['sqltype']=="cubrid") {
@@ -976,7 +976,7 @@ if ($handle = opendir($skindir)) { $dirnum = null;
    echo $themelist[$themei]."\n";
    ++$themei; } } }
 if($Settings['SQLThemes']=="on") {
-$sknquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."themes\" ORDER BY \"id\" ASC, \"Name\" ASC", array(null));
+$sknquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."themes\" ORDER BY \"id\" ASC, \"Name\" ASC", null);
 $sknresult=sql_query($sknquery,$SQLStat);
 $sknum=sql_num_rows($sknresult);
 $skni=0;
