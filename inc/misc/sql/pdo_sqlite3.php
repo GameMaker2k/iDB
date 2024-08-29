@@ -47,24 +47,32 @@ if ($result=="") {
 	return $result; }
 // Execute a query :P
 $NumQueries = 0;
-function pdo_sqlite3_func_query($query, $params = [], $link = null) {
+function pdo_sqlite3_func_query($query, $link = null) {
     global $NumQueries, $SQLStat;
-    if (isset($link)) {
-        $pdo = $link;
-    } else {
-        $pdo = $SQLStat;
-    }
-
-    // Check if the query is a prepared statement with parameters
+    
+    // Use the appropriate PDO connection
+    $pdo = isset($link) ? $link : $SQLStat;
+    
+    // Check if the query is an array containing the query string and parameters
     if (is_array($query)) {
-        $stmt = $pdo->prepare($query[0]);
-        $result = $stmt->execute($query[1]);
+        list($query_string, $params) = $query;
+        $stmt = $pdo->prepare($query_string);
+
+        // Debugging: Log the query and parameters
+        error_log("Executing SQL: " . $query_string);
+        error_log("With Parameters: " . implode(", ", $params));
+
+        // Execute with parameters
+        $result = $stmt->execute($params);
     } else {
+        // For direct queries without parameters
         $result = $pdo->query($query);
     }
 
     if ($result === false) {
-        output_error("SQL Error: " . pdo_sqlite3_func_error(), E_USER_ERROR);
+        // Improved error handling
+        $errorInfo = $pdo->errorInfo();
+        output_error("SQL Error: " . $errorInfo[2], E_USER_ERROR);
         return false;
     }
 
