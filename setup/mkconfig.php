@@ -12,7 +12,7 @@
     Copyright 2004-2024 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: mkconfig.php - Last Update: 8/26/2024 SVN 1048 - Author: cooldude2k $
+    $FileInfo: mkconfig.php - Last Update: 8/28/2024 SVN 1051 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mkconfig.php"||$File3Name=="/mkconfig.php") {
@@ -358,6 +358,7 @@ if($Settings['sqltype']!="sqlite3"||$Settings['sqltype']=="pdo_sqlite3") {
 @unlink($SettDir['sql'].'sqlite.php'); }
 if($Settings['sqltype']!="sqlite3") {
 @unlink($SettDir['sql'].'sqlite3.php'); }
+*/
 if($Settings['sqltype']=="mysql"||
 	$Settings['sqltype']=="mysqli") {
 require($SetupDir['sql'].'mysql.php'); }
@@ -367,7 +368,6 @@ if($Settings['sqltype']=="sqlite"||$Settings['sqltype']=="sqlite3"||$Settings['s
 require($SetupDir['sql'].'sqlite.php'); }
 if($Settings['sqltype']=="cubrid") {
 require($SetupDir['sql'].'cubrid.php'); }
-*/
 if($_POST['SQLThemes']=="on") {
 $OldThemeSet = $ThemeSet; 
 $Settings['board_name'] = $_POST['NewBoardName'];
