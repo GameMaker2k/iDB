@@ -53,7 +53,6 @@ function get_sql_function_prefix($sqllib) {
         'cubrid' => 'cubrid_func',
         'pdo_cubrid' => 'pdo_cubrid_func'
     );
-	var_dump($sqllib, $prefixes[$sqllib], $prefixes[$sqllib]);
     return isset($prefixes[$sqllib]) ? $prefixes[$sqllib] : null;
 }
 
@@ -66,7 +65,6 @@ function call_sql_function($func, $sqllib = null, ...$params) {
     $prefix = get_sql_function_prefix($sqllib);
     if ($prefix) {
         $functionName = $prefix . '_' . $func;
-		var_dump($functionName);
         if (function_exists($functionName)) {
             return $functionName(...$params);
         } else {
