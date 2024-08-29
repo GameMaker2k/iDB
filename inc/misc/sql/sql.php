@@ -11,7 +11,7 @@
     Copyright 2004-2024 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2024 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: sql.php - Last Update: 8/26/2024 SVN 1048 - Author: cooldude2k $
+    $FileInfo: sql.php - Last Update: 8/28/2024 SVN 1053 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="sql.php"||$File3Name=="/sql.php") {
@@ -32,8 +32,8 @@ if(file_exists($SettDir['sql']."sqlite.php")) {
 	require($SettDir['sql']."sqlite.php"); }
 if(file_exists($SettDir['sql']."sqlite3.php")) {
 	require($SettDir['sql']."sqlite3.php"); }
-/*if(file_exists($SettDir['sql']."pdo_sqlite3.php")) {
-	require($SettDir['sql']."pdo_sqlite3.php"); }*/
+if(file_exists($SettDir['sql']."pdo_sqlite3.php")) {
+	require($SettDir['sql']."pdo_sqlite3.php"); }
 if(file_exists($SettDir['sql']."cubrid.php")) {
 	require($SettDir['sql']."cubrid.php"); }
 /*if(file_exists($SettDir['sql']."pdo_cubrid.php")) {
@@ -53,7 +53,7 @@ function get_sql_function_prefix($sqllib) {
         'cubrid' => 'cubrid_func',
         'pdo_cubrid' => 'pdo_cubrid_func'
     );
-
+	var_dump($sqllib, $prefixes[$sqllib], $prefixes[$sqllib]);
     return isset($prefixes[$sqllib]) ? $prefixes[$sqllib] : null;
 }
 
@@ -66,6 +66,7 @@ function call_sql_function($func, $sqllib = null, ...$params) {
     $prefix = get_sql_function_prefix($sqllib);
     if ($prefix) {
         $functionName = $prefix . '_' . $func;
+		var_dump($functionName);
         if (function_exists($functionName)) {
             return $functionName(...$params);
         } else {

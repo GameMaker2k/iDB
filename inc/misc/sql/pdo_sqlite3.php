@@ -47,18 +47,32 @@ if ($result=="") {
 	return $result; }
 // Execute a query :P
 $NumQueries = 0;
-function pdo_sqlite3_func_query($query,$link=null) {
-global $NumQueries,$SQLStat;
-if(isset($link)) {
-	$result = $link->query($query); }
-if(!isset($link)) {
-	$result = $SQLStat->query($query); }
-if ($result===false) {
-    output_error("SQL Error: ".pdo_sqlite3_func_error(),E_USER_ERROR);
-	return false; }
-if ($result!==false) {
-	++$NumQueries;
-	return $result; } }
+function pdo_sqlite3_func_query($query, $params = [], $link = null) {
+    global $NumQueries, $SQLStat;
+    if (isset($link)) {
+        $pdo = $link;
+    } else {
+        $pdo = $SQLStat;
+    }
+
+    // Check if the query is a prepared statement with parameters
+    if (is_array($query)) {
+        $stmt = $pdo->prepare($query[0]);
+        $result = $stmt->execute($query[1]);
+    } else {
+        $result = $pdo->query($query);
+    }
+
+    if ($result === false) {
+        output_error("SQL Error: " . pdo_sqlite3_func_error(), E_USER_ERROR);
+        return false;
+    }
+
+    if ($result !== false) {
+        ++$NumQueries;
+        return $result;
+    }
+}
 //Fetch Number of Rows
 function pdo_sqlite3_func_num_rows($result) {
 $num = $result->rowCount();
@@ -131,24 +145,42 @@ if ($string===false) {
     output_error("SQL Error: ".pdo_sqlite3_func_error(),E_USER_ERROR);
 	return false; }
 	return $string; }
-// SafeSQL Lite Source Code by Cool Dude 2k
-// Make SQL Query's safe
-function pdo_sqlite3_func_pre_query($query_string,$query_vars) {
-   if($query_vars==null) { $query_vars = array(null); }
-   $query_array = array(array("%i","%I","%F","%S"),array("%d","%d","%f","%s"));
-   $query_string = str_replace($query_array[0], $query_array[1], $query_string);
-   if (get_magic_quotes_gpc()) {
-       $query_vars  = array_map("stripslashes", $query_vars); }
-   $query_vars = array_map("sql_escape_string", $query_vars);
-   $query_val = $query_vars;
-$query_num = count($query_val);
-$query_i = 0;
-while ($query_i < $query_num) {
-$query_is = $query_i+1;
-$query_val[$query_is] = $query_vars[$query_i];
-++$query_i; }
-   $query_val[0] = $query_string;
-   return call_user_func_array("sprintf",$query_val); }
+function pdo_sqlite3_func_pre_query($query_string, $query_vars = []) {
+	if($query_vars==null) { 
+		$query_vars = array(null); 
+	}
+    // If the first element of $query_vars is null, treat it as an empty array
+    if (is_array($query_vars) && count($query_vars) > 0 && $query_vars[0] === null) {
+        $query_vars = [];
+    }
+
+    // Escape literal ? in the query by replacing it with a placeholder token
+    $query_string = str_replace(['\?', "''"], ['{LITERAL_QUESTION_MARK}', "{LITERAL_EMPTY_STRING}"], $query_string);
+
+    // Replace any custom placeholders with standard PDO placeholders
+    $query_string = str_replace(['%s', '%d', '%i', '%f'], ['?', '?', '?', '?'], $query_string);
+
+    // Remove null values from the query_vars array to ensure they are not used in the query
+    $query_vars = array_filter($query_vars, function($value) {
+        return $value !== null;
+    });
+
+    // Count placeholders in the query string
+    $placeholder_count = substr_count($query_string, '?');
+    $params_count = count($query_vars);
+
+    if ($placeholder_count !== $params_count) {
+        // Handle mismatch in placeholders and parameters count
+        output_error("SQL Placeholder Error: Mismatch between placeholders and parameters.", E_USER_ERROR);
+        return false;
+    }
+
+    // Restore the literal ? and empty string '' in the query
+    $query_string = str_replace(['{LITERAL_QUESTION_MARK}', '{LITERAL_EMPTY_STRING}'], ['?', "''"], $query_string);
+
+    // Return the query string and the parameters array for use with PDO
+    return [$query_string, $query_vars];
+}
 function pdo_sqlite3_func_set_charset($charset,$link=null) {
 	return true; }
 /*
