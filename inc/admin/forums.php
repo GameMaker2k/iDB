@@ -540,10 +540,10 @@ $getperidID=sql_result($getperidr,$getperidi,"PermissionID"); }
 if($Settings['sqltype']=="sqlite") {
 $getperidID=sql_result($getperidr,$getperidi,"\"PermissionID\""); }
 if($_POST['CPermissions']=="0") {
-$getperidq2 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i", array($getperidID));
-$getperidrpre2=sql_query($getperidq2,$SQLStat);
-$getperidnum2=sql_num_rows($getperidrpre2);
-if($getperidnum2==0) {
+$getperidqpre2 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i", array($getperidID));
+$getperidrpre2=sql_query($getperidqpre2,$SQLStat);
+$getperidnumpre2=sql_num_rows($getperidrpre2);
+if($getperidnumpre2==0) {
 $getperidq2 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"PermissionID\"=%i", array($getperidID)); }
 sql_free_result($getperidrpre2);
 if($_POST['CPermissions']!="0") {
