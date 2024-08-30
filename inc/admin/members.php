@@ -575,7 +575,7 @@ sql_free_result($getranidr); ?>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="MemPermID" id="MemPermID">
 	<option <?php if($EditMemPerm['PermissionID']=="0") { echo "selected=\"selected\" "; } ?>value="0">use group info</option>
 <?php 
-if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"||
+if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"||$Settings['sqltype']=="pdo_mysql"||
 	$Settings['sqltype']=="pgsql"||$Settings['sqltype']=="sqlite"||
 	$Settings['sqltype']=="sqlite3"||$Settings['sqltype']=="pdo_sqlite3") {
 $getperidq = sql_pre_query("SELECT DISTINCT \"PermissionID\" FROM \"".$Settings['sqltable']."permissions\"", null); }

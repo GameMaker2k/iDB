@@ -360,7 +360,8 @@ if($Settings['sqltype']!="sqlite3") {
 @unlink($SettDir['sql'].'sqlite3.php'); }
 */
 if($Settings['sqltype']=="mysql"||
-	$Settings['sqltype']=="mysqli") {
+	$Settings['sqltype']=="mysqli"||
+	$Settings['sqltype']=="pdo_mysql") {
 require($SetupDir['sql'].'mysql.php'); }
 if($Settings['sqltype']=="pgsql") {
 require($SetupDir['sql'].'pgsql.php'); }

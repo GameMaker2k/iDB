@@ -67,7 +67,7 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Adding new Group";
 	<td style="width: 50%;"><select size="1" class="TextBox" name="GroupPerm" id="GroupPerm">
 	<option selected="selected" value="0">none</option>
 <?php 
-if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"||
+if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"||$Settings['sqltype']=="pdo_mysql"||
 	$Settings['sqltype']=="pgsql"||$Settings['sqltype']=="sqlite"||
 	$Settings['sqltype']=="sqlite3"||$Settings['sqltype']=="pdo_sqlite3") {
 $getperidq = sql_pre_query("SELECT DISTINCT \"PermissionID\" FROM \"".$Settings['sqltable']."permissions\"", null); }
@@ -77,7 +77,7 @@ $getperidr=sql_query($getperidq,$SQLStat);
 $getperidnum=sql_num_rows($getperidr);
 $getperidi = 0;
 while ($getperidi < $getperidnum) {
-if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"||
+if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"||$Settings['sqltype']=="pdo_mysql"||
 	$Settings['sqltype']=="pgsql"||$Settings['sqltype']=="cubrid"||
 	$Settings['sqltype']=="sqlite3"||$Settings['sqltype']=="pdo_sqlite3") {
 $getperidID=sql_result($getperidr,$getperidi,"PermissionID"); }
@@ -273,7 +273,7 @@ $getperidnum=sql_num_rows($getperidr);
 $getperidi = 0; 
 $nextperid = null;
 /*
-if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"||
+if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"||$Settings['sqltype']=="pdo_mysql"||
 	$Settings['sqltype']=="pgsql"||$Settings['sqltype']=="cubrid"||
 	$Settings['sqltype']=="sqlite3"||$Settings['sqltype']=="pdo_sqlite3") {
 $nextperid = sql_get_next_id($Settings['sqltable'],"permissions",$SQLStat); }
@@ -334,7 +334,7 @@ $getperidnum=sql_num_rows($getperidr);
 $getperidi = 0; 
 $nextperid = null;
 /*
-if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"||
+if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"||$Settings['sqltype']=="pdo_mysql"||
 	$Settings['sqltype']=="pgsql"||$Settings['sqltype']=="cubrid"||
 	$Settings['sqltype']=="sqlite3"||$Settings['sqltype']=="pdo_sqlite3") {
 $nextperid = sql_get_next_id($Settings['sqltable'],"permissions",$SQLStat); }

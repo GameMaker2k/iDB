@@ -172,7 +172,7 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Updating Settings";
 $query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."categories\" (\"id\", \"OrderID\", \"Name\", \"ShowCategory\", \"CategoryType\", \"SubShowForums\", \"InSubCategory\", \"PostCountView\", \"KarmaCountView\", \"Description\") VALUES\n".
 "(%i, %i, '%s', '%s', '%s', 'yes', %i, %i, %i, '%s')", array($_POST['CategoryID'],$_POST['OrderID'],$_POST['CategoryName'],$_POST['ShowCategory'],$_POST['CategoryType'],$_POST['InSubCategory'],$_POST['NumPostView'],$_POST['NumKarmaView'],$_POST['CategoryDesc']));
 sql_query($query,$SQLStat);
-if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"||
+if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"||$Settings['sqltype']=="pdo_mysql"||
 	$Settings['sqltype']=="pgsql"||$Settings['sqltype']=="sqlite"||
 	$Settings['sqltype']=="sqlite3"||$Settings['sqltype']=="pdo_sqlite3") {
 $getperidq = sql_pre_query("SELECT DISTINCT \"PermissionID\" FROM \"".$Settings['sqltable']."catpermissions\" ORDER BY \"PermissionID\" ASC", null); }
@@ -184,7 +184,7 @@ $getperidi = 0;
 //$nextperid = sql_get_next_id($Settings['sqltable'],"catpermissions",$SQLStat);
 $nextperid = null;
 while ($getperidi < $getperidnum) {
-if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"||
+if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"||$Settings['sqltype']=="pdo_mysql"||
 	$Settings['sqltype']=="pgsql"||$Settings['sqltype']=="cubrid"||
 	$Settings['sqltype']=="sqlite3"||$Settings['sqltype']=="pdo_sqlite3") {
 $getperidID=sql_result($getperidr,$getperidi,"PermissionID"); }
@@ -614,7 +614,7 @@ if(!isset($_POST['id'])) {
 	<td style="width: 50%;"><label class="TextBoxLabel" for="id">Permission to view:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="id" id="id">
 <?php 
-if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"||
+if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"||$Settings['sqltype']=="pdo_mysql"||
 	$Settings['sqltype']=="pgsql"||$Settings['sqltype']=="sqlite"||
 	$Settings['sqltype']=="sqlite3"||$Settings['sqltype']=="pdo_sqlite3") {
 $getperidq = sql_pre_query("SELECT DISTINCT \"PermissionID\" FROM \"".$Settings['sqltable']."catpermissions\"", null); }
@@ -624,7 +624,7 @@ $getperidr=sql_query($getperidq,$SQLStat);
 $getperidnum=sql_num_rows($getperidr);
 $getperidi = 0;
 while ($getperidi < $getperidnum) {
-if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"||
+if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"||$Settings['sqltype']=="pdo_mysql"||
 	$Settings['sqltype']=="pgsql"||$Settings['sqltype']=="cubrid"||
 	$Settings['sqltype']=="sqlite3"||$Settings['sqltype']=="pdo_sqlite3") {
 $getperidID=sql_result($getperidr,$getperidi,"PermissionID"); }

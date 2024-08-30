@@ -25,15 +25,14 @@ require('sql.php');
 if($_GET['act']=="sqldumper"&&$Settings['sqltype']=="cubrid") { $_GET['act'] = "view"; }
 if($_GET['act']=="sqldumper"&&$_SESSION['UserGroup']!=$Settings['GuestGroup']&&
 	$GroupInfo['HasAdminCP']=="yes") { 
-	if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli") {
+	if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"||$Settings['sqltype']=="pdo_mysql") {
 	require($SettDir['sqldumper'].'mysql.php'); }
 	if($Settings['sqltype']=="pgsql") {
 	require($SettDir['sqldumper'].'pgsql.php'); } 
 	if($Settings['sqltype']=="sqlite"||$Settings['sqltype']=="sqlite3"||$Settings['sqltype']=="pdo_sqlite3") {
 	require($SettDir['sqldumper'].'sqlite.php'); } 
 	if($Settings['sqltype']=="cubrid") {
-	require($SettDir['sqldumper'].'cubrid.php'); } 
-	session_write_close(); die(); }
+	require($SettDir['sqldumper'].'cubrid.php'); } }
 if(!isset($checklowview)) {
 	$checklowview = false; }
 if($checklowview!==false&&$checklowview!==true) {

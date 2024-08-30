@@ -88,12 +88,15 @@ if(!isset($Settings['sqltype'])) {
 $Settings['sqltype'] = strtolower($Settings['sqltype']);
 if($Settings['sqltype']!="mysql"&&
 	$Settings['sqltype']!="mysqli"&&
+	$Settings['sqltype']!="pdo_mysql"&&
 	$Settings['sqltype']!="pgsql"&&
 	$Settings['sqltype']!="sqlite"&&
 	$Settings['sqltype']!="sqlite3"&&
 	$Settings['sqltype']!="pdo_sqlite3"&&
 	$Settings['sqltype']!="cubrid") {
 	$Settings['sqltype'] = "mysql"; }
+$DBType['Server'] = "";
+$DBType['Client'] = "";
 if($Settings['sqltype']=="mysql"||
 	$Settings['sqltype']=="mysqli") {
 $DBType['Server'] = "MySQL ".sql_server_info($SQLStat);

@@ -31,6 +31,7 @@ if(!isset($Settings['sqltype'])) {
 $Settings['sqltype'] = strtolower($Settings['sqltype']);
 if($Settings['sqltype']!="mysql"&&
 	$Settings['sqltype']!="mysqli"&&
+	$Settings['sqltype']!="pdo_mysql"&&
 	$Settings['sqltype']!="pgsql"&&
 	$Settings['sqltype']!="sqlite"&&
 	$Settings['sqltype']!="sqlite3"&&

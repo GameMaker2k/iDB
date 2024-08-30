@@ -20,8 +20,8 @@ if ($File3Name=="sql.php"||$File3Name=="/sql.php") {
 
 if(file_exists($SettDir['sql']."mysql.php")) {
 	require($SettDir['sql']."mysql.php"); }
-/*if(file_exists($SettDir['sql']."pdo_mysql.php")) {
-	require($SettDir['sql']."pdo_mysql.php"); }*/
+if(file_exists($SettDir['sql']."pdo_mysql.php")) {
+	require($SettDir['sql']."pdo_mysql.php"); }
 if(file_exists($SettDir['sql']."mysqli.php")) {
 	require($SettDir['sql']."mysqli.php"); }
 if(file_exists($SettDir['sql']."pgsql.php")) {

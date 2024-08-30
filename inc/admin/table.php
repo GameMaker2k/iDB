@@ -66,6 +66,7 @@ if ($File3Name=="table.php"||$File3Name=="/table.php") {
 <td class="TableSMenuColumn3"><a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=vercheck",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>" onclick="window.open(this.href);return false;">Version Checker</a></td>
 <?php if($Settings['sqltype']=="mysql"||
 	$Settings['sqltype']=="mysqli"||
+	$Settings['sqltype']=="pdo_mysql"||
 	$Settings['sqltype']=="pgsql"||
 	$Settings['sqltype']=="sqlite"||
 	$Settings['sqltype']=="sqlite3"||
