@@ -12,7 +12,7 @@
     Copyright 2004-2024 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: setup.php - Last Update: 8/23/2024 SVN 1023 - Author: cooldude2k $
+    $FileInfo: setup.php - Last Update: 8/30/2024 SVN 1062 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="setup.php"||$File3Name=="/setup.php") {
@@ -181,8 +181,14 @@ for ($i=0; $i < count($timezone_identifiers); $i++) {
 	<td style="width: 50%;"><label class="TextBoxLabel" for="WebURL">Insert The WebSite URL:</label></td>
 	<td style="width: 50%;"><input type="url" class="TextBox" name="WebURL" size="20" id="WebURL" value="<?php echo $prehost.$_SERVER['HTTP_HOST']."/"; ?>" /></td>
 </tr><tr>
-	<td style="width: 50%;"><label class="TextBoxLabel" for="startblank">Start with test data:</label></td>
+	<td style="width: 50%;"><label class="TextBoxLabel" for="startblank">Start blank:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="startblank" id="startblank">
+	<option value="yes">Yes</option>
+	<option value="no">No</option>
+	</select></td>
+</tr><tr>
+	<td style="width: 50%;"><label class="TextBoxLabel" for="testdata">Start with test data:</label></td>
+	<td style="width: 50%;"><select size="1" class="TextBox" name="testdata" id="testdata">
 	<option value="yes">Yes</option>
 	<option value="no">No</option>
 	</select></td>
