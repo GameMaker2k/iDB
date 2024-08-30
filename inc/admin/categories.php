@@ -11,7 +11,7 @@
     Copyright 2004-2024 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2024 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: categories.php - Last Update: 8/30/2024 SVN 1066 - Author: cooldude2k $
+    $FileInfo: categories.php - Last Update: 8/26/2024 SVN 1048 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="categories.php"||$File3Name=="/categories.php") {
@@ -180,6 +180,15 @@ if($Settings['sqltype']=="cubrid") {
 $getperidq = sql_pre_query("SELECT DISTINCT \"permissionid\" FROM \"".$Settings['sqltable']."catpermissions\" ORDER BY \"PermissionID\" ASC", null); }
 $getperidr=sql_query($getperidq,$SQLStat);
 $getperidnum=sql_num_rows($getperidr);
+if($getperidnum==0) {
+if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"||$Settings['sqltype']=="pdo_mysql"||
+	$Settings['sqltype']=="pgsql"||$Settings['sqltype']=="sqlite"||
+	$Settings['sqltype']=="sqlite3"||$Settings['sqltype']=="pdo_sqlite3") {
+$getperidq = sql_pre_query("SELECT DISTINCT \"PermissionID\" FROM \"".$Settings['sqltable']."groups\" ORDER BY \"PermissionID\" ASC", null); }
+if($Settings['sqltype']=="cubrid") {
+$getperidq = sql_pre_query("SELECT DISTINCT \"permissionid\" FROM \"".$Settings['sqltable']."groups\" ORDER BY \"PermissionID\" ASC", null); }
+$getperidr=sql_query($getperidq,$SQLStat);
+$getperidnum=sql_num_rows($getperidr); }
 $getperidi = 0; 
 //$nextperid = sql_get_next_id($Settings['sqltable'],"catpermissions",$SQLStat);
 $nextperid = null;
@@ -193,6 +202,10 @@ $getperidID=sql_result($getperidr,$getperidi,"\"PermissionID\""); }
 $getperidq2 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."catpermissions\" WHERE \"PermissionID\"=%i", array($getperidID));
 $getperidr2=sql_query($getperidq2,$SQLStat);
 $getperidnum2=sql_num_rows($getperidr2);
+if($getperidnum2==0) {
+$getperidq2 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"PermissionID\"=%i", array($getperidID));
+$getperidr2=sql_query($getperidq2,$SQLStat);
+$getperidnum2=sql_num_rows($getperidr2); }
 $getperidName=sql_result($getperidr2,0,"Name");
 sql_free_result($getperidr2);
 $query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."catpermissions\" (\"PermissionID\", \"Name\", \"CategoryID\", \"CanViewCategory\") VALUES (%i, '%s', %i, 'yes')", array($getperidID,$getperidName,$_POST['CategoryID'])); 

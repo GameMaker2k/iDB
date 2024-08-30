@@ -11,7 +11,7 @@
     Copyright 2004-2024 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2024 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: forums.php - Last Update: 8/30/2024 SVN 1066 - Author: cooldude2k $
+    $FileInfo: forums.php - Last Update: 8/30/2024 SVN 1063 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="forums.php"||$File3Name=="/forums.php") {
@@ -516,6 +516,12 @@ if($Settings['sqltype']=="cubrid") {
 $getperidq = sql_pre_query("SELECT DISTINCT \"permissionid\" FROM \"".$Settings['sqltable']."permissions\" ORDER BY \"PermissionID\" ASC", null); }
 $getperidr=sql_query($getperidq,$SQLStat);
 $getperidnum=sql_num_rows($getperidr);
+if($getperidnum==0) {
+$getperidq = sql_pre_query("SELECT DISTINCT \"PermissionID\" FROM \"".$Settings['sqltable']."groups\" ORDER BY \"PermissionID\" ASC", null); }
+if($Settings['sqltype']=="cubrid") {
+$getperidq = sql_pre_query("SELECT DISTINCT \"permissionid\" FROM \"".$Settings['sqltable']."groups\" ORDER BY \"PermissionID\" ASC", null); }
+$getperidr=sql_query($getperidq,$SQLStat);
+$getperidnum=sql_num_rows($getperidr); }
 $getperidi = 0; 
 $nextperid = null;
 /*
@@ -534,14 +540,20 @@ $getperidID=sql_result($getperidr,$getperidi,"PermissionID"); }
 if($Settings['sqltype']=="sqlite") {
 $getperidID=sql_result($getperidr,$getperidi,"\"PermissionID\""); }
 if($_POST['CPermissions']=="0") {
-$getperidq2 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i", array($getperidID)); }
+$getperidq2 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i", array($getperidID));
+$getperidr2=sql_query($getperidq2,$SQLStat);
+$getperidnum2=sql_num_rows($getperidr2);
+if($getperidnum2==0) {
+$getperidq2 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"PermissionID\"=%i", array($getperidID)); }
+sql_free_result($getperidr2);
 if($_POST['CPermissions']!="0") {
 $getperidq2 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i AND \"ForumID\"=%i", array($getperidID,$_POST['CPermissions'])); }
 $getperidr2=sql_query($getperidq2,$SQLStat);
 $getperidnum2=sql_num_rows($getperidr2);
 $PermissionNum=sql_result($getperidr2,0,"id"); 
 $PermissionID=sql_result($getperidr2,0,"PermissionID"); 
-$PermissionName=sql_result($getperidr2,0,"Name"); 
+$PermissionName=sql_result($getperidr2,0,"Name");
+if($_POST['CPermissions']!="0") {
 $PermissionForumID=sql_result($getperidr2,0,"ForumID"); 
 $CanViewForum=sql_result($getperidr2,0,"CanViewForum"); 
 $CanMakePolls=sql_result($getperidr2,0,"CanMakePolls");
@@ -561,7 +573,7 @@ $CanPinTopics=sql_result($getperidr2,0,"CanPinTopics");
 $CanExecPHP=sql_result($getperidr2,0,"CanExecPHP"); 
 $CanDoHTML=sql_result($getperidr2,0,"CanDoHTML"); 
 $CanUseBBTags=sql_result($getperidr2,0,"CanUseBBTags"); 
-$CanModForum=sql_result($getperidr2,0,"CanModForum"); 
+$CanModForum=sql_result($getperidr2,0,"CanModForum"); }
 sql_free_result($getperidr2);
 if($_POST['CPermissions']=="0") {
 $query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."permissions\" (\"PermissionID\", \"Name\", \"ForumID\", \"CanViewForum\", \"CanMakePolls\", \"CanMakeTopics\", \"CanMakeReplys\", \"CanMakeReplysCT\", \"CanEditTopics\", \"CanEditTopicsCT\", \"CanEditReplys\", \"CanEditReplysCT\", \"CanDeleteTopics\", \"CanDeleteTopicsCT\", \"CanDeleteReplys\", \"CanDeleteReplysCT\", \"CanCloseTopics\", \"CanPinTopics\", \"CanExecPHP\", \"CanDoHTML\", \"CanUseBBTags\", \"CanModForum\") VALUES (%i, '%s', %i, 'yes', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no')", array($PermissionID,$PermissionName,$_POST['ForumID'])); }
