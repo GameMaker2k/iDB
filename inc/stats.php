@@ -81,7 +81,7 @@ if($GroupInfo['CanViewUserAgent']=="yes") { $uatitleadd = " title=\"".htmlentiti
 $MembersOnline .= "<a".$uatitleadd." href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UserSessInfo['UserID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">".$userprestring.$UserSessInfo['MemberName']."</a>"; 
 if($GroupInfo['CanViewIPAddress']=="yes") {
 $MembersOnline .= " (<a title=\"".$session_ip_address."\" onclick=\"window.open(this.href);return false;\" href=\"".sprintf($IPCheckURL,$session_ip_address)."\">".$session_ip_address."</a>)"; }
-++$olmn; ++$olmbn; }
+if($AmIHiddenUser=="no") { ++$olmn; ++$olmbn; } }
 if($user_agent_check!==false) {
 $uatitleadd = null;
 if($GroupInfo['CanViewUserAgent']=="yes") { $uatitleadd = " title=\"".htmlentities($session_user_agent, ENT_QUOTES, $Settings['charset'])."\""; }
