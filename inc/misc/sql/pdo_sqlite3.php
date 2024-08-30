@@ -11,7 +11,7 @@
     Copyright 2004-2024 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2024 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: pdo_sqlite3.php - Last Update: 8/26/2024 SVN 1048 - Author: cooldude2k $
+    $FileInfo: pdo_sqlite3.php - Last Update: 8/30/2024 SVN 1058 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="pdo_sqlite3.php"||$File3Name=="/pdo_sqlite3.php") {
@@ -100,11 +100,22 @@ if ($link===false) {
     output_error("Not connected: ".$sqliteerror,E_USER_ERROR);
 	return false; }
 return $link; }
-function pdo_sqlite3_func_disconnect_db($link=null) {
-if(isset($link)) {
-	return $link->closeCursor(); }
-if(!isset($link)) {
-	return $SQLStat->ccloseCursor(); } }
+function pdo_sqlite3_func_disconnect_db($link = null) {
+    global $SQLStat; // Assuming this is your PDO object
+
+    // If a specific link is provided (assuming $link is a PDOStatement), close the cursor
+    if (isset($link) && $link instanceof PDOStatement) {
+        return $link->closeCursor();
+    }
+    
+    // If no link is provided, we assume $SQLStat is a PDO object and we just nullify it to disconnect
+    if (!isset($link) && isset($SQLStat)) {
+        $SQLStat = null; // This effectively disconnects from the database
+        return true;
+    }
+    
+    return false;
+}
 // Query Results :P
 function pdo_sqlite3_func_result($result,$row,$field=0) {
 $check = true;
@@ -154,41 +165,40 @@ if ($string===false) {
 	return false; }
 	return $string; }
 function pdo_sqlite3_func_pre_query($query_string, $query_vars = []) {
-	if($query_vars==null) { 
-		$query_vars = array(null); 
-	}
-    // If the first element of $query_vars is null, treat it as an empty array
+    if ($query_vars === null || !is_array($query_vars)) { 
+        $query_vars = []; 
+    }
+
     if (is_array($query_vars) && count($query_vars) > 0 && $query_vars[0] === null) {
         $query_vars = [];
     }
 
-    // Escape literal ? in the query by replacing it with a placeholder token
+    // Escape literal ? and empty strings
     $query_string = str_replace(['\?', "''"], ['{LITERAL_QUESTION_MARK}', "{LITERAL_EMPTY_STRING}"], $query_string);
 
-    // Replace any custom placeholders with standard PDO placeholders
-    $query_string = str_replace(['%s', '%d', '%i', '%f'], ['?', '?', '?', '?'], $query_string);
+    // Replace placeholders
+    $query_string = str_replace(["'%s'", '%d', '%i', '%f'], ['?', '?', '?', '?'], $query_string);
 
-    // Remove null values from the query_vars array to ensure they are not used in the query
+    // Remove null values from query_vars
     $query_vars = array_filter($query_vars, function($value) {
         return $value !== null;
     });
 
-    // Count placeholders in the query string
+    // Count placeholders and check mismatch
     $placeholder_count = substr_count($query_string, '?');
     $params_count = count($query_vars);
 
     if ($placeholder_count !== $params_count) {
-        // Handle mismatch in placeholders and parameters count
-        output_error("SQL Placeholder Error: Mismatch between placeholders and parameters.", E_USER_ERROR);
+        output_error("SQL Placeholder Error: Mismatch between placeholders ($placeholder_count) and parameters ($params_count).", E_USER_ERROR);
         return false;
     }
 
-    // Restore the literal ? and empty string '' in the query
+    // Restore the literal ? and empty strings
     $query_string = str_replace(['{LITERAL_QUESTION_MARK}', '{LITERAL_EMPTY_STRING}'], ['?', "''"], $query_string);
 
-    // Return the query string and the parameters array for use with PDO
     return [$query_string, $query_vars];
 }
+
 function pdo_sqlite3_func_set_charset($charset,$link=null) {
 	return true; }
 /*
