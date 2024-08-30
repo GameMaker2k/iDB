@@ -420,7 +420,7 @@ while ($fci < $afi) {
 $InCategoryID=sql_result($fcr,$fci,"id");
 $InCategoryName=sql_result($fcr,$fci,"Name");
 $InCategoryType=sql_result($fcr,$fci,"CategoryType");
-$fq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"CategoryID\"=%i AND \"InSubForum\"=0 AND \"ForumType\"='subforum' ORDER BY \"CategoryID\" ASC, \"OrderID\" ASC", array($InCategoryID));
+$fq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"CategoryID\"=%i ORDER BY \"CategoryID\" ASC, \"OrderID\" ASC", array($InCategoryID));
 $fr=sql_query($fq,$SQLStat);
 $ai=sql_num_rows($fr);
 $fi=0;
