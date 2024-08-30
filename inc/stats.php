@@ -108,8 +108,8 @@ $npresult = sql_query($npquery,$SQLStat);
 $numposts = sql_result($npresult,0);
 sql_free_result($npresult);
 $caniview = "AND \"HiddenMember\"='no'";
-if($GroupInfo['CanViewAnonymous']=="yesy") {
- $caniview = "";
+if($GroupInfo['CanViewAnonymous']=="yes") {
+ $caniview = ""; }
 if($Settings['AdminValidate']=="on") {
 $nmquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\">=%i ".$caniview." AND \"Validated\"='yes' AND \"GroupID\"<>%i ORDER BY \"Joined\" DESC LIMIT 1", array(1,$Settings['ValidateGroup'])); 
 $rnmquery = sql_pre_query("SELECT COUNT(*) FROM \"".$Settings['sqltable']."members\" WHERE \"id\">=%i ".$caniview." AND \"Validated\"='yes' AND \"GroupID\"<>%i", array(1,$Settings['ValidateGroup'])); }
