@@ -83,11 +83,18 @@ function pdo_sqlite3_func_query($query, $link = null) {
 }
 //Fetch Number of Rows
 function pdo_sqlite3_func_num_rows($result) {
-$num = $result->rowCount();
-if ($num===false) {
-    output_error("SQL Error: ".pdo_sqlite3_func_error(),E_USER_ERROR);
-	return false; }
-	return $num; }
+    if ($result instanceof PDOStatement) {
+        $num = $result->rowCount();
+        if ($num === false) {
+            output_error("SQL Error: " . pdo_sqlite3_func_error(), E_USER_ERROR);
+            return false;
+        }
+        return $num;
+    } else {
+        output_error("SQL Error: Invalid result type. Expected PDOStatement, got " . gettype($result), E_USER_ERROR);
+        return false;
+    }
+}
 // Connect to sqlite database
 function pdo_sqlite3_func_connect_db($server,$username,$password,$database=null,$new_link=false) {
 global $SQLStat;
