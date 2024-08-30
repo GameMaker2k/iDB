@@ -341,6 +341,7 @@ if($MyKarmaUpdate<$NewKarmaUpdate&&$MyPostCountChk>0) {
 	$querykarmaup = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"Karma\"=%i,\"KarmaUpdate\"=%i WHERE \"id\"=%i", array($MyKarmaCount,$NewKarmaUpdate,$_SESSION['UserID']));
 	sql_query($querykarmaup,$SQLStat); }
 	$Settings['KarmaBoostDays'] = $Settings['OldKarmaBoostDays'];
+if(isset($RankInfo)&&is_array($RankInfo)) {
 if($RankInfo['PromoteTo']!=0&&$MyPostCountChk>=$RankInfo['PromotePosts']) {
 	$sql_level_check = sql_query(sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."ranks\" WHERE \"id\"=%i AND \"id\">0 LIMIT 1", array($RankInfo['PromoteTo'])),$SQLStat);
 	$level_check = sql_num_rows($sql_level_check);
@@ -354,7 +355,8 @@ if($RankInfo['PromotePosts']==0&&$RankInfo['PromoteTo']!=0&&$MyKarmaCount>=$Rank
 	sql_free_result($sql_level_check);
 	if($level_check > 0) {
 	$queryupgrade = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"RankID\"=%i WHERE \"id\"=%i", array($RankInfo['PromoteTo'],$_SESSION['UserID']));
-	sql_query($queryupgrade,$SQLStat); } }
+	sql_query($queryupgrade,$SQLStat); } } }
+if(isset($LevelInfo)&&is_array($LevelInfo)) {
 if($LevelInfo['PromoteTo']!=0&&$MyPostCountChk>=$LevelInfo['PromotePosts']) {
 	$sql_level_check = sql_query(sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."levels\" WHERE \"id\"=%i AND \"id\">0 LIMIT 1", array($LevelInfo['PromoteTo'])),$SQLStat);
 	$level_check = sql_num_rows($sql_level_check);
@@ -368,7 +370,7 @@ if($LevelInfo['PromotePosts']==0&&$LevelInfo['PromoteTo']!=0&&$MyKarmaCount>=$Le
 	sql_free_result($sql_level_check);
 	if($level_check > 0) {
 	$queryupgrade = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"LevelID\"=%i WHERE \"id\"=%i", array($LevelInfo['PromoteTo'],$_SESSION['UserID']));
-	sql_query($queryupgrade,$SQLStat); } }
+	sql_query($queryupgrade,$SQLStat); } } }
 if($GroupInfo['PromoteTo']!=0&&$MyPostCountChk>=$GroupInfo['PromotePosts']) {
 	$sql_group_check = sql_query(sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i AND \"id\">0 LIMIT 1", array($GroupInfo['PromoteTo'])),$SQLStat);
 	$group_check = sql_num_rows($sql_group_check);

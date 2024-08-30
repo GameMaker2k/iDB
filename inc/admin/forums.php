@@ -541,11 +541,11 @@ if($Settings['sqltype']=="sqlite") {
 $getperidID=sql_result($getperidr,$getperidi,"\"PermissionID\""); }
 if($_POST['CPermissions']=="0") {
 $getperidq2 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i", array($getperidID));
-$getperidr2=sql_query($getperidq2,$SQLStat);
-$getperidnum2=sql_num_rows($getperidr2);
+$getperidrpre2=sql_query($getperidq2,$SQLStat);
+$getperidnum2=sql_num_rows($getperidrpre2);
 if($getperidnum2==0) {
 $getperidq2 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"PermissionID\"=%i", array($getperidID)); }
-sql_free_result($getperidr2);
+sql_free_result($getperidrpre2);
 if($_POST['CPermissions']!="0") {
 $getperidq2 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i AND \"ForumID\"=%i", array($getperidID,$_POST['CPermissions'])); }
 $getperidr2=sql_query($getperidq2,$SQLStat);
