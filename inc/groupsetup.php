@@ -413,6 +413,13 @@ if($GroupInfo['CanViewUserAgent']=="group") {
 $GroupInfo['CanViewUserAgent']=sql_result($gruresult,0,"CanViewUserAgent");
 if($GroupInfo['CanViewUserAgent']!="yes"&&$GroupInfo['CanViewUserAgent']!="no") {
 	$GroupInfo['CanViewUserAgent'] = "no"; } }
+$GroupInfo['CanViewAnonymous']=sql_result($mempreresult,0,"CanViewAnonymous");
+if($GroupInfo['CanViewAnonymous']!="yes"&&$GroupInfo['CanViewAnonymous']!="no"&&$GroupInfo['CanViewAnonymous']!="group") {
+	$GroupInfo['CanViewAnonymous'] = "no"; }
+if($GroupInfo['CanViewAnonymous']=="group") {
+$GroupInfo['CanViewAnonymous']=sql_result($gruresult,0,"CanViewAnonymous");
+if($GroupInfo['CanViewAnonymous']!="yes"&&$GroupInfo['CanViewAnonymous']!="no") {
+	$GroupInfo['CanViewAnonymous'] = "no"; } }
 $GroupInfo['ViewDBInfo']=sql_result($mempreresult,0,"ViewDBInfo");
 if($GroupInfo['ViewDBInfo']!="yes"&&$GroupInfo['ViewDBInfo']!="no"&&$GroupInfo['ViewDBInfo']!="group") {
 	$GroupInfo['ViewDBInfo'] = "no"; }

@@ -2030,7 +2030,7 @@ if(user_agent_check($session_user_agent)) {
 if($UserSessInfo['UserGroup']!=$Settings['GuestGroup']||$user_agent_check!==false) {
 $PreAmIHiddenUser = GetUserName($UserSessInfo['UserID'],$Settings['sqltable'],$SQLStat);
 $AmIHiddenUser = $PreAmIHiddenUser['Hidden'];
-if(($AmIHiddenUser=="no"&&$UserSessInfo['UserID']>0)||$user_agent_check!==false) {
+if((($AmIHiddenUser=="no"||$GroupInfo['CanViewAnonymous']=="yes")&&$UserSessInfo['UserID']>0)||$user_agent_check!==false) {
 if($uviewlmbn>0) { $MembersViewList .= ", "; }
 if($user_agent_check===false) {
 $uatitleadd = null;
@@ -2065,7 +2065,7 @@ if(user_agent_check($_SERVER['HTTP_USER_AGENT'])) {
 if($_SESSION['UserGroup']!=$Settings['GuestGroup']||$user_agent_check!==false) {
 $PreAmIHiddenUser = GetUserName($_SESSION['UserID'],$Settings['sqltable'],$SQLStat);
 $AmIHiddenUser = $PreAmIHiddenUser['Hidden'];
-if(($AmIHiddenUser=="no"&&$_SESSION['UserID']>0)||$user_agent_check!==false) {
+if((($AmIHiddenUser=="no"||$GroupInfo['CanViewAnonymous']=="yes")&&$_SESSION['UserID']>0)||$user_agent_check!==false) {
 if($uviewlmbn>0) { $MembersViewList = ", ".$MembersViewList; }
 if($user_agent_check===false) {
 $uatitleadd = null;

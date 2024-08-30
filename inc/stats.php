@@ -107,12 +107,15 @@ $npquery = sql_pre_query("SELECT COUNT(*) FROM \"".$Settings['sqltable']."posts\
 $npresult = sql_query($npquery,$SQLStat);
 $numposts = sql_result($npresult,0);
 sql_free_result($npresult);
+$caniview = "AND \"HiddenMember\"='no'";
+if($GroupInfo['CanViewAnonymous']=="yesy") {
+ $caniview = "";
 if($Settings['AdminValidate']=="on") {
-$nmquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\">=%i AND \"HiddenMember\"='no' AND \"Validated\"='yes' AND \"GroupID\"<>%i ORDER BY \"Joined\" DESC LIMIT 1", array(1,$Settings['ValidateGroup'])); 
-$rnmquery = sql_pre_query("SELECT COUNT(*) FROM \"".$Settings['sqltable']."members\" WHERE \"id\">=%i AND \"HiddenMember\"='no' AND \"Validated\"='yes' AND \"GroupID\"<>%i", array(1,$Settings['ValidateGroup'])); }
+$nmquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\">=%i ".$caniview." AND \"Validated\"='yes' AND \"GroupID\"<>%i ORDER BY \"Joined\" DESC LIMIT 1", array(1,$Settings['ValidateGroup'])); 
+$rnmquery = sql_pre_query("SELECT COUNT(*) FROM \"".$Settings['sqltable']."members\" WHERE \"id\">=%i ".$caniview." AND \"Validated\"='yes' AND \"GroupID\"<>%i", array(1,$Settings['ValidateGroup'])); }
 if($Settings['AdminValidate']!="on") {
-$nmquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\">=%i AND \"HiddenMember\"='no' ORDER BY \"Joined\" DESC LIMIT 1", array(1,$Settings['ValidateGroup'])); 
-$rnmquery = sql_pre_query("SELECT COUNT(*) FROM \"".$Settings['sqltable']."members\" WHERE \"id\">=%i AND \"HiddenMember\"='no'", array(1,$Settings['ValidateGroup'])); }
+$nmquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\">=%i ".$caniview." ORDER BY \"Joined\" DESC LIMIT 1", array(1,$Settings['ValidateGroup'])); 
+$rnmquery = sql_pre_query("SELECT COUNT(*) FROM \"".$Settings['sqltable']."members\" WHERE \"id\">=%i ".$caniview, array(1,$Settings['ValidateGroup'])); }
 $nmresult = sql_query($nmquery,$SQLStat);
 $rnmresult = sql_query($rnmquery,$SQLStat);
 //$nummembers = sql_num_rows($nmresult);
@@ -134,9 +137,9 @@ $NewestMemExtraIP = " (<a title=\"".$NewestMem['IP']."\" onclick=\"window.open(t
 $bdMonthChCk = $usercurtime->format("m");
 $bdDayChCk = $usercurtime->format("d");
 if($Settings['AdminValidate']=="on") {
-$bdquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"BirthDay\"=%i AND \"BirthMonth\"=%i AND \"HiddenMember\"='no' AND \"Validated\"='yes' AND \"GroupID\"<>%i ORDER BY \"id\"", array($bdDayChCk,$bdMonthChCk,$Settings['ValidateGroup'])); } 
+$bdquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"BirthDay\"=%i AND \"BirthMonth\"=%i ".$caniview." AND \"Validated\"='yes' AND \"GroupID\"<>%i ORDER BY \"id\"", array($bdDayChCk,$bdMonthChCk,$Settings['ValidateGroup'])); } 
 if($Settings['AdminValidate']!="on") {
-$bdquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"BirthDay\"=%i AND \"BirthMonth\"=%i AND \"HiddenMember\"='no' ORDER BY \"id\"", array($bdDayChCk,$bdMonthChCk)); } 
+$bdquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"BirthDay\"=%i AND \"BirthMonth\"=%i ".$caniview." ORDER BY \"id\"", array($bdDayChCk,$bdMonthChCk)); } 
 $bdresult = sql_query($bdquery,$SQLStat);
 $bdmembers = sql_num_rows($bdresult); $bdi = 0;
 if($bdmembers>0) { $bdstring = "&#160;".$bdmembers." member(s) have a birthday today"; }
@@ -208,8 +211,8 @@ $ggquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHER
 $ggresult=sql_query($ggquery,$SQLStat);
 $GGroup=sql_result($ggresult,0,"id");
 sql_free_result($ggresult);
-$tdquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"<>%i AND \"id\">=0 AND \"HiddenMember\"='no' AND (\"LastActive\">=%i AND \"LastActive\"<=%i) ORDER BY \"LastActive\" DESC", array($GGroup,$active_start,$active_end)); 
-$tdrnquery = sql_pre_query("SELECT COUNT(*) FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"<>%i AND \"id\">=0 AND \"HiddenMember\"='no' AND (\"LastActive\">=%i AND \"LastActive\"<=%i)", array($GGroup,$active_start,$active_end));
+$tdquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"<>%i AND \"id\">=0 ".$caniview." AND (\"LastActive\">=%i AND \"LastActive\"<=%i) ORDER BY \"LastActive\" DESC", array($GGroup,$active_start,$active_end)); 
+$tdrnquery = sql_pre_query("SELECT COUNT(*) FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"<>%i AND \"id\">=0 ".$caniview." AND (\"LastActive\">=%i AND \"LastActive\"<=%i)", array($GGroup,$active_start,$active_end));
 $tdrnresult=sql_query($tdrnquery,$SQLStat);
 $tdNumberMembers=sql_result($tdrnresult,0);
 $tdresult=sql_query($tdquery,$SQLStat);

@@ -647,10 +647,10 @@ if($GroupInfo['HasAdminCP']!="yes"&&$UserSessInfo['ShowActHidden']=="yes") {
 	$UserSessInfo['ViewingPage'] = url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); }
 if($_GET['list']=="all"||$_GET['list']=="members") {
 if($UserSessInfo['UserGroup']!=$Settings['GuestGroup']) {
-if($AmIHiddenUser=="no"&&$UserSessInfo['UserID']>0) { 
+if(($AmIHiddenUser=="no"||$GroupInfo['CanViewAnonymous']=="yes")&&$UserSessInfo['UserID']>0) { 
 ?>
 <tr id="Member<?php echo $i; ?>" class="TableRow3">
-<td class="TableColumn3" style="text-align: center;"><a<?php if($GroupInfo['HasAdminCP']=="yes") { ?> title="<?php echo htmlentities($session_user_agent, ENT_QUOTES, $Settings['charset']); ?>"<?php } ?> href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UserSessInfo['UserID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>"><?php echo $UserSessInfo['MemberName']; ?></a>
+<td class="TableColumn3" style="text-align: center;"><a<?php if($GroupInfo['HasAdminCP']=="yes") { ?> title="<?php echo htmlentities($session_user_agent, ENT_QUOTES, $Settings['charset']); ?>"<?php } ?> href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UserSessInfo['UserID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>"><?php if($AmIHiddenUser=="yes") { echo("*") } echo $UserSessInfo['MemberName']; ?></a>
 <?php if($GroupInfo['CanViewIPAddress']=="yes") { ?> ( <a title="<?php echo $session_ip_address; ?>" onclick="window.open(this.href);return false;" href="<?php echo sprintf($IPCheckURL,$session_ip_address); ?>"><?php echo $session_ip_address; ?></a> )<?php } ?></td>
 <td class="TableColumn3" style="text-align: center;"><?php echo $UserSessInfo['UserGroup']; ?></td>
 <td class="TableColumn3" style="text-align: center;"><?php if($get_session_id!=session_id()) { ?><a href="<?php echo url_maker($PreFileName,"no+ext",$PreExpPage,$Settings['qstr'],$Settings['qsep'],null,null); ?>"><?php echo $UserSessInfo['PreViewingTitle']; ?> <?php echo $UserSessInfo['ViewingTitle']; ?></a><?php } if($get_session_id==session_id()) { ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=online&list=".$_GET['list']."&page=".$_GET['page'],"&","=",$prexqstr['member'],$exqstr['member']); ?>">Viewing Online Member List</a><?php } ?></td>
@@ -1892,25 +1892,6 @@ $Avatar = remove_spaces($Avatar);
 $Website = stripcslashes(htmlspecialchars($_POST['Website'], ENT_QUOTES, $Settings['charset']));
 //$Website = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $Website);
 $Website = remove_spaces($Website);
-$gquerys = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"Name\"='%s' LIMIT 1", array($yourgroup));
-$gresults=sql_query($gquerys,$SQLStat);
-$yourgroup=sql_result($gresults,0,"id");
-$PreUserPer['CanViewBoard']=sql_result($gresults,0,"CanViewBoard");
-$PreUserPer['CanViewOffLine']=sql_result($gresults,0,"CanViewOffLine");
-$PreUserPer['CanEditProfile']=sql_result($gresults,0,"CanEditProfile");
-$PreUserPer['CanAddEvents']=sql_result($gresults,0,"CanAddEvents");
-$PreUserPer['CanPM']=sql_result($gresults,0,"CanPM");
-$PreUserPer['CanSearch']=sql_result($gresults,0,"CanSearch");
-$PreUserPer['CanExecPHP']=sql_result($gresults,0,"CanExecPHP");
-$PreUserPer['CanDoHTML']=sql_result($gresults,0,"CanDoHTML");
-$PreUserPer['CanUseBBTags']=sql_result($gresults,0,"CanUseBBTags");
-$PreUserPer['CanModForum']=sql_result($gresults,0,"CanModForum");
-$PreUserPer['FloodControl']=sql_result($gresults,0,"FloodControl");
-$PreUserPer['SearchFlood']=sql_result($gresults,0,"SearchFlood");
-$PreUserPer['HasModCP']=sql_result($gresults,0,"HasModCP");
-$PreUserPer['HasAdminCP']=sql_result($gresults,0,"HasAdminCP");
-$PreUserPer['ViewDBInfo']=sql_result($gresults,0,"ViewDBInfo");
-sql_free_result($gresults);
 $_POST['Interests'] = remove_spaces($_POST['Interests']);
 $_POST['Title'] = remove_spaces($_POST['Title']);
 $_POST['Email'] = remove_spaces($_POST['Email']);
@@ -1927,9 +1908,8 @@ $idncheck = sql_result($idresult,0,"id");
 $idncheck = intval($idncheck); }
 sql_free_result($idresult);
 if($yourid!=$idncheck) { $yourid = $idncheck; }
-$query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."mempermissions\" (\"id\", \"PermissionID\", \"CanViewBoard\", \"CanViewOffLine\", \"CanEditProfile\", \"CanAddEvents\", \"CanPM\", \"CanSearch\", \"CanExecPHP\", \"CanDoHTML\", \"CanUseBBTags\", \"CanModForum\", \"CanViewIPAddress\", \"CanViewUserAgent\", \"FloodControl\", \"SearchFlood\", \"HasModCP\", \"HasAdminCP\", \"ViewDBInfo\") VALUES\n". 
-"(%i, %i, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %i, %i, '%s', '%s', '%s')", array($yourid, 0, "group", "group", "group", "group", "group", "group", "group", "group", "group", "group", "group", "group", -1, -1, "group", "group", "group"));
-//"(%i, %i, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %i, %i, '%s', '%s', '%s')", array($yourid, 0, $PreUserPer['CanViewBoard'], $PreUserPer['CanViewOffLine'], $PreUserPer['CanEditProfile'], $PreUserPer['CanAddEvents'], $PreUserPer['CanPM'], $PreUserPer['CanSearch'], $PreUserPer['CanExecPHP'], $PreUserPer['CanDoHTML'], $PreUserPer['CanUseBBTags'], $PreUserPer['CanModForum'], $PreUserPer['FloodControl'], $PreUserPer['SearchFlood'], $PreUserPer['HasModCP'], $PreUserPer['HasAdminCP'], $PreUserPer['ViewDBInfo']));
+$query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."mempermissions\" (\"id\", \"PermissionID\", \"CanViewBoard\", \"CanViewOffLine\", \"CanEditProfile\", \"CanAddEvents\", \"CanPM\", \"CanSearch\", \"CanExecPHP\", \"CanDoHTML\", \"CanUseBBTags\", \"CanModForum\", \"CanViewIPAddress\", \"CanViewUserAgent\", \"CanViewAnonymous\", \"FloodControl\", \"SearchFlood\", \"HasModCP\", \"HasAdminCP\", \"ViewDBInfo\") VALUES\n". 
+"(%i, %i, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %i, %i, '%s', '%s', '%s')", array($yourid, 0, "group", "group", "group", "group", "group", "group", "group", "group", "group", "group", "group", "group", "group", -1, -1, "group", "group", "group"));
 sql_query($query,$SQLStat);
 if(isset($_POST['referrerid'])&&is_numeric($_POST['referrerid'])) {
 	$rfidquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_POST['referrerid']));
