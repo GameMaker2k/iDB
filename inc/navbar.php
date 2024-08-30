@@ -11,7 +11,7 @@
     Copyright 2004-2024 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2024 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: navbar.php - Last Update: 8/26/2024 SVN 1048 - Author: cooldude2k $
+    $FileInfo: navbar.php - Last Update: 8/30/2024 SVN 1063 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="navbar.php"||$File3Name=="/navbar.php") {
@@ -70,7 +70,7 @@ if(!isset($idbpowertitle)) { $idbpowertitle = null; }
 	if($GroupInfo['CanEditProfile']=="yes") { ?>
 <a href="<?php echo url_maker($exfile['profile'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['profile'],$exqstr['profile']); ?>">Profile</a><?php echo $ThemeSet['LineDivider']; } 
 		if($GroupInfo['CanPM']=="yes") { ?>
-<a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>" title="<?php echo "You have ".$PMNumber." new messages."; ?>">MailBox</a><?php echo $ThemeSet['LineDivider']; ?><?php } } if($File3Name!="install.php"&&$File3Name!="/install.php") { ?>
+<a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>" title="<?php echo "You have ".$PMNumber." new messages."; ?>">Mailbox</a><?php echo $ThemeSet['LineDivider']; ?><?php } } if($File3Name!="install.php"&&$File3Name!="/install.php") { ?>
 <a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=list&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Members</a><?php echo $ThemeSet['LineDivider']; ?>
 <a href="<?php echo url_maker($exfile['calendar'],$Settings['file_ext'],"act=view&caldate=".$NavBarCurDate,$Settings['qstr'],$Settings['qsep'],$prexqstr['calendar'],$exqstr['calendar']); ?>">Calendar</a><?php if(isset($Settings['weburl'])) { echo $ThemeSet['LineDivider']; ?>
 <a href="<?php echo $Settings['weburl']; ?>">Homepage</a><?php } } ?>&#160;</span>

@@ -11,7 +11,7 @@
     Copyright 2004-2024 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2024 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: sqlite.php - Last Update: 8/23/2024 SVN 1023 - Author: cooldude2k $
+    $FileInfo: sqlite.php - Last Update: 8/30/2024 SVN 1063 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="sqlite.php"||$File3Name=="/sqlite.php") {
@@ -92,7 +92,7 @@ $TablePreFix = $Settings['sqltable'];
 function add_prefix($tarray) {
 global $TablePreFix;
 return $TablePreFix.$tarray; }
-$TableChCk = array("categories", "catpermissions", "events", "forums", "groups", "levels", "members", "mempermissions", "messenger", "permissions", "polls", "posts", 'ranks', "restrictedwords", "sessions", "smileys", "themes", "topics", "wordfilter");
+$TableChCk = array("categories", "catpermissions", "events", "forums", "groups", "levels", "ranks", "members", "mempermissions", "messenger", "permissions", "polls", "posts", 'ranks', "restrictedwords", "sessions", "smileys", "themes", "topics", "wordfilter");
 $TableChCk = array_map("add_prefix",$TableChCk);
 if(!isset($_GET['outtype'])||$_GET['outtype']=="UTF-8") {
 header("Content-Type: text/plain; charset=UTF-8"); }

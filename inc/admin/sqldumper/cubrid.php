@@ -11,7 +11,7 @@
     Copyright 2004-2024 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2024 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: cubrid.php - Last Update: 8/23/2024 SVN 1023 - Author: cooldude2k $
+    $FileInfo: cubrid.php - Last Update: 8/30/2024 SVN 1063 - Author: cooldude2k $
 */
 
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
@@ -36,7 +36,6 @@ header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
 header("Cache-Control: private", false); 
 header("Content-Description: File Transfer");
 
-// Compression settings
 if(!isset($_GET['compress'])) {
     $_GET['compress'] = "none";
 }
@@ -56,7 +55,7 @@ if($_GET['compress']!="none" && $_GET['compress']!="gzencode" &&
 }
 
 if(!extension_loaded("zlib")) {
-    if($_GET['compress']=="gzencode" && $_GET['compress']=="gzcompress" && $_GET['compress']=="gzdeflate") {
+    if($_GET['compress']=="gzencode" || $_GET['compress']=="gzcompress" || $_GET['compress']=="gzdeflate") {
         $_GET['compress'] = "none";
     }
 }
@@ -72,6 +71,12 @@ $conn = cubrid_connect("localhost", 33000, $Settings['sqldb'], "dba", "");
 if (!$conn) {
     die("Connection failed: " . cubrid_error_msg());
 }
+
+$TableChCk = array("categories", "catpermissions", "events", "forums", "groups", "levels", "ranks", "members", "mempermissions", "messenger", "permissions", "polls", "posts", 'ranks', "restrictedwords", "sessions", "smileys", "themes", "topics", "wordfilter");
+$TablePreFix = $Settings['sqltable'];
+$TableChCk = array_map(function($table) use ($TablePreFix) {
+    return $TablePreFix . $table;
+}, $TableChCk);
 
 $fname = str_replace("_", "", $Settings['sqldb'])."_".str_replace("_", "", $Settings['sqltable']);
 switch($_GET['compress']) {
@@ -111,21 +116,25 @@ $sqldump = "-- CUBRID SQL Dump\n\n";
 if ($tablesResult) {
     while ($table = cubrid_fetch_assoc($tablesResult)) {
         $tableName = $table['Name'];
-        $createTableSQL = getCreateTableSQL($conn, $tableName);
-        $sqldump .= "-- Table structure for table `".$tableName."`\n";
-        $sqldump .= $createTableSQL . ";\n\n";
         
-        // Fetch and insert data for each table
-        $rows = cubrid_execute($conn, "SELECT * FROM " . $tableName);
-        if ($rows) {
-            $sqldump .= "-- Dumping data for table `".$tableName."`\n";
-            while ($row = cubrid_fetch_assoc($rows)) {
-                $values = array_map(function($val) use ($conn) { return "'" . cubrid_real_escape_string($val, $conn) . "'"; }, $row);
-                $sqldump .= "INSERT INTO `".$tableName."` VALUES (" . implode(", ", $values) . ");\n";
+        // Only dump tables with the specified prefix
+        if (in_array($tableName, $TableChCk)) {
+            $createTableSQL = getCreateTableSQL($conn, $tableName);
+            $sqldump .= "-- Table structure for table `".$tableName."`\n";
+            $sqldump .= $createTableSQL . ";\n\n";
+            
+            // Fetch and insert data for each table
+            $rows = cubrid_execute($conn, "SELECT * FROM " . $tableName);
+            if ($rows) {
+                $sqldump .= "-- Dumping data for table `".$tableName."`\n";
+                while ($row = cubrid_fetch_assoc($rows)) {
+                    $values = array_map(function($val) use ($conn) { return "'" . cubrid_real_escape_string($val, $conn) . "'"; }, $row);
+                    $sqldump .= "INSERT INTO `".$tableName."` VALUES (" . implode(", ", $values) . ");\n";
+                }
+                cubrid_free_result($rows);
             }
-            cubrid_free_result($rows);
+            $sqldump .= "\n-- --------------------------------------------------------\n\n";
         }
-        $sqldump .= "\n-- --------------------------------------------------------\n\n";
     }
     cubrid_free_result($tablesResult);
 }
@@ -143,5 +152,4 @@ if ($_GET['compress'] == "none") {
 } elseif ($_GET['compress'] == "bzcompress") { 
     echo bzcompress($sqldump, $_GET['comlevel']); 
 }
-
 ?>

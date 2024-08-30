@@ -11,7 +11,7 @@
     Copyright 2004-2024 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2024 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: messenger.php - Last Update: 8/23/2024 SVN 1023 - Author: cooldude2k $
+    $FileInfo: messenger.php - Last Update: 8/30/2024 SVN 1063 - Author: cooldude2k $
 */
 if(ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }
@@ -74,9 +74,9 @@ require($SettDir['inc'].'iwrapper.php');
 if($_GET['act']=="read") {
 change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." ".$MessageName,$Settings['use_gzip'],$GZipEncode['Type']); }
 if($_GET['act']=="viewsent") { 
-change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." Viewing Sent MailBox",$Settings['use_gzip'],$GZipEncode['Type']); }
+change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." Viewing Sent Mailbox",$Settings['use_gzip'],$GZipEncode['Type']); }
 if($_GET['act']=="view") {
-change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." Viewing MailBox",$Settings['use_gzip'],$GZipEncode['Type']); }
+change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." Viewing Mailbox",$Settings['use_gzip'],$GZipEncode['Type']); }
 if($_GET['act']=="create") { 
 change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." Making a Message",$Settings['use_gzip'],$GZipEncode['Type']); }
 if($_GET['act']=="sendmessage"&&$_POST['act']=="sendmessages") { 

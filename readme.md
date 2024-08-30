@@ -1,7 +1,7 @@
 [![Stand With Ukraine](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://stand-with-ukraine.pp.ua)
 
 <pre>//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//        $FileInfo: README - Last Update: 8/23/2024 SVN 1023 - Author: cooldude2k $          
+//        $FileInfo: README - Last Update: 8/30/2024 SVN 1063 - Author: cooldude2k $          
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //                       __________________________________________
 //                      //        Internet Discussion Boards      \\
@@ -117,7 +117,7 @@
 //     * http://awardspace.com/
 // Paid WebHosts
 // Hosts that iDB Works on
-//     * Unknow
+//     * Unknown
 // Hosts that iDB dose not works on
-//     * Unknow
+//     * Unknown
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=</pre>
