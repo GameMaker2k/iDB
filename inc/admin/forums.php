@@ -583,8 +583,7 @@ $query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."permissions\" (\"
 if($getperidnum2<=0) {
 $query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."permissions\" (\"PermissionID\", \"Name\", \"ForumID\", \"CanViewForum\", \"CanMakePolls\", \"CanMakeTopics\", \"CanMakeReplys\", \"CanMakeReplysCT\", \"CanEditTopics\", \"CanEditTopicsCT\", \"CanEditReplys\", \"CanEditReplysCT\", \"CanDeleteTopics\", \"CanDeleteTopicsCT\", \"CanDeleteReplys\", \"CanDeleteReplysCT\", \"CanCloseTopics\", \"CanPinTopics\", \"CanExecPHP\", \"CanDoHTML\", \"CanUseBBTags\", \"CanModForum\") VALUES (%i, '%s', %i, 'yes', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no')", array($PermissionID,$PermissionName,$_POST['ForumID'])); } }
 sql_query($query,$SQLStat);
-++$getperidi; /*++$nextperid;*/ }
-sql_free_result($getperidr); } } 
+++$getperidi; /*++$nextperid;*/ } } sql_free_result($getperidr); } 
 if($_GET['act']=="deleteforum"&&$_POST['update']!="now") { 
 $admincptitle = " ".$ThemeSet['TitleDivider']." Deleting a Forum";
 ?>
