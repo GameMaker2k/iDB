@@ -12,7 +12,7 @@
     Copyright 2004-2024 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
     iDB Installer made by Game Maker 2k - http://idb.berlios.net/
 
-    $FileInfo: sqlite.php - Last Update: 8/30/2024 SVN 1063 - Author: cooldude2k $
+    $FileInfo: sqlite.php - Last Update: 8/30/2024 SVN 1064 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="sqlite.php"||$File3Name=="/sqlite.php") {
@@ -88,7 +88,7 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."events\" (\n".
 "  \"IP\" VARCHAR(64) NOT NULL default ''\n".
 ");", null);
 sql_query($query,$SQLStat);
-if($_POST['startblank']=="yes") {
+if($_POST['startblank']=="no") {
 $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."events\" (\"UserID\", \"GuestName\", \"EventName\", \"EventText\", \"TimeStamp\", \"TimeStampEnd\", \"EventMonth\", \"EventMonthEnd\", \"EventDay\", \"EventDayEnd\", \"EventYear\", \"EventYearEnd\", \"IP\") VALUES\n".
 "(-1, '".$iDB_Author."', 'iDB Install', 'This is the start date of your board. ^_^', %i, %i, %i, %i, %i, %i, %i, %i, '%s');", array($YourDate,$YourDateEnd,$EventMonth,$EventMonthEnd,$EventDay,$EventDayEnd,$EventYear,$EventYearEnd,$GuestLocalIP));
 sql_query($query,$SQLStat); }
@@ -171,7 +171,7 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."ranks\" (\n".
 "  \"PromotePosts\" INTEGER NOT NULL default '0'\n".
 ");", null);
 sql_query($query,$SQLStat);
-if($_POST['startblank']=="yes") {
+if($_POST['startblank']=="no") {
 $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."ranks\" (\"id\", \"Name\", \"PromoteTo\", \"PromoteKarma\", \"PromotePosts\") VALUES (-1, 'Guest', 0, 0, 0);", null);
 sql_query($query,$SQLStat);
 $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."ranks\" (\"id\", \"Name\", \"PromoteTo\", \"PromoteKarma\", \"PromotePosts\") VALUES (1, 'Provisional', 2, 3, 0);", null);
@@ -210,7 +210,7 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."levels\" (\n".
 "  \"PromoteKarma\" INTEGER NOT NULL default '0'\n".
 ");", null);
 sql_query($query,$SQLStat);
-if($_POST['startblank']=="yes") {
+if($_POST['startblank']=="no") {
 $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."levels\" (\"id\", \"Name\", \"PromoteTo\", \"PromotePosts\", \"PromoteKarma\") VALUES\n".
 "(-1, 'Guest', 0, 0, 0);", null);
 sql_query($query,$SQLStat);
@@ -314,7 +314,7 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."messenger\" (\n".
 "  \"IP\" VARCHAR(64) NOT NULL default ''\n".
 ");", null);
 sql_query($query,$SQLStat);
-if($_POST['startblank']=="yes") {
+if($_POST['startblank']=="no") {
 $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."messenger\" (\"DiscussionID\", \"SenderID\", \"ReciverID\", \"GuestName\", \"MessageTitle\", \"MessageText\", \"Description\", \"DateSend\", \"Read\", \"IP\") VALUES\n".
 "(0, -1, 1, '".$iDB_Author."', 'Welcome', 'Welcome to your new Internet Discussion Board! :)', '%s', %i, 0, '%s');", array("Welcome ".$_POST['AdminUser'],$YourDate,$GuestLocalIP));
 sql_query($query,$SQLStat); }
@@ -395,7 +395,7 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."posts\" (\n".
 "  \"EditIP\" VARCHAR(64) NOT NULL default ''\n".
 ");", null);
 sql_query($query,$SQLStat);
-if($_POST['startblank']=="yes") {
+if($_POST['startblank']=="no") {
 $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."posts\" (\"TopicID\", \"ForumID\", \"CategoryID\", \"UserID\", \"GuestName\", \"TimeStamp\", \"LastUpdate\", \"EditUser\", \"EditUserName\", \"Post\", \"Description\", \"IP\", \"EditIP\") VALUES\n".
 "(1, 1, 1, -1, '".$iDB_Author."', %i, %i, 1, '".$_POST['AdminUser']."', 'Welcome to your new Internet Discussion Board! :) ', '%s', '%s', '127.0.0.1');", array($YourDate,$YourEditDate,"Welcome ".$_POST['AdminUser'],$GuestLocalIP)); 
 sql_query($query,$SQLStat); }
@@ -596,7 +596,7 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."topics\" (\n".
 "  \"Closed\" INTEGER NOT NULL default '0'\n".
 ");", null);
 sql_query($query,$SQLStat);
-if($_POST['startblank']=="yes") {
+if($_POST['startblank']=="no") {
 $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."topics\" (\"PollID\", \"ForumID\", \"CategoryID\", \"OldForumID\", \"OldCategoryID\", \"UserID\", \"GuestName\", \"TimeStamp\", \"LastUpdate\", \"TopicName\", \"Description\", \"NumReply\", \"NumViews\", \"Pinned\", \"Closed\") VALUES\n".
 "(0, 1, 1, 1, 1, -1, '".$iDB_Author."', %i, %i, 'Welcome', '%s', 0, 0, 1, 1);", array($YourDate,$YourDate,"Welcome ".$_POST['AdminUser']));
 sql_query($query,$SQLStat); }
