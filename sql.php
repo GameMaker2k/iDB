@@ -465,6 +465,8 @@ $alttemp_session_data = serialize($alt_temp_session_data);
 $alt_temp_session_data = $alttemp_session_data;
 $alttemp_session_data = null;
 $SQLSType = $Settings['sqltype'];
+$use_old_session = false;
+if($use_old_session==true) {
 //Session Open Function
 function sql_session_open($save_path, $session_name ) {
 global $sess_save_path;
@@ -526,7 +528,106 @@ $time = $utccurtime->getTimestamp() - $maxlifetime;
 //sql_query(sql_pre_query('DELETE FROM \"'.$sqltable.'sessions\" WHERE \"expires\" < UNIX_TIMESTAMP();', null),$SQLStat);
 sql_query(sql_pre_query("DELETE FROM \"".$sqltable."sessions\" WHERE \"expires\" < %i", array($time)),$SQLStat);
 return true; }
-if (session_id()) { session_destroy(); }
+if (session_id()) { session_destroy(); } }
+else {
+function sql_session_read($id) {
+    global $sqltable, $SQLStat, $temp_user_ip, $temp_user_agent, $temp_session_data, $alt_temp_session_data;
+    
+    // Start a transaction
+    sql_query("BEGIN", $SQLStat);
+    
+    $query = sql_pre_query("SELECT * FROM \"" . $sqltable . "sessions\" WHERE \"session_id\" = '%s'", array($id));
+    $rs = sql_query($query, $SQLStat);
+    
+    if (!$rs) {
+        error_log("Failed to read session: " . sql_error($SQLStat));
+        sql_query("ROLLBACK", $SQLStat);
+        return ''; // or false, based on your application logic
+    }
+    
+    if (!sql_num_rows($rs)) {
+        // If no session found, delete other sessions with the same IP and User-Agent
+        $deleteQuery = sql_pre_query("DELETE FROM \"" . $sqltable . "sessions\" WHERE \"session_id\" <> '%s' AND \"ip_address\" = '%s' AND \"user_agent\" = '%s'", array($id, $temp_user_ip, $temp_user_agent));
+        if (!sql_query($deleteQuery, $SQLStat)) {
+            error_log("Failed to delete old sessions: " . sql_error($SQLStat));
+            sql_query("ROLLBACK", $SQLStat);
+            return ''; // or false
+        }
+        
+        // Insert a new session record
+        $utctz = new DateTimeZone("UTC");
+        $utccurtime = new DateTime();
+        $utccurtime->setTimezone($utctz);
+        $time = $utccurtime->getTimestamp();
+
+        $insertQuery = sql_pre_query("INSERT INTO \"" . $sqltable . "sessions\" (\"session_id\", \"session_data\", \"serialized_data\", \"user_agent\", \"ip_address\", \"expires\") VALUES ('%s', '%s', '%s', '%s', '%s', %i)", 
+            array($id, $temp_session_data, $alt_temp_session_data, $temp_user_agent, $temp_user_ip, $time));
+        
+        if (!sql_query($insertQuery, $SQLStat)) {
+            error_log("Failed to insert session: " . sql_error($SQLStat));
+            sql_query("ROLLBACK", $SQLStat);
+            return ''; // or false
+        }
+        
+        // Commit the transaction
+        sql_query("COMMIT", $SQLStat);
+        return '';
+    } else {
+        // If session exists, update session data (Optimistic concurrency control)
+        $row = sql_fetch_assoc($rs);
+        if (!$row) {
+            error_log("Failed to fetch session row: " . sql_error($SQLStat));
+            sql_query("ROLLBACK", $SQLStat);
+            return ''; // or false
+        }
+
+        $data = $row['session_data'];
+
+        // Commit the transaction
+        sql_query("COMMIT", $SQLStat);
+        return $data;
+    }
+}
+
+function sql_session_write($id, $data) {
+    global $sqltable, $SQLStat, $temp_user_ip, $temp_user_agent;
+    
+    // Start a transaction
+    sql_query("BEGIN", $SQLStat);
+    
+    $utctz = new DateTimeZone("UTC");
+    $utccurtime = new DateTime();
+    $utccurtime->setTimezone($utctz);
+    $time = $utccurtime->getTimestamp();
+    
+    // Check if session exists
+    $checkQuery = sql_pre_query("SELECT COUNT(*) as count FROM \"" . $sqltable . "sessions\" WHERE \"session_id\" = '%s'", array($id));
+    $rs = sql_query($checkQuery, $SQLStat);
+    
+    if (!$rs || sql_fetch_assoc($rs)['count'] == 0) {
+        // Insert new session
+        $insertQuery = sql_pre_query("INSERT INTO \"" . $sqltable . "sessions\" (\"session_id\", \"session_data\", \"serialized_data\", \"user_agent\", \"ip_address\", \"expires\") VALUES ('%s', '%s', '%s', '%s', '%s', %i)", 
+            array($id, $data, serialize($_SESSION), $temp_user_agent, $temp_user_ip, $time));
+        if (!sql_query($insertQuery, $SQLStat)) {
+            error_log("Failed to insert session: " . sql_error($SQLStat));
+            sql_query("ROLLBACK", $SQLStat);
+            return false;
+        }
+    } else {
+        // Update existing session
+        $updateQuery = sql_pre_query("UPDATE \"" . $sqltable . "sessions\" SET \"session_data\" = '%s', \"serialized_data\" = '%s', \"user_agent\" = '%s', \"ip_address\" = '%s', \"expires\" = %i WHERE \"session_id\" = '%s'", 
+            array($data, serialize($_SESSION), $temp_user_agent, $temp_user_ip, $time, $id));
+        if (!sql_query($updateQuery, $SQLStat)) {
+            error_log("Failed to update session: " . sql_error($SQLStat));
+            sql_query("ROLLBACK", $SQLStat);
+            return false;
+        }
+    }
+    
+    // Commit the transaction
+    sql_query("COMMIT", $SQLStat);
+    return true;
+} }
 session_set_save_handler("sql_session_open", "sql_session_close", "sql_session_read", "sql_session_write", "sql_session_destroy", "sql_session_gc");
 if($cookieDomain==null) {
 session_set_cookie_params(0, $cbasedir); }
