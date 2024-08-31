@@ -647,7 +647,7 @@ if($GroupInfo['HasAdminCP']!="yes"&&$UserSessInfo['ShowActHidden']=="yes") {
 	$UserSessInfo['ViewingPage'] = url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); }
 if($_GET['list']=="all"||$_GET['list']=="members") {
 if($UserSessInfo['UserGroup']!=$Settings['GuestGroup']) {
-if(($AmIHiddenUser=="no"||$GroupInfo['CanViewAnonymous']=="yes")&&$UserSessInfo['UserID']>0) { 
+if(($AmIHiddenUser=="no"||$GroupInfo['CanViewAnonymous']=="yes"||$_SESSION['UserID']==$UserSessInfo['UserID'])&&$UserSessInfo['UserID']>0) { 
 ?>
 <tr id="Member<?php echo $i; ?>" class="TableRow3">
 <td class="TableColumn3" style="text-align: center;"><a<?php if($GroupInfo['HasAdminCP']=="yes") { ?> title="<?php echo htmlentities($session_user_agent, ENT_QUOTES, $Settings['charset']); ?>"<?php } ?> href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UserSessInfo['UserID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>"><?php if($AmIHiddenUser=="yes") { echo "*"; } echo $UserSessInfo['MemberName']; ?></a>

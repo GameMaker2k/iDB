@@ -71,7 +71,7 @@ if($UserSessInfo['UserGroup']!=$Settings['GuestGroup']||$user_agent_check!==fals
 $PreAmIHiddenUser = GetUserName($UserSessInfo['UserID'],$Settings['sqltable'],$SQLStat);
 $AmIHiddenUser = $PreAmIHiddenUser['Hidden'];
 if(isset($UserSessInfo['AnonymousLogin']) && $UserSessInfo['AnonymousLogin']=="yes") { $AmIHiddenUser = "yes"; }
-if((($AmIHiddenUser=="no"||$GroupInfo['CanViewAnonymous']=="yes")&&$UserSessInfo['UserID']>0)||$user_agent_check!==false) {
+if((($AmIHiddenUser=="no"||$GroupInfo['CanViewAnonymous']=="yes"||$_SESSION['UserID']==$UserSessInfo['UserID'])&&$UserSessInfo['UserID']>0)||$user_agent_check!==false) {
 if($olmbn>0) { $MembersOnline .= ", "; }
 $userprestring = "";
 if($AmIHiddenUser=="yes") { $userprestring = "*"; }
