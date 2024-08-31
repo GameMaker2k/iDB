@@ -480,8 +480,8 @@ return true; }
 //Session Read Function
 function sql_session_read($id) {
 global $sqltable,$SQLStat,$SQLSType,$temp_user_ip,$temp_user_agent,$temp_session_data,$alt_temp_session_data;
-$result = sql_query(sql_pre_query("SELECT * FROM \"".$sqltable."sessions\" WHERE \"session_id\" = '%s'", array($id)),$SQLStat);
-if (!sql_num_rows($result)) {
+$rs = sql_query(sql_pre_query("SELECT * FROM \"".$sqltable."sessions\" WHERE \"session_id\" = '%s'", array($id)),$SQLStat);
+if (!sql_num_rows($rs)) {
 sql_query(sql_pre_query("DELETE FROM \"".$sqltable."sessions\" WHERE \"session_id\"<>'%s' AND \"ip_address\"='%s' AND \"user_agent\"='%s'", array($id,$temp_user_ip,$temp_user_agent)),$SQLStat);
 $utctz = new DateTimeZone("UTC");
 $utccurtime = new DateTime();
@@ -495,10 +495,10 @@ $utctz = new DateTimeZone("UTC");
 $utccurtime = new DateTime();
 $utccurtime->setTimezone($utctz);
 $time = $utccurtime->getTimestamp();
-$predata = sql_num_rows($result);
+$predata = sql_num_rows($rs);
 $data = "";
 if($predata > 0) {
-$row = sql_fetch_assoc($result);
+$row = sql_fetch_assoc($rs);
 $data = $row['session_data']; }
 /*sql_query(sql_pre_query("UPDATE \"".$sqltable."sessions\" SET \"session_data\"='%s',\"expires\"=%i WHERE \"session_id\"='%s'", array($data,$time,$id)),$SQLStat);*/
 return $data; } }
@@ -715,7 +715,8 @@ header("Content-Type: application/javascript; charset=".$Settings['charset']); }
 header("Content-Type: text/javascript; charset=".$Settings['charset']); } }
 require($SettDir['inc'].'javascript.php');
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); die(); }
-if($Settings['use_captcha']=="on") {
+$Settings['use_captcha'] = "off";
+/*if($Settings['use_captcha']=="on") {
 if($_GET['act']=="MkCaptcha"||$_GET['act']=="Captcha") {
 	if($Settings['captcha_clean']=="on") { ob_clean(); }
 	require($SettDir['inc']."captcha.php");
@@ -728,7 +729,7 @@ if($_GET['act']=="MkCaptcha"||$_GET['act']=="Captcha") {
 	$RandNum=strtoupper($RandNum);
 	$oPhpCaptcha->SetOwnerText("Fake Code: ".$RandNum);
 	$oPhpCaptcha->UseColour(true);
-	$oPhpCaptcha->Create(); session_write_close(); die(); } }
+	$oPhpCaptcha->Create(); session_write_close(); die(); } }*/
 require($SettDir['inc'].'groupsetup.php');
 if($Settings['board_offline']=="on"&&$GroupInfo['CanViewOffLine']!="yes") {
 header("Content-Type: text/plain; charset=".$Settings['charset']); sql_free_result($peresult);

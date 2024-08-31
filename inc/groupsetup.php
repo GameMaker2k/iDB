@@ -44,9 +44,9 @@ $_SESSION['ViewingFile'] = $exfile['index']; }
 $_SESSION['PreViewingTitle'] = "Viewing";
 $_SESSION['ViewingTitle'] = "Board index";
 $_SESSION['ExtraData'] = "currentact:view; currentcategoryid:0; currentforumid:0; currenttopicid:0; currentmessageid:0; currenteventid:0; currentmemberid:0;";
-/*$ggidquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"Name\"='%s' LIMIT 1", array($Settings['GuestGroup']));
+$ggidquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"Name\"='%s' LIMIT 1", array($Settings['GuestGroup']));
 $ggidresult=sql_query($ggidquery,$SQLStat);
-$Settings['GuestGroupID']=sql_result($ggidresult,0,"id");*/
+$Settings['GuestGroupID']=sql_result($ggidresult,0,"id");
 // Check to make sure MemberInfo is right
 $MyPostCountChk = null; $MyKarmaCount = null;
 if(!isset($_SESSION['UserID'])) { $_SESSION['UserID'] = 0; }

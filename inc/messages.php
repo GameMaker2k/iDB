@@ -795,9 +795,9 @@ sql_free_result($melanie_result);
 <td style="width: 100%;">
 <label class="TextBoxLabel" for="Message">Insert Your Message:</label><br />
 <textarea rows="10" name="Message" id="Message" cols="40" class="TextBox"><?php echo $QuoteReply; ?></textarea><br />
-<?php if($_SESSION['UserGroup']==$Settings['GuestGroup']&&$Settings['captcha_guest']=="on") { ?>
+<!--<?php if($_SESSION['UserGroup']==$Settings['GuestGroup']&&$Settings['captcha_guest']=="on") { ?>
 <label class="TextBoxLabel" for="signcode"><img src="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=MkCaptcha",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>" alt="CAPTCHA Code" title="CAPTCHA Code" /></label><br />
-<input maxlength="25" type="text" class="TextBox" name="signcode" size="20" id="signcode" value="Enter SignCode" /><br />
+<input maxlength="25" type="text" class="TextBox" name="signcode" size="20" id="signcode" value="Enter SignCode" /><br />-->
 <?php } ?>
 <input type="hidden" name="act" value="sendmessages" style="display: none;" />
 <?php if($_SESSION['UserGroup']!=$Settings['GuestGroup']) { ?>
@@ -869,7 +869,7 @@ require($SettDir['inc']."captcha.php"); }
 	<br />Sorry the referering url dose not match our host name.<br />
 	</span>&#160;</td>
 </tr>
-<?php } if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
+<?php } /*if($_SESSION['UserGroup']==$Settings['GuestGroup']&&
 	$Settings['captcha_guest']=="on") {
 if (PhpCaptcha::Validate($_POST['signcode'])) {
 //echo 'Valid code entered';
@@ -879,7 +879,7 @@ if (PhpCaptcha::Validate($_POST['signcode'])) {
 	<br />Invalid code entered<br />
 	</span>&#160;</td>
 </tr>
-<?php } } if ($_POST['SendMessageTo']==null) { $Error="Yes";  ?>
+<?php }*/ } if ($_POST['SendMessageTo']==null) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You need to enter a user name to send message to.<br />

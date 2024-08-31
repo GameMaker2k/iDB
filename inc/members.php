@@ -985,7 +985,7 @@ $_SESSION['UserFormID'] = $UFID;
 <form style="display: inline;" method="post" action="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=login_now",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">
 <table style="text-align: left;">
 <tr style="text-align: left;">
-	<td style="width: 30%;"><label class="TextBoxLabel" for="username">Enter UserName: </label></td>
+	<td style="width: 30%;"><label class="TextBoxLabel" for="username">Enter User Name: </label></td>
 	<td style="width: 70%;"><input maxlength="256" class="TextBox" id="username" type="text" name="username" /></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 30%;"><label class="TextBoxLabel" for="userpass">Enter Password: </label></td>
@@ -1433,7 +1433,7 @@ for ($i=0; $i < count($timezone_identifiers); $i++) {
 <form style="display: inline;" method="post" action="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=makemember",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">
 <table style="text-align: left;">
 <tr style="text-align: left;">
-	<td style="width: 30%;"><label class="TextBoxLabel" for="Name">Insert a UserName:</label></td>
+	<td style="width: 30%;"><label class="TextBoxLabel" for="Name">Insert a User Name:</label></td>
 	<?php if(!isset($_SESSION['GuestName'])) { ?>
 	<td style="width: 70%;"><input maxlength="24" type="text" class="TextBox" name="Name" size="20" id="Name" /></td>
 	<?php } if(isset($_SESSION['GuestName'])) { ?>
@@ -1581,10 +1581,10 @@ for ($i=0; $i < count($zonelist['etcetera']); $i++) {
 <?php if($Settings['use_captcha']!="on") { ?><br />
 <?php } if($Settings['use_captcha']=="on") { ?>
 </td></tr>
-<tr style="text-align: left;">
+<!--<tr style="text-align: left;">
 <td style="width: 100%;">
 <label class="TextBoxLabel" for="signcode"><img src="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=MkCaptcha",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>" alt="CAPTCHA Code" title="CAPTCHA Code" /></label><br />
-<input maxlength="25" type="text" class="TextBox" name="signcode" size="20" id="signcode" value="Enter SignCode" /><br /><?php } ?>
+<input maxlength="25" type="text" class="TextBox" name="signcode" size="20" id="signcode" value="Enter SignCode" /><br />--><?php } ?>
 <input type="hidden" style="display: none;" name="act" value="makemembers" />
 <input type="hidden" style="display: none;" name="fid" value="<?php echo $UFID; ?>" />
 <input type="hidden" style="display: none;" name="ubid" value="<?php echo $Settings['BoardUUID']; ?>" />
@@ -1716,7 +1716,7 @@ if (!filter_var($_POST['Avatar'], FILTER_VALIDATE_URL)&&$_POST['Avatar']!="http:
 	<br />Your passwords did not match.<br />
 	</span>&#160;</td>
 </tr>
-<?php } if($Settings['use_captcha']=="on") {
+<?php } /*if($Settings['use_captcha']=="on") {
 if (PhpCaptcha::Validate($_POST['signcode'])) {
 //echo 'Valid code entered';
 } else { $Error="Yes"; ?>
@@ -1725,7 +1725,7 @@ if (PhpCaptcha::Validate($_POST['signcode'])) {
 	<br />Invalid code entered<br />
 	</span>&#160;</td>
 </tr>
-<?php } } if ($Settings['TestReferer']=="on") {
+<?php } }*/ if ($Settings['TestReferer']=="on") {
 	if ($URL['HOST']!=$URL['REFERER']) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
@@ -1840,9 +1840,12 @@ $_POST['Signature'] = ""; $_POST['Interests'] = "";
 $_POST['Title'] = ""; $_POST['PostCount'] = "0";
 if(!isset($Settings['AdminValidate'])) { $Settings['AdminValidate'] = "off"; }
 if($Settings['AdminValidate']=="on"||$Settings['AdminValidate']!="off")
-{ $ValidateStats="no"; $yourgroup=$Settings['ValidateGroup']; }
+{ $ValidateStats="no"; $yourgroupname=$Settings['ValidateGroup']; }
 if($Settings['AdminValidate']=="off"||$Settings['AdminValidate']!="on")
-{ $ValidateStats="yes"; $yourgroup=$Settings['MemberGroup']; }
+{ $ValidateStats="yes"; $yourgroupname=$Settings['MemberGroup']; }
+$gmidquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"Name\"='%s' LIMIT 1", array($yourgroupname));
+$gmidresult=sql_query($gmidquery,$SQLStat);
+$yourgroup=sql_result($gmidresult,0,"id");
 $HideMe = "no"; $HashSalt = salt_hmac();
 if($Settings['use_hashtype']=="md2") { $iDBHash = "iDBH2";
 $NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$HashSalt,"md2"); }
@@ -1899,10 +1902,11 @@ $query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."members\" (\"Name
 "('%s', '%s', '%s', '%s', '%s', 1, 1, '%s', '%s', %i, '%s', '%s', %i, %i, %i, '0', '0', '0', '0', '0', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %i, 0, 0, 10, 10, 10, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')", array($Name,$NewPassword,$iDBHash,$_POST['Email'],$yourgroup,$ValidateStats,$HideMe,"0",$_POST['Interests'],$_POST['Title'],$_POST['Joined'],$_POST['LastActive'],$_POST['LastActive'],$NewSignature,'Your Notes','',$Avatar,"100x100",$Website,'',$_POST['YourGender'],$_POST['PostCount'],$_POST['YourOffSet'],$Settings['idb_date_format'],$Settings['idb_time_format'],$Settings['DefaultTheme'],$_POST['UserIP'],'','','',$HashSalt));
 sql_query($query,$SQLStat);
 $yourid = sql_get_next_id($Settings['sqltable'],"members",$SQLStat);
-$idquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s' AND \"UserPassword\"='%s' AND \"Email\"='%s' AND \"IP\"='%s' AND \"Salt\"='%s' LIMIT 1", array($Name,$NewPassword,$_POST['Email'],$_POST['UserIP'],$HashSalt));
+$idquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s' AND \"UserPassword\"='%s' LIMIT 1", array($Name,$NewPassword));
 $idresult=sql_query($idquery,$SQLStat);
 $idnum=sql_num_rows($idresult);
 $idcheck = $yourid;
+$idncheck = 0;
 if($idnum>=1) {
 $idncheck = sql_result($idresult,0,"id"); 
 $idncheck = intval($idncheck); }
