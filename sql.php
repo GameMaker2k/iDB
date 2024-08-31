@@ -465,7 +465,7 @@ $alttemp_session_data = serialize($alt_temp_session_data);
 $alt_temp_session_data = $alttemp_session_data;
 $alttemp_session_data = null;
 $SQLSType = $Settings['sqltype'];
-$use_old_session = false;
+$use_old_session = true;
 if($use_old_session==true) {
 //Session Open Function
 function sql_session_open($save_path, $session_name ) {
@@ -530,6 +530,21 @@ sql_query(sql_pre_query("DELETE FROM \"".$sqltable."sessions\" WHERE \"expires\"
 return true; }
 if (session_id()) { session_destroy(); } }
 else {
+function sql_session_open($save_path, $session_name) {
+    // We can store the save path if needed or perform any initialization here
+    global $sess_save_path;
+    $sess_save_path = $save_path;
+    // Return true to indicate the session can be opened
+    return true;
+}
+
+function sql_session_close() {
+    global $SQLStat;
+    // If needed, we could close database connections here
+    sql_disconnect_db($SQLStat);  // This is a placeholder if the function exists
+    return true;  // Return true to indicate the session can be closed
+}
+
 function sql_session_read($id) {
     global $sqltable, $SQLStat, $temp_user_ip, $temp_user_agent, $temp_session_data, $alt_temp_session_data;
     
@@ -626,6 +641,35 @@ function sql_session_write($id, $data) {
     
     // Commit the transaction
     sql_query("COMMIT", $SQLStat);
+    return true;
+}
+
+function sql_session_destroy($id) {
+    global $sqltable, $SQLStat;
+
+    $deleteQuery = sql_pre_query("DELETE FROM \"" . $sqltable . "sessions\" WHERE \"session_id\" = '%s'", array($id));
+    if (!sql_query($deleteQuery, $SQLStat)) {
+        error_log("Failed to delete session: " . sql_error($SQLStat));
+        return false;
+    }
+    
+    return true;
+}
+
+function sql_session_gc($maxlifetime) {
+    global $sqltable, $SQLStat;
+    
+    $utctz = new DateTimeZone("UTC");
+    $utccurtime = new DateTime();
+    $utccurtime->setTimezone($utctz);
+    $time = $utccurtime->getTimestamp() - $maxlifetime;
+    
+    $deleteQuery = sql_pre_query("DELETE FROM \"" . $sqltable . "sessions\" WHERE \"expires\" < %i", array($time));
+    if (!sql_query($deleteQuery, $SQLStat)) {
+        error_log("Failed to delete expired sessions: " . sql_error($SQLStat));
+        return false;
+    }
+    
     return true;
 } }
 session_set_save_handler("sql_session_open", "sql_session_close", "sql_session_read", "sql_session_write", "sql_session_destroy", "sql_session_gc");
