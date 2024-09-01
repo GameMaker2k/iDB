@@ -53,7 +53,7 @@ if ($result!=""&&$result!==0) {
 if(!isset($NumQueriesArray['mysqli'])) {
     $NumQueriesArray['mysqli'] = 0; }
 function mysqli_func_query($query,$link=null) {
-global $NumQueries,$SQLStat;
+global $NumQueriesArray,$SQLStat;
 if(isset($link)) {
 	$result = mysqli_query($link,$query); }
 if(!isset($link)) {
@@ -62,7 +62,7 @@ if ($result===false) {
     output_error("SQL Error: ".mysqli_func_error(),E_USER_ERROR);
 	return false; }
 if ($result!==false) {
-	++$NumQueries;
+	++$NumQueriesArray['mysqli'];
 	return $result; } }
 //Fetch Number of Rows
 function mysqli_func_num_rows($result) {

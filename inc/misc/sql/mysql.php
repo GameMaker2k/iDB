@@ -53,7 +53,7 @@ if ($result!=""&&$result!==0) {
 if(!isset($NumQueriesArray['mysql'])) {
     $NumQueriesArray['mysql'] = 0; }
 function mysql_func_query($query,$link=null) {
-global $NumQueriesArray['mysql'],$SQLStat;;
+global $NumQueriesArray,$SQLStat;;
 if(isset($link)) {
 	$result = mysql_query($query,$link); }
 if(!isset($link)) {

@@ -49,7 +49,7 @@ if ($result=="") {
 if(!isset($NumQueriesArray['sqlite'])) {
     $NumQueriesArray['sqlite'] = 0; }
 function sqlite_func_query($query,$link=null) {
-global $NumQueriesArray['sqlite'],$SQLStat;
+global $NumQueriesArray,$SQLStat;
 if(isset($link)) {
 	$result = sqlite_query($link,$query); }
 if(!isset($link)) {
@@ -57,7 +57,8 @@ if(!isset($link)) {
 if ($result===false) {
     output_error("SQL Error: ".sqlite_func_error(),E_USER_ERROR);
 	return false; }
-$NumQueriesArray['sqlite'] = 0;
+if ($result!==false) {
+	++$NumQueriesArray['sqlite'];
 	return $result; } }
 //Fetch Number of Rows
 function sqlite_func_num_rows($result) {

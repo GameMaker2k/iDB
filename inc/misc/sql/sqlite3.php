@@ -49,7 +49,7 @@ if ($result=="") {
 if(!isset($NumQueriesArray['sqlite3'])) {
     $NumQueriesArray['sqlite3'] = 0; };
 function sqlite3_func_query($query,$link=null) {
-global $NumQueriesArray['sqlite3'],$SQLStat;
+global $NumQueriesArray,$SQLStat;
 if(isset($link)) {
 	$result = $link->query($query); }
 if(!isset($link)) {

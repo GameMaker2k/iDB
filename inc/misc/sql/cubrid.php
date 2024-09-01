@@ -36,7 +36,7 @@ function cubrid_func_errorno($link=null) {
 if(!isset($NumQueriesArray['cubrid'])) {
     $NumQueriesArray['cubrid'] = 0; }
 function cubrid_func_query($query,$link=null) {
-global $NumQueriesArray['cubrid'],$SQLStat;;
+global $NumQueriesArray,$SQLStat;;
 if(isset($link)) {
 	$result = cubrid_query($query,$link); }
 if(!isset($link)) {
@@ -45,7 +45,7 @@ if ($result===false) {
     output_error("SQL Error: ".cubrid_func_error(),E_USER_ERROR);
 	return false; }
 if ($result!==false) {
-	++$NumQueriesArray['cubrid'] = 0;
+	++$NumQueriesArray['cubrid'];
 	return $result; } }
 //Fetch Number of Rows
 function cubrid_func_num_rows($result) {

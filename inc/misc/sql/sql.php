@@ -95,12 +95,12 @@ if(!isset($NumQueries)) {
 if(!isset($NumQueriesArray['sql'])) {
     $NumQueriesArray['sql'] = $NumQueries; }
 function sql_query($query, $link = null, $sqllib = null) {
-    global $NumQueries, $NumQueriesArray['sql'];
-    returnval = call_sql_function('query', $sqllib, $query, $link);
-    if(returnval) {
+    global $NumQueries, $NumQueriesArray;
+    $returnval = call_sql_function('query', $sqllib, $query, $link);
+    if($returnval) {
         ++$NumQueries; 
     }
-    return returnval;
+    return $returnval;
 }
 
 function sql_num_rows($result, $sqllib = null) {

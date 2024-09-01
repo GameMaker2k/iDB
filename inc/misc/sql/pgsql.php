@@ -49,7 +49,7 @@ if ($result=="") {
 if(!isset($NumQueriesArray['pgsql'])) {
     $NumQueriesArray['pgsql'] = 0; }
 function pgsql_func_query($query,$link=null) {
-global $NumQueriesArray['pgsql'],$SQLStat;;
+global $NumQueriesArray,$SQLStat;;
 if(isset($link)) {
 	$result = pg_query($link,$query); }
 if(!isset($link)) {
