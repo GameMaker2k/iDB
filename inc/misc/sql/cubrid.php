@@ -19,30 +19,33 @@ if ($File3Name=="cubrid.php"||$File3Name=="/cubrid.php") {
 	exit(); }
 // CUBRID Functions.
 function cubrid_func_error($link=null) {
+ global $SQLStat;
 	$result = cubrid_error_msg();
 	return $result; }
 function cubrid_func_errno($link=null) {
+ global $SQLStat;
 	$result = cubrid_error_code();
 	return $result; }
 function cubrid_func_errorno($link=null) {
+ global $SQLStat;
 	$result = cubrid_func_error();
 	$resultno = cubrid_func_errno();
 	$result = $resultno.": ".$result;
 	return $result; }
 // Execute a query :P
-if(!isset($NumQueries)) {
-$NumQueries = 0; }
+if(!isset($NumQueriesArray['cubrid'])) {
+    $NumQueriesArray['cubrid'] = 0; }
 function cubrid_func_query($query,$link=null) {
-global $NumQueries;
+global $NumQueriesArray['cubrid'],$SQLStat;;
 if(isset($link)) {
 	$result = cubrid_query($query,$link); }
 if(!isset($link)) {
-	$result = cubrid_query($query); }
+	$result = cubrid_query($query,$SQLStat); }
 if ($result===false) {
     output_error("SQL Error: ".cubrid_func_error(),E_USER_ERROR);
 	return false; }
 if ($result!==false) {
-	++$NumQueries;
+	++$NumQueriesArray['cubrid'] = 0;
 	return $result; } }
 //Fetch Number of Rows
 function cubrid_func_num_rows($result) {

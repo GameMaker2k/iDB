@@ -46,10 +46,10 @@ if ($result=="") {
 	return ""; }
 	return $result; }
 // Execute a query :P
-if(!isset($NumQueries)) {
-$NumQueries = 0; }
+if(!isset($NumQueriesArray['sqlite'])) {
+    $NumQueriesArray['sqlite'] = 0; }
 function sqlite_func_query($query,$link=null) {
-global $NumQueries,$SQLStat;
+global $NumQueriesArray['sqlite'],$SQLStat;
 if(isset($link)) {
 	$result = sqlite_query($link,$query); }
 if(!isset($link)) {
@@ -57,8 +57,7 @@ if(!isset($link)) {
 if ($result===false) {
     output_error("SQL Error: ".sqlite_func_error(),E_USER_ERROR);
 	return false; }
-if ($result!==false) {
-	++$NumQueries;
+$NumQueriesArray['sqlite'] = 0;
 	return $result; } }
 //Fetch Number of Rows
 function sqlite_func_num_rows($result) {

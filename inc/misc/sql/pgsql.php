@@ -19,34 +19,37 @@ if ($File3Name=="pgsql.php"||$File3Name=="/pgsql.php") {
 	exit(); }
 // PostgreSQL Functions.
 function pgsql_func_error($link=null) {
+global $SQLStat;
 if(isset($link)) {
 	$result = pg_last_error($link); }
 if(!isset($link)) {
-	$result = pg_last_error(); }
+	$result = pg_last_error($SQLStat); }
 if ($result=="") {
 	return ""; }
 	return $result; }
 function pgsql_func_errno($link=null) {
+global $SQLStat;
 if(isset($link)) {
 	$result = pg_last_error($link); }
 if(!isset($link)) {
-	$result = pg_last_error(); }
+	$result = pg_last_error($SQLStat); }
 if ($result===0) {
 	return 0; }
 	return $result; }
 function pgsql_func_errorno($link=null) {
+global $SQLStat;
 if(isset($link)) {
 	$result = pg_last_error($link); }
 if(!isset($link)) {
-	$result = pg_last_error(); }
+	$result = pg_last_error($SQLStat); }
 if ($result=="") {
 	return ""; }
 	return $result; }
 // Execute a query :P
-if(!isset($NumQueries)) {
-$NumQueries = 0; }
+if(!isset($NumQueriesArray['pgsql'])) {
+    $NumQueriesArray['pgsql'] = 0; }
 function pgsql_func_query($query,$link=null) {
-global $NumQueries;
+global $NumQueriesArray['pgsql'],$SQLStat;;
 if(isset($link)) {
 	$result = pg_query($link,$query); }
 if(!isset($link)) {
@@ -55,7 +58,7 @@ if ($result===false) {
     output_error("SQL Error: ".pgsql_func_error(),E_USER_ERROR);
 	return false; }
 if ($result!==false) {
-	++$NumQueries;
+	++$NumQueriesArray['pgsql'];
 	return $result; } }
 //Fetch Number of Rows
 function pgsql_func_num_rows($result) {

@@ -19,38 +19,41 @@ if ($File3Name=="mysql.php"||$File3Name=="/mysql.php") {
 	exit(); }
 // MySQL Functions.
 function mysql_func_error($link=null) {
+global $SQLStat;
 if(isset($link)) {
 	$result = mysql_error($link); }
 if(!isset($link)) {
-	$result = mysql_error(); }
+	$result = mysql_error($SQLStat); }
 if ($result=="") {
 	return ""; }
 	return $result; }
 function mysql_func_errno($link=null) {
+global $SQLStat;
 if(isset($link)) {
 	$result = mysql_errno($link); }
 if(!isset($link)) {
-	$result = mysql_errno(); }
+	$result = mysql_errno($SQLStat); }
 if ($result===0) {
 	return 0; }
 	return $result; }
 function mysql_func_errorno($link=null) {
+global $SQLStat;
 if(isset($link)) {
 	$result = mysql_func_error($link);
 	$resultno = mysql_func_errno($link); }
 if(!isset($link)) {
-	$result = mysql_func_error();
-	$resultno = mysql_func_errno(); }
+	$result = mysql_func_error($SQLStat);
+	$resultno = mysql_func_errno($SQLStat); }
 if ($result==""&&$result===0) {
 	return ""; }
 if ($result!=""&&$result!==0) {
 	$result = $resultno.": ".$result; }
 	return $result; }
 // Execute a query :P
-if(!isset($NumQueries)) {
-$NumQueries = 0; }
+if(!isset($NumQueriesArray['mysql'])) {
+    $NumQueriesArray['mysql'] = 0; }
 function mysql_func_query($query,$link=null) {
-global $NumQueries;
+global $NumQueriesArray['mysql'],$SQLStat;;
 if(isset($link)) {
 	$result = mysql_query($query,$link); }
 if(!isset($link)) {
@@ -59,7 +62,7 @@ if ($result===false) {
     output_error("SQL Error: ".mysql_func_error(),E_USER_ERROR);
 	return false; }
 if ($result!==false) {
-	++$NumQueries;
+	++$NumQueriesArray['mysql'];
 	return $result; } }
 //Fetch Number of Rows
 function mysql_func_num_rows($result) {

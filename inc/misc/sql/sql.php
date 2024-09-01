@@ -18,6 +18,8 @@ if ($File3Name=="sql.php"||$File3Name=="/sql.php") {
 	@header('Location: index.php');
 	exit(); }
 
+
+$NumQueriesArray = array();
 if(file_exists($SettDir['sql']."mysql.php")) {
 	require($SettDir['sql']."mysql.php"); }
 if(file_exists($SettDir['sql']."pdo_mysql.php")) {
@@ -88,8 +90,17 @@ function sql_errorno($link = null, $sqllib = null) {
     return call_sql_function('errorno', $sqllib, $link);
 }
 
+if(!isset($NumQueries)) {
+    $NumQueries = 0; }
+if(!isset($NumQueriesArray['sql'])) {
+    $NumQueriesArray['sql'] = $NumQueries; }
 function sql_query($query, $link = null, $sqllib = null) {
-    return call_sql_function('query', $sqllib, $query, $link);
+    global $NumQueries, $NumQueriesArray['sql'];
+    returnval = call_sql_function('query', $sqllib, $query, $link);
+    if(returnval) {
+        ++$NumQueries; 
+    }
+    return returnval;
 }
 
 function sql_num_rows($result, $sqllib = null) {

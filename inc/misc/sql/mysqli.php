@@ -19,22 +19,25 @@ if ($File3Name=="mysqli.php"||$File3Name=="/mysqli.php") {
 	exit(); }
 // MySQL Functions.
 function mysqli_func_error($link=null) {
+global $SQLStat;
 if(isset($link)) {
 	$result = mysqli_error($link); }
 if(!isset($link)) {
-	$result = mysqli_error(); }
+	$result = mysqli_error($SQLStat); }
 if ($result=="") {
 	return ""; }
 	return $result; }
 function mysqli_func_errno($link=null) {
+global $SQLStat;
 if(isset($link)) {
 	$result = mysqli_errno($link); }
 if(!isset($link)) {
-	$result = mysqli_errno(); }
+	$result = mysqli_errno($SQLStat); }
 if ($result===0) {
 	return 0; }
 	return $result; }
 function mysqli_func_errorno($link=null) {
+global $SQLStat;
 if(isset($link)) {
 	$result = mysqli_func_error($link);
 	$resultno = mysqli_func_errno($link); }
@@ -47,10 +50,10 @@ if ($result!=""&&$result!==0) {
 	$result = $resultno.": ".$result; }
 	return $result; }
 // Execute a query :P
-if(!isset($NumQueries)) {
-$NumQueries = 0; }
+if(!isset($NumQueriesArray['mysqli'])) {
+    $NumQueriesArray['mysqli'] = 0; }
 function mysqli_func_query($query,$link=null) {
-global $NumQueries;
+global $NumQueries,$SQLStat;
 if(isset($link)) {
 	$result = mysqli_query($link,$query); }
 if(!isset($link)) {
