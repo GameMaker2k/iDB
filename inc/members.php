@@ -1450,106 +1450,21 @@ for ($i=0; $i < count($timezone_identifiers); $i++) {
 	<td style="width: 70%;"><input type="email" class="TextBox" name="Email" size="20" id="Email" /></td>
 </tr><tr>
 	<td style="width: 30%;"><label class="TextBoxLabel" for="YourOffSet">Your TimeZone:</label></td>
-	<td style="width: 70%;"><select id="YourOffSet" name="YourOffSet" class="TextBox">
-<optgroup label="Africa">
-<?php
-$optsel="";
-for ($i=0; $i < count($zonelist['africa']); $i++) {
-    if($gettzinfofromjs==$zonelist['africa'][$i][1]) { $optsel = " selected=\"selected\""; }
-    echo "<option".$optsel." value=\"".$zonelist['africa'][$i][1]."\">".str_replace("_", " ", $zonelist['africa'][$i][0])."</option>\n"; 
-    $optsel=""; }
-?>
-</optgroup>
-<optgroup label="America">
-<?php
-$optsel="";
-for ($i=0; $i < count($zonelist['america']); $i++) {
-    if($gettzinfofromjs==$zonelist['america'][$i][1]) { $optsel = " selected=\"selected\""; }
-    echo "<option".$optsel." value=\"".$zonelist['america'][$i][1]."\">".str_replace("_", " ", $zonelist['america'][$i][0])."</option>\n"; 
-    $optsel=""; }
-?>
-</optgroup>
-<optgroup label="Antarctica">
-<?php
-$optsel="";
-for ($i=0; $i < count($zonelist['antarctica']); $i++) {
-    if($gettzinfofromjs==$zonelist['antarctica'][$i][1]) { $optsel = " selected=\"selected\""; }
-    echo "<option".$optsel." value=\"".$zonelist['antarctica'][$i][1]."\">".str_replace("_", " ", $zonelist['antarctica'][$i][0])."</option>\n"; 
-    $optsel=""; }
-?>
-</optgroup>
-<optgroup label="Arctic">
-<?php
-$optsel="";
-for ($i=0; $i < count($zonelist['arctic']); $i++) {
-    if($gettzinfofromjs==$zonelist['arctic'][$i][1]) { $optsel = " selected=\"selected\""; }
-    echo "<option".$optsel." value=\"".$zonelist['arctic'][$i][1]."\">".str_replace("_", " ", $zonelist['arctic'][$i][0])."</option>\n"; 
-    $optsel=""; }
-?>
-</optgroup>
-<optgroup label="Asia">
-<?php
-for ($i=0; $i < count($zonelist['asia']); $i++) {
-    if($gettzinfofromjs==$zonelist['asia'][$i][1]) { $optsel = " selected=\"selected\""; }
-    echo "<option".$optsel." value=\"".$zonelist['asia'][$i][1]."\">".str_replace("_", " ", $zonelist['asia'][$i][0])."</option>\n"; 
-    $optsel=""; }
-?>
-</optgroup>
-<optgroup label="Atlantic">
-<?php
-$optsel="";
-for ($i=0; $i < count($zonelist['atlantic']); $i++) {
-    if($gettzinfofromjs==$zonelist['atlantic'][$i][1]) { $optsel = " selected=\"selected\""; }
-    echo "<option".$optsel." value=\"".$zonelist['atlantic'][$i][1]."\">".str_replace("_", " ", $zonelist['atlantic'][$i][0])."</option>\n"; 
-    $optsel=""; }
-?>
-</optgroup>
-<optgroup label="Australia">
-<?php
-$optsel="";
-for ($i=0; $i < count($zonelist['australia']); $i++) {
-    if($gettzinfofromjs==$zonelist['australia'][$i][1]) { $optsel = " selected=\"selected\""; }
-    echo "<option".$optsel." value=\"".$zonelist['australia'][$i][1]."\">".str_replace("_", " ", $zonelist['australia'][$i][0])."</option>\n"; 
-    $optsel=""; }
-?>
-</optgroup>
-<optgroup label="Europe">
-<?php
-$optsel="";
-for ($i=0; $i < count($zonelist['europe']); $i++) {
-    if($gettzinfofromjs==$zonelist['europe'][$i][1]) { $optsel = " selected=\"selected\""; }
-    echo "<option".$optsel." value=\"".$zonelist['europe'][$i][1]."\">".str_replace("_", " ", $zonelist['europe'][$i][0])."</option>\n"; 
-    $optsel=""; }
-?>
-</optgroup>
-<optgroup label="Indian">
-<?php
-$optsel="";
-for ($i=0; $i < count($zonelist['indian']); $i++) {
-    if($gettzinfofromjs==$zonelist['indian'][$i][1]) { $optsel = " selected=\"selected\""; }
-    echo "<option".$optsel." value=\"".$zonelist['indian'][$i][1]."\">".str_replace("_", " ", $zonelist['indian'][$i][0])."</option>\n"; 
-    $optsel=""; }
-?>
-</optgroup>
-<optgroup label="Pacific">
-<?php
-$optsel="";
-for ($i=0; $i < count($zonelist['pacific']); $i++) {
-    if($gettzinfofromjs==$zonelist['pacific'][$i][1]) { $optsel = " selected=\"selected\""; }
-    echo "<option".$optsel." value=\"".$zonelist['pacific'][$i][1]."\">".str_replace("_", " ", $zonelist['pacific'][$i][0])."</option>\n"; 
-    $optsel=""; }
-?>
-</optgroup>
-<optgroup label="Etcetera">
-<?php
-$optsel="";
-for ($i=0; $i < count($zonelist['etcetera']); $i++) {
-    if($gettzinfofromjs==$zonelist['etcetera'][$i][1]) { $optsel = " selected=\"selected\""; }
-    echo "<option".$optsel." value=\"".$zonelist['etcetera'][$i][1]."\">".str_replace("_", " ", $zonelist['etcetera'][$i][0])."</option>\n"; 
-    $optsel=""; }
-?>
-</optgroup>
-</select></td>
+ <td style="width: 70%;">
+    <select id="YourOffSet" name="YourOffSet" class="TextBox">
+        <?php
+        // List of all region labels
+        $regions = ['africa', 'america', 'antarctica', 'arctic', 'asia', 'atlantic', 'australia', 'europe', 'indian', 'pacific', 'etcetera'];
+        
+        // Generate optgroups and options for each region
+        foreach ($regions as $region) {
+            echo '<optgroup label="' . ucfirst($region) . '">' . "\n";
+            echo generateOptions($region, $zonelist, $gettzinfofromjs); // Using $gettzinfofromjs for selected timezone
+            echo '</optgroup>' . "\n";
+        }
+        ?>
+    </select>
+</td>
 </tr><tr>
 	<td style="width: 30%;"><label class="TextBoxLabel" for="YourGender">Your Gender:</label></td>
 	<td style="width: 70%;"><select id="YourGender" name="YourGender" class="TextBox">
