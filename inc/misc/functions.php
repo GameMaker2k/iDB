@@ -655,4 +655,63 @@ function human_filesize($bytes, $decimals = 2) {
     if ($factor > 0) $sz = 'KMGT';
     return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . ' ' . @$sz[$factor - 1] . 'B';
 }
+
+// Function to add timezone to the appropriate region
+function addTimezoneToList($region, $location, &$zonelist) {
+    if (count($location) == 2) {
+        array_push($zonelist[strtolower($region)], [$location[1], implode('/', $location)]);
+    } elseif (count($location) == 3) {
+        array_push($zonelist[strtolower($region)], [$location[2] . ", " . $location[1], implode('/', $location)]);
+    }
+}
+
+// Unified function to generate <option> tags for a given region
+function generateOptions($region, $zonelist, $selectedTimezone) {
+    $options = '';
+    foreach ($zonelist[$region] as $timezone) {
+        // Check if this option should be selected
+        $isSelected = ($selectedTimezone == $timezone[1]) ? ' selected="selected"' : '';
+        
+        // Generate the <option> tag
+        $options .= '<option' . $isSelected . ' value="' . htmlspecialchars($timezone[1]) . '">' 
+                  . htmlspecialchars(str_replace("_", " ", $timezone[0])) . '</option>' . "\n";
+    }
+    return $options;
+}
+
+$gettzinfofromjs = date_default_timezone_get();
+if(isset($_COOKIE['getusertz']) && in_array($_COOKIE['getusertz'], DateTimeZone::listIdentifiers())) {
+   $gettzinfofromjs = $_COOKIE['getusertz']; }
+// http://www.tutorialspoint.com/php/php_function_timezone_identifiers_list.htm
+// Retrieve all timezone identifiers
+$timezone_identifiers = DateTimeZone::listIdentifiers();
+
+// Initialize the timezone list array
+$zonelist = [
+    'africa' => [],
+    'america' => [],
+    'antarctica' => [],
+    'arctic' => [],
+    'asia' => [],
+    'atlantic' => [],
+    'australia' => [],
+    'europe' => [],
+    'indian' => [],
+    'pacific' => [],
+    'etcetera' => []
+];
+
+// Loop through timezone identifiers and categorize them
+foreach ($timezone_identifiers as $timezone) {
+    $zonelookup = explode("/", $timezone);
+    
+    if (count($zonelookup) == 1) {
+        // Timezones without a region prefix go to 'etcetera'
+        array_push($zonelist['etcetera'], [$timezone, $timezone]);
+    } else {
+        // Add timezone to the appropriate region
+        addTimezoneToList($zonelookup[0], $zonelookup, $zonelist);
+    }
+}
+
 ?>
