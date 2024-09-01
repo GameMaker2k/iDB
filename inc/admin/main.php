@@ -857,106 +857,21 @@ while ($gi < $gnum) { ?>
 	</select></td>
 </tr>--><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="YourOffSet">Your TimeZone:</label></td>
-	<td style="width: 50%;"><select id="YourOffSet" name="YourOffSet" class="TextBox">
-<optgroup label="Africa">
-<?php
-$optsel="";
-for ($i=0; $i < count($zonelist['africa']); $i++) {
-    if($Settings['DefaultTimeZone']==$zonelist['africa'][$i][1]) { $optsel = " selected=\"selected\""; }
-    echo "<option".$optsel." value=\"".$zonelist['africa'][$i][1]."\">".str_replace("_", " ", $zonelist['africa'][$i][0])."</option>\n"; 
-    $optsel=""; }
-?>
-</optgroup>
-<optgroup label="America">
-<?php
-$optsel="";
-for ($i=0; $i < count($zonelist['america']); $i++) {
-    if($Settings['DefaultTimeZone']==$zonelist['america'][$i][1]) { $optsel = " selected=\"selected\""; }
-    echo "<option".$optsel." value=\"".$zonelist['america'][$i][1]."\">".str_replace("_", " ", $zonelist['america'][$i][0])."</option>\n"; 
-    $optsel=""; }
-?>
-</optgroup>
-<optgroup label="Antarctica">
-<?php
-$optsel="";
-for ($i=0; $i < count($zonelist['antarctica']); $i++) {
-    if($Settings['DefaultTimeZone']==$zonelist['antarctica'][$i][1]) { $optsel = " selected=\"selected\""; }
-    echo "<option".$optsel." value=\"".$zonelist['antarctica'][$i][1]."\">".str_replace("_", " ", $zonelist['antarctica'][$i][0])."</option>\n"; 
-    $optsel=""; }
-?>
-</optgroup>
-<optgroup label="Arctic">
-<?php
-$optsel="";
-for ($i=0; $i < count($zonelist['arctic']); $i++) {
-    if($Settings['DefaultTimeZone']==$zonelist['arctic'][$i][1]) { $optsel = " selected=\"selected\""; }
-    echo "<option".$optsel." value=\"".$zonelist['arctic'][$i][1]."\">".str_replace("_", " ", $zonelist['arctic'][$i][0])."</option>\n"; 
-    $optsel=""; }
-?>
-</optgroup>
-<optgroup label="Asia">
-<?php
-for ($i=0; $i < count($zonelist['asia']); $i++) {
-    if($Settings['DefaultTimeZone']==$zonelist['asia'][$i][1]) { $optsel = " selected=\"selected\""; }
-    echo "<option".$optsel." value=\"".$zonelist['asia'][$i][1]."\">".str_replace("_", " ", $zonelist['asia'][$i][0])."</option>\n"; 
-    $optsel=""; }
-?>
-</optgroup>
-<optgroup label="Atlantic">
-<?php
-$optsel="";
-for ($i=0; $i < count($zonelist['atlantic']); $i++) {
-    if($Settings['DefaultTimeZone']==$zonelist['atlantic'][$i][1]) { $optsel = " selected=\"selected\""; }
-    echo "<option".$optsel." value=\"".$zonelist['atlantic'][$i][1]."\">".str_replace("_", " ", $zonelist['atlantic'][$i][0])."</option>\n"; 
-    $optsel=""; }
-?>
-</optgroup>
-<optgroup label="Australia">
-<?php
-$optsel="";
-for ($i=0; $i < count($zonelist['australia']); $i++) {
-    if($Settings['DefaultTimeZone']==$zonelist['australia'][$i][1]) { $optsel = " selected=\"selected\""; }
-    echo "<option".$optsel." value=\"".$zonelist['australia'][$i][1]."\">".str_replace("_", " ", $zonelist['australia'][$i][0])."</option>\n"; 
-    $optsel=""; }
-?>
-</optgroup>
-<optgroup label="Europe">
-<?php
-$optsel="";
-for ($i=0; $i < count($zonelist['europe']); $i++) {
-    if($Settings['DefaultTimeZone']==$zonelist['europe'][$i][1]) { $optsel = " selected=\"selected\""; }
-    echo "<option".$optsel." value=\"".$zonelist['europe'][$i][1]."\">".str_replace("_", " ", $zonelist['europe'][$i][0])."</option>\n"; 
-    $optsel=""; }
-?>
-</optgroup>
-<optgroup label="Indian">
-<?php
-$optsel="";
-for ($i=0; $i < count($zonelist['indian']); $i++) {
-    if($Settings['DefaultTimeZone']==$zonelist['indian'][$i][1]) { $optsel = " selected=\"selected\""; }
-    echo "<option".$optsel." value=\"".$zonelist['indian'][$i][1]."\">".str_replace("_", " ", $zonelist['indian'][$i][0])."</option>\n"; 
-    $optsel=""; }
-?>
-</optgroup>
-<optgroup label="Pacific">
-<?php
-$optsel="";
-for ($i=0; $i < count($zonelist['pacific']); $i++) {
-    if($Settings['DefaultTimeZone']==$zonelist['pacific'][$i][1]) { $optsel = " selected=\"selected\""; }
-    echo "<option".$optsel." value=\"".$zonelist['pacific'][$i][1]."\">".str_replace("_", " ", $zonelist['pacific'][$i][0])."</option>\n"; 
-    $optsel=""; }
-?>
-</optgroup>
-<optgroup label="Etcetera">
-<?php
-$optsel="";
-for ($i=0; $i < count($zonelist['etcetera']); $i++) {
-    if($Settings['DefaultTimeZone']==$zonelist['etcetera'][$i][1]) { $optsel = " selected=\"selected\""; }
-    echo "<option".$optsel." value=\"".$zonelist['etcetera'][$i][1]."\">".str_replace("_", " ", $zonelist['etcetera'][$i][0])."</option>\n"; 
-    $optsel=""; }
-?>
-</optgroup>
-</select></td>
+ <td style="width: 50%;">
+    <select id="YourOffSet" name="YourOffSet" class="TextBox">
+        <?php
+        // List of all region labels
+        $regions = ['africa', 'america', 'antarctica', 'arctic', 'asia', 'atlantic', 'australia', 'europe', 'indian', 'pacific', 'etcetera'];
+        
+        // Generate optgroups and options for each region
+        foreach ($regions as $region) {
+            echo '<optgroup label="' . ucfirst($region) . '">' . "\n";
+            echo generateOptions($region, $zonelist, $Settings['DefaultTimeZone']); // Using $Settings['DefaultTimeZone'] for selected timezone
+            echo '</optgroup>' . "\n";
+        }
+        ?>
+    </select>
+</td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="DefaultTheme">Default Theme:</label></td>
 	<td style="width: 50%;"><select id="DefaultTheme" name="DefaultTheme" class="TextBox"><?php
