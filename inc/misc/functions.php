@@ -679,7 +679,10 @@ function generateOptions($region, $zonelist, $selectedTimezone) {
     return $options;
 }
 
-$gettzinfofromjs = date_default_timezone_get();
+if(isset($Settings['DefaultTimeZone'])) {
+ $gettzinfofromjs = $Settings['DefaultTimeZone']; } 
+ else {
+ $gettzinfofromjs = date_default_timezone_get(); }
 if(isset($_COOKIE['getusertz']) && in_array($_COOKIE['getusertz'], DateTimeZone::listIdentifiers())) {
    $gettzinfofromjs = $_COOKIE['getusertz']; }
 // http://www.tutorialspoint.com/php/php_function_timezone_identifiers_list.htm
