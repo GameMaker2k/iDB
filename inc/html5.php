@@ -76,7 +76,9 @@ if($checklowview===true&&$_GET['act']!="lowview") { $extext = "<a href=\"".url_m
 if($checklowview===true&&$_GET['act']=="lowview") {  $extext = "<a href=\"".url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'])."\">High-Version</a>"; }
 $endpagevar = "<div class=\"copyright\">Powered by ".$iDBURL1.$RName."</a> &#169; ".$GM2kURL." @ ".$csryear." - ".$cryear." <br />\n".$ThemeSet['CopyRight']." | ".$extext; 
 header("Content-Language: en");
-header("Vary: Accept-Encoding");
+header("Vary: Accept-Encoding, User-Agent
+");
+header("Accept-CH: Sec-CH-UA, Sec-CH-UA-Mobile, Sec-CH-UA-Full-Version, Sec-CH-UA-Platform, Sec-CH-UA-Platform-Version, Sec-CH-UA-Arch, Sec-CH-UA-Model");
 // Check if we are on a secure HTTP connection
 if($_SERVER['HTTPS']=="on") { $prehost = "https://"; }
 if($_SERVER['HTTPS']!="on") { $prehost = "http://"; }
