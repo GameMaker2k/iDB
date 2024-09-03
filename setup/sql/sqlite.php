@@ -27,6 +27,24 @@ sql_query($query,$SQLStat);
 $parsestr = parse_url($YourWebsite);
 if (!filter_var($parsestr['host'], FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6) || $parsestr['host'] == "localhost") {
 	$GuestLocalIP = gethostbyname($parsestr['host']); } else { $GuestLocalIP = $parsestr['host']; }
+$query=sql_pre_query("PRAGMA auto_vacuum = INCREMENTAL;", null);
+sql_query($query,$SQLStat);
+$query=sql_pre_query("PRAGMA foreign_keys = 1;", null);
+sql_query($query,$SQLStat);
+$query=sql_pre_query("PRAGMA locking_mode = NORMAL;", null);
+sql_query($query,$SQLStat);
+$query=sql_pre_query("PRAGMA synchronous = NORMAL;", null);
+sql_query($query,$SQLStat);
+$query=sql_pre_query("PRAGMA journal_size_limit = 1048576;", null);
+sql_query($query,$SQLStat);
+$query=sql_pre_query("PRAGMA mmap_size = 268435456;", null);
+sql_query($query,$SQLStat);
+$query=sql_pre_query("PRAGMA journal_mode = WAL;", null);
+sql_query($query,$SQLStat);
+$query=sql_pre_query("PRAGMA fullfsync = OFF;", null);
+sql_query($query,$SQLStat);
+$query=sql_pre_query("PRAGMA temp_store = MEMORY;", null);
+sql_query($query,$SQLStat);
 $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."categories\" (\n".
 "  \"id\" INTEGER PRIMARY KEY NOT NULL,\n".
 "  \"OrderID\" INTEGER NOT NULL default '0',\n".
