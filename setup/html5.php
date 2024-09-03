@@ -77,6 +77,7 @@ if($checklowview===true&&$_GET['act']=="lowview") {  $extext = "<a href=\"".url_
 $endpagevar = "<div class=\"copyright\">Powered by ".$iDBURL1.$RName."</a> &#169; ".$GM2kURL." @ ".$csryear." - ".$cryear." <br />\n".$ThemeSet['CopyRight']; 
 header("Content-Language: en");
 header("Vary: Accept-Encoding");
+header("Accept-CH: Sec-CH-UA, Sec-CH-UA-Mobile, Sec-CH-UA-Full-Version, Sec-CH-UA-Platform, Sec-CH-UA-Platform-Version, Sec-CH-UA-Arch, Sec-CH-UA-Model");
 // Check if we are on a secure HTTP connection
 if(isset($_SERVER['HTTPS'])) { $prehost = "https://";; }
 if(isset($_SERVER['HTTPS'])&&$_SERVER['HTTPS']=="on") { $prehost = "https://"; }
