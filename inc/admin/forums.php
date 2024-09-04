@@ -524,6 +524,7 @@ if($Settings['sqltype']=="cubrid") {
 $getperidq = sql_pre_query("SELECT DISTINCT \"permissionid\" FROM \"".$Settings['sqltable']."groups\" ORDER BY \"PermissionID\" ASC", null); }
 $getperidr=sql_query($getperidq,$SQLStat);
 $getperidnum=sql_num_rows($getperidr); }
+if(!isset($getperidnum)) { $getperidnum = 0; }
 $getperidi = 0; 
 $nextperid = null;
 /*
@@ -534,6 +535,7 @@ $nextperid = sql_get_next_id($Settings['sqltable'],"permissions",$SQLStat); }
 if($Settings['sqltype']=="sqlite") {
 $nextperid = sql_get_next_id($Settings['sqltable'],"\"permissions\"",$SQLStat); }
 */
+if($Error!="Yes") {
 while ($getperidi < $getperidnum) {
 if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"||$Settings['sqltype']=="pdo_mysql"||
 	$Settings['sqltype']=="pgsql"||$Settings['sqltype']=="cubrid"||
@@ -587,7 +589,7 @@ $query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."permissions\" (\"
 if($getperidnum2<=0) {
 $query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."permissions\" (\"PermissionID\", \"Name\", \"ForumID\", \"CanViewForum\", \"CanMakePolls\", \"CanMakeTopics\", \"CanMakeReplys\", \"CanMakeReplysCT\", \"CanEditTopics\", \"CanEditTopicsCT\", \"CanEditReplys\", \"CanEditReplysCT\", \"CanDeleteTopics\", \"CanDeleteTopicsCT\", \"CanDeleteReplys\", \"CanDeleteReplysCT\", \"CanCloseTopics\", \"CanPinTopics\", \"CanExecPHP\", \"CanDoHTML\", \"CanUseBBTags\", \"CanModForum\") VALUES (%i, '%s', %i, 'yes', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no')", array($PermissionID,$PermissionName,$_POST['ForumID'])); } }
 sql_query($query,$SQLStat);
-++$getperidi; /*++$nextperid;*/ } } sql_free_result($getperidr); } 
+++$getperidi; /*++$nextperid;*/ } } sql_free_result($getperidr); } }
 if($_GET['act']=="deleteforum"&&$_POST['update']!="now") { 
 $admincptitle = " ".$ThemeSet['TitleDivider']." Deleting a Forum";
 ?>
