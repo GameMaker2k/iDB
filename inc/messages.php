@@ -879,7 +879,7 @@ if (PhpCaptcha::Validate($_POST['signcode'])) {
 	<br />Invalid code entered<br />
 	</span>&#160;</td>
 </tr>
-<?php }*/ } if ($_POST['SendMessageTo']==null) { $Error="Yes";  ?>
+<?php } }*/ if ($_POST['SendMessageTo']==null) { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />You need to enter a user name to send message to.<br />
