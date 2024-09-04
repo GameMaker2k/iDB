@@ -491,7 +491,9 @@ $errorstr = $errorstr."You need to enter a forum name.<br />\n"; }
 if ($_POST['ForumDesc']==null) { $Error="Yes";
 $errorstr = $errorstr."You need to enter a description.<br />\n"; } 
 if ($_POST['ForumID']==null||
-	!is_numeric($_POST['ForumID'])) { $Error="Yes";
+	!is_numeric($_POST['ForumID'])||
+	$_POST['ForumID']==0||
+	$_POST['ForumID']=="0") { $Error="Yes";
 $errorstr = $errorstr."You need to enter a forum ID.<br />\n"; } 
 if($id_check > 0) { $Error="Yes";
 $errorstr = $errorstr."This ID number is already used.<br />\n"; } 

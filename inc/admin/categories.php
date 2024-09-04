@@ -156,7 +156,9 @@ $errorstr = $errorstr."You need to enter a category name.<br />\n"; }
 if ($_POST['CategoryDesc']==null) { $Error="Yes";
 $errorstr = $errorstr."You need to enter a description.<br />\n"; } 
 if ($_POST['CategoryID']==null||
-	!is_numeric($_POST['CategoryID'])) { $Error="Yes";
+	!is_numeric($_POST['CategoryID'])||
+	$_POST['CategoryID']==0||
+	!$_POST['CategoryID']=="0") { $Error="Yes";
 $errorstr = $errorstr."You need to enter a category id.<br />\n"; } 
 if($id_check > 0) { $Error="Yes";
 $errorstr = $errorstr."This ID number is already used.<br />\n"; } 
