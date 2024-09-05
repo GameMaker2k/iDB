@@ -1423,7 +1423,7 @@ $_SESSION['UserFormID'] = $UFID;
 <?php if($Settings['use_captcha']!="on") { ?><br />
 <?php } if($Settings['use_captcha']=="on") { ?>
 </td></tr>
-<!--<tr style="text-align: left;">
+<tr style="text-align: left;">
 <td style="width: 100%;">
 <label class="TextBoxLabel" for="signcode"><img src="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=MkCaptcha",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>" alt="CAPTCHA Code" title="CAPTCHA Code" /></label><br />
 <input maxlength="25" type="text" class="TextBox" name="signcode" size="20" id="signcode" value="Enter SignCode" /><br />--><?php } ?>
