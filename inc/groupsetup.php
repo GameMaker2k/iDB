@@ -174,7 +174,7 @@ if(!is_numeric($LevelInfo['DemotePosts'])) {
 $LevelInfo['DemoteKarma']=sql_result($levresult,0,"DemoteKarma");
 if(!is_numeric($LevelInfo['DemoteKarma'])) { 
 	$LevelInfo['DemoteKarma'] = 0; $LevelInfo['DemoteTo'] = 0; } }
-elseif($levnum<=0)&&$ChkUsrLevelID!=0) {
+elseif($levnum<=0&&$ChkUsrLevelID!=0) {
 	$queryupgrade = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"LevelID\"=0 WHERE \"id\"=%i", array($_SESSION['UserID']));
 	sql_query($queryupgrade,$SQLStat); }
 if($_SESSION['UserID']==0||$_SESSION['UserID']==null) {
@@ -206,7 +206,7 @@ if(!is_numeric($RankInfo['DemotePosts'])) {
 $RankInfo['DemoteKarma']=sql_result($ranresult,0,"DemoteKarma");
 if(!is_numeric($RankInfo['DemoteKarma'])) { 
 	$RankInfo['DemoteKarma'] = 0; } }
-elseif($rannum<=0)&&$ChkUsrRankID!=0) {
+elseif($rannum<=0&&$ChkUsrRankID!=0) {
 	$queryupgrade = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"RankID\"=0 WHERE \"id\"=%i", array($_SESSION['UserID']));
 	sql_query($queryupgrade,$SQLStat); }
 // Member Group Setup
