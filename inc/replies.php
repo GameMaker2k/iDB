@@ -359,14 +359,21 @@ $User1Joined=$tmpusrcurtime->format($_SESSION['iDBDateFormat']);
 $User1Hidden=sql_result($reresult,$rei,"HiddenMember");
 $User1LevelID=sql_result($reresult,$rei,"LevelID");
 $User1RankID=sql_result($reresult,$rei,"RankID");
+if($User1LevelID!==null&&$User1LevelID!=0) {
 $lquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."levels\" WHERE \"id\"=%i LIMIT 1", array($User1LevelID));
 $lresult=sql_query($lquery,$SQLStat);
-$User1Level=sql_result($lresult,0,"Name");
+if ($lresult !== false && sql_num_rows($lresult) > 0) {
+$User1Level=sql_result($lresult,0,"Name"); } else { $User1Level = ""; }
+sql_free_result($lresult); } else {
+$User1Level = ""; }
 $User1GroupID=sql_result($reresult,$rei,"GroupID");
+if($User1RankID!==null&&$User1RankID!=0) {
 $rquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."ranks\" WHERE \"id\"=%i LIMIT 1", array($User1RankID));
 $rresult=sql_query($rquery,$SQLStat);
-$User1Rank=sql_result($rresult,0,"Name");
-sql_free_result($rresult);
+if ($rresult !== false && sql_num_rows($rresult) > 0) {
+$User1Rank=sql_result($rresult,0,"Name"); } else { $User1Rank = ""; }
+sql_free_result($rresult); } else {
+$User1Rank = ""; }
 $gquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i LIMIT 1", array($User1GroupID));
 $gresult=sql_query($gquery,$SQLStat);
 $User1Group=sql_result($gresult,0,"Name");

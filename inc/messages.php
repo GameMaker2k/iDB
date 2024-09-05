@@ -501,14 +501,21 @@ $tmpusrcurtime->setTimestamp($User1Joined);
 $tmpusrcurtime->setTimezone($usertz);
 $User1Joined=$tmpusrcurtime->format($_SESSION['iDBDateFormat']);
 $User1LevelID=sql_result($reresult,$rei,"LevelID");
+if($User1LevelID!==null&&$User1LevelID!=0) {
 $lquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."levels\" WHERE \"id\"=%i LIMIT 1", array($User1LevelID));
 $lresult=sql_query($lquery,$SQLStat);
-$User1Level=sql_result($lresult,0,"Name");
+if ($lresult !== false && sql_num_rows($lresult) > 0) {
+$User1Level=sql_result($lresult,0,"Name"); } else { $User1Level = ""; }
+sql_free_result($lresult); } else {
+$User1Level = ""; }
 $User1RankID=sql_result($reresult,$rei,"RankID");
+if($User1RankID!==null&&$User1RankID!=0) {
 $rquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."ranks\" WHERE \"id\"=%i LIMIT 1", array($User1RankID));
 $rresult=sql_query($rquery,$SQLStat);
-$User1RankID=sql_result($rresult,0,"Name");
-sql_free_result($rresult);
+if ($rresult !== false && sql_num_rows($rresult) > 0) {
+$User1Rank=sql_result($rresult,0,"Name"); } else { $User1Rank = ""; }
+sql_free_result($rresult); } else {
+$User1Rank = ""; }
 $User1GroupID=sql_result($reresult,$rei,"GroupID");
 $User1Hidden=sql_result($reresult,$rei,"HiddenMember");
 $SenderHidden = $User1Hidden;
@@ -642,7 +649,7 @@ if($User1ID<=0||$User1Hidden=="yes") { echo 0; }
 ?><br />
 Posts: <?php echo $User1PostCount; ?><br />
 Karma: <?php echo $User1Karma; ?><br />
-Karma Level: <?php echo $User1RankID; ?><br />
+Karma Level: <?php echo $User1Rank; ?><br />
 Joined: <?php echo $User1Joined; ?><br />
 <?php if($GroupInfo['CanViewIPAddress']=="yes") { ?>
 User IP: <a onclick="window.open(this.href);return false;" href="<?php echo sprintf($IPCheckURL,$User1IP); ?>">

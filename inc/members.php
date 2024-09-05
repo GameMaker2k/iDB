@@ -756,16 +756,14 @@ if($ViewMem['LevelID']!==null&&$ViewMem['LevelID']!=0) {
 $lquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."levels\" WHERE \"id\"=%i LIMIT 1", array($ViewMem['LevelID']));
 $lresult=sql_query($lquery,$SQLStat);
 if ($lresult !== false && sql_num_rows($lresult) > 0) {
-$ViewMem['Level']=sql_result($lresult,0,"Name"); } else {
-$ViewMem['Level'] = ""; }
+$ViewMem['Level']=sql_result($lresult,0,"Name"); } else { $ViewMem['Level'] = ""; }
 sql_free_result($lresult); } else {
  $ViewMem['Level'] = ""; }
 if($ViewMem['RankID']!==null&&$ViewMem['RankID']!=0) {
 $rquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."ranks\" WHERE \"id\"=%i LIMIT 1", array($ViewMem['RankID']));
 $rresult=sql_query($rquery,$SQLStat);
 if ($rresult !== false && sql_num_rows($rresult) > 0) {
-$ViewMem['Rank']=sql_result($rresult,0,"Name"); } else {
-$ViewMem['Rank'] = ""; }
+$ViewMem['Rank']=sql_result($rresult,0,"Name"); } else { $ViewMem['Rank'] = ""; }
 sql_free_result($rresult); } else {
  $ViewMem['Rank'] = ""; }
 $gquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i LIMIT 1", array($ViewMem['GroupID']));
