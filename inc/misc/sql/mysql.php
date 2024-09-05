@@ -86,7 +86,7 @@ $dlink = mysql_select_db($database,$link);
 if ($dlink===false) {
     output_error("Can't use database ".$database.": ".mysql_func_error(),E_USER_ERROR);
 	return false; } }
-$result = mysql_func_query("SET SESSION SQL_MODE='ANSI_QUOTES,NO_AUTO_VALUE_ON_ZERO';",$link);
+$result = mysql_func_query("SET SESSION SQL_MODE='ANSI,ANSI_QUOTES,TRADITIONAL,STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION,NO_AUTO_VALUE_ON_ZERO';",$link);
 if ($result===false) {
     output_error("SQL Error: ".mysql_func_error(),E_USER_ERROR);
 	return false; }

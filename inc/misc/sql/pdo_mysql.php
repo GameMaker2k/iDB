@@ -100,10 +100,10 @@ pdo_mysql_func_num_rows($result) {
         return false;
     }
 }
-// Connect to sqlite database
+// Connect to MySQL database using PDO and set SQL modes
 function pdo_mysql_func_connect_db($server, $username, $password, $database = null, $new_link = false) {
     global $SQLStat;
-    
+
     // Set DSN (Data Source Name) for MySQL connection
     $dsn = "mysql:host=$server";
 
@@ -119,10 +119,13 @@ function pdo_mysql_func_connect_db($server, $username, $password, $database = nu
             PDO::ATTR_PERSISTENT => $new_link            // Use persistent connections if requested
         ]);
 
-        // Set SQL mode after successful connection
-        $result = pdo_mysql_func_query("SET SESSION SQL_MODE='ANSI_QUOTES,NO_AUTO_VALUE_ON_ZERO';", $SQLStat);
+        // Set multiple SQL modes after a successful connection
+        $sqlModes = "ANSI,ANSI_QUOTES,TRADITIONAL,STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION,NO_AUTO_VALUE_ON_ZERO";
+        $result = $SQLStat->exec("SET SESSION SQL_MODE='$sqlModes';");
+
+        // Check if setting SQL mode failed
         if ($result === false) {
-            output_error("SQL Error: " . pdo_mysql_func_error(), E_USER_ERROR);
+            output_error("SQL Error: " . $SQLStat->errorInfo()[2], E_USER_ERROR);
             return false;
         }
 
