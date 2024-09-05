@@ -558,16 +558,16 @@ echo $ThemeSet['LineDividerTopic']; ?><a href="<?php echo url_maker($exfile['top
 	</tr>
  </table><br />
 <?php echo $User1Title; ?><br />
-Group: <?php echo $User1Group; ?><br />
-Level: <?php echo $User1Level; ?><br />
-Member: <?php 
+User Group: <?php echo $User1Group; ?><br />
+<?php if($User1Level!="") { ?>User Level: <?php echo $User1Level; ?><br /><?php } ?>
+Membe ID: <?php 
 if($User1ID>0&&$User1Hidden=="no") { echo $User1ID; }
 if($User1ID<=0||$User1Hidden=="yes") { echo 0; }
 ?><br />
-Posts: <?php echo $User1PostCount; ?><br />
+Post Count: <?php echo $User1PostCount; ?><br />
 Karma: <?php echo $User1Karma; ?><br />
-Karma Level: <?php echo $User1Rank; ?><br />
-Joined: <?php echo $User1Joined; ?><br />
+<?php if($User1Rank!="") { ?>Karma Level: <?php echo $User1Rank; ?><br /><?php } ?>
+User Joined: <?php echo $User1Joined; ?><br />
 <?php if($GroupInfo['CanViewIPAddress']=="yes") { ?>
 User IP: <a onclick="window.open(this.href);return false;" href="<?php echo sprintf($IPCheckURL,$User1IP); ?>">
 <?php echo $User1IP; ?></a><br />

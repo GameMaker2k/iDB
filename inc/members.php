@@ -879,14 +879,14 @@ Title: <?php echo $ViewMem['Title']; ?>
 &#160;User Name: <?php echo $ViewMem['Name']; ?><br />
 &#160;User Title: <?php echo $ViewMem['Title']; ?><br />
 &#160;User Group: <?php echo $ViewMem['Group']; ?><br />
-&#160;User Level: <?php echo $ViewMem['Level']; ?><br />
+<?php if($ViewMem['Level']!="") { ?>&#160;User Level: <?php echo $ViewMem['Level']; ?><br /><?php } ?>
 &#160;User Joined: <?php echo $ViewMem['Joined']; ?><br />
 &#160;Last Active: <?php echo $ViewMem['LastActive']; ?><br />
 &#160;User Time: <?php echo $viewmemcurtime->format("M j Y, ".$_SESSION['iDBTimeFormat']); ?><br />
 &#160;User Website: <a href="<?php echo $ViewMem['Website']; ?>"<?php echo $opennew; ?>>Website</a><br />
 &#160;Post Count: <?php echo $ViewMem['PostCount']; ?><br />
 &#160;Karma: <?php echo $ViewMem['Karma']; ?><br />
-&#160;Karma Level: <?php echo $ViewMem['Rank']; ?><br />
+<?php if($ViewMem['Rank']!="") { ?>&#160;Karma Level: <?php echo $ViewMem['Rank']; ?><br /><?php } ?>
 &#160;Interests: <?php echo $ViewMem['Interests']; ?><br />
 &#160;Topics: <?php if($Settings['enable_search']=="on"&&$GroupInfo['CanSearch']=="yes") { ?>
 <a href="<?php echo url_maker($exfile['search'],$Settings['file_ext'],"act=topics&search=%&type=wildcard&memid=".$ViewMem['ID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search']); ?>">Find Topics</a>
