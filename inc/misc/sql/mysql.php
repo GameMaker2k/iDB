@@ -211,4 +211,13 @@ if(isset($link)) {
    $getnextid = mysql_func_fetch_assoc($getnextidr);
    return $getnextid['Rows'];
    @mysql_free_result($getnextidr); }
+// Fetch Number of Rows using COUNT in a single query
+function mysql_func_count_rows($query, $link = null) {
+    // Execute the query using sql_query
+    $checkresult = mysql_func_query($query, $link);
+    // Fetch the count result
+    $checknum = mysql_func_result($checkresult, 0, "cnt");
+    // Free the result resource
+    @mysql_func_free_result($checkresult); 
+    return $checknum;
 ?>

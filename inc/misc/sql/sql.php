@@ -162,4 +162,8 @@ function sql_get_next_id($tablepre, $table, $link = null, $sqllib = null) {
 function sql_get_num_rows($tablepre, $table, $link = null, $sqllib = null) {
     return call_sql_function('get_num_rows', $sqllib, $tablepre, $table, $link);
 }
+
+function sql_count_rows($query, $link = null, $sqllib = null) {
+    return sql_count_rows('count_rows', $sqllib, $query, $link = null);
+}
 ?>

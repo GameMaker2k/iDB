@@ -206,4 +206,13 @@ if(isset($link)) {
    $getnextid = sqlite3_func_fetch_assoc($getnextidr);
    return $getnextid['Rows'];
    @sqlite3_func_result($getnextidr); }
+// Fetch Number of Rows using COUNT in a single query
+function sqlite3_func_count_rows($query, $link = null) {
+    // Execute the query using sql_query
+    $checkresult = sqlite3_func_query($query, $link);
+    // Fetch the count result
+    $checknum = sqlite3_func_result($checkresult, 0, "cnt");
+    // Free the result resource
+    @sqlite3_func_free_result($checkresult); 
+    return $checknum;
 ?>

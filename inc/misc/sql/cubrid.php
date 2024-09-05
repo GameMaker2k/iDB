@@ -207,4 +207,14 @@ if(isset($link)) {
    $getnextid = cubrid_func_fetch_assoc($getnextidr);
    return $getnextid['Rows'];
    @cubrid_func_result($getnextidr); }
+// Fetch Number of Rows using COUNT in a single query
+function cubrid_func_count_rows($query, $link = null) {
+    // Execute the query using sql_query
+    $checkresult = cubrid_func_query($query, $link);
+    // Fetch the count result
+    $checknum = cubrid_func_result($checkresult, 0, "cnt");
+    // Free the result resource
+    @cubrid_func_free_result($checkresult); 
+    return $checknum;
+
 ?>

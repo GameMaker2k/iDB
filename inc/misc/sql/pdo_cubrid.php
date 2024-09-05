@@ -203,4 +203,13 @@ if(isset($link)) {
    $getnextid = pdo_cubrid_func_fetch_assoc($getnextidr);
    return $getnextid['Rows'];
    @pdo_cubrid_func_result($getnextidr); }
+// Fetch Number of Rows using COUNT in a single query
+function pdo_cubrid_func_count_rows($query, $link = null) {
+    // Execute the query using sql_query
+    $checkresult = pdo_cubrid_func_query($query, $link);
+    // Fetch the count result
+    $checknum = pdo_cubrid_func_result($checkresult, 0, "cnt");
+    // Free the result resource
+    @pdo_cubrid_func_free_result($checkresult); 
+    return $checknum;
 ?>

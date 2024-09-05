@@ -316,4 +316,13 @@ pdo_mysql_func_query($getnextidq,$link); }
 pdo_mysql_func_fetch_assoc($getnextidr);
    return $getnextid['Rows'];
    @pdo_mysql_func_result($getnextidr); }
+// Fetch Number of Rows using COUNT in a single query
+function pdo_mysql_func_count_rows($query, $link = null) {
+    // Execute the query using sql_query
+    $checkresult = pdo_mysql_func_query($query, $link);
+    // Fetch the count result
+    $checknum = pdo_mysql_func_result($checkresult, 0, "cnt");
+    // Free the result resource
+    @pdo_mysql_func_free_result($checkresult); 
+    return $checknum;
 ?>
