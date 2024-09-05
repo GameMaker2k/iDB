@@ -174,7 +174,7 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."levels\" (\n".
 "  \"PromoteKarma\" numeric(15) NOT NULL default '0',\n".
 "  \"DemoteTo\" numeric(15) NOT NULL default '0',\n".
 "  \"DemotePosts\" numeric(15) NOT NULL default '0',\n".
-"  \"DemoteKarma\" numeric(15) NOT NULL default '0',\n".
+"  \"DemoteKarma\" numeric(15) NOT NULL default '0'\n".
 "  UNIQUE (\"Name\")\n".
 ");", null);
 sql_query($query,$SQLStat);

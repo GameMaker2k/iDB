@@ -207,8 +207,8 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."ranks\" (\n".
 "  \"id\" INTEGER PRIMARY KEY NOT NULL,\n".
 "  \"Name\" VARCHAR(150) UNIQUE NOT NULL default '',\n".
 "  \"PromoteTo\" INTEGER NOT NULL default '0',\n".
-"  \"PromotePosts\" INTEGER NOT NULL default '0',\n"
-"  \"PromoteKarma\" INTEGER NOT NULL default '0',\n"..
+"  \"PromotePosts\" INTEGER NOT NULL default '0',\n".
+"  \"PromoteKarma\" INTEGER NOT NULL default '0',\n".
 "  \"DemoteTo\" INTEGER NOT NULL default '0',\n".
 "  \"DemotePosts\" INTEGER NOT NULL default '0',\n".
 "  \"DemoteKarma\" INTEGER NOT NULL default '0'\n".
@@ -219,7 +219,7 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."levels\" (\n".
 "  \"Name\" VARCHAR(150) UNIQUE NOT NULL default '',\n".
 "  \"PromoteTo\" INTEGER NOT NULL default '0',\n".
 "  \"PromotePosts\" INTEGER NOT NULL default '0',\n".
-"  \"PromoteKarma\" INTEGER NOT NULL default '0',\n"..
+"  \"PromoteKarma\" INTEGER NOT NULL default '0',\n".
 "  \"DemoteTo\" INTEGER NOT NULL default '0',\n".
 "  \"DemotePosts\" INTEGER NOT NULL default '0',\n".
 "  \"DemoteKarma\" INTEGER NOT NULL default '0'\n".
