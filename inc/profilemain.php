@@ -588,76 +588,6 @@ if($BirthMonth!=null&&$BirthDay!=null&&$BirthYear!=null) {
 	$User1Birthday = $BirthMonth."/".$BirthDay."/".$BirthYear; }
 $profileact = url_maker($exfile['profile'],$Settings['file_ext'],"act=profile",$Settings['qstr'],$Settings['qsep'],$prexqstr['profile'],$exqstr['profile']);
 $profiletitle = " ".$ThemeSet['TitleDivider']." Profile Editor";
-// http://www.tutorialspoint.com/php/php_function_timezone_identifiers_list.htm
-$timezone_identifiers = DateTimeZone::listIdentifiers();
-//$timezone_identifiers = timezone_identifiers_list();
-$zonelist['africa'] = array();
-$zonelist['america'] = array();
-$zonelist['antarctica'] = array();
-$zonelist['arctic'] = array();
-$zonelist['asia'] = array();
-$zonelist['atlantic'] = array();
-$zonelist['australia'] = array();
-$zonelist['europe'] = array();
-$zonelist['indian'] = array();
-$zonelist['pacific'] = array();
-$zonelist['etcetera'] = array();
-for ($i=0; $i < count($timezone_identifiers); $i++) {
-    $zonelookup = explode("/", $timezone_identifiers[$i]);
-    if(count($zonelookup)==1) { array_push($zonelist['etcetera'], array($timezone_identifiers[$i], $timezone_identifiers[$i])); }
-    if(count($zonelookup)>1) { 
-        if($zonelookup[0]=="Africa") {
-            if(count($zonelookup)==2) {
-                array_push($zonelist['africa'], array($zonelookup[1], $timezone_identifiers[$i])); }
-            if(count($zonelookup)==3) {
-                array_push($zonelist['africa'], array($zonelookup[2].", ".$zonelookup[1], $timezone_identifiers[$i])); } }
-        if($zonelookup[0]=="America") {
-            if(count($zonelookup)==2) {
-                array_push($zonelist['america'], array($zonelookup[1], $timezone_identifiers[$i])); }
-            if(count($zonelookup)==3) {
-                array_push($zonelist['america'], array($zonelookup[2].", ".$zonelookup[1], $timezone_identifiers[$i])); } }
-        if($zonelookup[0]=="Antarctica") {
-            if(count($zonelookup)==2) {
-                array_push($zonelist['antarctica'], array($zonelookup[1], $timezone_identifiers[$i])); }
-            if(count($zonelookup)==3) {
-                array_push($zonelist['antarctica'], array($zonelookup[2].", ".$zonelookup[1], $timezone_identifiers[$i])); } }
-        if($zonelookup[0]=="Arctic") {
-            if(count($zonelookup)==2) {
-                array_push($zonelist['arctic'], array($zonelookup[1], $timezone_identifiers[$i])); }
-            if(count($zonelookup)==3) {
-                array_push($zonelist['arctic'], array($zonelookup[2].", ".$zonelookup[1], $timezone_identifiers[$i])); } }
-        if($zonelookup[0]=="Asia") {
-            if(count($zonelookup)==2) {
-                array_push($zonelist['asia'], array($zonelookup[1], $timezone_identifiers[$i])); }
-            if(count($zonelookup)==3) {
-                array_push($zonelist['asia'], array($zonelookup[2].", ".$zonelookup[1], $timezone_identifiers[$i])); } }
-        if($zonelookup[0]=="Atlantic") {
-            if(count($zonelookup)==2) {
-                array_push($zonelist['atlantic'], array($zonelookup[1], $timezone_identifiers[$i])); }
-            if(count($zonelookup)==3) {
-                array_push($zonelist['atlantic'], array($zonelookup[2].", ".$zonelookup[1], $timezone_identifiers[$i])); } }
-        if($zonelookup[0]=="Australia") {
-            if(count($zonelookup)==2) {
-                array_push($zonelist['australia'], array($zonelookup[1], $timezone_identifiers[$i])); }
-            if(count($zonelookup)==3) {
-                array_push($zonelist['australia'], array($zonelookup[2].", ".$zonelookup[1], $timezone_identifiers[$i])); } }
-        if($zonelookup[0]=="Europe") {
-            if(count($zonelookup)==2) {
-                array_push($zonelist['europe'], array($zonelookup[1], $timezone_identifiers[$i])); }
-            if(count($zonelookup)==3) {
-                array_push($zonelist['europe'], array($zonelookup[2].", ".$zonelookup[1], $timezone_identifiers[$i])); } }
-        if($zonelookup[0]=="Indian") {
-            if(count($zonelookup)==2) {
-                array_push($zonelist['indian'], array($zonelookup[1], $timezone_identifiers[$i])); }
-            if(count($zonelookup)==3) {
-                array_push($zonelist['indian'], array($zonelookup[2].", ".$zonelookup[1], $timezone_identifiers[$i])); } }
-        if($zonelookup[0]=="Pacific") {
-            if(count($zonelookup)==2) {
-                array_push($zonelist['pacific'], array($zonelookup[1], $timezone_identifiers[$i])); }
-            if(count($zonelookup)==3) {
-                array_push($zonelist['pacific'], array($zonelookup[2].", ".$zonelookup[1], $timezone_identifiers[$i])); } }
-    }
-}
 ?>
 <div class="TableMenuBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
@@ -693,107 +623,22 @@ for ($i=0; $i < count($timezone_identifiers); $i++) {
 	<td style="width: 40%;"><label class="TextBoxLabel" for="EventDay">Your Birthday</label></td>
 	<td style="width: 60%;"><input maxlength="10" type="date" class="TextBox" name="EventDay" id="EventDay" value="<?php echo preg_replace("/([0-9]{2})\/([0-9]{2})\/([0-9]{4})/", "$3-$1-$2", $User1Birthday); ?>" /></td>
 </tr><tr style="text-align: left;">
-	<td style="width: 40%;"><label class="TextBoxLabel" for="YourOffSet">Your TimeZone:</label></td>
-	<td style="width: 60%;"><select id="YourOffSet" name="YourOffSet" class="TextBox">
-<optgroup label="Africa">
-<?php
-$optsel="";
-for ($i=0; $i < count($zonelist['africa']); $i++) {
-    if($User1TimeZone==$zonelist['africa'][$i][1]) { $optsel = " selected=\"selected\""; }
-    echo "<option".$optsel." value=\"".$zonelist['africa'][$i][1]."\">".str_replace("_", " ", $zonelist['africa'][$i][0])."</option>\n"; 
-    $optsel=""; }
-?>
-</optgroup>
-<optgroup label="America">
-<?php
-$optsel="";
-for ($i=0; $i < count($zonelist['america']); $i++) {
-    if($User1TimeZone==$zonelist['america'][$i][1]) { $optsel = " selected=\"selected\""; }
-    echo "<option".$optsel." value=\"".$zonelist['america'][$i][1]."\">".str_replace("_", " ", $zonelist['america'][$i][0])."</option>\n"; 
-    $optsel=""; }
-?>
-</optgroup>
-<optgroup label="Antarctica">
-<?php
-$optsel="";
-for ($i=0; $i < count($zonelist['antarctica']); $i++) {
-    if($User1TimeZone==$zonelist['antarctica'][$i][1]) { $optsel = " selected=\"selected\""; }
-    echo "<option".$optsel." value=\"".$zonelist['antarctica'][$i][1]."\">".str_replace("_", " ", $zonelist['antarctica'][$i][0])."</option>\n"; 
-    $optsel=""; }
-?>
-</optgroup>
-<optgroup label="Arctic">
-<?php
-$optsel="";
-for ($i=0; $i < count($zonelist['arctic']); $i++) {
-    if($User1TimeZone==$zonelist['arctic'][$i][1]) { $optsel = " selected=\"selected\""; }
-    echo "<option".$optsel." value=\"".$zonelist['arctic'][$i][1]."\">".str_replace("_", " ", $zonelist['arctic'][$i][0])."</option>\n"; 
-    $optsel=""; }
-?>
-</optgroup>
-<optgroup label="Asia">
-<?php
-for ($i=0; $i < count($zonelist['asia']); $i++) {
-    if($User1TimeZone==$zonelist['asia'][$i][1]) { $optsel = " selected=\"selected\""; }
-    echo "<option".$optsel." value=\"".$zonelist['asia'][$i][1]."\">".str_replace("_", " ", $zonelist['asia'][$i][0])."</option>\n"; 
-    $optsel=""; }
-?>
-</optgroup>
-<optgroup label="Atlantic">
-<?php
-$optsel="";
-for ($i=0; $i < count($zonelist['atlantic']); $i++) {
-    if($User1TimeZone==$zonelist['atlantic'][$i][1]) { $optsel = " selected=\"selected\""; }
-    echo "<option".$optsel." value=\"".$zonelist['atlantic'][$i][1]."\">".str_replace("_", " ", $zonelist['atlantic'][$i][0])."</option>\n"; 
-    $optsel=""; }
-?>
-</optgroup>
-<optgroup label="Australia">
-<?php
-$optsel="";
-for ($i=0; $i < count($zonelist['australia']); $i++) {
-    if($User1TimeZone==$zonelist['australia'][$i][1]) { $optsel = " selected=\"selected\""; }
-    echo "<option".$optsel." value=\"".$zonelist['australia'][$i][1]."\">".str_replace("_", " ", $zonelist['australia'][$i][0])."</option>\n"; 
-    $optsel=""; }
-?>
-</optgroup>
-<optgroup label="Europe">
-<?php
-$optsel="";
-for ($i=0; $i < count($zonelist['europe']); $i++) {
-    if($User1TimeZone==$zonelist['europe'][$i][1]) { $optsel = " selected=\"selected\""; }
-    echo "<option".$optsel." value=\"".$zonelist['europe'][$i][1]."\">".str_replace("_", " ", $zonelist['europe'][$i][0])."</option>\n"; 
-    $optsel=""; }
-?>
-</optgroup>
-<optgroup label="Indian">
-<?php
-$optsel="";
-for ($i=0; $i < count($zonelist['indian']); $i++) {
-    if($User1TimeZone==$zonelist['indian'][$i][1]) { $optsel = " selected=\"selected\""; }
-    echo "<option".$optsel." value=\"".$zonelist['indian'][$i][1]."\">".str_replace("_", " ", $zonelist['indian'][$i][0])."</option>\n"; 
-    $optsel=""; }
-?>
-</optgroup>
-<optgroup label="Pacific">
-<?php
-$optsel="";
-for ($i=0; $i < count($zonelist['pacific']); $i++) {
-    if($User1TimeZone==$zonelist['pacific'][$i][1]) { $optsel = " selected=\"selected\""; }
-    echo "<option".$optsel." value=\"".$zonelist['pacific'][$i][1]."\">".str_replace("_", " ", $zonelist['pacific'][$i][0])."</option>\n"; 
-    $optsel=""; }
-?>
-</optgroup>
-<optgroup label="Etcetera">
-<?php
-$optsel="";
-for ($i=0; $i < count($zonelist['etcetera']); $i++) {
-    if($User1TimeZone==$zonelist['etcetera'][$i][1]) { $optsel = " selected=\"selected\""; }
-    echo "<option".$optsel." value=\"".$zonelist['etcetera'][$i][1]."\">".str_replace("_", " ", $zonelist['etcetera'][$i][0])."</option>\n"; 
-    $optsel=""; }
-?>
-</optgroup>
-</select></td>
+    <td style="width: 40%;"><label class="TextBoxLabel" for="YourOffSet">Your TimeZone:</label></td>
+    <td style="width: 60%;">
+        <select id="YourOffSet" name="YourOffSet" class="TextBox">
+            <?php
+            // List of all region labels
+            $regions = ['africa', 'america', 'antarctica', 'arctic', 'asia', 'atlantic', 'australia', 'europe', 'indian', 'pacific', 'etcetera'];
+            
+            // Generate optgroups and options for each region
+            foreach ($regions as $region) {
+                echo '<optgroup label="' . ucfirst($region) . '">' . "\n";
+                echo generateOptions($region, $zonelist, $User1TimeZone); // Using $User1TimeZone for selected timezone
+                echo '</optgroup>' . "\n";
+            }
+            ?>
+        </select>
+    </td>
 </tr><tr style="text-align: left;">
 	<td style="width: 40%;"><label class="TextBoxLabel" for="iDBTimeFormat">Insert time format string:</label></td>
 	<td style="width: 60%;"><input type="text" class="TextBox" name="iDBTimeFormat" id="iDBTimeFormat" value="<?php echo $User1DateFormat; ?>" /></td>
