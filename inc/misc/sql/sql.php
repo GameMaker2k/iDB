@@ -166,4 +166,8 @@ function sql_get_num_rows($tablepre, $table, $link = null, $sqllib = null) {
 function sql_count_rows($query, $link = null, $sqllib = null) {
     return sql_count_rows('count_rows', $sqllib, $query, $link = null);
 }
+
+function sql_count_rows_alt($query, $link = null, $sqllib = null) {
+    return sql_count_rows_alt('count_rows_alt', $sqllib, $query, $link = null);
+}
 ?>

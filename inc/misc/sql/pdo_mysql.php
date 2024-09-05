@@ -319,10 +319,19 @@ pdo_mysql_func_fetch_assoc($getnextidr);
 // Fetch Number of Rows using COUNT in a single query
 function pdo_mysql_func_count_rows($query, $link = null) {
     // Execute the query using sql_query
-    $checkresult = pdo_mysql_func_query($query, $link);
+    $get_num_result = pdo_mysql_func_query($query, $link);
     // Fetch the count result
-    $checknum = pdo_mysql_func_result($checkresult, 0, "cnt");
+    $ret_num_result = pdo_mysql_func_result($get_num_result, 0);
     // Free the result resource
-    @pdo_mysql_func_free_result($checkresult); 
-    return $checknum;
+    @pdo_mysql_func_free_result($get_num_result); 
+    return $ret_num_result; }
+// Fetch Number of Rows using COUNT in a single query
+function pdo_mysql_func_count_rows_alt($query, $link = null) {
+    // Execute the query using sql_query
+    $get_num_result = pdo_mysql_func_query($query, $link);
+    // Fetch the count result
+    $ret_num_result = pdo_mysql_func_result($get_num_result, 0, 'cnt');
+    // Free the result resource
+    @pdo_mysql_func_free_result($get_num_result); 
+    return $ret_num_result; }
 ?>

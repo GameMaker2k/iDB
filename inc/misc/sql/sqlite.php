@@ -194,10 +194,19 @@ if(isset($link)) {
 // Fetch Number of Rows using COUNT in a single query
 function sqlite_func_count_rows($query, $link = null) {
     // Execute the query using sql_query
-    $checkresult = sqlite_func_query($query, $link);
+    $get_num_result = sqlite_func_query($query, $link);
     // Fetch the count result
-    $checknum = sqlite_func_result($checkresult, 0, "cnt");
+    $ret_num_result = sqlite_func_result($get_num_result, 0);
     // Free the result resource
-    @sqlite_func_free_result($checkresult); 
-    return $checknum;
+    @sqlite_func_free_result($get_num_result); 
+    return $ret_num_result; }
+// Fetch Number of Rows using COUNT in a single query
+function sqlite_func_count_rows_alt($query, $link = null) {
+    // Execute the query using sql_query
+    $get_num_result = sqlite_func_query($query, $link);
+    // Fetch the count result
+    $ret_num_result = sqlite_func_result($get_num_result, 0, 'cnt');
+    // Free the result resource
+    @sqlite_func_free_result($get_num_result); 
+    return $ret_num_result; }
 ?>
