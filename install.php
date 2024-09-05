@@ -61,70 +61,181 @@ if(file_exists('extrasettings.php')) {
 if(file_exists('extendsettings.php')) {
 	require_once('extendsettings.php'); }
 // Custom error handler for non-fatal errors
+// Configuration settings
+$errorDisplay = true;  // Set to true to display errors on the screen
+$errorLogFile = true;  // Set to true to log errors to a file
+$logFilePath = __DIR__ . '/logs/php_error_log.txt';  // Define your log file path
+
+// Custom Error Handler Function
 function customErrorHandler($errno, $errstr, $errfile, $errline) {
+    global $errorDisplay, $errorLogFile, $logFilePath;
+    
+    // List of error types we want to handle
+    $errorTypes = [
+        E_ERROR => 'Fatal Error',
+        E_WARNING => 'Warning',
+        E_PARSE => 'Parse Error',
+        E_NOTICE => 'Notice',
+        E_CORE_ERROR => 'Core Error',
+        E_CORE_WARNING => 'Core Warning',
+        E_COMPILE_ERROR => 'Compile Error',
+        E_COMPILE_WARNING => 'Compile Warning',
+        E_USER_ERROR => 'User Error',
+        E_USER_WARNING => 'User Warning',
+        E_USER_NOTICE => 'User Notice',
+        E_STRICT => 'Strict Notice',
+        E_RECOVERABLE_ERROR => 'Recoverable Error',
+        E_DEPRECATED => 'Deprecated Notice',
+        E_USER_DEPRECATED => 'User Deprecated Notice'
+    ];
+
     // Flush the output buffer if it exists
     while (ob_get_level()) {
         ob_end_flush();
     }
 
-    // Display the error
-    echo "<b>Error:</b> [$errno] $errstr - $errfile:$errline<br>";
+    // Check if the error type is in our list of handled types
+    $errorType = isset($errorTypes[$errno]) ? $errorTypes[$errno] : 'Unknown Error';
+
+    // Prepare the error message
+    $errorMessage = "<b>{$errorType}:</b> [$errno] $errstr - $errfile:$errline<br>";
 
     // Get the backtrace
     $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-    
-    // Display the backtrace information
-    echo "<b>Backtrace:</b><br>";
-    foreach ($backtrace as $trace) {
-        if (isset($trace['file'])) {
-            echo "Called in <b>{$trace['file']}</b> on line <b>{$trace['line']}</b>";
-            if (isset($trace['function'])) {
-                echo " (function <b>{$trace['function']}</b>)";
-            }
-            echo "<br>";
-        }
+    $backtraceMessage = getBacktraceAsString($backtrace);
+
+    // Display the error if enabled
+    if ($errorDisplay) {
+        echo $errorMessage;
+        echo "<b>Backtrace:</b><br>";
+        echo $backtraceMessage;
+    }
+
+    // Log the error to a file if enabled
+    if ($errorLogFile) {
+        logErrorToFile($logFilePath, $errorType, $errno, $errstr, $errfile, $errline, $backtrace);
     }
 
     // Depending on the error, you might want to stop the script
-    die();
+    if ($errno === E_ERROR || $errno === E_PARSE || $errno === E_CORE_ERROR || $errno === E_COMPILE_ERROR) {
+        die();
+    }
+
+    // Return true to prevent the PHP internal error handler from executing
+    return true;
 }
 
-// Set the custom error handler
-set_error_handler("customErrorHandler");
-
+// Custom Shutdown Handler Function
 function shutdownHandler() {
+    global $errorDisplay, $errorLogFile, $logFilePath;
+
     $last_error = error_get_last();
 
     // Check if $last_error is not null before accessing its elements
     if ($last_error !== null) {
         // Check if the error type is E_ERROR or E_PARSE (fatal errors)
-        if ($last_error['type'] === E_ERROR || $last_error['type'] === E_PARSE) {
+        if ($last_error['type'] === E_ERROR || $last_error['type'] === E_PARSE || $last_error['type'] === E_CORE_ERROR || $last_error['type'] === E_COMPILE_ERROR) {
             // Flush the output buffer if it exists
             while (ob_get_level()) {
                 ob_end_flush();
             }
 
-            // Display the error message
-            echo "<b>Fatal Error:</b> {$last_error['message']} - {$last_error['file']}:{$last_error['line']}<br>";
+            // Prepare the error message
+            $errorMessage = "<b>Fatal Error:</b> {$last_error['message']} - {$last_error['file']}:{$last_error['line']}<br>";
 
-            // Display backtrace for fatal errors
+            // Get the backtrace
             $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-            echo "<b>Backtrace:</b><br>";
-            foreach ($backtrace as $trace) {
-                if (isset($trace['file'])) {
-                    echo "Called in <b>{$trace['file']}</b> on line <b>{$trace['line']}</b>";
-                    if (isset($trace['function'])) {
-                        echo " (function <b>{$trace['function']}</b>)";
-                    }
-                    echo "<br>";
-                }
+            $backtraceMessage = getBacktraceAsString($backtrace);
+
+            // Display the error if enabled
+            if ($errorDisplay) {
+                echo $errorMessage;
+                echo "<b>Backtrace:</b><br>";
+                echo $backtraceMessage;
+            }
+
+            // Log the error to a file if enabled
+            if ($errorLogFile) {
+                logErrorToFile($logFilePath, 'Fatal Error', $last_error['type'], $last_error['message'], $last_error['file'], $last_error['line'], $backtrace);
             }
         }
     }
 }
 
+// Custom Exception Handler Function
+function customExceptionHandler($exception) {
+    global $errorDisplay, $errorLogFile, $logFilePath;
+
+    // Flush the output buffer if it exists
+    while (ob_get_level()) {
+        ob_end_flush();
+    }
+
+    // Prepare the uncaught exception message
+    $errorMessage = "<b>Uncaught Exception:</b> " . $exception->getMessage() . " in " . $exception->getFile() . " on line " . $exception->getLine() . "<br>";
+
+    // Get the backtrace from the exception
+    $backtrace = $exception->getTrace();
+    $backtraceMessage = getBacktraceAsString($backtrace);
+
+    // Display the exception if enabled
+    if ($errorDisplay) {
+        echo $errorMessage;
+        echo "<b>Backtrace:</b><br>";
+        echo $backtraceMessage;
+    }
+
+    // Log the exception to a file if enabled
+    if ($errorLogFile) {
+        logErrorToFile($logFilePath, 'Uncaught Exception', 0, $exception->getMessage(), $exception->getFile(), $exception->getLine(), $backtrace);
+    }
+
+    // Stop the script after an uncaught exception
+    die();
+}
+
+// Function to Convert Backtrace Array to String for Display/Logging
+function getBacktraceAsString($backtrace) {
+    $backtraceMessage = "";
+    foreach ($backtrace as $trace) {
+        if (isset($trace['file'])) {
+            $backtraceMessage .= "Called in <b>{$trace['file']}</b> on line <b>{$trace['line']}</b>";
+            if (isset($trace['function'])) {
+                $backtraceMessage .= " (function <b>{$trace['function']}</b>)";
+            }
+            $backtraceMessage .= "<br>";
+        }
+    }
+    return $backtraceMessage;
+}
+
+// Function to Log Errors to a File
+function logErrorToFile($logFile, $errorType, $errno, $errstr, $errfile, $errline, $backtrace) {
+    $logMessage = "[" . date('Y-m-d H:i:s') . "] {$errorType}: [{$errno}] {$errstr} in {$errfile} on line {$errline}\n";
+    
+    // Append backtrace to the log
+    foreach ($backtrace as $trace) {
+        if (isset($trace['file'])) {
+            $logMessage .= "Called in {$trace['file']} on line {$trace['line']}";
+            if (isset($trace['function'])) {
+                $logMessage .= " (function {$trace['function']})";
+            }
+            $logMessage .= "\n";
+        }
+    }
+
+    // Append to the log file
+    file_put_contents($logFile, $logMessage, FILE_APPEND);
+}
+
+// Set the custom error handler
+set_error_handler("customErrorHandler");
+
 // Register the shutdown function to catch fatal errors
 register_shutdown_function('shutdownHandler');
+
+// Set exception handler to catch uncaught exceptions
+set_exception_handler('customExceptionHandler');
 if(!isset($Settings['qstr'])) { $Settings['qstr'] = null; }
 if(!isset($Settings['send_pagesize'])) { $Settings['send_pagesize'] = "off"; }
 $deftz = new DateTimeZone(date_default_timezone_get());
