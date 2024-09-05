@@ -321,6 +321,11 @@ $CanUseBBTags=sql_result($getperidr2,0,"CanUseBBTags");
 $CanModForum=sql_result($getperidr2,0,"CanModForum"); 
 $CanReportPost=sql_result($getperidr2,0,"CanReportPost"); 
 sql_free_result($getperidr2); }
+if($getperidi==0) {
+if($_POST['GroupPerm']=="0") {
+$PermissionID=$_POST['PermissionID']; 
+$PermissionName=$_POST['GroupName']; 
+$query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."permissions\" (\"PermissionID\", \"Name\", \"ForumID\", \"CanViewForum\", \"CanMakePolls\", \"CanMakeTopics\", \"CanMakeReplys\", \"CanMakeReplysCT\", \"HideEditPostInfo\", \"CanEditTopics\", \"CanEditTopicsCT\", \"CanEditReplys\", \"CanEditReplysCT\", \"CanDeleteTopics\", \"CanDeleteTopicsCT\", \"CanDoublePost\", \"CanDoublePostCT\", \"GotoEditPost\", \"CanDeleteReplys\", \"CanDeleteReplysCT\", \"CanCloseTopics\", \"CanPinTopics\", \"CanExecPHP\", \"CanDoHTML\", \"CanUseBBTags\", \"CanModForum\", \"CanReportPost\") VALUES (%i, '%s', 0, 'yes', 'no', 'no', 'no', 'no', 'no, 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no')", array($PermissionID,$PermissionName)); } }
 if($_POST['GroupPerm']=="0") {
 $PermissionID=$_POST['PermissionID']; 
 $PermissionName=$_POST['GroupName']; 
