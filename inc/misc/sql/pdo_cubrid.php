@@ -192,7 +192,7 @@ if(!isset($link)) {
 if(isset($link)) {
 	$getnextidr = pdo_cubrid_func_query($getnextidq,$link); } 
 	return pdo_cubrid_func_result($getnextidr,0);
-	sql_free_result($getnextidr); }
+	pdo_cubrid_func_result($getnextidr); }
 // Get number of rows for table
 function pdo_cubrid_func_get_num_rows($tablepre,$table,$link=null) {
    $getnextidq = pdo_cubrid_func_pre_query("SHOW TABLE STATUS LIKE '".$tablepre.$table."'", array());
@@ -202,5 +202,5 @@ if(isset($link)) {
 	$getnextidr = pdo_cubrid_func_query($getnextidq,$link); } 
    $getnextid = pdo_cubrid_func_fetch_assoc($getnextidr);
    return $getnextid['Rows'];
-   @sql_free_result($getnextidr); }
+   @pdo_cubrid_func_result($getnextidr); }
 ?>

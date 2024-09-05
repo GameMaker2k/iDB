@@ -210,5 +210,5 @@ if(isset($link)) {
 	$getnextidr = mysql_func_query($getnextidq,$link); } 
    $getnextid = mysql_func_fetch_assoc($getnextidr);
    return $getnextid['Rows'];
-   @sql_free_result($getnextidr); }
+   @mysql_free_result($getnextidr); }
 ?>

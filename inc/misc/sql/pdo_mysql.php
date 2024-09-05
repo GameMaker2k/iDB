@@ -315,5 +315,5 @@ pdo_mysql_func_query($getnextidq,$link); }
    $getnextid = 
 pdo_mysql_func_fetch_assoc($getnextidr);
    return $getnextid['Rows'];
-   @sql_free_result($getnextidr); }
+   @pdo_mysql_func_result($getnextidr); }
 ?>

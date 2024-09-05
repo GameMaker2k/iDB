@@ -212,7 +212,7 @@ if(!isset($link)) {
 if(isset($link)) {
 	$getnextidr = pgsql_func_query($getnextidq,$link); } 
 	return pgsql_func_result($getnextidr,0);
-	sql_free_result($getnextidr); }
+	pgsql_func_result($getnextidr); }
 // Get number of rows for table
 function pgsql_func_get_num_rows($tablepre,$table,$link=null) {
    $getnextidq = pgsql_func_pre_query("SHOW TABLE STATUS LIKE '".$tablepre.$table."'", array());
@@ -222,5 +222,5 @@ if(isset($link)) {
 	$getnextidr = pgsql_func_query($getnextidq,$link); } 
    $getnextid = pgsql_func_fetch_assoc($getnextidr);
    return $getnextid['Rows'];
-   @sql_free_result($getnextidr); }
+   @pgsql_func_result($getnextidr); }
 ?>

@@ -205,5 +205,5 @@ if(isset($link)) {
 	$getnextidr = sqlite3_func_query($getnextidq,$link); } 
    $getnextid = sqlite3_func_fetch_assoc($getnextidr);
    return $getnextid['Rows'];
-   @sql_free_result($getnextidr); }
+   @sqlite3_func_result($getnextidr); }
 ?>
