@@ -14,7 +14,7 @@
     $FileInfo: html5.php - Last Update: 8/23/2024 SVN 1023 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
-if ($File3Name=="xhtml10.php"||$File3Name=="/xhtml10.php") {
+if ($File3Name=="html5.php"||$File3Name=="/html5.php") {
 	require('index.php');
 	exit(); }
 $XHTML5 = false;
@@ -76,7 +76,14 @@ if($checklowview===true&&$_GET['act']!="lowview") { $extext = "<a href=\"".url_m
 if($checklowview===true&&$_GET['act']=="lowview") {  $extext = "<a href=\"".url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'])."\">High-Version</a>"; }
 $endpagevar = "<div class=\"copyright\">Powered by ".$iDBURL1.$RName."</a> &#169; ".$GM2kURL." @ ".$csryear." - ".$cryear." <br />\n".$ThemeSet['CopyRight']; 
 header("Content-Language: en");
-header("Vary: Accept-Encoding");
+header("X-Robots-Tag: noindex, noarchive, nofollow, noimageindex, notranslate, nosnippet");
+header("X-Frame-Options: SAMEORIGIN");
+header("Cross-Origin-Resource-Policy: same-origin");
+header("X-XSS-Protection: 1; mode=block");
+header("Referrer-Policy: no-referrer-when-downgrade");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("X-Content-Type-Options: nosniff");
+header("Vary: Accept-Language, Accept-Encoding, User-Agent, Cookie, Referer, X-Requested-With");
 header("Accept-CH: Sec-CH-UA, Sec-CH-UA-Mobile, Sec-CH-UA-Full-Version, Sec-CH-UA-Platform, Sec-CH-UA-Platform-Version, Sec-CH-UA-Arch, Sec-CH-UA-Model");
 // Check if we are on a secure HTTP connection
 if(isset($_SERVER['HTTPS'])) { $prehost = "https://";; }
@@ -121,6 +128,7 @@ if(strpos($_SERVER['HTTP_USER_AGENT'], "msie") &&
 <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
 <?php } } if($XHTML5===true) { ?>
 <meta charset="<?php echo $Settings['charset']; ?>" />
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $Settings['charset']; ?>" />
 <meta name="language" content="english" />
 <?php 

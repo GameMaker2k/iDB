@@ -108,6 +108,7 @@ $usercurtime->setTimestamp($defcurtime->getTimestamp());
 /* Do not change anything below this line unless you know what you are doing */
 if(!isset($Settings['clean_ob'])) { $Settings['clean_ob'] = "off"; }
 function idb_output_handler($buffer) { return $buffer; }
+function idb_suboutput_handler($buffer) { return $buffer; }
 if($Settings['clean_ob']=="on") {
 /* Check for other output handlers/buffers are open
    and close and get the contents in an array */
