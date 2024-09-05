@@ -68,12 +68,30 @@ function customErrorHandler($errno, $errstr, $errfile, $errline) {
     }
 
     // Display the error
-    echo "<b>Error:</b> [$errno] $errstr - $errfile:$errline";
+    echo "<b>Error:</b> [$errno] $errstr - $errfile:$errline<br>";
+
+    // Get the backtrace
+    $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+    
+    // Display the backtrace information
+    echo "<b>Backtrace:</b><br>";
+    foreach ($backtrace as $trace) {
+        if (isset($trace['file'])) {
+            echo "Called in <b>{$trace['file']}</b> on line <b>{$trace['line']}</b>";
+            if (isset($trace['function'])) {
+                echo " (function <b>{$trace['function']}</b>)";
+            }
+            echo "<br>";
+        }
+    }
+
     // Depending on the error, you might want to stop the script
     die();
 }
+
 // Set the custom error handler
 set_error_handler("customErrorHandler");
+
 function shutdownHandler() {
     $last_error = error_get_last();
 
@@ -85,11 +103,26 @@ function shutdownHandler() {
             while (ob_get_level()) {
                 ob_end_flush();
             }
+
             // Display the error message
-            echo "<b>Fatal Error:</b> {$last_error['message']} - {$last_error['file']}:{$last_error['line']}";
+            echo "<b>Fatal Error:</b> {$last_error['message']} - {$last_error['file']}:{$last_error['line']}<br>";
+
+            // Display backtrace for fatal errors
+            $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+            echo "<b>Backtrace:</b><br>";
+            foreach ($backtrace as $trace) {
+                if (isset($trace['file'])) {
+                    echo "Called in <b>{$trace['file']}</b> on line <b>{$trace['line']}</b>";
+                    if (isset($trace['function'])) {
+                        echo " (function <b>{$trace['function']}</b>)";
+                    }
+                    echo "<br>";
+                }
+            }
         }
     }
 }
+
 // Register the shutdown function to catch fatal errors
 register_shutdown_function('shutdownHandler');
 if(!isset($Settings['qstr'])) { $Settings['qstr'] = null; }
