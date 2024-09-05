@@ -138,60 +138,46 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."groups\" (\n".
 "  \"PromoteTo\" numeric(15) NOT NULL default '0',\n".
 "  \"PromotePosts\" numeric(15) NOT NULL default '0',\n".
 "  \"PromoteKarma\" numeric(15) NOT NULL default '0',\n".
+"  \"DemoteTo\" numeric(15) NOT NULL default '0',\n".
+"  \"DemotePosts\" numeric(15) NOT NULL default '0',\n".
+"  \"DemoteKarma\" numeric(15) NOT NULL default '0',\n".
 "  \"HasModCP\" varchar(5) NOT NULL default '',\n".
 "  \"HasAdminCP\" varchar(5) NOT NULL default '',\n".
 "  \"ViewDBInfo\" varchar(5) NOT NULL default '',\n".
 "  UNIQUE (\"Name\")\n".
 ");", null);
 sql_query($query,$SQLStat);
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."groups\" (\"Name\", \"PermissionID\", \"NamePrefix\", \"NameSuffix\", \"CanViewBoard\", \"CanViewOffLine\", \"CanEditProfile\", \"CanAddEvents\", \"CanPM\", \"CanSearch\", \"CanExecPHP\", \"CanDoHTML\", \"CanUseBBTags\", \"CanModForum\", \"CanViewIPAddress\", \"CanViewUserAgent\", \"CanViewAnonymous\", \"FloodControl\", \"SearchFlood\", \"PromoteTo\", \"PromotePosts\", \"PromoteKarma\", \"HasModCP\", \"HasAdminCP\", \"ViewDBInfo\") VALUES\n".
-"('Admin', 1, '', '', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'no', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 30, 30, 0, 0, 0, 'yes', 'yes', 'yes'),\n".
-"('Moderator', 2, '', '', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'no', 'no', 'yes', 'yes', 'yes', 'yes', 'yes', 30, 30, 0, 0, 0, 'yes', 'no', 'no'),\n".
-"('Member', 3, '', '', 'yes', 'no', 'yes', 'yes', 'yes', 'yes', 'no', 'no', 'yes', 'no', 'no', 'no', 'no', 30, 30, 0, 0, 0, 'no', 'no', 'no'),\n".
-"('Guest', 4, '', '', 'yes', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'yes', 'no', 'no', 'no', 'no', 30, 30, 0, 0, 0, 'no', 'no', 'no'),\n".
-"('Banned', 5, '', '', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 30, 30, 0, 0, 0, 'no', 'no', 'no'),\n".
-"('Validate', 6, '', '', 'yes', 'no', 'yes', 'no', 'no', 'yes', 'no', 'no', 'yes', 'no', 'no', 'no', 'no', 30, 30, 0, 0, 0, 'no', 'no', 'no');", null); 
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."groups\" (\"Name\", \"PermissionID\", \"NamePrefix\", \"NameSuffix\", \"CanViewBoard\", \"CanViewOffLine\", \"CanEditProfile\", \"CanAddEvents\", \"CanPM\", \"CanSearch\", \"CanExecPHP\", \"CanDoHTML\", \"CanUseBBTags\", \"CanModForum\", \"CanViewIPAddress\", \"CanViewUserAgent\", \"CanViewAnonymous\", \"FloodControl\", \"SearchFlood\", \"PromoteTo\", \"PromotePosts\", \"PromoteKarma\", \"DemoteTo\", \"DemotePosts\", \"DemoteKarma\", \"HasModCP\", \"HasAdminCP\", \"ViewDBInfo\") VALUES\n".
+"('Admin', 1, '', '', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'no', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 30, 30, 0, 0, 0, 0, 0, 0, 'yes', 'yes', 'yes'),\n".
+"('Moderator', 2, '', '', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'no', 'no', 'yes', 'yes', 'yes', 'yes', 'yes', 30, 30, 0, 0, 0, 0, 0, 0, 'yes', 'no', 'no'),\n".
+"('Member', 3, '', '', 'yes', 'no', 'yes', 'yes', 'yes', 'yes', 'no', 'no', 'yes', 'no', 'no', 'no', 'no', 30, 30, 0, 0, 0, 0, 0, 0, 'no', 'no', 'no'),\n".
+"('Guest', 4, '', '', 'yes', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'yes', 'no', 'no', 'no', 'no', 30, 30, 0, 0, 0, 0, 0, 0, 'no', 'no', 'no'),\n".
+"('Banned', 5, '', '', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 30, 30, 0, 0, 0, 0, 0, 0, 'no', 'no', 'no'),\n".
+"('Validate', 6, '', '', 'yes', 'no', 'yes', 'no', 'no', 'yes', 'no', 'no', 'yes', 'no', 'no', 'no', 'no', 30, 30, 0, 0, 0, 0, 0, 0, 'no', 'no', 'no');", null); 
 sql_query($query,$SQLStat);
 $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."ranks\" (\n".
 "  \"id\" SERIAL PRIMARY KEY NOT NULL,\n".
 "  \"Name\" varchar(150) NOT NULL default '',\n".
 "  \"PromoteTo\" numeric(15) NOT NULL default '0',\n".
+"  \"PromotePosts\" numeric(15) NOT NULL default '0',\n".
 "  \"PromoteKarma\" numeric(15) NOT NULL default '0',\n".
-"  \"PromotePosts\" numeric(15) NOT NULL default '0'\n".
+"  \"DemoteTo\" numeric(15) NOT NULL default '0',\n".
+"  \"DemotePosts\" numeric(15) NOT NULL default '0',\n".
+"  \"DemoteKarma\" numeric(15) NOT NULL default '0'\n".
 ");", null);
 sql_query($query,$SQLStat);
-if($_POST['startblank']=="no") {
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."ranks\" (\"id\", \"Name\", \"PromoteTo\", \"PromoteKarma\", \"PromotePosts\") VALUES\n".
-"(-1, 'Guest', 0, 0, 0),\n".
-"(1, 'Provisional', 2, 3, 0),\n".
-"(2, 'New User', 3, 10, 0),\n".
-"(3, 'Rookie User', 4, 25, 0),\n".
-"(4, 'Novice User', 5, 50, 0),\n".
-"(5, 'Regular User', 6, 100, 0),\n".
-"(6, 'Veteran', 7, 250, 0),\n".
-"(7, 'Legend', 8, 500, 0),\n".
-"(8, 'Elite', 9, 1000, 0),\n".
-"(9, 'Icon', 10, 1500, 0),\n".
-"(10, 'Idol', 11, 2000, 0),\n".
-"(11, 'Ancient', 12, 3000, 0),\n".
-"(12, 'Sage', 13, 5000, 0),\n".
-"(13, '%s', 14, 10000, 0),\n".
-"(14, '%s', 0, 0, 0);", array('? Block', '???'));
-sql_query($query,$SQLStat); }
 $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."levels\" (\n".
 "  \"id\" SERIAL PRIMARY KEY NOT NULL,\n".
 "  \"Name\" varchar(150) NOT NULL default '',\n".
 "  \"PromoteTo\" numeric(15) NOT NULL default '0',\n".
 "  \"PromotePosts\" numeric(15) NOT NULL default '0',\n".
 "  \"PromoteKarma\" numeric(15) NOT NULL default '0',\n".
+"  \"DemoteTo\" numeric(15) NOT NULL default '0',\n".
+"  \"DemotePosts\" numeric(15) NOT NULL default '0',\n".
+"  \"DemoteKarma\" numeric(15) NOT NULL default '0',\n".
 "  UNIQUE (\"Name\")\n".
 ");", null);
 sql_query($query,$SQLStat);
-if($_POST['startblank']=="no") {
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."levels\" (\"id\", \"Name\", \"PromoteTo\", \"PromotePosts\", \"PromoteKarma\") VALUES\n".
-"(-1, 'Guest', 0, 0, 0),\n".
-"(1, 'Member', 0, 0, 0);", null);
-sql_query($query,$SQLStat); }
 $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."members\" (\n".
 "  \"id\" SERIAL PRIMARY KEY NOT NULL,\n".
 "  \"Name\" varchar(150) NOT NULL default '',\n".

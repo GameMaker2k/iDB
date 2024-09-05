@@ -180,6 +180,29 @@ sql_free_result($fr); ?>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="PromoteKarma">Amount of Karma needed:</label></td>
 	<td style="width: 50%;"><input type="number" name="PromoteKarma" class="TextBox" id="PromoteKarma" size="20" /></td>
 </tr><tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="DemoteTo">Demote To Group:</label></td>
+	<td style="width: 50%;"><select size="1" class="TextBox" name="DemoteTo" id="DemoteTo">
+	<option selected="selected" value="0">none</option>
+<?php 
+$fq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" ORDER BY \"id\" ASC", null);
+$fr=sql_query($fq,$SQLStat);
+$ai=sql_num_rows($fr);
+$fi=0;
+while ($fi < $ai) {
+$ProGroupID=sql_result($fr,$fi,"id");
+$ProGroupName=sql_result($fr,$fi,"Name");
+?>
+	<option value="<?php echo $ProGroupID; ?>"><?php echo $ProGroupName; ?></option>
+<?php ++$fi; }
+sql_free_result($fr); ?>
+	</select></td>
+</tr><tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="DemotePosts">Amount of Posts needed:</label></td>
+	<td style="width: 50%;"><input type="number" name="DemotePosts" class="TextBox" id="DemotePosts" size="20" /></td>
+</tr><tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="DemoteKarma">Amount of Karma needed:</label></td>
+	<td style="width: 50%;"><input type="number" name="DemoteKarma" class="TextBox" id="DemoteKarma" size="20" /></td>
+</tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="HasModCP">Can view Mod CP:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="HasModCP" id="HasModCP">
 	<option selected="selected" value="off">no</option>
@@ -257,6 +280,16 @@ if (!isset($_POST['PromoteKarma'])) {
 if ($_POST['PromoteKarma']==null||
 	!is_numeric($_POST['PromoteKarma'])) {
 	$_POST['NPromoteKarma'] = 0; }
+if (!isset($_POST['DemotePosts'])) {
+	$_POST['DemotePosts'] = 0; }
+if ($_POST['DemotePosts']==null||
+	!is_numeric($_POST['DemotePosts'])) {
+	$_POST['DemotePosts'] = 0; }
+if (!isset($_POST['DemoteKarma'])) {
+	$_POST['DemoteKarma'] = 0; }
+if ($_POST['DemoteKarma']==null||
+	!is_numeric($_POST['DemoteKarma'])) {
+	$_POST['NDemoteKarma'] = 0; }
 if ($_POST['GroupName']==null||
 	$_POST['GroupName']=="ShowMe") { $Error="Yes";
 $errorstr = $errorstr."You need to enter a forum name.<br />\n"; } 
@@ -269,8 +302,8 @@ $errorstr = $errorstr."Your Group Name is too big.<br />\n"; }
 if ($Error!="Yes") {
 redirect("refresh",$rbasedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=groups",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],FALSE),"4");
 $admincptitle = " ".$ThemeSet['TitleDivider']." Updating Settings";
-$query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."groups\" (\"Name\", \"PermissionID\", \"NamePrefix\", \"NameSuffix\", \"CanViewBoard\", \"CanViewOffLine\", \"CanEditProfile\", \"CanAddEvents\", \"CanPM\", \"CanSearch\", \"CanExecPHP\", \"CanDoHTML\", \"CanUseBBTags\", \"CanModForum\", \"CanViewIPAddress\", \"CanViewUserAgent\", \"CanViewAnonymous\", \"FloodControl\", \"SearchFlood\", \"PromoteTo\", \"PromotePosts\", \"PromoteKarma\", \"HasModCP\", \"HasAdminCP\", \"ViewDBInfo\") VALUES\n".
-"('%s', %i, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', 'no', '%s', '%s', '%s', '%s', '%s', %i, %i, %i, %i, %i, '%s', '%s', '%s')", array($_POST['GroupName'],$_POST['PermissionID'],$_POST['NamePrefix'],$_POST['NameSuffix'],$_POST['CanViewBoard'],$_POST['CanViewOffLine'],$_POST['CanEditProfile'],$_POST['CanAddEvents'],$_POST['CanPM'],$_POST['CanSearch'],$_POST['CanDoHTML'],$_POST['CanUseBBTags'],$_POST['HasModCP'],$_POST['CanViewIPAddress'],$_POST['CanViewUserAgent'],$_POST['CanViewAnonymous'],$_POST['FloodControl'],$_POST['SearchFlood'],$_POST['PromoteTo'],$_POST['PromotePosts'],$_POST['PromoteKarma'],$_POST['HasModCP'],$_POST['HasAdminCP'],$_POST['ViewDBInfo']));
+$query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."groups\" (\"Name\", \"PermissionID\", \"NamePrefix\", \"NameSuffix\", \"CanViewBoard\", \"CanViewOffLine\", \"CanEditProfile\", \"CanAddEvents\", \"CanPM\", \"CanSearch\", \"CanExecPHP\", \"CanDoHTML\", \"CanUseBBTags\", \"CanModForum\", \"CanViewIPAddress\", \"CanViewUserAgent\", \"CanViewAnonymous\", \"FloodControl\", \"SearchFlood\", \"PromoteTo\", \"PromotePosts\", \"PromoteKarma\", \"DemoteTo\", \"DemotePosts\", \"DemoteKarma\", \"HasModCP\", \"HasAdminCP\", \"ViewDBInfo\") VALUES\n".
+"('%s', %i, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', 'no', '%s', '%s', '%s', '%s', '%s', %i, %i, %i, %i, %i, %i, %i, %i, '%s', '%s', '%s')", array($_POST['GroupName'],$_POST['PermissionID'],$_POST['NamePrefix'],$_POST['NameSuffix'],$_POST['CanViewBoard'],$_POST['CanViewOffLine'],$_POST['CanEditProfile'],$_POST['CanAddEvents'],$_POST['CanPM'],$_POST['CanSearch'],$_POST['CanDoHTML'],$_POST['CanUseBBTags'],$_POST['HasModCP'],$_POST['CanViewIPAddress'],$_POST['CanViewUserAgent'],$_POST['CanViewAnonymous'],$_POST['FloodControl'],$_POST['SearchFlood'],$_POST['PromoteTo'],$_POST['PromotePosts'],$_POST['PromoteKarma'],$_POST['DemoteTo'],$_POST['DemotePosts'],$_POST['DemoteKarma'],$_POST['HasModCP'],$_POST['HasAdminCP'],$_POST['ViewDBInfo']));
 sql_query($query,$SQLStat);
 if(!is_numeric($_POST['GroupPerm'])) { $_POST['GroupPerm'] = "0"; }
 $getperidq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" ORDER BY \"id\" ASC", null);
@@ -543,6 +576,9 @@ $SearchFlood = sql_result($preresult,0,"SearchFlood");
 $PromoteTo = sql_result($preresult,0,"PromoteTo");
 $PromotePosts = sql_result($preresult,0,"PromotePosts");
 $PromoteKarma = sql_result($preresult,0,"PromoteKarma");
+$DemoteTo = sql_result($preresult,0,"DemoteTo");
+$DemotePosts = sql_result($preresult,0,"DemotePosts");
+$DemoteKarma = sql_result($preresult,0,"DemoteKarma");
 $HasModCP = sql_result($preresult,0,"HasModCP");
 $HasAdminCP = sql_result($preresult,0,"HasAdminCP");
 $ViewDBInfo = sql_result($preresult,0,"ViewDBInfo");
@@ -667,6 +703,30 @@ sql_free_result($fr); ?>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="PromoteKarma">Amount of Karma needed:</label></td>
 	<td style="width: 50%;"><input type="number" name="PromoteKarma" class="TextBox" id="PromoteKarma" size="20" value="<?php echo $PromoteKarma; ?>" /></td>
 </tr><tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="DemoteTo">Demote To Group:</label></td>
+	<td style="width: 50%;"><select size="1" class="TextBox" name="DemoteTo" id="DemoteTo">
+	<option selected="selected" value="<?php echo $DemoteTo; ?>">Old Value (<?php echo $DemoteTo; ?>)</option>
+	<option value="0">none</option>
+<?php 
+$fq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" ORDER BY \"id\" ASC", null);
+$fr=sql_query($fq,$SQLStat);
+$ai=sql_num_rows($fr);
+$fi=0;
+while ($fi < $ai) {
+$ProGroupID=sql_result($fr,$fi,"id");
+$ProGroupName=sql_result($fr,$fi,"Name");
+?>
+	<option value="<?php echo $ProGroupID; ?>"><?php echo $ProGroupName; ?></option>
+<?php ++$fi; }
+sql_free_result($fr); ?>
+	</select></td>
+</tr><tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="DemotePosts">Amount of Posts needed:</label></td>
+	<td style="width: 50%;"><input type="number" name="DemotePosts" class="TextBox" id="DemotePosts" size="20" value="<?php echo $DemotePosts; ?>" /></td>
+</tr><tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="DemoteKarma">Amount of Karma needed:</label></td>
+	<td style="width: 50%;"><input type="number" name="DemoteKarma" class="TextBox" id="DemoteKarma" size="20" value="<?php echo $DemoteKarma; ?>" /></td>
+</tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="HasModCP">Can view Mod CP:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="HasModCP" id="HasModCP">
 	<option selected="selected" value="<?php echo $HasModCP; ?>">Old Value (<?php echo $HasModCP; ?>)</option>
@@ -763,6 +823,16 @@ if (!isset($_POST['PromoteKarma'])) {
 if ($_POST['PromoteKarma']==null||
 	!is_numeric($_POST['PromoteKarma'])) {
 	$_POST['NPromoteKarma'] = 0; }
+if (!isset($_POST['DemotePosts'])) {
+	$_POST['DemotePosts'] = 0; }
+if ($_POST['DemotePosts']==null||
+	!is_numeric($_POST['DemotePosts'])) {
+	$_POST['DemotePosts'] = 0; }
+if (!isset($_POST['DemoteKarma'])) {
+	$_POST['DemoteKarma'] = 0; }
+if ($_POST['DemoteKarma']==null||
+	!is_numeric($_POST['DemoteKarma'])) {
+	$_POST['NDemoteKarma'] = 0; }
 if ($_POST['GroupName']==null||
 	$_POST['GroupName']=="ShowMe") { $Error="Yes";
 $errorstr = $errorstr."You need to enter a forum name.<br />\n"; } 
@@ -779,7 +849,7 @@ sql_query($query,$SQLStat);
 $query = sql_pre_query("UPDATE \"".$Settings['sqltable']."catpermissions\" SET \"Name\"='%s' WHERE \"Name\"='%s'", array($_POST['GroupName'],$OldGroupName));
 sql_query($query,$SQLStat); }
 if($_POST['id']!=1) {
-$query = sql_pre_query("UPDATE \"".$Settings['sqltable']."groups\" SET \"Name\"='%s',\"NamePrefix\"='%s',\"NameSuffix\"='%s',\"CanViewBoard\"='%s',\"CanViewOffLine\"='%s',\"CanEditProfile\"='%s',\"CanAddEvents\"='%s',\"CanPM\"='%s',\"CanSearch\"='%s',\"CanDoHTML\"='%s',\"CanUseBBTags\"='%s',CanViewIPAddress='%s',CanViewUserAgent='%s',CanViewAnonymous='%s',\"FloodControl\"=%i,\"SearchFlood\"=%i,\"PromoteTo\"=%i,\"PromotePosts\"=%i,\"PromoteKarma\"=%i,\"HasModCP\"='%s',\"HasAdminCP\"='%s',\"ViewDBInfo\"='%s' WHERE \"id\"=%i", array($_POST['GroupName'],$_POST['NamePrefix'],$_POST['NameSuffix'],$_POST['CanViewBoard'],$_POST['CanViewOffLine'],$_POST['CanEditProfile'],$_POST['CanAddEvents'],$_POST['CanPM'],$_POST['CanSearch'],$_POST['CanDoHTML'],$_POST['CanUseBBTags'],$_POST['CanViewIPAddress'],$_POST['CanViewUserAgent'],$_POST['CanViewAnonymous'],$_POST['FloodControl'],$_POST['SearchFlood'],$_POST['PromoteTo'],$_POST['PromotePosts'],$_POST['PromoteKarma'],$_POST['HasModCP'],$_POST['HasAdminCP'],$_POST['ViewDBInfo'],$_POST['id'])); }
+$query = sql_pre_query("UPDATE \"".$Settings['sqltable']."groups\" SET \"Name\"='%s',\"NamePrefix\"='%s',\"NameSuffix\"='%s',\"CanViewBoard\"='%s',\"CanViewOffLine\"='%s',\"CanEditProfile\"='%s',\"CanAddEvents\"='%s',\"CanPM\"='%s',\"CanSearch\"='%s',\"CanDoHTML\"='%s',\"CanUseBBTags\"='%s',CanViewIPAddress='%s',CanViewUserAgent='%s',CanViewAnonymous='%s',\"FloodControl\"=%i,\"SearchFlood\"=%i,\"PromoteTo\"=%i,\"PromotePosts\"=%i,\"PromoteKarma\"=%i,\"DemoteTo\"=%i,\"DemotePosts\"=%i,\"DemoteKarma\"=%i,\"HasModCP\"='%s',\"HasAdminCP\"='%s',\"ViewDBInfo\"='%s' WHERE \"id\"=%i", array($_POST['GroupName'],$_POST['NamePrefix'],$_POST['NameSuffix'],$_POST['CanViewBoard'],$_POST['CanViewOffLine'],$_POST['CanEditProfile'],$_POST['CanAddEvents'],$_POST['CanPM'],$_POST['CanSearch'],$_POST['CanDoHTML'],$_POST['CanUseBBTags'],$_POST['CanViewIPAddress'],$_POST['CanViewUserAgent'],$_POST['CanViewAnonymous'],$_POST['FloodControl'],$_POST['SearchFlood'],$_POST['PromoteTo'],$_POST['PromotePosts'],$_POST['PromoteKarma'],$_POST['DemoteTo'],$_POST['DemotePosts'],$_POST['DemoteKarma'],$_POST['HasModCP'],$_POST['HasAdminCP'],$_POST['ViewDBInfo'],$_POST['id'])); }
 if($_POST['id']==1) {
 $query = sql_pre_query("UPDATE \"".$Settings['sqltable']."groups\" SET \"Name\"='%s',\"NamePrefix\"='%s',\"NameSuffix\"='%s',\"CanDoHTML\"='%s',\"CanUseBBTags\"='%s',\"FloodControl\"=%i,\"SearchFlood\"=%i WHERE \"id\"=%i", array($_POST['GroupName'],$_POST['NamePrefix'],$_POST['NameSuffix'],$_POST['CanDoHTML'],$_POST['CanUseBBTags'],$_POST['FloodControl'],$_POST['SearchFlood'],$_POST['id'])); }
 sql_query($query,$SQLStat); } } }  

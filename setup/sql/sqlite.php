@@ -177,83 +177,54 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."groups\" (\n".
 "  \"PromoteTo\" INTEGER NOT NULL default '0',\n".
 "  \"PromotePosts\" INTEGER NOT NULL default '0',\n".
 "  \"PromoteKarma\" INTEGER NOT NULL default '0',\n".
+"  \"DemoteTo\" INTEGER NOT NULL default '0',\n".
+"  \"DemotePosts\" INTEGER NOT NULL default '0',\n".
+"  \"DemoteKarma\" INTEGER NOT NULL default '0',\n".
 "  \"HasModCP\" VARCHAR(5) NOT NULL default '',\n".
 "  \"HasAdminCP\" VARCHAR(5) NOT NULL default '',\n".
 "  \"ViewDBInfo\" VARCHAR(5) NOT NULL default ''\n".
 ");", null);
 sql_query($query,$SQLStat);
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."groups\" (\"Name\", \"PermissionID\", \"NamePrefix\", \"NameSuffix\", \"CanViewBoard\", \"CanViewOffLine\", \"CanEditProfile\", \"CanAddEvents\", \"CanPM\", \"CanSearch\", \"CanExecPHP\", \"CanDoHTML\", \"CanUseBBTags\", \"CanModForum\", \"CanViewIPAddress\", \"CanViewUserAgent\", \"CanViewAnonymous\", \"FloodControl\", \"SearchFlood\", \"PromoteTo\", \"PromotePosts\", \"PromoteKarma\", \"HasModCP\", \"HasAdminCP\", \"ViewDBInfo\") VALUES\n".
-"('Admin', 1, '', '', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'no', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 30, 30, 0, 0, 0, 'yes', 'yes', 'yes');", null);
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."groups\" (\"Name\", \"PermissionID\", \"NamePrefix\", \"NameSuffix\", \"CanViewBoard\", \"CanViewOffLine\", \"CanEditProfile\", \"CanAddEvents\", \"CanPM\", \"CanSearch\", \"CanExecPHP\", \"CanDoHTML\", \"CanUseBBTags\", \"CanModForum\", \"CanViewIPAddress\", \"CanViewUserAgent\", \"CanViewAnonymous\", \"FloodControl\", \"SearchFlood\", \"PromoteTo\", \"PromotePosts\", \"PromoteKarma\", \"DemoteTo\", \"DemotePosts\", \"DemoteKarma\", \"HasModCP\", \"HasAdminCP\", \"ViewDBInfo\") VALUES\n".
+"('Admin', 1, '', '', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'no', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 30, 30, 0, 0, 0, 0, 0, 0, 'yes', 'yes', 'yes');", null);
 sql_query($query,$SQLStat);
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."groups\" (\"Name\", \"PermissionID\", \"NamePrefix\", \"NameSuffix\", \"CanViewBoard\", \"CanViewOffLine\", \"CanEditProfile\", \"CanAddEvents\", \"CanPM\", \"CanSearch\", \"CanExecPHP\", \"CanDoHTML\", \"CanUseBBTags\", \"CanModForum\", \"CanViewIPAddress\", \"CanViewUserAgent\", \"CanViewAnonymous\", \"FloodControl\", \"SearchFlood\", \"PromoteTo\", \"PromotePosts\", \"PromoteKarma\", \"HasModCP\", \"HasAdminCP\", \"ViewDBInfo\") VALUES\n".
-"('Moderator', 2, '', '', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'no', 'no', 'yes', 'yes', 'yes', 'yes', 'yes', 30, 30, 0, 0, 0, 'yes', 'no', 'no');", null);
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."groups\" (\"Name\", \"PermissionID\", \"NamePrefix\", \"NameSuffix\", \"CanViewBoard\", \"CanViewOffLine\", \"CanEditProfile\", \"CanAddEvents\", \"CanPM\", \"CanSearch\", \"CanExecPHP\", \"CanDoHTML\", \"CanUseBBTags\", \"CanModForum\", \"CanViewIPAddress\", \"CanViewUserAgent\", \"CanViewAnonymous\", \"FloodControl\", \"SearchFlood\", \"PromoteTo\", \"PromotePosts\", \"PromoteKarma\", \"DemoteTo\", \"DemotePosts\", \"DemoteKarma\", \"HasModCP\", \"HasAdminCP\", \"ViewDBInfo\") VALUES\n".
+"('Moderator', 2, '', '', 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'no', 'no', 'yes', 'yes', 'yes', 'yes', 'yes', 30, 30, 0, 0, 0, 0, 0, 0, 'yes', 'no', 'no');", null);
 sql_query($query,$SQLStat);
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."groups\" (\"Name\", \"PermissionID\", \"NamePrefix\", \"NameSuffix\", \"CanViewBoard\", \"CanViewOffLine\", \"CanEditProfile\", \"CanAddEvents\", \"CanPM\", \"CanSearch\", \"CanExecPHP\", \"CanDoHTML\", \"CanUseBBTags\", \"CanModForum\", \"CanViewIPAddress\", \"CanViewUserAgent\", \"CanViewAnonymous\", \"FloodControl\", \"SearchFlood\", \"PromoteTo\", \"PromotePosts\", \"PromoteKarma\", \"HasModCP\", \"HasAdminCP\", \"ViewDBInfo\") VALUES\n".
-"('Member', 3, '', '', 'yes', 'no', 'yes', 'yes', 'yes', 'yes', 'no', 'no', 'yes', 'no', 'no', 'no', 'no', 30, 30, 0, 0, 0, 'no', 'no', 'no');", null);
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."groups\" (\"Name\", \"PermissionID\", \"NamePrefix\", \"NameSuffix\", \"CanViewBoard\", \"CanViewOffLine\", \"CanEditProfile\", \"CanAddEvents\", \"CanPM\", \"CanSearch\", \"CanExecPHP\", \"CanDoHTML\", \"CanUseBBTags\", \"CanModForum\", \"CanViewIPAddress\", \"CanViewUserAgent\", \"CanViewAnonymous\", \"FloodControl\", \"SearchFlood\", \"PromoteTo\", \"PromotePosts\", \"PromoteKarma\", \"DemoteTo\", \"DemotePosts\", \"DemoteKarma\", \"HasModCP\", \"HasAdminCP\", \"ViewDBInfo\") VALUES\n".
+"('Member', 3, '', '', 'yes', 'no', 'yes', 'yes', 'yes', 'yes', 'no', 'no', 'yes', 'no', 'no', 'no', 'no', 30, 30, 0, 0, 0, 0, 0, 0, 'no', 'no', 'no');", null);
 sql_query($query,$SQLStat);
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."groups\" (\"Name\", \"PermissionID\", \"NamePrefix\", \"NameSuffix\", \"CanViewBoard\", \"CanViewOffLine\", \"CanEditProfile\", \"CanAddEvents\", \"CanPM\", \"CanSearch\", \"CanExecPHP\", \"CanDoHTML\", \"CanUseBBTags\", \"CanModForum\", \"CanViewIPAddress\", \"CanViewUserAgent\", \"CanViewAnonymous\", \"FloodControl\", \"SearchFlood\", \"PromoteTo\", \"PromotePosts\", \"PromoteKarma\", \"HasModCP\", \"HasAdminCP\", \"ViewDBInfo\") VALUES\n".
-"('Guest', 4, '', '', 'yes', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'yes', 'no', 'no', 'no', 'no', 30, 30, 0, 0, 0, 'no', 'no', 'no');", null);
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."groups\" (\"Name\", \"PermissionID\", \"NamePrefix\", \"NameSuffix\", \"CanViewBoard\", \"CanViewOffLine\", \"CanEditProfile\", \"CanAddEvents\", \"CanPM\", \"CanSearch\", \"CanExecPHP\", \"CanDoHTML\", \"CanUseBBTags\", \"CanModForum\", \"CanViewIPAddress\", \"CanViewUserAgent\", \"CanViewAnonymous\", \"FloodControl\", \"SearchFlood\", \"PromoteTo\", \"PromotePosts\", \"PromoteKarma\", \"DemoteTo\", \"DemotePosts\", \"DemoteKarma\", \"HasModCP\", \"HasAdminCP\", \"ViewDBInfo\") VALUES\n".
+"('Guest', 4, '', '', 'yes', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'yes', 'no', 'no', 'no', 'no', 30, 30, 0, 0, 0, 0, 0, 0, 'no', 'no', 'no');", null);
 sql_query($query,$SQLStat);
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."groups\" (\"Name\", \"PermissionID\", \"NamePrefix\", \"NameSuffix\", \"CanViewBoard\", \"CanViewOffLine\", \"CanEditProfile\", \"CanAddEvents\", \"CanPM\", \"CanSearch\", \"CanExecPHP\", \"CanDoHTML\", \"CanUseBBTags\", \"CanModForum\", \"CanViewIPAddress\", \"CanViewUserAgent\", \"CanViewAnonymous\", \"FloodControl\", \"SearchFlood\", \"PromoteTo\", \"PromotePosts\", \"PromoteKarma\", \"HasModCP\", \"HasAdminCP\", \"ViewDBInfo\") VALUES\n".
-"('Banned', 5, '', '', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 30, 30, 0, 0, 0, 'no', 'no', 'no');", null);
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."groups\" (\"Name\", \"PermissionID\", \"NamePrefix\", \"NameSuffix\", \"CanViewBoard\", \"CanViewOffLine\", \"CanEditProfile\", \"CanAddEvents\", \"CanPM\", \"CanSearch\", \"CanExecPHP\", \"CanDoHTML\", \"CanUseBBTags\", \"CanModForum\", \"CanViewIPAddress\", \"CanViewUserAgent\", \"CanViewAnonymous\", \"FloodControl\", \"SearchFlood\", \"PromoteTo\", \"PromotePosts\", \"PromoteKarma\", \"DemoteTo\", \"DemotePosts\", \"DemoteKarma\", \"HasModCP\", \"HasAdminCP\", \"ViewDBInfo\") VALUES\n".
+"('Banned', 5, '', '', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 30, 30, 0, 0, 0, 0, 0, 0, 'no', 'no', 'no');", null);
 sql_query($query,$SQLStat);
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."groups\" (\"Name\", \"PermissionID\", \"NamePrefix\", \"NameSuffix\", \"CanViewBoard\", \"CanViewOffLine\", \"CanEditProfile\", \"CanAddEvents\", \"CanPM\", \"CanSearch\", \"CanExecPHP\", \"CanDoHTML\", \"CanUseBBTags\", \"CanModForum\", \"CanViewIPAddress\", \"CanViewUserAgent\", \"CanViewAnonymous\", \"FloodControl\", \"SearchFlood\", \"PromoteTo\", \"PromotePosts\", \"PromoteKarma\", \"HasModCP\", \"HasAdminCP\", \"ViewDBInfo\") VALUES\n".
-"('Validate', 6, '', '', 'yes', 'no', 'yes', 'no', 'no', 'yes', 'no', 'no', 'no', 'yes', 'no', 'no', 'no', 30, 30, 0, 0, 0, 'no', 'no', 'no');", null); 
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."groups\" (\"Name\", \"PermissionID\", \"NamePrefix\", \"NameSuffix\", \"CanViewBoard\", \"CanViewOffLine\", \"CanEditProfile\", \"CanAddEvents\", \"CanPM\", \"CanSearch\", \"CanExecPHP\", \"CanDoHTML\", \"CanUseBBTags\", \"CanModForum\", \"CanViewIPAddress\", \"CanViewUserAgent\", \"CanViewAnonymous\", \"FloodControl\", \"SearchFlood\", \"PromoteTo\", \"PromotePosts\", \"PromoteKarma\", \"DemoteTo\", \"DemotePosts\", \"DemoteKarma\", \"HasModCP\", \"HasAdminCP\", \"ViewDBInfo\") VALUES\n".
+"('Validate', 6, '', '', 'yes', 'no', 'yes', 'no', 'no', 'yes', 'no', 'no', 'no', 'yes', 'no', 'no', 'no', 30, 30, 0, 0, 0, 0, 0, 0, 'no', 'no', 'no');", null); 
 sql_query($query,$SQLStat);
 $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."ranks\" (\n".
 "  \"id\" INTEGER PRIMARY KEY NOT NULL,\n".
 "  \"Name\" VARCHAR(150) UNIQUE NOT NULL default '',\n".
 "  \"PromoteTo\" INTEGER NOT NULL default '0',\n".
-"  \"PromoteKarma\" INTEGER NOT NULL default '0',\n".
-"  \"PromotePosts\" INTEGER NOT NULL default '0'\n".
+"  \"PromotePosts\" INTEGER NOT NULL default '0',\n"
+"  \"PromoteKarma\" INTEGER NOT NULL default '0',\n"..
+"  \"DemoteTo\" INTEGER NOT NULL default '0',\n".
+"  \"DemotePosts\" INTEGER NOT NULL default '0',\n".
+"  \"DemoteKarma\" INTEGER NOT NULL default '0'\n".
 ");", null);
 sql_query($query,$SQLStat);
-if($_POST['startblank']=="no") {
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."ranks\" (\"id\", \"Name\", \"PromoteTo\", \"PromoteKarma\", \"PromotePosts\") VALUES (-1, 'Guest', 0, 0, 0);", null);
-sql_query($query,$SQLStat);
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."ranks\" (\"id\", \"Name\", \"PromoteTo\", \"PromoteKarma\", \"PromotePosts\") VALUES (1, 'Provisional', 2, 3, 0);", null);
-sql_query($query,$SQLStat);
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."ranks\" (\"id\", \"Name\", \"PromoteTo\", \"PromoteKarma\", \"PromotePosts\") VALUES (2, 'New User', 3, 10, 0);", null);
-sql_query($query,$SQLStat);
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."ranks\" (\"id\", \"Name\", \"PromoteTo\", \"PromoteKarma\", \"PromotePosts\") VALUES (3, 'Rookie User', 4, 25, 0);", null);
-sql_query($query,$SQLStat);
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."ranks\" (\"id\", \"Name\", \"PromoteTo\", \"PromoteKarma\", \"PromotePosts\") VALUES (4, 'Novice User', 5, 50, 0);", null);
-sql_query($query,$SQLStat);
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."ranks\" (\"id\", \"Name\", \"PromoteTo\", \"PromoteKarma\", \"PromotePosts\") VALUES (5, 'Regular User', 6, 100, 0);", null);
-sql_query($query,$SQLStat);																																	
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."ranks\" (\"id\", \"Name\", \"PromoteTo\", \"PromoteKarma\", \"PromotePosts\") VALUES (6, 'Veteran', 7, 250, 0);", null);
-sql_query($query,$SQLStat);
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."ranks\" (\"id\", \"Name\", \"PromoteTo\", \"PromoteKarma\", \"PromotePosts\") VALUES (7, 'Legend', 8, 500, 0);", null);
-sql_query($query,$SQLStat);
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."ranks\" (\"id\", \"Name\", \"PromoteTo\", \"PromoteKarma\", \"PromotePosts\") VALUES (8, 'Elite', 9, 1000, 0);", null);
-sql_query($query,$SQLStat);
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."ranks\" (\"id\", \"Name\", \"PromoteTo\", \"PromoteKarma\", \"PromotePosts\") VALUES (9, 'Icon', 10, 1500, 0);", null);
-sql_query($query,$SQLStat);
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."ranks\" (\"id\", \"Name\", \"PromoteTo\", \"PromoteKarma\", \"PromotePosts\") VALUES (10, 'Idol', 11, 2000, 0);", null);
-sql_query($query,$SQLStat);
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."ranks\" (\"id\", \"Name\", \"PromoteTo\", \"PromoteKarma\", \"PromotePosts\") VALUES (11, 'Ancient', 12, 3000, 0);", null);
-sql_query($query,$SQLStat);
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."ranks\" (\"id\", \"Name\", \"PromoteTo\", \"PromoteKarma\", \"PromotePosts\") VALUES (12, 'Sage', 13, 5000, 0);", null);
-sql_query($query,$SQLStat);
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."ranks\" (\"id\", \"Name\", \"PromoteTo\", \"PromoteKarma\", \"PromotePosts\") VALUES (13, '%s', 14, 10000, 0);", array('? Block'));
-sql_query($query,$SQLStat);
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."ranks\" (\"id\", \"Name\", \"PromoteTo\", \"PromoteKarma\", \"PromotePosts\") VALUES (14, '%s', 0, 0, 0);", array('???'));
-sql_query($query,$SQLStat); }
 $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."levels\" (\n".
 "  \"id\" INTEGER PRIMARY KEY NOT NULL,\n".
 "  \"Name\" VARCHAR(150) UNIQUE NOT NULL default '',\n".
 "  \"PromoteTo\" INTEGER NOT NULL default '0',\n".
 "  \"PromotePosts\" INTEGER NOT NULL default '0',\n".
-"  \"PromoteKarma\" INTEGER NOT NULL default '0'\n".
+"  \"PromoteKarma\" INTEGER NOT NULL default '0',\n"..
+"  \"DemoteTo\" INTEGER NOT NULL default '0',\n".
+"  \"DemotePosts\" INTEGER NOT NULL default '0',\n".
+"  \"DemoteKarma\" INTEGER NOT NULL default '0'\n".
 ");", null);
 sql_query($query,$SQLStat);
-if($_POST['startblank']=="no") {
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."levels\" (\"id\", \"Name\", \"PromoteTo\", \"PromotePosts\", \"PromoteKarma\") VALUES\n".
-"(-1, 'Guest', 0, 0, 0);", null);
-sql_query($query,$SQLStat);
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."levels\" (\"id\", \"Name\", \"PromoteTo\", \"PromotePosts\", \"PromoteKarma\") VALUES\n".
-"(1, 'Member', 0, 0, 0);", null);
-sql_query($query,$SQLStat); }
 $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."members\" (\n".
 "  \"id\" INTEGER PRIMARY KEY NOT NULL,\n".
 "  \"Name\" VARCHAR(150) UNIQUE NOT NULL default '',\n".
