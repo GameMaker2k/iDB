@@ -1374,6 +1374,9 @@ $_SESSION['UserFormID'] = $UFID;
 	<?php } if(isset($_SESSION['GuestName'])) { ?>
 	<td style="width: 70%;"><input maxlength="24" type="text" class="TextBox" name="Name" size="20" id="Name" value="<?php echo $_SESSION['GuestName']; ?>" /></td>
 	<?php } ?>
+</tr><tr style="text-align: left;">
+	<td style="width: 30%;"><label class="TextBoxLabel" for="Handle">Insert a User Handle</label></td>
+	<td style="width: 70%;"><input maxlength="24" type="text" class="TextBox" name="Handle" pattern="[a-zA-Z0-9_]{3,20}" size="20" id="Handle" /></td>
 </tr><tr>
 	<td style="width: 30%;"><label class="TextBoxLabel" for="Password">Insert a Password:</label></td>
 	<td style="width: 70%;"><input maxlength="30" type="password" class="TextBox" name="Password" size="20" id="Password" /></td>
@@ -1515,8 +1518,23 @@ require($SettDir['inc']."captcha.php"); }
 <td class="TableColumn3">
 <table style="width: 100%; height: 25%; text-align: center;">
 <?php 
-if (pre_strlen($_POST['Password'])>"60") { $Error="Yes";  
-?>
+$Handle = stripcslashes(htmlspecialchars($_POST['Handle'], ENT_QUOTES, $Settings['charset']));
+//$Handle = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $Handle);
+$Handle = remove_spaces($Handle);
+// Check if the username matches the pattern
+if (!preg_match('/^[a-zA-Z0-9_]{3,20}$/', $Handle)) { $Error="Yes"; ?>
+<tr>
+	<td><span class="TableMessage">
+	<br />Your handel is invalid.<br />
+	</span>&#160;</td>
+</tr>
+<?php if (pre_strlen($Handle)>"20") { $Error="Yes"; ?>
+<tr>
+	<td><span class="TableMessage">
+	<br />Your handel is too big.<br />
+	</span>&#160;</td>
+</tr>
+<?php } if (pre_strlen($_POST['Password'])>"60") { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Your password is too big.<br />
@@ -1748,8 +1766,8 @@ $Website = remove_spaces($Website);
 $_POST['Interests'] = remove_spaces($_POST['Interests']);
 $_POST['Title'] = remove_spaces($_POST['Title']);
 $_POST['Email'] = remove_spaces($_POST['Email']);
-$query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."members\" (\"Name\", \"UserPassword\", \"HashType\", \"Email\", \"GroupID\", \"LevelID\", \"RankID\", \"Validated\", \"HiddenMember\", \"WarnLevel\", \"Interests\", \"Title\", \"Joined\", \"LastActive\", \"LastLogin\", \"LastPostTime\", \"BanTime\", \"BirthDay\", \"BirthMonth\", \"BirthYear\", \"Signature\", \"Notes\", \"Bio\", \"Avatar\", \"AvatarSize\", \"Website\", \"Location\", \"Gender\", \"PostCount\", \"Karma\", \"KarmaUpdate\", \"RepliesPerPage\", \"TopicsPerPage\", \"MessagesPerPage\", \"TimeZone\", \"DateFormat\", \"TimeFormat\", \"UseTheme\", \"IgnoreSignitures\", \"IgnoreAdvatars\", \"IgnoreUsers\", \"IP\", \"Salt\") VALUES\n". 
-"('%s', '%s', '%s', '%s', '%s', 0, 0, '%s', '%s', %i, '%s', '%s', %i, %i, %i, '0', '0', '0', '0', '0', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %i, 0, 0, 10, 10, 10, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')", array($Name,$NewPassword,$iDBHash,$_POST['Email'],$yourgroup,$ValidateStats,$HideMe,"0",$_POST['Interests'],$_POST['Title'],$_POST['Joined'],$_POST['LastActive'],$_POST['LastActive'],$NewSignature,'Your Notes','',$Avatar,"100x100",$Website,'',$_POST['YourGender'],$_POST['PostCount'],$_POST['YourOffSet'],$Settings['idb_date_format'],$Settings['idb_time_format'],$Settings['DefaultTheme'],$_POST['UserIP'],'','','',$HashSalt));
+$query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."members\" (\"Name\", \"Handle\", \"UserPassword\", \"HashType\", \"Email\", \"GroupID\", \"LevelID\", \"RankID\", \"Validated\", \"HiddenMember\", \"WarnLevel\", \"Interests\", \"Title\", \"Joined\", \"LastActive\", \"LastLogin\", \"LastPostTime\", \"BanTime\", \"BirthDay\", \"BirthMonth\", \"BirthYear\", \"Signature\", \"Notes\", \"Bio\", \"Avatar\", \"AvatarSize\", \"Website\", \"Location\", \"Gender\", \"PostCount\", \"Karma\", \"KarmaUpdate\", \"RepliesPerPage\", \"TopicsPerPage\", \"MessagesPerPage\", \"TimeZone\", \"DateFormat\", \"TimeFormat\", \"UseTheme\", \"IgnoreSignitures\", \"IgnoreAdvatars\", \"IgnoreUsers\", \"IP\", \"Salt\") VALUES\n". 
+"('%s', '%s', '%s', '%s', '%s', '%s', 0, 0, '%s', '%s', %i, '%s', '%s', %i, %i, %i, '0', '0', '0', '0', '0', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %i, 0, 0, 10, 10, 10, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')", array($Name,$Handle,$NewPassword,$iDBHash,$_POST['Email'],$yourgroup,$ValidateStats,$HideMe,"0",$_POST['Interests'],$_POST['Title'],$_POST['Joined'],$_POST['LastActive'],$_POST['LastActive'],$NewSignature,'Your Notes','',$Avatar,"100x100",$Website,'',$_POST['YourGender'],$_POST['PostCount'],$_POST['YourOffSet'],$Settings['idb_date_format'],$Settings['idb_time_format'],$Settings['DefaultTheme'],$_POST['UserIP'],'','','',$HashSalt));
 sql_query($query,$SQLStat);
 $yourid = sql_get_next_id($Settings['sqltable'],"members",$SQLStat);
 $idquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s' AND \"UserPassword\"='%s' LIMIT 1", array($Name,$NewPassword));

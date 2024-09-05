@@ -93,6 +93,9 @@ fclose($fp);
 	<td style="width: 50%;"><label class="TextBoxLabel" for="AdminUser">Insert Admin User Name:</label></td>
 	<td style="width: 50%;"><input type="text" name="AdminUser" class="TextBox" id="AdminUser" size="20" /></td>
 </tr><tr>
+	<td style="width: 50%;"><label class="TextBoxLabel" for="AdminHandle">Insert Admin User Handel:</label></td>
+	<td style="width: 50%;"><input type="text" name="AdminHandle" pattern="[a-zA-Z0-9_]{3,20}" class="TextBox" id="AdminHandle" size="20" /></td>
+</tr><tr>
 	<td style="width: 30%;"><label class="TextBoxLabel" for="AdminEmail">Insert Admin Email:</label></td>
 	<td style="width: 70%;"><input type="email" class="TextBox" name="AdminEmail" size="20" id="AdminEmail" /></td>
 </tr><tr>

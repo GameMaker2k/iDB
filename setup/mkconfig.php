@@ -133,7 +133,9 @@ if (pre_strlen($_POST['AdminUser'])<"3") { $Error="Yes";
 echo "<br />Your user name is too small."; }
 if (pre_strlen($_POST['AdminUser'])<"3") { $Error="Yes";
 echo "<br />Your user name is too small."; }
-if (pre_strlen($_POST['AdminEmail'])<"3") { $Error="Yes";
+if (!preg_match('/^[a-zA-Z0-9_]{3,20}$/', $_POST['AdminUser'])) { $Error="Yes";
+echo "<br />Your handel is invalid."; }
+if (pre_strlen($_POST['AdminHandle'])<"3") { $Error="Yes";
 echo "<br />Your email name is too small."; }
 if (!filter_var($_POST['AdminEmail'], FILTER_VALIDATE_EMAIL)) { $Error="Yes";
 echo "<br />Your email is not a valid email address."; }
@@ -148,6 +150,8 @@ echo "<br />Your website url is not a valid web url."; }
 if (pre_strlen($_POST['AdminPasswords'])>"60") { $Error="Yes";
 echo "<br />Your password is too big."; }
 if (pre_strlen($_POST['AdminUser'])>"30") { $Error="Yes";
+echo "<br />Your user name is too big."; }
+if (pre_strlen($_POST['AdminHandle'])>"30") { $Error="Yes";
 echo "<br />Your user name is too big."; }
 if ($_POST['AdminPasswords']!=$_POST['ReaPassword']) { $Error="Yes";
 echo "<br />Your passwords did not match."; }

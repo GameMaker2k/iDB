@@ -181,6 +181,7 @@ sql_query($query,$SQLStat);
 $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."members\" (\n".
 "  \"id\" SERIAL PRIMARY KEY NOT NULL,\n".
 "  \"Name\" varchar(150) NOT NULL default '',\n".
+"  \"Handle\" varchar(150) NOT NULL default '',\n".
 "  \"UserPassword\" varchar(256) NOT NULL default '',\n".
 "  \"HashType\" varchar(50) NOT NULL default '',\n".
 "  \"Email\" varchar(256) NOT NULL default '',\n".
@@ -224,12 +225,13 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."members\" (\n".
 "  \"IP\" varchar(64) NOT NULL default '',\n".
 "  \"Salt\" varchar(50) NOT NULL default '',\n".
 "  UNIQUE (\"Name\"),\n".
+"  UNIQUE (\"Handle\"),\n".
 "  UNIQUE (\"Email\")\n".
 ");", null);
 sql_query($query,$SQLStat);
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."members\" (\"id\", \"Name\", \"UserPassword\", \"HashType\", \"Email\", \"GroupID\", \"LevelID\", \"RankID\", \"Validated\", \"HiddenMember\", \"WarnLevel\", \"Interests\", \"Title\", \"Joined\", \"LastActive\", \"LastLogin\", \"LastPostTime\", \"BanTime\", \"BirthDay\", \"BirthMonth\", \"BirthYear\", \"Signature\", \"Notes\", \"Bio\", \"Avatar\", \"AvatarSize\", \"Website\", \"Location\", \"Gender\", \"PostCount\", \"Karma\", \"KarmaUpdate\", \"RepliesPerPage\", \"TopicsPerPage\", \"MessagesPerPage\", \"TimeZone\", \"DateFormat\", \"TimeFormat\", \"UseTheme\", \"IgnoreSignitures\", \"IgnoreAdvatars\", \"IgnoreUsers\", \"IP\", \"Salt\") VALUES\n".
-"(-1, 'Guest', '%s', 'GuestPassword', '%s', 4, -1, -1, 'no', 'yes', 0, 'Guest Account', 'Guest', %i, %i, %i, '0', '0', '0', '0', '0', '', 'Your Notes', '', 'http://', '', '100x100', '%s', 'Unknown', 0, 0, 0, 10, 10, 10, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s'),\n".
-"(1, '%s', '%s', '%s', '%s', 1, 0, 0, 'yes', 'no', 0, '%s', 'Admin', %i, %i, %i, '0', '0', '0', '0', '0', '%s', 'Your Notes', '', '%s', '', '100x100', '%s', 'Unknown', 0, 0, 0, 10, 10, 10, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');", array($GuestPassword,$GEmail,$YourDate,$YourDate,$YourDate,$YourWebsite,$_POST['YourOffSet'],$_POST['iDBDateFormat'],$_POST['iDBTimeFormat'],$_POST['DefaultTheme'],'','','',$GuestLocalIP,$GSalt,$_POST['AdminUser'],$NewPassword,$iDBHashType,$_POST['AdminEmail'],"",$YourDate,$YourDate,$YourDate,"","http://",$YourWebsite,$_POST['YourOffSet'],$_POST['iDBDateFormat'],$_POST['iDBTimeFormat'],$_POST['DefaultTheme'],'','','',$UserIP,$YourSalt));
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."members\" (\"id\", \"Name\""  \"Handle\" varchar(150) NOT NULL default '',\n"., \"UserPassword\", \"HashType\", \"Email\", \"GroupID\", \"LevelID\", \"RankID\", \"Validated\", \"HiddenMember\", \"WarnLevel\", \"Interests\", \"Title\", \"Joined\", \"LastActive\", \"LastLogin\", \"LastPostTime\", \"BanTime\", \"BirthDay\", \"BirthMonth\", \"BirthYear\", \"Signature\", \"Notes\", \"Bio\", \"Avatar\", \"AvatarSize\", \"Website\", \"Location\", \"Gender\", \"PostCount\", \"Karma\", \"KarmaUpdate\", \"RepliesPerPage\", \"TopicsPerPage\", \"MessagesPerPage\", \"TimeZone\", \"DateFormat\", \"TimeFormat\", \"UseTheme\", \"IgnoreSignitures\", \"IgnoreAdvatars\", \"IgnoreUsers\", \"IP\", \"Salt\") VALUES\n".
+"(-1, 'Guest', 'guest', '%s', 'GuestPassword', '%s', 4, -1, -1, 'no', 'yes', 0, 'Guest Account', 'Guest', %i, %i, %i, '0', '0', '0', '0', '0', '', 'Your Notes', '', 'http://', '', '100x100', '%s', 'Unknown', 0, 0, 0, 10, 10, 10, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s'),\n".
+"(1, '%s', '%s', '%s', '%s', '%s', 1, 0, 0, 'yes', 'no', 0, '%s', 'Admin', %i, %i, %i, '0', '0', '0', '0', '0', '%s', 'Your Notes', '', '%s', '', '100x100', '%s', 'Unknown', 0, 0, 0, 10, 10, 10, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');", array($GuestPassword,$GEmail,$YourDate,$YourDate,$YourDate,$YourWebsite,$_POST['YourOffSet'],$_POST['iDBDateFormat'],$_POST['iDBTimeFormat'],$_POST['DefaultTheme'],'','','',$GuestLocalIP,$GSalt,$_POST['AdminUser'],$_POST['AdminHandle'],$NewPassword,$iDBHashType,$_POST['AdminEmail'],"",$YourDate,$YourDate,$YourDate,"","http://",$YourWebsite,$_POST['YourOffSet'],$_POST['iDBDateFormat'],$_POST['iDBTimeFormat'],$_POST['DefaultTheme'],'','','',$UserIP,$YourSalt));
 sql_query($query,$SQLStat);
 $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."mempermissions\" (\n".
 "  \"id\" SERIAL PRIMARY KEY NOT NULL,\n".
