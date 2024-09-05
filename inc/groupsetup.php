@@ -166,7 +166,14 @@ if(!is_numeric($LevelInfo['PromotePosts'])) {
 	$LevelInfo['PromotePosts'] = 0; $LevelInfo['PromoteTo'] = 0; }
 $LevelInfo['PromoteKarma']=sql_result($levresult,0,"PromoteKarma");
 if(!is_numeric($LevelInfo['PromoteKarma'])) { 
-	$LevelInfo['PromoteKarma'] = 0; $LevelInfo['PromoteTo'] = 0; } }
+	$LevelInfo['PromoteKarma'] = 0; $LevelInfo['PromoteTo'] = 0; }
+$LevelInfo['DemoteTo']=sql_result($levresult,0,"DemoteTo");
+$LevelInfo['DemotePosts']=sql_result($levresult,0,"DemotePosts");
+if(!is_numeric($LevelInfo['DemotePosts'])) { 
+	$LevelInfo['DemotePosts'] = 0; $LevelInfo['DemoteTo'] = 0; }
+$LevelInfo['DemoteKarma']=sql_result($levresult,0,"DemoteKarma");
+if(!is_numeric($LevelInfo['DemoteKarma'])) { 
+	$LevelInfo['DemoteKarma'] = 0; $LevelInfo['DemoteTo'] = 0; } }
 if($_SESSION['UserID']==0||$_SESSION['UserID']==null) {
  $rannum = 0; }
 if($_SESSION['UserID']!=0&&$_SESSION['UserID']!=null) {
@@ -187,7 +194,15 @@ if(!is_numeric($RankInfo['PromotePosts'])) {
 	$RankInfo['PromotePosts'] = 0; }
 $RankInfo['PromoteKarma']=sql_result($ranresult,0,"PromoteKarma");
 if(!is_numeric($RankInfo['PromoteKarma'])) { 
-	$RankInfo['PromoteKarma'] = 0; } }
+	$RankInfo['PromoteKarma'] = 0; }
+$RankInfo['Name']=sql_result($ranresult,0,"Name");
+$RankInfo['DemoteTo']=sql_result($ranresult,0,"DemoteTo");
+$RankInfo['DemotePosts']=sql_result($ranresult,0,"DemotePosts");
+if(!is_numeric($RankInfo['DemotePosts'])) { 
+	$RankInfo['DemotePosts'] = 0; }
+$RankInfo['DemoteKarma']=sql_result($ranresult,0,"DemoteKarma");
+if(!is_numeric($RankInfo['DemoteKarma'])) { 
+	$RankInfo['DemoteKarma'] = 0; } }
 // Member Group Setup
 if(!isset($_SESSION['UserGroup'])) { $_SESSION['UserGroup'] = null; }
 if($_SESSION['UserGroup']==null) { 
@@ -295,6 +310,13 @@ if(!is_numeric($GroupInfo['PromotePosts'])) {
 $GroupInfo['PromoteKarma']=sql_result($gruresult,0,"PromoteKarma");
 if(!is_numeric($GroupInfo['PromoteKarma'])) { 
 	$GroupInfo['PromoteKarma'] = 0; $GroupInfo['PromoteTo'] = 0; }
+$GroupInfo['DemoteTo']=sql_result($gruresult,0,"DemoteTo");
+$GroupInfo['DemotePosts']=sql_result($gruresult,0,"DemotePosts");
+if(!is_numeric($GroupInfo['DemotePosts'])) { 
+	$GroupInfo['DemotePosts'] = 0; $GroupInfo['DemoteTo'] = 0; }
+$GroupInfo['DemoteKarma']=sql_result($gruresult,0,"DemoteKarma");
+if(!is_numeric($GroupInfo['DemoteKarma'])) { 
+	$GroupInfo['DemoteKarma'] = 0; $GroupInfo['DemoteTo'] = 0; }
 if(!isset($Settings['KarmaBoostDays'])) {
 	$Settings['KarmaBoostDays'] = null; }
 $Settings['OldKarmaBoostDays'] = $Settings['KarmaBoostDays'];
@@ -348,6 +370,13 @@ if($RankInfo['PromoteTo']!=0&&$MyPostCountChk>=$RankInfo['PromotePosts']&&$MyKar
 	sql_free_result($sql_level_check);
 	if($level_check > 0) {
 	$queryupgrade = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"RankID\"=%i WHERE \"id\"=%i", array($RankInfo['PromoteTo'],$_SESSION['UserID']));
+	sql_query($queryupgrade,$SQLStat); } }
+elseif($RankInfo['DemoteTo']!=0&&$MyPostCountChk<=$RankInfo['DemotePosts']&&$MyKarmaCount<=$RankInfo['DemoteKarma']) {
+	$sql_level_check = sql_query(sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."ranks\" WHERE \"id\"=%i AND \"id\">0 LIMIT 1", array($RankInfo['DemoteTo'])),$SQLStat);
+	$level_check = sql_num_rows($sql_level_check);
+	sql_free_result($sql_level_check);
+	if($level_check > 0) {
+	$queryupgrade = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"RankID\"=%i WHERE \"id\"=%i", array($RankInfo['DemoteTo'],$_SESSION['UserID']));
 	sql_query($queryupgrade,$SQLStat); } } }
 if(isset($LevelInfo)&&is_array($LevelInfo)) {
 if($LevelInfo['PromoteTo']!=0&&$MyPostCountChk>=$LevelInfo['PromotePosts']&&$MyKarmaCount>=$LevelInfo['PromoteKarma']) {
@@ -356,6 +385,13 @@ if($LevelInfo['PromoteTo']!=0&&$MyPostCountChk>=$LevelInfo['PromotePosts']&&$MyK
 	sql_free_result($sql_level_check);
 	if($level_check > 0) {
 	$queryupgrade = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"LevelID\"=%i WHERE \"id\"=%i", array($LevelInfo['PromoteTo'],$_SESSION['UserID']));
+	sql_query($queryupgrade,$SQLStat); } }
+elseif($LevelInfo['DemoteTo']!=0&&$MyPostCountChk<=$LevelInfo['DemotePosts']&&$MyKarmaCount<=$LevelInfo['DemoteKarma']) {
+	$sql_level_check = sql_query(sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."levels\" WHERE \"id\"=%i AND \"id\">0 LIMIT 1", array($LevelInfo['DemoteTo'])),$SQLStat);
+	$level_check = sql_num_rows($sql_level_check);
+	sql_free_result($sql_level_check);
+	if($level_check > 0) {
+	$queryupgrade = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"LevelID\"=%i WHERE \"id\"=%i", array($LevelInfo['DemoteTo'],$_SESSION['UserID']));
 	sql_query($queryupgrade,$SQLStat); } } }
 if($GroupInfo['PromoteTo']!=0&&$MyPostCountChk>=$GroupInfo['PromotePosts']&&$MyKarmaCount>=$GroupInfo['PromoteKarma']) {
 	$sql_group_check = sql_query(sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i AND \"id\">0 LIMIT 1", array($GroupInfo['PromoteTo'])),$SQLStat);
@@ -363,6 +399,13 @@ if($GroupInfo['PromoteTo']!=0&&$MyPostCountChk>=$GroupInfo['PromotePosts']&&$MyK
 	sql_free_result($sql_group_check);
 	if($group_check > 0) {
 	$queryupgrade = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"GroupID\"=%i WHERE \"id\"=%i", array($GroupInfo['PromoteTo'],$_SESSION['UserID']));
+	sql_query($queryupgrade,$SQLStat); } }
+if($GroupInfo['DemoteTo']!=0&&$MyPostCountChk<=$GroupInfo['DemotePosts']&&$MyKarmaCount<=$GroupInfo['DemoteKarma']) {
+	$sql_group_check = sql_query(sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i AND \"id\">0 LIMIT 1", array($GroupInfo['DemoteTo'])),$SQLStat);
+	$group_check = sql_num_rows($sql_group_check);
+	sql_free_result($sql_group_check);
+	if($group_check > 0) {
+	$queryupgrade = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"GroupID\"=%i WHERE \"id\"=%i", array($GroupInfo['DemoteTo'],$_SESSION['UserID']));
 	sql_query($queryupgrade,$SQLStat); } } }
 $GroupInfo['HasModCP']=sql_result($mempreresult,0,"HasModCP");
 if($GroupInfo['HasModCP']!="yes"&&$GroupInfo['HasModCP']!="no"&&$GroupInfo['HasModCP']!="group") {
