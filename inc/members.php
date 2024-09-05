@@ -719,7 +719,9 @@ $ViewMem['AvatarSize']=sql_result($result,$i,"AvatarSize");
 $ViewMem['Email']=sql_result($result,$i,"Email");
 $ViewMem['GroupID']=sql_result($result,$i,"GroupID");
 $ViewMem['LevelID']=sql_result($result,$i,"LevelID");
+if(!is_numeric) { $ViewMem['LevelID'] = null; }
 $ViewMem['RankID']=sql_result($result,$i,"RankID");
+if(!is_numeric) { $ViewMem['RankID'] = null; }
 $ViewMem['HiddenMember']=sql_result($result,$i,"HiddenMember");
 $ViewMem['WarnLevel']=sql_result($result,$i,"WarnLevel");
 $ViewMem['Interests']=sql_result($result,$i,"Interests");
@@ -750,14 +752,18 @@ $ViewMem['TimeZone']=sql_result($result,$i,"TimeZone");
 $viewmemcurtime = new DateTime();
 $viewmemcurtime->setTimezone(new DateTimeZone($ViewMem['TimeZone']));
 $ViewMem['IP']=sql_result($result,$i,"IP");
+if($ViewMem['LevelID']!==null) {
 $lquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."levels\" WHERE \"id\"=%i LIMIT 1", array($ViewMem['LevelID']));
 $lresult=sql_query($lquery,$SQLStat);
 $ViewMem['Level']=sql_result($lresult,0,"Name");
-sql_free_result($lresult);
+sql_free_result($lresult); } else {
+ $ViewMem['Level'] = "None"; }
+if($ViewMem['RankID']!==null) {
 $rquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."ranks\" WHERE \"id\"=%i LIMIT 1", array($ViewMem['RankID']));
 $rresult=sql_query($rquery,$SQLStat);
 $ViewMem['Rank']=sql_result($rresult,0,"Name");
-sql_free_result($rresult);
+sql_free_result($rresult); } else {
+ $ViewMem['Rank'] = "None"; }
 $gquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i LIMIT 1", array($ViewMem['GroupID']));
 $gresult=sql_query($gquery,$SQLStat);
 $ViewMem['Group']=sql_result($gresult,0,"Name");
