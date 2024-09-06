@@ -47,178 +47,110 @@ if(isset($_SERVER['SERVER_PROTOCOL'])&&strstr($_SERVER['SERVER_PROTOCOL'],"/1.0"
 	return "HTTP/1.0 ".$header; }
 else {
 	return "HTTP/1.1 ".$header; } }
+
+// Helper function to get compressed output
+function get_compressed_output($output, $gzip_type) {
+    switch ($gzip_type) {
+        case "brotli":
+            return function_exists('brotli_compress') ? brotli_compress($output) : gzencode($output);
+        case "zstd":
+            return function_exists('zstd_compress') ? zstd_compress($output) : gzencode($output);
+        case "deflate":
+            return gzcompress($output);
+        case "gzip":
+        default:
+            return gzencode($output);
+    }
+}
+
+// Helper function to send headers and output the content
+function send_output($output, $urlstatus, $gzip_type = "gzip", $use_gzip = false) {
+    global $Settings;
+    if ($use_gzip == "on") {
+        $output = get_compressed_output($output, $gzip_type);
+    }
+    if ($Settings['send_pagesize'] == "on") {
+        @header("Content-Length: " . strlen($output));
+        @header("Content-MD5: " . base64_encode(md5($output)));
+    }
+    idb_log_maker($urlstatus, strlen($output));
+    echo $output;
+}
+
+// Helper function to clean HTML using Tidy
+function clean_html_output($output) {
+    global $Settings;
+    if (extension_loaded('tidy') && $Settings['clean_html']) {
+        $config = array(
+            'indent' => true,
+            'clean' => true,
+            'output-xhtml' => ($Settings['output_type'] == "xhtml"),
+            'show-body-only' => true,
+            'wrap' => 0
+        );
+        $tidy = tidy_parse_string($output, $config, 'UTF8');
+        $tidy->cleanRepair();
+        return tidy_get_output($tidy);
+    }
+    return $output;
+}
+
 // Change the title and gzip page
-function change_title($new_title,$use_gzip="off",$gzip_type="gzip") {
-global $Settings,$urlstatus;
-if(!isset($urlstatus)||!is_numeric($urlstatus)) { $urlstatus = 200; }
-if($gzip_type!="gzip"&&$gzip_type!="deflate"&&$gzip_type!="brotli"&&$gzip_type!="zstd") { $gzip_type = "gzip"; }
-if($gzip_type=="brotli"&&!function_exists('brotli_compress')) { $gzip_type = "gzip"; }
-if($gzip_type=="zstd"&&!function_exists('zstd_compress')) { $gzip_type = "gzip"; }
-$output = trim(ob_get_clean());
-$output = preg_replace("/<title>(.*?)<\/title>/i", "<title>".$new_title."</title>", $output);
-$new_title_html = htmlentities($new_title, ENT_QUOTES, $Settings['charset']);
-$output = preg_replace("/<meta itemprop=\"title\" property=\"og:title\" content=\"(.*?)\" \/>/i", "<meta itemprop=\"title\" property=\"og:title\" content=\"".$new_title_html."\" />", $output);
-$output = preg_replace("/<meta itemprop=\"title\" property=\"twitter:title\" content=\"(.*?)\" \/>/i", "<meta itemprop=\"title\" property=\"twitter:title\" content=\"".$new_title_html."\" />", $output);
-$output = preg_replace("/<meta name=\"title\" content=\"(.*?)\" \/>/i", "<meta name=\"title\" content=\"".$new_title_html."\" />", $output);
-/* Change Some PHP Settings Fix the &PHPSESSID to &amp;PHPSESSID */
-$SessName = session_name();
-$output = preg_replace("/&PHPSESSID/", "&amp;PHPSESSID", $output);
-$qstrcode = htmlentities($Settings['qstr'], ENT_QUOTES, $Settings['charset']);
-$output = str_replace($Settings['qstr'].$SessName, $qstrcode.$SessName, $output);
-if (extension_loaded('tidy') && (isset($Settings['clean_html']) && $Settings['clean_html']==true)) {
- $tidyxhtml = false;
- if($Settings['output_type']=="html") {
-  $tidyxhtml = false; }
- if($Settings['output_type']=="xhtml") {
-  $tidyxhtml = true; }
- if($Settings['output_type']!="html" && $Settings['output_type']!="xhtml") {
-  $tidyxhtml = false; }
-  $config = array(
-            'indent' => true,
-            'clean' => true,
-            'output-xhtml' => $tidyxhtml,
-            'show-body-only' => true,
-            'wrap' => 0);
- $output = tidy_parse_string($output, $config, 'UTF8');
- $output ->cleanRepair(); }
-if($use_gzip!="on") {
-	if($Settings['send_pagesize']=="on") {
-	@header("Content-Length: ".decoct(strlen($output))); 
-	@header("Content-MD5: ".base64_encode(md5($output))); }
-	idb_log_maker($urlstatus,strlen($output));
-	echo $output; }
-if($use_gzip=="on") {
-	if($gzip_type=="brotli"&&function_exists('brotli_compress')) {
-	$goutput = brotli_compress($output); }
-	if($gzip_type=="zstd"&&function_exists('zstd_compress')) {
-	$goutput = zstd_compress($output); }
-	if($gzip_type=="brotli"&&!function_exists('brotli_compress')) {
-	$gzip_type = "gzip"; }
-	if($gzip_type=="zstd"&&!function_exists('zstd_compress')) {
-	$gzip_type = "gzip"; }
-	if($gzip_type=="gzip") {
-	$goutput = gzencode($output); }
-	if($gzip_type=="deflate") {
-	$goutput = gzcompress($output); }
-	if($Settings['send_pagesize']=="on") {
-	@header("Content-Length: ".decoct(strlen($goutput))); 
-	@header("Content-MD5: ".base64_encode(md5($goutput))); }
-	idb_log_maker($urlstatus,strlen($goutput));
-	echo $goutput; } }
+function change_title($new_title, $use_gzip = "off", $gzip_type = "gzip") {
+    global $Settings, $urlstatus;
+    $urlstatus = (isset($urlstatus) && is_numeric($urlstatus)) ? $urlstatus : 200;
+    $gzip_type = in_array($gzip_type, ["gzip", "deflate", "brotli", "zstd"]) ? $gzip_type : "gzip";
+    $output = trim(ob_get_clean());
+    $output = preg_replace("/<title>(.*?)<\/title>/i", "<title>" . htmlentities($new_title, ENT_QUOTES, $Settings['charset']) . "</title>", $output);
+    $meta_title = htmlentities($new_title, ENT_QUOTES, $Settings['charset']);
+    $output = preg_replace("/<meta itemprop=\"title\" property=\"og:title\" content=\"(.*?)\" \/>/i", "<meta itemprop=\"title\" property=\"og:title\" content=\"" . $meta_title . "\" />", $output);
+    $output = preg_replace("/<meta itemprop=\"title\" property=\"twitter:title\" content=\"(.*?)\" \/>/i", "<meta itemprop=\"title\" property=\"twitter:title\" content=\"" . $meta_title . "\" />", $output);
+    $output = preg_replace("/<meta name=\"title\" content=\"(.*?)\" \/>/i", "<meta name=\"title\" content=\"" . $meta_title . "\" />", $output);
+    $output = clean_html_output($output);
+    send_output($output, $urlstatus, $gzip_type, $use_gzip);
+}
+
 // Fix amp => (&) to &amp; and gzip page
-function fix_amp($use_gzip="off",$gzip_type="gzip") {
-global $Settings,$urlstatus;
-if(!isset($urlstatus)||!is_numeric($urlstatus)) { $urlstatus = 200; }
-if($gzip_type!="gzip"&&$gzip_type!="deflate"&&$gzip_type!="brotli"&&$gzip_type!="zstd") { $gzip_type = "gzip"; }
-if($gzip_type=="brotli"&&!function_exists('brotli_compress')) { $gzip_type = "gzip"; }
-if($gzip_type=="zstd"&&!function_exists('zstd_compress')) { $gzip_type = "gzip"; }
-$output = trim(ob_get_clean());
-/* Change Some PHP Settings Fix the &PHPSESSID to &amp;PHPSESSID */
-$SessName = session_name();
-$output = preg_replace("/&PHPSESSID/", "&amp;PHPSESSID", $output);
-if(!isset($Settings['qstr'])) { $Settings['qstr'] = '&'; }
-$qstrcode = htmlentities($Settings['qstr'], ENT_QUOTES, $Settings['charset']);
-$output = str_replace($Settings['qstr'].$SessName, $qstrcode.$SessName, $output);
-if (extension_loaded('tidy') && (isset($Settings['clean_html']) && $Settings['clean_html']==true)) {
- $tidyxhtml = false;
- if($Settings['output_type']=="html") {
-  $tidyxhtml = false; }
- if($Settings['output_type']=="xhtml") {
-  $tidyxhtml = true; }
- if($Settings['output_type']!="html" && $Settings['output_type']!="xhtml") {
-  $tidyxhtml = false; }
-  $config = array(
-            'indent' => true,
-            'clean' => true,
-            'output-xhtml' => $tidyxhtml,
-            'show-body-only' => true,
-            'wrap' => 0);
- $output = tidy_parse_string($output, $config, 'UTF8');
- $output ->cleanRepair(); }
-if(!isset($Settings['send_pagesize'])) { $Settings['send_pagesize'] = "on"; }
-if($use_gzip!="on") {
-	if($Settings['send_pagesize']=="on") {
-	@header("Content-Length: ".decoct(strlen($output))); 
-	@header("Content-MD5: ".base64_encode(md5($output))); }
-	idb_log_maker($urlstatus,strlen($output));
-	echo $output; }
-if($use_gzip=="on") {
-	if($gzip_type=="brotli"&&function_exists('brotli_compress')) {
-	$goutput = brotli_compress($output); }
-	if($gzip_type=="zstd"&&function_exists('zstd_compress')) {
-	$goutput = zstd_compress($output); }
-	if($gzip_type=="brotli"&&!function_exists('brotli_compress')) {
-	$gzip_type = "gzip"; }
-	if($gzip_type=="zstd"&&!function_exists('zstd_compress')) {
-	$gzip_type = "gzip"; }
-	if($gzip_type=="gzip") {
-	$goutput = gzencode($output); }
-	if($gzip_type=="deflate") {
-	$goutput = gzcompress($output); }
-	if($Settings['send_pagesize']=="on") {
-	@header("Content-Length: ".decoct(strlen($goutput))); 
-	@header("Content-MD5: ".base64_encode(md5($goutput))); }
-	idb_log_maker($urlstatus,strlen($goutput));
-	echo $goutput; } }
+// Fix ampersand and gzip page
+function fix_amp($use_gzip = "off", $gzip_type = "gzip") {
+    global $Settings, $urlstatus;
+    $urlstatus = (isset($urlstatus) && is_numeric($urlstatus)) ? $urlstatus : 200;
+    $gzip_type = in_array($gzip_type, ["gzip", "deflate", "brotli", "zstd"]) ? $gzip_type : "gzip";
+    $output = trim(ob_get_clean());
+    $SessName = session_name();
+    $qstrcode = htmlentities($Settings['qstr'], ENT_QUOTES, $Settings['charset']);
+    $output = str_replace($Settings['qstr'] . $SessName, $qstrcode . $SessName, $output);
+    $output = clean_html_output($output);
+    send_output($output, $urlstatus, $gzip_type, $use_gzip);
+}
+
 // GZip page for faster download
-function gzip_page($use_gzip="off",$gzip_type="gzip") {
-global $Settings,$urlstatus;
-if(!isset($urlstatus)||!is_numeric($urlstatus)) { $urlstatus = 200; }
-$output = trim(ob_get_clean());
-if (extension_loaded('tidy') && (isset($Settings['clean_html']) && $Settings['clean_html']==true)) {
- $tidyxhtml = false;
- if($Settings['output_type']=="html") {
-  $tidyxhtml = false; }
- if($Settings['output_type']=="xhtml") {
-  $tidyxhtml = true; }
- if($Settings['output_type']!="html" && $Settings['output_type']!="xhtml") {
-  $tidyxhtml = false; }
-  $config = array(
-            'indent' => true,
-            'clean' => true,
-            'output-xhtml' => $tidyxhtml,
-            'show-body-only' => true,
-            'wrap' => 0);
- $output = tidy_parse_string($output, $config, 'UTF8');
- $output ->cleanRepair(); }
-if($gzip_type!="gzip"&&$gzip_type!="deflate"&&$gzip_type!="brotli"&&$gzip_type!="zstd") { $gzip_type = "gzip"; }
-if($gzip_type=="brotli"&&!function_exists('brotli_compress')) { $gzip_type = "gzip"; }
-if($gzip_type=="zstd"&&!function_exists('zstd_compress')) { $gzip_type = "gzip"; }
-if($use_gzip!="on") {
-	if($Settings['send_pagesize']=="on") {
-	@header("Content-Length: ".decoct(strlen($output))); 
-	@header("Content-MD5: ".base64_encode(md5($output))); }
-	idb_log_maker($urlstatus,strlen($output));
-	echo $output; }
-if($use_gzip=="on") {
-	if($gzip_type=="brotli"&&function_exists('brotli_compress')) {
-	$goutput = brotli_compress($output); }
-	if($gzip_type=="zstd"&&function_exists('zstd_compress')) {
-	$goutput = zstd_compress($output); }
-	if($gzip_type=="brotli"&&!function_exists('brotli_compress')) {
-	$gzip_type = "gzip"; }
-	if($gzip_type=="zstd"&&!function_exists('zstd_compress')) {
-	$gzip_type = "gzip"; }
-	if($gzip_type=="gzip") {
-	$goutput = gzencode($output); }
-	if($gzip_type=="deflate") {
-	$goutput = gzcompress($output); }
-	if($Settings['send_pagesize']=="on") {
-	@header("Content-Length: ".decoct(strlen($goutput))); 
-	@header("Content-MD5: ".base64_encode(md5($goutput))); }
-	idb_log_maker($urlstatus,strlen($goutput));
-	echo $goutput; } }
+function gzip_page($use_gzip = "off", $gzip_type = "gzip") {
+    global $Settings, $urlstatus;
+    $urlstatus = (isset($urlstatus) && is_numeric($urlstatus)) ? $urlstatus : 200;
+    $gzip_type = in_array($gzip_type, ["gzip", "deflate", "brotli", "zstd"]) ? $gzip_type : "gzip";
+    $output = trim(ob_get_clean());
+    $output = clean_html_output($output);
+    send_output($output, $urlstatus, $gzip_type, $use_gzip);
+}
+
 $foo="bar"; $$foo="foo";
+
 // Kill bad vars for some functions
+// Sanitize variable names to prevent injection of dangerous superglobals and characters
 function killbadvars($varname) {
-$badphp1 = array('$'); $badphp2 = array(null);
-$varname = str_replace($badphp1, $badphp2, $varname);
-$varname = preg_replace("/(_SERVER|_ENV|_COOKIE|_SESSION)/i", null, $varname);
-$varname = preg_replace("/(_GET|_POST|_FILES|_REQUEST|GLOBALS)/i", null, $varname);
-$varname = preg_replace("/(HTTP_SERVER_VARS|HTTP_ENV_VARS)/i", null, $varname);
-$varname = preg_replace("/(HTTP_COOKIE_VARS|HTTP_SESSION_VARS)/i", null, $varname);
-$varname = preg_replace("/(HTTP_GET_VARS|HTTP_POST_VARS|HTTP_POST_FILES)/i", null, $varname);
-	return $varname; }
+    // Remove dollar signs to prevent variable variables or eval-like behavior
+    $varname = str_replace('$', '', $varname);
+    // Define patterns for superglobals and other bad variable names to be removed
+    $patterns = array(
+        '/\b(_SERVER|_ENV|_COOKIE|_SESSION|_GET|_POST|_FILES|_REQUEST|GLOBALS)\b/i',
+        '/\b(HTTP_SERVER_VARS|HTTP_ENV_VARS|HTTP_COOKIE_VARS|HTTP_SESSION_VARS|HTTP_GET_VARS|HTTP_POST_VARS|HTTP_POST_FILES)\b/i'
+    );
+    // Replace all matched patterns with an empty string
+    $varname = preg_replace($patterns, '', $varname);
+    return $varname;
+}
+
 // Trying to fix this bug. ^_^
 // http://xforce.iss.net/xforce/xfdb/49697
 if(!isset($Settings['DefaultTheme'])) {
@@ -249,158 +181,215 @@ if($ReplaceType=="yes") {
 	$Smile1 = preg_quote($SmileText,"/");
 $Text = preg_replace("/".$Smile1."/i",$Smile2,$Text); }
 ++$melanies; } return $Text; }
+
 // Removes the bad stuff
 // Disabling to relax harsh restrictions ^_^ 
-function remove_bad_entities($Text) {
-/*//HTML Entities Dec Version
-$Text = preg_replace("/&#8238;/isU","",$Text);
-$Text = preg_replace("/&#8194;/isU","",$Text);
-$Text = preg_replace("/&#8195;/isU","",$Text);
-$Text = preg_replace("/&#8201;/isU","",$Text);
-$Text = preg_replace("/&#8204;/isU","",$Text);
-$Text = preg_replace("/&#8205;/isU","",$Text);
-$Text = preg_replace("/&#8206;/isU","",$Text);
-$Text = preg_replace("/&#8207;/isU","",$Text);
-//HTML Entities Hex Version
-$Text = preg_replace("/&#x202e;/isU","",$Text);
-$Text = preg_replace("/&#x2002;/isU","",$Text);
-$Text = preg_replace("/&#x2003;/isU","",$Text);
-$Text = preg_replace("/&#x2009;/isU","",$Text);
-$Text = preg_replace("/&#x200c;/isU","",$Text);
-$Text = preg_replace("/&#x200d;/isU","",$Text);
-$Text = preg_replace("/&#x200e;/isU","",$Text);
-$Text = preg_replace("/&#x200f;/isU","",$Text);
-//HTML Entities Name Version
-$Text = preg_replace("/&ensp;/isU","",$Text);
-$Text = preg_replace("/&emsp;/isU","",$Text);
-$Text = preg_replace("/&thinsp;/isU","",$Text);
-$Text = preg_replace("/&zwnj;/isU","",$Text);
-$Text = preg_replace("/&zwj;/isU","",$Text);
-$Text = preg_replace("/&lrm;/isU","",$Text);
-$Text = preg_replace("/&rlm;/isU","",$Text);*/
-return $Text; }
+// Remove specific bad or unnecessary HTML entities from the text
+function remove_bad_entities($text) {
+    /*// Array of HTML entities to remove (decimal, hex, and named versions)
+    $entities = array(
+        // Decimal entities
+        '&#8238;', '&#8194;', '&#8195;', '&#8201;', '&#8204;', '&#8205;', '&#8206;', '&#8207;',
+        // Hexadecimal entities
+        '&#x202e;', '&#x2002;', '&#x2003;', '&#x2009;', '&#x200c;', '&#x200d;', '&#x200e;', '&#x200f;',
+        // Named entities
+        '&ensp;', '&emsp;', '&thinsp;', '&zwnj;', '&zwj;', '&lrm;', '&rlm;'
+    );
+    // Remove all listed entities by replacing them with an empty string
+    $text = str_replace($entities, '', $text);*/
+    return $text;
+}
+
 // Remove the bad stuff
-function remove_spaces($Text) {
-$Text = preg_replace("/(^\t+|\t+$)/","",$Text);
-$Text = preg_replace("/(^\n+|\n+$)/","",$Text);
-$Text = preg_replace("/(^\r+|\r+$)/","",$Text);
-$Text = preg_replace("/(\r|\n|\t)+/"," ",$Text);
-$Text = preg_replace("/\s\s+/"," ",$Text);
-$Text = preg_replace("/(^\s+|\s+$)/","",$Text);
-$Text = trim($Text, "\x00..\x1F");
-$Text = remove_bad_entities($Text);
-return $Text; }
+// Remove unnecessary spaces, tabs, newlines, and control characters from the text
+function remove_spaces($text) {
+    // Trim whitespace characters (tabs, newlines, carriage returns, spaces) from both ends
+    $text = preg_replace('/^\s+|\s+$/u', '', $text);
+    // Replace multiple tabs, newlines, or carriage returns with a single space
+    $text = preg_replace('/[\t\n\r]+/u', ' ', $text);
+    // Replace multiple spaces with a single space
+    $text = preg_replace('/\s{2,}/u', ' ', $text);
+    // Trim control characters (ASCII 0-31)
+    $text = trim($text, "\x00..\x1F");
+    // Remove bad entities (assuming this is a user-defined function)
+    $text = remove_bad_entities($text);
+    return $text;
+
 // Fix some chars
+// Correct double-encoded HTML entities to their proper HTML representation
 function fixbamps($text) {
-$fixamps1 = array("&amp;copy;","&amp;reg;","&amp;trade;","&amp;quot;","&amp;amp;","&amp;lt;","&amp;gt;","&amp;(a|e|i|o|u|y)acute;","&amp;(a|e|i|o|u)grave;","&amp;(a|e|i|o|u)circ;","&amp;(a|e|i|o|u|y)uml;","&amp;(a|o|n)tilde;","&amp;aring;","&amp;aelig;","&amp;ccedil;","&amp;eth;","&amp;oslash;","&amp;szlig;","&amp;thorn;");
-$fixamps2 = array("&#169;","&reg;","&trade;","&quot;","&amp;","&lt;","&gt;","&\\1acute;","&\\1grave;","&\\1circ;","&\\1uml;","&\\1tilde;","&aring;","&aelig;","&ccedil;","&eth;","&oslash;","&szlig;","&thorn;");
-$ampnum = count($fixamps1); $ampi=0;
-while ($ampi < $ampnum) {
-$text = preg_replace("/".$fixamps1[$ampi]."/i", $fixamps2[$ampi], $text);
-++$ampi; }
-$text = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $text);
-return $text; }
+    // Direct replacements for common HTML entities
+    $directReplacements = array(
+        '&amp;copy;'   => '&#169;',
+        '&amp;reg;'    => '&reg;',
+        '&amp;trade;'  => '&trade;',
+        '&amp;quot;'   => '&quot;',
+        '&amp;amp;'    => '&amp;',
+        '&amp;lt;'     => '&lt;',
+        '&amp;gt;'     => '&gt;',
+        '&amp;aring;'  => '&aring;',
+        '&amp;aelig;'  => '&aelig;',
+        '&amp;ccedil;' => '&ccedil;',
+        '&amp;eth;'    => '&eth;',
+        '&amp;oslash;' => '&oslash;',
+        '&amp;szlig;'  => '&szlig;',
+        '&amp;thorn;'  => '&thorn;'
+    );
+    // Perform direct replacements
+    $text = str_replace(array_keys($directReplacements), array_values($directReplacements), $text);
+    // Correct encoded character entities with regex patterns
+    $patternReplacements = array(
+        '/&amp;([aeiouy])acute;/i'  => '&\1acute;',
+        '/&amp;([aeiou])grave;/i'   => '&\1grave;',
+        '/&amp;([aeiou])circ;/i'    => '&\1circ;',
+        '/&amp;([aeiouy])uml;/i'    => '&\1uml;',
+        '/&amp;([aon])tilde;/i'     => '&\1tilde;'
+    );
+    // Perform pattern-based replacements
+    foreach ($patternReplacements as $pattern => $replacement) {
+        $text = preg_replace($pattern, $replacement, $text);
+    }
+    // Fix double-encoded numeric entities
+    $text = preg_replace('/&amp;#(x[a-f0-9]+|[0-9]+);/i', '&#$1;', $text);
+    return $text;
+}
+
 $utshour = $dayconv['hour'];
 $utsminute = $dayconv['minute'];
+
 // Change Time Stamp to a readable time
 function GMTimeChange($format,$timestamp,$offset,$minoffset=null,$dst=null) {
-global $utshour,$utsminute;
-$dstake = null;
-if(!is_numeric($minoffset)) { $minoffset = "00"; }
-$ts_array = explode(":",$offset);
-if(count($ts_array)!=2) {
-	if(!isset($ts_array[0])) { $ts_array[0] = "0"; }
-	if(!isset($ts_array[1])) { $ts_array[1] = "00"; }
-	$offset = $ts_array[0].":".$ts_array[1]; }
-if(!is_numeric($ts_array[0])) { $ts_array[0] = "0"; }
-if(!is_numeric($ts_array[1])) { $ts_array[1] = "00"; }
-if($ts_array[1]<0) { $ts_array[1] = "00"; $offset = $ts_array[0].":".$ts_array[1]; }
-$tsa = array("offset" => $offset, "hour" => $ts_array[0], "minute" => $ts_array[1]);
-//$tsa['minute'] = $tsa['minute'] + $minoffset;
-if($dst!="on"&&$dst!="off") { $dst = "off"; }
-if($dst=="on") { if($dstake!="done") { 
-	$dstake = "done"; $tsa['hour'] = $tsa['hour']+1; } }
-$utimestamp = $tsa['hour'] * $utshour;
-$utimestamp = $utimestamp + $tsa['minute'] * $utsminute;
-$utimestamp = $utimestamp + $minoffset * $utsminute;
-$timestamp = $timestamp + $utimestamp;
-return date($format,$timestamp); }
+glo// Convert Unix timestamp to a readable time format with timezone and DST adjustment
+function GMTimeChange($format, $timestamp, $offset, $minoffset = 0, $dst = "off") {
+    // Define conversion constants for hour and minute
+    $secondsPerHour = 3600;
+    $secondsPerMinute = 60;
+    // Validate and normalize the offset input
+    $ts_array = explode(":", $offset);
+    $hourOffset = isset($ts_array[0]) && is_numeric($ts_array[0]) ? (int)$ts_array[0] : 0;
+    $minuteOffset = isset($ts_array[1]) && is_numeric($ts_array[1]) && $ts_array[1] >= 0 ? (int)$ts_array[1] : 0;
+    // Validate DST input
+    $dst = ($dst === "on") ? 1 : 0;
+    // Calculate total offset in seconds
+    $totalOffset = ($hourOffset * $secondsPerHour) + ($minuteOffset * $secondsPerMinute) + ($minoffset * $secondsPerMinute);
+    // Add DST adjustment (if applicable)
+    if ($dst) {
+        $totalOffset += $secondsPerHour; // Add one hour for DST
+    }
+    // Adjust the timestamp by the calculated offset
+    $adjustedTimestamp = $timestamp + $totalOffset;
+    // Return formatted time
+    return date($format, $adjustedTimestamp);
+}
+
 // Change Time Stamp to a readable time
-function TimeChange($format,$timestamp,$offset,$minoffset=null,$dst=null) {
-return GMTimeChange($format,$timestamp,$offset,$minoffset,$dst); }
-// Make a GMT Time Stamp
+// Simplified wrapper for GMTimeChange with added default behavior or validation
+function TimeChange($format, $timestamp, $offset, $minoffset = 0, $dst = "off") {
+    // Optionally, add validation or handle special cases here before calling GMTimeChange
+    return GMTimeChange($format, $timestamp, $offset, $minoffset, $dst);
+}
+
+/// Make a GMT timestamp for the current time
 function GMTimeStamp() {
-$GMTHour = gmdate("H");
-$GMTMinute = gmdate("i");
-$GMTSecond = gmdate("s");
-$GMTMonth = gmdate("n");
-$GMTDay = gmdate("d");
-$GMTYear = gmdate("Y");
-return mktime($GMTHour,$GMTMinute,$GMTSecond,$GMTMonth,$GMTDay,$GMTYear); }
+    // Get the current Unix timestamp and format it as GMT using gmdate()
+    return time();
+}
+
 // Make a GMT Time Stamp alt version
 function GMTimeStampS() { return time() - date('Z', time()); }
+
 // Get GMT Time
-function GMTimeGet($format,$offset,$minoffset=null,$dst=null,$taddon=null) {
-	if(!is_numeric($taddon)) { $taddon = null; }
-	if($taddon!==null) {
-	return GMTimeChange($format,GMTimeStamp()+$taddon,$offset,$minoffset,$dst); }
-	if($taddon===null) {
-	return GMTimeChange($format,GMTimeStamp(),$offset,$minoffset,$dst); } }
+// Get formatted GMT time with optional adjustments
+function GMTimeGet($format, $offset, $minoffset = null, $dst = null, $taddon = null) {
+    // Ensure $taddon is a numeric value or null
+    $taddon = is_numeric($taddon) ? $taddon : null;
+    // Calculate the timestamp with optional additional time adjustment
+    $timestamp = GMTimeStamp() + ($taddon ?? 0);
+    // Return the formatted time using GMTimeChange
+    return GMTimeChange($format, $timestamp, $offset, $minoffset, $dst);
+}
+
 // Get GMT Time alt version
-function GMTimeGetS($format,$offset,$minoffset=null,$dst=null) {
-global $utshour,$utsminute;
-$dstake = null;
-if(!is_numeric($offset)) { $offset = "0"; }
-if(!is_numeric($minoffset)) { $minoffset = "00"; }
-$ts_array = explode(":",$offset);
-if(count($ts_array)!=2) {
-	if(!isset($ts_array[0])) { $ts_array[0] = "0"; }
-	if(!isset($ts_array[1])) { $ts_array[1] = "00"; }
-	$offset = $ts_array[0].":".$ts_array[1]; }
-if(!is_numeric($ts_array[0])) { $ts_array[0] = "0"; }
-if(!is_numeric($ts_array[1])) { $ts_array[1] = "00"; }
-if($ts_array[1]<0) { $ts_array[1] = "00"; $offset = $ts_array[0].":".$ts_array[1]; }
-$tsa = array("offset" => $offset, "hour" => $ts_array[0], "minute" => $ts_array[1]);
-//$tsa['minute'] = $tsa['minute'] + $minoffset;
-if($dst!="on"&&$dst!="off") { $dst = "off"; }
-if($dst=="on") { if($dstake!="done") { 
-	$dstake = "done"; $tsa['hour'] = $tsa['hour']+1; } }
-$utimestamp = $tsa['hour'] * $utshour;
-$utimestamp = $utimestamp + $tsa['minute'] * $utsminute;
-$utimestamp = $utimestamp + $minoffset * $utsminute;
-$timestamp = $timestamp + $utimestamp;
-return date($format,mktime()+$timestamp); }
+// Alternative version to get GMT time with optional adjustments
+function GMTimeGetS($format, $offset, $minoffset = 0, $dst = "off") {
+    // Constants for seconds in an hour and a minute
+    $secondsPerHour = 3600;
+    $secondsPerMinute = 60;
+    // Validate and normalize the offset input
+    $ts_array = explode(":", $offset);
+    $hourOffset = isset($ts_array[0]) && is_numeric($ts_array[0]) ? (int)$ts_array[0] : 0;
+    $minuteOffset = isset($ts_array[1]) && is_numeric($ts_array[1]) && $ts_array[1] >= 0 ? (int)$ts_array[1] : 0;
+    // Validate DST input
+    $dstAdjustment = ($dst === "on") ? $secondsPerHour : 0;
+    // Calculate total offset in seconds
+    $totalOffset = ($hourOffset * $secondsPerHour) + ($minuteOffset * $secondsPerMinute) + ($minoffset * $secondsPerMinute) + $dstAdjustment;
+    // Get current GMT timestamp
+    $gmtTimestamp = time() - date('Z');
+    // Adjust the GMT timestamp by the total offset
+    $adjustedTimestamp = $gmtTimestamp + $totalOffset;
+    // Return the formatted time
+    return date($format, $adjustedTimestamp);
+}
+
 // Get Server offset
-function GetSeverZone() {
-$TestHour1 = date("H");
-@putenv("OTZ=".getenv("TZ"));
-@putenv("TZ=GMT");
-$TestHour2 = date("H");
-@putenv("TZ=".getenv("OTZ"));
-$TestHour3 = $TestHour1-$TestHour2;
-return $TestHour3; }
+// Get server's time zone offset from GMT in hours
+function GetServerZone() {
+    // Get the current timestamp and the GMT offset in seconds
+    $timezoneOffsetSeconds = date('Z');
+    // Convert seconds to hours
+    $timezoneOffsetHours = $timezoneOffsetSeconds / 3600;
+    return $timezoneOffsetHours;
+}
+
 // Get Server offset alt version
+// Get server's time zone offset from GMT in hours (alternative version)
 function SeverOffSet() {
-$TestHour1 = date("H");
-$TestHour2 = gmdate("H");
-$TestHour3 = $TestHour1-$TestHour2;
-return $TestHour3; }
+    return GetServerZone();
+}
+
 // Get Server offset new version
+// Get server's time zone offset from GMT in hours (correct version)
 function SeverOffSetNew() {
-return gmdate("g",mktime(0,date("Z"))); }
-function gmtime() { return time() - (int) date('Z'); }
+    // Get the server's timezone offset in seconds and convert it to hours
+    return date('Z') / 3600;
+}
+
+function gmtime() { 
+    return time() - (int) date('Z'); 
+}
+
 // Acts like highlight_file();
-function file_get_source($filename,$return = FALSE) {
-$phpsrc = file_get_contents($filename);
-$phpsrcs = highlight_string($phpsrc,$return);
-return $phpsrcs; }
+// Acts like highlight_file(), with improved error handling
+function file_get_source($filename, $return = FALSE) {
+    // Check if the file exists and is readable
+    if (!file_exists($filename) || !is_readable($filename)) {
+        return $return ? "Error: Unable to read the file." : print "Error: Unable to read the file.";
+    }
+    // Get the PHP source code from the file
+    $phpsrc = file_get_contents($filename);
+    // Highlight the PHP source code
+    $phpsrcs = highlight_string($phpsrc, $return);
+    return $phpsrcs;
+}
+
 // Also acts like highlight_file(); but valid xhtml
+// Acts like highlight_file() but returns valid XHTML
 function valid_get_source($filename) {
-$phpsrcs = file_get_source($filename,TRUE);
-// Change font tag to span tag for valid xhtml
-$phpsrcs = preg_replace("/\<font color=\"(.*?)\"\>/i", "<span style=\"color: \\1;\">", $phpsrcs);
-$phpsrcs = preg_replace("/\<\/font>/i", "</span>", $phpsrcs);
-return $phpsrcs; }
+    // Get the highlighted source code
+    $phpsrcs = file_get_source($filename, TRUE);
+    // Change <font> tags to <span> tags for valid XHTML
+    $dom = new DOMDocument();
+    @$dom->loadHTML('<?xml encoding="UTF-8">' . $phpsrcs);
+    // Replace all <font> elements with <span> elements and transfer the "color" attribute to "style"
+    foreach ($dom->getElementsByTagName('font') as $font) {
+        $span = $dom->createElement('span', $font->nodeValue); // Create a new <span> element with the same content
+        $span->setAttribute('style', 'color: ' . $font->getAttribute('color') . ';'); // Set the style attribute
+        $font->parentNode->replaceChild($span, $font); // Replace <font> with <span>
+    }
+    // Return the XHTML-compliant highlighted source code
+    return $dom->saveHTML();
+}
+
 // Check to see if the user is hidden/shy/timid. >_> | ^_^ | <_<
 function GetUserName($idu,$sqlt,$link=null) { $UsersName = null;
 global $SQLStat;
@@ -418,13 +407,34 @@ sql_free_result($gunresult);
 $UsersInfo['Name'] = $UsersName;
 $UsersInfo['Hidden'] = $UsersHidden;
 return $UsersInfo; }
-if(!function_exists('hash')) {
-function hash($algo, $data, $raw_output = false) {
-if($algo!="md5"&&$algo!="sha1") { $algo = "md5"; }
-return $algo($data); } }
-if(!function_exists('hash_algos')) {
-function hash_algos() {
-return array(0 => "md5", 1 => "sha1"); } }
+
+// Fallback hash function for environments without the hash extension
+if (!function_exists('hash')) {
+    function hash($algo, $data, $raw_output = false) {
+        // Supported algorithms in this fallback
+        $supported_algos = array('md5', 'sha1');
+
+        // Check if the algorithm is supported
+        if (!in_array($algo, $supported_algos)) {
+            trigger_error("Unsupported hashing algorithm. Defaulting to 'md5'.", E_USER_WARNING);
+            $algo = 'md5';  // Default to 'md5' if unsupported
+        }
+
+        // Hash the data using the specified algorithm
+        $hash = $algo($data);
+
+        // Handle raw output (binary) if requested
+        return $raw_output ? hex2bin($hash) : $hash;
+    }
+}
+
+// Fallback function to return supported hash algorithms in this environment
+if (!function_exists('hash_algos')) {
+    function hash_algos() {
+        return array('md5', 'sha1');
+    }
+}
+
 if(!function_exists('hash_hmac')) {
 function hash_hmac($hash, $data, $key, $raw_output = false) {
   if($hash=="sha3-224") { $hash = "sha3224"; }
