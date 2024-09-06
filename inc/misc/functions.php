@@ -214,6 +214,7 @@ function remove_spaces($text) {
     // Remove bad entities (assuming this is a user-defined function)
     $text = remove_bad_entities($text);
     return $text;
+}
 
 // Fix some chars
 // Correct double-encoded HTML entities to their proper HTML representation
@@ -257,7 +258,6 @@ function fixbamps($text) {
 $utshour = $dayconv['hour'];
 $utsminute = $dayconv['minute'];
 
-// Convert Unix timestamp to a readable time format with timezone and DST adjustment
 function GMTimeChange($format, $timestamp, $offset, $minoffset = 0, $dst = "off") {
     // Define conversion constants for hour and minute
     $secondsPerHour = 3600;
@@ -619,42 +619,49 @@ if (!function_exists('str_ireplace')) {
 /*   Adds httponly to PHP below Ver. 5.2.0   // 
 //       by Kazuki Przyborowski - Cool Dude 2k      */
 function http_set_cookie($name, $value = null, $expire = null, $path = null, $domain = null, $secure = false, $httponly = false) {
-    if (!$name) {
-        output_error("Error: You need to enter a name for the cookie.", E_USER_ERROR);
+    if (!isset($name)) {
+        trigger_error("Error: You need to enter a name for the cookie.", E_USER_ERROR);
         return false;
     }
-    if (!$expire) {
-        output_error("Error: You need to enter a time for the cookie to expire.", E_USER_ERROR);
+    if (!isset($expire)) {
+        trigger_error("Error: You need to enter a time for the cookie to expire.", E_USER_ERROR);
         return false;
     }
+
+    $expireGMT = gmdate("D, d-M-Y H:i:s \G\M\T", $expire);
+    
+    // If headers have already been sent, return false to avoid errors
     if (headers_sent()) {
-        output_error("Error: Headers have already been sent. Cannot set cookie.", E_USER_WARNING);
+        trigger_error("Error: Headers have already been sent. Cannot set cookie.", E_USER_WARNING);
         return false;
     }
-    // Use PHP's built-in setcookie() if HttpOnly is not needed or PHP version is 5.2.0 or higher
-    if (!$httponly || version_compare(PHP_VERSION, "5.2.0", ">=")) {
+
+    if ($httponly === false) {
+        // Set the cookie without HttpOnly
+        setcookie($name, $value, $expire, $path, $domain, $secure);
+        return true;
+    } 
+
+    if (version_compare(PHP_VERSION, "5.2.0", ">=") && $httponly === true) {
+        // PHP 5.2.0+ natively supports HttpOnly flag
         setcookie($name, $value, $expire, $path, $domain, $secure, $httponly);
         return true;
     }
-    // For PHP versions below 5.2.0 with HttpOnly flag
-    $cookie = "Set-Cookie: " . rawurlencode($name) . "=" . rawurlencode($value);
-    $cookie .= "; expires=" . gmdate("D, d-M-Y H:i:s \G\M\T", $expire);
-    if ($path) {
-        $cookie .= "; path=" . $path;
+
+    if (version_compare(PHP_VERSION, "5.2.0", "<") && $httponly === true) {
+        // Manually construct the Set-Cookie header for older PHP versions
+        $mkcookie = "Set-Cookie: " . rawurlencode($name) . "=" . rawurlencode($value);
+        $mkcookie .= "; expires=" . $expireGMT;
+        if ($path !== null) { $mkcookie .= "; path=" . $path; }
+        if ($domain !== null) { $mkcookie .= "; domain=" . $domain; }
+        if ($secure === true) { $mkcookie .= "; secure"; }
+        $mkcookie .= "; HttpOnly";
+        header($mkcookie);
+        return true;
     }
-    if ($domain) {
-        $cookie .= "; domain=" . $domain;
-    }
-    if ($secure) {
-        $cookie .= "; secure";
-    }
-    if ($httponly) {
-        $cookie .= "; HttpOnly";
-    }
-    header($cookie);
-    return true;
+
+    return false; // Fallback if nothing matched
 }
-header($mkcookie, false); return true; } }
 $foobar="fubar"; $$foobar="foobar";
 // Debug info
 function dump_included_files($type="var_dump") {
