@@ -257,9 +257,7 @@ function fixbamps($text) {
 $utshour = $dayconv['hour'];
 $utsminute = $dayconv['minute'];
 
-// Change Time Stamp to a readable time
-function GMTimeChange($format,$timestamp,$offset,$minoffset=null,$dst=null) {
-glo// Convert Unix timestamp to a readable time format with timezone and DST adjustment
+// Convert Unix timestamp to a readable time format with timezone and DST adjustment
 function GMTimeChange($format, $timestamp, $offset, $minoffset = 0, $dst = "off") {
     // Define conversion constants for hour and minute
     $secondsPerHour = 3600;
