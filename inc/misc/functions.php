@@ -574,65 +574,78 @@ function bcrypt($data) { return password_hash($data,PASSWORD_BCRYPT); } }
 if(!function_exists('hash_equals')) {
     function hash_equals($known_string, $user_string) {
         $ret = 0;
-       
         if (strlen($known_string) !== strlen($user_string)) {
             $user_string = $known_string;
             $ret = 1;
         }
-       
         $res = $known_string ^ $user_string;
-       
         for ($i = strlen($res) - 1; $i >= 0; --$i) {
             $ret |= ord($res[$i]);
         }
-       
         return !$ret;
     }
 }
-
 /* str_ireplace for PHP below ver. 5 updated // 
 //       by Kazuki Przyborowski - Cool Dude 2k      //
 //      and upaded by Kazuki Przyborowski again     */
-if(!function_exists('str_ireplace')) {
-function str_ireplace($search,$replace,$subject) {
-if(!is_array($search)&&is_array($replace)) {
-	$search = array($search); }
-if(is_array($search)&&!is_array($replace)) {
-	$replace = array($replace); }
-if(is_array($search)&&is_array($replace)) {
-	$sc=count($search); $rc=count($replace); $sn=0;
-	if($sc!=$rc) { return false; }
-while ($sc > $sn) {
-	$search[$sn] = preg_quote($search[$sn], "/");
-	$subject = preg_replace("/".$search[$sn]."/i", $replace[$sn], $subject);
-	++$sn; } }
-if(!is_array($search)&&!is_array($replace)) {
-$search = preg_quote($search, "/");
-$subject = preg_replace("/".$search."/i", $replace, $subject); }
-return $subject; } }
+// Optimized str_ireplace function for PHP versions that lack it
+if (!function_exists('str_ireplace')) {
+    function str_ireplace($search, $replace, $subject) {
+        // Ensure both $search and $replace are arrays
+        $search = (array) $search;
+        $replace = (array) $replace;
+        // If the number of search and replace items do not match, return false
+        if (count($search) !== count($replace)) {
+            return false;
+        }
+        // Iterate through each search item and perform the case-insensitive replacement
+        foreach ($search as $key => $value) {
+            // Escape special regex characters in the search value
+            $pattern = '/' . preg_quote($value, '/') . '/i';
+            // Perform the replacement
+            $subject = preg_replace($pattern, $replace[$key], $subject);
+        }
+        return $subject;
+    }
+}
 /*   Adds httponly to PHP below Ver. 5.2.0   // 
 //       by Kazuki Przyborowski - Cool Dude 2k      */
-function http_set_cookie($name,$value=null,$expire=null,$path=null,$domain=null,$secure=false,$httponly=false) {
-	$mkcookie = null; $expireGMT = null;
-	if(!isset($name)) { 
-	output_error("Error: You need to enter a name for cookie.",E_USER_ERROR); 
-	return false; }
-	if(!isset($expire)) { 
-	output_error("Error: You need to enter a time for cookie to expire.",E_USER_ERROR); 
-	return false; }
-	$expireGMT = gmdate("D, d-M-Y H:i:s \G\M\T", $expire);
-	if(!isset($value)) { $value = null; }
-	if(!isset($httponly)||$httponly==false) {
-	setcookie($name, $value, $expire, $path, $domain, $secure); return true; }
-	if(version_compare(PHP_VERSION,"5.2.0",">=")&&$httponly==true) {
-	setcookie($name, $value, $expire, $path, $domain, $secure, $httponly); return true; }
-	if(version_compare(PHP_VERSION,"5.2.0","<")&&$httponly==true) {
-	$mkcookie = "Set-Cookie: ".rawurlencode($name)."=".rawurlencode($value);
-	$mkcookie = $mkcookie."; expires=".$expireGMT;
-	if(isset($path)&&$path!=null) { $mkcookie = $mkcookie."; path=".$path; }
-	if(isset($domain)&&$domain!=null) { $mkcookie = $mkcookie."; domain=".$domain; }
-	if(isset($secure)&&$secure===true) { $mkcookie = $mkcookie."; secure"; }
-	if(isset($httponly)&&$httponly===true) { $mkcookie = $mkcookie."; HttpOnly"; }
+function http_set_cookie($name, $value = null, $expire = null, $path = null, $domain = null, $secure = false, $httponly = false) {
+    if (!$name) {
+        output_error("Error: You need to enter a name for the cookie.", E_USER_ERROR);
+        return false;
+    }
+    if (!$expire) {
+        output_error("Error: You need to enter a time for the cookie to expire.", E_USER_ERROR);
+        return false;
+    }
+    if (headers_sent()) {
+        output_error("Error: Headers have already been sent. Cannot set cookie.", E_USER_WARNING);
+        return false;
+    }
+    // Use PHP's built-in setcookie() if HttpOnly is not needed or PHP version is 5.2.0 or higher
+    if (!$httponly || version_compare(PHP_VERSION, "5.2.0", ">=")) {
+        setcookie($name, $value, $expire, $path, $domain, $secure, $httponly);
+        return true;
+    }
+    // For PHP versions below 5.2.0 with HttpOnly flag
+    $cookie = "Set-Cookie: " . rawurlencode($name) . "=" . rawurlencode($value);
+    $cookie .= "; expires=" . gmdate("D, d-M-Y H:i:s \G\M\T", $expire);
+    if ($path) {
+        $cookie .= "; path=" . $path;
+    }
+    if ($domain) {
+        $cookie .= "; domain=" . $domain;
+    }
+    if ($secure) {
+        $cookie .= "; secure";
+    }
+    if ($httponly) {
+        $cookie .= "; HttpOnly";
+    }
+    header($cookie);
+    return true;
+}
 header($mkcookie, false); return true; } }
 $foobar="fubar"; $$foobar="foobar";
 // Debug info
