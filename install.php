@@ -89,9 +89,10 @@ function customErrorHandler($errno, $errstr, $errfile, $errline) {
         E_USER_DEPRECATED => 'User Deprecated Notice'
     ];
 
-    // Flush the output buffer if it exists
-    while (ob_get_level()) {
-        ob_end_flush();
+    // Safely retrieve and clean the output buffer
+    $output = '';
+    if (ob_get_length()) {
+        $output = ob_get_clean();  // Get and clear the buffer without sending it
     }
 
     // Check if the error type is in our list of handled types
@@ -116,6 +117,9 @@ function customErrorHandler($errno, $errstr, $errfile, $errline) {
         logErrorToFile($logFilePath, $errorType, $errno, $errstr, $errfile, $errline, $backtrace);
     }
 
+    // Output the captured content again if needed
+    echo $output;
+
     // Depending on the error, you might want to stop the script
     if ($errno === E_ERROR || $errno === E_PARSE || $errno === E_CORE_ERROR || $errno === E_COMPILE_ERROR) {
         die();
@@ -135,9 +139,11 @@ function shutdownHandler() {
     if ($last_error !== null) {
         // Check if the error type is E_ERROR or E_PARSE (fatal errors)
         if ($last_error['type'] === E_ERROR || $last_error['type'] === E_PARSE || $last_error['type'] === E_CORE_ERROR || $last_error['type'] === E_COMPILE_ERROR) {
-            // Flush the output buffer if it exists
-            while (ob_get_level()) {
-                ob_end_flush();
+            
+            // Safely retrieve and clean the output buffer
+            $output = '';
+            if (ob_get_length()) {
+                $output = ob_get_clean();  // Get and clear the buffer without sending it
             }
 
             // Prepare the error message
@@ -158,17 +164,22 @@ function shutdownHandler() {
             if ($errorLogFile) {
                 logErrorToFile($logFilePath, 'Fatal Error', $last_error['type'], $last_error['message'], $last_error['file'], $last_error['line'], $backtrace);
             }
+
+            // Output the captured content again if needed
+            echo $output;
         }
     }
 }
 
 // Custom Exception Handler Function
+// Custom Exception Handler Function
 function customExceptionHandler($exception) {
     global $errorDisplay, $errorLogFile, $logFilePath;
 
-    // Flush the output buffer if it exists
-    while (ob_get_level()) {
-        ob_end_flush();
+    // Safely retrieve and clean the output buffer
+    $output = '';
+    if (ob_get_length()) {
+        $output = ob_get_clean();  // Get and clear the buffer without sending it
     }
 
     // Prepare the uncaught exception message
@@ -189,6 +200,9 @@ function customExceptionHandler($exception) {
     if ($errorLogFile) {
         logErrorToFile($logFilePath, 'Uncaught Exception', 0, $exception->getMessage(), $exception->getFile(), $exception->getLine(), $backtrace);
     }
+
+    // Output the captured content again if needed
+    echo $output;
 
     // Stop the script after an uncaught exception
     die();
@@ -236,6 +250,7 @@ register_shutdown_function('shutdownHandler');
 
 // Set exception handler to catch uncaught exceptions
 set_exception_handler('customExceptionHandler');
+
 if(!isset($Settings['qstr'])) { $Settings['qstr'] = null; }
 if(!isset($Settings['send_pagesize'])) { $Settings['send_pagesize'] = "off"; }
 $deftz = new DateTimeZone(date_default_timezone_get());
