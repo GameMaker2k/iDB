@@ -97,6 +97,9 @@ function clean_html_output($output) {
 
 // Change the title and gzip page
 function change_title($new_title, $use_gzip = "off", $gzip_type = "gzip") {
+    if($use_gzip==null) {
+        $use_gzip = false;
+    }
     global $Settings, $urlstatus;
     $urlstatus = (isset($urlstatus) && is_numeric($urlstatus)) ? $urlstatus : 200;
     $gzip_type = in_array($gzip_type, ["gzip", "deflate", "brotli", "zstd"]) ? $gzip_type : "gzip";
@@ -113,6 +116,9 @@ function change_title($new_title, $use_gzip = "off", $gzip_type = "gzip") {
 // Fix amp => (&) to &amp; and gzip page
 // Fix ampersand and gzip page
 function fix_amp($use_gzip = "off", $gzip_type = "gzip") {
+    if($use_gzip==null) {
+        $use_gzip = false;
+    }
     global $Settings, $urlstatus;
     $urlstatus = (isset($urlstatus) && is_numeric($urlstatus)) ? $urlstatus : 200;
     $gzip_type = in_array($gzip_type, ["gzip", "deflate", "brotli", "zstd"]) ? $gzip_type : "gzip";
@@ -126,6 +132,9 @@ function fix_amp($use_gzip = "off", $gzip_type = "gzip") {
 
 // GZip page for faster download
 function gzip_page($use_gzip = "off", $gzip_type = "gzip") {
+    if($use_gzip==null) {
+        $use_gzip = false;
+    }
     global $Settings, $urlstatus;
     $urlstatus = (isset($urlstatus) && is_numeric($urlstatus)) ? $urlstatus : 200;
     $gzip_type = in_array($gzip_type, ["gzip", "deflate", "brotli", "zstd"]) ? $gzip_type : "gzip";
