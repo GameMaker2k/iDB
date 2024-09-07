@@ -678,7 +678,7 @@ if(user_agent_check($session_user_agent)) {
 <td class="TableColumn3" style="text-align: center;"><?php echo $UserSessInfo['UserGroup']; ?></td>
 <td class="TableColumn3" style="text-align: center;"><?php if($get_session_id!=session_id()) { ?><a href="<?php echo url_maker($PreFileName,"no+ext",$PreExpPage,$Settings['qstr'],$Settings['qsep'],null,null); ?>"><?php echo $UserSessInfo['PreViewingTitle']; ?> <?php echo $UserSessInfo['ViewingTitle']; ?></a><?php } if($get_session_id==session_id()) { ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=online&list=".$_GET['list']."&page=".$_GET['page'],"&","=",$prexqstr['member'],$exqstr['member']); ?>">Viewing Online Member List</a><?php } ?></td>
 <td class="TableColumn3" style="text-align: center;"><?php echo $session_expires; ?></td>
-<td class="TableColumn3" style="text-align: center;"><a href="<?php echo $MemList['Website']; ?>"<?php echo $opennew; ?>>Website</a></td>
+<td class="TableColumn3" style="text-align: center;"><a href="<?php echo $ViewSessMem['Website']; ?>"<?php echo $opennew; ?>>Website</a></td>
 <?php if($UserSessInfo['UserID']>0&&$AmIHiddenUser=="no") { ?>
 <td class="TableColumn3" style="text-align: center;"><a href="<?php echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=create&id=".$UserSessInfo['UserID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); ?>"<?php echo $opennew; ?>>PM</a></td>
 <?php } if($UserSessInfo['UserID']<=0||$AmIHiddenUser=="yes") { ?>
