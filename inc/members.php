@@ -1528,7 +1528,7 @@ if (!preg_match('/^[a-zA-Z0-9_]{3,20}$/', $Handle)) { $Error="Yes"; ?>
 	<br />Your handel is invalid.<br />
 	</span>&#160;</td>
 </tr>
-<?php if (pre_strlen($Handle)>"20") { $Error="Yes"; ?>
+<?php } if (pre_strlen($Handle)>"20") { $Error="Yes"; ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />Your handel is too big.<br />
