@@ -69,6 +69,9 @@ function send_output($output, $urlstatus, $gzip_type = "gzip", $use_gzip = false
     if ($use_gzip == "on") {
         $output = get_compressed_output($output, $gzip_type);
     }
+    if(!isset($Settings['send_pagesize']) {
+        $Settings['send_pagesize'] = "off";
+    }
     if ($Settings['send_pagesize'] == "on") {
         @header("Content-Length: " . strlen($output));
         @header("Content-MD5: " . base64_encode(md5($output)));
@@ -124,6 +127,9 @@ function fix_amp($use_gzip = "off", $gzip_type = "gzip") {
     $gzip_type = in_array($gzip_type, ["gzip", "deflate", "brotli", "zstd"]) ? $gzip_type : "gzip";
     $output = trim(ob_get_clean());
     $SessName = session_name();
+    if(!isset($Settings['qstr']) {
+        $Settings['qstr'] = "&";
+    }
     $qstrcode = htmlentities($Settings['qstr'], ENT_QUOTES, $Settings['charset']);
     $output = str_replace($Settings['qstr'] . $SessName, $qstrcode . $SessName, $output);
     $output = clean_html_output($output);
