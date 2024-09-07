@@ -358,15 +358,19 @@ $gresult=sql_query($gquery,$SQLStat);
 $EditMem['Group']=sql_result($gresult,0,"Name");
 sql_free_result($gresult);
 $EditMem['LevelID']=sql_result($result,0,"LevelID");
+if($EditMem['LevelID']>0) {
 $lquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."levels\" WHERE \"id\"=%i LIMIT 1", array($EditMem['LevelID']));
 $lresult=sql_query($lquery,$SQLStat);
 $EditMem['Level']=sql_result($lresult,0,"Name");
-sql_free_result($lresult);
+sql_free_result($lresult); } else {
+ $EditMem['Level'] = ""; }
 $EditMem['RankID']=sql_result($result,0,"RankID");
+if($EditMem['RankID']>0) {
 $rquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."ranks\" WHERE \"id\"=%i LIMIT 1", array($EditMem['RankID']));
 $rresult=sql_query($rquery,$SQLStat);
 $EditMem['Rank']=sql_result($rresult,0,"Name");
-sql_free_result($rresult);
+sql_free_result($rresult); } else {
+ $EditMem['Rank'] = ""; }
 $EditMem['Validated']=sql_result($result,0,"Validated");
 $EditMem['HiddenMember']=sql_result($result,0,"HiddenMember");
 $EditMem['WarnLevel']=sql_result($result,0,"WarnLevel");
@@ -685,7 +689,6 @@ sql_free_result($getperidr); ?>
 	<option <?php if($EditMemPerm['CanViewUserAgent']=="yes") { echo "selected=\"selected\" "; } ?>value="yes">yes</option>
 	<option <?php if($EditMemPerm['CanViewUserAgent']=="no") { echo "selected=\"selected\" "; } ?>value="no">no</option>
 	</select></td>
-<?php } ?>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="CanViewAnonymous">Can view user agent:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="CanViewAnonymous" id="CanViewAnonymous">
