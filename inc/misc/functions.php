@@ -83,6 +83,9 @@ function send_output($output, $urlstatus, $gzip_type = "gzip", $use_gzip = false
 // Helper function to clean HTML using Tidy
 function clean_html_output($output) {
     global $Settings;
+	if(!isset($Settings['clean_html'])) {
+		$Settings['clean_html'] = false;
+	}
     if (extension_loaded('tidy') && $Settings['clean_html']) {
         $config = array(
             'indent' => true,
