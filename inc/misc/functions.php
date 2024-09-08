@@ -422,9 +422,10 @@ $UsersInfo['Hidden'] = $UsersHidden;
 return $UsersInfo; }
 
 // Fallback hash function for environments without the hash extension
+// Drop-in replacement for the hash() function if it does not exist
 if (!function_exists('hash')) {
     function hash($algo, $data, $raw_output = false) {
-        // Supported algorithms in this fallback
+        // Supported algorithms for the fallback implementation
         $supported_algos = array('md5', 'sha1');
 
         // Check if the algorithm is supported
@@ -434,11 +435,92 @@ if (!function_exists('hash')) {
         }
 
         // Hash the data using the specified algorithm
-        $hash = $algo($data);
+        $hash = ($algo == 'md5') ? md5($data) : sha1($data);
 
         // Handle raw output (binary) if requested
         return $raw_output ? hex2bin($hash) : $hash;
     }
+}
+
+// Drop-in replacement for the hash_hmac() function if it does not exist
+if (!function_exists('hash_hmac')) {
+    function hash_hmac($hash, $data, $key, $raw_output = false) {
+        // Normalize SHA-3 algorithm names for compatibility with hash()
+        $hash = str_replace(['sha3-224', 'sha3-256', 'sha3-384', 'sha3-512'], ['sha3224', 'sha3256', 'sha3384', 'sha3512'], $hash);
+
+        // Check if hash() function is available
+        if (!function_exists('hash')) {
+            trigger_error("hash() function not available. Cannot perform HMAC.", E_USER_WARNING);
+            return false;
+        }
+
+        // Determine the block size for the hash function
+        $blocksize = 64; // Most hash block sizes are 64 bytes, except SHA-512 and some others
+        if (in_array($hash, ['sha384', 'sha512', 'sha3384', 'sha3512'])) {
+            $blocksize = 128; // For SHA-512 and similar algorithms
+        }
+
+        // Hash the key if it is longer than the block size
+        if (strlen($key) > $blocksize) {
+            $key = pack('H*', hash($hash, $key));
+        }
+
+        // Pad the key to the block size
+        $key = str_pad($key, $blocksize, chr(0x00));
+        $ipad = str_repeat(chr(0x36), $blocksize);
+        $opad = str_repeat(chr(0x5c), $blocksize);
+
+        // Perform inner and outer hash calculations manually
+        $inner = hash($hash, ($key ^ $ipad) . $data);
+        $hmac = hash($hash, ($key ^ $opad) . pack('H*', $inner));
+
+        // Restore original SHA-3 names for consistency
+        $hash = str_replace(['sha3224', 'sha3256', 'sha3384', 'sha3512'], ['sha3-224', 'sha3-256', 'sha3-384', 'sha3-512'], $hash);
+
+        return $raw_output ? hex2bin($hmac) : $hmac;
+    }
+}
+
+// Define hmac() function as a custom implementation
+function hmac($data, $key, $hash = 'sha1', $blocksize = 64) {
+    // If hash_hmac() is available, use it directly
+    if (function_exists('hash_hmac')) {
+        return hash_hmac($hash, $data, $key);
+    }
+
+    // Otherwise, use the custom implementation for HMAC
+    // Normalize SHA-3 algorithm names for compatibility with hash()
+    $hash = str_replace(['sha3-224', 'sha3-256', 'sha3-384', 'sha3-512'], ['sha3224', 'sha3256', 'sha3384', 'sha3512'], $hash);
+
+    // Check if hash() function is available
+    if (!function_exists('hash')) {
+        trigger_error("hash() function not available. Cannot perform HMAC.", E_USER_WARNING);
+        return false;
+    }
+
+    // Determine the block size for the hash function
+    if (in_array($hash, ['sha384', 'sha512', 'sha3384', 'sha3512'])) {
+        $blocksize = 128; // For SHA-512 and similar algorithms
+    }
+
+    // Hash the key if it is longer than the block size
+    if (strlen($key) > $blocksize) {
+        $key = pack('H*', hash($hash, $key));
+    }
+
+    // Pad the key to the block size
+    $key = str_pad($key, $blocksize, chr(0x00));
+    $ipad = str_repeat(chr(0x36), $blocksize);
+    $opad = str_repeat(chr(0x5c), $blocksize);
+
+    // Perform inner and outer hash calculations manually
+    $inner = hash($hash, ($key ^ $ipad) . $data);
+    $hmac = hash($hash, ($key ^ $opad) . pack('H*', $inner));
+
+    // Restore original SHA-3 names for consistency
+    $hash = str_replace(['sha3224', 'sha3256', 'sha3384', 'sha3512'], ['sha3-224', 'sha3-256', 'sha3-384', 'sha3-512'], $hash);
+
+    return $hmac;
 }
 
 // Fallback function to return supported hash algorithms in this environment
@@ -447,60 +529,7 @@ if (!function_exists('hash_algos')) {
         return array('md5', 'sha1');
     }
 }
-
-if(!function_exists('hash_hmac')) {
-function hash_hmac($hash, $data, $key, $raw_output = false) {
-  if($hash=="sha3-224") { $hash = "sha3224"; }
-  if($hash=="sha3-256") { $hash = "sha3256"; }
-  if($hash=="sha3-384") { $hash = "sha3384"; }
-  if($hash=="sha3-512") { $hash = "sha3512"; }
-  $blocksize = 64;
-  if (strlen($key)>$blocksize) {
-  if (function_exists('hash')) {
-  if($hash=="sha3224") { $hash = "sha3-224"; }
-  if($hash=="sha3256") { $hash = "sha3-256"; }
-  if($hash=="sha3384") { $hash = "sha3-384"; }
-  if($hash=="sha3512") { $hash = "sha3-512"; }
-  $key=pack('H*',hash($hash, $key)); }
-  if (!function_exists('hash')) {
-  $key=pack('H*',$hash($key)); } }
-  $key=str_pad($key, $blocksize, chr(0x00));
-  $ipad=str_repeat(chr(0x36),$blocksize);
-  $opad=str_repeat(chr(0x5c),$blocksize);
-  if($hash=="sha3224") { $hash = "sha3-224"; }
-  if($hash=="sha3256") { $hash = "sha3-256"; }
-  if($hash=="sha3384") { $hash = "sha3-384"; }
-  if($hash=="sha3512") { $hash = "sha3-512"; }
-  return hash($hash, ($key^$opad).pack('H*',hash($hash, ($key^$ipad).$data))); } }
-// hmac hash function
-function hmac($data,$key,$hash='sha1',$blocksize=64) {
-  if($hash=="sha3-224") { $hash = "sha3224"; }
-  if($hash=="sha3-256") { $hash = "sha3256"; }
-  if($hash=="sha3-384") { $hash = "sha3384"; }
-  if($hash=="sha3-512") { $hash = "sha3512"; }
-  if (!function_exists('hash_hmac')) {
-  if (strlen($key)>$blocksize) {
-  if (function_exists('hash')) {
-  $key=pack('H*',hash($hash, $key)); }
-  if (!function_exists('hash')) {
-  $key=pack('H*',$hash($key)); } }
-  $key=str_pad($key, $blocksize, chr(0x00));
-  $ipad=str_repeat(chr(0x36),$blocksize);
-  $opad=str_repeat(chr(0x5c),$blocksize);
-  if (function_exists('hash')) {
-  if($hash=="sha3224") { $hash = "sha3-224"; }
-  if($hash=="sha3256") { $hash = "sha3-256"; }
-  if($hash=="sha3384") { $hash = "sha3-384"; }
-  if($hash=="sha3512") { $hash = "sha3-512"; }
-  return hash($hash, ($key^$opad).pack('H*',hash($hash, ($key^$ipad).$data))); }
-  if (!function_exists('hash')) {
-  return $hash(($key^$opad).pack('H*',$hash(($key^$ipad).$data))); } }
-  if (function_exists('hash_hmac')) { 
-  if($hash=="sha3224") { $hash = "sha3-224"; }
-  if($hash=="sha3256") { $hash = "sha3-256"; }
-  if($hash=="sha3384") { $hash = "sha3-384"; }
-  if($hash=="sha3512") { $hash = "sha3-512"; }
-  return hash_hmac($hash,$data,$key); } }
+	
 // b64hmac hash function
 function b64e_hmac($data,$key,$extdata,$hash='sha1',$blocksize=64) {
 	$extdata2 = hexdec($extdata); $key = $key.$extdata2;
@@ -526,39 +555,24 @@ function is_empty($var) {
 		$var !== false) || (is_array($var) && empty($var))) {
         return true; } else { return false; } }
 // PHP 5 hash algorithms to functions :o 
-if(function_exists('hash')&&function_exists('hash_algos')) {
-if(in_array("md2",hash_algos())&&!function_exists("md2")) { 
-function md2($data) { return hash("md2",$data); } } 
-if(in_array("md4",hash_algos())&&!function_exists("md4")) { 
-function md4($data) { return hash("md4",$data); } }
-if(in_array("md5",hash_algos())&&!function_exists("md5")) { 
-function md5($data) { return hash("md5",$data); } }
-if(in_array("sha1",hash_algos())&&!function_exists("sha1")) { 
-function sha1($data) { return hash("sha1",$data); } }
-if(in_array("sha224",hash_algos())&&!function_exists("sha224")) { 
-function sha224($data) { return hash("sha224",$data); } }
-if(in_array("sha256",hash_algos())&&!function_exists("sha256")) { 
-function sha256($data) { return hash("sha256",$data); } }
-if(in_array("sha384",hash_algos())&&!function_exists("sha384")) { 
-function sha384($data) { return hash("sha384",$data); } }
-if(in_array("sha512",hash_algos())&&!function_exists("sha512")) { 
-function sha512($data) { return hash("sha512",$data); } }
-if(in_array("sha3-224",hash_algos())&&!function_exists("sha3224")) { 
-function sha3224($data) { return hash("sha3-224",$data); } }
-if(in_array("sha3-256",hash_algos())&&!function_exists("sha3256")) { 
-function sha3256($data) { return hash("sha3-256",$data); } }
-if(in_array("sha3-384",hash_algos())&&!function_exists("sha3384")) { 
-function sha3384($data) { return hash("sha3-384",$data); } }
-if(in_array("sha3-512",hash_algos())&&!function_exists("sha3512")) { 
-function sha3512($data) { return hash("sha3-512",$data); } }
-if(in_array("ripemd128",hash_algos())&&!function_exists("ripemd128")) { 
-function ripemd128($data) { return hash("ripemd128",$data); } }
-if(in_array("ripemd160",hash_algos())&&!function_exists("ripemd160")) { 
-function ripemd160($data) { return hash("ripemd160",$data); } }
-if(in_array("ripemd256",hash_algos())&&!function_exists("ripemd256")) { 
-function ripemd256($data) { return hash("ripemd256",$data); } }
-if(in_array("ripemd512",hash_algos())&&!function_exists("ripemd512")) { 
-function ripemd320($data) { return hash("ripemd320",$data); } } }
+// Automatically define hash functions for all supported algorithms
+if (function_exists('hash') && function_exists('hash_algos')) {
+    $algos = hash_algos();  // Get the list of available hash algorithms
+
+    foreach ($algos as $algo) {
+        // Format function names: Remove non-alphanumeric characters for function names
+        $function_name = preg_replace('/[^a-zA-Z0-9]/', '', $algo);
+
+        // Check if the function already exists to avoid redeclaration
+        if (!function_exists($function_name)) {
+            eval("
+                function $function_name(\$data, \$raw_output = false) {
+                    return hash('$algo', \$data, \$raw_output);
+                }
+            ");
+        }
+    }
+}
 // Try and convert IPB 2.0.0 style passwords to iDB style passwords
 function hash2xkey($data,$key,$hash1='md5',$hash2='md5') {
   return $hash1($hash2($key).$hash2($data)); }
@@ -584,14 +598,78 @@ function cp($infile,$outfile,$mode="w") {
 function neo_b64e_hmac($data,$key,$extdata,$hash='sha1',$blocksize=64) {
 	$extdata2 = hexdec($extdata); $key = $key.$extdata2;
   return base64_encode(password_hash($data.$extdata, PASSWORD_BCRYPT)); }
+
+function neo_b64e_bcrypt_hmac($data,$key,$extdata,$hash='sha1',$blocksize=64) {
+  return neo_b64e_hmac($data,$key,$extdata,$hash,$blocksize); }
+
+function neo_b64e_argon2i_hmac($data,$key,$extdata,$hash='sha1',$blocksize=64) {
+	$extdata2 = hexdec($extdata); $key = $key.$extdata2;
+  return base64_encode(password_hash($data.$extdata, PASSWORD_ARGON2I)); }
+
+function neo_b64e_argon2id_hmac($data,$key,$extdata,$hash='sha1',$blocksize=64) {
+	$extdata2 = hexdec($extdata); $key = $key.$extdata2;
+  return base64_encode(password_hash($data.$extdata, PASSWORD_ARGON2ID)); }
+
 // b64hmac rot13 hash function
 function neo_b64e_rot13_hmac($data,$key,$extdata,$hash='sha1',$blocksize=64) {
 	$data = str_rot13($data);
 	$extdata2 = hexdec($extdata); $key = $key.$extdata2;
   return base64_encode(password_hash($data.$extdata, PASSWORD_BCRYPT)); }
 
-if(!function_exists('password_hash')) { 
-function bcrypt($data) { return password_hash($data,PASSWORD_BCRYPT); } }
+function neo_b64e_rot13_bcrypt_hmac($data,$key,$extdata,$hash='sha1',$blocksize=64) {
+  return neo_b64e_rot13_hmac($data,$key,$extdata,$hash,$blocksize); }
+
+function neo_b64e_rot13_argon2i_hmac($data,$key,$extdata,$hash='sha1',$blocksize=64) {
+	$data = str_rot13($data);
+	$extdata2 = hexdec($extdata); $key = $key.$extdata2;
+  return base64_encode(password_hash($data.$extdata, PASSWORD_ARGON2I)); }
+
+function neo_b64e_rot13_argon2id_hmac($data,$key,$extdata,$hash='sha1',$blocksize=64) {
+	$data = str_rot13($data);
+	$extdata2 = hexdec($extdata); $key = $key.$extdata2;
+  return base64_encode(password_hash($data.$extdata, PASSWORD_ARGON2ID)); }
+
+if (function_exists('password_hash')) {
+    if (defined('PASSWORD_BCRYPT')) {
+        function bcrypt($data) {
+            return password_hash($data, PASSWORD_BCRYPT);
+        }
+    } else {
+        function bcrypt($data) {
+            return false;
+        }
+    }
+
+    if (defined('PASSWORD_ARGON2I')) {
+        function argon2i($data) {
+            return password_hash($data, PASSWORD_ARGON2I);
+        }
+    } else {
+        function argon2i($data) {
+            return false;
+        }
+    }
+
+    if (defined('PASSWORD_ARGON2ID')) {
+        function argon2id($data) {
+            return password_hash($data, PASSWORD_ARGON2ID);
+        }
+    } else {
+        function argon2id($data) {
+            return false;
+        }
+    }
+
+    if (defined('PASSWORD_DEFAULT')) {
+        function defpass($data) {
+            return password_hash($data, PASSWORD_DEFAULT);
+        }
+    } else {
+        function defpass($data) {
+            return false;
+        }
+    }
+}
 
 /* is_empty by s rotondo90 at gmail com at https://www.php.net/manual/en/function.hash-equals.php#119576*/
 if(!function_exists('hash_equals')) {
