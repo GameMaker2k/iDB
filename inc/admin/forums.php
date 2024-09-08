@@ -308,6 +308,7 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Adding new Forum";
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="ForumCatID">Select category for forum:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="ForumCatID" id="ForumCatID">
+	<option selected="selected" value="0">none</option>
 <?php 
 $cq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."categories\" ORDER BY \"OrderID\" ASC, \"id\" ASC", null);
 $cr=sql_query($cq,$SQLStat);
@@ -494,7 +495,12 @@ if ($_POST['ForumID']==null||
 	!is_numeric($_POST['ForumID'])||
 	$_POST['ForumID']==0||
 	$_POST['ForumID']=="0") { $Error="Yes";
-$errorstr = $errorstr."You need to enter a forum ID.<br />\n"; } 
+$errorstr = $errorstr."You need to enter a forum ID.<br />\n"; }
+if ($_POST['ForumCatID']==null||
+	!is_numeric($_POST['ForumCatID'])||
+	$_POST['ForumCatID']==0||
+	$_POST['ForumCatID']=="0") { $Error="Yes";
+$errorstr = $errorstr."You need to enter a category ID.<br />\n"; }
 if($id_check > 0) { $Error="Yes";
 $errorstr = $errorstr."This ID number is already used.<br />\n"; } 
 if($order_check > 0) { $Error="Yes"; 
@@ -862,6 +868,7 @@ $ForumType = strtolower($ForumType); $CanHaveTopics = strtolower($CanHaveTopics)
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="ForumCatID">Select category for forum:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="ForumCatID" id="ForumCatID">
+	 <option selected="selected" value="0">none</option>
 <?php 
 $cq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."categories\" ORDER BY \"OrderID\" ASC, \"id\" ASC", null);
 $cr=sql_query($cq,$SQLStat);
@@ -1023,8 +1030,15 @@ $errorstr = $errorstr."You need to enter a forum name.<br />\n"; }
 if ($_POST['ForumDesc']==null) { $Error="Yes";
 $errorstr = $errorstr."You need to enter a description.<br />\n"; } 
 if ($_POST['ForumID']==null||
-	!is_numeric($_POST['ForumID'])) { $Error="Yes";
+	!is_numeric($_POST['ForumID'])||
+	$_POST['ForumID']==0||
+	$_POST['ForumID']=="0") { $Error="Yes";
 $errorstr = $errorstr."You need to enter a forum ID.<br />\n"; } 
+if ($_POST['ForumCatID']==null||
+	!is_numeric($_POST['ForumCatID'])||
+	$_POST['ForumCatID']==0||
+	$_POST['ForumCatID']=="0") { $Error="Yes";
+$errorstr = $errorstr."You need to enter a category ID.<br />\n"; }
 if($id_check > 0&&$_POST['ForumID']!=$OldID) { $Error="Yes";
 $errorstr = $errorstr."This ID number is already used.<br />\n"; } 
 if($order_check > 0&&$_POST['OrderID']!=$OldOrder) { $Error="Yes"; 
