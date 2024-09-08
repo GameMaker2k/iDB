@@ -395,7 +395,7 @@ if($User1CanUseBBTags!="yes"&&$User1CanUseBBTags!="no") {
 $GroupNamePrefix=sql_result($gresult,0,"NamePrefix");
 $GroupNameSuffix=sql_result($gresult,0,"NameSuffix");
 $User1PermissionID=sql_result($gresult,0,"PermissionID");
-sql_free_result($gresult); sql_free_result($lresult);
+sql_free_result($gresult);
 $per1query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i LIMIT 1", array($User1PermissionID));
 $per1esult=sql_query($per1query,$SQLStat);
 $per1num=sql_num_rows($per1esult);
