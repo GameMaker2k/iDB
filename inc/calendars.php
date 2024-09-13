@@ -134,7 +134,7 @@ $MyCurMonth = $usercurtime->format("m");
 $EventsName = array();
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."events\" WHERE (\"EventMonth\">=%i AND \"EventYear\"<%i AND \"EventYearEnd\">=%i) OR (\"EventMonth\"<=%i AND \"EventMonthEnd\">=%i AND \"EventYearEnd\">=%i) OR (\"EventMonth\"<=%i AND \"EventMonthEnd\"<=%i AND \"EventYear\"<=%i AND \"EventYearEnd\">%i)",  array($MyMonth,$MyYear,$MyYear,$MyMonth,$MyMonth,$MyYear,$MyMonth,$MyMonth,$MyYear,$MyYear));
 $result=sql_query($query,$SQLStat);
-$num=sql_num_rows($result);
+$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."events\" WHERE (\"EventMonth\">=%i AND \"EventYear\"<%i AND \"EventYearEnd\">=%i) OR (\"EventMonth\"<=%i AND \"EventMonthEnd\">=%i AND \"EventYearEnd\">=%i) OR (\"EventMonth\"<=%i AND \"EventMonthEnd\"<=%i AND \"EventYear\"<=%i AND \"EventYearEnd\">%i)",  array($MyMonth,$MyYear,$MyYear,$MyMonth,$MyMonth,$MyYear,$MyMonth,$MyMonth,$MyYear,$MyYear)), $SQLStat);
 $is=0;
 while ($is < $num) {
 $EventID=sql_result($result,$is,"id");
@@ -188,7 +188,7 @@ $EventsID[$EventDay] = $EventID;
 sql_free_result($result);
 $bdquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"BirthMonth\"=%i AND \"BirthYear\"<=%i", array($MyMonth, $MyYear));
 $bdresult=sql_query($bdquery,$SQLStat);
-$bdnum=sql_num_rows($bdresult);
+$bdnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"BirthMonth\"=%i AND \"BirthYear\"<=%i", array($MyMonth, $MyYear)), $SQLStat);
 $bdi=0;
 while ($bdi < $bdnum) {
 $UserNamebd=sql_result($bdresult,$bdi,"Name");

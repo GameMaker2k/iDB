@@ -21,7 +21,7 @@ if(!is_numeric($_GET['id'])) { $_GET['id'] = null; }
 if($_GET['act']=="view"||$_GET['act']==null) {
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."events\" WHERE \"id\"=%i LIMIT 1", array($_GET['id']));
 $result=sql_query($query,$SQLStat);
-$num=sql_num_rows($result);
+$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."events\" WHERE \"id\"=%i LIMIT 1", array($_GET['id'])), $SQLStat);
 $is=0;
 if($num==0) { redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($result);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
@@ -76,14 +76,14 @@ $_SESSION['ViewingTitle'] = $EventName;
 $_SESSION['ExtraData'] = "currentact:".$_GET['act']."; currentcategoryid:0; currentforumid:0; currenttopicid:0; currentmessageid:0; currenteventid:".$EventID.";";
 $requery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($EventUser));
 $reresult=sql_query($requery,$SQLStat);
-$renum=sql_num_rows($reresult);
+$renum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($EventUser)), $SQLStat);
 if($renum<1) { $EventUser = -1;
 $requery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($EventUser));
 $reresult=sql_query($requery,$SQLStat);
-$renum=sql_num_rows($reresult); }
+$renum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($EventUser)), $SQLStat); }
 $memrequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."mempermissions\" WHERE \"id\"=%i LIMIT 1", array($EventUser));
 $memreresult=sql_query($memrequery,$SQLStat);
-$memrenum=sql_num_rows($memreresult);
+$memrenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."mempermissions\" WHERE \"id\"=%i LIMIT 1", array($EventUser)), $SQLStat);
 $rei=0;
 $User1ID=$EventUser;
 $User1Name=sql_result($reresult,$rei,"Name");
@@ -290,7 +290,7 @@ $_SESSION['UserFormID'] = $UFID;
 <table style="width: 100%; text-align: center;"><?php
 $melanie_query=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."smileys\" WHERE \"Display\"='yes'", null);
 $melanie_result=sql_query($melanie_query,$SQLStat);
-$melanie_num=sql_num_rows($melanie_result);
+$melanie_num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."smileys\" WHERE \"Display\"='yes'", null), $SQLStat);
 $melanie_p=0; $SmileRow=0; $SmileCRow=0;
 while ($melanie_p < $melanie_num) { ++$SmileRow;
 $FileName=sql_result($melanie_result,$melanie_p,"FileName");
@@ -573,7 +573,7 @@ $_SESSION['GuestName']=$_POST['GuestName']; } }
    by Kazuki Przyborowski - Cool Dude 2k */
 $melanieqy=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."wordfilter\"", null);
 $melaniert=sql_query($melanieqy,$SQLStat);
-$melanienm=sql_num_rows($melaniert);
+$melanienm=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."wordfilter\"", null), $SQLStat);
 $melanies=0;
 while ($melanies < $melanienm) {
 $Filter=sql_result($melaniert,$melanies,"FilterWord");
@@ -598,7 +598,7 @@ $_POST['EventText'] = preg_replace("/".$Filter."/i", $Replace, $_POST['EventText
 ++$melanies; } sql_free_result($melaniert);
 $lonewolfqy=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."restrictedwords\" WHERE \"RestrictedEventName\"='yes' or \"RestrictedUserName\"='yes'", null);
 $lonewolfrt=sql_query($lonewolfqy,$SQLStat);
-$lonewolfnm=sql_num_rows($lonewolfrt);
+$lonewolfnm=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."restrictedwords\" WHERE \"RestrictedEventName\"='yes' or \"RestrictedUserName\"='yes'", null), $SQLStat);
 $lonewolfs=0; $RMatches = null; $RGMatches = null;
 while ($lonewolfs < $lonewolfnm) {
 $RWord=sql_result($lonewolfrt,$lonewolfs,"Word");
