@@ -811,8 +811,7 @@ function sql_session_gc($maxlifetime) {
     $deleteQuery = sql_pre_query("DELETE FROM \"" . $sqltable . "sessions\" WHERE \"expires\" < %i", array($time));
     sql_query($deleteQuery, $SQLStat);
     return true;
-}
-}
+} }
 session_set_save_handler("sql_session_open", "sql_session_close", "sql_session_read", "sql_session_write", "sql_session_destroy", "sql_session_gc");
 if($cookieDomain==null) {
 session_set_cookie_params(0, $cbasedir); }
@@ -1118,7 +1117,7 @@ if($_GET['theme']==null) {
 if($_SESSION['Theme']!=null) {
 $themequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."themes\" WHERE \"Name\"='%s'", array($_SESSION['Theme'])); } }
 $themeresult=sql_query($themequery,$SQLStat);
-$themenum=sql_num_rows($themeresult);
+$themenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."themes\" WHERE \"Name\"='%s'", array($_SESSION['Theme'])), $SQLStat);
 if($themenum<=0) {
 $_GET['theme'] = $Settings['DefaultTheme']; 
 $_SESSION['Theme'] = $Settings['DefaultTheme']; 
@@ -1128,7 +1127,7 @@ $qnewskin = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"Use
 sql_query($qnewskin,$SQLStat); }
 $themequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."themes\" WHERE \"Name\"='%s'", array($_GET['theme']));
 $themeresult=sql_query($themequery,$SQLStat);
-$themenum=sql_num_rows($themeresult); } 
+$themenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."themes\" WHERE \"Name\"='%s'", array($_SESSION['Theme'])), $SQLStat); } 
 else {
 if($_GET['theme']==null) { 
 if($_SESSION['Theme']!=null) {

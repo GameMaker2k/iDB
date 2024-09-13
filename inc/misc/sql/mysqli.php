@@ -88,7 +88,7 @@ $link = mysqli_connect($server,$username,$password,$database,$myport); }
 if ($link===false) {
     output_error("MySQLi Error ".mysqli_connect_errno().": ".mysqli_connect_error(),E_USER_ERROR);
 	return false; }
-$result = mysqli_func_query("SET SESSION SQL_MODE='ANSI,ANSI_QUOTES,TRADITIONAL,STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION,NO_AUTO_VALUE_ON_ZERO';",$link);
+$result = mysql_func_query("SET SESSION SQL_MODE='ANSI,ANSI_QUOTES,TRADITIONAL,STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION,NO_AUTO_VALUE_ON_ZERO';",$link);
 if ($result===false) {
     output_error("SQL Error: ".mysqli_func_error(),E_USER_ERROR);
 	return false; }

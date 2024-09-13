@@ -23,12 +23,22 @@ if(!isset($SetupDir['convert'])) { $SetupDir['convert'] = "setup/convert/"; }
 $query=sql_pre_query("ALTER DATABASE \"".$_POST['DatabaseName']."\" DEFAULT CHARACTER SET ".$Settings['sql_charset']." COLLATE ".$Settings['sql_collate'].";", null);
 sql_query($query,$SQLStat);
 if(isset($Settings['sql_storage_engine'])) {
-$result = sql_query(sql_pre_query("SHOW ENGINES;", null),$SQLStat);
-$num = sql_num_rows($result);
-$i = 0; $SQLEngines = null;
-while ($i < $num) {
-$SQLEngines[$i] = sql_result($result,$i,"Engine");
-++$i; }
+// Execute the query to get the list of engines
+$result = sql_query(sql_pre_query("SHOW ENGINES;", null), $SQLStat);
+// Fetch all rows into an array
+$engines = array();
+while ($row = sql_fetch_assoc($result)) {
+    $engines[] = $row;
+}
+// Count the number of rows
+$num = count($engines);
+// Process the results
+$SQLEngines = null;
+for ($i = 0; $i < $num; ++$i) {
+    $SQLEngines[$i] = $engines[$i]['Engine'];
+}
+// Free the result set
+sql_free_result($result);
 if (!in_array($Settings['sql_storage_engine'], $SQLEngines)) {
     $Settings['sql_storage_engine'] = "InnoDB"; } }
 if(!isset($Settings['sql_storage_engine'])) {
@@ -571,7 +581,7 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."word
 "  PRIMARY KEY  (\"id\")\n".
 ") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$Settings['sql_charset']." COLLATE=".$Settings['sql_collate'].";", null);
 sql_query($query,$SQLStat);
-$TableChCk = array("categories", "catpermissions", "events", "forums", "groups", "levels", "members", "mempermissions", "messenger", "permissions", "polls", "posts", "ranks", "restrictedwords", "sessions", "smileys", "themes", "topics", "wordfilter");
+$TableChCk = array("categories", "catpermissions", "events", "forums", "groups", "levels", "ranks", "members", "mempermissions", "messenger", "permissions", "polls", "posts", "restrictedwords", "sessions", "smileys", "themes", "topics", "wordfilter");
 $TablePreFix = $_POST['tableprefix'];
 function add_prefix($tarray) {
 global $TablePreFix;

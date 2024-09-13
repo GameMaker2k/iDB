@@ -92,7 +92,7 @@ $TablePreFix = $Settings['sqltable'];
 function add_prefix($tarray) {
 global $TablePreFix;
 return $TablePreFix.$tarray; }
-$TableChCk = array("categories", "catpermissions", "events", "forums", "groups", "levels", "members", "mempermissions", "messenger", "permissions", "polls", "posts", 'ranks', "restrictedwords", "sessions", "smileys", "themes", "topics", "wordfilter");
+$TableChCk = array("categories", "catpermissions", "events", "forums", "groups", "levels", "ranks", "members", "mempermissions", "messenger", "permissions", "polls", "posts", 'ranks', "restrictedwords", "sessions", "smileys", "themes", "topics", "wordfilter");
 $TableChCk = array_map("add_prefix",$TableChCk);
 if(!isset($_GET['outtype'])||$_GET['outtype']=="UTF-8") {
 header("Content-Type: text/plain; charset=UTF-8"); }
@@ -100,74 +100,42 @@ if($_GET['outtype']=="latin1") {
 header("Content-Type: text/plain; charset=ISO-8859-15"); }
 if($_GET['outtype']=="latin15") {
 header("Content-Type: text/plain; charset=ISO-8859-15"); }
-$sli = 0;
-$slnum = count($TableChCk);
-
+$sli = 0; $slnum = count($TableChCk);
 while ($sli < $slnum) {
-    $FullTable[$sli] = "CREATE TABLE \"" . $TableChCk[$sli] . "\" (";
-    $tabsta = sql_query("SELECT * FROM information_schema.columns WHERE table_name='" . $TableChCk[$sli] . "';", $SQLStat);
-    $zli = 0;
-    $zlnum = sql_num_rows($tabsta);
-    $UniKeyRow = null;
-
-    while ($zli < $zlnum) {
-        $SQL['column_name'] = sql_result($tabsta, $zli, "column_name");
-        $SQL['column_default'] = sql_result($tabsta, $zli, "column_default");
-
-        // Ensure column default is a string and not null
-        if ($SQL['column_default'] === null) {
-            $SQL['column_default'] = "";
-        }
-
-        $PSQL = explode("::", $SQL['column_default']);
-        if (count($PSQL) > 1) {
-            $SQL['column_default'] = $PSQL[0];
-        }
-
-        if (preg_match("/nextval(.*)\_seq/i", $SQL['column_default'])) {
-            $SQL['udt_name'] = "SERIAL";
-            $SQL['column_default'] = null;
-        } else {
-            $SQL['column_default'] = " DEFAULT " . $SQL['column_default'];
-            $SQL['udt_name'] = sql_result($tabsta, $zli, "udt_name");
-        }
-        if ($SQL['udt_name'] == "text") {
-            $SQL['column_default'] = null;
-        }
-        $SQL['character_maximum_length'] = sql_result($tabsta, $zli, "character_maximum_length");
-        if ($SQL['udt_name'] == "varchar") {
-            $SQL['udt_name'] = $SQL['udt_name'] . "(" . $SQL['character_maximum_length'] . ")";
-        }
-
-        // Initialize constraint checks
-        $pristats = null;
-        $PriKeyRow = " ";
-
-        // Fetch constraints for each column
-        $prista = sql_query("SELECT tc.constraint_name, tc.constraint_type FROM information_schema.table_constraints tc
-            JOIN information_schema.key_column_usage kcu ON tc.constraint_name = kcu.constraint_name
-            WHERE kcu.table_name = '" . $TableChCk[$sli] . "' AND kcu.column_name = '" . $SQL['column_name'] . "';", $SQLStat);
-
-        if ($prista && pg_num_rows($prista) > 0) {
-            while ($constraint = pg_fetch_assoc($prista)) {
-                $pristats = $constraint['constraint_name'];
-                if ($constraint['constraint_type'] == 'PRIMARY KEY') {
-                    $PriKeyRow = " PRIMARY KEY ";
-                } elseif ($constraint['constraint_type'] == 'UNIQUE') {
-                    $UniKeyRow = $UniKeyRow . ",\n  UNIQUE (\"" . $SQL['column_name'] . "\")";
-                }
-            }
-        }
-
-        $FullTable[$sli] .= "\n  \"" . $SQL['column_name'] . "\" " . $SQL['udt_name'] . $PriKeyRow . "NOT NULL" . $SQL['column_default'];
-        if ($zli + 1 < $zlnum) {
-            $FullTable[$sli] .= ",";
-        }
-        ++$zli;
-    }
-    $FullTable[$sli] .= $UniKeyRow . "\n);\n";
-    ++$sli;
-}
+$FullTable[$sli] = "CREATE TABLE \"".$TableChCk[$sli]."\" (";
+$tabsta = sql_query("select * from information_schema.columns where table_name='".$TableChCk[$sli]."';",$SQLStat);
+$zli = 0; $zlnum = sql_num_rows($tabsta);
+$UniKeyRow = null;
+while ($zli < $zlnum) {
+$SQL['column_name'] = sql_result($tabsta,$zli,"column_name");
+$SQL['column_default'] = sql_result($tabsta,$zli,"column_default");
+$PSQL = null;
+$PSQL = explode("::", $SQL['column_default']);
+if(count($PSQL)>1) { $SQL['column_default'] = $PSQL[0]; }
+if (preg_match("/nextval(.*)\_seq/i", $SQL['column_default'])) {
+$SQL['udt_name'] = "SERIAL"; $SQL['column_default'] = null;
+} else { $SQL['column_default'] = " DEFAULT ".$SQL['column_default'];
+$SQL['udt_name'] = sql_result($tabsta,$zli,"udt_name"); }
+if($SQL['udt_name']=="text") { $SQL['column_default'] = null; }
+$SQL['character_maximum_length'] = sql_result($tabsta,$zli,"character_maximum_length");
+if($SQL['udt_name']=="varchar") {
+	$SQL['udt_name'] = $SQL['udt_name']."(".$SQL['character_maximum_length'].")"; }
+$pristats = null; $PriKeyRow = " ";
+$prista = sql_query("SELECT * FROM information_schema.key_column_usage WHERE table_name = '".$TableChCk[$sli]."' and column_name = '".$SQL['column_name']."';",$SQLStat);
+$pristats = @pg_fetch_result($prista,0,"\"constraint_name\"");
+if (preg_match("/(.*)\_pkey/i", $pristats)) {
+$PriKeyRow = " PRIMARY KEY ";
+} else {
+if (preg_match("/(.*)\_key/i", $pristats)) {
+$UniKeyRow = $UniKeyRow.",\n  UNIQUE (\"".$SQL['column_name']."\")";
+} else {
+/*Nothing*/ } }
+if($pristats==$SQL['column_name']) { $PriKeyRow = " PRIMARY KEY "; }
+$FullTable[$sli] .= "\n  \"".$SQL['column_name']."\" ".$SQL['udt_name'].$PriKeyRow."NOT NULL".$SQL['column_default'];
+if($zli+1 < $zlnum) { $FullTable[$sli] .= ","; }
+++$zli; }
+$FullTable[$sli] .= $UniKeyRow."\n);\n";
+++$sli; }
 $TableNames = $TableChCk;
 $num = count($TableNames); $melanie_p = 0;
 $sqldump = "-- ".$OrgName." ".$SQLDumper."\n";
