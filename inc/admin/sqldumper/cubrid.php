@@ -72,7 +72,8 @@ if (!$conn) {
     die("Connection failed: " . cubrid_error_msg());
 }
 
-$TableChCk = array("categories", "catpermissions", "events", "forums", "groups", "levels", "ranks", "members", "mempermissions", "messenger", "permissions", "polls", "posts", 'ranks', "restrictedwords", "sessions", "smileys", "themes", "topics", "wordfilter");
+$TableChCk = array("categories", "catpermissions", "events", "forums", "groups", "levels", "members", "mempermissions", "messenger", "permissions", "polls", "posts", 'ranks', "restrictedwords", "sessions", "smileys", "themes", "topics", "wordfilter");
+
 $TablePreFix = $Settings['sqltable'];
 $TableChCk = array_map(function($table) use ($TablePreFix) {
     return $TablePreFix . $table;

@@ -163,7 +163,8 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."ranks\" (\n".
 "  \"PromoteKarma\" numeric(15) NOT NULL default '0',\n".
 "  \"DemoteTo\" numeric(15) NOT NULL default '0',\n".
 "  \"DemotePosts\" numeric(15) NOT NULL default '0',\n".
-"  \"DemoteKarma\" numeric(15) NOT NULL default '0'\n".
+"  \"DemoteKarma\" numeric(15) NOT NULL default '0',\n".
+"  UNIQUE (\"Name\")\n".
 ");", null);
 sql_query($query,$SQLStat);
 $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."levels\" (\n".
@@ -174,7 +175,7 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."levels\" (\n".
 "  \"PromoteKarma\" numeric(15) NOT NULL default '0',\n".
 "  \"DemoteTo\" numeric(15) NOT NULL default '0',\n".
 "  \"DemotePosts\" numeric(15) NOT NULL default '0',\n".
-"  \"DemoteKarma\" numeric(15) NOT NULL default '0'\n".
+"  \"DemoteKarma\" numeric(15) NOT NULL default '0',\n".
 "  UNIQUE (\"Name\")\n".
 ");", null);
 sql_query($query,$SQLStat);
@@ -529,7 +530,7 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."wordfilter\" (\n".
 "  \"WholeWord\" varchar(5) NOT NULL default ''\n".
 ");", null);
 sql_query($query,$SQLStat);
-$TableChCk = array("categories", "catpermissions", "events", "forums", "groups", "levels", "ranks", "members", "mempermissions", "messenger", "permissions", "polls", "posts", "restrictedwords", "sessions", "smileys", "themes", "topics", "wordfilter");
+$TableChCk = array("categories", "catpermissions", "events", "forums", "groups", "levels", "members", "mempermissions", "messenger", "permissions", "polls", "posts", "ranks", "restrictedwords", "sessions", "smileys", "themes", "topics", "wordfilter");
 $TablePreFix = $_POST['tableprefix'];
 function add_prefix($tarray) {
 global $TablePreFix;

@@ -581,7 +581,7 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."word
 "  PRIMARY KEY  (\"id\")\n".
 ") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$Settings['sql_charset']." COLLATE=".$Settings['sql_collate'].";", null);
 sql_query($query,$SQLStat);
-$TableChCk = array("categories", "catpermissions", "events", "forums", "groups", "levels", "ranks", "members", "mempermissions", "messenger", "permissions", "polls", "posts", "restrictedwords", "sessions", "smileys", "themes", "topics", "wordfilter");
+$TableChCk = array("categories", "catpermissions", "events", "forums", "groups", "levels", "members", "mempermissions", "messenger", "permissions", "polls", "posts", "ranks", "restrictedwords", "sessions", "smileys", "themes", "topics", "wordfilter");
 $TablePreFix = $_POST['tableprefix'];
 function add_prefix($tarray) {
 global $TablePreFix;

@@ -498,6 +498,7 @@ function logWebAccess($logFile, $format = '%h %l %u %t "%r" %>s %b "%{Referer}i"
     $status = http_response_code();
     $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '-';
     $userAgent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '-';
+
     // Replace placeholders in the log format with actual values
     $placeholders = array(
         '%h' => $ip,
@@ -511,12 +512,29 @@ function logWebAccess($logFile, $format = '%h %l %u %t "%r" %>s %b "%{Referer}i"
         '%{User-Agent}i' => $userAgent,
     );
     $logEntry = strtr($format, $placeholders);
+
     // Open the log file in append mode
     $logFileHandle = fopen($logFile, 'a');
-    // Write the log entry to the file
-    fwrite($logFileHandle, $logEntry . PHP_EOL);
-    // Close the log file
-    fclose($logFileHandle);
+
+    if ($logFileHandle) {  // Check if the file opened successfully
+        // Acquire an exclusive lock
+        if (flock($logFileHandle, LOCK_EX)) {
+            // Write the log entry to the file
+            fwrite($logFileHandle, $logEntry . PHP_EOL);
+            
+            // Release the lock
+            flock($logFileHandle, LOCK_UN);
+        } else {
+            // Handle the error if lock acquisition fails
+            error_log("Could not lock the log file: " . $logFile);
+        }
+
+        // Close the log file
+        fclose($logFileHandle);
+    } else {
+        // Handle the error if file opening fails
+        error_log("Could not open the log file: " . $logFile);
+    }
 }
 // Make xhtml tags
 function html_tag_make($name="br",$emptytag=true,$attbvar=null,$attbval=null,$extratest=null) {
