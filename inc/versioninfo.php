@@ -11,7 +11,7 @@
     Copyright 2004-2024 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2024 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: versioninfo.php - Last Update: 9/8/2024 SVN 1178 - Author: cooldude2k $
+    $FileInfo: versioninfo.php - Last Update: 9/8/2024 SVN 1179 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="versioninfo.php"||$File3Name=="/versioninfo.php") {
@@ -27,7 +27,7 @@ function version_info($proname,$subver,$ver,$supver,$reltype,$svnver,$showsvn) {
 	return $return_var; }
 // Version number and date stuff. :P
 $VER1[0] = 0; $VER1[1] = 6; $VER1[2] = 8; $VERFull[1] = $VER1[0].".".$VER1[1].".".$VER1[2];
-$VER2[0] = "Alpha"; $VER2[1] = "Al"; $VER2[2] = "SVN"; $SubVerN = 1178; $GitRevPreN = '$Id$';
+$VER2[0] = "Alpha"; $VER2[1] = "Al"; $VER2[2] = "SVN"; $SubVerN = 1179; $GitRevPreN = '$Id$';
 $GitRevN = getGitRevision($GitRevPreN);
 $SVNDay[0] = 9; $SVNDay[1] = 8; $SVNDay[2] = 2024; $SVNDay[3] = $SVNDay[0]."/".$SVNDay[1]."/".$SVNDay[2];
 $AltName = "DF2k"; $AltName2 = "DF2k"; $RName = "iDB"; $SFName = "IntDB";
@@ -36,6 +36,10 @@ $VerCheckName = "iDB"; $AltVerCheckName = "DF2k"; $AltiDBHome = "https://idb.osd
 $AltGM2kHome = "https://idb.osdn.jp/"; $AltGM2kURL = "<a href=\"".$AltGM2kHome."\" title=\"".$AltGM2k."\" onclick=\"window.open(this.href);return false;\">".$AltGM2k."</a>";
 $iDBTheme = "iDB"; $AltiDBTheme = "Gray"; 
 $UserAgentName = "iDB-Forum"; $AltUserAgentName = "DF2k-Forum";
+$AltNameJP = "ディーエフ二千"; $AltName2JP = "ディーエフ二千"; $RNameJP = "アイディービー"; $SFNameJP = "インティービー";
+$RFullNameJP = "インターネットディスカッションボード"; $AltFullNameJP = "ディスカッションフォーラム二千"; $AltGM2kJP = "ゲームメーカー二千";
+$AltNameKO = "디에프 이천"; $AltName2KO = "디에프 이천"; $RNameKO = "아이디비"; $SFNameKO = "인티비";
+$RFullNameKO = "인터넷 토론 게시판"; $AltFullNameKO = "토론 포럼 이천"; $AltGM2kKO = "게임 메이커 이천";
 if(!isset($Settings['usealtname'])) { $Settings['usealtname'] = "no"; }
 if(isset($Settings['usealtname'])&&$Settings['usealtname']=="yes") {
 if(isset($iDBAltName['VER1'][0])) { $VER1[0] = $iDBAltName['VER1'][0]; }
