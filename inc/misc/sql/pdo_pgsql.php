@@ -89,27 +89,14 @@ function pdo_pgsql_func_disconnect_db($link=null) {
 return pg_close($link); }
 // Query Results :P
 function pdo_pgsql_func_result($result,$row,$field=0) {
-    if (!$result instanceof PDOStatement) {
-        output_error("SQL Error: Invalid result type. Expected PDOStatement, got " . gettype($result), E_USER_ERROR);
-        return false;
-    }
-
-    // Move to the desired row
-    $num = 0;
-    while ($num < $row && $result->fetch(PDO::FETCH_BOTH)) {
-        $num++;
-    }
-
-    // Fetch the row
-    $trow = $result->fetch(PDO::FETCH_BOTH);
-    if ($trow === false) {
-        output_error("SQL Error: No such row found.", E_USER_ERROR);
-        return null;
-    }
-
-    // Return the requested field or null if not found
-    return isset($trow[$field]) ? $trow[$field] : null;
-}
+if(is_numeric($field)) {
+$value = pg_fetch_result($result, $row, $field); }
+if(!is_numeric($field)) {
+$value = pg_fetch_result($result, $row, "\"".$field."\""); }
+if ($value===false) { 
+    output_error("SQL Error: ".pdo_pgsql_func_error(),E_USER_ERROR);
+	return false; }
+	return $value; }
 // Free Results :P
 function pdo_pgsql_func_free_result($result) {
 $fresult = pg_free_result($result);
