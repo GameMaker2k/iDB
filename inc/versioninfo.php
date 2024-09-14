@@ -31,15 +31,18 @@ $VER2[0] = "Alpha"; $VER2[1] = "Al"; $VER2[2] = "SVN"; $SubVerN = 1179; $GitRevP
 $GitRevN = getGitRevision($GitRevPreN);
 $SVNDay[0] = 9; $SVNDay[1] = 8; $SVNDay[2] = 2024; $SVNDay[3] = $SVNDay[0]."/".$SVNDay[1]."/".$SVNDay[2];
 $AltName = "DF2k"; $AltName2 = "DF2k"; $RName = "iDB"; $SFName = "IntDB";
-$RFullName = "Internet Discussion Boards"; $AltFullName = "Discussion Forums 2k"; $AltGM2k = "Game Maker 2k";
+$RFullName = "Internet Discussion Boards"; $AltFullName = "Discussion Forums 2k";
+$AltGM2k = "Game Maker 2k"; $AltGM2kShort = "GM2k";
 $VerCheckName = "iDB"; $AltVerCheckName = "DF2k"; $AltiDBHome = "https://idb.osdn.jp/";
 $AltGM2kHome = "https://idb.osdn.jp/"; $AltGM2kURL = "<a href=\"".$AltGM2kHome."\" title=\"".$AltGM2k."\" onclick=\"window.open(this.href);return false;\">".$AltGM2k."</a>";
 $iDBTheme = "iDB"; $AltiDBTheme = "Gray"; 
 $UserAgentName = "iDB-Forum"; $AltUserAgentName = "DF2k-Forum";
 $AltNameJP = "ディーエフ二千"; $AltName2JP = "ディーエフ二千"; $RNameJP = "アイディービー"; $SFNameJP = "インティービー";
-$RFullNameJP = "インターネットディスカッションボード"; $AltFullNameJP = "ディスカッションフォーラム二千"; $AltGM2kJP = "ゲームメーカー二千";
+$RFullNameJP = "インターネットディスカッションボード"; $AltFullNameJP = "ディスカッションフォーラム二千";
+$AltGM2kJP = "ゲームメーカー二千"; $AltGM2kShortJP = "ジーエム二千";
 $AltNameKO = "디에프 이천"; $AltName2KO = "디에프 이천"; $RNameKO = "아이디비"; $SFNameKO = "인티비";
-$RFullNameKO = "인터넷 토론 게시판"; $AltFullNameKO = "토론 포럼 이천"; $AltGM2kKO = "게임 메이커 이천";
+$RFullNameKO = "인터넷 토론 게시판"; $AltFullNameKO = "토론 포럼 이천";
+$AltGM2kKO = "게임 메이커 이천"; $AltGM2kShortKO = "지엠 이천";
 if(!isset($Settings['usealtname'])) { $Settings['usealtname'] = "no"; }
 if(isset($Settings['usealtname'])&&$Settings['usealtname']=="yes") {
 if(isset($iDBAltName['VER1'][0])) { $VER1[0] = $iDBAltName['VER1'][0]; }
@@ -113,6 +116,12 @@ $CD2k = "Kazuki Przyborowski"; $CD2k_Full = "Kazuki Suzuki Przyborowski";
 $GM2k = "Game Maker 2k"; $iDB_Author = "Kazuki";
 $iDB = "Internet Discussion Boards"; $iTB = "Internet Tag Boards"; 
 $DF2k = "Discussion Forums 2k"; $TB2k = "Tag Boards 2k";
+$GM2kJP = "ゲームメーカー二千";
+$iDBJP = "インターネットディスカッションボード"; $iTBJP = "インターネットタグボード"; 
+$DF2kJP = "Discussion Forums 2k"; $TB2kJP = "タグボード二千";
+$GM2kKO = "게임 메이커 이천";
+$iDBKO = "인터넷 토론 게시판"; $iTBKO = "인터넷 태그 게시판"; 
+$DF2kKO = "토론 포럼 이천"; $TB2kKO = "태그 게시판 이천";
 $TheProgrammerNaps = "The programmer has a nap. \nHold out! Programmer! ";
 if(isset($Settings['usealtname'])&&$Settings['usealtname']=="yes") { 
 	$iDB = $AltiDB; $OrgName = $AltOrgName; $iDBTheme = $AltiDBTheme; }
