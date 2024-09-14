@@ -35,7 +35,7 @@ if($_GET['modact']=="pin"||$_GET['modact']=="unpin"||$_GET['modact']=="open"||
 if($_GET['act']=="announce") { $_GET['act'] = "pin"; $_GET['level'] = 2; }
 $prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"id\"=%i".$ForumIgnoreList4." LIMIT 1", array($_GET['id']));
 $preresult=sql_query($prequery,$SQLStat);
-$prenum=sql_num_rows($preresult);
+$prenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE \"id\"=%i".$ForumIgnoreList4." LIMIT 1", array($_GET['id'])), $SQLStat);
 if($prenum==0) { redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($preresult);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
@@ -57,7 +57,7 @@ $ViewTimes=sql_result($preresult,0,"NumViews");
 sql_free_result($preresult);
 $forumcheckx = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2."  LIMIT 1", array($TopicForumID));
 $fmckresult=sql_query($forumcheckx,$SQLStat);
-$fmcknum=sql_num_rows($fmckresult);
+$fmcknum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2."  LIMIT 1", array($TopicForumID)), $SQLStat);
 if($fmcknum==0) { redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($preresult);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
@@ -69,7 +69,7 @@ $InSubForum=sql_result($fmckresult,0,"InSubForum");
 if($InSubForum!=0) {
 $subforumcheckx = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2."  LIMIT 1", array($InSubForum));
 $subfmckresult=sql_query($subforumcheckx,$SQLStat);
-$subfmcknum=sql_num_rows($subfmckresult);
+$subfmcknum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2."  LIMIT 1", array($InSubForum)), $SQLStat);
 $SubForumName=sql_result($subfmckresult,0,"Name");
 $SubForumType=sql_result($subfmckresult,0,"ForumType");
 $SubForumShow=sql_result($subfmckresult,0,"ShowForum");
@@ -208,11 +208,12 @@ if($PageLimit<0) { $PageLimit = 0; }
 //End Reply Page Code
 $i=0;
 if(!isset($_GET['post'])||$_GET['post']!==null) {
-$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" ASC ".$SQLimit, array($_GET['id'],$PageLimit,$Settings['max_posts'])); }
+$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" ASC ".$SQLimit, array($_GET['id'],$PageLimit,$Settings['max_posts']));
+$num = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" ASC ".$SQLimit, array($_GET['id'],$PageLimit,$Settings['max_posts'])), $SQLStat); }
 if(isset($_GET['post'])&&$_GET['post']!==null) {
-$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i AND \"id\"=%i ORDER BY \"TimeStamp\" ASC ".$SQLimit, array($_GET['id'],$_GET['post'],$PageLimit,$Settings['max_posts'])); }
+$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i AND \"id\"=%i ORDER BY \"TimeStamp\" ASC ".$SQLimit, array($_GET['id'],$_GET['post'],$PageLimit,$Settings['max_posts']));
+$num = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i AND \"id\"=%i ORDER BY \"TimeStamp\" ASC ".$SQLimit, array($_GET['id'],$_GET['post'],$PageLimit,$Settings['max_posts'])), $SQLStat); }
 $result=sql_query($query,$SQLStat);
-$num=sql_num_rows($result);
 if($num==0) { redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
@@ -326,14 +327,14 @@ $MyPost=sql_result($result,$i,"Post");
 $MyDescription=sql_result($result,$i,"Description");
 $requery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($MyUserID));
 $reresult=sql_query($requery,$SQLStat);
-$renum=sql_num_rows($reresult);
+$renum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($MyUserID)), $SQLStat);
 if($renum<1) { $MyUserID = -1;
 $requery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($MyUserID));
 $reresult=sql_query($requery,$SQLStat);
-$renum=sql_num_rows($reresult); }
+$renum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($MyUserID)), $SQLStat); }
 $memrequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."mempermissions\" WHERE \"id\"=%i LIMIT 1", array($MyUserID));
 $memreresult=sql_query($memrequery,$SQLStat);
-$memrenum=sql_num_rows($memreresult);
+$memrenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."mempermissions\" WHERE \"id\"=%i LIMIT 1", array($MyUserID)), $SQLStat);
 $rei=0; $ipshow = "two";
 $User1ID=$MyUserID; $GuestsName = $MyGuestName;
 $User1Name=sql_result($reresult,$rei,"Name");
@@ -362,7 +363,8 @@ $User1RankID=sql_result($reresult,$rei,"RankID");
 if($User1LevelID!==null&&$User1LevelID!=0) {
 $lquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."levels\" WHERE \"id\"=%i LIMIT 1", array($User1LevelID));
 $lresult=sql_query($lquery,$SQLStat);
-if ($lresult !== false && sql_num_rows($lresult) > 0) {
+$lnum = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."levels\" WHERE \"id\"=%i LIMIT 1", array($User1LevelID)), $SQLStat);
+if ($lresult !== false && $lnum > 0) {
 $User1Level=sql_result($lresult,0,"Name"); } else { $User1Level = ""; }
 sql_free_result($lresult); } else {
 $User1Level = ""; }
@@ -370,7 +372,8 @@ $User1GroupID=sql_result($reresult,$rei,"GroupID");
 if($User1RankID!==null&&$User1RankID!=0) {
 $rquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."ranks\" WHERE \"id\"=%i LIMIT 1", array($User1RankID));
 $rresult=sql_query($rquery,$SQLStat);
-if ($rresult !== false && sql_num_rows($rresult) > 0) {
+$rnum = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."ranks\" WHERE \"id\"=%i LIMIT 1", array($User1RankID)), $SQLStat);
+if ($rresult !== false && $rnum > 0) {
 $User1Rank=sql_result($rresult,0,"Name"); } else { $User1Rank = ""; }
 sql_free_result($rresult); } else {
 $User1Rank = ""; }
@@ -398,7 +401,7 @@ $User1PermissionID=sql_result($gresult,0,"PermissionID");
 sql_free_result($gresult);
 $per1query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i LIMIT 1", array($User1PermissionID));
 $per1esult=sql_query($per1query,$SQLStat);
-$per1num=sql_num_rows($per1esult);
+$per1num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i LIMIT 1", array($User1PermissionID)), $SQLStat);
 $User1CanDoHTML1=sql_result($per1esult,0,"CanDoHTML");
 if($User1CanDoHTML1!="yes"&&$User1CanDoHTML1!="no") {
 	$User1CanDoHTML1 = "no"; }
@@ -440,11 +443,11 @@ if($MyEditTime!=$MyTimeStamp&&$MyEditUserID!=0) {
 if($MyEditUserID!=$MyUserID) {
 $euquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($MyEditUserID));
 $euresult = sql_query($euquery,$SQLStat);
-$eunum = sql_num_rows($euresult);
+$eunum = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($MyEditUserID)), $SQLStat);
 if($eunum<1) { $MyEditUserID = -1;
 $euquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($MyEditUserID));
 $euresult = sql_query($euquery,$SQLStat);
-$eunum = sql_num_rows($euresult); }
+$eunum = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($MyEditUserID)), $SQLStat); }
 	$EditUserID = $MyEditUserID;
 	$EditUserGroupID = sql_result($euresult,0,"GroupID");
 	$EditUserHidden=sql_result($euresult,0,"HiddenMember");
@@ -660,7 +663,7 @@ $QuoteReply = null; $QuoteDescription = null;
 if($_GET['post']==null) {
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" ASC  LIMIT 1", array($_GET['id']));
 $result=sql_query($query,$SQLStat);
-$num=sql_num_rows($result);
+$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" ASC  LIMIT 1", array($_GET['id'])), $SQLStat);
 $QuoteDescription=sql_result($result,0,"Description"); 
 $QuoteDescription = str_replace("Re: ","",$QuoteDescription);
 $QuoteDescription = "Re: ".$QuoteDescription;
@@ -668,7 +671,7 @@ sql_free_result($result); }
 if($_GET['post']!=null) {
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"id\"=%i LIMIT 1", array($_GET['post']));
 $result=sql_query($query,$SQLStat);
-$num=sql_num_rows($result);
+$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."posts\" WHERE \"id\"=%i LIMIT 1", array($_GET['post'])), $SQLStat);
 if($num>=1) {
 $QuoteReplyID=sql_result($result,0,"id");
 $QuoteReplyFID=sql_result($result,0,"ForumID");
@@ -680,11 +683,11 @@ $QuoteDescription=sql_result($result,0,"Description");
 $QuoteGuestName=sql_result($result,0,"GuestName");
 $requery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($QuoteUserID));
 $reresult=sql_query($requery,$SQLStat);
-$renum=sql_num_rows($reresult);
+$renum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($QuoteUserID)), $SQLStat);
 if($renum<1) { $QuoteUserID = -1;
 $requery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($QuoteUserID));
 $reresult=sql_query($requery,$SQLStat);
-$renum=sql_num_rows($reresult); }
+$renum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($QuoteUserID)), $SQLStat); }
 $QuoteUserName=sql_result($reresult,0,"Name");
 if($QuoteUserName=="Guest") { $QuoteUserName=$QuoteGuestName;
 if($QuoteUserName==null) { $QuoteUserName="Guest"; } }
@@ -753,7 +756,7 @@ $_SESSION['UserFormID'] = $UFID;
 <table style="width: 100%; text-align: center;"><?php
 $melanie_query=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."smileys\" WHERE \"Display\"='yes'", null);
 $melanie_result=sql_query($melanie_query,$SQLStat);
-$melanie_num=sql_num_rows($melanie_result);
+$melanie_num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."smileys\" WHERE \"Display\"='yes'", null), $SQLStat);
 $melanie_p=0; $rose_a=0; $SmileRow=0; $SmileCRow=0;
 while ($melanie_p < $melanie_num) { ++$SmileRow;
 $FileName=sql_result($melanie_result,$melanie_p,"FileName");
@@ -927,7 +930,7 @@ $_SESSION['GuestName']=$_POST['GuestName']; } }
    by Kazuki Przyborowski - Cool Dude 2k */
 $melanieqy=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."wordfilter\"", null);
 $melaniert=sql_query($melanieqy,$SQLStat);
-$melanienm=sql_num_rows($melaniert);
+$melanienm=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."wordfilter\"", null), $SQLStat);
 $melanies=0;
 while ($melanies < $melanienm) {
 $Filter=sql_result($melaniert,$melanies,"FilterWord");
@@ -995,13 +998,14 @@ redirect("refresh",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"a
 </tr>
 <?php } if ($Error!="Yes") { $LastActive = $utccurtime->getTimestamp();
 $gnrquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2." LIMIT 1", array($TopicForumID));
-$gnrresult=sql_query($gnrquery,$SQLStat); $gnrnum=sql_num_rows($gnrresult);
+$gnrresult=sql_query($gnrquery,$SQLStat);
+$gnrnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2." LIMIT 1", array($TopicForumID)), $SQLStat);
 $NumberPosts=sql_result($gnrresult,0,"NumPosts"); 
 $PostCountAdd=sql_result($gnrresult,0,"PostCountAdd"); 
 sql_free_result($gnrresult);
 $requery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($MyUsersID));
 $reresult=sql_query($requery,$SQLStat);
-$renum=sql_num_rows($reresult);
+$renum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($MyUsersID)), $SQLStat);
 $rei=0;
 while ($rei < $renum) {
 $User1ID=$MyUsersID;
@@ -1057,7 +1061,7 @@ redirect("refresh",$rbasedir.url_maker($exfile['topic'],$Settings['file_ext'],"a
 <?php } if($_GET['act']=="pin"||$_GET['act']=="unpin") {
 $gtsquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"id\"=%i LIMIT 1", array($_GET['id']));
 $gtsresult=sql_query($gtsquery,$SQLStat);
-$gtsnum=sql_num_rows($gtsresult);
+$gtsnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE \"id\"=%i LIMIT 1", array($_GET['id'])), $SQLStat);
 $TTopicID=sql_result($gtsresult,0,"id");
 $TForumID=sql_result($gtsresult,0,"ForumID");
 $TUsersID=sql_result($gtsresult,0,"UserID");
@@ -1129,7 +1133,7 @@ redirect("refresh",$rbasedir.url_maker($exfile['topic'],$Settings['file_ext'],"a
 <?php } } if($_GET['act']=="open"||$_GET['act']=="close") {
 $gtsquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"id\"=%i LIMIT 1", array($_GET['id']));
 $gtsresult=sql_query($gtsquery,$SQLStat);
-$gtsnum=sql_num_rows($gtsresult);
+$gtsnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE \"id\"=%i LIMIT 1", array($_GET['id'])), $SQLStat);
 $TTopicID=sql_result($gtsresult,0,"id");
 $TForumID=sql_result($gtsresult,0,"ForumID");
 $TUsersID=sql_result($gtsresult,0,"UserID");
@@ -1206,7 +1210,7 @@ ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $gtsquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"id\"=%i LIMIT 1", array($_GET['id']));
 $gtsresult=sql_query($gtsquery,$SQLStat);
-$gtsnum=sql_num_rows($gtsresult);
+$gtsnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE \"id\"=%i LIMIT 1", array($_GET['id'])), $SQLStat);
 $TTopicID=sql_result($gtsresult,0,"id");
 $OldForumID=sql_result($gtsresult,0,"ForumID");
 $OldCatID=sql_result($gtsresult,0,"CategoryID");
@@ -1238,7 +1242,7 @@ if($CanMoveTopics===true) {
 $TNumberPosts = $NumberReplies + 1;
 $mvquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2." LIMIT 1", array($_GET['newid']));
 $mvresult=sql_query($mvquery,$SQLStat);
-$mvnum=sql_num_rows($mvresult);
+$mvnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2." LIMIT 1", array($_GET['newid'])), $SQLStat);
 if($mvnum<1) {
 redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($gtsresult); $urlstatus = 302;
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); sql_free_result($mvresult);
@@ -1253,7 +1257,7 @@ $recountq = sql_pre_query("UPDATE \"".$Settings['sqltable']."forums\" SET \"NumP
 sql_query($recountq,$SQLStat);
 $mvquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2." LIMIT 1", array($OldForumID));
 $mvresult=sql_query($mvquery,$SQLStat);
-$mvnum=sql_num_rows($mvresult);
+$mvnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2." LIMIT 1", array($OldForumID)), $SQLStat);
 $NumberPosts=sql_result($mvresult,0,"NumPosts");
 $NumberPosts = $NumberPosts - $TNumberPosts;
 $NumberTopics=sql_result($mvresult,0,"NumTopics");
@@ -1300,7 +1304,7 @@ redirect("refresh",$rbasedir.url_maker($exfile['topic'],$Settings['file_ext'],"a
 <?php } if($_GET['act']=="delete") {
 $predquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"id\"=%i LIMIT 1", array($_GET['post']));
 $predresult=sql_query($predquery,$SQLStat);
-$prednum=sql_num_rows($predresult);
+$prednum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."posts\" WHERE \"id\"=%i LIMIT 1", array($_GET['post'])), $SQLStat);
 $ReplyID=sql_result($predresult,0,"id");
 $ReplyTopicID=sql_result($predresult,0,"TopicID");
 $ReplyForumID=sql_result($predresult,0,"ForumID");
@@ -1323,17 +1327,18 @@ ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $delquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" ASC", array($_GET['id']));
 $delresult=sql_query($delquery,$SQLStat);
-$delnum=sql_num_rows($delresult);
+$delnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" ASC", array($_GET['id'])), $SQLStat);
 $DelTopic = false;
 $gnrquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2." LIMIT 1", array($ReplyForumID));
-$gnrresult=sql_query($gnrquery,$SQLStat); $gnrnum=sql_num_rows($gnrresult);
+$gnrresult=sql_query($gnrquery,$SQLStat);
+$gnrnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2." LIMIT 1", array($ReplyForumID)), $SQLStat);
 $NumberPosts=sql_result($gnrresult,0,"NumPosts"); $NumberTopics=sql_result($gnrresult,0,"NumTopics"); 
 sql_free_result($gnrresult);
 $FReplyID=sql_result($delresult,0,"id");
 if($ReplyID==$FReplyID) { $DelTopic = true;
 $gtsquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"id\"=%i LIMIT 1", array($ReplyTopicID));
 $gtsresult=sql_query($gtsquery,$SQLStat);
-$gtsnum=sql_num_rows($gtsresult);
+$gtsnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE \"id\"=%i LIMIT 1", array($ReplyTopicID)), $SQLStat);
 $TUsersID=sql_result($gtsresult,0,"UserID");
 $TForumID=sql_result($gtsresult,0,"ForumID");
 $TClosed=sql_result($gtsresult,0,"Closed");
@@ -1424,14 +1429,14 @@ $ShowEditTopic = null;
 if($PermissionInfo['CanEditTopics'][$TopicForumID]=="yes") {
 $editquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" ASC", array($TopicID));
 $editresult=sql_query($editquery,$SQLStat);
-$editnum=sql_num_rows($editresult);
+$editnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" ASC", array($TopicID)), $SQLStat);
 $FReplyID=sql_result($editresult,0,"id");
 sql_free_result($editresult);
 if($_GET['post']==$FReplyID) { $ShowEditTopic = true; } }
 if($PermissionInfo['CanEditTopics'][$TopicForumID]=="no") { $ShowEditTopic = null; }
 $ersquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"id\"=%i LIMIT 1", array($_GET['post']));
 $ersresult=sql_query($ersquery,$SQLStat);
-$ersnum=sql_num_rows($ersresult);
+$ersnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."posts\" WHERE \"id\"=%i LIMIT 1", array($_GET['post'])), $SQLStat);
 if($ersnum==0) { sql_free_result($ersresult);
 redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
@@ -1458,7 +1463,7 @@ sql_free_result($ersresult);
 if($ShowEditTopic===true) {
 $gtsquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"id\"=%i LIMIT 1", array($TopicID));
 $gtsresult=sql_query($gtsquery,$SQLStat);
-$gtsnum=sql_num_rows($gtsresult);
+$gtsnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE \"id\"=%i LIMIT 1", array($TopicID)), $SQLStat);
 $TUsersID=sql_result($gtsresult,0,"UserID");
 $TForumID=sql_result($gtsresult,0,"ForumID");
 $TClosed=sql_result($gtsresult,0,"Closed");
@@ -1505,7 +1510,7 @@ $_SESSION['UserFormID'] = $UFID;
 <div style="width: 100%; height: 160px; overflow: auto;"><?php
 $melanie_query=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."smileys\" WHERE \"Display\"='yes'", null);
 $melanie_result=sql_query($melanie_query,$SQLStat);
-$melanie_num=sql_num_rows($melanie_result);
+$melanie_num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."smileys\" WHERE \"Display\"='yes'", null), $SQLStat);
 $melanie_p=0; $SmileRow=1;
 while ($melanie_p < $melanie_num) {
 $FileName=sql_result($melanie_result,$melanie_p,"FileName");
@@ -1584,14 +1589,14 @@ $ShowEditTopic = null;
 if($PermissionInfo['CanEditTopics'][$TopicForumID]=="yes") {
 $editquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" ASC", array($TopicID));
 $editresult=sql_query($editquery,$SQLStat);
-$editnum=sql_num_rows($editresult);
+$editnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" ASC", array($TopicID)), $SQLStat);
 $FReplyID=sql_result($editresult,0,"id");
 sql_free_result($editresult);
 if($_GET['post']==$FReplyID) { $ShowEditTopic = true; } }
 if($PermissionInfo['CanEditTopics'][$TopicForumID]=="no") { $ShowEditTopic = null; }
 $ersquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"id\"=%i LIMIT 1", array($_GET['post']));
 $ersresult=sql_query($ersquery,$SQLStat);
-$ersnum=sql_num_rows($ersresult);
+$ersnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."posts\" WHERE \"id\"=%i LIMIT 1", array($_GET['post'])), $SQLStat);
 if($ersnum==0) { sql_free_result($ersresult);
 redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
@@ -1605,7 +1610,7 @@ sql_free_result($ersresult);
 if($ShowEditTopic===true) {
 $gtsquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"id\"=%i LIMIT 1", array($TopicID));
 $gtsresult=sql_query($gtsquery,$SQLStat);
-$gtsnum=sql_num_rows($gtsresult);
+$gtsnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE \"id\"=%i LIMIT 1", array($TopicID)), $SQLStat);
 $TUsersID=sql_result($gtsresult,0,"UserID");
 $TForumID=sql_result($gtsresult,0,"ForumID");
 $TClosed=sql_result($gtsresult,0,"Closed");
@@ -1710,7 +1715,7 @@ $_POST['TopicName'] = remove_spaces($_POST['TopicName']); }
    by Kazuki Przyborowski - Cool Dude 2k */
 $melanieqy=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."wordfilter\"", null);
 $melaniert=sql_query($melanieqy,$SQLStat);
-$melanienm=sql_num_rows($melaniert);
+$melanienm=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."wordfilter\"", null), $SQLStat);
 $melanies=0;
 while ($melanies < $melanienm) {
 $Filter=sql_result($melaniert,$melanies,"FilterWord");
@@ -1739,7 +1744,7 @@ $_POST['ReplyPost'] = preg_replace("/".$Filter."/i", $Replace, $_POST['ReplyPost
 ++$melanies; } sql_free_result($melaniert);
 $lonewolfqy=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."restrictedwords\" WHERE \"RestrictedTopicName\"='yes' or \"RestrictedUserName\"='yes'", null);
 $lonewolfrt=sql_query($lonewolfqy,$SQLStat);
-$lonewolfnm=sql_num_rows($lonewolfrt);
+$lonewolfnm=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."restrictedwords\" WHERE \"RestrictedTopicName\"='yes' or \"RestrictedUserName\"='yes'", null), $SQLStat);
 $lonewolfs=0; $RMatches = null; $RGMatches = null;
 while ($lonewolfs < $lonewolfnm) {
 $RWord=sql_result($lonewolfrt,$lonewolfs,"Word");
@@ -1849,7 +1854,7 @@ redirect("refresh",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"a
 <?php } if ($Error!="Yes") { $LastActive = $utccurtime->getTimestamp();
 $requery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_SESSION['UserID']));
 $reresult=sql_query($requery,$SQLStat);
-$renum=sql_num_rows($reresult);
+$renum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_SESSION['UserID'])), $SQLStat);
 $rei=0;
 while ($rei < $renum) {
 $User1ID=$_SESSION['UserID'];
@@ -1920,7 +1925,7 @@ if($_GET['fastreply']!==true&&
 $QuoteReply = null; $QuoteDescription = null;
 $queryra = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" ASC LIMIT 1", array($_GET['id']));
 $resultra=sql_query($queryra,$SQLStat);
-$numrose=sql_num_rows($resultra);
+$numrose=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" ASC LIMIT 1", array($_GET['id'])), $SQLStat);
 $QuoteDescription=sql_result($resultra,0,"Description"); 
 $QuoteDescription = str_replace("Re: ","",$QuoteDescription);
 $QuoteDescription = "Re: ".$QuoteDescription;
@@ -1950,7 +1955,7 @@ $_SESSION['UserFormID'] = $UFID;
 <table style="width: 100%; text-align: center;"><?php
 $melanie_query=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."smileys\" WHERE \"Display\"='yes'", null);
 $melanie_result=sql_query($melanie_query,$SQLStat);
-$melanie_num=sql_num_rows($melanie_result);
+$melanie_num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."smileys\" WHERE \"Display\"='yes'", null), $SQLStat);
 $melanie_p=0; $SmileRow=0; $SmileCRow=0;
 while ($melanie_p < $melanie_num) { ++$SmileRow;
 $FileName=sql_result($melanie_result,$melanie_p,"FileName");
@@ -2019,7 +2024,7 @@ $uviewlcuttime = $utccurtime->getTimestamp();
 $uviewltime = $uviewlcuttime - ini_get("session.gc_maxlifetime");
 $uviewlquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"session_id\"<>'%s' AND \"serialized_data\" LIKE '%s' ORDER BY \"expires\" DESC", array($uviewltime, session_id(), "%currenttopicid:".$TopicID.";%"));
 $uviewlresult=sql_query($uviewlquery,$SQLStat);
-$uviewlnum=sql_num_rows($uviewlresult);
+$uviewlnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"session_id\"<>'%s' AND \"serialized_data\" LIKE '%s' ORDER BY \"expires\" DESC", array($uviewltime, session_id(), "%currenttopicid:".$TopicID.";%")), $SQLStat);
 $uviewli=0; $uviewlmn = 0; $uviewlgn = 0; $uviewlan = 0; $uviewlmbn = 0;
 $MembersViewList = null; $GuestsOnline = null;
 while ($uviewli < $uviewlnum) {

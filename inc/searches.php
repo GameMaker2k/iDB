@@ -110,7 +110,7 @@ if(isset($_GET['msearch'])&&$_GET['msearch']!=null) {
 $_GET['memid'] = null;
 $memsiquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s' LIMIT 1", array($_GET['msearch']));
 $memsiresult=sql_query($memsiquery,$SQLStat);
-$memsinum=sql_num_rows($memsiresult);
+$memsinum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s' LIMIT 1", array($_GET['msearch'])), $SQLStat);
 $memsi=0;
 if($memsinum==0) { $memsid = -1; }
 if($memsinum!=0) {
@@ -189,7 +189,7 @@ if($pnum<$Settings['max_topics']&&$pnum>0) {
 	$pnum = $pnum - $pnum; 
 	$Pages[$l] = $l; ++$l; } }
 //End Topic Page Code
-$num=sql_num_rows($result);
+$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE (\"TimeStamp\">=%i AND \"TimeStamp\"<=%i) OR (\"LastUpdate\">=%i AND \"LastUpdate\"<=%i)".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($active_start,$active_end,$active_start,$active_end,$PageLimit,$Settings['max_topics'])), $SQLStat);
 if($num<=0) { 
 redirect("location",$rbasedir.url_maker($exfile['search'],$Settings['file_ext'],"act=topics",$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search'],false));
 header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
@@ -328,7 +328,7 @@ $TopicID=sql_result($result,$i,"id");
 $ForumID=sql_result($result,$i,"ForumID");
 $prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2." LIMIT 1", array($ForumID));
 $preresult=sql_query($prequery,$SQLStat);
-$prenum=sql_num_rows($preresult);
+$prenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2." LIMIT 1", array($ForumID)), $SQLStat);
 $HotTopicPosts = $Settings['hot_topic_num'];
 if($prenum > 0) {
 $HotTopicPosts = sql_result($preresult,0,"HotTopicPosts"); }
@@ -430,7 +430,7 @@ if(($PermissionInfo['CanViewForum'][$ForumID]=="yes"&&
 $LastReply = "&#160;<br />&#160;";
 $glrquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" DESC LIMIT 1", array($TopicID));
 $glrresult=sql_query($glrquery,$SQLStat);
-$glrnum=sql_num_rows($glrresult);
+$glrnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" DESC LIMIT 1", array($TopicID)), $SQLStat);
 if($glrnum>0){
 $ReplyID1=sql_result($glrresult,0,"id");
 $UsersID1=sql_result($glrresult,0,"UserID");

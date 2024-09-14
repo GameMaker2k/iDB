@@ -363,7 +363,7 @@ if ($handle = opendir($skindir)) { $dirnum = null;
    ++$themei; } }
 $themequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."themes\" WHERE \"Name\"='%s'", array($_GET['theme']));
 $themeresult=sql_query($themequery,$SQLStat);
-$themenum=sql_num_rows($themeresult);
+$themenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."themes\" WHERE \"Name\"='%s'", array($_GET['theme'])), $SQLStat);
 require($SettDir['inc'].'sqlthemes.php');
 $_POST['update'] = "now"; $_GET['act'] = "optimize"; }
 if($_GET['act']=="optimize"&&$GroupInfo['ViewDBInfo']=="yes") {
@@ -442,7 +442,7 @@ redirect("refresh",$rbasedir.url_maker($exfile['admin'],$Settings['file_ext'],"a
 <?php } if($_GET['act']=="view"&&$_POST['update']!="now") {
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_SESSION['UserID']));
 $result=sql_query($query,$SQLStat);
-$num=sql_num_rows($result);
+$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_SESSION['UserID'])), $SQLStat);
 $i=0;
 $YourID=sql_result($result,$i,"id");
 $Notes=sql_result($result,$i,"Notes");
@@ -484,7 +484,7 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Admin CP";
 $admincptitle = " ".$ThemeSet['TitleDivider']." Settings Manager";
 $mguerys = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE (\"Name\"<>'%s') ORDER BY \"id\" ASC", array("Admin"));
 $mgresults=sql_query($mguerys,$SQLStat);
-$mnum=sql_num_rows($mgresults);
+$mnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."groups\" WHERE (\"Name\"<>'%s') ORDER BY \"id\" ASC", array("Admin")), $SQLStat);
 $mi = 0;
 while ($mi < $mnum) {
 $MGroups[$mi]=sql_result($mgresults,$mi,"Name");
@@ -826,7 +826,7 @@ if ($handle = opendir($skindir)) { $dirnum = null;
 if($Settings['SQLThemes']=="on") {
 $sknquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."themes\" ORDER BY \"id\" ASC, \"Name\" ASC", null);
 $sknresult=sql_query($sknquery,$SQLStat);
-$sknum=sql_num_rows($sknresult);
+$sknum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."themes\" ORDER BY \"id\" ASC, \"Name\" ASC", null), $SQLStat);
 $skni=0;
 while ($skni < $sknum) {
 $ThemeInfo['Name'] = sql_result($sknresult,$skni,"Name");

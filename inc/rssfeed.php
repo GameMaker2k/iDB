@@ -78,7 +78,7 @@ header("Vary: Accept");
 if($_GET['feedtype']=="oldrss"||$_GET['feedtype']=="rss"||$_GET['feedtype']=="atom"||$_GET['feedtype']=="opml") { 
 $prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2."", array($_GET['id']));
 $preresult=sql_query($prequery,$SQLStat);
-$prenum=sql_num_rows($preresult);
+$prenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2."", array($_GET['id'])), $SQLStat);
 $prei=0;
 if($prenum==0) { redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($preresult);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
@@ -105,7 +105,7 @@ $gltf = array(null); $gltf[0] = $ForumID;
 if ($ForumType=="subforum") { 
 $apcquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"ShowForum\"='yes' AND \"InSubForum\"=%i".$ForumIgnoreList2." ORDER BY \"id\"", array($ForumID));
 $apcresult=sql_query($apcquery,$SQLStat);
-$apcnum=sql_num_rows($apcresult);
+$apcnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"ShowForum\"='yes' AND \"InSubForum\"=%i".$ForumIgnoreList2." ORDER BY \"id\"", array($ForumID)), $SQLStat);
 $apci=0; $apcl=1; if($apcnum>=1) {
 while ($apci < $apcnum) {
 $SubsForumID=sql_result($apcresult,$apci,"id");
@@ -122,27 +122,28 @@ if($PermissionInfo['CanModForum'][$gltf[$glti]]=="no") {
 	$ExtraIgnores = " AND \"Closed\"<>3"; }
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"ForumID\"=%i".$ExtraIgnores.$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC LIMIT %i", array($gltf[$glti],$Settings['max_topics']));
 $result=sql_query($query,$SQLStat);
-$num=sql_num_rows($result); $i=0;
+$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE \"ForumID\"=%i".$ExtraIgnores.$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC LIMIT %i", array($gltf[$glti],$Settings['max_topics'])), $SQLStat);
+$i=0;
 while ($i < $num) {
 $TopicID=sql_result($result,$i,"id");
 $ForumID=sql_result($result,$i,"ForumID");
 $CategoryID=sql_result($result,$i,"CategoryID");
 $pquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" ASC LIMIT %i", array($TopicID,1));
 $presult=sql_query($pquery,$SQLStat);
-$pnum=sql_num_rows($presult);
+$pnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" ASC LIMIT %i", array($TopicID,1)), $SQLStat);
 $MyDescription=sql_result($presult,0,"Post");
 $UsersID=sql_result($result,$i,"UserID");
 $GuestsName=sql_result($result,$i,"GuestName");
 $requery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($UsersID));
 $reresult=sql_query($requery,$SQLStat);
-$renum=sql_num_rows($reresult);
+$renum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($UsersID)), $SQLStat);
 if($renum<1) { $UsersID = -1;
 $requery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($UsersID));
 $reresult=sql_query($requery,$SQLStat);
-$renum=sql_num_rows($reresult); }
+$renum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($UsersID)), $SQLStat); }
 $memrequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."mempermissions\" WHERE \"id\"=%i LIMIT 1", array($UsersID));
 $memreresult=sql_query($memrequery,$SQLStat);
-$memrenum=sql_num_rows($memreresult);
+$memrenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."mempermissions\" WHERE \"id\"=%i LIMIT 1", array($UsersID)), $SQLStat);
 $UsersName=sql_result($reresult,0,"Name");
 $UsersGroupID=sql_result($reresult,0,"GroupID");
 $PreUserCanExecPHP=sql_result($memreresult,0,"CanExecPHP");

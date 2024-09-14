@@ -38,16 +38,16 @@ require($SettDir['admin'].'table.php');
 $admincptitle = " ".$ThemeSet['TitleDivider']." Recounting Topics";
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" ORDER BY \"OrderID\" ASC, \"id\" ASC", null);
 $result=sql_query($query,$SQLStat);
-$num=sql_num_rows($result);
+$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" ORDER BY \"OrderID\" ASC, \"id\" ASC", null), $SQLStat);
 $i=0;
 while ($i < $num) {
 $ForumID=sql_result($result,$i,"id");
 $tquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"ForumID\"=%i ORDER BY \"Pinned\" DESC, \"LastUpdate\" DESC", array($ForumID));
 $tresult=sql_query($tquery,$SQLStat);
-$tnum=sql_num_rows($tresult);
+$tnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE \"ForumID\"=%i ORDER BY \"Pinned\" DESC, \"LastUpdate\" DESC", array($ForumID)), $SQLStat);
 $rquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"ForumID\"=%i ORDER BY \"TimeStamp\" ASC", array($ForumID));
 $rresult=sql_query($rquery,$SQLStat);
-$rnum=sql_num_rows($rresult);
+$rnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."posts\" WHERE \"ForumID\"=%i ORDER BY \"TimeStamp\" ASC", array($ForumID)), $SQLStat);
 $query = sql_pre_query("UPDATE \"".$Settings['sqltable']."forums\" SET \"NumPosts\"=%i,\"NumTopics\"=%i WHERE \"id\"=%i", array($rnum,$tnum,$ForumID));
 sql_query($query,$SQLStat);
 sql_free_result($tresult);
@@ -90,13 +90,13 @@ sql_free_result($result);
 $admincptitle = " ".$ThemeSet['TitleDivider']." Recounting Replies";
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" ORDER BY \"Pinned\" DESC, \"LastUpdate\" DESC", null);
 $result=sql_query($query,$SQLStat);
-$num=sql_num_rows($result);
+$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" ORDER BY \"Pinned\" DESC, \"LastUpdate\" DESC", null), $SQLStat);
 $i=0;
 while ($i < $num) {
 $TopicID=sql_result($result,$i,"id");
 $rquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" ASC", array($TopicID));
 $rresult=sql_query($rquery,$SQLStat);
-$rnum=sql_num_rows($rresult);
+$rnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" ASC", array($TopicID)), $SQLStat);
 $Nrnum = $rnum - 1;
 $query = sql_pre_query("UPDATE \"".$Settings['sqltable']."topics\" SET \"NumReply\"=%i WHERE \"id\"=%i", array($Nrnum,$TopicID));
 sql_query($query,$SQLStat);
@@ -139,7 +139,7 @@ sql_free_result($result);
 $admincptitle = " ".$ThemeSet['TitleDivider']." Fixing Topic User Names";
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" ORDER BY \"TimeStamp\" ASC", null);
 $result=sql_query($query,$SQLStat);
-$num=sql_num_rows($result);
+$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" ORDER BY \"TimeStamp\" ASC", null), $SQLStat);
 $i=0;
 while ($i < $num) {
 $TopicID=sql_result($result,$i,"id");
@@ -200,7 +200,7 @@ sql_free_result($result);
 $admincptitle = " ".$ThemeSet['TitleDivider']." Fixing Reply User Names";
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" ORDER BY \"TimeStamp\" ASC", null);
 $result=sql_query($query,$SQLStat);
-$num=sql_num_rows($result);
+$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."posts\" ORDER BY \"TimeStamp\" ASC", null), $SQLStat);
 $i=0;
 while ($i < $num) {
 $PostID=sql_result($result,$i,"id");
@@ -312,7 +312,7 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Adding new Forum";
 <?php 
 $cq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."categories\" ORDER BY \"OrderID\" ASC, \"id\" ASC", null);
 $cr=sql_query($cq,$SQLStat);
-$eu=sql_num_rows($cr);
+$eu=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."categories\" ORDER BY \"OrderID\" ASC, \"id\" ASC", null), $SQLStat);
 if($eu>0) { ?>
 	<optgroup label="<?php echo $Settings['board_name']; ?>">
 <?php }
@@ -358,7 +358,7 @@ sql_free_result($cr); ?>
 <?php
 $fcq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."categories\" ORDER BY \"OrderID\" ASC, \"id\" ASC", null);
 $fcr=sql_query($fcq,$SQLStat);
-$afi=sql_num_rows($fcr);
+$afi=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."categories\" ORDER BY \"OrderID\" ASC, \"id\" ASC", null), $SQLStat);
 $fci=0;
 while ($fci < $afi) {
 $InCategoryID=sql_result($fcr,$fci,"id");
@@ -366,7 +366,7 @@ $InCategoryName=sql_result($fcr,$fci,"Name");
 $InCategoryType=sql_result($fcr,$fci,"CategoryType");
 $fq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"CategoryID\"=%i AND \"InSubForum\"=0 AND \"ForumType\"='subforum' ORDER BY \"CategoryID\" ASC, \"OrderID\" ASC", array($InCategoryID));
 $fr=sql_query($fq,$SQLStat);
-$ai=sql_num_rows($fr);
+$ai=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"CategoryID\"=%i AND \"InSubForum\"=0 AND \"ForumType\"='subforum' ORDER BY \"CategoryID\" ASC, \"OrderID\" ASC", array($InCategoryID)), $SQLStat);
 $fi=0;
 if($ai>0) { ?>
 <optgroup label="<?php echo htmlentities($InCategoryName, ENT_QUOTES, $Settings['charset']); ?>">
@@ -415,7 +415,7 @@ sql_free_result($fcr); ?>
 <?php
 $fcq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."categories\" ORDER BY \"OrderID\" ASC, \"id\" ASC", null);
 $fcr=sql_query($fcq,$SQLStat);
-$afi=sql_num_rows($fcr);
+$afi=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."categories\" ORDER BY \"OrderID\" ASC, \"id\" ASC", null), $SQLStat);
 $fci=0;
 while ($fci < $afi) {
 $InCategoryID=sql_result($fcr,$fci,"id");
@@ -423,7 +423,7 @@ $InCategoryName=sql_result($fcr,$fci,"Name");
 $InCategoryType=sql_result($fcr,$fci,"CategoryType");
 $fq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"CategoryID\"=%i ORDER BY \"CategoryID\" ASC, \"OrderID\" ASC", array($InCategoryID));
 $fr=sql_query($fq,$SQLStat);
-$ai=sql_num_rows($fr);
+$ai=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"CategoryID\"=%i ORDER BY \"CategoryID\" ASC, \"OrderID\" ASC", array($InCategoryID)), $SQLStat);
 $fi=0;
 if($ai>0) { ?>
 <optgroup label="<?php echo htmlentities($InCategoryName, ENT_QUOTES, $Settings['charset']); ?>">
@@ -471,7 +471,8 @@ $_POST['ForumDesc'] = stripcslashes(htmlspecialchars($_POST['ForumDesc'], ENT_QU
 $_POST['ForumDesc'] = remove_spaces($_POST['ForumDesc']);
 $sql_id_check = sql_query(sql_pre_query("SELECT \"id\" FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($_POST['ForumID'])),$SQLStat);
 $sql_order_check = sql_query(sql_pre_query("SELECT \"OrderID\" FROM \"".$Settings['sqltable']."forums\" WHERE \"OrderID\"=%i AND \"CategoryID\"=%i AND \"InSubForum\"=%i LIMIT 1", array($_POST['OrderID'],$_POST['ForumCatID'],$_POST['InSubForum'])),$SQLStat);
-$id_check = sql_num_rows($sql_id_check); $order_check = sql_num_rows($sql_order_check);
+$id_check = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($_POST['ForumID'])), $SQLStat);
+$order_check = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"OrderID\"=%i AND \"CategoryID\"=%i AND \"InSubForum\"=%i LIMIT 1", array($_POST['OrderID'],$_POST['ForumCatID'],$_POST['InSubForum'])), $SQLStat);
 sql_free_result($sql_id_check); sql_free_result($sql_order_check);
 $errorstr = "";
 if ($_POST['NumPostView']==null||
@@ -519,17 +520,19 @@ if(!is_numeric($_POST['CPermissions'])) { $_POST['CPermissions'] = "0"; }
 if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"||$Settings['sqltype']=="pdo_mysql"||
 	$Settings['sqltype']=="pgsql"||$Settings['sqltype']=="sqlite"||
 	$Settings['sqltype']=="sqlite3"||$Settings['sqltype']=="pdo_sqlite3") {
-$getperidq = sql_pre_query("SELECT DISTINCT \"PermissionID\" FROM \"".$Settings['sqltable']."permissions\" ORDER BY \"PermissionID\" ASC", null); }
+$getperidq = sql_pre_query("SELECT DISTINCT \"PermissionID\" FROM \"".$Settings['sqltable']."permissions\" ORDER BY \"PermissionID\" ASC", null);
+$getperidnum = sql_count_rows(sql_pre_query("SELECT COUNT(DISTINCT \"PermissionID\") AS cnt FROM \"".$Settings['sqltable']."permissions\" ORDER BY \"PermissionID\" ASC", null), $SQLStat); }
 if($Settings['sqltype']=="cubrid") {
-$getperidq = sql_pre_query("SELECT DISTINCT \"permissionid\" FROM \"".$Settings['sqltable']."permissions\" ORDER BY \"PermissionID\" ASC", null); }
+$getperidq = sql_pre_query("SELECT DISTINCT \"permissionid\" FROM \"".$Settings['sqltable']."permissions\" ORDER BY \"PermissionID\" ASC", null);
+$getperidnum = sql_count_rows(sql_pre_query("SELECT COUNT(DISTINCT \"permissionid\") AS cnt FROM \"".$Settings['sqltable']."permissions\" ORDER BY \"PermissionID\" ASC", null), $SQLStat); }
 $getperidr=sql_query($getperidq,$SQLStat);
-$getperidnum=sql_num_rows($getperidr);
 if($getperidnum==0) {
-$getperidq = sql_pre_query("SELECT DISTINCT \"PermissionID\" FROM \"".$Settings['sqltable']."groups\" ORDER BY \"PermissionID\" ASC", null); }
+$getperidq = sql_pre_query("SELECT DISTINCT \"PermissionID\" FROM \"".$Settings['sqltable']."groups\" ORDER BY \"PermissionID\" ASC", null);
+$getperidnum = sql_count_rows(sql_pre_query("SELECT COUNT(DISTINCT \"PermissionID\") AS cnt FROM \"".$Settings['sqltable']."groups\" ORDER BY \"PermissionID\" ASC", null), $SQLStat); }
 if($Settings['sqltype']=="cubrid") {
-$getperidq = sql_pre_query("SELECT DISTINCT \"permissionid\" FROM \"".$Settings['sqltable']."groups\" ORDER BY \"PermissionID\" ASC", null); }
-$getperidr=sql_query($getperidq,$SQLStat);
-$getperidnum=sql_num_rows($getperidr); }
+$getperidq = sql_pre_query("SELECT DISTINCT \"permissionid\" FROM \"".$Settings['sqltable']."groups\" ORDER BY \"PermissionID\" ASC", null);
+$getperidnum = sql_count_rows(sql_pre_query("SELECT COUNT(DISTINCT \"permissionid\") AS cnt FROM \"".$Settings['sqltable']."groups\" ORDER BY \"PermissionID\" ASC", null), $SQLStat); }
+$getperidr=sql_query($getperidq,$SQLStat); }
 if(!isset($getperidnum)) { $getperidnum = 0; }
 $getperidi = 0; 
 $nextperid = null;
@@ -552,16 +555,18 @@ $getperidID=sql_result($getperidr,$getperidi,"\"PermissionID\""); }
 if($_POST['CPermissions']=="0") {
 $getperidqpre2 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i", array($getperidID));
 $getperidrpre2=sql_query($getperidqpre2,$SQLStat);
-$getperidnumpre2=sql_num_rows($getperidrpre2);
+$getperidnumpre2=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i", array($getperidID)), $SQLStat);
 if($getperidnumpre2==0) {
-$getperidq2 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"PermissionID\"=%i", array($getperidID)); }
+$getperidq2 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"PermissionID\"=%i", array($getperidID));
+$getperidnum2=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."groups\" WHERE \"PermissionID\"=%i", array($getperidID)), $SQLStat); }
 if($getperidnumpre2>0) {
-$getperidq2 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i", array($getperidID)); }
+$getperidq2 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i", array($getperidID));
+$getperidnum2=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i", array($getperidID)), $SQLStat); }
 sql_free_result($getperidrpre2);
 if($_POST['CPermissions']!="0") {
-$getperidq2 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i AND \"ForumID\"=%i", array($getperidID,$_POST['CPermissions'])); }
+$getperidq2 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i AND \"ForumID\"=%i", array($getperidID,$_POST['CPermissions']));
+$getperidnum2=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i AND \"ForumID\"=%i", array($getperidID,$_POST['CPermissions'])), $SQLStat); }
 $getperidr2=sql_query($getperidq2,$SQLStat);
-$getperidnum2=sql_num_rows($getperidr2);
 $PermissionNum=sql_result($getperidr2,0,"id"); 
 $PermissionID=sql_result($getperidr2,0,"PermissionID"); 
 $PermissionName=sql_result($getperidr2,0,"Name");
@@ -645,7 +650,7 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Deleting a Forum";
 <?php
 $fcq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."categories\" ORDER BY \"OrderID\" ASC, \"id\" ASC", null);
 $fcr=sql_query($fcq,$SQLStat);
-$afi=sql_num_rows($fcr);
+$afi=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."categories\" ORDER BY \"OrderID\" ASC, \"id\" ASC", null), $SQLStat);
 $fci=0;
 while ($fci < $afi) {
 $InCategoryID=sql_result($fcr,$fci,"id");
@@ -653,7 +658,7 @@ $InCategoryName=sql_result($fcr,$fci,"Name");
 $InCategoryType=sql_result($fcr,$fci,"CategoryType");
 $fq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"CategoryID\"=%i ORDER BY \"CategoryID\" ASC, \"OrderID\" ASC", array($InCategoryID));
 $fr=sql_query($fq,$SQLStat);
-$ai=sql_num_rows($fr);
+$ai=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"CategoryID\"=%i ORDER BY \"CategoryID\" ASC, \"OrderID\" ASC", array($InCategoryID)), $SQLStat);
 $fi=0;
 if($ai>0) { ?>
 <optgroup label="<?php echo htmlentities($InCategoryName, ENT_QUOTES, $Settings['charset']); ?>">
@@ -695,7 +700,7 @@ sql_free_result($fcr); ?>
 $admincptitle = " ".$ThemeSet['TitleDivider']." Updating Settings";
 $prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($_POST['DelID']));
 $preresult=sql_query($prequery,$SQLStat);
-$prenum=sql_num_rows($preresult);
+$prenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($_POST['DelID'])), $SQLStat);
 $errorstr = ""; $Error = null;
 if (!is_numeric($_POST['DelID'])) { $Error="Yes";
 $errorstr = $errorstr."You need to enter a forum ID.<br />\n"; } 
@@ -713,7 +718,7 @@ sql_query($dtquery,$SQLStat); }
 if($_POST['DelForums']=="yes") {
 $apcquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"InSubForum\"=%i ORDER BY \"OrderID\" ASC, \"id\" ASC", array($_POST['DelID']));
 $apcresult=sql_query($apcquery,$SQLStat);
-$apcnum=sql_num_rows($apcresult);
+$apcnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"InSubForum\"=%i ORDER BY \"OrderID\" ASC, \"id\" ASC", array($_POST['DelID'])), $SQLStat);
 $apci=0; $apcl=1; if($apcnum>=1) {
 while ($apci < $apcnum) {
 $DelSubsForumID=sql_result($apcresult,$apci,"id");
@@ -762,7 +767,7 @@ if(!isset($_POST['id'])) {
 <?php
 $fcq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."categories\" ORDER BY \"OrderID\" ASC, \"id\" ASC", null);
 $fcr=sql_query($fcq,$SQLStat);
-$afi=sql_num_rows($fcr);
+$afi=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."categories\" ORDER BY \"OrderID\" ASC, \"id\" ASC", null), $SQLStat);
 $fci=0;
 while ($fci < $afi) {
 $InCategoryID=sql_result($fcr,$fci,"id");
@@ -770,7 +775,7 @@ $InCategoryName=sql_result($fcr,$fci,"Name");
 $InCategoryType=sql_result($fcr,$fci,"CategoryType");
 $fq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"CategoryID\"=%i ORDER BY \"CategoryID\" ASC, \"OrderID\" ASC", array($InCategoryID));
 $fr=sql_query($fq,$SQLStat);
-$ai=sql_num_rows($fr);
+$ai=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"CategoryID\"=%i ORDER BY \"CategoryID\" ASC, \"OrderID\" ASC", array($InCategoryID)), $SQLStat);
 $fi=0;
 if($ai>0) { ?>
 <optgroup label="<?php echo htmlentities($InCategoryName, ENT_QUOTES, $Settings['charset']); ?>">
@@ -810,7 +815,7 @@ sql_free_result($fcr); ?>
 <?php } if(isset($_POST['id'])) { 
 $prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($_POST['id']));
 $preresult=sql_query($prequery,$SQLStat);
-$prenum=sql_num_rows($preresult);
+$prenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($_POST['id'])), $SQLStat);
 if($prenum==0) { redirect("location",$rbasedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],false)); sql_free_result($preresult);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
@@ -872,7 +877,7 @@ $ForumType = strtolower($ForumType); $CanHaveTopics = strtolower($CanHaveTopics)
 <?php 
 $cq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."categories\" ORDER BY \"OrderID\" ASC, \"id\" ASC", null);
 $cr=sql_query($cq,$SQLStat);
-$eu=sql_num_rows($cr);
+$eu=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."categories\" ORDER BY \"OrderID\" ASC, \"id\" ASC", null), $SQLStat);
 if($eu>0) { ?>
 	<optgroup label="<?php echo $Settings['board_name']; ?>">
 <?php }
@@ -921,7 +926,7 @@ sql_free_result($cr); ?>
 <?php
 $fcq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."categories\" ORDER BY \"OrderID\" ASC, \"id\" ASC", null);
 $fcr=sql_query($fcq,$SQLStat);
-$afi=sql_num_rows($fcr);
+$afi=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."categories\" ORDER BY \"OrderID\" ASC, \"id\" ASC", null), $SQLStat);
 $fci=0;
 while ($fci < $afi) {
 $InCategoryID=sql_result($fcr,$fci,"id");
@@ -929,7 +934,7 @@ $InCategoryName=sql_result($fcr,$fci,"Name");
 $InCategoryType=sql_result($fcr,$fci,"CategoryType");
 $fq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"CategoryID\"=%i AND \"InSubForum\"=0 AND \"ForumType\"='subforum' ORDER BY \"CategoryID\" ASC, \"OrderID\" ASC", array($InCategoryID));
 $fr=sql_query($fq,$SQLStat);
-$ai=sql_num_rows($fr);
+$ai=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"CategoryID\"=%i AND \"InSubForum\"=0 AND \"ForumType\"='subforum' ORDER BY \"CategoryID\" ASC, \"OrderID\" ASC", array($InCategoryID)), $SQLStat);
 $fi=0;
 if($ai>0) { ?>
 <optgroup label="<?php echo htmlentities($InCategoryName, ENT_QUOTES, $Settings['charset']); ?>">
@@ -1000,7 +1005,7 @@ $_POST['ForumDesc'] = stripcslashes(htmlspecialchars($_POST['ForumDesc'], ENT_QU
 $_POST['ForumDesc'] = remove_spaces($_POST['ForumDesc']);
 $prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($_POST['id']));
 $preresult=sql_query($prequery,$SQLStat);
-$prenum=sql_num_rows($preresult);
+$prenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($_POST['id'])), $SQLStat);
 if($prenum==0) { redirect("location",$rbasedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],false)); sql_free_result($preresult);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
@@ -1010,7 +1015,8 @@ $OldOrder=sql_result($preresult,0,"OrderID");
 sql_free_result($preresult);
 $sql_id_check = sql_query(sql_pre_query("SELECT \"id\" FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($_POST['ForumID'])),$SQLStat);
 $sql_order_check = sql_query(sql_pre_query("SELECT \"OrderID\" FROM \"".$Settings['sqltable']."forums\" WHERE \"OrderID\"=%i AND \"CategoryID\"=%i AND \"InSubForum\"=%i LIMIT 1", array($_POST['OrderID'],$_POST['ForumCatID'],$_POST['InSubForum'])),$SQLStat);
-$id_check = sql_num_rows($sql_id_check); $order_check = sql_num_rows($sql_order_check);
+$id_check = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($_POST['ForumID'])), $SQLStat);
+$order_check = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"OrderID\"=%i AND \"CategoryID\"=%i AND \"InSubForum\"=%i LIMIT 1", array($_POST['OrderID'],$_POST['ForumCatID'],$_POST['InSubForum'])), $SQLStat);
 sql_free_result($sql_id_check); sql_free_result($sql_order_check);
 if ($_POST['NumPostView']==null||
 	!is_numeric($_POST['NumPostView'])) {
@@ -1094,11 +1100,12 @@ if(!isset($_POST['id'])) {
 if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"||$Settings['sqltype']=="pdo_mysql"||
 	$Settings['sqltype']=="pgsql"||$Settings['sqltype']=="sqlite"||
 	$Settings['sqltype']=="sqlite3"||$Settings['sqltype']=="pdo_sqlite3") {
-$getperidq = sql_pre_query("SELECT DISTINCT \"PermissionID\" FROM \"".$Settings['sqltable']."permissions\"", null); }
+$getperidq = sql_pre_query("SELECT DISTINCT \"PermissionID\" FROM \"".$Settings['sqltable']."permissions\"", null);
+$getperidnum = sql_count_rows(sql_pre_query("SELECT COUNT(DISTINCT \"PermissionID\") AS cnt FROM \"".$Settings['sqltable']."permissions\"", null), $SQLStat); }
 if($Settings['sqltype']=="cubrid") {
-$getperidq = sql_pre_query("SELECT DISTINCT \"permissionid\" FROM \"".$Settings['sqltable']."permissions\"", null); }
+$getperidq = sql_pre_query("SELECT DISTINCT \"permissionid\" FROM \"".$Settings['sqltable']."permissions\"", null);
+$getperidnum = sql_count_rows(sql_pre_query("SELECT COUNT(DISTINCT \"permissionid\") AS cnt FROM \"".$Settings['sqltable']."permissions\"", null), $SQLStat); }
 $getperidr=sql_query($getperidq,$SQLStat);
-$getperidnum=sql_num_rows($getperidr);
 $getperidi = 0;
 while ($getperidi < $getperidnum) {
 if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"||$Settings['sqltype']=="pdo_mysql"||
@@ -1109,7 +1116,7 @@ if($Settings['sqltype']=="sqlite") {
 $getperidID=sql_result($getperidr,$getperidi,"\"PermissionID\""); }
 $getperidq2 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i ORDER BY \"ForumID\" ASC", array($getperidID));
 $getperidr2=sql_query($getperidq2,$SQLStat);
-$getperidnum2=sql_num_rows($getperidr2);
+$getperidnum2=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i ORDER BY \"ForumID\" ASC", array($getperidID)), $SQLStat);
 $getperidName=sql_result($getperidr2,0,"Name");
 sql_free_result($getperidr2);
 ?>
@@ -1157,14 +1164,14 @@ sql_free_result($getperidr); ?>
 <?php 
 $fq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" ORDER BY \"id\" ASC, \"OrderID\" ASC", null);
 $fr=sql_query($fq,$SQLStat);
-$ai=sql_num_rows($fr);
+$ai=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" ORDER BY \"id\" ASC, \"OrderID\" ASC", null), $SQLStat);
 $fi=0;
 while ($fi < $ai) {
 $InForumID=sql_result($fr,$fi,"id");
 $InForumName=sql_result($fr,$fi,"Name");
 $getperidq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i AND \"ForumID\"=%i LIMIT 1", array($_POST['id'],$InForumID));
 $getperidr=sql_query($getperidq,$SQLStat);
-$getperidnum=sql_num_rows($getperidr);
+$getperidnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i AND \"ForumID\"=%i LIMIT 1", array($_POST['id'],$InForumID)), $SQLStat);
 $getperidNumz = null;
 $getperidID = null;
 if($getperidnum>0) {
@@ -1205,7 +1212,7 @@ sql_free_result($fr); ?>
 <?php } if(isset($_POST['id'])&&$_POST['subact']=="edit") {
 $prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."permissions\" WHERE \"id\"=%i LIMIT 1", array($_POST['id']));
 $preresult=sql_query($prequery,$SQLStat);
-$prenum=sql_num_rows($preresult);
+$prenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."permissions\" WHERE \"id\"=%i LIMIT 1", array($_POST['id'])), $SQLStat);
 if($prenum==0) { redirect("location",$rbasedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],false)); sql_free_result($preresult);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
@@ -1579,7 +1586,7 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Updating Settings";
 redirect("refresh",$rbasedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],FALSE),"4");
 $prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."permissions\" WHERE \"id\"=%i LIMIT 1", array($_POST['permid']));
 $preresult=sql_query($prequery,$SQLStat);
-$prenum=sql_num_rows($preresult);
+$prenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."permissions\" WHERE \"id\"=%i LIMIT 1", array($_POST['permid'])), $SQLStat);
 if($prenum==0) { redirect("location",$rbasedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],false)); sql_free_result($preresult);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }

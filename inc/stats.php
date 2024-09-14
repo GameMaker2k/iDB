@@ -52,7 +52,7 @@ $uolcuttime = $utccurtime->getTimestamp();
 $uoltime = $uolcuttime - ini_get("session.gc_maxlifetime");
 $uolquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i ORDER BY \"expires\" DESC", array($uoltime));
 $uolresult=sql_query($uolquery,$SQLStat);
-$uolnum=sql_num_rows($uolresult);
+$uolnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i ORDER BY \"expires\" DESC", array($uoltime)), $SQLStat);
 $uoli=0; $olmn = 0; $olgn = 0; $olan = 0; $olmbn = 0;
 $MembersOnline = null; $GuestsOnline = null;
 while ($uoli < $uolnum) {
@@ -120,7 +120,6 @@ $nmquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHE
 $rnmquery = sql_pre_query("SELECT COUNT(*) FROM \"".$Settings['sqltable']."members\" WHERE \"id\">=%i ".$caniview, array(1,$Settings['ValidateGroup'])); }
 $nmresult = sql_query($nmquery,$SQLStat);
 $rnmresult = sql_query($rnmquery,$SQLStat);
-//$nummembers = sql_num_rows($nmresult);
 $nummembers = sql_result($rnmresult,0);
 sql_free_result($rnmresult);
 $NewestMem = array(null);
@@ -139,11 +138,13 @@ $NewestMemExtraIP = " (<a title=\"".$NewestMem['IP']."\" onclick=\"window.open(t
 $bdMonthChCk = $usercurtime->format("m");
 $bdDayChCk = $usercurtime->format("d");
 if($Settings['AdminValidate']=="on") {
-$bdquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"BirthDay\"=%i AND \"BirthMonth\"=%i ".$caniview." AND \"Validated\"='yes' AND \"GroupID\"<>%i ORDER BY \"id\"", array($bdDayChCk,$bdMonthChCk,$Settings['ValidateGroup'])); } 
+$bdquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"BirthDay\"=%i AND \"BirthMonth\"=%i ".$caniview." AND \"Validated\"='yes' AND \"GroupID\"<>%i ORDER BY \"id\"", array($bdDayChCk,$bdMonthChCk,$Settings['ValidateGroup']));
+$bdmembers = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"BirthDay\"=%i AND \"BirthMonth\"=%i ".$caniview." AND \"Validated\"='yes' AND \"GroupID\"<>%i ORDER BY \"id\"", array($bdDayChCk,$bdMonthChCk,$Settings['ValidateGroup'])), $SQLStat); }
 if($Settings['AdminValidate']!="on") {
-$bdquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"BirthDay\"=%i AND \"BirthMonth\"=%i ".$caniview." ORDER BY \"id\"", array($bdDayChCk,$bdMonthChCk)); } 
+$bdquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"BirthDay\"=%i AND \"BirthMonth\"=%i ".$caniview." ORDER BY \"id\"", array($bdDayChCk,$bdMonthChCk));
+$bdmembers = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"BirthDay\"=%i AND \"BirthMonth\"=%i ".$caniview." ORDER BY \"id\"", array($bdDayChCk,$bdMonthChCk)), $SQLStat); }
 $bdresult = sql_query($bdquery,$SQLStat);
-$bdmembers = sql_num_rows($bdresult); $bdi = 0;
+$bdi = 0;
 if($bdmembers>0) { $bdstring = "&#160;".$bdmembers." member(s) have a birthday today"; }
 if($bdmembers<=0) { $bdstring = "<div>&#160;</div>&#160;No members have a birthday today<div>&#160;</div>"; }
 while ($bdi < $bdmembers) {
@@ -176,7 +177,8 @@ $evcur_end_day = date("d", $evcur_end);
 $evcur_end_year = date("Y", $evcur_end);
 $evquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."events\" WHERE (\"TimeStamp\">=%i AND \"TimeStamp\"<=%i) OR (\"TimeStampEnd\">=%i AND \"TimeStampEnd\"<=%i) ORDER BY \"TimeStamp\"", array($evcur_start,$evcur_end,$evcur_start,$evcur_end)); 
 $evresult = sql_query($evquery,$SQLStat);
-$evevents = sql_num_rows($evresult); $evi = 0;
+$evevents = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."events\" WHERE (\"TimeStamp\">=%i AND \"TimeStamp\"<=%i) OR (\"TimeStampEnd\">=%i AND \"TimeStampEnd\"<=%i) ORDER BY \"TimeStamp\"", array($evcur_start,$evcur_end,$evcur_start,$evcur_end)), $SQLStat);
+$evi = 0;
 if($evevents>0) { $evstring = "&#160;".$evevents." upcoming events"; }
 if($evevents<=0) { $evstring = "<div>&#160;</div>&#160;There are no upcoming calendar events<div>&#160;</div>"; }
 while ($evi < $evevents) {
@@ -218,7 +220,7 @@ $tdrnquery = sql_pre_query("SELECT COUNT(*) FROM \"".$Settings['sqltable']."memb
 $tdrnresult=sql_query($tdrnquery,$SQLStat);
 $tdNumberMembers=sql_result($tdrnresult,0);
 $tdresult=sql_query($tdquery,$SQLStat);
-$tdnum=sql_num_rows($tdresult);
+$tdnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"<>%i AND \"id\">=0 ".$caniview." AND (\"LastActive\">=%i AND \"LastActive\"<=%i) ORDER BY \"LastActive\" DESC", array($GGroup,$active_start,$active_end)), $SQLStat);
 $tdi=0;
 while($tdi < $tdnum) {
 $tdMemList['ID']=sql_result($tdresult,$tdi,"id");

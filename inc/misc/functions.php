@@ -179,7 +179,7 @@ global $SQLStat;
 if(!isset($link)) { $link = $SQLStat; }
 $melaniequery=sql_pre_query("SELECT * FROM \"".$sqlt."smileys\"", null);
 $melanieresult=sql_query($melaniequery,$link);
-$melanienum=sql_num_rows($melanieresult);
+$melanienum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$sqlt."smileys\"", null), $SQLStat);
 $melanies=0;
 while ($melanies < $melanienum) {
 $FileName=sql_result($melanieresult,$melanies,"FileName");
@@ -412,7 +412,7 @@ global $SQLStat;
 if(!isset($link)) { $link = $SQLStat; }
 $gunquery = sql_pre_query("SELECT * FROM \"".$sqlt."members\" WHERE \"id\"=%i LIMIT 1", array($idu));
 $gunresult=sql_query($gunquery,$link);
-$gunnum=sql_num_rows($gunresult);
+$gunnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$sqlt."members\" WHERE \"id\"=%i LIMIT 1", array($idu)), $SQLStat);
 // I'm now hidden from you. ^_^ | <_< I cant find you.
 $UsersHidden = "yes";
 if($gunnum>0){
