@@ -11,7 +11,7 @@
     Copyright 2004-2024 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2024 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: versioninfo.php - Last Update: 9/8/2024 SVN 1182 - Author: cooldude2k $
+    $FileInfo: versioninfo.php - Last Update: 9/8/2024 SVN 1183 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="versioninfo.php"||$File3Name=="/versioninfo.php") {
@@ -27,7 +27,7 @@ function version_info($proname,$subver,$ver,$supver,$reltype,$svnver,$showsvn) {
 	return $return_var; }
 // Version number and date stuff. :P
 $VER1[0] = 0; $VER1[1] = 6; $VER1[2] = 8; $VERFull[1] = $VER1[0].".".$VER1[1].".".$VER1[2];
-$VER2[0] = "Alpha"; $VER2[1] = "Al"; $VER2[2] = "SVN"; $SubVerN = 1182; $GitRevPreN = '$Id$';
+$VER2[0] = "Alpha"; $VER2[1] = "Al"; $VER2[2] = "SVN"; $SubVerN = 1183; $GitRevPreN = '$Id$';
 $GitRevN = getGitRevision($GitRevPreN);
 $SVNDay[0] = 9; $SVNDay[1] = 8; $SVNDay[2] = 2024; $SVNDay[3] = $SVNDay[0]."/".$SVNDay[1]."/".$SVNDay[2];
 $AltName = "DF2k"; $AltName2 = "DF2k"; $RName = "iDB"; $SFName = "IntDB";
@@ -43,6 +43,12 @@ $AltGM2kJP = "ゲームメーカー二千"; $AltGM2kShortJP = "ジーエム二�
 $AltNameKO = "디에프 이천"; $AltName2KO = "디에프 이천"; $RNameKO = "아이디비"; $SFNameKO = "인티비";
 $RFullNameKO = "인터넷 토론 게시판"; $AltFullNameKO = "토론 포럼 이천";
 $AltGM2kKO = "게임 메이커 이천"; $AltGM2kShortKO = "지엠 이천";
+$AltNameSC = "DF二千"; $AltName2SC = "DF二千"; $RNameSC = "i讨论板"; $SFNameSC = "Int标签板";
+$RFullNameSC = "互联网讨论板"; $AltFullNameSC = "讨论论坛二千";
+$AltGM2kSC = "游戏制作二千"; $AltGM2kShortSC = "GM二千";
+$AltNameTC = "DF二千"; $AltName2TC = "DF二千"; $RNameTC = "i討論板"; $SFNameTC = "Int標籤板";
+$RFullNameTC = "互聯網討論板"; $AltFullNameTC = "討論論壇二千";
+$AltGM2kTC = "遊戲製作二千"; $AltGM2kShortTC = "GM二千";
 if(!isset($Settings['usealtname'])) { $Settings['usealtname'] = "no"; }
 if(isset($Settings['usealtname'])&&$Settings['usealtname']=="yes") {
 if(isset($iDBAltName['VER1'][0])) { $VER1[0] = $iDBAltName['VER1'][0]; }
@@ -118,10 +124,16 @@ $iDB = "Internet Discussion Boards"; $iTB = "Internet Tag Boards";
 $DF2k = "Discussion Forums 2k"; $TB2k = "Tag Boards 2k";
 $GM2kJP = "ゲームメーカー二千";
 $iDBJP = "インターネットディスカッションボード"; $iTBJP = "インターネットタグボード"; 
-$DF2kJP = "Discussion Forums 2k"; $TB2kJP = "タグボード二千";
+$DF2kJP = "ディスカッションフォーラム二千"; $TB2kJP = "タグボード二千";
 $GM2kKO = "게임 메이커 이천";
 $iDBKO = "인터넷 토론 게시판"; $iTBKO = "인터넷 태그 게시판"; 
 $DF2kKO = "토론 포럼 이천"; $TB2kKO = "태그 게시판 이천";
+$GM2kSC = "游戏制作二千";
+$iDBSC = "互联网讨论板"; $iTBSC = "互联网标签板"; 
+$DF2kSC = "讨论论坛二千"; $TB2kSC = "标签板二千";
+$GM2kTC = "遊戲製作二千";
+$iDBTC = "互聯網討論板"; $iTBTC = "互聯網標籤板"; 
+$DF2kTC = "討論論壇二千"; $TB2kTC = "標籤板二千";
 $TheProgrammerNaps = "The programmer has a nap. \nHold out! Programmer! ";
 if(isset($Settings['usealtname'])&&$Settings['usealtname']=="yes") { 
 	$iDB = $AltiDB; $OrgName = $AltOrgName; $iDBTheme = $AltiDBTheme; }
