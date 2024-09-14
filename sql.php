@@ -658,8 +658,9 @@ if ($use_old_session == true) {
             $utccurtime = new DateTime();
             $utccurtime->setTimezone($utctz);
             $time = $utccurtime->getTimestamp();
-            sql_query(sql_pre_query("INSERT INTO \"" . $sqltable . "sessions\" (\"session_id\", \"session_data\", \"serialized_data\", \"user_agent\", \"ip_address\", \"expires\") VALUES\n" .
-                "('%s', '%s', '%s', '%s', '%s', %i)", array($id, $temp_session_data, $alt_temp_session_data, $temp_user_agent, $temp_user_ip, $time)), $SQLStat);
+            // Use INSERT OR REPLACE to avoid unique constraint violations
+            sql_query(sql_pre_query("INSERT OR REPLACE INTO \"" . $sqltable . "sessions\" (\"session_id\", \"session_data\", \"serialized_data\", \"user_agent\", \"ip_address\", \"expires\") VALUES ('%s', '%s', '%s', '%s', '%s', %i)", 
+                array($id, $temp_session_data, $alt_temp_session_data, $temp_user_agent, $temp_user_ip, $time)), $SQLStat);
             return '';
         } else {
             $utctz = new DateTimeZone("UTC");
@@ -687,9 +688,10 @@ if ($use_old_session == true) {
         $checkQuery = sql_pre_query("SELECT COUNT(*) AS cnt FROM \"" . $sqltable . "sessions\" WHERE \"session_id\" = '%s'", array($id));
         $sessionExists = sql_count_rows($checkQuery, $SQLStat);
 
+        // Use INSERT OR REPLACE to avoid unique constraint violations
         if ($sessionExists == 0) {
-            sql_query(sql_pre_query("INSERT INTO \"" . $sqltable . "sessions\" (\"session_id\", \"session_data\", \"serialized_data\", \"user_agent\", \"ip_address\", \"expires\") VALUES\n" .
-                "('%s', '%s', '%s', '%s', '%s', %i)", array($id, $data, serialize($_SESSION), $temp_user_agent, $temp_user_ip, $time)), $SQLStat);
+            sql_query(sql_pre_query("INSERT OR REPLACE INTO \"" . $sqltable . "sessions\" (\"session_id\", \"session_data\", \"serialized_data\", \"user_agent\", \"ip_address\", \"expires\") VALUES ('%s', '%s', '%s', '%s', '%s', %i)", 
+                array($id, $data, serialize($_SESSION), $temp_user_agent, $temp_user_ip, $time)), $SQLStat);
         } else {
             sql_query(sql_pre_query("UPDATE \"" . $sqltable . "sessions\" SET \"session_data\"='%s',\"serialized_data\"='%s',\"user_agent\"='%s',\"ip_address\"='%s',\"expires\"=%i WHERE \"session_id\"='%s'", array($data, serialize($_SESSION), $temp_user_agent, $temp_user_ip, $time, $id)), $SQLStat);
         }
@@ -749,7 +751,8 @@ function sql_session_read($id) {
         $utccurtime->setTimezone($utctz);
         $time = $utccurtime->getTimestamp();
 
-        $insertQuery = sql_pre_query("INSERT INTO \"" . $sqltable . "sessions\" (\"session_id\", \"session_data\", \"serialized_data\", \"user_agent\", \"ip_address\", \"expires\") VALUES ('%s', '%s', '%s', '%s', '%s', %i)", 
+        // Use INSERT OR REPLACE to avoid unique constraint violations
+        $insertQuery = sql_pre_query("INSERT OR REPLACE INTO \"" . $sqltable . "sessions\" (\"session_id\", \"session_data\", \"serialized_data\", \"user_agent\", \"ip_address\", \"expires\") VALUES ('%s', '%s', '%s', '%s', '%s', %i)", 
             array($id, $temp_session_data, $alt_temp_session_data, $temp_user_agent, $temp_user_ip, $time));
         
         sql_query($insertQuery, $SQLStat);
@@ -778,13 +781,12 @@ function sql_session_write($id, $data) {
     $checkQuery = sql_pre_query("SELECT COUNT(*) AS cnt FROM \"" . $sqltable . "sessions\" WHERE \"session_id\" = '%s'", array($id));
     $sessionExists = sql_count_rows($checkQuery, $SQLStat);
     
+    // Use INSERT OR REPLACE to avoid unique constraint violations
     if ($sessionExists == 0) {
-        // Insert new session
-        $insertQuery = sql_pre_query("INSERT INTO \"" . $sqltable . "sessions\" (\"session_id\", \"session_data\", \"serialized_data\", \"user_agent\", \"ip_address\", \"expires\") VALUES ('%s', '%s', '%s', '%s', '%s', %i)", 
+        $insertQuery = sql_pre_query("INSERT OR REPLACE INTO \"" . $sqltable . "sessions\" (\"session_id\", \"session_data\", \"serialized_data\", \"user_agent\", \"ip_address\", \"expires\") VALUES ('%s', '%s', '%s', '%s', '%s', %i)", 
             array($id, $data, serialize($_SESSION), $temp_user_agent, $temp_user_ip, $time));
         sql_query($insertQuery, $SQLStat);
     } else {
-        // Update existing session
         $updateQuery = sql_pre_query("UPDATE \"" . $sqltable . "sessions\" SET \"session_data\" = '%s', \"serialized_data\" = '%s', \"user_agent\" = '%s', \"ip_address\" = '%s', \"expires\" = %i WHERE \"session_id\" = '%s'", 
             array($data, serialize($_SESSION), $temp_user_agent, $temp_user_ip, $time, $id));
         sql_query($updateQuery, $SQLStat);

@@ -158,20 +158,27 @@ pdo_mysql_func_disconnect_db($link = null) {
 // Query Results :P
 function 
 pdo_mysql_func_result($result,$row,$field=0) {
-$check = true;
-$num = 0;
-$result->reset();
-while ($num<$row) {
-	$result->fetch(PDO::FETCH_BOTH);
-    $num++; }
-if ($check===false) {
-    output_error("SQL Error: ".
-pdo_mysql_func_error(),E_USER_ERROR);
-	return false; }
-$trow = $result->fetch(PDO::FETCH_BOTH);
-if(!isset($trow[$field])) { $trow[$field] = null; }
-$retval = $trow[$field]; 
-return $retval; }
+    if (!$result instanceof PDOStatement) {
+        output_error("SQL Error: Invalid result type. Expected PDOStatement, got " . gettype($result), E_USER_ERROR);
+        return false;
+    }
+
+    // Move to the desired row
+    $num = 0;
+    while ($num < $row && $result->fetch(PDO::FETCH_BOTH)) {
+        $num++;
+    }
+
+    // Fetch the row
+    $trow = $result->fetch(PDO::FETCH_BOTH);
+    if ($trow === false) {
+        output_error("SQL Error: No such row found.", E_USER_ERROR);
+        return null;
+    }
+
+    // Return the requested field or null if not found
+    return isset($trow[$field]) ? $trow[$field] : null;
+}
 // Free Results :P
 function 
 pdo_mysql_func_free_result($result) {
