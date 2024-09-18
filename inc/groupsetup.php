@@ -465,7 +465,7 @@ if($GroupInfo['ViewDBInfo']!="yes"&&$GroupInfo['ViewDBInfo']!="no") {
 if($GruError==true) {
 header("Content-Type: text/plain; charset=".$Settings['charset']); 
 sql_free_result($gruresult); sql_free_result($levresult); sql_free_result($mempreresult); $urlstatus = 503;
-ob_clean(); var_dump($gruquery); var_dump($memprequery); echo "Sorry could not load all group data in database.\nContact the board admin about error."; 
+ob_clean(); echo "Sorry could not load all group data in database.\nContact the board admin about error."; 
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); } }
 sql_free_result($gruresult);
 if($_SESSION['UserID']!=0&&$_SESSION['UserID']!=null) {
