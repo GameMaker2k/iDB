@@ -95,7 +95,8 @@ if ($fresult===false) {
 if ($fresult===true) {
 	return true; } }
 //Fetch Results to Array
-function pdo_cubrid_func_fetch_array($result,$result_type=CUBRID_BOTH) {
+function pdo_cubrid_func_fetch_array($result,$result_type=PDO::FETCH_BOTH) {
+if($result_type==null) { $result_type = PDO::FETCH_BOTH; }
 $row = cubrid_fetch_array($result,$result_type);
 	return $row; }
 //Fetch Results to Associative Array

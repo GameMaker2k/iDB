@@ -123,7 +123,7 @@ function sql_free_result($result, $sqllib = null) {
     return call_sql_function('free_result', $sqllib, $result);
 }
 
-function sql_fetch_array($result, $result_type = SQLITE_BOTH, $sqllib = null) {
+function sql_fetch_array($result, $result_type = null, $sqllib = null) {
     return call_sql_function('fetch_array', $sqllib, $result, $result_type);
 }
 

@@ -215,9 +215,14 @@ if($rannum<=0&&$ChkUsrRankID!=0) {
 if(!isset($_SESSION['UserGroup'])) { $_SESSION['UserGroup'] = null; }
 if($_SESSION['UserGroup']==null) { 
 $_SESSION['UserGroup']=$Settings['GuestGroup']; } $GruError = null;
+if($_SESSION['UserID']!=0) {
 $gruquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"Name\"='%s' LIMIT 1", array($_SESSION['UserGroup']));
 $gruresult=sql_query($gruquery,$SQLStat);
-$grunum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."groups\" WHERE \"Name\"='%s' LIMIT 1", array($_SESSION['UserGroup'])), $SQLStat);
+$grunum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."groups\" WHERE \"Name\"='%s' LIMIT 1", array($_SESSION['UserGroup'])), $SQLStat); }
+if($_SESSION['UserID']==0) {
+$gruquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"Name\"='%s' LIMIT 1", array($Settings['GuestGroup']));
+$gruresult=sql_query($gruquery,$SQLStat);
+$grunum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."groups\" WHERE \"Name\"='%s' LIMIT 1", array($Settings['GuestGroup'])), $SQLStat); }
 if($grunum<=0) { $GruError = true; sql_free_result($gruresult);
 header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 503;
 ob_clean(); echo "Sorry could not find group data in database.\nContact the board admin about error."; 
@@ -460,7 +465,7 @@ if($GroupInfo['ViewDBInfo']!="yes"&&$GroupInfo['ViewDBInfo']!="no") {
 if($GruError==true) {
 header("Content-Type: text/plain; charset=".$Settings['charset']); 
 sql_free_result($gruresult); sql_free_result($levresult); sql_free_result($mempreresult); $urlstatus = 503;
-ob_clean(); echo "Sorry could not load all group data in database.\nContact the board admin about error."; 
+ob_clean(); var_dump($gruquery); var_dump($memprequery); echo "Sorry could not load all group data in database.\nContact the board admin about error."; 
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); } }
 sql_free_result($gruresult);
 if($_SESSION['UserID']!=0&&$_SESSION['UserID']!=null) {

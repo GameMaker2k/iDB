@@ -17,8 +17,7 @@ $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="mysqli.php"||$File3Name=="/mysqli.php") {
 	@header('Location: index.php');
 	exit(); }
-function 
-pdo_mysql_func_error($link=null) {
+function pdo_mysql_func_error($link=null) {
 global $SQLStat;
 if(isset($link)) {
 	$result = $link->errorInfo(); }
@@ -27,8 +26,7 @@ if(!isset($link)) {
 if ($result=="") {
 	return ""; }
 	return $result; }
-function 
-pdo_mysql_func_errno($link=null) {
+function pdo_mysql_func_errno($link=null) {
 global $SQLStat;
 if(isset($link)) {
 	$result = $link->errorCode(); }
@@ -37,8 +35,7 @@ if(!isset($link)) {
 if ($result===0) {
 	return 0; }
 	return $result; }
-function 
-pdo_mysql_func_errorno($link=null) {
+function pdo_mysql_func_errorno($link=null) {
 global $SQLStat;
 if(isset($link)) {
 	$result = $link->errorCode().": ".$link->errorInfo(); }
@@ -50,44 +47,51 @@ if ($result=="") {
 // Execute a query :P
 if(!isset($NumQueries)) {
 $NumQueries = 0; }
-function 
-pdo_mysql_func_query($query, $link = null) {
+function pdo_mysql_func_query($query, $link = null) {
     global $NumQueries, $SQLStat;
-    
+
     // Use the appropriate PDO connection
     $pdo = isset($link) ? $link : $SQLStat;
-    
+
     // Check if the query is an array containing the query string and parameters
     if (is_array($query)) {
         list($query_string, $params) = $query;
         $stmt = $pdo->prepare($query_string);
 
-        // Debugging: Log the query and parameters
-        error_log("Executing SQL: " . $query_string);
-        error_log("With Parameters: " . implode(", ", $params));
-
         // Execute with parameters
         $result = $stmt->execute($params);
+
+        if ($result === false) {
+            // Improved error handling
+            $errorInfo = $pdo->errorInfo();
+            output_error("SQL Error: " . $errorInfo[2], E_USER_ERROR);
+            return false;
+        }
+        ++$NumQueries;
+        return $stmt;  // Return the statement for SELECT or data-fetching queries
     } else {
         // For direct queries without parameters
         $result = $pdo->query($query);
-    }
 
-    if ($result === false) {
-        // Improved error handling
-        $errorInfo = $pdo->errorInfo();
-        output_error("SQL Error: " . $errorInfo[2], E_USER_ERROR);
-        return false;
-    }
+        if ($result === false) {
+            // Improved error handling
+            $errorInfo = $pdo->errorInfo();
+            output_error("SQL Error: " . $errorInfo[2], E_USER_ERROR);
+            return false;
+        }
 
-    if ($result !== false) {
-        ++$NumQueries;
+        // Check if it's a SELECT or other data-fetching query
+        if ($result instanceof PDOStatement) {
+            ++$NumQueries;
+            return $result;
+        }
+
+        // For INSERT, UPDATE, DELETE queries, return true if successful
         return $result;
     }
 }
 //Fetch Number of Rows
-function 
-pdo_mysql_func_num_rows($result) {
+function pdo_mysql_func_num_rows($result) {
     if ($result instanceof PDOStatement) {
         $num = $result->rowCount();
         if ($num === false) {
@@ -138,8 +142,7 @@ function pdo_mysql_func_connect_db($server, $username, $password, $database = nu
         return false;
     }
 }
-function 
-pdo_mysql_func_disconnect_db($link = null) {
+function pdo_mysql_func_disconnect_db($link = null) {
     global $SQLStat; // Assuming this is your PDO object
 
     // If a specific link is provided (assuming $link is a PDOStatement), close the cursor
@@ -156,52 +159,53 @@ pdo_mysql_func_disconnect_db($link = null) {
     return false;
 }
 // Query Results :P
-function 
-pdo_mysql_func_result($result,$row,$field=0) {
-$check = true;
-$num = 0;
-$result->reset();
-while ($num<$row) {
-	$result->fetch(PDO::FETCH_BOTH);
-    $num++; }
-if ($check===false) {
-    output_error("SQL Error: ".
-pdo_mysql_func_error(),E_USER_ERROR);
-	return false; }
-$trow = $result->fetch(PDO::FETCH_BOTH);
-if(!isset($trow[$field])) { $trow[$field] = null; }
-$retval = $trow[$field]; 
-return $retval; }
+function pdo_mysql_func_result($result, $row = 0, $field = 0) {
+    // Ensure that $result is a PDOStatement before calling fetch
+    if ($result instanceof PDOStatement) {
+        // Use PDO::FETCH_BOTH to fetch rows with both numeric and associative keys
+        // Seek to the requested row using fetch
+        $result->fetch(PDO::FETCH_BOTH, PDO::FETCH_ORI_ABS, $row);
+        
+        // Fetch the specific row
+        $fetchedRow = $result->fetch(PDO::FETCH_BOTH);
+        
+        if ($fetchedRow === false) {
+            // If no row exists at the specified index
+            return null;
+        }
+        
+        // Return the specific field from the requested row
+        return isset($fetchedRow[$field]) ? $fetchedRow[$field] : null;
+    } else {
+        // Handle the case where the result is not a PDOStatement (e.g., for non-SELECT queries)
+        output_error("SQL Error: Invalid result type. Expected PDOStatement, got " . gettype($result), E_USER_ERROR);
+        return false;
+    }
+}
 // Free Results :P
-function 
-pdo_mysql_func_free_result($result) {
+function pdo_mysql_func_free_result($result) {
 	return true; }
 //Fetch Results to Array
-function 
-pdo_mysql_func_fetch_array($result,$result_type=SQLITE3_BOTH) {
+function pdo_mysql_func_fetch_array($result,$result_type=PDO::FETCH_BOTH) {
+if($result_type==null) { $result_type = PDO::FETCH_BOTH; }
 $row = $result->fetch($result_type);
 	return $row; }
 //Fetch Results to Associative Array
-function 
-pdo_mysql_func_fetch_assoc($result) {
+function pdo_mysql_func_fetch_assoc($result) {
 $row = $result->fetch(PDO::FETCH_ASSOC);
 	return $row; }
 //Fetch Row Results
-function 
-pdo_mysql_func_fetch_row($result) {
+function pdo_mysql_func_fetch_row($result) {
 $row = $result->fetch(PDO::FETCH_NUM);
 	return $row; }
 //Get Server Info
-function 
-pdo_mysql_func_server_info($link=null) {
+function pdo_mysql_func_server_info($link=null) {
 	$result = $link->query('select sqlite_version()')->fetch()[0];
 	return $result; }
 //Get Client Info
-function 
-pdo_mysql_func_client_info($link=null) {
+function pdo_mysql_func_client_info($link=null) {
 	return null; }
-function 
-pdo_mysql_func_escape_string($string,$link=null) {
+function pdo_mysql_func_escape_string($string,$link=null) {
 global $SQLStat;
  if(isset($string)&&!is_null($string)) {
 	if(isset($link)) {
@@ -213,8 +217,7 @@ if ($string===false) {
 pdo_mysql_func_error(),E_USER_ERROR);
 	return false; }
 	return $string; }
-function 
-pdo_mysql_func_pre_query($query_string, $query_vars = []) {
+function pdo_mysql_func_pre_query($query_string, $query_vars = []) {
     if ($query_vars === null || !is_array($query_vars)) { 
         $query_vars = []; 
     }
@@ -293,8 +296,7 @@ if ($result===false) {
 	return true; } }
 */
 // Get next id for stuff
-function 
-pdo_mysql_func_get_next_id($tablepre,$table,$link=null) {
+function pdo_mysql_func_get_next_id($tablepre,$table,$link=null) {
 	global $SQLStat;
 	if(isset($link)) {
 		$nid = $link->lastInsertId(); }
@@ -302,8 +304,7 @@ pdo_mysql_func_get_next_id($tablepre,$table,$link=null) {
 		$nid = $SQLStat->lastInsertId(); }
 	return $nid; }
 // Get number of rows for table
-function 
-pdo_mysql_func_get_num_rows($tablepre,$table,$link=null) {
+function pdo_mysql_func_get_num_rows($tablepre,$table,$link=null) {
    $getnextidq = 
 pdo_mysql_func_pre_query("SHOW TABLE STATUS LIKE '".$tablepre.$table."'", array());
 if(!isset($link)) {

@@ -18,9 +18,12 @@ if ($File3Name=="prelogin.php"||$File3Name=="/prelogin.php") {
 	require('index.php');
 	exit(); }
 $_SESSION['CheckCookie']="done";
+if(!isset($_COOKIE['UserID'])) { $_COOKIE['UserID'] = 0; }
+if($_COOKIE['UserID']!=0&&$_COOKIE['UserID']!=null) {
 $querylog2 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s' AND \"UserPassword\"='%s' AND \"id\"=%i LIMIT 1", array($_COOKIE['MemberName'],$_COOKIE['SessPass'],$_COOKIE['UserID']));
 $resultlog2=sql_query($querylog2,$SQLStat);
-$numlog2=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s' AND \"UserPassword\"='%s' AND \"id\"=%i LIMIT 1", array($_COOKIE['MemberName'],$_COOKIE['SessPass'],$_COOKIE['UserID'])), $SQLStat);
+$numlog2=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s' AND \"UserPassword\"='%s' AND \"id\"=%i LIMIT 1", array($_COOKIE['MemberName'],$_COOKIE['SessPass'],$_COOKIE['UserID'])), $SQLStat); }
+else { $numlog2 = 0; }
 if($numlog2==1) {
 $YourIDAM=sql_result($resultlog2,0,"id");
 $YourNameAM=sql_result($resultlog2,0,"Name");

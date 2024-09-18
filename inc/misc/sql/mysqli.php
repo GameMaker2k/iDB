@@ -57,7 +57,7 @@ global $NumQueriesArray,$SQLStat;
 if(isset($link)) {
 	$result = mysqli_query($link,$query); }
 if(!isset($link)) {
-	$result = mysqli_query(null,$query); }
+	$result = mysqli_query($SQLStat,$query); }
 if ($result===false) {
     output_error("SQL Error: ".mysqli_func_error(),E_USER_ERROR);
 	return false; }
@@ -88,7 +88,7 @@ $link = mysqli_connect($server,$username,$password,$database,$myport); }
 if ($link===false) {
     output_error("MySQLi Error ".mysqli_connect_errno().": ".mysqli_connect_error(),E_USER_ERROR);
 	return false; }
-$result = mysql_func_query("SET SESSION SQL_MODE='ANSI,ANSI_QUOTES,TRADITIONAL,STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION,NO_AUTO_VALUE_ON_ZERO';",$link);
+$result = mysqli_func_query("SET SESSION SQL_MODE='ANSI,ANSI_QUOTES,TRADITIONAL,STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION,NO_AUTO_VALUE_ON_ZERO';",$link);
 if ($result===false) {
     output_error("SQL Error: ".mysqli_func_error(),E_USER_ERROR);
 	return false; }
@@ -115,6 +115,7 @@ if ($fresult===true) {
 	return true; } }
 //Fetch Results to Array
 function mysqli_func_fetch_array($result,$result_type=MYSQLI_BOTH) {
+if($result_type==null) { $result_type = MYSQLI_BOTH; }
 $row = mysqli_fetch_array($result,$result_type);
 	return $row; }
 //Fetch Results to Associative Array

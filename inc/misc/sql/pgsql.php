@@ -109,7 +109,8 @@ if ($fresult===false) {
 if ($fresult===true) {
 	return true; } }
 //Fetch Results to Array
-function pgsql_func_fetch_array($result,$result_type=MYSQL_BOTH) {
+function pgsql_func_fetch_array($result,$result_type=PGSQL_BOTH) {
+if($result_type==null) { $result_type = PGSQL_BOTH; }
 $row = pg_fetch_array($result,$result_type);
 	return $row; }
 //Fetch Results to Associative Array

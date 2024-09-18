@@ -53,11 +53,11 @@ if ($result!=""&&$result!==0) {
 if(!isset($NumQueriesArray['mysql'])) {
     $NumQueriesArray['mysql'] = 0; }
 function mysql_func_query($query,$link=null) {
-global $NumQueriesArray,$SQLStat;;
+global $NumQueriesArray,$SQLStat;
 if(isset($link)) {
 	$result = mysql_query($query,$link); }
 if(!isset($link)) {
-	$result = mysql_query($query); }
+	$result = mysql_query($query,$SQLStat); }
 if ($result===false) {
     output_error("SQL Error: ".mysql_func_error(),E_USER_ERROR);
 	return false; }
@@ -110,6 +110,7 @@ if ($fresult===true) {
 	return true; } }
 //Fetch Results to Array
 function mysql_func_fetch_array($result,$result_type=MYSQL_BOTH) {
+if($result_type==null) { $result_type = MYSQL_BOTH; }
 $row = mysql_fetch_array($result,$result_type);
 	return $row; }
 //Fetch Results to Associative Array

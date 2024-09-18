@@ -107,6 +107,7 @@ function sqlite3_func_free_result($result) {
 	return true; }
 //Fetch Results to Array
 function sqlite3_func_fetch_array($result,$result_type=SQLITE3_BOTH) {
+if($result_type==null) { $result_type = SQLITE3_BOTH; }
 $row = $result->fetchArray($result_type);
 	return $row; }
 //Fetch Results to Associative Array

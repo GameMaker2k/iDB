@@ -143,7 +143,8 @@ return $retval; }
 function pdo_sqlite3_func_free_result($result) {
 	return true; }
 //Fetch Results to Array
-function pdo_sqlite3_func_fetch_array($result,$result_type=SQLITE3_BOTH) {
+function pdo_sqlite3_func_fetch_array($result,$result_type=PDO::FETCH_BOTH) {
+if($result_type==null) { $result_type = PDO::FETCH_BOTH; }
 $row = $result->fetch($result_type);
 	return $row; }
 //Fetch Results to Associative Array
