@@ -162,20 +162,16 @@ function pdo_mysql_func_disconnect_db($link = null) {
 function pdo_mysql_func_result($result, $row = 0, $field = 0) {
     // Ensure that $result is a PDOStatement before calling fetch
     if ($result instanceof PDOStatement) {
-        // Use PDO::FETCH_BOTH to fetch rows with both numeric and associative keys
-        // Seek to the requested row using fetch
-        $result->fetch(PDO::FETCH_BOTH, PDO::FETCH_ORI_ABS, $row);
-        
-        // Fetch the specific row
-        $fetchedRow = $result->fetch(PDO::FETCH_BOTH);
-        
-        if ($fetchedRow === false) {
-            // If no row exists at the specified index
-            return null;
+        // Fetch all rows into an array
+        $rows = $result->fetchAll(PDO::FETCH_BOTH);
+
+        // Check if the requested row exists
+        if (!isset($rows[$row])) {
+            return null;  // If the requested row doesn't exist, return null
         }
-        
+
         // Return the specific field from the requested row
-        return isset($fetchedRow[$field]) ? $fetchedRow[$field] : null;
+        return isset($rows[$row][$field]) ? $rows[$row][$field] : null;
     } else {
         // Handle the case where the result is not a PDOStatement (e.g., for non-SELECT queries)
         output_error("SQL Error: Invalid result type. Expected PDOStatement, got " . gettype($result), E_USER_ERROR);
@@ -318,21 +314,60 @@ pdo_mysql_func_fetch_assoc($getnextidr);
    return $getnextid['Rows'];
    @pdo_mysql_func_result($getnextidr); }
 // Fetch Number of Rows using COUNT in a single query
+// Fetch Number of Rows using COUNT in a single query
 function pdo_mysql_func_count_rows($query, $link = null) {
     // Execute the query using sql_query
     $get_num_result = pdo_mysql_func_query($query, $link);
-    // Fetch the count result
-    $ret_num_result = pdo_mysql_func_result($get_num_result, 0);
-    // Free the result resource
-    @pdo_mysql_func_free_result($get_num_result); 
-    return $ret_num_result; }
+    // Debugging: Check if query returned a valid result set
+    if ($get_num_result === false) {
+        error_log("Query failed: " . var_export($query, true));
+        return null;
+    }
+    // Debugging: Log the full result set
+    $rows = $get_num_result->fetchAll(PDO::FETCH_ASSOC);
+    error_log("Full result set: " . var_export($rows, true));
+    // Fetch the count result from the 'cnt' column
+    if (isset($rows[0]['cnt'])) {
+        $ret_num_result = $rows[0]['cnt'];
+    } else {
+        error_log("Count column 'cnt' not found in result set.");
+        $ret_num_result = null;
+    }
+    // Free the result resource (this depends on your custom free function)
+    @pdo_mysql_func_free_result($get_num_result);
+    // Debugging: Check what is being returned
+    var_dump($ret_num_result);
+    return $ret_num_result;
+}
+// Fetch Number of Rows using COUNT in a single query
 // Fetch Number of Rows using COUNT in a single query
 function pdo_mysql_func_count_rows_alt($query, $link = null) {
     // Execute the query using sql_query
     $get_num_result = pdo_mysql_func_query($query, $link);
-    // Fetch the count result
-    $ret_num_result = pdo_mysql_func_result($get_num_result, 0, 'cnt');
-    // Free the result resource
-    @pdo_mysql_func_free_result($get_num_result); 
-    return $ret_num_result; }
+
+    // Debugging: Check if query returned a valid result set
+    if ($get_num_result === false) {
+        error_log("Query failed: " . var_export($query, true));
+        return null;
+    }
+
+    // Debugging: Log the full result set
+    $rows = $get_num_result->fetchAll(PDO::FETCH_NUM);
+    error_log("Full result set: " . var_export($rows, true));
+
+    // Fetch the count result from index 0
+    if (isset($rows[0][0])) {
+        $ret_num_result = $rows[0][0];
+    } else {
+        error_log("No count found in the result set.");
+        $ret_num_result = null;
+    }
+
+    // Free the result resource (this depends on your custom free function)
+    @pdo_mysql_func_free_result($get_num_result);
+
+    // Debugging: Check what is being returned
+    var_dump($ret_num_result);
+    return $ret_num_result;
+}
 ?>

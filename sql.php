@@ -21,17 +21,17 @@ $disfunc = @preg_replace("/([\\s+|\\t+|\\n+|\\r+|\\0+|\\x0B+])/i", "", $disfunc)
 if($disfunc!="ini_set") { $disfunc = explode(",",$disfunc); }
 if($disfunc=="ini_set") { $disfunc = array("ini_set"); }
 if(!in_array("ini_set", $disfunc)) {
-@ini_set("html_errors", true);
-@ini_set("track_errors", true);
-@ini_set("display_errors", true);
-@ini_set("report_memleaks", true);
-@ini_set("display_startup_errors", true);
+@ini_set("html_errors", false);
+@ini_set("track_errors", false);
+@ini_set("display_errors", false);
+@ini_set("report_memleaks", false);
+@ini_set("display_startup_errors", false);
 //@ini_set("error_log","logs/error.log"); 
 //@ini_set("log_errors","On"); 
 @ini_set("docref_ext", "");
 @ini_set("docref_root", "http://php.net/"); }
 if(!defined("E_DEPRECATED")) { define("E_DEPRECATED", 0); }
-@error_reporting(E_ALL);
+@error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
 /* Get rid of session id in urls */
 if(!in_array("ini_set", $disfunc)) {
 @ini_set("default_mimetype","text/html"); 
@@ -626,14 +626,14 @@ $alttemp_session_data = null;
 $SQLSType = $Settings['sqltype'];
 $use_old_session = true;
 if ($use_old_session == true) {
-    //Session Open Function
+    // Session Open Function
     function sql_session_open($save_path, $session_name) {
         global $sess_save_path;
         $sess_save_path = $save_path;
         return true;
     }
 
-    //Session Close Function
+    // Session Close Function
     $iDBSessCloseDB = true;
     function sql_session_close() {
         global $SQLStat, $iDBSessCloseDB;
@@ -643,24 +643,27 @@ if ($use_old_session == true) {
         return true;
     }
 
-    //Session Read Function
+    // Session Read Function
     function sql_session_read($id) {
         global $sqltable, $SQLStat, $temp_user_ip, $temp_user_agent, $temp_session_data, $alt_temp_session_data;
-        $rs = sql_query(sql_pre_query("SELECT * FROM \"" . $sqltable . "sessions\" WHERE \"session_id\" = '%s'", array($id)), $SQLStat);
 
-        // Check if the session exists
+        // Select session
+        $rs = sql_query(sql_pre_query("SELECT * FROM \"" . $sqltable . "sessions\" WHERE \"session_id\" = '%s'", array($id)), $SQLStat);
         $checkQuery = sql_pre_query("SELECT COUNT(*) AS cnt FROM \"" . $sqltable . "sessions\" WHERE \"session_id\" = '%s'", array($id));
         $sessionExists = sql_count_rows($checkQuery, $SQLStat);
 
         if ($sessionExists == 0) {
-            // Delete existing sessions with the same IP and User-Agent
-            sql_query(sql_pre_query("DELETE FROM \"" . $sqltable . "sessions\" WHERE \"session_id\" <> '%s' AND \"ip_address\" = '%s' AND \"user_agent\" = '%s'", array($id, $temp_user_ip, $temp_user_agent)), $SQLStat);
+            // If session does not exist, delete previous sessions with same IP and User-Agent
+            sql_query(sql_pre_query("DELETE FROM \"" . $sqltable . "sessions\" WHERE \"session_id\" <> '%s' AND \"ip_address\" = '%s' AND \"user_agent\" = '%s'", 
+                array($id, $temp_user_ip, $temp_user_agent)), $SQLStat);
+
+            // Insert new session
             $time = (new DateTime('now', new DateTimeZone("UTC")))->getTimestamp();
-            // Insert a new session record
             sql_query(sql_pre_query("INSERT INTO \"" . $sqltable . "sessions\" (\"session_id\", \"session_data\", \"serialized_data\", \"user_agent\", \"ip_address\", \"expires\") VALUES ('%s', '%s', '%s', '%s', '%s', %i)", 
                 array($id, $temp_session_data, $alt_temp_session_data, $temp_user_agent, $temp_user_ip, $time)), $SQLStat);
             return '';
         } else {
+            // Fetch the session data if it exists
             $row = sql_fetch_assoc($rs);
             return $row ? $row['session_data'] : '';
         }
@@ -671,54 +674,30 @@ if ($use_old_session == true) {
         global $sqltable, $SQLStat, $temp_user_ip, $temp_user_agent;
 
         $time = (new DateTime('now', new DateTimeZone("UTC")))->getTimestamp();
-
-        // Check if the session already exists
         $checkQuery = sql_pre_query("SELECT COUNT(*) AS cnt FROM \"" . $sqltable . "sessions\" WHERE \"session_id\" = '%s'", array($id));
         $sessionExists = sql_count_rows($checkQuery, $SQLStat);
 
         if ($sessionExists == 0) {
-            // Log for debugging
-            error_log("Inserting new session: session_id = " . $id);
-            
             // Insert new session
-            try {
-                sql_query(sql_pre_query("INSERT INTO \"" . $sqltable . "sessions\" 
-                    (\"session_id\", \"session_data\", \"serialized_data\", \"user_agent\", \"ip_address\", \"expires\") 
-                    VALUES ('%s', '%s', '%s', '%s', '%s', %i)", 
-                    array($id, $data, serialize($_SESSION), $temp_user_agent, $temp_user_ip, $time)), $SQLStat);
-            } catch (Exception $e) {
-                // Log the error message
-                error_log("Failed to insert session: " . $e->getMessage());
-                return false;  // Return false to signal failure
-            }
+            sql_query(sql_pre_query("INSERT INTO \"" . $sqltable . "sessions\" (\"session_id\", \"session_data\", \"serialized_data\", \"user_agent\", \"ip_address\", \"expires\") VALUES ('%s', '%s', '%s', '%s', '%s', %i)", 
+                array($id, $data, serialize($_SESSION), $temp_user_agent, $temp_user_ip, $time)), $SQLStat);
         } else {
-            // Log for debugging
-            error_log("Updating existing session: session_id = " . $id);
-
-            // Update the existing session
-            try {
-                sql_query(sql_pre_query("UPDATE \"" . $sqltable . "sessions\" 
-                    SET \"session_data\" = '%s', \"serialized_data\" = '%s', \"user_agent\" = '%s', \"ip_address\" = '%s', \"expires\" = %i 
-                    WHERE \"session_id\" = '%s'", 
-                    array($data, serialize($_SESSION), $temp_user_agent, $temp_user_ip, $time, $id)), $SQLStat);
-            } catch (Exception $e) {
-                // Log the error message
-                error_log("Failed to update session: " . $e->getMessage());
-                return false;  // Return false to signal failure
-            }
+            // Update existing session
+            sql_query(sql_pre_query("UPDATE \"" . $sqltable . "sessions\" SET \"session_data\" = '%s', \"serialized_data\" = '%s', \"user_agent\" = '%s', \"ip_address\" = '%s', \"expires\" = %i WHERE \"session_id\" = '%s'", 
+                array($data, serialize($_SESSION), $temp_user_agent, $temp_user_ip, $time, $id)), $SQLStat);
         }
 
         return true;
     }
 
-    //Session Destroy Function
+    // Session Destroy Function
     function sql_session_destroy($id) {
         global $sqltable, $SQLStat;
         sql_query(sql_pre_query("DELETE FROM \"" . $sqltable . "sessions\" WHERE \"session_id\" = '%s'", array($id)), $SQLStat);
         return true;
     }
 
-    //Session Garbage Collection Function
+    // Session Garbage Collection Function
     function sql_session_gc($maxlifetime) {
         global $sqltable, $SQLStat;
         $time = (new DateTime('now', new DateTimeZone("UTC")))->getTimestamp() - $maxlifetime;
@@ -732,39 +711,33 @@ if ($use_old_session == true) {
 } else {
     // Alternative session management logic
 
-    //Session Open Function
     function sql_session_open($save_path, $session_name) {
         global $sess_save_path;
         $sess_save_path = $save_path;
         return true;
     }
 
-    //Session Close Function
     function sql_session_close() {
         global $SQLStat;
-        sql_disconnect_db($SQLStat);  // If this function exists, use it to close the DB connection
+        sql_disconnect_db($SQLStat);  
         return true;
     }
 
-    //Session Read Function
     function sql_session_read($id) {
         global $sqltable, $SQLStat, $temp_user_ip, $temp_user_agent, $temp_session_data, $alt_temp_session_data;
 
-        // Check if session exists
         $checkQuery = sql_pre_query("SELECT COUNT(*) AS cnt FROM \"" . $sqltable . "sessions\" WHERE \"session_id\" = '%s'", array($id));
         $sessionExists = sql_count_rows($checkQuery, $SQLStat);
 
         if ($sessionExists == 0) {
-            // If no session found, delete other sessions with the same IP and User-Agent
-            sql_query(sql_pre_query("DELETE FROM \"" . $sqltable . "sessions\" WHERE \"session_id\" <> '%s' AND \"ip_address\" = '%s' AND \"user_agent\" = '%s'", array($id, $temp_user_ip, $temp_user_agent)), $SQLStat);
+            sql_query(sql_pre_query("DELETE FROM \"" . $sqltable . "sessions\" WHERE \"session_id\" <> '%s' AND \"ip_address\" = '%s' AND \"user_agent\" = '%s'", 
+                array($id, $temp_user_ip, $temp_user_agent)), $SQLStat);
             
-            // Insert a new session record
             $time = (new DateTime('now', new DateTimeZone("UTC")))->getTimestamp();
             sql_query(sql_pre_query("INSERT INTO \"" . $sqltable . "sessions\" (\"session_id\", \"session_data\", \"serialized_data\", \"user_agent\", \"ip_address\", \"expires\") VALUES ('%s', '%s', '%s', '%s', '%s', %i)", 
                 array($id, $temp_session_data, $alt_temp_session_data, $temp_user_agent, $temp_user_ip, $time)), $SQLStat);
             return '';
         } else {
-            // Fetch and return session data
             $query = sql_pre_query("SELECT * FROM \"" . $sqltable . "sessions\" WHERE \"session_id\" = '%s'", array($id));
             $rs = sql_query($query, $SQLStat);
             $row = sql_fetch_assoc($rs);
@@ -772,59 +745,30 @@ if ($use_old_session == true) {
         }
     }
 
-    //Session Write Function
     function sql_session_write($id, $data) {
         global $sqltable, $SQLStat, $temp_user_ip, $temp_user_agent;
 
         $time = (new DateTime('now', new DateTimeZone("UTC")))->getTimestamp();
-
-        // Check if the session already exists
         $checkQuery = sql_pre_query("SELECT COUNT(*) AS cnt FROM \"" . $sqltable . "sessions\" WHERE \"session_id\" = '%s'", array($id));
         $sessionExists = sql_count_rows($checkQuery, $SQLStat);
 
         if ($sessionExists == 0) {
-            // Log for debugging
-            error_log("Inserting new session: session_id = " . $id);
-            
-            // Insert new session
-            try {
-                sql_query(sql_pre_query("INSERT INTO \"" . $sqltable . "sessions\" 
-                    (\"session_id\", \"session_data\", \"serialized_data\", \"user_agent\", \"ip_address\", \"expires\") 
-                    VALUES ('%s', '%s', '%s', '%s', '%s', %i)", 
-                    array($id, $data, serialize($_SESSION), $temp_user_agent, $temp_user_ip, $time)), $SQLStat);
-            } catch (Exception $e) {
-                // Log the error message
-                error_log("Failed to insert session: " . $e->getMessage());
-                return false;  // Return false to signal failure
-            }
+            sql_query(sql_pre_query("INSERT INTO \"" . $sqltable . "sessions\" (\"session_id\", \"session_data\", \"serialized_data\", \"user_agent\", \"ip_address\", \"expires\") VALUES ('%s', '%s', '%s', '%s', '%s', %i)", 
+                array($id, $data, serialize($_SESSION), $temp_user_agent, $temp_user_ip, $time)), $SQLStat);
         } else {
-            // Log for debugging
-            error_log("Updating existing session: session_id = " . $id);
-
-            // Update the existing session
-            try {
-                sql_query(sql_pre_query("UPDATE \"" . $sqltable . "sessions\" 
-                    SET \"session_data\" = '%s', \"serialized_data\" = '%s', \"user_agent\" = '%s', \"ip_address\" = '%s', \"expires\" = %i 
-                    WHERE \"session_id\" = '%s'", 
-                    array($data, serialize($_SESSION), $temp_user_agent, $temp_user_ip, $time, $id)), $SQLStat);
-            } catch (Exception $e) {
-                // Log the error message
-                error_log("Failed to update session: " . $e->getMessage());
-                return false;  // Return false to signal failure
-            }
+            sql_query(sql_pre_query("UPDATE \"" . $sqltable . "sessions\" SET \"session_data\" = '%s', \"serialized_data\" = '%s', \"user_agent\" = '%s', \"ip_address\" = '%s', \"expires\" = %i WHERE \"session_id\" = '%s'", 
+                array($data, serialize($_SESSION), $temp_user_agent, $temp_user_ip, $time, $id)), $SQLStat);
         }
 
         return true;
     }
 
-    //Session Destroy Function
     function sql_session_destroy($id) {
         global $sqltable, $SQLStat;
         sql_query(sql_pre_query("DELETE FROM \"" . $sqltable . "sessions\" WHERE \"session_id\" = '%s'", array($id)), $SQLStat);
         return true;
     }
 
-    //Session Garbage Collection Function
     function sql_session_gc($maxlifetime) {
         global $sqltable, $SQLStat;
         $time = (new DateTime('now', new DateTimeZone("UTC")))->getTimestamp() - $maxlifetime;
