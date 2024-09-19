@@ -205,7 +205,9 @@ if($_POST['usehashtype']!="md2"&&
    $_POST['usehashtype']!="ripemd160"&&
    $_POST['usehashtype']!="ripemd256"&&
    $_POST['usehashtype']!="ripemd320"&&
-   $_POST['usehashtype']!="bcrypt") {
+   $_POST['usehashtype']!="bcrypt"&&
+   $_POST['usehashtype']!="argon2i"&&
+   $_POST['usehashtype']!="argon2id") {
 	$_POST['usehashtype'] = "sha1"; } }
 if($_POST['usehashtype']=="md2") { $iDBHashType = "iDBH2"; }
 if($_POST['usehashtype']=="md4") { $iDBHashType = "iDBH4"; }
@@ -224,8 +226,12 @@ if($_POST['usehashtype']=="ripemd160") { $iDBHashType = "iDBHRMD160"; }
 if($_POST['usehashtype']=="ripemd256") { $iDBHashType = "iDBHRMD256"; }
 if($_POST['usehashtype']=="ripemd320") { $iDBHashType = "iDBHRMD320"; }
 if($_POST['usehashtype']=="bcrypt") { $iDBHashType = "iDBCRYPT"; }
+if($_POST['usehashtype']=="argon2i") { $iDBHashType = "iDBARGON2I"; }
+if($_POST['usehashtype']=="argon2id") { $iDBHashType = "iDBARGON2ID"; }
 if ($_POST['AdminUser']=="Guest") { $Error="Yes";
 echo "<br />You can not use Guest as your name."; }
+if ($_POST['AdminHandle']=="guest") { $Error="Yes";
+echo "<br />You can not use guest as your name."; }
 /* We are done now with fixing the info. ^_^ */
 $SQLStat = sql_connect_db($_POST['DatabaseHost'],$_POST['DatabaseUserName'],$_POST['DatabasePassword'],$_POST['DatabaseName']);
 if(isset($_POST['sqlcollate'])) { $Settings['sql_collate'] = $_POST['sqlcollate']; }

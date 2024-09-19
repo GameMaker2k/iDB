@@ -214,8 +214,12 @@ if(in_array("md2",hash_algos())) { ?>
 <option value="ripemd256">RIPEMD256</option>
 <?php } if(in_array("ripemd320",hash_algos())) { ?>
 <option value="ripemd320">RIPEMD320</option>
-<?php } } if(function_exists('password_hash')) { ?>
+<?php } } if(function_exists('password_hash')&&defined('PASSWORD_BCRYPT')) { ?>
 <option value="bcrypt">BCRYPT</option>
+<?php } if(function_exists('password_hash')&&defined('PASSWORD_ARGON2I')) { ?>
+<option value="argon2i">ARGON2I</option>
+<?php } if(function_exists('password_hash')&&defined('PASSWORD_ARGON2ID')) { ?>
+<option value="argon2id">ARGON2ID</option>
 <?php } 
 if(!function_exists('hash')&&!function_exists('hash_algos')) { ?>
 <option value="md5">MD5</option>

@@ -914,6 +914,10 @@ if($OldHashType=="iDBHRMD320") {
 	$YourPassword = b64e_hmac($_POST['OldPass'],$OldJoined,$OldSalt,"ripemd320"); }
 if($OldHashType=="iDBCRYPT") { 
 	$YourPassword = neo_b64e_hmac($_POST['OldPass'],$OldJoined,$OldSalt,"bcrypt"); }
+if($OldHashType=="iDBARGON2I") { 
+	$YourPassword = neo_b64e_hmac($_POST['OldPass'],$OldJoined,$OldSalt,"argon2i"); }
+if($OldHashType=="iDBARGON2ID") { 
+	$YourPassword = neo_b64e_hmac($_POST['OldPass'],$OldJoined,$OldSalt,"argon2id"); }
 if($YourPassword!=$OldPassword) { $Error="Yes"; ?>
 <div class="TableMessage" style="text-align: center;">Your old Password did not match.<br />&#160;</div>
 <?php } if(pre_strlen($_POST['Password'])>"60") { $Error="Yes"; ?>
@@ -963,6 +967,10 @@ if($YourPassword!=$OldPassword) { $Error="Yes"; ?>
 	$NewPassword = b64e_hmac($_POST['Password'],$OldJoined,$NewSalt,"ripemd320"); }
 	if($Settings['use_hashtype']=="bcrypt") { $iDBHash = "iDBCRYPT";
 	$NewPassword = neo_b64e_hmac($_POST['Password'],$OldJoined,$NewSalt,"bcrypt"); }
+	if($Settings['use_hashtype']=="argon2i") { $iDBHash = "iDBARGON2I";
+	$NewPassword = neo_b64e_hmac($_POST['Password'],$OldJoined,$NewSalt,"argon2i"); }
+	if($Settings['use_hashtype']=="argon2id") { $iDBHash = "iDBARGON2ID";
+	$NewPassword = neo_b64e_hmac($_POST['Password'],$OldJoined,$NewSalt,"argon2id"); }
 	$_SESSION['UserPass']=$NewPassword;
 	if($cookieDomain==null) {
 	setcookie("SessPass", $NewPassword, time() + (7 * 86400), $cbasedir); }

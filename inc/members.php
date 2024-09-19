@@ -1195,6 +1195,8 @@ if($HashType=="iDBHRMD160") { $YourPassword = b64e_hmac($_POST['userpass'],$Join
 if($HashType=="iDBHRMD256") { $YourPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$HashSalt,"ripemd256"); }
 if($HashType=="iDBHRMD320") { $YourPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$HashSalt,"ripemd320"); }
 if($HashType=="iDBCRYPT") { $YourPassword = neo_b64e_hmac($_POST['userpass'],$JoinedPass,$HashSalt,"bcrypt"); }
+if($HashType=="iDBARGON2I") { $YourPassword = neo_b64e_hmac($_POST['userpass'],$JoinedPass,$HashSalt,"argon2i"); }
+if($HashType=="iDBARGON2ID") { $YourPassword = neo_b64e_hmac($_POST['userpass'],$JoinedPass,$HashSalt,"argon2id"); }
 if($HashType=="NoPass") { $YourPassword = "iDB"; $YourPassTry = "IntDB"; }
 if($HashType=="NoPassword") { $YourPassword = "iDB"; $YourPassTry = "IntDB"; }
 if($HashType=="GuestPass") { $YourPassword = "iDB"; $YourPassTry = "IntDB"; }
@@ -1257,6 +1259,10 @@ if($Settings['use_hashtype']=="ripemd320") { $iDBHash = "iDBHRMD320";
 $NewPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$NewHashSalt,"ripemd320"); }
 if($Settings['use_hashtype']=="bcrypt") { $iDBHash = "iDBCRYPT";
 $NewPassword = neo_b64e_hmac($_POST['userpass'],$JoinedPass,$NewHashSalt,"bcrypt"); }
+if($Settings['use_hashtype']=="argon2i") { $iDBHash = "iDBARGON2I";
+$NewPassword = neo_b64e_hmac($_POST['userpass'],$JoinedPass,$NewHashSalt,"argon2i"); }
+if($Settings['use_hashtype']=="argon2id") { $iDBHash = "iDBARGON2ID";
+$NewPassword = neo_b64e_hmac($_POST['userpass'],$JoinedPass,$NewHashSalt,"argon2id"); }
 $NewDay=$utccurtime->getTimestamp();
 $NewIP=$_SERVER['REMOTE_ADDR'];
 if($BanError!="yes") {
@@ -1757,6 +1763,10 @@ if($Settings['use_hashtype']=="ripemd320") { $iDBHash = "iDBHRMD320";
 $NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$HashSalt,"ripemd320"); }
 if($Settings['use_hashtype']=="bcrypt") { $iDBHash = "iDBCRYPT";
 $NewPassword = neo_b64e_hmac($_POST['Password'],$_POST['Joined'],$HashSalt,"bcrypt"); }
+if($Settings['use_hashtype']=="argon2i") { $iDBHash = "iDBARGON2I";
+$NewPassword = neo_b64e_hmac($_POST['Password'],$JoinedPass,$NewHashSalt,"argon2i"); }
+if($Settings['use_hashtype']=="argon2id") { $iDBHash = "iDBARGON2ID";
+$NewPassword = neo_b64e_hmac($_POST['Password'],$JoinedPass,$NewHashSalt,"argon2id"); }
 $_GET['YourPost'] = $_POST['Signature'];
 //require( './'.$SettDir['misc'].'HTMLTags.php');
 $_GET['YourPost'] = htmlspecialchars($_GET['YourPost'], ENT_QUOTES, $Settings['charset']);

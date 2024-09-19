@@ -650,14 +650,22 @@ if(in_array("md2",hash_algos())) { ?>
 <option<?php if($Settings['use_hashtype']=="ripemd256") { echo " selected=\"selected\""; } ?> value="ripemd256">RIPEMD256</option>
 <?php } if(in_array("ripemd320",hash_algos())) { ?>
 <option<?php if($Settings['use_hashtype']=="ripemd320") { echo " selected=\"selected\""; } ?> value="ripemd320">RIPEMD320</option>
-<?php } if(function_exists('password_hash')) { ?>
+<?php } if(function_exists('password_hash')&&defined('PASSWORD_BCRYPT')) { ?>
 <option<?php if($Settings['use_hashtype']=="bcrypt") { echo " selected=\"selected\""; } ?> value="bcrypt">BCRYPT</option>
+<?php } if(function_exists('password_hash')&&defined('PASSWORD_ARGON2I')) { ?>
+<option<?php if($Settings['use_hashtype']=="argon2i") { echo " selected=\"selected\""; } ?> value="argon2i">ARGON2I</option>
+<?php } if(function_exists('password_hash')&&defined('PASSWORD_ARGON2ID')) { ?>
+<option<?php if($Settings['use_hashtype']=="argon2id") { echo " selected=\"selected\""; } ?> value="argon2id">ARGON2ID</option>
 <?php } } 
 if(!function_exists('hash')&&!function_exists('hash_algos')) { ?>
 <option<?php if($Settings['use_hashtype']=="md5") { echo " selected=\"selected\""; } ?> value="md5">MD5</option>
 <option<?php if($Settings['use_hashtype']=="sha1") { echo " selected=\"selected\""; } ?> value="sha1">SHA1</option>
-<?php if(function_exists('password_hash')) { ?>
+<?php if(function_exists('password_hash')&&defined('PASSWORD_BCRYPT')) { ?>
 <option<?php if($Settings['use_hashtype']=="bcrypt") { echo " selected=\"selected\""; } ?> value="bcrypt">BCRYPT</option>
+<?php } if(function_exists('password_hash')&&defined('PASSWORD_ARGON2I')) { ?>
+<option<?php if($Settings['use_hashtype']=="argon2i") { echo " selected=\"selected\""; } ?> value="argon2i">ARGON2I</option>
+<?php } if(function_exists('password_hash')&&defined('PASSWORD_ARGON2ID')) { ?>
+<option<?php if($Settings['use_hashtype']=="argon2id") { echo " selected=\"selected\""; } ?> value="argon2id">ARGON2ID</option>
 <?php } } ?>
 </select></td>
 </tr><tr style="text-align: left;">
@@ -961,7 +969,9 @@ if($_POST['PassHashType']!="md2"&&
    $_POST['PassHashType']!="ripemd160"&&
    $_POST['PassHashType']!="ripemd256"&&
    $_POST['PassHashType']!="ripemd320"&&
-   $_POST['PassHashType']!="bcrypt") {
+   $_POST['PassHashType']!="bcrypt"&&
+   $_POST['PassHashType']!="argon2i"&&
+   $_POST['PassHashType']!="argon2id") {
 	$_POST['PassHashType'] = "sha1"; } }
 $BoardSettings=$pretext2[0]."\n".
 "\$Settings['sqlhost'] = ".null_string($Settings['sqlhost']).";\n".
