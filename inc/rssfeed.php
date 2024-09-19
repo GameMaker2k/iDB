@@ -231,8 +231,7 @@ if($Settings['showverinfo']=="on") { ?>
 <rdf:RDF 
  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
  xmlns="http://purl.org/rss/1.0/"
- xmlns:dc="http://purl.org/dc/elements/1.1/"
->
+ xmlns:dc="http://purl.org/dc/elements/1.1/">
 <channel rdf:about="<?php echo $BoardURL.$feedsname; ?>">
  <title><?php echo $boardsname." ".$ThemeSet['TitleDivider']; ?> Viewing Forum <?php echo $ForumName; ?></title>
   <link><?php echo $BoardURL.url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$ForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?></link>
@@ -251,7 +250,8 @@ if($Settings['showverinfo']=="on") { ?>
   <link><?php echo $BoardURL.url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$ForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?></link>
   <url><?php echo $AltBoardURL.$SettDir['inc']; ?>rss.png</url>
 </image>
-<?php echo "\n".$RSS."\n"; ?></rdf:RDF>
+<?php echo $endtag; ?>
+<?php echo "\n".$RSS."\n"; ?>/rdf:RDF>
 <?php } if($_GET['feedtype']=="rss") { ?>
 <rss version="2.0">
 <channel>
@@ -287,7 +287,7 @@ if($Settings['showverinfo']=="on") { ?>
    <generator><?php echo $iDB; ?></generator>
    <?php } ?>
   <icon><?php echo $AltBoardURL.$SettDir['inc']; ?>rss.png</icon>
-<?php echo $endtag; ?>
+ <?php echo $endtag; ?>
  <?php echo "\n".$Atom."\n"; ?>
 </feed>
 <?php } if($_GET['feedtype']=="opml") { ?>
@@ -299,7 +299,7 @@ if($Settings['showverinfo']=="on") { ?>
     <?php /*<!--
 	<outline text="<?php echo $ForumName; ?> Topics RSS 1.0 Feed" type="link" url="<?php echo $BoardURL.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>" htmlUrl="<?php echo $BoardURL.url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$ForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>" xmlUrl="<?php echo $BoardURL.url_maker($exfile['rss'],$Settings['rss_ext'],"act=oldrss&id=".$ForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr['rss'],$exqstr['rss']); ?>" />
 	-->*/ ?>
-<outline text="<?php echo $ForumName; ?> Topics RSS 2.0 Feed" type="rss" url="<?php echo $BoardURL.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>" htmlUrl="<?php echo $BoardURL.url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$ForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>" xmlUrl="<?php echo $BoardURL.url_maker($exfile['rss'],$Settings['rss_ext'],"act=rss&id=".$ForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr['rss'],$exqstr['rss']); ?>" />
+    <outline text="<?php echo $ForumName; ?> Topics RSS 2.0 Feed" type="rss" url="<?php echo $BoardURL.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>" htmlUrl="<?php echo $BoardURL.url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$ForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>" xmlUrl="<?php echo $BoardURL.url_maker($exfile['rss'],$Settings['rss_ext'],"act=rss&id=".$ForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr['rss'],$exqstr['rss']); ?>" />
     <outline text="<?php echo $ForumName; ?> Topics Atom Feed" type="atom" url="<?php echo $BoardURL.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>" htmlUrl="<?php echo $BoardURL.url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$ForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>" xmlUrl="<?php echo $BoardURL.url_maker($exfile['rss'],$Settings['rss_ext'],"act=atom&id=".$ForumID,$Settings['qstr'],$Settings['qsep'],$prexqstr['rss'],$exqstr['rss']); ?>" />
   </body>
 </opml>
