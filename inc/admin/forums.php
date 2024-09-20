@@ -586,19 +586,21 @@ $CanDeleteTopicsCT=sql_result($getperidr2,0,"CanDeleteTopicsCT");
 $CanDeleteReplys=sql_result($getperidr2,0,"CanDeleteReplys"); 
 $CanDeleteReplysCT=sql_result($getperidr2,0,"CanDeleteReplysCT"); 
 $CanCloseTopics=sql_result($getperidr2,0,"CanCloseTopics"); 
+$CanCloseTopicsCT=sql_result($getperidr2,0,"CanCloseTopicsCT"); 
 $CanPinTopics=sql_result($getperidr2,0,"CanPinTopics"); 
+$CanPinTopicsCT=sql_result($getperidr2,0,"CanPinTopicsCT"); 
 $CanExecPHP=sql_result($getperidr2,0,"CanExecPHP"); 
 $CanDoHTML=sql_result($getperidr2,0,"CanDoHTML"); 
 $CanUseBBTags=sql_result($getperidr2,0,"CanUseBBTags"); 
 $CanModForum=sql_result($getperidr2,0,"CanModForum"); }
 sql_free_result($getperidr2);
 if($_POST['CPermissions']=="0") {
-$query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."permissions\" (\"PermissionID\", \"Name\", \"ForumID\", \"CanViewForum\", \"CanMakePolls\", \"CanMakeTopics\", \"CanMakeReplys\", \"CanMakeReplysCT\", \"CanEditTopics\", \"CanEditTopicsCT\", \"CanEditReplys\", \"CanEditReplysCT\", \"CanDeleteTopics\", \"CanDeleteTopicsCT\", \"CanDeleteReplys\", \"CanDeleteReplysCT\", \"CanCloseTopics\", \"CanPinTopics\", \"CanExecPHP\", \"CanDoHTML\", \"CanUseBBTags\", \"CanModForum\") VALUES (%i, '%s', %i, 'yes', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no')", array($PermissionID,$PermissionName,$_POST['ForumID'])); }
+$query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."permissions\" (\"PermissionID\", \"Name\", \"ForumID\", \"CanViewForum\", \"CanMakePolls\", \"CanMakeTopics\", \"CanMakeReplys\", \"CanMakeReplysCT\", \"CanEditTopics\", \"CanEditTopicsCT\", \"CanEditReplys\", \"CanEditReplysCT\", \"CanDeleteTopics\", \"CanDeleteTopicsCT\", \"CanDeleteReplys\", \"CanDeleteReplysCT\", \"CanCloseTopics\", \"CanCloseTopicsCT\", \"CanPinTopics\", \"CanPinTopicsCT\", \"CanExecPHP\", \"CanDoHTML\", \"CanUseBBTags\", \"CanModForum\") VALUES (%i, '%s', %i, 'yes', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no')", array($PermissionID,$PermissionName,$_POST['ForumID'])); }
 if($_POST['CPermissions']!="0") {
 if($getperidnum2>0) {
-$query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."permissions\" (\"PermissionID\", \"Name\", \"ForumID\", \"CanViewForum\", \"CanMakePolls\", \"CanMakeTopics\", \"CanMakeReplys\", \"CanMakeReplysCT\", \"CanEditTopics\", \"CanEditTopicsCT\", \"CanEditReplys\", \"CanEditReplysCT\", \"CanDeleteTopics\", \"CanDeleteTopicsCT\", \"CanDeleteReplys\", \"CanDeleteReplysCT\", \"CanCloseTopics\", \"CanPinTopics\", \"CanExecPHP\", \"CanDoHTML\", \"CanUseBBTags\", \"CanModForum\") VALUES (%i, '%s', %i, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')", array($PermissionID,$PermissionName,$_POST['ForumID'],$CanViewForum,$CanMakePolls,$CanMakeTopics,$CanMakeReplys,$CanMakeReplysCT,$CanEditTopics,$CanEditTopicsCT,$CanEditReplys,$CanEditReplysCT,$CanDeleteTopics,$CanDeleteTopicsCT,$CanDeleteReplys,$CanDeleteReplysCT,$CanCloseTopics,$CanPinTopics,$CanExecPHP,$CanDoHTML,$CanUseBBTags,$CanModForum)); }
+$query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."permissions\" (\"PermissionID\", \"Name\", \"ForumID\", \"CanViewForum\", \"CanMakePolls\", \"CanMakeTopics\", \"CanMakeReplys\", \"CanMakeReplysCT\", \"CanEditTopics\", \"CanEditTopicsCT\", \"CanEditReplys\", \"CanEditReplysCT\", \"CanDeleteTopics\", \"CanDeleteTopicsCT\", \"CanDeleteReplys\", \"CanDeleteReplysCT\", \"CanCloseTopics\", \"CanCloseTopicsCT\", \"CanPinTopics\", \"CanPinTopicsCT\", \"CanExecPHP\", \"CanDoHTML\", \"CanUseBBTags\", \"CanModForum\") VALUES (%i, '%s', %i, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')", array($PermissionID,$PermissionName,$_POST['ForumID'],$CanViewForum,$CanMakePolls,$CanMakeTopics,$CanMakeReplys,$CanMakeReplysCT,$CanEditTopics,$CanEditTopicsCT,$CanEditReplys,$CanEditReplysCT,$CanDeleteTopics,$CanDeleteTopicsCT,$CanDeleteReplys,$CanDeleteReplysCT,$CanCloseTopics,$CanCloseTopicsCT,$CanPinTopics,$CanPinTopicsCT,$CanExecPHP,$CanDoHTML,$CanUseBBTags,$CanModForum)); }
 if($getperidnum2<=0) {
-$query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."permissions\" (\"PermissionID\", \"Name\", \"ForumID\", \"CanViewForum\", \"CanMakePolls\", \"CanMakeTopics\", \"CanMakeReplys\", \"CanMakeReplysCT\", \"CanEditTopics\", \"CanEditTopicsCT\", \"CanEditReplys\", \"CanEditReplysCT\", \"CanDeleteTopics\", \"CanDeleteTopicsCT\", \"CanDeleteReplys\", \"CanDeleteReplysCT\", \"CanCloseTopics\", \"CanPinTopics\", \"CanExecPHP\", \"CanDoHTML\", \"CanUseBBTags\", \"CanModForum\") VALUES (%i, '%s', %i, 'yes', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no')", array($PermissionID,$PermissionName,$_POST['ForumID'])); } }
+$query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."permissions\" (\"PermissionID\", \"Name\", \"ForumID\", \"CanViewForum\", \"CanMakePolls\", \"CanMakeTopics\", \"CanMakeReplys\", \"CanMakeReplysCT\", \"CanEditTopics\", \"CanEditTopicsCT\", \"CanEditReplys\", \"CanEditReplysCT\", \"CanDeleteTopics\", \"CanDeleteTopicsCT\", \"CanDeleteReplys\", \"CanDeleteReplysCT\", \"CanCloseTopics\", \"CanCloseTopicsCT\", \"CanPinTopics\", \"CanPinTopicsCT\", \"CanExecPHP\", \"CanDoHTML\", \"CanUseBBTags\", \"CanModForum\") VALUES (%i, '%s', %i, 'yes', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no')", array($PermissionID,$PermissionName,$_POST['ForumID'])); } }
 sql_query($query,$SQLStat);
 ++$getperidi; /*++$nextperid;*/ } } sql_free_result($getperidr); } }
 if($_GET['act']=="deleteforum"&&$_POST['update']!="now") { 
@@ -1235,7 +1237,9 @@ $CanDeleteTopicsCT=sql_result($preresult,0,"CanDeleteTopicsCT");
 $CanDeleteReplys=sql_result($preresult,0,"CanDeleteReplys"); 
 $CanDeleteReplysCT=sql_result($preresult,0,"CanDeleteReplysCT"); 
 $CanCloseTopics=sql_result($preresult,0,"CanCloseTopics"); 
+$CanCloseTopicsCT=sql_result($preresult,0,"CanCloseTopicsCT"); 
 $CanPinTopics=sql_result($preresult,0,"CanPinTopics"); 
+$CanPinTopicsCT=sql_result($preresult,0,"CanPinTopicsCT"); 
 $CanExecPHP=sql_result($preresult,0,"CanExecPHP");
 $CanDoHTML=sql_result($preresult,0,"CanDoHTML"); 
 $CanUseBBTags=sql_result($preresult,0,"CanUseBBTags"); 
@@ -1358,17 +1362,31 @@ $PermissionName = stripcslashes(htmlspecialchars($PermissionName, ENT_QUOTES, $S
 	</select></td>
 </tr> 
 <tr style="text-align: left;">
-	<td style="width: 50%;"><label class="TextBoxLabel" for="CanCloseTopics">Can close topics:</label></td>
+	<td style="width: 50%;"><label class="TextBoxLabel" for="CanCloseTopics">Can close own topics:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="CanCloseTopics" id="CanCloseTopics">
 	<option <?php if($CanCloseTopics=="yes") { echo "selected=\"selected\" "; } ?>value="yes">yes</option>
 	<option <?php if($CanCloseTopics=="no") { echo "selected=\"selected\" "; } ?>value="no">no</option>
 	</select></td>
 </tr> 
 <tr style="text-align: left;">
-	<td style="width: 50%;"><label class="TextBoxLabel" for="CanPinTopics">Can pin topics:</label></td>
+	<td style="width: 50%;"><label class="TextBoxLabel" for="CanCloseTopicsCT">Can close other users topics:</label></td>
+	<td style="width: 50%;"><select size="1" class="TextBox" name="CanCloseTopicsCT" id="CanCloseTopicsCT">
+	<option <?php if($CanCloseTopicsCT=="yes") { echo "selected=\"selected\" "; } ?>value="yes">yes</option>
+	<option <?php if($CanCloseTopicsCT=="no") { echo "selected=\"selected\" "; } ?>value="no">no</option>
+	</select></td>
+</tr> 
+<tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="CanPinTopics">Can pin own topics:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="CanPinTopics" id="CanPinTopics">
 	<option <?php if($CanPinTopics=="yes") { echo "selected=\"selected\" "; } ?>value="yes">yes</option>
 	<option <?php if($CanPinTopics=="no") { echo "selected=\"selected\" "; } ?>value="no">no</option>
+	</select></td>
+</tr> 
+<tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="CanPinTopicsCT">Can pin other users topics:</label></td>
+	<td style="width: 50%;"><select size="1" class="TextBox" name="CanPinTopicsCT" id="CanPinTopicsCT">
+	<option <?php if($CanPinTopicsCT=="yes") { echo "selected=\"selected\" "; } ?>value="yes">yes</option>
+	<option <?php if($CanPinTopicsCT=="no") { echo "selected=\"selected\" "; } ?>value="no">no</option>
 	</select></td>
 </tr> 
 <tr style="text-align: left;">
@@ -1412,7 +1430,7 @@ $PermissionName = stripcslashes(htmlspecialchars($PermissionName, ENT_QUOTES, $S
 <?php } if(isset($_POST['id'])&&$_POST['subact']=="editnow") {
 $admincptitle = " ".$ThemeSet['TitleDivider']." Updating Settings";
 redirect("refresh",$rbasedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view&menu=forums",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],FALSE),"4");
-$query = sql_pre_query("UPDATE \"".$Settings['sqltable']."permissions\" SET \"CanViewForum\"='%s', \"CanMakePolls\"='%s', \"CanMakeTopics\"='%s', \"CanMakeReplys\"='%s', \"CanMakeReplysCT\"='%s', \"CanEditTopics\"='%s', \"CanEditTopicsCT\"='%s', \"CanEditReplys\"='%s', \"CanEditReplysCT\"='%s', \"CanDeleteTopics\"='%s', \"CanDeleteTopicsCT\"='%s', \"CanDeleteReplys\"='%s', \"CanDeleteReplysCT\"='%s', \"CanCloseTopics\"='%s', \"CanPinTopics\"='%s', \"CanDoHTML\"='%s', \"CanUseBBTags\"='%s', \"CanModForum\"='%s' WHERE \"id\"=%i", array($_POST['CanViewForum'], $_POST['CanMakePolls'], $_POST['CanMakeTopics'], $_POST['CanMakeReplys'], $_POST['CanMakeReplysCT'], $_POST['CanEditTopics'], $_POST['CanEditTopicsCT'], $_POST['CanEditReplys'], $_POST['CanEditReplysCT'], $_POST['CanDeleteTopics'], $_POST['CanDeleteTopicsCT'], $_POST['CanDeleteReplys'], $_POST['CanDeleteReplysCT'], $_POST['CanCloseTopics'], $_POST['CanPinTopics'], $_POST['CanDoHTML'], $_POST['CanUseBBTags'], $_POST['CanModForum'], $_POST['id']));
+$query = sql_pre_query("UPDATE \"".$Settings['sqltable']."permissions\" SET \"CanViewForum\"='%s', \"CanMakePolls\"='%s', \"CanMakeTopics\"='%s', \"CanMakeReplys\"='%s', \"CanMakeReplysCT\"='%s', \"CanEditTopics\"='%s', \"CanEditTopicsCT\"='%s', \"CanEditReplys\"='%s', \"CanEditReplysCT\"='%s', \"CanDeleteTopics\"='%s', \"CanDeleteTopicsCT\"='%s', \"CanDeleteReplys\"='%s', \"CanDeleteReplysCT\"='%s', \"CanCloseTopics\"='%s', \"CanCloseTopicsCT\"='%s', \"CanPinTopics\"='%s', \"CanPinTopics\"='%s', \"CanDoHTML\"='%s', \"CanUseBBTags\"='%s', \"CanModForum\"='%s' WHERE \"id\"=%i", array($_POST['CanViewForum'], $_POST['CanMakePolls'], $_POST['CanMakeTopics'], $_POST['CanMakeReplys'], $_POST['CanMakeReplysCT'], $_POST['CanEditTopics'], $_POST['CanEditTopicsCT'], $_POST['CanEditReplys'], $_POST['CanEditReplysCT'], $_POST['CanDeleteTopics'], $_POST['CanDeleteTopicsCT'], $_POST['CanDeleteReplys'], $_POST['CanDeleteReplysCT'], $_POST['CanCloseTopics'], $_POST['CanCloseTopicsCT'], $_POST['CanPinTopics'], $_POST['CanPinTopicsCT'], $_POST['CanDoHTML'], $_POST['CanUseBBTags'], $_POST['CanModForum'], $_POST['id']));
 sql_query($query,$SQLStat); } if(isset($_POST['id'])&&$_POST['subact']=="create") { 
 ?>
 <div class="TableMenuBorder">
@@ -1529,15 +1547,29 @@ sql_query($query,$SQLStat); } if(isset($_POST['id'])&&$_POST['subact']=="create"
 	</select></td>
 </tr> 
 <tr style="text-align: left;">
-	<td style="width: 50%;"><label class="TextBoxLabel" for="CanCloseTopics">Can close topics:</label></td>
+	<td style="width: 50%;"><label class="TextBoxLabel" for="CanCloseTopics">Can close own topics:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="CanCloseTopics" id="CanCloseTopics">
 	<option value="yes">yes</option>
 	<option value="no">no</option>
 	</select></td>
 </tr> 
 <tr style="text-align: left;">
-	<td style="width: 50%;"><label class="TextBoxLabel" for="CanPinTopics">Can pin topics:</label></td>
+	<td style="width: 50%;"><label class="TextBoxLabel" for="CanCloseTopicsCT">Can close other users topics:</label></td>
+	<td style="width: 50%;"><select size="1" class="TextBox" name="CanCloseTopicsCT" id="CanCloseTopicsCT">
+	<option value="yes">yes</option>
+	<option value="no">no</option>
+	</select></td>
+</tr> 
+<tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="CanPinTopics">Can pin own topics:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="CanPinTopics" id="CanPinTopics">
+	<option value="yes">yes</option>
+	<option value="no">no</option>
+	</select></td>
+</tr> 
+<tr style="text-align: left;">
+	<td style="width: 50%;"><label class="TextBoxLabel" for="CanPinTopicsCT">Can pin other users topics:</label></td>
+	<td style="width: 50%;"><select size="1" class="TextBox" name="CanPinTopicsCT" id="CanPinTopicsCT">
 	<option value="yes">yes</option>
 	<option value="no">no</option>
 	</select></td>
@@ -1595,8 +1627,8 @@ $PermissionName=sql_result($preresult,0,"Name");
 sql_free_result($preresult); }
 //$nextidnum = sql_get_next_id($Settings['sqltable'],"permissions",$SQLStat);
 $nextidnum = null;
-$query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."permissions\" (\"PermissionID\", \"Name\", \"ForumID\", \"CanViewForum\", \"CanMakePolls\", \"CanMakeTopics\", \"CanMakeReplys\", \"CanMakeReplysCT\", \"CanEditTopics\", \"CanEditTopicsCT\", \"CanEditReplys\", \"CanEditReplysCT\", \"CanDeleteTopics\", \"CanDeleteTopicsCT\", \"CanDeleteReplys\", \"CanDeleteReplysCT\", \"CanCloseTopics\", \"CanPinTopics\", \"CanExecPHP\", \"CanDoHTML\", \"CanUseBBTags\", \"CanModForum\") VALUES\n".
-"(%i, '%s', %i, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', 'no', '%s', '%s', '%s')", array($_POST['permid'], $PermissionName, $_POST['id'], $_POST['CanViewForum'], $_POST['CanMakePolls'], $_POST['CanMakeTopics'], $_POST['CanMakeReplys'], $_POST['CanMakeReplysCT'], $_POST['CanEditTopics'], $_POST['CanEditTopicsCT'], $_POST['CanEditReplys'], $_POST['CanEditReplysCT'], $_POST['CanDeleteTopics'], $_POST['CanDeleteTopicsCT'], $_POST['CanDeleteReplys'], $_POST['CanDeleteReplysCT'], $_POST['CanCloseTopics'], $_POST['CanPinTopics'], $_POST['CanDoHTML'], $_POST['CanUseBBTags'], $_POST['CanModForum'])); 
+$query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."permissions\" (\"PermissionID\", \"Name\", \"ForumID\", \"CanViewForum\", \"CanMakePolls\", \"CanMakeTopics\", \"CanMakeReplys\", \"CanMakeReplysCT\", \"CanEditTopics\", \"CanEditTopicsCT\", \"CanEditReplys\", \"CanEditReplysCT\", \"CanDeleteTopics\", \"CanDeleteTopicsCT\", \"CanDeleteReplys\", \"CanDeleteReplysCT\", \"CanCloseTopics\", \"CanCloseTopicsCT\", \"CanPinTopics\", \"CanPinTopicsCT\", \"CanExecPHP\", \"CanDoHTML\", \"CanUseBBTags\", \"CanModForum\") VALUES\n".
+"(%i, '%s', %i, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', 'no', '%s', '%s', '%s')", array($_POST['permid'], $PermissionName, $_POST['id'], $_POST['CanViewForum'], $_POST['CanMakePolls'], $_POST['CanMakeTopics'], $_POST['CanMakeReplys'], $_POST['CanMakeReplysCT'], $_POST['CanEditTopics'], $_POST['CanEditTopicsCT'], $_POST['CanEditReplys'], $_POST['CanEditReplysCT'], $_POST['CanDeleteTopics'], $_POST['CanDeleteTopicsCT'], $_POST['CanDeleteReplys'], $_POST['CanDeleteReplysCT'], $_POST['CanCloseTopics'], $_POST['CanCloseTopicsCT'], $_POST['CanPinTopics'], $_POST['CanPinTopicsCT'], $_POST['CanDoHTML'], $_POST['CanUseBBTags'], $_POST['CanModForum'])); 
 sql_query($query,$SQLStat); } } 
 $doupdate = false;
 if(isset($_POST['id'])&&$_POST['subact']=="editnow") { 

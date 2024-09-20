@@ -553,9 +553,15 @@ if($PermissionInfo['CanDeleteReplysClose'][$PerForumID]!="yes"&&$PermissionInfo[
 $PermissionInfo['CanCloseTopics'][$PerForumID]=sql_result($peresult,$peri,"CanCloseTopics");
 if($PermissionInfo['CanCloseTopics'][$PerForumID]!="yes"&&$PermissionInfo['CanCloseTopics'][$PerForumID]!="no") {
 	$PermissionInfo['CanCloseTopics'][$PerForumID] = "no"; }
+$PermissionInfo['CanCloseTopicsCT'][$PerForumID]=sql_result($peresult,$peri,"CanCloseTopicsCT");
+if($PermissionInfo['CanCloseTopicsCT'][$PerForumID]!="yes"&&$PermissionInfo['CanCloseTopicsCT'][$PerForumID]!="no") {
+	$PermissionInfo['CanCloseTopicsCT'][$PerForumID] = "no"; }
 $PermissionInfo['CanPinTopics'][$PerForumID]=sql_result($peresult,$peri,"CanPinTopics");
 if($PermissionInfo['CanPinTopics'][$PerForumID]!="yes"&&$PermissionInfo['CanPinTopics'][$PerForumID]!="no") {
 	$PermissionInfo['CanPinTopics'][$PerForumID] = "no"; }
+$PermissionInfo['CanPinTopicsCT'][$PerForumID]=sql_result($peresult,$peri,"CanPinTopicsCT");
+if($PermissionInfo['CanPinTopicsCT'][$PerForumID]!="yes"&&$PermissionInfo['CanPinTopicsCT'][$PerForumID]!="no") {
+	$PermissionInfo['CanPinTopicsCT'][$PerForumID] = "no"; }
 $PermissionInfo['CanDoHTML'][$PerForumID]=sql_result($peresult,$peri,"CanDoHTML");
 if($PermissionInfo['CanDoHTML'][$PerForumID]!="yes"&&$PermissionInfo['CanDoHTML'][$PerForumID]!="no") {
 	$PermissionInfo['CanDoHTML'][$PerForumID] = "no"; }

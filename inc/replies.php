@@ -1081,6 +1081,7 @@ $CanPinTopics = false;
 if($_SESSION['UserGroup']!=$Settings['GuestGroup']) {
 if($PermissionInfo['CanPinTopics'][$TForumID]=="yes"&&
 	$_SESSION['UserID']==$TUsersID) { $CanPinTopics = true; }
+if($PermissionInfo['CanPinTopicsCT'][$TForumID]=="yes") { $CanPinTopics = true; }
 if($PermissionInfo['CanPinTopics'][$TForumID]=="yes"&&
 	$PermissionInfo['CanModForum'][$TForumID]=="yes") { 
 	$CanPinTopics = true; }
@@ -1152,6 +1153,7 @@ $CanCloseTopics = false;
 if($_SESSION['UserGroup']!=$Settings['GuestGroup']) {
 if($PermissionInfo['CanCloseTopics'][$TForumID]=="yes"&&
 	$_SESSION['UserID']==$TUsersID) { $CanCloseTopics = true; }
+if($PermissionInfo['CanCloseTopicsCT'][$TForumID]=="yes") { $CanCloseTopics = true; }
 if($PermissionInfo['CanCloseTopics'][$TForumID]=="yes"&&
 	$PermissionInfo['CanModForum'][$TForumID]=="yes") { 
 	$CanCloseTopics = true; } }
