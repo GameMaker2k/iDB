@@ -107,12 +107,12 @@ while ($sli < $slnum) {
 $FullTable[$sli] = "CREATE TABLE \"".$TableChCk[$sli]."\" (\n";
 */
 $tabsta = sql_query("SELECT * FROM sqlite_master WHERE type=\"table\" and tbl_name=\"".$TableChCk[$sli]."\";",$SQLStat);
-$tabstats = sql_fetch_array($tabsta);
+$tabstats = sql_fetch_assoc($tabsta);
 $FullTable[$sli] = $tabstats['sql'].";\n";
 /*
 $zli = 0;
 $tabsta = sql_query("PRAGMA table_info(\"".$TableChCk[$sli]."\");",$SQLStat);
-while ($tabstats = sql_fetch_array($tabsta)) {
+while ($tabstats = sql_fetch_assoc($tabsta)) {
 var_dump($tabstats);
 if($zli>0) { $FullTable[$sli] .= ",\n"; }
 $SQLDefault = null; $PrimeKey = " ";

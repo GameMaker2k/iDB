@@ -116,11 +116,11 @@ $CreateTable[$l] = "CREATE TABLE IF NOT EXISTS \"".$row[0]."\" (\n";
 $CreateTable[$l] = null;
 $result2 = sql_query("SHOW COLUMNS FROM ".$row[0],$SQLStat);
 $tabsta = sql_query("SHOW TABLE STATUS LIKE '".$row[0]."'",$SQLStat);
-$tabstats = sql_fetch_array($tabsta); $AutoIncrement = " ";
+$tabstats = sql_fetch_assoc($tabsta); $AutoIncrement = " ";
 $tabstaz = sql_query("SHOW CREATE TABLE \"".$row[0]."\"",$SQLStat);
-$tabstatz = sql_fetch_array($tabstaz);
+$tabstatz = sql_fetch_assoc($tabstaz);
 $FullTable[$l] = $DropTable[$l].$tabstatz[1].";\n";
-$tabstats = sql_fetch_array($tabsta); $AutoIncrement = " ";
+$tabstats = sql_fetch_assoc($tabsta); $AutoIncrement = " ";
 /*
 if($tabstats["Auto_increment"]!="") {
 $AutoIncrement = " AUTO_INCREMENT=".$tabstats["Auto_increment"]." "; }
