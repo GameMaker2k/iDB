@@ -443,9 +443,9 @@ redirect("refresh",$rbasedir.url_maker($exfile['admin'],$Settings['file_ext'],"a
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_SESSION['UserID']));
 $result=sql_query($query,$SQLStat);
 $num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_SESSION['UserID'])), $SQLStat);
-$i=0;
-$YourID=sql_result($result,$i,"id");
-$Notes=sql_result($result,$i,"Notes");
+$result_array = sql_fetch_assoc($result);
+$YourID=$result_array["id"];
+$Notes=$result_array["Notes"];
 $noteact = url_maker($exfile['profile'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['profile'],$exqstr['profile']);
 $notepadact = $noteact; $profiletitle = " ".$ThemeSet['TitleDivider']." NotePad";
 $admincptitle = " ".$ThemeSet['TitleDivider']." Admin CP";
@@ -487,7 +487,8 @@ $mgresults=sql_query($mguerys,$SQLStat);
 $mnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."groups\" WHERE (\"Name\"<>'%s') ORDER BY \"id\" ASC", array("Admin")), $SQLStat);
 $mi = 0;
 while ($mi < $mnum) {
-$MGroups[$mi]=sql_result($mgresults,$mi,"Name");
+$mgresults_array = sql_fetch_assoc($mgresults);
+$MGroups[$mi]=$mgresults_array["Name"];
 ++$mi; }
 sql_free_result($mgresults);
 if($Settings['vercheck']===1) {
@@ -837,8 +838,9 @@ $sknresult=sql_query($sknquery,$SQLStat);
 $sknum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."themes\" ORDER BY \"id\" ASC, \"Name\" ASC", null), $SQLStat);
 $skni=0;
 while ($skni < $sknum) {
-$ThemeInfo['Name'] = sql_result($sknresult,$skni,"Name");
-$ThemeInfo['ThemeName'] = sql_result($sknresult,$skni,"ThemeName");
+$sknresult_array = sql_fetch_assoc($sknresult);
+$ThemeInfo['Name'] = $sknresult_array["Name"];
+$ThemeInfo['ThemeName'] = $sknresult_array["ThemeName"];
 if($Settings['DefaultTheme']==$ThemeInfo['Name']) {
 echo "<option selected=\"selected\" value=\"".$ThemeInfo['Name']."\">".$ThemeInfo['ThemeName']."</option>\n"; }
 if($Settings['DefaultTheme']!=$ThemeInfo['Name']) {

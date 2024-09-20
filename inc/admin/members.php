@@ -70,7 +70,8 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Validating Members";
 <?php 
 $gquerys = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"Name\"='%s' LIMIT 1", array($Settings['ValidateGroup']));
 $gresults=sql_query($gquerys,$SQLStat);
-$VGroupID=sql_result($gresults,0,"id");
+$gresults_array = sql_fetch_assoc($gresults);
+$VGroupID=$gresults_array["id"];
 sql_free_result($gresults);
 $getmemidq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE (\"GroupID\"=%i AND \"id\"<>-1) OR (\"Validated\"='no' AND \"id\"<>-1)", array($VGroupID));
 $getmemidr=sql_query($getmemidq,$SQLStat);
@@ -80,8 +81,9 @@ if($getmemidnum<1) { ?>
 	<option value="0">None</option>
 <?php }
 while ($getmemidi < $getmemidnum) {
-$getmemidID=sql_result($getmemidr,$getmemidi,"id");
-$getmemidName=sql_result($getmemidr,$getmemidi,"Name");
+$getmemidr_array = sql_fetch_assoc($getmemidr);
+$getmemidID=$getmemidr_array["id"];
+$getmemidName=$getmemidr_array["Name"];
 ?>
 <option value="<?php echo $getmemidID; ?>"><?php echo $getmemidName; ?></option>
 <?php ++$getmemidi; }
@@ -107,19 +109,21 @@ sql_free_result($getmemidr); ?>
 <?php } if($_POST['act']=="validate"&&$_POST['update']=="now"&&$_GET['act']=="validate"&&$_POST['id']!="0") { 
 $mguerys = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"Name\"='%s' LIMIT 1", array($Settings['MemberGroup']));
 $mgresults=sql_query($mguerys,$SQLStat);
-$MGroupID=sql_result($mgresults,0,"id");
+$mgresults_array = sql_fetch_assoc($mgresults);
+$MGroupID=$mgresults_array["id"];
 sql_free_result($mgresults);
 $gquerys = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"Name\"='%s' LIMIT 1", array($Settings['ValidateGroup']));
 $gresults=sql_query($gquerys,$SQLStat);
-$VGroupID=sql_result($gresults,0,"id");
+$gresults_array = sql_fetch_assoc($gresults);
+$VGroupID=$gresults_array["id"];
 sql_free_result($gresults);
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_POST['id']));
 $result=sql_query($query,$SQLStat);
 $num=sql_num_rows($result);
-$i=0;
-$VMemName=sql_result($result,$i,"Name");
-$VMemGroup=sql_result($result,$i,"GroupID");
-$VMemValidated=sql_result($result,$i,"Validated");
+$result_array = sql_fetch_assoc($result);
+$VMemName=$result_array["Name"];
+$VMemGroup=$result_array["GroupID"];
+$VMemValidated=$result_array["Validated"];
 $admincptitle = " ".$ThemeSet['TitleDivider']." Validating Members";
 redirect("refresh",$rbasedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=members",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],FALSE),"4");
 if($VMemGroup==$VGroupID) {
@@ -193,8 +197,9 @@ if($getmemidnum<1) { ?>
 	<option value="0">None</option>
 <?php }
 while ($getmemidi < $getmemidnum) {
-$getmemidID=sql_result($getmemidr,$getmemidi,"id");
-$getmemidName=sql_result($getmemidr,$getmemidi,"Name");
+$getmemidr_array = sql_fetch_assoc($getmemidr);
+$getmemidID=$getmemidr_array["id"];
+$getmemidName=$getmemidr_array["Name"];
 ?>
 <option value="<?php echo $getmemidID; ?>"><?php echo $getmemidName; ?></option>
 <?php ++$getmemidi; }
@@ -315,8 +320,9 @@ if($getmemidnum<1) { ?>
 	<option value="0">None</option>
 <?php }
 while ($getmemidi < $getmemidnum) {
-$getmemidID=sql_result($getmemidr,$getmemidi,"id");
-$getmemidName=sql_result($getmemidr,$getmemidi,"Name");
+$getmemidr_array = sql_fetch_assoc($getmemidr);
+$getmemidID=$getmemidr_array["id"];
+$getmemidName=$getmemidr_array["Name"];
 ?>
 <option value="<?php echo $getmemidID; ?>"><?php echo $getmemidName; ?></option>
 <?php ++$getmemidi; }
@@ -348,33 +354,37 @@ if($num<1) {
 redirect("location",$rbasedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=editmember",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],false));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
-$EditMem['ID']=sql_result($result,0,"id");
-$EditMem['Name']=sql_result($result,0,"Name");
-$EditMem['Handle']=sql_result($result,0,"Handle");
-$EditMem['Email']=sql_result($result,0,"Email");
-$EditMem['GroupID']=sql_result($result,0,"GroupID");
+$result_array = sql_fetch_assoc($result);
+$EditMem['ID']=$result_array["id"];
+$EditMem['Name']=$result_array["Name"];
+$EditMem['Handle']=$result_array["Handle"];
+$EditMem['Email']=$result_array["Email"];
+$EditMem['GroupID']=$result_array["GroupID"];
 $gquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i LIMIT 1", array($EditMem['GroupID']));
 $gresult=sql_query($gquery,$SQLStat);
-$EditMem['Group']=sql_result($gresult,0,"Name");
+$gresult_array = sql_fetch_assoc($gresult);
+$EditMem['Group']=$gresult_array["Name"];
 sql_free_result($gresult);
-$EditMem['LevelID']=sql_result($result,0,"LevelID");
+$EditMem['LevelID']=$result_array["LevelID"];
 if($EditMem['LevelID']>0) {
 $lquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."levels\" WHERE \"id\"=%i LIMIT 1", array($EditMem['LevelID']));
 $lresult=sql_query($lquery,$SQLStat);
-$EditMem['Level']=sql_result($lresult,0,"Name");
+$lresult_array = sql_fetch_assoc($lresult);
+$EditMem['Level']=$lresult_array["Name"];
 sql_free_result($lresult); } else {
  $EditMem['Level'] = ""; }
-$EditMem['RankID']=sql_result($result,0,"RankID");
+$EditMem['RankID']=$result_array["RankID"];
 if($EditMem['RankID']>0) {
 $rquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."ranks\" WHERE \"id\"=%i LIMIT 1", array($EditMem['RankID']));
 $rresult=sql_query($rquery,$SQLStat);
-$EditMem['Rank']=sql_result($rresult,0,"Name");
+$rresult_array = sql_fetch_assoc($rresult);
+$EditMem['Rank']=$rresult_array["Name"];
 sql_free_result($rresult); } else {
  $EditMem['Rank'] = ""; }
-$EditMem['Validated']=sql_result($result,0,"Validated");
-$EditMem['HiddenMember']=sql_result($result,0,"HiddenMember");
-$EditMem['WarnLevel']=sql_result($result,0,"WarnLevel");
-$EditMem['BanTime']=sql_result($result,0,"BanTime");
+$EditMem['Validated']=$result_array["Validated"];
+$EditMem['HiddenMember']=$result_array["HiddenMember"];
+$EditMem['WarnLevel']=$result_array["WarnLevel"];
+$EditMem['BanTime']=$result_array["BanTime"];
 if($EditMem['BanTime']!=""&&$EditMem['BanTime']>1) {
 $tmpusrcurtime = new DateTime();
 $tmpusrcurtime->setTimestamp($EditMem['BanTime']);
@@ -383,38 +393,39 @@ $BanMonth=$tmpusrcurtime->format("m");
 $BanDay=$tmpusrcurtime->format("d");
 $BanYear=$tmpusrcurtime->format("Y");
 $EditMem['BanTime'] = $BanMonth."/".$BanDay."/".$BanYear; }
-$EditMem['Interests']=sql_result($result,0,"Interests");
-$EditMem['Signature']=sql_result($result,0,"Signature");
-$EditMem['Avatar']=sql_result($result,0,"Avatar");
-$EditMem['AvatarSize']=sql_result($result,0,"AvatarSize");
-$EditMem['Title']=sql_result($result,0,"Title");
-$EditMem['Website']=sql_result($result,0,"Website");
-$EditMem['Gender']=sql_result($result,0,"Gender");
-$EditMem['PostCount']=sql_result($result,0,"PostCount");
-$EditMem['Karma']=sql_result($result,0,"Karma");
-$EditMem['TimeZone']=sql_result($result,0,"TimeZone");
-$EditMem['DST']=sql_result($result,0,"DST");
-$EditMem['IP']=sql_result($result,0,"IP");
+$EditMem['Interests']=$result_array["Interests"];
+$EditMem['Signature']=$result_array["Signature"];
+$EditMem['Avatar']=$result_array["Avatar"];
+$EditMem['AvatarSize']=$result_array["AvatarSize"];
+$EditMem['Title']=$result_array["Title"];
+$EditMem['Website']=$result_array["Website"];
+$EditMem['Gender']=$result_array["Gender"];
+$EditMem['PostCount']=$result_array["PostCount"];
+$EditMem['Karma']=$result_array["Karma"];
+$EditMem['TimeZone']=$result_array["TimeZone"];
+$EditMem['DST']=$result_array["DST"];
+$EditMem['IP']=$result_array["IP"];
 $mpquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."mempermissions\" WHERE \"id\"=%i LIMIT 1", array($_POST['id']));
 $mpresult=sql_query($mpquery,$SQLStat);
 $mpnum=sql_num_rows($mpresult);
-$EditMemPerm['PermissionID'] = sql_result($mpresult,0,"PermissionID");
-$EditMemPerm['CanViewBoard'] = sql_result($mpresult,0,"CanViewBoard");
-$EditMemPerm['CanViewOffLine'] = sql_result($mpresult,0,"CanViewOffLine");
-$EditMemPerm['CanEditProfile'] = sql_result($mpresult,0,"CanEditProfile");
-$EditMemPerm['CanAddEvents'] = sql_result($mpresult,0,"CanAddEvents");
-$EditMemPerm['CanPM'] = sql_result($mpresult,0,"CanPM");
-$EditMemPerm['CanSearch'] = sql_result($mpresult,0,"CanSearch");
-$EditMemPerm['CanDoHTML'] = sql_result($mpresult,0,"CanDoHTML");
-$EditMemPerm['CanUseBBTags'] = sql_result($mpresult,0,"CanUseBBTags");
-$EditMemPerm['CanViewIPAddress'] = sql_result($mpresult,0,"CanViewIPAddress");
-$EditMemPerm['CanViewUserAgent'] = sql_result($mpresult,0,"CanViewUserAgent");
-$EditMemPerm['CanViewAnonymous'] = sql_result($mpresult,0,"CanViewAnonymous");
-$EditMemPerm['FloodControl'] = sql_result($mpresult,0,"FloodControl");
-$EditMemPerm['SearchFlood'] = sql_result($mpresult,0,"SearchFlood");
-$EditMemPerm['HasModCP'] = sql_result($mpresult,0,"HasModCP");
-$EditMemPerm['HasAdminCP'] = sql_result($mpresult,0,"HasAdminCP");
-$EditMemPerm['ViewDBInfo'] = sql_result($mpresult,0,"ViewDBInfo");
+$mpresult_array = sql_fetch_assoc($mpresult);
+$EditMemPerm['PermissionID'] = $mpresult_array["PermissionID"];
+$EditMemPerm['CanViewBoard'] = $mpresult_array["CanViewBoard"];
+$EditMemPerm['CanViewOffLine'] = $mpresult_array["CanViewOffLine"];
+$EditMemPerm['CanEditProfile'] = $mpresult_array["CanEditProfile"];
+$EditMemPerm['CanAddEvents'] = $mpresult_array["CanAddEvents"];
+$EditMemPerm['CanPM'] = $mpresult_array["CanPM"];
+$EditMemPerm['CanSearch'] = $mpresult_array["CanSearch"];
+$EditMemPerm['CanDoHTML'] = $mpresult_array["CanDoHTML"];
+$EditMemPerm['CanUseBBTags'] = $mpresult_array["CanUseBBTags"];
+$EditMemPerm['CanViewIPAddress'] = $mpresult_array["CanViewIPAddress"];
+$EditMemPerm['CanViewUserAgent'] = $mpresult_array["CanViewUserAgent"];
+$EditMemPerm['CanViewAnonymous'] = $mpresult_array["CanViewAnonymous"];
+$EditMemPerm['FloodControl'] = $mpresult_array["FloodControl"];
+$EditMemPerm['SearchFlood'] = $mpresult_array["SearchFlood"];
+$EditMemPerm['HasModCP'] = $mpresult_array["HasModCP"];
+$EditMemPerm['HasAdminCP'] = $mpresult_array["HasAdminCP"];
+$EditMemPerm['ViewDBInfo'] = $mpresult_array["ViewDBInfo"];
 $MemIPList[0] = $EditMem['IP'];
 $MemIPArrayNum = 1;
 $MemPostIP = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"UserID\"=%i ORDER BY \"TimeStamp\" ASC ", array($EditMem['ID']));
@@ -422,11 +433,12 @@ $mppresult = sql_query($MemPostIP,$SQLStat);
 $mppnum = sql_num_rows($mppresult);
 $mppi = 0;
 while ($mppi < $mppnum) {
-$MemPostCheckIP=sql_result($mppresult,$mppi,"IP");
+$mppresult_array = sql_fetch_assoc($mppresult);
+$MemPostCheckIP=$mppresult_array["IP"];
 if(!in_array($MemPostCheckIP, $MemIPList)) {
 $MemIPList[$MemIPArrayNum] = $MemPostCheckIP;
 ++$MemIPArrayNum; }
-$MemPostCheckEditIP=sql_result($mppresult,$mppi,"EditIP");
+$MemPostCheckEditIP=$mppresult_array["EditIP"];
 if(!in_array($MemPostCheckEditIP, $MemIPList) && $MemPostCheckEditIP!="0") {
 $MemIPList[$MemIPArrayNum] = $MemPostCheckEditIP;
 ++$MemIPArrayNum; }
@@ -437,7 +449,8 @@ $mepresult = sql_query($MemEventIP,$SQLStat);
 $mepnum = sql_num_rows($mepresult);
 $mepi = 0;
 while ($mepi < $mepnum) {
-$MemEventCheckIP=sql_result($mepresult,$mepi,"IP");
+$mepresult_array = sql_fetch_assoc($mepresult);
+$MemEventCheckIP=$mepresult_array["IP"];
 if(!in_array($MemEventCheckIP, $MemIPList)) {
 $MemIPList[$MemIPArrayNum] = $MemEventCheckIP;
 ++$MemIPArrayNum; }
@@ -503,8 +516,9 @@ if($getgrpidnum<1) { ?>
 	<option value="0">None</option>
 <?php }
 while ($getgrpidi < $getgrpidnum) {
-$getgrpidID=sql_result($getgrpidr,$getgrpidi,"id");
-$getgrpidName=sql_result($getgrpidr,$getgrpidi,"Name");
+$getgrpidr_array = sql_fetch_assoc($getgrpidr);
+$getgrpidID=$getgrpidr_array["id"];
+$getgrpidName=$getgrpidr_array["Name"];
 $GIDselected = null;
 if($getgrpidID==$EditMem['GroupID']) { 
 	$GIDselected = " selected=\"selected\""; }
@@ -526,8 +540,9 @@ if($getlevidnum<1) { ?>
 	<option value="0">None</option>
 <?php }
 while ($getlevidi < $getlevidnum) {
-$getlevidID=sql_result($getlevidr,$getlevidi,"id");
-$getlevidName=sql_result($getlevidr,$getlevidi,"Name");
+$getlevidr_array = sql_fetch_assoc($getlevidr);
+$getlevidID=$getlevidr_array["id"];
+$getlevidName=$getlevidr_array["Name"];
 $LIDselected = null;
 if($getlevidID==$EditMem['LevelID']) { 
 	$LIDselected = " selected=\"selected\""; }
@@ -548,8 +563,9 @@ if($getranidnum<1) { ?>
 	<option value="0">None</option>
 <?php }
 while ($getranidi < $getranidnum) {
-$getranidID=sql_result($getranidr,$getranidi,"id");
-$getranidName=sql_result($getranidr,$getranidi,"Name");
+$getranidr_array = sql_fetch_assoc($getranidr);
+$getranidID=$getranidr_array["id"];
+$getranidName=$getranidr_array["Name"];
 $RANselected = null;
 if($getranidID==$EditMem['LevelID']) { 
 	$RANselected = " selected=\"selected\""; }
@@ -594,16 +610,13 @@ $getperidr=sql_query($getperidq,$SQLStat);
 $getperidnum=sql_num_rows($getperidr);
 $getperidi = 0;
 while ($getperidi < $getperidnum) {
-if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"||
-	$Settings['sqltype']=="pgsql"||$Settings['sqltype']=="cubrid"||
-	$Settings['sqltype']=="sqlite3"||$Settings['sqltype']=="pdo_sqlite3") {
-$getperidID=sql_result($getperidr,$getperidi,"PermissionID"); }
-if($Settings['sqltype']=="sqlite") {
-$getperidID=sql_result($getperidr,$getperidi,"\"PermissionID\""); }
+$getperidr_array = sql_fetch_assoc($getperidr);
+$getperidID=$getperidr_array["PermissionID"];
 $getperidq2 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i ORDER BY \"PermissionID\" ASC", array($getperidID));
 $getperidr2=sql_query($getperidq2,$SQLStat);
 $getperidnum2=sql_num_rows($getperidr2);
-$getperidName=sql_result($getperidr2,0,"Name");
+$getperidr2_array = sql_fetch_assoc($getperidr2);
+$getperidName=$getperidr2_array["Name"];
 sql_free_result($getperidr2);
 ?>
 	<option <?php if($EditMemPerm['PermissionID']==$getperidID) { echo "selected=\"selected\" "; } ?>value="<?php echo $getperidID; ?>"><?php echo $getperidName; ?></option>
@@ -750,11 +763,13 @@ sql_free_result($getperidr); ?>
 	($_POST['id']!="0"||$_POST['id']!="-1")) { 
 $ggidquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"Name\"='%s' LIMIT 1", array($Settings['GuestGroup']));
 $ggidresult=sql_query($ggidquery,$SQLStat);
-$GuestGroupID=sql_result($ggidresult,0,"id");
+$ggidresult_array = sql_fetch_assoc($ggidresult);
+$GuestGroupID=$ggidresult_array["id"];
 sql_free_result($ggidresult);
 $vgidquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"Name\"='%s' LIMIT 1", array($Settings['ValidateGroup']));
 $vgidresult=sql_query($vgidquery,$SQLStat);
-$ValidateGroupID=sql_result($vgidresult,0,"id");
+$vgidresult_array = sql_fetch_assoc($vgidresult);
+$ValidateGroupID=$vgidresult_array["id"];
 sql_free_result($vgidresult);
 $DMemName = GetUserName($_POST['id'],$Settings['sqltable']);
 $DMemName = $DMemName['Name'];

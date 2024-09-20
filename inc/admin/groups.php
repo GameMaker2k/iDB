@@ -78,16 +78,13 @@ $getperidnum = sql_count_rows(sql_pre_query("SELECT COUNT(DISTINCT \"permissioni
 $getperidr=sql_query($getperidq,$SQLStat);
 $getperidi = 0;
 while ($getperidi < $getperidnum) {
-if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"||$Settings['sqltype']=="pdo_mysql"||
-	$Settings['sqltype']=="pgsql"||$Settings['sqltype']=="cubrid"||
-	$Settings['sqltype']=="sqlite3"||$Settings['sqltype']=="pdo_sqlite3") {
-$getperidID=sql_result($getperidr,$getperidi,"PermissionID"); }
-if($Settings['sqltype']=="sqlite") {
-$getperidID=sql_result($getperidr,$getperidi,"\"PermissionID\""); }
+$getperidr_array = sql_fetch_assoc($getperidr);
+$getperidID=$getperidr_array["PermissionID"];
 $getperidq2 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i ORDER BY \"ForumID\" ASC", array($getperidID));
 $getperidr2=sql_query($getperidq2,$SQLStat);
 $getperidnum2=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i ORDER BY \"ForumID\" ASC", array($getperidID)), $SQLStat);
-$getperidName=sql_result($getperidr2,0,"Name");
+$getperidr2_array = sql_fetch_assoc($getperidr2);
+$getperidName=$getperidr2_array["Name"];
 sql_free_result($getperidr2);
 ?>
 	<option value="<?php echo $getperidID; ?>"><?php echo $getperidName; ?></option>
@@ -167,8 +164,9 @@ $fr=sql_query($fq,$SQLStat);
 $ai=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."groups\" ORDER BY \"id\" ASC", null), $SQLStat);
 $fi=0;
 while ($fi < $ai) {
-$ProGroupID=sql_result($fr,$fi,"id");
-$ProGroupName=sql_result($fr,$fi,"Name");
+$fr_array = sql_fetch_assoc($fr);
+$ProGroupID=$fr_array["id"];
+$ProGroupName=$fr_array["Name"];
 ?>
 	<option value="<?php echo $ProGroupID; ?>"><?php echo $ProGroupName; ?></option>
 <?php ++$fi; }
@@ -190,8 +188,9 @@ $fr=sql_query($fq,$SQLStat);
 $ai=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."groups\" ORDER BY \"id\" ASC", null), $SQLStat);
 $fi=0;
 while ($fi < $ai) {
-$ProGroupID=sql_result($fr,$fi,"id");
-$ProGroupName=sql_result($fr,$fi,"Name");
+$fr_array = sql_fetch_assoc($fr);
+$ProGroupID=$fr_array["id"];
+$ProGroupName=$fr_array["Name"];
 ?>
 	<option value="<?php echo $ProGroupID; ?>"><?php echo $ProGroupName; ?></option>
 <?php ++$fi; }
@@ -322,39 +321,41 @@ if($Settings['sqltype']=="sqlite") {
 $nextperid = sql_get_next_id($Settings['sqltable'],"\"permissions\"",$SQLStat); }
 */
 while ($getperidi < $getperidnum) {
-$getperidID=sql_result($getperidr,$getperidi,"id");
+$getperidr_array = sql_fetch_assoc($getperidr);
+$getperidID=$getperidr_array["id"];
 if($_POST['GroupPerm']!="0") {
 $getperidq2 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i AND \"ForumID\"=%i", array($_POST['GroupPerm'],$getperidID));
 $getperidr2=sql_query($getperidq2,$SQLStat);
 $getperidnum2=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i AND \"ForumID\"=%i", array($_POST['GroupPerm'],$getperidID)), $SQLStat);
-$PermissionNum=sql_result($getperidr2,0,"id"); 
+$getperidr2_array = sql_fetch_assoc($getperidr2);
+$PermissionNum=$getperidr2_array["id"]; 
 $PermissionID=$_POST['PermissionID']; 
 $PermissionName=$_POST['GroupName']; 
-$PermissionForumID=sql_result($getperidr2,0,"ForumID"); 
-$CanViewForum=sql_result($getperidr2,0,"CanViewForum");
-$CanMakePolls=sql_result($getperidr2,0,"CanMakePolls");
-$CanMakeTopics=sql_result($getperidr2,0,"CanMakeTopics"); 
-$CanMakeReplys=sql_result($getperidr2,0,"CanMakeReplys"); 
-$CanMakeReplysCT=sql_result($getperidr2,0,"CanMakeReplysCT"); 
-$HideEditPostInfo=sql_result($getperidr2,0,"HideEditPostInfo"); 
-$CanEditTopics=sql_result($getperidr2,0,"CanEditTopics"); 
-$CanEditTopicsCT=sql_result($getperidr2,0,"CanEditTopicsCT"); 
-$CanEditReplys=sql_result($getperidr2,0,"CanEditReplys"); 
-$CanEditReplysCT=sql_result($getperidr2,0,"CanEditReplysCT"); 
-$CanDeleteTopics=sql_result($getperidr2,0,"CanDeleteTopics"); 
-$CanDeleteTopicsCT=sql_result($getperidr2,0,"CanDeleteTopicsCT"); 
-$CanDeleteReplys=sql_result($getperidr2,0,"CanDeleteReplys"); 
-$CanDeleteReplysCT=sql_result($getperidr2,0,"CanDeleteReplysCT"); 
-$CanDoublePost=sql_result($getperidr2,0,"CanDoublePost"); 
-$CanDoublePostCT=sql_result($getperidr2,0,"CanDoublePostCT"); 
-$GotoEditPost=sql_result($getperidr2,0,"GotoEditPost"); 
-$CanCloseTopics=sql_result($getperidr2,0,"CanCloseTopics"); 
-$CanPinTopics=sql_result($getperidr2,0,"CanPinTopics"); 
-$CanExecPHP=sql_result($getperidr2,0,"CanExecPHP"); 
-$CanDoHTML=sql_result($getperidr2,0,"CanDoHTML"); 
-$CanUseBBTags=sql_result($getperidr2,0,"CanUseBBTags"); 
-$CanModForum=sql_result($getperidr2,0,"CanModForum"); 
-$CanReportPost=sql_result($getperidr2,0,"CanReportPost"); 
+$PermissionForumID=$getperidr2_array["ForumID"]; 
+$CanViewForum=$getperidr2_array["CanViewForum"];
+$CanMakePolls=$getperidr2_array["CanMakePolls"];
+$CanMakeTopics=$getperidr2_array["CanMakeTopics"]; 
+$CanMakeReplys=$getperidr2_array["CanMakeReplys"]; 
+$CanMakeReplysCT=$getperidr2_array["CanMakeReplysCT"]; 
+$HideEditPostInfo=$getperidr2_array["HideEditPostInfo"]; 
+$CanEditTopics=$getperidr2_array["CanEditTopics"]; 
+$CanEditTopicsCT=$getperidr2_array["CanEditTopicsCT"]; 
+$CanEditReplys=$getperidr2_array["CanEditReplys"]; 
+$CanEditReplysCT=$getperidr2_array["CanEditReplysCT"]; 
+$CanDeleteTopics=$getperidr2_array["CanDeleteTopics"]; 
+$CanDeleteTopicsCT=$getperidr2_array["CanDeleteTopicsCT"]; 
+$CanDeleteReplys=$getperidr2_array["CanDeleteReplys"]; 
+$CanDeleteReplysCT=$getperidr2_array["CanDeleteReplysCT"]; 
+$CanDoublePost=$getperidr2_array["CanDoublePost"]; 
+$CanDoublePostCT=$getperidr2_array["CanDoublePostCT"]; 
+$GotoEditPost=$getperidr2_array["GotoEditPost"]; 
+$CanCloseTopics=$getperidr2_array["CanCloseTopics"]; 
+$CanPinTopics=$getperidr2_array["CanPinTopics"]; 
+$CanExecPHP=$getperidr2_array["CanExecPHP"]; 
+$CanDoHTML=$getperidr2_array["CanDoHTML"]; 
+$CanUseBBTags=$getperidr2_array["CanUseBBTags"]; 
+$CanModForum=$getperidr2_array["CanModForum"]; 
+$CanReportPost=$getperidr2_array["CanReportPost"]; 
 sql_free_result($getperidr2); }
 if($getperidi==0) {
 if($_POST['GroupPerm']=="0") {
@@ -388,16 +389,18 @@ if($Settings['sqltype']=="sqlite") {
 $nextperid = sql_get_next_id($Settings['sqltable'],"\"permissions\"",$SQLStat); }
 */
 while ($getperidi < $getperidnum) {
-$getperidID=sql_result($getperidr,$getperidi,"id");
+$getperidr_array = sql_fetch_assoc($getperidr);
+$getperidID=$getperidr_array["id"];
 if($_POST['GroupPerm']!="0") {
 $getperidq2 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."catpermissions\" WHERE \"PermissionID\"=%i AND \"CategoryID\"=%i", array($_POST['GroupPerm'],$getperidID));
 $getperidr2=sql_query($getperidq2,$SQLStat);
 $getperidnum2=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."catpermissions\" WHERE \"PermissionID\"=%i AND \"CategoryID\"=%i", array($_POST['GroupPerm'],$getperidID)), $SQLStat);
-$PermissionNum=sql_result($getperidr2,0,"id"); 
+$getperidr2_array = sql_fetch_assoc($getperidr2);
+$PermissionNum=$getperidr2_array["id"]; 
 $PermissionID=$_POST['PermissionID']; 
 $PermissionName=$_POST['GroupName']; 
-$PermissionCatID=sql_result($getperidr2,0,"CategoryID"); 
-$CanViewCategory=sql_result($getperidr2,0,"CanViewCategory"); 
+$PermissionCatID=$getperidr2_array["CategoryID"]; 
+$CanViewCategory=$getperidr2_array["CanViewCategory"]; 
 sql_free_result($getperidr2); }
 if($_POST['GroupPerm']=="0") {
 $PermissionID=$_POST['PermissionID']; 
@@ -445,8 +448,9 @@ $fr=sql_query($fq,$SQLStat);
 $ai=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."groups\" WHERE (\"Name\"<>'%s' AND \"Name\"<>'%s' AND \"Name\"<>'%s' AND \"Name\"<>'%s') ORDER BY \"id\" ASC", array($Settings['GuestGroup'],$Settings['MemberGroup'],$Settings['ValidateGroup'],"Admin")), $SQLStat);
 $fi=0;
 while ($fi < $ai) {
-$GroupID=sql_result($fr,$fi,"id");
-$GroupName=sql_result($fr,$fi,"Name");
+$fr_array = sql_fetch_assoc($fr);
+$GroupID=$fr_array["id"];
+$GroupName=$fr_array["Name"];
 ?>
 	<option value="<?php echo $GroupID; ?>"><?php echo $GroupName; ?></option>
 <?php ++$fi; }
@@ -474,7 +478,8 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Updating Settings";
 $prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i AND (\"Name\"<>'%s' AND \"Name\"<>'%s' AND \"Name\"<>'%s' AND \"Name\"<>'%s') LIMIT 1", array($_POST['DelID'],$Settings['GuestGroup'],$Settings['MemberGroup'],$Settings['ValidateGroup'],"Admin"));
 $preresult=sql_query($prequery,$SQLStat);
 $prenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i AND (\"Name\"<>'%s' AND \"Name\"<>'%s' AND \"Name\"<>'%s' AND \"Name\"<>'%s') LIMIT 1", array($_POST['DelID'],$Settings['GuestGroup'],$Settings['MemberGroup'],$Settings['ValidateGroup'],"Admin")), $SQLStat);
-$GroupName=sql_result($preresult,0,"Name");
+$preresult_array = sql_fetch_assoc($preresult);
+$GroupName=$preresult_array["Name"];
 $errorstr = ""; $Error = null;
 if (!is_numeric($_POST['DelID'])) { $Error="Yes";
 $errorstr = $errorstr."You need to enter a group ID.<br />\n"; } 
@@ -487,7 +492,8 @@ $dtquery = sql_pre_query("DELETE FROM \"".$Settings['sqltable']."permissions\" W
 sql_query($dtquery,$SQLStat);
 $gquerys = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"Name\"='%s' LIMIT 1", array($Settings['MemberGroup']));
 $gresults=sql_query($gquerys,$SQLStat);
-$MemGroup=sql_result($gresults,0,"id");
+$gresult_array = sql_fetch_assoc($gresult);
+$MemGroup=$gresults_array["id"];
 sql_free_result($gresults);
 $dtquery = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"GroupID\"=%i WHERE \"GroupID\"=%i", array($MemGroup,$_POST['DelID']));
 sql_query($dtquery,$SQLStat); } }
@@ -526,8 +532,9 @@ $fr=sql_query($fq,$SQLStat);
 $ai=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."groups\" ORDER BY \"id\" ASC", null), $SQLStat);
 $fi=0;
 while ($fi < $ai) {
-$GroupID=sql_result($fr,$fi,"id");
-$GroupName=sql_result($fr,$fi,"Name");
+$fr_array = sql_fetch_assoc($fr);
+$GroupID=$fr_array["id"];
+$GroupName=$fr_array["Name"];
 ?>
 	<option value="<?php echo $GroupID; ?>"><?php echo $GroupName; ?></option>
 <?php ++$fi; }
@@ -557,33 +564,34 @@ if($prenum==0) { redirect("location",$rbasedir.url_maker($exfile['admin'],$Setti
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($prenum>=1) {
-$GroupID = sql_result($preresult,0,"id");
-$GroupName = sql_result($preresult,0,"Name");
-$PermissionID = sql_result($preresult,0,"PermissionID");
-$NamePrefix = sql_result($preresult,0,"NamePrefix");
-$NameSuffix = sql_result($preresult,0,"NameSuffix");
-$CanViewBoard = sql_result($preresult,0,"CanViewBoard");
-$CanViewOffLine = sql_result($preresult,0,"CanViewOffLine");
-$CanEditProfile = sql_result($preresult,0,"CanEditProfile");
-$CanAddEvents = sql_result($preresult,0,"CanAddEvents");
-$CanPM = sql_result($preresult,0,"CanPM");
-$CanSearch = sql_result($preresult,0,"CanSearch");
-$CanDoHTML = sql_result($preresult,0,"CanDoHTML");
-$CanUseBBTags = sql_result($preresult,0,"CanUseBBTags");
-$CanViewIPAddress = sql_result($preresult,0,"CanViewIPAddress");
-$CanViewUserAgent = sql_result($preresult,0,"CanViewUserAgent");
-$CanViewAnonymous = sql_result($preresult,0,"CanViewAnonymous");
-$FloodControl = sql_result($preresult,0,"FloodControl");
-$SearchFlood = sql_result($preresult,0,"SearchFlood");
-$PromoteTo = sql_result($preresult,0,"PromoteTo");
-$PromotePosts = sql_result($preresult,0,"PromotePosts");
-$PromoteKarma = sql_result($preresult,0,"PromoteKarma");
-$DemoteTo = sql_result($preresult,0,"DemoteTo");
-$DemotePosts = sql_result($preresult,0,"DemotePosts");
-$DemoteKarma = sql_result($preresult,0,"DemoteKarma");
-$HasModCP = sql_result($preresult,0,"HasModCP");
-$HasAdminCP = sql_result($preresult,0,"HasAdminCP");
-$ViewDBInfo = sql_result($preresult,0,"ViewDBInfo");
+$preresult_array = sql_fetch_assoc($preresult);
+$GroupID = $preresult_array["id"];
+$GroupName = $preresult_array["Name"];
+$PermissionID = $preresult_array["PermissionID"];
+$NamePrefix = $preresult_array["NamePrefix"];
+$NameSuffix = $preresult_array["NameSuffix"];
+$CanViewBoard = $preresult_array["CanViewBoard"];
+$CanViewOffLine = $preresult_array["CanViewOffLine"];
+$CanEditProfile = $preresult_array["CanEditProfile"];
+$CanAddEvents = $preresult_array["CanAddEvents"];
+$CanPM = $preresult_array["CanPM"];
+$CanSearch = $preresult_array["CanSearch"];
+$CanDoHTML = $preresult_array["CanDoHTML"];
+$CanUseBBTags = $preresult_array["CanUseBBTags"];
+$CanViewIPAddress = $preresult_array["CanViewIPAddress"];
+$CanViewUserAgent = $preresult_array["CanViewUserAgent"];
+$CanViewAnonymous = $preresult_array["CanViewAnonymous"];
+$FloodControl = $preresult_array["FloodControl"];
+$SearchFlood = $preresult_array["SearchFlood"];
+$PromoteTo = $preresult_array["PromoteTo"];
+$PromotePosts = $preresult_array["PromotePosts"];
+$PromoteKarma = $preresult_array["PromoteKarma"];
+$DemoteTo = $preresult_array["DemoteTo"];
+$DemotePosts = $preresult_array["DemotePosts"];
+$DemoteKarma = $preresult_array["DemoteKarma"];
+$HasModCP = $preresult_array["HasModCP"];
+$HasAdminCP = $preresult_array["HasAdminCP"];
+$ViewDBInfo = $preresult_array["ViewDBInfo"];
 sql_free_result($preresult);
 ?>
 <div class="TableMenuBorder">
@@ -691,8 +699,9 @@ $fr=sql_query($fq,$SQLStat);
 $ai=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."groups\" ORDER BY \"id\" ASC", null), $SQLStat);
 $fi=0;
 while ($fi < $ai) {
-$ProGroupID=sql_result($fr,$fi,"id");
-$ProGroupName=sql_result($fr,$fi,"Name");
+$fr_array = sql_fetch_assoc($fr);
+$ProGroupID=$fr_array["id"];
+$ProGroupName=$fr_array["Name"];
 ?>
 	<option value="<?php echo $ProGroupID; ?>"><?php echo $ProGroupName; ?></option>
 <?php ++$fi; }
@@ -715,8 +724,9 @@ $fr=sql_query($fq,$SQLStat);
 $ai=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."groups\" ORDER BY \"id\" ASC", null), $SQLStat);
 $fi=0;
 while ($fi < $ai) {
-$ProGroupID=sql_result($fr,$fi,"id");
-$ProGroupName=sql_result($fr,$fi,"Name");
+$fr_array = sql_fetch_assoc($fr);
+$ProGroupID=$fr_array["id"];
+$ProGroupName=$fr_array["Name"];
 ?>
 	<option value="<?php echo $ProGroupID; ?>"><?php echo $ProGroupName; ?></option>
 <?php ++$fi; }
@@ -808,7 +818,8 @@ if($prenum==0) { redirect("location",$rbasedir.url_maker($exfile['admin'],$Setti
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($prenum>=1) {
-$OldGroupName=sql_result($preresult,0,"Name");
+$preresult_array = sql_fetch_assoc($preresult);
+$OldGroupName=$preresult_array["Name"];
 sql_free_result($preresult);
 if($_POST['GroupName']!=$OldGroupName) {
 $sql_name_check = sql_query(sql_pre_query("SELECT \"Name\" FROM \"".$Settings['sqltable']."groups\" WHERE \"Name\"='%s'", array($_POST['GroupName'])),$SQLStat);
