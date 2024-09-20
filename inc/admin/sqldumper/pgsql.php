@@ -111,14 +111,13 @@ while ($sli < $slnum) {
     $UniKeyRow = null;
 
     while ($zli < $zlnum) {
-        $SQL['column_name'] = sql_result($tabsta, $zli, "column_name");
-        $SQL['column_default'] = sql_result($tabsta, $zli, "column_default");
+        $row = sql_fetch_assoc($tabsta); // Fetch the entire row as an associative array
 
-        // Ensure column default is a string and not null
-        if ($SQL['column_default'] === null) {
-            $SQL['column_default'] = "";
-        }
+        // Access the column values using their names
+        $SQL['column_name'] = $row['column_name'];
+        $SQL['column_default'] = $row['column_default'] ?? ''; // Provide a default value if null
 
+        // Handling the column default and constraints
         $PSQL = explode("::", $SQL['column_default']);
         if (count($PSQL) > 1) {
             $SQL['column_default'] = $PSQL[0];
@@ -129,36 +128,38 @@ while ($sli < $slnum) {
             $SQL['column_default'] = null;
         } else {
             $SQL['column_default'] = " DEFAULT " . $SQL['column_default'];
-            $SQL['udt_name'] = sql_result($tabsta, $zli, "udt_name");
+            $SQL['udt_name'] = $row['udt_name'];
         }
+
         if ($SQL['udt_name'] == "text") {
             $SQL['column_default'] = null;
         }
-        $SQL['character_maximum_length'] = sql_result($tabsta, $zli, "character_maximum_length");
-        if ($SQL['udt_name'] == "varchar") {
-            $SQL['udt_name'] = $SQL['udt_name'] . "(" . $SQL['character_maximum_length'] . ")";
-        }
 
-        // Initialize constraint checks
-        $pristats = null;
-        $PriKeyRow = " ";
+        $SQL['character_maximum_length'] = $row['character_maximum_length'];
+        if ($SQL['udt_name'] == "varchar") {
+            $SQL['udt_name'] .= "(" . $SQL['character_maximum_length'] . ")";
+        }
 
         // Fetch constraints for each column
         $prista = sql_query("SELECT tc.constraint_name, tc.constraint_type FROM information_schema.table_constraints tc
             JOIN information_schema.key_column_usage kcu ON tc.constraint_name = kcu.constraint_name
             WHERE kcu.table_name = '" . $TableChCk[$sli] . "' AND kcu.column_name = '" . $SQL['column_name'] . "';", $SQLStat);
 
+        // Process constraints as before
+        $UniKeyRow = null;
+        $PriKeyRow = " ";
+
         if ($prista && pg_num_rows($prista) > 0) {
             while ($constraint = pg_fetch_assoc($prista)) {
-                $pristats = $constraint['constraint_name'];
                 if ($constraint['constraint_type'] == 'PRIMARY KEY') {
                     $PriKeyRow = " PRIMARY KEY ";
                 } elseif ($constraint['constraint_type'] == 'UNIQUE') {
-                    $UniKeyRow = $UniKeyRow . ",\n  UNIQUE (\"" . $SQL['column_name'] . "\")";
+                    $UniKeyRow .= ",\n  UNIQUE (\"" . $SQL['column_name'] . "\")";
                 }
             }
         }
 
+        // Append the column definition to the SQL create table statement
         $FullTable[$sli] .= "\n  \"" . $SQL['column_name'] . "\" " . $SQL['udt_name'] . $PriKeyRow . "NOT NULL" . $SQL['column_default'];
         if ($zli + 1 < $zlnum) {
             $FullTable[$sli] .= ",";
