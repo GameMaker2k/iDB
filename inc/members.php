@@ -69,12 +69,12 @@ $i=0;
 if($_GET['act']=="list") {
 if($_GET['groupid']==null) {
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"<>%i AND \"id\">=0 AND \"HiddenMember\"='no' ".$orderlist." ".$SQLimit, array($GGroup,$PageLimit,$Settings['max_memlist'])); 
-$rnquery = sql_pre_query("SELECT COUNT(*) FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"<>%i AND \"id\">=0 AND \"HiddenMember\"='no'", array($GGroup));
+$NumberMembers = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"<>%i AND \"id\">=0 AND \"HiddenMember\"='no'", array($GGroup)), $SQLStat);
 $num = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"<>%i AND \"id\">=0 AND \"HiddenMember\"='no' ".$orderlist." ".$SQLimit, array($GGroup,$PageLimit,$Settings['max_memlist'])), $SQLStat); }
 if($_GET['groupid']!=null) {
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"=%i AND \"GroupID\"<>%i AND \"id\">=0 ".$orderlist." ".$SQLimit, array($_GET['groupid'],$GGroup,$PageLimit,$Settings['max_memlist'])); 
 $num = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"=%i AND \"GroupID\"<>%i AND \"id\">=0 ".$orderlist." ".$SQLimit, array($_GET['groupid'],$GGroup,$PageLimit,$Settings['max_memlist'])), $SQLStat); 
-$rnquery = sql_pre_query("SELECT COUNT(*) FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"=%i AND \"GroupID\"<>%i AND \"id\">=0", array($_GET['groupid'],$GGroup)); } }
+$NumberMembers = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"=%i AND \"GroupID\"<>%i AND \"id\">=0", array($_GET['groupid'],$GGroup)), $SQLStat); } }
 if($_GET['act']=="getactive") {
 $active_month = $usercurtime->format("m");
 $active_day = $usercurtime->format("d");
@@ -84,15 +84,12 @@ $active_end = mktime(23,59,59,$active_month,$active_day,$active_year);
 if($_GET['groupid']==null) {
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"<>%i AND \"id\">=0 AND \"HiddenMember\"='no' AND (\"LastActive\">=%i AND \"LastActive\"<=%i) ".$orderlist." ".$SQLimit, array($GGroup,$active_start,$active_end,$PageLimit,$Settings['max_memlist'])); 
 $num = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"<>%i AND \"id\">=0 AND \"HiddenMember\"='no' AND (\"LastActive\">=%i AND \"LastActive\"<=%i) ".$orderlist." ".$SQLimit, array($GGroup,$active_start,$active_end,$PageLimit,$Settings['max_memlist'])), $SQLStat); 
-$rnquery = sql_pre_query("SELECT COUNT(*) FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"<>%i AND \"id\">=0 AND \"HiddenMember\"='no' AND (\"LastActive\">=%i AND \"LastActive\"<=%i)", array($GGroup,$active_start,$active_end)); }
+$NumberMembers = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"<>%i AND \"id\">=0 AND \"HiddenMember\"='no' AND (\"LastActive\">=%i AND \"LastActive\"<=%i)", array($GGroup,$active_start,$active_end)), $SQLStat); }
 if($_GET['groupid']!=null) {
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"=%i AND \"GroupID\"<>%i AND \"id\">=0 AND (\"LastActive\">=%i AND \"LastActive\"<=%i) ".$orderlist." ".$SQLimit, array($_GET['groupid'],$GGroup,$active_start,$active_end,$PageLimit,$Settings['max_memlist'])); 
 $num = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"=%i AND \"GroupID\"<>%i AND \"id\">=0 AND (\"LastActive\">=%i AND \"LastActive\"<=%i) ".$orderlist." ".$SQLimit, array($_GET['groupid'],$GGroup,$active_start,$active_end,$PageLimit,$Settings['max_memlist'])), $SQLStat); 
-$rnquery = sql_pre_query("SELECT COUNT(*) FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"=%i AND \"GroupID\"<>%i AND \"id\">=0 AND (\"LastActive\">=%i AND \"LastActive\"<=%i)", array($_GET['groupid'],$GGroup,$active_start,$active_end)); } }
+$NumberMembers = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"=%i AND \"GroupID\"<>%i AND \"id\">=0 AND (\"LastActive\">=%i AND \"LastActive\"<=%i)", array($_GET['groupid'],$GGroup,$active_start,$active_end)), $SQLStat); } }
 $result=sql_query($query,$SQLStat);
-$rnresult=sql_query($rnquery,$SQLStat);
-$NumberMembers = sql_result($rnresult,0);
-sql_free_result($rnresult);
 if(isset($_SESSION['OldViewingPage'])) { $_SESSION['AncientViewingPage'] = $_SESSION['OldViewingPage']; } else { $_SESSION['AncientViewingPage'] = url_maker(null,"no+ext","act=view","&","=",$prexqstr['index'],$exqstr['index']); }
 if(isset($_SESSION['OldViewingFile'])) { $_SESSION['AncientViewingFile'] = $_SESSION['OldViewingFile']; } else { 
 	 if($Settings['file_ext']!="no+ext"&&$Settings['file_ext']!="no ext") {
@@ -328,19 +325,16 @@ $uoltime = $uolcuttime - ini_get("session.gc_maxlifetime");
 if($_GET['list']=="members") {
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"serialized_data\" NOT LIKE '%s' ORDER BY \"expires\" DESC ".$SQLimit, array($uoltime,"%UserGroup|s:".strlen($Settings['GuestGroup']).":\"".$Settings['GuestGroup']."\";%",$PageLimit,$Settings['max_memlist'])); 
 $num = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"serialized_data\" NOT LIKE '%s' ORDER BY \"expires\" DESC ".$SQLimit, array($uoltime,"%UserGroup|s:".strlen($Settings['GuestGroup']).":\"".$Settings['GuestGroup']."\";%",$PageLimit,$Settings['max_memlist'])), $SQLStat); 
-$rnquery = sql_pre_query("SELECT COUNT(*) FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"serialized_data\" NOT LIKE '%s'", array($uoltime,"%UserGroup|s:".strlen($Settings['GuestGroup']).":\"".$Settings['GuestGroup']."\";%")); }
+$NumberMembers = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"serialized_data\" NOT LIKE '%s'", array($uoltime,"%UserGroup|s:".strlen($Settings['GuestGroup']).":\"".$Settings['GuestGroup']."\";%")), $SQLStat); }
 if($_GET['list']=="guests") {
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"serialized_data\" LIKE '%s' ORDER BY \"expires\" DESC ".$SQLimit, array($uoltime,"%UserGroup|s:".strlen($Settings['GuestGroup']).":\"".$Settings['GuestGroup']."\";%",$PageLimit,$Settings['max_memlist'])); 
 $num = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"serialized_data\" LIKE '%s' ORDER BY \"expires\" DESC ".$SQLimit, array($uoltime,"%UserGroup|s:".strlen($Settings['GuestGroup']).":\"".$Settings['GuestGroup']."\";%",$PageLimit,$Settings['max_memlist'])), $SQLStat);
-$rnquery = sql_pre_query("SELECT COUNT(*) FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"serialized_data\" LIKE '%s'", array($uoltime,"%UserGroup|s:".strlen($Settings['GuestGroup']).":\"".$Settings['GuestGroup']."\";%")); }
+$NumberMembers = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"serialized_data\" LIKE '%s'", array($uoltime,"%UserGroup|s:".strlen($Settings['GuestGroup']).":\"".$Settings['GuestGroup']."\";%")), $SQLStat); }
 if($_GET['list']=="all") {
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i ORDER BY \"expires\" DESC ".$SQLimit, array($uoltime,$PageLimit,$Settings['max_memlist'])); 
 $num = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i ORDER BY \"expires\" DESC ".$SQLimit, array($uoltime,$PageLimit,$Settings['max_memlist'])), $SQLStat);
-$rnquery = sql_pre_query("SELECT COUNT(*) FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i", array($uoltime)); }
+$NumberMembers = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i", array($uoltime)), $SQLStat); }
 $result=sql_query($query,$SQLStat);
-$rnresult=sql_query($rnquery,$SQLStat);
-$NumberMembers = sql_result($rnresult,0);
-sql_free_result($rnresult);
 if(isset($_SESSION['OldViewingPage'])) { $_SESSION['AncientViewingPage'] = $_SESSION['OldViewingPage']; } else { $_SESSION['AncientViewingPage'] = url_maker(null,"no+ext","act=view","&","=",$prexqstr['index'],$exqstr['index']); }
 if(isset($_SESSION['OldViewingFile'])) { $_SESSION['AncientViewingFile'] = $_SESSION['OldViewingFile']; } else { 
 	 if($Settings['file_ext']!="no+ext"&&$Settings['file_ext']!="no ext") {

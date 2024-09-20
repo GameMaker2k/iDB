@@ -1366,7 +1366,10 @@ $gnrnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings[
 $gnrresult_array = sql_fetch_assoc($gnrresult);
 $NumberPosts=$gnrresult_array["NumPosts"]; $NumberTopics=$gnrresult_array["NumTopics"]; 
 sql_free_result($gnrresult);
-$delresult_array = sql_fetch_assoc($delresult);
+while ($row = sql_fetch_assoc($delresult)) {
+    $rows[] = $row;
+}
+$delresult_array = $rows[0];
 $FReplyID=$delresult_array["id"];
 if($ReplyID==$FReplyID) { $DelTopic = true;
 $gtsquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"id\"=%i LIMIT 1", array($ReplyTopicID));
@@ -1406,9 +1409,9 @@ sql_query($dtquery,$SQLStat);
 $queryupd = sql_pre_query("UPDATE \"".$Settings['sqltable']."forums\" SET \"NumPosts\"=%i,\"NumTopics\"=%i WHERE \"id\"=%i", array($NewNumPosts,$NewNumTopics,$ReplyForumID));
 sql_query($queryupd,$SQLStat); } }
 if($ReplyID!=$FReplyID) {
-$LReplyID=sql_result($delresult,$delnum-1,"id");
-$SLReplyID=sql_result($delresult,$delnum-2,"id");
-$NewLastUpdate=sql_result($delresult,$delnum-2,"TimeStamp");
+$LReplyID=$rows[$delnum - 1]['id'];
+$SLReplyID=$rows[$delnum - 2]['id'];
+$NewLastUpdate=$rows[$delnum - 2]['TimeStamp'];
 if($ReplyID==$LReplyID) { $NewNumReplies = $NumberReplies - 1; $NewNumPosts = $NumberPosts - 1;
 $drquery = sql_pre_query("DELETE FROM \"".$Settings['sqltable']."posts\" WHERE \"id\"=%i", array($ReplyID));
 sql_query($drquery,$SQLStat); 

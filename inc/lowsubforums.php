@@ -25,17 +25,18 @@ if($checknum==0) { redirect("location",$rbasedir.url_maker($exfile['index'],$Set
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($checknum>=1) {
-$ForumID=sql_result($checkresult,0,"id");
-$ForumName=sql_result($checkresult,0,"Name");
-$ForumType=sql_result($checkresult,0,"ForumType");
-$ForumShow=sql_result($checkresult,0,"ShowForum");
+$checkresult_array = sql_fetch_assoc($checkresult);
+$ForumID=$checkresult_array["id"];
+$ForumName=$checkresult_array["Name"];
+$ForumType=$checkresult_array["ForumType"];
+$ForumShow=$checkresult_array["ShowForum"];
 if($ForumShow=="no") { $_SESSION['ShowActHidden'] = "yes"; }
-$InSubForum=sql_result($checkresult,0,"InSubForum");
-$CategoryID=sql_result($checkresult,0,"CategoryID");
-$RedirectURL=sql_result($checkresult,0,"RedirectURL");
-$RedirectTimes=sql_result($checkresult,0,"Redirects");
-$CanHaveTopics=sql_result($checkresult,0,"CanHaveTopics");
-$NumberViews=sql_result($checkresult,0,"NumViews");
+$InSubForum=$checkresult_array["InSubForum"];
+$CategoryID=$checkresult_array["CategoryID"];
+$RedirectURL=$checkresult_array["RedirectURL"];
+$RedirectTimes=$checkresult_array["Redirects"];
+$CanHaveTopics=$checkresult_array["CanHaveTopics"];
+$NumberViews=$checkresult_array["NumViews"];
 $SForumName = $ForumName;
 $ForumType = strtolower($ForumType); $CanHaveTopics = strtolower($CanHaveTopics);
 if($CanHaveTopics!="yes"&&$ForumType!="redirect") {
@@ -64,25 +65,26 @@ sql_free_result($checkresult);
 $prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."categories\" WHERE \"ShowCategory\"='yes' AND \"id\"=%i".$CatIgnoreList2." ORDER BY \"OrderID\" ASC, \"id\" ASC", array($CategoryID));
 $preresult=sql_query($prequery,$SQLStat);
 $prenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."categories\" WHERE \"ShowCategory\"='yes' AND \"id\"=%i".$CatIgnoreList2." ORDER BY \"OrderID\" ASC, \"id\" ASC", array($CategoryID)), $SQLStat);
-$prei=0;
-$CategoryID=sql_result($preresult,0,"id");
-$CategoryName=sql_result($preresult,0,"Name");
-$CategoryShow=sql_result($preresult,0,"ShowCategory");
-$CategoryType=sql_result($preresult,0,"CategoryType");
-$InSubCategory=sql_result($preresult,0,"InSubCategory");
+$preresult_array = sql_fetch_assoc($preresult);
+$CategoryID=$preresult_array["id"];
+$CategoryName=$preresult_array["Name"];
+$CategoryShow=$preresult_array["ShowCategory"];
+$CategoryType=$preresult_array["CategoryType"];
+$InSubCategory=$preresult_array["InSubCategory"];
 if($CategoryShow=="no") { $_SESSION['ShowActHidden'] = "yes"; }
-$CategoryDescription=sql_result($preresult,0,"Description");
+$CategoryDescription=$preresult_array["Description"];
 if($InSubForum!="0") {
 $isfquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2." LIMIT 1", array($InSubForum));
 $isfresult=sql_query($isfquery,$SQLStat);
 $isfnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2." LIMIT 1", array($InSubForum)), $SQLStat);
 if($isfnum>=1) {
-$isfForumID=sql_result($isfresult,0,"id");
-$isfForumCatID=sql_result($isfresult,0,"CategoryID");
-$isfForumName=sql_result($isfresult,0,"Name");
-$isfForumType=sql_result($isfresult,0,"ForumType");
+$isfresult_array = sql_fetch_assoc($isfresult);
+$isfForumID=$isfresult_array["id"];
+$isfForumCatID=$isfresult_array["CategoryID"];
+$isfForumName=$isfresult_array["Name"];
+$isfForumType=$isfresult_array["ForumType"];
 $isfForumType = strtolower($isfForumType);
-$isfRedirectURL=sql_result($isfresult,0,"RedirectURL"); }
+$isfRedirectURL=$isfresult_array["RedirectURL"]; }
 if($isfnum<1) { $InSubForum = "0"; } 
 sql_free_result($isfresult); }
 if(isset($_SESSION['OldViewingPage'])) { $_SESSION['AncientViewingPage'] = $_SESSION['OldViewingPage']; } else { $_SESSION['AncientViewingPage'] = url_maker(null,"no+ext","act=view","&","=",$prexqstr['index'],$exqstr['index']); }
@@ -143,16 +145,17 @@ if($num>=1) {
 <li style="font-weight: bold;"><a href="<?php echo url_maker($exfile[$ForumType],$Settings['file_ext'],"act=lowview&id=".$ForumID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>"><?php echo $ForumName; ?></a></li><li>
 <?php
 while ($i < $num) {
-$ForumID=sql_result($result,$i,"id");
-$ForumName=sql_result($result,$i,"Name");
-$ForumShow=sql_result($result,$i,"ShowForum");
-$ForumType=sql_result($result,$i,"ForumType");
-$ForumShowTopics=sql_result($result,$i,"CanHaveTopics");
+$result_array = sql_fetch_assoc($result);
+$ForumID=$result_array["id"];
+$ForumName=$result_array["Name"];
+$ForumShow=$result_array["ShowForum"];
+$ForumType=$result_array["ForumType"];
+$ForumShowTopics=$result_array["CanHaveTopics"];
 $ForumShowTopics = strtolower($ForumShowTopics);
-$NumTopics=sql_result($result,$i,"NumTopics");
-$NumPosts=sql_result($result,$i,"NumPosts");
-$NumRedirects=sql_result($result,$i,"Redirects");
-$ForumDescription=sql_result($result,$i,"Description");
+$NumTopics=$result_array["NumTopics"];
+$NumPosts=$result_array["NumPosts"];
+$NumRedirects=$result_array["Redirects"];
+$ForumDescription=$result_array["Description"];
 $ForumType = strtolower($ForumType); $sflist = null;
 $gltf = array(null); $gltf[0] = $ForumID;
 if ($ForumType=="subforum") { 
@@ -161,14 +164,15 @@ $apcresult=sql_query($apcquery);
 $apcnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"ShowForum\"='yes' AND \"InSubForum\"=%i".$ForumIgnoreList2." ORDER BY \"OrderID\" ASC, \"id\" ASC", array($ForumID)), $SQLStat);
 $apci=0; $apcl=1; if($apcnum>=1) {
 while ($apci < $apcnum) {
-$NumsTopics=sql_result($apcresult,$apci,"NumTopics");
+$apcresult_array = sql_fetch_assoc($apcresult);
+$NumsTopics=$apcresult_array["NumTopics"];
 $NumTopics = $NumsTopics + $NumTopics;
-$NumsPosts=sql_result($apcresult,$apci,"NumPosts");
+$NumsPosts=$apcresult_array["NumPosts"];
 $NumPosts = $NumsPosts + $NumPosts;
-$SubsForumID=sql_result($apcresult,$apci,"id");
-$SubsForumName=sql_result($apcresult,$apci,"Name");
-$SubsForumType=sql_result($apcresult,$apci,"ForumType");
-$SubsForumShowTopics=sql_result($result,$i,"CanHaveTopics");
+$SubsForumID=$apcresult_array["id"];
+$SubsForumName=$apcresult_array["Name"];
+$SubsForumType=$apcresult_array["ForumType"];
+$SubsForumShowTopics=$result_array["CanHaveTopics"];
 if(isset($PermissionInfo['CanViewForum'][$SubsForumID])&&
 	$PermissionInfo['CanViewForum'][$SubsForumID]=="yes") {
 $ExStr = ""; if ($SubsForumType!="redirect"&&

@@ -271,7 +271,7 @@ $pstring = $pstring."<span class=\"pagelinklast\"><a href=\"".url_maker($exfile[
 <?php }
 while ($i < $num) {
 $result_array = sql_fetch_assoc($result);
-$TopicID=sql_result($result,$i,"id");
+$TopicID=$result_array["id"];
 $TForumID=$result_array["ForumID"];
 $OldForumID=$result_array["OldForumID"];
 $UsersID=$result_array["UserID"];
