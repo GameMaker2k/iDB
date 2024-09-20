@@ -56,10 +56,11 @@ $uolnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings[
 $uoli=0; $olmn = 0; $olgn = 0; $olan = 0; $olmbn = 0;
 $MembersOnline = null; $GuestsOnline = null;
 while ($uoli < $uolnum) {
-$session_data=sql_result($uolresult,$uoli,"session_data"); 
-$serialized_data=sql_result($uolresult,$uoli,"serialized_data");
-$session_user_agent=sql_result($uolresult,$uoli,"user_agent"); 
-$session_ip_address=sql_result($uolresult,$uoli,"ip_address");
+$uolresult_array = sql_fetch_assoc($uolresult);
+$session_data=$uolresult_array["session_data"]; 
+$serialized_data=$uolresult_array["serialized_data"];
+$session_user_agent=$uolresult_array["user_agent"]; 
+$session_ip_address=$uolresult_array["ip_address"];
 //$UserSessInfo = unserialize_session($session_data);
 $UserSessInfo = unserialize($serialized_data);
 if(!isset($UserSessInfo['UserGroup'])) { $UserSessInfo['UserGroup'] = $Settings['GuestGroup']; }
@@ -125,9 +126,10 @@ sql_free_result($rnmresult);
 $NewestMem = array(null);
 $NewestMem['ID'] = "0"; $NewestMem['Name'] = "Anonymous";
 if($nummembers>0) {
-$NewestMem['ID']=sql_result($nmresult,0,"id");
-$NewestMem['Name']=sql_result($nmresult,0,"Name");
-$NewestMem['IP']=sql_result($nmresult,0,"IP"); }
+$nmresult_array = sql_fetch_assoc($nmresult);
+$NewestMem['ID']=$nmresult_array["id"];
+$NewestMem['Name']=$nmresult_array["Name"];
+$NewestMem['IP']=$nmresult_array["IP"]; }
 if($nummembers<=0) { $NewestMem['ID'] = 0; }
 if($NewestMem['ID']<=0) { $NewestMem['ID'] = "0"; $NewestMem['Name'] = "Anonymous"; $NewestMem['IP'] = "127.0.0.1"; }
 $NewestMemTitle = null;
@@ -149,10 +151,11 @@ if($bdmembers>0) { $bdstring = "&#160;".$bdmembers." member(s) have a birthday t
 if($bdmembers<=0) { $bdstring = "<div>&#160;</div>&#160;No members have a birthday today<div>&#160;</div>"; }
 while ($bdi < $bdmembers) {
 $bdmemberz = $bdmembers - 1;
-$birthday['ID']=sql_result($bdresult,$bdi,"id");
-$birthday['Name']=sql_result($bdresult,$bdi,"Name");
-$birthday['IP']=sql_result($bdresult,$bdi,"IP");
-$birthday['BirthYear']=sql_result($bdresult,$bdi,"BirthYear");
+$bdresult_array = sql_fetch_assoc($bdresult);
+$birthday['ID']=$bdresult_array["id"];
+$birthday['Name']=$bdresult_array["Name"];
+$birthday['IP']=$bdresult_array["IP"];
+$birthday['BirthYear']=$bdresult_array["BirthYear"];
 $bdThisYear = $usercurtime->format("Y");
 $birthday['Age'] = $bdThisYear - $birthday['BirthYear'];
 $bdMemTitle = null;
@@ -183,10 +186,11 @@ if($evevents>0) { $evstring = "&#160;".$evevents." upcoming events"; }
 if($evevents<=0) { $evstring = "<div>&#160;</div>&#160;There are no upcoming calendar events<div>&#160;</div>"; }
 while ($evi < $evevents) {
 $eveventz = $evevents - 1;
-$getevent['ID']=sql_result($evresult,$evi,"id");
-$getevent['EventName']=sql_result($evresult,$evi,"EventName");
-$getevent['TimeStamp']=sql_result($evresult,$evi,"TimeStamp");
-$getevent['TimeStampEnd']=sql_result($evresult,$evi,"TimeStampEnd");
+$evresult_array = sql_fetch_assoc($evresult);
+$getevent['ID']=$evresult_array["id"];
+$getevent['EventName']=$evresult_array["EventName"];
+$getevent['TimeStamp']=$evresult_array["TimeStamp"];
+$getevent['TimeStampEnd']=$evresult_array["TimeStampEnd"];
 $eventstartcurtime = new DateTime();
 $eventstartcurtime->setTimestamp($getevent['TimeStamp']);
 $eventstartcurtime->setTimezone($usertz);
@@ -213,7 +217,8 @@ $active_end = mktime(23,59,59,$active_month,$active_day,$active_year);
 $tdMembersOnline = null;
 $ggquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"Name\"='%s'", array($Settings['GuestGroup']));
 $ggresult=sql_query($ggquery,$SQLStat);
-$GGroup=sql_result($ggresult,0,"id");
+$ggresult_array = sql_fetch_assoc($ggresult);
+$GGroup=$ggresult_array["id"];
 sql_free_result($ggresult);
 $tdquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"<>%i AND \"id\">=0 ".$caniview." AND (\"LastActive\">=%i AND \"LastActive\"<=%i) ORDER BY \"LastActive\" DESC", array($GGroup,$active_start,$active_end)); 
 $tdrnquery = sql_pre_query("SELECT COUNT(*) FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"<>%i AND \"id\">=0 ".$caniview." AND (\"LastActive\">=%i AND \"LastActive\"<=%i)", array($GGroup,$active_start,$active_end));
@@ -223,10 +228,11 @@ $tdresult=sql_query($tdquery,$SQLStat);
 $tdnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"<>%i AND \"id\">=0 ".$caniview." AND (\"LastActive\">=%i AND \"LastActive\"<=%i) ORDER BY \"LastActive\" DESC", array($GGroup,$active_start,$active_end)), $SQLStat);
 $tdi=0;
 while($tdi < $tdnum) {
-$tdMemList['ID']=sql_result($tdresult,$tdi,"id");
-$tdMemList['Name']=sql_result($tdresult,$tdi,"Name");
-$tdMemList['IP']=sql_result($tdresult,$tdi,"IP");
-$tdMemList['LastActive']=sql_result($tdresult,$tdi,"LastActive");
+$tdresult_array = sql_fetch_assoc($tdresult);
+$tdMemList['ID']=$tdresult_array["id"];
+$tdMemList['Name']=$tdresult_array["Name"];
+$tdMemList['IP']=$tdresult_array["IP"];
+$tdMemList['LastActive']=$tdresult_array["LastActive"];
 $tmpusrcurtime = new DateTime();
 $tmpusrcurtime->setTimestamp($tdMemList['LastActive']);
 $tmpusrcurtime->setTimezone($usertz);

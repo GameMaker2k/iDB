@@ -19,136 +19,137 @@ if ($File3Name=="sqlthemes.php"||$File3Name=="/sqlthemes.php") {
 	exit(); }
 // Change SQLThemes to iDB Themes Settings
 $ThemeSet = array();
-$ThemeSet['ThemeName'] = sql_result($themeresult,0,"ThemeName");
+$themeresult_array = sql_fetch_assoc($themeresult);
+$ThemeSet['ThemeName'] = $themeresult_array["ThemeName"];
 if($ThemeSet['ThemeName']=="") { $ThemeSet['ThemeName'] = null; }
-$ThemeSet['ThemeMaker'] = sql_result($themeresult,0,"ThemeMaker");
+$ThemeSet['ThemeMaker'] = $themeresult_array["ThemeMaker"];
 if($ThemeSet['ThemeMaker']=="") { $ThemeSet['ThemeMaker'] = null; }
-$ThemeSet['ThemeVersion'] = sql_result($themeresult,0,"ThemeVersion");
+$ThemeSet['ThemeVersion'] = $themeresult_array["ThemeVersion"];
 if($ThemeSet['ThemeVersion']=="") { $ThemeSet['ThemeVersion'] = null; }
-$ThemeSet['ThemeVersionType'] = sql_result($themeresult,0,"ThemeVersionType");
+$ThemeSet['ThemeVersionType'] = $themeresult_array["ThemeVersionType"];
 if($ThemeSet['ThemeVersionType']=="") { $ThemeSet['ThemeVersionType'] = null; }
-$ThemeSet['ThemeSubVersion'] = sql_result($themeresult,0,"ThemeSubVersion");
+$ThemeSet['ThemeSubVersion'] = $themeresult_array["ThemeSubVersion"];
 if($ThemeSet['ThemeSubVersion']=="") { $ThemeSet['ThemeSubVersion'] = null; }
-$ThemeSet['MakerURL'] = sql_result($themeresult,0,"MakerURL");
+$ThemeSet['MakerURL'] = $themeresult_array["MakerURL"];
 if($ThemeSet['MakerURL']=="") { $ThemeSet['MakerURL'] = null; }
-$ThemeSet['CopyRight'] = sql_result($themeresult,0,"CopyRight");
+$ThemeSet['CopyRight'] = $themeresult_array["CopyRight"];
 if($ThemeSet['CopyRight']=="") { $ThemeSet['CopyRight'] = null; }
-$ThemeSet['WrapperString'] = sql_result($themeresult,0,"WrapperString");
+$ThemeSet['WrapperString'] = $themeresult_array["WrapperString"];
 if($ThemeSet['WrapperString']=="") { $ThemeSet['WrapperString'] = null; }
-$ThemeSet['CSS'] = sql_result($themeresult,0,"CSS");
+$ThemeSet['CSS'] = $themeresult_array["CSS"];
 if($ThemeSet['CSS']=="") { $ThemeSet['CSS'] = null; }
-$ThemeSet['CSSType'] = sql_result($themeresult,0,"CSSType");
+$ThemeSet['CSSType'] = $themeresult_array["CSSType"];
 if($ThemeSet['CSSType']=="") { $ThemeSet['CSSType'] = null; }
-$ThemeSet['FavIcon'] = sql_result($themeresult,0,"FavIcon");
+$ThemeSet['FavIcon'] = $themeresult_array["FavIcon"];
 if($ThemeSet['FavIcon']=="") { $ThemeSet['FavIcon'] = null; }
-$ThemeSet['OpenGraph'] = sql_result($themeresult,0,"OpenGraph");
+$ThemeSet['OpenGraph'] = $themeresult_array["OpenGraph"];
 if($ThemeSet['OpenGraph']=="") { $ThemeSet['OpenGraph'] = null; }
-$ThemeSet['TableStyle'] = sql_result($themeresult,0,"TableStyle");
+$ThemeSet['TableStyle'] = $themeresult_array["TableStyle"];
 if($ThemeSet['TableStyle']=="") { $ThemeSet['TableStyle'] = null; }
-$ThemeSet['MiniPageAltStyle'] = sql_result($themeresult,0,"MiniPageAltStyle");
+$ThemeSet['MiniPageAltStyle'] = $themeresult_array["MiniPageAltStyle"];
 if($ThemeSet['MiniPageAltStyle']=="") { $ThemeSet['MiniPageAltStyle'] = null; }
-$ThemeSet['PreLogo'] = sql_result($themeresult,0,"PreLogo");
+$ThemeSet['PreLogo'] = $themeresult_array["PreLogo"];
 if($ThemeSet['PreLogo']=="") { $ThemeSet['PreLogo'] = null; }
-$ThemeSet['Logo'] = sql_result($themeresult,0,"Logo");
+$ThemeSet['Logo'] = $themeresult_array["Logo"];
 if($ThemeSet['Logo']=="") { $ThemeSet['Logo'] = null; }
-$ThemeSet['LogoStyle'] = sql_result($themeresult,0,"LogoStyle");
+$ThemeSet['LogoStyle'] = $themeresult_array["LogoStyle"];
 if($ThemeSet['LogoStyle']=="") { $ThemeSet['LogoStyle'] = null; }
-$ThemeSet['SubLogo'] = sql_result($themeresult,0,"SubLogo");
+$ThemeSet['SubLogo'] = $themeresult_array["SubLogo"];
 if($ThemeSet['SubLogo']=="") { $ThemeSet['SubLogo'] = null; }
-$ThemeSet['TopicIcon'] = sql_result($themeresult,0,"TopicIcon");
+$ThemeSet['TopicIcon'] = $themeresult_array["TopicIcon"];
 if($ThemeSet['TopicIcon']=="") { $ThemeSet['TopicIcon'] = null; }
-$ThemeSet['MovedTopicIcon'] = sql_result($themeresult,0,"MovedTopicIcon");
+$ThemeSet['MovedTopicIcon'] = $themeresult_array["MovedTopicIcon"];
 if($ThemeSet['MovedTopicIcon']=="") { $ThemeSet['MovedTopicIcon'] = $ThemeSet['TopicIcon']; }
-$ThemeSet['HotTopic'] = sql_result($themeresult,0,"HotTopic");
+$ThemeSet['HotTopic'] = $themeresult_array["HotTopic"];
 if($ThemeSet['HotTopic']=="") { $ThemeSet['HotTopic'] = null; }
-$ThemeSet['MovedHotTopic'] = sql_result($themeresult,0,"MovedHotTopic");
+$ThemeSet['MovedHotTopic'] = $themeresult_array["MovedHotTopic"];
 if($ThemeSet['MovedHotTopic']=="") { $ThemeSet['MovedHotTopic'] = $ThemeSet['HotTopic']; }
-$ThemeSet['PinTopic'] = sql_result($themeresult,0,"PinTopic");
+$ThemeSet['PinTopic'] = $themeresult_array["PinTopic"];
 if($ThemeSet['PinTopic']=="") { $ThemeSet['PinTopic'] = null; }
-$ThemeSet['AnnouncementTopic'] = sql_result($themeresult,0,"AnnouncementTopic");
+$ThemeSet['AnnouncementTopic'] = $themeresult_array["AnnouncementTopic"];
 if($ThemeSet['AnnouncementTopic']=="") { $ThemeSet['AnnouncementTopic'] = $ThemeSet['PinTopic']; }
-$ThemeSet['MovedPinTopic'] = sql_result($themeresult,0,"MovedPinTopic");
+$ThemeSet['MovedPinTopic'] = $themeresult_array["MovedPinTopic"];
 if($ThemeSet['MovedPinTopic']=="") { $ThemeSet['MovedPinTopic'] = $ThemeSet['PinTopic']; }
-$ThemeSet['HotPinTopic'] = sql_result($themeresult,0,"HotPinTopic");
+$ThemeSet['HotPinTopic'] = $themeresult_array["HotPinTopic"];
 if($ThemeSet['HotPinTopic']=="") { $ThemeSet['HotPinTopic'] = null; }
-$ThemeSet['MovedHotPinTopic'] = sql_result($themeresult,0,"MovedHotPinTopic");
+$ThemeSet['MovedHotPinTopic'] = $themeresult_array["MovedHotPinTopic"];
 if($ThemeSet['MovedHotPinTopic']=="") { $ThemeSet['MovedHotPinTopic'] = $ThemeSet['HotPinTopic']; }
-$ThemeSet['ClosedTopic'] = sql_result($themeresult,0,"ClosedTopic");
+$ThemeSet['ClosedTopic'] = $themeresult_array["ClosedTopic"];
 if($ThemeSet['ClosedTopic']=="") { $ThemeSet['ClosedTopic'] = null; }
-$ThemeSet['MovedClosedTopic'] = sql_result($themeresult,0,"MovedClosedTopic");
+$ThemeSet['MovedClosedTopic'] = $themeresult_array["MovedClosedTopic"];
 if($ThemeSet['MovedClosedTopic']=="") { $ThemeSet['MovedClosedTopic'] = $ThemeSet['ClosedTopic']; }
-$ThemeSet['HotClosedTopic'] = sql_result($themeresult,0,"HotClosedTopic");
+$ThemeSet['HotClosedTopic'] = $themeresult_array["HotClosedTopic"];
 if($ThemeSet['HotClosedTopic']=="") { $ThemeSet['HotClosedTopic'] = null; }
-$ThemeSet['MovedHotClosedTopic'] = sql_result($themeresult,0,"MovedHotClosedTopic");
+$ThemeSet['MovedHotClosedTopic'] = $themeresult_array["MovedHotClosedTopic"];
 if($ThemeSet['MovedHotClosedTopic']=="") { $ThemeSet['MovedHotClosedTopic'] = $ThemeSet['HotClosedTopic']; }
-$ThemeSet['PinClosedTopic'] = sql_result($themeresult,0,"PinClosedTopic");
+$ThemeSet['PinClosedTopic'] = $themeresult_array["PinClosedTopic"];
 if($ThemeSet['PinClosedTopic']=="") { $ThemeSet['PinClosedTopic'] = null; }
-$ThemeSet['MovedPinClosedTopic'] = sql_result($themeresult,0,"MovedPinClosedTopic");
+$ThemeSet['MovedPinClosedTopic'] = $themeresult_array["MovedPinClosedTopic"];
 if($ThemeSet['MovedPinClosedTopic']=="") { $ThemeSet['MovedPinClosedTopic'] = $ThemeSet['PinClosedTopic']; }
-$ThemeSet['HotPinClosedTopic'] = sql_result($themeresult,0,"HotPinClosedTopic");
+$ThemeSet['HotPinClosedTopic'] = $themeresult_array["HotPinClosedTopic"];
 if($ThemeSet['HotPinClosedTopic']=="") { $ThemeSet['HotPinClosedTopic'] = null; }
-$ThemeSet['MovedHotPinClosedTopic'] = sql_result($themeresult,0,"MovedHotPinClosedTopic");
+$ThemeSet['MovedHotPinClosedTopic'] = $themeresult_array["MovedHotPinClosedTopic"];
 if($ThemeSet['MovedHotPinClosedTopic']=="") { $ThemeSet['MovedHotPinClosedTopic'] = $ThemeSet['HotPinClosedTopic']; }
-$ThemeSet['MessageRead'] = sql_result($themeresult,0,"MessageRead");
+$ThemeSet['MessageRead'] = $themeresult_array["MessageRead"];
 if($ThemeSet['MessageRead']=="") { $ThemeSet['MessageRead'] = null; }
-$ThemeSet['MessageUnread'] = sql_result($themeresult,0,"MessageUnread");
+$ThemeSet['MessageUnread'] = $themeresult_array["MessageUnread"];
 if($ThemeSet['MessageUnread']=="") { $ThemeSet['MessageUnread'] = null; }
-$ThemeSet['Profile'] = sql_result($themeresult,0,"Profile");
+$ThemeSet['Profile'] = $themeresult_array["Profile"];
 if($ThemeSet['Profile']=="") { $ThemeSet['Profile'] = null; }
-$ThemeSet['WWW'] = sql_result($themeresult,0,"WWW");
+$ThemeSet['WWW'] = $themeresult_array["WWW"];
 if($ThemeSet['WWW']=="") { $ThemeSet['WWW'] = null; }
-$ThemeSet['PM'] = sql_result($themeresult,0,"PM");
+$ThemeSet['PM'] = $themeresult_array["PM"];
 if($ThemeSet['PM']=="") { $ThemeSet['PM'] = null; }
-$ThemeSet['TopicLayout'] = sql_result($themeresult,0,"TopicLayout");
+$ThemeSet['TopicLayout'] = $themeresult_array["TopicLayout"];
 if($ThemeSet['TopicLayout']=="") { $ThemeSet['TopicLayout'] = null; }
-$ThemeSet['AddReply'] = sql_result($themeresult,0,"AddReply");
+$ThemeSet['AddReply'] = $themeresult_array["AddReply"];
 if($ThemeSet['AddReply']=="") { $ThemeSet['AddReply'] = null; }
-$ThemeSet['FastReply'] = sql_result($themeresult,0,"FastReply");
+$ThemeSet['FastReply'] = $themeresult_array["FastReply"];
 if($ThemeSet['FastReply']=="") { $ThemeSet['FastReply'] = null; }
-$ThemeSet['NewTopic'] = sql_result($themeresult,0,"NewTopic");
+$ThemeSet['NewTopic'] = $themeresult_array["NewTopic"];
 if($ThemeSet['NewTopic']=="") { $ThemeSet['NewTopic'] = null; }
-$ThemeSet['QuoteReply'] = sql_result($themeresult,0,"QuoteReply");
+$ThemeSet['QuoteReply'] = $themeresult_array["QuoteReply"];
 if($ThemeSet['QuoteReply']=="") { $ThemeSet['QuoteReply'] = null; }
-$ThemeSet['EditReply'] = sql_result($themeresult,0,"EditReply");
+$ThemeSet['EditReply'] = $themeresult_array["EditReply"];
 if($ThemeSet['EditReply']=="") { $ThemeSet['EditReply'] = null; }
-$ThemeSet['DeleteReply'] = sql_result($themeresult,0,"DeleteReply");
+$ThemeSet['DeleteReply'] = $themeresult_array["DeleteReply"];
 if($ThemeSet['DeleteReply']=="") { $ThemeSet['DeleteReply'] = null; }
-$ThemeSet['Report'] = sql_result($themeresult,0,"Report");
+$ThemeSet['Report'] = $themeresult_array["Report"];
 if($ThemeSet['Report']=="") { $ThemeSet['Report'] = null; }
-$ThemeSet['LineDivider'] = sql_result($themeresult,0,"LineDivider");
+$ThemeSet['LineDivider'] = $themeresult_array["LineDivider"];
 if($ThemeSet['LineDivider']=="") { $ThemeSet['LineDivider'] = null; }
-$ThemeSet['ButtonDivider'] = sql_result($themeresult,0,"ButtonDivider");
+$ThemeSet['ButtonDivider'] = $themeresult_array["ButtonDivider"];
 if($ThemeSet['ButtonDivider']=="") { $ThemeSet['ButtonDivider'] = null; }
-$ThemeSet['LineDividerTopic'] = sql_result($themeresult,0,"LineDividerTopic");
+$ThemeSet['LineDividerTopic'] = $themeresult_array["LineDividerTopic"];
 if($ThemeSet['LineDividerTopic']=="") { $ThemeSet['LineDividerTopic'] = null; }
-$ThemeSet['TitleDivider'] = sql_result($themeresult,0,"TitleDivider");
+$ThemeSet['TitleDivider'] = $themeresult_array["TitleDivider"];
 if($ThemeSet['TitleDivider']=="") { $ThemeSet['TitleDivider'] = null; }
-$ThemeSet['ForumStyle'] = sql_result($themeresult,0,"ForumStyle");
+$ThemeSet['ForumStyle'] = $themeresult_array["ForumStyle"];
 if($ThemeSet['ForumStyle']=="") { $ThemeSet['ForumStyle'] = null; }
-$ThemeSet['ForumIcon'] = sql_result($themeresult,0,"ForumIcon");
+$ThemeSet['ForumIcon'] = $themeresult_array["ForumIcon"];
 if($ThemeSet['ForumIcon']=="") { $ThemeSet['ForumIcon'] = null; }
-$ThemeSet['SubForumIcon'] = sql_result($themeresult,0,"SubForumIcon");
+$ThemeSet['SubForumIcon'] = $themeresult_array["SubForumIcon"];
 if($ThemeSet['SubForumIcon']=="") { $ThemeSet['SubForumIcon'] = null; }
-$ThemeSet['RedirectIcon'] = sql_result($themeresult,0,"RedirectIcon");
+$ThemeSet['RedirectIcon'] = $themeresult_array["RedirectIcon"];
 if($ThemeSet['RedirectIcon']=="") { $ThemeSet['RedirectIcon'] = null; }
-$ThemeSet['TitleIcon'] = sql_result($themeresult,0,"TitleIcon");
+$ThemeSet['TitleIcon'] = $themeresult_array["TitleIcon"];
 if($ThemeSet['TitleIcon']=="") { $ThemeSet['TitleIcon'] = null; }
-$ThemeSet['NavLinkIcon'] = sql_result($themeresult,0,"NavLinkIcon");
+$ThemeSet['NavLinkIcon'] = $themeresult_array["NavLinkIcon"];
 if($ThemeSet['NavLinkIcon']=="") { $ThemeSet['NavLinkIcon'] = null; }
-$ThemeSet['NavLinkDivider'] = sql_result($themeresult,0,"NavLinkDivider");
+$ThemeSet['NavLinkDivider'] = $themeresult_array["NavLinkDivider"];
 if($ThemeSet['NavLinkDivider']=="") { $ThemeSet['NavLinkDivider'] = null; }
-$ThemeSet['BoardStatsIcon'] = sql_result($themeresult,0,"BoardStatsIcon");
+$ThemeSet['BoardStatsIcon'] = $themeresult_array["BoardStatsIcon"];
 if($ThemeSet['BoardStatsIcon']=="") { $ThemeSet['BoardStatsIcon'] = null; }
-$ThemeSet['MemberStatsIcon'] = sql_result($themeresult,0,"MemberStatsIcon");
+$ThemeSet['MemberStatsIcon'] = $themeresult_array["MemberStatsIcon"];
 if($ThemeSet['MemberStatsIcon']=="") { $ThemeSet['MemberStatsIcon'] = null; }
-$ThemeSet['BirthdayStatsIcon'] = sql_result($themeresult,0,"BirthdayStatsIcon");
+$ThemeSet['BirthdayStatsIcon'] = $themeresult_array["BirthdayStatsIcon"];
 if($ThemeSet['BirthdayStatsIcon']=="") { $ThemeSet['BirthdayStatsIcon'] = null; }
-$ThemeSet['EventStatsIcon'] = sql_result($themeresult,0,"EventStatsIcon");
+$ThemeSet['EventStatsIcon'] = $themeresult_array["EventStatsIcon"];
 if($ThemeSet['EventStatsIcon']=="") { $ThemeSet['EventStatsIcon'] = null; }
-$ThemeSet['OnlineStatsIcon'] = sql_result($themeresult,0,"OnlineStatsIcon");
+$ThemeSet['OnlineStatsIcon'] = $themeresult_array["OnlineStatsIcon"];
 if($ThemeSet['OnlineStatsIcon']=="") { $ThemeSet['OnlineStatsIcon'] = null; }
-$ThemeSet['NoAvatar'] = sql_result($themeresult,0,"NoAvatar");
+$ThemeSet['NoAvatar'] = $themeresult_array["NoAvatar"];
 if($ThemeSet['NoAvatar']=="") { $ThemeSet['NoAvatar'] = null; }
-$ThemeSet['NoAvatarSize'] = sql_result($themeresult,0,"NoAvatarSize");
+$ThemeSet['NoAvatarSize'] = $themeresult_array["NoAvatarSize"];
 if($ThemeSet['NoAvatarSize']=="") { $ThemeSet['NoAvatarSize'] = null; }
 ?>

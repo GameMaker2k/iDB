@@ -56,16 +56,17 @@ $_SESSION['ExtraData'] = "currentact:".$_GET['act']."; currentcategoryid:0; curr
 <div class="DivNavLinks">&#160;</div>
 <?php
 while ($prei < $prenum) {
-$CategoryID=sql_result($preresult,$prei,"id");
-$CategoryName=sql_result($preresult,$prei,"Name");
-$CategoryShow=sql_result($preresult,$prei,"ShowCategory");
+$preresult_array = sql_fetch_assoc($preresult);
+$CategoryID=$preresult_array["id"];
+$CategoryName=$preresult_array["Name"];
+$CategoryShow=$preresult_array["ShowCategory"];
 if($CategoryShow=="no") { $_SESSION['ShowActHidden'] = "yes"; }
-$CategoryType=sql_result($preresult,$prei,"CategoryType");
-$SubShowForums=sql_result($preresult,$prei,"SubShowForums");
-$CategoryDescription=sql_result($preresult,$prei,"Description");
+$CategoryType=$preresult_array["CategoryType"];
+$SubShowForums=$preresult_array["SubShowForums"];
+$CategoryDescription=$preresult_array["Description"];
 $CategoryType = strtolower($CategoryType); $SubShowForums = strtolower($SubShowForums);
-$CategoryPostCountView=sql_result($preresult,0,"PostCountView");
-$CategoryKarmaCountView=sql_result($preresult,0,"KarmaCountView");
+$CategoryPostCountView=$preresult_array["PostCountView"];
+$CategoryKarmaCountView=$preresult_array["KarmaCountView"];
 if($MyPostCountChk==null) { $MyPostCountChk = 0; }
 if($MyKarmaCount==null) { $MyKarmaCount = 0; }
 if($GroupInfo['HasAdminCP']!="yes"||$GroupInfo['HasModCP']!="yes") {
@@ -103,17 +104,18 @@ if($num>=1) {
 </tr>
 <?php }
 while ($i < $num) {
-$ForumID=sql_result($result,$i,"id");
-$ForumName=sql_result($result,$i,"Name");
-$ForumShow=sql_result($result,$i,"ShowForum");
+$result_array = sql_fetch_assoc($result);
+$ForumID=$result_array["id"];
+$ForumName=$result_array["Name"];
+$ForumShow=$result_array["ShowForum"];
 if($ForumShow=="no") { $_SESSION['ShowActHidden'] = "yes"; }
-$ForumType=sql_result($result,$i,"ForumType");
-$ForumShowTopics=sql_result($result,$i,"CanHaveTopics");
+$ForumType=$result_array["ForumType"];
+$ForumShowTopics=$result_array["CanHaveTopics"];
 $ForumShowTopics = strtolower($ForumShowTopics);
-$NumTopics=sql_result($result,$i,"NumTopics");
-$NumPosts=sql_result($result,$i,"NumPosts");
-$NumRedirects=sql_result($result,$i,"Redirects");
-$ForumDescription=sql_result($result,$i,"Description");
+$NumTopics=$result_array["NumTopics"];
+$NumPosts=$result_array["NumPosts"];
+$NumRedirects=$result_array["Redirects"];
+$ForumDescription=$result_array["Description"];
 $ForumType = strtolower($ForumType); $sflist = null;
 $gltf = array(null); $gltf[0] = $ForumID;
 if ($ForumType=="subforum") {
@@ -122,15 +124,16 @@ $apcresult=sql_query($apcquery,$SQLStat);
 $apcnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"ShowForum\"='yes' AND \"InSubForum\"=%i".$ForumIgnoreList2." ORDER BY \"OrderID\" ASC, \"id\" ASC", array($ForumID)), $SQLStat);
 $apci=0; $apcl=1; if($apcnum>=1) {
 while ($apci < $apcnum) {
-$NumsTopics=sql_result($apcresult,$apci,"NumTopics");
+$apcresult_array = sql_fetch_assoc($apcresult);
+$NumsTopics=$apcresult_array["NumTopics"];
 $NumTopics = $NumsTopics + $NumTopics;
-$NumsPosts=sql_result($apcresult,$apci,"NumPosts");
+$NumsPosts=$apcresult_array["NumPosts"];
 $NumPosts = $NumsPosts + $NumPosts;
-$SubsForumID=sql_result($apcresult,$apci,"id");
-$SubsForumName=sql_result($apcresult,$apci,"Name");
-$SubsForumType=sql_result($apcresult,$apci,"ForumType");
-$SubsForumShowTopics=sql_result($apcresult,$apci,"CanHaveTopics");
-$SubsForumDescription=sql_result($apcresult,$apci,"Description");
+$SubsForumID=$apcresult_array["id"];
+$SubsForumName=$apcresult_array["Name"];
+$SubsForumType=$apcresult_array["ForumType"];
+$SubsForumShowTopics=$apcresult_array["CanHaveTopics"];
+$SubsForumDescription=$apcresult_array["Description"];
 if(isset($PermissionInfo['CanViewForum'][$SubsForumID])&&
     $PermissionInfo['CanViewForum'][$SubsForumID]=="yes") {
 $ExStr = ""; if ($SubsForumType!="redirect"&&
@@ -161,7 +164,8 @@ $gltfoquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" W
 $gltforesult=sql_query($gltfoquery,$SQLStat);
 $gltfonum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE \"ForumID\"=%i".$ExtraIgnores." ORDER BY \"LastUpdate\" DESC LIMIT 1", array($gltf[$glti])), $SQLStat);
 if($gltfonum>0) {
-$NewUpdateTime=sql_result($gltforesult,0,"LastUpdate");
+$gltforesult_array = sql_fetch_assoc($gltforesult);
+$NewUpdateTime=$gltforesult_array["LastUpdate"];
 if($NewUpdateTime>$OldUpdateTime) {
     $UseThisFonum = $gltf[$glti];
 $OldUpdateTime = $NewUpdateTime; } }
@@ -178,9 +182,10 @@ $gltquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHE
 $gltresult=sql_query($gltquery,$SQLStat);
 $gltnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE (\"ForumID\"=%i".$ExtraIgnores.$ForumIgnoreList4.") OR (\"OldForumID\"=%i".$ExtraIgnores.$ForumIgnoreList4.") ORDER BY \"LastUpdate\" DESC LIMIT 1", array($UseThisFonum,$UseThisFonum)), $SQLStat);
 if($gltnum>0){
-$TopicID=sql_result($gltresult,0,"id");
-$TopicName=sql_result($gltresult,0,"TopicName");
-$NumReplys=sql_result($gltresult,0,"NumReply");
+$gltresult_array = sql_fetch_assoc($gltresult);
+$TopicID=$gltresult_array["id"];
+$TopicName=$gltresult_array["TopicName"];
+$NumReplys=$gltresult_array["NumReply"];
 $NumPages = null; $NumRPosts = $NumReplys + 1;
 if(!isset($Settings['max_posts'])) { $Settings['max_posts'] = 10; }
 if($NumRPosts>$Settings['max_posts']) {
@@ -194,10 +199,11 @@ $glrquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHER
 $glrresult=sql_query($glrquery,$SQLStat);
 $glrnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" DESC LIMIT 1", array($TopicID)), $SQLStat);
 if($glrnum>0){
-$ReplyID=sql_result($glrresult,0,"id");
-$UsersID=sql_result($glrresult,0,"UserID");
-$GuestsName=sql_result($glrresult,0,"GuestName");
-$TimeStamp=sql_result($glrresult,0,"TimeStamp");
+$glrresult_array = sql_fetch_assoc($glrresult);
+$ReplyID=$glrresult_array["id"];
+$UsersID=$glrresult_array["UserID"];
+$GuestsName=$glrresult_array["GuestName"];
+$TimeStamp=$glrresult_array["TimeStamp"];
 $tmpusrcurtime = new DateTime();
 $tmpusrcurtime->setTimestamp($TimeStamp);
 $tmpusrcurtime->setTimezone($usertz);

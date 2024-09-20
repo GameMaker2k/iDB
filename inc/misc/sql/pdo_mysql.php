@@ -336,7 +336,6 @@ function pdo_mysql_func_count_rows($query, $link = null) {
     // Free the result resource (this depends on your custom free function)
     @pdo_mysql_func_free_result($get_num_result);
     // Debugging: Check what is being returned
-    var_dump($ret_num_result);
     return $ret_num_result;
 }
 // Fetch Number of Rows using COUNT in a single query
@@ -367,7 +366,6 @@ function pdo_mysql_func_count_rows_alt($query, $link = null) {
     @pdo_mysql_func_free_result($get_num_result);
 
     // Debugging: Check what is being returned
-    var_dump($ret_num_result);
     return $ret_num_result;
 }
 ?>

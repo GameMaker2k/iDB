@@ -31,14 +31,15 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die
 <div class="DivNavLinks">&#160;</div>
 <?php
 while ($is < $num) {
-$EventID=sql_result($result,$is,"id");
-$EventIP=sql_result($result,$is,"IP");
-$EventUser=sql_result($result,$is,"UserID");
-$EventGuest=sql_result($result,$is,"GuestName");
-$EventName=sql_result($result,$is,"EventName");
-$EventText=sql_result($result,$is,"EventText");
-$EventStart=sql_result($result,$is,"TimeStamp");
-$EventEnd=sql_result($result,$is,"TimeStampEnd");
+$result_array = sql_fetch_assoc($result);
+$EventID=$result_array["id"];
+$EventIP=$result_array["IP"];
+$EventUser=$result_array["UserID"];
+$EventGuest=$result_array["GuestName"];
+$EventName=$result_array["EventName"];
+$EventText=$result_array["EventText"];
+$EventStart=$result_array["TimeStamp"];
+$EventEnd=$result_array["TimeStampEnd"];
 $eventstartcurtime = new DateTime();
 $eventstartcurtime->setTimestamp($EventStart);
 $eventstartcurtime->setTimezone($usertz);
@@ -86,61 +87,64 @@ $memreresult=sql_query($memrequery,$SQLStat);
 $memrenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."mempermissions\" WHERE \"id\"=%i LIMIT 1", array($EventUser)), $SQLStat);
 $rei=0;
 $User1ID=$EventUser;
-$User1Name=sql_result($reresult,$rei,"Name");
-$User1IP=sql_result($reresult,$rei,"IP");
+$reresult_array = sql_fetch_assoc($reresult);
+$User1Name=$reresult_array["Name"];
+$User1IP=$reresult_array["IP"];
 if($User1IP==$EventIP) { $ipshow = "one"; }
-$User1Email=sql_result($reresult,$rei,"Email");
-$User1Title=sql_result($reresult,$rei,"Title");
-$PreUserCanExecPHP=sql_result($memreresult,$rei,"CanExecPHP");
+$User1Email=$reresult_array["Email"];
+$User1Title=$reresult_array["Title"];
+$memreresult_array = sql_fetch_assoc($memreresult);
+$PreUserCanExecPHP=$memreresult_array["CanExecPHP"];
 if($PreUserCanExecPHP!="yes"&&$PreUserCanExecPHP!="no"&&$PreUserCanExecPHP!="group") {
 	$PreUserCanExecPHP = "no"; }
-$PreUserCanDoHTML=sql_result($memreresult,$rei,"CanDoHTML");
+$PreUserCanDoHTML=$memreresult_array["CanDoHTML"];
 if($PreUserCanDoHTML!="yes"&&$PreUserCanDoHTML!="no"&&$PreUserCanDoHTML!="group") {
 	$PreUserCanDoHTML = "no"; }
-$PreUserCanUseBBTags=sql_result($memreresult,$rei,"CanUseBBTags");
+$PreUserCanUseBBTags=$memreresult_array["CanUseBBTags"];
 if($PreUserCanUseBBTags!="yes"&&$PreUserCanUseBBTags!="no"&&$PreUserCanUseBBTags!="group") {
 	$PreUserCanUseBBTags = "no"; }
 sql_free_result($memreresult);
-$User1Joined=sql_result($reresult,$rei,"Joined");
+$User1Joined=$reresult_array["Joined"];
 $tmpusrcurtime = new DateTime();
 $tmpusrcurtime->setTimestamp($User1Joined);
 $tmpusrcurtime->setTimezone($usertz);
 $User1Joined=$tmpusrcurtime->format($_SESSION['iDBDateFormat']);
-$User1GroupID=sql_result($reresult,$rei,"GroupID");
+$User1GroupID=$reresult_array["GroupID"];
 $gquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i LIMIT 1", array($User1GroupID));
 $gresult=sql_query($gquery,$SQLStat);
-$User1Hidden=sql_result($reresult,$rei,"HiddenMember");
-$User1Group=sql_result($gresult,0,"Name");
+$User1Hidden=$reresult_array["HiddenMember"];
+$gresult_array = sql_fetch_assoc($gresult);
+$User1Group=$gresult_array["Name"];
 $User1CanExecPHP = $PreUserCanExecPHP;
 if($PreUserCanExecPHP=="group") {
-$User1CanExecPHP=sql_result($gresult,0,"CanExecPHP"); }
+$User1CanExecPHP=$gresult_array["CanExecPHP"]; }
 if($User1CanExecPHP!="yes"&&$User1CanExecPHP!="no") {
 	$User1CanExecPHP = "no"; }
 $User1CanDoHTML = $PreUserCanDoHTML;
 if($PreUserCanDoHTML=="group") {
-$User1CanDoHTML=sql_result($gresult,0,"CanDoHTML"); }
+$User1CanDoHTML=$gresult_array["CanDoHTML"]; }
 if($User1CanDoHTML!="yes"&&$User1CanDoHTML!="no") {
 	$User1CanDoHTML = "no"; }
 $User1CanUseBBTags = $PreUserCanUseBBTags;
 if($User1CanUseBBTags=="group") {
-$User1CanUseBBTags=sql_result($gresult,0,"CanUseBBTags"); }
+$User1CanUseBBTags=$gresult_array["CanUseBBTags"]; }
 if($User1CanUseBBTags!="yes"&&$User1CanUseBBTags!="no") {
 	$User1CanUseBBTags = "no"; }
-$GroupNamePrefix=sql_result($gresult,0,"NamePrefix");
-$GroupNameSuffix=sql_result($gresult,0,"NameSuffix");
+$GroupNamePrefix=$gresult_array["NamePrefix"];
+$GroupNameSuffix=$gresult_array["NameSuffix"];
 sql_free_result($gresult);
 if($User1Title=="") { $User1Title = $User1Group; }
-$User1Signature=sql_result($reresult,$rei,"Signature");
+$User1Signature=$reresult_array["Signature"];
 $User1Signature = preg_replace("/\<br\>/", "<br />", nl2br($User1Signature));
-$User1Avatar=sql_result($reresult,$rei,"Avatar");
-$User1AvatarSize=sql_result($reresult,$rei,"AvatarSize");
+$User1Avatar=$reresult_array["Avatar"];
+$User1AvatarSize=$reresult_array["AvatarSize"];
 if ($User1Avatar=="http://"||$User1Avatar==null||
 	strtolower($User1Avatar)=="noavatar") {
 $User1Avatar=$ThemeSet['NoAvatar'];
 $User1AvatarSize=$ThemeSet['NoAvatarSize']; }
 $AvatarSize1=explode("x", $User1AvatarSize);
 $AvatarSize1W=$AvatarSize1[0]; $AvatarSize1H=$AvatarSize1[1];
-$User1Website=sql_result($reresult,$rei,"Website");
+$User1Website=$reresult_array["Website"];
 if($User1Website=="http://") { 
 	$User1Website = $Settings['idburl']; }
 $User1Website = urlcheck($User1Website);
@@ -149,8 +153,8 @@ $User1WWWChCk = parse_url($User1Website);
 $opennew = " onclick=\"window.open(this.href);return false;\"";
 if($BoardWWWChCk['host']==$User1WWWChCk['host']) {
 	$opennew = null; }
-$User1PostCount=sql_result($reresult,$rei,"PostCount");
-$User1IP=sql_result($reresult,$rei,"IP");
+$User1PostCount=$reresult_array["PostCount"];
+$User1IP=$reresult_array["IP"];
 sql_free_result($reresult);
 ++$is; } sql_free_result($result);
 if($User1Name=="Guest") { $User1Name=$EventGuest;
@@ -293,12 +297,13 @@ $melanie_result=sql_query($melanie_query,$SQLStat);
 $melanie_num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."smileys\" WHERE \"Display\"='yes'", null), $SQLStat);
 $melanie_p=0; $SmileRow=0; $SmileCRow=0;
 while ($melanie_p < $melanie_num) { ++$SmileRow;
-$FileName=sql_result($melanie_result,$melanie_p,"FileName");
-$SmileName=sql_result($melanie_result,$melanie_p,"SmileName");
-$SmileText=sql_result($melanie_result,$melanie_p,"SmileText");
-$SmileDirectory=sql_result($melanie_result,$melanie_p,"Directory");
-$ShowSmile=sql_result($melanie_result,$melanie_p,"Display");
-$ReplaceType=sql_result($melanie_result,$melanie_p,"ReplaceCI");
+$melanie_result_array = sql_fetch_assoc($melanie_result);
+$FileName=$melanie_result_array["FileName"];
+$SmileName=$melanie_result_array["SmileName"];
+$SmileText=$melanie_result_array["SmileText"];
+$SmileDirectory=$melanie_result_array["Directory"];
+$ShowSmile=$melanie_result_array["Display"];
+$ReplaceType=$melanie_result_array["ReplaceCI"];
 if($SmileRow==1) { ?><tr>
 	<?php } if($SmileRow<5) { ++$SmileCRow; ?>
 	<td><img src="<?php echo $SmileDirectory."".$FileName; ?>" style="vertical-align: middle; border: 0px; cursor: pointer;" title="<?php echo $SmileName; ?>" alt="<?php echo $SmileName; ?>" onclick="addsmiley('EventText','&#160;<?php echo htmlspecialchars($SmileText, ENT_QUOTES, $Settings['charset']); ?>&#160;')" /></td>
@@ -576,13 +581,14 @@ $melaniert=sql_query($melanieqy,$SQLStat);
 $melanienm=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."wordfilter\"", null), $SQLStat);
 $melanies=0;
 while ($melanies < $melanienm) {
-$Filter=sql_result($melaniert,$melanies,"FilterWord");
-$Replace=sql_result($melaniert,$melanies,"Replacement");
-$CaseInsensitive=sql_result($melaniert,$melanies,"CaseInsensitive");
+$melaniert_array = sql_fetch_assoc($melaniert);
+$Filter=$melaniert_array["FilterWord"];
+$Replace=$melaniert_array["Replacement"];
+$CaseInsensitive=$melaniert_array["CaseInsensitive"];
 if($CaseInsensitive=="on") { $CaseInsensitive = "yes"; }
 if($CaseInsensitive=="off") { $CaseInsensitive = "no"; }
 if($CaseInsensitive!="yes"||$CaseInsensitive!="no") { $CaseInsensitive = "no"; }
-$WholeWord=sql_result($melaniert,$melanies,"WholeWord");
+$WholeWord=$melaniert_array["WholeWord"];
 if($WholeWord=="on") { $WholeWord = "yes"; }
 if($WholeWord=="off") { $WholeWord = "no"; }
 if($WholeWord!="yes"&&$WholeWord!="no") { $WholeWord = "no"; }
@@ -601,20 +607,21 @@ $lonewolfrt=sql_query($lonewolfqy,$SQLStat);
 $lonewolfnm=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."restrictedwords\" WHERE \"RestrictedEventName\"='yes' or \"RestrictedUserName\"='yes'", null), $SQLStat);
 $lonewolfs=0; $RMatches = null; $RGMatches = null;
 while ($lonewolfs < $lonewolfnm) {
-$RWord=sql_result($lonewolfrt,$lonewolfs,"Word");
-$RCaseInsensitive=sql_result($lonewolfrt,$lonewolfs,"CaseInsensitive");
+$lonewolfrt_array = sql_fetch_assoc($lonewolfrt);
+$RWord=$lonewolfrt_array["Word"];
+$RCaseInsensitive=$lonewolfrt_array["CaseInsensitive"];
 if($RCaseInsensitive=="on") { $RCaseInsensitive = "yes"; }
 if($RCaseInsensitive=="off") { $RCaseInsensitive = "no"; }
 if($RCaseInsensitive!="yes"||$RCaseInsensitive!="no") { $RCaseInsensitive = "no"; }
-$RWholeWord=sql_result($lonewolfrt,$lonewolfs,"WholeWord");
+$RWholeWord=$lonewolfrt_array["WholeWord"];
 if($RWholeWord=="on") { $RWholeWord = "yes"; }
 if($RWholeWord=="off") { $RWholeWord = "no"; }
 if($RWholeWord!="yes"||$RWholeWord!="no") { $RWholeWord = "no"; }
-$RestrictedEventName=sql_result($lonewolfrt,$lonewolfs,"RestrictedEventName");
+$RestrictedEventName=$lonewolfrt_array["RestrictedEventName"];
 if($RestrictedEventName=="on") { $RestrictedEventName = "yes"; }
 if($RestrictedEventName=="off") { $RestrictedEventName = "no"; }
 if($RestrictedEventName!="yes"||$RestrictedEventName!="no") { $RestrictedEventName = "no"; }
-$RestrictedUserName=sql_result($lonewolfrt,$lonewolfs,"RestrictedUserName");
+$RestrictedUserName=$lonewolfrt_array["RestrictedUserName"];
 if($RestrictedUserName=="on") { $RestrictedUserName = "yes"; }
 if($RestrictedUserName=="off") { $RestrictedUserName = "no"; }
 if($RestrictedUserName!="yes"||$RestrictedUserName!="no") { $RestrictedUserName = "no"; }

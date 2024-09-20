@@ -25,21 +25,23 @@ $resultlog2=sql_query($querylog2,$SQLStat);
 $numlog2=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s' AND \"UserPassword\"='%s' AND \"id\"=%i LIMIT 1", array($_COOKIE['MemberName'],$_COOKIE['SessPass'],$_COOKIE['UserID'])), $SQLStat); }
 else { $numlog2 = 0; }
 if($numlog2==1) {
-$YourIDAM=sql_result($resultlog2,0,"id");
-$YourNameAM=sql_result($resultlog2,0,"Name");
-$YourGroupAM=sql_result($resultlog2,0,"GroupID");
+$resultlog2_array = sql_fetch_assoc($resultlog2);
+$YourIDAM=$resultlog2_array["id"];
+$YourNameAM=$resultlog2_array["Name"];
+$YourGroupAM=$resultlog2_array["GroupID"];
 $YourGroupIDAM=$YourGroupAM;
-$YourPassAM=sql_result($resultlog2,0,"UserPassword");
+$YourPassAM=$resultlog2_array["UserPassword"];
 $gquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i LIMIT 1", array($YourGroupAM));
 $gresult=sql_query($gquery,$SQLStat);
-$YourGroupAM=sql_result($gresult,0,"Name");
+$gresult_array = sql_fetch_assoc($gresult);
+$YourGroupAM=$gresult_array["Name"];
 sql_free_result($gresult);
 $BanError = null;
-$YourTimeZoneAM=sql_result($resultlog2,0,"TimeZone");
-$UseThemeAM=sql_result($resultlog2,0,"UseTheme");
-//$YourDSTAM=sql_result($resultlog2,0,"DST");
-$YourLastPostTime=sql_result($resultlog2,0,"LastPostTime");
-$YourBanTime=sql_result($resultlog2,0,"BanTime");
+$YourTimeZoneAM=$resultlog2_array["TimeZone"];
+$UseThemeAM=$resultlog2_array["UseTheme"];
+//$YourDSTAM=$resultlog2_array["DST"];
+$YourLastPostTime=$resultlog2_array["LastPostTime"];
+$YourBanTime=$resultlog2_array["BanTime"];
 sql_free_result($resultlog2);
 $CGMTime = $utccurtime->getTimestamp();
 if($YourBanTime!=0&&$YourBanTime!=null) {

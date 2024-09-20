@@ -29,13 +29,14 @@ if($checknum==0) { redirect("location",$rbasedir.url_maker($exfile['index'],$Set
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($checknum>=1) {
-$CategoryID=sql_result($checkresult,0,"id");
-$CategoryName=sql_result($checkresult,0,"Name");
-$CategoryShow=sql_result($checkresult,0,"ShowCategory");
+$checkresult_array = sql_fetch_assoc($checkresult);
+$CategoryID=$checkresult_array["id"];
+$CategoryName=$checkresult_array["Name"];
+$CategoryShow=$checkresult_array["ShowCategory"];
 if($CategoryShow=="no") { $_SESSION['ShowActHidden'] = "yes"; }
-$CategoryType=sql_result($checkresult,0,"CategoryType");
-$InSubCategory=sql_result($checkresult,0,"InSubCategory");
-$SubShowForums=sql_result($checkresult,0,"SubShowForums");
+$CategoryType=$checkresult_array["CategoryType"];
+$InSubCategory=$checkresult_array["InSubCategory"];
+$SubShowForums=$checkresult_array["SubShowForums"];
 $CategoryType = strtolower($CategoryType); $SubShowForums = strtolower($SubShowForums);
 $SCategoryName = $CategoryName;
 if(!isset($CatPermissionInfo['CanViewCategory'][$CategoryID])) {
@@ -77,10 +78,11 @@ $iscquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."categories\"
 $iscresult=sql_query($iscquery,$SQLStat);
 $iscnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."categories\" WHERE \"id\"=%i".$CatIgnoreList2." LIMIT 1", array($InSubCategory)), $SQLStat);
 if($iscnum>=1) {
-$iscCategoryID=sql_result($iscresult,0,"id");
-$iscCategoryName=sql_result($iscresult,0,"Name");
-$iscCategoryShow=sql_result($iscresult,0,"ShowCategory");
-$iscCategoryType=sql_result($iscresult,0,"CategoryType");
+$iscresult_array = sql_fetch_assoc($iscresult);
+$iscCategoryID=$iscresult_array["id"];
+$iscCategoryName=$iscresult_array["Name"];
+$iscCategoryShow=$iscresult_array["ShowCategory"];
+$iscCategoryType=$iscresult_array["CategoryType"];
 $iscCategoryType = strtolower($iscCategoryType); }
 if($iscnum<1) { $InSubCategory = "0"; } 
 sql_free_result($iscresult); }
@@ -98,12 +100,13 @@ $preresult=sql_query($prequery,$SQLStat);
 $prenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."categories\" WHERE \"ShowCategory\"='yes' AND \"InSubCategory\"=%i".$CatIgnoreList2." ORDER BY \"OrderID\" ASC, \"id\" ASC", array($_GET['id'])), $SQLStat);
 $prei=0;
 while ($prei < $prenum) {
-$CategoryID=sql_result($preresult,$prei,"id");
-$CategoryName=sql_result($preresult,$prei,"Name");
-$CategoryShow=sql_result($preresult,$prei,"ShowCategory");
-$CategoryType=sql_result($preresult,$prei,"CategoryType");
-$SSubShowForums=sql_result($preresult,$prei,"SubShowForums");
-$CategoryDescription=sql_result($preresult,$prei,"Description");
+$preresult_array = sql_fetch_assoc($preresult);
+$CategoryID=$preresult_array["id"];
+$CategoryName=$preresult_array["Name"];
+$CategoryShow=$preresult_array["ShowCategory"];
+$CategoryType=$preresult_array["CategoryType"];
+$SSubShowForums=$preresult_array["SubShowForums"];
+$CategoryDescription=$preresult_array["Description"];
 $CategoryType = strtolower($CategoryType); $SubShowForums = strtolower($SubShowForums);
 if(isset($CatPermissionInfo['CanViewCategory'][$CategoryID])&&
 	$CatPermissionInfo['CanViewCategory'][$CategoryID]=="yes") {
@@ -135,16 +138,17 @@ if($num>=1) {
 </tr>
 <?php }
 while ($i < $num) {
-$ForumID=sql_result($result,$i,"id");
-$ForumName=sql_result($result,$i,"Name");
-$ForumShow=sql_result($result,$i,"ShowForum");
-$ForumType=sql_result($result,$i,"ForumType");
-$ForumShowTopics=sql_result($result,$i,"CanHaveTopics");
+$result_array = sql_fetch_assoc($result);
+$ForumID=$result_array["id"];
+$ForumName=$result_array["Name"];
+$ForumShow=$result_array["ShowForum"];
+$ForumType=$result_array["ForumType"];
+$ForumShowTopics=$result_array["CanHaveTopics"];
 $ForumShowTopics = strtolower($ForumShowTopics);
-$NumTopics=sql_result($result,$i,"NumTopics");
-$NumPosts=sql_result($result,$i,"NumPosts");
-$NumRedirects=sql_result($result,$i,"Redirects");
-$ForumDescription=sql_result($result,$i,"Description");
+$NumTopics=$result_array["NumTopics"];
+$NumPosts=$result_array["NumPosts"];
+$NumRedirects=$result_array["Redirects"];
+$ForumDescription=$result_array["Description"];
 $ForumType = strtolower($ForumType); $sflist = null;
 $gltf = array(null); $gltf[0] = $ForumID;
 if ($ForumType=="subforum") { 
@@ -153,14 +157,15 @@ $apcresult=sql_query($apcquery,$SQLStat);
 $apcnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"ShowForum\"='yes' AND \"InSubForum\"=%i".$ForumIgnoreList2." ORDER BY \"OrderID\" ASC, \"id\" ASC", array($ForumID)), $SQLStat);
 $apci=0; $apcl=1; if($apcnum>=1) {
 while ($apci < $apcnum) {
-$NumsTopics=sql_result($apcresult,$apci,"NumTopics");
+$apcresult_array = sql_fetch_assoc($apcresult);
+$NumsTopics=$apcresult_array["NumTopics"];
 $NumTopics = $NumsTopics + $NumTopics;
-$NumsPosts=sql_result($apcresult,$apci,"NumPosts");
+$NumsPosts=$apcresult_array["NumPosts"];
 $NumPosts = $NumsPosts + $NumPosts;
-$SubsForumID=sql_result($apcresult,$apci,"id");
-$SubsForumName=sql_result($apcresult,$apci,"Name");
-$SubsForumType=sql_result($apcresult,$apci,"ForumType");
-$SubsForumShowTopics=sql_result($result,$i,"CanHaveTopics");
+$SubsForumID=$apcresult_array["id"];
+$SubsForumName=$apcresult_array["Name"];
+$SubsForumType=$apcresult_array["ForumType"];
+$SubsForumShowTopics=$result_array["CanHaveTopics"];
 if(isset($PermissionInfo['CanViewForum'][$SubsForumID])&&
 	$PermissionInfo['CanViewForum'][$SubsForumID]=="yes") {
 $ExStr = ""; if ($SubsForumType!="redirect"&&
@@ -183,13 +188,14 @@ $apcresult=sql_query($apcquery,$SQLStat);
 $apcnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"ShowForum\"='yes' AND \"InSubForum\"=%i".$ForumIgnoreList2." ORDER BY \"OrderID\" ASC, \"id\" ASC", array($ForumID)), $SQLStat);
 $apci=0; $apcl=1; if($apcnum>=1) {
 while ($apci < $apcnum) {
-$NumsTopics=sql_result($apcresult,$apci,"NumTopics");
+$apcresult_array = sql_fetch_assoc($apcresult);
+$NumsTopics=$apcresult_array["NumTopics"];
 $NumTopics = $NumsTopics + $NumTopics;
-$NumsPosts=sql_result($apcresult,$apci,"NumPosts");
+$NumsPosts=$apcresult_array["NumPosts"];
 $NumPosts = $NumsPosts + $NumPosts;
-$SubsForumID=sql_result($apcresult,$apci,"id");
-$SubsForumName=sql_result($apcresult,$apci,"Name");
-$SubsForumType=sql_result($apcresult,$apci,"ForumType");
+$SubsForumID=$apcresult_array["id"];
+$SubsForumName=$apcresult_array["Name"];
+$SubsForumType=$apcresult_array["ForumType"];
 if(isset($PermissionInfo['CanViewForum'][$SubsForumID])&&
 	$PermissionInfo['CanViewForum'][$SubsForumID]=="yes") {
 $sfurl = "<a href=\"";
@@ -209,11 +215,12 @@ $apcresult=sql_query($apcquery,$SQLStat);
 $apcnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"ShowForum\"='yes' AND \"InSubForum\"=%i".$ForumIgnoreList2." ORDER BY \"OrderID\" ASC, \"id\" ASC", array($ForumID)), $SQLStat);
 $apci=0; $apcl=1; if($apcnum>=1) {
 while ($apci < $apcnum) {
-$NumsTopics=sql_result($apcresult,$apci,"NumTopics");
+$apcresult_array = sql_fetch_assoc($apcresult);
+$NumsTopics=$apcresult_array["NumTopics"];
 $NumTopics = $NumsTopics + $NumTopics;
-$NumsPosts=sql_result($apcresult,$apci,"NumPosts");
+$NumsPosts=$apcresult_array["NumPosts"];
 $NumPosts = $NumsPosts + $NumPosts;
-$SubsForumID=sql_result($apcresult,$apci,"id");
+$SubsForumID=$apcresult_array["id"];
 if(isset($PermissionInfo['CanViewForum'][$SubsForumID])&&
 	$PermissionInfo['CanViewForum'][$SubsForumID]=="yes") {
 $gltf[$apcl] = $SubsForumID; ++$apcl; }
@@ -234,7 +241,8 @@ $gltfoquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" W
 $gltforesult=sql_query($gltfoquery,$SQLStat);
 $gltfonum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE \"ForumID\"=%i".$ExtraIgnores.$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC LIMIT 1", array($gltf[$glti])), $SQLStat);
 if($gltfonum>0) {
-$NewUpdateTime=sql_result($gltforesult,0,"LastUpdate");
+$gltforesult_array = sql_fetch_assoc($gltforesult);
+$NewUpdateTime=$gltforesult_array["LastUpdate"];
 if($NewUpdateTime>$OldUpdateTime) { 
 	$UseThisFonum = $gltf[$glti]; 
 $OldUpdateTime = $NewUpdateTime; }
@@ -251,9 +259,10 @@ $gltquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHE
 $gltresult=sql_query($gltquery,$SQLStat);
 $gltnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE (\"ForumID\"=%i".$ExtraIgnores.$ForumIgnoreList4.") OR (\"OldForumID\"=%i".$ExtraIgnores.$ForumIgnoreList4.") ORDER BY \"LastUpdate\" DESC LIMIT 1", array($UseThisFonum,$UseThisFonum)), $SQLStat);
 if($gltnum>0){
-$TopicID=sql_result($gltresult,0,"id");
-$TopicName=sql_result($gltresult,0,"TopicName");
-$NumReplys=sql_result($gltresult,0,"NumReply");
+$gltresult_array = sql_fetch_assoc($gltresult);
+$TopicID=$gltresult_array["id"];
+$TopicName=$gltresult_array["TopicName"];
+$NumReplys=$gltresult_array["NumReply"];
 $NumPages = null; $NumRPosts = $NumReplys + 1;
 if(!isset($Settings['max_posts'])) { $Settings['max_posts'] = 10; }
 if($NumRPosts>$Settings['max_posts']) {
@@ -267,10 +276,11 @@ $glrquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHER
 $glrresult=sql_query($glrquery,$SQLStat);
 $glrnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" DESC LIMIT 1", array($TopicID)), $SQLStat);
 if($glrnum>0){
-$ReplyID=sql_result($glrresult,0,"id");
-$UsersID=sql_result($glrresult,0,"UserID");
-$GuestsName=sql_result($glrresult,0,"GuestName");
-$TimeStamp=sql_result($glrresult,0,"TimeStamp");
+$glrresult_array = sql_fetch_assoc($glrresult);
+$ReplyID=$glrresult_array["id"];
+$UsersID=$glrresult_array["UserID"];
+$GuestsName=$glrresult_array["GuestName"];
+$TimeStamp=$glrresult_array["TimeStamp"];
 $tmpusrcurtime = new DateTime();
 $tmpusrcurtime->setTimestamp($TimeStamp);
 $tmpusrcurtime->setTimezone($usertz);

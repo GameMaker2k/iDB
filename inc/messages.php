@@ -204,30 +204,31 @@ if($pagenum>1) {
 </tr>
 <?php
 while ($i < $num) {
-$PMID=sql_result($result,$i,"id");
-$PMDiscussionID=sql_result($result,$i,"DiscussionID");
-$SenderID=sql_result($result,$i,"SenderID");
-$SenderIP=sql_result($result,$i,"IP");
+$result_array = sql_fetch_assoc($result);
+$PMID=$result_array["id"];
+$PMDiscussionID=$result_array["DiscussionID"];
+$SenderID=$result_array["SenderID"];
+$SenderIP=$result_array["IP"];
 $PreSenderName = GetUserName($SenderID,$Settings['sqltable'],$SQLStat);
 if($PreSenderName['Name']===null) { $SenderID = -1;
 $PreSenderName = GetUserName($SenderID,$Settings['sqltable'],$SQLStat); }
 $SenderName = $PreSenderName['Name'];
 $SenderHidden = $PreSenderName['Hidden'];
-$ReciverID=sql_result($result,$i,"ReciverID");
+$ReciverID=$result_array["ReciverID"];
 $PreReciverName = GetUserName($ReciverID,$Settings['sqltable'],$SQLStat);
 if($PreReciverName['Name']===null) { $ReciverID = -1;
 $PreReciverName = GetUserName($ReciverID,$Settings['sqltable'],$SQLStat); }
 $ReciverName = $PreReciverName['Name'];
 $ReciverHidden = $PreReciverName['Hidden'];
-$PMGuest=sql_result($result,$i,"GuestName");
-$MessageName=sql_result($result,$i,"MessageTitle");
-$MessageDesc=sql_result($result,$i,"Description");
-$DateSend=sql_result($result,$i,"DateSend");
+$PMGuest=$result_array["GuestName"];
+$MessageName=$result_array["MessageTitle"];
+$MessageDesc=$result_array["Description"];
+$DateSend=$result_array["DateSend"];
 $tmpusrcurtime = new DateTime();
 $tmpusrcurtime->setTimestamp($DateSend);
 $tmpusrcurtime->setTimezone($usertz);
 $DateSend=$tmpusrcurtime->format($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat']);
-$MessageStat=sql_result($result,$i,"Read");
+$MessageStat=$result_array["Read"];
 if($SenderName=="Guest") { $SenderName=$PMGuest;
 if($SenderName==null) { $SenderName="Guest"; } }
 $PreMessage = $ThemeSet['MessageUnread'];
@@ -379,30 +380,31 @@ if($pagenum>1) {
 </tr>
 <?php
 while ($i < $num) {
-$PMID=sql_result($result,$i,"id");
-$PMDiscussionID=sql_result($result,$i,"DiscussionID");
-$SenderID=sql_result($result,$i,"SenderID");
-$SenderIP=sql_result($result,$i,"IP");
+$result_array = sql_fetch_assoc($result);
+$PMID=$result_array["id"];
+$PMDiscussionID=$result_array["DiscussionID"];
+$SenderID=$result_array["SenderID"];
+$SenderIP=$result_array["IP"];
 $PreSenderName = GetUserName($SenderID,$Settings['sqltable'],$SQLStat);
 if($PreSenderName['Name']===null) { $SenderID = -1;
 $PreSenderName = GetUserName($SenderID,$Settings['sqltable'],$SQLStat); }
 $SenderName = $PreSenderName['Name'];
 $SenderHidden = $PreSenderName['Hidden'];
-$ReciverID=sql_result($result,$i,"ReciverID");
+$ReciverID=$result_array["ReciverID"];
 $PreReciverName = GetUserName($ReciverID,$Settings['sqltable'],$SQLStat);
 if($PreReciverName['Name']===null) { $ReciverID = -1;
 $PreReciverName = GetUserName($ReciverID,$Settings['sqltable'],$SQLStat); }
 $ReciverName = $PreReciverName['Name'];
 $ReciverHidden = $PreReciverName['Hidden'];
-$PMGuest=sql_result($result,$i,"GuestName");
-$MessageName=sql_result($result,$i,"MessageTitle");
-$MessageDesc=sql_result($result,$i,"Description");
-$DateSend=sql_result($result,$i,"DateSend");
+$PMGuest=$result_array["GuestName"];
+$MessageName=$result_array["MessageTitle"];
+$MessageDesc=$result_array["Description"];
+$DateSend=$result_array["DateSend"];
 $tmpusrcurtime = new DateTime();
 $tmpusrcurtime->setTimestamp($DateSend);
 $tmpusrcurtime->setTimezone($usertz);
 $DateSend=$tmpusrcurtime->format($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat']);
-$MessageStat=sql_result($result,$i,"Read");
+$MessageStat=$result_array["Read"];
 if($SenderName=="Guest") { $SenderName=$PMGuest;
 if($SenderName==null) { $SenderName="Guest"; } }
 $PreMessage = $ThemeSet['MessageUnread'];
@@ -441,29 +443,30 @@ if($num==0) { redirect("location",$rbasedir.url_maker($exfile['index'],$Settings
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 while ($is < $num) {
-$PMID=sql_result($result,$is,"id");
-$SenderID=sql_result($result,$is,"SenderID");
-$SenderIP=sql_result($result,$is,"IP");
+$result_array = sql_fetch_assoc($result);
+$PMID=$result_array["id"];
+$SenderID=$result_array["SenderID"];
+$SenderIP=$result_array["IP"];
 $PreSenderName = GetUserName($SenderID,$Settings['sqltable'],$SQLStat);
 if($PreSenderName['Name']===null) { $SenderID = -1;
 $PreSenderName = GetUserName($SenderID,$Settings['sqltable'],$SQLStat); }
 $SenderName = $PreSenderName['Name'];
 $SenderHidden = $PreSenderName['Hidden'];
-$ReciverID=sql_result($result,$is,"ReciverID");
+$ReciverID=$result_array["ReciverID"];
 $PreReciverName = GetUserName($ReciverID,$Settings['sqltable'],$SQLStat);
 if($PreReciverName['Name']===null) { $ReciverID = -1;
 $PreReciverName = GetUserName($ReciverID,$Settings['sqltable'],$SQLStat); }
 $ReciverName = $PreReciverName['Name'];
 $ReciverHidden = $PreReciverName['Hidden'];
-$PMGuest=sql_result($result,$is,"GuestName");
-$MessageName=sql_result($result,$is,"MessageTitle");
-$DateSend=sql_result($result,$is,"DateSend");
+$PMGuest=$result_array["GuestName"];
+$MessageName=$result_array["MessageTitle"];
+$DateSend=$result_array["DateSend"];
 $tmpusrcurtime = new DateTime();
 $tmpusrcurtime->setTimestamp($DateSend);
 $tmpusrcurtime->setTimezone($usertz);
 $DateSend=$tmpusrcurtime->format($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat']);
-$MessageText=sql_result($result,$is,"MessageText");
-$MessageDesc=sql_result($result,$is,"Description");
+$MessageText=$result_array["MessageText"];
+$MessageDesc=$result_array["Description"];
 $ipshow = "two";
 $requery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i", array($SenderID));
 $reresult=sql_query($requery,$SQLStat);
@@ -479,80 +482,86 @@ ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 while ($rei < $renum) {
 $User1ID=$SenderID;
-$User1Name=sql_result($reresult,$rei,"Name");
+$result_array = sql_fetch_assoc($result);
+$reresult_array = sql_fetch_assoc($reresult);
+$memreresult_array = sql_fetch_assoc($memreresult);
+$User1Name=$reresult_array["Name"];
 $SenderName = $User1Name;
-$User1IP=sql_result($reresult,$rei,"IP");
+$User1IP=$reresult_array["IP"];
 if($User1IP==$SenderIP) { $ipshow = "one"; }
-$User1Email=sql_result($reresult,$rei,"Email");
-$User1Title=sql_result($reresult,$rei,"Title");
-$PreUserCanExecPHP=sql_result($memreresult,$rei,"CanExecPHP");
+$User1Email=$reresult_array["Email"];
+$User1Title=$reresult_array["Title"];
+$PreUserCanExecPHP=$memreresult_array["CanExecPHP"];
 if($PreUserCanExecPHP!="yes"&&$PreUserCanExecPHP!="no"&&$PreUserCanExecPHP!="group") {
 	$PreUserCanExecPHP = "no"; }
-$PreUserCanDoHTML=sql_result($memreresult,$rei,"CanDoHTML");
+$PreUserCanDoHTML=$memreresult_array["CanDoHTML"];
 if($PreUserCanDoHTML!="yes"&&$PreUserCanDoHTML!="no"&&$PreUserCanDoHTML!="group") {
 	$PreUserCanDoHTML = "no"; }
-$PreUserCanUseBBTags=sql_result($memreresult,$rei,"CanUseBBTags");
+$PreUserCanUseBBTags=$memreresult_array["CanUseBBTags"];
 if($PreUserCanUseBBTags!="yes"&&$PreUserCanUseBBTags!="no"&&$PreUserCanUseBBTags!="group") {
 	$PreUserCanUseBBTags = "no"; }
 sql_free_result($memreresult);
-$User1Joined=sql_result($reresult,$rei,"Joined");
+$User1Joined=$reresult_array["Joined"];
 $tmpusrcurtime = new DateTime();
 $tmpusrcurtime->setTimestamp($User1Joined);
 $tmpusrcurtime->setTimezone($usertz);
 $User1Joined=$tmpusrcurtime->format($_SESSION['iDBDateFormat']);
-$User1LevelID=sql_result($reresult,$rei,"LevelID");
+$User1LevelID=$reresult_array["LevelID"];
 if($User1LevelID!==null&&$User1LevelID!=0) {
 $lquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."levels\" WHERE \"id\"=%i LIMIT 1", array($User1LevelID));
 $lresult=sql_query($lquery,$SQLStat);
 $lnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."levels\" WHERE \"id\"=%i LIMIT 1", array($User1LevelID)), $SQLStat);
 if ($lresult !== false && $lnum > 0) {
-$User1Level=sql_result($lresult,0,"Name"); } else { $User1Level = ""; }
+$lresult_array = sql_fetch_assoc($lresult);
+$User1Level=$lresult_array["Name"]; } else { $User1Level = ""; }
 sql_free_result($lresult); } else {
 $User1Level = ""; }
-$User1RankID=sql_result($reresult,$rei,"RankID");
+$User1RankID=$reresult_array["RankID"];
 if($User1RankID!==null&&$User1RankID!=0) {
 $rquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."ranks\" WHERE \"id\"=%i LIMIT 1", array($User1RankID));
 $rresult=sql_query($rquery,$SQLStat);
 $rnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."ranks\" WHERE \"id\"=%i LIMIT 1", array($User1RankID)), $SQLStat);
 if ($rresult !== false && $rnum > 0) {
-$User1Rank=sql_result($rresult,0,"Name"); } else { $User1Rank = ""; }
+$rresult_array = sql_fetch_assoc($rresult);
+$User1Rank=$rresult_array["Name"]; } else { $User1Rank = ""; }
 sql_free_result($rresult); } else {
 $User1Rank = ""; }
-$User1GroupID=sql_result($reresult,$rei,"GroupID");
-$User1Hidden=sql_result($reresult,$rei,"HiddenMember");
+$User1GroupID=$reresult_array["GroupID"];
+$User1Hidden=$reresult_array["HiddenMember"];
 $SenderHidden = $User1Hidden;
 $gquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i", array($User1GroupID));
 $gresult=sql_query($gquery,$SQLStat);
-$User1Group=sql_result($gresult,0,"Name");
+$gresult_array = sql_fetch_assoc($gresult);
+$User1Group=$gresult_array["Name"];
 $User1CanExecPHP = $PreUserCanExecPHP;
 if($PreUserCanExecPHP=="group") {
-$User1CanExecPHP=sql_result($gresult,0,"CanExecPHP"); }
+$User1CanExecPHP=$gresult_array["CanExecPHP"]; }
 if($User1CanExecPHP!="yes"&&$User1CanExecPHP!="no") {
 	$User1CanExecPHP = "no"; }
 $User1CanDoHTML = $PreUserCanDoHTML;
 if($PreUserCanDoHTML=="group") {
-$User1CanDoHTML=sql_result($gresult,0,"CanDoHTML"); }
+$User1CanDoHTML=$gresult_array["CanDoHTML"]; }
 if($User1CanDoHTML!="yes"&&$User1CanDoHTML!="no") {
 	$User1CanDoHTML = "no"; }
 $User1CanUseBBTags = $PreUserCanUseBBTags;
 if($User1CanUseBBTags=="group") {
-$User1CanUseBBTags=sql_result($gresult,0,"CanUseBBTags"); }
+$User1CanUseBBTags=$gresult_array["CanUseBBTags"]; }
 if($User1CanUseBBTags!="yes"&&$User1CanUseBBTags!="no") {
 	$User1CanUseBBTags = "no"; }
-$GroupNamePrefix=sql_result($gresult,0,"NamePrefix");
-$GroupNameSuffix=sql_result($gresult,0,"NameSuffix");
+$GroupNamePrefix=$gresult_array["NamePrefix"];
+$GroupNameSuffix=$gresult_array["NameSuffix"];
 sql_free_result($gresult); sql_free_result($lresult);
 if($User1Title=="") { $User1Title = $User1Group; }
-$User1Signature=sql_result($reresult,$rei,"Signature");
-$User1Avatar=sql_result($reresult,$rei,"Avatar");
-$User1AvatarSize=sql_result($reresult,$rei,"AvatarSize");
+$User1Signature=$reresult_array["Signature"];
+$User1Avatar=$reresult_array["Avatar"];
+$User1AvatarSize=$reresult_array["AvatarSize"];
 if ($User1Avatar=="http://"||$User1Avatar==null||
 	strtolower($User1Avatar)=="noavatar") {
 $User1Avatar=$ThemeSet['NoAvatar'];
 $User1AvatarSize=$ThemeSet['NoAvatarSize']; }
 $AvatarSize1=explode("x", $User1AvatarSize);
 $AvatarSize1W=$AvatarSize1[0]; $AvatarSize1H=$AvatarSize1[1];
-$User1Website=sql_result($reresult,$rei,"Website");
+$User1Website=$reresult_array["Website"];
 if($User1Website=="http://") { 
 	$User1Website = $Settings['idburl']; }
 $User1Website = urlcheck($User1Website);
@@ -561,9 +570,9 @@ $User1WWWChCk = parse_url($User1Website);
 $opennew = " onclick=\"window.open(this.href);return false;\"";
 if($BoardWWWChCk['host']==$User1WWWChCk['host']) {
 	$opennew = null; }
-$User1PostCount=sql_result($reresult,$rei,"PostCount");
-$User1Karma=sql_result($reresult,$rei,"Karma");
-$User1IP=sql_result($reresult,$rei,"IP");
+$User1PostCount=$reresult_array["PostCount"];
+$User1Karma=$reresult_array["Karma"];
+$User1IP=$reresult_array["IP"];
 ++$rei; } sql_free_result($reresult);
 if($_SESSION['UserID']==$ReciverID) {
 $queryup = sql_pre_query("UPDATE \"".$Settings['sqltable']."messenger\" SET \"Read\"=%i WHERE \"id\"=%i", array(1,$_GET['id']));
@@ -702,9 +711,10 @@ $reresult=sql_query($requery,$SQLStat);
 $renum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i", array($_GET['id'])), $SQLStat);
 $rei=0;
 while ($rei < $renum) {
-$SendMessageTo = sql_result($reresult,$rei,"Name");
+$reresult_array = sql_fetch_assoc($reresult);
+$SendMessageTo = $reresult_array["Name"];
 $SendMessageTo = htmlspecialchars($SendMessageTo, ENT_QUOTES, $Settings['charset']);
-$SendToGroupID = sql_result($reresult,$rei,"GroupID");
+$SendToGroupID = $reresult_array["GroupID"];
 ++$rei; } sql_free_result($reresult); }
 if(!isset($renum)) { $renum = 0; }
 if($renum==0) { $SendMessageTo = null; }
@@ -718,10 +728,11 @@ $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."messenger\" WHE
 $result=sql_query($query,$SQLStat);
 $num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."messenger\" WHERE \"id\"=%i AND (\"SenderID\"=%i OR \"ReciverID\"=%i)", array($_GET['post'], $_SESSION['UserID'], $_SESSION['UserID'])), $SQLStat);
 if($num>0) {
-$QuoteTitle=sql_result($result,0,"MessageTitle");
-$MessageText=sql_result($result,0,"MessageText");
+$result_array = sql_fetch_assoc($result);
+$QuoteTitle=$result_array["MessageTitle"];
+$MessageText=$result_array["MessageText"];
 $QuoteReply = preg_replace("/\<br\>/", "<br />", nl2br($MessageText));
-$QuoteDescription=sql_result($result,0,"Description");
+$QuoteDescription=$result_array["Description"];
 $result=sql_query($query,$SQLStat);
 $num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."messenger\" WHERE \"id\"=%i AND (\"SenderID\"=%i OR \"ReciverID\"=%i)", array($_GET['post'], $_SESSION['UserID'], $_SESSION['UserID'])), $SQLStat);
 $QuoteReply = remove_bad_entities($QuoteReply);
@@ -760,12 +771,13 @@ $melanie_result=sql_query($melanie_query,$SQLStat);
 $melanie_num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."smileys\" WHERE \"Display\"='yes'", null), $SQLStat);
 $melanie_p=0; $SmileRow=0; $SmileCRow=0;
 while ($melanie_p < $melanie_num) { ++$SmileRow;
-$FileName=sql_result($melanie_result,$melanie_p,"FileName");
-$SmileName=sql_result($melanie_result,$melanie_p,"SmileName");
-$SmileText=sql_result($melanie_result,$melanie_p,"SmileText");
-$SmileDirectory=sql_result($melanie_result,$melanie_p,"Directory");
-$ShowSmile=sql_result($melanie_result,$melanie_p,"Display");
-$ReplaceType=sql_result($melanie_result,$melanie_p,"ReplaceCI");
+$melanie_result_array = sql_fetch_assoc($melanie_result);
+$FileName=$melanie_result_array["FileName"];
+$SmileName=$melanie_result_array["SmileName"];
+$SmileText=$melanie_result_array["SmileText"];
+$SmileDirectory=$melanie_result_array["Directory"];
+$ShowSmile=$melanie_result_array["Display"];
+$ReplaceType=$melanie_result_array["ReplaceCI"];
 if($SmileRow==1) { ?><tr>
 	<?php } if($SmileRow<5) { ++$SmileCRow; ?>
 	<td><img src="<?php echo $SmileDirectory."".$FileName; ?>" style="vertical-align: middle; border: 0px; cursor: pointer;" title="<?php echo $SmileName; ?>" alt="<?php echo $SmileName; ?>" onclick="addsmiley('ReplyPost','&#160;<?php echo htmlspecialchars($SmileText, ENT_QUOTES, $Settings['charset']); ?>&#160;')" /></td>
@@ -962,13 +974,14 @@ $melaniert=sql_query($melanieqy,$SQLStat);
 $melanienm=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."wordfilter\"", null), $SQLStat);
 $melanies=0;
 while ($melanies < $melanienm) {
-$Filter=sql_result($melaniert,$melanies,"FilterWord");
-$Replace=sql_result($melaniert,$melanies,"Replacement");
-$CaseInsensitive=sql_result($melaniert,$melanies,"CaseInsensitive");
+$melaniert_array = sql_fetch_assoc($melaniert);
+$Filter=$melaniert_array["FilterWord"];
+$Replace=$melaniert_array["Replacement"];
+$CaseInsensitive=$melaniert_array["CaseInsensitive"];
 if($CaseInsensitive=="on") { $CaseInsensitive = "yes"; }
 if($CaseInsensitive=="off") { $CaseInsensitive = "no"; }
 if($CaseInsensitive!="yes"||$CaseInsensitive!="no") { $CaseInsensitive = "no"; }
-$WholeWord=sql_result($melaniert,$melanies,"WholeWord");
+$WholeWord=$melaniert_array["WholeWord"];
 if($WholeWord=="on") { $WholeWord = "yes"; }
 if($WholeWord=="off") { $WholeWord = "no"; }
 if($WholeWord!="yes"&&$WholeWord!="no") { $WholeWord = "no"; }
@@ -991,20 +1004,21 @@ $lonewolfrt=sql_query($lonewolfqy,$SQLStat);
 $lonewolfnm=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."restrictedwords\" WHERE \"RestrictedMessageName\"='yes' or \"RestrictedUserName\"='yes'", null), $SQLStat);
 $lonewolfs=0; $RMatches = null; $RGMatches = null;
 while ($lonewolfs < $lonewolfnm) {
-$RWord=sql_result($lonewolfrt,$lonewolfs,"Word");
-$RCaseInsensitive=sql_result($lonewolfrt,$lonewolfs,"CaseInsensitive");
+$lonewolfrt_array = sql_fetch_assoc($lonewolfrt);
+$RWord=$lonewolfrt_array["Word"];
+$RCaseInsensitive=$lonewolfrt_array["CaseInsensitive"];
 if($RCaseInsensitive=="on") { $RCaseInsensitive = "yes"; }
 if($RCaseInsensitive=="off") { $RCaseInsensitive = "no"; }
 if($RCaseInsensitive!="yes"||$RCaseInsensitive!="no") { $RCaseInsensitive = "no"; }
-$RWholeWord=sql_result($lonewolfrt,$lonewolfs,"WholeWord");
+$RWholeWord=$lonewolfrt_array["WholeWord"];
 if($RWholeWord=="on") { $RWholeWord = "yes"; }
 if($RWholeWord=="off") { $RWholeWord = "no"; }
 if($RWholeWord!="yes"||$RWholeWord!="no") { $RWholeWord = "no"; }
-$RestrictedMessageName=sql_result($lonewolfrt,$lonewolfs,"RestrictedMessageName");
+$RestrictedMessageName=$lonewolfrt_array["RestrictedMessageName"];
 if($RestrictedMessageName=="on") { $RestrictedMessageName = "yes"; }
 if($RestrictedMessageName=="off") { $RestrictedMessageName = "no"; }
 if($RestrictedMessageName!="yes"||$RestrictedMessageName!="no") { $RestrictedMessageName = "no"; }
-$RestrictedUserName=sql_result($lonewolfrt,$lonewolfs,"RestrictedUserName");
+$RestrictedUserName=$lonewolfrt_array["RestrictedUserName"];
 if($RestrictedUserName=="on") { $RestrictedUserName = "yes"; }
 if($RestrictedUserName=="off") { $RestrictedUserName = "no"; }
 if($RestrictedUserName!="yes"||$RestrictedUserName!="no") { $RestrictedUserName = "no"; }
@@ -1043,11 +1057,13 @@ $reresult=sql_query($requery,$SQLStat);
 $renum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s'", array($_POST['SendMessageTo'])), $SQLStat);
 $rei=0;
 while ($rei < $renum) {
-$SendMessageToID = sql_result($reresult,$rei,"id");
-$SendToGroupID = sql_result($reresult,$rei,"GroupID");
+$reresult_array = sql_fetch_assoc($reresult);
+$SendMessageToID = $reresult_array["id"];
+$SendToGroupID = $reresult_array["GroupID"];
 $gquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i", array($SendToGroupID));
 $gresult=sql_query($gquery,$SQLStat);
-$SendUserCanPM=sql_result($gresult,0,"CanPM");
+$gresult_array = sql_fetch_assoc($gresult);
+$SendUserCanPM=$gresult_array["CanPM"];
 $SendUserCanPM = strtolower($SendUserCanPM);
 if($SendUserCanPM!="yes"&&$SendUserCanPM!="no") {
 	$SendUserCanPM = "no"; }

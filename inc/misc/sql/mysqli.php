@@ -151,7 +151,6 @@ if ($string===false) {
 // SafeSQL Lite Source Code by Cool Dude 2k
 // Make SQL Query's safe
 function mysqli_func_pre_query($query_string,$query_vars) {
-    echo "<pre>"; var_dump($query_string, $query_vars); echo "</pre>";
    if($query_vars==null) { $query_vars = array(null); }
    $query_array = array(array("%i","%I","%F","%S"),array("%d","%d","%f","%s"));
    $query_string = str_replace($query_array[0], $query_array[1], $query_string);

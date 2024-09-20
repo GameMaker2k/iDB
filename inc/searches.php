@@ -114,7 +114,8 @@ $memsinum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Setting
 $memsi=0;
 if($memsinum==0) { $memsid = -1; }
 if($memsinum!=0) {
-$memsid=sql_result($memsiresult,$memsi,"id"); 
+$memsiresult_array = sql_fetch_assoc($memsiresult);
+$memsid=$memsiresult_array["id"]; 
 sql_free_result($memsiresult); } }
 if(!isset($_GET['memid'])) { $_GET['memid'] = null; }
 if(!is_numeric($_GET['memid'])||$_GET['memid']<1) { 
@@ -324,28 +325,30 @@ if($_GET['msearch']==null&&$_GET['search']!=null) { ?>
 </tr>
 <?php
 while ($i < $num) {
-$TopicID=sql_result($result,$i,"id");
-$ForumID=sql_result($result,$i,"ForumID");
+$result_array = sql_fetch_assoc($result);
+$TopicID=$result_array["id"];
+$ForumID=$result_array["ForumID"];
 $prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2." LIMIT 1", array($ForumID));
 $preresult=sql_query($prequery,$SQLStat);
 $prenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2." LIMIT 1", array($ForumID)), $SQLStat);
 $HotTopicPosts = $Settings['hot_topic_num'];
 if($prenum > 0) {
-$HotTopicPosts = sql_result($preresult,0,"HotTopicPosts"); }
+$preresult_array = sql_fetch_assoc($preresult);
+$HotTopicPosts = $preresult_array["HotTopicPosts"]; }
 sql_free_result($preresult);
 if($HotTopicPosts!=0&&is_numeric($HotTopicPosts)) {
 	$Settings['hot_topic_num'] = $HotTopicPosts; }
 if(!is_numeric($Settings['hot_topic_num'])) {
 	$Settings['hot_topic_num'] = 15; }
-$CategoryID=sql_result($result,$i,"CategoryID");
-$UsersID=sql_result($result,$i,"UserID");
-$GuestsName=sql_result($result,$i,"GuestName");
-$TheTime=sql_result($result,$i,"TimeStamp");
+$CategoryID=$result_array["CategoryID"];
+$UsersID=$result_array["UserID"];
+$GuestsName=$result_array["GuestName"];
+$TheTime=$result_array["TimeStamp"];
 $tmpusrcurtime = new DateTime();
 $tmpusrcurtime->setTimestamp($TheTime);
 $tmpusrcurtime->setTimezone($usertz);
 $TheTime=$tmpusrcurtime->format($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat']);
-$NumReply=sql_result($result,$i,"NumReply");
+$NumReply=$result_array["NumReply"];
 $NumberPosts=$NumReply + 1;
 $prepagelist = null;
 if(!isset($Settings['max_posts'])) { 
@@ -404,13 +407,13 @@ if($NumberPages>=2) {
 	$prepagelist = $prepagelist."</span>"; } }
 	if($ThemeSet['MiniPageAltStyle']=="off") { 
 	$prepagelist = $prepagelist.")</span>"; } }
-$TopicName=sql_result($result,$i,"TopicName");
-$TopicDescription=sql_result($result,$i,"Description");
-$PinnedTopic=sql_result($result,$i,"Pinned");
+$TopicName=$result_array["TopicName"];
+$TopicDescription=$result_array["Description"];
+$PinnedTopic=$result_array["Pinned"];
 if ($PinnedTopic>2) { $PinnedTopic = 1; } 
 if ($PinnedTopic<0) { $PinnedTopic = 0; }
 if(!is_numeric($PinnedTopic)) { $PinnedTopic = 0; }
-$TopicStat=sql_result($result,$i,"Closed");
+$TopicStat=$result_array["Closed"];
 if ($TopicStat>3) { $TopicStat = 1; } 
 if ($TopicStat<0) { $TopicStat = 0; }
 if(!is_numeric($TopicStat)) { $TopicStat = 1; }
@@ -432,10 +435,11 @@ $glrquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHER
 $glrresult=sql_query($glrquery,$SQLStat);
 $glrnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" DESC LIMIT 1", array($TopicID)), $SQLStat);
 if($glrnum>0){
-$ReplyID1=sql_result($glrresult,0,"id");
-$UsersID1=sql_result($glrresult,0,"UserID");
-$GuestsName1=sql_result($glrresult,0,"GuestName");
-$TimeStamp1=sql_result($glrresult,0,"TimeStamp");
+$glrresult_array = sql_fetch_assoc($glrresult);
+$ReplyID1=$glrresult_array["id"];
+$UsersID1=$glrresult_array["UserID"];
+$GuestsName1=$glrresult_array["GuestName"];
+$TimeStamp1=$glrresult_array["TimeStamp"];
 $tmpusrcurtime = new DateTime();
 $tmpusrcurtime->setTimestamp($TimeStamp1);
 $tmpusrcurtime->setTimezone($usertz);
