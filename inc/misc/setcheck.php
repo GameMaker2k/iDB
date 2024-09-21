@@ -40,7 +40,7 @@ if($Settings['sqltype']!="mysql"&&
 	$Settings['sqltype']!="cubrid"&&
 	$Settings['sqltype']!="pdo_cubrid") {
 	$Settings['sqltype'] = "mysql"; }
-if($Settings['sqltype']=="mysql"||
+/*if($Settings['sqltype']=="mysql"||
 	$Settings['sqltype']=="mysqli"||
 	$Settings['sqltype']=="pdo_mysql"||
 	$Settings['sqltype']=="sqlite"||
@@ -51,7 +51,7 @@ if($Settings['sqltype']=="mysql"||
 	$SQLimit = "LIMIT %i,%i"; }
 if($Settings['sqltype']=="pgsql"||
 	$Settings['sqltype']=="pdo_pgsql") {
-	$SQLimit = "OFFSET %i LIMIT %i"; }
+	$SQLimit = "OFFSET %i LIMIT %i"; }*/
 if(!isset($Settings['enable_pathinfo'])) {
   $Settings['enable_pathinfo'] = "off";  }
 if($Settings['enable_pathinfo']!="on"&&
