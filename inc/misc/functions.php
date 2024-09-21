@@ -777,8 +777,18 @@ function count_extensions() {	return count(get_loaded_extensions()); }
 // human_filesize by evgenij at kostanay dot kz 
 // URL: https://www.php.net/manual/en/function.filesize.php#120250
 function human_filesize($bytes, $decimals = 2) {
+    // If $bytes is not numeric, return false
+    if (!is_numeric($bytes)) {
+        return false;
+    }
+
+    // Convert the numeric value to an integer
+    $bytes = intval($bytes);
+
+    // Proceed with calculating the human-readable filesize
     $factor = floor((strlen($bytes) - 1) / 3);
     if ($factor > 0) $sz = 'KMGT';
+
     return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . ' ' . @$sz[$factor - 1] . 'B';
 }
 
