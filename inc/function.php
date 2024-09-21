@@ -378,7 +378,7 @@ return uuid($my_uuid,$rndty,$name); } }
 // unserialize sessions variables
 // By: jason@joeymail.net
 // URL: http://us2.php.net/manual/en/function.session-decode.php#101687
-function unserialize_session($data)
+function unserialize_session_old($data)
 {
     if(  strlen( $data) == 0)
     {
@@ -404,8 +404,58 @@ function unserialize_session($data)
     $returnArray[$currentKey] = unserialize($valueText);
     return $returnArray;
 }
+function unserialize_session($data)
+{
+    if (strlen($data) === 0) {
+        return array();
+    }
+
+    // Match all session keys and offsets using a regex
+    if (!preg_match_all('/(^|;|\})([a-zA-Z0-9_]+)\|/i', $data, $matchesarray, PREG_OFFSET_CAPTURE)) {
+        // Return an empty array if the session format is incorrect
+        return array();
+    }
+
+    $returnArray = array();
+    $lastOffset = null;
+    $currentKey = '';
+
+    foreach ($matchesarray[2] as $match) {
+        $offset = $match[1];
+
+        if ($lastOffset !== null) {
+            // Extract and unserialize the previous value
+            $valueText = substr($data, $lastOffset, $offset - $lastOffset);
+            $unserializedValue = @unserialize($valueText);  // Suppress errors with @
+            
+            // Handle unserialization failure (optional handling)
+            if ($unserializedValue === false && $valueText !== 'b:0;') {
+                // b:0; is valid boolean false, so we avoid marking it as an error
+                throw new Exception("Failed to unserialize session data for key: $currentKey");
+            }
+
+            $returnArray[$currentKey] = $unserializedValue;
+        }
+
+        // Update the current key and last offset
+        $currentKey = $match[0];
+        $lastOffset = $offset + strlen($currentKey) + 1;
+    }
+
+    // Unserialize the last value in the session data
+    $valueText = substr($data, $lastOffset);
+    $unserializedValue = @unserialize($valueText);
+    
+    if ($unserializedValue === false && $valueText !== 'b:0;') {
+        throw new Exception("Failed to unserialize session data for key: $currentKey");
+    }
+
+    $returnArray[$currentKey] = $unserializedValue;
+
+    return $returnArray;
+}
 // Make the Query String if we are not useing &=
-function qstring($qstr=";",$qsep="=")
+function qstring_old($qstr=";",$qsep="=")
 { $_GET = array(); $_GET = null;
 if (!isset($_SERVER['QUERY_STRING'])) {
 $_SERVER['QUERY_STRING'] = getenv('QUERY_STRING'); }
@@ -421,6 +471,59 @@ $preqst[0] = killbadvars($preqst[0]);
 if($preqst[0]!=null) {
 $_GET[$preqst[0]] = $preqst[1]; }
 ++$qsi; } return true; }
+function qstring($qstr = ';', $qsep = '=')
+{
+    // Clear $_GET properly
+    $_GET = array();
+
+    // Check if query string is available
+    if (!isset($_SERVER['QUERY_STRING'])) {
+        $_SERVER['QUERY_STRING'] = getenv('QUERY_STRING');
+    }
+
+    // If query string is still not set, return false early
+    if (!$_SERVER['QUERY_STRING']) {
+        return false;
+    }
+
+    // Apply urldecode to handle encoded characters
+    $queryString = urldecode($_SERVER['QUERY_STRING']);
+
+    // Split query string into individual parameters using $qstr as the separator
+    $preqs = explode($qstr, $queryString);
+
+    // Iterate through each query parameter
+    foreach ($preqs as $param) {
+        // Split parameter into key and value by the $qsep separator (only split the first occurrence)
+        $preqst = explode($qsep, $param, 2);
+
+        // If no key is present or the split failed (e.g., no '=' in the parameter), skip this entry
+        if (empty($preqst[0])) {
+            continue;
+        }
+
+        // Replace unwanted characters in the key (e.g., spaces or $ signs)
+        $fix1 = array(" ", '$');
+        $fix2 = array("_", "_");
+        $key = str_replace($fix1, $fix2, $preqst[0]);
+
+        // Sanitize the key using the killbadvars function (ensure this function is safe)
+        $key = killbadvars($key);
+
+        // If the sanitized key is null or invalid, skip this entry
+        if ($key === null || $key === '') {
+            continue;
+        }
+
+        // Handle cases where a parameter might not have a value
+        $value = isset($preqst[1]) ? $preqst[1] : null;
+
+        // Assign the key-value pair to the $_GET array
+        $_GET[$key] = $value;
+    }
+
+    return true;
+}
 if($Settings['qstr']!="&"&&
 	$Settings['qstr']!="/") {
 qstring($Settings['qstr'],$Settings['qsep']); 
@@ -441,7 +544,7 @@ $mypathinfo = str_replace($myscript, "", $myphpath);
 @putenv("PATH_INFO=".$mypathinfo); } }
 // Change raw post data to POST array
 // Not sure why I made but alwell. :P 
-function parse_post_data()
+function parse_post_data_old()
 { $_POST = array(); $_POST = null;
 $postdata = file_get_contents("php://input");
 if (!isset($postdata)) { $postdata = null; }
@@ -456,8 +559,59 @@ $preqst[0] = killbadvars($preqst[0]);
 if($preqst[0]!=null) {
 $_POST[$preqst[0]] = $preqst[1]; }
 ++$qsi; } return true; }
+// Manually parse raw POST data from php://input and populate the $_POST array.
+// Useful for non-standard POST content types or when the default PHP POST handling is insufficient.
+// This function decodes URL-encoded data, replaces certain characters in the keys, 
+// and sanitizes the keys using killbadvars().
+function parse_post_data()
+{
+    // Properly clear $_POST without setting it to null
+    $_POST = array();
+
+    // Retrieve the raw POST data
+    $postdata = file_get_contents("php://input");
+    if (!$postdata) {
+        return false; // Return false if there's no POST data
+    }
+
+    // Decode the URL-encoded POST data
+    $postdata = urldecode($postdata);
+
+    // Split the POST data into key-value pairs
+    $preqs = explode("&", $postdata);
+
+    // Iterate over each key-value pair
+    foreach ($preqs as $param) {
+        // Split the key-value pair by the "=" sign
+        $preqst = explode("=", $param, 2);
+
+        // If no key is found, skip the iteration
+        if (empty($preqst[0])) {
+            continue;
+        }
+
+        // Replace spaces and dollar signs in the key
+        $fix1 = array(" ", '$');
+        $fix2 = array("_", "_");
+        $key = str_replace($fix1, $fix2, $preqst[0]);
+
+        // Sanitize the key using killbadvars
+        $key = killbadvars($key);
+
+        // If the key is invalid, skip it
+        if ($key === null || $key === '') {
+            continue;
+        }
+
+        // Set the key-value pair in the $_POST array
+        $value = isset($preqst[1]) ? $preqst[1] : null;
+        $_POST[$key] = $value;
+    }
+
+    return true;
+}
 // Change Path info to Get Vars :
-function mrstring() {
+function mrstring_old() {
 if($_SERVER['PATH_INFO']==null) {
 $urlvar = explode('/',$_SERVER['PATH_INFO']); }
 else {
@@ -473,19 +627,108 @@ $urlvar[$i] = str_replace($fix1, $fix2, $urlvar[$i]);
 $urlvar[$i] = killbadvars($urlvar[$i]);
 	$_GET[$urlvar[$i]] = $urlvar[$i+1]; }
 ++$i; ++$i; } return true; }
+// Change PATH_INFO to $_GET variables
+function mrstring() {
+    // Check if PATH_INFO exists
+    if ($_SERVER['PATH_INFO'] != null) {
+        $urlvar = explode('/', trim($_SERVER['PATH_INFO'], '/')); // Remove leading/trailing slashes
+    } else {
+        return false; // Return false if there's no PATH_INFO
+    }
+
+    $num = count($urlvar);
+    $i = 0; // Start from index 0
+
+    while ($i < $num) {
+        if (isset($urlvar[$i])) {
+            // Sanitize and prepare key
+            $fix1 = array(" ", '$');
+            $fix2 = array("_", "_");
+            $key = str_replace($fix1, $fix2, $urlvar[$i]);
+            $key = killbadvars($key);
+
+            // Set the next element as the value, if it exists
+            $value = isset($urlvar[$i + 1]) ? $urlvar[$i + 1] : null;
+
+            // Add to $_GET
+            $_GET[$key] = $value;
+
+            // Skip to the next key-value pair
+            $i += 2;
+        }
+    }
+
+    return true;
+}
 // Redirect to another file with ether timed or nontimed redirect
-function redirect($type,$file,$time=0,$url=null,$dbsr=true) {
-if($type!="location"&&$type!="refresh") { $type=="location"; }
+function redirect_old($type,$file,$time=0,$url=null,$dbsr=true) {
+if($type!="location"&&$type!="refresh") { $type="location"; }
 if($url!=null) { $file = $url.$file; }
 if($dbsr===true) { $file = str_replace("//", "/", $file); }
 if($type=="refresh") { header("Refresh: ".$time."; URL=".$file); }
 if($type=="location") { session_write_close(); 
 header("Location: ".$file); } return true; }
-function redirects($type,$url,$time=0) {
+function redirects_old($type,$url,$time=0) {
 if($type!="location"&&$type!="refresh") { $type=="location"; }
 if($type=="refresh") { header("Refresh: ".$time."; URL=".$url); }
 if($type=="location") { idb_log_maker(302,"-"); }
 if($type=="location") { header("Location: ".$url); } return true; }
+// Redirect to another file with either a timed or immediate redirect
+function redirect($type, $file, $time = 0, $url = null, $dbsr = true) {
+    // Validate type and default to "location"
+    if ($type != "location" && $type != "refresh") {
+        $type = "location";
+    }
+
+    // If a base URL is provided, prepend it to the file
+    if ($url != null) {
+        $file = rtrim($url, '/') . '/' . ltrim($file, '/'); // Ensure URL is well-formed
+    }
+
+    // Sanitize double slashes in the path, but avoid modifying valid URLs
+    if ($dbsr === true && parse_url($file, PHP_URL_SCHEME) === null) {
+        $file = str_replace("//", "/", $file); // Only apply if there's no scheme (http, https, etc.)
+    }
+
+    // Handle timed redirect using Refresh header
+    if ($type == "refresh") {
+        header("Refresh: " . (int) $time . "; URL=" . $file);
+    }
+
+    // Handle immediate redirect using Location header
+    if ($type == "location") {
+        session_write_close(); // Ensure session data is saved
+        header("Location: " . $file);
+        exit(); // Ensure script stops after redirect
+    }
+
+    return true;
+}
+
+// Simplified redirect with logging
+function redirects($type, $url, $time = 0) {
+    // Validate type and default to "location"
+    if ($type != "location" && $type != "refresh") {
+        $type = "location";
+    }
+
+    // Handle timed redirect using Refresh header
+    if ($type == "refresh") {
+        header("Refresh: " . (int) $time . "; URL=" . $url);
+    }
+
+    // Handle immediate redirect using Location header, with logging
+    if ($type == "location") {
+        if (function_exists('idb_log_maker')) {
+            idb_log_maker(302, "-"); // Optional logging, if function exists
+        }
+        header("Location: " . $url);
+        exit(); // Ensure script stops after redirect
+    }
+
+    return true;
+}
+
 // Function to log the web access
 function logWebAccess($logFile, $format = '%h %l %u %t "%r" %>s %b "%{Referer}i" "%{User-Agent}i"')
 {
@@ -644,7 +887,7 @@ $theme=preg_replace("/(.*?)\.\/(.*?)/", $BoardTheme, $theme);
 if(!in_array($theme,$cktheme)||strlen($theme)>26) {
 	$theme = $BoardTheme; } return $theme; }
 // Make a url with query string
-function url_maker($file="index",$ext=".php",$qvarstr=null,$qstr=";",$qsep="=",$prexqstr=null,$exqstr=null,$fixhtml=true) {
+function url_maker_old($file="index",$ext=".php",$qvarstr=null,$qstr=";",$qsep="=",$prexqstr=null,$exqstr=null,$fixhtml=true) {
 global $sidurls, $icharset, $debug_on;
 $fileurl = null; if(!isset($ext)) { $ext = null; }
 if($ext==null) { $ext = ".php"; } 
@@ -730,8 +973,66 @@ while ($sandi < $sanum) {
 	++$sandi; } }
 return $fileurl; }
 $thisdir = dirname(realpath("Preindex.php"))."/";
+function url_maker($file = "index", $ext = ".php", $qvarstr = null, $qstr = ";", $qsep = "=", $prexqstr = null, $exqstr = null, $fixhtml = true) {
+    global $sidurls, $icharset, $debug_on;
+
+    // Handle the file extension
+    if ($ext === "noext" || $ext === "no ext" || $ext === "no+ext") {
+        $ext = null;
+    } else {
+        $ext = $ext ?? ".php";
+    }
+    $file = $file . $ext;
+
+    // Build the base file URL
+    $fileurl = $file;
+
+    // If sidurls is on, include the session ID in the query string
+    if ($sidurls === "on" && $qstr !== "/" && defined('SID')) {
+        $qvarstr = $qvarstr ? SID . "&" . $qvarstr : SID;
+    }
+
+    // Add debug mode query string if enabled
+    if ($debug_on === true) {
+        $qvarstr = $qvarstr ? $qvarstr . "&debug=on" : "debug=on";
+    }
+
+    // Apply htmlentities to make the query string HTML-safe
+    if ($fixhtml === true) {
+        $qstr = htmlentities($qstr, ENT_QUOTES, $icharset);
+        $qsep = htmlentities($qsep, ENT_QUOTES, $icharset);
+    }
+
+    // Helper function to append query strings
+    function append_query($queryStr, $qstr, $qsep, &$fileurl) {
+        if ($queryStr) {
+            $params = explode("&", $queryStr);
+            foreach ($params as $index => $param) {
+                [$key, $value] = explode("=", $param);
+                $key = urlencode($key);
+                $value = urlencode($value);
+                $fileurl .= ($qstr === "/") ? "$key/$value/" : "$key$qsep$value";
+                if ($index < count($params) - 1 && $qstr !== "/") {
+                    $fileurl .= $qstr;
+                }
+            }
+        }
+    }
+
+    // Build the URL with the query strings
+    if ($prexqstr || $qvarstr || $exqstr) {
+        $fileurl .= ($qstr === "/") ? "/" : "?";
+    }
+
+    append_query($prexqstr, $qstr, $qsep, $fileurl);
+    append_query($qvarstr, $qstr, $qsep, $fileurl);
+    append_query($exqstr, $qstr, $qsep, $fileurl);
+
+    return $fileurl;
+}
+
 // Get the Query String
-function GetQueryStr($qstr=";",$qsep="=",$fixhtml=true)
+function GetQueryStrOld($qstr=";",$qsep="=",$fixhtml=true)
 { $pregqstr = preg_quote($qstr,"/");
 $pregqsep = preg_quote($qsep,"/");
 $oqstr = $qstr; $oqsep = $qsep;
@@ -739,8 +1040,42 @@ if($fixhtml===true||$fixhtml==null) {
 $qstr = htmlentities($qstr, ENT_QUOTES, $icharset);
 $qsep = htmlentities($qsep, ENT_QUOTES, $icharset); }
 $OldBoardQuery = preg_replace("/".$pregqstr."/isxS", $qstr, $_SERVER['QUERY_STRING']);
+$OldBoardQuery = preg_replace("/".$pregqsep."/isxS", $qsep, $OldBoardQuery);
 $BoardQuery = "?".$OldBoardQuery;
 return $BoardQuery; }
+function GetQueryStr($qstr = ";", $qsep = "=", $fixhtml = true)
+{
+    global $icharset;
+
+    // Ensure QUERY_STRING is available and non-empty
+    if (!isset($_SERVER['QUERY_STRING']) || empty($_SERVER['QUERY_STRING'])) {
+        return ''; // Return an empty string if no query string is present
+    }
+
+    // If fixhtml is enabled, convert separators to HTML-safe equivalents
+    if ($fixhtml === true || $fixhtml == null) {
+        $qstr = htmlentities($qstr, ENT_QUOTES, $icharset);
+        $qsep = htmlentities($qsep, ENT_QUOTES, $icharset);
+    }
+
+    // Get the current query string from the server
+    $OldBoardQuery = $_SERVER['QUERY_STRING'];
+
+    // Replace the default separators ('&' and '=') with the custom ones
+    $OldBoardQuery = str_replace('&', $qstr, $OldBoardQuery);
+    $OldBoardQuery = str_replace('=', $qsep, $OldBoardQuery);
+
+    // Only prepend '?' if the query string is not empty after modifications
+    if (!empty($OldBoardQuery)) {
+        $BoardQuery = '?' . $OldBoardQuery;
+    } else {
+        $BoardQuery = ''; // No need for '?' if there's no query string
+    }
+
+    return $BoardQuery;
+}
+
+
 function log_fix_quotes($logtxt) {
 	$logtxt = str_replace("\"", "\\\"", $logtxt);
 	$logtxt = str_replace("'", "", $logtxt);
