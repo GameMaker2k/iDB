@@ -1290,4 +1290,28 @@ if(isset($Settings['log_http_request'])&&$Settings['log_http_request']!="on"&&
 $Settings['log_http_request'] = preg_replace_callback("/".preg_quote("%{", "/")."([^\}]*)".preg_quote("}t", "/")."/s", "get_time", $Settings['log_http_request']);
 $Settings['log_http_request'] = preg_replace_callback("/".preg_quote("%{", "/")."([^\}]*)".preg_quote("}s", "/")."/s", "get_setting_values", $Settings['log_http_request']);
 return apache_log_maker($Settings['log_config_format'], $SettDir['logs'].$Settings['log_http_request'], $status, $contentsize, strlen(implode("\r\n",headers_list())."\r\n\r\n")); } }
+
+// Function to return the LIMIT and OFFSET clause in ANSI format or SQL Server-specific syntax
+function getSQLLimitClause($sqltype, $limit, $offset) {
+    // Check if LIMIT and OFFSET are provided, set default values if necessary
+    $limit = isset($limit) ? intval($limit) : 10; // Default limit value, e.g., 10
+    $offset = isset($offset) ? intval($offset) : 0; // Default offset value, e.g., 0
+
+    // Construct the LIMIT OFFSET clause based on the SQL type
+    if ($sqltype == "mysql" || $sqltype == "mysqli" || $sqltype == "pdo_mysql" ||
+        $sqltype == "sqlite" || $sqltype == "sqlite3" || $sqltype == "pdo_sqlite3" ||
+        $sqltype == "cubrid" || $sqltype == "pdo_cubrid") {
+        // MySQL, SQLite, and Cubrid support ANSI LIMIT x OFFSET y syntax
+        return sprintf("LIMIT %d OFFSET %d", $limit, $offset);
+    } elseif ($sqltype == "pgsql" || $sqltype == "pdo_pgsql") {
+        // PostgreSQL also supports ANSI LIMIT x OFFSET y syntax
+        return sprintf("LIMIT %d OFFSET %d", $limit, $offset);
+    } elseif ($sqltype == "sqlsrv" || $sqltype == "pdo_sqlsrv") {
+        // SQL Server (sqlsrv) uses OFFSET x ROWS FETCH NEXT y ROWS ONLY syntax
+        return sprintf("OFFSET %d ROWS FETCH NEXT %d ROWS ONLY", $offset, $limit);
+    } else {
+        // If the SQL type is unknown or unsupported, return an empty string (no limit)
+        return "";
+    }
+}
 ?>

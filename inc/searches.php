@@ -133,25 +133,26 @@ if($_GET['memid']!=null&&is_numeric($_GET['memid'])) {
 $nums = $_GET['page'] * $Settings['max_topics'];
 $PageLimit = $nums - $Settings['max_topics'];
 if($PageLimit<0) { $PageLimit = 0; }
+$SQLimit = getSQLLimitClause($Settings['sqltype'], $Settings['max_topics'], $PageLimit);
 if($_GET['msearch']==null) {
 if($_GET['type']=="normal") {
-$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\"='%s'".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($_GET['search'],$PageLimit,$Settings['max_topics'])); 
+$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\"='%s'".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($_GET['search'])); 
 $NumberTopics = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\"='%s'".$ForumIgnoreList4."", array($_GET['search'])), $SQLStat); }
 if($_GET['type']=="wildcard") {
-$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\" LIKE '%s'".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($_GET['search'],$PageLimit,$Settings['max_topics'])); 
+$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\" LIKE '%s'".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($_GET['search'])); 
 $NumberTopics = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\" LIKE '%s'".$ForumIgnoreList4."", array($_GET['search'])), $SQLStat); } }
 if($_GET['msearch']!=null) {
 if($_GET['type']=="normal") {
-$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\"='%s' AND \"UserID\"=%i".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($_GET['search'],$memsid,$PageLimit,$Settings['max_topics']));
+$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\"='%s' AND \"UserID\"=%i".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($_GET['search'],$memsid));
 $NumberTopics = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\"='%s' AND \"UserID\"=%i".$ForumIgnoreList4."", array($_GET['search'])), $SQLStat);
 if($memsid==-1) {
-$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\"='%s' AND \"GuestName\"='%s'".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($_GET['search'],$_GET['msearch'],$PageLimit,$Settings['max_topics'])); 
+$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\"='%s' AND \"GuestName\"='%s'".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($_GET['search'],$_GET['msearch'])); 
 $NumberTopics = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\"='%s' AND \"GuestName\"='%s'".$ForumIgnoreList4."", array($_GET['search'],$_GET['msearch'])), $SQLStat); } }
 if($_GET['type']=="wildcard") {
-$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\" LIKE '%s' AND \"UserID\"=%i".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($_GET['search'],$memsid,$PageLimit,$Settings['max_topics']));
+$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\" LIKE '%s' AND \"UserID\"=%i".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($_GET['search'],$memsid));
 $NumberTopics = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\" LIKE '%s' AND \"UserID\"=%i".$ForumIgnoreList4."", array($_GET['search'],$_GET['msearch'])), $SQLStat);
 if($memsid==-1) {
-$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\" LIKE '%s' AND \"GuestName\"='%s'".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($_GET['search'],$_GET['msearch'],$PageLimit,$Settings['max_topics'])); 
+$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\" LIKE '%s' AND \"GuestName\"='%s'".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($_GET['search'],$_GET['msearch'])); 
 $NumberTopics = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\" LIKE '%s' AND \"GuestName\"='%s'".$ForumIgnoreList4."", array($_GET['search'],$_GET['msearch'])), $SQLStat); } } }
 if($_GET['type']=="getactive") {
 if(!isset($active_start)||!isset($active_end)) {
@@ -160,7 +161,8 @@ $active_day = $usercurtime->format("d");
 $active_year = $usercurtime->format("Y");
 $active_start = mktime(0,0,0,$active_month,$active_day,$active_year);
 $active_end = mktime(23,59,59,$active_month,$active_day,$active_year); }
-$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE (\"TimeStamp\">=%i AND \"TimeStamp\"<=%i) OR (\"LastUpdate\">=%i AND \"LastUpdate\"<=%i)".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($active_start,$active_end,$active_start,$active_end,$PageLimit,$Settings['max_topics']));
+$SQLimit = getSQLLimitClause($Settings['sqltype'], $Settings['max_topics'], $PageLimit);
+$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE (\"TimeStamp\">=%i AND \"TimeStamp\"<=%i) OR (\"LastUpdate\">=%i AND \"LastUpdate\"<=%i)".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($active_start,$active_end,$active_start,$active_end));
 $NumberTopics = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE (\"TimeStamp\">=%i AND \"TimeStamp\"<=%i) OR (\"LastUpdate\">=%i AND \"LastUpdate\"<=%i)".$ForumIgnoreList4."", array($active_start,$active_end,$active_start,$active_end)), $SQLStat); }
 $result=sql_query($query,$SQLStat);
 if($NumberTopics==null) { 
@@ -194,7 +196,8 @@ $active_year = $usercurtime->format("Y");
 $active_start = mktime(0,0,0,$active_month,$active_day,$active_year);
 $active_end = mktime(23,59,59,$active_month,$active_day,$active_year); }
 //End Topic Page Code
-$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE (\"TimeStamp\">=%i AND \"TimeStamp\"<=%i) OR (\"LastUpdate\">=%i AND \"LastUpdate\"<=%i)".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($active_start,$active_end,$active_start,$active_end,$PageLimit,$Settings['max_topics'])), $SQLStat);
+$SQLimit = getSQLLimitClause($Settings['sqltype'], $Settings['max_topics'], $PageLimit);
+$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE (\"TimeStamp\">=%i AND \"TimeStamp\"<=%i) OR (\"LastUpdate\">=%i AND \"LastUpdate\"<=%i)".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($active_start,$active_end,$active_start,$active_end)), $SQLStat);
 if($num<=0) { 
 redirect("location",$rbasedir.url_maker($exfile['search'],$Settings['file_ext'],"act=topics",$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search'],false));
 header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;

@@ -86,13 +86,14 @@ if($_GET['act']=="view") {
 //Get SQL LIMIT Number
 $nums = $_GET['page'] * $Settings['max_pmlist'];
 $PageLimit = $nums - $Settings['max_pmlist'];
-$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."messenger\" WHERE \"ReciverID\"=%i ORDER BY \"DateSend\" DESC ".$SQLimit, array($_SESSION['UserID'],$PageLimit,$Settings['max_pmlist']));
+$SQLimit = getSQLLimitClause($Settings['sqltype'], $Settings['max_pmlist'], $PageLimit);
+$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."messenger\" WHERE \"ReciverID\"=%i ORDER BY \"DateSend\" DESC ".$SQLimit, array($_SESSION['UserID']));
 $result=sql_query($query,$SQLStat);
 $NumberMessage = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."messenger\" WHERE \"ReciverID\"=%i", array($_SESSION['UserID'])), $SQLStat);
 if($NumberMessage==null) { 
 	$NumberMessage = 0; }
 $num = $NumberMessage;
-$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."messenger\" WHERE \"ReciverID\"=%i ORDER BY \"DateSend\" DESC ".$SQLimit, array($_SESSION['UserID'],$PageLimit,$Settings['max_pmlist'])), $SQLStat);
+$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."messenger\" WHERE \"ReciverID\"=%i ORDER BY \"DateSend\" DESC ".$SQLimit, array($_SESSION['UserID'])), $SQLStat);
 //Start MessengerList Page Code
 if(!isset($Settings['max_pmlist'])) { $Settings['max_pmlist'] = 10; }
 if($_GET['page']==null) { $_GET['page'] = 1; } 
@@ -115,7 +116,8 @@ if($pnum<$Settings['max_pmlist']&&$pnum>0) {
 	$pnum = $pnum - $pnum; 
 	$Pages[$l] = $l; ++$l; } }
 //End MessengerList Page Code
-$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."messenger\" WHERE \"ReciverID\"=%i ORDER BY \"DateSend\" DESC ".$SQLimit, array($_SESSION['UserID'],$PageLimit,$Settings['max_pmlist'])), $SQLStat);
+$SQLimit = getSQLLimitClause($Settings['sqltype'], $Settings['max_pmlist'], $PageLimit);
+$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."messenger\" WHERE \"ReciverID\"=%i ORDER BY \"DateSend\" DESC ".$SQLimit, array($_SESSION['UserID'])), $SQLStat);
 $i=0;
 //List Page Number Code Start
 $pagenum=count($Pages);
@@ -259,13 +261,15 @@ if($_GET['act']=="viewsent") {
 //Get SQL LIMIT Number
 $nums = $_GET['page'] * $Settings['max_pmlist'];
 $PageLimit = $nums - $Settings['max_pmlist'];
-$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."messenger\" WHERE \"SenderID\"=%i ORDER BY \"DateSend\" DESC ".$SQLimit, array($_SESSION['UserID'],$PageLimit,$Settings['max_pmlist']));
+$SQLimit = getSQLLimitClause($Settings['sqltype'], $Settings['max_pmlist'], $PageLimit);
+$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."messenger\" WHERE \"SenderID\"=%i ORDER BY \"DateSend\" DESC ".$SQLimit, array($_SESSION['UserID']));
 $result=sql_query($query,$SQLStat);
 $NumberMessage = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."messenger\" WHERE \"SenderID\"=%i", array($_SESSION['UserID'])), $SQLStat);
 if($NumberMessage==null) { 
 	$NumberMessage = 0; }
 $num = $NumberMessage;
-$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."messenger\" WHERE \"SenderID\"=%i ORDER BY \"DateSend\" DESC ".$SQLimit, array($_SESSION['UserID'],$PageLimit,$Settings['max_pmlist'])), $SQLStat);
+$SQLimit = getSQLLimitClause($Settings['sqltype'], $Settings['max_pmlist'], $PageLimit);
+$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."messenger\" WHERE \"SenderID\"=%i ORDER BY \"DateSend\" DESC ".$SQLimit, array($_SESSION['UserID'])), $SQLStat);
 //Start MessengerList Page Code
 if(!isset($Settings['max_pmlist'])) { $Settings['max_pmlist'] = 10; }
 if($_GET['page']==null) { $_GET['page'] = 1; } 
@@ -288,7 +292,8 @@ if($pnum<$Settings['max_pmlist']&&$pnum>0) {
 	$pnum = $pnum - $pnum; 
 	$Pages[$l] = $l; ++$l; } }
 //End MessengerList Page Code
-$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."messenger\" WHERE \"SenderID\"=%i ORDER BY \"DateSend\" DESC ".$SQLimit, array($_SESSION['UserID'],$PageLimit,$Settings['max_pmlist'])), $SQLStat);
+$SQLimit = getSQLLimitClause($Settings['sqltype'], $Settings['max_pmlist'], $PageLimit);
+$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."messenger\" WHERE \"SenderID\"=%i ORDER BY \"DateSend\" DESC ".$SQLimit, array($_SESSION['UserID'])), $SQLStat);
 $i=0;
 //List Page Number Code Start
 $pagenum=count($Pages);
