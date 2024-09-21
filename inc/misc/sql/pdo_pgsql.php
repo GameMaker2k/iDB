@@ -216,6 +216,11 @@ function pdo_pgsql_func_get_next_id($tablepre, $table, $link = null) {
     return $row['currval'] ?? 0;
 }
 
+// Set Charset (dummy function)
+function pdo_pgsql_func_set_charset($charset, $link = null) {
+    return true;
+}
+
 // Fetch number of rows from a table using COUNT
 function pdo_pgsql_func_get_num_rows($tablepre, $table, $link = null) {
     $query = pdo_pgsql_func_pre_query("SELECT COUNT(*) as cnt FROM " . $tablepre . $table, []);
@@ -224,12 +229,19 @@ function pdo_pgsql_func_get_num_rows($tablepre, $table, $link = null) {
     return $row['cnt'] ?? 0;
 }
 
-// Fetch number of rows using a COUNT query
+// Fetch Number of Rows using COUNT in a single query
 function pdo_pgsql_func_count_rows($query, $link = null) {
-    $get_num_result = pdo_pgsql_func_query($query, $link);
-    $ret_num_result = pdo_pgsql_func_result($get_num_result, 0);
-    @pdo_pgsql_func_free_result($get_num_result);
-    return $ret_num_result;
+    $result = pdo_pgsql_func_query($query, $link);
+    $row = pdo_pgsql_func_result($result, 0, 'cnt');
+    @pdo_pgsql_func_free_result($result);
+    return $row;
+}
+
+function pdo_pgsql_func_count_rows_alt($query, $link = null) {
+    $result = pdo_pgsql_func_query($query, $link);
+    $row = pdo_pgsql_func_result($result, 0);
+    @pdo_pgsql_func_free_result($result);
+    return $row;
 }
 
 function pdo_pgsql_func_free_result($result) {

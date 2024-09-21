@@ -274,14 +274,14 @@ function pdo_mysql_func_get_num_rows($tablepre, $table, $link = null) {
 // Fetch Number of Rows using COUNT in a single query
 function pdo_mysql_func_count_rows($query, $link = null) {
     $result = pdo_mysql_func_query($query, $link);
-    $row = pdo_mysql_func_result($result, 0);
+    $row = pdo_mysql_func_result($result, 0, 'cnt');
     @pdo_mysql_func_free_result($result);
     return $row;
 }
 
 function pdo_mysql_func_count_rows_alt($query, $link = null) {
     $result = pdo_mysql_func_query($query, $link);
-    $row = pdo_mysql_func_result($result, 0, 'cnt');
+    $row = pdo_mysql_func_result($result, 0);
     @pdo_mysql_func_free_result($result);
     return $row;
 }

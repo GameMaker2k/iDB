@@ -203,6 +203,31 @@ function pdo_sqlite3_func_get_next_id($tablepre, $table, $link = null) {
     return $pdo->lastInsertId();
 }
 
+// Set Charset (dummy function)
+function pdo_sqlite3_func_set_charset($charset, $link = null) {
+    return true;
+}
+
+// Fetch Number of Rows using COUNT in a single query
+function pdo_sqlite3_func_count_rows($query, $link = null) {
+    $result = pdo_sqlite3_func_query($query, $link);
+    $row = pdo_sqlite3_func_result($result, 0, 'cnt');
+    @pdo_sqlite3_func_free_result($result);
+    return $row;
+}
+
+function pdo_sqlite3_func_count_rows_alt($query, $link = null) {
+    $result = pdo_sqlite3_func_query($query, $link);
+    $row = pdo_sqlite3_func_result($result, 0);
+    @pdo_sqlite3_func_free_result($result);
+    return $row;
+}
+
+// Free Results
+function pdo_sqlite3_func_free_result($result) {
+    return true;
+}
+
 // Fetch number of rows from a table
 function pdo_sqlite3_func_get_num_rows($tablepre, $table, $link = null) {
     $query = pdo_sqlite3_func_pre_query("SELECT COUNT(*) as cnt FROM " . $tablepre . $table);
