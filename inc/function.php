@@ -973,6 +973,23 @@ while ($sandi < $sanum) {
 	++$sandi; } }
 return $fileurl; }
 $thisdir = dirname(realpath("Preindex.php"))."/";
+// Move append_query() outside to avoid redeclaration error
+function append_query($queryStr, $qstr, $qsep, &$fileurl) {
+    if ($queryStr) {
+        $params = explode("&", $queryStr);
+        foreach ($params as $index => $param) {
+            [$key, $value] = explode("=", $param);
+            $key = urlencode($key);
+            $value = urlencode($value);
+            $fileurl .= ($qstr === "/") ? "$key/$value/" : "$key$qsep$value";
+            if ($index < count($params) - 1 && $qstr !== "/") {
+                $fileurl .= $qstr;
+            }
+        }
+    }
+}
+
+// Now modify url_maker function
 function url_maker($file = "index", $ext = ".php", $qvarstr = null, $qstr = ";", $qsep = "=", $prexqstr = null, $exqstr = null, $fixhtml = true) {
     global $sidurls, $icharset, $debug_on;
 
@@ -1003,23 +1020,7 @@ function url_maker($file = "index", $ext = ".php", $qvarstr = null, $qstr = ";",
         $qsep = htmlentities($qsep, ENT_QUOTES, $icharset);
     }
 
-    // Helper function to append query strings
-    function append_query($queryStr, $qstr, $qsep, &$fileurl) {
-        if ($queryStr) {
-            $params = explode("&", $queryStr);
-            foreach ($params as $index => $param) {
-                [$key, $value] = explode("=", $param);
-                $key = urlencode($key);
-                $value = urlencode($value);
-                $fileurl .= ($qstr === "/") ? "$key/$value/" : "$key$qsep$value";
-                if ($index < count($params) - 1 && $qstr !== "/") {
-                    $fileurl .= $qstr;
-                }
-            }
-        }
-    }
-
-    // Build the URL with the query strings
+    // Append pre-existing query string, main query string, and extra query string
     if ($prexqstr || $qvarstr || $exqstr) {
         $fileurl .= ($qstr === "/") ? "/" : "?";
     }
@@ -1074,7 +1075,6 @@ function GetQueryStr($qstr = ";", $qsep = "=", $fixhtml = true)
 
     return $BoardQuery;
 }
-
 
 function log_fix_quotes($logtxt) {
 	$logtxt = str_replace("\"", "\\\"", $logtxt);
