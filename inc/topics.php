@@ -210,7 +210,7 @@ $PageLimit = $_GET['st']; }
 if($PageLimit<0) { $PageLimit = 0; }
 //End Topic Page Code
 $i=0;
-$ExtraIgnores = null;
+$ExtraIgnores = "";
 if($PermissionInfo['CanModForum'][$_GET['id']]=="no") {
 	$ExtraIgnores = " AND \"Closed\"<>3"; }
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE (\"ForumID\"=%i".$ExtraIgnores.$ForumIgnoreList4.") OR (\"OldForumID\"=%i".$ExtraIgnores.$ForumIgnoreList4.") OR (\"Pinned\"=2".$ExtraIgnores.$ForumIgnoreList4.") ORDER BY \"Pinned\" DESC, \"LastUpdate\" DESC ".$SQLimit, array($_GET['id'],$_GET['id'],$PageLimit,$Settings['max_topics']));

@@ -13,35 +13,46 @@
 
     $FileInfo: sql.php - Last Update: 8/28/2024 SVN 1053 - Author: cooldude2k $
 */
-$File3Name = basename($_SERVER['SCRIPT_NAME']);
-if ($File3Name=="sql.php"||$File3Name=="/sql.php") {
-	@header('Location: index.php');
-	exit(); }
 
+$File3Name = basename($_SERVER['SCRIPT_NAME']);
+if ($File3Name == "sql.php" || $File3Name == "/sql.php") {
+    @header('Location: index.php');
+    exit();
+}
 
 $NumQueriesArray = array();
-if(file_exists($SettDir['sql']."mysql.php")) {
-	require($SettDir['sql']."mysql.php"); }
-if(file_exists($SettDir['sql']."pdo_mysql.php")) {
-	require($SettDir['sql']."pdo_mysql.php"); }
-if(file_exists($SettDir['sql']."mysqli.php")) {
-	require($SettDir['sql']."mysqli.php"); }
-if(file_exists($SettDir['sql']."pgsql.php")) {
-	require($SettDir['sql']."pgsql.php"); }
-/*if(file_exists($SettDir['sql']."pdo_pgsql.php")) {
-	require($SettDir['sql']."pdo_pgsql.php"); }*/
-if(file_exists($SettDir['sql']."sqlite.php")) {
-	require($SettDir['sql']."sqlite.php"); }
-if(file_exists($SettDir['sql']."sqlite3.php")) {
-	require($SettDir['sql']."sqlite3.php"); }
-if(file_exists($SettDir['sql']."pdo_sqlite3.php")) {
-	require($SettDir['sql']."pdo_sqlite3.php"); }
-if(file_exists($SettDir['sql']."cubrid.php")) {
-	require($SettDir['sql']."cubrid.php"); }
-/*if(file_exists($SettDir['sql']."pdo_cubrid.php")) {
-	require($SettDir['sql']."pdo_cubrid.php"); }*/
+if (file_exists($SettDir['sql'] . "mysql.php")) {
+    require($SettDir['sql'] . "mysql.php");
+}
+if (file_exists($SettDir['sql'] . "pdo_mysql.php")) {
+    require($SettDir['sql'] . "pdo_mysql.php");
+}
+if (file_exists($SettDir['sql'] . "mysqli.php")) {
+    require($SettDir['sql'] . "mysqli.php");
+}
+if (file_exists($SettDir['sql'] . "pgsql.php")) {
+    require($SettDir['sql'] . "pgsql.php");
+}
+if(file_exists($SettDir['sql']."pdo_pgsql.php")) {
+    require($SettDir['sql']."pdo_pgsql.php");
+}
+if (file_exists($SettDir['sql'] . "sqlite.php")) {
+    require($SettDir['sql'] . "sqlite.php");
+}
+if (file_exists($SettDir['sql'] . "sqlite3.php")) {
+    require($SettDir['sql'] . "sqlite3.php");
+}
+if (file_exists($SettDir['sql'] . "pdo_sqlite3.php")) {
+    require($SettDir['sql'] . "pdo_sqlite3.php");
+}
+if (file_exists($SettDir['sql'] . "cubrid.php")) {
+    require($SettDir['sql'] . "cubrid.php");
+}
+if(file_exists($SettDir['sql']."pdo_cubrid.php")) {
+    require($SettDir['sql']."pdo_cubrid.php");
+}
 
-// Helper function to map sql library to its function prefix
+// Helper function to map SQL library to its function prefix
 function get_sql_function_prefix($sqllib) {
     $prefixes = array(
         'mysql' => 'mysql_func',
@@ -90,15 +101,18 @@ function sql_errorno($link = null, $sqllib = null) {
     return call_sql_function('errorno', $sqllib, $link);
 }
 
-if(!isset($NumQueries)) {
-    $NumQueries = 0; }
-if(!isset($NumQueriesArray['sql'])) {
-    $NumQueriesArray['sql'] = $NumQueries; }
+if (!isset($NumQueries)) {
+    $NumQueries = 0;
+}
+if (!isset($NumQueriesArray['sql'])) {
+    $NumQueriesArray['sql'] = $NumQueries;
+}
+
 function sql_query($query, $link = null, $sqllib = null) {
     global $NumQueries, $NumQueriesArray;
     $returnval = call_sql_function('query', $sqllib, $query, $link);
-    if($returnval) {
-        ++$NumQueries; 
+    if ($returnval) {
+        ++$NumQueries;
     }
     return $returnval;
 }
@@ -164,10 +178,10 @@ function sql_get_num_rows($tablepre, $table, $link = null, $sqllib = null) {
 }
 
 function sql_count_rows($query, $link = null, $sqllib = null) {
-    return call_sql_function('count_rows', $sqllib, $query, $link = null);
+    return call_sql_function('count_rows', $sqllib, $query, $link);
 }
 
 function sql_count_rows_alt($query, $link = null, $sqllib = null) {
-    return call_sql_function('count_rows_alt', $sqllib, $query, $link = null);
+    return call_sql_function('count_rows_alt', $sqllib, $query, $link);
 }
 ?>

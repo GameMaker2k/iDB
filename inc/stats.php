@@ -111,8 +111,8 @@ if($Settings['AdminValidate']=="on") {
 $nmquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\">=%i ".$caniview." AND \"Validated\"='yes' AND \"GroupID\"<>%i ORDER BY \"Joined\" DESC LIMIT 1", array(1,$Settings['ValidateGroup'])); 
 $nummembers = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\">=%i ".$caniview." AND \"Validated\"='yes' AND \"GroupID\"<>%i", array(1,$Settings['ValidateGroup'])), $SQLStat); }
 if($Settings['AdminValidate']!="on") {
-$nmquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\">=%i ".$caniview." ORDER BY \"Joined\" DESC LIMIT 1", array(1,$Settings['ValidateGroup'])); 
-$nummembers = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\">=%i ".$caniview, array(1,$Settings['ValidateGroup'])), $SQLStat); }
+$nmquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\">=%i ".$caniview." ORDER BY \"Joined\" DESC LIMIT 1", array(1)); 
+$nummembers = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\">=%i ".$caniview, array(1)), $SQLStat); }
 $nmresult = sql_query($nmquery,$SQLStat);
 $NewestMem = array(null);
 $NewestMem['ID'] = "0"; $NewestMem['Name'] = "Anonymous";

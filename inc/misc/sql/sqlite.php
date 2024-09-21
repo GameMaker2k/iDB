@@ -13,201 +13,190 @@
 
     $FileInfo: sqlite.php - Last Update: 8/30/2024 SVN 1063 - Author: cooldude2k $
 */
+
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
-if ($File3Name=="sqlite.php"||$File3Name=="/sqlite.php") {
-	@header('Location: index.php');
-	exit(); }
-// SQLite Functions.
-function sqlite_func_error($link=null) {
-global $SQLStat;
-if(isset($link)) {
-	$result = sqlite_error_string(sqlite_last_error($link)); }
-if(!isset($link)) {
-	$result = sqlite_error_string(sqlite_last_error($SQLStat)); }
-if ($result=="") {
-	return ""; }
-	return $result; }
-function sqlite_func_errno($link=null) {
-global $SQLStat;
-if(isset($link)) {
-	$result = sqlite_last_error($link); }
-if(!isset($link)) {
-	$result = sqlite_last_error($SQLStat); }
-if ($result===0) {
-	return 0; }
-	return $result; }
-function sqlite_func_errorno($link=null) {
-global $SQLStat;
-if(isset($link)) {
-	$result = sqlite_last_error($link).": ".sqlite_func_ite_error_string(sqlite_last_error($link)); }
-if(!isset($link)) {
-	$result = sqlite_last_error($SQLStat).": ".sqlite_func_ite_error_string(sqlite_last_error($SQLStat)); }
-if ($result=="") {
-	return ""; }
-	return $result; }
-// Execute a query :P
-if(!isset($NumQueriesArray['sqlite'])) {
-    $NumQueriesArray['sqlite'] = 0; }
-function sqlite_func_query($query,$link=null) {
-global $NumQueriesArray,$SQLStat;
-if(isset($link)) {
-	$result = sqlite_query($link,$query); }
-if(!isset($link)) {
-	$result = sqlite_query($SQLStat,$query); }
-if ($result===false) {
-    output_error("SQL Error: ".sqlite_func_error(),E_USER_ERROR);
-	return false; }
-if ($result!==false) {
-	++$NumQueriesArray['sqlite'];
-	return $result; } }
-//Fetch Number of Rows
+if ($File3Name == "sqlite.php" || $File3Name == "/sqlite.php") {
+    @header('Location: index.php');
+    exit();
+}
+
+// SQLite Functions
+function sqlite_func_error($link = null) {
+    global $SQLStat;
+    return isset($link) 
+        ? sqlite_error_string(sqlite_last_error($link)) 
+        : sqlite_error_string(sqlite_last_error($SQLStat));
+}
+
+function sqlite_func_errno($link = null) {
+    global $SQLStat;
+    return isset($link) ? sqlite_last_error($link) : sqlite_last_error($SQLStat);
+}
+
+function sqlite_func_errorno($link = null) {
+    global $SQLStat;
+    return isset($link)
+        ? sqlite_last_error($link) . ": " . sqlite_error_string(sqlite_last_error($link))
+        : sqlite_last_error($SQLStat) . ": " . sqlite_error_string(sqlite_last_error($SQLStat));
+}
+
+// Execute a query
+if (!isset($NumQueriesArray['sqlite'])) {
+    $NumQueriesArray['sqlite'] = 0;
+}
+
+function sqlite_func_query($query, $link = null) {
+    global $NumQueriesArray, $SQLStat;
+    $result = isset($link) ? sqlite_query($link, $query) : sqlite_query($SQLStat, $query);
+
+    if ($result === false) {
+        output_error("SQL Error: " . sqlite_func_error(), E_USER_ERROR);
+        return false;
+    }
+
+    ++$NumQueriesArray['sqlite'];
+    return $result;
+}
+
+// Fetch Number of Rows
 function sqlite_func_num_rows($result) {
-$num = sqlite_num_rows($result);
-if ($num===false) {
-    output_error("SQL Error: ".sqlite_func_error(),E_USER_ERROR);
-	return false; }
-	return $num; }
-// Connect to sqlite database
-function sqlite_func_connect_db($server,$username,$password,$database=null,$new_link=false) {
-if($new_link!==true) { $new_link = false; }
-if($database===null) {
-return true; }
-if($database!==null) {
-$link = sqlite_open($database,0666,$sqliteerror); }
-if ($link===false) {
-    output_error("Not connected: ".$sqliteerror,E_USER_ERROR);
-	return false; }
-return $link; }
-function sqlite_func_disconnect_db($link=null) {
-return sqlite_close($link); }
-// Query Results :P
-function sqlite_func_result($result,$row,$field=0) {
-$check = sqlite_seek($result,$row);
-if ($check===false) {
-    output_error("SQL Error: ".sqlite_func_error(),E_USER_ERROR);
-	return false; }
-$trow = sqlite_fetch_array($result);
-if(!isset($trow[$field])) { $trow[$field] = null; }
-$retval = $trow[$field]; 
-return $retval; }
-// Free Results :P
+    $num = sqlite_num_rows($result);
+
+    if ($num === false) {
+        output_error("SQL Error: " . sqlite_func_error(), E_USER_ERROR);
+        return false;
+    }
+
+    return $num;
+}
+
+// Connect to SQLite database
+function sqlite_func_connect_db($server, $username, $password, $database = null, $new_link = false) {
+    if ($database === null) {
+        return true;
+    }
+
+    $link = sqlite_open($database, 0666, $sqliteerror);
+    
+    if ($link === false) {
+        output_error("Not connected: " . $sqliteerror, E_USER_ERROR);
+        return false;
+    }
+
+    return $link;
+}
+
+function sqlite_func_disconnect_db($link = null) {
+    return sqlite_close($link);
+}
+
+// Query Results
+function sqlite_func_result($result, $row, $field = 0) {
+    $check = sqlite_seek($result, $row);
+
+    if ($check === false) {
+        output_error("SQL Error: " . sqlite_func_error(), E_USER_ERROR);
+        return false;
+    }
+
+    $trow = sqlite_fetch_array($result);
+    return isset($trow[$field]) ? $trow[$field] : null;
+}
+
+// Free Results
 function sqlite_func_free_result($result) {
-	return true; }
-//Fetch Results to Array
-function sqlite_func_fetch_array($result,$result_type=SQLITE_BOTH) {
-if($result_type==null) { $result_type = SQLITE_BOTH; }
-$row = sqlite_fetch_array($result,$result_type);
-	return $row; }
-//Fetch Results to Associative Array
+    return true;
+}
+
+// Fetch Results to Array
+function sqlite_func_fetch_array($result, $result_type = SQLITE_BOTH) {
+    return sqlite_fetch_array($result, $result_type);
+}
+
+// Fetch Results to Associative Array
 function sqlite_func_fetch_assoc($result) {
-$row = sqlite_fetch_array($result,SQLITE_ASSOC);
-	return $row; }
-//Fetch Row Results
+    return sqlite_fetch_array($result, SQLITE_ASSOC);
+}
+
+// Fetch Row Results
 function sqlite_func_fetch_row($result) {
-$row = sqlite_fetch_array($result,SQLITE_NUM);
-	return $row; }
-//Get Server Info
-function sqlite_func_server_info($link=null) {
-	$result = sqlite_libversion();
-	return $result; }
-//Get Client Info
-function sqlite_func_client_info($link=null) {
-	return null; }
-function sqlite_func_escape_string($string,$link=null) {
- if(isset($string)) {
- 	$string = sqlite_escape_string($string); }
-if ($string===false) {
-    output_error("SQL Error: ".sqlite_func_error(),E_USER_ERROR);
-	return false; }
-	return $string; }
+    return sqlite_fetch_array($result, SQLITE_NUM);
+}
+
+// Get Server Info
+function sqlite_func_server_info($link = null) {
+    return sqlite_libversion();
+}
+
+// Get Client Info
+function sqlite_func_client_info($link = null) {
+    return null;
+}
+
+function sqlite_func_escape_string($string, $link = null) {
+    return sqlite_escape_string($string);
+}
+
 // SafeSQL Lite Source Code by Cool Dude 2k
 // Make SQL Query's safe
-function sqlite_func_pre_query($query_string,$query_vars) {
-   if($query_vars==null) { $query_vars = array(null); }
-   $query_array = array(array("%i","%I","%F","%S"),array("%d","%d","%f","%s"));
-   $query_string = str_replace($query_array[0], $query_array[1], $query_string);
-   if (get_magic_quotes_gpc()) {
-       $query_vars  = array_map("stripslashes", $query_vars); }
-   $query_vars = array_map("sql_escape_string", $query_vars);
-   $query_val = $query_vars;
-$query_num = count($query_val);
-$query_i = 0;
-while ($query_i < $query_num) {
-$query_is = $query_i+1;
-$query_val[$query_is] = $query_vars[$query_i];
-++$query_i; }
-   $query_val[0] = $query_string;
-   return call_user_func_array("sprintf",$query_val); }
-function sqlite_func_set_charset($charset,$link=null) {
-	return true; }
-/*
-function sqlite_func_set_charset($charset,$link=null) {
-if(function_exists('mysql_set_charset')===false) {
-if(!isset($link)) {
-	$result = sqlite_func_query("SET CHARACTER SET '".$charset."'"); }
-if(isset($link)) {
-	$result = sqlite_func_query("SET CHARACTER SET '".$charset."'",$link); }
-if ($result===false) {
-    output_error("SQL Error: ".sqlite_func_error(),E_USER_ERROR);
-	return false; }
-if(!isset($link)) {
-	$result = sqlite_func_query("SET NAMES '".$charset."'"); }
-if(isset($link)) {
-	$result = sqlite_func_query("SET NAMES '".$charset."'",$link); } 
-if ($result===false) {
-    output_error("SQL Error: ".sqlite_func_error(),E_USER_ERROR);
-	return false; }
-	return true; }
-if(function_exists('mysql_set_charset')===true) {
-if(isset($link)) {
-	$result = mysql_set_charset($charset,$link); }
-if(!isset($link)) {
-	$result = mysql_set_charset($charset); }
-if ($result===false) {
-    output_error("SQL Error: ".sqlite_func_error(),E_USER_ERROR);
-	return false; }
-	return true; }
-if(function_exists('mysql_set_charset')===false) {
-function mysql_set_charset($charset,$link) {
-if(isset($link)) {
-	$result = sqlite_func_set_charset($charset,$link); }
-if(!isset($link)) {
-	$result = sqlite_func_set_charset($charset); }
-if ($result===false) {
-    output_error("SQL Error: ".sqlite_func_error(),E_USER_ERROR);
-	return false; }
-	return true; } }
-*/
+function sqlite_func_pre_query($query_string, $query_vars) {
+    if ($query_vars == null) {
+        $query_vars = array(null);
+    }
+
+    $query_array = array(array("%i", "%I", "%F", "%S"), array("%d", "%d", "%f", "%s"));
+    $query_string = str_replace($query_array[0], $query_array[1], $query_string);
+
+    if (get_magic_quotes_gpc()) {
+        $query_vars = array_map("stripslashes", $query_vars);
+    }
+
+    $query_vars = array_map("sqlite_func_escape_string", $query_vars);
+    $query_val = $query_vars;
+    $query_num = count($query_val);
+    $query_i = 0;
+
+    while ($query_i < $query_num) {
+        $query_val[$query_i + 1] = $query_vars[$query_i];
+        ++$query_i;
+    }
+
+    $query_val[0] = $query_string;
+    return call_user_func_array("sprintf", $query_val);
+}
+
+// Set Charset
+function sqlite_func_set_charset($charset, $link = null) {
+    return true;
+}
+
 // Get next id for stuff
-function sqlite_func_get_next_id($tablepre,$table,$link=null) {
-	$nid = sqlite_last_insert_rowid($link);
-	return $nid; }
+function sqlite_func_get_next_id($tablepre, $table, $link = null) {
+    return sqlite_last_insert_rowid($link);
+}
+
 // Get number of rows for table
-function sqlite_func_get_num_rows($tablepre,$table,$link=null) {
-   $getnextidq = sqlite_func_pre_query("SHOW TABLE STATUS LIKE '".$tablepre.$table."'", array());
-if(!isset($link)) {
-	$getnextidr = sqlite_func_query($getnextidq); }
-if(isset($link)) {
-	$getnextidr = sqlite_func_query($getnextidq,$link); } 
-   $getnextid = sqlite_func_fetch_assoc($getnextidr);
-   return $getnextid['Rows'];
-   @sqlite_func_result($getnextidr); }
+function sqlite_func_get_num_rows($tablepre, $table, $link = null) {
+    $getnextidq = sqlite_func_pre_query("SHOW TABLE STATUS LIKE '" . $tablepre . $table . "'", array());
+    $getnextidr = isset($link) ? sqlite_func_query($getnextidq, $link) : sqlite_func_query($getnextidq);
+    $getnextid = sqlite_func_fetch_assoc($getnextidr);
+    return $getnextid['Rows'];
+    @sqlite_func_result($getnextidr);
+}
+
 // Fetch Number of Rows using COUNT in a single query
 function sqlite_func_count_rows($query, $link = null) {
-    // Execute the query using sql_query
     $get_num_result = sqlite_func_query($query, $link);
-    // Fetch the count result
     $ret_num_result = sqlite_func_result($get_num_result, 0);
-    // Free the result resource
-    @sqlite_func_free_result($get_num_result); 
-    return $ret_num_result; }
+    @sqlite_func_free_result($get_num_result);
+    return $ret_num_result;
+}
+
 // Fetch Number of Rows using COUNT in a single query
 function sqlite_func_count_rows_alt($query, $link = null) {
-    // Execute the query using sql_query
     $get_num_result = sqlite_func_query($query, $link);
-    // Fetch the count result
     $ret_num_result = sqlite_func_result($get_num_result, 0, 'cnt');
-    // Free the result resource
-    @sqlite_func_free_result($get_num_result); 
-    return $ret_num_result; }
+    @sqlite_func_free_result($get_num_result);
+    return $ret_num_result;
+}
 ?>

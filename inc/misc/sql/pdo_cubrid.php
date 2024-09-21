@@ -14,212 +14,225 @@
     $FileInfo: pdo_cubrid.php - Last Update: 8/30/2024 SVN 1063 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
-if ($File3Name=="pdo_cubrid.php"||$File3Name=="/pdo_cubrid.php") {
-	@header('Location: index.php');
-	exit(); }
-// CUBRID Functions.
-function pdo_cubrid_func_error($link=null) {
-	$result = cubrid_error_msg();
-	return $result; }
-function pdo_cubrid_func_errno($link=null) {
-	$result = cubrid_error_code();
-	return $result; }
-function pdo_cubrid_func_errorno($link=null) {
-	$result = pdo_cubrid_func_error();
-	$resultno = pdo_cubrid_func_errno();
-	$result = $resultno.": ".$result;
-	return $result; }
-// Execute a query :P
-if(!isset($NumQueries)) {
-$NumQueries = 0; }
-function pdo_cubrid_func_query($query,$link=null) {
-global $NumQueries;
-if(isset($link)) {
-	$result = cubrid_query($query,$link); }
-if(!isset($link)) {
-	$result = cubrid_query($query); }
-if ($result===false) {
-    output_error("SQL Error: ".pdo_cubrid_func_error(),E_USER_ERROR);
-	return false; }
-if ($result!==false) {
-	++$NumQueries;
-	return $result; } }
-//Fetch Number of Rows
+if ($File3Name == "pdo_cubrid.php" || $File3Name == "/pdo_cubrid.php") {
+    @header('Location: index.php');
+    exit();
+}
+
+// CUBRID Error handling functions
+function pdo_cubrid_func_error($link = null) {
+    global $SQLStat;
+    $result = isset($link) ? $link->errorInfo() : $SQLStat->errorInfo();
+    return ($result == "") ? "" : $result;
+}
+
+function pdo_cubrid_func_errno($link = null) {
+    global $SQLStat;
+    $result = isset($link) ? $link->errorCode() : $SQLStat->errorCode();
+    return ($result === 0) ? 0 : $result;
+}
+
+// Execute a query
+if (!isset($NumQueries)) {
+    $NumQueries = 0;
+}
+
+function pdo_cubrid_func_query($query, $link = null) {
+    global $NumQueries, $SQLStat;
+
+    // Use the appropriate PDO connection
+    $pdo = isset($link) ? $link : $SQLStat;
+
+    // Check if the query is an array containing the query string and parameters
+    if (is_array($query)) {
+        list($query_string, $params) = $query;
+        $stmt = $pdo->prepare($query_string);
+
+        // Bind parameters dynamically based on their type
+        foreach ($params as $key => $value) {
+            $paramKey = is_int($key) ? $key + 1 : $key;
+            if (is_int($value)) {
+                $stmt->bindValue($paramKey, $value, PDO::PARAM_INT);
+            } elseif (is_bool($value)) {
+                $stmt->bindValue($paramKey, $value, PDO::PARAM_BOOL);
+            } elseif (is_null($value)) {
+                $stmt->bindValue($paramKey, $value, PDO::PARAM_NULL);
+            } else {
+                $stmt->bindValue($paramKey, $value, PDO::PARAM_STR);
+            }
+        }
+
+        // Execute with bound parameters
+        $result = $stmt->execute();
+
+        if ($result === false) {
+            $errorInfo = $pdo->errorInfo();
+            output_error("SQL Error: " . $errorInfo[2], E_USER_ERROR);
+            return false;
+        }
+
+        ++$NumQueries;
+        return $stmt;  // Return the statement for SELECT or data-fetching queries
+    } else {
+        // For direct queries without parameters
+        $result = $pdo->query($query);
+
+        if ($result === false) {
+            $errorInfo = $pdo->errorInfo();
+            output_error("SQL Error: " . $errorInfo[2], E_USER_ERROR);
+            return false;
+        }
+
+        if ($result instanceof PDOStatement) {
+            ++$NumQueries;
+            return $result;
+        }
+
+        return $result;
+    }
+}
+
+// Fetch number of rows for SELECT queries
 function pdo_cubrid_func_num_rows($result) {
-$num = cubrid_num_rows($result);
-if ($num===false) {
-    output_error("SQL Error: ".pdo_cubrid_func_error(),E_USER_ERROR);
-	return false; }
-	return $num; }
-// Connect to mysql database
-function pdo_cubrid_func_connect_db($server,$username,$password,$database=null,$new_link=false) {
-if($new_link!==true) { $new_link = false; }
-if($database===null) {
-return true; }
-if($database!==null) {
-$myport = "30000";
-$hostex = explode(":", $server);
-if(isset($hostex[1])&&
-	!is_numeric($hostex[1])) {
-	$hostex[1] = $myport; }
-if(isset($hostex[1])) { 
-	$server = $hostex[0];
-	$myport = $hostex[1]; }
-$link = cubrid_connect($server,$myport,$database,$username,$password); 
-cubrid_set_autocommit($link,CUBRID_AUTOCOMMIT_TRUE); }
-if ($link===false) {
-    output_error("Not connected: ".$sqliteerror,E_USER_ERROR);
-	return false; }
-return $link; }
-function pdo_cubrid_func_disconnect_db($link=null) {
-return cubrid_disconnect($link); }
-// Query Results :P
-function pdo_cubrid_func_result($result,$row,$field=0) {
-if(isset($field)&&!is_numeric($field)) {
-	$field = strtolower($field); }
-$value = cubrid_result($result, $row, $field);
-if ($value===false) { 
-    output_error("SQL Error: ".pdo_cubrid_func_error(),E_USER_ERROR);
-	return false; }
-	return $value; }
-// Free Results :P
-function pdo_cubrid_func_free_result($result) {
-$fresult = cubrid_free_result($result);
-if ($fresult===false) {
-    output_error("SQL Error: ".pdo_cubrid_func_error(),E_USER_ERROR);
-	return false; }
-$fresult = cubrid_close_request($result);
-if ($fresult===false) {
-    output_error("SQL Error: ".pdo_cubrid_func_error(),E_USER_ERROR);
-	return false; }
-if ($fresult===true) {
-	return true; } }
-//Fetch Results to Array
-function pdo_cubrid_func_fetch_array($result,$result_type=PDO::FETCH_BOTH) {
-if($result_type==null) { $result_type = PDO::FETCH_BOTH; }
-$row = cubrid_fetch_array($result,$result_type);
-	return $row; }
-//Fetch Results to Associative Array
+    if ($result instanceof PDOStatement) {
+        $num = $result->rowCount();
+        return $num !== false ? $num : 0;
+    }
+    return false;
+}
+
+// Connect to CUBRID database
+function pdo_cubrid_func_connect_db($server, $username, $password, $database = null, $new_link = false) {
+    global $SQLStat;
+    $dsn = "cubrid:host=$server";
+
+    // If a database is specified, include it in the DSN
+    if ($database !== null) {
+        $dsn .= ";dbname=$database";
+    }
+
+    try {
+        // Create a new PDO instance with the DSN, username, and password
+        $SQLStat = new PDO($dsn, $username, $password, [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, // Set error mode to exceptions
+            PDO::ATTR_PERSISTENT => $new_link            // Use persistent connections if requested
+        ]);
+
+        // Return the PDO instance (CUBRID connection)
+        return $SQLStat;
+
+    } catch (PDOException $e) {
+        // Output error if connection fails
+        output_error("Connection failed: " . $e->getMessage(), E_USER_ERROR);
+        return false;
+    }
+}
+
+function pdo_cubrid_func_disconnect_db($link = null) {
+    global $SQLStat;
+    if (isset($link) && $link instanceof PDOStatement) {
+        return $link->closeCursor();
+    }
+
+    if (!isset($link) && isset($SQLStat)) {
+        $SQLStat = null;
+        return true;
+    }
+
+    return false;
+}
+
+// Query result fetching for both associative and numeric arrays
+function pdo_cubrid_func_result($result, $row = 0, $field = 0) {
+    if ($result instanceof PDOStatement) {
+        $rows = $result->fetchAll(PDO::FETCH_BOTH);
+
+        if (!isset($rows[$row])) {
+            return null;
+        }
+
+        return $rows[$row][$field] ?? null;
+    }
+    return false;
+}
+
+// Fetch row results as an array
+function pdo_cubrid_func_fetch_array($result, $result_type = PDO::FETCH_BOTH) {
+    return $result->fetch($result_type);
+}
+
+// Fetch row results as an associative array
 function pdo_cubrid_func_fetch_assoc($result) {
-$row = cubrid_fetch_assoc($result);
-	return $row; }
-//Fetch Row Results
+    return $result->fetch(PDO::FETCH_ASSOC);
+}
+
+// Fetch row results as a numeric array
 function pdo_cubrid_func_fetch_row($result) {
-$row = cubrid_fetch_row($result);
-	return $row; }
-//Get Server Info
-function pdo_cubrid_func_server_info($link=null) {
-if(isset($link)) {
-	$result = cubrid_get_server_info($link); }
-if(!isset($link)) {
-	$result = cubrid_get_server_info(); }
-	return $result; }
-//Get Client Info
-function pdo_cubrid_func_client_info($link=null) {
-	$result = cubrid_get_client_info();
-	return $result; }
-function pdo_cubrid_func_escape_string($string,$link=null) {
-if(isset($string)) {
- if(isset($link)) {
- 	$string = cubrid_real_escape_string($string,$link); }
- if(!isset($link)) {
- 	$string = cubrid_real_escape_string($string); } }
-if ($string===false) {
-    output_error("SQL Error: ".pdo_cubrid_func_error(),E_USER_ERROR);
-	return false; }
-	return $string; }
-// SafeSQL Lite Source Code by Cool Dude 2k
-// Make SQL Query's safe
-function pdo_cubrid_func_pre_query($query_string,$query_vars) {
-   $query_array = array(array("%i","%I","%F","%S"),array("%d","%d","%f","%s"));
-   $query_string = str_replace($query_array[0], $query_array[1], $query_string);
-   if (get_magic_quotes_gpc()) {
-       $query_vars  = array_map("stripslashes", $query_vars); }
-   $query_vars = array_map("sql_escape_string", $query_vars);
-   $query_val = $query_vars;
-$query_num = count($query_val);
-$query_i = 0;
-while ($query_i < $query_num) {
-$query_is = $query_i+1;
-$query_val[$query_is] = $query_vars[$query_i];
-++$query_i; }
-   $query_val[0] = $query_string;
-   return call_user_func_array("sprintf",$query_val); }
-function pdo_cubrid_func_set_charset($charset,$link=null) {
-	return true; }
-/*
-function pdo_cubrid_func_set_charset($charset,$link=null) {
-if(function_exists('mysql_set_charset')===false) {
-if(!isset($link)) {
-	$result = pdo_cubrid_func_query("SET CHARACTER SET '".$charset."'"); }
-if(isset($link)) {
-	$result = pdo_cubrid_func_query("SET CHARACTER SET '".$charset."'",$link); }
-if ($result===false) {
-    output_error("SQL Error: ".pdo_cubrid_func_error(),E_USER_ERROR);
-	return false; }
-if(!isset($link)) {
-	$result = pdo_cubrid_func_query("SET NAMES '".$charset."'"); }
-if(isset($link)) {
-	$result = pdo_cubrid_func_query("SET NAMES '".$charset."'",$link); } 
-if ($result===false) {
-    output_error("SQL Error: ".pdo_cubrid_func_error(),E_USER_ERROR);
-	return false; }
-	return true; }
-if(function_exists('mysql_set_charset')===true) {
-if(isset($link)) {
-	$result = mysql_set_charset($charset,$link); }
-if(!isset($link)) {
-	$result = mysql_set_charset($charset); }
-if ($result===false) {
-    output_error("SQL Error: ".pdo_cubrid_func_error(),E_USER_ERROR);
-	return false; }
-	return true; }
-if(function_exists('mysql_set_charset')===false) {
-function mysql_set_charset($charset,$link) {
-if(isset($link)) {
-	$result = pdo_cubrid_func_set_charset($charset,$link); }
-if(!isset($link)) {
-	$result = pdo_cubrid_func_set_charset($charset); }
-if ($result===false) {
-    output_error("SQL Error: ".pdo_cubrid_func_error(),E_USER_ERROR);
-	return false; }
-	return true; } }
-*/
-// Get next id for stuff
-function pdo_cubrid_func_get_next_id($tablepre,$table,$link=null) {
-   $getnextidq = pdo_cubrid_func_pre_query("SELECT ".$tablepre.$table."_ai_id.current_value;", array());
-if(!isset($link)) {
-	$result = pdo_cubrid_func_query($getnextidq); }
-if(isset($link)) {
-	$getnextidr = pdo_cubrid_func_query($getnextidq,$link); } 
-	return pdo_cubrid_func_result($getnextidr,0);
-	pdo_cubrid_func_result($getnextidr); }
-// Get number of rows for table
-function pdo_cubrid_func_get_num_rows($tablepre,$table,$link=null) {
-   $getnextidq = pdo_cubrid_func_pre_query("SHOW TABLE STATUS LIKE '".$tablepre.$table."'", array());
-if(!isset($link)) {
-	$getnextidr = pdo_cubrid_func_query($getnextidq); }
-if(isset($link)) {
-	$getnextidr = pdo_cubrid_func_query($getnextidq,$link); } 
-   $getnextid = pdo_cubrid_func_fetch_assoc($getnextidr);
-   return $getnextid['Rows'];
-   @pdo_cubrid_func_result($getnextidr); }
-// Fetch Number of Rows using COUNT in a single query
+    return $result->fetch(PDO::FETCH_NUM);
+}
+
+// Escape a string for CUBRID queries
+function pdo_cubrid_func_escape_string($string, $link = null) {
+    global $SQLStat;
+    if (!isset($string)) return null;
+
+    $pdo = isset($link) ? $link : $SQLStat;
+    $escaped_string = $pdo->quote($string);
+
+    if ($escaped_string === false) {
+        output_error("SQL Error: " . pdo_cubrid_func_error(), E_USER_ERROR);
+        return false;
+    }
+    return $escaped_string;
+}
+
+// Pre-process query for CUBRID
+function pdo_cubrid_func_pre_query($query_string, $query_vars = []) {
+    if ($query_vars === null || !is_array($query_vars)) {
+        $query_vars = [];
+    }
+
+    $query_string = str_replace(["'%s'", '%d', '%i', '%f'], ['?', '?', '?', '?'], $query_string);
+    $query_vars = array_filter($query_vars, function ($value) {
+        return $value !== null;
+    });
+
+    $placeholder_count = substr_count($query_string, '?');
+    $params_count = count($query_vars);
+
+    if ($placeholder_count !== $params_count) {
+        output_error("SQL Placeholder Error: Mismatch between placeholders ($placeholder_count) and parameters ($params_count).", E_USER_ERROR);
+        return false;
+    }
+
+    return [$query_string, $query_vars];
+}
+
+// Fetch the next ID from the sequence
+function pdo_cubrid_func_get_next_id($tablepre, $table, $link = null) {
+    $query = pdo_cubrid_func_pre_query("SELECT auto_increment_value FROM db_serial WHERE class_name = '" . $tablepre . $table . "'", []);
+    $result = pdo_cubrid_func_query($query, $link);
+    $row = pdo_cubrid_func_fetch_assoc($result);
+    return $row['auto_increment_value'] ?? 0;
+}
+
+// Fetch number of rows from a table using COUNT
+function pdo_cubrid_func_get_num_rows($tablepre, $table, $link = null) {
+    $query = pdo_cubrid_func_pre_query("SELECT COUNT(*) as cnt FROM " . $tablepre . $table, []);
+    $result = pdo_cubrid_func_query($query, $link);
+    $row = pdo_cubrid_func_fetch_assoc($result);
+    return $row['cnt'] ?? 0;
+}
+
+// Fetch number of rows using a COUNT query
 function pdo_cubrid_func_count_rows($query, $link = null) {
-    // Execute the query using sql_query
     $get_num_result = pdo_cubrid_func_query($query, $link);
-    // Fetch the count result
     $ret_num_result = pdo_cubrid_func_result($get_num_result, 0);
-    // Free the result resource
-    @pdo_cubrid_func_free_result($get_num_result); 
-    return $ret_num_result; }
-// Fetch Number of Rows using COUNT in a single query
-function pdo_cubrid_func_count_rows_alt($query, $link = null) {
-    // Execute the query using sql_query
-    $get_num_result = pdo_cubrid_func_query($query, $link);
-    // Fetch the count result
-    $ret_num_result = pdo_cubrid_func_result($get_num_result, 0, 'cnt');
-    // Free the result resource
-    @pdo_cubrid_func_free_result($get_num_result); 
-    return $ret_num_result; }
+    @pdo_cubrid_func_free_result($get_num_result);
+    return $ret_num_result;
+}
+
+function pdo_cubrid_func_free_result($result) {
+    return true;
+}
 ?>

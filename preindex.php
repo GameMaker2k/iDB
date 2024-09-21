@@ -27,11 +27,11 @@ if($_GET['act']=="sqldumper"&&$_SESSION['UserGroup']!=$Settings['GuestGroup']&&
 	$GroupInfo['HasAdminCP']=="yes") { 
 	if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"||$Settings['sqltype']=="pdo_mysql") {
 	require($SettDir['sqldumper'].'mysql.php'); }
-	if($Settings['sqltype']=="pgsql") {
+	if($Settings['sqltype']=="pgsql"||$Settings['sqltype']=="pdo_pgsql") {
 	require($SettDir['sqldumper'].'pgsql.php'); } 
 	if($Settings['sqltype']=="sqlite"||$Settings['sqltype']=="sqlite3"||$Settings['sqltype']=="pdo_sqlite3") {
 	require($SettDir['sqldumper'].'sqlite.php'); } 
-	if($Settings['sqltype']=="cubrid") {
+	if($Settings['sqltype']=="cubrid"||$Settings['sqltype']=="pdo_cubrid") {
 	require($SettDir['sqldumper'].'cubrid.php'); } }
 if(!isset($checklowview)) {
 	$checklowview = false; }

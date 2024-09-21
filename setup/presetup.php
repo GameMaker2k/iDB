@@ -58,13 +58,13 @@ if($Error!="Yes") {
 	<option value="cubrid">CUBRID Database</option>
 	<?php } if(extension_loaded("PDO")) {
             if(extension_loaded("PDO_MYSQL")) {?>
-	<option value="pdo_mysql">PDO MySQL Database ( WIP! )</option>
+	<option value="pdo_mysql">PDO MySQL Database</option>
 	<?php } if(extension_loaded("PDO_PGSQL")) { ?>
-	<option value="pdo_pgsql">PDO PostgreSQL Database ( WIP! )</option>
+	<option value="pdo_pgsql">PDO PostgreSQL Database</option>
 	<?php } if(extension_loaded("PDO_SQLITE")) { ?>
-	<option value="pdo_sqlite3">PDO SQLite 3 Database ( WIP! )</option>
+	<option value="pdo_sqlite3">PDO SQLite 3 Database</option>
 	<?php } if(extension_loaded("PDO_CUBRID")) { ?>
-	<option value="pdo_cubrid">PDO CUBRID Database ( WIP! )</option>
+	<option value="pdo_cubrid">PDO CUBRID Database</option>
 	<?php } } if(!function_exists("mysql_connect")&&!function_exists("mysqli_connect")&&
 	!function_exists("pg_connect")&&!function_exists("sqlite_open")&&!class_exists('SQLite3')&&
 	!function_exists("cubrid_connect")&&!extension_loaded("PDO")) { ?>
