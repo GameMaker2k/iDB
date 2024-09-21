@@ -154,6 +154,7 @@ function mysql_func_client_info($link = null) {
 
 // Escape String
 function mysql_func_escape_string($string, $link = null) {
+	if (!isset($string)) return null;
     return isset($link) ? mysql_real_escape_string($string, $link) : mysql_real_escape_string($string);
 }
 

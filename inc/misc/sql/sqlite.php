@@ -134,6 +134,7 @@ function sqlite_func_client_info($link = null) {
 }
 
 function sqlite_func_escape_string($string, $link = null) {
+	if (!isset($string)) return null;
     return sqlite_escape_string($string);
 }
 

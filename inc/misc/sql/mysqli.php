@@ -160,6 +160,7 @@ function mysqli_func_client_info($link = null) {
 // Escape String
 function mysqli_func_escape_string($string, $link = null) {
     global $SQLStat;
+	if (!isset($string)) return null;
     return isset($link) ? mysqli_real_escape_string($link, $string) : mysqli_real_escape_string($SQLStat, $string);
 }
 

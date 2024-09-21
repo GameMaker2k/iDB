@@ -157,6 +157,7 @@ function pgsql_func_client_info($link = null) {
 // Escape String
 function pgsql_func_escape_string($string, $link = null) {
     global $SQLStat;
+	if (!isset($string)) return null;
     return isset($link) ? pg_escape_string($link, $string) : pg_escape_string($SQLStat, $string);
 }
 

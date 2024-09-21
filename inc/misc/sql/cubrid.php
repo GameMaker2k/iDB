@@ -138,6 +138,7 @@ function cubrid_func_client_info($link = null) {
 
 // Escape String
 function cubrid_func_escape_string($string, $link = null) {
+	if (!isset($string)) return null;
     return isset($link) ? cubrid_real_escape_string($string, $link) : cubrid_real_escape_string($string);
 }
 
