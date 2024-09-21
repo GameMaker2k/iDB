@@ -1655,12 +1655,24 @@ $RMatches = preg_match("/".$RWord."/", $Name);
 if($RCaseInsensitive=="yes"&&$RWholeWord!="yes") {
 $RMatches = preg_match("/".$RWord."/i", $Name);
 	if($RMatches==true) { break 1; } }
+if($RCaseInsensitive!="yes"&&$RWholeWord=="yes") {
+$RMatches = preg_match("/\b(".$RWord.")\b/", $Handle);
+	if($RMatches==true) { break 1; } }
+if($RCaseInsensitive=="yes"&&$RWholeWord=="yes") {
+$RMatches = preg_match("/\b(".$RWord.")\b/i", $Handle);
+	if($RMatches==true) { break 1; } }
+if($RCaseInsensitive!="yes"&&$RWholeWord!="yes") {
+$RMatches = preg_match("/".$RWord."/", $Handle);
+	if($RMatches==true) { break 1; } }
+if($RCaseInsensitive=="yes"&&$RWholeWord!="yes") {
+$RMatches = preg_match("/".$RWord."/i", $Handle);
+	if($RMatches==true) { break 1; } }
 ++$lonewolfs; } sql_free_result($lonewolfrt);
 $sql_email_check = sql_query(sql_pre_query("SELECT \"Email\" FROM \"".$Settings['sqltable']."members\" WHERE \"Email\"='%s'", array($_POST['Email'])),$SQLStat);
 $sql_username_check = sql_query(sql_pre_query("SELECT \"Name\" FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s'", array($Name)),$SQLStat);
 $email_check = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"Email\"='%s'", array($_POST['Email'])), $SQLStat); 
 $username_check = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s'", array($Name)), $SQLStat);
-sql_free_result($sql_email_check); sql_free_result($sql_username_check);
+$handle_check = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"Handle\"='%s'", array($Handle)), $SQLStat);
 if ($_POST['TOS']!="Agree") { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
@@ -1707,6 +1719,12 @@ if ($_POST['TOS']!="Agree") { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
 	<br />User Name is already used.<br />
+	</span>&#160;</td>
+</tr>
+<?php } if($handle_check > 0) { $Error="Yes"; ?>
+<tr>
+	<td><span class="TableMessage">
+	<br />Handle is already used.<br />
 	</span>&#160;</td>
 </tr>
 <?php } if($RMatches==true) { $Error="Yes"; ?>
