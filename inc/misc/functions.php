@@ -783,21 +783,29 @@ function human_filesize($bytes, $decimals = 2) {
     }
 
     // Convert the numeric value to an integer
-    $bytes = intval($bytes);
+    $bytes = (int) $bytes;
 
     // Handle the case where $bytes is zero to avoid division by zero
     if ($bytes === 0) {
         return '0 B';
     }
 
-    // Use log to calculate the factor
-    $factor = floor(log($bytes, 1024));
+    // Calculate the factor (how many times to divide by 1024)
+    $factor = floor((strlen($bytes) - 1) / 3);
 
-    // Define units
+    // Define the units (Kilo, Mega, Giga, Tera)
     $sz = 'KMGT';
 
-    // Calculate human-readable size
-    return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . ' ' . @$sz[$factor - 1] . 'B';
+    // Ensure factor doesn't exceed the available length of $sz
+    if ($factor > strlen($sz)) {
+        $factor = strlen($sz); // Set to the highest factor
+    }
+
+    // Only access the unit string if factor > 0, otherwise return 'B' (bytes)
+    $unit = ($factor > 0 && isset($sz[$factor - 1])) ? $sz[$factor - 1] : '';
+
+    // Return human-readable file size
+    return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . ' ' . $unit . 'B';
 }
 
 // Function to add timezone to the appropriate region
