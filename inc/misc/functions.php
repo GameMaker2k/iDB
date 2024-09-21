@@ -760,49 +760,68 @@ function http_set_cookie($name, $value = null, $expire = null, $path = null, $do
 
     return false; // Fallback if nothing matched
 }
-$foobar="fubar"; $$foobar="foobar";
+$foobar = "fubar";
+$$foobar = "foobar";
+
 // Debug info
-function dump_included_files($type="var_dump") {
-	if(!isset($type)) { $type = "var_dump"; }
-	if($type=="print_r") { return print_r(get_included_files()); }
-	if($type=="var_dump") { return var_dump(get_included_files()); }
-	if($type=="var_export") { return var_export(get_included_files()); } }
-function count_included_files() {	return count(get_included_files()); }
-function dump_extensions($type="var_dump") {
-	if(!isset($type)) { $type = "var_dump"; }
-	if($type=="print_r") { return print_r(get_loaded_extensions()); }
-	if($type=="var_dump") { return var_dump(get_loaded_extensions()); }
-	if($type=="var_export") { return var_export(get_loaded_extensions()); } }
-function count_extensions() {	return count(get_loaded_extensions()); }
+function dump_items($items, $type = "var_dump") {
+    switch ($type) {
+        case "print_r":
+            return print_r($items, true);  // Return string representation instead of direct output
+        case "var_export":
+            return var_export($items, true); // Same, return string representation
+        case "var_dump":
+        default:
+            ob_start();  // Capture output of var_dump
+            var_dump($items);
+            return ob_get_clean(); // Return captured output
+    }
+}
+
+function dump_included_files($type = "var_dump") {
+    return dump_items(get_included_files(), $type);
+}
+
+function count_included_files() {
+    return count(get_included_files());
+}
+
+function dump_extensions($type = "var_dump") {
+    return dump_items(get_loaded_extensions(), $type);
+}
+
+function count_extensions() {
+    return count(get_loaded_extensions());
+}
+
 // human_filesize by evgenij at kostanay dot kz 
 // URL: https://www.php.net/manual/en/function.filesize.php#120250
-function human_filesize($bytes, $decimals = 2) {
-    // Ensure $bytes is numeric, else return false
+function human_filesize($bytes, $decimals = 2, $is_binary = true) {
+    // Ensure $bytes is a valid numeric value
     if (!is_numeric($bytes)) {
         return false;
     }
 
-    // Explicitly cast to an integer to avoid unexpected behavior
+    // Convert $bytes to integer
     $bytes = (int)$bytes;
 
-    // Handle edge case where the size is zero
-    if ($bytes === 0) {
-        return '0 B';
+    // Determine whether to use binary (1024) or decimal (1000) units
+    $base = $is_binary ? 1024 : 1000;
+    $suffix = $is_binary ? ['B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB'] : ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
+
+    // Calculate the factor (which unit to use)
+    $factor = $bytes > 0 ? floor(log($bytes) / log($base)) : 0;
+
+    // Prevent index error if bytes is very small
+    if ($factor >= count($suffix)) {
+        $factor = count($suffix) - 1;
     }
 
-    // Use logarithm to determine the size factor (KB, MB, etc.)
-    $factor = (int) floor(log($bytes, 1024));
+    // Calculate the human-readable size
+    $size = $bytes / pow($base, $factor);
 
-    // Array for human-readable units
-    $sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB'];
-
-    // Ensure factor is within the bounds of the array
-    if ($factor > count($sizes) - 1) {
-        $factor = count($sizes) - 1;
-    }
-
-    // Return the formatted size, using the correct unit
-    return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . ' ' . $sizes[$factor];
+    // Return formatted result with the appropriate suffix
+    return sprintf("%.{$decimals}f", $size) . ' ' . $suffix[$factor];
 }
 
 // Function to add timezone to the appropriate region
