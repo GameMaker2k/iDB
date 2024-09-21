@@ -785,10 +785,18 @@ function human_filesize($bytes, $decimals = 2) {
     // Convert the numeric value to an integer
     $bytes = intval($bytes);
 
-    // Proceed with calculating the human-readable filesize
-    $factor = floor((strlen($bytes) - 1) / 3);
-    if ($factor > 0) $sz = 'KMGT';
+    // Handle the case where $bytes is zero to avoid division by zero
+    if ($bytes === 0) {
+        return '0 B';
+    }
 
+    // Use log to calculate the factor
+    $factor = floor(log($bytes, 1024));
+
+    // Define units
+    $sz = 'KMGT';
+
+    // Calculate human-readable size
     return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . ' ' . @$sz[$factor - 1] . 'B';
 }
 
