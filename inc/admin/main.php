@@ -1093,7 +1093,7 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Database Manager";
 ?><tr style="text-align: left;">
 	<td style="width: 50%;"><span class="TextBoxLabel">Database Client:</span></td>
 	<td style="width: 50%;"><?php echo $DBType['Client']; ?></td>
-</tr><?php } if($Settings['sqltype']=="sqlite"||$Settings['sqltype']=="sqlite3"&&$Settings['sqltype']=="pdo_sqlite3") { 
+</tr><?php } if($Settings['sqltype']=="sqlite"||$Settings['sqltype']=="sqlite3"||$Settings['sqltype']=="pdo_sqlite3") { 
 ?><tr style="text-align: left;">
 	<td style="width: 50%;"><span class="TextBoxLabel">Database File Size:</span></td>
 	<td style="width: 50%;"><?php echo sprintf("%u", filesize($Settings['sqldb']))." bytes"; ?></td>
