@@ -777,35 +777,32 @@ function count_extensions() {	return count(get_loaded_extensions()); }
 // human_filesize by evgenij at kostanay dot kz 
 // URL: https://www.php.net/manual/en/function.filesize.php#120250
 function human_filesize($bytes, $decimals = 2) {
-    // If $bytes is not numeric, return false
+    // Ensure $bytes is numeric, else return false
     if (!is_numeric($bytes)) {
         return false;
     }
 
-    // Convert the numeric value to an integer
-    $bytes = (int) $bytes;
+    // Explicitly cast to an integer to avoid unexpected behavior
+    $bytes = (int)$bytes;
 
-    // Handle the case where $bytes is zero to avoid division by zero
+    // Handle edge case where the size is zero
     if ($bytes === 0) {
         return '0 B';
     }
 
-    // Calculate the factor (how many times to divide by 1024)
-    $factor = floor((strlen($bytes) - 1) / 3);
+    // Use logarithm to determine the size factor (KB, MB, etc.)
+    $factor = (int) floor(log($bytes, 1024));
 
-    // Define the units (Kilo, Mega, Giga, Tera)
-    $sz = 'KMGT';
+    // Array for human-readable units
+    $sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB'];
 
-    // Ensure factor doesn't exceed the available length of $sz
-    if ($factor > strlen($sz)) {
-        $factor = strlen($sz); // Set to the highest factor
+    // Ensure factor is within the bounds of the array
+    if ($factor > count($sizes) - 1) {
+        $factor = count($sizes) - 1;
     }
 
-    // Only access the unit string if factor > 0, otherwise return 'B' (bytes)
-    $unit = ($factor > 0 && isset($sz[$factor - 1])) ? $sz[$factor - 1] : '';
-
-    // Return human-readable file size
-    return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . ' ' . $unit . 'B';
+    // Return the formatted size, using the correct unit
+    return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . ' ' . $sizes[$factor];
 }
 
 // Function to add timezone to the appropriate region
