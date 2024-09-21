@@ -195,9 +195,9 @@ function pdo_mysql_func_server_info($link = null) {
     return $result;
 }
 
-// Get Client Info
+// Get Client Info for PDO MySQL
 function pdo_mysql_func_client_info($link = null) {
-    return null;
+    return $link->getAttribute(PDO::ATTR_CLIENT_VERSION);
 }
 
 // Escape String

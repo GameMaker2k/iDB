@@ -235,4 +235,17 @@ function pdo_sqlite3_func_get_num_rows($tablepre, $table, $link = null) {
     $row = pdo_sqlite3_func_fetch_assoc($result);
     return $row['cnt'] ?? 0;
 }
+
+// Get Server Info for PDO SQLite3
+function pdo_sqlite3_func_server_info($link = null) {
+    $result = $link->query('SELECT sqlite_version()')->fetch(PDO::FETCH_COLUMN);
+    return $result;
+}
+
+// Get Client Info for PDO SQLite3
+function pdo_sqlite3_func_client_info($link = null) {
+    $result = $link->query('SELECT sqlite_version()')->fetch(PDO::FETCH_COLUMN);
+    return $result;
+}
+
 ?>

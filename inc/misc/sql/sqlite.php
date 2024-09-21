@@ -130,7 +130,7 @@ function sqlite_func_server_info($link = null) {
 
 // Get Client Info
 function sqlite_func_client_info($link = null) {
-    return null;
+    return sqlite_libversion();
 }
 
 function sqlite_func_escape_string($string, $link = null) {

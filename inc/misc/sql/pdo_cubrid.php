@@ -247,4 +247,16 @@ function pdo_cubrid_func_count_rows_alt($query, $link = null) {
 function pdo_cubrid_func_free_result($result) {
     return true;
 }
+
+// Get Server Info for PDO CUBRID
+function pdo_cubrid_func_server_info($link = null) {
+    $result = $link->query('SELECT cubrid_version()')->fetch(PDO::FETCH_COLUMN);
+    return $result;
+}
+
+// Get Client Info for PDO CUBRID
+function pdo_cubrid_func_client_info($link = null) {
+    return $link->getAttribute(PDO::ATTR_CLIENT_VERSION);
+}
+
 ?>

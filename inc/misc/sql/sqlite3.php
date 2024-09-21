@@ -134,7 +134,7 @@ function sqlite3_func_server_info($link = null) {
 
 // Get Client Info
 function sqlite3_func_client_info($link = null) {
-    return null;
+    return SQLite3::version()['versionString'];
 }
 
 function sqlite3_func_escape_string($string, $link = null) {
