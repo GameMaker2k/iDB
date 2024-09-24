@@ -67,12 +67,17 @@ if(isset($_POST['DatabaseType'])) {
 if(isset($Settings['sqltype'])) {
 if($Settings['sqltype']!="mysql"&&
 	$Settings['sqltype']!="mysqli"&&
+	$Settings['sqltype']!="mysqli_prepare"&&
     $Settings['sqltype']!="pdo_mysql"&&
 	$Settings['sqltype']!="pgsql"&&
+	$Settings['sqltype']!="pgsql_prepare"&&
 	$Settings['sqltype']!="sqlite"&&
 	$Settings['sqltype']!="sqlite3"&&
+	$Settings['sqltype']!="sqlite3_prepare"&&
     $Settings['sqltype']!="pdo_sqlite3"&&
-	$Settings['sqltype']!="cubrid") {
+	$Settings['sqltype']!="cubrid"&&
+	$Settings['sqltype']!="cubrid_prepare"&&
+	$Settings['sqltype']!="pdo_cubrid") {
 	$Settings['sqltype'] = "mysql"; } }
 $Settings['idb_time_format'] = "g:i A";
 $iDBTheme = "iDB"; $AltiDBTheme = "Gray";

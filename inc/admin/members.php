@@ -600,11 +600,21 @@ sql_free_result($getranidr); ?>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="MemPermID" id="MemPermID">
 	<option <?php if($EditMemPerm['PermissionID']=="0") { echo "selected=\"selected\" "; } ?>value="0">use group info</option>
 <?php 
-if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"||$Settings['sqltype']=="pdo_mysql"||
-	$Settings['sqltype']=="pgsql"||$Settings['sqltype']=="sqlite"||
-	$Settings['sqltype']=="sqlite3"||$Settings['sqltype']=="pdo_sqlite3") {
+if($Settings['sqltype']=="mysql"||
+	$Settings['sqltype']=="mysqli"||
+	$Settings['sqltype']=="mysqli_prepare"||
+	$Settings['sqltype']=="pdo_mysql"||
+	$Settings['sqltype']=="pgsql"||
+	$Settings['sqltype']=="pgsql_prepare"||
+	$Settings['sqltype']=="pdo_pgsql"||
+	$Settings['sqltype']=="sqlite"||
+	$Settings['sqltype']=="sqlite3"||
+	$Settings['sqltype']=="sqlite3_prepare"||
+	$Settings['sqltype']=="pdo_sqlite3") {
 $getperidq = sql_pre_query("SELECT DISTINCT \"PermissionID\" FROM \"".$Settings['sqltable']."permissions\"", null); }
-if($Settings['sqltype']=="cubrid") {
+if($Settings['sqltype']=="cubrid"||
+	$Settings['sqltype']=="cubrid_prepare"||
+	$Settings['sqltype']=="pdo_cubrid") {
 $getperidq = sql_pre_query("SELECT DISTINCT \"permissionid\" FROM \"".$Settings['sqltable']."permissions\"", null); }
 $getperidr=sql_query($getperidq,$SQLStat);
 $getperidnum=sql_num_rows($getperidr);

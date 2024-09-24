@@ -67,12 +67,22 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Adding new Group";
 	<td style="width: 50%;"><select size="1" class="TextBox" name="GroupPerm" id="GroupPerm">
 	<option selected="selected" value="0">none</option>
 <?php 
-if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"||$Settings['sqltype']=="pdo_mysql"||
-	$Settings['sqltype']=="pgsql"||$Settings['sqltype']=="sqlite"||
-	$Settings['sqltype']=="sqlite3"||$Settings['sqltype']=="pdo_sqlite3") {
+if($Settings['sqltype']=="mysql"||
+	$Settings['sqltype']=="mysqli"||
+	$Settings['sqltype']=="mysqli_prepare"||
+	$Settings['sqltype']=="pdo_mysql"||
+	$Settings['sqltype']=="pgsql"||
+	$Settings['sqltype']=="pgsql_prepare"||
+	$Settings['sqltype']=="pdo_pgsql"||
+	$Settings['sqltype']=="sqlite"||
+	$Settings['sqltype']=="sqlite3"||
+	$Settings['sqltype']=="sqlite3_prepare"||
+	$Settings['sqltype']=="pdo_sqlite3") {
 $getperidq = sql_pre_query("SELECT DISTINCT \"PermissionID\" FROM \"".$Settings['sqltable']."permissions\"", null);
 $getperidnum = sql_count_rows(sql_pre_query("SELECT COUNT(DISTINCT \"PermissionID\") AS cnt FROM \"".$Settings['sqltable']."permissions\"", null), $SQLStat); }
-if($Settings['sqltype']=="cubrid") {
+if($Settings['sqltype']=="cubrid"||
+	$Settings['sqltype']=="cubrid_prepare"||
+	$Settings['sqltype']=="pdo_cubrid") {
 $getperidq = sql_pre_query("SELECT DISTINCT \"permissionid\" FROM \"".$Settings['sqltable']."permissions\"", null);
 $getperidnum = sql_count_rows(sql_pre_query("SELECT COUNT(DISTINCT \"permissionid\") AS cnt FROM \"".$Settings['sqltable']."permissions\"", null), $SQLStat); }
 $getperidr=sql_query($getperidq,$SQLStat);
@@ -312,14 +322,6 @@ $getperidr=sql_query($getperidq,$SQLStat);
 $getperidnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" ORDER BY \"id\" ASC", null), $SQLStat);
 $getperidi = 0; 
 $nextperid = null;
-/*
-if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"||$Settings['sqltype']=="pdo_mysql"||
-	$Settings['sqltype']=="pgsql"||$Settings['sqltype']=="cubrid"||
-	$Settings['sqltype']=="sqlite3"||$Settings['sqltype']=="pdo_sqlite3") {
-$nextperid = sql_get_next_id($Settings['sqltable'],"permissions",$SQLStat); }
-if($Settings['sqltype']=="sqlite") {
-$nextperid = sql_get_next_id($Settings['sqltable'],"\"permissions\"",$SQLStat); }
-*/
 while ($getperidi < $getperidnum) {
 $getperidr_array = sql_fetch_assoc($getperidr);
 $getperidID=$getperidr_array['id'];
@@ -380,14 +382,6 @@ $getperidr=sql_query($getperidq,$SQLStat);
 $getperidnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."categories\" ORDER BY \"id\" ASC", null), $SQLStat);
 $getperidi = 0; 
 $nextperid = null;
-/*
-if($Settings['sqltype']=="mysql"||$Settings['sqltype']=="mysqli"||$Settings['sqltype']=="pdo_mysql"||
-	$Settings['sqltype']=="pgsql"||$Settings['sqltype']=="cubrid"||
-	$Settings['sqltype']=="sqlite3"||$Settings['sqltype']=="pdo_sqlite3") {
-$nextperid = sql_get_next_id($Settings['sqltable'],"permissions",$SQLStat); }
-if($Settings['sqltype']=="sqlite") {
-$nextperid = sql_get_next_id($Settings['sqltable'],"\"permissions\"",$SQLStat); }
-*/
 while ($getperidi < $getperidnum) {
 $getperidr_array = sql_fetch_assoc($getperidr);
 $getperidID=$getperidr_array['id'];

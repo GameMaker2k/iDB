@@ -1298,9 +1298,17 @@ function getSQLLimitClause($sqltype, $limit, $offset) {
     $offset = isset($offset) ? intval($offset) : 0; // Default offset value, e.g., 0
 
     // Construct the LIMIT OFFSET clause based on the SQL type
-    if ($sqltype == "mysql" || $sqltype == "mysqli" || $sqltype == "pdo_mysql" ||
-        $sqltype == "sqlite" || $sqltype == "sqlite3" || $sqltype == "pdo_sqlite3" ||
-        $sqltype == "cubrid" || $sqltype == "pdo_cubrid") {
+    if ($sqltype == "mysql"||
+		$sqltype == "mysqli"||
+		$sqltype == "mysqli_prepare"||
+		$sqltype == "pdo_mysql"||
+        $sqltype == "sqlite"||
+		$sqltype == "sqlite3"||
+		$sqltype == "sqlite3_prepare"||
+		$sqltype == "pdo_sqlite3"||
+        $sqltype == "cubrid"||
+        $sqltype == "cubrid_prepare"||
+		$sqltype == "pdo_cubrid") {
         // MySQL, SQLite, and Cubrid support ANSI LIMIT x OFFSET y syntax
         return sprintf("LIMIT %d OFFSET %d", $limit, $offset);
     } elseif ($sqltype == "pgsql" || $sqltype == "pdo_pgsql") {
