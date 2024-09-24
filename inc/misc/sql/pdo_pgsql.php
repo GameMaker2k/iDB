@@ -33,12 +33,12 @@ function pdo_pgsql_func_errno($link = null) {
 }
 
 // Execute a query
-if (!isset($NumQueries)) {
-    $NumQueries = 0;
+if (!isset($NumQueriesArray['pdo_pgsql'])) {
+    $NumQueriesArray['pdo_pgsql'] = 0;
 }
 
 function pdo_pgsql_func_query($query, $link = null) {
-    global $NumQueries, $SQLStat;
+    global $NumQueriesArray, $SQLStat;
 
     // Use the appropriate PDO connection
     $pdo = isset($link) ? $link : $SQLStat;
@@ -72,7 +72,7 @@ function pdo_pgsql_func_query($query, $link = null) {
             return false;
         }
 
-        ++$NumQueries;
+        ++$NumQueriesArray['pdo_pgsql'];
         return $stmt;  // Return the statement for SELECT or data-fetching queries
     } else {
         // For direct queries without parameters
@@ -85,7 +85,7 @@ function pdo_pgsql_func_query($query, $link = null) {
             return false;
         }
 
-        ++$NumQueries;
+        ++$NumQueriesArray['pdo_pgsql'];
         return $result;
     }
 }

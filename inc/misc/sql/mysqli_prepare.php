@@ -40,8 +40,8 @@ function mysqli_prepare_func_errorno($link = null) {
 }
 
 // Execute a query using prepared statements
-if (!isset($NumQueriesArray['mysqli'])) {
-    $NumQueriesArray['mysqli'] = 0;
+if (!isset($NumQueriesArray['mysqli_prepare'])) {
+    $NumQueriesArray['mysqli_prepare'] = 0;
 }
 
 function mysqli_prepare_func_query($query, $params = [], $link = null) {
@@ -91,7 +91,7 @@ function mysqli_prepare_func_query($query, $params = [], $link = null) {
         return false;
     }
 
-    ++$NumQueriesArray['mysqli'];
+    ++$NumQueriesArray['mysqli_prepare'];
 
     return $stmt;  // Return the prepared statement object
 }
@@ -219,20 +219,29 @@ function mysqli_prepare_func_escape_string($string, $link = null) {
 
 // SafeSQL Lite with prepared statements and placeholders
 function mysqli_prepare_func_pre_query($query_string, $query_vars) {
-    // If no query variables are provided, initialize with a single element array containing null
-    if ($query_vars == null) {
-        $query_vars = array(null);
+    if ($query_vars === null || !is_array($query_vars)) {
+        $query_vars = [];
     }
 
-    // Add support for multiple variable types like %c (comma-separated integers), %l (comma-separated strings), etc.
-    $query_array = array(
-        array("%i", "%I", "%F", "%S", "%c", "%l", "%q", "%n"),
-        array("?", "?", "?", "?", "?", "?", "?", "?")
-    );
-    
-    // Replace custom placeholders with ? for prepared statements
-    $query_string = str_replace($query_array[0], $query_array[1], $query_string);
+    // Handle placeholders like %s, %d, %i, %f and convert them to PDO's positional placeholders (?)
+    $replacements = ['\'%s\'' => '?', '%s' => '?', '%d' => '?', '%i' => '?', '%f' => '?'];
+    $query_string = str_replace(array_keys($replacements), array_values($replacements), $query_string);
 
+    // Filter out null values in $query_vars array
+    $query_vars = array_filter($query_vars, function ($value) {
+        return $value !== null;
+    });
+
+    // Check for mismatch between placeholders and variables
+    $placeholder_count = substr_count($query_string, '?');
+    $params_count = count($query_vars);
+
+    if ($placeholder_count !== $params_count) {
+        output_error("SQL Placeholder Error: Mismatch between placeholders ($placeholder_count) and parameters ($params_count).", E_USER_ERROR);
+        return false;
+    }
+
+    // Return the query string and variables for further execution
     return [$query_string, $query_vars];
 }
 

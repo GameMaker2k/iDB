@@ -37,8 +37,8 @@ function pgsql_prepare_func_errorno($link = null) {
 }
 
 // Execute a prepared query
-if (!isset($NumQueriesArray['pgsql'])) {
-    $NumQueriesArray['pgsql'] = 0;
+if (!isset($NumQueriesArray['pgsql_prepare'])) {
+    $NumQueriesArray['pgsql_prepare'] = 0;
 }
 
 function pgsql_prepare_func_query($query, $params = [], $link = null) {
@@ -70,7 +70,7 @@ function pgsql_prepare_func_query($query, $params = [], $link = null) {
         return false;
     }
 
-    ++$NumQueriesArray['pgsql'];
+    ++$NumQueriesArray['pgsql_prepare'];
     return $result;
 }
 
@@ -178,26 +178,28 @@ function pgsql_prepare_func_escape_string($string, $link = null) {
     return isset($link) ? pg_escape_string($link, $string) : pg_escape_string($SQLStat, $string);
 }
 
-// SafeSQL Lite with additional SafeSQL features
+// SafeSQL Lite with additional SafeSQL features for PostgreSQL
 function pgsql_prepare_func_pre_query($query_string, $query_vars) {
-    // If no query variables are provided, initialize with a single element array containing null
-    if ($query_vars == null) {
-        $query_vars = array(null);
+    if ($query_vars === null || !is_array($query_vars)) {
+        $query_vars = [];
     }
 
-    // Add support for multiple variable types like %c (comma-separated integers), %l (comma-separated strings), etc.
-    $query_array = array(
-        array("%i", "%I", "%F", "%S", "%c", "%l", "%q", "%n"),
-        array("?", "?", "?", "?", "?", "?", "?", "?")
-    );
+    // Handle placeholders like %s, %d, %i, %f and replace them with PostgreSQL's numbered placeholders ($1, $2, etc.)
+    $replacements = ['\'%s\'' => '%s', '%s' => '%s', '%d' => '%d', '%i' => '%i', '%f' => '%f'];
+    $query_string = str_replace(array_keys($replacements), array_values($replacements), $query_string);
     
-    // Replace custom placeholders with appropriate placeholders
-    $query_string = str_replace($query_array[0], $query_array[1], $query_string);
+    // Replace '%s', '%d', '%i', etc. with $1, $2, $3... based on the number of query_vars
+    foreach ($query_vars as $key => $value) {
+        $position = $key + 1; // PostgreSQL uses 1-based index for placeholders
+        $query_string = preg_replace('/%[sdif]/', "\$$position", $query_string, 1);
+    }
 
-    // Escape each variable using pgsql_prepare_func_escape_string
-    $query_vars = array_map("pgsql_prepare_func_escape_string", $query_vars);
+    // Filter out null values in the $query_vars array (if needed)
+    $query_vars = array_filter($query_vars, function ($value) {
+        return $value !== null;
+    });
 
-    // Return the query and its parameters
+    // Return the modified query string and the variables for further execution
     return [$query_string, $query_vars];
 }
 

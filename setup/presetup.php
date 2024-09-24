@@ -48,18 +48,18 @@ if($Error!="Yes") {
 	<option value="mysql">MySQL Database</option>
 	<?php } if(function_exists("mysqli_connect")) { ?>
 	<option value="mysqli">MySQLi Database</option>
-	<option value="mysqli_prepare">MySQLi Alt Database (Beta!)</option>
+	<option value="mysqli_prepare">MySQLi Alt Database</option>
 	<?php } if(function_exists("pg_connect")) { ?>
 	<option value="pgsql">PostgreSQL Database</option>
-	<option value="pgsql_prepare">PostgreSQL Alt Database (Beta!)</option>
+	<option value="pgsql_prepare">PostgreSQL Alt Database</option>
 	<?php } if(function_exists("sqlite_open")) { ?>
 	<option value="sqlite">SQLite Database</option>
 	<?php } if(class_exists('SQLite3')) { ?>
 	<option value="sqlite3">SQLite 3 Database</option>
-	<option value="sqlite3_prepare">SQLite 3 Alt Database (Beta!)</option>
+	<option value="sqlite3_prepare">SQLite 3 Alt Database</option>
 	<?php } if(function_exists("cubrid_connect")) { ?>
 	<option value="cubrid">CUBRID Database</option>
-	<option value="cubrid_prepare">CUBRID Alt Database (Beta!)</option>
+	<option value="cubrid_prepare">CUBRID Alt Database</option>
 	<?php } if(extension_loaded("PDO")) {
             if(extension_loaded("PDO_MYSQL")) {?>
 	<option value="pdo_mysql">PDO MySQL Database</option>

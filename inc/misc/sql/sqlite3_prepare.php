@@ -39,18 +39,20 @@ function sqlite3_prepare_func_errorno($link = null) {
 }
 
 // Execute a query
-if (!isset($NumQueriesArray['sqlite3'])) {
-    $NumQueriesArray['sqlite3'] = 0;
+if (!isset($NumQueriesArray['sqlite3_prepare'])) {
+    $NumQueriesArray['sqlite3_prepare'] = 0;
 }
 
 function sqlite3_prepare_func_query($query, $params = [], $link = null) {
     global $NumQueriesArray, $SQLStat;
     $db = isset($link) ? $link : $SQLStat;
 
-    // If the query is an array (query and parameters), extract them
+    // Check if $query is an array returned from `sqlite3_prepare_func_pre_query()`
     if (is_array($query)) {
+        // Extract query string and parameters
         list($query_string, $params) = $query;
     } else {
+        // If query is already a string, use it as is
         $query_string = $query;
     }
 
@@ -63,7 +65,7 @@ function sqlite3_prepare_func_query($query, $params = [], $link = null) {
 
     // Bind parameters dynamically
     foreach ($params as $key => $value) {
-        $paramKey = is_int($key) ? $key + 1 : ':' . $key; // Positional vs named placeholders
+        $paramKey = is_int($key) ? $key + 1 : ':' . $key; // SQLite uses 1-based indexing for positional placeholders
         if (is_int($value)) {
             $stmt->bindValue($paramKey, $value, SQLITE3_INTEGER);
         } elseif (is_float($value)) {
@@ -82,7 +84,7 @@ function sqlite3_prepare_func_query($query, $params = [], $link = null) {
         return false;
     }
 
-    ++$NumQueriesArray['sqlite3'];
+    ++$NumQueriesArray['sqlite3_prepare'];
     return $result;
 }
 
@@ -175,15 +177,29 @@ function sqlite3_prepare_func_escape_string($string, $link = null) {
 // SafeSQL Lite Source Code by Cool Dude 2k
 // Make SQL Query's safe
 function sqlite3_prepare_func_pre_query($query_string, $query_vars = []) {
-    // Add support for multiple variable types like %c (comma-separated integers), %l (comma-separated strings), etc.
-    $query_array = array(
-        array("%i", "%I", "%F", "%S", "%c", "%l", "%q", "%n"),
-        array("?", "?", "?", "?", "?", "?", "?", "?")
-    );
-    
-    // Replace custom placeholders with appropriate SQLite3 placeholders
-    $query_string = str_replace($query_array[0], $query_array[1], $query_string);
+    if ($query_vars === null || !is_array($query_vars)) {
+        $query_vars = [];
+    }
 
+    // Handle placeholders like %s, %d, %i, %f and convert them to PDO's positional placeholders (?)
+    $replacements = ['\'%s\'' => '$1', '%s' => '$1', '%d' => '$2', '%i' => '$3', '%f' => '$4'];
+    $query_string = str_replace(array_keys($replacements), array_values($replacements), $query_string);
+
+    // Filter out null values in $query_vars array
+    $query_vars = array_filter($query_vars, function ($value) {
+        return $value !== null;
+    });
+
+    // Check for mismatch between placeholders and variables
+    $placeholder_count = substr_count($query_string, '?');
+    $params_count = count($query_vars);
+
+    if ($placeholder_count !== $params_count) {
+        output_error("SQL Placeholder Error: Mismatch between placeholders ($placeholder_count) and parameters ($params_count).", E_USER_ERROR);
+        return false;
+    }
+
+    // Return the query string and variables for further execution
     return [$query_string, $query_vars];
 }
 
@@ -199,20 +215,20 @@ function sqlite3_prepare_func_get_next_id($tablepre, $table, $link = null) {
     return $db->lastInsertRowID();
 }
 
-// Fetch number of rows using COUNT in a query
-function sqlite3_prepare_func_count_rows($query, $params = [], $link = null) {
-    $db = isset($link) ? $link : $SQLStat;
+// Fetch Number of Rows using COUNT in a single query
+function sqlite3_prepare_func_count_rows($query, $link = null) {
+    $get_num_result = sqlite3_prepare_func_query($query, $link);
+    $ret_num_result = sqlite3_prepare_func_result($get_num_result, 0);
+    @sqlite3_prepare_func_free_result($get_num_result);
+    return $ret_num_result;
+}
 
-    // Query with COUNT()
-    $count_query = "SELECT COUNT(*) as num_rows FROM ($query)";
-    $result = sqlite3_prepare_func_query($count_query, $params, $db);
-
-    if ($result) {
-        $row = sqlite3_prepare_func_fetch_assoc($result);
-        return isset($row['num_rows']) ? $row['num_rows'] : 0;
-    }
-
-    return 0;
+// Fetch Number of Rows using COUNT in a single query
+function sqlite3_prepare_func_count_rows_alt($query, $link = null) {
+    $get_num_result = sqlite3_prepare_func_query($query, $link);
+    $ret_num_result = sqlite3_prepare_func_result($get_num_result, 0, 'cnt');
+    @sqlite3_prepare_func_free_result($get_num_result);
+    return $ret_num_result;
 }
 
 // Get number of rows for a table
@@ -221,11 +237,6 @@ function sqlite3_prepare_func_get_num_rows($tablepre, $table, $link = null) {
     $result = sqlite3_prepare_func_query($query, [], $link);
     $row = sqlite3_prepare_func_fetch_assoc($result);
     return $row['cnt'] ?? 0;
-}
-
-// Fetch Number of Rows using COUNT in a single query
-function sqlite3_prepare_func_count_rows_alt($query, $params = [], $link = null) {
-    return sqlite3_prepare_func_count_rows($query, $params, $link);
 }
 
 ?>

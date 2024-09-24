@@ -5,7 +5,8 @@
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the Revised BSD License for more details.
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    Revised BSD License for more details.
 
     Copyright 2004-2024 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2024 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
@@ -33,8 +34,8 @@ function cubrid_prepare_func_errorno($link = null) {
 }
 
 // Execute a prepared query
-if (!isset($NumQueriesArray['cubrid'])) {
-    $NumQueriesArray['cubrid'] = 0;
+if (!isset($NumQueriesArray['cubrid_prepare'])) {
+    $NumQueriesArray['cubrid_prepare'] = 0;
 }
 
 function cubrid_prepare_func_query($query, $params = [], $link = null) {
@@ -75,7 +76,7 @@ function cubrid_prepare_func_query($query, $params = [], $link = null) {
         return false;
     }
 
-    ++$NumQueriesArray['cubrid'];
+    ++$NumQueriesArray['cubrid_prepare'];
     return $stmt;
 }
 
@@ -155,34 +156,35 @@ function cubrid_prepare_func_client_info($link = null) {
 
 // Escape String
 function cubrid_prepare_func_escape_string($string, $link = null) {
-	if (!isset($string)) return null;
+    if (!isset($string)) return null;
     return cubrid_real_escape_string($string, $link);
 }
 
 // SafeSQL Lite with additional SafeSQL features
 function cubrid_prepare_func_pre_query($query_string, $query_vars) {
-    // If no query variables are provided, initialize with an empty array
-    if ($query_vars == null) {
+    if ($query_vars === null || !is_array($query_vars)) {
         $query_vars = [];
     }
 
-    // Handle multiple placeholders including %c, %l, %q, and %n
-    $query_array = array(
-        array("%i", "%I", "%F", "%S", "%c", "%l", "%q", "%n"),
-        array("?", "?", "?", "?", "?", "?", "?", "?")
-    );
+    // Handle placeholders like %s, %d, %i, %f and convert them to PDO's positional placeholders (?)
+    $replacements = ['\'%s\'' => '?', '%s' => '?', '%d' => '?', '%i' => '?', '%f' => '?'];
+    $query_string = str_replace(array_keys($replacements), array_values($replacements), $query_string);
 
-    // Replace placeholders with positional `?` for prepared statements
-    $query_string = str_replace($query_array[0], $query_array[1], $query_string);
+    // Filter out null values in $query_vars array
+    $query_vars = array_filter($query_vars, function ($value) {
+        return $value !== null;
+    });
 
-    // Prepare variables for use in prepared statements
-    $query_vars = array_map(function($val) {
-        if (is_array($val)) {
-            return implode(',', $val);  // Handle comma-separated cases (%c, %l)
-        }
-        return $val;
-    }, $query_vars);
+    // Check for mismatch between placeholders and variables
+    $placeholder_count = substr_count($query_string, '?');
+    $params_count = count($query_vars);
 
+    if ($placeholder_count !== $params_count) {
+        output_error("SQL Placeholder Error: Mismatch between placeholders ($placeholder_count) and parameters ($params_count).", E_USER_ERROR);
+        return false;
+    }
+
+    // Return the query string and variables for further execution
     return [$query_string, $query_vars];
 }
 
