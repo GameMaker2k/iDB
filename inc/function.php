@@ -461,7 +461,7 @@ if (!isset($_SERVER['QUERY_STRING'])) {
 $_SERVER['QUERY_STRING'] = getenv('QUERY_STRING'); }
 ini_set("arg_separator.input", $qstr);
 $_SERVER['QUERY_STRING'] = urldecode($_SERVER['QUERY_STRING']);
-$preqs = explode($qstr,$_SERVER["QUERY_STRING"]);
+$preqs = explode($qstr,$_SERVER['QUERY_STRING']);
 $qsnum = count($preqs); $qsi = 0;
 while ($qsi < $qsnum) {
 $preqst = explode($qsep,$preqs[$qsi],2);
@@ -538,8 +538,8 @@ if(isset($_SERVER['PATH_INFO']) && $_SERVER['PATH_INFO']==null) {
 	if(getenv('PATH_INFO')!=null&&getenv('PATH_INFO')!="1") {
 $_SERVER['PATH_INFO'] = getenv('PATH_INFO'); }
 if(getenv('PATH_INFO')==null) {
-$myscript = $_SERVER["SCRIPT_NAME"];
-$myphpath = $_SERVER["PHP_SELF"];
+$myscript = $_SERVER['SCRIPT_NAME'];
+$myphpath = $_SERVER['PHP_SELF'];
 $mypathinfo = str_replace($myscript, "", $myphpath);
 @putenv("PATH_INFO=".$mypathinfo); } }
 // Change raw post data to POST array
@@ -1170,8 +1170,8 @@ if(isset($_SERVER['PHP_AUTH_USER'])) { $LOG_AUTH_USER = $_SERVER['PHP_AUTH_USER'
 if($LOG_AUTH_USER==""||$LOG_AUTH_USER==null) { $LOG_AUTH_USER = "-"; }
 if(trim($LOG_AUTH_USER, "\x00..\x1F") == "") { $LOG_AUTH_USER = "-"; }
 $LOG_AUTH_USER = log_fix_quotes($LOG_AUTH_USER);
-if(!isset($_SERVER["HTTP_USER_AGENT"])) { $LOG_USER_AGENT = "-"; }
-if(isset($_SERVER["HTTP_USER_AGENT"])) { $LOG_USER_AGENT = $_SERVER["HTTP_USER_AGENT"]; }
+if(!isset($_SERVER['HTTP_USER_AGENT'])) { $LOG_USER_AGENT = "-"; }
+if(isset($_SERVER['HTTP_USER_AGENT'])) { $LOG_USER_AGENT = $_SERVER['HTTP_USER_AGENT']; }
 if($LOG_USER_AGENT==""||$LOG_USER_AGENT==null) { $LOG_USER_AGENT = "-"; }
 if(trim($LOG_USER_AGENT, "\x00..\x1F") == "") { $LOG_USER_AGENT = "-"; }
 $LOG_USER_AGENT = log_fix_quotes($LOG_USER_AGENT);
@@ -1212,8 +1212,8 @@ if(isset($_SESSION['UserGroupID'])&&$_SESSION['UserGroupID']!==null) {
 if(trim($LogGroupID, "\x00..\x1F") == "") { $LogGroupID = "-"; }
 $LogGroupID = log_fix_quotes($LogGroupID);
 $LOG_QUERY_STRING = "";
-if($_SERVER["QUERY_STRING"]!=="") {
-$LOG_QUERY_STRING = "?".$_SERVER["QUERY_STRING"]; }
+if($_SERVER['QUERY_STRING']!=="") {
+$LOG_QUERY_STRING = "?".$_SERVER['QUERY_STRING']; }
 if(trim($LOG_QUERY_STRING, "\x00..\x1F") == "") { $LOG_QUERY_STRING = ""; }
 $LOG_QUERY_STRING = log_fix_quotes($LOG_QUERY_STRING);
 $oldcontentsize = $contentsize;
@@ -1222,33 +1222,33 @@ if($contentsize===0) { $contentsize = "-"; }
 if($contentsize=="-"&&$headersize!==0) { $fullsitesize = $headersize; }
 if($contentsize!="-"&&$headersize!==0) { $fullsitesize = $contentsize + $headersize; }
 if($status=="302") { $contentsize = "-"; }
-$HTTP_REQUEST_LINE = $_SERVER["REQUEST_METHOD"]." ".$_SERVER["REQUEST_URI"]." ".$_SERVER["SERVER_PROTOCOL"];
+$HTTP_REQUEST_LINE = $_SERVER['REQUEST_METHOD']." ".$_SERVER['REQUEST_URI']." ".$_SERVER['SERVER_PROTOCOL'];
 $HTTP_REQUEST_LINE = log_fix_quotes($HTTP_REQUEST_LINE);
 $logtxt = preg_replace("/%%/s", "{percent}p", $logtxt);
 $logtxt = preg_replace("/%([\<\>]*?)a/s", $_SERVER['REMOTE_ADDR'], $logtxt);
-$logtxt = preg_replace("/%([\<\>]*?)A/s", $_SERVER["SERVER_ADDR"], $logtxt);
+$logtxt = preg_replace("/%([\<\>]*?)A/s", $_SERVER['SERVER_ADDR'], $logtxt);
 $logtxt = preg_replace("/%([\<\>]*?)B/s", $oldcontentsize, $logtxt);
 $logtxt = preg_replace("/%([\<\>]*?)b/s", $contentsize, $logtxt);
 $logtxt = preg_replace_callback("/%([\<\>]*?)\{([^\}]*)\}C/s", "get_cookie_values", $logtxt);
 $logtxt = preg_replace_callback("/%([\<\>]*?)\{([^\}]*)\}e/s", "get_env_values", $logtxt);
-$logtxt = preg_replace("/%([\<\>]*?)f/s", log_fix_quotes($_SERVER["SCRIPT_FILENAME"]), $logtxt);
+$logtxt = preg_replace("/%([\<\>]*?)f/s", log_fix_quotes($_SERVER['SCRIPT_FILENAME']), $logtxt);
 $logtxt = preg_replace("/%([\<\>]*?)h/s", $_SERVER['REMOTE_ADDR'], $logtxt);
-$logtxt = preg_replace("/%([\<\>]*?)H/s", $_SERVER["SERVER_PROTOCOL"], $logtxt);
+$logtxt = preg_replace("/%([\<\>]*?)H/s", $_SERVER['SERVER_PROTOCOL'], $logtxt);
 $logtxt = preg_replace("/%([\<\>]*?)\{Referer\}i/s", $LOG_URL_REFERER, $logtxt);
 $logtxt = preg_replace("/%([\<\>]*?)\{User-Agent\}i/s", $LOG_USER_AGENT, $logtxt);
 $logtxt = preg_replace_callback("/%([\<\>]*?)\{([^\}]*)\}i/s", "get_server_values", $logtxt);
 $logtxt = preg_replace("/%([\<\>]*?)l/s", "-", $logtxt);
-$logtxt = preg_replace("/%([\<\>]*?)m/s", $_SERVER["REQUEST_METHOD"], $logtxt);
-$logtxt = preg_replace("/%([\<\>]*?)p/s", $_SERVER["SERVER_PORT"], $logtxt);
+$logtxt = preg_replace("/%([\<\>]*?)m/s", $_SERVER['REQUEST_METHOD'], $logtxt);
+$logtxt = preg_replace("/%([\<\>]*?)p/s", $_SERVER['SERVER_PORT'], $logtxt);
 $logtxt = preg_replace("/%([\<\>]*?)q/s", $LOG_QUERY_STRING, $logtxt);
 $logtxt = preg_replace("/%([\<\>]*?)r/s", $HTTP_REQUEST_LINE, $logtxt);
 $logtxt = preg_replace("/%([\<\>]*?)s/s", $status, $logtxt);
 $logtxt = preg_replace("/%([\<\>]*?)t/s", "[".$servcurtime->format("d/M/Y:H:i:s O")."]", $logtxt);
 $logtxt = preg_replace_callback("/%([\<\>]*?)\{([^\}]*)\}t/s", "get_time", $logtxt);
 $logtxt = preg_replace("/%([\<\>]*?)u/s", $LOG_AUTH_USER, $logtxt);
-$logtxt = preg_replace("/%([\<\>]*?)U/s", log_fix_quotes($_SERVER["PHP_SELF"]), $logtxt);
-$logtxt = preg_replace("/%([\<\>]*?)v/s", $_SERVER["SERVER_NAME"], $logtxt);
-$logtxt = preg_replace("/%([\<\>]*?)V/s", $_SERVER["SERVER_NAME"], $logtxt);
+$logtxt = preg_replace("/%([\<\>]*?)U/s", log_fix_quotes($_SERVER['PHP_SELF']), $logtxt);
+$logtxt = preg_replace("/%([\<\>]*?)v/s", $_SERVER['SERVER_NAME'], $logtxt);
+$logtxt = preg_replace("/%([\<\>]*?)V/s", $_SERVER['SERVER_NAME'], $logtxt);
 // Not what it should be but PHP dose not have variable to get Apache ServerName config value. :( 
 $logtxt = preg_replace("/%([\<\>]*?)O/s", $fullsitesize, $logtxt);
 $logtxt = preg_replace_callback("/%([\<\>]*?)\{([^\}]*)\}s/s", "get_setting_values", $logtxt);

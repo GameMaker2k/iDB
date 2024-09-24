@@ -57,17 +57,33 @@ $uoli=0; $olmn = 0; $olgn = 0; $olan = 0; $olmbn = 0;
 $MembersOnline = null; $GuestsOnline = null;
 while ($uoli < $uolnum) {
 $uolresult_array = sql_fetch_assoc($uolresult);
-$session_data=$uolresult_array["session_data"]; 
-$serialized_data=$uolresult_array["serialized_data"];
-$session_user_agent=$uolresult_array["user_agent"]; 
-$session_ip_address=$uolresult_array["ip_address"];
+$session_data=$uolresult_array['session_data']; 
+$serialized_data=$uolresult_array['serialized_data'];
+$session_user_agent=$uolresult_array['user_agent'];
+$session_client_hints=json_decode($uolresult_array['client_hints']);
+$session_ip_address=$uolresult_array['ip_address'];
 //$UserSessInfo = unserialize_session($session_data);
 $UserSessInfo = unserialize($serialized_data);
 if(!isset($UserSessInfo['UserGroup'])) { $UserSessInfo['UserGroup'] = $Settings['GuestGroup']; }
 $AmIHiddenUser = "no";
 $user_agent_check = false;
-if(user_agent_check($session_user_agent)) {
-	$user_agent_check = user_agent_check($session_user_agent); }
+if (user_agent_check($session_user_agent)) {
+    // Use the result from user_agent_check if it's valid
+    $user_agent_check = user_agent_check($session_user_agent);
+} else {
+    // Check if browscap is available
+    if (ini_get('browscap')) {
+        // Attempt to use get_browser() if browscap is set
+        $pre_user_agent = @get_browser($session_user_agent, true);
+        if ($pre_user_agent !== false) {
+            // Use get_browser result if available
+            $session_user_agent = $pre_user_agent['parent'] . " on " . $pre_user_agent['platform'];
+        }
+        unset($pre_user_agent);
+    }
+    // If browscap is not set or get_browser() fails, retain $session_user_agent
+    // from the SQL select.
+}
 if($UserSessInfo['UserGroup']!=$Settings['GuestGroup']||$user_agent_check!==false) {
 $PreAmIHiddenUser = GetUserName($UserSessInfo['UserID'],$Settings['sqltable'],$SQLStat);
 $AmIHiddenUser = $PreAmIHiddenUser['Hidden'];
@@ -118,9 +134,9 @@ $NewestMem = array(null);
 $NewestMem['ID'] = "0"; $NewestMem['Name'] = "Anonymous";
 if($nummembers>0) {
 $nmresult_array = sql_fetch_assoc($nmresult);
-$NewestMem['ID']=$nmresult_array["id"];
-$NewestMem['Name']=$nmresult_array["Name"];
-$NewestMem['IP']=$nmresult_array["IP"]; }
+$NewestMem['ID']=$nmresult_array['id'];
+$NewestMem['Name']=$nmresult_array['Name'];
+$NewestMem['IP']=$nmresult_array['IP']; }
 if($nummembers<=0) { $NewestMem['ID'] = 0; }
 if($NewestMem['ID']<=0) { $NewestMem['ID'] = "0"; $NewestMem['Name'] = "Anonymous"; $NewestMem['IP'] = "127.0.0.1"; }
 $NewestMemTitle = null;
@@ -143,10 +159,10 @@ if($bdmembers<=0) { $bdstring = "<div>&#160;</div>&#160;No members have a birthd
 while ($bdi < $bdmembers) {
 $bdmemberz = $bdmembers - 1;
 $bdresult_array = sql_fetch_assoc($bdresult);
-$birthday['ID']=$bdresult_array["id"];
-$birthday['Name']=$bdresult_array["Name"];
-$birthday['IP']=$bdresult_array["IP"];
-$birthday['BirthYear']=$bdresult_array["BirthYear"];
+$birthday['ID']=$bdresult_array['id'];
+$birthday['Name']=$bdresult_array['Name'];
+$birthday['IP']=$bdresult_array['IP'];
+$birthday['BirthYear']=$bdresult_array['BirthYear'];
 $bdThisYear = $usercurtime->format("Y");
 $birthday['Age'] = $bdThisYear - $birthday['BirthYear'];
 $bdMemTitle = null;
@@ -178,10 +194,10 @@ if($evevents<=0) { $evstring = "<div>&#160;</div>&#160;There are no upcoming cal
 while ($evi < $evevents) {
 $eveventz = $evevents - 1;
 $evresult_array = sql_fetch_assoc($evresult);
-$getevent['ID']=$evresult_array["id"];
-$getevent['EventName']=$evresult_array["EventName"];
-$getevent['TimeStamp']=$evresult_array["TimeStamp"];
-$getevent['TimeStampEnd']=$evresult_array["TimeStampEnd"];
+$getevent['ID']=$evresult_array['id'];
+$getevent['EventName']=$evresult_array['EventName'];
+$getevent['TimeStamp']=$evresult_array['TimeStamp'];
+$getevent['TimeStampEnd']=$evresult_array['TimeStampEnd'];
 $eventstartcurtime = new DateTime();
 $eventstartcurtime->setTimestamp($getevent['TimeStamp']);
 $eventstartcurtime->setTimezone($usertz);
@@ -209,7 +225,7 @@ $tdMembersOnline = null;
 $ggquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"Name\"='%s'", array($Settings['GuestGroup']));
 $ggresult=sql_query($ggquery,$SQLStat);
 $ggresult_array = sql_fetch_assoc($ggresult);
-$GGroup=$ggresult_array["id"];
+$GGroup=$ggresult_array['id'];
 sql_free_result($ggresult);
 $tdquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"<>%i AND \"id\">=0 ".$caniview." AND (\"LastActive\">=%i AND \"LastActive\"<=%i) ORDER BY \"LastActive\" DESC", array($GGroup,$active_start,$active_end)); 
 $tdrnquery = sql_pre_query("SELECT COUNT(*) FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"<>%i AND \"id\">=0 ".$caniview." AND (\"LastActive\">=%i AND \"LastActive\"<=%i)", array($GGroup,$active_start,$active_end));
@@ -220,10 +236,10 @@ $tdnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['
 $tdi=0;
 while($tdi < $tdnum) {
 $tdresult_array = sql_fetch_assoc($tdresult);
-$tdMemList['ID']=$tdresult_array["id"];
-$tdMemList['Name']=$tdresult_array["Name"];
-$tdMemList['IP']=$tdresult_array["IP"];
-$tdMemList['LastActive']=$tdresult_array["LastActive"];
+$tdMemList['ID']=$tdresult_array['id'];
+$tdMemList['Name']=$tdresult_array['Name'];
+$tdMemList['IP']=$tdresult_array['IP'];
+$tdMemList['LastActive']=$tdresult_array['LastActive'];
 $tmpusrcurtime = new DateTime();
 $tmpusrcurtime->setTimestamp($tdMemList['LastActive']);
 $tmpusrcurtime->setTimezone($usertz);

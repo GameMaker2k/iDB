@@ -135,8 +135,8 @@ $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE
 $result=sql_query($query,$SQLStat);
 $num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_SESSION['UserID'])), $SQLStat);
 $result_array = sql_fetch_assoc($result);
-$YourID=$result_array["id"];
-$Notes=$result_array["Notes"];
+$YourID=$result_array['id'];
+$Notes=$result_array['Notes'];
 $noteact = url_maker($exfile['profile'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['profile'],$exqstr['profile']);
 $notepadact = $noteact; $profiletitle = " ".$ThemeSet['TitleDivider']." NotePad";
 ?>
@@ -189,13 +189,13 @@ if($_POST['act']=="view"&&
 	$melanies=0;
 	while ($melanies < $melanienm) {
 	$melaniert_array = sql_fetch_assoc($melaniert);
-	$Filter=$melaniert_array["FilterWord"];
-	$Replace=$melaniert_array["Replacement"];
-	$CaseInsensitive=$melaniert_array["CaseInsensitive"];
+	$Filter=$melaniert_array['FilterWord'];
+	$Replace=$melaniert_array['Replacement'];
+	$CaseInsensitive=$melaniert_array['CaseInsensitive'];
 	if($CaseInsensitive=="on") { $CaseInsensitive = "yes"; }
 	if($CaseInsensitive=="off") { $CaseInsensitive = "no"; }
 	if($CaseInsensitive!="yes"||$CaseInsensitive!="no") { $CaseInsensitive = "no"; }
-	$WholeWord=$melaniert_array["WholeWord"];
+	$WholeWord=$melaniert_array['WholeWord'];
 	if($WholeWord=="on") { $WholeWord = "yes"; }
 	if($WholeWord=="off") { $WholeWord = "no"; }
 	if($WholeWord!="yes"&&$WholeWord!="no") { $WholeWord = "no"; }
@@ -219,8 +219,8 @@ $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE
 $result=sql_query($query,$SQLStat);
 $num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_SESSION['UserID'])), $SQLStat);
 $result_array = sql_fetch_assoc($result);
-$YourID=$result_array["id"];
-$Signature=$result_array["Signature"]; 
+$YourID=$result_array['id'];
+$Signature=$result_array['Signature']; 
 $signatureact = url_maker($exfile['profile'],$Settings['file_ext'],"act=signature",$Settings['qstr'],$Settings['qsep'],$prexqstr['profile'],$exqstr['profile']);
 $profiletitle = " ".$ThemeSet['TitleDivider']." Signature Editor";
 ?>
@@ -272,13 +272,13 @@ if($_POST['act']=="signature"&&
 	$melanies=0;
 	while ($melanies < $melanienm) {
 	$melaniert_array = sql_fetch_assoc($melaniert);
-	$Filter=$melaniert_array["FilterWord"];
-	$Replace=$melaniert_array["Replacement"];
-	$CaseInsensitive=$melaniert_array["CaseInsensitive"];
+	$Filter=$melaniert_array['FilterWord'];
+	$Replace=$melaniert_array['Replacement'];
+	$CaseInsensitive=$melaniert_array['CaseInsensitive'];
 	if($CaseInsensitive=="on") { $CaseInsensitive = "yes"; }
 	if($CaseInsensitive=="off") { $CaseInsensitive = "no"; }
 	if($CaseInsensitive!="yes"||$CaseInsensitive!="no") { $CaseInsensitive = "no"; }
-	$WholeWord=$melaniert_array["WholeWord"];
+	$WholeWord=$melaniert_array['WholeWord'];
 	if($WholeWord=="on") { $WholeWord = "yes"; }
 	if($WholeWord=="off") { $WholeWord = "no"; }
 	if($WholeWord!="yes"&&$WholeWord!="no") { $WholeWord = "no"; }
@@ -302,9 +302,9 @@ $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE
 $result=sql_query($query,$SQLStat);
 $num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_SESSION['UserID'])), $SQLStat);
 $result_array = sql_fetch_assoc($result);
-$YourID=$result_array["id"];
-$User1Avatar=$result_array["Avatar"]; 
-$User1AvatarSize=$result_array["AvatarSize"];
+$YourID=$result_array['id'];
+$User1Avatar=$result_array['Avatar']; 
+$User1AvatarSize=$result_array['AvatarSize'];
 $avataract = url_maker($exfile['profile'],$Settings['file_ext'],"act=avatar",$Settings['qstr'],$Settings['qsep'],$prexqstr['profile'],$exqstr['profile']);
 $profiletitle = " ".$ThemeSet['TitleDivider']." Avatar Editor";
 $Pre1Avatar = $User1Avatar;
@@ -402,11 +402,11 @@ $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE
 $result=sql_query($query,$SQLStat);
 $num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_SESSION['UserID'])), $SQLStat);
 $result_array = sql_fetch_assoc($result);
-$YourID=$result_array["id"];
-$User1TimeZone=$result_array["TimeZone"]; 
-$User1DateFormat=$result_array["DateFormat"];
+$YourID=$result_array['id'];
+$User1TimeZone=$result_array['TimeZone']; 
+$User1DateFormat=$result_array['DateFormat'];
 $User1DateFormat = htmlspecialchars($User1DateFormat, ENT_QUOTES, $Settings['charset']);
-$User1TimeFormat=$result_array["TimeFormat"];
+$User1TimeFormat=$result_array['TimeFormat'];
 $User1TimeFormat= htmlspecialchars($User1TimeFormat, ENT_QUOTES, $Settings['charset']);
 $settingsact = url_maker($exfile['profile'],$Settings['file_ext'],"act=settings",$Settings['qstr'],$Settings['qsep'],$prexqstr['profile'],$exqstr['profile']);
 $profiletitle = " ".$ThemeSet['TitleDivider']." Board Settings"; 
@@ -481,8 +481,8 @@ $sknum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['
 $skni=0;
 while ($skni < $sknum) {
 $sknresult_array = sql_fetch_assoc($sknresult);
-$ThemeInfo['Name'] = $sknresult_array["Name"];
-$ThemeInfo['ThemeName'] = $sknresult_array["ThemeName"];
+$ThemeInfo['Name'] = $sknresult_array['Name'];
+$ThemeInfo['ThemeName'] = $sknresult_array['ThemeName'];
 echo "<option value=\"".$ThemeInfo['Name']."\">".$ThemeInfo['ThemeName']."</option>\n";
 ++$skni; }
 } ?></select></td>
@@ -563,21 +563,21 @@ $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE
 $result=sql_query($query,$SQLStat);
 $num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_SESSION['UserID'])), $SQLStat);
 $result_array = sql_fetch_assoc($result);
-$YourID=$result_array["id"];
-$User1Interests=$result_array["Interests"]; 
-$User1Title=$result_array["Title"];
-$User1Website=$result_array["Website"]; 
+$YourID=$result_array['id'];
+$User1Interests=$result_array['Interests']; 
+$User1Title=$result_array['Title'];
+$User1Website=$result_array['Website']; 
 $User1Website = urlcheck($User1Website);
 if($User1Website=="http://") { $User1Website = ""; }
-$User1Gender=$result_array["Gender"];
-$User1TimeZone=$result_array["TimeZone"];
-$User1DateFormat=$result_array["DateFormat"];
+$User1Gender=$result_array['Gender'];
+$User1TimeZone=$result_array['TimeZone'];
+$User1DateFormat=$result_array['DateFormat'];
 $User1DateFormat = htmlspecialchars($User1DateFormat, ENT_QUOTES, $Settings['charset']);
-$User1TimeFormat=$result_array["TimeFormat"];
+$User1TimeFormat=$result_array['TimeFormat'];
 $User1TimeFormat= htmlspecialchars($User1TimeFormat, ENT_QUOTES, $Settings['charset']);
-$BirthDay=$result_array["BirthDay"];
-$BirthMonth=$result_array["BirthMonth"];
-$BirthYear=$result_array["BirthYear"];
+$BirthDay=$result_array['BirthDay'];
+$BirthMonth=$result_array['BirthMonth'];
+$BirthYear=$result_array['BirthYear'];
 $User1Birthday = "MM/DD/YYYY";
 if($BirthMonth!=null&&$BirthDay!=null&&$BirthYear!=null) { 
 	if($BirthYear=="0") { $BirthYear = "YYYY"; }
@@ -736,13 +736,13 @@ if($_POST['act']=="profile"&&
 	$melanies=0;
 	while ($melanies < $melanienm) {
 	$melaniert_array = sql_fetch_assoc($melaniert);
-	$Filter=$melaniert_array["FilterWord"];
-	$Replace=$melaniert_array["Replacement"];
-	$CaseInsensitive=$melaniert_array["CaseInsensitive"];
+	$Filter=$melaniert_array['FilterWord'];
+	$Replace=$melaniert_array['Replacement'];
+	$CaseInsensitive=$melaniert_array['CaseInsensitive'];
 	if($CaseInsensitive=="on") { $CaseInsensitive = "yes"; }
 	if($CaseInsensitive=="off") { $CaseInsensitive = "no"; }
 	if($CaseInsensitive!="yes"||$CaseInsensitive!="no") { $CaseInsensitive = "no"; }
-	$WholeWord=$melaniert_array["WholeWord"];
+	$WholeWord=$melaniert_array['WholeWord'];
 	if($WholeWord=="on") { $WholeWord = "yes"; }
 	if($WholeWord=="off") { $WholeWord = "no"; }
 	if($WholeWord!="yes"&&$WholeWord!="no") { $WholeWord = "no"; }
@@ -809,8 +809,8 @@ $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE
 $result=sql_query($query,$SQLStat);
 $num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_SESSION['UserID'])), $SQLStat);
 $result_array = sql_fetch_assoc($result);
-$YourID=$result_array["id"];
-$User1Email=$result_array["Email"]; 
+$YourID=$result_array['id'];
+$User1Email=$result_array['Email']; 
 $userinfoact = url_maker($exfile['profile'],$Settings['file_ext'],"act=userinfo",$Settings['qstr'],$Settings['qsep'],$prexqstr['profile'],$exqstr['profile']);
 $profiletitle = " ".$ThemeSet['TitleDivider']." User Info Editer";
 ?>
@@ -871,10 +871,10 @@ if($_POST['act']=="userinfo"&&
 	$result=sql_query($query,$SQLStat);
 	$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_SESSION['UserID'])), $SQLStat);
 	$result_array = sql_fetch_assoc($result);
-	$OldPassword=$result_array["UserPassword"];
-	$OldHashType=$result_array["HashType"];
-	$OldJoined=$result_array["Joined"];
-	$OldSalt=$result_array["Salt"];
+	$OldPassword=$result_array['UserPassword'];
+	$OldHashType=$result_array['HashType'];
+	$OldJoined=$result_array['Joined'];
+	$OldSalt=$result_array['Salt'];
 	$UpdateHash = false;
 if($OldHashType=="ODFH") { 
 	$YourPassword = PassHash2x($_POST['OldPass']); }

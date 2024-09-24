@@ -371,6 +371,7 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."sessions\" (\n".
 "  \"session_data\" STRING NOT NULL,\n".
 "  \"serialized_data\" STRING NOT NULL,\n".
 "  \"user_agent\" STRING NOT NULL,\n".
+"  \"client_hints\" STRING NOT NULL,\n".
 "  \"ip_address\" VARCHAR(64) NOT NULL default '',\n".
 "  \"expires\" INTEGER NOT NULL default '0'\n".
 ");", null);

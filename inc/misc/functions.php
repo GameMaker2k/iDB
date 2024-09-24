@@ -183,12 +183,12 @@ $melanienum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$sqlt.
 $melanies=0;
 while ($melanies < $melanienum) {
 $melanieresult_array = sql_fetch_assoc($melanieresult);
-$FileName=$melanieresult_array["FileName"];
-$SmileName=$melanieresult_array["SmileName"];
-$SmileText=$melanieresult_array["SmileText"];
-$SmileDirectory=$melanieresult_array["Directory"];
-$ShowSmile=$melanieresult_array["Display"];
-$ReplaceType=$melanieresult_array["ReplaceCI"];
+$FileName=$melanieresult_array['FileName'];
+$SmileName=$melanieresult_array['SmileName'];
+$SmileText=$melanieresult_array['SmileText'];
+$SmileDirectory=$melanieresult_array['Directory'];
+$ShowSmile=$melanieresult_array['Display'];
+$ReplaceType=$melanieresult_array['ReplaceCI'];
 if($ReplaceType=="on") { $ReplaceType = "yes"; }
 if($ReplaceType=="off") { $ReplaceType = "no"; }
 if($ReplaceType!="yes"||$ReplaceType!="no") { $ReplaceType = "no"; }
@@ -418,9 +418,9 @@ $gunnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$sqlt."mem
 $UsersHidden = "yes";
 if($gunnum>0){
 $gunresult_array = sql_fetch_assoc($gunresult);
-$UsersName=$gunresult_array["Name"];
+$UsersName=$gunresult_array['Name'];
 // Am i still hidden. o_O <_< I can see you.
-$UsersHidden=$gunresult_array["HiddenMember"]; }
+$UsersHidden=$gunresult_array['HiddenMember']; }
 sql_free_result($gunresult);
 $UsersInfo['Name'] = $UsersName;
 $UsersInfo['Hidden'] = $UsersHidden;

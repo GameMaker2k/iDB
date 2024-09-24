@@ -377,7 +377,7 @@ $tcount = count($TableChCk); $ti = 0;
 $TblOptimized = 0;
 if($Settings['sqltype']!="sqlite"||$Settings['sqltype']=="sqlite3"||$Settings['sqltype']=="pdo_sqlite3") {
 while ($ti < $tcount) {
-if(isset($OptimizeAr["Msg_text"])) { unset($OptimizeAr["Msg_text"]); }
+if(isset($OptimizeAr['Msg_text'])) { unset($OptimizeAr['Msg_text']); }
 if(isset($OptimizeAr[3])) { unset($OptimizeAr[3]); }
 if($Settings['sqltype']=="mysql"||
 	$Settings['sqltype']=="mysqli") {
@@ -392,9 +392,9 @@ if($Settings['sqltype']=="mysql"||
 	$Settings['sqltype']=="mysqli"||
 	$Settings['sqltype']=="cubrid") {
 $OptimizeAr = sql_fetch_array($OptimizeTea);
-if(!isset($OptimizeAr["Msg_text"])&&
-	isset($OptimizeAr[3])) { $OptimizeAr["Msg_text"] = $OptimizeAr[3]; }
-if($OptimizeAr["Msg_text"]=="OK") { 
+if(!isset($OptimizeAr['Msg_text'])&&
+	isset($OptimizeAr[3])) { $OptimizeAr['Msg_text'] = $OptimizeAr[3]; }
+if($OptimizeAr['Msg_text']=="OK") { 
 	++$TblOptimized; } } ++$ti; } }
 if($Settings['sqltype']=="sqlite"||$Settings['sqltype']=="sqlite3"||$Settings['sqltype']=="pdo_sqlite3") {
 sql_disconnect_db($SQLStat);
@@ -444,8 +444,8 @@ $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE
 $result=sql_query($query,$SQLStat);
 $num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_SESSION['UserID'])), $SQLStat);
 $result_array = sql_fetch_assoc($result);
-$YourID=$result_array["id"];
-$Notes=$result_array["Notes"];
+$YourID=$result_array['id'];
+$Notes=$result_array['Notes'];
 $noteact = url_maker($exfile['profile'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['profile'],$exqstr['profile']);
 $notepadact = $noteact; $profiletitle = " ".$ThemeSet['TitleDivider']." NotePad";
 $admincptitle = " ".$ThemeSet['TitleDivider']." Admin CP";
@@ -488,7 +488,7 @@ $mnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['s
 $mi = 0;
 while ($mi < $mnum) {
 $mgresults_array = sql_fetch_assoc($mgresults);
-$MGroups[$mi]=$mgresults_array["Name"];
+$MGroups[$mi]=$mgresults_array['Name'];
 ++$mi; }
 sql_free_result($mgresults);
 if($Settings['vercheck']===1) {
@@ -839,8 +839,8 @@ $sknum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['
 $skni=0;
 while ($skni < $sknum) {
 $sknresult_array = sql_fetch_assoc($sknresult);
-$ThemeInfo['Name'] = $sknresult_array["Name"];
-$ThemeInfo['ThemeName'] = $sknresult_array["ThemeName"];
+$ThemeInfo['Name'] = $sknresult_array['Name'];
+$ThemeInfo['ThemeName'] = $sknresult_array['ThemeName'];
 if($Settings['DefaultTheme']==$ThemeInfo['Name']) {
 echo "<option selected=\"selected\" value=\"".$ThemeInfo['Name']."\">".$ThemeInfo['ThemeName']."</option>\n"; }
 if($Settings['DefaultTheme']!=$ThemeInfo['Name']) {

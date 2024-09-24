@@ -97,10 +97,10 @@ if($ai>0) { ?>
 $fi=0;
 while ($fi < $ai) {
 $fr_array = sql_fetch_assoc($fr);
-$InCategoryID=$fr_array["id"];
-$InCategoryName=$fr_array["Name"];
-$InCategoryType=$fr_array["CategoryType"];
-$AiFiInSubCategory=$fr_array["InSubCategory"];
+$InCategoryID=$fr_array['id'];
+$InCategoryName=$fr_array['Name'];
+$InCategoryType=$fr_array['CategoryType'];
+$AiFiInSubCategory=$fr_array['InSubCategory'];
 if ($AiFiInSubCategory=="0") {
 ?>
 	<option value="<?php echo $InCategoryID; ?>"><?php echo $InCategoryName; ?></option>
@@ -199,7 +199,7 @@ $getperidi = 0;
 $nextperid = null;
 while ($getperidi < $getperidnum) {
 $gerperid_array = sql_fetch_assoc($getperid);
-$getperidID=$getperidr_array["PermissionID"];
+$getperidID=$getperidr_array['PermissionID'];
 $getperidq2 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."catpermissions\" WHERE \"PermissionID\"=%i", array($getperidID));
 $getperidr2=sql_query($getperidq2,$SQLStat);
 $getperidnum2=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."catpermissions\" WHERE \"PermissionID\"=%i", array($getperidID)), $SQLStat);
@@ -208,7 +208,7 @@ $getperidq2 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" W
 $getperidr2=sql_query($getperidq2,$SQLStat);
 $getperidnum2=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."groups\" WHERE \"PermissionID\"=%i", array($getperidID)), $SQLStat); }
 $getperidr2_array = sql_fetch_assoc($getperidr2);
-$getperidName=$getperidr2_array["Name"];
+$getperidName=$getperidr2_array['Name'];
 sql_free_result($getperidr2);
 $query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."catpermissions\" (\"PermissionID\", \"Name\", \"CategoryID\", \"CanViewCategory\") VALUES (%i, '%s', %i, 'yes')", array($getperidID,$getperidName,$_POST['CategoryID'])); 
 sql_query($query,$SQLStat);
@@ -276,10 +276,10 @@ if($ai>0) { ?>
 $fi=0;
 while ($fi < $ai) {
 $fr_array = sql_fetch_assoc($fr);
-$InCategoryID=$fr_array["id"];
-$InCategoryName=$fr_array["Name"];
-$InCategoryType=$fr_array["CategoryType"];
-$AiFiInSubCategory=$fr_array["InSubCategory"];
+$InCategoryID=$fr_array['id'];
+$InCategoryName=$fr_array['Name'];
+$InCategoryType=$fr_array['CategoryType'];
+$AiFiInSubCategory=$fr_array['InSubCategory'];
 ?>
 	<option value="<?php echo $InCategoryID; ?>"><?php echo $InCategoryName; ?></option>
 <?php ++$fi; }
@@ -337,7 +337,7 @@ $apcnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings[
 $apci=0; $apcl=1; if($apcnum>=1) {
 while ($apci < $apcnum) {
 $apcresult_array = sql_fetch_assoc($apcresult);
-$DelForumID=$apcresult_array["id"];
+$DelForumID=$apcresult_array['id'];
 if($_POST['DelPermission']=="yes") {
 $dtquery = sql_pre_query("DELETE FROM \"".$Settings['sqltable']."permissions\" WHERE \"ForumID\"=%i", array($DelForumID));
 sql_query($dtquery,$SQLStat); }
@@ -352,7 +352,7 @@ $apcnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings[
 $apci=0; $apcl=1; if($apcnum>=1) {
 while ($apci < $apcnum) {
 $apcresult_array = sql_fetch_assoc($apcresult);
-$DelSubsCategoryID=$apcresult_array["id"];
+$DelSubsCategoryID=$apcresult_array['id'];
 if($_POST['DelPermission']=="yes") {
 $dtquery = sql_pre_query("DELETE FROM \"".$Settings['sqltable']."catpermissions\" WHERE \"CategoryID\"=%i", array($DelSubsCategoryID));
 sql_query($dtquery,$SQLStat); }
@@ -398,10 +398,10 @@ if($ai>0) { ?>
 $fi=0;
 while ($fi < $ai) {
 $fr_array = sql_fetch_assoc($fr);
-$InCategoryID=$fr_array["id"];
-$InCategoryName=$fr_array["Name"];
-$InCategoryType=$fr_array["CategoryType"];
-$AiFiInSubCategory=$fr_array["InSubCategory"];
+$InCategoryID=$fr_array['id'];
+$InCategoryName=$fr_array['Name'];
+$InCategoryType=$fr_array['CategoryType'];
+$AiFiInSubCategory=$fr_array['InSubCategory'];
 ?>
 	<option value="<?php echo $InCategoryID; ?>"><?php echo $InCategoryName; ?></option>
 <?php ++$fi; }
@@ -435,16 +435,16 @@ ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($prenum>=1) {
 $preresult_array = sql_fetch_assoc($preresult);
-$CategoryID=$preresult_array["id"];
-$CategoryOrder=$preresult_array["OrderID"];
-$CategoryName=$preresult_array["Name"];
-$ShowCategory=$preresult_array["ShowCategory"];
-$CategoryType=$preresult_array["CategoryType"];
-$SubShowForums=$preresult_array["SubShowForums"];
-$InSubCategory=$preresult_array["InSubCategory"];
-$CategoryDescription=$preresult_array["Description"];
-$KarmaCountView=$preresult_array["KarmaCountView"];
-$PostCountView=$preresult_array["PostCountView"];
+$CategoryID=$preresult_array['id'];
+$CategoryOrder=$preresult_array['OrderID'];
+$CategoryName=$preresult_array['Name'];
+$ShowCategory=$preresult_array['ShowCategory'];
+$CategoryType=$preresult_array['CategoryType'];
+$SubShowForums=$preresult_array['SubShowForums'];
+$InSubCategory=$preresult_array['InSubCategory'];
+$CategoryDescription=$preresult_array['Description'];
+$KarmaCountView=$preresult_array['KarmaCountView'];
+$PostCountView=$preresult_array['PostCountView'];
 sql_free_result($preresult);
 $CategoryType = strtolower($CategoryType);
 ?>
@@ -508,10 +508,10 @@ if($ai>0) { ?>
 $fi=0;
 while ($fi < $ai) {
 $fr_array = sql_fetch_assoc($fr);
-$InCategoryID=$fr_array["id"];
-$InCategoryName=$fr_array["Name"];
-$InCategoryType=$fr_array["CategoryType"];
-$AiFiInSubCategory=$fr_array["InSubCategory"];
+$InCategoryID=$fr_array['id'];
+$InCategoryName=$fr_array['Name'];
+$InCategoryType=$fr_array['CategoryType'];
+$AiFiInSubCategory=$fr_array['InSubCategory'];
 if ($AiFiInSubCategory=="0") {
 if($InSubCategory==$InCategoryID) {
 ?>
@@ -564,8 +564,8 @@ ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($prenum>=1) {
 $preresult_array = sql_fetch_assoc($preresult);
-$OldID=$preresult_array["id"];
-$OldOrder=$preresult_array["OrderID"];
+$OldID=$preresult_array['id'];
+$OldOrder=$preresult_array['OrderID'];
 sql_free_result($preresult);
 $sql_id_check = sql_query(sql_pre_query("SELECT \"id\" FROM \"".$Settings['sqltable']."categories\" WHERE \"id\"=%i LIMIT 1", array($_POST['ForumID'])),$SQLStat);
 $sql_order_check = sql_query(sql_pre_query("SELECT \"OrderID\" FROM \"".$Settings['sqltable']."categories\" WHERE \"OrderID\"=%i LIMIT 1", array($_POST['OrderID'])),$SQLStat);
@@ -649,12 +649,12 @@ $getperidr=sql_query($getperidq,$SQLStat);
 $getperidi = 0;
 while ($getperidi < $getperidnum) {
 $getperidr_array = sql_fetch_assoc($getperidr);
-$getperidID=$getperidr_array["PermissionID"];
+$getperidID=$getperidr_array['PermissionID'];
 $getperidq2 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."catpermissions\" WHERE \"PermissionID\"=%i ORDER BY \"CategoryID\" ASC", array($getperidID));
 $getperidr2=sql_query($getperidq2,$SQLStat);
 $getperidnum2=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."catpermissions\" WHERE \"PermissionID\"=%i ORDER BY \"CategoryID\" ASC", array($getperidID)), $SQLStat);
 $getperidr2_array = sql_fetch_assoc($getperidr2);
-$getperidName=$getperidr2_array["Name"];
+$getperidName=$getperidr2_array['Name'];
 sql_free_result($getperidr2);
 ?>
 	<option value="<?php echo $getperidID; ?>"><?php echo $getperidName; ?></option>
@@ -705,8 +705,8 @@ $ai=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sql
 $fi=0;
 while ($fi < $ai) {
 $fr_array = sql_fetch_assoc($fr);
-$InCategoryID=$fr_array["id"];
-$InCategoryName=$fr_array["Name"];
+$InCategoryID=$fr_array['id'];
+$InCategoryName=$fr_array['Name'];
 $getperidq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."catpermissions\" WHERE \"PermissionID\"=%i AND \"CategoryID\"=%i LIMIT 1", array($_POST['id'],$InCategoryID));
 $getperidr=sql_query($getperidq,$SQLStat);
 $getperidnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."catpermissions\" WHERE \"PermissionID\"=%i AND \"CategoryID\"=%i LIMIT 1", array($_POST['id'],$InCategoryID)), $SQLStat);
@@ -714,8 +714,8 @@ $getperidNumz = null;
 $getperidID = null;
 if($getperidnum>0) {
 $getperidr_array = sql_fetch_assoc($getperidr);
-$getperidNumz=$getperidr_array["id"];
-$getperidID=$getperidr_array["PermissionID"]; }
+$getperidNumz=$getperidr_array['id'];
+$getperidID=$getperidr_array['PermissionID']; }
 ?>
 <form style="display: inline;" method="post" action="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=cpermissions",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">
 <table style="text-align: left;">
@@ -757,11 +757,11 @@ ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($prenum>=1) {
 $preresult_array = sql_fetch_assoc($preresult);
-$PermissionNum=$preresult_array["id"]; 
-$PermissionID=$preresult_array["PermissionID"]; 
-$PermissionName=$preresult_array["Name"]; 
-$PermissionCategoryID=$preresult_array["CategoryID"]; 
-$CanViewCategory=$preresult_array["CanViewCategory"];
+$PermissionNum=$preresult_array['id']; 
+$PermissionID=$preresult_array['PermissionID']; 
+$PermissionName=$preresult_array['Name']; 
+$PermissionCategoryID=$preresult_array['CategoryID']; 
+$CanViewCategory=$preresult_array['CanViewCategory'];
 sql_free_result($preresult); }
 $PermissionName = stripcslashes(htmlspecialchars($PermissionName, ENT_QUOTES, $Settings['charset']));
 //$_POST['CategoryName'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['CategoryName']);
@@ -877,7 +877,7 @@ ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($prenum>=1) {
 $preresult_array = sql_fetch_assoc($preresult);
-$PermissionName=$preresult_array["Name"]; 
+$PermissionName=$preresult_array['Name']; 
 sql_free_result($preresult); }
 //$nextidnum = sql_get_next_id($Settings['sqltable'],"catpermissions",$SQLStat);
 $query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."catpermissions\" (\"PermissionID\", \"Name\", \"CategoryID\", \"CanViewCategory\") VALUES\n".

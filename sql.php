@@ -406,7 +406,7 @@ if(!isset($Settings['clean_ob'])) { $Settings['clean_ob'] = "off"; }
 if(!isset($_SERVER['PATH_INFO'])) { $_SERVER['PATH_INFO'] = null; }
 if(!isset($_SERVER['HTTP_ACCEPT_ENCODING'])) { 
 	$_SERVER['HTTP_ACCEPT_ENCODING'] = null; }
-if(!isset($_SERVER["HTTP_ACCEPT"])) { $_SERVER["HTTP_ACCEPT"] = null; }
+if(!isset($_SERVER['HTTP_ACCEPT'])) { $_SERVER['HTTP_ACCEPT'] = null; }
 if(!isset($_SERVER['HTTP_REFERER'])) { $_SERVER['HTTP_REFERER'] = null; }
 if(!isset($_GET['page'])) { $_GET['page'] = null; }
 if(!isset($_GET['act'])) { $_GET['act'] = null; }
@@ -605,6 +605,38 @@ $sqltable = $Settings['sqltable'];
 $temp_user_ip = $_SERVER['REMOTE_ADDR'];
 if(!isset($_SERVER['HTTP_USER_AGENT'])) {
 	$_SERVER['HTTP_USER_AGENT'] = ""; }
+// Create an array to store browser hints
+$client_hints_json = [];
+$client_hints = [
+    'user_agent' => isset($_SERVER['HTTP_SEC_CH_UA']) ? $_SERVER['HTTP_SEC_CH_UA'] : null,
+    'is_mobile' => isset($_SERVER['HTTP_SEC_CH_UA_MOBILE']) ? $_SERVER['HTTP_SEC_CH_UA_MOBILE'] : null,
+    'full_version' => isset($_SERVER['HTTP_SEC_CH_UA_FULL_VERSION']) ? $_SERVER['HTTP_SEC_CH_UA_FULL_VERSION'] : null,
+    'full_version_list' => isset($_SERVER['HTTP_SEC_CH_UA_FULL_VERSION_LIST']) ? $_SERVER['HTTP_SEC_CH_UA_FULL_VERSION_LIST'] : null,
+    'platform' => isset($_SERVER['HTTP_SEC_CH_UA_PLATFORM']) ? $_SERVER['HTTP_SEC_CH_UA_PLATFORM'] : null,
+    'platform_version' => isset($_SERVER['HTTP_SEC_CH_UA_PLATFORM_VERSION']) ? $_SERVER['HTTP_SEC_CH_UA_PLATFORM_VERSION'] : null,
+    'architecture' => isset($_SERVER['HTTP_SEC_CH_UA_ARCH']) ? $_SERVER['HTTP_SEC_CH_UA_ARCH'] : null,
+    'bitness' => isset($_SERVER['HTTP_SEC_CH_UA_BITNESS']) ? $_SERVER['HTTP_SEC_CH_UA_BITNESS'] : null,
+    'wow64' => isset($_SERVER['HTTP_SEC_CH_UA_WOW64']) ? $_SERVER['HTTP_SEC_CH_UA_WOW64'] : null,
+    'model' => isset($_SERVER['HTTP_SEC_CH_UA_MODEL']) ? $_SERVER['HTTP_SEC_CH_UA_MODEL'] : null,
+    'form_factor' => isset($_SERVER['HTTP_SEC_CH_UA_FORM_FACTOR']) ? $_SERVER['HTTP_SEC_CH_UA_FORM_FACTOR'] : null,
+    'lang' => isset($_SERVER['HTTP_SEC_CH_LANG']) ? $_SERVER['HTTP_SEC_CH_LANG'] : null,
+    'save_data' => isset($_SERVER['HTTP_SEC_CH_SAVE_DATA']) ? $_SERVER['HTTP_SEC_CH_SAVE_DATA'] : null,
+    'width' => isset($_SERVER['HTTP_SEC_CH_WIDTH']) ? $_SERVER['HTTP_SEC_CH_WIDTH'] : null,
+    'viewport_width' => isset($_SERVER['HTTP_SEC_CH_VIEWPORT_WIDTH']) ? $_SERVER['HTTP_SEC_CH_VIEWPORT_WIDTH'] : null,
+    'viewport_height' => isset($_SERVER['HTTP_SEC_CH_VIEWPORT_HEIGHT']) ? $_SERVER['HTTP_SEC_CH_VIEWPORT_HEIGHT'] : null,
+    'dpr' => isset($_SERVER['HTTP_SEC_CH_DPR']) ? $_SERVER['HTTP_SEC_CH_DPR'] : null,
+    'device_memory' => isset($_SERVER['HTTP_SEC_CH_DEVICE_MEMORY']) ? $_SERVER['HTTP_SEC_CH_DEVICE_MEMORY'] : null,
+    'rtt' => isset($_SERVER['HTTP_SEC_CH_RTT']) ? $_SERVER['HTTP_SEC_CH_RTT'] : null,
+    'downlink' => isset($_SERVER['HTTP_SEC_CH_DOWNLINK']) ? $_SERVER['HTTP_SEC_CH_DOWNLINK'] : null,
+    'ect' => isset($_SERVER['HTTP_SEC_CH_ECT']) ? $_SERVER['HTTP_SEC_CH_ECT'] : null,
+    'prefers_color_scheme' => isset($_SERVER['HTTP_SEC_CH_PREFERS_COLOR_SCHEME']) ? $_SERVER['HTTP_SEC_CH_PREFERS_COLOR_SCHEME'] : null,
+    'prefers_reduced_motion' => isset($_SERVER['HTTP_SEC_CH_PREFERS_REDUCED_MOTION']) ? $_SERVER['HTTP_SEC_CH_PREFERS_REDUCED_MOTION'] : null,
+    'prefers_reduced_transparency' => isset($_SERVER['HTTP_SEC_CH_PREFERS_REDUCED_TRANSPARENCY']) ? $_SERVER['HTTP_SEC_CH_PREFERS_REDUCED_TRANSPARENCY'] : null,
+    'prefers_contrast' => isset($_SERVER['HTTP_SEC_CH_PREFERS_CONTRAST']) ? $_SERVER['HTTP_SEC_CH_PREFERS_CONTRAST'] : null,
+    'forced_colors' => isset($_SERVER['HTTP_SEC_CH_FORCED_COLORS']) ? $_SERVER['HTTP_SEC_CH_FORCED_COLORS'] : null
+];
+$client_hints_json = json_encode($client_hints);
+if($client_hints_json=="") { $client_hints_json = []; }
 if(strpos($_SERVER['HTTP_USER_AGENT'], "msie") && 
 	!strpos($_SERVER['HTTP_USER_AGENT'], "opera")){
 	header("X-UA-Compatible: IE=Edge"); }
@@ -649,7 +681,7 @@ if ($use_old_session == true) {
 
     // Session Read Function
     function sql_session_read($id) {
-        global $sqltable, $SQLStat, $temp_user_ip, $temp_user_agent, $temp_session_data, $alt_temp_session_data;
+        global $sqltable, $SQLStat, $temp_user_ip, $temp_user_agent, $client_hints_json, $temp_session_data, $alt_temp_session_data;
 
         // Select session
         $rs = sql_query(sql_pre_query("SELECT * FROM \"" . $sqltable . "sessions\" WHERE \"session_id\" = '%s'", array($id)), $SQLStat);
@@ -663,8 +695,8 @@ if ($use_old_session == true) {
 
             // Insert new session
             $time = (new DateTime('now', new DateTimeZone("UTC")))->getTimestamp();
-            sql_query(sql_pre_query("INSERT INTO \"" . $sqltable . "sessions\" (\"session_id\", \"session_data\", \"serialized_data\", \"user_agent\", \"ip_address\", \"expires\") VALUES ('%s', '%s', '%s', '%s', '%s', %i)", 
-                array($id, $temp_session_data, $alt_temp_session_data, $temp_user_agent, $temp_user_ip, $time)), $SQLStat);
+            sql_query(sql_pre_query("INSERT INTO \"" . $sqltable . "sessions\" (\"session_id\", \"session_data\", \"serialized_data\", \"user_agent\", \"client_hints\", \"ip_address\", \"expires\") VALUES ('%s', '%s', '%s', '%s', '%s', '%s', %i)", 
+                array($id, $temp_session_data, $alt_temp_session_data, $temp_user_agent, $client_hints_json, $temp_user_ip, $time)), $SQLStat);
             return '';
         } else {
             // Fetch the session data if it exists
@@ -675,7 +707,7 @@ if ($use_old_session == true) {
 
     // Session Write Function
     function sql_session_write($id, $data) {
-        global $sqltable, $SQLStat, $temp_user_ip, $temp_user_agent;
+        global $sqltable, $SQLStat, $temp_user_ip, $temp_user_agent, $client_hints_json;
 
         $time = (new DateTime('now', new DateTimeZone("UTC")))->getTimestamp();
         $checkQuery = sql_pre_query("SELECT COUNT(*) AS cnt FROM \"" . $sqltable . "sessions\" WHERE \"session_id\" = '%s'", array($id));
@@ -683,12 +715,12 @@ if ($use_old_session == true) {
 
         if ($sessionExists == 0) {
             // Insert new session
-            sql_query(sql_pre_query("INSERT INTO \"" . $sqltable . "sessions\" (\"session_id\", \"session_data\", \"serialized_data\", \"user_agent\", \"ip_address\", \"expires\") VALUES ('%s', '%s', '%s', '%s', '%s', %i)", 
-                array($id, $data, serialize($_SESSION), $temp_user_agent, $temp_user_ip, $time)), $SQLStat);
+            sql_query(sql_pre_query("INSERT INTO \"" . $sqltable . "sessions\" (\"session_id\", \"session_data\", \"serialized_data\", \"user_agent\", \"client_hints\", \"ip_address\", \"expires\") VALUES ('%s', '%s', '%s', '%s', '%s', '%s', %i)", 
+                array($id, $data, serialize($_SESSION), $temp_user_agent, $client_hints_json, $temp_user_ip, $time)), $SQLStat);
         } else {
             // Update existing session
-            sql_query(sql_pre_query("UPDATE \"" . $sqltable . "sessions\" SET \"session_data\" = '%s', \"serialized_data\" = '%s', \"user_agent\" = '%s', \"ip_address\" = '%s', \"expires\" = %i WHERE \"session_id\" = '%s'", 
-                array($data, serialize($_SESSION), $temp_user_agent, $temp_user_ip, $time, $id)), $SQLStat);
+            sql_query(sql_pre_query("UPDATE \"" . $sqltable . "sessions\" SET \"session_data\" = '%s', \"serialized_data\" = '%s', \"user_agent\" = '%s', \"client_hints\" = '%s', \"ip_address\" = '%s', \"expires\" = %i WHERE \"session_id\" = '%s'", 
+                array($data, serialize($_SESSION), $temp_user_agent, $client_hints_json, $temp_user_ip, $time, $id)), $SQLStat);
         }
 
         return true;
@@ -728,7 +760,7 @@ if ($use_old_session == true) {
     }
 
     function sql_session_read($id) {
-        global $sqltable, $SQLStat, $temp_user_ip, $temp_user_agent, $temp_session_data, $alt_temp_session_data;
+        global $sqltable, $SQLStat, $temp_user_ip, $temp_user_agent, $client_hints_json, $temp_session_data, $alt_temp_session_data;
 
         $checkQuery = sql_pre_query("SELECT COUNT(*) AS cnt FROM \"" . $sqltable . "sessions\" WHERE \"session_id\" = '%s'", array($id));
         $sessionExists = sql_count_rows($checkQuery, $SQLStat);
@@ -738,8 +770,8 @@ if ($use_old_session == true) {
                 array($id, $temp_user_ip, $temp_user_agent)), $SQLStat);
             
             $time = (new DateTime('now', new DateTimeZone("UTC")))->getTimestamp();
-            sql_query(sql_pre_query("INSERT INTO \"" . $sqltable . "sessions\" (\"session_id\", \"session_data\", \"serialized_data\", \"user_agent\", \"ip_address\", \"expires\") VALUES ('%s', '%s', '%s', '%s', '%s', %i)", 
-                array($id, $temp_session_data, $alt_temp_session_data, $temp_user_agent, $temp_user_ip, $time)), $SQLStat);
+            sql_query(sql_pre_query("INSERT INTO \"" . $sqltable . "sessions\" (\"session_id\", \"session_data\", \"serialized_data\", \"user_agent\", \"client_hints\", \"ip_address\", \"expires\") VALUES ('%s', '%s', '%s', '%s', '%s', '%s', %i)", 
+                array($id, $temp_session_data, $alt_temp_session_data, $temp_user_agent, $client_hints_json, $temp_user_ip, $time)), $SQLStat);
             return '';
         } else {
             $query = sql_pre_query("SELECT * FROM \"" . $sqltable . "sessions\" WHERE \"session_id\" = '%s'", array($id));
@@ -750,18 +782,18 @@ if ($use_old_session == true) {
     }
 
     function sql_session_write($id, $data) {
-        global $sqltable, $SQLStat, $temp_user_ip, $temp_user_agent;
+        global $sqltable, $SQLStat, $temp_user_ip, $temp_user_agent, $client_hints_json;
 
         $time = (new DateTime('now', new DateTimeZone("UTC")))->getTimestamp();
         $checkQuery = sql_pre_query("SELECT COUNT(*) AS cnt FROM \"" . $sqltable . "sessions\" WHERE \"session_id\" = '%s'", array($id));
         $sessionExists = sql_count_rows($checkQuery, $SQLStat);
 
         if ($sessionExists == 0) {
-            sql_query(sql_pre_query("INSERT INTO \"" . $sqltable . "sessions\" (\"session_id\", \"session_data\", \"serialized_data\", \"user_agent\", \"ip_address\", \"expires\") VALUES ('%s', '%s', '%s', '%s', '%s', %i)", 
-                array($id, $data, serialize($_SESSION), $temp_user_agent, $temp_user_ip, $time)), $SQLStat);
+            sql_query(sql_pre_query("INSERT INTO \"" . $sqltable . "sessions\" (\"session_id\", \"session_data\", \"serialized_data\", \"user_agent\", \"client_hints\", \"ip_address\", \"expires\") VALUES ('%s', '%s', '%s', '%s', '%s', '%s', %i)", 
+                array($id, $data, serialize($_SESSION), $temp_user_agent, $client_hints_json, $temp_user_ip, $time)), $SQLStat);
         } else {
-            sql_query(sql_pre_query("UPDATE \"" . $sqltable . "sessions\" SET \"session_data\" = '%s', \"serialized_data\" = '%s', \"user_agent\" = '%s', \"ip_address\" = '%s', \"expires\" = %i WHERE \"session_id\" = '%s'", 
-                array($data, serialize($_SESSION), $temp_user_agent, $temp_user_ip, $time, $id)), $SQLStat);
+            sql_query(sql_pre_query("UPDATE \"" . $sqltable . "sessions\" SET \"session_data\" = '%s', \"serialized_data\" = '%s', \"user_agent\" = '%s', \"client_hints\" = '%s', \"ip_address\" = '%s', \"expires\" = %i WHERE \"session_id\" = '%s'", 
+                array($data, serialize($_SESSION), $temp_user_agent, $client_hints_json, $temp_user_ip, $time, $id)), $SQLStat);
         }
 
         return true;
@@ -891,7 +923,7 @@ if($Settings['vercheck']!=1&&
 	$Settings['vercheck'] = 2; }
 if($Settings['vercheck']===2) {
 if($_GET['act']=="vercheckxsl") {
-if(stristr($_SERVER["HTTP_ACCEPT"],"application/xml") ) {
+if(stristr($_SERVER['HTTP_ACCEPT'],"application/xml") ) {
 header("Content-Type: application/xml; charset=".$Settings['charset']); }
 else { header("Content-Type: text/xml; charset=".$Settings['charset']); }
 xml_doc_start("1.0",$Settings['charset']);
@@ -917,7 +949,7 @@ echo "\n"; ?>
 </xsl:stylesheet>
 <?php gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); } 
 if($_GET['act']=="versioninfo") {
-if(stristr($_SERVER["HTTP_ACCEPT"],"application/xml") ) {
+if(stristr($_SERVER['HTTP_ACCEPT'],"application/xml") ) {
 header("Content-Type: application/xml; charset=".$Settings['charset']); }
 else { header("Content-Type: text/xml; charset=".$Settings['charset']); }
 xml_doc_start("1.0",$Settings['charset']);
@@ -961,9 +993,9 @@ header("Content-Type: text/plain; charset=".$Settings['charset']);
 require("README"); gzip_page($Settings['use_gzip'],$GZipEncode['Type']); die(); }
 if($_GET['act']=="js"||$_GET['act']=="javascript") {
 header("Content-Script-Type: text/javascript");
-if(stristr($_SERVER["HTTP_ACCEPT"],"application/x-javascript") ) {
+if(stristr($_SERVER['HTTP_ACCEPT'],"application/x-javascript") ) {
 header("Content-Type: application/x-javascript; charset=".$Settings['charset']); } else {
-if(stristr($_SERVER["HTTP_ACCEPT"],"application/javascript") ) {
+if(stristr($_SERVER['HTTP_ACCEPT'],"application/javascript") ) {
 header("Content-Type: application/javascript; charset=".$Settings['charset']); } else {
 header("Content-Type: text/javascript; charset=".$Settings['charset']); } }
 require($SettDir['inc'].'javascript.php');

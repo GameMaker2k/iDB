@@ -56,16 +56,16 @@ $_SESSION['ExtraData'] = "currentact:".$_GET['act']."; currentcategoryid:0; curr
 <?php
 while ($prei < $prenum) {
 $preresult_array = sql_fetch_assoc($preresult);
-$CategoryID=$preresult_array["id"];
-$CategoryName=$preresult_array["Name"];
-$CategoryShow=$preresult_array["ShowCategory"];
+$CategoryID=$preresult_array['id'];
+$CategoryName=$preresult_array['Name'];
+$CategoryShow=$preresult_array['ShowCategory'];
 if($CategoryShow=="no") { $_SESSION['ShowActHidden'] = "yes"; }
-$CategoryType=$preresult_array["CategoryType"];
-$SubShowForums=$preresult_array["SubShowForums"];
-$CategoryDescription=$preresult_array["Description"];
+$CategoryType=$preresult_array['CategoryType'];
+$SubShowForums=$preresult_array['SubShowForums'];
+$CategoryDescription=$preresult_array['Description'];
 $CategoryType = strtolower($CategoryType); $SubShowForums = strtolower($SubShowForums);
-$CategoryPostCountView=$preresult_array["PostCountView"];
-$CategoryKarmaCountView=$preresult_array["KarmaCountView"];
+$CategoryPostCountView=$preresult_array['PostCountView'];
+$CategoryKarmaCountView=$preresult_array['KarmaCountView'];
 if($MyPostCountChk==null) { $MyPostCountChk = 0; }
 if($MyKarmaCount==null) { $MyKarmaCount = 0; }
 if($GroupInfo['HasAdminCP']!="yes"||$GroupInfo['HasModCP']!="yes") {
@@ -85,17 +85,17 @@ if($num>=1) {
 <?php }
 while ($i < $num) {
 $result_array = sql_fetch_assoc($result);
-$ForumID=$result_array["id"];
-$ForumName=$result_array["Name"];
-$ForumShow=$result_array["ShowForum"];
+$ForumID=$result_array['id'];
+$ForumName=$result_array['Name'];
+$ForumShow=$result_array['ShowForum'];
 if($ForumShow=="no") { $_SESSION['ShowActHidden'] = "yes"; }
-$ForumType=$result_array["ForumType"];
-$ForumShowTopics=$result_array["CanHaveTopics"];
+$ForumType=$result_array['ForumType'];
+$ForumShowTopics=$result_array['CanHaveTopics'];
 $ForumShowTopics = strtolower($ForumShowTopics);
-$NumTopics=$result_array["NumTopics"];
-$NumPosts=$result_array["NumPosts"];
-$NumRedirects=$result_array["Redirects"];
-$ForumDescription=$result_array["Description"];
+$NumTopics=$result_array['NumTopics'];
+$NumPosts=$result_array['NumPosts'];
+$NumRedirects=$result_array['Redirects'];
+$ForumDescription=$result_array['Description'];
 $ForumType = strtolower($ForumType); $sflist = null;
 $gltf = array(null); $gltf[0] = $ForumID;
 if ($ForumType=="subforum") { 
@@ -105,14 +105,14 @@ $apcnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings[
 $apci=0; $apcl=1; if($apcnum>=1) {
 while ($apci < $apcnum) {
 $apcresult_array = sql_fetch_assoc($apcresult);
-$NumsTopics=$apcresult_array["NumTopics"];
+$NumsTopics=$apcresult_array['NumTopics'];
 $NumTopics = $NumsTopics + $NumTopics;
-$NumsPosts=$apcresult_array["NumPosts"];
+$NumsPosts=$apcresult_array['NumPosts'];
 $NumPosts = $NumsPosts + $NumPosts;
-$SubsForumID=$apcresult_array["id"];
-$SubsForumName=$apcresult_array["Name"];
-$SubsForumType=$apcresult_array["ForumType"];
-$SubsForumShowTopics=$result_array["CanHaveTopics"];
+$SubsForumID=$apcresult_array['id'];
+$SubsForumName=$apcresult_array['Name'];
+$SubsForumType=$apcresult_array['ForumType'];
+$SubsForumShowTopics=$result_array['CanHaveTopics'];
 if(isset($PermissionInfo['CanViewForum'][$SubsForumID])&&
 	$PermissionInfo['CanViewForum'][$SubsForumID]=="yes") {
 $ExStr = ""; if ($SubsForumType!="redirect"&&
@@ -147,7 +147,7 @@ $gltforesult=sql_query($gltfoquery,$SQLStat);
 $gltfonum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE \"ForumID\"=%i".$ExtraIgnores." ORDER BY \"LastUpdate\" DESC LIMIT 1", array($gltf[$glti])), $SQLStat);
 if($gltfonum>0) {
 $gltforesult_array = sql_fetch_assoc($gltforesult);
-$NewUpdateTime=$gltforesult_array["LastUpdate"];
+$NewUpdateTime=$gltforesult_array['LastUpdate'];
 if($NewUpdateTime>$OldUpdateTime) { 
 	$UseThisFonum = $gltf[$glti]; 
 $OldUpdateTime = $NewUpdateTime; } }

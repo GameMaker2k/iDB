@@ -25,10 +25,10 @@ if($Settings['output_type']=="html") {
 	$ccstart = "//<!--"; $ccend = "//-->"; $XHTML5 = false;
 header("Content-Type: text/html; charset=".$Settings['charset']); }
 if($Settings['output_type']=="xhtml") {
-if(stristr($_SERVER["HTTP_ACCEPT"],"application/xhtml+xml")) {
+if(stristr($_SERVER['HTTP_ACCEPT'],"application/xhtml+xml")) {
 	$ccstart = "//<![CDATA["; $ccend = "//]]>"; $XHTML5 = true;
 	header("Content-Type: application/xhtml+xml; charset=".$Settings['charset']); }
-else { if (stristr($_SERVER["HTTP_USER_AGENT"],"W3C_Validator")) {
+else { if (stristr($_SERVER['HTTP_USER_AGENT'],"W3C_Validator")) {
 	$ccstart = "//<![CDATA["; $ccend = "//]]>"; $XHTML5 = true;
    header("Content-Type: application/xhtml+xml; charset=".$Settings['charset']);
 } else { $ccstart = "//<!--"; $ccend = "//-->"; $XHTML5 = false;
@@ -84,13 +84,13 @@ header("Referrer-Policy: no-referrer-when-downgrade");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("X-Content-Type-Options: nosniff");
 header("Vary: Accept-Language, Accept-Encoding, User-Agent, Cookie, Referer, X-Requested-With");
-header("Accept-CH: Sec-CH-UA, Sec-CH-UA-Mobile, Sec-CH-UA-Full-Version, Sec-CH-UA-Platform, Sec-CH-UA-Platform-Version, Sec-CH-UA-Arch, Sec-CH-UA-Model");
+header("Accept-CH: Accept-CH: Sec-CH-UA, Sec-CH-UA-Platform, Sec-CH-UA-Mobile, Sec-CH-UA-Full-Version, Sec-CH-UA-Full-Version-List, Sec-CH-UA-Platform-Version, Sec-CH-UA-Arch, Sec-CH-UA-Bitness, Sec-CH-UA-Model, Sec-CH-Viewport-Width, Sec-CH-Viewport-Height, Sec-CH-Lang, Sec-CH-Save-Data, Sec-CH-Width, Sec-CH-DPR, Sec-CH-Device-Memory, Sec-CH-RTT, Sec-CH-Downlink, Sec-CH-ECT, Sec-CH-Prefers-Color-Scheme, Sec-CH-Prefers-Reduced-Motion, Sec-CH-Prefers-Reduced-Transparency, Sec-CH-Prefers-Contrast, Sec-CH-Forced-Colors");
 // Check if we are on a secure HTTP connection
 if($_SERVER['HTTPS']=="on") { $prehost = "https://"; }
 if($_SERVER['HTTPS']!="on") { $prehost = "http://"; }
 // Get the board's url
 if($Settings['idburl']=="localhost"||$Settings['idburl']==null) {
-	$BoardURL = $prehost.$_SERVER["HTTP_HOST"].$basedir; }
+	$BoardURL = $prehost.$_SERVER['HTTP_HOST'].$basedir; }
 if($Settings['idburl']!="localhost"&&$Settings['idburl']!=null) {
 	$BoardURL = $Settings['idburl']; 
 	if($Settings['qstr']!="/") {

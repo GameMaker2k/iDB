@@ -42,7 +42,7 @@ $num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sq
 $i=0;
 while ($i < $num) {
 $result_array = sql_fetch_assoc($result);
-$ForumID=$result_array["id"];
+$ForumID=$result_array['id'];
 $tquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"ForumID\"=%i ORDER BY \"Pinned\" DESC, \"LastUpdate\" DESC", array($ForumID));
 $tresult=sql_query($tquery,$SQLStat);
 $tnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE \"ForumID\"=%i ORDER BY \"Pinned\" DESC, \"LastUpdate\" DESC", array($ForumID)), $SQLStat);
@@ -95,7 +95,7 @@ $num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sq
 $i=0;
 while ($i < $num) {
 $result_array = sql_fetch_assoc($result);
-$TopicID=$result_array["id"];
+$TopicID=$result_array['id'];
 $rquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" ASC", array($TopicID));
 $rresult=sql_query($rquery,$SQLStat);
 $rnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" ASC", array($TopicID)), $SQLStat);
@@ -145,9 +145,9 @@ $num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sq
 $i=0;
 while ($i < $num) {
 $result_array = sql_fetch_assoc($result);
-$TopicID=$result_array["id"];
-$UsersID=$result_array["UserID"];
-$GuestsName=$result_array["GuestName"];
+$TopicID=$result_array['id'];
+$UsersID=$result_array['UserID'];
+$GuestsName=$result_array['GuestName'];
 $NewUserID = $UsersID;
 $NewGuestsName = $GuestsName;
 $NewGuestsName = GetUserName($NewUserID,$Settings['sqltable']);
@@ -207,9 +207,9 @@ $num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sq
 $i=0;
 while ($i < $num) {
 $result_array = sql_fetch_assoc($result);
-$PostID=$result_array["id"];
-$UsersID=$result_array["UserID"];
-$GuestsName=$result_array["GuestName"];
+$PostID=$result_array['id'];
+$UsersID=$result_array['UserID'];
+$GuestsName=$result_array['GuestName'];
 $NewUserID = $UsersID;
 $NewGuestsName = $GuestsName;
 $NewGuestsName = GetUserName($NewUserID,$Settings['sqltable']);
@@ -225,8 +225,8 @@ if($UsersID===0&&$GuestsName==null) {
 $NewUserID = -1; $NewGuestsName = "Guest"; }
 if($UsersID==$NewUserID&&$GuestsName==$NewGuestsName) {
 $NewUserID = $UsersID; $NewGuestsName = $GuestsName; }
-$EditUserID=$result_array["EditUser"];
-$EditUserName=$result_array["EditUserName"];
+$EditUserID=$result_array['EditUser'];
+$EditUserName=$result_array['EditUserName'];
 $NewEditUserID = $EditUserID;
 $NewEditUserName = $EditUserName;
 $NewEditUserName = GetUserName($NewEditUserID,$Settings['sqltable']);
@@ -323,8 +323,8 @@ if($eu>0) { ?>
 $nu=0;
 while ($nu < $eu) {
 $cr_array = sql_fetch_assoc($cr);
-$InCatID=$cr_array["id"];
-$InCatName=$cr_array["Name"];
+$InCatID=$cr_array['id'];
+$InCatName=$cr_array['Name'];
 $EuNuMai = "Eu nu mai vreau";
 ?>
 	<option value="<?php echo $InCatID; ?>"><?php echo $InCatName; ?></option>
@@ -367,9 +367,9 @@ $afi=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sq
 $fci=0;
 while ($fci < $afi) {
 $fcr_array = sql_fetch_assoc($fcr);
-$InCategoryID=$fcr_array["id"];
-$InCategoryName=$fcr_array["Name"];
-$InCategoryType=$fcr_array["CategoryType"];
+$InCategoryID=$fcr_array['id'];
+$InCategoryName=$fcr_array['Name'];
+$InCategoryType=$fcr_array['CategoryType'];
 $fq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"CategoryID\"=%i AND \"InSubForum\"=0 AND \"ForumType\"='subforum' ORDER BY \"CategoryID\" ASC, \"OrderID\" ASC", array($InCategoryID));
 $fr=sql_query($fq,$SQLStat);
 $ai=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"CategoryID\"=%i AND \"InSubForum\"=0 AND \"ForumType\"='subforum' ORDER BY \"CategoryID\" ASC, \"OrderID\" ASC", array($InCategoryID)), $SQLStat);
@@ -379,11 +379,11 @@ if($ai>0) { ?>
 <?php }
 while ($fi < $ai) {
 $fr_array = sql_fetch_assoc($fr);
-$InForumID=$fr_array["id"];
-$InCategoryID=$fr_array["CategoryID"];
-$InForumName=$fr_array["Name"];
-$InForumType=$fr_array["ForumType"];
-$AiFiInSubForum=$fr_array["InSubForum"];
+$InForumID=$fr_array['id'];
+$InCategoryID=$fr_array['CategoryID'];
+$InForumName=$fr_array['Name'];
+$InForumType=$fr_array['ForumType'];
+$AiFiInSubForum=$fr_array['InSubForum'];
 ?>
 	<option value="<?php echo $InForumID; ?>"><?php echo $InForumName; ?></option>
 <?php ++$fi; }
@@ -426,9 +426,9 @@ $afi=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sq
 $fci=0;
 while ($fci < $afi) {
 $fcr_array = sql_fetch_assoc($fcr);
-$InCategoryID=$fcr_array["id"];
-$InCategoryName=$fcr_array["Name"];
-$InCategoryType=$fcr_array["CategoryType"];
+$InCategoryID=$fcr_array['id'];
+$InCategoryName=$fcr_array['Name'];
+$InCategoryType=$fcr_array['CategoryType'];
 $fq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"CategoryID\"=%i ORDER BY \"CategoryID\" ASC, \"OrderID\" ASC", array($InCategoryID));
 $fr=sql_query($fq,$SQLStat);
 $ai=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"CategoryID\"=%i ORDER BY \"CategoryID\" ASC, \"OrderID\" ASC", array($InCategoryID)), $SQLStat);
@@ -438,11 +438,11 @@ if($ai>0) { ?>
 <?php }
 while ($fi < $ai) {
 $fr_array = sql_fetch_assoc($fr);
-$InForumID=$fr_array["id"];
-$InCategoryID=$fr_array["CategoryID"];
-$InForumName=$fr_array["Name"];
-$InForumType=$fr_array["ForumType"];
-$AiFiInSubForum=$fr_array["InSubForum"];
+$InForumID=$fr_array['id'];
+$InCategoryID=$fr_array['CategoryID'];
+$InForumName=$fr_array['Name'];
+$InForumType=$fr_array['ForumType'];
+$AiFiInSubForum=$fr_array['InSubForum'];
 ?>
 	<option value="<?php echo $InForumID; ?>"><?php echo $InForumName; ?></option>
 <?php ++$fi; }
@@ -556,7 +556,7 @@ $nextperid = sql_get_next_id($Settings['sqltable'],"\"permissions\"",$SQLStat); 
 if($Error!="Yes") {
 while ($getperidi < $getperidnum) {
 $getperidr_array = sql_fetch_assoc($getperidr);
-$getperidID=$getperidr_array["PermissionID"];
+$getperidID=$getperidr_array['PermissionID'];
 if($_POST['CPermissions']=="0") {
 $getperidqpre2 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i", array($getperidID));
 $getperidrpre2=sql_query($getperidqpre2,$SQLStat);
@@ -573,32 +573,32 @@ $getperidq2 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."permission
 $getperidnum2=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i AND \"ForumID\"=%i", array($getperidID,$_POST['CPermissions'])), $SQLStat); }
 $getperidr2=sql_query($getperidq2,$SQLStat);
 $getperidq2_array = sql_fetch_assoc($getperidq2);
-$PermissionNum=$getperidr2_array["id"]; 
-$PermissionID=$getperidr2_array["PermissionID"]; 
-$PermissionName=$getperidr2_array["Name"];
+$PermissionNum=$getperidr2_array['id']; 
+$PermissionID=$getperidr2_array['PermissionID']; 
+$PermissionName=$getperidr2_array['Name'];
 if($_POST['CPermissions']!="0") {
-$PermissionForumID=$getperidr2_array["ForumID"]; 
-$CanViewForum=$getperidr2_array["CanViewForum"]; 
-$CanMakePolls=$getperidr2_array["CanMakePolls"];
-$CanMakeTopics=$getperidr2_array["CanMakeTopics"]; 
-$CanMakeReplys=$getperidr2_array["CanMakeReplys"]; 
-$CanMakeReplysCT=$getperidr2_array["CanMakeReplysCT"]; 
-$CanEditTopics=$getperidr2_array["CanEditTopics"]; 
-$CanEditTopicsCT=$getperidr2_array["CanEditTopicsCT"]; 
-$CanEditReplys=$getperidr2_array["CanEditReplys"]; 
-$CanEditReplysCT=$getperidr2_array["CanEditReplysCT"]; 
-$CanDeleteTopics=$getperidr2_array["CanDeleteTopics"]; 
-$CanDeleteTopicsCT=$getperidr2_array["CanDeleteTopicsCT"]; 
-$CanDeleteReplys=$getperidr2_array["CanDeleteReplys"]; 
-$CanDeleteReplysCT=$getperidr2_array["CanDeleteReplysCT"]; 
-$CanCloseTopics=$getperidr2_array["CanCloseTopics"]; 
-$CanCloseTopicsCT=$getperidr2_array["CanCloseTopicsCT"]; 
-$CanPinTopics=$getperidr2_array["CanPinTopics"]; 
-$CanPinTopicsCT=$getperidr2_array["CanPinTopicsCT"]; 
-$CanExecPHP=$getperidr2_array["CanExecPHP"]; 
-$CanDoHTML=$getperidr2_array["CanDoHTML"]; 
-$CanUseBBTags=$getperidr2_array["CanUseBBTags"]; 
-$CanModForum=$getperidr2_array["CanModForum"]; }
+$PermissionForumID=$getperidr2_array['ForumID']; 
+$CanViewForum=$getperidr2_array['CanViewForum']; 
+$CanMakePolls=$getperidr2_array['CanMakePolls'];
+$CanMakeTopics=$getperidr2_array['CanMakeTopics']; 
+$CanMakeReplys=$getperidr2_array['CanMakeReplys']; 
+$CanMakeReplysCT=$getperidr2_array['CanMakeReplysCT']; 
+$CanEditTopics=$getperidr2_array['CanEditTopics']; 
+$CanEditTopicsCT=$getperidr2_array['CanEditTopicsCT']; 
+$CanEditReplys=$getperidr2_array['CanEditReplys']; 
+$CanEditReplysCT=$getperidr2_array['CanEditReplysCT']; 
+$CanDeleteTopics=$getperidr2_array['CanDeleteTopics']; 
+$CanDeleteTopicsCT=$getperidr2_array['CanDeleteTopicsCT']; 
+$CanDeleteReplys=$getperidr2_array['CanDeleteReplys']; 
+$CanDeleteReplysCT=$getperidr2_array['CanDeleteReplysCT']; 
+$CanCloseTopics=$getperidr2_array['CanCloseTopics']; 
+$CanCloseTopicsCT=$getperidr2_array['CanCloseTopicsCT']; 
+$CanPinTopics=$getperidr2_array['CanPinTopics']; 
+$CanPinTopicsCT=$getperidr2_array['CanPinTopicsCT']; 
+$CanExecPHP=$getperidr2_array['CanExecPHP']; 
+$CanDoHTML=$getperidr2_array['CanDoHTML']; 
+$CanUseBBTags=$getperidr2_array['CanUseBBTags']; 
+$CanModForum=$getperidr2_array['CanModForum']; }
 sql_free_result($getperidr2);
 if($_POST['CPermissions']=="0") {
 $query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."permissions\" (\"PermissionID\", \"Name\", \"ForumID\", \"CanViewForum\", \"CanMakePolls\", \"CanMakeTopics\", \"CanMakeReplys\", \"CanMakeReplysCT\", \"CanEditTopics\", \"CanEditTopicsCT\", \"CanEditReplys\", \"CanEditReplysCT\", \"CanDeleteTopics\", \"CanDeleteTopicsCT\", \"CanDeleteReplys\", \"CanDeleteReplysCT\", \"CanCloseTopics\", \"CanCloseTopicsCT\", \"CanPinTopics\", \"CanPinTopicsCT\", \"CanExecPHP\", \"CanDoHTML\", \"CanUseBBTags\", \"CanModForum\") VALUES (%i, '%s', %i, 'yes', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no')", array($PermissionID,$PermissionName,$_POST['ForumID'])); }
@@ -662,9 +662,9 @@ $afi=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sq
 $fci=0;
 while ($fci < $afi) {
 $fcr_array = sql_fetch_assoc($fcr);
-$InCategoryID=$fcr_array["id"];
-$InCategoryName=$fcr_array["Name"];
-$InCategoryType=$fcr_array["CategoryType"];
+$InCategoryID=$fcr_array['id'];
+$InCategoryName=$fcr_array['Name'];
+$InCategoryType=$fcr_array['CategoryType'];
 $fq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"CategoryID\"=%i ORDER BY \"CategoryID\" ASC, \"OrderID\" ASC", array($InCategoryID));
 $fr=sql_query($fq,$SQLStat);
 $ai=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"CategoryID\"=%i ORDER BY \"CategoryID\" ASC, \"OrderID\" ASC", array($InCategoryID)), $SQLStat);
@@ -674,11 +674,11 @@ if($ai>0) { ?>
 <?php }
 while ($fi < $ai) {
 $fr_array = sql_fetch_assoc($fr);
-$InForumID=$fr_array["id"];
-$InCategoryID=$fr_array["CategoryID"];
-$InForumName=$fr_array["Name"];
-$InForumType=$fr_array["ForumType"];
-$AiFiInSubForum=$fr_array["InSubForum"];
+$InForumID=$fr_array['id'];
+$InCategoryID=$fr_array['CategoryID'];
+$InForumName=$fr_array['Name'];
+$InForumType=$fr_array['ForumType'];
+$AiFiInSubForum=$fr_array['InSubForum'];
 ?>
 	<option value="<?php echo $InForumID; ?>"><?php echo $InForumName; ?></option>
 <?php ++$fi; }
@@ -732,7 +732,7 @@ $apcnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings[
 $apci=0; $apcl=1; if($apcnum>=1) {
 while ($apci < $apcnum) {
 $apcresult_array = sql_fetch_assoc($apcresult);
-$DelSubsForumID=$apcresult_array["id"];
+$DelSubsForumID=$apcresult_array['id'];
 if($_POST['DelForums']=="yes") {
 $dtquery = sql_pre_query("DELETE FROM \"".$Settings['sqltable']."topics\" WHERE \"ForumID\"=%i", array($DelSubsForumID));
 sql_query($dtquery,$SQLStat);
@@ -782,9 +782,9 @@ $afi=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sq
 $fci=0;
 while ($fci < $afi) {
 $fcr_array = sql_fetch_assoc($fcr);
-$InCategoryID=$fcr_array["id"];
-$InCategoryName=$fcr_array["Name"];
-$InCategoryType=$fcr_array["CategoryType"];
+$InCategoryID=$fcr_array['id'];
+$InCategoryName=$fcr_array['Name'];
+$InCategoryType=$fcr_array['CategoryType'];
 $fq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"CategoryID\"=%i ORDER BY \"CategoryID\" ASC, \"OrderID\" ASC", array($InCategoryID));
 $fr=sql_query($fq,$SQLStat);
 $ai=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"CategoryID\"=%i ORDER BY \"CategoryID\" ASC, \"OrderID\" ASC", array($InCategoryID)), $SQLStat);
@@ -794,11 +794,11 @@ if($ai>0) { ?>
 <?php }
 while ($fi < $ai) {
 $fr_array = sql_fetch_assoc($fr);
-$InForumID=$fr_array["id"];
-$InCategoryID=$fr_array["CategoryID"];
-$InForumName=$fr_array["Name"];
-$InForumType=$fr_array["ForumType"];
-$AiFiInSubForum=$fr_array["InSubForum"];
+$InForumID=$fr_array['id'];
+$InCategoryID=$fr_array['CategoryID'];
+$InForumName=$fr_array['Name'];
+$InForumType=$fr_array['ForumType'];
+$AiFiInSubForum=$fr_array['InSubForum'];
 ?>
 	<option value="<?php echo $InForumID; ?>"><?php echo $InForumName; ?></option>
 <?php ++$fi; }
@@ -834,25 +834,25 @@ ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($prenum>=1) {
 $preresult_array = sql_fetch_assoc($preresult);
-$ForumID=$preresult_array["id"];
-$ForumCatID=$preresult_array["CategoryID"];
-$ForumOrder=$preresult_array["OrderID"];
-$ForumName=$preresult_array["Name"];
-$ShowForum=$preresult_array["ShowForum"];
-$ForumType=$preresult_array["ForumType"];
-$InSubForum=$preresult_array["InSubForum"];
-$RedirectURL=$preresult_array["RedirectURL"];
+$ForumID=$preresult_array['id'];
+$ForumCatID=$preresult_array['CategoryID'];
+$ForumOrder=$preresult_array['OrderID'];
+$ForumName=$preresult_array['Name'];
+$ShowForum=$preresult_array['ShowForum'];
+$ForumType=$preresult_array['ForumType'];
+$InSubForum=$preresult_array['InSubForum'];
+$RedirectURL=$preresult_array['RedirectURL'];
 if($RedirectURL=="http://") { $RedirectURL = ""; }
-$RedirectTimes=$preresult_array["Redirects"];
-$NumberViews=$preresult_array["NumViews"];
-$ForumDescription=$preresult_array["Description"];
-$PostCountAdd=$preresult_array["PostCountAdd"];
-$PostCountView=$preresult_array["PostCountView"];
-$KarmaCountView=$preresult_array["KarmaCountView"];
-$CanHaveTopics=$preresult_array["CanHaveTopics"];
-$HotTopicPosts=$preresult_array["HotTopicPosts"];
-$NumberPosts=$preresult_array["NumPosts"];
-$NumberTopics=$preresult_array["NumTopics"];
+$RedirectTimes=$preresult_array['Redirects'];
+$NumberViews=$preresult_array['NumViews'];
+$ForumDescription=$preresult_array['Description'];
+$PostCountAdd=$preresult_array['PostCountAdd'];
+$PostCountView=$preresult_array['PostCountView'];
+$KarmaCountView=$preresult_array['KarmaCountView'];
+$CanHaveTopics=$preresult_array['CanHaveTopics'];
+$HotTopicPosts=$preresult_array['HotTopicPosts'];
+$NumberPosts=$preresult_array['NumPosts'];
+$NumberTopics=$preresult_array['NumTopics'];
 sql_free_result($preresult);
 $ForumType = strtolower($ForumType); $CanHaveTopics = strtolower($CanHaveTopics);
 ?>
@@ -898,8 +898,8 @@ if($eu>0) { ?>
 $nu=0;
 while ($nu < $eu) {
 $cr_array = sql_fetch_assoc($cr);
-$InCatID=$cr_array["id"];
-$InCatName=$cr_array["Name"];
+$InCatID=$cr_array['id'];
+$InCatName=$cr_array['Name'];
 $EuNuMai = "Eu nu mai vreau";
 if($ForumCatID==$InCatID) {
 ?>
@@ -945,9 +945,9 @@ $afi=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sq
 $fci=0;
 while ($fci < $afi) {
 $fcr_array = sql_fetch_assoc($fcr);
-$InCategoryID=$fcr_array["id"];
-$InCategoryName=$fcr_array["Name"];
-$InCategoryType=$fcr_array["CategoryType"];
+$InCategoryID=$fcr_array['id'];
+$InCategoryName=$fcr_array['Name'];
+$InCategoryType=$fcr_array['CategoryType'];
 $fq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"CategoryID\"=%i AND \"InSubForum\"=0 AND \"ForumType\"='subforum' ORDER BY \"CategoryID\" ASC, \"OrderID\" ASC", array($InCategoryID));
 $fr=sql_query($fq,$SQLStat);
 $ai=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"CategoryID\"=%i AND \"InSubForum\"=0 AND \"ForumType\"='subforum' ORDER BY \"CategoryID\" ASC, \"OrderID\" ASC", array($InCategoryID)), $SQLStat);
@@ -957,11 +957,11 @@ if($ai>0) { ?>
 <?php }
 while ($fi < $ai) {
 $fr_array = sql_fetch_assoc($fr);
-$InForumID=$fr_array["id"];
-$InCategoryID=$fr_array["CategoryID"];
-$InForumName=$fr_array["Name"];
-$InForumType=$fr_array["ForumType"];
-$AiFiInSubForum=$fr_array["InSubForum"];
+$InForumID=$fr_array['id'];
+$InCategoryID=$fr_array['CategoryID'];
+$InForumName=$fr_array['Name'];
+$InForumType=$fr_array['ForumType'];
+$AiFiInSubForum=$fr_array['InSubForum'];
 ?>
 	<option value="<?php echo $InForumID; ?>"><?php echo $InForumName; ?></option>
 <?php ++$fi; }
@@ -1028,8 +1028,8 @@ ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($prenum>=1) {
 $preresult_array = sql_fetch_assoc($preresult);
-$OldID=$preresult_array["id"];
-$OldOrder=$preresult_array["OrderID"];
+$OldID=$preresult_array['id'];
+$OldOrder=$preresult_array['OrderID'];
 sql_free_result($preresult);
 $sql_id_check = sql_query(sql_pre_query("SELECT \"id\" FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($_POST['ForumID'])),$SQLStat);
 $sql_order_check = sql_query(sql_pre_query("SELECT \"OrderID\" FROM \"".$Settings['sqltable']."forums\" WHERE \"OrderID\"=%i AND \"CategoryID\"=%i AND \"InSubForum\"=%i LIMIT 1", array($_POST['OrderID'],$_POST['ForumCatID'],$_POST['InSubForum'])),$SQLStat);
@@ -1127,12 +1127,12 @@ $getperidr=sql_query($getperidq,$SQLStat);
 $getperidi = 0;
 while ($getperidi < $getperidnum) {
 $getperidr_array = sql_fetch_assoc($getperidr);
-$getperidID=$getperidr_array["PermissionID"];
+$getperidID=$getperidr_array['PermissionID'];
 $getperidq2 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i ORDER BY \"ForumID\" ASC", array($getperidID));
 $getperidr2=sql_query($getperidq2,$SQLStat);
 $getperidnum2=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i ORDER BY \"ForumID\" ASC", array($getperidID)), $SQLStat);
 $getperidr2_array = sql_fetch_assoc($getperidr2);
-$getperidName=$getperidr2_array["Name"];
+$getperidName=$getperidr2_array['Name'];
 sql_free_result($getperidr2);
 ?>
 	<option value="<?php echo $getperidID; ?>"><?php echo $getperidName; ?></option>
@@ -1183,8 +1183,8 @@ $ai=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sql
 $fi=0;
 while ($fi < $ai) {
 $fr_array = sql_fetch_assoc($fr);
-$InForumID=$fr_array["id"];
-$InForumName=$fr_array["Name"];
+$InForumID=$fr_array['id'];
+$InForumName=$fr_array['Name'];
 $getperidq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i AND \"ForumID\"=%i LIMIT 1", array($_POST['id'],$InForumID));
 $getperidr=sql_query($getperidq,$SQLStat);
 $getperidnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i AND \"ForumID\"=%i LIMIT 1", array($_POST['id'],$InForumID)), $SQLStat);
@@ -1192,8 +1192,8 @@ $getperidNumz = null;
 $getperidID = null;
 if($getperidnum>0) {
 $getperidr_array = sql_fetch_assoc($getperidr);
-$getperidNumz=$getperidr_array["id"];
-$getperidID=$getperidr_array["PermissionID"]; }
+$getperidNumz=$getperidr_array['id'];
+$getperidID=$getperidr_array['PermissionID']; }
 ?>
 <form style="display: inline;" method="post" action="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=fpermissions",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">
 <table style="text-align: left;">
@@ -1235,31 +1235,31 @@ ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($prenum>=1) {
 $preresult_array = sql_fetch_assoc($preresult);
-$PermissionNum=$preresult_array["id"]; 
-$PermissionID=$preresult_array["PermissionID"]; 
-$PermissionName=$preresult_array["Name"]; 
-$PermissionForumID=$preresult_array["ForumID"]; 
-$CanViewForum=$preresult_array["CanViewForum"]; 
-$CanMakePolls=$preresult_array["CanMakePolls"];
-$CanMakeTopics=$preresult_array["CanMakeTopics"]; 
-$CanMakeReplys=$preresult_array["CanMakeReplys"]; 
-$CanMakeReplysCT=$preresult_array["CanMakeReplysCT"]; 
-$CanEditTopics=$preresult_array["CanEditTopics"]; 
-$CanEditTopicsCT=$preresult_array["CanEditTopicsCT"]; 
-$CanEditReplys=$preresult_array["CanEditReplys"]; 
-$CanEditReplysCT=$preresult_array["CanEditReplysCT"]; 
-$CanDeleteTopics=$preresult_array["CanDeleteTopics"]; 
-$CanDeleteTopicsCT=$preresult_array["CanDeleteTopicsCT"]; 
-$CanDeleteReplys=$preresult_array["CanDeleteReplys"]; 
-$CanDeleteReplysCT=$preresult_array["CanDeleteReplysCT"]; 
-$CanCloseTopics=$preresult_array["CanCloseTopics"]; 
-$CanCloseTopicsCT=$preresult_array["CanCloseTopicsCT"]; 
-$CanPinTopics=$preresult_array["CanPinTopics"]; 
-$CanPinTopicsCT=$preresult_array["CanPinTopicsCT"]; 
-$CanExecPHP=$preresult_array["CanExecPHP"];
-$CanDoHTML=$preresult_array["CanDoHTML"]; 
-$CanUseBBTags=$preresult_array["CanUseBBTags"]; 
-$CanModForum=$preresult_array["CanModForum"]; 
+$PermissionNum=$preresult_array['id']; 
+$PermissionID=$preresult_array['PermissionID']; 
+$PermissionName=$preresult_array['Name']; 
+$PermissionForumID=$preresult_array['ForumID']; 
+$CanViewForum=$preresult_array['CanViewForum']; 
+$CanMakePolls=$preresult_array['CanMakePolls'];
+$CanMakeTopics=$preresult_array['CanMakeTopics']; 
+$CanMakeReplys=$preresult_array['CanMakeReplys']; 
+$CanMakeReplysCT=$preresult_array['CanMakeReplysCT']; 
+$CanEditTopics=$preresult_array['CanEditTopics']; 
+$CanEditTopicsCT=$preresult_array['CanEditTopicsCT']; 
+$CanEditReplys=$preresult_array['CanEditReplys']; 
+$CanEditReplysCT=$preresult_array['CanEditReplysCT']; 
+$CanDeleteTopics=$preresult_array['CanDeleteTopics']; 
+$CanDeleteTopicsCT=$preresult_array['CanDeleteTopicsCT']; 
+$CanDeleteReplys=$preresult_array['CanDeleteReplys']; 
+$CanDeleteReplysCT=$preresult_array['CanDeleteReplysCT']; 
+$CanCloseTopics=$preresult_array['CanCloseTopics']; 
+$CanCloseTopicsCT=$preresult_array['CanCloseTopicsCT']; 
+$CanPinTopics=$preresult_array['CanPinTopics']; 
+$CanPinTopicsCT=$preresult_array['CanPinTopicsCT']; 
+$CanExecPHP=$preresult_array['CanExecPHP'];
+$CanDoHTML=$preresult_array['CanDoHTML']; 
+$CanUseBBTags=$preresult_array['CanUseBBTags']; 
+$CanModForum=$preresult_array['CanModForum']; 
 sql_free_result($preresult); }
 $PermissionName = stripcslashes(htmlspecialchars($PermissionName, ENT_QUOTES, $Settings['charset']));
 //$_POST['ForumName'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['ForumName']);
@@ -1640,7 +1640,7 @@ ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($prenum>=1) {
 $preresult_array = sql_fetch_assoc($preresult);
-$PermissionName=$preresult_array["Name"]; 
+$PermissionName=$preresult_array['Name']; 
 sql_free_result($preresult); }
 //$nextidnum = sql_get_next_id($Settings['sqltable'],"permissions",$SQLStat);
 $nextidnum = null;

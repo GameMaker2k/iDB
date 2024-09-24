@@ -138,30 +138,30 @@ $num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sq
 $is=0;
 while ($is < $num) {
 $result_array = sql_fetch_assoc($result);
-$EventID=$result_array["id"];
-$EventUser=$result_array["UserID"];
-$EventGuest=$result_array["GuestName"];
-$EventName=$result_array["EventName"];
-$EventText=$result_array["EventText"];
-$EventStart=$result_array["TimeStamp"];
-$EventEnd=$result_array["TimeStampEnd"];
+$EventID=$result_array['id'];
+$EventUser=$result_array['UserID'];
+$EventGuest=$result_array['GuestName'];
+$EventName=$result_array['EventName'];
+$EventText=$result_array['EventText'];
+$EventStart=$result_array['TimeStamp'];
+$EventEnd=$result_array['TimeStampEnd'];
 $eventstartcurtime = new DateTime();
 $eventstartcurtime->setTimestamp($EventStart);
 $eventstartcurtime->setTimezone($usertz);
 $eventendcurtime = new DateTime();
 $eventendcurtime->setTimestamp($EventEnd);
 $eventendcurtime->setTimezone($usertz);
-//$EventMonth=$result_array["EventMonth"];
+//$EventMonth=$result_array['EventMonth'];
 $EventMonth=$eventstartcurtime->format("m");
-//$EventMonthEnd=$result_array["EventMonthEnd"];
+//$EventMonthEnd=$result_array['EventMonthEnd'];
 $EventMonthEnd=$eventendcurtime->format("m");
-//$EventDay=$result_array["EventDay"];
+//$EventDay=$result_array['EventDay'];
 $EventDay=$eventstartcurtime->format("j");
-//$EventDayEnd=$result_array["EventDayEnd"];
+//$EventDayEnd=$result_array['EventDayEnd'];
 $EventDayEnd=$eventendcurtime->format("j");
-//$EventYear=$result_array["EventYear"];
+//$EventYear=$result_array['EventYear'];
 $EventYear=$eventstartcurtime->format("Y");
-//$EventYearEnd=$result_array["EventYearEnd"];
+//$EventYearEnd=$result_array['EventYearEnd'];
 $EventYearEnd=$eventendcurtime->format("Y");
 if($EventMonthEnd!=$MyMonth) { $EventDayEnd = $CountDays; }
 if($EventMonth<$MyMonth) { $EventDay = 1; }
@@ -193,10 +193,10 @@ $bdnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['
 $bdi=0;
 while ($bdi < $bdnum) {
 $bdresult_array = sql_fetch_assoc($bdresult);
-$UserNamebd=$bdresult_array["Name"];
-$BirthDay=$bdresult_array["BirthDay"];
-$BirthMonth=$bdresult_array["BirthMonth"];
-$BirthYear=$bdresult_array["BirthYear"];
+$UserNamebd=$bdresult_array['Name'];
+$BirthDay=$bdresult_array['BirthDay'];
+$BirthMonth=$bdresult_array['BirthMonth'];
+$BirthYear=$bdresult_array['BirthYear'];
 $UserCurAge=$MyYear-$BirthYear;
 $oldusername=$UserNamebd;
 $UserNamebd1 = pre_substr($UserNamebd,0,20);

@@ -34,7 +34,7 @@ if(!isset($_SERVER['HTTPS'])) { $_SERVER['HTTPS'] = 'off'; }
 if($_SERVER['HTTPS']=="on") { $prehost = "https://"; }
 if($_SERVER['HTTPS']!="on") { $prehost = "http://"; }
 if($Settings['idburl']=="localhost"||$Settings['idburl']==null) {
-	$rssurl = $prehost.$_SERVER["HTTP_HOST"].$BaseURL; }
+	$rssurl = $prehost.$_SERVER['HTTP_HOST'].$BaseURL; }
 if($Settings['idburl']!="localhost"&&$Settings['idburl']!=null) {
 	$rssurlon = "on"; $rssurl = $Settings['idburl']; }
 if($Settings['rssurl']!=null&&$Settings['rssurl']!="") {

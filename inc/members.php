@@ -59,7 +59,7 @@ if(!is_numeric($_GET['groupid'])) { $_GET['groupid'] = null; }
 $ggquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"Name\"='%s'", array($Settings['GuestGroup']));
 $ggresult=sql_query($ggquery,$SQLStat);
 $ggresult_array = sql_fetch_assoc($ggresult);
-$GGroup=$ggresult_array["id"];
+$GGroup=$ggresult_array['id'];
 sql_free_result($ggresult);
 //Get SQL LIMIT Number
 $nums = $_GET['page'] * $Settings['max_memlist'];
@@ -235,25 +235,25 @@ if($pagenum>1) {
 <?php
 while ($i < $num) {
 $result_array = sql_fetch_assoc($result);
-$MemList['ID']=$result_array["id"];
-$MemList['Name']=$result_array["Name"];
-$MemList['Email']=$result_array["Email"];
-$MemList['GroupID']=$result_array["GroupID"];
-$MemList['HiddenMember']=$result_array["HiddenMember"];
-$MemList['WarnLevel']=$result_array["WarnLevel"];
-$MemList['Interests']=$result_array["Interests"];
-$MemList['Title']=$result_array["Title"];
-$MemList['Joined']=$result_array["Joined"];
+$MemList['ID']=$result_array['id'];
+$MemList['Name']=$result_array['Name'];
+$MemList['Email']=$result_array['Email'];
+$MemList['GroupID']=$result_array['GroupID'];
+$MemList['HiddenMember']=$result_array['HiddenMember'];
+$MemList['WarnLevel']=$result_array['WarnLevel'];
+$MemList['Interests']=$result_array['Interests'];
+$MemList['Title']=$result_array['Title'];
+$MemList['Joined']=$result_array['Joined'];
 $tmpusrcurtime = new DateTime();
 $tmpusrcurtime->setTimestamp($MemList['Joined']);
 $tmpusrcurtime->setTimezone($usertz);
 $MemList['Joined']=$tmpusrcurtime->format($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat']);
-$MemList['LastActive']=$result_array["LastActive"];
+$MemList['LastActive']=$result_array['LastActive'];
 $tmpusrcurtime = new DateTime();
 $tmpusrcurtime->setTimestamp($MemList['LastActive']);
 $tmpusrcurtime->setTimezone($usertz);
 $MemList['LastActive']=$tmpusrcurtime->format($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat']);
-$MemList['Website']=$result_array["Website"];
+$MemList['Website']=$result_array['Website'];
 if($MemList['Website']=="http://") { 
 	$MemList['Website'] = $Settings['idburl']; }
 $MemList['Website'] = urlcheck($MemList['Website']);
@@ -262,17 +262,17 @@ $MemsWWWChCk = parse_url($MemList['Website']);
 $opennew = " onclick=\"window.open(this.href);return false;\"";
 if($BoardWWWChCk['host']==$MemsWWWChCk['host']) {
 	$opennew = null; }
-$MemList['Gender']=$result_array["Gender"];
-$MemList['PostCount']=$result_array["PostCount"];
-$MemList['Karma']=$result_array["Karma"];
-$MemList['TimeZone']=$result_array["TimeZone"];
-$MemList['IP']=$result_array["IP"];
+$MemList['Gender']=$result_array['Gender'];
+$MemList['PostCount']=$result_array['PostCount'];
+$MemList['Karma']=$result_array['Karma'];
+$MemList['TimeZone']=$result_array['TimeZone'];
+$MemList['IP']=$result_array['IP'];
 $gquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i LIMIT 1", array($MemList['GroupID']));
 $gresult=sql_query($gquery,$SQLStat);
 $gresult_array = sql_fetch_assoc($gresult);
-$MemList['Group']=$gresult_array["Name"];
-$GroupNamePrefix=$gresult_array["NamePrefix"];
-$GroupNameSuffix=$gresult_array["NameSuffix"];
+$MemList['Group']=$gresult_array['Name'];
+$GroupNamePrefix=$gresult_array['NamePrefix'];
+$GroupNameSuffix=$gresult_array['NameSuffix'];
 sql_free_result($gresult);
 if(isset($GroupNamePrefix)&&$GroupNamePrefix!=null) {
 	$MemList['Name'] = $GroupNamePrefix.$MemList['Name']; }
@@ -480,12 +480,13 @@ if($pagenum>1) {
 while ($i < $num) {
 $AmIHiddenUser = "no";
 $result_array = sql_fetch_assoc($result);
-$get_session_id=$result_array["session_id"];
-$session_data=$result_array["session_data"];
-$serialized_data=$result_array["serialized_data"];
-$session_user_agent=$result_array["user_agent"]; 
-$session_ip_address=$result_array["ip_address"]; 
-$session_expires=$result_array["expires"]; 
+$get_session_id=$result_array['session_id'];
+$session_data=$result_array['session_data'];
+$serialized_data=$result_array['serialized_data'];
+$session_user_agent=$result_array['user_agent'];
+$session_client_hints=json_decode($result_array['client_hints']);
+$session_ip_address=$result_array['ip_address']; 
+$session_expires=$result_array['expires']; 
 $tmpusrcurtime = new DateTime();
 $tmpusrcurtime->setTimestamp($session_expires);
 $tmpusrcurtime->setTimezone($usertz);
@@ -505,22 +506,22 @@ $sess_query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" 
 $sess_result=sql_query($sess_query,$SQLStat);
 $sess_num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_GET['id'])), $SQLStat);
 $sess_result_array = sql_fetch_assoc($sess_result);
-$ViewSessMem['ID']=$sess_result_array["id"];
-$ViewSessMem['Name']=$sess_result_array["Name"];
-$ViewSessMem['GroupID']=$sess_result_array["GroupID"];
-$ViewSessMem['HiddenMember']=$sess_result_array["HiddenMember"];
-$ViewSessMem['WarnLevel']=$sess_result_array["WarnLevel"];
-$ViewSessMem['Joined']=$sess_result_array["Joined"];
+$ViewSessMem['ID']=$sess_result_array['id'];
+$ViewSessMem['Name']=$sess_result_array['Name'];
+$ViewSessMem['GroupID']=$sess_result_array['GroupID'];
+$ViewSessMem['HiddenMember']=$sess_result_array['HiddenMember'];
+$ViewSessMem['WarnLevel']=$sess_result_array['WarnLevel'];
+$ViewSessMem['Joined']=$sess_result_array['Joined'];
 $tmpusrcurtime = new DateTime();
 $tmpusrcurtime->setTimestamp($ViewSessMem['Joined']);
 $tmpusrcurtime->setTimezone($usertz);
 $ViewSessMem['Joined']=$tmpusrcurtime->format("M j Y, ".$_SESSION['iDBTimeFormat']);
-$ViewSessMem['LastActive']=$sess_result_array["LastActive"];
+$ViewSessMem['LastActive']=$sess_result_array['LastActive'];
 $tmpusrcurtime = new DateTime();
 $tmpusrcurtime->setTimestamp($ViewSessMem['LastActive']);
 $tmpusrcurtime->setTimezone($usertz);
 $ViewSessMem['LastActive']=$tmpusrcurtime->format("M j Y, ".$_SESSION['iDBTimeFormat']);
-$ViewSessMem['Website']=$sess_result_array["Website"];
+$ViewSessMem['Website']=$sess_result_array['Website'];
 if($ViewSessMem['Website']=="http://") { 
 	$ViewSessMem['Website'] = $Settings['idburl']; }
 $ViewSessMem['Website'] = urlcheck($ViewSessMem['Website']);
@@ -529,11 +530,11 @@ $MemsWWWChCk = parse_url($ViewSessMem['Website']);
 $opennew = " onclick=\"window.open(this.href);return false;\"";
 if($BoardWWWChCk['host']==$MemsWWWChCk['host']) {
 	$opennew = null; }
-$ViewSessMem['Gender']=$sess_result_array["Gender"];
-$ViewSessMem['PostCount']=$sess_result_array["PostCount"];
-$ViewSessMem['Karma']=$sess_result_array["Karma"];
-$ViewSessMem['TimeZone']=$sess_result_array["TimeZone"];
-$ViewSessMem['IP']=$sess_result_array["IP"];
+$ViewSessMem['Gender']=$sess_result_array['Gender'];
+$ViewSessMem['PostCount']=$sess_result_array['PostCount'];
+$ViewSessMem['Karma']=$sess_result_array['Karma'];
+$ViewSessMem['TimeZone']=$sess_result_array['TimeZone'];
+$ViewSessMem['IP']=$sess_result_array['IP'];
 $gsess_query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i LIMIT 1", array($ViewSessMem['GroupID']));
 $gsess_result=sql_query($gsess_query,$SQLStat);
 $gsess_result_array = sql_fetch_assoc($gsess_result);
@@ -563,7 +564,7 @@ $PreExpPage = str_replace($qstr, "&", $PreExpPage);
 $PreExpPage = str_replace($qsep, "=", $PreExpPage);
 parse_str($PreExpPage,$ChkID);
 if($PreFileName==$exfile['topic'].$Settings['file_ext']) {
-if(isset($ChkID["id"])) { $ChkID = $ChkID["id"]; 
+if(isset($ChkID['id'])) { $ChkID = $ChkID['id']; 
 $prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"id\"=%i LIMIT 1", array($ChkID));
 $preresult=sql_query($prequery,$SQLStat);
 $prenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE \"id\"=%i LIMIT 1", array($ChkID)), $SQLStat);
@@ -589,7 +590,7 @@ if($PermissionInfo['CanViewForum'][$TopicForumID]=="no"||
 	$UserSessInfo['PreViewingTitle'] = "Viewing";
 	$UserSessInfo['ViewingTitle'] = "Board index"; } } }
 if($PreFileName==$exfile['forum'].$Settings['file_ext']) {
-if(isset($ChkID["id"])) { $ChkID = $ChkID["id"]; 
+if(isset($ChkID['id'])) { $ChkID = $ChkID['id']; 
 $prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($ChkID));
 $preresult=sql_query($prequery,$SQLStat);
 $prenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($ChkID)), $SQLStat);
@@ -611,7 +612,7 @@ if($PermissionInfo['CanViewForum'][$ChkID]=="no"||
 	$UserSessInfo['PreViewingTitle'] = "Viewing";
 	$UserSessInfo['ViewingTitle'] = "Board index"; } } }
 if($PreFileName==$exfile['subforum'].$Settings['file_ext']) {
-if(isset($ChkID["id"])) { $ChkID = $ChkID["id"]; 
+if(isset($ChkID['id'])) { $ChkID = $ChkID['id']; 
 $prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($ChkID));
 $preresult=sql_query($prequery,$SQLStat);
 $prenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($ChkID)), $SQLStat);
@@ -633,7 +634,7 @@ if($PermissionInfo['CanViewForum'][$ChkID]=="no"||
 	$UserSessInfo['PreViewingTitle'] = "Viewing";
 	$UserSessInfo['ViewingTitle'] = "Board index"; } } }
 if($PreFileName==$exfile['category'].$Settings['file_ext']) {
-if(isset($ChkID["id"])) { $ChkID = $ChkID["id"]; 
+if(isset($ChkID['id'])) { $ChkID = $ChkID['id']; 
 if($CatPermissionInfo['CanViewCategory'][$ChkID]=="no"||
 	$CatPermissionInfo['CanViewCategory'][$ChkID]!="yes") {
 	$PreFileName = $exfile['index'].$Settings['file_ext'];
@@ -642,7 +643,7 @@ if($CatPermissionInfo['CanViewCategory'][$ChkID]=="no"||
 	$UserSessInfo['PreViewingTitle'] = "Viewing";
 	$UserSessInfo['ViewingTitle'] = "Board index"; } } }
 if($PreFileName==$exfile['subcategory'].$Settings['file_ext']) {
-if(isset($ChkID["id"])) { $ChkID = $ChkID["id"]; 
+if(isset($ChkID['id'])) { $ChkID = $ChkID['id']; 
 if($CatPermissionInfo['CanViewCategory'][$ChkID]=="no"||
 	$CatPermissionInfo['CanViewCategory'][$ChkID]!="yes") {
 	$PreFileName = $exfile['index'].$Settings['file_ext'];
@@ -721,32 +722,32 @@ if($num==0||$_GET['id']<=0) { redirect("location",$rbasedir.url_maker($exfile['i
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $result_array = sql_fetch_assoc($result);
-$ViewMem['ID']=$result_array["id"];
-$ViewMem['Name']=$result_array["Name"];
-$ViewMem['Signature']=$result_array["Signature"];
-$ViewMem['Avatar']=$result_array["Avatar"];
-$ViewMem['AvatarSize']=$result_array["AvatarSize"];
-$ViewMem['Email']=$result_array["Email"];
-$ViewMem['GroupID']=$result_array["GroupID"];
-$ViewMem['LevelID']=$result_array["LevelID"];
+$ViewMem['ID']=$result_array['id'];
+$ViewMem['Name']=$result_array['Name'];
+$ViewMem['Signature']=$result_array['Signature'];
+$ViewMem['Avatar']=$result_array['Avatar'];
+$ViewMem['AvatarSize']=$result_array['AvatarSize'];
+$ViewMem['Email']=$result_array['Email'];
+$ViewMem['GroupID']=$result_array['GroupID'];
+$ViewMem['LevelID']=$result_array['LevelID'];
 if(!is_numeric($ViewMem['LevelID'])) { $ViewMem['LevelID'] = null; }
-$ViewMem['RankID']=$result_array["RankID"];
+$ViewMem['RankID']=$result_array['RankID'];
 if(!is_numeric($ViewMem['RankID'])) { $ViewMem['RankID'] = null; }
-$ViewMem['HiddenMember']=$result_array["HiddenMember"];
-$ViewMem['WarnLevel']=$result_array["WarnLevel"];
-$ViewMem['Interests']=$result_array["Interests"];
-$ViewMem['Title']=$result_array["Title"];
-$ViewMem['Joined']=$result_array["Joined"];
+$ViewMem['HiddenMember']=$result_array['HiddenMember'];
+$ViewMem['WarnLevel']=$result_array['WarnLevel'];
+$ViewMem['Interests']=$result_array['Interests'];
+$ViewMem['Title']=$result_array['Title'];
+$ViewMem['Joined']=$result_array['Joined'];
 $tmpusrcurtime = new DateTime();
 $tmpusrcurtime->setTimestamp($ViewMem['Joined']);
 $tmpusrcurtime->setTimezone($usertz);
 $ViewMem['Joined']=$tmpusrcurtime->format("M j Y, ".$_SESSION['iDBTimeFormat']);
-$ViewMem['LastActive']=$result_array["LastActive"];
+$ViewMem['LastActive']=$result_array['LastActive'];
 $tmpusrcurtime = new DateTime();
 $tmpusrcurtime->setTimestamp($ViewMem['LastActive']);
 $tmpusrcurtime->setTimezone($usertz);
 $ViewMem['LastActive']=$tmpusrcurtime->format("M j Y, ".$_SESSION['iDBTimeFormat']);
-$ViewMem['Website']=$result_array["Website"];
+$ViewMem['Website']=$result_array['Website'];
 if($ViewMem['Website']=="http://") { 
 	$ViewMem['Website'] = $Settings['idburl']; }
 $ViewMem['Website'] = urlcheck($ViewMem['Website']);
@@ -755,20 +756,20 @@ $MemsWWWChCk = parse_url($ViewMem['Website']);
 $opennew = " onclick=\"window.open(this.href);return false;\"";
 if($BoardWWWChCk['host']==$MemsWWWChCk['host']) {
 	$opennew = null; }
-$ViewMem['Gender']=$result_array["Gender"];
-$ViewMem['PostCount']=$result_array["PostCount"];
-$ViewMem['Karma']=$result_array["Karma"];
-$ViewMem['TimeZone']=$result_array["TimeZone"];
+$ViewMem['Gender']=$result_array['Gender'];
+$ViewMem['PostCount']=$result_array['PostCount'];
+$ViewMem['Karma']=$result_array['Karma'];
+$ViewMem['TimeZone']=$result_array['TimeZone'];
 $viewmemcurtime = new DateTime();
 $viewmemcurtime->setTimezone(new DateTimeZone($ViewMem['TimeZone']));
-$ViewMem['IP']=$result_array["IP"];
+$ViewMem['IP']=$result_array['IP'];
 if($ViewMem['LevelID']!==null&&$ViewMem['LevelID']!=0) {
 $lquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."levels\" WHERE \"id\"=%i LIMIT 1", array($ViewMem['LevelID']));
 $lresult=sql_query($lquery,$SQLStat);
 $lnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."levels\" WHERE \"id\"=%i LIMIT 1", array($ViewMem['LevelID'])), $SQLStat);
 if ($lresult !== false && $lnum > 0) {
 $lresult_array = sql_fetch_assoc($lresult);
-$ViewMem['Level']=$lresult_array["Name"]; } else { $ViewMem['Level'] = ""; }
+$ViewMem['Level']=$lresult_array['Name']; } else { $ViewMem['Level'] = ""; }
 sql_free_result($lresult); } else {
  $ViewMem['Level'] = ""; }
 if($ViewMem['RankID']!==null&&$ViewMem['RankID']!=0) {
@@ -777,16 +778,16 @@ $rresult=sql_query($rquery,$SQLStat);
 $rnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."ranks\" WHERE \"id\"=%i LIMIT 1", array($ViewMem['RankID'])), $SQLStat);
 if ($rresult !== false && $rnum > 0) {
 $rresult_array = sql_fetch_assoc($rresult);
-$ViewMem['Rank']=$rresult_array["Name"]; } else { $ViewMem['Rank'] = ""; }
+$ViewMem['Rank']=$rresult_array['Name']; } else { $ViewMem['Rank'] = ""; }
 sql_free_result($rresult); } else {
  $ViewMem['Rank'] = ""; }
 $gquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i LIMIT 1", array($ViewMem['GroupID']));
 $gresult=sql_query($gquery,$SQLStat);
 $gresult_array = sql_fetch_assoc($gresult);
-$ViewMem['Group']=$gresult_array["Name"];
+$ViewMem['Group']=$gresult_array['Name'];
 /*
-$GroupNamePrefix=$gresult_array["NamePrefix"];
-$GroupNameSuffix=$gresult_array["NameSuffix"];
+$GroupNamePrefix=$gresult_array['NamePrefix'];
+$GroupNameSuffix=$gresult_array['NameSuffix'];
 */
 sql_free_result($gresult);
 if($ViewMem['Title']=="") { $ViewMem['Title'] = $ViewMem['Group']; }
@@ -1085,7 +1086,7 @@ $_SESSION['ExtraData'] = "currentact:".$_GET['act']."; currentcategoryid:0; curr
 $membertitle = " ".$ThemeSet['TitleDivider']." Login";
 $REFERERurl = parse_url($_SERVER['HTTP_REFERER']);
 $URL['REFERER'] = $REFERERurl['host'];
-$URL['HOST'] = $_SERVER["SERVER_NAME"];
+$URL['HOST'] = $_SERVER['SERVER_NAME'];
 $REFERERurl = null;
 ?>
 <div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $Settings['board_name']; ?></a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=login",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Login</a></div>
@@ -1165,12 +1166,12 @@ $numlog=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings[
 $resultlog=sql_query($querylog,$SQLStat);
 if($numlog>=1) {
 $resultlog_array = sql_fetch_assoc($resultlog);
-$YourName=$resultlog_array["Name"];
-$YourPassTry=$resultlog_array["UserPassword"];
-$HashType=$resultlog_array["HashType"];
+$YourName=$resultlog_array['Name'];
+$YourPassTry=$resultlog_array['UserPassword'];
+$HashType=$resultlog_array['HashType'];
 $HashType=str_replace("IntDBH", "iDBH", $HashType);
-$JoinedPass=$resultlog_array["Joined"];
-$HashSalt=$resultlog_array["Salt"];
+$JoinedPass=$resultlog_array['Joined'];
+$HashSalt=$resultlog_array['Salt'];
 $UpdateHash = false; $YourPassword = null;
 //Used if you forget your password will change on next login.
 if($HashType=="NoHash") { $YourPassword = $_POST['userpass']; }
@@ -1213,14 +1214,14 @@ if($HashType=="GuestPassword") { $YourPassword = "iDB"; $YourPassTry = "IntDB"; 
 if($YourPassword==$YourPassTry) { $passright = true; */
 if(hash_equals($YourPassTry, $YourPassword)==false) { $passright = false; } 
 if(hash_equals($YourPassTry, $YourPassword)==true) { $passright = true;
-$YourIDM=$resultlog_array["id"];
-$YourNameM=$resultlog_array["Name"];
-$YourPassM=$resultlog_array["UserPassword"];
-$PostCount=$resultlog_array["PostCount"];
-$YourGroupM=$resultlog_array["GroupID"];
+$YourIDM=$resultlog_array['id'];
+$YourNameM=$resultlog_array['Name'];
+$YourPassM=$resultlog_array['UserPassword'];
+$PostCount=$resultlog_array['PostCount'];
+$YourGroupM=$resultlog_array['GroupID'];
 $YourGroupIDM=$YourGroupM;
-$YourLastPostTime=$resultlog_array["LastPostTime"];
-$YourBanTime=$resultlog_array["BanTime"];
+$YourLastPostTime=$resultlog_array['LastPostTime'];
+$YourBanTime=$resultlog_array['BanTime'];
 $CGMTime = $utccurtime->getTimestamp();
 if($YourBanTime!=0&&$YourBanTime!=null) {
 if($YourBanTime>=$CGMTime) { $BanError = "yes"; }
@@ -1228,11 +1229,11 @@ if($YourBanTime<0) { $BanError = "yes"; } }
 $gquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i LIMIT 1", array($YourGroupM));
 $gresult=sql_query($gquery,$SQLStat);
 $gresult_array = sql_fetch_assoc($gresult);
-$YourGroupM=$gresult_array["Name"];
+$YourGroupM=$gresult_array['Name'];
 sql_free_result($gresult);
-$YourTimeZoneM=$resultlog_array["TimeZone"];
-$JoinedDate=$resultlog_array["Joined"];
-$UseTheme=$resultlog_array["UseTheme"];
+$YourTimeZoneM=$resultlog_array['TimeZone'];
+$JoinedDate=$resultlog_array['Joined'];
+$UseTheme=$resultlog_array['UseTheme'];
 $NewHashSalt = salt_hmac();
 if($Settings['use_hashtype']=="md2") { $iDBHash = "iDBH2";
 $NewPassword = b64e_hmac($_POST['userpass'],$JoinedPass,$NewHashSalt,"md2"); }
@@ -1513,7 +1514,7 @@ $_SESSION['ExtraData'] = "currentact:".$_GET['act']."; currentcategoryid:0; curr
 $membertitle = " ".$ThemeSet['TitleDivider']." Signing up";
 $REFERERurl = parse_url($_SERVER['HTTP_REFERER']);
 $URL['REFERER'] = $REFERERurl['host'];
-$URL['HOST'] = $_SERVER["SERVER_NAME"];
+$URL['HOST'] = $_SERVER['SERVER_NAME'];
 $REFERERurl = null;
 if(!isset($_POST['username'])) { $_POST['username'] = null; }
 if(!isset($_POST['TOS'])) { $_POST['TOS'] = null; }
@@ -1635,12 +1636,12 @@ $lonewolfnm=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Setti
 $lonewolfs=0; $RMatches = null;
 while ($lonewolfs < $lonewolfnm) {
 $lonewolfrt_array = sql_fetch_assoc($lonewolfrt);
-$RWord=$lonewolfrt_array["Word"];
-$RCaseInsensitive=$lonewolfrt_array["CaseInsensitive"];
+$RWord=$lonewolfrt_array['Word'];
+$RCaseInsensitive=$lonewolfrt_array['CaseInsensitive'];
 if($RCaseInsensitive=="on") { $RCaseInsensitive = "yes"; }
 if($RCaseInsensitive=="off") { $RCaseInsensitive = "no"; }
 if($RCaseInsensitive!="yes"||$RCaseInsensitive!="no") { $RCaseInsensitive = "no"; }
-$RWholeWord=$lonewolfrt_array["WholeWord"];
+$RWholeWord=$lonewolfrt_array['WholeWord'];
 if($RWholeWord=="on") { $RWholeWord = "yes"; }
 if($RWholeWord=="off") { $RWholeWord = "no"; }
 if($RWholeWord!="yes"||$RWholeWord!="no") { $RWholeWord = "no"; }
@@ -1756,7 +1757,7 @@ if($Settings['AdminValidate']=="off"||$Settings['AdminValidate']!="on")
 $gmidquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"Name\"='%s' LIMIT 1", array($yourgroupname));
 $gmidresult=sql_query($gmidquery,$SQLStat);
 $gmidresult_array = sql_fetch_assoc($gmidresult);
-$yourgroup=$gmidresult_array["id"];
+$yourgroup=$gmidresult_array['id'];
 $HideMe = "no"; $HashSalt = salt_hmac();
 if($Settings['use_hashtype']=="md2") { $iDBHash = "iDBH2";
 $NewPassword = b64e_hmac($_POST['Password'],$_POST['Joined'],$HashSalt,"md2"); }
@@ -1824,7 +1825,7 @@ $idcheck = $yourid;
 $idncheck = 0;
 if($idnum>=1) {
 $idresult_array = sql_fetch_assoc($idresult);
-$idncheck = $idresult_array["id"]; 
+$idncheck = $idresult_array['id']; 
 $idncheck = intval($idncheck); }
 sql_free_result($idresult);
 if($yourid!=$idncheck) { $yourid = $idncheck; }
@@ -1837,7 +1838,7 @@ if(isset($_POST['referrerid'])&&is_numeric($_POST['referrerid'])) {
 	$rfidnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_POST['referrerid'])), $SQLStat);
 	if($rfidnum>=1) {
 		$rfidresult_array = sql_fetch_assoc($rfidresult);
-		$rfidKarma=$rfidresult_array["Karma"];
+		$rfidKarma=$rfidresult_array['Karma'];
 		sql_free_result($rfidresult);
 		if(!is_numeric($rfidKarma)) { $rfidKarma = 0; }
 		$rfidKarma = $rfidKarma + 1;
@@ -1848,17 +1849,17 @@ $resultlogr=sql_query($querylogr,$SQLStat);
 $numlogr=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s' AND \"UserPassword\"='%s' LIMIT 1", array($Name,$NewPassword)), $SQLStat);
 if($numlogr>=1) {
 $resultlog_array = sql_fetch_assoc($resultlog);
-$YourIDMr=$resultlog_array["id"];
-$YourNameMr=$resultlog_array["Name"];
-$YourGroupMr=$resultlog_array["GroupID"];
+$YourIDMr=$resultlog_array['id'];
+$YourNameMr=$resultlog_array['Name'];
+$YourGroupMr=$resultlog_array['GroupID'];
 $YourGroupIDMr=$YourGroupMr;
 $gquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i LIMIT 1", array($YourGroupMr));
 $gresult=sql_query($gquery,$SQLStat);
 $gresult_array = sql_fetch_assoc($gresult);
-$YourGroupMr=$gresult_array["Name"];
+$YourGroupMr=$gresult_array['Name'];
 sql_free_result($gresult);
 $resultlogr_array = sql_fetch_assoc($resultlogr);
-$YourTimeZoneMr=$resultlogr_array["TimeZone"]; }
+$YourTimeZoneMr=$resultlogr_array['TimeZone']; }
 sql_free_result($resultlogr);
 session_regenerate_id(true);
 $_SESSION['Loggedin']=true;

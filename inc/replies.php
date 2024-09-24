@@ -41,20 +41,20 @@ ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($prenum>=1) {
 $preresult_array = sql_fetch_assoc($preresult);
-$TopicName=$preresult_array["TopicName"];
-$TopicID=$preresult_array["id"];
-$TopicForumID=$preresult_array["ForumID"];
-$TopicCatID=$preresult_array["CategoryID"];
-$TopicClosed=$preresult_array["Closed"];
+$TopicName=$preresult_array['TopicName'];
+$TopicID=$preresult_array['id'];
+$TopicForumID=$preresult_array['ForumID'];
+$TopicCatID=$preresult_array['CategoryID'];
+$TopicClosed=$preresult_array['Closed'];
 if($TopicClosed==3&&$PermissionInfo['CanModForum'][$TopicForumID]=="no") { 
 redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($preresult);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if(!isset($_GET['post'])||$_GET['post']!==null) {
-$NumberReplies=$preresult_array["NumReply"]; }
+$NumberReplies=$preresult_array['NumReply']; }
 if(isset($_GET['post'])&&$_GET['post']!==null) {
 $NumberReplies=1; }
-$ViewTimes=$preresult_array["NumViews"];
+$ViewTimes=$preresult_array['NumViews'];
 sql_free_result($preresult);
 $forumcheckx = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2."  LIMIT 1", array($TopicForumID));
 $fmckresult=sql_query($forumcheckx,$SQLStat);
@@ -63,36 +63,36 @@ if($fmcknum==0) { redirect("location",$rbasedir.url_maker($exfile['index'],$Sett
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $fmckresult_array = sql_fetch_assoc($fmckresult);
-$ForumID=$fmckresult_array["id"];
-$ForumName=$fmckresult_array["Name"];
-$ForumType=$fmckresult_array["ForumType"];
-$ForumShow=$fmckresult_array["ShowForum"];
-$InSubForum=$fmckresult_array["InSubForum"];
+$ForumID=$fmckresult_array['id'];
+$ForumName=$fmckresult_array['Name'];
+$ForumType=$fmckresult_array['ForumType'];
+$ForumShow=$fmckresult_array['ShowForum'];
+$InSubForum=$fmckresult_array['InSubForum'];
 if($InSubForum!=0) {
 $subforumcheckx = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2."  LIMIT 1", array($InSubForum));
 $subfmckresult=sql_query($subforumcheckx,$SQLStat);
 $subfmcknum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2."  LIMIT 1", array($InSubForum)), $SQLStat);
 $subfmckresult_array = sql_fetch_assoc($subfmckresult);
-$SubForumName=$subfmckresult_array["Name"];
-$SubForumType=$subfmckresult_array["ForumType"];
-$SubForumShow=$subfmckresult_array["ShowForum"];
+$SubForumName=$subfmckresult_array['Name'];
+$SubForumType=$subfmckresult_array['ForumType'];
+$SubForumShow=$subfmckresult_array['ShowForum'];
 sql_free_result($subfmckresult); }
 if($ForumShow=="no") { $_SESSION['ShowActHidden'] = "yes"; }
-$CanHaveTopics=$fmckresult_array["CanHaveTopics"];
-$ForumPostCountView=$fmckresult_array["PostCountView"];
-$ForumKarmaCountView=$fmckresult_array["KarmaCountView"];
+$CanHaveTopics=$fmckresult_array['CanHaveTopics'];
+$ForumPostCountView=$fmckresult_array['PostCountView'];
+$ForumKarmaCountView=$fmckresult_array['KarmaCountView'];
 sql_free_result($fmckresult);
 $catcheck = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."categories\" WHERE \"id\"=%i".$CatIgnoreList2."  LIMIT 1", array($TopicCatID));
 $catresult=sql_query($catcheck,$SQLStat);
 $catresult_array = sql_fetch_assoc($catresult);
-$CategoryID=$catresult_array["id"];
-$CategoryName=$catresult_array["Name"];
-$CategoryShow=$catresult_array["ShowCategory"];
+$CategoryID=$catresult_array['id'];
+$CategoryName=$catresult_array['Name'];
+$CategoryShow=$catresult_array['ShowCategory'];
 if($CategoryShow=="no") { $_SESSION['ShowActHidden'] = "yes"; }
-$CategoryType=$catresult_array["CategoryType"];
-$InSubCategory=$catresult_array["InSubCategory"];
-$CategoryPostCountView=$catresult_array["PostCountView"];
-$CategoryKarmaCountView=$catresult_array["KarmaCountView"];
+$CategoryType=$catresult_array['CategoryType'];
+$InSubCategory=$catresult_array['InSubCategory'];
+$CategoryPostCountView=$catresult_array['PostCountView'];
+$CategoryKarmaCountView=$catresult_array['KarmaCountView'];
 sql_free_result($catresult);
 if($GroupInfo['HasAdminCP']!="yes"||$GroupInfo['HasModCP']!="yes") {
 if($MyPostCountChk==null) { $MyPostCountChk = 0; }
@@ -314,23 +314,23 @@ if($pstring!=null||$CanMakeReply=="yes"||$CanMakeTopic=="yes") {
 <?php }
 while ($i < $num) {
 $result_array = sql_fetch_assoc($result);
-$MyPostID=$result_array["id"];
-$MyTopicID=$result_array["TopicID"];
-$MyPostIP=$result_array["IP"];
-$MyForumID=$result_array["ForumID"];
-$MyCategoryID=$result_array["CategoryID"];
-$MyUserID=$result_array["UserID"];
-$MyGuestName=$result_array["GuestName"];
-$MyTimeStamp=$result_array["TimeStamp"];
-$MyEditTime=$result_array["LastUpdate"];
-$MyEditUserID=$result_array["EditUser"];
-$MyEditUserName=$result_array["EditUserName"];
+$MyPostID=$result_array['id'];
+$MyTopicID=$result_array['TopicID'];
+$MyPostIP=$result_array['IP'];
+$MyForumID=$result_array['ForumID'];
+$MyCategoryID=$result_array['CategoryID'];
+$MyUserID=$result_array['UserID'];
+$MyGuestName=$result_array['GuestName'];
+$MyTimeStamp=$result_array['TimeStamp'];
+$MyEditTime=$result_array['LastUpdate'];
+$MyEditUserID=$result_array['EditUser'];
+$MyEditUserName=$result_array['EditUserName'];
 $tmpusrcurtime = new DateTime();
 $tmpusrcurtime->setTimestamp($MyTimeStamp);
 $tmpusrcurtime->setTimezone($usertz);
 $MyTimeStamp=$tmpusrcurtime->format($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat']);
-$MyPost=$result_array["Post"];
-$MyDescription=$result_array["Description"];
+$MyPost=$result_array['Post'];
+$MyDescription=$result_array['Description'];
 $requery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($MyUserID));
 $reresult=sql_query($requery,$SQLStat);
 $renum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($MyUserID)), $SQLStat);
@@ -345,93 +345,93 @@ $ipshow = "two";
 $reresult_array = sql_fetch_assoc($reresult);
 $memreresult_array = sql_fetch_assoc($memreresult);
 $User1ID=$MyUserID; $GuestsName = $MyGuestName;
-$User1Name=$reresult_array["Name"];
-$User1IP=$reresult_array["IP"];
+$User1Name=$reresult_array['Name'];
+$User1IP=$reresult_array['IP'];
 if($User1IP==$MyPostIP) { $ipshow = "one"; }
-$User1Email=$reresult_array["Email"];
-$User1Title=$reresult_array["Title"];
-$PreUserCanExecPHP=$memreresult_array["CanExecPHP"];
+$User1Email=$reresult_array['Email'];
+$User1Title=$reresult_array['Title'];
+$PreUserCanExecPHP=$memreresult_array['CanExecPHP'];
 if($PreUserCanExecPHP!="yes"&&$PreUserCanExecPHP!="no"&&$PreUserCanExecPHP!="group") {
 	$PreUserCanExecPHP = "no"; }
-$PreUserCanDoHTML=$memreresult_array["CanDoHTML"];
+$PreUserCanDoHTML=$memreresult_array['CanDoHTML'];
 if($PreUserCanDoHTML!="yes"&&$PreUserCanDoHTML!="no"&&$PreUserCanDoHTML!="group") {
 	$PreUserCanDoHTML = "no"; }
-$PreUserCanUseBBTags=$memreresult_array["CanUseBBTags"];
+$PreUserCanUseBBTags=$memreresult_array['CanUseBBTags'];
 if($PreUserCanUseBBTags!="yes"&&$PreUserCanUseBBTags!="no"&&$PreUserCanUseBBTags!="group") {
 	$PreUserCanUseBBTags = "no"; }
 sql_free_result($memreresult);
-$User1Joined=$reresult_array["Joined"];
+$User1Joined=$reresult_array['Joined'];
 $tmpusrcurtime = new DateTime();
 $tmpusrcurtime->setTimestamp($User1Joined);
 $tmpusrcurtime->setTimezone($usertz);
 $User1Joined=$tmpusrcurtime->format($_SESSION['iDBDateFormat']);
-$User1Hidden=$reresult_array["HiddenMember"];
-$User1LevelID=$reresult_array["LevelID"];
-$User1RankID=$reresult_array["RankID"];
+$User1Hidden=$reresult_array['HiddenMember'];
+$User1LevelID=$reresult_array['LevelID'];
+$User1RankID=$reresult_array['RankID'];
 if($User1LevelID!==null&&$User1LevelID!=0) {
 $lquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."levels\" WHERE \"id\"=%i LIMIT 1", array($User1LevelID));
 $lresult=sql_query($lquery,$SQLStat);
 $lnum = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."levels\" WHERE \"id\"=%i LIMIT 1", array($User1LevelID)), $SQLStat);
 if ($lresult !== false && $lnum > 0) {
 $lresult_array = sql_fetch_assoc($lresult);
-$User1Level=$lresult_array["Name"]; } else { $User1Level = ""; }
+$User1Level=$lresult_array['Name']; } else { $User1Level = ""; }
 sql_free_result($lresult); } else {
 $User1Level = ""; }
-$User1GroupID=$reresult_array["GroupID"];
+$User1GroupID=$reresult_array['GroupID'];
 if($User1RankID!==null&&$User1RankID!=0) {
 $rquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."ranks\" WHERE \"id\"=%i LIMIT 1", array($User1RankID));
 $rresult=sql_query($rquery,$SQLStat);
 $rnum = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."ranks\" WHERE \"id\"=%i LIMIT 1", array($User1RankID)), $SQLStat);
 if ($rresult !== false && $rnum > 0) {
 $rresult_array = sql_fetch_assoc($rresult);
-$User1Rank=$rresult_array["Name"]; } else { $User1Rank = ""; }
+$User1Rank=$rresult_array['Name']; } else { $User1Rank = ""; }
 sql_free_result($rresult); } else {
 $User1Rank = ""; }
 $gquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i LIMIT 1", array($User1GroupID));
 $gresult=sql_query($gquery,$SQLStat);
 $gresult_array = sql_fetch_assoc($gresult);
-$User1Group=$gresult_array["Name"];
+$User1Group=$gresult_array['Name'];
 $User1CanExecPHP = $PreUserCanExecPHP;
 if($PreUserCanExecPHP=="group") {
-$User1CanExecPHP=$gresult_array["CanExecPHP"]; }
+$User1CanExecPHP=$gresult_array['CanExecPHP']; }
 if($User1CanExecPHP!="yes"&&$User1CanExecPHP!="no") {
 	$User1CanExecPHP = "no"; }
 $User1CanDoHTML = $PreUserCanDoHTML;
 if($PreUserCanDoHTML=="group") {
-$User1CanDoHTML=$gresult_array["CanDoHTML"]; }
+$User1CanDoHTML=$gresult_array['CanDoHTML']; }
 if($User1CanDoHTML!="yes"&&$User1CanDoHTML!="no") {
 	$User1CanDoHTML = "no"; }
 $User1CanUseBBTags = $PreUserCanUseBBTags;
 if($User1CanUseBBTags=="group") {
-$User1CanUseBBTags=$gresult_array["CanUseBBTags"]; }
+$User1CanUseBBTags=$gresult_array['CanUseBBTags']; }
 if($User1CanUseBBTags!="yes"&&$User1CanUseBBTags!="no") {
 	$User1CanUseBBTags = "no"; }
-$GroupNamePrefix=$gresult_array["NamePrefix"];
-$GroupNameSuffix=$gresult_array["NameSuffix"];
-$User1PermissionID=$gresult_array["PermissionID"];
+$GroupNamePrefix=$gresult_array['NamePrefix'];
+$GroupNameSuffix=$gresult_array['NameSuffix'];
+$User1PermissionID=$gresult_array['PermissionID'];
 sql_free_result($gresult);
 $per1query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i LIMIT 1", array($User1PermissionID));
 $per1esult=sql_query($per1query,$SQLStat);
 $per1num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i LIMIT 1", array($User1PermissionID)), $SQLStat);
 $per1esult_array = sql_fetch_assoc($per1esult);
-$User1CanDoHTML1=$per1esult_array["CanDoHTML"];
+$User1CanDoHTML1=$per1esult_array['CanDoHTML'];
 if($User1CanDoHTML1!="yes"&&$User1CanDoHTML1!="no") {
 	$User1CanDoHTML1 = "no"; }
-$User1CanUseBBTags1=$per1esult_array["CanUseBBTags"];
+$User1CanUseBBTags1=$per1esult_array['CanUseBBTags'];
 if($User1CanUseBBTags1!="yes"&&$User1CanUseBBTags1!="no") {
 	$User1CanUseBBTags1 = "no"; }
 sql_free_result($per1esult);
 if($User1Title=="") { $User1Title = $User1Group; }
-$User1Signature=$reresult_array["Signature"];
-$User1Avatar=$reresult_array["Avatar"];
-$User1AvatarSize=$reresult_array["AvatarSize"];
+$User1Signature=$reresult_array['Signature'];
+$User1Avatar=$reresult_array['Avatar'];
+$User1AvatarSize=$reresult_array['AvatarSize'];
 if ($User1Avatar=="http://"||$User1Avatar==null||
 	strtolower($User1Avatar)=="noavatar") {
 $User1Avatar=$ThemeSet['NoAvatar'];
 $User1AvatarSize=$ThemeSet['NoAvatarSize']; }
 $AvatarSize1=explode("x", $User1AvatarSize);
 $AvatarSize1W=$AvatarSize1[0]; $AvatarSize1H=$AvatarSize1[1];
-$User1Website=$reresult_array["Website"];
+$User1Website=$reresult_array['Website'];
 if($User1Website=="http://") { 
 	$User1Website = $Settings['idburl']; }
 $User1Website = urlcheck($User1Website);
@@ -440,9 +440,9 @@ $User1WWWChCk = parse_url($User1Website);
 $opennew = " onclick=\"window.open(this.href);return false;\"";
 if($BoardWWWChCk['host']==$User1WWWChCk['host']) {
 	$opennew = null; }
-$User1PostCount=$reresult_array["PostCount"];
-$User1Karma=$reresult_array["Karma"];
-$User1IP=$reresult_array["IP"];
+$User1PostCount=$reresult_array['PostCount'];
+$User1Karma=$reresult_array['Karma'];
+$User1IP=$reresult_array['IP'];
 sql_free_result($reresult);
 if($User1Name=="Guest") { $User1Name=$GuestsName;
 if($User1Name==null) { $User1Name="Guest"; } }
@@ -462,16 +462,16 @@ $euresult = sql_query($euquery,$SQLStat);
 $eunum = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($MyEditUserID)), $SQLStat); }
 	$euresult_array = sql_fetch_assoc($euresult);
 	$EditUserID = $MyEditUserID;
-	$EditUserGroupID = $euresult_array["GroupID"];
-	$EditUserHidden=$euresult_array["HiddenMember"];
-	$EditUserName = $euresult_array["Name"];
+	$EditUserGroupID = $euresult_array['GroupID'];
+	$EditUserHidden=$euresult_array['HiddenMember'];
+	$EditUserName = $euresult_array['Name'];
 	sql_free_result($euresult);
 	$eugquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i LIMIT 1", array($EditUserGroupID));
 	$eugresult=sql_query($eugquery,$SQLStat);
 	$eugresult_array = sql_fetch_assoc($eugresult);
-	$EditUserGroup=$eugresult_array["Name"];
-	$EditUserNamePrefix=$eugresult_array["NamePrefix"];
-	$EditUserNameSuffix=$eugresult_array["NameSuffix"];
+	$EditUserGroup=$eugresult_array['Name'];
+	$EditUserNamePrefix=$eugresult_array['NamePrefix'];
+	$EditUserNameSuffix=$eugresult_array['NameSuffix'];
 	sql_free_result($eugresult);	}
 	if($MyEditUserID==$MyUserID) {
 	$EditUserID = $User1ID;
@@ -679,7 +679,7 @@ $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \
 $result=sql_query($query,$SQLStat);
 $num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" ASC  LIMIT 1", array($_GET['id'])), $SQLStat);
 $result_array = sql_fetch_assoc($result);
-$QuoteDescription=$result_array["Description"]; 
+$QuoteDescription=$result_array['Description']; 
 $QuoteDescription = str_replace("Re: ","",$QuoteDescription);
 $QuoteDescription = "Re: ".$QuoteDescription;
 sql_free_result($result); }
@@ -689,14 +689,14 @@ $result=sql_query($query,$SQLStat);
 $num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."posts\" WHERE \"id\"=%i LIMIT 1", array($_GET['post'])), $SQLStat);
 if($num>=1) {
 $result_array = sql_fetch_assoc($result);
-$QuoteReplyID=$result_array["id"];
-$QuoteReplyFID=$result_array["ForumID"];
-$QuoteReplyCID=$result_array["CategoryID"];
-$QuoteUserID=$result_array["UserID"];
-$QuoteReply=$result_array["Post"];
+$QuoteReplyID=$result_array['id'];
+$QuoteReplyFID=$result_array['ForumID'];
+$QuoteReplyCID=$result_array['CategoryID'];
+$QuoteUserID=$result_array['UserID'];
+$QuoteReply=$result_array['Post'];
 $QuoteReply = preg_replace("/\[ExecPHP\](.*?)\[\/ExecPHP\]/is","",$QuoteReply);
-$QuoteDescription=$result_array["Description"];
-$QuoteGuestName=$result_array["GuestName"];
+$QuoteDescription=$result_array['Description'];
+$QuoteGuestName=$result_array['GuestName'];
 $requery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($QuoteUserID));
 $reresult=sql_query($requery,$SQLStat);
 $renum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($QuoteUserID)), $SQLStat);
@@ -705,7 +705,7 @@ $requery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHE
 $reresult=sql_query($requery,$SQLStat);
 $renum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($QuoteUserID)), $SQLStat); }
 $reresult_array = sql_fetch_assoc($reresult);
-$QuoteUserName=$reresult_array["Name"];
+$QuoteUserName=$reresult_array['Name'];
 if($QuoteUserName=="Guest") { $QuoteUserName=$QuoteGuestName;
 if($QuoteUserName==null) { $QuoteUserName="Guest"; } }
 $QuoteUserName = stripcslashes(htmlspecialchars($QuoteUserName, ENT_QUOTES, $Settings['charset']));
@@ -731,14 +731,14 @@ if($_GET['post']!=null&&$num>=1) {
 $rforumcheck = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2."  LIMIT 1", array($QuoteReplyFID));
 $rfmckresult=sql_query($rforumcheck,$SQLStat);
 $rfmckresult_array = sql_fetch_assoc($rfmckresult);
-$rForumPostCountView=$rfmckresult_array["PostCountView"];
-$rForumKarmaCountView=$rfmckresult_array["KarmaCountView"];
+$rForumPostCountView=$rfmckresult_array['PostCountView'];
+$rForumKarmaCountView=$rfmckresult_array['KarmaCountView'];
 sql_free_result($rfmckresult);
 $rcatcheck = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."categories\" WHERE \"id\"=%i".$CatIgnoreList2."  LIMIT 1", array($QuoteReplyCID));
 $rcatresult=sql_query($rcatcheck,$SQLStat);
 $rcatresult_array = sql_fetch_assoc($rcatresult);
-$rCategoryPostCountView=$rcatresult_array["PostCountView"];
-$rCategoryKarmaCountView=$rcatresult_array["KarmaCountView"];
+$rCategoryPostCountView=$rcatresult_array['PostCountView'];
+$rCategoryKarmaCountView=$rcatresult_array['KarmaCountView'];
 sql_free_result($rcatresult);
 if($MyPostCountChk==null) { $MyPostCountChk = 0; }
 if($rForumPostCountView!=0&&$MyPostCountChk<$rForumPostCountView) {
@@ -779,12 +779,12 @@ $melanie_num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Sett
 $melanie_p=0; $rose_a=0; $SmileRow=0; $SmileCRow=0;
 while ($melanie_p < $melanie_num) { ++$SmileRow;
 $melanie_result_array = sql_fetch_assoc($melanie_result);
-$FileName=$melanie_result_array["FileName"];
-$SmileName=$melanie_result_array["SmileName"];
-$SmileText=$melanie_result_array["SmileText"];
-$SmileDirectory=$melanie_result_array["Directory"];
-$ShowSmile=$melanie_result_array["Display"];
-$ReplaceType=$melanie_result_array["ReplaceCI"];
+$FileName=$melanie_result_array['FileName'];
+$SmileName=$melanie_result_array['SmileName'];
+$SmileText=$melanie_result_array['SmileText'];
+$SmileDirectory=$melanie_result_array['Directory'];
+$ShowSmile=$melanie_result_array['Display'];
+$ReplaceType=$melanie_result_array['ReplaceCI'];
 if($SmileRow==1) { ?><tr>
 	<?php } if($SmileRow<5) { ++$SmileCRow; ?>
 	<td><img src="<?php echo $SmileDirectory."".$FileName; ?>" style="vertical-align: middle; border: 0px; cursor: pointer;" title="<?php echo $SmileName; ?>" alt="<?php echo $SmileName; ?>" onclick="addsmiley('ReplyPost','&#160;<?php echo htmlspecialchars($SmileText, ENT_QUOTES, $Settings['charset']); ?>&#160;')" /></td>
@@ -855,7 +855,7 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die
 $MyUsersID = $_SESSION['UserID']; if($MyUsersID=="0"||$MyUsersID==null) { $MyUsersID = -1; }
 $REFERERurl = parse_url($_SERVER['HTTP_REFERER']);
 $URL['REFERER'] = $REFERERurl['host'];
-$URL['HOST'] = $_SERVER["SERVER_NAME"];
+$URL['HOST'] = $_SERVER['SERVER_NAME'];
 $REFERERurl = null;
 if(!isset($_POST['ReplyDesc'])) { $_POST['ReplyDesc'] = null; }
 if(!isset($_POST['ReplyPost'])) { $_POST['ReplyPost'] = null; }
@@ -954,13 +954,13 @@ $melanienm=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settin
 $melanies=0;
 while ($melanies < $melanienm) {
 $melaniert_array = sql_fetch_assoc($melaniert);
-$Filter=$melaniert_array["FilterWord"];
-$Replace=$melaniert_array["Replacement"];
-$CaseInsensitive=$melaniert_array["CaseInsensitive"];
+$Filter=$melaniert_array['FilterWord'];
+$Replace=$melaniert_array['Replacement'];
+$CaseInsensitive=$melaniert_array['CaseInsensitive'];
 if($CaseInsensitive=="on") { $CaseInsensitive = "yes"; }
 if($CaseInsensitive=="off") { $CaseInsensitive = "no"; }
 if($CaseInsensitive!="yes"||$CaseInsensitive!="no") { $CaseInsensitive = "no"; }
-$WholeWord=$melaniert_array["WholeWord"];
+$WholeWord=$melaniert_array['WholeWord'];
 if($WholeWord=="on") { $WholeWord = "yes"; }
 if($WholeWord=="off") { $WholeWord = "no"; }
 if($WholeWord!="yes"&&$WholeWord!="no") { $WholeWord = "no"; }
@@ -1022,8 +1022,8 @@ $gnrquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHE
 $gnrresult=sql_query($gnrquery,$SQLStat);
 $gnrnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2." LIMIT 1", array($TopicForumID)), $SQLStat);
 $gnrresult_array = sql_fetch_assoc($gnrresult);
-$NumberPosts=$gnrresult_array["NumPosts"]; 
-$PostCountAdd=$gnrresult_array["PostCountAdd"]; 
+$NumberPosts=$gnrresult_array['NumPosts']; 
+$PostCountAdd=$gnrresult_array['PostCountAdd']; 
 sql_free_result($gnrresult);
 $requery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($MyUsersID));
 $reresult=sql_query($requery,$SQLStat);
@@ -1032,19 +1032,19 @@ $rei=0;
 while ($rei < $renum) {
 $User1ID=$MyUsersID;
 $reresult_array = sql_fetch_assoc($reresult);
-$User1Name=$reresult_array["Name"];
+$User1Name=$reresult_array['Name'];
 if($_SESSION['UserGroup']==$Settings['GuestGroup']) { $User1Name = $_POST['GuestName']; }
-$User1Email=$reresult_array["Email"];
-$User1Title=$reresult_array["Title"];
-$User1GroupID=$reresult_array["GroupID"];
-$PostCount=$reresult_array["PostCount"];
+$User1Email=$reresult_array['Email'];
+$User1Title=$reresult_array['Title'];
+$User1GroupID=$reresult_array['GroupID'];
+$PostCount=$reresult_array['PostCount'];
 $NewPostCount = null;
 if($PostCountAdd=="on") { $NewPostCount = $PostCount + 1; }
 if(!isset($NewPostCount)) { $NewPostCount = $PostCount; }
 $gquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i LIMIT 1", array($User1GroupID));
 $gresult=sql_query($gquery,$SQLStat);
 $gresult_array = sql_fetch_assoc($gresult);
-$User1Group=$gresult_array["Name"];
+$User1Group=$gresult_array['Name'];
 sql_free_result($gresult);
 $User1IP=$_SERVER['REMOTE_ADDR'];
 ++$rei; } sql_free_result($reresult);
@@ -1087,11 +1087,11 @@ $gtsquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHE
 $gtsresult=sql_query($gtsquery,$SQLStat);
 $gtsnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE \"id\"=%i LIMIT 1", array($_GET['id'])), $SQLStat);
 $gtsresult_array = sql_fetch_assoc($gtsresult);
-$TTopicID=$gtsresult_array["id"];
-$TForumID=$gtsresult_array["ForumID"];
-$TUsersID=$gtsresult_array["UserID"];
-$TPinned=$gtsresult_array["Pinned"];
-$TClosed=$gtsresult_array["Closed"];
+$TTopicID=$gtsresult_array['id'];
+$TForumID=$gtsresult_array['ForumID'];
+$TUsersID=$gtsresult_array['UserID'];
+$TPinned=$gtsresult_array['Pinned'];
+$TClosed=$gtsresult_array['Closed'];
 if($TopicClosed==2&&$PermissionInfo['CanModForum'][$TForumID]=="no") { 
 redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($preresult);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
@@ -1161,10 +1161,10 @@ $gtsquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHE
 $gtsresult=sql_query($gtsquery,$SQLStat);
 $gtsnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE \"id\"=%i LIMIT 1", array($_GET['id'])), $SQLStat);
 $gtsresult_array = sql_fetch_assoc($gtsresult);
-$TTopicID=$gtsresult_array["id"];
-$TForumID=$gtsresult_array["ForumID"];
-$TUsersID=$gtsresult_array["UserID"];
-$TClosed=$gtsresult_array["Closed"];
+$TTopicID=$gtsresult_array['id'];
+$TForumID=$gtsresult_array['ForumID'];
+$TUsersID=$gtsresult_array['UserID'];
+$TClosed=$gtsresult_array['Closed'];
 if($TopicClosed==2&&$PermissionInfo['CanModForum'][$TForumID]=="no") { 
 redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($preresult);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
@@ -1240,10 +1240,10 @@ $gtsquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHE
 $gtsresult=sql_query($gtsquery,$SQLStat);
 $gtsnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE \"id\"=%i LIMIT 1", array($_GET['id'])), $SQLStat);
 $gtsresult_array = sql_fetch_assoc($gtsresult);
-$TTopicID=$gtsresult_array["id"];
-$OldForumID=$gtsresult_array["ForumID"];
-$OldCatID=$gtsresult_array["CategoryID"];
-$TClosed=$gtsresult_array["Closed"];
+$TTopicID=$gtsresult_array['id'];
+$OldForumID=$gtsresult_array['ForumID'];
+$OldCatID=$gtsresult_array['CategoryID'];
+$TClosed=$gtsresult_array['Closed'];
 if($TopicClosed==2&&$PermissionInfo['CanModForum'][$OldForumID]=="no") { 
 redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($preresult);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
@@ -1277,11 +1277,11 @@ redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); sql_free_result($mvresult);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $mvresult_array = sql_fetch_assoc($mvresult);
-$NumberPosts=$mvresult_array["NumPosts"];
+$NumberPosts=$mvresult_array['NumPosts'];
 $NumberPosts = $NumberPosts + $TNumberPosts;
-$NumberTopics=$mvresult_array["NumTopics"];
+$NumberTopics=$mvresult_array['NumTopics'];
 $NumberTopics = $NumberTopics + 1;
-$NewCatID=$mvresult_array["CategoryID"];
+$NewCatID=$mvresult_array['CategoryID'];
 sql_free_result($mvresult);
 $recountq = sql_pre_query("UPDATE \"".$Settings['sqltable']."forums\" SET \"NumPosts\"=%i,\"NumTopics\"=%i WHERE \"id\"=%i", array($NumberPosts,$NumberTopics,$_GET['newid']));
 sql_query($recountq,$SQLStat);
@@ -1289,9 +1289,9 @@ $mvquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHER
 $mvresult=sql_query($mvquery,$SQLStat);
 $mvnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2." LIMIT 1", array($OldForumID)), $SQLStat);
 $mvresult_array = sql_fetch_assoc($mvresult);
-$NumberPosts=$mvresult_array["NumPosts"];
+$NumberPosts=$mvresult_array['NumPosts'];
 $NumberPosts = $NumberPosts - $TNumberPosts;
-$NumberTopics=$mvresult_array["NumTopics"];
+$NumberTopics=$mvresult_array['NumTopics'];
 $NumberTopics = $NumberTopics - 1;
 sql_free_result($mvresult);
 $recountq = sql_pre_query("UPDATE \"".$Settings['sqltable']."forums\" SET \"NumPosts\"=%i,\"NumTopics\"=%i WHERE \"id\"=%i", array($NumberPosts,$NumberTopics,$OldForumID));
@@ -1337,10 +1337,10 @@ $predquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHE
 $predresult=sql_query($predquery,$SQLStat);
 $prednum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."posts\" WHERE \"id\"=%i LIMIT 1", array($_GET['post'])), $SQLStat);
 $predresult_array = sql_fetch_assoc($predresult);
-$ReplyID=$predresult_array["id"];
-$ReplyTopicID=$predresult_array["TopicID"];
-$ReplyForumID=$predresult_array["ForumID"];
-$ReplyUserID=$predresult_array["UserID"];
+$ReplyID=$predresult_array['id'];
+$ReplyTopicID=$predresult_array['TopicID'];
+$ReplyForumID=$predresult_array['ForumID'];
+$ReplyUserID=$predresult_array['UserID'];
 sql_free_result($predresult);
 $CanDeleteReply = false;
 if($_SESSION['UserID']!=0) {
@@ -1365,21 +1365,21 @@ $gnrquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHE
 $gnrresult=sql_query($gnrquery,$SQLStat);
 $gnrnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2." LIMIT 1", array($ReplyForumID)), $SQLStat);
 $gnrresult_array = sql_fetch_assoc($gnrresult);
-$NumberPosts=$gnrresult_array["NumPosts"]; $NumberTopics=$gnrresult_array["NumTopics"]; 
+$NumberPosts=$gnrresult_array['NumPosts']; $NumberTopics=$gnrresult_array['NumTopics']; 
 sql_free_result($gnrresult);
 while ($row = sql_fetch_assoc($delresult)) {
     $rows[] = $row;
 }
 $delresult_array = $rows[0];
-$FReplyID=$delresult_array["id"];
+$FReplyID=$delresult_array['id'];
 if($ReplyID==$FReplyID) { $DelTopic = true;
 $gtsquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"id\"=%i LIMIT 1", array($ReplyTopicID));
 $gtsresult=sql_query($gtsquery,$SQLStat);
 $gtsnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE \"id\"=%i LIMIT 1", array($ReplyTopicID)), $SQLStat);
 $gtsresult_array = sql_fetch_assoc($gtsresult);
-$TUsersID=$gtsresult_array["UserID"];
-$TForumID=$gtsresult_array["ForumID"];
-$TClosed=$gtsresult_array["Closed"];
+$TUsersID=$gtsresult_array['UserID'];
+$TForumID=$gtsresult_array['ForumID'];
+$TClosed=$gtsresult_array['Closed'];
 if($TopicClosed==2&&$PermissionInfo['CanModForum'][$TForumID]=="no") { 
 redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($preresult);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
@@ -1469,7 +1469,7 @@ $editquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHE
 $editresult=sql_query($editquery,$SQLStat);
 $editnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" ASC", array($TopicID)), $SQLStat);
 $editresult_array = sql_fetch_assoc($editresult);
-$FReplyID=$editresult_array["id"];
+$FReplyID=$editresult_array['id'];
 sql_free_result($editresult);
 if($_GET['post']==$FReplyID) { $ShowEditTopic = true; } }
 if($PermissionInfo['CanEditTopics'][$TopicForumID]=="no") { $ShowEditTopic = null; }
@@ -1481,20 +1481,20 @@ redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $ersresult_array = sql_fetch_assoc($ersresult);
-$ReplyPost=$ersresult_array["Post"];
+$ReplyPost=$ersresult_array['Post'];
 /*$ReplyPost = stripcslashes(htmlspecialchars($ReplyPost, ENT_QUOTES, $Settings['charset']));
 $ReplyPost = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $ReplyPost);
 //$ReplyPost = remove_spaces($ReplyPost);*/
 $ReplyPost = remove_bad_entities($ReplyPost);
-$ReplyDescription=$ersresult_array["Description"];
+$ReplyDescription=$ersresult_array['Description'];
 /*$ReplyDescription = stripcslashes(htmlspecialchars($ReplyDescription, ENT_QUOTES, $Settings['charset']));
 $ReplyDescription = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $ReplyDescription);
 //$ReplyDescription = remove_spaces($ReplyDescription);*/
-$ReplyGuestName=$ersresult_array["GuestName"];
+$ReplyGuestName=$ersresult_array['GuestName'];
 //$ReplyGuestName = stripcslashes(htmlspecialchars($ReplyGuestName, ENT_QUOTES, $Settings['charset']));
 //$ReplyGuestName = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $ReplyGuestName);
 $ReplyGuestName = remove_spaces($ReplyGuestName);
-$ReplyUser=$ersresult_array["UserID"];
+$ReplyUser=$ersresult_array['UserID'];
 if($_SESSION['UserID']!=$ReplyUser&&$PermissionInfo['CanModForum'][$TopicForumID]=="no") {
 redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
@@ -1505,9 +1505,9 @@ $gtsquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHE
 $gtsresult=sql_query($gtsquery,$SQLStat);
 $gtsnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE \"id\"=%i LIMIT 1", array($TopicID)), $SQLStat);
 $gtsresult_array = sql_fetch_assoc($gtsresult);
-$TUsersID=$gtsresult_array["UserID"];
-$TForumID=$gtsresult_array["ForumID"];
-$TClosed=$gtsresult_array["Closed"];
+$TUsersID=$gtsresult_array['UserID'];
+$TForumID=$gtsresult_array['ForumID'];
+$TClosed=$gtsresult_array['Closed'];
 if($TopicClosed==2&&$PermissionInfo['CanModForum'][$TForumID]=="no") { 
 redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($preresult);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
@@ -1555,12 +1555,12 @@ $melanie_num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Sett
 $melanie_p=0; $SmileRow=1;
 while ($melanie_p < $melanie_num) {
 $melanie_result_array = sql_fetch_assoc($melanie_result);
-$FileName=$melanie_result_array["FileName"];
-$SmileName=$melanie_result_array["SmileName"];
-$SmileText=$melanie_result_array["SmileText"];
-$SmileDirectory=$melanie_result_array["Directory"];
-$ShowSmile=$melanie_result_array["Display"];
-$ReplaceType=$melanie_result_array["ReplaceCI"];
+$FileName=$melanie_result_array['FileName'];
+$SmileName=$melanie_result_array['SmileName'];
+$SmileText=$melanie_result_array['SmileText'];
+$SmileDirectory=$melanie_result_array['Directory'];
+$ShowSmile=$melanie_result_array['Display'];
+$ReplaceType=$melanie_result_array['ReplaceCI'];
 if($SmileRow<5) { ?>
 	<img src="<?php echo $SmileDirectory."".$FileName; ?>" style="vertical-align: middle; border: 0px; cursor: pointer;" title="<?php echo $SmileName; ?>" alt="<?php echo $SmileName; ?>" onclick="addsmiley('ReplyPost','&#160;<?php echo htmlspecialchars($SmileText, ENT_QUOTES, $Settings['charset']); ?>&#160;')" />&#160;&#160;
 	<?php } if($SmileRow==5) { ?>
@@ -1618,7 +1618,7 @@ ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $REFERERurl = parse_url($_SERVER['HTTP_REFERER']);
 $URL['REFERER'] = $REFERERurl['host'];
-$URL['HOST'] = $_SERVER["SERVER_NAME"];
+$URL['HOST'] = $_SERVER['SERVER_NAME'];
 $REFERERurl = null;
 if(!isset($_POST['ReplyDesc'])) { $_POST['ReplyDesc'] = null; }
 if(!isset($_POST['ReplyPost'])) { $_POST['ReplyPost'] = null; }
@@ -1633,7 +1633,7 @@ $editquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHE
 $editresult=sql_query($editquery,$SQLStat);
 $editnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" ASC", array($TopicID)), $SQLStat);
 $editresult_array = sql_fetch_assoc($editresult);
-$FReplyID=$editresult_array["id"];
+$FReplyID=$editresult_array['id'];
 sql_free_result($editresult);
 if($_GET['post']==$FReplyID) { $ShowEditTopic = true; } }
 if($PermissionInfo['CanEditTopics'][$TopicForumID]=="no") { $ShowEditTopic = null; }
@@ -1645,7 +1645,7 @@ redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $ersresult_array = sql_fetch_assoc($ersresult);
-$ReplyUser=$ersresult_array["UserID"];
+$ReplyUser=$ersresult_array['UserID'];
 if($_SESSION['UserID']!=$ReplyUser&&$PermissionInfo['CanModForum'][$TopicForumID]=="no") {
 redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
@@ -1656,9 +1656,9 @@ $gtsquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHE
 $gtsresult=sql_query($gtsquery,$SQLStat);
 $gtsnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE \"id\"=%i LIMIT 1", array($TopicID)), $SQLStat);
 $gtsresult_array = sql_fetch_assoc($gtsresult);
-$TUsersID=$gtsresult_array["UserID"];
-$TForumID=$gtsresult_array["ForumID"];
-$TClosed=$gtsresult_array["Closed"];
+$TUsersID=$gtsresult_array['UserID'];
+$TForumID=$gtsresult_array['ForumID'];
+$TClosed=$gtsresult_array['Closed'];
 if($_SESSION['UserID']!=$TUsersID) { $ShowEditTopic = null; }
 if($PermissionInfo['CanModForum'][$TopicForumID]=="yes"&&
 	$PermissionInfo['CanEditTopics'][$TopicForumID]=="yes") { 
@@ -1764,13 +1764,13 @@ $melanienm=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settin
 $melanies=0;
 while ($melanies < $melanienm) {
 $melaniert_array = sql_fetch_assoc($melaniert);
-$Filter=$melaniert_array["FilterWord"];
-$Replace=$melaniert_array["Replacement"];
-$CaseInsensitive=$melaniert_array["CaseInsensitive"];
+$Filter=$melaniert_array['FilterWord'];
+$Replace=$melaniert_array['Replacement'];
+$CaseInsensitive=$melaniert_array['CaseInsensitive'];
 if($CaseInsensitive=="on") { $CaseInsensitive = "yes"; }
 if($CaseInsensitive=="off") { $CaseInsensitive = "no"; }
 if($CaseInsensitive!="yes"||$CaseInsensitive!="no") { $CaseInsensitive = "no"; }
-$WholeWord=$melaniert_array["WholeWord"];
+$WholeWord=$melaniert_array['WholeWord'];
 if($WholeWord=="on") { $WholeWord = "yes"; }
 if($WholeWord=="off") { $WholeWord = "no"; }
 if($WholeWord!="yes"&&$WholeWord!="no") { $WholeWord = "no"; }
@@ -1794,20 +1794,20 @@ $lonewolfnm=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Setti
 $lonewolfs=0; $RMatches = null; $RGMatches = null;
 while ($lonewolfs < $lonewolfnm) {
 $lonewolfrt_array = sql_fetch_assoc($lonewolfrt);
-$RWord=$lonewolfrt_array["Word"];
-$RCaseInsensitive=$lonewolfrt_array["CaseInsensitive"];
+$RWord=$lonewolfrt_array['Word'];
+$RCaseInsensitive=$lonewolfrt_array['CaseInsensitive'];
 if($RCaseInsensitive=="on") { $RCaseInsensitive = "yes"; }
 if($RCaseInsensitive=="off") { $RCaseInsensitive = "no"; }
 if($RCaseInsensitive!="yes"||$RCaseInsensitive!="no") { $RCaseInsensitive = "no"; }
-$RWholeWord=$lonewolfrt_array["WholeWord"];
+$RWholeWord=$lonewolfrt_array['WholeWord'];
 if($RWholeWord=="on") { $RWholeWord = "yes"; }
 if($RWholeWord=="off") { $RWholeWord = "no"; }
 if($RWholeWord!="yes"||$RWholeWord!="no") { $RWholeWord = "no"; }
-$RestrictedTopicName=$lonewolfrt_array["RestrictedTopicName"];
+$RestrictedTopicName=$lonewolfrt_array['RestrictedTopicName'];
 if($RestrictedTopicName=="on") { $RestrictedTopicName = "yes"; }
 if($RestrictedTopicName=="off") { $RestrictedTopicName = "no"; }
 if($RestrictedTopicName!="yes"||$RestrictedTopicName!="no") { $RestrictedTopicName = "no"; }
-$RestrictedUserName=$lonewolfrt_array["RestrictedUserName"];
+$RestrictedUserName=$lonewolfrt_array['RestrictedUserName'];
 if($RestrictedUserName=="on") { $RestrictedUserName = "yes"; }
 if($RestrictedUserName=="off") { $RestrictedUserName = "no"; }
 if($RestrictedUserName!="yes"||$RestrictedUserName!="no") { $RestrictedUserName = "no"; }
@@ -1906,7 +1906,7 @@ $rei=0;
 while ($rei < $renum) {
 $User1ID=$_SESSION['UserID'];
 $reresult_array = sql_fetch_assoc($reresult);
-$User1Name=$reresult_array["Name"];
+$User1Name=$reresult_array['Name'];
 if($_SESSION['UserGroup']==$Settings['GuestGroup']) { $User1Name = $_POST['GuestName']; }
 ++$rei; }
 sql_free_result($reresult);
@@ -1975,7 +1975,7 @@ $queryra = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE
 $resultra=sql_query($queryra,$SQLStat);
 $numrose=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" ASC LIMIT 1", array($_GET['id'])), $SQLStat);
 $resultra_array = sql_fetch_assoc($resultra);
-$QuoteDescription=$resultra_array["Description"]; 
+$QuoteDescription=$resultra_array['Description']; 
 $QuoteDescription = str_replace("Re: ","",$QuoteDescription);
 $QuoteDescription = "Re: ".$QuoteDescription;
 sql_free_result($resultra);
@@ -2008,12 +2008,12 @@ $melanie_num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Sett
 $melanie_p=0; $SmileRow=0; $SmileCRow=0;
 while ($melanie_p < $melanie_num) { ++$SmileRow;
 $melanie_result_array = sql_fetch_assoc($melanie_result);
-$FileName=$melanie_result_array["FileName"];
-$SmileName=$melanie_result_array["SmileName"];
-$SmileText=$melanie_result_array["SmileText"];
-$SmileDirectory=$melanie_result_array["Directory"];
-$ShowSmile=$melanie_result_array["Display"];
-$ReplaceType=$melanie_result_array["ReplaceCI"];
+$FileName=$melanie_result_array['FileName'];
+$SmileName=$melanie_result_array['SmileName'];
+$SmileText=$melanie_result_array['SmileText'];
+$SmileDirectory=$melanie_result_array['Directory'];
+$ShowSmile=$melanie_result_array['Display'];
+$ReplaceType=$melanie_result_array['ReplaceCI'];
 if($SmileRow==1) { ?><tr>
 	<?php } if($SmileRow<5) { ++$SmileCRow; ?>
 	<td><img src="<?php echo $SmileDirectory."".$FileName; ?>" style="vertical-align: middle; border: 0px; cursor: pointer;" title="<?php echo $SmileName; ?>" alt="<?php echo $SmileName; ?>" onclick="addsmiley('ReplyPost','&#160;<?php echo htmlspecialchars($SmileText, ENT_QUOTES, $Settings['charset']); ?>&#160;')" /></td>
@@ -2079,26 +2079,45 @@ $uviewli=0; $uviewlmn = 0; $uviewlgn = 0; $uviewlan = 0; $uviewlmbn = 0;
 $MembersViewList = null; $GuestsOnline = null;
 while ($uviewli < $uviewlnum) {
 $uviewlresult_array = sql_fetch_assoc($uviewlresult);
-$session_data=$uviewlresult_array["session_data"]; 
-$serialized_data=$uviewlresult_array["serialized_data"];
-$session_user_agent=$uviewlresult_array["user_agent"]; 
-$session_ip_address=$uviewlresult_array["ip_address"];
+$session_data=$uviewlresult_array['session_data']; 
+$serialized_data=$uviewlresult_array['serialized_data'];
+$session_user_agent=$uviewlresult_array['user_agent'];
+$session_client_hints=json_decode($uviewlresult_array"client_hints"]);
+$session_ip_address=$uviewlresult_array['ip_address'];
 //$UserSessInfo = unserialize_session($session_data);
 $UserSessInfo = unserialize($serialized_data);
 if(!isset($UserSessInfo['UserGroup'])) { $UserSessInfo['UserGroup'] = $Settings['GuestGroup']; }
 $AmIHiddenUser = "no";
 $user_agent_check = false;
-if(user_agent_check($session_user_agent)) {
-	$user_agent_check = user_agent_check($session_user_agent); }
+if (user_agent_check($session_user_agent)) {
+    // Use the result from user_agent_check if it's valid
+    $user_agent_check = user_agent_check($session_user_agent);
+} else {
+    // Check if browscap is available
+    if (ini_get('browscap')) {
+        // Attempt to use get_browser() if browscap is set
+        $pre_user_agent = @get_browser($session_user_agent, true);
+        if ($pre_user_agent !== false) {
+            // Use get_browser result if available
+            $session_user_agent = $pre_user_agent['parent'] . " on " . $pre_user_agent['platform'];
+        }
+        unset($pre_user_agent);
+    }
+    // If browscap is not set or get_browser() fails, retain $session_user_agent
+    // from the SQL select.
+}
 if($UserSessInfo['UserGroup']!=$Settings['GuestGroup']||$user_agent_check!==false) {
 $PreAmIHiddenUser = GetUserName($UserSessInfo['UserID'],$Settings['sqltable'],$SQLStat);
 $AmIHiddenUser = $PreAmIHiddenUser['Hidden'];
+if(isset($UserSessInfo['AnonymousLogin']) && $UserSessInfo['AnonymousLogin']=="yes") { $AmIHiddenUser = "yes"; }
 if((($AmIHiddenUser=="no"||$GroupInfo['CanViewAnonymous']=="yes")&&$UserSessInfo['UserID']>0)||$user_agent_check!==false) {
 if($uviewlmbn>0) { $MembersViewList .= ", "; }
+$userprestring = "";
+if($AmIHiddenUser=="yes") { $userprestring = "*"; }
 if($user_agent_check===false) {
 $uatitleadd = null;
 if($GroupInfo['CanViewUserAgent']=="yes") { $uatitleadd = " title=\"".htmlentities($session_user_agent, ENT_QUOTES, $Settings['charset'])."\""; }
-$MembersViewList .= "<a".$uatitleadd." href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UserSessInfo['UserID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">".$UserSessInfo['MemberName']."</a>"; 
+$MembersViewList .= "<a".$uatitleadd." href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UserSessInfo['UserID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">".$userprestring.$UserSessInfo['MemberName']."</a>"; 
 if($GroupInfo['CanViewIPAddress']=="yes") {
 $MembersViewList .= " (<a title=\"".$session_ip_address."\" onclick=\"window.open(this.href);return false;\" href=\"".sprintf($IPCheckURL,$session_ip_address)."\">".$session_ip_address."</a>)"; }
 ++$uviewlmn; ++$uviewlmbn; }

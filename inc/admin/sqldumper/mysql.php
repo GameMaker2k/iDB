@@ -122,29 +122,29 @@ $tabstatz = sql_fetch_assoc($tabstaz);
 $FullTable[$l] = $DropTable[$l].$tabstatz[1].";\n";
 $tabstats = sql_fetch_assoc($tabsta); $AutoIncrement = " ";
 /*
-if($tabstats["Auto_increment"]!="") {
-$AutoIncrement = " AUTO_INCREMENT=".$tabstats["Auto_increment"]." "; }
+if($tabstats['Auto_increment']!="") {
+$AutoIncrement = " AUTO_INCREMENT=".$tabstats['Auto_increment']." "; }
 	$TableInfo[$l] = null; $TableStats = null; $i = 0;
 	while ($row2 = sql_fetch_assoc($result2)) {
-		$row2["Default"] = "'".$row2["Default"]."'"; 
-		if($i==0) { $row2["Default"] = null; } $DefaVaule = null;
-		if($row2["Default"]!=null) { $DefaVaule = " default ".$row2["Default"]; }
-		if($row2["Extra"]!="") { $row2["Extra"] = " ".$row2["Extra"]; }
-	if($row2["Type"]=="text") { $DefaVaule = null; }
+		$row2['Default'] = "'".$row2['Default']."'"; 
+		if($i==0) { $row2['Default'] = null; } $DefaVaule = null;
+		if($row2['Default']!=null) { $DefaVaule = " default ".$row2['Default']; }
+		if($row2['Extra']!="") { $row2['Extra'] = " ".$row2['Extra']; }
+	if($row2['Type']=="text") { $DefaVaule = null; }
 	if(isset($PrimaryKey[$l])) { 
-	if($row2["Key"]=="PRI"||$row2["Key"]=="UNI") {
+	if($row2['Key']=="PRI"||$row2['Key']=="UNI") {
 	$PrimaryKey[$l] .= ",\n"; } }
 	if(!isset($PrimaryKey[$l])) { $PrimaryKey[$l] = null; }
-        $TableInfo[$l] .= "  \"".$row2["Field"]."\" ".$row2["Type"]." NOT NULL".$DefaVaule.$row2["Extra"].",\n";
-		if($row2["Key"]=="PRI") { $PrimaryKey[$l] .= "  PRIMARY KEY (\"".$row2["Field"]."\")"; }
-		if($row2["Key"]=="UNI") { $PrimaryKey[$l] .= "  UNIQUE KEY \"".$row2["Field"]."\" (\"".$row2["Field"]."\")"; }
+        $TableInfo[$l] .= "  \"".$row2['Field']."\" ".$row2['Type']." NOT NULL".$DefaVaule.$row2['Extra'].",\n";
+		if($row2['Key']=="PRI") { $PrimaryKey[$l] .= "  PRIMARY KEY (\"".$row2['Field']."\")"; }
+		if($row2['Key']=="UNI") { $PrimaryKey[$l] .= "  UNIQUE KEY \"".$row2['Field']."\" (\"".$row2['Field']."\")"; }
 	++$i; } */
 	/*
-	$TableStats[$l] = ") ENGINE=".$tabstats["Engine"]." DEFAULT CHARSET=".mysql_client_encoding()." COLLATE=".$tabstats["Collation"].$AutoIncrement.";\n";
+	$TableStats[$l] = ") ENGINE=".$tabstats['Engine']." DEFAULT CHARSET=".mysql_client_encoding()." COLLATE=".$tabstats['Collation'].$AutoIncrement.";\n";
 	$TableInfo[$l] .= $PrimaryKey[$l]."\n".$TableStats[$l];
 	$FullTable[$l] = $DropTable[$l].$CreateTable[$l].$TableInfo[$l];
 	 }
-	$TableStats[$l] = ") ENGINE=".$tabstats["Engine"]." DEFAULT CHARSET=".mysql_client_encoding()." COLLATE=".$tabstats["Collation"].$AutoIncrement.";\n";
+	$TableStats[$l] = ") ENGINE=".$tabstats['Engine']." DEFAULT CHARSET=".mysql_client_encoding()." COLLATE=".$tabstats['Collation'].$AutoIncrement.";\n";
 	$TableInfo[$l] .= $PrimaryKey[$l]."\n".$TableStats[$l];
 	$FullTable[$l] = $DropTable[$l].$CreateTable[$l].$TableInfo[$l]; */ }
 if (!$result2) {

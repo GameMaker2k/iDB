@@ -423,6 +423,7 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."sess
 "  \"session_data\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
 "  \"serialized_data\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
 "  \"user_agent\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
+"  \"client_hints\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
 "  \"ip_address\" varchar(64) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"expires\" int(15) NOT NULL default '0',\n".
 "  PRIMARY KEY  (\"session_id\")\n".

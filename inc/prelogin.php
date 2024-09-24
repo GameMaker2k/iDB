@@ -26,22 +26,22 @@ $numlog2=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings
 else { $numlog2 = 0; }
 if($numlog2==1) {
 $resultlog2_array = sql_fetch_assoc($resultlog2);
-$YourIDAM=$resultlog2_array["id"];
-$YourNameAM=$resultlog2_array["Name"];
-$YourGroupAM=$resultlog2_array["GroupID"];
+$YourIDAM=$resultlog2_array['id'];
+$YourNameAM=$resultlog2_array['Name'];
+$YourGroupAM=$resultlog2_array['GroupID'];
 $YourGroupIDAM=$YourGroupAM;
-$YourPassAM=$resultlog2_array["UserPassword"];
+$YourPassAM=$resultlog2_array['UserPassword'];
 $gquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i LIMIT 1", array($YourGroupAM));
 $gresult=sql_query($gquery,$SQLStat);
 $gresult_array = sql_fetch_assoc($gresult);
-$YourGroupAM=$gresult_array["Name"];
+$YourGroupAM=$gresult_array['Name'];
 sql_free_result($gresult);
 $BanError = null;
-$YourTimeZoneAM=$resultlog2_array["TimeZone"];
-$UseThemeAM=$resultlog2_array["UseTheme"];
-//$YourDSTAM=$resultlog2_array["DST"];
-$YourLastPostTime=$resultlog2_array["LastPostTime"];
-$YourBanTime=$resultlog2_array["BanTime"];
+$YourTimeZoneAM=$resultlog2_array['TimeZone'];
+$UseThemeAM=$resultlog2_array['UseTheme'];
+//$YourDSTAM=$resultlog2_array['DST'];
+$YourLastPostTime=$resultlog2_array['LastPostTime'];
+$YourBanTime=$resultlog2_array['BanTime'];
 sql_free_result($resultlog2);
 $CGMTime = $utccurtime->getTimestamp();
 if($YourBanTime!=0&&$YourBanTime!=null) {

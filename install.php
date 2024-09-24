@@ -333,7 +333,7 @@ if($this_dir=="\/") { $this_dir="/"; }
 $this_dir = str_replace("//", "/", $this_dir);
 $idbdir = addslashes(str_replace("\\","/",dirname(__FILE__)."/"));
 if(!isset($_POST['BoardURL'])) { 
-   $Settings['idburl'] = $prehost.$_SERVER["HTTP_HOST"].$this_dir; }
+   $Settings['idburl'] = $prehost.$_SERVER['HTTP_HOST'].$this_dir; }
 if(isset($_POST['BoardURL'])) { 
    $Settings['idburl'] = $_POST['BoardURL']; }
 $Settings['qstr'] = "&";

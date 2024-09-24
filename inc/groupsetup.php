@@ -47,7 +47,7 @@ $_SESSION['ExtraData'] = "currentact:view; currentcategoryid:0; currentforumid:0
 $ggidquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"Name\"='%s' LIMIT 1", array($Settings['GuestGroup']));
 $ggidresult=sql_query($ggidquery,$SQLStat);
 $ggidresult_array = sql_fetch_assoc($ggidresult);
-$Settings['GuestGroupID']=$ggidresult_array["id"];
+$Settings['GuestGroupID']=$ggidresult_array['id'];
 // Check to make sure MemberInfo is right
 $MyPostCountChk = null; $MyKarmaCount = null;
 if(!isset($_SESSION['UserID'])) { $_SESSION['UserID'] = 0; }
@@ -57,35 +57,35 @@ $resultchkusr=sql_query($kgbquerychkusr,$SQLStat);
 $numchkusr=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s' AND \"UserPassword\"='%s' AND \"id\"=%i LIMIT 1", array($_SESSION['MemberName'],$_SESSION['UserPass'],$_SESSION['UserID'])), $SQLStat);
 if($numchkusr==1) {
 $resultchkusr_array = sql_fetch_assoc($resultchkusr);
-$ChkUsrID=$resultchkusr_array["id"];
-$ChkUsrName=$resultchkusr_array["Name"];
-$ChkUsrGroup=$resultchkusr_array["GroupID"];
+$ChkUsrID=$resultchkusr_array['id'];
+$ChkUsrName=$resultchkusr_array['Name'];
+$ChkUsrGroup=$resultchkusr_array['GroupID'];
 $ChkUsrGroupID=$ChkUsrGroup;
-$ChkUsrLevel=$resultchkusr_array["LevelID"];
+$ChkUsrLevel=$resultchkusr_array['LevelID'];
 $ChkUsrLevelID=$ChkUsrLevel;
-$ChkUsrRank=$resultchkusr_array["RankID"];
+$ChkUsrRank=$resultchkusr_array['RankID'];
 $ChkUsrRankID=$ChkUsrRank;
-$ChkUsrPass=$resultchkusr_array["UserPassword"];
-$ChkUsrTimeZone=$resultchkusr_array["TimeZone"];
-$ChkUsrDateFormat=$resultchkusr_array["DateFormat"];
-$ChkUsrTimeFormat=$resultchkusr_array["TimeFormat"];
-$ChkUsrTheme=$resultchkusr_array["UseTheme"];
-$ChkUsrLastPostTime=$resultchkusr_array["LastPostTime"];
-$MyPostCountChk=$resultchkusr_array["PostCount"];
-$MyKarmaCount=$resultchkusr_array["Karma"];
-$MyKarmaUpdate=$resultchkusr_array["KarmaUpdate"];
-$MyRepliesPerPage=$resultchkusr_array["RepliesPerPage"];
+$ChkUsrPass=$resultchkusr_array['UserPassword'];
+$ChkUsrTimeZone=$resultchkusr_array['TimeZone'];
+$ChkUsrDateFormat=$resultchkusr_array['DateFormat'];
+$ChkUsrTimeFormat=$resultchkusr_array['TimeFormat'];
+$ChkUsrTheme=$resultchkusr_array['UseTheme'];
+$ChkUsrLastPostTime=$resultchkusr_array['LastPostTime'];
+$MyPostCountChk=$resultchkusr_array['PostCount'];
+$MyKarmaCount=$resultchkusr_array['Karma'];
+$MyKarmaUpdate=$resultchkusr_array['KarmaUpdate'];
+$MyRepliesPerPage=$resultchkusr_array['RepliesPerPage'];
 $Settings['max_posts'] = $MyRepliesPerPage;
-$MyTopicsPerPage=$resultchkusr_array["TopicsPerPage"];
+$MyTopicsPerPage=$resultchkusr_array['TopicsPerPage'];
 $Settings['max_topics'] = $MyTopicsPerPage;
-$MyMessagesPerPage=$resultchkusr_array["MessagesPerPage"];
+$MyMessagesPerPage=$resultchkusr_array['MessagesPerPage'];
 $Settings['max_memlist'] = $MyMessagesPerPage;
 $Settings['max_pmlist'] = $MyMessagesPerPage;
 $svrquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i LIMIT 1", array($ChkUsrGroup));
 $svrgresultkgb=sql_query($svrquery,$SQLStat);
 $svrgresultkgb_array = sql_fetch_assoc($svrgresultkgb);
-$ChkUsrGroup=$svrgresultkgb_array["Name"]; 
-$ChkUsrBanTime=$resultchkusr_array["BanTime"];
+$ChkUsrGroup=$svrgresultkgb_array['Name']; 
+$ChkUsrBanTime=$resultchkusr_array['BanTime'];
 $ChkUsrGMTime = $utccurtime->getTimestamp();
 if($ChkUsrBanTime!=0&&$ChkUsrBanTime!=null) {
 if($ChkUsrBanTime>=$ChkUsrGMTime) { $BanError = "yes"; }
@@ -141,14 +141,14 @@ $_SESSION['UserGroup'] = $Settings['GuestGroup'];
 $gidquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"Name\"='%s' LIMIT 1", array($Settings['GuestGroup']));
 $gidresult=sql_query($gidquery,$SQLStat);
 $gidresult_array = sql_fetch_assoc($gidresult);
-$_SESSION['UserGroupID']=$gidresult_array["id"]; 
+$_SESSION['UserGroupID']=$gidresult_array['id']; 
 sql_free_result($gidresult); }
 if($_SESSION['MemberName']==null) { $_SESSION['UserID'] = "0";
 $_SESSION['UserIP']=$_SERVER['REMOTE_ADDR'];
 $_SESSION['UserGroup'] = $Settings['GuestGroup']; 
 $gidquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"Name\"='%s' LIMIT 1", array($Settings['GuestGroup']));
 $gidresult=sql_query($gidquery,$SQLStat);
-$_SESSION['UserGroupID']=$gidresult_array["id"]; 
+$_SESSION['UserGroupID']=$gidresult_array['id']; 
 sql_free_result($gidresult); }
 $levnum = 0;
 if($_SESSION['UserID']==0||$_SESSION['UserID']==null) {
@@ -163,21 +163,21 @@ ob_clean(); echo "Sorry could not find level data in database.\nContact the boar
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }*/ }
 if($levnum>=1) {
 $levresult_array = sql_fetch_assoc($levresult);
-$LevelInfo['ID']=$levresult_array["id"];
+$LevelInfo['ID']=$levresult_array['id'];
 if(!is_numeric($LevelInfo['ID'])) { $GruError = true; }
-$LevelInfo['Name']=$levresult_array["Name"];
-$LevelInfo['PromoteTo']=$levresult_array["PromoteTo"];
-$LevelInfo['PromotePosts']=$levresult_array["PromotePosts"];
+$LevelInfo['Name']=$levresult_array['Name'];
+$LevelInfo['PromoteTo']=$levresult_array['PromoteTo'];
+$LevelInfo['PromotePosts']=$levresult_array['PromotePosts'];
 if(!is_numeric($LevelInfo['PromotePosts'])) { 
 	$LevelInfo['PromotePosts'] = 0; $LevelInfo['PromoteTo'] = 0; }
-$LevelInfo['PromoteKarma']=$levresult_array["PromoteKarma"];
+$LevelInfo['PromoteKarma']=$levresult_array['PromoteKarma'];
 if(!is_numeric($LevelInfo['PromoteKarma'])) { 
 	$LevelInfo['PromoteKarma'] = 0; $LevelInfo['PromoteTo'] = 0; }
-$LevelInfo['DemoteTo']=$levresult_array["DemoteTo"];
-$LevelInfo['DemotePosts']=$levresult_array["DemotePosts"];
+$LevelInfo['DemoteTo']=$levresult_array['DemoteTo'];
+$LevelInfo['DemotePosts']=$levresult_array['DemotePosts'];
 if(!is_numeric($LevelInfo['DemotePosts'])) { 
 	$LevelInfo['DemotePosts'] = 0; $LevelInfo['DemoteTo'] = 0; }
-$LevelInfo['DemoteKarma']=$levresult_array["DemoteKarma"];
+$LevelInfo['DemoteKarma']=$levresult_array['DemoteKarma'];
 if(!is_numeric($LevelInfo['DemoteKarma'])) { 
 	$LevelInfo['DemoteKarma'] = 0; $LevelInfo['DemoteTo'] = 0; }
 if($levnum<=0&&$ChkUsrLevelID!=0) {
@@ -196,22 +196,22 @@ ob_clean(); echo "Sorry could not find ranel data in database.\nContact the boar
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }*/ }
 if($rannum>=1) {
 $ranresult_array = sql_fetch_assoc($ranresult);
-$RankInfo['ID']=$ranresult_array["id"];
+$RankInfo['ID']=$ranresult_array['id'];
 if(!is_numeric($RankInfo['ID'])) { $GruError = true; }
-$RankInfo['Name']=$ranresult_array["Name"];
-$RankInfo['PromoteTo']=$ranresult_array["PromoteTo"];
-$RankInfo['PromotePosts']=$ranresult_array["PromotePosts"];
+$RankInfo['Name']=$ranresult_array['Name'];
+$RankInfo['PromoteTo']=$ranresult_array['PromoteTo'];
+$RankInfo['PromotePosts']=$ranresult_array['PromotePosts'];
 if(!is_numeric($RankInfo['PromotePosts'])) { 
 	$RankInfo['PromotePosts'] = 0; }
-$RankInfo['PromoteKarma']=$ranresult_array["PromoteKarma"];
+$RankInfo['PromoteKarma']=$ranresult_array['PromoteKarma'];
 if(!is_numeric($RankInfo['PromoteKarma'])) { 
 	$RankInfo['PromoteKarma'] = 0; }
-$RankInfo['Name']=$ranresult_array["Name"];
-$RankInfo['DemoteTo']=$ranresult_array["DemoteTo"];
-$RankInfo['DemotePosts']=$ranresult_array["DemotePosts"];
+$RankInfo['Name']=$ranresult_array['Name'];
+$RankInfo['DemoteTo']=$ranresult_array['DemoteTo'];
+$RankInfo['DemotePosts']=$ranresult_array['DemotePosts'];
 if(!is_numeric($RankInfo['DemotePosts'])) { 
 	$RankInfo['DemotePosts'] = 0; }
-$RankInfo['DemoteKarma']=$ranresult_array["DemoteKarma"];
+$RankInfo['DemoteKarma']=$ranresult_array['DemoteKarma'];
 if(!is_numeric($RankInfo['DemoteKarma'])) { 
 	$RankInfo['DemoteKarma'] = 0; }
 if($rannum<=0&&$ChkUsrRankID!=0) {
@@ -242,100 +242,100 @@ $memprenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settin
 if($grunum>=1) {
 $gruresult_array = sql_fetch_assoc($gruresult);
 $mempreresult_array = sql_fetch_assoc($mempreresult);
-$GroupInfo['ID']=$gruresult_array["id"];
+$GroupInfo['ID']=$gruresult_array['id'];
 if(!is_numeric($GroupInfo['ID'])) { $GruError = true; }
-$GroupInfo['Name']=$gruresult_array["Name"];
-$GroupInfo['PermissionID']=$mempreresult_array["PermissionID"];
+$GroupInfo['Name']=$gruresult_array['Name'];
+$GroupInfo['PermissionID']=$mempreresult_array['PermissionID'];
 if(!is_numeric($GroupInfo['PermissionID'])||$GroupInfo['PermissionID']=="0") {
-$GroupInfo['PermissionID']=$gruresult_array["PermissionID"];
+$GroupInfo['PermissionID']=$gruresult_array['PermissionID'];
 if(!is_numeric($GroupInfo['PermissionID'])) { $GruError = true; } }
-$GroupInfo['NamePrefix']=$gruresult_array["NamePrefix"];
-$GroupInfo['NameSuffix']=$gruresult_array["NameSuffix"];
-$GroupInfo['CanViewBoard']=$mempreresult_array["CanViewBoard"];
+$GroupInfo['NamePrefix']=$gruresult_array['NamePrefix'];
+$GroupInfo['NameSuffix']=$gruresult_array['NameSuffix'];
+$GroupInfo['CanViewBoard']=$mempreresult_array['CanViewBoard'];
 if($GroupInfo['CanViewBoard']!="yes"&&$GroupInfo['CanViewBoard']!="no"&&$GroupInfo['CanViewBoard']!="group") {
 		$GruError = true; }
 if($GroupInfo['CanViewBoard']=="group") {
-$GroupInfo['CanViewBoard']=$gruresult_array["CanViewBoard"];
+$GroupInfo['CanViewBoard']=$gruresult_array['CanViewBoard'];
 if($GroupInfo['CanViewBoard']!="yes"&&$GroupInfo['CanViewBoard']!="no") {
 		$GruError = true; } }
-$GroupInfo['CanViewOffLine']=$mempreresult_array["CanViewOffLine"];
+$GroupInfo['CanViewOffLine']=$mempreresult_array['CanViewOffLine'];
 if($GroupInfo['CanViewOffLine']!="yes"&&$GroupInfo['CanViewOffLine']!="no"&&$GroupInfo['CanViewOffLine']!="group") {
 		$GruError = true; }
 if($GroupInfo['CanViewOffLine']=="group") {
-$GroupInfo['CanViewOffLine']=$gruresult_array["CanViewOffLine"];
+$GroupInfo['CanViewOffLine']=$gruresult_array['CanViewOffLine'];
 if($GroupInfo['CanViewOffLine']!="yes"&&$GroupInfo['CanViewOffLine']!="no") {
 		$GruError = true; } }
-$GroupInfo['FloodControl']=$mempreresult_array["FloodControl"];
+$GroupInfo['FloodControl']=$mempreresult_array['FloodControl'];
 if(!is_numeric($GroupInfo['FloodControl'])) { $GroupInfo['FloodControl'] = 30; }
 if($GroupInfo['FloodControl']==-1) {
-$GroupInfo['FloodControl']=$gruresult_array["FloodControl"];
+$GroupInfo['FloodControl']=$gruresult_array['FloodControl'];
 if(!is_numeric($GroupInfo['FloodControl'])) { $GroupInfo['FloodControl'] = 30; } }
-$GroupInfo['SearchFlood']=$mempreresult_array["SearchFlood"];
+$GroupInfo['SearchFlood']=$mempreresult_array['SearchFlood'];
 if(!is_numeric($GroupInfo['SearchFlood'])) { $GroupInfo['SearchFlood'] = 30; }
 if($GroupInfo['SearchFlood']==-1) {
-$GroupInfo['SearchFlood']=$gruresult_array["SearchFlood"];
+$GroupInfo['SearchFlood']=$gruresult_array['SearchFlood'];
 if(!is_numeric($GroupInfo['SearchFlood'])) { $GroupInfo['SearchFlood'] = 30; } }
-$GroupInfo['CanEditProfile']=$mempreresult_array["CanEditProfile"];
+$GroupInfo['CanEditProfile']=$mempreresult_array['CanEditProfile'];
 if($GroupInfo['CanEditProfile']!="yes"&&$GroupInfo['CanEditProfile']!="no"&&$GroupInfo['CanEditProfile']!="group") {
 		$GruError = true; }
 if($GroupInfo['CanEditProfile']=="group") {
-$GroupInfo['CanEditProfile']=$gruresult_array["CanEditProfile"];
+$GroupInfo['CanEditProfile']=$gruresult_array['CanEditProfile'];
 if($GroupInfo['CanEditProfile']!="yes"&&$GroupInfo['CanEditProfile']!="no") {
 		$GruError = true; } }
-$GroupInfo['CanAddEvents']=$mempreresult_array["CanAddEvents"];
+$GroupInfo['CanAddEvents']=$mempreresult_array['CanAddEvents'];
 if($GroupInfo['CanAddEvents']!="yes"&&$GroupInfo['CanAddEvents']!="no"&&$GroupInfo['CanAddEvents']!="group") {
 		$GruError = true; }
 if($GroupInfo['CanAddEvents']=="group") {
-$GroupInfo['CanAddEvents']=$gruresult_array["CanAddEvents"];
+$GroupInfo['CanAddEvents']=$gruresult_array['CanAddEvents'];
 if($GroupInfo['CanAddEvents']!="yes"&&$GroupInfo['CanAddEvents']!="no") {
 		$GruError = true; } }
-$GroupInfo['CanPM']=$mempreresult_array["CanPM"];
+$GroupInfo['CanPM']=$mempreresult_array['CanPM'];
 if($GroupInfo['CanPM']!="yes"&&$GroupInfo['CanPM']!="no"&&$GroupInfo['CanPM']!="group") {
 		$GruError = true; }
 if($GroupInfo['CanPM']=="group") {
-$GroupInfo['CanPM']=$gruresult_array["CanPM"];
+$GroupInfo['CanPM']=$gruresult_array['CanPM'];
 if($GroupInfo['CanPM']!="yes"&&$GroupInfo['CanPM']!="no") {
 		$GruError = true; } }
-$GroupInfo['CanSearch']=$mempreresult_array["CanSearch"];
+$GroupInfo['CanSearch']=$mempreresult_array['CanSearch'];
 if($GroupInfo['CanSearch']!="yes"&&$GroupInfo['CanSearch']!="no"&&$GroupInfo['CanSearch']!="group") {
 		$GruError = true; }
 if($GroupInfo['CanSearch']=="group") {
-$GroupInfo['CanSearch']=$gruresult_array["CanSearch"];
+$GroupInfo['CanSearch']=$gruresult_array['CanSearch'];
 if($GroupInfo['CanSearch']!="yes"&&$GroupInfo['CanSearch']!="no") {
 		$GruError = true; } }
-$GroupInfo['CanExecPHP']=$mempreresult_array["CanExecPHP"];
+$GroupInfo['CanExecPHP']=$mempreresult_array['CanExecPHP'];
 if($GroupInfo['CanExecPHP']!="yes"&&$GroupInfo['CanExecPHP']!="no"&&$GroupInfo['CanExecPHP']!="group") {
 	$GroupInfo['CanExecPHP'] = "no"; }
 if($GroupInfo['CanExecPHP']=="group") {
-$GroupInfo['CanExecPHP']=$gruresult_array["CanExecPHP"];
+$GroupInfo['CanExecPHP']=$gruresult_array['CanExecPHP'];
 if($GroupInfo['CanExecPHP']!="yes"&&$GroupInfo['CanExecPHP']!="no") {
 	$GroupInfo['CanExecPHP'] = "no"; } }
-$GroupInfo['CanDoHTML']=$mempreresult_array["CanDoHTML"];
+$GroupInfo['CanDoHTML']=$mempreresult_array['CanDoHTML'];
 if($GroupInfo['CanDoHTML']!="yes"&&$GroupInfo['CanDoHTML']!="no"&&$GroupInfo['CanDoHTML']!="group") {
 	$GroupInfo['CanDoHTML'] = "no"; }
 if($GroupInfo['CanDoHTML']=="group") {
-$GroupInfo['CanDoHTML']=$gruresult_array["CanDoHTML"];
+$GroupInfo['CanDoHTML']=$gruresult_array['CanDoHTML'];
 if($GroupInfo['CanDoHTML']!="yes"&&$GroupInfo['CanDoHTML']!="no") {
 	$GroupInfo['CanDoHTML'] = "no"; } }
-$GroupInfo['CanUseBBTags']=$mempreresult_array["CanUseBBTags"];
+$GroupInfo['CanUseBBTags']=$mempreresult_array['CanUseBBTags'];
 if($GroupInfo['CanUseBBTags']!="yes"&&$GroupInfo['CanUseBBTags']!="no"&&$GroupInfo['CanUseBBTags']!="group") {
 	$GroupInfo['CanUseBBTags'] = "no"; }
 if($GroupInfo['CanUseBBTags']=="group") {
-$GroupInfo['CanUseBBTags']=$gruresult_array["CanUseBBTags"];
+$GroupInfo['CanUseBBTags']=$gruresult_array['CanUseBBTags'];
 if($GroupInfo['CanUseBBTags']!="yes"&&$GroupInfo['CanUseBBTags']!="no") {
 	$GroupInfo['CanUseBBTags'] = "no"; } }
-$GroupInfo['PromoteTo']=$gruresult_array["PromoteTo"];
-$GroupInfo['PromotePosts']=$gruresult_array["PromotePosts"];
+$GroupInfo['PromoteTo']=$gruresult_array['PromoteTo'];
+$GroupInfo['PromotePosts']=$gruresult_array['PromotePosts'];
 if(!is_numeric($GroupInfo['PromotePosts'])) { 
 	$GroupInfo['PromotePosts'] = 0; $GroupInfo['PromoteTo'] = 0; }
-$GroupInfo['PromoteKarma']=$gruresult_array["PromoteKarma"];
+$GroupInfo['PromoteKarma']=$gruresult_array['PromoteKarma'];
 if(!is_numeric($GroupInfo['PromoteKarma'])) { 
 	$GroupInfo['PromoteKarma'] = 0; $GroupInfo['PromoteTo'] = 0; }
-$GroupInfo['DemoteTo']=$gruresult_array["DemoteTo"];
-$GroupInfo['DemotePosts']=$gruresult_array["DemotePosts"];
+$GroupInfo['DemoteTo']=$gruresult_array['DemoteTo'];
+$GroupInfo['DemotePosts']=$gruresult_array['DemotePosts'];
 if(!is_numeric($GroupInfo['DemotePosts'])) { 
 	$GroupInfo['DemotePosts'] = 0; $GroupInfo['DemoteTo'] = 0; }
-$GroupInfo['DemoteKarma']=$gruresult_array["DemoteKarma"];
+$GroupInfo['DemoteKarma']=$gruresult_array['DemoteKarma'];
 if(!is_numeric($GroupInfo['DemoteKarma'])) { 
 	$GroupInfo['DemoteKarma'] = 0; $GroupInfo['DemoteTo'] = 0; }
 if(!isset($Settings['KarmaBoostDays'])) {
@@ -428,46 +428,46 @@ if($GroupInfo['DemoteTo']!=0&&$MyPostCountChk<=$GroupInfo['DemotePosts']&&$MyKar
 	if($group_check > 0) {
 	$queryupgrade = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"GroupID\"=%i WHERE \"id\"=%i", array($GroupInfo['DemoteTo'],$_SESSION['UserID']));
 	sql_query($queryupgrade,$SQLStat); } } }
-$GroupInfo['HasModCP']=$mempreresult_array["HasModCP"];
+$GroupInfo['HasModCP']=$mempreresult_array['HasModCP'];
 if($GroupInfo['HasModCP']!="yes"&&$GroupInfo['HasModCP']!="no"&&$GroupInfo['HasModCP']!="group") {
 	$GroupInfo['HasModCP'] = "no"; }
 if($GroupInfo['HasModCP']=="group") {
-$GroupInfo['HasModCP']=$gruresult_array["HasModCP"];
+$GroupInfo['HasModCP']=$gruresult_array['HasModCP'];
 if($GroupInfo['HasModCP']!="yes"&&$GroupInfo['HasModCP']!="no") {
 	$GroupInfo['HasModCP'] = "no"; } }
-$GroupInfo['HasAdminCP']=$mempreresult_array["HasAdminCP"];
+$GroupInfo['HasAdminCP']=$mempreresult_array['HasAdminCP'];
 if($GroupInfo['HasAdminCP']!="yes"&&$GroupInfo['HasAdminCP']!="no"&&$GroupInfo['HasAdminCP']!="group") {
 	$GroupInfo['HasAdminCP'] = "no"; }
 if($GroupInfo['HasAdminCP']=="group") {
-$GroupInfo['HasAdminCP']=$gruresult_array["HasAdminCP"];
+$GroupInfo['HasAdminCP']=$gruresult_array['HasAdminCP'];
 if($GroupInfo['HasAdminCP']!="yes"&&$GroupInfo['HasAdminCP']!="no") {
 	$GroupInfo['HasAdminCP'] = "no"; } }
-$GroupInfo['CanViewIPAddress']=$mempreresult_array["CanViewIPAddress"];
+$GroupInfo['CanViewIPAddress']=$mempreresult_array['CanViewIPAddress'];
 if($GroupInfo['CanViewIPAddress']!="yes"&&$GroupInfo['CanViewIPAddress']!="no"&&$GroupInfo['CanViewIPAddress']!="group") {
 	$GroupInfo['CanViewIPAddress'] = "no"; }
 if($GroupInfo['CanViewIPAddress']=="group") {
-$GroupInfo['CanViewIPAddress']=$gruresult_array["CanViewIPAddress"];
+$GroupInfo['CanViewIPAddress']=$gruresult_array['CanViewIPAddress'];
 if($GroupInfo['CanViewIPAddress']!="yes"&&$GroupInfo['CanViewIPAddress']!="no") {
 	$GroupInfo['CanViewIPAddress'] = "no"; } }
-$GroupInfo['CanViewUserAgent']=$mempreresult_array["CanViewUserAgent"];
+$GroupInfo['CanViewUserAgent']=$mempreresult_array['CanViewUserAgent'];
 if($GroupInfo['CanViewUserAgent']!="yes"&&$GroupInfo['CanViewUserAgent']!="no"&&$GroupInfo['CanViewUserAgent']!="group") {
 	$GroupInfo['CanViewUserAgent'] = "no"; }
 if($GroupInfo['CanViewUserAgent']=="group") {
-$GroupInfo['CanViewUserAgent']=$gruresult_array["CanViewUserAgent"];
+$GroupInfo['CanViewUserAgent']=$gruresult_array['CanViewUserAgent'];
 if($GroupInfo['CanViewUserAgent']!="yes"&&$GroupInfo['CanViewUserAgent']!="no") {
 	$GroupInfo['CanViewUserAgent'] = "no"; } }
-$GroupInfo['CanViewAnonymous']=$mempreresult_array["CanViewAnonymous"];
+$GroupInfo['CanViewAnonymous']=$mempreresult_array['CanViewAnonymous'];
 if($GroupInfo['CanViewAnonymous']!="yes"&&$GroupInfo['CanViewAnonymous']!="no"&&$GroupInfo['CanViewAnonymous']!="group") {
 	$GroupInfo['CanViewAnonymous'] = "no"; }
 if($GroupInfo['CanViewAnonymous']=="group") {
-$GroupInfo['CanViewAnonymous']=$gruresult_array["CanViewAnonymous"];
+$GroupInfo['CanViewAnonymous']=$gruresult_array['CanViewAnonymous'];
 if($GroupInfo['CanViewAnonymous']!="yes"&&$GroupInfo['CanViewAnonymous']!="no") {
 	$GroupInfo['CanViewAnonymous'] = "no"; } }
-$GroupInfo['ViewDBInfo']=$mempreresult_array["ViewDBInfo"];
+$GroupInfo['ViewDBInfo']=$mempreresult_array['ViewDBInfo'];
 if($GroupInfo['ViewDBInfo']!="yes"&&$GroupInfo['ViewDBInfo']!="no"&&$GroupInfo['ViewDBInfo']!="group") {
 	$GroupInfo['ViewDBInfo'] = "no"; }
 if($GroupInfo['ViewDBInfo']=="group") {
-$GroupInfo['ViewDBInfo']=$gruresult_array["ViewDBInfo"]; 
+$GroupInfo['ViewDBInfo']=$gruresult_array['ViewDBInfo']; 
 if($GroupInfo['ViewDBInfo']!="yes"&&$GroupInfo['ViewDBInfo']!="no") {
 	$GroupInfo['ViewDBInfo'] = "no"; } }
 if($GruError==true) {
@@ -498,16 +498,16 @@ $ModForumIgnoreList1 = null; $ModForumIgnoreList2 = null;
 $ModForumIgnoreList3 = null; $ModForumIgnoreList4 = null;
 if($pernum>=1) { while ($peri < $pernum) {
 $peresult_array = sql_fetch_assoc($peresult);
-$PerForumID=$peresult_array["ForumID"];
+$PerForumID=$peresult_array['ForumID'];
 if(!is_numeric($PerForumID)) { $PerError = true; }
-$PermissionInfo['ID'][$PerForumID]=$peresult_array["id"];
+$PermissionInfo['ID'][$PerForumID]=$peresult_array['id'];
 if(!is_numeric($PermissionInfo['ID'][$PerForumID])) { $PerError = true; }
-$PermissionInfo['PermissionID'][$PerForumID]=$peresult_array["PermissionID"];
+$PermissionInfo['PermissionID'][$PerForumID]=$peresult_array['PermissionID'];
 if(!is_numeric($PermissionInfo['PermissionID'][$PerForumID])) { $PerError = true; }
-$PermissionInfo['Name'][$PerForumID]=$peresult_array["Name"];
-$PermissionInfo['ForumID'][$PerForumID]=$peresult_array["ForumID"];
+$PermissionInfo['Name'][$PerForumID]=$peresult_array['Name'];
+$PermissionInfo['ForumID'][$PerForumID]=$peresult_array['ForumID'];
 if(!is_numeric($PermissionInfo['ForumID'][$PerForumID])) { $PerError = true; }
-$PermissionInfo['CanViewForum'][$PerForumID]=$peresult_array["CanViewForum"];
+$PermissionInfo['CanViewForum'][$PerForumID]=$peresult_array['CanViewForum'];
 if($PermissionInfo['CanViewForum'][$PerForumID]!="yes"&&$PermissionInfo['CanViewForum'][$PerForumID]!="no") {
 		$PerError = true; }
 if($PermissionInfo['CanViewForum'][$PerForumID]=="no") {
@@ -523,61 +523,61 @@ if(strlen($ForumIgnoreList5)>1) { $ForumIgnoreList5 .= " AND \"OldForumID\"<>".$
 if(strlen($ForumIgnoreList5)<1) { $ForumIgnoreList5 = " WHERE \"OldForumID\"<>".$PerForumID; }
 if(strlen($ForumIgnoreList6)>1) { $ForumIgnoreList6 .= " AND \"OldForumID\"<>".$PerForumID; }
 if(strlen($ForumIgnoreList6)<1) { $ForumIgnoreList6 = " AND \"OldForumID\"<>".$PerForumID; } }
-$PermissionInfo['CanMakePolls'][$PerForumID]=$peresult_array["CanMakePolls"];
+$PermissionInfo['CanMakePolls'][$PerForumID]=$peresult_array['CanMakePolls'];
 if($PermissionInfo['CanMakePolls'][$PerForumID]!="yes"&&$PermissionInfo['CanMakePolls'][$PerForumID]!="no") {
 		$PerError = true; }
-$PermissionInfo['CanMakeTopics'][$PerForumID]=$peresult_array["CanMakeTopics"];
+$PermissionInfo['CanMakeTopics'][$PerForumID]=$peresult_array['CanMakeTopics'];
 if($PermissionInfo['CanMakeTopics'][$PerForumID]!="yes"&&$PermissionInfo['CanMakeTopics'][$PerForumID]!="no") {
 		$PerError = true; }
-$PermissionInfo['CanMakeReplys'][$PerForumID]=$peresult_array["CanMakeReplys"];
+$PermissionInfo['CanMakeReplys'][$PerForumID]=$peresult_array['CanMakeReplys'];
 if($PermissionInfo['CanMakeReplys'][$PerForumID]!="yes"&&$PermissionInfo['CanMakeReplys'][$PerForumID]!="no") {
 		$PerError = true; }
-$PermissionInfo['CanMakeReplysClose'][$PerForumID]=$peresult_array["CanMakeReplysCT"];
+$PermissionInfo['CanMakeReplysClose'][$PerForumID]=$peresult_array['CanMakeReplysCT'];
 if($PermissionInfo['CanMakeReplysClose'][$PerForumID]!="yes"&&$PermissionInfo['CanMakeReplysClose'][$PerForumID]!="no") {
 		$PerError = true; }
-$PermissionInfo['CanEditTopics'][$PerForumID]=$peresult_array["CanEditTopics"];
+$PermissionInfo['CanEditTopics'][$PerForumID]=$peresult_array['CanEditTopics'];
 if($PermissionInfo['CanEditTopics'][$PerForumID]!="yes"&&$PermissionInfo['CanEditTopics'][$PerForumID]!="no") {
 	$PermissionInfo['CanEditTopics'][$PerForumID] = "no"; }
-$PermissionInfo['CanEditTopicsClose'][$PerForumID]=$peresult_array["CanEditTopicsCT"];
+$PermissionInfo['CanEditTopicsClose'][$PerForumID]=$peresult_array['CanEditTopicsCT'];
 if($PermissionInfo['CanEditTopicsClose'][$PerForumID]!="yes"&&$PermissionInfo['CanEditTopicsClose'][$PerForumID]!="no") {
 	$PermissionInfo['CanEditTopicsClose'][$PerForumID] = "no"; }
-$PermissionInfo['CanEditReplys'][$PerForumID]=$peresult_array["CanEditReplys"];
+$PermissionInfo['CanEditReplys'][$PerForumID]=$peresult_array['CanEditReplys'];
 if($PermissionInfo['CanEditReplys'][$PerForumID]!="yes"&&$PermissionInfo['CanEditReplys'][$PerForumID]!="no") {
 	$PermissionInfo['CanEditReplys'][$PerForumID] = "no"; }
-$PermissionInfo['CanEditReplysClose'][$PerForumID]=$peresult_array["CanEditReplysCT"];
+$PermissionInfo['CanEditReplysClose'][$PerForumID]=$peresult_array['CanEditReplysCT'];
 if($PermissionInfo['CanEditReplysClose'][$PerForumID]!="yes"&&$PermissionInfo['CanEditReplysClose'][$PerForumID]!="no") {
 	$PermissionInfo['CanEditReplysClose'][$PerForumID] = "no"; }
-$PermissionInfo['CanDeleteTopics'][$PerForumID]=$peresult_array["CanDeleteTopics"];
+$PermissionInfo['CanDeleteTopics'][$PerForumID]=$peresult_array['CanDeleteTopics'];
 if($PermissionInfo['CanDeleteTopics'][$PerForumID]!="yes"&&$PermissionInfo['CanDeleteTopics'][$PerForumID]!="no") {
 	$PermissionInfo['CanDeleteTopics'][$PerForumID] = "no"; }
-$PermissionInfo['CanDeleteTopicsClose'][$PerForumID]=$peresult_array["CanDeleteTopicsCT"];
+$PermissionInfo['CanDeleteTopicsClose'][$PerForumID]=$peresult_array['CanDeleteTopicsCT'];
 if($PermissionInfo['CanDeleteTopicsClose'][$PerForumID]!="yes"&&$PermissionInfo['CanDeleteTopicsClose'][$PerForumID]!="no") {
 	$PermissionInfo['CanDeleteTopicsClose'][$PerForumID] = "no"; }
-$PermissionInfo['CanDeleteReplys'][$PerForumID]=$peresult_array["CanDeleteReplys"];
+$PermissionInfo['CanDeleteReplys'][$PerForumID]=$peresult_array['CanDeleteReplys'];
 if($PermissionInfo['CanDeleteReplys'][$PerForumID]!="yes"&&$PermissionInfo['CanDeleteReplys'][$PerForumID]!="no") {
 	$PermissionInfo['CanDeleteReplys'][$PerForumID] = "no"; }
-$PermissionInfo['CanDeleteReplysClose'][$PerForumID]=$peresult_array["CanDeleteReplysCT"];
+$PermissionInfo['CanDeleteReplysClose'][$PerForumID]=$peresult_array['CanDeleteReplysCT'];
 if($PermissionInfo['CanDeleteReplysClose'][$PerForumID]!="yes"&&$PermissionInfo['CanDeleteReplysClose'][$PerForumID]!="no") {
 	$PermissionInfo['CanDeleteReplysClose'][$PerForumID] = "no"; }
-$PermissionInfo['CanCloseTopics'][$PerForumID]=$peresult_array["CanCloseTopics"];
+$PermissionInfo['CanCloseTopics'][$PerForumID]=$peresult_array['CanCloseTopics'];
 if($PermissionInfo['CanCloseTopics'][$PerForumID]!="yes"&&$PermissionInfo['CanCloseTopics'][$PerForumID]!="no") {
 	$PermissionInfo['CanCloseTopics'][$PerForumID] = "no"; }
-$PermissionInfo['CanCloseTopicsCT'][$PerForumID]=$peresult_array["CanCloseTopicsCT"];
+$PermissionInfo['CanCloseTopicsCT'][$PerForumID]=$peresult_array['CanCloseTopicsCT'];
 if($PermissionInfo['CanCloseTopicsCT'][$PerForumID]!="yes"&&$PermissionInfo['CanCloseTopicsCT'][$PerForumID]!="no") {
 	$PermissionInfo['CanCloseTopicsCT'][$PerForumID] = "no"; }
-$PermissionInfo['CanPinTopics'][$PerForumID]=$peresult_array["CanPinTopics"];
+$PermissionInfo['CanPinTopics'][$PerForumID]=$peresult_array['CanPinTopics'];
 if($PermissionInfo['CanPinTopics'][$PerForumID]!="yes"&&$PermissionInfo['CanPinTopics'][$PerForumID]!="no") {
 	$PermissionInfo['CanPinTopics'][$PerForumID] = "no"; }
-$PermissionInfo['CanPinTopicsCT'][$PerForumID]=$peresult_array["CanPinTopicsCT"];
+$PermissionInfo['CanPinTopicsCT'][$PerForumID]=$peresult_array['CanPinTopicsCT'];
 if($PermissionInfo['CanPinTopicsCT'][$PerForumID]!="yes"&&$PermissionInfo['CanPinTopicsCT'][$PerForumID]!="no") {
 	$PermissionInfo['CanPinTopicsCT'][$PerForumID] = "no"; }
-$PermissionInfo['CanDoHTML'][$PerForumID]=$peresult_array["CanDoHTML"];
+$PermissionInfo['CanDoHTML'][$PerForumID]=$peresult_array['CanDoHTML'];
 if($PermissionInfo['CanDoHTML'][$PerForumID]!="yes"&&$PermissionInfo['CanDoHTML'][$PerForumID]!="no") {
 	$PermissionInfo['CanDoHTML'][$PerForumID] = "no"; }
-$PermissionInfo['CanUseBBTags'][$PerForumID]=$peresult_array["CanUseBBTags"];
+$PermissionInfo['CanUseBBTags'][$PerForumID]=$peresult_array['CanUseBBTags'];
 if($PermissionInfo['CanUseBBTags'][$PerForumID]!="yes"&&$PermissionInfo['CanUseBBTags'][$PerForumID]!="no") {
 	$PermissionInfo['CanUseBBTags'][$PerForumID] = "no"; }
-$PermissionInfo['CanModForum'][$PerForumID]=$peresult_array["CanModForum"];
+$PermissionInfo['CanModForum'][$PerForumID]=$peresult_array['CanModForum'];
 if($PermissionInfo['CanModForum'][$PerForumID]!="yes"&&$PermissionInfo['CanModForum'][$PerForumID]!="no") {
 	$PermissionInfo['CanModForum'][$PerForumID] = "no"; }
 if($PermissionInfo['CanModForum'][$PerForumID]=="no") {
@@ -612,16 +612,16 @@ $CatIgnoreList3 = null; $CatIgnoreList4 = null;
 $CatIgnoreList5 = null; $CatIgnoreList6 = null;
 if($per2num>=1) { while ($per2i < $per2num) {
 $per2esult_array = sql_fetch_assoc($per2esult);
-$PerCatID=$per2esult_array["CategoryID"];
+$PerCatID=$per2esult_array['CategoryID'];
 if(!is_numeric($PerCatID)) { $Per2Error = true; }
-$CatPermissionInfo['ID'][$PerCatID]=$per2esult_array["id"];
+$CatPermissionInfo['ID'][$PerCatID]=$per2esult_array['id'];
 if(!is_numeric($CatPermissionInfo['ID'][$PerCatID])) { $Per2Error = true; }
-$CatPermissionInfo['PermissionID'][$PerCatID]=$per2esult_array["PermissionID"];
+$CatPermissionInfo['PermissionID'][$PerCatID]=$per2esult_array['PermissionID'];
 if(!is_numeric($CatPermissionInfo['PermissionID'][$PerCatID])) { $Per2Error = true; }
-$CatPermissionInfo['Name'][$PerCatID]=$per2esult_array["Name"];
-$CatPermissionInfo['CategoryID'][$PerCatID]=$per2esult_array["CategoryID"];
+$CatPermissionInfo['Name'][$PerCatID]=$per2esult_array['Name'];
+$CatPermissionInfo['CategoryID'][$PerCatID]=$per2esult_array['CategoryID'];
 if(!is_numeric($CatPermissionInfo['CategoryID'][$PerCatID])) { $Per2Error = true; }
-$CatPermissionInfo['CanViewCategory'][$PerCatID]=$per2esult_array["CanViewCategory"];
+$CatPermissionInfo['CanViewCategory'][$PerCatID]=$per2esult_array['CanViewCategory'];
 if($CatPermissionInfo['CanViewCategory'][$PerCatID]!="yes"&&$CatPermissionInfo['CanViewCategory'][$PerCatID]!="no") { $Per2Error = true; }
 if($CatPermissionInfo['CanViewCategory'][$PerCatID]=="no") {
 if(strlen($CatIgnoreList1)>1) { $CatIgnoreList1 .= " AND \"id\"<>".$PerCatID; }

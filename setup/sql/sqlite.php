@@ -445,6 +445,7 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."sessions\" (\n".
 "  \"session_data\" TEXT NOT NULL,\n".
 "  \"serialized_data\" TEXT NOT NULL,\n".
 "  \"user_agent\" TEXT NOT NULL,\n".
+"  \"client_hints\" TEXT NOT NULL,\n".
 "  \"ip_address\" VARCHAR(64) NOT NULL default '',\n".
 "  \"expires\" INTEGER NOT NULL default '0'\n".
 ");", null);
