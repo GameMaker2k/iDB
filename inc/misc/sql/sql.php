@@ -96,8 +96,14 @@ if (file_exists($SettDir['sql'] . "pdo_mysql.php")) {
 if (file_exists($SettDir['sql'] . "mysqli.php")) {
     require($SettDir['sql'] . "mysqli.php");
 }
+if (file_exists($SettDir['sql'] . "mysqli_prepare.php")) {
+    require($SettDir['sql'] . "mysqli_prepare.php");
+}
 if (file_exists($SettDir['sql'] . "pgsql.php")) {
     require($SettDir['sql'] . "pgsql.php");
+}
+if (file_exists($SettDir['sql'] . "pgsql_prepare.php")) {
+    require($SettDir['sql'] . "pgsql_prepare.php");
 }
 if(file_exists($SettDir['sql']."pdo_pgsql.php")) {
     require($SettDir['sql']."pdo_pgsql.php");
@@ -108,11 +114,17 @@ if (file_exists($SettDir['sql'] . "sqlite.php")) {
 if (file_exists($SettDir['sql'] . "sqlite3.php")) {
     require($SettDir['sql'] . "sqlite3.php");
 }
+if (file_exists($SettDir['sql'] . "sqlite3_prepare.php")) {
+    require($SettDir['sql'] . "sqlite3_prepare.php");
+}
 if (file_exists($SettDir['sql'] . "pdo_sqlite3.php")) {
     require($SettDir['sql'] . "pdo_sqlite3.php");
 }
 if (file_exists($SettDir['sql'] . "cubrid.php")) {
     require($SettDir['sql'] . "cubrid.php");
+}
+if (file_exists($SettDir['sql'] . "cubrid_prepare.php")) {
+    require($SettDir['sql'] . "cubrid_prepare.php");
 }
 if(file_exists($SettDir['sql']."pdo_cubrid.php")) {
     require($SettDir['sql']."pdo_cubrid.php");

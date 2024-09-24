@@ -146,7 +146,6 @@ function sqlite3_func_escape_string($string, $link = null) {
 // Make SQL Query's safe
 // SafeSQL Lite with additional SafeSQL features
 function sqlite3_func_pre_query($query_string, $query_vars) {
-	echo "<pre>"; var_dump($query_string, $query_vars); echo "</pre>";
     // If no query variables are provided, initialize with a single element array containing null
     if ($query_vars == null) {
         $query_vars = array(null);

@@ -1,0 +1,250 @@
+<?php
+/*
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the Revised BSD License.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    Revised BSD License for more details.
+
+    Copyright 2004-2024 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
+    Copyright 2004-2024 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
+
+    $FileInfo: mysqli_prepare.php - Last Update: 8/30/2024 SVN 1063 - Author: cooldude2k $
+*/
+
+$File3Name = basename($_SERVER['SCRIPT_NAME']);
+if ($File3Name == "mysqli_prepare.php" || $File3Name == "/mysqli_prepare.php") {
+    @header('Location: index.php');
+    exit();
+}
+
+// MySQLi Error handling functions
+function mysqli_prepare_func_error($link = null) {
+    global $SQLStat;
+    return isset($link) ? mysqli_error($link) : mysqli_error($SQLStat);
+}
+
+function mysqli_prepare_func_errno($link = null) {
+    global $SQLStat;
+    return isset($link) ? mysqli_errno($link) : mysqli_errno($SQLStat);
+}
+
+function mysqli_prepare_func_errorno($link = null) {
+    global $SQLStat;
+    $result = isset($link) ? mysqli_prepare_func_error($link) : mysqli_prepare_func_error();
+    $resultno = isset($link) ? mysqli_prepare_func_errno($link) : mysqli_prepare_func_errno();
+
+    return ($result == "" && $resultno === 0) ? "" : "$resultno: $result";
+}
+
+// Execute a query using prepared statements
+if (!isset($NumQueriesArray['mysqli'])) {
+    $NumQueriesArray['mysqli'] = 0;
+}
+
+function mysqli_prepare_func_query($query, $params = [], $link = null) {
+    global $NumQueriesArray, $SQLStat;
+    
+    $db = isset($link) ? $link : $SQLStat;
+
+    // Prepare the statement
+    $stmt = mysqli_prepare($db, $query);
+    if (!$stmt) {
+        output_error("SQL Error (Prepare): " . mysqli_prepare_func_error($db), E_USER_ERROR);
+        return false;
+    }
+
+    // If parameters are provided, bind them dynamically
+    if (!empty($params)) {
+        $types = '';  // Will contain parameter types (e.g., 'ssi' for string, string, integer)
+        $values = [];
+        foreach ($params as $param) {
+            if (is_int($param)) {
+                $types .= 'i';
+            } elseif (is_float($param)) {
+                $types .= 'd';
+            } elseif (is_null($param)) {
+                $types .= 's';
+                $param = null;
+            } else {
+                $types .= 's';
+            }
+            $values[] = $param;
+        }
+
+        // Bind parameters
+        mysqli_stmt_bind_param($stmt, $types, ...$values);
+    }
+
+    // Execute the prepared statement
+    if (!mysqli_stmt_execute($stmt)) {
+        output_error("SQL Error (Execution): " . mysqli_prepare_func_error($db), E_USER_ERROR);
+        return false;
+    }
+
+    ++$NumQueriesArray['mysqli'];
+
+    return $stmt;  // Return the prepared statement object
+}
+
+// Fetch number of rows for SELECT queries
+function mysqli_prepare_func_num_rows($stmt) {
+    mysqli_stmt_store_result($stmt);  // Ensure results are stored for row counting
+    $num = mysqli_stmt_num_rows($stmt);
+
+    if ($num === false) {
+        output_error("SQL Error: " . mysqli_prepare_func_error(), E_USER_ERROR);
+        return false;
+    }
+
+    return $num;
+}
+
+// Connect to MySQLi database
+function mysqli_prepare_func_connect_db($server, $username, $password, $database = null, $new_link = false) {
+    $myport = "3306";
+    $hostex = explode(":", $server);
+    
+    if (isset($hostex[1]) && !is_numeric($hostex[1])) {
+        $hostex[1] = $myport;
+    }
+    
+    if (isset($hostex[1])) {
+        $server = $hostex[0];
+        $myport = $hostex[1];
+    }
+
+    $link = $database === null ? mysqli_connect($server, $username, $password, null, $myport) : mysqli_connect($server, $username, $password, $database, $myport);
+
+    if ($link === false) {
+        output_error("MySQLi Error " . mysqli_connect_errno() . ": " . mysqli_connect_error(), E_USER_ERROR);
+        return false;
+    }
+
+    // Set MySQL session settings
+    $result = mysqli_prepare_func_query("SET SESSION SQL_MODE='ANSI,ANSI_QUOTES,TRADITIONAL,STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION,NO_AUTO_VALUE_ON_ZERO';", [], $link);
+
+    if ($result === false) {
+        output_error("SQL Error: " . mysqli_prepare_func_error(), E_USER_ERROR);
+        return false;
+    }
+
+    return $link;
+}
+
+function mysqli_prepare_func_disconnect_db($link = null) {
+    return mysqli_close($link);
+}
+
+// Query results fetching
+function mysqli_prepare_func_result($stmt, $row, $field = 0) {
+    // Fetch all rows into an array
+    mysqli_stmt_store_result($stmt);
+    $meta = mysqli_stmt_result_metadata($stmt);
+    $fields = mysqli_fetch_fields($meta);
+    $result = [];
+
+    $bindArray = [];
+    foreach ($fields as $field) {
+        $bindArray[] = &$result[$field->name];
+    }
+
+    call_user_func_array('mysqli_stmt_bind_result', array_merge([$stmt], $bindArray));
+
+    // Fetch row
+    for ($i = 0; $i <= $row; $i++) {
+        mysqli_stmt_fetch($stmt);
+    }
+
+    return $result[$fields[$field]->name] ?? null;
+}
+
+// Free results
+function mysqli_prepare_func_free_result($stmt) {
+    mysqli_stmt_free_result($stmt);
+    return true;
+}
+
+// Fetch results as associative array
+function mysqli_prepare_func_fetch_assoc($stmt) {
+    mysqli_stmt_store_result($stmt);
+    $meta = mysqli_stmt_result_metadata($stmt);
+    $fields = mysqli_fetch_fields($meta);
+    $result = [];
+
+    $bindArray = [];
+    foreach ($fields as $field) {
+        $bindArray[] = &$result[$field->name];
+    }
+
+    call_user_func_array('mysqli_stmt_bind_result', array_merge([$stmt], $bindArray));
+    mysqli_stmt_fetch($stmt);
+
+    return $result;
+}
+
+// Fetch row results as a numeric array
+function mysqli_prepare_func_fetch_row($stmt) {
+    mysqli_stmt_store_result($stmt);
+    $meta = mysqli_stmt_result_metadata($stmt);
+    $fields = mysqli_fetch_fields($meta);
+    $result = [];
+
+    $bindArray = [];
+    foreach ($fields as $field) {
+        $bindArray[] = &$result[$field->name];
+    }
+
+    call_user_func_array('mysqli_stmt_bind_result', array_merge([$stmt], $bindArray));
+    mysqli_stmt_fetch($stmt);
+
+    return array_values($result);
+}
+
+// Escape string
+function mysqli_prepare_func_escape_string($string, $link = null) {
+    global $SQLStat;
+    if (!isset($string)) return null;
+    return isset($link) ? mysqli_real_escape_string($link, $string) : mysqli_real_escape_string($SQLStat, $string);
+}
+
+// SafeSQL Lite with prepared statements and placeholders
+function mysqli_prepare_func_pre_query($query_string, $query_vars) {
+    // If no query variables are provided, initialize with a single element array containing null
+    if ($query_vars == null) {
+        $query_vars = array(null);
+    }
+
+    // Add support for multiple variable types like %c (comma-separated integers), %l (comma-separated strings), etc.
+    $query_array = array(
+        array("%i", "%I", "%F", "%S", "%c", "%l", "%q", "%n"),
+        array("?", "?", "?", "?", "?", "?", "?", "?")
+    );
+    
+    // Replace custom placeholders with ? for prepared statements
+    $query_string = str_replace($query_array[0], $query_array[1], $query_string);
+
+    return [$query_string, $query_vars];
+}
+
+// Set Charset
+function mysqli_prepare_func_set_charset($charset, $link = null) {
+    return isset($link) ? mysqli_set_charset($link, $charset) : mysqli_set_charset(null, $charset);
+}
+
+// Get next ID after an insert
+function mysqli_prepare_func_get_next_id($link = null) {
+    return mysqli_insert_id($link);
+}
+
+// Fetch number of rows using COUNT in a single query
+function mysqli_prepare_func_count_rows($query, $params = [], $link = null) {
+    $stmt = mysqli_prepare_func_query($query, $params, $link);
+    $result = mysqli_prepare_func_result($stmt, 0);
+    mysqli_prepare_func_free_result($stmt);
+    return $result;
+}
+
+?>
