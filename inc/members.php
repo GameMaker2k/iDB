@@ -538,7 +538,7 @@ $ViewSessMem['IP']=$sess_result_array['IP'];
 $gsess_query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i LIMIT 1", array($ViewSessMem['GroupID']));
 $gsess_result=sql_query($gsess_query,$SQLStat);
 $gsess_result_array = sql_fetch_assoc($gsess_result);
-$ViewSessMem['Group']=gsess_result_array["Name"];
+$ViewSessMem['Group']=$sess_result_array['Name'];
 $PreAmIHiddenUser = GetUserName($UserSessInfo['UserID'],$Settings['sqltable'],$SQLStat);
 $AmIHiddenUser = $PreAmIHiddenUser['Hidden']; }
 if(!isset($AmIHiddenUser)) { $AmIHiddenUser = "no"; }

@@ -49,8 +49,15 @@ function mysqli_prepare_func_query($query, $params = [], $link = null) {
     
     $db = isset($link) ? $link : $SQLStat;
 
+    // If the query is provided as an array (query string and parameters)
+    if (is_array($query)) {
+        list($query_string, $params) = $query;
+    } else {
+        $query_string = $query;
+    }
+
     // Prepare the statement
-    $stmt = mysqli_prepare($db, $query);
+    $stmt = mysqli_prepare($db, $query_string);
     if (!$stmt) {
         output_error("SQL Error (Prepare): " . mysqli_prepare_func_error($db), E_USER_ERROR);
         return false;

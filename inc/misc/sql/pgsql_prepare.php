@@ -46,9 +46,16 @@ function pgsql_prepare_func_query($query, $params = [], $link = null) {
     
     $connection = isset($link) ? $link : $SQLStat;
     
+    // If the query is provided as an array (query string and parameters)
+    if (is_array($query)) {
+        list($query_string, $params) = $query;
+    } else {
+        $query_string = $query;
+    }
+
     // Prepare a statement with a unique name
-    $stmt_name = md5($query); // Generate a unique statement name based on the query
-    $prepare = pg_prepare($connection, $stmt_name, $query);
+    $stmt_name = md5($query_string); // Generate a unique statement name based on the query
+    $prepare = pg_prepare($connection, $stmt_name, $query_string);
     
     if ($prepare === false) {
         output_error("SQL Prepare Error: " . pgsql_prepare_func_error($connection), E_USER_ERROR);

@@ -27,31 +27,23 @@ if(!isset($Error)) { $Error = null; }
 if(!isset($passright)) { $passright = null; }
 $SQLimit = null;
 if(!isset($Settings['sqltype'])) {
-	$Settings['sqltype'] = "mysql"; }
+	$Settings['sqltype'] = "mysqli"; }
 $Settings['sqltype'] = strtolower($Settings['sqltype']);
 if($Settings['sqltype']!="mysql"&&
 	$Settings['sqltype']!="mysqli"&&
+	$Settings['sqltype']!="mysqli_prepare"&&
 	$Settings['sqltype']!="pdo_mysql"&&
 	$Settings['sqltype']!="pgsql"&&
+	$Settings['sqltype']!="pgsql_prepare"&&
 	$Settings['sqltype']!="pdo_pgsql"&&
 	$Settings['sqltype']!="sqlite"&&
 	$Settings['sqltype']!="sqlite3"&&
+	$Settings['sqltype']!="sqlite3_prepare"&&
 	$Settings['sqltype']!="pdo_sqlite3"&&
 	$Settings['sqltype']!="cubrid"&&
+	$Settings['sqltype']!="cubrid_prepare"&&
 	$Settings['sqltype']!="pdo_cubrid") {
-	$Settings['sqltype'] = "mysql"; }
-/*if($Settings['sqltype']=="mysql"||
-	$Settings['sqltype']=="mysqli"||
-	$Settings['sqltype']=="pdo_mysql"||
-	$Settings['sqltype']=="sqlite"||
-	$Settings['sqltype']=="sqlite3"||
-	$Settings['sqltype']=="pdo_sqlite3"||
-	$Settings['sqltype']=="cubrid"||
-	$Settings['sqltype']=="pdo_cubrid") {
-	$SQLimit = "LIMIT %i,%i"; }
-if($Settings['sqltype']=="pgsql"||
-	$Settings['sqltype']=="pdo_pgsql") {
-	$SQLimit = "OFFSET %i LIMIT %i"; }*/
+	$Settings['sqltype'] = "mysqli"; }
 if(!isset($Settings['enable_pathinfo'])) {
   $Settings['enable_pathinfo'] = "off";  }
 if($Settings['enable_pathinfo']!="on"&&

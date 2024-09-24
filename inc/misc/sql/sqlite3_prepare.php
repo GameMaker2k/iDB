@@ -47,14 +47,23 @@ function sqlite3_prepare_func_query($query, $params = [], $link = null) {
     global $NumQueriesArray, $SQLStat;
     $db = isset($link) ? $link : $SQLStat;
 
-    $stmt = $db->prepare($query);
+    // If the query is an array (query and parameters), extract them
+    if (is_array($query)) {
+        list($query_string, $params) = $query;
+    } else {
+        $query_string = $query;
+    }
+
+    // Prepare the query
+    $stmt = $db->prepare($query_string);
     if (!$stmt) {
         output_error("SQL Error (Prepare): " . sqlite3_prepare_func_error($db), E_USER_ERROR);
         return false;
     }
 
+    // Bind parameters dynamically
     foreach ($params as $key => $value) {
-        $paramKey = is_int($key) ? $key + 1 : ':' . $key;
+        $paramKey = is_int($key) ? $key + 1 : ':' . $key; // Positional vs named placeholders
         if (is_int($value)) {
             $stmt->bindValue($paramKey, $value, SQLITE3_INTEGER);
         } elseif (is_float($value)) {
@@ -66,6 +75,7 @@ function sqlite3_prepare_func_query($query, $params = [], $link = null) {
         }
     }
 
+    // Execute the query
     $result = $stmt->execute();
     if ($result === false) {
         output_error("SQL Error (Execution): " . sqlite3_prepare_func_error($db), E_USER_ERROR);

@@ -39,29 +39,39 @@ if (!isset($NumQueriesArray['cubrid'])) {
 
 function cubrid_prepare_func_query($query, $params = [], $link = null) {
     global $NumQueriesArray, $SQLStat;
-    $stmt = isset($link) ? cubrid_prepare($link, $query) : cubrid_prepare($SQLStat, $query);
+    $db = isset($link) ? $link : $SQLStat;
 
+    // Check if the query is an array (query string and parameters)
+    if (is_array($query)) {
+        list($query_string, $params) = $query;
+    } else {
+        $query_string = $query;
+    }
+
+    // Prepare the query
+    $stmt = cubrid_prepare($db, $query_string);
     if ($stmt === false) {
-        output_error("SQL Error: " . cubrid_prepare_func_error(), E_USER_ERROR);
+        output_error("SQL Error (Prepare): " . cubrid_prepare_func_error(), E_USER_ERROR);
         return false;
     }
 
-    // Bind parameters dynamically based on their types
+    // Bind parameters dynamically
     foreach ($params as $key => $value) {
+        $paramKey = $key + 1; // CUBRID uses 1-based indexing for bind parameters
         if (is_int($value)) {
-            cubrid_bind($stmt, $key + 1, $value, CUBRID_INTEGER);
+            cubrid_bind($stmt, $paramKey, $value, CUBRID_INTEGER);
         } elseif (is_bool($value)) {
-            cubrid_bind($stmt, $key + 1, $value, CUBRID_BOOL);
+            cubrid_bind($stmt, $paramKey, $value, CUBRID_BOOL);
         } elseif (is_null($value)) {
-            cubrid_bind($stmt, $key + 1, $value, CUBRID_NULL);
+            cubrid_bind($stmt, $paramKey, $value, CUBRID_NULL);
         } else {
-            cubrid_bind($stmt, $key + 1, $value, CUBRID_STRING);
+            cubrid_bind($stmt, $paramKey, $value, CUBRID_STRING);
         }
     }
 
-    // Execute the statement
+    // Execute the query
     if (!cubrid_execute($stmt)) {
-        output_error("SQL Error: " . cubrid_prepare_func_error(), E_USER_ERROR);
+        output_error("SQL Error (Execution): " . cubrid_prepare_func_error(), E_USER_ERROR);
         return false;
     }
 

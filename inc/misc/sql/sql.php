@@ -134,14 +134,18 @@ if(file_exists($SettDir['sql']."pdo_cubrid.php")) {
 function get_sql_function_prefix($sqllib) {
     $prefixes = array(
         'mysql' => 'mysql_func',
+        'mysql_prepare' => 'mysqli_prepare_func',
         'mysqli' => 'mysqli_func',
         'pdo_mysql' => 'pdo_mysql_func',
         'pgsql' => 'pgsql_func',
+        'pgsql_prepare' => 'pgsql_prepare_func',
         'pdo_pgsql' => 'pdo_pgsql_func',
         'sqlite' => 'sqlite_func',
+        'sqlite3_prepare' => 'sqlite3_prepare_func',
         'sqlite3' => 'sqlite3_func',
         'pdo_sqlite3' => 'pdo_sqlite3_func',
         'cubrid' => 'cubrid_func',
+        'cubrid_prepare' => 'cubrid_prepare_func',
         'pdo_cubrid' => 'pdo_cubrid_func'
     );
     return isset($prefixes[$sqllib]) ? $prefixes[$sqllib] : null;

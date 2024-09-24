@@ -64,6 +64,7 @@ $session_client_hints=json_decode($uolresult_array['client_hints']);
 $session_ip_address=$uolresult_array['ip_address'];
 //$UserSessInfo = unserialize_session($session_data);
 $UserSessInfo = unserialize($serialized_data);
+if($UserSessInfo==false) { $UserSessInfo = []; }
 if(!isset($UserSessInfo['UserGroup'])) { $UserSessInfo['UserGroup'] = $Settings['GuestGroup']; }
 $AmIHiddenUser = "no";
 $user_agent_check = false;

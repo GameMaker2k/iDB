@@ -39,56 +39,46 @@ if (!isset($NumQueries)) {
 
 // Execute a query with PDO, with support for positional and named placeholders
 function pdo_sqlite3_func_query($query, $link = null) {
-    global $NumQueries, $SQLStat;
+    global $NumQueriesArray, $SQLStat;
+    $db = isset($link) ? $link : $SQLStat;
 
-    // Use the appropriate PDO connection
-    $pdo = isset($link) ? $link : $SQLStat;
-
-    // If the query is an array (with query and parameters)
+    // If the query is an array (query and parameters), extract them
     if (is_array($query)) {
         list($query_string, $params) = $query;
-        $stmt = $pdo->prepare($query_string);
-
-        // Bind parameters dynamically based on their type
-        foreach ($params as $key => $value) {
-            $paramKey = is_int($key) ? $key + 1 : $key;  // For positional keys, shift index to start at 1
-            if (is_int($value)) {
-                $stmt->bindValue($paramKey, $value, PDO::PARAM_INT);
-            } elseif (is_bool($value)) {
-                $stmt->bindValue($paramKey, $value, PDO::PARAM_BOOL);
-            } elseif (is_null($value)) {
-                $stmt->bindValue($paramKey, $value, PDO::PARAM_NULL);
-            } else {
-                $stmt->bindValue($paramKey, $value, PDO::PARAM_STR);
-            }
-        }
-
-        // Execute the prepared statement with bound parameters
-        $result = $stmt->execute();
-
-        // Error handling
-        if ($result === false) {
-            $errorInfo = $pdo->errorInfo();
-            output_error("SQL Error: " . $errorInfo[2], E_USER_ERROR);
-            return false;
-        }
-
-        ++$NumQueries;
-        return $stmt;  // Return the statement for SELECT or data-fetching queries
     } else {
-        // For direct queries without parameters
-        $result = $pdo->query($query);
-
-        // Error handling
-        if ($result === false) {
-            $errorInfo = $pdo->errorInfo();
-            output_error("SQL Error: " . $errorInfo[2], E_USER_ERROR);
-            return false;
-        }
-
-        ++$NumQueries;
-        return $result;
+        $query_string = $query;
     }
+
+    // Prepare the query
+    $stmt = $db->prepare($query_string);
+    if (!$stmt) {
+        output_error("SQL Error (Prepare): " . sqlite3_prepare_func_error($db), E_USER_ERROR);
+        return false;
+    }
+
+    // Bind parameters dynamically
+    foreach ($params as $key => $value) {
+        $paramKey = is_int($key) ? $key + 1 : ':' . $key; // Positional vs named placeholders
+        if (is_int($value)) {
+            $stmt->bindValue($paramKey, $value, SQLITE3_INTEGER);
+        } elseif (is_float($value)) {
+            $stmt->bindValue($paramKey, $value, SQLITE3_FLOAT);
+        } elseif (is_null($value)) {
+            $stmt->bindValue($paramKey, $value, SQLITE3_NULL);
+        } else {
+            $stmt->bindValue($paramKey, $value, SQLITE3_TEXT);
+        }
+    }
+
+    // Execute the query
+    $result = $stmt->execute();
+    if ($result === false) {
+        output_error("SQL Error (Execution): " . sqlite3_prepare_func_error($db), E_USER_ERROR);
+        return false;
+    }
+
+    ++$NumQueriesArray['sqlite3'];
+    return $result;
 }
 
 // Fetch number of rows for SELECT queries
