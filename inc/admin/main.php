@@ -1144,7 +1144,7 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Database Manager";
 	<td style="width: 50%;"><?php echo human_filesize(filesize($Settings['sqldb']), 2, false); ?></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><span class="TextBoxLabel">Human Readable File Size in Binary:</span></td>
-	<td style="width: 50%;"><?php echo human_filesize(filesize($Settings['sqldb']), 2, false); ?></td>
+	<td style="width: 50%;"><?php echo human_filesize(filesize($Settings['sqldb']), 2, true); ?></td>
 </tr><?php } if($Settings['sqltype']=="cubrid") { ?><tr style="text-align: left;">
 	<td style="width: 50%;"><span class="TextBoxLabel">CUBRID PHP:</span></td>
 	<td style="width: 50%;"><?php echo $DBType['PHP']; ?></td>
