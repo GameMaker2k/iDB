@@ -20,6 +20,72 @@ if ($File3Name == "sql.php" || $File3Name == "/sql.php") {
     exit();
 }
 
+// _convert_var handles additional variable types for different placeholders
+function _convert_var($var, $placeholder) {
+    switch ($placeholder) {
+        case '%i':
+        case '%I':
+            // Cast to integer
+            settype($var, 'integer');
+            return $var;
+
+        case '%f':
+        case '%F':
+            // Cast to float
+            settype($var, 'float');
+            return $var;
+
+        case '%c':
+            // Comma-separate an array of integers
+            settype($var, 'array');
+            $var = array_map('intval', $var);
+            return implode(',', $var);
+
+        case '%l':
+            // Comma-separate without quotes
+            settype($var, 'array');
+            return implode(',', $var);
+
+        case '%q':
+            // Quote-comma separate strings
+            settype($var, 'array');
+            return implode("','", $var);
+
+        case '%n':
+            // Wrap value in single quotes unless it's NULL
+            return $var === 'NULL' ? 'NULL' : $var;
+
+        default:
+            // Treat as a string (default behavior)
+            return $var;
+    }
+}
+
+// Example for dropping parts of the query based on variables
+function handle_conditional_parts(&$query_string, &$query_vars) {
+    preg_match_all('/\[(.*?)\]/', $query_string, $matches, PREG_OFFSET_CAPTURE);
+    
+    foreach ($matches[1] as $match) {
+        // Check if all placeholders inside brackets correspond to non-empty values
+        $optional_part = $match[0];
+        $bracketed_vars = [];
+        preg_match_all('/%[iIflqcn]/', $optional_part, $var_placeholders);
+
+        foreach ($var_placeholders[0] as $ph) {
+            // Find the corresponding value for the placeholder
+            $pos = array_search($ph, $query_vars);
+            if ($pos !== false && empty($query_vars[$pos])) {
+                // If a variable inside the brackets is empty, remove the whole part
+                $query_string = str_replace("[$optional_part]", '', $query_string);
+                return;
+            }
+        }
+
+        // If all variables inside the brackets are non-empty, remove only the brackets
+        $query_string = str_replace("[$optional_part]", $optional_part, $query_string);
+    }
+}
+
 $NumQueriesArray = array();
 if (file_exists($SettDir['sql'] . "mysql.php")) {
     require($SettDir['sql'] . "mysql.php");

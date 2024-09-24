@@ -50,7 +50,7 @@ if(!isset($_GET['caldate'])&&(!isset($_GET['calmonth']) && !isset($_GET['calyear
     $_GET['caldate'] = $calcurtime->format("mY"); }
 if(isset($_GET['caldate'])&&!is_numeric($_GET['caldate'])) { 
     $_GET['caldate'] = $calcurtime->format("mY"); }
-if(!isset($_GET['HighligtDay'])) { $_GET['HighligtDay'] = null; }
+if(!isset($_GET['HighlightDay'])) { $_GET['HighlightDay'] = null; }
 if(!isset($_GET['calmadd'])) { $_GET['calmadd'] = 0; }
 if(!is_numeric($_GET['calmadd'])) { $_GET['calmadd'] = 0; }
 if((!isset($_GET['calmonth']) && !isset($_GET['calyear'])) && 
@@ -229,7 +229,7 @@ $ii = 1; }
 $Extra = 'CalTableColumn3Current'; }
 else {
 $Extra = 'CalTableColumn3'; }
-if ($Day_i != $_GET['HighligtDay']) {
+if ($Day_i != $_GET['HighlightDay']) {
 if(!isset($EventsName[$Day_i])) { $EventsName[$Day_i] = null; }
 if($EventsName[$Day_i]!=null) { $EventsName[$Day_i] = "&#160;( ".$EventsName[$Day_i]." )"; }
 if ($Day_i != $MyCurDay) {

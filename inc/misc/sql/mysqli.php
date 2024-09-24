@@ -166,29 +166,45 @@ function mysqli_func_escape_string($string, $link = null) {
 
 // SafeSQL Lite Source Code by Cool Dude 2k
 // Make SQL Queries safe
+// SafeSQL Lite with additional SafeSQL features
 function mysqli_func_pre_query($query_string, $query_vars) {
+    // If no query variables are provided, initialize with a single element array containing null
     if ($query_vars == null) {
         $query_vars = array(null);
     }
 
-    $query_array = array(array("%i", "%I", "%F", "%S"), array("%d", "%d", "%f", "%s"));
+    // Add support for multiple variable types like %c (comma-separated integers), %l (comma-separated strings), etc.
+    $query_array = array(
+        array("%i", "%I", "%F", "%S", "%c", "%l", "%q", "%n"),
+        array("%d", "%d", "%f", "%s", "%s", "%s", "%s", "%s")
+    );
+    
+    // Replace custom placeholders with appropriate sprintf format specifiers
     $query_string = str_replace($query_array[0], $query_array[1], $query_string);
 
+    // Handle magic quotes if enabled (for backward compatibility with older PHP versions)
     if (get_magic_quotes_gpc()) {
         $query_vars = array_map("stripslashes", $query_vars);
     }
 
+    // Escape each variable using mysqli_func_escape_string
     $query_vars = array_map("mysqli_func_escape_string", $query_vars);
+
+    // Prepare the variables for sprintf
     $query_val = $query_vars;
     $query_num = count($query_val);
     $query_i = 0;
 
+    // Replace variables in reverse order to avoid string position issues
     while ($query_i < $query_num) {
-        $query_val[$query_i + 1] = $query_vars[$query_i];
+        $query_val[$query_i + 1] = _convert_var($query_vars[$query_i], $query_string);
         ++$query_i;
     }
 
+    // Set the first element of the array to be the query string
     $query_val[0] = $query_string;
+
+    // Use sprintf to inject the variables into the query string safely
     return call_user_func_array("sprintf", $query_val);
 }
 

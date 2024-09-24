@@ -11,7 +11,7 @@
     Copyright 2004-2024 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2024 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: versioninfo.php - Last Update: 9/18/2024 SVN 1221 - Author: cooldude2k $
+    $FileInfo: versioninfo.php - Last Update: 9/18/2024 SVN 1222 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="versioninfo.php"||$File3Name=="/versioninfo.php") {
@@ -19,15 +19,18 @@ if ($File3Name=="versioninfo.php"||$File3Name=="/versioninfo.php") {
 	exit(); }
 	$rssurlon = "off";
 // Version info stuff. :P 
-function version_info($proname,$subver,$ver,$supver,$reltype,$svnver,$showsvn) {
-	$return_var = $proname." ".$reltype." ".$subver.".".$ver.".".$supver;
-	if($showsvn===false) { $showsvn = null; }
-	if($showsvn===true) { $return_var .= " SVN ".$svnver; }
-	if($showsvn!==true&&$showsvn!==null) { $return_var .= " ".$showsvn." ".$svnver; }
-	return $return_var; }
+function version_info($proname, $subver, $ver, $supver, $reltype, $svnver, $showsvn) {
+    $return_var = "$proname $reltype $subver.$ver.$supver";
+
+    if ($showsvn) {
+        $return_var .= is_bool($showsvn) ? " SVN $svnver" : " $showsvn $svnver";
+    }
+
+    return $return_var;
+}
 // Version number and date stuff. :P
 $VER1[0] = 0; $VER1[1] = 6; $VER1[2] = 8; $VERFull[1] = $VER1[0].".".$VER1[1].".".$VER1[2];
-$VER2[0] = "Alpha"; $VER2[1] = "Al"; $VER2[2] = "SVN"; $SubVerN = 1221; $GitRevPreN = '$Id$';
+$VER2[0] = "Alpha"; $VER2[1] = "Al"; $VER2[2] = "SVN"; $SubVerN = 1222; $GitRevPreN = '$Id$';
 $GitRevN = getGitRevision($GitRevPreN);
 $SVNDay[0] = 9; $SVNDay[1] = 18; $SVNDay[2] = 2024; $SVNDay[3] = $SVNDay[0]."/".$SVNDay[1]."/".$SVNDay[2];
 $AltName = "DF2k"; $AltName2 = "DF2k"; $RName = "iDB"; $SFName = "IntDB";

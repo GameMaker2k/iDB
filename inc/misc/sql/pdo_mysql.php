@@ -49,14 +49,14 @@ function pdo_mysql_func_query($query, $link = null) {
     // Use the appropriate PDO connection
     $pdo = isset($link) ? $link : $SQLStat;
 
-    // Check if the query is an array containing the query string and parameters
+    // If the query is an array (with query and parameters)
     if (is_array($query)) {
         list($query_string, $params) = $query;
         $stmt = $pdo->prepare($query_string);
 
         // Bind parameters dynamically based on their type
         foreach ($params as $key => $value) {
-            $paramKey = is_int($key) ? $key + 1 : $key;
+            $paramKey = is_int($key) ? $key + 1 : $key;  // For positional keys, shift index to start at 1
             if (is_int($value)) {
                 $stmt->bindValue($paramKey, $value, PDO::PARAM_INT);
             } elseif (is_bool($value)) {
@@ -68,9 +68,10 @@ function pdo_mysql_func_query($query, $link = null) {
             }
         }
 
-        // Execute with bound parameters
+        // Execute the prepared statement with bound parameters
         $result = $stmt->execute();
 
+        // Error handling
         if ($result === false) {
             $errorInfo = $pdo->errorInfo();
             output_error("SQL Error: " . $errorInfo[2], E_USER_ERROR);
@@ -80,19 +81,17 @@ function pdo_mysql_func_query($query, $link = null) {
         ++$NumQueries;
         return $stmt;  // Return the statement for SELECT or data-fetching queries
     } else {
+        // For direct queries without parameters
         $result = $pdo->query($query);
 
+        // Error handling
         if ($result === false) {
             $errorInfo = $pdo->errorInfo();
             output_error("SQL Error: " . $errorInfo[2], E_USER_ERROR);
             return false;
         }
 
-        if ($result instanceof PDOStatement) {
-            ++$NumQueries;
-            return $result;
-        }
-
+        ++$NumQueries;
         return $result;
     }
 }
@@ -213,11 +212,16 @@ function pdo_mysql_func_pre_query($query_string, $query_vars = []) {
         $query_vars = [];
     }
 
+    // Handle placeholders like %s, %d, %i, %f and convert them to PDO's positional placeholders (?)
     $query_string = str_replace(["'%s'", '%d', '%i', '%f'], ['?', '?', '?', '?'], $query_string);
+
+    // If the query contains named placeholders (e.g., :name), we won't replace those
+    // Filter out null values in $query_vars array
     $query_vars = array_filter($query_vars, function ($value) {
         return $value !== null;
     });
 
+    // Check for mismatch between placeholders and variables
     $placeholder_count = substr_count($query_string, '?');
     $params_count = count($query_vars);
 
@@ -226,6 +230,7 @@ function pdo_mysql_func_pre_query($query_string, $query_vars = []) {
         return false;
     }
 
+    // Return the query string and variables for further execution
     return [$query_string, $query_vars];
 }
 
