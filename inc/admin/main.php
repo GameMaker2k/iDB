@@ -111,7 +111,7 @@ $DBType['Server'] = "MySQL ".sql_server_info($SQLStat);
 $DBType['Client'] = "MySQL ".sql_client_info($SQLStat); }
 if($Settings['sqltype']=="pgsql"||
 	$Settings['sqltype']=="pgsql_prepare"||
-	$Settings['sqltype']=="pdo_pgsql"||) {
+	$Settings['sqltype']=="pdo_pgsql") {
 $DBType['Server'] = "Postgres ".sql_server_info($SQLStat);
 $DBType['Client'] = "Postgres ".sql_client_info($SQLStat); }
 if($Settings['sqltype']=="sqlite"||
@@ -405,7 +405,7 @@ if(isset($_GET['subact']) && $_GET['subact']=="repair") {
 $OptimizeTea = sql_query(sql_pre_query("OPTIMIZE TABLE \"".$TableChCk[$ti]."\"", null),$SQLStat); }
 if($Settings['sqltype']=="cubrid"||
 	$Settings['sqltype']=="cubrid_prepare"||
-	$Settings['sqltype']=="pdo_cubrid"||) {
+	$Settings['sqltype']=="pdo_cubrid") {
 $OptimizeTea = sql_query(sql_pre_query("UPDATE STATISTICS ON \"".$TableChCk[$ti]."\"", null),$SQLStat); }
 if($Settings['sqltype']=="pgsql"||
 	$Settings['sqltype']=="pgsql_prepare"||
