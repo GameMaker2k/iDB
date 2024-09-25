@@ -256,18 +256,17 @@ function mysqli_prepare_func_get_next_id($link = null) {
 }
 
 // Fetch Number of Rows using COUNT in a single query
-function mysqli_prepare_func_count_rows_alt($query, $link = null) {
-    $get_num_result = mysqli_prepare_func_query($query, $link);
-    $ret_num_result = mysqli_prepare_func_result($get_num_result, 0, 'cnt');
-    @mysqli_prepare_func_free_result($get_num_result);
-    return $ret_num_result;
+function mysqli_prepare_func_count_rows($query, $link = null) {
+    $result = mysqli_prepare_func_query($query, $link);
+    $row = mysqli_prepare_func_result($result, 0, 'cnt');
+    @mysqli_prepare_func_free_result($result);
+    return $row;
 }
 
-// Get number of rows for a table
-function mysqli_prepare_func_get_num_rows($tablepre, $table, $link = null) {
-    $query = "SELECT COUNT(*) as cnt FROM " . $tablepre . $table;
-    $result = mysqli_prepare_func_query($query, [], $link);
-    $row = mysqli_prepare_func_fetch_assoc($result);
-    return $row['cnt'] ?? 0;
+function mysqli_prepare_func_count_rows_alt($query, $link = null) {
+    $result = mysqli_prepare_func_query($query, $link);
+    $row = mysqli_prepare_func_result($result, 0);
+    @mysqli_prepare_func_free_result($result);
+    return $row;
 }
 ?>
