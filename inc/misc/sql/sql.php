@@ -87,43 +87,43 @@ function handle_conditional_parts(&$query_string, &$query_vars) {
 }
 
 $NumQueriesArray = array();
-if (file_exists($SettDir['sql'] . "mysql.php")) {
+if (file_exists($SettDir['sql'] . "mysql.php")&&function_exists("mysql_connect")) {
     require($SettDir['sql'] . "mysql.php");
 }
 if (file_exists($SettDir['sql'] . "pdo_mysql.php")&&extension_loaded("PDO")&&extension_loaded("PDO_MYSQL")) {
     require($SettDir['sql'] . "pdo_mysql.php");
 }
-if (file_exists($SettDir['sql'] . "mysqli.php")) {
+if (file_exists($SettDir['sql'] . "mysqli.php")&&function_exists("mysqli_connect")) {
     require($SettDir['sql'] . "mysqli.php");
 }
-if (file_exists($SettDir['sql'] . "mysqli_prepare.php")) {
+if (file_exists($SettDir['sql'] . "mysqli_prepare.php")&&function_exists("mysqli_connect")) {
     require($SettDir['sql'] . "mysqli_prepare.php");
 }
-if (file_exists($SettDir['sql'] . "pgsql.php")) {
+if (file_exists($SettDir['sql'] . "pgsql.php")&&function_exists("pg_connect")) {
     require($SettDir['sql'] . "pgsql.php");
 }
-if (file_exists($SettDir['sql'] . "pgsql_prepare.php")) {
+if (file_exists($SettDir['sql'] . "pgsql_prepare.php")&&function_exists("pg_connect")) {
     require($SettDir['sql'] . "pgsql_prepare.php");
 }
 if(file_exists($SettDir['sql']."pdo_pgsql.php")&&extension_loaded("PDO")&&extension_loaded("PDO_PGSQL")) {
     require($SettDir['sql']."pdo_pgsql.php");
 }
-if (file_exists($SettDir['sql'] . "sqlite.php")) {
+if (file_exists($SettDir['sql'] . "sqlite.php")&&function_exists("sqlite_open")) {
     require($SettDir['sql'] . "sqlite.php");
 }
-if (file_exists($SettDir['sql'] . "sqlite3.php")) {
+if (file_exists($SettDir['sql'] . "sqlite3.php")&&class_exists('SQLite3')) {
     require($SettDir['sql'] . "sqlite3.php");
 }
-if (file_exists($SettDir['sql'] . "sqlite3_prepare.php")) {
+if (file_exists($SettDir['sql'] . "sqlite3_prepare.php")&&class_exists('SQLite3')) {
     require($SettDir['sql'] . "sqlite3_prepare.php");
 }
 if (file_exists($SettDir['sql'] . "pdo_sqlite3.php")&&extension_loaded("PDO")&&extension_loaded("PDO_SQLITE")) {
     require($SettDir['sql'] . "pdo_sqlite3.php");
 }
-if (file_exists($SettDir['sql'] . "cubrid.php")) {
+if (file_exists($SettDir['sql'] . "cubrid.php")&&function_exists("cubrid_connect")) {
     require($SettDir['sql'] . "cubrid.php");
 }
-if (file_exists($SettDir['sql'] . "cubrid_prepare.php")) {
+if (file_exists($SettDir['sql'] . "cubrid_prepare.php")&&function_exists("cubrid_connect")) {
     require($SettDir['sql'] . "cubrid_prepare.php");
 }
 if(file_exists($SettDir['sql']."pdo_cubrid.php")&&extension_loaded("PDO")&&extension_loaded("PDO_CUBRID")) {
