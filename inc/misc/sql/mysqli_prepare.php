@@ -255,12 +255,19 @@ function mysqli_prepare_func_get_next_id($link = null) {
     return mysqli_insert_id($link);
 }
 
-// Fetch number of rows using COUNT in a single query
-function mysqli_prepare_func_count_rows($query, $params = [], $link = null) {
-    $stmt = mysqli_prepare_func_query($query, $params, $link);
-    $result = mysqli_prepare_func_result($stmt, 0);
-    mysqli_prepare_func_free_result($stmt);
-    return $result;
+// Fetch Number of Rows using COUNT in a single query
+function mysqli_prepare_func_count_rows_alt($query, $link = null) {
+    $get_num_result = mysqli_prepare_func_query($query, $link);
+    $ret_num_result = mysqli_prepare_func_result($get_num_result, 0, 'cnt');
+    @mysqli_prepare_func_free_result($get_num_result);
+    return $ret_num_result;
 }
 
+// Get number of rows for a table
+function mysqli_prepare_func_get_num_rows($tablepre, $table, $link = null) {
+    $query = "SELECT COUNT(*) as cnt FROM " . $tablepre . $table;
+    $result = mysqli_prepare_func_query($query, [], $link);
+    $row = mysqli_prepare_func_fetch_assoc($result);
+    return $row['cnt'] ?? 0;
+}
 ?>

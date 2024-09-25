@@ -208,16 +208,16 @@ function cubrid_func_get_num_rows($tablepre, $table, $link = null) {
 
 // Fetch Number of Rows using COUNT in a single query
 function cubrid_func_count_rows($query, $link = null) {
-    $get_num_result = cubrid_func_query($query, $link);
-    $ret_num_result = cubrid_func_result($get_num_result, 0);
-    @cubrid_func_free_result($get_num_result);
-    return $ret_num_result;
+    $result = cubrid_func_query($query, $link);
+    $row = cubrid_func_result($result, 0, 'cnt');
+    @cubrid_func_free_result($result);
+    return $row;
 }
 
 function cubrid_func_count_rows_alt($query, $link = null) {
-    $get_num_result = cubrid_func_query($query, $link);
-    $ret_num_result = cubrid_func_result($get_num_result, 0, 'cnt');
-    @cubrid_func_free_result($get_num_result);
-    return $ret_num_result;
+    $result = cubrid_func_query($query, $link);
+    $row = cubrid_func_result($result, 0);
+    @cubrid_func_free_result($result);
+    return $row;
 }
 ?>

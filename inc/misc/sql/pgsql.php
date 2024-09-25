@@ -228,17 +228,16 @@ function pgsql_func_get_num_rows($tablepre, $table, $link = null) {
 
 // Fetch Number of Rows using COUNT in a single query
 function pgsql_func_count_rows($query, $link = null) {
-    $get_num_result = pgsql_func_query($query, $link);
-    $ret_num_result = pgsql_func_result($get_num_result, 0);
-    @pgsql_func_free_result($get_num_result);
-    return $ret_num_result;
+    $result = pgsql_func_query($query, $link);
+    $row = pgsql_func_result($result, 0, 'cnt');
+    @pgsql_func_free_result($result);
+    return $row;
 }
 
-// Fetch Number of Rows using COUNT in a single query
 function pgsql_func_count_rows_alt($query, $link = null) {
-    $get_num_result = pgsql_func_query($query, $link);
-    $ret_num_result = pgsql_func_result($get_num_result, 0, 'cnt');
-    @pgsql_func_free_result($get_num_result);
-    return $ret_num_result;
+    $result = pgsql_func_query($query, $link);
+    $row = pgsql_func_result($result, 0);
+    @pgsql_func_free_result($result);
+    return $row;
 }
 ?>

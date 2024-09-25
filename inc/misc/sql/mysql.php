@@ -248,17 +248,16 @@ function mysql_func_get_num_rows($tablepre, $table, $link = null) {
 
 // Fetch Number of Rows using COUNT in a single query
 function mysql_func_count_rows($query, $link = null) {
-    $get_num_result = mysql_func_query($query, $link);
-    $ret_num_result = mysql_func_result($get_num_result, 0);
-    @mysql_func_free_result($get_num_result);
-    return $ret_num_result;
+    $result = mysql_func_query($query, $link);
+    $row = mysql_func_result($result, 0, 'cnt');
+    @mysql_func_free_result($result);
+    return $row;
 }
 
-// Fetch Number of Rows using COUNT in a single query
 function mysql_func_count_rows_alt($query, $link = null) {
-    $get_num_result = mysql_func_query($query, $link);
-    $ret_num_result = mysql_func_result($get_num_result, 0, 'cnt');
-    @mysql_func_free_result($get_num_result);
-    return $ret_num_result;
+    $result = mysql_func_query($query, $link);
+    $row = mysql_func_result($result, 0);
+    @mysql_func_free_result($result);
+    return $row;
 }
 ?>

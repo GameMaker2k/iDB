@@ -196,18 +196,17 @@ function cubrid_prepare_func_get_next_id($tablepre, $table, $link = null) {
 }
 
 // Fetch Number of Rows using COUNT in a single query
-function cubrid_prepare_func_count_rows($query, $params = [], $link = null) {
-    $stmt = cubrid_prepare_func_query($query, $params, $link);
-    $ret_num_result = cubrid_prepare_func_result($stmt, 0);
-    cubrid_prepare_func_free_result($stmt);
-    return $ret_num_result;
+function cubrid_prepare_func_count_rows($query, $link = null) {
+    $result = cubrid_prepare_func_query($query, $link);
+    $row = cubrid_prepare_func_result($result, 0, 'cnt');
+    @cubrid_prepare_func_free_result($result);
+    return $row;
 }
 
-// Fetch Number of Rows using COUNT in a single query (alternative)
-function cubrid_prepare_func_count_rows_alt($query, $params = [], $link = null) {
-    $stmt = cubrid_prepare_func_query($query, $params, $link);
-    $ret_num_result = cubrid_prepare_func_result($stmt, 0, 'cnt');
-    cubrid_prepare_func_free_result($stmt);
-    return $ret_num_result;
+function cubrid_prepare_func_count_rows_alt($query, $link = null) {
+    $result = cubrid_prepare_func_query($query, $link);
+    $row = cubrid_prepare_func_result($result, 0);
+    @cubrid_prepare_func_free_result($result);
+    return $row;
 }
 ?>

@@ -203,17 +203,16 @@ function sqlite_func_get_num_rows($tablepre, $table, $link = null) {
 
 // Fetch Number of Rows using COUNT in a single query
 function sqlite_func_count_rows($query, $link = null) {
-    $get_num_result = sqlite_func_query($query, $link);
-    $ret_num_result = sqlite_func_result($get_num_result, 0);
-    @sqlite_func_free_result($get_num_result);
-    return $ret_num_result;
+    $result = sqlite_func_query($query, $link);
+    $row = sqlite_func_result($result, 0, 'cnt');
+    @sqlite_func_free_result($result);
+    return $row;
 }
 
-// Fetch Number of Rows using COUNT in a single query
 function sqlite_func_count_rows_alt($query, $link = null) {
-    $get_num_result = sqlite_func_query($query, $link);
-    $ret_num_result = sqlite_func_result($get_num_result, 0, 'cnt');
-    @sqlite_func_free_result($get_num_result);
-    return $ret_num_result;
+    $result = sqlite_func_query($query, $link);
+    $row = sqlite_func_result($result, 0);
+    @sqlite_func_free_result($result);
+    return $row;
 }
 ?>

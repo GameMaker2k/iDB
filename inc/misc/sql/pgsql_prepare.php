@@ -211,18 +211,17 @@ function pgsql_prepare_func_get_next_id($tablepre, $table, $link = null) {
 }
 
 // Fetch Number of Rows using COUNT in a single query
-function pgsql_prepare_func_count_rows($query, $params = [], $link = null) {
-    $get_num_result = pgsql_prepare_func_query($query, $params, $link);
-    $ret_num_result = pgsql_prepare_func_result($get_num_result, 0);
-    @pgsql_prepare_func_free_result($get_num_result);
-    return $ret_num_result;
+function pgsql_prepare_func_count_rows($query, $link = null) {
+    $result = pgsql_prepare_func_query($query, $link);
+    $row = pgsql_prepare_func_result($result, 0, 'cnt');
+    @pgsql_prepare_func_free_result($result);
+    return $row;
 }
 
-// Fetch Number of Rows using COUNT in a single query (alternative)
-function pgsql_prepare_func_count_rows_alt($query, $params = [], $link = null) {
-    $get_num_result = pgsql_prepare_func_query($query, $params, $link);
-    $ret_num_result = pgsql_prepare_func_result($get_num_result, 0, 'cnt');
-    @pgsql_prepare_func_free_result($get_num_result);
-    return $ret_num_result;
+function pgsql_prepare_func_count_rows_alt($query, $link = null) {
+    $result = pgsql_prepare_func_query($query, $link);
+    $row = pgsql_prepare_func_result($result, 0);
+    @pgsql_prepare_func_free_result($result);
+    return $row;
 }
 ?>
