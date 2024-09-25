@@ -90,7 +90,7 @@ $NumQueriesArray = array();
 if (file_exists($SettDir['sql'] . "mysql.php")) {
     require($SettDir['sql'] . "mysql.php");
 }
-if (file_exists($SettDir['sql'] . "pdo_mysql.php")) {
+if (file_exists($SettDir['sql'] . "pdo_mysql.php")&&extension_loaded("PDO")&&extension_loaded("PDO_MYSQL")) {
     require($SettDir['sql'] . "pdo_mysql.php");
 }
 if (file_exists($SettDir['sql'] . "mysqli.php")) {
@@ -105,7 +105,7 @@ if (file_exists($SettDir['sql'] . "pgsql.php")) {
 if (file_exists($SettDir['sql'] . "pgsql_prepare.php")) {
     require($SettDir['sql'] . "pgsql_prepare.php");
 }
-if(file_exists($SettDir['sql']."pdo_pgsql.php")) {
+if(file_exists($SettDir['sql']."pdo_pgsql.php")&&extension_loaded("PDO")&&extension_loaded("PDO_PGSQL")) {
     require($SettDir['sql']."pdo_pgsql.php");
 }
 if (file_exists($SettDir['sql'] . "sqlite.php")) {
@@ -117,7 +117,7 @@ if (file_exists($SettDir['sql'] . "sqlite3.php")) {
 if (file_exists($SettDir['sql'] . "sqlite3_prepare.php")) {
     require($SettDir['sql'] . "sqlite3_prepare.php");
 }
-if (file_exists($SettDir['sql'] . "pdo_sqlite3.php")) {
+if (file_exists($SettDir['sql'] . "pdo_sqlite3.php")&&extension_loaded("PDO")&&extension_loaded("PDO_SQLITE")) {
     require($SettDir['sql'] . "pdo_sqlite3.php");
 }
 if (file_exists($SettDir['sql'] . "cubrid.php")) {
@@ -126,7 +126,7 @@ if (file_exists($SettDir['sql'] . "cubrid.php")) {
 if (file_exists($SettDir['sql'] . "cubrid_prepare.php")) {
     require($SettDir['sql'] . "cubrid_prepare.php");
 }
-if(file_exists($SettDir['sql']."pdo_cubrid.php")) {
+if(file_exists($SettDir['sql']."pdo_cubrid.php")&&extension_loaded("PDO")&&extension_loaded("PDO_CUBRID")) {
     require($SettDir['sql']."pdo_cubrid.php");
 }
 
