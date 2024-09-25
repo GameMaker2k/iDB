@@ -48,28 +48,28 @@ if($Error!="Yes") {
 	<option value="mysql">MySQL Database</option>
 	<?php } if(function_exists("mysqli_func_connect_db")) { ?>
 	<option value="mysqli">MySQLi Database</option>
-	<?php }if(function_exists("mysqli_prepare_func_connect_db")) { ?>
+	<?php } if(function_exists("mysqli_prepare_func_connect_db")) { ?>
 	<option value="mysqli_prepare">MySQLi Alt Database</option>
+	<?php } if(function_exists("pdo_mysql_func_connect_db")) { ?>
+	<option value="pdo_mysql">PDO MySQL Database</option>
 	<?php } if(function_exists("pgsql_func_connect_db")) { ?>
 	<option value="pgsql">PostgreSQL Database</option>
 	<?php } if(function_exists("pgsql_prepare_func_connect_db")) { ?>
 	<option value="pgsql_prepare">PostgreSQL Alt Database</option>
+	<?php } if(function_exists("pdo_pgsql_func_connect_db")) { ?>
+	<option value="pdo_pgsql">PDO PostgreSQL Database</option>
 	<?php } if(function_exists("sqlite_func_connect_db")) { ?>
 	<option value="sqlite">SQLite Database</option>
 	<?php } if(function_exists("sqlite3_func_connect_db")) { ?>
 	<option value="sqlite3">SQLite 3 Database</option>
 	<?php } if(function_exists("sqlite3_prepare_func_connect_db")) { ?>
 	<option value="sqlite3_prepare">SQLite 3 Alt Database</option>
+	<?php } if(function_exists("pdo_sqlite3_func_connect_db")) { ?>
+	<option value="pdo_sqlite3">PDO SQLite 3 Database</option>
 	<?php } if(function_exists("cubrid_func_connect_db")) { ?>
 	<option value="cubrid">CUBRID Database</option>
 	<?php } if(function_exists("cubrid_prepare_func_connect_db")) { ?>
 	<option value="cubrid_prepare">CUBRID Alt Database</option>
-	<?php } if(function_exists("pdo_mysql_func_connect_db")) { ?>
-	<option value="pdo_mysql">PDO MySQL Database</option>
-	<?php } if(function_exists("pdo_pgsql_func_connect_db")) { ?>
-	<option value="pdo_pgsql">PDO PostgreSQL Database</option>
-	<?php } if(function_exists("pdo_sqlite3_func_connect_db")) { ?>
-	<option value="pdo_sqlite3">PDO SQLite 3 Database</option>
 	<?php } if(function_exists("pdo_cubrid_func_connect_db")) { ?>
 	<option value="pdo_cubrid">PDO CUBRID Database</option>
 	<?php } if(!function_exists("mysql_func_connect_db")&&
