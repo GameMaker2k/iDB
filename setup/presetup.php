@@ -44,34 +44,47 @@ if($Error!="Yes") {
 </tr><tr>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="DatabaseType">Select Database Type:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="DatabaseType" id="DatabaseType">
-	<?php if(function_exists("mysql_connect")) { ?>
+	<?php if(function_exists("mysql_func_connect_db")) { ?>
 	<option value="mysql">MySQL Database</option>
-	<?php } if(function_exists("mysqli_connect")) { ?>
+	<?php } if(function_exists("mysqli_func_connect_db")) { ?>
 	<option value="mysqli">MySQLi Database</option>
+	<?php }if(function_exists("mysqli_prepare_func_connect_db")) { ?>
 	<option value="mysqli_prepare">MySQLi Alt Database</option>
-	<?php } if(function_exists("pg_connect")) { ?>
+	<?php } if(function_exists("pgsql_func_connect_db")) { ?>
 	<option value="pgsql">PostgreSQL Database</option>
+	<?php } if(function_exists("pgsql_prepare_func_connect_db")) { ?>
 	<option value="pgsql_prepare">PostgreSQL Alt Database</option>
-	<?php } if(function_exists("sqlite_open")) { ?>
+	<?php } if(function_exists("sqlite_func_connect_db")) { ?>
 	<option value="sqlite">SQLite Database</option>
-	<?php } if(class_exists('SQLite3')) { ?>
+	<?php } if(function_exists("sqlite3_func_connect_db")) { ?>
 	<option value="sqlite3">SQLite 3 Database</option>
+	<?php } if(function_exists("sqlite3_prepare_func_connect_db")) { ?>
 	<option value="sqlite3_prepare">SQLite 3 Alt Database</option>
-	<?php } if(function_exists("cubrid_connect")) { ?>
+	<?php } if(function_exists("cubrid_func_connect_db")) { ?>
 	<option value="cubrid">CUBRID Database</option>
+	<?php } if(function_exists("cubrid_prepare_func_connect_db")) { ?>
 	<option value="cubrid_prepare">CUBRID Alt Database</option>
-	<?php } if(extension_loaded("PDO")) {
-            if(extension_loaded("PDO_MYSQL")) {?>
+	<?php } if(function_exists("pdo_mysql_func_connect_db")) { ?>
 	<option value="pdo_mysql">PDO MySQL Database</option>
-	<?php } if(extension_loaded("PDO_PGSQL")) { ?>
+	<?php } if(function_exists("pdo_pgsql_func_connect_db")) { ?>
 	<option value="pdo_pgsql">PDO PostgreSQL Database</option>
-	<?php } if(extension_loaded("PDO_SQLITE")) { ?>
+	<?php } if(function_exists("pdo_sqlite3_func_connect_db")) { ?>
 	<option value="pdo_sqlite3">PDO SQLite 3 Database</option>
-	<?php } if(extension_loaded("PDO_CUBRID")) { ?>
+	<?php } if(function_exists("pdo_cubrid_func_connect_db")) { ?>
 	<option value="pdo_cubrid">PDO CUBRID Database</option>
-	<?php } } if(!function_exists("mysql_connect")&&!function_exists("mysqli_connect")&&
-	!function_exists("pg_connect")&&!function_exists("sqlite_open")&&!class_exists('SQLite3')&&
-	!function_exists("cubrid_connect")&&!extension_loaded("PDO")) { ?>
+	<?php } if(!function_exists("mysql_func_connect_db")&&
+		   !function_exists("mysqli_func_connect_db")&&
+		   !function_exists("pgsql_func_connect_db")&&
+		   !function_exists("sqlite_func_connect_db")&&
+		   !function_exists("sqlite3_func_connect_db")&&
+		   !function_exists("cubrid_prepare_func_connect_db")&&
+		   !function_exists("mysqli_prepare_func_connect_db")&&
+		   !function_exists("pgsql_prepare_func_connect_db")&&
+		   !function_exists("sqlite3_prepare_func_connect_db")&&
+		   !function_exists("pdo_cubrid_func_connect_db")&&
+		   !function_exists("pdo_mysql_func_connect_db")&&
+		   !function_exists("pdo_pgsql_func_connect_db")&&
+		   !function_exists("pdo_sqlite3_func_connect_db")) { ?>
 	<option value="none">No Database Available</option>
 	<?php } ?>
 	</select></td>
