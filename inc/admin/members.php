@@ -403,7 +403,6 @@ $EditMem['Gender']=$result_array['Gender'];
 $EditMem['PostCount']=$result_array['PostCount'];
 $EditMem['Karma']=$result_array['Karma'];
 $EditMem['TimeZone']=$result_array['TimeZone'];
-$EditMem['DST']=$result_array['DST'];
 $EditMem['IP']=$result_array['IP'];
 $mpquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."mempermissions\" WHERE \"id\"=%i LIMIT 1", array($_POST['id']));
 $mpresult=sql_query($mpquery,$SQLStat);
