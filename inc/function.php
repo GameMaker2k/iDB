@@ -198,6 +198,71 @@ if($uuidver=="v3"||$uuidver=="v5") {
       (hexdec(substr($hash, 12, 4)) & 0x0fff) | $uuidverid,
       (hexdec(substr($hash, 16, 4)) & 0x3fff) | 0x8000,
       substr($hash, 20, 12) ); } }
+
+function uuid_new($uuidver = "v4", $rndty = "random_int", $namespace = null, $name = null) {
+    // Validate the UUID version, default to "v4" if invalid
+    if (!in_array($uuidver, ["v3", "v4", "v5"])) {
+        $uuidver = "v4";
+    }
+
+    // Version 4 UUID (Randomly Generated)
+    if ($uuidver == "v4") {
+        return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+            $rndty(0, 0xffff), $rndty(0, 0xffff),
+            $rndty(0, 0xffff),
+            $rndty(0, 0x0fff) | 0x4000,  // Set version 4
+            $rndty(0, 0x3fff) | 0x8000,  // Set variant DCE 1.1
+            $rndty(0, 0xffff), $rndty(0, 0xffff), $rndty(0, 0xffff)
+        );
+    }
+
+    // For v3 or v5 UUIDs, ensure namespace is a valid UUID
+    if ($uuidver == "v3" || $uuidver == "v5") {
+        if ($namespace === null || !uuid_is_valid($namespace)) {
+            // If no valid namespace is provided, return false or generate a random v4 UUID as a fallback
+            return false;
+        }
+
+        // Convert namespace to hexadecimal and binary string
+        $nhex = str_replace(['-', '{', '}'], '', $namespace);
+        $nstr = '';
+        for ($i = 0; $i < strlen($nhex); $i += 2) {
+            $nstr .= chr(hexdec($nhex[$i] . ($nhex[$i + 1] ?? '0')));
+        }
+
+        // Use a default random name if none is provided
+        if ($name === null) {
+            $name = bin2hex(random_bytes(16));  // Generate a 16-byte random string
+        }
+
+        // Calculate hash based on UUID version (v3 = MD5, v5 = SHA-1)
+        if ($uuidver == "v3") {
+            $uuidverid = 0x3000;
+            $hash = hash('md5', $nstr . $name);
+        } elseif ($uuidver == "v5") {
+            $uuidverid = 0x5000;
+            $hash = hash('sha1', $nstr . $name);
+        }
+
+        // Format the hash into the standard UUID structure
+        return sprintf('%08s-%04s-%04x-%04x-%12s',
+            substr($hash, 0, 8),    // time_low
+            substr($hash, 8, 4),    // time_mid
+            (hexdec(substr($hash, 12, 4)) & 0x0fff) | $uuidverid,  // time_hi_and_version
+            (hexdec(substr($hash, 16, 4)) & 0x3fff) | 0x8000,      // clk_seq_hi_res + variant
+            substr($hash, 20, 12)   // node
+        );
+    }
+
+    return false;
+}
+
+// Helper function to validate UUIDs
+function uuid_is_valid($uuid) {
+    return preg_match('/^\{?[0-9a-f]{8}\-?[0-9a-f]{4}\-?[0-9a-f]{4}\-?' .
+                      '[0-9a-f]{4}\-?[0-9a-f]{12}\}?$/i', $uuid) === 1;
+}
+
 class UUID {
   public static function v3($namespace, $name) {
     if(!self::is_valid($namespace)) return false;
@@ -306,11 +371,35 @@ class UUID {
   }
 }
 function uuid($uuidver = "v4", $rndty = "rand", $namespace = null, $name = null) {
- if($uuidver!="v3"&&$uuidver!="v4"&&$uuidver!="v5") { $uuidver = "v4"; }
- if($uuidver=="v3") { return UUID::v3(UUID::v4(), salt_hmac()); }
- if($uuidver=="v3") { return UUID::v4(); }
- if($uuidver=="v3") { return UUID::v5(UUID::v4(), salt_hmac()); }
- return false; }
+    // Ensure the UUID version is valid, default to "v4"
+    if(!in_array($uuidver, ["v3", "v4", "v5"])) {
+        $uuidver = "v4";
+    }
+
+    // Generate a UUID based on the specified version
+    if ($uuidver == "v3") {
+        // Ensure namespace and name are provided for v3
+        if ($namespace && $name) {
+            return UUID::v3($namespace, $name); // v3 uses MD5 hashing
+        }
+        return false; // Return false if the required parameters are missing
+    }
+
+    if ($uuidver == "v4") {
+        return UUID::v4(); // v4 generates a random UUID
+    }
+
+    if ($uuidver == "v5") {
+        // Ensure namespace and name are provided for v5
+        if ($namespace && $name) {
+            return UUID::v5($namespace, $name); // v5 uses SHA-1 hashing
+        }
+        return false; // Return false if the required parameters are missing
+    }
+
+    return false; // If the UUID version is invalid or missing, return false
+}
+
 // By info at raymondrodgers dot com at https://www.php.net/manual/en/function.random-int.php#118636
 function generateUUIDv4()
 {
