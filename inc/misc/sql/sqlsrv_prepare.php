@@ -105,7 +105,8 @@ function sqlsrv_prepare_func_connect_db($server, $username, $password, $database
         "UID" => $username,
         "PWD" => $password,
         "Database" => $database,
-        "CharacterSet" => "UTF-8"
+        "CharacterSet" => "UTF-8",
+		"TrustServerCertificate" => true
     ];
 
     $link = sqlsrv_connect($server, $connectionInfo);

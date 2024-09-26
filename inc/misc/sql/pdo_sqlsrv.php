@@ -123,8 +123,9 @@ function pdo_sqlsrv_func_connect_db($server, $username, $password, $database = n
     try {
         // Create the PDO instance with UTF-8 support and set other options
         $SQLStat = new PDO($dsn, $username, $password, [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,  // Set error mode to exceptions
-            PDO::ATTR_PERSISTENT => $new_link             // Use persistent connections if requested
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,   // Set error mode to exceptions
+            PDO::ATTR_PERSISTENT => $new_link,            // Use persistent connections if requested
+            PDO::SQLSRV_ATTR_TRUST_SERVER_CERTIFICATE => true  // Trust server certificate
         ]);
 
         return $SQLStat;
