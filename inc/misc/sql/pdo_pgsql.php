@@ -240,13 +240,6 @@ function pdo_pgsql_func_count_rows_alt($query, $link = null) {
     return $row;
 }
 
-function pdo_pgsql_func_count_rows_alt($query, $link = null) {
-    $result = pdo_pgsql_func_query($query, $link);
-    $row = pdo_pgsql_func_result($result, 0);
-    @pdo_pgsql_func_free_result($result);
-    return $row;
-}
-
 function pdo_pgsql_func_free_result($result) {
     return true;
 }
