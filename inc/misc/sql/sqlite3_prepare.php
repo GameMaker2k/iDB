@@ -217,14 +217,6 @@ function sqlite3_prepare_func_get_next_id($tablepre, $table, $link = null) {
 
 // Fetch Number of Rows using COUNT in a single query
 function sqlite3_prepare_func_count_rows($query, $link = null) {
-    $get_num_result = sqlite3_prepare_func_query($query, $link);
-    $ret_num_result = sqlite3_prepare_func_result($get_num_result, 0);
-    @sqlite3_prepare_func_free_result($get_num_result);
-    return $ret_num_result;
-}
-
-// Fetch Number of Rows using COUNT in a single query
-function sqlite3_prepare_func_count_rows($query, $link = null) {
     $result = sqlite3_prepare_func_query($query, $link);
     $row = sqlite3_prepare_func_result($result, 0, 'cnt');
     @sqlite3_prepare_func_free_result($result);
