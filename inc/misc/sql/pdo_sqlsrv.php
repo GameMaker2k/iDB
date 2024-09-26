@@ -109,7 +109,7 @@ function pdo_sqlsrv_func_num_rows($result) {
 function pdo_sqlsrv_func_connect_db($server, $username, $password, $database = null, $new_link = false) {
     global $SQLStat;
 
-    // Set DSN (Data Source Name) for SQLSRV connection
+    // Set DSN (Data Source Name) for SQLSRV connection with UTF-8 encoding
     $dsn = "sqlsrv:Server=$server";
 
     // If a database is specified, include it in the DSN
@@ -117,7 +117,11 @@ function pdo_sqlsrv_func_connect_db($server, $username, $password, $database = n
         $dsn .= ";Database=$database";
     }
 
+    // Set UTF-8 character encoding in the DSN
+    $dsn .= ";CharacterSet=UTF-8";
+
     try {
+        // Create the PDO instance with UTF-8 support and set other options
         $SQLStat = new PDO($dsn, $username, $password, [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,  // Set error mode to exceptions
             PDO::ATTR_PERSISTENT => $new_link             // Use persistent connections if requested
