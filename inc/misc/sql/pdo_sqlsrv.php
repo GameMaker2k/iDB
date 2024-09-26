@@ -105,11 +105,11 @@ function pdo_sqlsrv_func_num_rows($result) {
     return false;
 }
 
-// Connect to SQL Server using PDO
+// Connect to SQL Server using PDO and set session options
 function pdo_sqlsrv_func_connect_db($server, $username, $password, $database = null, $new_link = false) {
     global $SQLStat;
 
-    // Set DSN (Data Source Name) for SQLSRV connection with UTF-8 encoding
+    // Set DSN (Data Source Name) for SQLSRV connection
     $dsn = "sqlsrv:Server=$server";
 
     // If a database is specified, include it in the DSN
@@ -121,12 +121,16 @@ function pdo_sqlsrv_func_connect_db($server, $username, $password, $database = n
     $dsn .= ";CharacterSet=UTF-8";
 
     try {
-        // Create the PDO instance with UTF-8 support and set other options
+        // Create the PDO instance with options
         $SQLStat = new PDO($dsn, $username, $password, [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,   // Set error mode to exceptions
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,  // Set error mode to exceptions
             PDO::ATTR_PERSISTENT => $new_link,            // Use persistent connections if requested
-            PDO::SQLSRV_ATTR_TRUST_SERVER_CERTIFICATE => true  // Trust server certificate
+            PDO::SQLSRV_ATTR_TRUST_SERVER_CERTIFICATE => true // Trust server certificate
         ]);
+
+        // If additional session settings are needed, they can be added here
+        // Example: setting options (though SQLSRV doesn't have "SQL_MODE" like MySQL)
+        // $SQLStat->exec("SET SOME_OPTION = value;");
 
         return $SQLStat;
 

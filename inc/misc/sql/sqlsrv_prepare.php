@@ -99,22 +99,32 @@ function sqlsrv_prepare_func_num_rows($stmt) {
     return $num;
 }
 
-// Connect to SQL Server database
+// Connect to SQL Server database using sqlsrv
 function sqlsrv_prepare_func_connect_db($server, $username, $password, $database = null) {
+    // Set up default connection options
     $connectionInfo = [
         "UID" => $username,
         "PWD" => $password,
-        "Database" => $database,
         "CharacterSet" => "UTF-8",
-		"TrustServerCertificate" => true
+        "TrustServerCertificate" => true
     ];
 
+    // Only set the Database key if a database is specified
+    if ($database !== null) {
+        $connectionInfo["Database"] = $database;
+    }
+
+    // Establish connection
     $link = sqlsrv_connect($server, $connectionInfo);
 
     if ($link === false) {
         output_error("SQLSRV Error: " . print_r(sqlsrv_errors(), true), E_USER_ERROR);
         return false;
     }
+
+    // You can set session options after connection (if needed in SQL Server)
+    // Example: Setting session level options (if applicable)
+    // sqlsrv_query($link, "SET SOME_OPTION = value");
 
     return $link;
 }
