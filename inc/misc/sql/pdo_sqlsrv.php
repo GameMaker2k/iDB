@@ -106,7 +106,7 @@ function pdo_sqlsrv_func_num_rows($result) {
 }
 
 // Connect to SQL Server using PDO and set session options
-function pdo_sqlsrv_func_connect_db($server, $username, $password, $database = null, $new_link = false) {
+function pdo_sqlsrv_func_connect_db($server, $username = null, $password = null, $database = null, $new_link = false) {
     global $SQLStat;
 
     // Set DSN (Data Source Name) for SQLSRV connection
@@ -121,15 +121,23 @@ function pdo_sqlsrv_func_connect_db($server, $username, $password, $database = n
     $dsn .= ";CharacterSet=UTF-8";
 
     try {
-        // Create the PDO instance with options
-        $SQLStat = new PDO($dsn, $username, $password, [
+        // Connection options for SQL Authentication
+        $options = [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,  // Set error mode to exceptions
             PDO::ATTR_PERSISTENT => $new_link,            // Use persistent connections if requested
             PDO::SQLSRV_ATTR_TRUST_SERVER_CERTIFICATE => true // Trust server certificate
-        ]);
+        ];
+
+        // Use SQL Authentication if username and password are provided
+        if (!empty($username) && !empty($password)) {
+            $SQLStat = new PDO($dsn, $username, $password, $options);
+        } else {
+            // Use Windows Authentication (omit username and password)
+            $SQLStat = new PDO($dsn, null, null, $options);
+        }
 
         // If additional session settings are needed, they can be added here
-        // Example: setting options (though SQLSRV doesn't have "SQL_MODE" like MySQL)
+        // Example: setting session options
         // $SQLStat->exec("SET SOME_OPTION = value;");
 
         return $SQLStat;
