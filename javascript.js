@@ -12,52 +12,84 @@
 
     $FileInfo: javascript.js - Last Update: 8/23/2024 SVN 1023 - Author: cooldude2k $
 */
+// Utility function to fetch a DOM element by ID
+
 function getid(id) {
-var itm;
-itm = document.getElementById(id);
-return itm; }
+    return document.getElementById(id);
+}
 
+// Toggle the visibility of an element by ID
 function toggletag(id) {
-var itm;
-itm = document.getElementById(id);
-if (itm.style.display == "none") {
-itm.style.display = ""; }
-else {
-itm.style.display = "none"; } }
+    const itm = getid(id);
+    if (itm) {
+        itm.style.display = (itm.style.display === "none") ? "" : "none";
+    }
+}
 
-function bgchange(id,color) {
-var itm;
-itm = document.getElementById(id);
-itm.style.backgroundColor = ''+color+''; }
+// Change the background color of an element by ID
+function bgchange(id, color) {
+    const itm = getid(id);
+    if (itm) {
+        itm.style.backgroundColor = color; // No need to concatenate empty strings
+    }
+}
 
-function innerchange(tag,text1,text2) {
-var usrname;
-usrname = document.getElementsByTagName(tag);
-for (var i = 0; i < usrname.length; i++) {
-if(usrname[i].innerHTML==text1) {
-usrname[i].innerHTML = text2; } } }
+// Change the inner HTML of elements with a specific tag name
+function innerchange(tag, text1, text2) {
+    const elements = document.getElementsByTagName(tag);
+    for (const element of elements) {
+        if (element.innerHTML === text1) {
+            element.innerHTML = text2;
+        }
+    }
+}
 
-function addsmiley(id,code) {
-var itm;
-itm = document.getElementById(id);
-var pretext = itm.value;
-itm.value = pretext + code; }
+// Append a code (e.g., smiley) to the value of an input/textarea by ID
+function addsmiley_old(id, code) {
+    const itm = getid(id);
+    if (itm) {
+        itm.value += code;
+    }
+}
 
+function addsmiley(id, code) {
+    const itm = getid(id);
+    if (!itm) return;
+
+    // For input or textarea elements
+    if (typeof itm.selectionStart === "number" && typeof itm.selectionEnd === "number") {
+        const startPos = itm.selectionStart;
+        const endPos = itm.selectionEnd;
+        const preText = itm.value.substring(0, startPos);
+        const postText = itm.value.substring(endPos, itm.value.length);
+
+        // Insert the smiley code at the cursor position
+        itm.value = preText + code + postText;
+
+        // Move the cursor to the end of the inserted smiley code
+        itm.selectionStart = itm.selectionEnd = startPos + code.length;
+    } else {
+        // If the browser does not support selectionStart/selectionEnd, append at the end
+        itm.value += code;
+    }
+
+    // Focus back to the textarea/input after inserting the smiley
+    itm.focus();
+}
+
+// Get the user's time zone and set it in the "YourOffSet" input
 function GetUserTimeZone() {
-    if (!Intl || !Intl.DateTimeFormat().resolvedOptions().timeZone) {
-        throw 'Time zones are not available in this environment';
-    }
-
     try {
-        tzname = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        const tzname = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        if (tzname) {
+            const offsetElement = getid("YourOffSet");
+            if (offsetElement) {
+                offsetElement.value = tzname;
+            }
+            return true;
+        }
+    } catch (ex) {
+        console.error('Error detecting timezone:', ex);
     }
-    catch (ex) {
-        tzname = false;
-        return false;
-    }
-    if(tzname!=false)
-    {
-    document.getElementById("YourOffSet").value = tzname;
-    return true;
-    }
+    return false;
 }
