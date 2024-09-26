@@ -11,7 +11,7 @@
     Copyright 2004-2024 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2024 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: versioninfo.php - Last Update: 9/25/2024 SVN 1243 - Author: cooldude2k $
+    $FileInfo: versioninfo.php - Last Update: 9/25/2024 SVN 1244 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="versioninfo.php"||$File3Name=="/versioninfo.php") {
@@ -25,12 +25,11 @@ function version_info($proname, $subver, $ver, $supver, $reltype, $svnver, $show
     if ($showsvn) {
         $return_var .= is_bool($showsvn) ? " SVN $svnver" : " $showsvn $svnver";
     }
-
     return $return_var;
 }
 // Version number and date stuff. :P
 $VER1[0] = 0; $VER1[1] = 7; $VER1[2] = 4; $VERFull[1] = $VER1[0].".".$VER1[1].".".$VER1[2];
-$VER2[0] = "Alpha"; $VER2[1] = "Al"; $VER2[2] = "SVN"; $SubVerN = 1243; $GitRevPreN = '$Id$';
+$VER2[0] = "Alpha"; $VER2[1] = "Al"; $VER2[2] = "SVN"; $SubVerN = 1244; $GitRevPreN = '$Id$';
 $GitRevN = getGitRevision($GitRevPreN);
 $SVNDay[0] = 9; $SVNDay[1] = 24; $SVNDay[2] = 2024; $SVNDay[3] = $SVNDay[0]."/".$SVNDay[1]."/".$SVNDay[2];
 $AltName = "DF2k"; $AltName2 = "DF2k"; $RName = "iDB"; $SFName = "IntDB";

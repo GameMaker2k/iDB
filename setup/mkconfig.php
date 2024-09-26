@@ -406,6 +406,9 @@ if($Settings['sqltype']=="cubrid"||
 	$Settings['sqltype']=="cubrid_prepare"||
 	$Settings['sqltype']=="pdo_cubrid") {
 $OptimizeTea = sql_query(sql_pre_query("UPDATE STATISTICS ON \"".$_POST['tableprefix']."themes\"", null),$SQLStat); }
+if($Settings['sqltype']=="sqlsrv_prepare"||
+	$Settings['sqltype']=="pdo_sqlsrv") {
+$OptimizeTea = sql_query(sql_pre_query("ALTER INDEX ALL ON \"".$_POST['tableprefix']."\" REORGANIZE", null),$SQLStat); }
 sql_disconnect_db($SQLStat);
 $ThemeSet = $OldThemeSet; }
 $CHMOD = $_SERVER['PHP_SELF'];

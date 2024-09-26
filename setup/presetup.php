@@ -72,6 +72,10 @@ if($Error!="Yes") {
 	<option value="cubrid_prepare">CUBRID Alt Database</option>
 	<?php } if(function_exists("pdo_cubrid_func_connect_db")) { ?>
 	<option value="pdo_cubrid">PDO CUBRID Database</option>
+	<?php } if(function_exists("sqlsrv_prepare_func_connect_db")) { ?>
+	<option value="sqlsrv_prepare">SQL Server Database</option>
+	<?php } if(function_exists("pdo_sqlsrv_func_connect_db")) { ?>
+	<option value="pdo_sqlsrv">PDO SQL Server Database</option>
 	<?php } if(!function_exists("mysql_func_connect_db")&&
 		   !function_exists("mysqli_func_connect_db")&&
 		   !function_exists("pgsql_func_connect_db")&&
@@ -81,10 +85,12 @@ if($Error!="Yes") {
 		   !function_exists("mysqli_prepare_func_connect_db")&&
 		   !function_exists("pgsql_prepare_func_connect_db")&&
 		   !function_exists("sqlite3_prepare_func_connect_db")&&
+		   !function_exists("sqlsrv_prepare_func_connect_db")&&
 		   !function_exists("pdo_cubrid_func_connect_db")&&
 		   !function_exists("pdo_mysql_func_connect_db")&&
 		   !function_exists("pdo_pgsql_func_connect_db")&&
-		   !function_exists("pdo_sqlite3_func_connect_db")) { ?>
+		   !function_exists("pdo_sqlite3_func_connect_db")&&
+		   !function_exists("pdo_sqlsrv_func_connect_db")) { ?>
 	<option value="none">No Database Available</option>
 	<?php } ?>
 	</select></td>

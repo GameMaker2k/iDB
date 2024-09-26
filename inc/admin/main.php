@@ -99,33 +99,53 @@ if($Settings['sqltype']!="mysql"&&
 	$Settings['sqltype']!="pdo_sqlite3"&&
 	$Settings['sqltype']!="cubrid"&&
 	$Settings['sqltype']!="cubrid_prepare"&&
-	$Settings['sqltype']!="pdo_cubrid") {
+	$Settings['sqltype']!="pdo_cubrid"&&
+	$Settings['sqltype']!="sqlsrv_prepare"&&
+	$Settings['sqltype']!="pdo_sqlsrv") {
 	$Settings['sqltype'] = "mysql"; }
 $DBType['Server'] = "";
 $DBType['Client'] = "";
+$DBType['PHP'] = "";
+$SQLString = "";
+if($Settings['sqltype']=="mysqli_prepare"||
+	$Settings['sqltype']=="sqlsrv_prepare"||
+	$Settings['sqltype']=="pgsql_prepare"||
+	$Settings['sqltype']=="sqlite3_prepare"||
+	$Settings['sqltype']=="cubrid_prepare") {
+	$SQLString = "Prepared "; }
+if($Settings['sqltype']=="mysqli_prepare"||
+	$Settings['sqltype']=="sqlsrv_prepare"||
+	$Settings['sqltype']=="pgsql_prepare"||
+	$Settings['sqltype']=="sqlite3_prepare"||
+	$Settings['sqltype']=="cubrid_prepare") {
+	$SQLString = "PDO "; }
 if($Settings['sqltype']=="mysql"||
 	$Settings['sqltype']=="mysqli"||
 	$Settings['sqltype']=="mysqli_prepare"||
 	$Settings['sqltype']=="pdo_mysql") {
-$DBType['Server'] = "MySQL ".sql_server_info($SQLStat);
-$DBType['Client'] = "MySQL ".sql_client_info($SQLStat); }
+$DBType['Server'] = "MySQL ".$SQLString.sql_server_info($SQLStat);
+$DBType['Client'] = "MySQL ".$SQLString.sql_client_info($SQLStat); }
+if($Settings['sqltype']=="sqlsrv_prepare"||
+	$Settings['sqltype']=="pdo_sqlsrv") {
+$DBType['Server'] = "SQL Server ".$SQLString.sql_server_info($SQLStat);
+$DBType['Client'] = "SQL Server ".$SQLString.sql_client_info($SQLStat); }
 if($Settings['sqltype']=="pgsql"||
 	$Settings['sqltype']=="pgsql_prepare"||
 	$Settings['sqltype']=="pdo_pgsql") {
-$DBType['Server'] = "Postgres ".sql_server_info($SQLStat);
-$DBType['Client'] = "Postgres ".sql_client_info($SQLStat); }
+$DBType['Server'] = "Postgres ".$SQLString.sql_server_info($SQLStat);
+$DBType['Client'] = "Postgres ".$SQLString.sql_client_info($SQLStat); }
 if($Settings['sqltype']=="sqlite"||
 	$Settings['sqltype']=="sqlite3_prepare"||
 	$Settings['sqltype']=="sqlite3"||
 	$Settings['sqltype']=="pdo_sqlite3") {
-$DBType['Server'] = "SQLite ".sql_server_info($SQLStat);
-$DBType['Client'] = sql_client_info($SQLStat); }
+$DBType['Server'] = "SQLite ".$SQLString.sql_server_info($SQLStat);
+$DBType['Client'] = "SQLite ".$SQLString.sql_client_info($SQLStat); }
 if($Settings['sqltype']=="cubrid"||
 	$Settings['sqltype']=="cubrid_prepare"||
 	$Settings['sqltype']=="pdo_cubrid") {
-$DBType['Server'] = "CUBRID ".sql_server_info($SQLStat);
-$DBType['Client'] = "CUBRID ".sql_client_info($SQLStat); 
-$DBType['PHP'] = "CUBRID ".cubrid_version(); }
+$DBType['Server'] = "CUBRID ".$SQLString.sql_server_info($SQLStat);
+$DBType['Client'] = "CUBRID ".$SQLString.sql_client_info($SQLStat); 
+$DBType['PHP'] = "CUBRID ".$SQLString.cubrid_version(); }
 if(!isset($Settings['vercheck'])) { 
 	$Settings['vercheck'] = 2; }
 if($Settings['vercheck']!=1&&
@@ -345,12 +365,18 @@ $time = $utccurtime->getTimestamp() - ini_get("session.gc_maxlifetime");
 //$sqlg = sql_pre_query('DELETE FROM \"'.$Settings['sqltable'].'sessions\" WHERE \"expires\" < UNIX_TIMESTAMP();', null);
 if($Settings['sqltype']=="mysql"||
 	$Settings['sqltype']=="mysqli"||
-	$Settings['sqltype']=="cubrid") {
+	$Settings['sqltype']=="mysqli_prepare"||
+	$Settings['sqltype']=="pdo_mysql"||
+	$Settings['sqltype']=="cubrid"||
+	$Settings['sqltype']=="cubrid_prepare"||
+	$Settings['sqltype']=="pdo_cubrid") {
 $sqlgc = sql_pre_query("TRUNCATE TABLE \"".$Settings['sqltable']."themes\"", null);
 sql_query($sqlgc,$SQLStat);
 $sqlgc = sql_pre_query("ALTER TABLE \"".$Settings['sqltable']."themes\" AUTO_INCREMENT=1", null);
 sql_query($sqlgc,$SQLStat); }
-if($Settings['sqltype']=="pgsql") {
+if($Settings['sqltype']=="pgsql"||
+	$Settings['sqltype']=="pgsql_prepare"||
+	$Settings['sqltype']=="pdo_pgsql") {
 $sqlgc = sql_pre_query("TRUNCATE TABLE \"".$Settings['sqltable']."themes\"", null);
 sql_query($sqlgc,$SQLStat);
 $sqlgc = sql_pre_query("SELECT setval('".$Settings['sqltable']."themes_id_seq', 1, false);", null);
@@ -361,6 +387,16 @@ if($Settings['sqltype']=="sqlite"||
 	$Settings['sqltype']=="pdo_sqlite3") {
 $sqlgc = sql_pre_query("DELETE FROM \"".$Settings['sqltable']."themes\";", null);
 sql_query($sqlgc,$SQLStat); }
+if($Settings['sqltype']=="sqlsrv_prepare"||
+   $Settings['sqltype']=="pdo_sqlsrv") {
+    // Truncate the table, which automatically resets the identity column
+    $sqlgc = sql_pre_query("TRUNCATE TABLE \"".$Settings['sqltable']."themes\"", null);
+    sql_query($sqlgc, $SQLStat);
+
+    // If you need to explicitly reseed the identity (to set it to 1 or another value), use DBCC CHECKIDENT
+    $sqlgc = sql_pre_query("DBCC CHECKIDENT ('".$Settings['sqltable']."themes', RESEED, 1);", null);
+    sql_query($sqlgc, $SQLStat);
+}
 $skindir = dirname(realpath("sql.php"))."/".$SettDir['themes'];
 if ($handle = opendir($skindir)) { $dirnum = null;
    while (false !== ($file = readdir($handle))) {
@@ -407,6 +443,9 @@ if($Settings['sqltype']=="cubrid"||
 	$Settings['sqltype']=="cubrid_prepare"||
 	$Settings['sqltype']=="pdo_cubrid") {
 $OptimizeTea = sql_query(sql_pre_query("UPDATE STATISTICS ON \"".$TableChCk[$ti]."\"", null),$SQLStat); }
+if($Settings['sqltype']=="sqlsrv_prepare"||
+	$Settings['sqltype']=="pdo_sqlsrv") {
+$OptimizeTea = sql_query(sql_pre_query("ALTER INDEX ALL ON \"".$TableChCk[$ti]."\" REORGANIZE", null),$SQLStat); }
 if($Settings['sqltype']=="pgsql"||
 	$Settings['sqltype']=="pgsql_prepare"||
 	$Settings['sqltype']=="pdo_pgsql") {
@@ -1128,7 +1167,9 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Database Manager";
 	$Settings['sqltype']=="pdo_pgsql"||
 	$Settings['sqltype']=="cubrid"||
 	$Settings['sqltype']=="cubrid_prepare"||
-	$Settings['sqltype']=="pdo_cubrid") { 
+	$Settings['sqltype']=="pdo_cubrid"||
+	$Settings['sqltype']=="sqlsrv_prepare"||
+	$Settings['sqltype']=="pdo_sqlsrv") { 
 ?><tr style="text-align: left;">
 	<td style="width: 50%;"><span class="TextBoxLabel">Database Client:</span></td>
 	<td style="width: 50%;"><?php echo $DBType['Client']; ?></td>

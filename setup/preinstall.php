@@ -77,7 +77,9 @@ if($Settings['sqltype']!="mysql"&&
     $Settings['sqltype']!="pdo_sqlite3"&&
 	$Settings['sqltype']!="cubrid"&&
 	$Settings['sqltype']!="cubrid_prepare"&&
-	$Settings['sqltype']!="pdo_cubrid") {
+	$Settings['sqltype']!="pdo_cubrid"&&
+	$Settings['sqltype']!="sqlsrv_prepare"&&
+	$Settings['sqltype']!="pdo_sqlsrv") {
 	$Settings['sqltype'] = "mysqli"; } }
 $Settings['idb_time_format'] = "g:i A";
 $iDBTheme = "iDB"; $AltiDBTheme = "Gray";

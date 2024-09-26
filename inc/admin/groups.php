@@ -77,7 +77,9 @@ if($Settings['sqltype']=="mysql"||
 	$Settings['sqltype']=="sqlite"||
 	$Settings['sqltype']=="sqlite3"||
 	$Settings['sqltype']=="sqlite3_prepare"||
-	$Settings['sqltype']=="pdo_sqlite3") {
+	$Settings['sqltype']=="pdo_sqlite3"||
+	$Settings['sqltype']=="sqlsrv_prepare"||
+	$Settings['sqltype']=="pdo_sqlsrv") {
 $getperidq = sql_pre_query("SELECT DISTINCT \"PermissionID\" FROM \"".$Settings['sqltable']."permissions\"", null);
 $getperidnum = sql_count_rows(sql_pre_query("SELECT COUNT(DISTINCT \"PermissionID\") AS cnt FROM \"".$Settings['sqltable']."permissions\"", null), $SQLStat); }
 if($Settings['sqltype']=="cubrid"||

@@ -186,7 +186,9 @@ if($Settings['sqltype']=="mysql"||
 	$Settings['sqltype']=="sqlite"||
 	$Settings['sqltype']=="sqlite3"||
 	$Settings['sqltype']=="sqlite3_prepare"||
-	$Settings['sqltype']=="pdo_sqlite3") {
+	$Settings['sqltype']=="pdo_sqlite3"||
+	$Settings['sqltype']=="sqlsrv_prepare"||
+	$Settings['sqltype']=="pdo_sqlsrv") {
 $getperidq = sql_pre_query("SELECT DISTINCT \"PermissionID\" FROM \"".$Settings['sqltable']."catpermissions\" ORDER BY \"PermissionID\" ASC", null); 
 $getperidnum=sql_count_rows(sql_pre_query("SELECT COUNT(DISTINCT \"PermissionID\") AS cnt FROM \"".$Settings['sqltable']."catpermissions\" ORDER BY \"PermissionID\" ASC", null), $SQLStat); }
 if($Settings['sqltype']=="cubrid"||
@@ -206,7 +208,9 @@ if($Settings['sqltype']=="mysql"||
 	$Settings['sqltype']=="sqlite"||
 	$Settings['sqltype']=="sqlite3"||
 	$Settings['sqltype']=="sqlite3_prepare"||
-	$Settings['sqltype']=="pdo_sqlite3") {
+	$Settings['sqltype']=="pdo_sqlite3"||
+	$Settings['sqltype']=="sqlsrv_prepare"||
+	$Settings['sqltype']=="pdo_sqlsrv") {
 $getperidq = sql_pre_query("SELECT DISTINCT \"PermissionID\" FROM \"".$Settings['sqltable']."groups\" ORDER BY \"PermissionID\" ASC", null); 
 $getperidnum=sql_count_rows(sql_pre_query("SELECT COUNT(DISTINCT \"PermissionID\") AS cnt FROM \"".$Settings['sqltable']."groups\" ORDER BY \"PermissionID\" ASC", null), $SQLStat); }
 if($Settings['sqltype']=="cubrid"||
@@ -667,7 +671,9 @@ if($Settings['sqltype']=="mysql"||
 	$Settings['sqltype']=="sqlite"||
 	$Settings['sqltype']=="sqlite3"||
 	$Settings['sqltype']=="sqlite3_prepare"||
-	$Settings['sqltype']=="pdo_sqlite3") {
+	$Settings['sqltype']=="pdo_sqlite3"||
+	$Settings['sqltype']=="sqlsrv_prepare"||
+	$Settings['sqltype']=="pdo_sqlsrv") {
 $getperidq = sql_pre_query("SELECT DISTINCT \"PermissionID\" FROM \"".$Settings['sqltable']."catpermissions\"", null);
 $getperidnum=sql_count_rows(sql_pre_query("SELECT COUNT(DISTINCT \"PermissionID\") AS cnt FROM \"".$Settings['sqltable']."catpermissions\"", null), $SQLStat); }
 if($Settings['sqltype']=="cubrid"||

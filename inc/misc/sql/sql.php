@@ -129,6 +129,12 @@ if (file_exists($SettDir['sql'] . "cubrid_prepare.php")&&function_exists("cubrid
 if(file_exists($SettDir['sql']."pdo_cubrid.php")&&extension_loaded("PDO")&&extension_loaded("PDO_CUBRID")) {
     require($SettDir['sql']."pdo_cubrid.php");
 }
+if (file_exists($SettDir['sql'] . "pdo_sqlsrv.php")&&extension_loaded("PDO")&&extension_loaded("PDO_SQLSRV")) {
+    require($SettDir['sql'] . "pdo_sqlsrv.php");
+}
+if (file_exists($SettDir['sql'] . "sqlsrv_prepare.php")&&function_exists("sqlsrv_connect")) {
+    require($SettDir['sql'] . "sqlsrv_prepare.php");
+}
 
 // Helper function to map SQL library to its function prefix
 function get_sql_function_prefix($sqllib) {
@@ -146,7 +152,9 @@ function get_sql_function_prefix($sqllib) {
         'pdo_sqlite3' => 'pdo_sqlite3_func',
         'cubrid' => 'cubrid_func',
         'cubrid_prepare' => 'cubrid_prepare_func',
-        'pdo_cubrid' => 'pdo_cubrid_func'
+        'pdo_cubrid' => 'pdo_cubrid_func',
+        'sqlsrv_prepare' => 'sqlsrv_prepare_func',
+        'sqlsrv' => 'sqlsrv_func'
     );
     return isset($prefixes[$sqllib]) ? $prefixes[$sqllib] : null;
 }

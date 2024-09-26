@@ -536,7 +536,9 @@ if($Settings['sqltype']=="mysql"||
 	$Settings['sqltype']=="sqlite"||
 	$Settings['sqltype']=="sqlite3"||
 	$Settings['sqltype']=="sqlite3_prepare"||
-	$Settings['sqltype']=="pdo_sqlite3") {
+	$Settings['sqltype']=="pdo_sqlite3"||
+	$Settings['sqltype']=="sqlsrv_prepare"||
+	$Settings['sqltype']=="pdo_sqlsrv") {
 $getperidq = sql_pre_query("SELECT DISTINCT \"PermissionID\" FROM \"".$Settings['sqltable']."permissions\" ORDER BY \"PermissionID\" ASC", null);
 $getperidnum = sql_count_rows(sql_pre_query("SELECT COUNT(DISTINCT \"PermissionID\") AS cnt FROM \"".$Settings['sqltable']."permissions\" ORDER BY \"PermissionID\" ASC", null), $SQLStat); }
 if($Settings['sqltype']=="cubrid"||
@@ -546,6 +548,19 @@ $getperidq = sql_pre_query("SELECT DISTINCT \"permissionid\" FROM \"".$Settings[
 $getperidnum = sql_count_rows(sql_pre_query("SELECT COUNT(DISTINCT \"permissionid\") AS cnt FROM \"".$Settings['sqltable']."permissions\" ORDER BY \"PermissionID\" ASC", null), $SQLStat); }
 $getperidr=sql_query($getperidq,$SQLStat);
 if($getperidnum==0) {
+if($Settings['sqltype']=="mysql"||
+	$Settings['sqltype']=="mysqli"||
+	$Settings['sqltype']=="mysqli_prepare"||
+	$Settings['sqltype']=="pdo_mysql"||
+	$Settings['sqltype']=="pgsql"||
+	$Settings['sqltype']=="pgsql_prepare"||
+	$Settings['sqltype']=="pdo_pgsql"||
+	$Settings['sqltype']=="sqlite"||
+	$Settings['sqltype']=="sqlite3"||
+	$Settings['sqltype']=="sqlite3_prepare"||
+	$Settings['sqltype']=="pdo_sqlite3"||
+	$Settings['sqltype']=="sqlsrv_prepare"||
+	$Settings['sqltype']=="pdo_sqlsrv") {
 $getperidq = sql_pre_query("SELECT DISTINCT \"PermissionID\" FROM \"".$Settings['sqltable']."groups\" ORDER BY \"PermissionID\" ASC", null);
 $getperidnum = sql_count_rows(sql_pre_query("SELECT COUNT(DISTINCT \"PermissionID\") AS cnt FROM \"".$Settings['sqltable']."groups\" ORDER BY \"PermissionID\" ASC", null), $SQLStat); }
 if($Settings['sqltype']=="cubrid"||
@@ -553,7 +568,7 @@ if($Settings['sqltype']=="cubrid"||
 	$Settings['sqltype']=="pdo_cubrid") {
 $getperidq = sql_pre_query("SELECT DISTINCT \"permissionid\" FROM \"".$Settings['sqltable']."groups\" ORDER BY \"PermissionID\" ASC", null);
 $getperidnum = sql_count_rows(sql_pre_query("SELECT COUNT(DISTINCT \"permissionid\") AS cnt FROM \"".$Settings['sqltable']."groups\" ORDER BY \"PermissionID\" ASC", null), $SQLStat); }
-$getperidr=sql_query($getperidq,$SQLStat); }
+$getperidr=sql_query($getperidq,$SQLStat); } }
 if(!isset($getperidnum)) { $getperidnum = 0; }
 $getperidi = 0; 
 $nextperid = null;
@@ -1129,7 +1144,9 @@ if($Settings['sqltype']=="mysql"||
 	$Settings['sqltype']=="sqlite"||
 	$Settings['sqltype']=="sqlite3"||
 	$Settings['sqltype']=="sqlite3_prepare"||
-	$Settings['sqltype']=="pdo_sqlite3") {
+	$Settings['sqltype']=="pdo_sqlite3"||
+	$Settings['sqltype']=="sqlsrv_prepare"||
+	$Settings['sqltype']=="pdo_sqlsrv") {
 $getperidq = sql_pre_query("SELECT DISTINCT \"PermissionID\" FROM \"".$Settings['sqltable']."permissions\"", null);
 $getperidnum = sql_count_rows(sql_pre_query("SELECT COUNT(DISTINCT \"PermissionID\") AS cnt FROM \"".$Settings['sqltable']."permissions\"", null), $SQLStat); }
 if($Settings['sqltype']=="cubrid"||

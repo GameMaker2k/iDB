@@ -42,7 +42,10 @@ if($_GET['act']=="sqldumper"&&$_SESSION['UserGroup']!=$Settings['GuestGroup']&&
 	if($Settings['sqltype']=="cubrid"||
 		$Settings['sqltype']=="cubrid_prepare"||
 		$Settings['sqltype']=="pdo_cubrid") {
-	require($SettDir['sqldumper'].'cubrid.php'); } }
+	require($SettDir['sqldumper'].'cubrid.php'); }
+	if($Settings['sqltype']=="sqlsrv"||
+		$Settings['sqltype']=="sqlsrv_prepare") {
+	require($SettDir['sqldumper'].'cubrid.php'); }}
 if(!isset($checklowview)) {
 	$checklowview = false; }
 if($checklowview!==false&&$checklowview!==true) {
