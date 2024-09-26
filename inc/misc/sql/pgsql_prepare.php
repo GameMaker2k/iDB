@@ -184,22 +184,26 @@ function pgsql_prepare_func_pre_query($query_string, $query_vars) {
         $query_vars = [];
     }
 
-    // Handle placeholders like %s, %d, %i, %f and replace them with PostgreSQL's numbered placeholders ($1, $2, etc.)
-    $replacements = ['\'%s\'' => '%s', '%s' => '%s', '%d' => '%d', '%i' => '%i', '%f' => '%f'];
-    $query_string = str_replace(array_keys($replacements), array_values($replacements), $query_string);
-    
-    // Replace '%s', '%d', '%i', etc. with $1, $2, $3... based on the number of query_vars
-    foreach ($query_vars as $key => $value) {
-        $position = $key + 1; // PostgreSQL uses 1-based index for placeholders
-        $query_string = preg_replace('/%[sdif]/', "\$$position", $query_string, 1);
-    }
+    // SQLite only supports `?` or named placeholders like `:param`
+    // Replace complex placeholders with `?`
+    $query_string = str_replace(["'%s'", '%d', '%i', '%f'], ['?', '?', '?', '?'], $query_string);
 
-    // Filter out null values in the $query_vars array (if needed)
+    // Filter out null values in the query_vars array
     $query_vars = array_filter($query_vars, function ($value) {
         return $value !== null;
     });
 
-    // Return the modified query string and the variables for further execution
+    // Count the number of `?` placeholders
+    $placeholder_count = substr_count($query_string, '?');
+    $params_count = count($query_vars);
+
+    // Check for mismatch between placeholders and parameters
+    if ($placeholder_count !== $params_count) {
+        output_error("SQL Placeholder Error: Mismatch between placeholders ($placeholder_count) and parameters ($params_count).", E_USER_ERROR);
+        return false;
+    }
+
+    // Return the query string and the array of variables
     return [$query_string, $query_vars];
 }
 

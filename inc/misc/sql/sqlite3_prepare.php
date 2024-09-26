@@ -181,25 +181,26 @@ function sqlite3_prepare_func_pre_query($query_string, $query_vars = []) {
         $query_vars = [];
     }
 
-    // Handle placeholders like %s, %d, %i, %f and convert them to PDO's positional placeholders (?)
-    $replacements = ['\'%s\'' => '$1', '%s' => '$1', '%d' => '$2', '%i' => '$3', '%f' => '$4'];
-    $query_string = str_replace(array_keys($replacements), array_values($replacements), $query_string);
+    // SQLite only supports `?` or named placeholders like `:param`
+    // Replace complex placeholders with `?`
+    $query_string = str_replace(["'%s'", '%d', '%i', '%f'], ['?', '?', '?', '?'], $query_string);
 
-    // Filter out null values in $query_vars array
+    // Filter out null values in the query_vars array
     $query_vars = array_filter($query_vars, function ($value) {
         return $value !== null;
     });
 
-    // Check for mismatch between placeholders and variables
+    // Count the number of `?` placeholders
     $placeholder_count = substr_count($query_string, '?');
     $params_count = count($query_vars);
 
+    // Check for mismatch between placeholders and parameters
     if ($placeholder_count !== $params_count) {
         output_error("SQL Placeholder Error: Mismatch between placeholders ($placeholder_count) and parameters ($params_count).", E_USER_ERROR);
         return false;
     }
 
-    // Return the query string and variables for further execution
+    // Return the query string and the array of variables
     return [$query_string, $query_vars];
 }
 

@@ -42,11 +42,35 @@ if (!isset($NumQueriesArray['sqlsrv_prepare'])) {
 function sqlsrv_prepare_func_query($query, $params = [], $link = null) {
     global $NumQueriesArray;
 
+    // If the query is provided as an array (query string and parameters)
+    if (is_array($query)) {
+        list($query_string, $params) = $query;
+    } else {
+        $query_string = $query;
+    }
+
     // Prepare the statement
-    $stmt = sqlsrv_prepare($link, $query, $params);
+    $stmt = sqlsrv_prepare($link, $query_string, $params);
     if (!$stmt) {
         output_error("SQL Error (Prepare): " . print_r(sqlsrv_prepare_func_error($link), true), E_USER_ERROR);
         return false;
+    }
+
+    // Bind parameters if any are provided
+    if (!empty($params)) {
+        // Dynamically bind parameters
+        foreach ($params as $key => $value) {
+            if (is_int($value)) {
+                $params[$key] = [$value, SQLSRV_PARAM_IN, null, SQLSRV_SQLTYPE_INT];
+            } elseif (is_float($value)) {
+                $params[$key] = [$value, SQLSRV_PARAM_IN, null, SQLSRV_SQLTYPE_FLOAT];
+            } elseif (is_null($value)) {
+                $params[$key] = [null, SQLSRV_PARAM_IN, null, SQLSRV_SQLTYPE_NULL];
+            } else {
+                $params[$key] = [$value, SQLSRV_PARAM_IN, null, SQLSRV_SQLTYPE_VARCHAR('max')];
+            }
+        }
+        sqlsrv_prepare($link, $query_string, $params);
     }
 
     // Execute the prepared statement
@@ -54,6 +78,9 @@ function sqlsrv_prepare_func_query($query, $params = [], $link = null) {
         output_error("SQL Error (Execution): " . print_r(sqlsrv_prepare_func_error($link), true), E_USER_ERROR);
         return false;
     }
+
+    // Reset the statement for reuse
+    sqlsrv_free_stmt($stmt);
 
     ++$NumQueriesArray['sqlsrv_prepare'];
 
@@ -125,13 +152,30 @@ function sqlsrv_prepare_func_escape_string($string, $link = null) {
     return $string; // SQLSRV does not have a string escape function; use parameterized queries instead.
 }
 
-// SafeSQL Lite with prepared statements and placeholders
-function sqlsrv_prepare_func_pre_query($query_string, $query_vars) {
+// Pre-process Query for SQLSRV
+function sqlsrv_prepare_func_pre_query($query_string, $query_vars = []) {
     if ($query_vars === null || !is_array($query_vars)) {
         $query_vars = [];
     }
 
-    // No need to convert placeholders in SQLSRV, as the use of '?' is standard in parameterized queries
+    // Convert placeholders like '%s', '%d', '%i', '%f' to positional placeholders '?'
+    $query_string = str_replace(["'%s'", '%d', '%i', '%f'], ['?', '?', '?', '?'], $query_string);
+
+    // Filter out null values in $query_vars array
+    $query_vars = array_filter($query_vars, function ($value) {
+        return $value !== null;
+    });
+
+    // Check for mismatch between placeholders and variables
+    $placeholder_count = substr_count($query_string, '?');
+    $params_count = count($query_vars);
+
+    if ($placeholder_count !== $params_count) {
+        output_error("SQL Placeholder Error: Mismatch between placeholders ($placeholder_count) and parameters ($params_count).", E_USER_ERROR);
+        return false;
+    }
+
+    // Return the query string and variables for further execution
     return [$query_string, $query_vars];
 }
 
