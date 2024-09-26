@@ -454,6 +454,27 @@ function unserialize_session($data)
 
     return $returnArray;
 }
+function build_old_format_from_unserialized_data($sessionData)
+{
+    if (!is_array($sessionData)) {
+        // Unserialize the data if it's not already an array
+        $sessionData = unserialize($sessionData);
+    }
+
+    $sessionString = '';
+
+    // Iterate through the session data
+    foreach ($sessionData as $key => $value) {
+        // Serialize each value
+        $serializedValue = serialize($value);
+
+        // Combine the key and serialized value in the old format
+        $sessionString .= $key . '|' . $serializedValue;
+    }
+
+    return $sessionString;
+}
+
 // Make the Query String if we are not useing &=
 function qstring_old($qstr=";",$qsep="=")
 { $_GET = array(); $_GET = null;
