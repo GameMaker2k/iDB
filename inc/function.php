@@ -847,7 +847,7 @@ if($_GET['debug']=="true"||
 $debug_on = true; } }
 $BoardURL = $Settings['idburl'];
 // Change URLs to Links
-function pre_url2link($matches) {
+function pre_url2link_old($matches) {
 global $BoardURL; $opennew = true;
 $burlCHCK = parse_url($BoardURL);
 $urlCHCK = parse_url($matches[0]);
@@ -875,14 +875,73 @@ $outlink = "<a onclick=\"window.open(this.href); return false;\" href=\"".$outur
 if($opennew===false) {
 $outlink = "<a href=\"".$outurl."\">".$outurl."</a>"; }
 return $outlink; }
-function url2link($string) {
-return preg_replace_callback("/(?<![\">])\b([a-zA-Z]+)\:\/\/([a-z0-9\-\.@\:]+)(\:[0-9]+)?\/([A-Za-z0-9\.\/%\?\!\$\(\)\*\-_\:;,\+\@~]+)?(\?)?([A-Za-z0-9\.\/%&\=\?\!\$\(\)\*\-_\:;,\+\@~]+)?(\#)?([A-Za-z0-9\.\/%&\=\?\!\$\(\)\*\-_\:;,\+\@~]+)?/is", "pre_url2link", $string); }
-function urlcheck($string) {
+function url2link_old($string) {
+return preg_replace_callback("/(?<![\">])\b([a-zA-Z]+)\:\/\/([a-z0-9\-\.@\:]+)(\:[0-9]+)?\/([A-Za-z0-9\.\/%\?\!\$\(\)\*\-_\:;,\+\@~]+)?(\?)?([A-Za-z0-9\.\/%&\=\?\!\$\(\)\*\-_\:;,\+\@~]+)?(\#)?([A-Za-z0-9\.\/%&\=\?\!\$\(\)\*\-_\:;,\+\@~]+)?/is", "pre_url2link_old", $string); }
+function urlcheck_old($string) {
 global $BoardURL;
 $retnum = preg_match_all("/([a-zA-Z]+)\:\/\/([a-z0-9\-\.@\:]+)(\:[0-9]+)?\/([A-Za-z0-9\.\/%\?\!\$\(\)\*\-_\:;,\+\@~]+)?(\?)?([A-Za-z0-9\.\/%&\=\?\!\$\(\)\*\-_\:;,\+\@~]+)?(\#)?([A-Za-z0-9\.\/%&\=\?\!\$\(\)\*\-_\:;,\+\@~]+)?/is", $string, $urlcheck); 
 if(isset($urlcheck[0][0])) { $url = $urlcheck[0][0]; }
 if(!isset($urlcheck[0][0])) { $url = $BoardURL; }
 return $url; }
+// Change URLs to Links
+function pre_url2link($matches) {
+    global $BoardURL;
+    
+    // Parse the board URL and the matched URL
+    $burlCHCK = parse_url($BoardURL);
+    $urlCHCK = parse_url($matches[0]);
+    
+    // Determine if the link should open in a new window
+    $opennew = $urlCHCK['host'] !== $burlCHCK['host'];
+    
+    // Rebuild the URL
+    $outurl = $urlCHCK['scheme'] . "://";
+    
+    // If user credentials exist, add them to the URL
+    if (isset($urlCHCK['user'])) {
+        $outurl .= $urlCHCK['user'];
+        if (isset($urlCHCK['pass'])) {
+            $outurl .= ":" . $urlCHCK['pass'];
+        }
+        $outurl .= "@";
+    }
+
+    // Add host and path
+    $outurl .= $urlCHCK['host'] ?? '';
+    $outurl .= $urlCHCK['path'] ?? '/';
+    
+    // If query or fragment exists, append them
+    if (isset($urlCHCK['query'])) {
+        $outurl .= '?' . str_replace(' ', '+', $urlCHCK['query']);
+    }
+    if (isset($urlCHCK['fragment'])) {
+        $outurl .= '#' . str_replace(' ', '+', $urlCHCK['fragment']);
+    }
+
+    // Generate the HTML anchor tag
+    $outlink = "<a href=\"{$outurl}\"" . ($opennew ? " onclick=\"window.open(this.href); return false;\"" : "") . ">{$outurl}</a>";
+    
+    return $outlink;
+}
+
+function url2link($string) {
+    // Optimized regex for URL matching
+    return preg_replace_callback(
+        "/\b([a-zA-Z]+):\/\/([a-zA-Z0-9\-\.@\:]+)(\:[0-9]+)?(\/[A-Za-z0-9\.\/%\?\!\$\(\)\*\-_\:;,\+\@~]*)?(\?)?([A-Za-z0-9\.\/%&=\?\!\$\(\)\*\-_\:;,\+\@~]*)?(\#)?([A-Za-z0-9\.\/%&=\?\!\$\(\)\*\-_\:;,\+\@~]*)?/is",
+        "pre_url2link",
+        $string
+    );
+}
+
+function urlcheck($string) {
+    global $BoardURL;
+    
+    // Simplified regex for extracting the first URL
+    preg_match("/\b([a-zA-Z]+):\/\/([a-zA-Z0-9\-\.@\:]+)(\:[0-9]+)?(\/[A-Za-z0-9\.\/%\?\!\$\(\)\*\-_\:;,\+\@~]*)?(\?)?([A-Za-z0-9\.\/%&=\?\!\$\(\)\*\-_\:;,\+\@~]*)?(\#)?([A-Za-z0-9\.\/%&=\?\!\$\(\)\*\-_\:;,\+\@~]*)?/is", $string, $urlcheck);
+    
+    // Return the found URL or the default Board URL
+    return $urlcheck[0] ?? $BoardURL;
+}
 //Check to make sure theme exists
 $BoardTheme = $Settings['DefaultTheme'];
 $ThemeDir = $SettDir['themes'];
