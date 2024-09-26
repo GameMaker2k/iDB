@@ -100,14 +100,19 @@ function sqlsrv_prepare_func_num_rows($stmt) {
 }
 
 // Connect to SQL Server database using sqlsrv
-function sqlsrv_prepare_func_connect_db($server, $username, $password, $database = null) {
+function sqlsrv_prepare_func_connect_db($server, $username = null, $password = null, $database = null) {
     // Set up default connection options
     $connectionInfo = [
-        "UID" => $username,
-        "PWD" => $password,
         "CharacterSet" => "UTF-8",
         "TrustServerCertificate" => true
     ];
+
+    // Check if username and password are provided for SQL Authentication
+    if (!empty($username) && !empty($password)) {
+        // Use SQL Server Authentication
+        $connectionInfo["UID"] = $username;
+        $connectionInfo["PWD"] = $password;
+    }
 
     // Only set the Database key if a database is specified
     if ($database !== null) {
@@ -122,10 +127,7 @@ function sqlsrv_prepare_func_connect_db($server, $username, $password, $database
         return false;
     }
 
-    // You can set session options after connection (if needed in SQL Server)
-    // Example: Setting session level options (if applicable)
-    // sqlsrv_query($link, "SET SOME_OPTION = value");
-
+    // Connection successful, return the link resource
     return $link;
 }
 
