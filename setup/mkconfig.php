@@ -525,6 +525,7 @@ if(!@unlink($SetupDir['sql'].'index.php')) { $chdel = false; }
 if(!@unlink($SetupDir['sql'].'mysql.php')) { $chdel = false; }
 if(!@unlink($SetupDir['sql'].'pgsql.php')) { $chdel = false; }
 if(!@unlink($SetupDir['sql'].'sqlite.php')) { $chdel = false; }
+if(!@unlink($SetupDir['sql'].'sqlsrv.php')) { $chdel = false; }
 if(!@rmdir($SetupDir['sql'])) { $chdel = false; }
 if(!@unlink($SetupDir['setup'].'index.php')) { $chdel = false; }
 if(!@unlink($SetupDir['setup'].'license.php')) { $chdel = false; }
