@@ -82,7 +82,7 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."even
 "  \"EventYear\" int(5) NOT NULL default '0',\n".
 "  \"EventYearEnd\" int(5) NOT NULL default '0',\n".
 "  \"IP\" nvarchar(64) NOT NULL default '',\n".
-"  PRIMARY KEY  (\"id\")\n".
+"  CONSTRAINT UQ_E_Name UNIQUE (\"Name\")  (\"id\")\n".
 ");", null);
 sql_query($query,$SQLStat);
 if($_POST['testdata']=="yes") {
@@ -108,7 +108,7 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."foru
 "  \"HotTopicPosts\" int(15) NOT NULL default '0',\n".
 "  \"NumPosts\" int(15) NOT NULL default '0',\n".
 "  \"NumTopics\" int(15) NOT NULL default '0',\n".
-"  PRIMARY KEY  (\"id\")\n".
+"  CONSTRAINT UQ_F_Name UNIQUE (\"Name\")  (\"id\")\n".
 ");", null);
 sql_query($query,$SQLStat);
 if($_POST['startblank']=="no") {
@@ -146,7 +146,7 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."grou
 "  \"HasAdminCP\" nvarchar(5) NOT NULL default '',\n".
 "  \"ViewDBInfo\" nvarchar(5) NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\"),\n".
-"  UNIQUE KEY \"Name\" (\"Name\")\n".
+"  CONSTRAINT UQ_G_Name UNIQUE (\"Name\")\n".
 ");", null);
 sql_query($query,$SQLStat);
 $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."groups\" (\"Name\", \"PermissionID\", \"NamePrefix\", \"NameSuffix\", \"CanViewBoard\", \"CanViewOffLine\", \"CanEditProfile\", \"CanAddEvents\", \"CanPM\", \"CanSearch\", \"CanExecPHP\", \"CanDoHTML\", \"CanUseBBTags\", \"CanModForum\", \"CanViewIPAddress\", \"CanViewUserAgent\", \"CanViewAnonymous\", \"FloodControl\", \"SearchFlood\", \"PromoteTo\", \"PromotePosts\", \"PromoteKarma\", \"DemoteTo\", \"DemotePosts\", \"DemoteKarma\", \"HasModCP\", \"HasAdminCP\", \"ViewDBInfo\") VALUES\n".
@@ -167,7 +167,7 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."ranks\" (\n".
 "  \"DemotePosts\" int(15) NOT NULL default '0',\n".
 "  \"DemoteKarma\" int(15) NOT NULL default '0',\n".
 "  PRIMARY KEY  (\"id\"),\n".
-"  UNIQUE KEY \"Name\" (\"Name\")\n".
+"  CONSTRAINT UQ_R_Name UNIQUE (\"Name\")\n".
 ");", null);
 sql_query($query,$SQLStat);
 $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."levels\" (\n".
@@ -180,7 +180,7 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."levels\" (\n".
 "  \"DemotePosts\" int(15) NOT NULL default '0',\n".
 "  \"DemoteKarma\" int(15) NOT NULL default '0',\n".
 "  PRIMARY KEY  (\"id\"),\n".
-"  UNIQUE KEY \"Name\" (\"Name\")\n".
+"  CONSTRAINT UQ_L_Name UNIQUE (\"Name\")\n".
 ");", null);
 sql_query($query,$SQLStat);
 $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."members\" (\n".
@@ -230,9 +230,9 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."memb
 "  \"IP\" nvarchar(64) NOT NULL default '',\n".
 "  \"Salt\" nvarchar(50) NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\"),\n".
-"  UNIQUE KEY \"Name\" (\"Name\"),\n".
-"  UNIQUE KEY \"Handle\" (\"Name\"),\n".
-"  UNIQUE KEY \"Email\" (\"Email\")\n".
+"  CONSTRAINT UQ_M_Name UNIQUE (\"Name\"),\n".
+"  CONSTRAINT UQ_Handle UNIQUE (\"Handle\"),\n".
+"  CONSTRAINT UQ_Email UNIQUE (\"Email\")\n".
 ");", null);
 sql_query($query,$SQLStat);
 $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."members\" (\"id\", \"Name\", \"Handle\", \"UserPassword\", \"HashType\", \"Email\", \"GroupID\", \"LevelID\", \"RankID\", \"Validated\", \"HiddenMember\", \"WarnLevel\", \"Interests\", \"Title\", \"Joined\", \"LastActive\", \"LastLogin\", \"LastPostTime\", \"BanTime\", \"BirthDay\", \"BirthMonth\", \"BirthYear\", \"Signature\", \"Notes\", \"Bio\", \"Avatar\", \"AvatarSize\", \"Website\", \"Location\", \"Gender\", \"PostCount\", \"Karma\", \"KarmaUpdate\", \"RepliesPerPage\", \"TopicsPerPage\", \"MessagesPerPage\", \"TimeZone\", \"DateFormat\", \"TimeFormat\", \"UseTheme\", \"IgnoreSignitures\", \"IgnoreAdvatars\", \"IgnoreUsers\", \"IP\", \"Salt\") VALUES\n".
@@ -514,7 +514,7 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."them
 "  \"NoAvatar\" nvarchar(150) NOT NULL default '',\n".
 "  \"NoAvatarSize\" nvarchar(150) NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\"),\n".
-"  UNIQUE KEY \"Name\" (\"Name\")\n".
+"  CONSTRAINT UQ_T_Name UNIQUE (\"Name\")\n".
 ");", null);
 sql_query($query,$SQLStat);
 $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."topics\" (\n".

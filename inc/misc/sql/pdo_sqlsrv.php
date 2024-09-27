@@ -124,9 +124,13 @@ function pdo_sqlsrv_func_connect_db($server, $username = null, $password = null,
         // Connection options for SQL Authentication
         $options = [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,  // Set error mode to exceptions
-            PDO::ATTR_PERSISTENT => $new_link,            // Use persistent connections if requested
-            PDO::SQLSRV_ATTR_TRUST_SERVER_CERTIFICATE => true // Trust server certificate
+            PDO::ATTR_PERSISTENT => $new_link            // Use persistent connections if requested
         ];
+
+        // Check if the constant is defined and add it to the options if it exists
+        if (defined('PDO::SQLSRV_ATTR_TRUST_SERVER_CERTIFICATE')) {
+            $options[PDO::SQLSRV_ATTR_TRUST_SERVER_CERTIFICATE] = true; // Trust server certificate if available
+        }
 
         // Use SQL Authentication if username and password are provided
         if (!empty($username) && !empty($password)) {
