@@ -890,7 +890,7 @@ function logWebAccess($logFile, $format = '%h %l %u %t "%r" %>s %b "%{Referer}i"
     }
 }
 // Make xhtml tags
-function html_tag_make($name="br",$emptytag=true,$attbvar=null,$attbval=null,$extratest=null) {
+function html_tag_make_old($name="br",$emptytag=true,$attbvar=null,$attbval=null,$extratest=null) {
 	$var_num = count($attbvar); $value_num = count($attbval);
 	if($var_num!=$value_num) { 
 		output_error("Erorr Number of Var and Values dont match!",E_USER_ERROR);
@@ -908,7 +908,7 @@ function html_tag_make($name="br",$emptytag=true,$attbvar=null,$attbval=null,$ex
 	$mytag = $mytag.$extratest; $mytag = $mytag."</".$name.">"; } 
 	return $mytag; }
 // Start a xml document
-function xml_tag_make($type,$attbs,$retval=false) {
+function xml_tag_make_old($type,$attbs,$retval=false) {
 	$melanie1 = explode("&",$attbs);
 	$melanienum=count($melanie1);
 	$melaniei=0; $attblist = null;
@@ -923,11 +923,100 @@ function xml_tag_make($type,$attbs,$retval=false) {
 	if($retval===true) {
 	return '<?'.$type.$attblist.'?>'."\n"; } }
 // Start a xml document (old version)
-function xml_doc_start($ver,$encode,$retval=false) {
+function xml_doc_start_old($ver,$encode,$retval=false) {
 	if($retval===false) {
 	echo xml_tag_make('xml','version='.$ver.'&encoding='.$encode,true); }
 	if($retval===true) {
 	return xml_tag_make('xml','version='.$ver.'&encoding='.$encode,true); } }
+// Make xhtml tags
+function html_tag_make($name = "br", $emptytag = true, $attbvar = null, $attbval = null, $extratest = null) {
+    // Check if both attributes and values are null or their counts mismatch
+    if ($attbvar !== null && $attbval !== null && count($attbvar) !== count($attbval)) {
+        trigger_error("Error: Number of attributes and values don't match!", E_USER_ERROR);
+        return false;
+    }
+
+    // Initialize the tag with the tag name
+    $mytag = "<" . $name;
+
+    // Append attributes if provided
+    if ($attbvar !== null && $attbval !== null) {
+        $attributes = [];
+        foreach ($attbvar as $i => $attb) {
+            $attributes[] = $attb . '="' . htmlspecialchars($attbval[$i]) . '"';
+        }
+        $mytag .= " " . implode(" ", $attributes);
+    }
+
+    // Determine if tag is self-closing
+    if ($emptytag) {
+        $mytag .= " />";
+    } else {
+        $mytag .= ">";
+        if ($extratest !== null) {
+            $mytag .= $extratest;
+        }
+        $mytag .= "</" . $name . ">";
+    }
+
+    return $mytag;
+}
+
+// Start a xml document
+function xml_tag_make($type, $attbs, $retval = false) {
+    // Split attributes string by & and then by = for name-value pairs
+    $attblist = "";
+    if (!empty($attbs)) {
+        $attributes = array_map(function($attb) {
+            list($key, $val) = explode("=", $attb);
+            return $key . '="' . htmlspecialchars($val) . '"';
+        }, explode("&", $attbs));
+
+        $attblist = " " . implode(" ", $attributes);
+    }
+
+    // Build the final XML declaration
+    $xml_declaration = '<?' . $type . $attblist . '?>' . "\n";
+
+    if ($retval) {
+        return $xml_declaration;
+    } else {
+        echo $xml_declaration;
+    }
+}
+
+// Start a generic XML tag
+function xml_tag_make_alt($name, $attributes = null, $content = null, $emptytag = false) {
+    // Initialize the XML tag
+    $tag = "<" . $name;
+
+    // Add attributes if provided
+    if ($attributes !== null) {
+        foreach ($attributes as $attr => $value) {
+            $tag .= ' ' . $attr . '="' . htmlspecialchars($value) . '"';
+        }
+    }
+
+    // Check if tag is self-closing or has content
+    if ($emptytag) {
+        $tag .= " />";
+    } else {
+        $tag .= ">";
+        if ($content !== null) {
+            $tag .= htmlspecialchars($content);  // Escaping content to prevent XML injection
+        }
+        $tag .= "</" . $name . ">";
+    }
+
+    return $tag;
+}
+
+// Start a xml document (wrapper for xml_tag_make)
+function xml_doc_start($ver, $encode, $retval = false) {
+    // Call the xml_tag_make function to generate the XML document declaration
+    return xml_tag_make('xml', 'version=' . $ver . '&encoding=' . $encode, $retval);
+}
+
 $icharset = $Settings['charset'];
 $debug_on = false;
 if(isset($_GET['debug'])) {

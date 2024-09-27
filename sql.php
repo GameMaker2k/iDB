@@ -974,7 +974,129 @@ echo '<?xml-stylesheet type="text/xsl" href="'.url_maker($exfile['index'],$Setti
 </version>
 
 </versioninfo>
-<?php gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); } } 
+<?php gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); } }
+if ($_GET['act'] == "status") {
+	$_GET['act'] = "view";
+	$_GET['status'] = null; }
+$statusCodes = array(
+    100 => "100 Continue",
+    101 => "101 Switching Protocols",
+    102 => "102 Processing",
+    103 => "103 Early Hints",
+    200 => "200 OK",
+    201 => "201 Created",
+    202 => "202 Accepted",
+    203 => "203 Non-Authoritative Information",
+    204 => "204 No Content",
+    205 => "205 Reset Content",
+    206 => "206 Partial Content",
+    207 => "207 Multi-Status",
+    208 => "208 Already Reported",
+    226 => "226 IM Used",
+    300 => "300 Multiple Choices",
+    301 => "301 Moved Permanently",
+    302 => "302 Found",
+    303 => "303 See Other",
+    304 => "304 Not Modified",
+    305 => "305 Use Proxy",
+    306 => "306 (Unused)",
+    307 => "307 Temporary Redirect",
+    308 => "308 Permanent Redirect",
+    400 => "400 Bad Request",
+    401 => "401 Unauthorized",
+    402 => "402 Payment Required",
+    403 => "403 Forbidden",
+    404 => "404 Not Found",
+    405 => "405 Method Not Allowed",
+    406 => "406 Not Acceptable",
+    407 => "407 Proxy Authentication Required",
+    408 => "408 Request Timeout",
+    409 => "409 Conflict",
+    410 => "410 Gone",
+    411 => "411 Length Required",
+    412 => "412 Precondition Failed",
+    413 => "413 Payload Too Large",
+    414 => "414 URI Too Long",
+    415 => "415 Unsupported Media Type",
+    416 => "416 Range Not Satisfiable",
+    417 => "417 Expectation Failed",
+    418 => "418 I'm a teapot",
+    421 => "421 Misdirected Request",
+    422 => "422 Unprocessable Entity",
+    423 => "423 Locked",
+    424 => "424 Failed Dependency",
+    425 => "425 Too Early",
+    426 => "426 Upgrade Required",
+    428 => "428 Precondition Required",
+    429 => "429 Too Many Requests",
+    431 => "431 Request Header Fields Too Large",
+    451 => "451 Unavailable For Legal Reasons",
+    500 => "500 Internal Server Error",
+    501 => "501 Not Implemented",
+    502 => "502 Bad Gateway",
+    503 => "503 Service Unavailable",
+    504 => "504 Gateway Timeout",
+    505 => "505 HTTP Version Not Supported",
+    506 => "506 Variant Also Negotiates",
+    507 => "507 Insufficient Storage",
+    508 => "508 Loop Detected",
+    510 => "510 Not Extended",
+    511 => "511 Network Authentication Required"
+);
+
+if ($_GET['act'] == "status") {
+    // Check if 'status' is set and valid, otherwise default to 200
+    if (!isset($_GET['status']) || !array_key_exists((int)$_GET['status'], $statusCodes)) {
+        $_GET['status'] = 200; // Default to 200 OK
+    } else {
+        $_GET['status'] = (int)$_GET['status']; // Cast to int if valid
+    }
+?>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en-US">
+<head>
+    <title><?php echo $statusCodes[$_GET['status']]; ?></title>
+    <meta http-equiv="content-language" content="en-US">
+    <meta http-equiv="content-type" content="text/html; charset=iso-8859-15">
+    <meta name="Author" content="Null">
+    <meta name="Keywords" content="Null">
+    <meta name="Description" content="Null">
+    <style type="text/css">
+        body {
+            background-color: black;
+            color: skyblue;
+        }
+        table {
+            height: 100%;
+            width: 100%;
+            text-align: center;
+            vertical-align: center;
+        }
+        a {
+            font-size: 100px;
+            font-weight: bold;
+            text-decoration: none;
+            color: skyblue;
+        }
+    </style>
+</head>
+
+<body>
+    <table>
+        <tr>
+            <td><pre><a href="index.php?act=View"><?php echo $statusCodes[$_GET['status']]; ?></a></pre></td>
+        </tr>
+    </table>
+</body>
+</html>
+
+<?php
+    $urlstatus = $_GET['status'];
+    gzip_page($Settings['use_gzip'], $GZipEncode['Type']); // Assuming gzip_page function exists
+    session_write_close();
+    die();
+}
 if($Settings['vercheck']===1) {
 if($_GET['act']=="versioninfo") { header("Content-Type: text/plain; charset=UTF-8");
 header("Location: ".$VerCheckURL."&name=".urlencode($iDBVerName)); $urlstatus = 302;
