@@ -223,6 +223,7 @@ function pdo_sqlsrv_func_pre_query($query_string, $query_vars = []) {
     // Handle placeholders like %s, %d, %i, %f and convert them to PDO's positional placeholders (?)
     $query_string = str_replace(["'%s'", '%d', '%i', '%f'], ['?', '?', '?', '?'], $query_string);
 
+    // If the query contains named placeholders (e.g., :name), we won't replace those
     // Filter out null values in $query_vars array
     $query_vars = array_filter($query_vars, function ($value) {
         return $value !== null;
