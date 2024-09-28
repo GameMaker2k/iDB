@@ -1052,17 +1052,16 @@ if ($_GET['act'] == "status") {
         $_GET['status'] = (int)$_GET['status']; // Cast to int if valid
     }
 ?>
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE html>
 <html lang="en-US">
 <head>
     <title><?php echo $statusCodes[$_GET['status']]; ?></title>
-    <meta http-equiv="content-language" content="en-US">
-    <meta http-equiv="content-type" content="text/html; charset=iso-8859-15">
-    <meta name="Author" content="Null">
-    <meta name="Keywords" content="Null">
-    <meta name="Description" content="Null">
-    <style type="text/css">
+    <meta charset="UTF-8">
+    <meta name="author" content="Null">
+    <meta name="keywords" content="Null">
+    <meta name="description" content="Null">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
         body {
             background-color: black;
             color: skyblue;
@@ -1071,7 +1070,6 @@ if ($_GET['act'] == "status") {
             height: 100%;
             width: 100%;
             text-align: center;
-            vertical-align: center;
         }
         a {
             font-size: 100px;
@@ -1085,12 +1083,11 @@ if ($_GET['act'] == "status") {
 <body>
     <table>
         <tr>
-            <td><pre><a href="index.php?act=View"><?php echo $statusCodes[$_GET['status']]; ?></a></pre></td>
+            <td><a href="index.php?act=View"><?php echo $statusCodes[$_GET['status']]; ?></a></td>
         </tr>
     </table>
 </body>
 </html>
-
 <?php
     $urlstatus = $_GET['status'];
     gzip_page($Settings['use_gzip'], $GZipEncode['Type']); // Assuming gzip_page function exists
