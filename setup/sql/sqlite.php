@@ -413,6 +413,7 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."posts\" (\n".
 "  \"TopicID\" INTEGER NOT NULL default '0',\n".
 "  \"ForumID\" INTEGER NOT NULL default '0',\n".
 "  \"CategoryID\" INTEGER NOT NULL default '0',\n".
+"  \"ReplyID\" INTEGER NOT NULL default '0',\n".
 "  \"UserID\" INTEGER NOT NULL default '0',\n".
 "  \"GuestName\" VARCHAR(150) NOT NULL default '',\n".
 "  \"TimeStamp\" INTEGER NOT NULL default '0',\n".
@@ -426,8 +427,8 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."posts\" (\n".
 ");", null);
 sql_query($query,$SQLStat);
 if($_POST['testdata']=="yes") {
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."posts\" (\"TopicID\", \"ForumID\", \"CategoryID\", \"UserID\", \"GuestName\", \"TimeStamp\", \"LastUpdate\", \"EditUser\", \"EditUserName\", \"Post\", \"Description\", \"IP\", \"EditIP\") VALUES\n".
-"(1, 1, 1, -1, '".$iDB_Author."', %i, %i, 1, '".$_POST['AdminUser']."', 'Welcome to your new Internet Discussion Board! :) ', '%s', '%s', '127.0.0.1');", array($YourDate,$YourEditDate,"Welcome ".$_POST['AdminUser'],$GuestLocalIP)); 
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."posts\" (\"TopicID\", \"ForumID\", \"CategoryID\", \"ReplyID\", \"UserID\", \"GuestName\", \"TimeStamp\", \"LastUpdate\", \"EditUser\", \"EditUserName\", \"Post\", \"Description\", \"IP\", \"EditIP\") VALUES\n".
+"(1, 1, 1, 0, -1, '".$iDB_Author."', %i, %i, 1, '".$_POST['AdminUser']."', 'Welcome to your new Internet Discussion Board! :) ', '%s', '%s', '127.0.0.1');", array($YourDate,$YourEditDate,"Welcome ".$_POST['AdminUser'],$GuestLocalIP)); 
 sql_query($query,$SQLStat); }
 $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."restrictedwords\" (\n".
 "  \"id\" INTEGER PRIMARY KEY NOT NULL,\n".
