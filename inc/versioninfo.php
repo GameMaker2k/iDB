@@ -11,7 +11,7 @@
     Copyright 2004-2024 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2024 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: versioninfo.php - Last Update: 9/29/2024 SVN 1274 - Author: cooldude2k $
+    $FileInfo: versioninfo.php - Last Update: 9/29/2024 SVN 1276 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="versioninfo.php"||$File3Name=="/versioninfo.php") {
@@ -29,7 +29,7 @@ function version_info($proname, $subver, $ver, $supver, $reltype, $svnver, $show
 }
 // Version number and date stuff. :P
 $VER1[0] = 0; $VER1[1] = 7; $VER1[2] = 4; $VERFull[1] = $VER1[0].".".$VER1[1].".".$VER1[2];
-$VER2[0] = "Alpha"; $VER2[1] = "Al"; $VER2[2] = "SVN"; $SubVerN = 1274; $GitRevPreN = '$Id: 4f3fdca0fb93b00ded3928773fabe22ec7fe3de6 $';
+$VER2[0] = "Alpha"; $VER2[1] = "Al"; $VER2[2] = "SVN"; $SubVerN = 1276; $GitRevPreN = '$Id$';
 $GitRevN = getGitRevision($GitRevPreN);
 $SVNDay[0] = 9; $SVNDay[1] = 29; $SVNDay[2] = 2024; $SVNDay[3] = $SVNDay[0]."/".$SVNDay[1]."/".$SVNDay[2];
 $AltName = "DF2k"; $AltName2 = "DF2k"; $RName = "iDB"; $SFName = "IntDB";
@@ -106,7 +106,7 @@ if(isset($iDBAltName['AltiDB'])) { $AltiDB = $iDBAltName['AltiDB']; }
 if(isset($iDBAltName['AltSQLDumperName'])) { $AltSQLDumper = $iDBAltName['AltSQLDumperName']; } }
 if(!isset($Settings['VerCheckURL'])||
 	$Settings['VerCheckURL']==="") {
-$VerCheckURL = $iDBHome."?act=vercheck"; }
+$VerCheckURL = "http://localhost:8080/vercheck/?act=vercheck"; }
 if(isset($Settings['VerCheckURL'])&&
 	$Settings['VerCheckURL']!=="") {
 $VerCheckURL = $Settings['VerCheckURL']; }
@@ -142,6 +142,10 @@ $TheProgrammerNapsJP = "プログラマーは昼寝しています。\n頑張れ
 $TheProgrammerNapsKO = "프로그래머는 낮잠을 자고 있어요.\n힘내요! 프로그래머! ";
 $TheProgrammerNapsSC = "程序员正在小憩。\n加油！程序员！";
 $TheProgrammerNapsTC = "程式設計師正在小憩。\n加油！程式設計師！ ";
+$Ganbare = "Ganbare!";
+$GanbareGanbare = "😁 \"".$Ganbare." ".$Ganbare."\"\n😏 \"".$Ganbare."\"\n😡 \"".$Ganbare."\"\n🤔 \"".$Ganbare."\"";
+$GanbareJP = "がんばれ";
+$GanbareGanbareJP = "😁「".$GanbareJP.$GanbareJP."」\n😏「".$GanbareJP."」\n😡「".$GanbareJP."」\n🤔「".$GanbareJP."」";
 if(isset($Settings['usealtname'])&&$Settings['usealtname']=="yes") { 
 	$iDB = $AltiDB; $OrgName = $AltOrgName; $iDBTheme = $AltiDBTheme; }
 $iDBURL1 = "<a href=\"".$iDBHome."\" onclick=\"window.open(this.href);return false;\">"; $iDBURL2 = $iDBURL1.$iDB."</a>";
