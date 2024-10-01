@@ -563,6 +563,7 @@ $mgresults_array = sql_fetch_assoc($mgresults);
 $MGroups[$mi]=$mgresults_array['Name'];
 ++$mi; }
 sql_free_result($mgresults);
+$AdminCheckURL = "";
 if($Settings['vercheck']===1) {
 $AdminCheckURL = url_maker($exfile['admin'],$Settings['file_ext'],"act=vercheck&redirect=on",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); }
 if($Settings['vercheck']===2) {
@@ -642,13 +643,19 @@ if($PreWorgURL['host']!="localhost.url"&&str_replace("/", "", $PreWorgURL['path'
 	<td style="width: 50%;"><span class="TextBoxLabel" title="Using UTC Time Zone">[UTC TimeZone] Install Date:</span></td>
 	<td style="width: 50%;"><?php echo $utctzstarttime->format($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat']." P"); ?></td>
 </tr><?php if($GroupInfo['ViewDBInfo']=="yes") { 
-?><tr style="text-align: left;">
+if($AdminCheckURL=="") { ?><tr style="text-align: left;">
 	<td style="width: 50%;"><span class="TextBoxLabel">Forum Software Version:</span></td>
-	<td style="width: 50%;"><?php echo "<span title=\"".$VerInfo['iDB_Full_Ver_Show']."\">".$VerInfo['iDB_Ver_Show']."</span>"; ?><!--&#160;<a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=vercheck",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>" onclick="window.open(this.href);return false;"><img src="<?php echo $AdminCheckURL; ?>" alt="Version Check: Click to see more info." title="Version Check: Click to see more info." /></a>--></td>
+	<td style="width: 50%;"><?php echo "<span title=\"".$VerInfo['iDB_Full_Ver_Show']."\">".$VerInfo['iDB_Ver_Show']."</span>"; ?></td>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><span class="TextBoxLabel">Forum Software GIT Revision:</span></td>
-	<td style="width: 50%;"><?php echo "<span title=\"GIT ".$GitRevN."\">".$GitRevN."</span>"; ?><!--&#160;<a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=vercheck",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>" onclick="window.open(this.href);return false;"><img src="<?php echo $AdminCheckURL; ?>" alt="Version Check: Click to see more info." title="Version Check: Click to see more info." /></a>--></td>
-</tr><tr>
+	<td style="width: 50%;"><?php echo "<span title=\"GIT ".$GitRevN."\">".$GitRevN."</span>"; ?></td>
+</tr><?php } else { ?><tr style="text-align: left;">
+	<td style="width: 50%;"><span class="TextBoxLabel">Forum Software Version:</span></td>
+	<td style="width: 50%;"><?php echo "<span title=\"".$VerInfo['iDB_Full_Ver_Show']."\">".$VerInfo['iDB_Ver_Show']."</span>"; ?>&#160;<a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=vercheck",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>" onclick="window.open(this.href);return false;"><img src="<?php echo $AdminCheckURL; ?>" alt="Version Check: Click to see more info." title="Version Check: Click to see more info." /></a></td>
+</tr><tr style="text-align: left;">
+	<td style="width: 50%;"><span class="TextBoxLabel">Forum Software GIT Revision:</span></td>
+	<td style="width: 50%;"><?php echo "<span title=\"GIT ".$GitRevN."\">".$GitRevN."</span>"; ?>&#160;<a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=vercheck",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>" onclick="window.open(this.href);return false;"><img src="<?php echo $AdminCheckURL; ?>" alt="Version Check: Click to see more info." title="Version Check: Click to see more info." /></a></td>
+</tr><?php } ?><tr>
 	<td style="width: 50%;"><span class="TextBoxLabel">Forum UUID:</span></td>
 	<td style="width: 50%;"><?php echo $Settings['BoardUUID']; ?></td>
 </tr><tr id="clickhere" style="text-align: left;">

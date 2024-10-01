@@ -18,6 +18,9 @@ if ($File3Name=="replies.php"||$File3Name=="/replies.php") {
 	require('index.php');
 	exit(); }
 $pstring = null; $pagenum = null;
+$viewvar = "view";
+if($_GET['act']=="lowview") { 
+	$viewvar = "lowview"; }
 if(!is_numeric($_GET['id'])) { $_GET['id'] = null; }
 if(!is_numeric($_GET['post'])) { $_GET['post'] = null; }
 if(!is_numeric($_GET['page'])) { $_GET['page'] = 1; }
@@ -36,7 +39,7 @@ if($_GET['act']=="announce") { $_GET['act'] = "pin"; $_GET['level'] = 2; }
 $prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"id\"=%i".$ForumIgnoreList4." LIMIT 1", array($_GET['id']));
 $preresult=sql_query($prequery,$SQLStat);
 $prenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE \"id\"=%i".$ForumIgnoreList4." LIMIT 1", array($_GET['id'])), $SQLStat);
-if($prenum==0) { redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($preresult);
+if($prenum==0) { redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($preresult);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($prenum>=1) {
@@ -47,7 +50,7 @@ $TopicForumID=$preresult_array['ForumID'];
 $TopicCatID=$preresult_array['CategoryID'];
 $TopicClosed=$preresult_array['Closed'];
 if($TopicClosed==3&&$PermissionInfo['CanModForum'][$TopicForumID]=="no") { 
-redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($preresult);
+redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($preresult);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if(!isset($_GET['post'])||$_GET['post']!==null) {
@@ -59,7 +62,7 @@ sql_free_result($preresult);
 $forumcheckx = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2."  LIMIT 1", array($TopicForumID));
 $fmckresult=sql_query($forumcheckx,$SQLStat);
 $fmcknum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2."  LIMIT 1", array($TopicForumID)), $SQLStat);
-if($fmcknum==0) { redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($preresult);
+if($fmcknum==0) { redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($preresult);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $fmckresult_array = sql_fetch_assoc($fmckresult);
@@ -98,33 +101,33 @@ if($GroupInfo['HasAdminCP']!="yes"||$GroupInfo['HasModCP']!="yes") {
 if($MyPostCountChk==null) { $MyPostCountChk = 0; }
 if($MyKarmaCount==null) { $MyKarmaCount = 0; }
 if($ForumPostCountView!=0&&$MyPostCountChk<$ForumPostCountView) {
-redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); }
+redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); }
 if($CategoryPostCountView!=0&&$MyPostCountChk<$CategoryPostCountView) {
-redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); }
+redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); }
 if($ForumKarmaCountView!=0&&$MyKarmaCount<$ForumKarmaCountView) {
-redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); }
+redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); }
 if($CategoryKarmaCountView!=0&&$MyKarmaCount<$CategoryKarmaCountView) {
-redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); } }
+redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); } }
 if($ForumCheck!="skip") {
 ?>
-<div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $Settings['board_name']; ?></a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile[$CategoryType],$Settings['file_ext'],"act=view&id=".$TopicCatID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$CategoryType],$exqstr[$CategoryType]); ?>"><?php echo $CategoryName; ?></a><?php echo $ThemeSet['NavLinkDivider']; if($InSubForum!=0 && $subfmcknum>0) { ?><a href="<?php echo url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$InSubForum."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>"><?php echo $SubForumName; ?></a><?php echo $ThemeSet['NavLinkDivider']; } ?><a href="<?php echo url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$TopicForumID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>"><?php echo $ForumName; ?></a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a></div>
+<div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $Settings['board_name']; ?></a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile[$CategoryType],$Settings['file_ext'],"act=".$viewvar."&id=".$TopicCatID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$CategoryType],$exqstr[$CategoryType]); ?>"><?php echo $CategoryName; ?></a><?php echo $ThemeSet['NavLinkDivider']; if($InSubForum!=0 && $subfmcknum>0) { ?><a href="<?php echo url_maker($exfile[$ForumType],$Settings['file_ext'],"act=".$viewvar."&id=".$InSubForum."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>"><?php echo $SubForumName; ?></a><?php echo $ThemeSet['NavLinkDivider']; } ?><a href="<?php echo url_maker($exfile[$ForumType],$Settings['file_ext'],"act=".$viewvar."&id=".$TopicForumID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>"><?php echo $ForumName; ?></a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=".$viewvar."&id=".$_GET['id']."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a></div>
 <div class="DivNavLinks">&#160;</div>
 <?php }
 if(!isset($CatPermissionInfo['CanViewCategory'][$TopicCatID])) {
 	$CatPermissionInfo['CanViewCategory'][$TopicCatID] = "no"; }
 if($CatPermissionInfo['CanViewCategory'][$TopicCatID]=="no"||
 	$CatPermissionInfo['CanViewCategory'][$TopicCatID]!="yes") {
-redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
+redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if(!isset($PermissionInfo['CanViewForum'][$TopicForumID])) {
 	$PermissionInfo['CanViewForum'][$TopicForumID] = "no"; }
 if($PermissionInfo['CanViewForum'][$TopicForumID]=="no"||
 	$PermissionInfo['CanViewForum'][$TopicForumID]!="yes") {
-redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
+redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
-if($_GET['act']!="view") { 
+if($_GET['act']!="view"&&$_GET['act']!="lowview") { 
 $CanMakeReply = "no"; $CanMakeTopic = "no";
 if($PermissionInfo['CanMakeTopics'][$TopicForumID]=="yes"&&$CanHaveTopics=="yes") { 
 	$CanMakeTopic = "yes"; }
@@ -148,9 +151,9 @@ if($TopicClosed==1&&$PermissionInfo['CanMakeReplysClose'][$TopicForumID]=="yes"
 </tr>
 </table>
 <div class="DivTable2">&#160;</div>
-<?php } } if($_GET['act']=="view") {
+<?php } } if($_GET['act']=="view"||$_GET['act']=="lowview") {
 if($ForumCheck!="skip") {
-if(isset($_SESSION['OldViewingPage'])) { $_SESSION['AncientViewingPage'] = $_SESSION['OldViewingPage']; } else { $_SESSION['AncientViewingPage'] = url_maker(null,"no+ext","act=view","&","=",$prexqstr['index'],$exqstr['index']); }
+if(isset($_SESSION['OldViewingPage'])) { $_SESSION['AncientViewingPage'] = $_SESSION['OldViewingPage']; } else { $_SESSION['AncientViewingPage'] = url_maker(null,"no+ext","act=".$viewvar,"&","=",$prexqstr['index'],$exqstr['index']); }
 if(isset($_SESSION['OldViewingFile'])) { $_SESSION['AncientViewingFile'] = $_SESSION['OldViewingFile']; } else { 
 	 if($Settings['file_ext']!="no+ext"&&$Settings['file_ext']!="no ext") {
 	    $_SESSION['AncientViewingFile'] = $exfile['index'].$Settings['file_ext']; }
@@ -159,7 +162,7 @@ if(isset($_SESSION['OldViewingFile'])) { $_SESSION['AncientViewingFile'] = $_SES
 if(isset($_SESSION['OldPreViewingTitle'])) { $_SESSION['AncientPreViewingTitle'] = $_SESSION['OldPreViewingTitle']; } else { $_SESSION['AncientPreViewingTitle'] = "Viewing"; }
 if(isset($_SESSION['OldViewingTitle'])) { $_SESSION['AncientViewingTitle'] = $_SESSION['OldViewingTitle']; } else { $_SESSION['AncientViewingTitle'] = "Board index"; }
 if(isset($_SESSION['OldExtraData'])) { $_SESSION['AncientExtraData'] = $_SESSION['OldExtraData']; } else { $_SESSION['AncientExtraData'] = "currentact:view; currentcategoryid:0; currentforumid:0; currenttopicid:0; currentmessageid:0; currenteventid:0; currentmemberid:0;"; }
-if(isset($_SESSION['ViewingPage'])) { $_SESSION['OldViewingPage'] = $_SESSION['ViewingPage']; } else { $_SESSION['OldViewingPage'] = url_maker(null,"no+ext","act=view","&","=",$prexqstr['index'],$exqstr['index']); }
+if(isset($_SESSION['ViewingPage'])) { $_SESSION['OldViewingPage'] = $_SESSION['ViewingPage']; } else { $_SESSION['OldViewingPage'] = url_maker(null,"no+ext","act=".$viewvar,"&","=",$prexqstr['index'],$exqstr['index']); }
 if(isset($_SESSION['ViewingFile'])) { $_SESSION['OldViewingFile'] = $_SESSION['ViewingFile']; } else { 
 	 if($Settings['file_ext']!="no+ext"&&$Settings['file_ext']!="no ext") {
 	    $_SESSION['OldViewingFile'] = $exfile['index'].$Settings['file_ext']; }
@@ -168,7 +171,7 @@ if(isset($_SESSION['ViewingFile'])) { $_SESSION['OldViewingFile'] = $_SESSION['V
 if(isset($_SESSION['PreViewingTitle'])) { $_SESSION['OldPreViewingTitle'] = $_SESSION['PreViewingTitle']; } else { $_SESSION['OldPreViewingTitle'] = "Viewing"; }
 if(isset($_SESSION['ViewingTitle'])) { $_SESSION['OldViewingTitle'] = $_SESSION['ViewingTitle']; } else { $_SESSION['OldViewingTitle'] = "Board index"; }
 if(isset($_SESSION['ExtraData'])) { $_SESSION['OldExtraData'] = $_SESSION['ExtraData']; } else { $_SESSION['OldExtraData'] = "currentact:view; currentcategoryid:0; currentforumid:0; currenttopicid:0; currentmessageid:0; currenteventid:0; currentmemberid:0;"; }
-$_SESSION['ViewingPage'] = url_maker(null,"no+ext","act=view&id=".$_GET['id']."&page=".$_GET['page'],"&","=",$prexqstr['topic'],$exqstr['topic']);
+$_SESSION['ViewingPage'] = url_maker(null,"no+ext","act=".$viewvar."&id=".$_GET['id']."&page=".$_GET['page'],"&","=",$prexqstr['topic'],$exqstr['topic']);
 if($Settings['file_ext']!="no+ext"&&$Settings['file_ext']!="no ext") {
 $_SESSION['ViewingFile'] = $exfile['topic'].$Settings['file_ext']; }
 if($Settings['file_ext']=="no+ext"||$Settings['file_ext']=="no ext") {
@@ -219,7 +222,7 @@ if(isset($_GET['post'])&&$_GET['post']!==null) {
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i AND (\"id\"=%i OR ReplyID=%i) ORDER BY \"TimeStamp\" ASC ".$SQLimit, array($_GET['id'],$_GET['post'],$_GET['post']));
 $num = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i AND (\"id\"=%i OR ReplyID=%i) ORDER BY \"TimeStamp\" ASC ".$SQLimit, array($_GET['id'],$_GET['post'],$_GET['post'])), $SQLStat); }
 $result=sql_query($query,$SQLStat);
-if($num==0) { redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
+if($num==0) { redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($num!=0) { 
@@ -264,23 +267,23 @@ if($pagenum>1) {
 while ($pagei < $pagenumi) {
 if($_GET['page']!=1&&$pagei==1) {
 $Pback = $_GET['page'] - 1;
-$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$Pback,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">&lt;</a></span> "; }
+$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=".$viewvar."&id=".$_GET['id']."&page=".$Pback,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">&lt;</a></span> "; }
 if($Pagez[$pagei]!=null&&
    $Pagez[$pagei]!="First"&&
    $Pagez[$pagei]!="Last") {
 if($pagei!=3) { 
-$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$Pagez[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">".$Pagez[$pagei]."</a></span> "; }
+$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=".$viewvar."&id=".$_GET['id']."&page=".$Pagez[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">".$Pagez[$pagei]."</a></span> "; }
 if($pagei==3) { 
-$pstring = $pstring."<span class=\"pagecurrent\"><a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$Pagez[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">".$Pagez[$pagei]."</a></span> "; } }
+$pstring = $pstring."<span class=\"pagecurrent\"><a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=".$viewvar."&id=".$_GET['id']."&page=".$Pagez[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">".$Pagez[$pagei]."</a></span> "; } }
 if($Pagez[$pagei]=="First") {
-$pstring = $pstring."<span class=\"pagelinklast\"><a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">&laquo;</a></span> "; }
+$pstring = $pstring."<span class=\"pagelinklast\"><a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=".$viewvar."&id=".$_GET['id']."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">&laquo;</a></span> "; }
 if($Pagez[$pagei]=="Last") {
 $ptestnext = $pagenext + 1;
 $paget = $pagei - 1;
 $Pnext = $_GET['page'] + 1;
-$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$Pnext,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">&gt;</a></span> ";
+$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=".$viewvar."&id=".$_GET['id']."&page=".$Pnext,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">&gt;</a></span> ";
 if($ptestnext<$pagenum) {
-$pstring = $pstring."<span class=\"pagelinklast\"><a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$pagenum,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">&raquo;</a></span> "; } }
+$pstring = $pstring."<span class=\"pagelinklast\"><a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=".$viewvar."&id=".$_GET['id']."&page=".$pagenum,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">&raquo;</a></span> "; } }
 	++$pagei; } $pstring = $pstring."</div>"; }
 //List Page Number Code end
 $CanMakeReply = "no"; $CanMakeTopic = "no";
@@ -292,6 +295,7 @@ if($TopicClosed==1&&$PermissionInfo['CanMakeReplysClose'][$TopicForumID]=="yes"
 	&&$PermissionInfo['CanMakeReplys'][$TopicForumID]=="yes") {
 		$CanMakeReply = "yes"; }
 if($pstring!=null||$CanMakeReply=="yes"||$CanMakeTopic=="yes") {
+if($_GET['act']=="view") { 
 ?>
 <table style="width: 100%;" class="Table2">
 <tr>
@@ -311,7 +315,12 @@ if($pstring!=null||$CanMakeReply=="yes"||$CanMakeTopic=="yes") {
 /* <div class="DivPageLinks">&#160;</div> */
 ?>
 <div class="DivTable2">&#160;</div>
-<?php }
+<?php } if($_GET['act']=="lowview") {  ?>
+<div style="font-size: 11px; font-weight: bold; padding: 10px; border: 1px solid gray;">
+<?php echo $pstring; ?></div>
+<div>&#160;</div>
+<div style="padding: 10px; border: 1px solid gray;">
+<?php } }
 while ($i < $num) {
 $result_array = sql_fetch_assoc($result);
 $MyPostID=$result_array['id'];
@@ -524,17 +533,18 @@ if($PermissionInfo['CanModForum'][$MyForumID]=="yes") {
 if($_SESSION['UserID']==0) { 
 	$CanEditReply = false; $CanDeleteReply = false; }
 $ReplyNum = $i + $PageLimit + 1;
+if($_GET['act']=="view") { 
 ?>
 <div class="TableInfo1Border" id="reply<?php echo $ReplyNum; ?>">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableInfoRow1">
-<span style="font-weight: bold; text-align: left;"><?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']).$qstrhtml."&#35;reply".$ReplyNum; ?>"><?php echo $TopicName; ?></a> ( <?php echo $MyDescription; ?> )</span>
+<span style="font-weight: bold; text-align: left;"><?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=".$viewvar."&id=".$_GET['id']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']).$qstrhtml."&#35;reply".$ReplyNum; ?>"><?php echo $TopicName; ?></a> ( <?php echo $MyDescription; ?> )</span>
 </div>
 <?php } ?>
 <table class="TableInfo1" id="post<?php echo $MyPostID; ?>">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableInfoRow1">
-<td class="TableInfoColumn1" colspan="2"><span style="font-weight: bold; text-align: left;"><?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']).$qstrhtml."&#35;reply".$ReplyNum; ?>"><?php echo $TopicName; ?></a> ( <?php echo $MyDescription; ?> )</span>
+<td class="TableInfoColumn1" colspan="2"><span style="font-weight: bold; text-align: left;"><?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=".$viewvar."&id=".$_GET['id']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']).$qstrhtml."&#35;reply".$ReplyNum; ?>"><?php echo $TopicName; ?></a> ( <?php echo $MyDescription; ?> )</span>
 </td>
 </tr><?php } ?>
 <tr class="TableInfoRow2">
@@ -542,14 +552,14 @@ $ReplyNum = $i + $PageLimit + 1;
 &#160;<?php
 if($User1ID>0&&$User1Hidden=="no") {
 echo "<a href=\"";
-echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$User1ID,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
+echo url_maker($exfile['member'],$Settings['file_ext'],"act=".$viewvar."&id=".$User1ID,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']);
 echo "\">".$User1Name."</a>"; }
 if($User1ID<=0||$User1Hidden=="yes") {
 echo "<span>".$User1Name."</span>"; }
 ?></td>
 <td class="TableInfoColumn2" style="vertical-align: middle;">
 <div style="float: left; text-align: left;">
-<span style="font-weight: bold; vertical-align: middle;">Time Posted: </span><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&post=".$MyPostID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>" style="vertical-align: middle;"><?php echo $MyTimeStamp; ?></a>
+<span style="font-weight: bold; vertical-align: middle;">Time Posted: </span><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=".$viewvar."&id=".$_GET['id']."&post=".$MyPostID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>" style="vertical-align: middle;"><?php echo $MyTimeStamp; ?></a>
 </div>
 <div style="float: right;">
 <?php if(isset($ThemeSet['Report'])&&$ThemeSet['Report']!=null) { ?>
@@ -603,39 +613,51 @@ Post IP: <a onclick="window.open(this.href);return false;" href="<?php echo spri
 <td class="TableInfoColumn4" colspan="2">
 <span style="text-align: left; float: left;">&#160;<a href="<?php
 if($User1ID>0&&$User1Hidden=="no"&&isset($ThemeSet['Profile'])&&$ThemeSet['Profile']!=null) {
-echo url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$User1ID,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); }
+echo url_maker($exfile['member'],$Settings['file_ext'],"act=".$viewvar."&id=".$User1ID,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); }
 if(($User1ID<=0||$User1Hidden=="yes")&&isset($ThemeSet['Profile'])&&$ThemeSet['Profile']!=null) {
-echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); }
+echo url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); }
 ?>"><?php echo $ThemeSet['Profile']; ?></a>
 <?php if(isset($ThemeSet['WWW'])&&$ThemeSet['WWW']!=null) {
 echo $ThemeSet['LineDividerTopic']; ?><a href="<?php echo $User1Website; ?>"<?php echo $opennew; ?>><?php echo $ThemeSet['WWW']; ?></a><?php } echo $ThemeSet['LineDividerTopic']; ?><a href="<?php
 if($User1ID>0&&$User1Hidden=="no"&&isset($ThemeSet['PM'])&&$ThemeSet['PM']!=null) {
 echo url_maker($exfile['messenger'],$Settings['file_ext'],"act=create&id=".$User1ID,$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger']); }
 if(($User1ID<=0||$User1Hidden=="yes")&&isset($ThemeSet['PM'])&&$ThemeSet['PM']!=null) {
-echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); }
+echo url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); }
 ?>"><?php echo $ThemeSet['PM']; ?></a></span>
-<span style="text-align: right; float: right; font-weight: bold;"><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&post=".$MyPostID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>" title="Link to post #<?php echo $ReplyNum; ?>" style="vertical-align: middle; font-weight: bold;">
+<span style="text-align: right; float: right; font-weight: bold;"><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=".$viewvar."&id=".$_GET['id']."&post=".$MyPostID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>" title="Link to post #<?php echo $ReplyNum; ?>" style="vertical-align: middle; font-weight: bold;">
 #<?php echo $ReplyNum; ?></a>&#160;</span>
 </td>
 </tr>
 </table></div>
 <div class="DivReplies">&#160;</div>
-<?php ++$i; } sql_free_result($result); } 
+<?php } if($_GET['act']=="lowview") {  ?>
+<div style="border:1px solid #E6E3E4; padding:1px; margin-bottom: 15px;" id="reply<?php echo $ReplyNum; ?>">
+<div style="border: 1px solid #E6E3E4; padding:1px; margin-bottom: 15px; background-color: #E6E3E4; padding: 6px;" id="post<?php echo $MyPostID; ?>">
+<div style="font-weight: bold; font-size: 0.8em; width: auto; float: left;"><?php echo $User1Name; ?></div>
+<div style="width:auto; font-size: 0.8em; color: gray; text-align:right;"><?php echo $MyTimeStamp; ?></div>
+</div>
+<div style="padding: 6px; font-size: 0.8em;"><?php echo $MyPost; ?></div></div>
+<?php } ++$i; } if($_GET['act']=="lowview") { ?>
+</div><div>&#160;</div>
+<div style="font-size: 11px; font-weight: bold; padding: 10px; border: 1px solid gray;">
+<?php echo $pstring; ?></div>
+<div>&#160;</div>
+<?php } sql_free_result($result); } 
 if(($utccurtime->getTimestamp()<$_SESSION['LastPostTime']&&$_SESSION['LastPostTime']!=0)&&
 ($_GET['act']=="create"||$_GET['act']=="edit"||$_GET['act']=="makereply"||$_GET['act']=="editreply")) { 
 $_GET['act'] = "view"; $_POST['act'] = null; 
-redirect("refresh",$rbasedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],FALSE),"3"); ?>
+redirect("refresh",$rbasedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=".$viewvar."&id=".$_GET['id']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],FALSE),"3"); ?>
 <div class="Table1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableRow1">
 <span style="text-align: left;">
-<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a></span></div>
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=".$viewvar."&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a></span></div>
 <?php } ?>
 <table class="Table1">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableRow1">
 <td class="TableColumn1"><span style="text-align: left;">
-<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a></span>
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=".$viewvar."&id=".$_GET['id']."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a></span>
 </td>
 </tr><?php } ?>
 <tr class="TableRow2">
@@ -647,7 +669,7 @@ redirect("refresh",$rbasedir.url_maker($exfile['topic'],$Settings['file_ext'],"a
 <tr>
 	<td><span class="TableMessage"><br />
 	You have to wait before making/editing another post.<br />
-	Click <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>">here</a> to view your reply.<br />&#160;
+	Click <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=".$viewvar."&id=".$TopicID."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>">here</a> to view your reply.<br />&#160;
 	</span><br /></td>
 </tr>
 </table>
@@ -660,17 +682,17 @@ redirect("refresh",$rbasedir.url_maker($exfile['topic'],$Settings['file_ext'],"a
 <?php } if($_GET['act']=="create") {
 if($GroupInfo['HasAdminCP']!="yes"||$GroupInfo['HasModCP']!="yes") {
 if($ForumPostCountView!=0&&$MyPostCountChk<$ForumPostCountView) {
-redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); }
+redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); }
 if($CategoryPostCountView!=0&&$MyPostCountChk<$CategoryPostCountView) {
-redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); }
+redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); }
 if($ForumKarmaCountView!=0&&$MyKarmaCount<$ForumKarmaCountView) {
-redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); }
+redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); }
 if($CategoryKarmaCountView!=0&&$MyKarmaCount<$CategoryKarmaCountView) {
-redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); } }
-if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="no") { redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
+redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); } }
+if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="no") { redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
-if($PermissionInfo['CanMakeReplysClose'][$TopicForumID]=="no"&&$TopicClosed==1) { redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
+if($PermissionInfo['CanMakeReplysClose'][$TopicForumID]=="no"&&$TopicClosed==1) { redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $QuoteReply = null; $QuoteDescription = null;
@@ -757,13 +779,13 @@ $_SESSION['UserFormID'] = $UFID;
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableRow1">
 <span style="text-align: left;">
-<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>#<?php echo $TopicID; ?>"><?php echo $TopicName; ?></a></span></div>
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=".$viewvar."&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>#<?php echo $TopicID; ?>"><?php echo $TopicName; ?></a></span></div>
 <?php } ?>
 <table class="Table1" id="MakeReply<?php echo $TopicForumID; ?>">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableRow1" id="ReplyStart<?php echo $TopicForumID; ?>">
 <td class="TableColumn1" colspan="2"><span style="text-align: left;">
-<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>#<?php echo $TopicID; ?>"><?php echo $TopicName; ?></a></span>
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=".$viewvar."&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>#<?php echo $TopicID; ?>"><?php echo $TopicName; ?></a></span>
 </td>
 </tr><?php } ?>
 <tr id="MakeReplyRow<?php echo $TopicForumID; ?>" class="TableRow2">
@@ -839,17 +861,17 @@ sql_free_result($melanie_result);
 <?php } if($_GET['act']=="makereply"&&$_POST['act']=="makereplies") {
 if($GroupInfo['HasAdminCP']!="yes"||$GroupInfo['HasModCP']!="yes") {
 if($ForumPostCountView!=0&&$MyPostCountChk<$ForumPostCountView) {
-redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); }
+redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); }
 if($CategoryPostCountView!=0&&$MyPostCountChk<$CategoryPostCountView) {
-redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); }
+redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); }
 if($ForumKarmaCountView!=0&&$MyKarmaCount<$ForumKarmaCountView) {
-redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); }
+redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); }
 if($CategoryKarmaCountView!=0&&$MyKarmaCount<$CategoryKarmaCountView) {
-redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); } }
-if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="no") { redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
+redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); } }
+if($PermissionInfo['CanMakeReplys'][$TopicForumID]=="no") { redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
-if($PermissionInfo['CanMakeReplysClose'][$TopicForumID]=="no"&&$TopicClosed==1) { redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
+if($PermissionInfo['CanMakeReplysClose'][$TopicForumID]=="no"&&$TopicClosed==1) { redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $MyUsersID = $_SESSION['UserID']; if($MyUsersID=="0"||$MyUsersID==null) { $MyUsersID = -1; }
@@ -868,13 +890,13 @@ require($SettDir['inc']."captcha.php"); }
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableRow1">
 <span style="text-align: left;">
-<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>#<?php echo $TopicID; ?>"><?php echo $TopicName; ?></a></span></div>
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=".$viewvar."&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>#<?php echo $TopicID; ?>"><?php echo $TopicName; ?></a></span></div>
 <?php } ?>
 <table class="Table1">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableRow1">
 <td class="TableColumn1"><span style="text-align: left;">
-<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>#<?php echo $TopicID; ?>"><?php echo $TopicName; ?></a></span>
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=".$viewvar."&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>#<?php echo $TopicID; ?>"><?php echo $TopicName; ?></a></span>
 </td>
 </tr><?php } ?>
 <tr class="TableRow2">
@@ -1011,10 +1033,10 @@ if ($_POST['ReplyDesc']==null) { $Error="Yes"; ?>
 	</span>&#160;</td>
 </tr>
 <?php } if ($Error=="Yes") {
-redirect("refresh",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false),"4"); ?>
+redirect("refresh",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false),"4"); ?>
 <tr>
 	<td><span class="TableMessage">
-	<br />Click <a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">here</a> to goto index page.<br />&#160;
+	<br />Click <a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">here</a> to goto index page.<br />&#160;
 	</span><br /></td>
 </tr>
 <?php } if ($Error!="Yes") { $LastActive = $utccurtime->getTimestamp();
@@ -1067,11 +1089,11 @@ if($MyPostNum>$Settings['max_posts']) {
 $NumPages = ceil($MyPostNum/$Settings['max_posts']); }
 if($MyPostNum<=$Settings['max_posts']) {
 $NumPages = 1; }
-redirect("refresh",$rbasedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],FALSE).$Settings['qstr']."#reply".$MyPostNum,"3");
+redirect("refresh",$rbasedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=".$viewvar."&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],FALSE).$Settings['qstr']."#reply".$MyPostNum,"3");
 ?><tr>
 	<td><span class="TableMessage"><br />
 	Reply to Topic <?php echo $TopicName; ?> was posted.<br />
-	Click <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>&amp;&#35;reply<?php echo $MyPostNum; ?>">here</a> to view your reply.<br />&#160;
+	Click <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=".$viewvar."&id=".$TopicID."&page=".$NumPages,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>&amp;&#35;reply<?php echo $MyPostNum; ?>">here</a> to view your reply.<br />&#160;
 	</span><br /></td>
 </tr>
 <?php } ?>
@@ -1093,11 +1115,11 @@ $TUsersID=$gtsresult_array['UserID'];
 $TPinned=$gtsresult_array['Pinned'];
 $TClosed=$gtsresult_array['Closed'];
 if($TopicClosed==2&&$PermissionInfo['CanModForum'][$TForumID]=="no") { 
-redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($preresult);
+redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($preresult);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($TopicClosed==3&&$PermissionInfo['CanModForum'][$TForumID]=="no") { 
-redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($preresult);
+redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($preresult);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if ($TPinned>2) { $TPinned = 1; } 
@@ -1118,7 +1140,7 @@ if($_GET['level']>2) { $_GET['level'] = 1; }
 if($PermissionInfo['CanModForum'][$UseThisFonum]=="no") {
 if($_GET['level']>1) { $_GET['level'] = 1; } }
 if($CanPinTopics===false) {
-redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($gtsresult);
+redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($gtsresult);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 sql_free_result($gtsresult);
@@ -1128,19 +1150,19 @@ $queryupd = sql_pre_query("UPDATE \"".$Settings['sqltable']."topics\" SET \"Pinn
 	if($_GET['act']=="unpin") {
 $queryupd = sql_pre_query("UPDATE \"".$Settings['sqltable']."topics\" SET \"Pinned\"=0 WHERE \"id\"=%i", array($TTopicID)); } 
 sql_query($queryupd,$SQLStat); 
-redirect("refresh",$rbasedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TTopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],false).$Settings['qstr']."#post".$_GET['post'],"4");
+redirect("refresh",$rbasedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=".$viewvar."&id=".$TTopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],false).$Settings['qstr']."#post".$_GET['post'],"4");
 ?>
 <div class="Table1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableRow1">
 <span style="text-align: left;">
-<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TTopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a></span></div>
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=".$viewvar."&id=".$TTopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a></span></div>
 <?php } ?>
 <table class="Table1">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableRow1">
 <td class="TableColumn1"><span style="text-align: left;">
-<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TTopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a></span>
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=".$viewvar."&id=".$TTopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a></span>
 </td>
 </tr><?php } ?>
 <tr class="TableRow2">
@@ -1149,7 +1171,7 @@ redirect("refresh",$rbasedir.url_maker($exfile['topic'],$Settings['file_ext'],"a
 <tr class="TableRow3" style="text-align: center;">
 	<td class="TableColumn3" style="text-align: center;"><span class="TableMessage"><br />
 	Topic was successfully unpinned/pinned.<br />
-	Click <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TTopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>">here</a> to go back to topic.<br />&#160;
+	Click <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=".$viewvar."&id=".$TTopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>">here</a> to go back to topic.<br />&#160;
 	</span><br /></td>
 </tr>
 <tr class="TableRow4">
@@ -1166,11 +1188,11 @@ $TForumID=$gtsresult_array['ForumID'];
 $TUsersID=$gtsresult_array['UserID'];
 $TClosed=$gtsresult_array['Closed'];
 if($TopicClosed==2&&$PermissionInfo['CanModForum'][$TForumID]=="no") { 
-redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($preresult);
+redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($preresult);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($TopicClosed==3&&$PermissionInfo['CanModForum'][$TForumID]=="no") { 
-redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($preresult);
+redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($preresult);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if ($TClosed>3) { $TClosed = 3; } 
@@ -1189,7 +1211,7 @@ if($PermissionInfo['CanModForum'][$TForumID]=="no") {
 if($_GET['level']>1) { $_GET['level'] = 1; } }
 if($_SESSION['UserID']==0) { $CanCloseTopics = false; }
 if($CanCloseTopics===false) {
-redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($gtsresult);
+redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($gtsresult);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 sql_free_result($gtsresult);
@@ -1199,19 +1221,19 @@ $queryupd = sql_pre_query("UPDATE \"".$Settings['sqltable']."topics\" SET \"Clos
 	if($_GET['act']=="open") {
 $queryupd = sql_pre_query("UPDATE \"".$Settings['sqltable']."topics\" SET \"Closed\"=0 WHERE \"id\"=%i", array($TTopicID)); } 
 sql_query($queryupd,$SQLStat); 
-redirect("refresh",$rbasedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TTopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],false).$Settings['qstr']."#post".$_GET['post'],"4");
+redirect("refresh",$rbasedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=".$viewvar."&id=".$TTopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],false).$Settings['qstr']."#post".$_GET['post'],"4");
 ?>
 <div class="Table1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableRow1">
 <span style="text-align: left;">
-<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TTopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a></span></div>
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=".$viewvar."&id=".$TTopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a></span></div>
 <?php } ?>
 <table class="Table1">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableRow1">
 <td class="TableColumn1"><span style="text-align: left;">
-<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TTopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a></span>
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=".$viewvar."&id=".$TTopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a></span>
 </td>
 </tr><?php } ?>
 <tr class="TableRow2">
@@ -1220,7 +1242,7 @@ redirect("refresh",$rbasedir.url_maker($exfile['topic'],$Settings['file_ext'],"a
 <tr class="TableRow3" style="text-align: center;">
 	<td class="TableColumn3" style="text-align: center;"><span class="TableMessage"><br />
 	Topic was successfully opened/closed.<br />
-	Click <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TTopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>">here</a> to go back to topic.<br />&#160;
+	Click <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=".$viewvar."&id=".$TTopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>">here</a> to go back to topic.<br />&#160;
 	</span><br /></td>
 </tr>
 <tr class="TableRow4">
@@ -1229,11 +1251,11 @@ redirect("refresh",$rbasedir.url_maker($exfile['topic'],$Settings['file_ext'],"a
 </table></div>
 <?php } } if($_GET['act']=="move") {
 if(!isset($_GET['newid'])) {
-redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($gtsresult);
+redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($gtsresult);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if(!is_numeric($_GET['newid'])) {
-redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($gtsresult);
+redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($gtsresult);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $gtsquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"id\"=%i LIMIT 1", array($_GET['id']));
@@ -1245,11 +1267,11 @@ $OldForumID=$gtsresult_array['ForumID'];
 $OldCatID=$gtsresult_array['CategoryID'];
 $TClosed=$gtsresult_array['Closed'];
 if($TopicClosed==2&&$PermissionInfo['CanModForum'][$OldForumID]=="no") { 
-redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($preresult);
+redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($preresult);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($TopicClosed==3&&$PermissionInfo['CanModForum'][$OldForumID]=="no") { 
-redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($preresult);
+redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($preresult);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $CanMoveTopics = false;
@@ -1263,7 +1285,7 @@ if($PermissionInfo['CanCloseTopics'][$_GET['newid']]=="yes"&&
 if($_SESSION['UserID']==0) { $CanMoveTopics = false; }
 //if($CanMoveTopics===false||$_GET['newid']==$OldForumID) {
 if($CanMoveTopics===false) {
-redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($gtsresult);
+redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($gtsresult);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 sql_free_result($gtsresult);
@@ -1273,7 +1295,7 @@ $mvquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHER
 $mvresult=sql_query($mvquery,$SQLStat);
 $mvnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2." LIMIT 1", array($_GET['newid'])), $SQLStat);
 if($mvnum<1) {
-redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($gtsresult); $urlstatus = 302;
+redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($gtsresult); $urlstatus = 302;
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); sql_free_result($mvresult);
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $mvresult_array = sql_fetch_assoc($mvresult);
@@ -1304,19 +1326,19 @@ sql_query($queryupd,$SQLStat);
 $queryupd = sql_pre_query("UPDATE \"".$Settings['sqltable']."posts\" SET \"ForumID\"=%i,\"CategoryID\"=%i WHERE \"TopicID\"=%i", array($_GET['newid'],$NewCatID,$TTopicID)); 
 sql_query($queryupd,$SQLStat);
 } 
-redirect("refresh",$rbasedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TTopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],false),"4");
+redirect("refresh",$rbasedir.url_maker($exfile['topic'],$Settings['file_ext'],"act=".$viewvar."&id=".$TTopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],false),"4");
 ?>
 <div class="Table1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableRow1">
 <span style="text-align: left;">
-<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TTopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a></span></div>
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=".$viewvar."&id=".$TTopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a></span></div>
 <?php } ?>
 <table class="Table1">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableRow1">
 <td class="TableColumn1"><span style="text-align: left;">
-<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TTopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a></span>
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=".$viewvar."&id=".$TTopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a></span>
 </td>
 </tr><?php } ?>
 <tr class="TableRow2">
@@ -1325,7 +1347,7 @@ redirect("refresh",$rbasedir.url_maker($exfile['topic'],$Settings['file_ext'],"a
 <tr class="TableRow3" style="text-align: center;">
 	<td class="TableColumn3" style="text-align: center;"><span class="TableMessage"><br />
 	Topic was successfully moved.<br />
-	Click <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TTopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>">here</a> to go back to topic.<br />&#160;
+	Click <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=".$viewvar."&id=".$TTopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>">here</a> to go back to topic.<br />&#160;
 	</span><br /></td>
 </tr>
 <tr class="TableRow4">
@@ -1354,7 +1376,7 @@ if($PermissionInfo['CanDeleteReplys'][$ReplyForumID]=="yes"&&
 		$TopicClosed==1) { $CanDeleteReply = false; } }
 if($_SESSION['UserID']==0) { $CanDeleteReply = false; }
 if($CanDeleteReply===false) {
-redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
+redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $delquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" ASC", array($_GET['id']));
@@ -1381,11 +1403,11 @@ $TUsersID=$gtsresult_array['UserID'];
 $TForumID=$gtsresult_array['ForumID'];
 $TClosed=$gtsresult_array['Closed'];
 if($TopicClosed==2&&$PermissionInfo['CanModForum'][$TForumID]=="no") { 
-redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($preresult);
+redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($preresult);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($TopicClosed==3&&$PermissionInfo['CanModForum'][$TForumID]=="no") { 
-redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($preresult);
+redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($preresult);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $CanDeleteTopics = false;
@@ -1399,7 +1421,7 @@ if($PermissionInfo['CanDeleteTopics'][$ReplyForumID]=="yes"&&
 		$TopicClosed==1) { $CanDeleteTopics = false; } }
 if($_SESSION['UserID']==0) { $CanDeleteTopics = false; }
 if($CanDeleteTopics===false) {
-redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($delresult);
+redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($delresult);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($CanDeleteTopics===true) { $NewNumTopics = $NumberTopics - 1; $NewNumPosts = $NumberPosts - $delnum;
@@ -1427,20 +1449,20 @@ $queryupd = sql_pre_query("UPDATE \"".$Settings['sqltable']."forums\" SET \"NumP
 sql_query($queryupd,$SQLStat);
 $queryupd = sql_pre_query("UPDATE \"".$Settings['sqltable']."topics\" SET \"NumReply\"=%i WHERE \"id\"=%i", array($NewNumReplies,$ReplyTopicID));
 sql_query($queryupd,$SQLStat); }
-redirect("refresh",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],FALSE),"3");
+redirect("refresh",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],FALSE),"3");
 sql_free_result($delresult);
 ?>
 <div class="Table1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableRow1">
 <span style="text-align: left;">
-<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $TopicName; ?></a></span></div>
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $TopicName; ?></a></span></div>
 <?php } ?>
 <table class="Table1">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableRow1">
 <td class="TableColumn1"><span style="text-align: left;">
-<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $TopicName; ?></a></span>
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $TopicName; ?></a></span>
 </td>
 </tr><?php } ?>
 <tr class="TableRow2">
@@ -1449,7 +1471,7 @@ sql_free_result($delresult);
 <tr class="TableRow3" style="text-align: center;">
 	<td class="TableColumn3" style="text-align: center;"><span class="TableMessage"><br />
 	Reply was deleted successfully.<br />
-	Click <a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">here</a> to go back to index.<br />&#160;
+	Click <a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">here</a> to go back to index.<br />&#160;
 	</span><br /></td>
 </tr>
 <tr class="TableRow4">
@@ -1457,10 +1479,10 @@ sql_free_result($delresult);
 </tr>
 </table></div>
 <?php } if($_GET['act']=="edit") {
-if($PermissionInfo['CanEditReplys'][$TopicForumID]=="no"||$_SESSION['UserID']==0) { redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
+if($PermissionInfo['CanEditReplys'][$TopicForumID]=="no"||$_SESSION['UserID']==0) { redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
-if($PermissionInfo['CanEditReplysClose'][$TopicForumID]=="no"&&$TopicClosed==1) { redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
+if($PermissionInfo['CanEditReplysClose'][$TopicForumID]=="no"&&$TopicClosed==1) { redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $ShowEditTopic = null;
@@ -1477,7 +1499,7 @@ $ersquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHER
 $ersresult=sql_query($ersquery,$SQLStat);
 $ersnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."posts\" WHERE \"id\"=%i LIMIT 1", array($_GET['post'])), $SQLStat);
 if($ersnum==0) { sql_free_result($ersresult);
-redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
+redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $ersresult_array = sql_fetch_assoc($ersresult);
@@ -1496,7 +1518,7 @@ $ReplyGuestName=$ersresult_array['GuestName'];
 $ReplyGuestName = remove_spaces($ReplyGuestName);
 $ReplyUser=$ersresult_array['UserID'];
 if($_SESSION['UserID']!=$ReplyUser&&$PermissionInfo['CanModForum'][$TopicForumID]=="no") {
-redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
+redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 sql_free_result($ersresult);
@@ -1509,11 +1531,11 @@ $TUsersID=$gtsresult_array['UserID'];
 $TForumID=$gtsresult_array['ForumID'];
 $TClosed=$gtsresult_array['Closed'];
 if($TopicClosed==2&&$PermissionInfo['CanModForum'][$TForumID]=="no") { 
-redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($preresult);
+redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($preresult);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($TopicClosed==3&&$PermissionInfo['CanModForum'][$TForumID]=="no") { 
-redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($preresult);
+redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($preresult);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($_SESSION['UserID']!=$TUsersID) { $ShowEditTopic = null; }
@@ -1534,13 +1556,13 @@ $_SESSION['UserFormID'] = $UFID;
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableRow1">
 <span style="text-align: left;">
-<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a></span></div>
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=".$viewvar."&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a></span></div>
 <?php } ?>
 <table class="Table1" id="EditReply<?php echo $_GET['post']; ?>">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableRow1" id="ReplyEdit<?php echo $_GET['post']; ?>">
 <td class="TableColumn1" colspan="2"><span style="text-align: left;">
-<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a></span>
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=".$viewvar."&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a></span>
 </td>
 </tr><?php } ?>
 <tr id="EditReplyRow<?php echo $_GET['post']; ?>" class="TableRow2">
@@ -1610,10 +1632,10 @@ sql_free_result($melanie_result);
 </table></div>
 <div class="DivMkReply">&#160;</div>
 <?php } if($_GET['act']=="editreply"&&$_POST['act']=="editreplies") {
-if($PermissionInfo['CanEditReplys'][$TopicForumID]=="no"||$_SESSION['UserID']==0) { redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
+if($PermissionInfo['CanEditReplys'][$TopicForumID]=="no"||$_SESSION['UserID']==0) { redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
-if($PermissionInfo['CanEditReplysClose'][$TopicForumID]=="no"&&$TopicClosed==1) { redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
+if($PermissionInfo['CanEditReplysClose'][$TopicForumID]=="no"&&$TopicClosed==1) { redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $REFERERurl = parse_url($_SERVER['HTTP_REFERER']);
@@ -1641,13 +1663,13 @@ $ersquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHER
 $ersresult=sql_query($ersquery,$SQLStat);
 $ersnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."posts\" WHERE \"id\"=%i LIMIT 1", array($_GET['post'])), $SQLStat);
 if($ersnum==0) { sql_free_result($ersresult);
-redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
+redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 $ersresult_array = sql_fetch_assoc($ersresult);
 $ReplyUser=$ersresult_array['UserID'];
 if($_SESSION['UserID']!=$ReplyUser&&$PermissionInfo['CanModForum'][$TopicForumID]=="no") {
-redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
+redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 sql_free_result($ersresult); 
@@ -1666,11 +1688,11 @@ if($PermissionInfo['CanModForum'][$TopicForumID]=="yes"&&
 if($PermissionInfo['CanEditTopicsClose'][$TopicForumID]=="no"&&$TopicClosed==1) {
 	$ShowEditTopic = null; } }
 if($TopicClosed==2&&$PermissionInfo['CanModForum'][$TForumID]=="no") { 
-redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($preresult);
+redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($preresult);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($TopicClosed==3&&$PermissionInfo['CanModForum'][$TForumID]=="no") { 
-redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($preresult);
+redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($preresult);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 ?>
@@ -1678,13 +1700,13 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableRow1">
 <span style="text-align: left;">
-<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a></span></div>
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=".$viewvar."&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a></span></div>
 <?php } ?>
 <table class="Table1">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableRow1">
 <td class="TableColumn1"><span style="text-align: left;">
-<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a></span>
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=".$viewvar."&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a></span>
 </td>
 </tr><?php } ?>
 <tr class="TableRow2">
@@ -1892,10 +1914,10 @@ if ($_POST['ReplyDesc']==null) { $Error="Yes"; ?>
 	</span>&#160;</td>
 </tr>
 <?php } if ($Error=="Yes") {
-redirect("refresh",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']),"3"); ?>
+redirect("refresh",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']),"3"); ?>
 <tr>
 	<td><span class="TableMessage">
-	<br />Click <a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">here</a> to goto index page.<br />&#160;
+	<br />Click <a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>">here</a> to goto index page.<br />&#160;
 	</span><br /></td>
 </tr>
 <?php } if ($Error!="Yes") { $LastActive = $utccurtime->getTimestamp();
@@ -1920,7 +1942,7 @@ sql_query($queryupd,$SQLStat);
 if($ShowEditTopic===true) {
 $queryupd = sql_pre_query("UPDATE \"".$Settings['sqltable']."topics\" SET \"TopicName\"='%s',\"Description\"='%s' WHERE \"id\"=%i", array($_POST['TopicName'],$_POST['ReplyDesc'],$TopicID));
 sql_query($queryupd,$SQLStat); } } 
-redirect(url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],FALSE).$Settings['qstr']."#post".$_GET['post'],"3");
+redirect(url_maker($exfile['topic'],$Settings['file_ext'],"act=".$viewvar."&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'],FALSE).$Settings['qstr']."#post".$_GET['post'],"3");
 $erpage = "&page=1";
 if(isset($_POST['page'])&&is_numeric($_POST['page'])) {
 	$erpage = "&page=".$_POST['page']; }
@@ -1928,7 +1950,7 @@ if(isset($_POST['page'])&&is_numeric($_POST['page'])) {
 <tr>
 	<td><span class="TableMessage"><br />
 	Reply to Topic <?php echo $TopicName; ?> was edited.<br />
-	Click <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID.$erpage,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']).$qstrhtml."&#35;post".$_GET['post']; ?>">here</a> to view topic.<br />&#160;
+	Click <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=".$viewvar."&id=".$TopicID.$erpage,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']).$qstrhtml."&#35;post".$_GET['post']; ?>">here</a> to view topic.<br />&#160;
 	</span><br /></td>
 </tr>
 </table>
@@ -1937,7 +1959,8 @@ if(isset($_POST['page'])&&is_numeric($_POST['page'])) {
 <td class="TableColumn4">&#160;</td>
 </tr>
 </table></div>
-<?php } $frnext = "off";
+<?php } if($_GET['act']!="lowview") { 
+$frnext = "off";
 if(!isset($_GET['fastreply'])) {
 	$_GET['fastreply'] = "off"; }
 if($_GET['fastreply']=="on") {
@@ -1954,7 +1977,7 @@ if($pstring!=null||$CanMakeReply=="yes"||$CanMakeTopic=="yes") {
  <a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=create&id=".$TopicID,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $ThemeSet['AddReply']; ?></a>
  <?php if(isset($ThemeSet['FastReply'])&&$ThemeSet['FastReply']!=null) { ?>
  <?php echo $ThemeSet['ButtonDivider']; ?>
- <a onclick="toggletag('FastReply'); toggletag('MkFastReply'); return false;" href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$_GET['id']."&page=".$_GET['page']."&fastreply=".$frnext,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']).$extrafe; ?>"><?php echo $ThemeSet['FastReply']; ?></a>
+ <a onclick="toggletag('FastReply'); toggletag('MkFastReply'); return false;" href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=".$viewvar."&id=".$_GET['id']."&page=".$_GET['page']."&fastreply=".$frnext,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']).$extrafe; ?>"><?php echo $ThemeSet['FastReply']; ?></a>
  <?php } } if($PermissionInfo['CanMakeTopics'][$TopicForumID]=="yes") {
 	if($CanMakeTopic=="yes"&&$CanMakeReply=="yes") { ?>
  <?php echo $ThemeSet['ButtonDivider']; } ?>
@@ -1963,7 +1986,7 @@ if($pstring!=null||$CanMakeReply=="yes"||$CanMakeTopic=="yes") {
 </tr>
 </table>
 <div class="DivTable2">&#160;</div>
-<?php } }
+<?php } } }
 if($_GET['act']=="view"&&$CanMakeReply=="yes") {  
 if(!isset($_GET['fastreply'])) { $_GET['fastreply'] = false; }
 if($_GET['fastreply']===true||
@@ -1986,13 +2009,13 @@ $_SESSION['UserFormID'] = $UFID;
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableRow1">
 <span style="text-align: left;">
-<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>#<?php echo $TopicID; ?>"><?php echo $TopicName; ?></a></span></div>
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=".$viewvar."&id=".$TopicID."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>#<?php echo $TopicID; ?>"><?php echo $TopicName; ?></a></span></div>
 <?php } ?>
 <table class="Table1" id="MakeReply<?php echo $TopicForumID; ?>">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableRow1" id="ReplyStart<?php echo $TopicForumID; ?>">
 <td class="TableColumn1" colspan="2"><span style="text-align: left;">
-<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=view&id=".$TopicID."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>#<?php echo $TopicID; ?>"><?php echo $TopicName; ?></a></span>
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=".$viewvar."&id=".$TopicID."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>#<?php echo $TopicID; ?>"><?php echo $TopicName; ?></a></span>
 </td>
 </tr><?php } ?>
 <tr id="MakeReplyRow<?php echo $TopicForumID; ?>" class="TableRow2">
@@ -2069,7 +2092,7 @@ sql_free_result($melanie_result);
 </tr>
 </table></div>
 <div<?php echo $fps; ?>id="MkFastReply" class="MkFastReply">&#160;</div>
-<?php }
+<?php } if($_GET['act']!="lowview") { 
 $uviewlcuttime = $utccurtime->getTimestamp();
 $uviewltime = $uviewlcuttime - ini_get("session.gc_maxlifetime");
 $uviewlquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"session_id\"<>'%s' AND \"serialized_data\" LIKE '%s' ORDER BY \"expires\" DESC", array($uviewltime, session_id(), "%currenttopicid:".$TopicID.";%"));
@@ -2117,7 +2140,7 @@ if($AmIHiddenUser=="yes") { $userprestring = "*"; }
 if($user_agent_check===false) {
 $uatitleadd = null;
 if($GroupInfo['CanViewUserAgent']=="yes") { $uatitleadd = " title=\"".htmlentities($session_user_agent, ENT_QUOTES, $Settings['charset'])."\""; }
-$MembersViewList .= "<a".$uatitleadd." href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$UserSessInfo['UserID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">".$userprestring.$UserSessInfo['MemberName']."</a>"; 
+$MembersViewList .= "<a".$uatitleadd." href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=".$viewvar."&id=".$UserSessInfo['UserID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">".$userprestring.$UserSessInfo['MemberName']."</a>"; 
 if($GroupInfo['CanViewIPAddress']=="yes") {
 $MembersViewList .= " (<a title=\"".$session_ip_address."\" onclick=\"window.open(this.href);return false;\" href=\"".sprintf($IPCheckURL,$session_ip_address)."\">".$session_ip_address."</a>)"; }
 ++$uviewlmn; ++$uviewlmbn; }
@@ -2134,7 +2157,7 @@ if($user_agent_check===false) {
 if($UserSessInfo['UserGroup']==$Settings['GuestGroup']) {
 /*$uatitleadd = null;
 if($GroupInfo['CanViewUserAgent']=="yes") { $uatitleadd = " title=\"".htmlentities($session_user_agent, ENT_QUOTES, $Settings['charset'])."\""; }
-$GuestsViewList .= "<a".$uatitleadd." href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$MemList['ID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">".$MemList['Name']."</a>";
+$GuestsViewList .= "<a".$uatitleadd." href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=".$viewvar."&id=".$MemList['ID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">".$MemList['Name']."</a>";
 if($GroupInfo['CanViewIPAddress']=="yes") {
 $GuestsViewList .= " (<a title=\"".$session_ip_address."\" onclick=\"window.open(this.href);return false;\" href=\"".sprintf($IPCheckURL,$session_ip_address)."\">".$session_ip_address."</a>)"; } */
 ++$uviewlgn; }
@@ -2154,7 +2177,7 @@ $uatitleadd = null;
 if($GroupInfo['CanViewUserAgent']=="yes") { $uatitleadd = " title=\"".htmlentities($_SERVER['HTTP_USER_AGENT'], ENT_QUOTES, $Settings['charset'])."\""; }
 if($GroupInfo['CanViewIPAddress']=="yes") {
 $MembersViewList = " (<a title=\"".$_SERVER['REMOTE_ADDR']."\" onclick=\"window.open(this.href);return false;\" href=\"".sprintf($IPCheckURL,$_SERVER['REMOTE_ADDR'])."\">".$_SERVER['REMOTE_ADDR']."</a>)".$MembersViewList; }
-$MembersViewList = "<a".$uatitleadd." href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$_SESSION['UserID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">".$_SESSION['MemberName']."</a>".$MembersViewList; 
+$MembersViewList = "<a".$uatitleadd." href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=".$viewvar."&id=".$_SESSION['UserID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">".$_SESSION['MemberName']."</a>".$MembersViewList; 
 ++$uviewlmn; ++$uviewlmbn; }
 if($user_agent_check!==false) {
 $uatitleadd = null;
@@ -2171,7 +2194,7 @@ if($_SESSION['UserGroup']==$Settings['GuestGroup']) {
 if($GroupInfo['CanViewUserAgent']=="yes") { $uatitleadd = " title=\"".htmlentities($_SERVER['HTTP_USER_AGENT'], ENT_QUOTES, $Settings['charset'])."\""; }
 if($GroupInfo['CanViewIPAddress']=="yes") {
 $GuestsViewList = " (<a title=\"".$_SERVER['REMOTE_ADDR']."\" onclick=\"window.open(this.href);return false;\" href=\"".sprintf($IPCheckURL,$_SERVER['REMOTE_ADDR'])."\">".$_SERVER['REMOTE_ADDR']."</a>)".$GuestsViewList; }
-$GuestsViewList = "<a".$uatitleadd." href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=view&id=".$MemList['ID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">".$MemList['Name']."</a>".$GuestsViewList; */
+$GuestsViewList = "<a".$uatitleadd." href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=".$viewvar."&id=".$MemList['ID'],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">".$MemList['Name']."</a>".$GuestsViewList; */
 ++$uviewlgn; }
 ++$uviewlnum;
 ?>
@@ -2179,13 +2202,13 @@ $GuestsViewList = "<a".$uatitleadd." href=\"".url_maker($exfile['member'],$Setti
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableStatsRow1">
 <span style="text-align: left;">
-<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$ForumID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>">Topic Statistics</a></span></div>
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile[$ForumType],$Settings['file_ext'],"act=".$viewvar."&id=".$ForumID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>">Topic Statistics</a></span></div>
 <?php } ?>
 <table id="BoardStats" class="TableStats1">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableStatsRow1">
 <td class="TableStatsColumn1" colspan="2"><span style="text-align: left;">
-<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile[$ForumType],$Settings['file_ext'],"act=view&id=".$ForumID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>">Topic Statistics</a></span>
+<?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker($exfile[$ForumType],$Settings['file_ext'],"act=".$viewvar."&id=".$ForumID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>">Topic Statistics</a></span>
 </td>
 </tr><?php } ?>
 <tr id="Stats1" class="TableStatsRow2">
@@ -2204,4 +2227,4 @@ $GuestsViewList = "<a".$uatitleadd." href=\"".url_maker($exfile['member'],$Setti
 </tr>
 </table></div>
 <div class="DivStats">&#160;</div>
-
+<?php } ?>

@@ -84,10 +84,9 @@ if($_GET['act']==null)
 { $_GET['act']="view"; }
 if(!in_array($_GET['act'], $idbactcheck))
 { $_GET['act']="view"; }
-if($_GET['act']=="view")
+if($_GET['act']=="view"||
+	$_GET['act']=="lowview")
 { require($SettDir['inc'].'forums.php'); }
-if($_GET['act']=="lowview")
-{ require($SettDir['inc'].'lowforums.php'); }
 if($_GET['act']=="view"||$_GET['act']=="stats")
 { require($SettDir['inc'].'stats.php'); }
 $iWrappers['CONTENT'] = ob_get_clean();

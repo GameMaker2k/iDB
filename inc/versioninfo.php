@@ -82,6 +82,8 @@ if(isset($iDBAltName['AltGM2kHome'])) { $AltGM2kHome = $iDBAltName['AltGM2kHome'
 if(isset($iDBAltName['AltGM2kURL'])) { $AltGM2kURL = $iDBAltName['AltGM2kURL']; } 
 if(isset($iDBAltName['AltiDBTheme'])) { $AltiDBTheme = $iDBAltName['AltiDBTheme']; } 
 if(isset($iDBAltName['VerCheckURL'])) { $Settings['VerCheckURL'] = $iDBAltName['VerCheckURL']; } }
+$Settings['vercheck'] = 0;
+$Settings['VerCheckURL'] = "";
 if(isset($Settings['usealtname'])&&$Settings['usealtname']=="yes") {
 	$RName = $AltName2; $SFName = $AltName; $RFullName = $AltFullName; $VerCheckName = $AltVerCheckName; $UserAgentName = $AltUserAgentName; }
 $VerInfo['iDB_Ver'] = version_info($RName,$VER1[0],$VER1[1],$VER1[2],$VER2[1],$SubVerN,false);
