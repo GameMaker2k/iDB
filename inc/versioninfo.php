@@ -11,7 +11,7 @@
     Copyright 2004-2024 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2024 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: versioninfo.php - Last Update: 9/29/2024 SVN 1277 - Author: cooldude2k $
+    $FileInfo: versioninfo.php - Last Update: 10/1/2024 SVN 1278 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="versioninfo.php"||$File3Name=="/versioninfo.php") {
@@ -29,9 +29,9 @@ function version_info($proname, $subver, $ver, $supver, $reltype, $svnver, $show
 }
 // Version number and date stuff. :P
 $VER1[0] = 0; $VER1[1] = 7; $VER1[2] = 4; $VERFull[1] = $VER1[0].".".$VER1[1].".".$VER1[2];
-$VER2[0] = "Alpha"; $VER2[1] = "Al"; $VER2[2] = "SVN"; $SubVerN = 1277; $GitRevPreN = '$Id$';
+$VER2[0] = "Alpha"; $VER2[1] = "Al"; $VER2[2] = "SVN"; $SubVerN = 1278; $GitRevPreN = '$Id$';
 $GitRevN = getGitRevision($GitRevPreN);
-$SVNDay[0] = 9; $SVNDay[1] = 29; $SVNDay[2] = 2024; $SVNDay[3] = $SVNDay[0]."/".$SVNDay[1]."/".$SVNDay[2];
+$SVNDay[0] = 10; $SVNDay[1] = 1; $SVNDay[2] = 2024; $SVNDay[3] = $SVNDay[0]."/".$SVNDay[1]."/".$SVNDay[2];
 $AltName = "DF2k"; $AltName2 = "DF2k"; $RName = "iDB"; $SFName = "IntDB";
 $RFullName = "Internet Discussion Boards"; $AltFullName = "Discussion Forums 2k";
 $AltGM2k = "Game Maker 2k"; $AltGM2kShort = "GM2k";
@@ -115,8 +115,9 @@ $VerCheckQuery = $VerCheckQuery['query'];
 if($VerCheckQuery=="") { $VerCheckURL = $VerCheckURL."?"; }
 if(!isset($Settings['IPCheckURL'])||
 	$Settings['IPCheckURL']==="") {
-//$IPCheckURL = 'http://cqcounter.com/whois/?query=%s';
-$IPCheckURL = 'https://tools.keycdn.com/geo?host=%s'; }
+//	http://cqcounter.com/whois/?query=%s
+//	https://tools.keycdn.com/geo?host=%s
+$IPCheckURL = 'https://bgp.he.net/ip/%s#_whois'; }
 if(isset($Settings['IPCheckURL'])&&
 	$Settings['IPCheckURL']!=="") {
 $IPCheckURL = $Settings['IPCheckURL']; }
