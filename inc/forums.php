@@ -60,7 +60,7 @@ if($_GET['act']=="view") {
 <div class="DivNavLinks">&#160;</div>
 <?php } if($_GET['act']=="lowview") { ?>
 <div style="font-size: 1.0em; font-weight: bold; margin-bottom: 10px; padding-top: 3px; width: auto;">Full Version: <a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $Settings['board_name']; ?></a></div>
-<div style="font-size: 11px; font-weight: bold; padding: 10px; border: 1px solid gray;"><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=lowview",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $Settings['board_name']; ?></a></div>
+<div style="font-size: 11px; font-weight: bold; padding: 10px; border: 1px solid gray;"><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=".$_GET['act'],$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $Settings['board_name']; ?></a></div>
 <div>&#160;</div>
 <div style="padding: 10px; border: 1px solid gray;">
 <ul style="list-style-type: none;">
@@ -114,7 +114,7 @@ if($_GET['act']=="view") {
 <th class="TableColumn2" style="width: 24%;">Last Topic</th>
 </tr>
 <?php } if($_GET['act']=="lowview") { ?>
-<li style="font-weight: bold;"><a href="<?php echo url_maker($exfile[$CategoryType],$Settings['file_ext'],"act=lowview&id=".$CategoryID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$CategoryType],$exqstr[$CategoryType]); ?>"><?php echo $CategoryName; ?></a></li><li>
+<li style="font-weight: bold;"><a href="<?php echo url_maker($exfile[$CategoryType],$Settings['file_ext'],"act=".$_GET['act']."&id=".$CategoryID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$CategoryType],$exqstr[$CategoryType]); ?>"><?php echo $CategoryName; ?></a></li><li>
 <?php } }
 while ($i < $num) {
 $result_array = sql_fetch_assoc($result);
@@ -164,7 +164,7 @@ if($apcl>1) {
 $sflist = $sflist.", ".$sfurl; } }
 if($_GET['act']=="lowview") {
 $sfurl = "<a href=\"";
-$sfurl = url_maker($exfile[$SubsForumType],$Settings['file_ext'],"act=lowview&id=".$SubsForumID.$ExStr,$Settings['qstr'],$Settings['qsep'],$prexqstr[$SubsForumType],$exqstr[$SubsForumType]);
+$sfurl = url_maker($exfile[$SubsForumType],$Settings['file_ext'],"act=".$_GET['act']."&id=".$SubsForumID.$ExStr,$Settings['qstr'],$Settings['qsep'],$prexqstr[$SubsForumType],$exqstr[$SubsForumType]);
 $sfurl = "<li><ul style=\"list-style-type: none;\"><li><a href=\"".$sfurl."\">".$SubsForumName."</a> <span style=\"color: gray; font-size: 10px;\">".$shownum."</span></li></ul></li>";
 if($apcl==1) {
 $sflist = null;
@@ -294,7 +294,7 @@ if($_GET['act']=="view") {
 </tr>
 <?php } if($_GET['act']=="lowview") { ?>
 <ul style="list-style-type: none;"><li>
-<a href="<?php echo url_maker($exfile[$ForumType],$Settings['file_ext'],"act=lowview&id=".$ForumID.$ExStr,$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>"<?php if($ForumType=="redirect") { echo " onclick=\"window.open(this.href);return false;\""; } ?>><?php echo $ForumName; ?></a> <span style="color: gray; font-size: 10px;"><?php echo $shownum; ?></span></li>
+<a href="<?php echo url_maker($exfile[$ForumType],$Settings['file_ext'],"act=".$_GET['act']."&id=".$ForumID.$ExStr,$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>"<?php if($ForumType=="redirect") { echo " onclick=\"window.open(this.href);return false;\""; } ?>><?php echo $ForumName; ?></a> <span style="color: gray; font-size: 10px;"><?php echo $shownum; ?></span></li>
 <?php echo $sflist; ?></ul>
 <?php } } ++$i; } sql_free_result($result);
 if($num>=1&&$_GET['act']=="view") {
