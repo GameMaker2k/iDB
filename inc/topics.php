@@ -542,6 +542,17 @@ if ($PinnedTopic>0&&$PinnedTopic<3&&$TopicStat>0&&$TopicStat<=3) {
 			$PreTopic=$ThemeSet['MovedHotPinClosedTopic']; }
 		if($NumReply<$Settings['hot_topic_num']) {
 			$PreTopic=$ThemeSet['MovedPinClosedTopic']; } } }
+if($_GET['act']=="lowview") {
+$PreTopic = null;
+if ($PinnedTopic>2) { $PinnedTopic = 1; } 
+if ($PinnedTopic<0) { $PinnedTopic = 0; }
+if(!is_numeric($PinnedTopic)) { $PinnedTopic = 0; }
+if ($TopicStat>3) { $TopicStat = 1; } 
+if ($TopicStat<0) { $TopicStat = 0; }
+if(!is_numeric($TopicStat)) { $TopicStat = 1; }
+if ($PinnedTopic>0&&$PinnedTopic<3) { $PreTopic="<span style=\"font-weight: bold;\">Pinned: </span>"; }
+if ($PinnedTopic==0) { $PreTopic=null; }
+if ($OldForumID==$ForumID&&$TForumID!=$ForumID) { $PreTopic="<span>Moved: </span>"; } }
 if($_GET['act']=="view") {
 ?>
 <tr class="TableRow3" id="Topic<?php echo $TopicID; ?>">
