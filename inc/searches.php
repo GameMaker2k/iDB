@@ -129,172 +129,143 @@ if($_GET['memid']!=null&&is_numeric($_GET['memid'])) {
 	$_GET['msearch'] = null;
 	$_GET['memid'] = null;
 	$memsid = null; } }
-//Get SQL LIMIT Number
+// Get SQL LIMIT Number
 $nums = $_GET['page'] * $Settings['max_topics'];
-$PageLimit = $nums - $Settings['max_topics'];
-if($PageLimit<0) { $PageLimit = 0; }
+$PageLimit = max(0, $nums - $Settings['max_topics']);
 $SQLimit = getSQLLimitClause($Settings['sqltype'], $Settings['max_topics'], $PageLimit);
-if($_GET['msearch']==null) {
-if($_GET['type']=="normal") {
-$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\"='%s'".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($_GET['search'])); 
-$NumberTopics = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\"='%s'".$ForumIgnoreList4."", array($_GET['search'])), $SQLStat); }
-if($_GET['type']=="wildcard") {
-$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\" LIKE '%s'".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($_GET['search'])); 
-$NumberTopics = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\" LIKE '%s'".$ForumIgnoreList4."", array($_GET['search'])), $SQLStat); } }
-if($_GET['msearch']!=null) {
-if($_GET['type']=="normal") {
-$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\"='%s' AND \"UserID\"=%i".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($_GET['search'],$memsid));
-$NumberTopics = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\"='%s' AND \"UserID\"=%i".$ForumIgnoreList4."", array($_GET['search'])), $SQLStat);
-if($memsid==-1) {
-$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\"='%s' AND \"GuestName\"='%s'".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($_GET['search'],$_GET['msearch'])); 
-$NumberTopics = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\"='%s' AND \"GuestName\"='%s'".$ForumIgnoreList4."", array($_GET['search'],$_GET['msearch'])), $SQLStat); } }
-if($_GET['type']=="wildcard") {
-$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\" LIKE '%s' AND \"UserID\"=%i".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($_GET['search'],$memsid));
-$NumberTopics = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\" LIKE '%s' AND \"UserID\"=%i".$ForumIgnoreList4."", array($_GET['search'],$_GET['msearch'])), $SQLStat);
-if($memsid==-1) {
-$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\" LIKE '%s' AND \"GuestName\"='%s'".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($_GET['search'],$_GET['msearch'])); 
-$NumberTopics = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\" LIKE '%s' AND \"GuestName\"='%s'".$ForumIgnoreList4."", array($_GET['search'],$_GET['msearch'])), $SQLStat); } } }
-if($_GET['type']=="getactive") {
-if(!isset($active_start)||!isset($active_end)) {
-$active_month = $usercurtime->format("m");
-$active_day = $usercurtime->format("d");
-$active_year = $usercurtime->format("Y");
-$active_start = mktime(0,0,0,$active_month,$active_day,$active_year);
-$active_end = mktime(23,59,59,$active_month,$active_day,$active_year); }
-$SQLimit = getSQLLimitClause($Settings['sqltype'], $Settings['max_topics'], $PageLimit);
-$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE (\"TimeStamp\">=%i AND \"TimeStamp\"<=%i) OR (\"LastUpdate\">=%i AND \"LastUpdate\"<=%i)".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($active_start,$active_end,$active_start,$active_end));
-$NumberTopics = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE (\"TimeStamp\">=%i AND \"TimeStamp\"<=%i) OR (\"LastUpdate\">=%i AND \"LastUpdate\"<=%i)".$ForumIgnoreList4."", array($active_start,$active_end,$active_start,$active_end)), $SQLStat); }
-$result=sql_query($query,$SQLStat);
-if($NumberTopics==null) { 
-	$NumberTopics = 0; }
-$num = $NumberTopics;
-//Start Topic Page Code
-if(!isset($Settings['max_topics'])) { $Settings['max_topics'] = 10; }
-if($_GET['page']==null) { $_GET['page'] = 1; } 
-if($_GET['page']<=0) { $_GET['page'] = 1; }
-$nums = $_GET['page'] * $Settings['max_topics'];
-if($nums>$num) { $nums = $num; }
-$numz = $nums - $Settings['max_topics'];
-if($numz<=0) { $numz = 0; }
-//$i=$numz;
-if($nums<$num) { $nextpage = $_GET['page'] + 1; }
-if($nums>=$num) { $nextpage = $_GET['page']; }
-if($numz>=$Settings['max_topics']) { $backpage = $_GET['page'] - 1; }
-if($_GET['page']<=1) { $backpage = 1; }
-$pnum = $num; $l = 1; $Pages = array();;
-while ($pnum>0) {
-if($pnum>=$Settings['max_topics']) { 
-	$pnum = $pnum - $Settings['max_topics']; 
-	$Pages[$l] = $l; ++$l; }
-if($pnum<$Settings['max_topics']&&$pnum>0) { 
-	$pnum = $pnum - $pnum; 
-	$Pages[$l] = $l; ++$l; } }
-if(!isset($active_start)||!isset($active_end)) {
-$active_month = $usercurtime->format("m");
-$active_day = $usercurtime->format("d");
-$active_year = $usercurtime->format("Y");
-$active_start = mktime(0,0,0,$active_month,$active_day,$active_year);
-$active_end = mktime(23,59,59,$active_month,$active_day,$active_year); }
-//End Topic Page Code
-$SQLimit = getSQLLimitClause($Settings['sqltype'], $Settings['max_topics'], $PageLimit);
-$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE (\"TimeStamp\">=%i AND \"TimeStamp\"<=%i) OR (\"LastUpdate\">=%i AND \"LastUpdate\"<=%i)".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($active_start,$active_end,$active_start,$active_end)), $SQLStat);
-if($num<=0) { 
-redirect("location",$rbasedir.url_maker($exfile['search'],$Settings['file_ext'],"act=topics",$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search'],false));
-header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
-ob_clean(); echo "Sorry could not find any search results."; sql_free_result($result);
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
-$i=0;
-//List Page Number Code Start
-$pagenum=count($Pages);
-if($_GET['page']>$pagenum) {
-	$_GET['page'] = $pagenum; }
-$pagei=0; $pstring = null;
-if($pagenum>1) {
-$pstring = "<div class=\"PageList\"><span class=\"pagelink\">".$pagenum." Pages:</span> "; }
-if($_GET['page']<4) { $Pagez[0] = null; }
-if($_GET['page']>=4) { $Pagez[0] = "First"; }
-if($_GET['page']>=3) {
-$Pagez[1] = $_GET['page'] - 2; }
-if($_GET['page']<3) {
-$Pagez[1] = null; }
-if($_GET['page']>=2) {
-$Pagez[2] = $_GET['page'] - 1; }
-if($_GET['page']<2) {
-$Pagez[2] = null; }
-$Pagez[3] = $_GET['page'];
-if($_GET['page']<$pagenum) {
-$Pagez[4] = $_GET['page'] + 1; }
-if($_GET['page']>=$pagenum) {
-$Pagez[4] = null; }
-$pagenext = $_GET['page'] + 1;
-if($pagenext<$pagenum) {
-$Pagez[5] = $_GET['page'] + 2; }
-if($pagenext>=$pagenum) {
-$Pagez[5] = null; }
-if($_GET['page']<$pagenum) { $Pagez[6] = "Last"; }
-if($_GET['page']>=$pagenum) { $Pagez[6] = null; }
-$pagenumi=count($Pagez);
-if($num==0) {
-$pagenumi = 0;
-if($_GET['msearch']==null) { 
-$pstring = null; }
-if($_GET['msearch']!=null) {
-$pstring = null; }
+
+// Prepare search query based on search type
+if (empty($_GET['msearch'])) {
+    if ($_GET['type'] === "normal") {
+        $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\"='%s'".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($_GET['search']));
+        $NumberTopics = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\"='%s'".$ForumIgnoreList4."", array($_GET['search'])), $SQLStat);
+    } elseif ($_GET['type'] === "wildcard") {
+        $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\" LIKE '%s'".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($_GET['search']));
+        $NumberTopics = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\" LIKE '%s'".$ForumIgnoreList4."", array($_GET['search'])), $SQLStat);
+    }
+} else {
+    if ($_GET['type'] === "normal") {
+        $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\"='%s' AND \"UserID\"=%i".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($_GET['search'], $memsid));
+        $NumberTopics = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\"='%s' AND \"UserID\"=%i".$ForumIgnoreList4."", array($_GET['search'], $memsid)), $SQLStat);
+        if ($memsid == -1) {
+            $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\"='%s' AND \"GuestName\"='%s'".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($_GET['search'], $_GET['msearch']));
+            $NumberTopics = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\"='%s' AND \"GuestName\"='%s'".$ForumIgnoreList4."", array($_GET['search'], $_GET['msearch'])), $SQLStat);
+        }
+    } elseif ($_GET['type'] === "wildcard") {
+        $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\" LIKE '%s' AND \"UserID\"=%i".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($_GET['search'], $memsid));
+        $NumberTopics = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\" LIKE '%s' AND \"UserID\"=%i".$ForumIgnoreList4."", array($_GET['search'], $_GET['msearch'])), $SQLStat);
+        if ($memsid == -1) {
+            $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\" LIKE '%s' AND \"GuestName\"='%s'".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($_GET['search'], $_GET['msearch']));
+            $NumberTopics = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\" LIKE '%s' AND \"GuestName\"='%s'".$ForumIgnoreList4."", array($_GET['search'], $_GET['msearch'])), $SQLStat);
+        }
+    }
 }
-if($pagenum>1) {
-while ($pagei < $pagenumi) {
-if($_GET['msearch']==null) {
-if($_GET['page']!=1&&$pagei==1) {
-$Pback = $_GET['page'] - 1;
-$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['search'],$Settings['file_ext'],"act=topics&search=".$_GET['search']."&type=".$_GET['type']."&page=".$Pback,$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search'])."\">&lt;</a></span> "; } }
-if($_GET['msearch']!=null) {
-if($_GET['page']!=1&&$pagei==1) {
-$Pback = $_GET['page'] - 1;
-$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['search'],$Settings['file_ext'],"act=topics&search=".$_GET['search']."&type=".$_GET['type']."&msearch=".$_GET['msearch']."&page=".$Pback,$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search'])."\">&lt;</a></span> "; } }
-if($Pagez[$pagei]!=null&&
-   $Pagez[$pagei]!="First"&&
-   $Pagez[$pagei]!="Last") {
-if($_GET['msearch']==null) {
-if($pagei!=3) { 
-$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['search'],$Settings['file_ext'],"act=topics&search=".$_GET['search']."&type=".$_GET['type']."&page=".$Pagez[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search'])."\">".$Pagez[$pagei]."</a></span> "; }
-if($pagei==3) { 
-$pstring = $pstring."<span class=\"pagecurrent\"><a href=\"".url_maker($exfile['search'],$Settings['file_ext'],"act=topics&search=".$_GET['search']."&type=".$_GET['type']."&page=".$Pagez[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search'])."\">".$Pagez[$pagei]."</a></span> "; } }
-if($_GET['msearch']!=null) {
-if($pagei!=3) { 
-$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['search'],$Settings['file_ext'],"act=topics&search=".$_GET['search']."&type=".$_GET['type']."&msearch=".$_GET['msearch']."&page=".$Pagez[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search'])."\">".$Pagez[$pagei]."</a></span> "; } 
-if($pagei==3) { 
-$pstring = $pstring."<span class=\"pagecurrent\"><a href=\"".url_maker($exfile['search'],$Settings['file_ext'],"act=topics&search=".$_GET['search']."&type=".$_GET['type']."&msearch=".$_GET['msearch']."&page=".$Pagez[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search'])."\">".$Pagez[$pagei]."</a></span> "; } } }
-if($Pagez[$pagei]=="First") {
-if($_GET['msearch']==null) {
-$pstring = $pstring."<span class=\"pagelinklast\"><a href=\"".url_maker($exfile['search'],$Settings['file_ext'],"act=topics&search=".$_GET['search']."&type=".$_GET['type']."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search'])."\">&laquo;</a></span> "; }
-if($_GET['msearch']!=null) {
-$pstring = $pstring."<span class=\"pagelinklast\"><a href=\"".url_maker($exfile['search'],$Settings['file_ext'],"act=topics&search=".$_GET['search']."&type=".$_GET['type']."&msearch=".$_GET['msearch']."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search'])."\">&laquo;</a></span> "; } }
-if($Pagez[$pagei]=="Last") {
-if($_GET['msearch']==null) {
-$ptestnext = $pagenext + 1;
-$paget = $pagei - 1;
-$Pnext = $_GET['page'] + 1;
-$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['search'],$Settings['file_ext'],"act=topics&search=".$_GET['search']."&type=".$_GET['type']."&page=".$Pnext,$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search'])."\">&gt;</a></span> "; 
-if($ptestnext<$pagenum) {
-$pstring = $pstring."<span class=\"pagelinklast\"><a href=\"".url_maker($exfile['search'],$Settings['file_ext'],"act=topics&search=".$_GET['search']."&type=".$_GET['type']."&page=".$pagenum,$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search'])."\">&raquo;</a></span> "; } }
-if($_GET['msearch']!=null) {
-$ptestnext = $pagenext + 1;
-$paget = $pagei - 1;
-$Pnext = $_GET['page'] + 1;
-$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['search'],$Settings['file_ext'],"act=topics&search=".$_GET['search']."&type=".$_GET['type']."&msearch=".$_GET['msearch']."&page=".$Pnext,$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search'])."\">&gt;</a></span> "; 
-if($ptestnext<$pagenum) {
-$pstring = $pstring."<span class=\"pagelinklast\"><a href=\"".url_maker($exfile['search'],$Settings['file_ext'],"act=topics&search=".$_GET['search']."&type=".$_GET['type']."&msearch=".$_GET['msearch']."&page=".$pagenum,$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search'])."\">&raquo;</a></span> "; } } }
-	++$pagei; } $pstring = $pstring."</div>"; }
-?>
-<div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $Settings['board_name']; ?></a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['search'],$Settings['file_ext'],"act=topics",$Settings['qstr'],$Settings['qsep'],$prexqstr['search'],$exqstr['search']); ?>">Search topics</a></div>
-<div class="DivNavLinks">&#160;</div>
-<?php
+
+// Fetch active topics based on time range
+if ($_GET['type'] === "getactive") {
+    if (!isset($active_start) || !isset($active_end)) {
+        $active_month = $usercurtime->format("m");
+        $active_day = $usercurtime->format("d");
+        $active_year = $usercurtime->format("Y");
+        $active_start = mktime(0, 0, 0, $active_month, $active_day, $active_year);
+        $active_end = mktime(23, 59, 59, $active_month, $active_day, $active_year);
+    }
+    $SQLimit = getSQLLimitClause($Settings['sqltype'], $Settings['max_topics'], $PageLimit);
+    $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE (\"TimeStamp\">=%i AND \"TimeStamp\"<=%i) OR (\"LastUpdate\">=%i AND \"LastUpdate\"<=%i)".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($active_start, $active_end, $active_start, $active_end));
+    $NumberTopics = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE (\"TimeStamp\">=%i AND \"TimeStamp\"<=%i) OR (\"LastUpdate\">=%i AND \"LastUpdate\"<=%i)".$ForumIgnoreList4."", array($active_start, $active_end, $active_start, $active_end)), $SQLStat);
+}
+
+$result = sql_query($query, $SQLStat);
+$NumberTopics = $NumberTopics ?? 0;
+$num = $NumberTopics;
+
+// Start Topic Page Code
+$Settings['max_topics'] = $Settings['max_topics'] ?? 10;
+$_GET['page'] = max(1, (int)($_GET['page'] ?? 1));
+
+$nums = min($_GET['page'] * $Settings['max_topics'], $num);
+$numz = max(0, $nums - $Settings['max_topics']);
+
+// Calculate next and previous pages
+$nextpage = ($nums < $num) ? $_GET['page'] + 1 : $_GET['page'];
+$backpage = ($_GET['page'] > 1) ? $_GET['page'] - 1 : 1;
+
+// Generate pagination
+$Pages = [];
+for ($l = 1, $pnum = $num; $pnum > 0; ++$l) {
+    $pnum = max(0, $pnum - $Settings['max_topics']);
+    $Pages[$l] = $l;
+}
+
+// End Topic Page Code
+$SQLimit = getSQLLimitClause($Settings['sqltype'], $Settings['max_topics'], $PageLimit);
+$num = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE (\"TimeStamp\">=%i AND \"TimeStamp\"<=%i) OR (\"LastUpdate\">=%i AND \"LastUpdate\"<=%i)".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($active_start, $active_end, $active_start, $active_end)), $SQLStat);
+
+// Handle no results found
+if ($num <= 0) {
+    redirect("location", $rbasedir . url_maker($exfile['search'], $Settings['file_ext'], "act=topics", $Settings['qstr'], $Settings['qsep'], $prexqstr['search'], $exqstr['search'], false));
+    header("Content-Type: text/plain; charset=" . $Settings['charset']);
+    $urlstatus = 302;
+    ob_clean();
+    echo "Sorry could not find any search results.";
+    sql_free_result($result);
+    gzip_page($Settings['use_gzip'], $GZipEncode['Type']);
+    session_write_close();
+    die();
+}
+
+// Pagination display logic
+$pagenum = count($Pages);
+$_GET['page'] = min($_GET['page'], $pagenum);
+
+$pstring = null;
+if ($pagenum > 1) {
+    $pstring = "<div class=\"PageList\"><span class=\"pagelink\">{$pagenum} Pages:</span> ";
+    $Pagez = [
+        0 => ($_GET['page'] >= 4) ? "First" : null,
+        1 => ($_GET['page'] >= 3) ? $_GET['page'] - 2 : null,
+        2 => ($_GET['page'] >= 2) ? $_GET['page'] - 1 : null,
+        3 => $_GET['page'],
+        4 => ($_GET['page'] < $pagenum) ? $_GET['page'] + 1 : null,
+        5 => ($_GET['page'] + 1 < $pagenum) ? $_GET['page'] + 2 : null,
+        6 => ($_GET['page'] < $pagenum) ? "Last" : null
+    ];
+
+    // Build pagination links
+    for ($pagei = 0, $pagenumi = count($Pagez); $pagei < $pagenumi; ++$pagei) {
+        if ($pagei == 1 && $_GET['page'] > 1) {
+            $Pback = $_GET['page'] - 1;
+            $pstring .= "<span class=\"pagelink\"><a href=\"".url_maker($exfile['search'], $Settings['file_ext'], "act=topics&search={$_GET['search']}&type={$_GET['type']}&page={$Pback}", $Settings['qstr'], $Settings['qsep'], $prexqstr['search'], $exqstr['search'])."\">&lt;</a></span> ";
+        }
+
+        if ($Pagez[$pagei] !== null && $Pagez[$pagei] != "First" && $Pagez[$pagei] != "Last") {
+            $pstring .= ($pagei == 3)
+                ? "<span class=\"pagecurrent\"><a href=\"".url_maker($exfile['search'], $Settings['file_ext'], "act=topics&search={$_GET['search']}&type={$_GET['type']}&page={$Pagez[$pagei]}", $Settings['qstr'], $Settings['qsep'], $prexqstr['search'], $exqstr['search'])."\">{$Pagez[$pagei]}</a></span> "
+                : "<span class=\"pagelink\"><a href=\"".url_maker($exfile['search'], $Settings['file_ext'], "act=topics&search={$_GET['search']}&type={$_GET['type']}&page={$Pagez[$pagei]}", $Settings['qstr'], $Settings['qsep'], $prexqstr['search'], $exqstr['search'])."\">{$Pagez[$pagei]}</a></span> ";
+        }
+
+        if ($Pagez[$pagei] == "First") {
+            $pstring .= "<span class=\"pagelinklast\"><a href=\"".url_maker($exfile['search'], $Settings['file_ext'], "act=topics&search={$_GET['search']}&type={$_GET['type']}&page=1", $Settings['qstr'], $Settings['qsep'], $prexqstr['search'], $exqstr['search'])."\">&laquo;</a></span> ";
+        }
+
+        if ($Pagez[$pagei] == "Last") {
+            $Pnext = $_GET['page'] + 1;
+            $pstring .= "<span class=\"pagelink\"><a href=\"".url_maker($exfile['search'], $Settings['file_ext'], "act=topics&search={$_GET['search']}&type={$_GET['type']}&page={$Pnext}", $Settings['qstr'], $Settings['qsep'], $prexqstr['search'], $exqstr['search'])."\">&gt;</a></span> ";
+            $pstring .= "<span class=\"pagelinklast\"><a href=\"".url_maker($exfile['search'], $Settings['file_ext'], "act=topics&search={$_GET['search']}&type={$_GET['type']}&page={$pagenum}", $Settings['qstr'], $Settings['qsep'], $prexqstr['search'], $exqstr['search'])."\">&raquo;</a></span> ";
+        }
+    }
+    $pstring .= "</div>";
+}
+
+// Output pagination string
 echo $pstring;
-//List Page Number Code end
-if($pagenum>1) {
+
+// Show div for page links if there are multiple pages
+if ($pagenum > 1) {
+    echo "<div class=\"DivPageLinks\">&#160;</div>";
+}
+$i=0;
 ?>
-<div class="DivPageLinks">&#160;</div>
-<?php } ?>
 <div class="Table1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableRow1">

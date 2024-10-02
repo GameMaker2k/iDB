@@ -83,104 +83,100 @@ if($_GET['act']=="view"||$_GET['act']=="viewsent"||$_GET['act']=="read") {
 	<td style="width: 85%; vertical-align: top;">
 <?php
 if($_GET['act']=="view") {
-//Get SQL LIMIT Number
+// Get SQL LIMIT Number
 $nums = $_GET['page'] * $Settings['max_pmlist'];
-$PageLimit = $nums - $Settings['max_pmlist'];
+$PageLimit = max(0, $nums - $Settings['max_pmlist']);
 $SQLimit = getSQLLimitClause($Settings['sqltype'], $Settings['max_pmlist'], $PageLimit);
+
+// Query for fetching private messages
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."messenger\" WHERE \"ReciverID\"=%i ORDER BY \"DateSend\" DESC ".$SQLimit, array($_SESSION['UserID']));
-$result=sql_query($query,$SQLStat);
+$result = sql_query($query, $SQLStat);
+
+// Count total number of messages
 $NumberMessage = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."messenger\" WHERE \"ReciverID\"=%i", array($_SESSION['UserID'])), $SQLStat);
-if($NumberMessage==null) { 
-	$NumberMessage = 0; }
+$NumberMessage = $NumberMessage ?? 0;
 $num = $NumberMessage;
-$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."messenger\" WHERE \"ReciverID\"=%i ORDER BY \"DateSend\" DESC ".$SQLimit, array($_SESSION['UserID'])), $SQLStat);
-//Start MessengerList Page Code
-if(!isset($Settings['max_pmlist'])) { $Settings['max_pmlist'] = 10; }
-if($_GET['page']==null) { $_GET['page'] = 1; } 
-if($_GET['page']<=0) { $_GET['page'] = 1; }
+
+// Re-calculate message count for pagination
+$num = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."messenger\" WHERE \"ReciverID\"=%i ORDER BY \"DateSend\" DESC ".$SQLimit, array($_SESSION['UserID'])), $SQLStat);
+
+// Start MessengerList Page Code
+$Settings['max_pmlist'] = $Settings['max_pmlist'] ?? 10;
+$_GET['page'] = max(1, (int)($_GET['page'] ?? 1));
+
 $nums = $_GET['page'] * $Settings['max_pmlist'];
-if($nums>$num) { $nums = $num; }
-$numz = $nums - $Settings['max_pmlist'];
-if($numz<=0) { $numz = 0; }
-//$i=$numz;
-if($nums<$num) { $nextpage = $_GET['page'] + 1; }
-if($nums>=$num) { $nextpage = $_GET['page']; }
-if($numz>=$Settings['max_pmlist']) { $backpage = $_GET['page'] - 1; }
-if($_GET['page']<=1) { $backpage = 1; }
-$pnum = $num; $l = 1; $Pages = array();
-while ($pnum>0) {
-if($pnum>=$Settings['max_pmlist']) { 
-	$pnum = $pnum - $Settings['max_pmlist']; 
-	$Pages[$l] = $l; ++$l; }
-if($pnum<$Settings['max_pmlist']&&$pnum>0) { 
-	$pnum = $pnum - $pnum; 
-	$Pages[$l] = $l; ++$l; } }
-//End MessengerList Page Code
+$nums = min($nums, $num);
+$numz = max(0, $nums - $Settings['max_pmlist']);
+
+// Calculate next and previous pages
+$nextpage = ($nums < $num) ? $_GET['page'] + 1 : $_GET['page'];
+$backpage = ($_GET['page'] > 1) ? $_GET['page'] - 1 : 1;
+
+// Generate pagination
+$Pages = [];
+for ($l = 1, $pnum = $num; $pnum > 0; ++$l) {
+    $pnum = max(0, $pnum - $Settings['max_pmlist']);
+    $Pages[$l] = $l;
+}
+
+// End MessengerList Page Code
+
+// Re-calculate SQL Limit Clause
 $SQLimit = getSQLLimitClause($Settings['sqltype'], $Settings['max_pmlist'], $PageLimit);
-$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."messenger\" WHERE \"ReciverID\"=%i ORDER BY \"DateSend\" DESC ".$SQLimit, array($_SESSION['UserID'])), $SQLStat);
+$num = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."messenger\" WHERE \"ReciverID\"=%i ORDER BY \"DateSend\" DESC ".$SQLimit, array($_SESSION['UserID'])), $SQLStat);
+
+// List Page Number Code Start
+$pagenum = count($Pages);
+$_GET['page'] = min($_GET['page'], $pagenum);
+
+$pstring = null;
+if ($pagenum > 1) {
+    $pstring = "<div class=\"PageList\"><span class=\"pagelink\">{$pagenum} Pages:</span> ";
+    $Pagez = [
+        0 => ($_GET['page'] >= 4) ? "First" : null,
+        1 => ($_GET['page'] >= 3) ? $_GET['page'] - 2 : null,
+        2 => ($_GET['page'] >= 2) ? $_GET['page'] - 1 : null,
+        3 => $_GET['page'],
+        4 => ($_GET['page'] < $pagenum) ? $_GET['page'] + 1 : null,
+        5 => ($_GET['page'] + 1 < $pagenum) ? $_GET['page'] + 2 : null,
+        6 => ($_GET['page'] < $pagenum) ? "Last" : null
+    ];
+
+    // Build pagination links
+    for ($pagei = 0, $pagenumi = count($Pagez); $pagei < $pagenumi; ++$pagei) {
+        if ($pagei == 1 && $_GET['page'] > 1) {
+            $Pback = $_GET['page'] - 1;
+            $pstring .= "<span class=\"pagelink\"><a href=\"".url_maker($exfile['messenger'], $Settings['file_ext'], "act=view&page={$Pback}", $Settings['qstr'], $Settings['qsep'], $prexqstr['messenger'], $exqstr['messenger'])."\">&lt;</a></span> ";
+        }
+
+        if ($Pagez[$pagei] !== null && $Pagez[$pagei] != "First" && $Pagez[$pagei] != "Last") {
+            $pstring .= ($pagei == 3)
+                ? "<span class=\"pagecurrent\"><a href=\"".url_maker($exfile['messenger'], $Settings['file_ext'], "act=view&page={$Pagez[$pagei]}", $Settings['qstr'], $Settings['qsep'], $prexqstr['messenger'], $exqstr['messenger'])."\">{$Pagez[$pagei]}</a></span> "
+                : "<span class=\"pagelink\"><a href=\"".url_maker($exfile['messenger'], $Settings['file_ext'], "act=view&page={$Pagez[$pagei]}", $Settings['qstr'], $Settings['qsep'], $prexqstr['messenger'], $exqstr['messenger'])."\">{$Pagez[$pagei]}</a></span> ";
+        }
+
+        if ($Pagez[$pagei] == "First") {
+            $pstring .= "<span class=\"pagelinklast\"><a href=\"".url_maker($exfile['messenger'], $Settings['file_ext'], "act=view&page=1", $Settings['qstr'], $Settings['qsep'], $prexqstr['messenger'], $exqstr['messenger'])."\">&laquo;</a></span> ";
+        }
+
+        if ($Pagez[$pagei] == "Last") {
+            $Pnext = $_GET['page'] + 1;
+            $pstring .= "<span class=\"pagelink\"><a href=\"".url_maker($exfile['messenger'], $Settings['file_ext'], "act=view&page={$Pnext}", $Settings['qstr'], $Settings['qsep'], $prexqstr['messenger'], $exqstr['messenger'])."\">&gt;</a></span> ";
+            $pstring .= "<span class=\"pagelinklast\"><a href=\"".url_maker($exfile['messenger'], $Settings['file_ext'], "act=view&page={$pagenum}", $Settings['qstr'], $Settings['qsep'], $prexqstr['messenger'], $exqstr['messenger'])."\">&raquo;</a></span> ";
+        }
+    }
+    $pstring .= "</div>";
+}
+
+// Output pagination string
+echo $pstring;
+
+// Show div for page links if there are multiple pages
+if ($pagenum > 1) {
+    echo "<div class=\"DivPageLinks\">&#160;</div>";
+}
 $i=0;
-//List Page Number Code Start
-$pagenum=count($Pages);
-if($_GET['page']>$pagenum) {
-	$_GET['page'] = $pagenum; }
-$pagei=0; $pstring = null;
-if($pagenum>1) {
-$pstring = "<div class=\"PageList\"><span class=\"pagelink\">".$pagenum." Pages:</span> "; }
-if($_GET['page']<4) { $Pagez[0] = null; }
-if($_GET['page']>=4) { $Pagez[0] = "First"; }
-if($_GET['page']>=3) {
-$Pagez[1] = $_GET['page'] - 2; }
-if($_GET['page']<3) {
-$Pagez[1] = null; }
-if($_GET['page']>=2) {
-$Pagez[2] = $_GET['page'] - 1; }
-if($_GET['page']<2) {
-$Pagez[2] = null; }
-$Pagez[3] = $_GET['page'];
-if($_GET['page']<$pagenum) {
-$Pagez[4] = $_GET['page'] + 1; }
-if($_GET['page']>=$pagenum) {
-$Pagez[4] = null; }
-$pagenext = $_GET['page'] + 1;
-if($pagenext<$pagenum) {
-$Pagez[5] = $_GET['page'] + 2; }
-if($pagenext>=$pagenum) {
-$Pagez[5] = null; }
-if($_GET['page']<$pagenum) { $Pagez[6] = "Last"; }
-if($_GET['page']>=$pagenum) { $Pagez[6] = null; }
-$pagenumi=count($Pagez);
-if($num==0) {
-$pagenumi = 0;
-$pstring = null; }
-if($pagenum>1) {
-while ($pagei < $pagenumi) {
-if($_GET['page']!=1&&$pagei==1) {
-$Pback = $_GET['page'] - 1;
-$pstring = $pstring."<span class=\"pagelink\">a href=\"".url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&page=".$Pback,$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger'])."\">&lt;</a></span> "; }
-if($Pagez[$pagei]!=null&&
-   $Pagez[$pagei]!="First"&&
-   $Pagez[$pagei]!="Last") {
-if($pagei!=3) { 
-$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&page=".$Pagez[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger'])."\">".$Pagez[$pagei]."</a></span> "; }
-if($pagei==3) { 
-$pstring = $pstring."<span class=\"pagecurrent\"><a href=\"".url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&page=".$Pagez[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger'])."\">".$Pagez[$pagei]."</a></span> "; } }
-if($Pagez[$pagei]=="First") {
-$pstring = $pstring."<span class=\"pagelinklast\"><a href=\"".url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger'])."\">&laquo;</a></span> "; }
-if($Pagez[$pagei]=="Last") {
-$ptestnext = $pagenext + 1;
-$paget = $pagei - 1;
-$Pnext = $_GET['page'] + 1;
-$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&page=".$Pnext,$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger'])."\">&gt;</a></span> ";
-if($ptestnext<$pagenum) {
-$pstring = $pstring."<span class=\"pagelinklast\"><a href=\"".url_maker($exfile['messenger'],$Settings['file_ext'],"act=view&page=".$pagenum,$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger'])."\">&raquo;</a></span> "; } }
-	++$pagei; } $pstring = $pstring."</div>"; }
-//echo $pstring;
-//List Page Number Code end
-echo $pstring; 
-if($pagenum>1) {
 ?>
-<div class="DivPageLinks">&#160;</div>
-<?php } ?>
 <div class="TableMenuBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableMenuRow1">
@@ -258,105 +254,100 @@ echo "<span>".$SenderName."</span>"; }
 </tr>
 <?php } 
 if($_GET['act']=="viewsent") {
-//Get SQL LIMIT Number
+// Get SQL LIMIT Number
 $nums = $_GET['page'] * $Settings['max_pmlist'];
-$PageLimit = $nums - $Settings['max_pmlist'];
+$PageLimit = max(0, $nums - $Settings['max_pmlist']);
 $SQLimit = getSQLLimitClause($Settings['sqltype'], $Settings['max_pmlist'], $PageLimit);
+
+// Query for fetching sent messages
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."messenger\" WHERE \"SenderID\"=%i ORDER BY \"DateSend\" DESC ".$SQLimit, array($_SESSION['UserID']));
-$result=sql_query($query,$SQLStat);
+$result = sql_query($query, $SQLStat);
+
+// Count total number of sent messages
 $NumberMessage = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."messenger\" WHERE \"SenderID\"=%i", array($_SESSION['UserID'])), $SQLStat);
-if($NumberMessage==null) { 
-	$NumberMessage = 0; }
+$NumberMessage = $NumberMessage ?? 0;
 $num = $NumberMessage;
+
+// Re-calculate SQL LIMIT for pagination
 $SQLimit = getSQLLimitClause($Settings['sqltype'], $Settings['max_pmlist'], $PageLimit);
-$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."messenger\" WHERE \"SenderID\"=%i ORDER BY \"DateSend\" DESC ".$SQLimit, array($_SESSION['UserID'])), $SQLStat);
-//Start MessengerList Page Code
-if(!isset($Settings['max_pmlist'])) { $Settings['max_pmlist'] = 10; }
-if($_GET['page']==null) { $_GET['page'] = 1; } 
-if($_GET['page']<=0) { $_GET['page'] = 1; }
-$nums = $_GET['page'] * $Settings['max_pmlist'];
-if($nums>$num) { $nums = $num; }
-$numz = $nums - $Settings['max_pmlist'];
-if($numz<=0) { $numz = 0; }
-//$i=$numz;
-if($nums<$num) { $nextpage = $_GET['page'] + 1; }
-if($nums>=$num) { $nextpage = $_GET['page']; }
-if($numz>=$Settings['max_pmlist']) { $backpage = $_GET['page'] - 1; }
-if($_GET['page']<=1) { $backpage = 1; }
-$pnum = $num; $l = 1; $Pages = array();
-while ($pnum>0) {
-if($pnum>=$Settings['max_pmlist']) { 
-	$pnum = $pnum - $Settings['max_pmlist']; 
-	$Pages[$l] = $l; ++$l; }
-if($pnum<$Settings['max_pmlist']&&$pnum>0) { 
-	$pnum = $pnum - $pnum; 
-	$Pages[$l] = $l; ++$l; } }
-//End MessengerList Page Code
+$num = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."messenger\" WHERE \"SenderID\"=%i ORDER BY \"DateSend\" DESC ".$SQLimit, array($_SESSION['UserID'])), $SQLStat);
+
+// Start MessengerList Page Code
+$Settings['max_pmlist'] = $Settings['max_pmlist'] ?? 10;
+$_GET['page'] = max(1, (int)($_GET['page'] ?? 1));
+
+$nums = min($_GET['page'] * $Settings['max_pmlist'], $num);
+$numz = max(0, $nums - $Settings['max_pmlist']);
+
+// Calculate next and previous pages
+$nextpage = ($nums < $num) ? $_GET['page'] + 1 : $_GET['page'];
+$backpage = ($_GET['page'] > 1) ? $_GET['page'] - 1 : 1;
+
+// Generate pagination
+$Pages = [];
+for ($l = 1, $pnum = $num; $pnum > 0; ++$l) {
+    $pnum = max(0, $pnum - $Settings['max_pmlist']);
+    $Pages[$l] = $l;
+}
+
+// End MessengerList Page Code
+
+// Re-calculate SQL Limit Clause
 $SQLimit = getSQLLimitClause($Settings['sqltype'], $Settings['max_pmlist'], $PageLimit);
-$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."messenger\" WHERE \"SenderID\"=%i ORDER BY \"DateSend\" DESC ".$SQLimit, array($_SESSION['UserID'])), $SQLStat);
+$num = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."messenger\" WHERE \"SenderID\"=%i ORDER BY \"DateSend\" DESC ".$SQLimit, array($_SESSION['UserID'])), $SQLStat);
+
+// List Page Number Code Start
+$pagenum = count($Pages);
+$_GET['page'] = min($_GET['page'], $pagenum);
+
+$pstring = null;
+if ($pagenum > 1) {
+    $pstring = "<div class=\"PageList\"><span class=\"pagelink\">{$pagenum} Pages:</span> ";
+    $Pagez = [
+        0 => ($_GET['page'] >= 4) ? "First" : null,
+        1 => ($_GET['page'] >= 3) ? $_GET['page'] - 2 : null,
+        2 => ($_GET['page'] >= 2) ? $_GET['page'] - 1 : null,
+        3 => $_GET['page'],
+        4 => ($_GET['page'] < $pagenum) ? $_GET['page'] + 1 : null,
+        5 => ($_GET['page'] + 1 < $pagenum) ? $_GET['page'] + 2 : null,
+        6 => ($_GET['page'] < $pagenum) ? "Last" : null
+    ];
+
+    // Build pagination links
+    for ($pagei = 0, $pagenumi = count($Pagez); $pagei < $pagenumi; ++$pagei) {
+        if ($pagei == 1 && $_GET['page'] > 1) {
+            $Pback = $_GET['page'] - 1;
+            $pstring .= "<span class=\"pagelink\"><a href=\"".url_maker($exfile['messenger'], $Settings['file_ext'], "act=viewsent&page={$Pback}", $Settings['qstr'], $Settings['qsep'], $prexqstr['messenger'], $exqstr['messenger'])."\">&lt;</a></span> ";
+        }
+
+        if ($Pagez[$pagei] !== null && $Pagez[$pagei] != "First" && $Pagez[$pagei] != "Last") {
+            $pstring .= ($pagei == 3)
+                ? "<span class=\"pagecurrent\"><a href=\"".url_maker($exfile['messenger'], $Settings['file_ext'], "act=viewsent&page={$Pagez[$pagei]}", $Settings['qstr'], $Settings['qsep'], $prexqstr['messenger'], $exqstr['messenger'])."\">{$Pagez[$pagei]}</a></span> "
+                : "<span class=\"pagelink\"><a href=\"".url_maker($exfile['messenger'], $Settings['file_ext'], "act=viewsent&page={$Pagez[$pagei]}", $Settings['qstr'], $Settings['qsep'], $prexqstr['messenger'], $exqstr['messenger'])."\">{$Pagez[$pagei]}</a></span> ";
+        }
+
+        if ($Pagez[$pagei] == "First") {
+            $pstring .= "<span class=\"pagelinklast\"><a href=\"".url_maker($exfile['messenger'], $Settings['file_ext'], "act=viewsent&page=1", $Settings['qstr'], $Settings['qsep'], $prexqstr['messenger'], $exqstr['messenger'])."\">&laquo;</a></span> ";
+        }
+
+        if ($Pagez[$pagei] == "Last") {
+            $Pnext = $_GET['page'] + 1;
+            $pstring .= "<span class=\"pagelink\"><a href=\"".url_maker($exfile['messenger'], $Settings['file_ext'], "act=viewsent&page={$Pnext}", $Settings['qstr'], $Settings['qsep'], $prexqstr['messenger'], $exqstr['messenger'])."\">&gt;</a></span> ";
+            $pstring .= "<span class=\"pagelinklast\"><a href=\"".url_maker($exfile['messenger'], $Settings['file_ext'], "act=viewsent&page={$pagenum}", $Settings['qstr'], $Settings['qsep'], $prexqstr['messenger'], $exqstr['messenger'])."\">&raquo;</a></span> ";
+        }
+    }
+    $pstring .= "</div>";
+}
+
+// Output pagination string
+echo $pstring;
+
+// Show div for page links if there are multiple pages
+if ($pagenum > 1) {
+    echo "<div class=\"DivPageLinks\">&#160;</div>";
+}
 $i=0;
-//List Page Number Code Start
-$pagenum=count($Pages);
-if($_GET['page']>$pagenum) {
-	$_GET['page'] = $pagenum; }
-$pagei=0; $pstring = null;
-if($pagenum>1) {
-$pstring = "<div class=\"PageList\"><span class=\"pagelink\">".$pagenum." Pages:</span> "; }
-if($_GET['page']<4) { $Pagez[0] = null; }
-if($_GET['page']>=4) { $Pagez[0] = "First"; }
-if($_GET['page']>=3) {
-$Pagez[1] = $_GET['page'] - 2; }
-if($_GET['page']<3) {
-$Pagez[1] = null; }
-if($_GET['page']>=2) {
-$Pagez[2] = $_GET['page'] - 1; }
-if($_GET['page']<2) {
-$Pagez[2] = null; }
-$Pagez[3] = $_GET['page'];
-if($_GET['page']<$pagenum) {
-$Pagez[4] = $_GET['page'] + 1; }
-if($_GET['page']>=$pagenum) {
-$Pagez[4] = null; }
-$pagenext = $_GET['page'] + 1;
-if($pagenext<$pagenum) {
-$Pagez[5] = $_GET['page'] + 2; }
-if($pagenext>=$pagenum) {
-$Pagez[5] = null; }
-if($_GET['page']<$pagenum) { $Pagez[6] = "Last"; }
-if($_GET['page']>=$pagenum) { $Pagez[6] = null; }
-$pagenumi=count($Pagez);
-if($num==0) {
-$pagenumi = 0;
-$pstring = null; }
-if($pagenum>1) {
-while ($pagei < $pagenumi) {
-if($_GET['page']!=1&&$pagei==1) {
-$Pback = $_GET['page'] - 1;
-$pstring = $pstring."<span class=\"pagelink\">a href=\"".url_maker($exfile['messenger'],$Settings['file_ext'],"act=viewsent&page=".$Pback,$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger'])."\">&lt;</a></span> "; }
-if($Pagez[$pagei]!=null&&
-   $Pagez[$pagei]!="First"&&
-   $Pagez[$pagei]!="Last") {
-if($pagei!=3) { 
-$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['messenger'],$Settings['file_ext'],"act=viewsent&page=".$Pagez[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger'])."\">".$Pagez[$pagei]."</a></span> "; }
-if($pagei==3) { 
-$pstring = $pstring."<span class=\"pagecurrent\"><a href=\"".url_maker($exfile['messenger'],$Settings['file_ext'],"act=viewsent&page=".$Pagez[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger'])."\">".$Pagez[$pagei]."</a></span> "; } }
-if($Pagez[$pagei]=="First") {
-$pstring = $pstring."<span class=\"pagelinklast\"><a href=\"".url_maker($exfile['messenger'],$Settings['file_ext'],"act=viewsent&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger'])."\">&laquo;</a></span> "; }
-if($Pagez[$pagei]=="Last") {
-$ptestnext = $pagenext + 1;
-$paget = $pagei - 1;
-$Pnext = $_GET['page'] + 1;
-$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['messenger'],$Settings['file_ext'],"act=viewsent&page=".$Pnext,$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger'])."\">&gt;</a></span> ";
-if($ptestnext<$pagenum) {
-$pstring = $pstring."<span class=\"pagelinklast\"><a href=\"".url_maker($exfile['messenger'],$Settings['file_ext'],"act=viewsent&page=".$pagenum,$Settings['qstr'],$Settings['qsep'],$prexqstr['messenger'],$exqstr['messenger'])."\">&raquo;</a></span> "; } }
-	++$pagei; } $pstring = $pstring."</div>"; }
-//echo $pstring;
-//List Page Number Code end
-echo $pstring; 
-if($pagenum>1) {
 ?>
-<div class="DivPageLinks">&#160;</div>
-<?php } ?>
 <div class="TableMenuBorder">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableMenuRow1">

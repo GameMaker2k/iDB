@@ -184,113 +184,110 @@ $_SESSION['ViewingFile'] = $exfile['topic']; }
 $_SESSION['PreViewingTitle'] = "Viewing Topic:";
 $_SESSION['ViewingTitle'] = $TopicName; 
 $_SESSION['ExtraData'] = "currentact:".$_GET['act']."; currentcategoryid:".$InSubCategory.",".$CategoryID."; currentforumid:".$InSubForum.",".$ForumID."; currenttopicid:".$TopicID."; currentmessageid:0; currenteventid:0; currentmemberid:0;"; }
-if($NumberReplies==null) { 
-	$NumberReplies = 0; }
-$num=$NumberReplies+1;
-//Start Reply Page Code
-if(!isset($Settings['max_posts'])) { $Settings['max_posts'] = 10; }
-if($_GET['page']==null) { $_GET['page'] = 1; } 
-if($_GET['page']<=0) { $_GET['page'] = 1; }
-if($_GET['st']<=0||!isset($_GET['st'])) {
-$nums = $_GET['page'] * $Settings['max_posts']; }
-if($_GET['st']>0&&isset($_GET['st'])) {
-$nums = $_GET['st']; }
-if($nums>$num) { $nums = $num; }
-$numz = $nums - $Settings['max_posts'];
-if($numz<=0) { $numz = 0; }
-//$i=$numz;
-if($nums<$num) { $nextpage = $_GET['page'] + 1; }
-if($nums>=$num) { $nextpage = $_GET['page']; }
-if($numz>=$Settings['max_posts']) { $backpage = $_GET['page'] - 1; }
-if($_GET['page']<=1) { $backpage = 1; }
-$pnum = $num; $l = 1; $Pages = array();;
-while ($pnum>0) {
-if($pnum>=$Settings['max_posts']) { 
-	$pnum = $pnum - $Settings['max_posts']; 
-	$Pages[$l] = $l; ++$l; }
-if($pnum<$Settings['max_posts']&&$pnum>0) { 
-	$pnum = $pnum - $pnum; 
-	$Pages[$l] = $l; ++$l; } }
+// Initialize NumberReplies and Pagination Settings
+$NumberReplies = $NumberReplies ?? 0;
+$num = $NumberReplies + 1;
+$Settings['max_posts'] = $Settings['max_posts'] ?? 10;
+
+// Validate current page number
+$_GET['page'] = max(1, (int)($_GET['page'] ?? 1));
+
+// Determine the start and end limits for replies on the current page
+$nums = $_GET['st'] > 0 ? (int)$_GET['st'] : $_GET['page'] * $Settings['max_posts'];
+$nums = min($nums, $num);
+$numz = max(0, $nums - $Settings['max_posts']);
+
+// Calculate the next and previous page numbers
+$nextpage = ($nums < $num) ? $_GET['page'] + 1 : $_GET['page'];
+$backpage = ($_GET['page'] > 1) ? $_GET['page'] - 1 : 1;
+
+// Calculate total pages and initialize Pages array
+$Pages = [];
+for ($l = 1, $pnum = $num; $pnum > 0; ++$l) {
+    $pnum = max(0, $pnum - $Settings['max_posts']);
+    $Pages[$l] = $l;
+}
+
+// Calculate the page limit for SQL query
 $snumber = $_GET['page'] - 1;
-if($_GET['st']<=0||!isset($_GET['st'])) {
-$PageLimit = $Settings['max_posts'] * $snumber; }
-if($_GET['st']>0&&isset($_GET['st'])) {
-$PageLimit = $_GET['st']; }
-if($PageLimit<0) { $PageLimit = 0; }
-//End Reply Page Code
-$i=0;
+$PageLimit = $_GET['st'] > 0 ? (int)$_GET['st'] : max(0, $Settings['max_posts'] * $snumber);
+
+// Fetch replies based on the current page and post
 $SQLimit = getSQLLimitClause($Settings['sqltype'], $Settings['max_posts'], $PageLimit);
-if(!isset($_GET['post'])||$_GET['post']!==null) {
-$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" ASC ".$SQLimit, array($_GET['id']));
-$num = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" ASC ".$SQLimit, array($_GET['id'])), $SQLStat); }
-if(isset($_GET['post'])&&$_GET['post']!==null) {
-$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i AND (\"id\"=%i OR ReplyID=%i) ORDER BY \"TimeStamp\" ASC ".$SQLimit, array($_GET['id'],$_GET['post'],$_GET['post']));
-$num = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i AND (\"id\"=%i OR ReplyID=%i) ORDER BY \"TimeStamp\" ASC ".$SQLimit, array($_GET['id'],$_GET['post'],$_GET['post'])), $SQLStat); }
-$result=sql_query($query,$SQLStat);
-if($num==0) { redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
-ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
-if($num!=0) { 
-if($ViewTimes==0||$ViewTimes==null) { $NewViewTimes = 1; }
-if($ViewTimes!=0&&$ViewTimes!=null) { $NewViewTimes = $ViewTimes + 1; }
-$viewsup = sql_pre_query("UPDATE \"".$Settings['sqltable']."topics\" SET \"NumViews\"='%s' WHERE \"id\"=%i", array($NewViewTimes,$_GET['id']));
-sql_query($viewsup,$SQLStat); }
-//List Page Number Code Start
-$pagenum=count($Pages);
-if($_GET['page']>$pagenum) {
-	$_GET['page'] = $pagenum; }
-$pagei=0; $pstring = null;
-if($pagenum>1) {
-$pstring = "<div class=\"PageList\"><span class=\"pagelink\">".$pagenum." Pages:</span> "; }
-if($_GET['page']<4) { $Pagez[0] = null; }
-if($_GET['page']>=4) { $Pagez[0] = "First"; }
-if($_GET['page']>=3) {
-$Pagez[1] = $_GET['page'] - 2; }
-if($_GET['page']<3) {
-$Pagez[1] = null; }
-if($_GET['page']>=2) {
-$Pagez[2] = $_GET['page'] - 1; }
-if($_GET['page']<2) {
-$Pagez[2] = null; }
-$Pagez[3] = $_GET['page'];
-if($_GET['page']<$pagenum) {
-$Pagez[4] = $_GET['page'] + 1; }
-if($_GET['page']>=$pagenum) {
-$Pagez[4] = null; }
-$pagenext = $_GET['page'] + 1;
-if($pagenext<$pagenum) {
-$Pagez[5] = $_GET['page'] + 2; }
-if($pagenext>=$pagenum) {
-$Pagez[5] = null; }
-if($_GET['page']<$pagenum) { $Pagez[6] = "Last"; }
-if($_GET['page']>=$pagenum) { $Pagez[6] = null; }
-$pagenumi=count($Pagez);
-if($num==0) {
-$pagenumi = 0;
-$pstring = null; }
-if($pagenum>1) {
-while ($pagei < $pagenumi) {
-if($_GET['page']!=1&&$pagei==1) {
-$Pback = $_GET['page'] - 1;
-$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=".$viewvar."&id=".$_GET['id']."&page=".$Pback,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">&lt;</a></span> "; }
-if($Pagez[$pagei]!=null&&
-   $Pagez[$pagei]!="First"&&
-   $Pagez[$pagei]!="Last") {
-if($pagei!=3) { 
-$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=".$viewvar."&id=".$_GET['id']."&page=".$Pagez[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">".$Pagez[$pagei]."</a></span> "; }
-if($pagei==3) { 
-$pstring = $pstring."<span class=\"pagecurrent\"><a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=".$viewvar."&id=".$_GET['id']."&page=".$Pagez[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">".$Pagez[$pagei]."</a></span> "; } }
-if($Pagez[$pagei]=="First") {
-$pstring = $pstring."<span class=\"pagelinklast\"><a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=".$viewvar."&id=".$_GET['id']."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">&laquo;</a></span> "; }
-if($Pagez[$pagei]=="Last") {
-$ptestnext = $pagenext + 1;
-$paget = $pagei - 1;
-$Pnext = $_GET['page'] + 1;
-$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=".$viewvar."&id=".$_GET['id']."&page=".$Pnext,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">&gt;</a></span> ";
-if($ptestnext<$pagenum) {
-$pstring = $pstring."<span class=\"pagelinklast\"><a href=\"".url_maker($exfile['topic'],$Settings['file_ext'],"act=".$viewvar."&id=".$_GET['id']."&page=".$pagenum,$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic'])."\">&raquo;</a></span> "; } }
-	++$pagei; } $pstring = $pstring."</div>"; }
-//List Page Number Code end
+
+if (!isset($_GET['post']) || $_GET['post'] === null) {
+    $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" ASC ".$SQLimit, array($_GET['id']));
+    $num = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" ASC", array($_GET['id'])), $SQLStat);
+} else {
+    $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i AND (\"id\"=%i OR ReplyID=%i) ORDER BY \"TimeStamp\" ASC ".$SQLimit, array($_GET['id'], $_GET['post'], $_GET['post']));
+    $num = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i AND (\"id\"=%i OR ReplyID=%i) ORDER BY \"TimeStamp\" ASC", array($_GET['id'], $_GET['post'], $_GET['post'])), $SQLStat);
+}
+$result = sql_query($query, $SQLStat);
+
+// Handle case where no replies are found
+if ($num == 0) {
+    redirect("location", $rbasedir.url_maker($exfile['index'], $Settings['file_ext'], "act=".$viewvar, $Settings['qstr'], $Settings['qsep'], $prexqstr['index'], $exqstr['index'], false));
+    ob_clean();
+    header("Content-Type: text/plain; charset=".$Settings['charset']);
+    $urlstatus = 302;
+    gzip_page($Settings['use_gzip'], $GZipEncode['Type']);
+    session_write_close();
+    die();
+}
+
+// Update view count if replies exist
+if ($ViewTimes == 0 || $ViewTimes == null) {
+    $NewViewTimes = 1;
+} else {
+    $NewViewTimes = $ViewTimes + 1;
+}
+$viewsup = sql_pre_query("UPDATE \"".$Settings['sqltable']."topics\" SET \"NumViews\"='%s' WHERE \"id\"=%i", array($NewViewTimes, $_GET['id']));
+sql_query($viewsup, $SQLStat);
+
+// List Page Number Code Start
+$pagenum = count($Pages);
+$_GET['page'] = min($_GET['page'], $pagenum);
+$pstring = null;
+
+if ($pagenum > 1) {
+    $pstring = "<div class=\"PageList\"><span class=\"pagelink\">{$pagenum} Pages:</span> ";
+    $Pagez = [
+        0 => ($_GET['page'] >= 4) ? "First" : null,
+        1 => ($_GET['page'] >= 3) ? $_GET['page'] - 2 : null,
+        2 => ($_GET['page'] >= 2) ? $_GET['page'] - 1 : null,
+        3 => $_GET['page'],
+        4 => ($_GET['page'] < $pagenum) ? $_GET['page'] + 1 : null,
+        5 => ($_GET['page'] + 1 < $pagenum) ? $_GET['page'] + 2 : null,
+        6 => ($_GET['page'] < $pagenum) ? "Last" : null
+    ];
+
+    // Build pagination links
+    for ($pagei = 0, $pagenumi = count($Pagez); $pagei < $pagenumi; ++$pagei) {
+        if ($pagei == 1 && $_GET['page'] > 1) {
+            $Pback = $_GET['page'] - 1;
+            $pstring .= "<span class=\"pagelink\"><a href=\"".url_maker($exfile['topic'], $Settings['file_ext'], "act=".$viewvar."&id={$_GET['id']}&page={$Pback}", $Settings['qstr'], $Settings['qsep'], $prexqstr['topic'], $exqstr['topic'])."\">&lt;</a></span> ";
+        }
+
+        if ($Pagez[$pagei] !== null && $Pagez[$pagei] != "First" && $Pagez[$pagei] != "Last") {
+            $pstring .= ($pagei == 3)
+                ? "<span class=\"pagecurrent\"><a href=\"".url_maker($exfile['topic'], $Settings['file_ext'], "act=".$viewvar."&id={$_GET['id']}&page={$Pagez[$pagei]}", $Settings['qstr'], $Settings['qsep'], $prexqstr['topic'], $exqstr['topic'])."\">{$Pagez[$pagei]}</a></span> "
+                : "<span class=\"pagelink\"><a href=\"".url_maker($exfile['topic'], $Settings['file_ext'], "act=".$viewvar."&id={$_GET['id']}&page={$Pagez[$pagei]}", $Settings['qstr'], $Settings['qsep'], $prexqstr['topic'], $exqstr['topic'])."\">{$Pagez[$pagei]}</a></span> ";
+        }
+
+        if ($Pagez[$pagei] == "First") {
+            $pstring .= "<span class=\"pagelinklast\"><a href=\"".url_maker($exfile['topic'], $Settings['file_ext'], "act=".$viewvar."&id={$_GET['id']}&page=1", $Settings['qstr'], $Settings['qsep'], $prexqstr['topic'], $exqstr['topic'])."\">&laquo;</a></span> ";
+        }
+
+        if ($Pagez[$pagei] == "Last") {
+            $Pnext = $_GET['page'] + 1;
+            $pstring .= "<span class=\"pagelink\"><a href=\"".url_maker($exfile['topic'], $Settings['file_ext'], "act=".$viewvar."&id={$_GET['id']}&page={$Pnext}", $Settings['qstr'], $Settings['qsep'], $prexqstr['topic'], $exqstr['topic'])."\">&gt;</a></span> ";
+            $pstring .= "<span class=\"pagelinklast\"><a href=\"".url_maker($exfile['topic'], $Settings['file_ext'], "act=".$viewvar."&id={$_GET['id']}&page={$pagenum}", $Settings['qstr'], $Settings['qsep'], $prexqstr['topic'], $exqstr['topic'])."\">&raquo;</a></span> ";
+        }
+    }
+    $pstring .= "</div>";
+}
+// List Page Number Code End
+$i=0;
 $CanMakeReply = "no"; $CanMakeTopic = "no";
 if($PermissionInfo['CanMakeTopics'][$TopicForumID]=="yes"&&$CanHaveTopics=="yes") { 
 	$CanMakeTopic = "yes"; }

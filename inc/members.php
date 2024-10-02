@@ -61,150 +61,127 @@ $ggresult=sql_query($ggquery,$SQLStat);
 $ggresult_array = sql_fetch_assoc($ggresult);
 $GGroup=$ggresult_array['id'];
 sql_free_result($ggresult);
-//Get SQL LIMIT Number
+// Get SQL LIMIT Number
 $nums = $_GET['page'] * $Settings['max_memlist'];
-$PageLimit = $nums - $Settings['max_memlist'];
-if($PageLimit<0) { $PageLimit = 0; }
-$i=0;
+$PageLimit = max(0, $nums - $Settings['max_memlist']);
 $SQLimit = getSQLLimitClause($Settings['sqltype'], $Settings['max_memlist'], $PageLimit);
-if($_GET['act']=="list") {
-if($_GET['groupid']==null) {
-$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"<>%i AND \"id\">=0 AND \"HiddenMember\"='no' ".$orderlist." ".$SQLimit, array($GGroup)); 
-$NumberMembers = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"<>%i AND \"id\">=0 AND \"HiddenMember\"='no'", array($GGroup)), $SQLStat);
-$num = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"<>%i AND \"id\">=0 AND \"HiddenMember\"='no' ".$orderlist." ".$SQLimit, array($GGroup)), $SQLStat); }
-if($_GET['groupid']!=null) {
-$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"=%i AND \"GroupID\"<>%i AND \"id\">=0 ".$orderlist." ".$SQLimit, array($_GET['groupid'],$GGroup)); 
-$num = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"=%i AND \"GroupID\"<>%i AND \"id\">=0 ".$orderlist." ".$SQLimit, array($_GET['groupid'],$GGroup)), $SQLStat); 
-$NumberMembers = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"=%i AND \"GroupID\"<>%i AND \"id\">=0", array($_GET['groupid'],$GGroup)), $SQLStat); } }
-if($_GET['act']=="getactive") {
-$active_month = $usercurtime->format("m");
-$active_day = $usercurtime->format("d");
-$active_year = $usercurtime->format("Y");
-$active_start = mktime(0,0,0,$active_month,$active_day,$active_year);
-$active_end = mktime(23,59,59,$active_month,$active_day,$active_year);
-if($_GET['groupid']==null) {
-$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"<>%i AND \"id\">=0 AND \"HiddenMember\"='no' AND (\"LastActive\">=%i AND \"LastActive\"<=%i) ".$orderlist." ".$SQLimit, array($GGroup,$active_start,$active_end)); 
-$num = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"<>%i AND \"id\">=0 AND \"HiddenMember\"='no' AND (\"LastActive\">=%i AND \"LastActive\"<=%i) ".$orderlist." ".$SQLimit, array($GGroup,$active_start,$active_end)), $SQLStat); 
-$NumberMembers = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"<>%i AND \"id\">=0 AND \"HiddenMember\"='no' AND (\"LastActive\">=%i AND \"LastActive\"<=%i)", array($GGroup,$active_start,$active_end)), $SQLStat); }
-if($_GET['groupid']!=null) {
-$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"=%i AND \"GroupID\"<>%i AND \"id\">=0 AND (\"LastActive\">=%i AND \"LastActive\"<=%i) ".$orderlist." ".$SQLimit, array($_GET['groupid'],$GGroup,$active_start,$active_end)); 
-$num = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"=%i AND \"GroupID\"<>%i AND \"id\">=0 AND (\"LastActive\">=%i AND \"LastActive\"<=%i) ".$orderlist." ".$SQLimit, array($_GET['groupid'],$GGroup,$active_start,$active_end)), $SQLStat); 
-$NumberMembers = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"=%i AND \"GroupID\"<>%i AND \"id\">=0 AND (\"LastActive\">=%i AND \"LastActive\"<=%i)", array($_GET['groupid'],$GGroup,$active_start,$active_end)), $SQLStat); } }
-$result=sql_query($query,$SQLStat);
-if(isset($_SESSION['OldViewingPage'])) { $_SESSION['AncientViewingPage'] = $_SESSION['OldViewingPage']; } else { $_SESSION['AncientViewingPage'] = url_maker(null,"no+ext","act=view","&","=",$prexqstr['index'],$exqstr['index']); }
-if(isset($_SESSION['OldViewingFile'])) { $_SESSION['AncientViewingFile'] = $_SESSION['OldViewingFile']; } else { 
-	 if($Settings['file_ext']!="no+ext"&&$Settings['file_ext']!="no ext") {
-	    $_SESSION['AncientViewingFile'] = $exfile['index'].$Settings['file_ext']; }
-	 if($Settings['file_ext']=="no+ext"||$Settings['file_ext']=="no ext") {
-	    $_SESSION['AncientViewingFile'] = $exfile['index']; } }
-if(isset($_SESSION['OldPreViewingTitle'])) { $_SESSION['AncientPreViewingTitle'] = $_SESSION['OldPreViewingTitle']; } else { $_SESSION['AncientPreViewingTitle'] = "Viewing"; }
-if(isset($_SESSION['OldViewingTitle'])) { $_SESSION['AncientViewingTitle'] = $_SESSION['OldViewingTitle']; } else { $_SESSION['AncientViewingTitle'] = "Board index"; }
-if(isset($_SESSION['OldExtraData'])) { $_SESSION['AncientExtraData'] = $_SESSION['OldExtraData']; } else { $_SESSION['AncientExtraData'] = "currentact:view; currentcategoryid:0; currentforumid:0; currenttopicid:0; currentmessageid:0; currenteventid:0; currentmemberid:0;"; }
-if(isset($_SESSION['ViewingPage'])) { $_SESSION['OldViewingPage'] = $_SESSION['ViewingPage']; } else { $_SESSION['OldViewingPage'] = url_maker(null,"no+ext","act=view","&","=",$prexqstr['index'],$exqstr['index']); }
-if(isset($_SESSION['ViewingFile'])) { $_SESSION['OldViewingFile'] = $_SESSION['ViewingFile']; } else { 
-	 if($Settings['file_ext']!="no+ext"&&$Settings['file_ext']!="no ext") {
-	    $_SESSION['OldViewingFile'] = $exfile['index'].$Settings['file_ext']; }
-	 if($Settings['file_ext']=="no+ext"||$Settings['file_ext']=="no ext") {
-	    $_SESSION['OldViewingFile'] = $exfile['index']; } }
-if(isset($_SESSION['PreViewingTitle'])) { $_SESSION['OldPreViewingTitle'] = $_SESSION['PreViewingTitle']; } else { $_SESSION['OldPreViewingTitle'] = "Viewing"; }
-if(isset($_SESSION['ViewingTitle'])) { $_SESSION['OldViewingTitle'] = $_SESSION['ViewingTitle']; } else { $_SESSION['OldViewingTitle'] = "Board index"; }
-if(isset($_SESSION['ExtraData'])) { $_SESSION['OldExtraData'] = $_SESSION['ExtraData']; } else { $_SESSION['OldExtraData'] = "currentact:view; currentcategoryid:0; currentforumid:0; currenttopicid:0; currentmessageid:0; currenteventid:0; currentmemberid:0;"; }
-$_SESSION['ViewingPage'] = url_maker(null,"no+ext","act=list&orderby=".$_GET['orderby']."&ordertype=".$_GET['ordertype']."&page=".$_GET['page'],"&","=",$prexqstr['member'],$exqstr['member']);
-if($Settings['file_ext']!="no+ext"&&$Settings['file_ext']!="no ext") {
-$_SESSION['ViewingFile'] = $exfile['member'].$Settings['file_ext']; }
-if($Settings['file_ext']=="no+ext"||$Settings['file_ext']=="no ext") {
-$_SESSION['ViewingFile'] = $exfile['member']; }
+
+// Handling different actions for member list
+if ($_GET['act'] == "list") {
+    $query = "";
+    $NumberMembers = 0;
+    
+    if (empty($_GET['groupid'])) {
+        // Fetch all members that are not in the restricted group
+        $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"<>%i AND \"id\">=0 AND \"HiddenMember\"='no' ".$orderlist." ".$SQLimit, array($GGroup));
+        $NumberMembers = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"<>%i AND \"id\">=0 AND \"HiddenMember\"='no'", array($GGroup)), $SQLStat);
+    } else {
+        // Fetch members from a specific group
+        $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"=%i AND \"GroupID\"<>%i AND \"id\">=0 ".$orderlist." ".$SQLimit, array($_GET['groupid'], $GGroup));
+        $NumberMembers = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"=%i AND \"GroupID\"<>%i AND \"id\">=0", array($_GET['groupid'], $GGroup)), $SQLStat);
+    }
+}
+
+if ($_GET['act'] == "getactive") {
+    $active_start = mktime(0, 0, 0, $usercurtime->format("m"), $usercurtime->format("d"), $usercurtime->format("Y"));
+    $active_end = mktime(23, 59, 59, $usercurtime->format("m"), $usercurtime->format("d"), $usercurtime->format("Y"));
+    
+    if (empty($_GET['groupid'])) {
+        // Fetch all active members
+        $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"<>%i AND \"id\">=0 AND \"HiddenMember\"='no' AND (\"LastActive\">=%i AND \"LastActive\"<=%i) ".$orderlist." ".$SQLimit, array($GGroup, $active_start, $active_end));
+        $NumberMembers = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"<>%i AND \"id\">=0 AND \"HiddenMember\"='no' AND (\"LastActive\">=%i AND \"LastActive\"<=%i)", array($GGroup, $active_start, $active_end)), $SQLStat);
+    } else {
+        // Fetch active members from a specific group
+        $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"=%i AND \"GroupID\"<>%i AND \"id\">=0 AND (\"LastActive\">=%i AND \"LastActive\"<=%i) ".$orderlist." ".$SQLimit, array($_GET['groupid'], $GGroup, $active_start, $active_end));
+        $NumberMembers = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"=%i AND \"GroupID\"<>%i AND \"id\">=0 AND (\"LastActive\">=%i AND \"LastActive\"<=%i)", array($_GET['groupid'], $GGroup, $active_start, $active_end)), $SQLStat);
+    }
+}
+
+// Execute query and fetch results
+$result = sql_query($query, $SQLStat);
+
+// Session handling
+$_SESSION['AncientViewingPage'] = $_SESSION['OldViewingPage'] ?? url_maker(null, "no+ext", "act=view", "&", "=", $prexqstr['index'], $exqstr['index']);
+$_SESSION['AncientViewingFile'] = $_SESSION['OldViewingFile'] ?? ($Settings['file_ext'] != "no+ext" ? $exfile['index'].$Settings['file_ext'] : $exfile['index']);
+$_SESSION['AncientPreViewingTitle'] = $_SESSION['OldPreViewingTitle'] ?? "Viewing";
+$_SESSION['AncientViewingTitle'] = $_SESSION['OldViewingTitle'] ?? "Board index";
+$_SESSION['AncientExtraData'] = $_SESSION['OldExtraData'] ?? "currentact:view; currentcategoryid:0; currentforumid:0; currenttopicid:0; currentmessageid:0; currenteventid:0; currentmemberid:0;";
+$_SESSION['ViewingPage'] = url_maker(null, "no+ext", "act=list&orderby=".$_GET['orderby']."&ordertype=".$_GET['ordertype']."&page=".$_GET['page'], "&", "=", $prexqstr['member'], $exqstr['member']);
+$_SESSION['ViewingFile'] = $Settings['file_ext'] != "no+ext" ? $exfile['member'].$Settings['file_ext'] : $exfile['member'];
 $_SESSION['PreViewingTitle'] = "Viewing";
 $_SESSION['ViewingTitle'] = "Member List";
 $_SESSION['ExtraData'] = "currentact:".$_GET['act']."; currentcategoryid:0; currentforumid:0; currenttopicid:0; currentmessageid:0; currenteventid:0; currentmemberid:0;";
-if($NumberMembers==null) { 
-	$NumberMembers = 0; }
+
+// Member List Pagination
+$NumberMembers = $NumberMembers ?? 0;
 $num = $NumberMembers;
-//Start MemberList Page Code
-if(!isset($Settings['max_memlist'])) { $Settings['max_memlist'] = 10; }
-if($_GET['page']==null) { $_GET['page'] = 1; } 
-if($_GET['page']<=0) { $_GET['page'] = 1; }
+$Settings['max_memlist'] = $Settings['max_memlist'] ?? 10;
+
+$_GET['page'] = max(1, (int)($_GET['page'] ?? 1));
 $nums = $_GET['page'] * $Settings['max_memlist'];
-if($nums>$num) { $nums = $num; }
-$numz = $nums - $Settings['max_memlist'];
-if($numz<=0) { $numz = 0; }
-//$i=$numz;
-if($nums<$num) { $nextpage = $_GET['page'] + 1; }
-if($nums>=$num) { $nextpage = $_GET['page']; }
-if($numz>=$Settings['max_memlist']) { $backpage = $_GET['page'] - 1; }
-if($_GET['page']<=1) { $backpage = 1; }
-$pnum = $num; $l = 1; $Pages = array();;
-while ($pnum>0) {
-if($pnum>=$Settings['max_memlist']) { 
-	$pnum = $pnum - $Settings['max_memlist']; 
-	$Pages[$l] = $l; ++$l; }
-if($pnum<$Settings['max_memlist']&&$pnum>0) { 
-	$pnum = $pnum - $pnum; 
-	$Pages[$l] = $l; ++$l; } }
-$nums = $_GET['page'] * $Settings['max_memlist'];
-//End MemberList Page Code
-//List Page Number Code Start
-$pagenum=count($Pages);
-if($_GET['page']>$pagenum) {
-	$_GET['page'] = $pagenum; }
-$pagei=0; $pstring = null;
-if($pagenum>1) {
-$pstring = "<div class=\"PageList\"><span class=\"pagelink\">".$pagenum." Pages:</span> "; }
-if($_GET['page']<4) { $Pagez[0] = null; }
-if($_GET['page']>=4) { $Pagez[0] = "First"; }
-if($_GET['page']>=3) {
-$Pagez[1] = $_GET['page'] - 2; }
-if($_GET['page']<3) {
-$Pagez[1] = null; }
-if($_GET['page']>=2) {
-$Pagez[2] = $_GET['page'] - 1; }
-if($_GET['page']<2) {
-$Pagez[2] = null; }
-$Pagez[3] = $_GET['page'];
-if($_GET['page']<$pagenum) {
-$Pagez[4] = $_GET['page'] + 1; }
-if($_GET['page']>=$pagenum) {
-$Pagez[4] = null; }
-$pagenext = $_GET['page'] + 1;
-if($pagenext<$pagenum) {
-$Pagez[5] = $_GET['page'] + 2; }
-if($pagenext>=$pagenum) {
-$Pagez[5] = null; }
-if($_GET['page']<$pagenum) { $Pagez[6] = "Last"; }
-if($_GET['page']>=$pagenum) { $Pagez[6] = null; }
-$pagenumi=count($Pagez);
-if($NumberMembers==0) {
-$pagenumi = 0;
-$pstring = null; }
-if($pagenum>1) {
-while ($pagei < $pagenumi) {
-if($_GET['page']!=1&&$pagei==1) {
-$Pback = $_GET['page'] - 1;
-$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=list&orderby=".$_GET['orderby']."&ordertype=".$_GET['ordertype']."&page=".$Pback,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">&lt;</a></span> "; }
-if($Pagez[$pagei]!=null&&
-   $Pagez[$pagei]!="First"&&
-   $Pagez[$pagei]!="Last") {
-if($pagei!=3) { 
-$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=list&orderby=".$_GET['orderby']."&ordertype=".$_GET['ordertype']."&page=".$Pagez[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">".$Pagez[$pagei]."</a></span> "; }
-if($pagei==3) { 
-$pstring = $pstring."<span class=\"pagecurrent\"><a href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=list&orderby=".$_GET['orderby']."&ordertype=".$_GET['ordertype']."&page=".$Pagez[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">".$Pagez[$pagei]."</a></span> "; } }
-if($Pagez[$pagei]=="First") {
-$pstring = $pstring."<span class=\"pagelinklast\"><a href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=list&orderby=".$_GET['orderby']."&ordertype=".$_GET['ordertype']."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">&laquo;</a></span> "; }
-if($Pagez[$pagei]=="Last") {
-$ptestnext = $pagenext + 1;
-$paget = $pagei - 1;
-$Pnext = $_GET['page'] + 1;
-$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=list&orderby=".$_GET['orderby']."&ordertype=".$_GET['ordertype']."&page=".$Pnext,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">&gt;</a></span> ";
-if($ptestnext<$pagenum) {
-$pstring = $pstring."<span class=\"pagelinklast\"><a href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=list&orderby=".$_GET['orderby']."&ordertype=".$_GET['ordertype']."&page=".$pagenum,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">&raquo;</a></span> "; } }
-	++$pagei; } $pstring = $pstring."</div>"; }
+$nums = min($nums, $num);
+$numz = max(0, $nums - $Settings['max_memlist']);
+
+// Calculate next and previous pages
+$nextpage = ($nums < $num) ? $_GET['page'] + 1 : $_GET['page'];
+$backpage = ($_GET['page'] > 1) ? $_GET['page'] - 1 : 1;
+
+// Generate pagination
+$Pages = [];
+for ($l = 1, $pnum = $num; $pnum > 0; ++$l) {
+    $pnum = max(0, $pnum - $Settings['max_memlist']);
+    $Pages[$l] = $l;
+}
+
+$pagenum = count($Pages);
+$_GET['page'] = min($_GET['page'], $pagenum);
+$pstring = null;
+
+if ($pagenum > 1) {
+    $pstring = "<div class=\"PageList\"><span class=\"pagelink\">{$pagenum} Pages:</span> ";
+    $Pagez = [
+        0 => ($_GET['page'] >= 4) ? "First" : null,
+        1 => ($_GET['page'] >= 3) ? $_GET['page'] - 2 : null,
+        2 => ($_GET['page'] >= 2) ? $_GET['page'] - 1 : null,
+        3 => $_GET['page'],
+        4 => ($_GET['page'] < $pagenum) ? $_GET['page'] + 1 : null,
+        5 => ($_GET['page'] + 1 < $pagenum) ? $_GET['page'] + 2 : null,
+        6 => ($_GET['page'] < $pagenum) ? "Last" : null
+    ];
+
+    // Build pagination links
+    for ($pagei = 0, $pagenumi = count($Pagez); $pagei < $pagenumi; ++$pagei) {
+        if ($pagei == 1 && $_GET['page'] > 1) {
+            $Pback = $_GET['page'] - 1;
+            $pstring .= "<span class=\"pagelink\"><a href=\"".url_maker($exfile['member'], $Settings['file_ext'], "act=list&orderby=".$_GET['orderby']."&ordertype=".$_GET['ordertype']."&page={$Pback}", $Settings['qstr'], $Settings['qsep'], $prexqstr['member'], $exqstr['member'])."\">&lt;</a></span> ";
+        }
+
+        if ($Pagez[$pagei] !== null && $Pagez[$pagei] != "First" && $Pagez[$pagei] != "Last") {
+            $pstring .= ($pagei == 3)
+                ? "<span class=\"pagecurrent\"><a href=\"".url_maker($exfile['member'], $Settings['file_ext'], "act=list&orderby=".$_GET['orderby']."&ordertype=".$_GET['ordertype']."&page={$Pagez[$pagei]}", $Settings['qstr'], $Settings['qsep'], $prexqstr['member'], $exqstr['member'])."\">{$Pagez[$pagei]}</a></span> "
+                : "<span class=\"pagelink\"><a href=\"".url_maker($exfile['member'], $Settings['file_ext'], "act=list&orderby=".$_GET['orderby']."&ordertype=".$_GET['ordertype']."&page={$Pagez[$pagei]}", $Settings['qstr'], $Settings['qsep'], $prexqstr['member'], $exqstr['member'])."\">{$Pagez[$pagei]}</a></span> ";
+        }
+
+        if ($Pagez[$pagei] == "First") {
+            $pstring .= "<span class=\"pagelinklast\"><a href=\"".url_maker($exfile['member'], $Settings['file_ext'], "act=list&orderby=".$_GET['orderby']."&ordertype=".$_GET['ordertype']."&page=1", $Settings['qstr'], $Settings['qsep'], $prexqstr['member'], $exqstr['member'])."\">&laquo;</a></span> ";
+        }
+
+        if ($Pagez[$pagei] == "Last") {
+            $Pnext = $_GET['page'] + 1;
+            $pstring .= "<span class=\"pagelink\"><a href=\"".url_maker($exfile['member'], $Settings['file_ext'], "act=list&orderby=".$_GET['orderby']."&ordertype=".$_GET['ordertype']."&page={$Pnext}", $Settings['qstr'], $Settings['qsep'], $prexqstr['member'], $exqstr['member'])."\">&gt;</a></span> ";
+            $pstring .= "<span class=\"pagelinklast\"><a href=\"".url_maker($exfile['member'], $Settings['file_ext'], "act=list&orderby=".$_GET['orderby']."&ordertype=".$_GET['ordertype']."&page={$pagenum}", $Settings['qstr'], $Settings['qsep'], $prexqstr['member'], $exqstr['member'])."\">&raquo;</a></span> ";
+        }
+    }
+    $pstring .= "</div>";
+}
 ?>
-<div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $Settings['board_name']; ?></a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=list&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Member list</a></div>
+<div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'], $Settings['file_ext'], "act=view", $Settings['qstr'], $Settings['qsep'], $prexqstr['index'], $exqstr['index']); ?>"><?php echo $Settings['board_name']; ?></a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['member'], $Settings['file_ext'], "act=list&page=1", $Settings['qstr'], $Settings['qsep'], $prexqstr['member'], $exqstr['member']); ?>">Member list</a></div>
 <div class="DivNavLinks">&#160;</div>
 <?php
 echo $pstring;
-//List Page Number Code end
-if($pagenum>1) {
+// List Page Number Code End
+$i=0;
+if ($pagenum > 1) {
 ?>
 <div class="DivPageLinks">&#160;</div>
 <?php } ?>
@@ -316,144 +293,147 @@ if($pagenum>1) {
 if($_GET['act']=="online") {
 if($_GET['list']!="all"&&$_GET['list']!="members"&&$_GET['list']!="guests") {
 	$_GET['list'] = "members"; }
-//Get SQL LIMIT Number
+// Get SQL LIMIT Number
 $nums = $_GET['page'] * $Settings['max_memlist'];
-$PageLimit = $nums - $Settings['max_memlist'];
-if($PageLimit<0) { $PageLimit = 0; }
-$i=0;
+$PageLimit = max(0, $nums - $Settings['max_memlist']);
 $SQLimit = getSQLLimitClause($Settings['sqltype'], $Settings['max_memlist'], $PageLimit);
+
 $uolcuttime = $utccurtime->getTimestamp();
 $uoltime = $uolcuttime - ini_get("session.gc_maxlifetime");
-if($_GET['list']=="members") {
-$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"serialized_data\" NOT LIKE '%s' ORDER BY \"expires\" DESC ".$SQLimit, array($uoltime,"%UserGroup|s:".strlen($Settings['GuestGroup']).":\"".$Settings['GuestGroup']."\";%")); 
-$num = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"serialized_data\" NOT LIKE '%s' ORDER BY \"expires\" DESC ".$SQLimit, array($uoltime,"%UserGroup|s:".strlen($Settings['GuestGroup']).":\"".$Settings['GuestGroup']."\";%")), $SQLStat); 
-$NumberMembers = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"serialized_data\" NOT LIKE '%s'", array($uoltime,"%UserGroup|s:".strlen($Settings['GuestGroup']).":\"".$Settings['GuestGroup']."\";%")), $SQLStat); }
-if($_GET['list']=="guests") {
-$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"serialized_data\" LIKE '%s' ORDER BY \"expires\" DESC ".$SQLimit, array($uoltime,"%UserGroup|s:".strlen($Settings['GuestGroup']).":\"".$Settings['GuestGroup']."\";%")); 
-$num = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"serialized_data\" LIKE '%s' ORDER BY \"expires\" DESC ".$SQLimit, array($uoltime,"%UserGroup|s:".strlen($Settings['GuestGroup']).":\"".$Settings['GuestGroup']."\";%")), $SQLStat);
-$NumberMembers = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"serialized_data\" LIKE '%s'", array($uoltime,"%UserGroup|s:".strlen($Settings['GuestGroup']).":\"".$Settings['GuestGroup']."\";%")), $SQLStat); }
-if($_GET['list']=="all") {
-$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i ORDER BY \"expires\" DESC ".$SQLimit, array($uoltime)); 
-$num = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i ORDER BY \"expires\" DESC ".$SQLimit, array($uoltime)), $SQLStat);
-$NumberMembers = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i", array($uoltime)), $SQLStat); }
-$result=sql_query($query,$SQLStat);
-if(isset($_SESSION['OldViewingPage'])) { $_SESSION['AncientViewingPage'] = $_SESSION['OldViewingPage']; } else { $_SESSION['AncientViewingPage'] = url_maker(null,"no+ext","act=view","&","=",$prexqstr['index'],$exqstr['index']); }
-if(isset($_SESSION['OldViewingFile'])) { $_SESSION['AncientViewingFile'] = $_SESSION['OldViewingFile']; } else { 
-	 if($Settings['file_ext']!="no+ext"&&$Settings['file_ext']!="no ext") {
-	    $_SESSION['AncientViewingFile'] = $exfile['index'].$Settings['file_ext']; }
-	 if($Settings['file_ext']=="no+ext"||$Settings['file_ext']=="no ext") {
-	    $_SESSION['AncientViewingFile'] = $exfile['index']; } }
-if(isset($_SESSION['OldPreViewingTitle'])) { $_SESSION['AncientPreViewingTitle'] = $_SESSION['OldPreViewingTitle']; } else { $_SESSION['AncientPreViewingTitle'] = "Viewing"; }
-if(isset($_SESSION['OldViewingTitle'])) { $_SESSION['AncientViewingTitle'] = $_SESSION['OldViewingTitle']; } else { $_SESSION['AncientViewingTitle'] = "Board index"; }
-if(isset($_SESSION['OldExtraData'])) { $_SESSION['AncientExtraData'] = $_SESSION['OldExtraData']; } else { $_SESSION['AncientExtraData'] = "currentact:view; currentcategoryid:0; currentforumid:0; currenttopicid:0; currentmessageid:0; currenteventid:0; currentmemberid:0;"; }
-if(isset($_SESSION['ViewingPage'])) { $_SESSION['OldViewingPage'] = $_SESSION['ViewingPage']; } else { $_SESSION['OldViewingPage'] = url_maker(null,"no+ext","act=view","&","=",$prexqstr['index'],$exqstr['index']); }
-if(isset($_SESSION['ViewingFile'])) { $_SESSION['OldViewingFile'] = $_SESSION['ViewingFile']; } else { 
-	 if($Settings['file_ext']!="no+ext"&&$Settings['file_ext']!="no ext") {
-	    $_SESSION['OldViewingFile'] = $exfile['index'].$Settings['file_ext']; }
-	 if($Settings['file_ext']=="no+ext"||$Settings['file_ext']=="no ext") {
-	    $_SESSION['OldViewingFile'] = $exfile['index']; } }
-if(isset($_SESSION['PreViewingTitle'])) { $_SESSION['OldPreViewingTitle'] = $_SESSION['PreViewingTitle']; } else { $_SESSION['OldPreViewingTitle'] = "Viewing"; }
-if(isset($_SESSION['ViewingTitle'])) { $_SESSION['OldViewingTitle'] = $_SESSION['ViewingTitle']; } else { $_SESSION['OldViewingTitle'] = "Board index"; }
-if(isset($_SESSION['ExtraData'])) { $_SESSION['OldExtraData'] = $_SESSION['ExtraData']; } else { $_SESSION['OldExtraData'] = "currentact:view; currentcategoryid:0; currentforumid:0; currenttopicid:0; currentmessageid:0; currenteventid:0; currentmemberid:0;"; }
-$_SESSION['ViewingPage'] = url_maker(null,"no+ext","act=online&list=".$_GET['list']."&page=".$_GET['page'],"&","=",$prexqstr['member'],$exqstr['member']);
-if($Settings['file_ext']!="no+ext"&&$Settings['file_ext']!="no ext") {
-$_SESSION['ViewingFile'] = $exfile['member'].$Settings['file_ext']; }
-if($Settings['file_ext']=="no+ext"||$Settings['file_ext']=="no ext") {
-$_SESSION['ViewingFile'] = $exfile['member']; }
+
+// Query based on the list type (members, guests, all)
+switch ($_GET['list']) {
+    case "members":
+        $query = sql_pre_query(
+            "SELECT * FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"serialized_data\" NOT LIKE '%s' ORDER BY \"expires\" DESC ".$SQLimit, 
+            array($uoltime, "%UserGroup|s:".strlen($Settings['GuestGroup']).":\"".$Settings['GuestGroup']."\";%")
+        );
+        $NumberMembers = sql_count_rows(
+            sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"serialized_data\" NOT LIKE '%s'", 
+            array($uoltime, "%UserGroup|s:".strlen($Settings['GuestGroup']).":\"".$Settings['GuestGroup']."\";%")), 
+            $SQLStat
+        );
+        break;
+    
+    case "guests":
+        $query = sql_pre_query(
+            "SELECT * FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"serialized_data\" LIKE '%s' ORDER BY \"expires\" DESC ".$SQLimit, 
+            array($uoltime, "%UserGroup|s:".strlen($Settings['GuestGroup']).":\"".$Settings['GuestGroup']."\";%")
+        );
+        $NumberMembers = sql_count_rows(
+            sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"serialized_data\" LIKE '%s'", 
+            array($uoltime, "%UserGroup|s:".strlen($Settings['GuestGroup']).":\"".$Settings['GuestGroup']."\";%")), 
+            $SQLStat
+        );
+        break;
+
+    case "all":
+    default:
+        $query = sql_pre_query(
+            "SELECT * FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i ORDER BY \"expires\" DESC ".$SQLimit, 
+            array($uoltime)
+        );
+        $NumberMembers = sql_count_rows(
+            sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i", 
+            array($uoltime)), 
+            $SQLStat
+        );
+        break;
+}
+
+$result = sql_query($query, $SQLStat);
+
+// Set session variables for navigation and viewing titles
+$_SESSION['AncientViewingPage'] = $_SESSION['OldViewingPage'] ?? url_maker(null, "no+ext", "act=view", "&", "=", $prexqstr['index'], $exqstr['index']);
+$_SESSION['AncientViewingFile'] = $_SESSION['OldViewingFile'] ?? ($Settings['file_ext'] !== "no+ext" ? $exfile['index'].$Settings['file_ext'] : $exfile['index']);
+$_SESSION['AncientPreViewingTitle'] = $_SESSION['OldPreViewingTitle'] ?? "Viewing";
+$_SESSION['AncientViewingTitle'] = $_SESSION['OldViewingTitle'] ?? "Board index";
+$_SESSION['AncientExtraData'] = $_SESSION['OldExtraData'] ?? "currentact:view; currentcategoryid:0; currentforumid:0; currenttopicid:0; currentmessageid:0; currenteventid:0; currentmemberid:0;";
+
+$_SESSION['OldViewingPage'] = $_SESSION['ViewingPage'] ?? url_maker(null, "no+ext", "act=view", "&", "=", $prexqstr['index'], $exqstr['index']);
+$_SESSION['OldViewingFile'] = $_SESSION['ViewingFile'] ?? ($Settings['file_ext'] !== "no+ext" ? $exfile['index'].$Settings['file_ext'] : $exfile['index']);
+$_SESSION['OldPreViewingTitle'] = $_SESSION['PreViewingTitle'] ?? "Viewing";
+$_SESSION['OldViewingTitle'] = $_SESSION['ViewingTitle'] ?? "Board index";
+$_SESSION['OldExtraData'] = $_SESSION['ExtraData'] ?? "currentact:view; currentcategoryid:0; currentforumid:0; currenttopicid:0; currentmessageid:0; currenteventid:0; currentmemberid:0;";
+
+$_SESSION['ViewingPage'] = url_maker(null, "no+ext", "act=online&list=".$_GET['list']."&page=".$_GET['page'], "&", "=", $prexqstr['member'], $exqstr['member']);
+$_SESSION['ViewingFile'] = $Settings['file_ext'] !== "no+ext" ? $exfile['member'].$Settings['file_ext'] : $exfile['member'];
 $_SESSION['PreViewingTitle'] = "Viewing";
 $_SESSION['ViewingTitle'] = "Online Member List";
 $_SESSION['ExtraData'] = "currentact:".$_GET['act']."; currentcategoryid:0; currentforumid:0; currenttopicid:0; currentmessageid:0; currenteventid:0; currentmemberid:0;";
-if($NumberMembers==null) { 
-	$NumberMembers = 0; }
+
+// Handle pagination for members list
+$NumberMembers = $NumberMembers ?? 0;
 $num = $NumberMembers;
-//Start MemberList Page Code
-if(!isset($Settings['max_memlist'])) { $Settings['max_memlist'] = 10; }
-if($_GET['page']==null) { $_GET['page'] = 1; } 
-if($_GET['page']<=0) { $_GET['page'] = 1; }
-$nums = $_GET['page'] * $Settings['max_memlist'];
-if($nums>$num) { $nums = $num; }
-$numz = $nums - $Settings['max_memlist'];
-if($numz<=0) { $numz = 0; }
-//$i=$numz;
-if($nums<$num) { $nextpage = $_GET['page'] + 1; }
-if($nums>=$num) { $nextpage = $_GET['page']; }
-if($numz>=$Settings['max_memlist']) { $backpage = $_GET['page'] - 1; }
-if($_GET['page']<=1) { $backpage = 1; }
-$pnum = $num; $l = 1; $Pages = array();;
-while ($pnum>0) {
-if($pnum>=$Settings['max_memlist']) { 
-	$pnum = $pnum - $Settings['max_memlist']; 
-	$Pages[$l] = $l; ++$l; }
-if($pnum<$Settings['max_memlist']&&$pnum>0) { 
-	$pnum = $pnum - $pnum; 
-	$Pages[$l] = $l; ++$l; } }
-$nums = $_GET['page'] * $Settings['max_memlist'];
-//End MemberList Page Code
-//List Page Number Code Start
-$pagenum=count($Pages);
-if($_GET['page']>$pagenum) {
-	$_GET['page'] = $pagenum; }
-$pagei=0; $pstring = null;
-if($pagenum>1) {
-$pstring = "<div class=\"PageList\"><span class=\"pagelink\">".$pagenum." Pages:</span> "; }
-if($_GET['page']<4) { $Pagez[0] = null; }
-if($_GET['page']>=4) { $Pagez[0] = "First"; }
-if($_GET['page']>=3) {
-$Pagez[1] = $_GET['page'] - 2; }
-if($_GET['page']<3) {
-$Pagez[1] = null; }
-if($_GET['page']>=2) {
-$Pagez[2] = $_GET['page'] - 1; }
-if($_GET['page']<2) {
-$Pagez[2] = null; }
-$Pagez[3] = $_GET['page'];
-if($_GET['page']<$pagenum) {
-$Pagez[4] = $_GET['page'] + 1; }
-if($_GET['page']>=$pagenum) {
-$Pagez[4] = null; }
-$pagenext = $_GET['page'] + 1;
-if($pagenext<$pagenum) {
-$Pagez[5] = $_GET['page'] + 2; }
-if($pagenext>=$pagenum) {
-$Pagez[5] = null; }
-if($_GET['page']<$pagenum) { $Pagez[6] = "Last"; }
-if($_GET['page']>=$pagenum) { $Pagez[6] = null; }
-$pagenumi=count($Pagez);
-if($NumberMembers==0) {
-$pagenumi = 0;
-$pstring = null; }
-if($pagenum>1) {
-while ($pagei < $pagenumi) {
-if($_GET['page']!=1&&$pagei==1) {
-$Pback = $_GET['page'] - 1;
-$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=online&list=".$_GET['list']."&page=".$Pback,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">&lt;</a></span> "; }
-if($Pagez[$pagei]!=null&&
-   $Pagez[$pagei]!="First"&&
-   $Pagez[$pagei]!="Last") {
-if($pagei!=3) { 
-$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=online&list=".$_GET['list']."&page=".$Pagez[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">".$Pagez[$pagei]."</a></span> "; }
-if($pagei==3) { 
-$pstring = $pstring."<span class=\"pagecurrent\"><a href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=online&list=".$_GET['list']."&page=".$Pagez[$pagei],$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">".$Pagez[$pagei]."</a></span> "; } }
-if($Pagez[$pagei]=="First") {
-$pstring = $pstring."<span class=\"pagelinklast\"><a href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=online&list=".$_GET['list']."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">&laquo;</a></span> "; }
-if($Pagez[$pagei]=="Last") {
-$ptestnext = $pagenext + 1;
-$paget = $pagei - 1;
-$Pnext = $_GET['page'] + 1;
-$pstring = $pstring."<span class=\"pagelink\"><a href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=online&list=".$_GET['list']."&page=".$Pnext,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">&gt;</a></span> ";
-if($ptestnext<$pagenum) {
-$pstring = $pstring."<span class=\"pagelinklast\"><a href=\"".url_maker($exfile['member'],$Settings['file_ext'],"act=online&list=".$_GET['list']."&page=".$pagenum,$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member'])."\">&raquo;</a></span> "; } }
-	++$pagei; } $pstring = $pstring."</div>"; }
+
+$Settings['max_memlist'] = $Settings['max_memlist'] ?? 10;
+$_GET['page'] = max(1, (int)($_GET['page'] ?? 1));
+
+$nums = min($_GET['page'] * $Settings['max_memlist'], $num);
+$numz = max(0, $nums - $Settings['max_memlist']);
+
+$nextpage = ($nums < $num) ? $_GET['page'] + 1 : $_GET['page'];
+$backpage = ($_GET['page'] > 1) ? $_GET['page'] - 1 : 1;
+
+// Pagination calculation
+$Pages = [];
+for ($l = 1, $pnum = $num; $pnum > 0; ++$l) {
+    $pnum = max(0, $pnum - $Settings['max_memlist']);
+    $Pages[$l] = $l;
+}
+
+// Generate pagination HTML
+$pagenum = count($Pages);
+$_GET['page'] = min($_GET['page'], $pagenum);
+$pstring = null;
+
+if ($pagenum > 1) {
+    $pstring = "<div class=\"PageList\"><span class=\"pagelink\">{$pagenum} Pages:</span> ";
+    $Pagez = [
+        0 => ($_GET['page'] >= 4) ? "First" : null,
+        1 => ($_GET['page'] >= 3) ? $_GET['page'] - 2 : null,
+        2 => ($_GET['page'] >= 2) ? $_GET['page'] - 1 : null,
+        3 => $_GET['page'],
+        4 => ($_GET['page'] < $pagenum) ? $_GET['page'] + 1 : null,
+        5 => ($_GET['page'] + 1 < $pagenum) ? $_GET['page'] + 2 : null,
+        6 => ($_GET['page'] < $pagenum) ? "Last" : null
+    ];
+
+    for ($pagei = 0, $pagenumi = count($Pagez); $pagei < $pagenumi; ++$pagei) {
+        if ($pagei == 1 && $_GET['page'] > 1) {
+            $Pback = $_GET['page'] - 1;
+            $pstring .= "<span class=\"pagelink\"><a href=\"".url_maker($exfile['member'], $Settings['file_ext'], "act=online&list=".$_GET['list']."&page={$Pback}", $Settings['qstr'], $Settings['qsep'], $prexqstr['member'], $exqstr['member'])."\">&lt;</a></span> ";
+        }
+
+        if ($Pagez[$pagei] !== null && $Pagez[$pagei] != "First" && $Pagez[$pagei] != "Last") {
+            $pstring .= ($pagei == 3)
+                ? "<span class=\"pagecurrent\"><a href=\"".url_maker($exfile['member'], $Settings['file_ext'], "act=online&list=".$_GET['list']."&page={$Pagez[$pagei]}", $Settings['qstr'], $Settings['qsep'], $prexqstr['member'], $exqstr['member'])."\">{$Pagez[$pagei]}</a></span> "
+                : "<span class=\"pagelink\"><a href=\"".url_maker($exfile['member'], $Settings['file_ext'], "act=online&list=".$_GET['list']."&page={$Pagez[$pagei]}", $Settings['qstr'], $Settings['qsep'], $prexqstr['member'], $exqstr['member'])."\">{$Pagez[$pagei]}</a></span> ";
+        }
+
+        if ($Pagez[$pagei] == "First") {
+            $pstring .= "<span class=\"pagelinklast\"><a href=\"".url_maker($exfile['member'], $Settings['file_ext'], "act=online&list=".$_GET['list']."&page=1", $Settings['qstr'], $Settings['qsep'], $prexqstr['member'], $exqstr['member'])."\">&laquo;</a></span> ";
+        }
+
+        if ($Pagez[$pagei] == "Last") {
+            $Pnext = $_GET['page'] + 1;
+            $pstring .= "<span class=\"pagelink\"><a href=\"".url_maker($exfile['member'], $Settings['file_ext'], "act=online&list=".$_GET['list']."&page={$Pnext}", $Settings['qstr'], $Settings['qsep'], $prexqstr['member'], $exqstr['member'])."\">&gt;</a></span> ";
+            $pstring .= "<span class=\"pagelinklast\"><a href=\"".url_maker($exfile['member'], $Settings['file_ext'], "act=online&list=".$_GET['list']."&page={$pagenum}", $Settings['qstr'], $Settings['qsep'], $prexqstr['member'], $exqstr['member'])."\">&raquo;</a></span> ";
+        }
+    }
+    $pstring .= "</div>";
+}
+
+// Display the navigation and page links
 ?>
-<div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $Settings['board_name']; ?></a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['member'],$Settings['file_ext'],"act=online&list=all&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['member'],$exqstr['member']); ?>">Online Member List</a></div>
+<div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'], $Settings['file_ext'], "act=view", $Settings['qstr'], $Settings['qsep'], $prexqstr['index'], $exqstr['index']); ?>"><?php echo $Settings['board_name']; ?></a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile['member'], $Settings['file_ext'], "act=online&list=all&page=1", $Settings['qstr'], $Settings['qsep'], $prexqstr['member'], $exqstr['member']); ?>">Online Member List</a></div>
 <div class="DivNavLinks">&#160;</div>
-<?php
-echo $pstring;
-//List Page Number Code end
-if($pagenum>1) {
-?>
-<div class="DivPageLinks">&#160;</div>
-<?php } ?>
+
+<?php echo $pstring; ?>
+
+<?php if ($pagenum > 1) { ?>
+    <div class="DivPageLinks">&#160;</div>
+<?php } $i=0; ?>
 <div class="Table1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableRow1">
