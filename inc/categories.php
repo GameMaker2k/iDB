@@ -100,10 +100,17 @@ $iscCategoryType=$iscresult_array['CategoryType'];
 $iscCategoryType = strtolower($iscCategoryType); }
 if($iscnum<1) { $InSubCategory = "0"; } 
 sql_free_result($iscresult); }
+if($_GET['act']=="view") {
 ?>
 <div class="NavLinks"><?php echo $ThemeSet['NavLinkIcon']; ?><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $Settings['board_name']; ?></a><?php if($InSubCategory!="0") { echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile[$iscCategoryType],$Settings['file_ext'],"act=".$viewvar."&id=".$iscCategoryID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr[$iscCategoryType],$exqstr[$iscCategoryType]); ?>"><?php echo $iscCategoryName; ?></a><?php } echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile[$CategoryType],$Settings['file_ext'],"act=".$viewvar."&id=".$CategoryID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$CategoryType],$exqstr[$CategoryType]); ?>"><?php echo $CategoryName; ?></a></div>
 <div class="DivNavLinks">&#160;</div>
-<?php
+<?php } if($_GET['act']=="lowview") { ?>
+<div style="font-size: 1.0em; font-weight: bold; margin-bottom: 10px; padding-top: 3px; width: auto;">Full Version: <a href="<?php echo url_maker($exfile[$CategoryType],$Settings['file_ext'],"act=view&id=".$CategoryID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$CategoryType],$exqstr[$CategoryType]); ?>"><?php echo $CategoryName; ?></a></div>
+<div style="font-size: 11px; font-weight: bold; padding: 10px; border: 1px solid gray;"><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=lowview",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $Settings['board_name']; ?></a><?php if($InSubCategory!="0") { echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile[$iscCategoryType],$Settings['file_ext'],"act=lowview&id=".$iscCategoryID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr[$iscCategoryType],$exqstr[$iscCategoryType]); ?>"><?php echo $iscCategoryName; ?></a><?php } echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile[$CategoryType],$Settings['file_ext'],"act=lowview&id=".$CategoryID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$CategoryType],$exqstr[$CategoryType]); ?>"><?php echo $CategoryName; ?></a></div>
+<div>&#160;</div>
+<div style="padding: 10px; border: 1px solid gray;">
+<ul style="list-style-type: none;">
+<?php }
 if($CategoryType=="subcategory") {
 redirect("location",$rbasedir.url_maker($exfile['subcategory'],$Settings['file_ext'],"act=".$_GET['act']."&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['subcategory'],$exqstr['subcategory'],FALSE));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
@@ -113,6 +120,7 @@ $result=sql_query($query,$SQLStat);
 $num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"ShowForum\"='yes' AND \"CategoryID\"=%i AND \"InSubForum\"=0".$ForumIgnoreList2." ORDER BY \"OrderID\" ASC, \"id\" ASC", array($CategoryID)), $SQLStat);
 $i=0;
 if($num>=1) {
+if($_GET['act']=="view") {
 ?>
 <div class="Table1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
@@ -134,7 +142,7 @@ if($num>=1) {
 <th class="TableColumn2" style="width: 7%;">Posts</th>
 <th class="TableColumn2" style="width: 24%;">Last Topic</th>
 </tr>
-<?php }
+<?php } }
 while ($i < $num) {
 $result_array = sql_fetch_assoc($result);
 $ForumID=$result_array['id'];
@@ -168,14 +176,24 @@ if(isset($PermissionInfo['CanViewForum'][$SubsForumID])&&
 	$PermissionInfo['CanViewForum'][$SubsForumID]=="yes") {
 $ExStr = ""; if ($SubsForumType!="redirect"&&
     $SubsForumShowTopics!="no") { $ExStr = "&page=1"; }
-$sfurl = "<a href=\"";
+if($_GET['act']=="view") {
 $sfurl = url_maker($exfile[$SubsForumType],$Settings['file_ext'],"act=".$viewvar."&id=".$SubsForumID.$ExStr,$Settings['qstr'],$Settings['qsep'],$prexqstr[$SubsForumType],$exqstr[$SubsForumType]);
 $sfurl = "<a href=\"".$sfurl."\">".$SubsForumName."</a>";
 if($apcl==1) {
 $sflist = "Subforums:";
 $sflist = $sflist." ".$sfurl; }
 if($apcl>1) {
-$sflist = $sflist.", ".$sfurl; }
+$sflist = $sflist.", ".$sfurl; } }
+if($_GET['act']=="lowview") {
+if ($SubsForumType=="redirect") { $shownum = "(".$NumRedirects." redirects)"; }
+if ($SubsForumType!="redirect") { $shownum = "(".$NumsPosts." posts)"; }
+$sfurl = "<a href=\"";
+$sfurl = url_maker($exfile[$SubsForumType],$Settings['file_ext'],"act=lowview&id=".$SubsForumID.$ExStr,$Settings['qstr'],$Settings['qsep'],$prexqstr[$SubsForumType],$exqstr[$SubsForumType]);
+$sfurl = "<li><ul style=\"list-style-type: none;\"><li><a href=\"".$sfurl."\">".$SubsForumName."</a><span style=\"color: gray; font-size: 10px;\">".$shownum."</span></li></ul></li>";
+if($apcl==1) {
+$sflist = $sflist." ".$sfurl; }
+if($apcl>1) {
+$sflist = $sflist." ".$sfurl; } }
 $gltf[$apcl] = $SubsForumID; ++$apcl; }
 ++$apci; }
 sql_free_result($apcresult); } }
@@ -262,6 +280,9 @@ $LastTopic = $TimeStamp."<br />\nTopic: <a href=\"".url_maker($exfile['topic'],$
 if($LastTopic==null) { $LastTopic = "&#160;<br />&#160;<br />&#160;"; }
 sql_free_result($gltresult); }
 if ($ForumType=="redirect") { $LastTopic="&#160;<br />Redirects: ".$NumRedirects."<br />&#160;"; }
+$shownum = null;
+if ($ForumType=="redirect") { $shownum = "(".$NumRedirects." redirects)"; }
+if ($ForumType!="redirect") { $shownum = "(".$NumPosts." posts)"; }
 $PreForum = $ThemeSet['ForumIcon'];
 if ($ForumType=="forum") { $PreForum=$ThemeSet['ForumIcon']; }
 if ($ForumType=="subforum") { $PreForum=$ThemeSet['SubForumIcon']; }
@@ -280,6 +301,7 @@ if($ThemeSet['ForumStyle']==2) {
 	$ForumClass[3] = " class=\"TableColumn3Alt\" ";
 	$ForumClass[4] = " class=\"TableColumn3Alt\" ";
 	$ForumClass[5] = " class=\"TableColumn3Alt\" "; }
+if($_GET['act']=="view") {
 ?>
 <tr class="TableRow3" id="Forum<?php echo $ForumID; ?>">
 <td<?php echo $ForumClass[1]; ?>><div class="forumicon">
@@ -292,12 +314,20 @@ if($ThemeSet['ForumStyle']==2) {
 <td<?php echo $ForumClass[4]; ?>style="text-align: center;"><?php echo $NumPosts; ?></td>
 <td<?php echo $ForumClass[5]; ?>><?php echo $LastTopic; ?></td>
 </tr>
-<?php } ++$i; } sql_free_result($result);
-if($num>=1) { ?>
+<?php } if($_GET['act']=="lowview") { ?>
+<ul style="list-style-type: none;"><li>
+<a href="<?php echo url_maker($exfile[$ForumType],$Settings['file_ext'],"act=lowview&id=".$ForumID.$ExStr,$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>"<?php if($ForumType=="redirect") { echo " onclick=\"window.open(this.href);return false;\""; } ?>><?php echo $ForumName; ?></a> <span style="color: gray; font-size: 10px;"><?php echo $shownum; ?></span></li>
+<?php echo $sflist; ?></ul>
+<?php } } ++$i; } sql_free_result($result);
+if($num>=1) {
+if($_GET['act']=="view") { ?>
 <tr id="CatEnd<?php echo $CategoryID; ?>" class="TableRow4">
 <td class="TableColumn4" colspan="5">&#160;</td>
 </tr>
 </table></div>
 <div class="DivCategories">&#160;</div>
-<?php } } }
+<?php } if($_GET['act']=="lowview") { ?>
+</li></ul></div>
+<div>&#160;</div>
+<?php } } } }
 sql_free_result($preresult); ?>

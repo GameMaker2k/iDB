@@ -177,7 +177,7 @@ if($_GET['act']!="view"&&$_GET['act']!="lowview") { ?>
 </tr>
 </table>
 <div class="DivTable2">&#160;</div>
-<?php } if($_GET['act']=="view") {
+<?php } if($_GET['act']=="view"||$_GET['act']=="lowview") {
 if($NumberTopics==null) { 
 	$NumberTopics = 0; }
 $num=$NumberTopics;
@@ -276,7 +276,13 @@ if($ptestnext<$pagenum) {
 $pstring = $pstring."<span class=\"pagelinklast\"><a href=\"".url_maker($exfile[$ForumType],$Settings['file_ext'],"act=".$viewvar."&id=".$_GET['id']."&page=".$pagenum,$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType])."\">&raquo;</a></span> "; } }
 	++$pagei; } $pstring = $pstring."</div>"; }
 //List Page Number Code end
+if($_GET['act']=="lowview") { ?>
+<div style="font-size: 1.0em; font-weight: bold; margin-bottom: 10px; padding-top: 3px; width: auto;">Full Version: <a href="<?php echo url_maker($exfile['forum'],$Settings['file_ext'],"act=view&id=".$ForumID."&page=".$_GET['page'],$Settings['qstr'],$Settings['qsep'],$prexqstr['forum'],$exqstr['forum']); ?>"><?php echo $ForumName; ?></a></div>
+<div style="font-size: 11px; font-weight: bold; padding: 10px; border: 1px solid gray;"><a href="<?php echo url_maker($exfile['index'],$Settings['file_ext'],"act=lowview",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']); ?>"><?php echo $Settings['board_name']; ?></a><?php echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile[$CategoryType],$Settings['file_ext'],"act=lowview&id=".$ForumCatID,$Settings['qstr'],$Settings['qsep'],$prexqstr[$CategoryType],$exqstr[$CategoryType]); ?>"><?php echo $CategoryName; ?></a><?php if($InSubForum!="0") { echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile[$isfForumType],$Settings['file_ext'],"act=lowview&id=".$isfForumID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr[$isfForumType],$exqstr[$isfForumType]); ?>"><?php echo $isfForumName; ?></a><?php } echo $ThemeSet['NavLinkDivider']; ?><a href="<?php echo url_maker($exfile[$ForumType],$Settings['file_ext'],"act=lowview&id=".$ForumID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>"><?php echo $ForumName; ?></a></div>
+<div>&#160;</div>
+<?php }
 if($pstring!=null||$PermissionInfo['CanMakeTopics'][$ForumID]=="yes"&&$CanHaveTopics=="yes") {
+if($_GET['act']=="view") {
 ?>
 <table style="width: 100%;" class="Table2">
 <tr>
@@ -292,7 +298,17 @@ if($pstring!=null||$PermissionInfo['CanMakeTopics'][$ForumID]=="yes"&&$CanHaveTo
 ?>
 <?php /*<div class="DivPageLinks">&#160;</div>*/?>
 <div class="DivTable2">&#160;</div>
-<?php } ?>
+<?php } if($_GET['act']=="lowview") { ?>
+<div style="font-size: 11px; font-weight: bold; padding: 10px; border: 1px solid gray;">
+<?php echo $pstring; ?></div>
+<div>&#160;</div>
+<div style="padding: 10px; border: 1px solid gray;">
+<?php if($num<=0) { ?>
+<ul style="list-style-type: none;">
+<li>&#160;</li>
+<?php } if($num>0) { ?>
+<ul style="list-style-type: decimal;">
+<?php } } } if($_GET['act']=="view") { ?>
 <div class="Table1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableRow1">
@@ -314,7 +330,7 @@ if($pstring!=null||$PermissionInfo['CanMakeTopics'][$ForumID]=="yes"&&$CanHaveTo
 <th class="TableColumn2" style="width: 5%;">Replys</th>
 <th class="TableColumn2" style="width: 25%;">Last Reply</th>
 </tr>
-<?php
+<?php }
 while ($i < $num) {
 $result_array = sql_fetch_assoc($result);
 $TopicID=$result_array['id'];
@@ -526,6 +542,7 @@ if ($PinnedTopic>0&&$PinnedTopic<3&&$TopicStat>0&&$TopicStat<=3) {
 			$PreTopic=$ThemeSet['MovedHotPinClosedTopic']; }
 		if($NumReply<$Settings['hot_topic_num']) {
 			$PreTopic=$ThemeSet['MovedPinClosedTopic']; } } }
+if($_GET['act']=="view") {
 ?>
 <tr class="TableRow3" id="Topic<?php echo $TopicID; ?>">
 <td class="TableColumn3"><div class="topicstate">
@@ -546,14 +563,20 @@ echo "<span>".$UsersName."</span>"; }
 <td class="TableColumn3" style="text-align: center;"><?php echo $NumReply; ?></td>
 <td class="TableColumn3"><?php echo $LastReply; ?></td>
 </tr>
-<?php ++$i; } 
-?>
+<?php } if($_GET['act']=="lowview") { ?>
+<li><?php echo $PreTopic; ?><a href="<?php echo url_maker($exfile['topic'],$Settings['file_ext'],"act=lowview&id=".$TopicID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr['topic'],$exqstr['topic']); ?>"><?php echo $TopicName; ?></a> <span style="color: gray; font-size: 10px;">(<?php echo $NumReply; ?> replies)</span></li>
+<?php } ++$i; } if($_GET['act']=="view") { ?>
 <tr id="ForumEnd<?php echo $ForumID; ?>" class="TableRow4">
 <td class="TableColumn4" colspan="6">&#160;</td>
 </tr>
 </table></div>
 <div class="DivTopics">&#160;</div>
-<?php
+<?php } if($_GET['act']=="lowview") { ?>
+</ul></div><div>&#160;</div>
+<div style="font-size: 11px; font-weight: bold; padding: 10px; border: 1px solid gray;">
+<?php echo $pstring; ?></div>
+<div>&#160;</div>
+<?php }
 sql_free_result($result); }
 if(($utccurtime->getTimestamp()<$_SESSION['LastPostTime']&&$_SESSION['LastPostTime']!=0)&&($_GET['act']=="create"||$_GET['act']=="maketopic")) { 
 $_GET['act'] = "view"; $_POST['act'] = null; 
@@ -993,7 +1016,7 @@ redirect("refresh",$rbasedir.url_maker($exfile['topic'],$Settings['file_ext'],"a
 </tr>
 </table></div>
 <div class="DivMkTopics">&#160;</div>
-<?php } ?>
+<?php } if($_GET['act']!="lowview") { ?>
 <table style="width: 100%;" class="Table2">
 <tr>
  <td style="width: 30%; text-align: left;"><?php echo $pstring; ?></td>
@@ -1148,4 +1171,4 @@ $GuestsViewList = "<a".$uatitleadd." href=\"".url_maker($exfile['member'],$Setti
 </tr>
 </table></div>
 <div class="DivStats">&#160;</div>
-<?php } } ?>
+<?php } } } ?>

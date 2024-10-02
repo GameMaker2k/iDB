@@ -54,10 +54,9 @@ if($_GET['act']==null)
 if(!in_array($_GET['act'], $idbactcheck))
 { $_GET['act']="view"; }
 if(!is_numeric($_GET['id'])) { $_GET['id']="1"; }
-if($_GET['act']=="view")
+if($_GET['act']=="view"||
+	$_GET['act']=="lowview")
 { require($SettDir['inc'].'subforums.php'); }
-if($_GET['act']=="lowview")
-{ require($SettDir['inc'].'lowsubforums.php'); }
 if($_GET['act']=="oldrss"||$_GET['act']=="rss"||$_GET['act']=="atom"||$_GET['act']=="opml") {
 redirect("location",$rbasedir.url_maker($exfile['rss'],$Settings['file_ext'],"act=".$_GET['act']."&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['rss'],$exqstr['rss'],FALSE));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;

@@ -48,10 +48,9 @@ if($_GET['act']==null)
 if(!in_array($_GET['act'], $idbactcheck))
 { $_GET['act']="view"; }
 if(!is_numeric($_GET['id'])) { $_GET['id']="1"; }
-if($_GET['act']=="view")
+if($_GET['act']=="view"||
+	$_GET['act']=="lowview")
 { require($SettDir['inc'].'subcategories.php'); }
-if($_GET['act']=="lowview")
-{ require($SettDir['inc'].'lowsubcategories.php'); }
 if($_GET['act']=="view"||$_GET['act']=="stats")
 { require($SettDir['inc'].'stats.php'); }
 $iWrappers['CONTENT'] = ob_get_clean();
