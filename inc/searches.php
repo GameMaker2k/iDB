@@ -129,22 +129,10 @@ if($_GET['memid']!=null&&is_numeric($_GET['memid'])) {
 	$_GET['msearch'] = null;
 	$_GET['memid'] = null;
 	$memsid = null; } }
-
 // Get SQL LIMIT Number
-$nums = isset($_GET['page']) ? $_GET['page'] * $Settings['max_topics'] : 1 * $Settings['max_topics'];
+$nums = $_GET['page'] * $Settings['max_topics'];
 $PageLimit = max(0, $nums - $Settings['max_topics']);
 $SQLimit = getSQLLimitClause($Settings['sqltype'], $Settings['max_topics'], $PageLimit);
-
-// Ensure that the 'page' value is valid
-$_GET['page'] = max(1, (int)$_GET['page']);
-
-if ($nums <= 0) {
-    // Set a default value for pagination when invalid values are provided
-    $nums = $Settings['max_topics'];
-}
-
-// Initialize $active_start and $active_end to avoid undefined variable warnings
-$active_start = $active_end = null;
 
 // Prepare search query based on search type
 if (empty($_GET['msearch'])) {
