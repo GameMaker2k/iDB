@@ -372,6 +372,10 @@ if($renum<1) {
 		'PostCount' => 0,
 		'Karma' => 0); }
 $memreresult_array = sql_fetch_assoc($memreresult);
+if($memrenum<1) { 
+	$memreresult_array = array('CanExecPHP' => "group",
+		'CanDoHTML' => "group",
+		'CanUseBBTags' => "group"); }
 $User1ID=$MyUserID; $GuestsName = $MyGuestName;
 $User1Name=$reresult_array['Name'];
 $User1IP=$reresult_array['IP'];

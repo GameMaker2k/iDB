@@ -242,6 +242,28 @@ $memprenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settin
 if($grunum>=1) {
 $gruresult_array = sql_fetch_assoc($gruresult);
 $mempreresult_array = sql_fetch_assoc($mempreresult);
+if($memprenum < 1) { 
+    $mempreresult_array = array(
+        'PermissionID' => "group",
+        'CanViewBoard' => "group",
+        'CanViewOffLine' => "group",
+        'FloodControl' => 30,
+        'SearchFlood' => 30,
+        'CanEditProfile' => "group",
+        'CanAddEvents' => "group",
+        'CanPM' => "group",
+        'CanSearch' => "group",
+        'CanExecPHP' => "group",
+        'CanDoHTML' => "group",
+        'CanUseBBTags' => "group",
+        'CanViewIPAddress' => "group",
+        'HasAdminCP' => "group",
+        'HasModCP' => "group",
+        'CanViewUserAgent' => "group",
+        'CanViewAnonymous' => "group",
+        'ViewDBInfo' => "group"
+    );
+}
 $GroupInfo['ID']=$gruresult_array['id'];
 if(!is_numeric($GroupInfo['ID'])) { $GruError = true; }
 $GroupInfo['Name']=$gruresult_array['Name'];

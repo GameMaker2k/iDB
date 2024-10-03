@@ -111,6 +111,10 @@ if($User1IP==$EventIP) { $ipshow = "one"; }
 $User1Email=$reresult_array['Email'];
 $User1Title=$reresult_array['Title'];
 $memreresult_array = sql_fetch_assoc($memreresult);
+if($memrenum<1) { 
+	$memreresult_array = array('CanExecPHP' => "group",
+		'CanDoHTML' => "group",
+		'CanUseBBTags' => "group"); }
 $PreUserCanExecPHP=$memreresult_array['CanExecPHP'];
 if($PreUserCanExecPHP!="yes"&&$PreUserCanExecPHP!="no"&&$PreUserCanExecPHP!="group") {
 	$PreUserCanExecPHP = "no"; }
