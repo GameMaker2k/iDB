@@ -58,12 +58,12 @@ $parsestr = parse_url($YourWebsite);
 if (!filter_var($parsestr['host'], FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6) || $parsestr['host'] == "localhost") {
 	$GuestLocalIP = gethostbyname($parsestr['host']); } else { $GuestLocalIP = $parsestr['host']; }
 $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."categories\" (\n".
-"  \"id\" int(15) NOT NULL IDENTITY,\n".
+"  \"id\" int(15) NOT NULL auto_increment,\n".
 "  \"OrderID\" int(15) NOT NULL default '0',\n".
-"  \"Name\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"ShowCategory\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"CategoryType\" nvarchar(15) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"SubShowForums\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"Name\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"ShowCategory\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CategoryType\" varchar(15) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"SubShowForums\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"InSubCategory\" int(15) NOT NULL default '0',\n".
 "  \"PostCountView\" int(15) NOT NULL default '0',\n".
 "  \"KarmaCountView\" int(15) NOT NULL default '0',\n".
@@ -76,11 +76,11 @@ $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."categories\" (\"O
 "VALUES (1, 'A Test Category', 'yes', 'category', 'yes', 0, 0, 0, 'A test category that may be removed at any time.');", null);
 sql_query($query,$SQLStat); }
 $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."catpermissions\" (\n".
-"  \"id\" int(15) NOT NULL IDENTITY,\n".
+"  \"id\" int(15) NOT NULL auto_increment,\n".
 "  \"PermissionID\" int(15) NOT NULL default '0',\n".
-"  \"Name\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"Name\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"CategoryID\" int(15) NOT NULL default '0',\n".
-"  \"CanViewCategory\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanViewCategory\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\")\n".
 ") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$Settings['sql_charset']." COLLATE=".$Settings['sql_collate'].";", null);
 sql_query($query,$SQLStat);
@@ -102,10 +102,10 @@ $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."catpermissions\" 
 "(6, 'Validate', 1, 'yes');", null); 
 sql_query($query,$SQLStat); }
 $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."events\" (\n".
-"  \"id\" int(15) NOT NULL IDENTITY,\n".
+"  \"id\" int(15) NOT NULL auto_increment,\n".
 "  \"UserID\" int(15) NOT NULL default '0',\n".
-"  \"GuestName\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"EventName\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"GuestName\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"EventName\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"EventText\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
 "  \"TimeStamp\" int(15) NOT NULL default '0',\n".
 "  \"TimeStampEnd\" int(15) NOT NULL default '0',\n".
@@ -115,7 +115,7 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."even
 "  \"EventDayEnd\" int(5) NOT NULL default '0',\n".
 "  \"EventYear\" int(5) NOT NULL default '0',\n".
 "  \"EventYearEnd\" int(5) NOT NULL default '0',\n".
-"  \"IP\" nvarchar(64) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"IP\" varchar(64) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\")\n".
 ") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$Settings['sql_charset']." COLLATE=".$Settings['sql_collate'].";", null);
 sql_query($query,$SQLStat);
@@ -124,21 +124,21 @@ $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."events\" (\"UserI
 "(-1, '".$iDB_Author."', 'iDB Install', 'This is the start date of your board. ^_^', %i, %i, %i, %i, %i, %i, %i, %i, '%s');", array($YourDate,$YourDateEnd,$EventMonth,$EventMonthEnd,$EventDay,$EventDayEnd,$EventYear,$EventYearEnd,$GuestLocalIP));
 sql_query($query,$SQLStat); }
 $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."forums\" (\n".
-"  \"id\" int(15) NOT NULL IDENTITY,\n".
+"  \"id\" int(15) NOT NULL auto_increment,\n".
 "  \"CategoryID\" int(15) NOT NULL default '0',\n".
 "  \"OrderID\" int(15) NOT NULL default '0',\n".
-"  \"Name\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"ShowForum\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"ForumType\" nvarchar(15) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"Name\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"ShowForum\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"ForumType\" varchar(15) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"InSubForum\" int(15) NOT NULL default '0',\n".
 "  \"RedirectURL\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
 "  \"Redirects\" int(15) NOT NULL default '0',\n".
 "  \"NumViews\" int(15) NOT NULL default '0',\n".
 "  \"Description\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
-"  \"PostCountAdd\" nvarchar(15) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"PostCountAdd\" varchar(15) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"PostCountView\" int(15) NOT NULL default '0',\n".
 "  \"KarmaCountView\" int(15) NOT NULL default '0',\n".
-"  \"CanHaveTopics\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanHaveTopics\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"HotTopicPosts\" int(15) NOT NULL default '0',\n".
 "  \"NumPosts\" int(15) NOT NULL default '0',\n".
 "  \"NumTopics\" int(15) NOT NULL default '0',\n".
@@ -150,24 +150,24 @@ $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."forums\" (\"Categ
 "(1, 1, 'A Test Forum', 'yes', 'forum', 0, 'http://', 0, 0, 'A test forum that may be removed at any time.', 'off', 0, 0, 'yes', 15, 1, 1);", null);
 sql_query($query,$SQLStat); }
 $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."groups\" (\n".
-"  \"id\" int(15) NOT NULL IDENTITY,\n".
-"  \"Name\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"id\" int(15) NOT NULL auto_increment,\n".
+"  \"Name\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"PermissionID\" int(15) NOT NULL default '0',\n".
-"  \"NamePrefix\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"NameSuffix\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"CanViewBoard\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"CanViewOffLine\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"CanEditProfile\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"CanAddEvents\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"CanPM\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"CanSearch\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"CanExecPHP\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"CanDoHTML\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"CanUseBBTags\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"CanModForum\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"CanViewIPAddress\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"CanViewUserAgent\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"CanViewAnonymous\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"NamePrefix\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"NameSuffix\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanViewBoard\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanViewOffLine\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanEditProfile\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanAddEvents\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanPM\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanSearch\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanExecPHP\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanDoHTML\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanUseBBTags\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanModForum\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanViewIPAddress\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanViewUserAgent\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanViewAnonymous\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"FloodControl\" int(5) NOT NULL default '0',\n".
 "  \"SearchFlood\" int(5) NOT NULL default '0',\n".
 "  \"PromoteTo\" int(15) NOT NULL default '0',\n".
@@ -176,9 +176,9 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."grou
 "  \"DemoteTo\" int(15) NOT NULL default '0',\n".
 "  \"DemotePosts\" int(15) NOT NULL default '0',\n".
 "  \"DemoteKarma\" int(15) NOT NULL default '0',\n".
-"  \"HasModCP\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"HasAdminCP\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"ViewDBInfo\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"HasModCP\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"HasAdminCP\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"ViewDBInfo\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\"),\n".
 "  UNIQUE KEY \"Name\" (\"Name\")\n".
 ") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$Settings['sql_charset']." COLLATE=".$Settings['sql_collate'].";", null);
@@ -192,8 +192,8 @@ $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."groups\" (\"Name\
 "('Validate', 6, '', '', 'yes', 'no', 'yes', 'no', 'no', 'yes', 'no', 'no', 'yes', 'no', 'no', 'no', 'no', 30, 30, 0, 0, 0, 0, 0, 0, 'no', 'no', 'no');", null); 
 sql_query($query,$SQLStat);
 $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."ranks\" (\n".
-"  \"id\" int(15) NOT NULL IDENTITY,\n".
-"  \"Name\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"id\" int(15) NOT NULL auto_increment,\n".
+"  \"Name\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"PromoteTo\" int(15) NOT NULL default '0',\n".
 "  \"PromotePosts\" int(15) NOT NULL default '0',\n".
 "  \"PromoteKarma\" int(15) NOT NULL default '0',\n".
@@ -205,8 +205,8 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."ranks\" (\n".
 ") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$Settings['sql_charset']." COLLATE=".$Settings['sql_collate'].";", null);
 sql_query($query,$SQLStat);
 $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."levels\" (\n".
-"  \"id\" int(15) NOT NULL IDENTITY,\n".
-"  \"Name\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"id\" int(15) NOT NULL auto_increment,\n".
+"  \"Name\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"PromoteTo\" int(15) NOT NULL default '0',\n".
 "  \"PromotePosts\" int(15) NOT NULL default '0',\n".
 "  \"PromoteKarma\" int(15) NOT NULL default '0',\n".
@@ -218,20 +218,20 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."levels\" (\n".
 ") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$Settings['sql_charset']." COLLATE=".$Settings['sql_collate'].";", null);
 sql_query($query,$SQLStat);
 $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."members\" (\n".
-"  \"id\" int(15) NOT NULL IDENTITY,\n".
-"  \"Name\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"Handle\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"UserPassword\" nvarchar(256) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"HashType\" nvarchar(50) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"Email\" nvarchar(256) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"id\" int(15) NOT NULL auto_increment,\n".
+"  \"Name\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"Handle\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"UserPassword\" varchar(256) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"HashType\" varchar(50) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"Email\" varchar(256) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"GroupID\" int(15) NOT NULL default '0',\n".
 "  \"LevelID\" int(15) NOT NULL default '0',\n".
 "  \"RankID\" int(15) NOT NULL default '0',\n".
-"  \"Validated\" nvarchar(20) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"HiddenMember\" nvarchar(20) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"Validated\" varchar(20) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"HiddenMember\" varchar(20) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"WarnLevel\" int(15) NOT NULL default '0',\n".
 "  \"Interests\" text COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"Title\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"Title\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"Joined\" int(15) NOT NULL default '0',\n".
 "  \"LastActive\" int(15) NOT NULL default '0',\n".
 "  \"LastLogin\" int(15) NOT NULL default '0',\n".
@@ -243,26 +243,26 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."memb
 "  \"Signature\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
 "  \"Notes\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
 "  \"Bio\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
-"  \"Avatar\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"AvatarSize\" nvarchar(10) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"Website\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"Location\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"Gender\" nvarchar(15) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"Avatar\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"AvatarSize\" varchar(10) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"Website\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"Location\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"Gender\" varchar(15) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"PostCount\" int(15) NOT NULL default '0',\n".
 "  \"Karma\" int(15) NOT NULL default '0',\n".
 "  \"KarmaUpdate\" int(15) NOT NULL default '0',\n".
 "  \"RepliesPerPage\" int(5) NOT NULL default '0',\n".
 "  \"TopicsPerPage\" int(5) NOT NULL default '0',\n".
 "  \"MessagesPerPage\" int(5) NOT NULL default '0',\n".
-"  \"TimeZone\" nvarchar(256) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"DateFormat\" nvarchar(15) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"TimeFormat\" nvarchar(15) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"UseTheme\" nvarchar(32) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"IgnoreSignitures\" nvarchar(32) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"IgnoreAdvatars\" nvarchar(32) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"IgnoreUsers\" nvarchar(32) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"IP\" nvarchar(64) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"Salt\" nvarchar(50) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"TimeZone\" varchar(256) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"DateFormat\" varchar(15) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"TimeFormat\" varchar(15) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"UseTheme\" varchar(32) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"IgnoreSignitures\" varchar(32) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"IgnoreAdvatars\" varchar(32) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"IgnoreUsers\" varchar(32) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"IP\" varchar(64) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"Salt\" varchar(50) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\"),\n".
 "  UNIQUE KEY \"Name\" (\"Name\"),\n".
 "  UNIQUE KEY \"Handle\" (\"Name\"),\n".
@@ -274,26 +274,26 @@ $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."members\" (\"id\"
 "(1, '%s', '%s', '%s', '%s', '%s', 1, 0, 0, 'yes', 'no', 0, '%s', 'Admin', %i, %i, %i, '0', '0', '0', '0', '0', '%s', 'Your Notes', '', '%s', '100x100', '%s', '', 'Unknown', 0, 0, 0, 10, 10, 10, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');", array($GuestPassword,$GEmail,$YourDate,$YourDate,$YourDate,$YourWebsite,$_POST['YourOffSet'],$_POST['iDBDateFormat'],$_POST['iDBTimeFormat'],$_POST['DefaultTheme'],'','','',$GuestLocalIP,$GSalt,$_POST['AdminUser'],$_POST['AdminHandle'],$NewPassword,$iDBHashType,$_POST['AdminEmail'],"",$YourDate,$YourDate,$YourDate,"","http://",$YourWebsite,$_POST['YourOffSet'],$_POST['iDBDateFormat'],$_POST['iDBTimeFormat'],$_POST['DefaultTheme'],'','','',$UserIP,$YourSalt));
 sql_query($query,$SQLStat);
 $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."mempermissions\" (\n".
-"  \"id\" int(15) NOT NULL IDENTITY,\n".
+"  \"id\" int(15) NOT NULL auto_increment,\n".
 "  \"PermissionID\" int(15) NOT NULL default '0',\n".
-"  \"CanViewBoard\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"CanViewOffLine\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"CanEditProfile\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"CanAddEvents\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"CanPM\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"CanSearch\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"CanExecPHP\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"CanDoHTML\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"CanUseBBTags\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"CanModForum\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"CanViewIPAddress\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"CanViewUserAgent\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"CanViewAnonymous\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanViewBoard\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanViewOffLine\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanEditProfile\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanAddEvents\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanPM\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanSearch\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanExecPHP\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanDoHTML\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanUseBBTags\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanModForum\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanViewIPAddress\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanViewUserAgent\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanViewAnonymous\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"FloodControl\" int(5) NOT NULL default '0',\n".
 "  \"SearchFlood\" int(5) NOT NULL default '0',\n".
-"  \"HasModCP\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"HasAdminCP\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"ViewDBInfo\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"HasModCP\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"HasAdminCP\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"ViewDBInfo\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\")\n".
 ") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$Settings['sql_charset']." COLLATE=".$Settings['sql_collate'].";", null);
 sql_query($query,$SQLStat);
@@ -304,17 +304,17 @@ $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."mempermissions\" 
 //"(1, 0, 'yes', 'yes', 'yes', 'yes', 'yes', 'yes', 'no', 'yes', 'yes', 'yes', 30, 30, 'yes', 'yes', 'yes');", null);
 sql_query($query,$SQLStat);
 $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."messenger\" (\n".
-"  \"id\" int(15) NOT NULL IDENTITY,\n".
+"  \"id\" int(15) NOT NULL auto_increment,\n".
 "  \"DiscussionID\" int(15) NOT NULL default '0',\n".
 "  \"SenderID\" int(15) NOT NULL default '0',\n".
 "  \"ReciverID\" int(15) NOT NULL default '0',\n".
-"  \"GuestName\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"MessageTitle\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"GuestName\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"MessageTitle\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"MessageText\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
 "  \"Description\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
 "  \"DateSend\" int(15) NOT NULL default '0',\n".
 "  \"Read\" int(5) NOT NULL default '0',\n".
-"  \"IP\" nvarchar(64) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"IP\" varchar(64) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\")\n".
 ") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$Settings['sql_charset']." COLLATE=".$Settings['sql_collate'].";", null);
 sql_query($query,$SQLStat);
@@ -323,36 +323,36 @@ $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."messenger\" (\"Di
 "(0, -1, 1, '".$iDB_Author."', 'Welcome', 'Welcome to your new Internet Discussion Board! :)', '%s', %i, 0, '%s');", array("Welcome ".$_POST['AdminUser'],$YourDate,$GuestLocalIP));
 sql_query($query,$SQLStat); }
 $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."permissions\" (\n".
-"  \"id\" int(15) NOT NULL IDENTITY,\n".
+"  \"id\" int(15) NOT NULL auto_increment,\n".
 "  \"PermissionID\" int(15) NOT NULL default '0',\n".
-"  \"Name\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"Name\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"ForumID\" int(15) NOT NULL default '0',\n".
-"  \"CanViewForum\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"CanMakePolls\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"CanMakeTopics\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"CanMakeReplys\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"CanMakeReplysCT\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"HideEditPostInfo\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"CanEditTopics\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"CanEditTopicsCT\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"CanEditReplys\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"CanEditReplysCT\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"CanDeleteTopics\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"CanDeleteTopicsCT\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"CanDeleteReplys\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"CanDeleteReplysCT\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"CanDoublePost\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"CanDoublePostCT\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"GotoEditPost\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"CanCloseTopics\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"CanCloseTopicsCT\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"CanPinTopics\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"CanPinTopicsCT\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"CanExecPHP\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"CanDoHTML\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"CanUseBBTags\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"CanModForum\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"CanReportPost\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanViewForum\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanMakePolls\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanMakeTopics\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanMakeReplys\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanMakeReplysCT\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"HideEditPostInfo\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanEditTopics\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanEditTopicsCT\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanEditReplys\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanEditReplysCT\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanDeleteTopics\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanDeleteTopicsCT\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanDeleteReplys\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanDeleteReplysCT\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanDoublePost\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanDoublePostCT\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"GotoEditPost\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanCloseTopics\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanCloseTopicsCT\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanPinTopics\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanPinTopicsCT\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanExecPHP\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanDoHTML\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanUseBBTags\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanModForum\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CanReportPost\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\")\n".
 ") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$Settings['sql_charset']." COLLATE=".$Settings['sql_collate'].";", null);
 sql_query($query,$SQLStat);
@@ -374,71 +374,70 @@ $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."permissions\" (\"
 "(6, 'Validate', 1, 'yes', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no');", null); 
 sql_query($query,$SQLStat); }
 $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."polls\" (\n".
-"  \"id\" int(15) NOT NULL IDENTITY,\n".
+"  \"id\" int(15) NOT NULL auto_increment,\n".
 "  \"UserID\" int(15) NOT NULL default '0',\n".
-"  \"GuestName\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"GuestName\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"PollValues\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
 "  \"Description\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
 "  \"UsersVoted\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
-"  \"IP\" nvarchar(64) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"IP\" varchar(64) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\")\n".
 ") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$Settings['sql_charset']." COLLATE=".$Settings['sql_collate'].";", null);
 sql_query($query,$SQLStat);
 $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."posts\" (\n".
-"  \"id\" int(15) NOT NULL IDENTITY,\n".
+"  \"id\" int(15) NOT NULL auto_increment,\n".
 "  \"TopicID\" int(15) NOT NULL default '0',\n".
 "  \"ForumID\" int(15) NOT NULL default '0',\n".
 "  \"CategoryID\" int(15) NOT NULL default '0',\n".
-"  \"ReplyID\" int(15) NOT NULL default '0',\n".
 "  \"UserID\" int(15) NOT NULL default '0',\n".
-"  \"GuestName\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"GuestName\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"TimeStamp\" int(15) NOT NULL default '0',\n".
 "  \"LastUpdate\" int(15) NOT NULL default '0',\n".
 "  \"EditUser\" int(15) NOT NULL default '0',\n".
-"  \"EditUserName\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"EditUserName\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"Post\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
 "  \"Description\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
-"  \"IP\" nvarchar(64) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"EditIP\" nvarchar(64) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"IP\" varchar(64) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"EditIP\" varchar(64) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\")\n".
 ") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$Settings['sql_charset']." COLLATE=".$Settings['sql_collate'].";", null);
 sql_query($query,$SQLStat);
 if($_POST['testdata']=="yes") {
-$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."posts\" (\"TopicID\", \"ForumID\", \"CategoryID\", \"ReplyID\", \"UserID\", \"GuestName\", \"TimeStamp\", \"LastUpdate\", \"EditUser\", \"EditUserName\", \"Post\", \"Description\", \"IP\", \"EditIP\") VALUES\n".
-"(1, 1, 1, 0, -1, '".$iDB_Author."', %i, %i, 1, '".$_POST['AdminUser']."', 'Welcome to your new Internet Discussion Board! :) ', '%s', '%s', '127.0.0.1');", array($YourDate,$YourEditDate,"Welcome ".$_POST['AdminUser'],$GuestLocalIP)); 
+$query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."posts\" (\"TopicID\", \"ForumID\", \"CategoryID\", \"UserID\", \"GuestName\", \"TimeStamp\", \"LastUpdate\", \"EditUser\", \"EditUserName\", \"Post\", \"Description\", \"IP\", \"EditIP\") VALUES\n".
+"(1, 1, 1, -1, '".$iDB_Author."', %i, %i, 1, '".$_POST['AdminUser']."', 'Welcome to your new Internet Discussion Board! :) ', '%s', '%s', '127.0.0.1');", array($YourDate,$YourEditDate,"Welcome ".$_POST['AdminUser'],$GuestLocalIP)); 
 sql_query($query,$SQLStat); }
 $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."restrictedwords\" (\n".
-"  \"id\" int(15) NOT NULL IDENTITY,\n".
+"  \"id\" int(15) NOT NULL auto_increment,\n".
 "  \"Word\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
-"  \"RestrictedUserName\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"RestrictedTopicName\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"RestrictedEventName\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"RestrictedMessageName\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"CaseInsensitive\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"WholeWord\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"RestrictedUserName\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"RestrictedTopicName\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"RestrictedEventName\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"RestrictedMessageName\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CaseInsensitive\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"WholeWord\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\")\n".
 ") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$Settings['sql_charset']." COLLATE=".$Settings['sql_collate'].";", null);
 sql_query($query,$SQLStat);
 $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."sessions\" (\n".
-"  \"session_id\" nvarchar(250) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"session_id\" varchar(250) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"session_data\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
 "  \"serialized_data\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
 "  \"user_agent\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
 "  \"client_hints\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
-"  \"ip_address\" nvarchar(64) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"ip_address\" varchar(64) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"expires\" int(15) NOT NULL default '0',\n".
 "  PRIMARY KEY  (\"session_id\")\n".
 ") ENGINE=".$SQLStorageEngine." DEFAULT CHARSET=".$Settings['sql_charset']." COLLATE=".$Settings['sql_collate'].";", null);
 sql_query($query,$SQLStat);
 $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."smileys\" (\n".
-"  \"id\" int(15) NOT NULL IDENTITY,\n".
+"  \"id\" int(15) NOT NULL auto_increment,\n".
 "  \"FileName\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
 "  \"SmileName\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
 "  \"SmileText\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
 "  \"EmojiText\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
 "  \"Directory\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
-"  \"Display\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"ReplaceCI\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"Display\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"ReplaceCI\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\")\n".
 ") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$Settings['sql_charset']." COLLATE=".$Settings['sql_collate'].";", null);
 sql_query($query,$SQLStat);
@@ -467,12 +466,12 @@ $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."smileys\" (\"File
 sql_query($query,$SQLStat);
 /*
 $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."tagboard\" (\n".
-"  \"id\" int(15) NOT NULL IDENTITY,\n".
+"  \"id\" int(15) NOT NULL auto_increment,\n".
 "  \"UserID\" int(15) NOT NULL default '0',\n".
-"  \"GuestName\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"GuestName\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"TimeStamp\" int(15) NOT NULL default '0',\n".
 "  \"Post\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
-"  \"IP\" nvarchar(64) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"IP\" varchar(64) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\")\n".
 ") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$Settings['sql_charset']." COLLATE=".$Settings['sql_collate'].";", null);
 sql_query($query,$SQLStat);
@@ -480,90 +479,90 @@ $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."tagboard\" VALUES
 sql_query($query,$SQLStat);
 */
 $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."themes\" (\n".
-"  \"id\" int(15) NOT NULL IDENTITY,\n".
-"  \"Name\" nvarchar(32) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"ThemeName\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"ThemeMaker\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"ThemeVersion\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"ThemeVersionType\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"ThemeSubVersion\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"MakerURL\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"CopyRight\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"id\" int(15) NOT NULL auto_increment,\n".
+"  \"Name\" varchar(32) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"ThemeName\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"ThemeMaker\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"ThemeVersion\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"ThemeVersionType\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"ThemeSubVersion\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"MakerURL\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CopyRight\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"WrapperString\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
 "  \"CSS\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
-"  \"CSSType\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"FavIcon\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"OpenGraph\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"TableStyle\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"MiniPageAltStyle\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"PreLogo\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"Logo\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"LogoStyle\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"SubLogo\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"TopicIcon\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"MovedTopicIcon\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"HotTopic\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"MovedHotTopic\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"PinTopic\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"AnnouncementTopic\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"MovedPinTopic\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"HotPinTopic\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"MovedHotPinTopic\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"ClosedTopic\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"MovedClosedTopic\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"HotClosedTopic\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"MovedHotClosedTopic\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"PinClosedTopic\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"MovedPinClosedTopic\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"HotPinClosedTopic\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"MovedHotPinClosedTopic\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"MessageRead\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"MessageUnread\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"Profile\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"WWW\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"PM\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"TopicLayout\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"AddReply\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"FastReply\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"NewTopic\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"QuoteReply\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"EditReply\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"DeleteReply\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"Report\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"LineDivider\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"ButtonDivider\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"LineDividerTopic\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"TitleDivider\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"ForumStyle\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"ForumIcon\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"SubForumIcon\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"RedirectIcon\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"TitleIcon\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"NavLinkIcon\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"NavLinkDivider\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"BoardStatsIcon\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"MemberStatsIcon\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"BirthdayStatsIcon\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"EventStatsIcon\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"OnlineStatsIcon\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"NoAvatar\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"NoAvatarSize\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CSSType\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"FavIcon\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"OpenGraph\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"TableStyle\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"MiniPageAltStyle\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"PreLogo\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"Logo\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"LogoStyle\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"SubLogo\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"TopicIcon\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"MovedTopicIcon\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"HotTopic\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"MovedHotTopic\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"PinTopic\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"AnnouncementTopic\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"MovedPinTopic\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"HotPinTopic\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"MovedHotPinTopic\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"ClosedTopic\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"MovedClosedTopic\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"HotClosedTopic\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"MovedHotClosedTopic\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"PinClosedTopic\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"MovedPinClosedTopic\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"HotPinClosedTopic\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"MovedHotPinClosedTopic\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"MessageRead\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"MessageUnread\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"Profile\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"WWW\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"PM\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"TopicLayout\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"AddReply\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"FastReply\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"NewTopic\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"QuoteReply\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"EditReply\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"DeleteReply\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"Report\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"LineDivider\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"ButtonDivider\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"LineDividerTopic\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"TitleDivider\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"ForumStyle\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"ForumIcon\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"SubForumIcon\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"RedirectIcon\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"TitleIcon\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"NavLinkIcon\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"NavLinkDivider\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"BoardStatsIcon\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"MemberStatsIcon\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"BirthdayStatsIcon\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"EventStatsIcon\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"OnlineStatsIcon\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"NoAvatar\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"NoAvatarSize\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\"),\n".
 "  UNIQUE KEY \"Name\" (\"Name\")\n".
 ") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$Settings['sql_charset']." COLLATE=".$Settings['sql_collate'].";", null);
 sql_query($query,$SQLStat);
 $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."topics\" (\n".
-"  \"id\" int(15) NOT NULL IDENTITY,\n".
+"  \"id\" int(15) NOT NULL auto_increment,\n".
 "  \"PollID\" int(15) NOT NULL default '0',\n".
 "  \"ForumID\" int(15) NOT NULL default '0',\n".
 "  \"CategoryID\" int(15) NOT NULL default '0',\n".
 "  \"OldForumID\" int(15) NOT NULL default '0',\n".
 "  \"OldCategoryID\" int(15) NOT NULL default '0',\n".
 "  \"UserID\" int(15) NOT NULL default '0',\n".
-"  \"GuestName\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"GuestName\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"TimeStamp\" int(15) NOT NULL default '0',\n".
 "  \"LastUpdate\" int(15) NOT NULL default '0',\n".
-"  \"TopicName\" nvarchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"TopicName\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"Description\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
 "  \"NumReply\" int(15) NOT NULL default '0',\n".
 "  \"NumViews\" int(15) NOT NULL default '0',\n".
@@ -577,11 +576,11 @@ $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."topics\" (\"PollI
 "(0, 1, 1, 1, 1, -1, '".$iDB_Author."', %i, %i, 'Welcome', '%s', 0, 0, 1, 1);", array($YourDate,$YourDate,"Welcome ".$_POST['AdminUser']));
 sql_query($query,$SQLStat); }
 $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."wordfilter\" (\n".
-"  \"id\" int(15) NOT NULL IDENTITY,\n".
+"  \"id\" int(15) NOT NULL auto_increment,\n".
 "  \"FilterWord\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
 "  \"Replacement\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
-"  \"CaseInsensitive\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
-"  \"WholeWord\" nvarchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"CaseInsensitive\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"WholeWord\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\")\n".
 ") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$Settings['sql_charset']." COLLATE=".$Settings['sql_collate'].";", null);
 sql_query($query,$SQLStat);
