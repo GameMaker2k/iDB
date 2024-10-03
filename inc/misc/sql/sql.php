@@ -140,7 +140,7 @@ if (file_exists($SettDir['sql'] . "sqlsrv_prepare.php")&&function_exists("sqlsrv
 function get_sql_function_prefix($sqllib) {
     $prefixes = array(
         'mysql' => 'mysql_func',
-        'mysql_prepare' => 'mysqli_prepare_func',
+        'mysqli_prepare' => 'mysqli_prepare_func',
         'mysqli' => 'mysqli_func',
         'pdo_mysql' => 'pdo_mysql_func',
         'pgsql' => 'pgsql_func',
