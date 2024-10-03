@@ -197,6 +197,14 @@ for ($l = 1, $pnum = $num; $pnum > 0; ++$l) {
     $Pages[$l] = $l;
 }
 
+if (!isset($active_start) || !isset($active_end)) {
+	$active_month = $usercurtime->format("m");
+	$active_day = $usercurtime->format("d");
+	$active_year = $usercurtime->format("Y");
+	$active_start = mktime(0, 0, 0, $active_month, $active_day, $active_year);
+	$active_end = mktime(23, 59, 59, $active_month, $active_day, $active_year);
+}
+
 // End Topic Page Code
 $SQLimit = getSQLLimitClause($Settings['sqltype'], $Settings['max_topics'], $PageLimit);
 $num = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE (\"TimeStamp\">=%i AND \"TimeStamp\"<=%i) OR (\"LastUpdate\">=%i AND \"LastUpdate\"<=%i)".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($active_start, $active_end, $active_start, $active_end)), $SQLStat);
