@@ -207,12 +207,20 @@ $SenderIP=$result_array['IP'];
 $PreSenderName = GetUserName($SenderID,$Settings['sqltable'],$SQLStat);
 if($PreSenderName['Name']===null) { $SenderID = -1;
 $PreSenderName = GetUserName($SenderID,$Settings['sqltable'],$SQLStat); }
+if($PreSenderName['Name']===null) { $SenderID = -1;
+	$PreSenderName = array('UserID' => -1,
+		'Name' => "Guest",
+		'Hidden' => "yes"); }
 $SenderName = $PreSenderName['Name'];
 $SenderHidden = $PreSenderName['Hidden'];
 $ReciverID=$result_array['ReciverID'];
 $PreReciverName = GetUserName($ReciverID,$Settings['sqltable'],$SQLStat);
 if($PreReciverName['Name']===null) { $ReciverID = -1;
 $PreReciverName = GetUserName($ReciverID,$Settings['sqltable'],$SQLStat); }
+if($PreReciverName['Name']===null) { $ReciverID = -1;
+	$PreReciverName = array('UserID' => -1,
+		'Name' => "Guest",
+		'Hidden' => "yes"); }
 $ReciverName = $PreReciverName['Name'];
 $ReciverHidden = $PreReciverName['Hidden'];
 $PMGuest=$result_array['GuestName'];
@@ -378,12 +386,20 @@ $SenderIP=$result_array['IP'];
 $PreSenderName = GetUserName($SenderID,$Settings['sqltable'],$SQLStat);
 if($PreSenderName['Name']===null) { $SenderID = -1;
 $PreSenderName = GetUserName($SenderID,$Settings['sqltable'],$SQLStat); }
+if($PreSenderName['Name']===null) { $SenderID = -1;
+	$PreSenderName = array('UserID' => -1,
+		'Name' => "Guest",
+		'Hidden' => "yes"); }
 $SenderName = $PreSenderName['Name'];
 $SenderHidden = $PreSenderName['Hidden'];
 $ReciverID=$result_array['ReciverID'];
 $PreReciverName = GetUserName($ReciverID,$Settings['sqltable'],$SQLStat);
 if($PreReciverName['Name']===null) { $ReciverID = -1;
 $PreReciverName = GetUserName($ReciverID,$Settings['sqltable'],$SQLStat); }
+if($PreReciverName['Name']===null) { $ReciverID = -1;
+	$PreReciverName = array('UserID' => -1,
+		'Name' => "Guest",
+		'Hidden' => "yes"); }
 $ReciverName = $PreReciverName['Name'];
 $ReciverHidden = $PreReciverName['Hidden'];
 $PMGuest=$result_array['GuestName'];
@@ -440,12 +456,20 @@ $SenderIP=$result_array['IP'];
 $PreSenderName = GetUserName($SenderID,$Settings['sqltable'],$SQLStat);
 if($PreSenderName['Name']===null) { $SenderID = -1;
 $PreSenderName = GetUserName($SenderID,$Settings['sqltable'],$SQLStat); }
+if($PreSenderName['Name']===null) { $SenderID = -1;
+	$PreSenderName = array('UserID' => -1,
+		'Name' => "Guest",
+		'Hidden' => "yes"); }
 $SenderName = $PreSenderName['Name'];
 $SenderHidden = $PreSenderName['Hidden'];
 $ReciverID=$result_array['ReciverID'];
 $PreReciverName = GetUserName($ReciverID,$Settings['sqltable'],$SQLStat);
 if($PreReciverName['Name']===null) { $ReciverID = -1;
 $PreReciverName = GetUserName($ReciverID,$Settings['sqltable'],$SQLStat); }
+if($PreReciverName['Name']===null) { $ReciverID = -1;
+	$PreReciverName = array('UserID' => -1,
+		'Name' => "Guest",
+		'Hidden' => "yes"); }
 $ReciverName = $PreReciverName['Name'];
 $ReciverHidden = $PreReciverName['Hidden'];
 $PMGuest=$result_array['GuestName'];
@@ -470,10 +494,26 @@ if($_SESSION['UserID']!=$ReciverID&&
 redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
-while ($rei < $renum) {
 $User1ID=$SenderID;
 $result_array = sql_fetch_assoc($result);
 $reresult_array = sql_fetch_assoc($reresult);
+if($renum<1) { 
+	$reresult_array = array('UserID' => -1,
+		'Name' => "Guest",
+		'IP' => "127.0.0.1",
+		'Email' => "",
+		'Title' => "Guest",
+		'Joined' => $Settings['start_date'],
+		'HiddenMember' => "yes",
+		'LevelID' => 0,
+		'RankID' => "0",
+		'GroupID' => $Settings['GuestGroupID'],
+		'Signature' => "",
+		'Avatar' => $ThemeSet['NoAvatar'],
+		'AvatarSize' => $ThemeSet['NoAvatarSize'],
+		'Website' => $Settings['weburl'],
+		'PostCount' => 0,
+		'Karma' => 0); }
 $memreresult_array = sql_fetch_assoc($memreresult);
 $User1Name=$reresult_array['Name'];
 $SenderName = $User1Name;
@@ -540,7 +580,7 @@ if($User1CanUseBBTags!="yes"&&$User1CanUseBBTags!="no") {
 	$User1CanUseBBTags = "no"; }
 $GroupNamePrefix=$gresult_array['NamePrefix'];
 $GroupNameSuffix=$gresult_array['NameSuffix'];
-sql_free_result($gresult); sql_free_result($lresult);
+sql_free_result($gresult);
 if($User1Title=="") { $User1Title = $User1Group; }
 $User1Signature=$reresult_array['Signature'];
 $User1Avatar=$reresult_array['Avatar'];
@@ -563,7 +603,7 @@ if($BoardWWWChCk['host']==$User1WWWChCk['host']) {
 $User1PostCount=$reresult_array['PostCount'];
 $User1Karma=$reresult_array['Karma'];
 $User1IP=$reresult_array['IP'];
-++$rei; } sql_free_result($reresult);
+sql_free_result($reresult);
 if($_SESSION['UserID']==$ReciverID) {
 $queryup = sql_pre_query("UPDATE \"".$Settings['sqltable']."messenger\" SET \"Read\"=%i WHERE \"id\"=%i", array(1,$_GET['id']));
 sql_query($queryup,$SQLStat); }

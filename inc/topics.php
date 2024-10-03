@@ -411,6 +411,23 @@ $requery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHE
 $reresult=sql_query($requery,$SQLStat);
 $renum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($UsersID)), $SQLStat); }
 $reresult_array = sql_fetch_assoc($reresult);
+if($renum<1) { 
+	$reresult_array = array('UserID' => -1,
+		'Name' => "Guest",
+		'IP' => "127.0.0.1",
+		'Email' => "",
+		'Title' => "Guest",
+		'Joined' => $Settings['start_date'],
+		'HiddenMember' => "yes",
+		'LevelID' => 0,
+		'RankID' => "0",
+		'GroupID' => $Settings['GuestGroupID'],
+		'Signature' => "",
+		'Avatar' => $ThemeSet['NoAvatar'],
+		'AvatarSize' => $ThemeSet['NoAvatarSize'],
+		'Website' => $Settings['weburl'],
+		'PostCount' => 0,
+		'Karma' => 0); }
 $UserHidden=$reresult_array['HiddenMember'];
 $UserGroupID=$reresult_array['GroupID'];
 sql_free_result($reresult);
@@ -424,6 +441,10 @@ sql_free_result($gresult);
 $PreUsersName = GetUserName($UsersID,$Settings['sqltable'],$SQLStat);
 if($PreUsersName['Name']===null) { $UsersID = -1;
 $PreUsersName = GetUserName($UsersID,$Settings['sqltable'],$SQLStat); }
+if($PreUsersName['Name']===null) { $UsersID = -1;
+	$PreUsersName = array('UserID' => -1,
+		'Name' => "Guest",
+		'Hidden' => "yes"); }
 $UsersName = $PreUsersName['Name'];
 $UsersHidden = $PreUsersName['Hidden'];
 if($UsersName=="Guest") { $UsersName=$GuestsName;
@@ -443,6 +464,10 @@ $UsersID1=$glrresult_array['UserID'];
 $PreUsersName1 = GetUserName($UsersID1,$Settings['sqltable'],$SQLStat);
 if($PreUsersName1['Name']===null) { $UsersID1 = -1;
 $PreUsersName1 = GetUserName($UsersID1,$Settings['sqltable'],$SQLStat); }
+if($PreUsersName1['Name']===null) { $UsersID = -1;
+	$PreUsersName1 = array('UserID' => -1,
+		'Name' => "Guest",
+		'Hidden' => "yes"); }
 $UsersName1 = $PreUsersName1['Name'];
 $UsersHidden1 = $PreUsersName1['Hidden'];
 $GuestsName1=$glrresult_array['GuestName'];

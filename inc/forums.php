@@ -237,6 +237,10 @@ sql_free_result($glrresult); }
 $PreUsersName = GetUserName($UsersID,$Settings['sqltable'],$SQLStat);
 if($PreUsersName['Name']===null) { $UsersID = -1;
 $PreUsersName = GetUserName($UsersID,$Settings['sqltable'],$SQLStat); }
+if($PreUsersName['Name']===null) { $UsersID = -1;
+	$PreUsersName = array('UserID' => -1,
+		'Name' => "Guest",
+		'Hidden' => "yes"); }
 $UsersName = $PreUsersName['Name'];
 $UsersHidden = $PreUsersName['Hidden'];
 $UsersName1 = pre_substr($UsersName,0,20);

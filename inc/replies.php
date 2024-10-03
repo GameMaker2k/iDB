@@ -354,6 +354,23 @@ $memreresult=sql_query($memrequery,$SQLStat);
 $memrenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."mempermissions\" WHERE \"id\"=%i LIMIT 1", array($MyUserID)), $SQLStat);
 $ipshow = "two";
 $reresult_array = sql_fetch_assoc($reresult);
+if($renum<1) { 
+	$reresult_array = array('UserID' => -1,
+		'Name' => "Guest",
+		'IP' => "127.0.0.1",
+		'Email' => "",
+		'Title' => "Guest",
+		'Joined' => $Settings['start_date'],
+		'HiddenMember' => "yes",
+		'LevelID' => 0,
+		'RankID' => "0",
+		'GroupID' => $Settings['GuestGroupID'],
+		'Signature' => "",
+		'Avatar' => $ThemeSet['NoAvatar'],
+		'AvatarSize' => $ThemeSet['NoAvatarSize'],
+		'Website' => $Settings['weburl'],
+		'PostCount' => 0,
+		'Karma' => 0); }
 $memreresult_array = sql_fetch_assoc($memreresult);
 $User1ID=$MyUserID; $GuestsName = $MyGuestName;
 $User1Name=$reresult_array['Name'];
