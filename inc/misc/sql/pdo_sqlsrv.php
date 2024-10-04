@@ -117,14 +117,12 @@ function pdo_sqlsrv_func_connect_db($server, $username = null, $password = null,
         $dsn .= ";Database=$database";
     }
 
-    // Set UTF-8 character encoding in the DSN
-    $dsn .= ";CharacterSet=UTF-8";
-
     try {
         // Connection options for SQL Authentication
         $options = [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,  // Set error mode to exceptions
-            PDO::ATTR_PERSISTENT => $new_link            // Use persistent connections if requested
+            PDO::ATTR_PERSISTENT => $new_link,            // Use persistent connections if requested
+            PDO::SQLSRV_ATTR_ENCODING => PDO::SQLSRV_ENCODING_UTF8  // Set UTF-8 character encoding
         ];
 
         // Check if the constant is defined and add it to the options if it exists
