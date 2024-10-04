@@ -106,6 +106,7 @@ function pdo_sqlsrv_func_num_rows($result) {
 }
 
 // Connect to SQL Server using PDO and set session options
+// Connect to SQL Server using PDO and set session options
 function pdo_sqlsrv_func_connect_db($server, $username = null, $password = null, $database = null, $new_link = false) {
     global $SQLStat;
 
@@ -121,13 +122,17 @@ function pdo_sqlsrv_func_connect_db($server, $username = null, $password = null,
         // Connection options for SQL Authentication
         $options = [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,  // Set error mode to exceptions
-            PDO::ATTR_PERSISTENT => $new_link,            // Use persistent connections if requested
-            PDO::SQLSRV_ATTR_ENCODING => PDO::SQLSRV_ENCODING_UTF8  // Set UTF-8 character encoding
+            PDO::ATTR_PERSISTENT => $new_link             // Use persistent connections if requested
         ];
 
-        // Check if the constant is defined and add it to the options if it exists
+        // Check if PDO::SQLSRV_ATTR_TRUST_SERVER_CERTIFICATE is supported and set it
         if (defined('PDO::SQLSRV_ATTR_TRUST_SERVER_CERTIFICATE')) {
             $options[PDO::SQLSRV_ATTR_TRUST_SERVER_CERTIFICATE] = true; // Trust server certificate if available
+        }
+
+        // Check if PDO::SQLSRV_ATTR_ENCODING is supported and set it to UTF-8
+        if (defined('PDO::SQLSRV_ATTR_ENCODING')) {
+            $options[PDO::SQLSRV_ATTR_ENCODING] = PDO::SQLSRV_ENCODING_UTF8; // Set UTF-8 encoding if available
         }
 
         // Use SQL Authentication if username and password are provided
@@ -137,10 +142,6 @@ function pdo_sqlsrv_func_connect_db($server, $username = null, $password = null,
             // Use Windows Authentication (omit username and password)
             $SQLStat = new PDO($dsn, null, null, $options);
         }
-
-        // If additional session settings are needed, they can be added here
-        // Example: setting session options
-        // $SQLStat->exec("SET SOME_OPTION = value;");
 
         return $SQLStat;
 
