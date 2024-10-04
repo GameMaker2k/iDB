@@ -1255,9 +1255,9 @@ if($_GET['theme']!=null) {
 $themequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."themes\" WHERE \"Name\"='%s'", array($_GET['theme'])); }
 if($_GET['theme']==null) { 
 if($_SESSION['Theme']!=null) {
+$themenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."themes\" WHERE \"Name\"='%s'", array($_SESSION['Theme'])), $SQLStat);
 $themequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."themes\" WHERE \"Name\"='%s'", array($_SESSION['Theme'])); } }
 $themeresult=sql_query($themequery,$SQLStat);
-$themenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."themes\" WHERE \"Name\"='%s'", array($_SESSION['Theme'])), $SQLStat);
 if($themenum<=0) {
 $_GET['theme'] = $Settings['DefaultTheme']; 
 $_SESSION['Theme'] = $Settings['DefaultTheme']; 
@@ -1265,9 +1265,9 @@ if($_SESSION['UserGroup']!=$Settings['GuestGroup']) {
 $NewDay=$utccurtime->getTimestamp();
 $qnewskin = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"UseTheme\"='%s',\"LastActive\"='%s' WHERE \"id\"=%i", array($_SESSION['Theme'],$NewDay,$_SESSION['UserID']));
 sql_query($qnewskin,$SQLStat); }
+$themenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."themes\" WHERE \"Name\"='%s'", array($_SESSION['Theme'])), $SQLStat);
 $themequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."themes\" WHERE \"Name\"='%s'", array($_GET['theme']));
-$themeresult=sql_query($themequery,$SQLStat);
-$themenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."themes\" WHERE \"Name\"='%s'", array($_SESSION['Theme'])), $SQLStat); } 
+$themeresult=sql_query($themequery,$SQLStat); } 
 else {
 if($_GET['theme']==null) { 
 if($_SESSION['Theme']!=null) {

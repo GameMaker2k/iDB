@@ -80,21 +80,21 @@ if($Settings['sqltype']=="mysql"||
 	$Settings['sqltype']=="pdo_sqlite3"||
 	$Settings['sqltype']=="sqlsrv_prepare"||
 	$Settings['sqltype']=="pdo_sqlsrv") {
-$getperidq = sql_pre_query("SELECT DISTINCT \"PermissionID\" FROM \"".$Settings['sqltable']."permissions\"", null);
-$getperidnum = sql_count_rows(sql_pre_query("SELECT COUNT(DISTINCT \"PermissionID\") AS cnt FROM \"".$Settings['sqltable']."permissions\"", null), $SQLStat); }
+$getperidnum = sql_count_rows(sql_pre_query("SELECT COUNT(DISTINCT \"PermissionID\") AS cnt FROM \"".$Settings['sqltable']."permissions\"", null), $SQLStat);
+$getperidq = sql_pre_query("SELECT DISTINCT \"PermissionID\" FROM \"".$Settings['sqltable']."permissions\"", null); }
 if($Settings['sqltype']=="cubrid"||
 	$Settings['sqltype']=="cubrid_prepare"||
 	$Settings['sqltype']=="pdo_cubrid") {
-$getperidq = sql_pre_query("SELECT DISTINCT \"permissionid\" FROM \"".$Settings['sqltable']."permissions\"", null);
-$getperidnum = sql_count_rows(sql_pre_query("SELECT COUNT(DISTINCT \"permissionid\") AS cnt FROM \"".$Settings['sqltable']."permissions\"", null), $SQLStat); }
+$getperidnum = sql_count_rows(sql_pre_query("SELECT COUNT(DISTINCT \"permissionid\") AS cnt FROM \"".$Settings['sqltable']."permissions\"", null), $SQLStat);
+$getperidq = sql_pre_query("SELECT DISTINCT \"permissionid\" FROM \"".$Settings['sqltable']."permissions\"", null); }
 $getperidr=sql_query($getperidq,$SQLStat);
 $getperidi = 0;
 while ($getperidi < $getperidnum) {
 $getperidr_array = sql_fetch_assoc($getperidr);
 $getperidID=$getperidr_array['PermissionID'];
+$getperidnum2=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i ORDER BY \"ForumID\" ASC", array($getperidID)), $SQLStat);
 $getperidq2 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i ORDER BY \"ForumID\" ASC", array($getperidID));
 $getperidr2=sql_query($getperidq2,$SQLStat);
-$getperidnum2=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i ORDER BY \"ForumID\" ASC", array($getperidID)), $SQLStat);
 $getperidr2_array = sql_fetch_assoc($getperidr2);
 $getperidName=$getperidr2_array['Name'];
 sql_free_result($getperidr2);
@@ -171,9 +171,9 @@ sql_free_result($getperidr); ?>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="PromoteTo" id="PromoteTo">
 	<option selected="selected" value="0">none</option>
 <?php 
+$ai=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."groups\" ORDER BY \"id\" ASC", null), $SQLStat);
 $fq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" ORDER BY \"id\" ASC", null);
 $fr=sql_query($fq,$SQLStat);
-$ai=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."groups\" ORDER BY \"id\" ASC", null), $SQLStat);
 $fi=0;
 while ($fi < $ai) {
 $fr_array = sql_fetch_assoc($fr);
@@ -195,9 +195,9 @@ sql_free_result($fr); ?>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="DemoteTo" id="DemoteTo">
 	<option selected="selected" value="0">none</option>
 <?php 
+$ai=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."groups\" ORDER BY \"id\" ASC", null), $SQLStat);
 $fq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" ORDER BY \"id\" ASC", null);
 $fr=sql_query($fq,$SQLStat);
-$ai=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."groups\" ORDER BY \"id\" ASC", null), $SQLStat);
 $fi=0;
 while ($fi < $ai) {
 $fr_array = sql_fetch_assoc($fr);
@@ -277,11 +277,12 @@ $_POST['NamePrefix'] = remove_spaces($_POST['NamePrefix']);
 $_POST['NameSuffix'] = stripcslashes(htmlspecialchars($_POST['NameSuffix'], ENT_QUOTES, $Settings['charset']));
 //$_POST['NameSuffix'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['NameSuffix']);
 $_POST['NameSuffix'] = remove_spaces($_POST['NameSuffix']);
-$sql_name_check = sql_query(sql_pre_query("SELECT \"Name\" FROM \"".$Settings['sqltable']."groups\" WHERE \"Name\"='%s'", array($_POST['GroupName'])),$SQLStat);
-$sql_id_check = sql_query(sql_pre_query("SELECT \"id\" FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i LIMIT 1", array($_POST['PermissionID'])),$SQLStat);
 $name_check = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."groups\" WHERE \"Name\"='%s'", array($_POST['GroupName'])), $SQLStat);
 $id_check = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i LIMIT 1", array($_POST['PermissionID'])), $SQLStat);
+/*$sql_name_check = sql_query(sql_pre_query("SELECT \"Name\" FROM \"".$Settings['sqltable']."groups\" WHERE \"Name\"='%s'", array($_POST['GroupName'])),$SQLStat);
 sql_free_result($sql_name_check);
+$sql_id_check = sql_query(sql_pre_query("SELECT \"id\" FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i LIMIT 1", array($_POST['PermissionID'])),$SQLStat);
+sql_free_result($sql_id_check);*/
 $errorstr = "";
 if (!isset($_POST['PromotePosts'])) {
 	$_POST['PromotePosts'] = 0; }
@@ -319,18 +320,18 @@ $query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."groups\" (\"Name\
 "('%s', %i, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', 'no', '%s', '%s', '%s', '%s', '%s', %i, %i, %i, %i, %i, %i, %i, %i, '%s', '%s', '%s')", array($_POST['GroupName'],$_POST['PermissionID'],$_POST['NamePrefix'],$_POST['NameSuffix'],$_POST['CanViewBoard'],$_POST['CanViewOffLine'],$_POST['CanEditProfile'],$_POST['CanAddEvents'],$_POST['CanPM'],$_POST['CanSearch'],$_POST['CanDoHTML'],$_POST['CanUseBBTags'],$_POST['HasModCP'],$_POST['CanViewIPAddress'],$_POST['CanViewUserAgent'],$_POST['CanViewAnonymous'],$_POST['FloodControl'],$_POST['SearchFlood'],$_POST['PromoteTo'],$_POST['PromotePosts'],$_POST['PromoteKarma'],$_POST['DemoteTo'],$_POST['DemotePosts'],$_POST['DemoteKarma'],$_POST['HasModCP'],$_POST['HasAdminCP'],$_POST['ViewDBInfo']));
 sql_query($query,$SQLStat);
 if(!is_numeric($_POST['GroupPerm'])) { $_POST['GroupPerm'] = "0"; }
+$getperidnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" ORDER BY \"id\" ASC", null), $SQLStat);
 $getperidq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" ORDER BY \"id\" ASC", null);
 $getperidr=sql_query($getperidq,$SQLStat);
-$getperidnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" ORDER BY \"id\" ASC", null), $SQLStat);
 $getperidi = 0; 
 $nextperid = null;
 while ($getperidi < $getperidnum) {
 $getperidr_array = sql_fetch_assoc($getperidr);
 $getperidID=$getperidr_array['id'];
 if($_POST['GroupPerm']!="0") {
+$getperidnum2=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i AND \"ForumID\"=%i", array($_POST['GroupPerm'],$getperidID)), $SQLStat);
 $getperidq2 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i AND \"ForumID\"=%i", array($_POST['GroupPerm'],$getperidID));
 $getperidr2=sql_query($getperidq2,$SQLStat);
-$getperidnum2=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i AND \"ForumID\"=%i", array($_POST['GroupPerm'],$getperidID)), $SQLStat);
 $getperidr2_array = sql_fetch_assoc($getperidr2);
 $PermissionNum=$getperidr2_array['id']; 
 $PermissionID=$_POST['PermissionID']; 
@@ -379,18 +380,18 @@ sql_query($query,$SQLStat);
 ++$getperidi; /*++$nextperid;*/ }
 sql_free_result($getperidr);
 if(!is_numeric($_POST['GroupPerm'])) { $_POST['GroupPerm'] = "0"; }
+$getperidnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."categories\" ORDER BY \"id\" ASC", null), $SQLStat);
 $getperidq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."categories\" ORDER BY \"id\" ASC", null);
 $getperidr=sql_query($getperidq,$SQLStat);
-$getperidnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."categories\" ORDER BY \"id\" ASC", null), $SQLStat);
 $getperidi = 0; 
 $nextperid = null;
 while ($getperidi < $getperidnum) {
 $getperidr_array = sql_fetch_assoc($getperidr);
 $getperidID=$getperidr_array['id'];
 if($_POST['GroupPerm']!="0") {
+$getperidnum2=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."catpermissions\" WHERE \"PermissionID\"=%i AND \"CategoryID\"=%i", array($_POST['GroupPerm'],$getperidID)), $SQLStat);
 $getperidq2 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."catpermissions\" WHERE \"PermissionID\"=%i AND \"CategoryID\"=%i", array($_POST['GroupPerm'],$getperidID));
 $getperidr2=sql_query($getperidq2,$SQLStat);
-$getperidnum2=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."catpermissions\" WHERE \"PermissionID\"=%i AND \"CategoryID\"=%i", array($_POST['GroupPerm'],$getperidID)), $SQLStat);
 $getperidr2_array = sql_fetch_assoc($getperidr2);
 $PermissionNum=$getperidr2_array['id']; 
 $PermissionID=$_POST['PermissionID']; 
@@ -439,9 +440,9 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Deleting a Forum";
 	<td style="width: 50%;"><label class="TextBoxLabel" for="DelID">Delete Group:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="DelID" id="DelID">
 <?php 
+$ai=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."groups\" WHERE (\"Name\"<>'%s' AND \"Name\"<>'%s' AND \"Name\"<>'%s' AND \"Name\"<>'%s') ORDER BY \"id\" ASC", array($Settings['GuestGroup'],$Settings['MemberGroup'],$Settings['ValidateGroup'],"Admin")), $SQLStat);
 $fq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE (\"Name\"<>'%s' AND \"Name\"<>'%s' AND \"Name\"<>'%s' AND \"Name\"<>'%s') ORDER BY \"id\" ASC", array($Settings['GuestGroup'],$Settings['MemberGroup'],$Settings['ValidateGroup'],"Admin"));
 $fr=sql_query($fq,$SQLStat);
-$ai=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."groups\" WHERE (\"Name\"<>'%s' AND \"Name\"<>'%s' AND \"Name\"<>'%s' AND \"Name\"<>'%s') ORDER BY \"id\" ASC", array($Settings['GuestGroup'],$Settings['MemberGroup'],$Settings['ValidateGroup'],"Admin")), $SQLStat);
 $fi=0;
 while ($fi < $ai) {
 $fr_array = sql_fetch_assoc($fr);
@@ -471,9 +472,9 @@ sql_free_result($fr); ?>
 </div>
 <?php } if($_GET['act']=="deletegroup"&&$_POST['update']=="now"&&$_GET['act']=="deletegroup") { 
 $admincptitle = " ".$ThemeSet['TitleDivider']." Updating Settings";
+$prenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i AND (\"Name\"<>'%s' AND \"Name\"<>'%s' AND \"Name\"<>'%s' AND \"Name\"<>'%s') LIMIT 1", array($_POST['DelID'],$Settings['GuestGroup'],$Settings['MemberGroup'],$Settings['ValidateGroup'],"Admin")), $SQLStat);
 $prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i AND (\"Name\"<>'%s' AND \"Name\"<>'%s' AND \"Name\"<>'%s' AND \"Name\"<>'%s') LIMIT 1", array($_POST['DelID'],$Settings['GuestGroup'],$Settings['MemberGroup'],$Settings['ValidateGroup'],"Admin"));
 $preresult=sql_query($prequery,$SQLStat);
-$prenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i AND (\"Name\"<>'%s' AND \"Name\"<>'%s' AND \"Name\"<>'%s' AND \"Name\"<>'%s') LIMIT 1", array($_POST['DelID'],$Settings['GuestGroup'],$Settings['MemberGroup'],$Settings['ValidateGroup'],"Admin")), $SQLStat);
 $preresult_array = sql_fetch_assoc($preresult);
 $GroupName=$preresult_array['Name'];
 $errorstr = ""; $Error = null;
@@ -523,9 +524,9 @@ if(!isset($_POST['id'])) {
 	<td style="width: 50%;"><label class="TextBoxLabel" for="id">Group to Edit:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="id" id="id">
 <?php 
+$ai=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."groups\" ORDER BY \"id\" ASC", null), $SQLStat);
 $fq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" ORDER BY \"id\" ASC", null);
 $fr=sql_query($fq,$SQLStat);
-$ai=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."groups\" ORDER BY \"id\" ASC", null), $SQLStat);
 $fi=0;
 while ($fi < $ai) {
 $fr_array = sql_fetch_assoc($fr);
@@ -553,9 +554,9 @@ sql_free_result($fr); ?>
 </table>
 </div>
 <?php } if(isset($_POST['id'])) { 
+$prenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i LIMIT 1", array($_POST['id'])), $SQLStat);
 $prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i LIMIT 1", array($_POST['id']));
 $preresult=sql_query($prequery,$SQLStat);
-$prenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i LIMIT 1", array($_POST['id'])), $SQLStat);
 if($prenum==0) { redirect("location",$rbasedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],false)); sql_free_result($preresult);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
@@ -690,9 +691,9 @@ sql_free_result($preresult);
 	<option selected="selected" value="<?php echo $PromoteTo; ?>">Old Value (<?php echo $PromoteTo; ?>)</option>
 	<option value="0">none</option>
 <?php 
+$ai=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."groups\" ORDER BY \"id\" ASC", null), $SQLStat);
 $fq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" ORDER BY \"id\" ASC", null);
 $fr=sql_query($fq,$SQLStat);
-$ai=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."groups\" ORDER BY \"id\" ASC", null), $SQLStat);
 $fi=0;
 while ($fi < $ai) {
 $fr_array = sql_fetch_assoc($fr);
@@ -715,9 +716,9 @@ sql_free_result($fr); ?>
 	<option selected="selected" value="<?php echo $DemoteTo; ?>">Old Value (<?php echo $DemoteTo; ?>)</option>
 	<option value="0">none</option>
 <?php 
+$ai=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."groups\" ORDER BY \"id\" ASC", null), $SQLStat);
 $fq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" ORDER BY \"id\" ASC", null);
 $fr=sql_query($fq,$SQLStat);
-$ai=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."groups\" ORDER BY \"id\" ASC", null), $SQLStat);
 $fi=0;
 while ($fi < $ai) {
 $fr_array = sql_fetch_assoc($fr);
@@ -807,9 +808,9 @@ $_POST['NameSuffix'] = stripcslashes(htmlspecialchars($_POST['NameSuffix'], ENT_
 //$_POST['NameSuffix'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['NameSuffix']);
 $_POST['NameSuffix'] = remove_spaces($_POST['NameSuffix']);
 $name_check = 0;
+$prenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i LIMIT 1", array($_POST['id'])), $SQLStat);
 $prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i LIMIT 1", array($_POST['id']));
 $preresult=sql_query($prequery,$SQLStat);
-$prenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i LIMIT 1", array($_POST['id'])), $SQLStat);
 if($prenum==0) { redirect("location",$rbasedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],false)); sql_free_result($preresult);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
@@ -818,9 +819,9 @@ $preresult_array = sql_fetch_assoc($preresult);
 $OldGroupName=$preresult_array['Name'];
 sql_free_result($preresult);
 if($_POST['GroupName']!=$OldGroupName) {
-$sql_name_check = sql_query(sql_pre_query("SELECT \"Name\" FROM \"".$Settings['sqltable']."groups\" WHERE \"Name\"='%s'", array($_POST['GroupName'])),$SQLStat);
 $name_check = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."groups\" WHERE \"Name\"='%s'", array($_POST['GroupName'])), $SQLStat);
-sql_free_result($sql_name_check); }
+/*$sql_name_check = sql_query(sql_pre_query("SELECT \"Name\" FROM \"".$Settings['sqltable']."groups\" WHERE \"Name\"='%s'", array($_POST['GroupName'])),$SQLStat);
+sql_free_result($sql_name_check);*/ }
 $errorstr = "";
 if (!isset($_POST['PromotePosts'])) {
 	$_POST['PromotePosts'] = 0; }

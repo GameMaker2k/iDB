@@ -88,10 +88,6 @@ $nums = $_GET['page'] * $Settings['max_pmlist'];
 $PageLimit = max(0, $nums - $Settings['max_pmlist']);
 $SQLimit = getSQLLimitClause($Settings['sqltype'], $Settings['max_pmlist'], $PageLimit);
 
-// Query for fetching private messages
-$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."messenger\" WHERE \"ReciverID\"=%i ORDER BY \"DateSend\" DESC ".$SQLimit, array($_SESSION['UserID']));
-$result = sql_query($query, $SQLStat);
-
 // Count total number of messages
 $NumberMessage = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."messenger\" WHERE \"ReciverID\"=%i", array($_SESSION['UserID'])), $SQLStat);
 $NumberMessage = $NumberMessage ?? 0;
@@ -99,6 +95,10 @@ $num = $NumberMessage;
 
 // Re-calculate message count for pagination
 $num = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."messenger\" WHERE \"ReciverID\"=%i ORDER BY \"DateSend\" DESC ".$SQLimit, array($_SESSION['UserID'])), $SQLStat);
+
+// Query for fetching private messages
+$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."messenger\" WHERE \"ReciverID\"=%i ORDER BY \"DateSend\" DESC ".$SQLimit, array($_SESSION['UserID']));
+$result = sql_query($query, $SQLStat);
 
 // Start MessengerList Page Code
 $Settings['max_pmlist'] = $Settings['max_pmlist'] ?? 10;
@@ -267,14 +267,14 @@ $nums = $_GET['page'] * $Settings['max_pmlist'];
 $PageLimit = max(0, $nums - $Settings['max_pmlist']);
 $SQLimit = getSQLLimitClause($Settings['sqltype'], $Settings['max_pmlist'], $PageLimit);
 
-// Query for fetching sent messages
-$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."messenger\" WHERE \"SenderID\"=%i ORDER BY \"DateSend\" DESC ".$SQLimit, array($_SESSION['UserID']));
-$result = sql_query($query, $SQLStat);
-
 // Count total number of sent messages
 $NumberMessage = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."messenger\" WHERE \"SenderID\"=%i", array($_SESSION['UserID'])), $SQLStat);
 $NumberMessage = $NumberMessage ?? 0;
 $num = $NumberMessage;
+
+// Query for fetching sent messages
+$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."messenger\" WHERE \"SenderID\"=%i ORDER BY \"DateSend\" DESC ".$SQLimit, array($_SESSION['UserID']));
+$result = sql_query($query, $SQLStat);
 
 // Re-calculate SQL LIMIT for pagination
 $SQLimit = getSQLLimitClause($Settings['sqltype'], $Settings['max_pmlist'], $PageLimit);
@@ -441,9 +441,9 @@ echo "<span>".$ReciverName."</span>"; }
 </tr>
 <?php sql_free_result($result); }
 if($_GET['act']=="read") {
+$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."messenger\" WHERE (\"id\"=%i OR \"DiscussionID\"=%i) AND (\"SenderID\"=%i OR \"ReciverID\"=%i)", array($_GET['id'], $_GET['id'], $_SESSION['UserID'], $_SESSION['UserID'])), $SQLStat);
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."messenger\" WHERE (\"id\"=%i OR \"DiscussionID\"=%i) AND (\"SenderID\"=%i OR \"ReciverID\"=%i)", array($_GET['id'], $_GET['id'], $_SESSION['UserID'], $_SESSION['UserID']));
 $result=sql_query($query,$SQLStat);
-$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."messenger\" WHERE (\"id\"=%i OR \"DiscussionID\"=%i) AND (\"SenderID\"=%i OR \"ReciverID\"=%i)", array($_GET['id'], $_GET['id'], $_SESSION['UserID'], $_SESSION['UserID'])), $SQLStat);
 $is=0;
 if($num==0) { redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
@@ -482,13 +482,13 @@ $DateSend=$tmpusrcurtime->format($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBT
 $MessageText=$result_array['MessageText'];
 $MessageDesc=$result_array['Description'];
 $ipshow = "two";
+$renum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i", array($SenderID)), $SQLStat);
 $requery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i", array($SenderID));
 $reresult=sql_query($requery,$SQLStat);
-$renum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i", array($SenderID)), $SQLStat);
 $rei=0;
+//$memrenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."mempermissions\" WHERE \"id\"=%i LIMIT 1", array($SenderID)), $SQLStat);
 $memrequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."mempermissions\" WHERE \"id\"=%i LIMIT 1", array($SenderID));
 $memreresult=sql_query($memrequery,$SQLStat);
-$memrenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."mempermissions\" WHERE \"id\"=%i LIMIT 1", array($SenderID)), $SQLStat);
 if($_SESSION['UserID']!=$ReciverID&&
 	$_SESSION['UserID']!=$SenderID) {
 redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
@@ -538,9 +538,9 @@ $tmpusrcurtime->setTimezone($usertz);
 $User1Joined=$tmpusrcurtime->format($_SESSION['iDBDateFormat']);
 $User1LevelID=$reresult_array['LevelID'];
 if($User1LevelID!==null&&$User1LevelID!=0) {
+$lnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."levels\" WHERE \"id\"=%i LIMIT 1", array($User1LevelID)), $SQLStat);
 $lquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."levels\" WHERE \"id\"=%i LIMIT 1", array($User1LevelID));
 $lresult=sql_query($lquery,$SQLStat);
-$lnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."levels\" WHERE \"id\"=%i LIMIT 1", array($User1LevelID)), $SQLStat);
 if ($lresult !== false && $lnum > 0) {
 $lresult_array = sql_fetch_assoc($lresult);
 $User1Level=$lresult_array['Name']; } else { $User1Level = ""; }
@@ -548,9 +548,9 @@ sql_free_result($lresult); } else {
 $User1Level = ""; }
 $User1RankID=$reresult_array['RankID'];
 if($User1RankID!==null&&$User1RankID!=0) {
+$rnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."ranks\" WHERE \"id\"=%i LIMIT 1", array($User1RankID)), $SQLStat);
 $rquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."ranks\" WHERE \"id\"=%i LIMIT 1", array($User1RankID));
 $rresult=sql_query($rquery,$SQLStat);
-$rnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."ranks\" WHERE \"id\"=%i LIMIT 1", array($User1RankID)), $SQLStat);
 if ($rresult !== false && $rnum > 0) {
 $rresult_array = sql_fetch_assoc($rresult);
 $User1Rank=$rresult_array['Name']; } else { $User1Rank = ""; }
@@ -736,9 +736,9 @@ if($_GET['act']!="read") { ?>
 if($_GET['act']=="create") { 
 $SendMessageTo = null;
 if($_GET['id']!=null&&$_GET['id']!=-1) {
+$renum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i", array($_GET['id'])), $SQLStat);
 $requery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i", array($_GET['id']));
 $reresult=sql_query($requery,$SQLStat);
-$renum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i", array($_GET['id'])), $SQLStat);
 $rei=0;
 while ($rei < $renum) {
 $reresult_array = sql_fetch_assoc($reresult);
@@ -754,17 +754,17 @@ if(isset($SendMessageTo)) {
 $QuoteUserName = $SendMessageTo; }
 if(!isset($SendMessageTo)) {
 $QuoteUserName = "Unknown"; }
+$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."messenger\" WHERE \"id\"=%i AND (\"SenderID\"=%i OR \"ReciverID\"=%i)", array($_GET['post'], $_SESSION['UserID'], $_SESSION['UserID'])), $SQLStat);
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."messenger\" WHERE \"id\"=%i AND (\"SenderID\"=%i OR \"ReciverID\"=%i)", array($_GET['post'], $_SESSION['UserID'], $_SESSION['UserID']));
 $result=sql_query($query,$SQLStat);
-$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."messenger\" WHERE \"id\"=%i AND (\"SenderID\"=%i OR \"ReciverID\"=%i)", array($_GET['post'], $_SESSION['UserID'], $_SESSION['UserID'])), $SQLStat);
 if($num>0) {
 $result_array = sql_fetch_assoc($result);
 $QuoteTitle=$result_array['MessageTitle'];
 $MessageText=$result_array['MessageText'];
 $QuoteReply = preg_replace("/\<br\>/", "<br />", nl2br($MessageText));
 $QuoteDescription=$result_array['Description'];
-$result=sql_query($query,$SQLStat);
 $num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."messenger\" WHERE \"id\"=%i AND (\"SenderID\"=%i OR \"ReciverID\"=%i)", array($_GET['post'], $_SESSION['UserID'], $_SESSION['UserID'])), $SQLStat);
+$result=sql_query($query,$SQLStat);
 $QuoteReply = remove_bad_entities($QuoteReply);
 $QuoteDescription = str_replace("Re: ","",$QuoteDescription);
 $QuoteDescription = "Re: ".$QuoteDescription;
@@ -796,9 +796,9 @@ $_SESSION['UserFormID'] = $UFID;
 <td class="TableColumn3" style="width: 15%; vertical-align: middle; text-align: center;">
 <div style="width: 100%; height: 160px; overflow: auto;">
 <table style="width: 100%; text-align: center;"><?php
+$melanie_num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."smileys\" WHERE \"Display\"='yes'", null), $SQLStat);
 $melanie_query=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."smileys\" WHERE \"Display\"='yes'", null);
 $melanie_result=sql_query($melanie_query,$SQLStat);
-$melanie_num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."smileys\" WHERE \"Display\"='yes'", null), $SQLStat);
 $melanie_p=0; $SmileRow=0; $SmileCRow=0;
 while ($melanie_p < $melanie_num) { ++$SmileRow;
 $melanie_result_array = sql_fetch_assoc($melanie_result);
@@ -966,9 +966,9 @@ if (PhpCaptcha::Validate($_POST['signcode'])) {
 if(is_numeric($_POST['post'])) { $_POST['post'] = intval($_POST['post'], 10); }
 if(!isset($_POST['post']) or !is_numeric($_POST['post']) or $_POST['post']==null) { $_POST['post'] = 0; }
 if($_POST['post']>0) {
+$numchckm=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."messenger\" WHERE \"id\"=%i AND (\"SenderID\"=%i OR \"ReciverID\"=%i)", array($_POST['post'], $_SESSION['UserID'], $_SESSION['UserID'])), $SQLStat);
 $querychckm = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."messenger\" WHERE \"id\"=%i AND (\"SenderID\"=%i OR \"ReciverID\"=%i)", array($_POST['post'], $_SESSION['UserID'], $_SESSION['UserID']));
 $resultchckm=sql_query($querychckm,$SQLStat);
-$numchckm=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."messenger\" WHERE \"id\"=%i AND (\"SenderID\"=%i OR \"ReciverID\"=%i)", array($_POST['post'], $_SESSION['UserID'], $_SESSION['UserID'])), $SQLStat);
 if($numchckm==0) { $_POST['post'] = 0; }
 sql_free_result($resultchckm); }
 $_POST['MessageName'] = stripcslashes(htmlspecialchars($_POST['MessageName'], ENT_QUOTES, $Settings['charset']));
@@ -999,9 +999,9 @@ setcookie("GuestName", $_POST['GuestName'], time() + (7 * 86400), $cbasedir, $co
 $_SESSION['GuestName']=$_POST['GuestName']; } }
 /*    <_<  iWordFilter  >_>      
    by Kazuki Przyborowski - Cool Dude 2k */
+$melanienm=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."wordfilter\"", null), $SQLStat);
 $melanieqy=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."wordfilter\"", null);
 $melaniert=sql_query($melanieqy,$SQLStat);
-$melanienm=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."wordfilter\"", null), $SQLStat);
 $melanies=0;
 while ($melanies < $melanienm) {
 $melaniert_array = sql_fetch_assoc($melaniert);
@@ -1029,9 +1029,9 @@ if($CaseInsensitive=="yes"&&$WholeWord!="yes") {
 $_POST['Message'] = preg_replace("/".$Filter."/i", $Replace, $_POST['Message']);
 $_POST['MessageDesc'] = preg_replace("/".$Filter."/i", $Replace, $_POST['MessageDesc']); }
 ++$melanies; } sql_free_result($melaniert);
+$lonewolfnm=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."restrictedwords\" WHERE \"RestrictedMessageName\"='yes' or \"RestrictedUserName\"='yes'", null), $SQLStat);
 $lonewolfqy=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."restrictedwords\" WHERE \"RestrictedMessageName\"='yes' or \"RestrictedUserName\"='yes'", null);
 $lonewolfrt=sql_query($lonewolfqy,$SQLStat);
-$lonewolfnm=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."restrictedwords\" WHERE \"RestrictedMessageName\"='yes' or \"RestrictedUserName\"='yes'", null), $SQLStat);
 $lonewolfs=0; $RMatches = null; $RGMatches = null;
 while ($lonewolfs < $lonewolfnm) {
 $lonewolfrt_array = sql_fetch_assoc($lonewolfrt);
@@ -1082,9 +1082,9 @@ if($RestrictedUserName=="yes") {
 $RGMatches = preg_match("/".$RWord."/i", $_POST['GuestName']);
 	if($RGMatches==true) { break 1; } } }
 ++$lonewolfs; } sql_free_result($lonewolfrt);
+$renum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s'", array($_POST['SendMessageTo'])), $SQLStat);
 $requery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s'", array($_POST['SendMessageTo']));
 $reresult=sql_query($requery,$SQLStat);
-$renum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s'", array($_POST['SendMessageTo'])), $SQLStat);
 $rei=0;
 while ($rei < $renum) {
 $reresult_array = sql_fetch_assoc($reresult);

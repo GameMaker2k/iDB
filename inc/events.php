@@ -19,9 +19,9 @@ if ($File3Name=="events.php"||$File3Name=="/events.php") {
 	exit(); }
 if(!is_numeric($_GET['id'])) { $_GET['id'] = null; }
 if($_GET['act']=="view"||$_GET['act']==null) {
+$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."events\" WHERE \"id\"=%i LIMIT 1", array($_GET['id'])), $SQLStat);
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."events\" WHERE \"id\"=%i LIMIT 1", array($_GET['id']));
 $result=sql_query($query,$SQLStat);
-$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."events\" WHERE \"id\"=%i LIMIT 1", array($_GET['id'])), $SQLStat);
 $is=0;
 if($num==0) { redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($result);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
@@ -75,16 +75,16 @@ $_SESSION['ViewingFile'] = $exfile['event']; }
 $_SESSION['PreViewingTitle'] = "Viewing Event:";
 $_SESSION['ViewingTitle'] = $EventName;
 $_SESSION['ExtraData'] = "currentact:".$_GET['act']."; currentcategoryid:0; currentforumid:0; currenttopicid:0; currentmessageid:0; currenteventid:".$EventID.";";
-$requery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($EventUser));
-$reresult=sql_query($requery,$SQLStat);
 $renum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($EventUser)), $SQLStat);
-if($renum<1) { $EventUser = -1;
 $requery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($EventUser));
 $reresult=sql_query($requery,$SQLStat);
-$renum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($EventUser)), $SQLStat); }
+if($renum<1) { $EventUser = -1;
+$renum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($EventUser)), $SQLStat);
+$requery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($EventUser));
+$reresult=sql_query($requery,$SQLStat); }
+$memrenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."mempermissions\" WHERE \"id\"=%i LIMIT 1", array($EventUser)), $SQLStat);
 $memrequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."mempermissions\" WHERE \"id\"=%i LIMIT 1", array($EventUser));
 $memreresult=sql_query($memrequery,$SQLStat);
-$memrenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."mempermissions\" WHERE \"id\"=%i LIMIT 1", array($EventUser)), $SQLStat);
 $rei=0;
 $User1ID=$EventUser;
 $reresult_array = sql_fetch_assoc($reresult);
@@ -313,9 +313,9 @@ $_SESSION['UserFormID'] = $UFID;
 <td class="TableColumn3" style="width: 15%; vertical-align: middle; text-align: center;">
 <div style="width: 100%; height: 160px; overflow: auto;">
 <table style="width: 100%; text-align: center;"><?php
+$melanie_num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."smileys\" WHERE \"Display\"='yes'", null), $SQLStat);
 $melanie_query=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."smileys\" WHERE \"Display\"='yes'", null);
 $melanie_result=sql_query($melanie_query,$SQLStat);
-$melanie_num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."smileys\" WHERE \"Display\"='yes'", null), $SQLStat);
 $melanie_p=0; $SmileRow=0; $SmileCRow=0;
 while ($melanie_p < $melanie_num) { ++$SmileRow;
 $melanie_result_array = sql_fetch_assoc($melanie_result);
@@ -597,9 +597,9 @@ setcookie("GuestName", $_POST['GuestName'], time() + (7 * 86400), $cbasedir, $co
 $_SESSION['GuestName']=$_POST['GuestName']; } }
 /*    <_<  iWordFilter  >_>      
    by Kazuki Przyborowski - Cool Dude 2k */
+$melanienm=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."wordfilter\"", null), $SQLStat);
 $melanieqy=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."wordfilter\"", null);
 $melaniert=sql_query($melanieqy,$SQLStat);
-$melanienm=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."wordfilter\"", null), $SQLStat);
 $melanies=0;
 while ($melanies < $melanienm) {
 $melaniert_array = sql_fetch_assoc($melaniert);
@@ -623,9 +623,9 @@ $_POST['EventText'] = preg_replace("/".$Filter."/", $Replace, $_POST['EventText'
 if($CaseInsensitive=="yes"&&$WholeWord!="yes") {
 $_POST['EventText'] = preg_replace("/".$Filter."/i", $Replace, $_POST['EventText']); }
 ++$melanies; } sql_free_result($melaniert);
+$lonewolfnm=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."restrictedwords\" WHERE \"RestrictedEventName\"='yes' or \"RestrictedUserName\"='yes'", null), $SQLStat);
 $lonewolfqy=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."restrictedwords\" WHERE \"RestrictedEventName\"='yes' or \"RestrictedUserName\"='yes'", null);
 $lonewolfrt=sql_query($lonewolfqy,$SQLStat);
-$lonewolfnm=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."restrictedwords\" WHERE \"RestrictedEventName\"='yes' or \"RestrictedUserName\"='yes'", null), $SQLStat);
 $lonewolfs=0; $RMatches = null; $RGMatches = null;
 while ($lonewolfs < $lonewolfnm) {
 $lonewolfrt_array = sql_fetch_assoc($lonewolfrt);

@@ -25,9 +25,9 @@ if(!isset($ThemeSet['ForumStyle'])) { $ThemeSet['ForumStyle'] = 1; }
 if(!is_numeric($ThemeSet['ForumStyle'])) { $ThemeSet['ForumStyle'] = 1; }
 if($ThemeSet['ForumStyle']>2||$ThemeSet['ForumStyle']<1) {
 	$ThemeSet['ForumStyle'] = 1; }
+$checknum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2." LIMIT 1", array($_GET['id'])), $SQLStat);
 $checkquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2." LIMIT 1", array($_GET['id']));
 $checkresult=sql_query($checkquery,$SQLStat);
-$checknum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2." LIMIT 1", array($_GET['id'])), $SQLStat);
 if($checknum==0) { redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($checkresult);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
@@ -71,9 +71,9 @@ redirect("location",$rbasedir.url_maker($exfile['forum'],$Settings['file_ext'],"
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 sql_free_result($checkresult);
+//$prenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."categories\" WHERE \"ShowCategory\"='yes' AND \"id\"=%i".$CatIgnoreList2." ORDER BY \"OrderID\" ASC, \"id\" ASC", array($CategoryID)), $SQLStat);
 $prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."categories\" WHERE \"ShowCategory\"='yes' AND \"id\"=%i".$CatIgnoreList2." ORDER BY \"OrderID\" ASC, \"id\" ASC", array($CategoryID));
 $preresult=sql_query($prequery,$SQLStat);
-$prenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."categories\" WHERE \"ShowCategory\"='yes' AND \"id\"=%i".$CatIgnoreList2." ORDER BY \"OrderID\" ASC, \"id\" ASC", array($CategoryID)), $SQLStat);
 $preresult_array = sql_fetch_assoc($preresult);
 $CategoryID=$preresult_array['id'];
 $CategoryName=$preresult_array['Name'];
@@ -83,9 +83,9 @@ $InSubCategory=$preresult_array['InSubCategory'];
 if($CategoryShow=="no") { $_SESSION['ShowActHidden'] = "yes"; }
 $CategoryDescription=$preresult_array['Description'];
 if($InSubForum!="0") {
+$isfnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2." LIMIT 1", array($InSubForum)), $SQLStat);
 $isfquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2." LIMIT 1", array($InSubForum));
 $isfresult=sql_query($isfquery,$SQLStat);
-$isfnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2." LIMIT 1", array($InSubForum)), $SQLStat);
 if($isfnum>=1) {
 $isfresult_array = sql_fetch_assoc($isfresult);
 $isfForumID=$isfresult_array['id'];
@@ -147,9 +147,9 @@ ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 if($CatPermissionInfo['CanViewCategory'][$CategoryID]=="yes"&&
 	$PermissionInfo['CanViewForum'][$_GET['id']]=="yes") {
+$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"ShowForum\"='yes' AND \"CategoryID\"=%i AND \"InSubForum\"=%i".$ForumIgnoreList2." ORDER BY \"OrderID\" ASC, \"id\" ASC", array($CategoryID,$_GET['id'])), $SQLStat);
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"ShowForum\"='yes' AND \"CategoryID\"=%i AND \"InSubForum\"=%i".$ForumIgnoreList2." ORDER BY \"OrderID\" ASC, \"id\" ASC", array($CategoryID,$_GET['id']));
 $result=sql_query($query,$SQLStat);
-$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"ShowForum\"='yes' AND \"CategoryID\"=%i AND \"InSubForum\"=%i".$ForumIgnoreList2." ORDER BY \"OrderID\" ASC, \"id\" ASC", array($CategoryID,$_GET['id'])), $SQLStat);
 $i=0;
 if($num>=1) {
 if($_GET['act']=="view") {
@@ -193,10 +193,10 @@ $NumRedirects=$result_array['Redirects'];
 $ForumDescription=$result_array['Description'];
 $ForumType = strtolower($ForumType); $sflist = null;
 $gltf = array(null); $gltf[0] = $ForumID;
-if ($ForumType=="subforum") { 
+if ($ForumType=="subforum") {
+$apcnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"ShowForum\"='yes' AND \"InSubForum\"=%i".$ForumIgnoreList2." ORDER BY \"OrderID\" ASC, \"id\" ASC", array($ForumID)), $SQLStat);
 $apcquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"ShowForum\"='yes' AND \"InSubForum\"=%i".$ForumIgnoreList2." ORDER BY \"OrderID\" ASC, \"id\" ASC", array($ForumID));
 $apcresult=sql_query($apcquery,$SQLStat);
-$apcnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"ShowForum\"='yes' AND \"InSubForum\"=%i".$ForumIgnoreList2." ORDER BY \"OrderID\" ASC, \"id\" ASC", array($ForumID)), $SQLStat);
 $apci=0; $apcl=1; if($apcnum>=1) {
 while ($apci < $apcnum) {
 $apcresult_array = sql_fetch_assoc($apcresult);
@@ -256,9 +256,9 @@ while ($glti < $gltnum) {
 $ExtraIgnores = null;
 if($PermissionInfo['CanModForum'][$gltf[$glti]]=="no") {
 	$ExtraIgnores = " AND \"Closed\"<>3"; }
+$gltfonum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE \"CategoryID\"=%i".$ExtraIgnores.$ForumIgnoreList4." AND \"ForumID\"=%i ORDER BY \"LastUpdate\" DESC LIMIT 1", array($CategoryID,$gltf[$glti])), $SQLStat);
 $gltfoquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"CategoryID\"=%i".$ExtraIgnores.$ForumIgnoreList4." AND \"ForumID\"=%i ORDER BY \"LastUpdate\" DESC LIMIT 1", array($CategoryID,$gltf[$glti]));
 $gltforesult=sql_query($gltfoquery,$SQLStat);
-$gltfonum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE \"CategoryID\"=%i".$ExtraIgnores.$ForumIgnoreList4." AND \"ForumID\"=%i ORDER BY \"LastUpdate\" DESC LIMIT 1", array($CategoryID,$gltf[$glti])), $SQLStat);
 if($gltfonum>0) {
 $ltforesult_array = sql_fetch_assoc($ltforesult);
 $NewUpdateTime=$gltforesult_array['LastUpdate'];
@@ -274,9 +274,9 @@ if ($ForumType!="redirect") {
 $ExtraIgnores = null;
 if($PermissionInfo['CanModForum'][$UseThisFonum]=="no") {
 	$ExtraIgnores = " AND \"Closed\"<>3"; }
+$gltnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE (\"ForumID\"=%i".$ExtraIgnores.$ForumIgnoreList4.") OR (\"OldForumID\"=%i".$ExtraIgnores.$ForumIgnoreList4.") ORDER BY \"LastUpdate\" DESC LIMIT 1", array($UseThisFonum,$UseThisFonum)), $SQLStat);
 $gltquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE (\"ForumID\"=%i".$ExtraIgnores.$ForumIgnoreList4.") OR (\"OldForumID\"=%i".$ExtraIgnores.$ForumIgnoreList4.") ORDER BY \"LastUpdate\" DESC LIMIT 1", array($UseThisFonum,$UseThisFonum));
 $gltresult=sql_query($gltquery,$SQLStat);
-$gltnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE (\"ForumID\"=%i".$ExtraIgnores.$ForumIgnoreList4.") OR (\"OldForumID\"=%i".$ExtraIgnores.$ForumIgnoreList4.") ORDER BY \"LastUpdate\" DESC LIMIT 1", array($UseThisFonum,$UseThisFonum)), $SQLStat);
 if($gltnum>0){
 $gltresult_array = sql_fetch_assoc($gltresult);
 $TopicID=$gltresult_array['id'];
@@ -290,9 +290,9 @@ $NumPages = ceil($NumRPosts/$Settings['max_posts']); }
 if($NumRPosts<=$Settings['max_posts']) { $NumPages = 1; }
 if (pre_strlen($TopicName)>20) { 
 $TopicName1 = $TopicName1."..."; $TopicName=$TopicName1; }
+$glrnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" DESC LIMIT 1", array($TopicID)), $SQLStat);
 $glrquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" DESC LIMIT 1", array($TopicID));
 $glrresult=sql_query($glrquery,$SQLStat);
-$glrnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" DESC LIMIT 1", array($TopicID)), $SQLStat);
 if($glrnum>0){
 $glrresult_array = sql_fetch_assoc($glrresult);
 $ReplyID=$glrresult_array['id'];
@@ -385,11 +385,11 @@ $ForumName = $SForumName; $ForumID = $SForumID; $InSubForum = $SFInSubForum;
 $uviewlcuttime = $utccurtime->getTimestamp();
 $uviewltime = $uviewlcuttime - ini_get("session.gc_maxlifetime");
 if($InSubForum==0) {
-$uviewlquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"session_id\"<>'%s' AND (\"serialized_data\" LIKE '%s' OR \"serialized_data\" LIKE '%s') ORDER BY \"expires\" DESC", array($uviewltime, session_id(), "%currentforumid:0,".$ForumID.";%", "%currentforumid:".$ForumID.",%")); 
-$uviewlnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"session_id\"<>'%s' AND (\"serialized_data\" LIKE '%s' OR \"serialized_data\" LIKE '%s') ORDER BY \"expires\" DESC", array($uviewltime, session_id(), "%currentforumid:0,".$ForumID.";%", "%currentforumid:".$ForumID.",%")), $SQLStat); }
+$uviewlnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"session_id\"<>'%s' AND (\"serialized_data\" LIKE '%s' OR \"serialized_data\" LIKE '%s') ORDER BY \"expires\" DESC", array($uviewltime, session_id(), "%currentforumid:0,".$ForumID.";%", "%currentforumid:".$ForumID.",%")), $SQLStat);
+$uviewlquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"session_id\"<>'%s' AND (\"serialized_data\" LIKE '%s' OR \"serialized_data\" LIKE '%s') ORDER BY \"expires\" DESC", array($uviewltime, session_id(), "%currentforumid:0,".$ForumID.";%", "%currentforumid:".$ForumID.",%")); }
 if($InSubForum!=0) {
-$uviewlquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"session_id\"<>'%s' AND (\"serialized_data\" LIKE '%s' OR \"serialized_data\" LIKE '%s') ORDER BY \"expires\" DESC", array($uviewltime, session_id(), "%currentforumid:".$InSubForum.",".$ForumID.";%", "%currentforumid:0,".$ForumID.";"));
-$uviewlnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"session_id\"<>'%s' AND (\"serialized_data\" LIKE '%s' OR \"serialized_data\" LIKE '%s') ORDER BY \"expires\" DESC", array($uviewltime, session_id(), "%currentforumid:".$InSubForum.",".$ForumID.";%", "%currentforumid:0,".$ForumID.";")), $SQLStat); } }
+$uviewlnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"session_id\"<>'%s' AND (\"serialized_data\" LIKE '%s' OR \"serialized_data\" LIKE '%s') ORDER BY \"expires\" DESC", array($uviewltime, session_id(), "%currentforumid:".$InSubForum.",".$ForumID.";%", "%currentforumid:0,".$ForumID.";")), $SQLStat);
+$uviewlquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"session_id\"<>'%s' AND (\"serialized_data\" LIKE '%s' OR \"serialized_data\" LIKE '%s') ORDER BY \"expires\" DESC", array($uviewltime, session_id(), "%currentforumid:".$InSubForum.",".$ForumID.";%", "%currentforumid:0,".$ForumID.";")); } }
 $uviewlresult=sql_query($uviewlquery,$SQLStat);
 $uviewli=0; $uviewlmn = 0; $uviewlgn = 0; $uviewlan = 0; $uviewlmbn = 0;
 $MembersViewList = null; $GuestsOnline = null;

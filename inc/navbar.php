@@ -18,13 +18,13 @@ if ($File3Name=="navbar.php"||$File3Name=="/navbar.php") {
 	require('index.php');
 	exit(); }
 if(isset($Settings['sqldb'])&&($_SESSION['UserGroup']!=$Settings['GuestGroup']||$GroupInfo['CanPM']=="yes")) {
+$PMNumber=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."messenger\" WHERE \"ReciverID\"=%i AND \"Read\"=0", array($_SESSION['UserID'])), $SQLStat);
 $pmquery1 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."messenger\" WHERE \"ReciverID\"=%i AND \"Read\"=0", array($_SESSION['UserID']));
 $pmresult1=sql_query($pmquery1,$SQLStat);
-$PMNumber=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."messenger\" WHERE \"ReciverID\"=%i AND \"Read\"=0", array($_SESSION['UserID'])), $SQLStat);
 sql_free_result($pmresult1); /*
+$SentPMNumber=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."messenger\" WHERE \"SenderID\"=%i AND \"Read\"=0", array($_SESSION['UserID'])), $SQLStat);
 $pmquery2 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."messenger\" WHERE \"SenderID\"=%i AND \"Read\"=0", array($_SESSION['UserID']));
 $pmresult2=sql_query($pmquery2,$SQLStat);
-$SentPMNumber=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."messenger\" WHERE \"SenderID\"=%i AND \"Read\"=0", array($_SESSION['UserID'])), $SQLStat);
 sql_free_result($pmresult2); */ }
 if($ThemeSet['LogoStyle']==null) { $logostyle = ""; }
 if($ThemeSet['LogoStyle']!=null) { $logostyle = "style=\"".$ThemeSet['LogoStyle']."\" "; }

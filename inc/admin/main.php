@@ -415,9 +415,9 @@ if ($handle = opendir($skindir)) { $dirnum = null;
    "('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');", array($themelist[$themei], $ThemeSet['ThemeName'], $ThemeSet['ThemeMaker'], $ThemeSet['ThemeVersion'], $ThemeSet['ThemeVersionType'], $ThemeSet['ThemeSubVersion'], $ThemeSet['MakerURL'], $ThemeSet['CopyRight'], $ThemeSet['WrapperString'], $ThemeSet['CSS'], $ThemeSet['CSSType'], $ThemeSet['FavIcon'], $ThemeSet['OpenGraph'], $ThemeSet['TableStyle'], $ThemeSet['MiniPageAltStyle'], $ThemeSet['PreLogo'], $ThemeSet['Logo'], $ThemeSet['LogoStyle'], $ThemeSet['SubLogo'], $ThemeSet['TopicIcon'], $ThemeSet['MovedTopicIcon'], $ThemeSet['HotTopic'], $ThemeSet['MovedHotTopic'], $ThemeSet['PinTopic'], $ThemeSet['AnnouncementTopic'], $ThemeSet['MovedPinTopic'], $ThemeSet['HotPinTopic'], $ThemeSet['MovedHotPinTopic'], $ThemeSet['ClosedTopic'], $ThemeSet['MovedClosedTopic'], $ThemeSet['HotClosedTopic'], $ThemeSet['MovedHotClosedTopic'], $ThemeSet['PinClosedTopic'], $ThemeSet['MovedPinClosedTopic'], $ThemeSet['HotPinClosedTopic'], $ThemeSet['MovedHotPinClosedTopic'], $ThemeSet['MessageRead'], $ThemeSet['MessageUnread'], $ThemeSet['Profile'], $ThemeSet['WWW'], $ThemeSet['PM'], $ThemeSet['TopicLayout'], $ThemeSet['AddReply'], $ThemeSet['FastReply'], $ThemeSet['NewTopic'], $ThemeSet['QuoteReply'], $ThemeSet['EditReply'], $ThemeSet['DeleteReply'], $ThemeSet['Report'], $ThemeSet['LineDivider'], $ThemeSet['ButtonDivider'], $ThemeSet['LineDividerTopic'], $ThemeSet['TitleDivider'], $ThemeSet['ForumStyle'], $ThemeSet['ForumIcon'], $ThemeSet['SubForumIcon'], $ThemeSet['RedirectIcon'], $ThemeSet['TitleIcon'], $ThemeSet['NavLinkIcon'], $ThemeSet['NavLinkDivider'], $ThemeSet['BoardStatsIcon'], $ThemeSet['MemberStatsIcon'], $ThemeSet['BirthdayStatsIcon'], $ThemeSet['EventStatsIcon'], $ThemeSet['NoAvatar'], $ThemeSet['NoAvatarSize']));
    sql_query($query,$SQLStat);
    ++$themei; } }
+$themenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."themes\" WHERE \"Name\"='%s'", array($_GET['theme'])), $SQLStat);
 $themequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."themes\" WHERE \"Name\"='%s'", array($_GET['theme']));
 $themeresult=sql_query($themequery,$SQLStat);
-$themenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."themes\" WHERE \"Name\"='%s'", array($_GET['theme'])), $SQLStat);
 require($SettDir['inc'].'sqlthemes.php');
 $_POST['update'] = "now"; $_GET['act'] = "optimize"; }
 if($_GET['act']=="optimize"&&$GroupInfo['ViewDBInfo']=="yes") {
@@ -512,9 +512,9 @@ redirect("refresh",$rbasedir.url_maker($exfile['admin'],$Settings['file_ext'],"a
 <?php if(isset($OutPutLog)) { echo "<br />".$OutPutLog; } ?>
 <br />Settings have been updated <a href="<?php echo url_maker($exfile['admin'],$Settings['file_ext'],"act=".$_GET['act']."&menu=main",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin']); ?>">click here</a> to go back. ^_^<br />&#160;</div>
 <?php } if($_GET['act']=="view"&&$_POST['update']!="now") {
+$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_SESSION['UserID'])), $SQLStat);
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_SESSION['UserID']));
 $result=sql_query($query,$SQLStat);
-$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_SESSION['UserID'])), $SQLStat);
 $result_array = sql_fetch_assoc($result);
 $YourID=$result_array['id'];
 $Notes=$result_array['Notes'];
@@ -554,9 +554,9 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Admin CP";
 </div>
 <?php } if($_GET['act']=="settings"&&$_POST['update']!="now") {
 $admincptitle = " ".$ThemeSet['TitleDivider']." Settings Manager";
+$mnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."groups\" WHERE (\"Name\"<>'%s') ORDER BY \"id\" ASC", array("Admin")), $SQLStat);
 $mguerys = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE (\"Name\"<>'%s') ORDER BY \"id\" ASC", array("Admin"));
 $mgresults=sql_query($mguerys,$SQLStat);
-$mnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."groups\" WHERE (\"Name\"<>'%s') ORDER BY \"id\" ASC", array("Admin")), $SQLStat);
 $mi = 0;
 while ($mi < $mnum) {
 $mgresults_array = sql_fetch_assoc($mgresults);
@@ -912,9 +912,9 @@ if ($handle = opendir($skindir)) { $dirnum = null;
    echo $themelist[$themei]."\n";
    ++$themei; } } }
 if($Settings['SQLThemes']=="on") {
+$sknum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."themes\" ORDER BY \"id\" ASC, \"Name\" ASC", null), $SQLStat);
 $sknquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."themes\" ORDER BY \"id\" ASC, \"Name\" ASC", null);
 $sknresult=sql_query($sknquery,$SQLStat);
-$sknum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."themes\" ORDER BY \"id\" ASC, \"Name\" ASC", null), $SQLStat);
 $skni=0;
 while ($skni < $sknum) {
 $sknresult_array = sql_fetch_assoc($sknresult);

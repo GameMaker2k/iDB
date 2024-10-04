@@ -108,9 +108,9 @@ if(pre_strlen($_GET['msearch'])>="25") {
 	$_GET['msearch'] = null; }
 if(isset($_GET['msearch'])&&$_GET['msearch']!=null) {
 $_GET['memid'] = null;
+$memsinum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s' LIMIT 1", array($_GET['msearch'])), $SQLStat);
 $memsiquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s' LIMIT 1", array($_GET['msearch']));
 $memsiresult=sql_query($memsiquery,$SQLStat);
-$memsinum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s' LIMIT 1", array($_GET['msearch'])), $SQLStat);
 $memsi=0;
 if($memsinum==0) { $memsid = -1; }
 if($memsinum!=0) {
@@ -137,26 +137,26 @@ $SQLimit = getSQLLimitClause($Settings['sqltype'], $Settings['max_topics'], $Pag
 // Prepare search query based on search type
 if (empty($_GET['msearch'])) {
     if ($_GET['type'] === "normal") {
-        $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\"='%s'".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($_GET['search']));
         $NumberTopics = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\"='%s'".$ForumIgnoreList4."", array($_GET['search'])), $SQLStat);
+        $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\"='%s'".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($_GET['search']));
     } elseif ($_GET['type'] === "wildcard") {
-        $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\" LIKE '%s'".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($_GET['search']));
         $NumberTopics = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\" LIKE '%s'".$ForumIgnoreList4."", array($_GET['search'])), $SQLStat);
+        $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\" LIKE '%s'".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($_GET['search']));
     }
 } else {
     if ($_GET['type'] === "normal") {
-        $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\"='%s' AND \"UserID\"=%i".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($_GET['search'], $memsid));
         $NumberTopics = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\"='%s' AND \"UserID\"=%i".$ForumIgnoreList4."", array($_GET['search'], $memsid)), $SQLStat);
+        $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\"='%s' AND \"UserID\"=%i".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($_GET['search'], $memsid));
         if ($memsid == -1) {
-            $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\"='%s' AND \"GuestName\"='%s'".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($_GET['search'], $_GET['msearch']));
             $NumberTopics = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\"='%s' AND \"GuestName\"='%s'".$ForumIgnoreList4."", array($_GET['search'], $_GET['msearch'])), $SQLStat);
+            $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\"='%s' AND \"GuestName\"='%s'".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($_GET['search'], $_GET['msearch']));
         }
     } elseif ($_GET['type'] === "wildcard") {
-        $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\" LIKE '%s' AND \"UserID\"=%i".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($_GET['search'], $memsid));
         $NumberTopics = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\" LIKE '%s' AND \"UserID\"=%i".$ForumIgnoreList4."", array($_GET['search'], $_GET['msearch'])), $SQLStat);
+        $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\" LIKE '%s' AND \"UserID\"=%i".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($_GET['search'], $memsid));
         if ($memsid == -1) {
-            $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\" LIKE '%s' AND \"GuestName\"='%s'".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($_GET['search'], $_GET['msearch']));
             $NumberTopics = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\" LIKE '%s' AND \"GuestName\"='%s'".$ForumIgnoreList4."", array($_GET['search'], $_GET['msearch'])), $SQLStat);
+            $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\" LIKE '%s' AND \"GuestName\"='%s'".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($_GET['search'], $_GET['msearch']));
         }
     }
 }
@@ -171,8 +171,8 @@ if ($_GET['type'] === "getactive") {
         $active_end = mktime(23, 59, 59, $active_month, $active_day, $active_year);
     }
     $SQLimit = getSQLLimitClause($Settings['sqltype'], $Settings['max_topics'], $PageLimit);
-    $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE (\"TimeStamp\">=%i AND \"TimeStamp\"<=%i) OR (\"LastUpdate\">=%i AND \"LastUpdate\"<=%i)".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($active_start, $active_end, $active_start, $active_end));
     $NumberTopics = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE (\"TimeStamp\">=%i AND \"TimeStamp\"<=%i) OR (\"LastUpdate\">=%i AND \"LastUpdate\"<=%i)".$ForumIgnoreList4."", array($active_start, $active_end, $active_start, $active_end)), $SQLStat);
+    $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE (\"TimeStamp\">=%i AND \"TimeStamp\"<=%i) OR (\"LastUpdate\">=%i AND \"LastUpdate\"<=%i)".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($active_start, $active_end, $active_start, $active_end));
 }
 
 $result = sql_query($query, $SQLStat);
@@ -314,9 +314,9 @@ while ($i < $num) {
 $result_array = sql_fetch_assoc($result);
 $TopicID=$result_array['id'];
 $ForumID=$result_array['ForumID'];
+$prenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2." LIMIT 1", array($ForumID)), $SQLStat);
 $prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2." LIMIT 1", array($ForumID));
 $preresult=sql_query($prequery,$SQLStat);
-$prenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2." LIMIT 1", array($ForumID)), $SQLStat);
 $HotTopicPosts = $Settings['hot_topic_num'];
 if($prenum > 0) {
 $preresult_array = sql_fetch_assoc($preresult);
@@ -417,9 +417,9 @@ if(($PermissionInfo['CanViewForum'][$ForumID]=="yes"&&
 	$CatPermissionInfo['CanViewCategory'][$CategoryID]=="yes"&&
 	$PermissionInfo['CanModForum'][$ForumID]=="yes"&&$TopicStat==3)) {
 $LastReply = "&#160;<br />&#160;";
+$glrnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" DESC LIMIT 1", array($TopicID)), $SQLStat);
 $glrquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" DESC LIMIT 1", array($TopicID));
 $glrresult=sql_query($glrquery,$SQLStat);
-$glrnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" DESC LIMIT 1", array($TopicID)), $SQLStat);
 if($glrnum>0){
 $glrresult_array = sql_fetch_assoc($glrresult);
 $ReplyID1=$glrresult_array['id'];

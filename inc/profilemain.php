@@ -131,9 +131,9 @@ $profiletitle = " ".$ThemeSet['TitleDivider']." NotePad";
 <br />Profile updated <a href="<?php echo $updateact; ?>">click here</a> to go back. ^_^<br />&#160;</div>
 <?php } if($_GET['act']=="view") {
 if($_POST['update']!="now") {
+$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_SESSION['UserID'])), $SQLStat);
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_SESSION['UserID']));
 $result=sql_query($query,$SQLStat);
-$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_SESSION['UserID'])), $SQLStat);
 $result_array = sql_fetch_assoc($result);
 $YourID=$result_array['id'];
 $Notes=$result_array['Notes'];
@@ -183,9 +183,9 @@ if($_POST['act']=="view"&&
 	//$_POST['Signature'] = remove_bad_entities($_POST['Signature']);
 	/*    <_<  iWordFilter  >_>      
     by Kazuki Przyborowski - Cool Dude 2k */
+	$melanienm=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."wordfilter\"", null), $SQLStat);
 	$melanieqy=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."wordfilter\"", null);
 	$melaniert=sql_query($melanieqy,$SQLStat);
-	$melanienm=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."wordfilter\"", null), $SQLStat);
 	$melanies=0;
 	while ($melanies < $melanienm) {
 	$melaniert_array = sql_fetch_assoc($melaniert);
@@ -215,9 +215,9 @@ if($_POST['act']=="view"&&
 		sql_query($querynewskin,$SQLStat); } } }
 if($_GET['act']=="signature") {
 if($_POST['update']!="now") {
+$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_SESSION['UserID'])), $SQLStat);
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_SESSION['UserID']));
 $result=sql_query($query,$SQLStat);
-$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_SESSION['UserID'])), $SQLStat);
 $result_array = sql_fetch_assoc($result);
 $YourID=$result_array['id'];
 $Signature=$result_array['Signature']; 
@@ -266,9 +266,9 @@ if($_POST['act']=="signature"&&
 	$_POST['Signature'] = remove_bad_entities($_POST['Signature']);
 	/*    <_<  iWordFilter  >_>      
     by Kazuki Przyborowski - Cool Dude 2k */
+	$melanienm=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."wordfilter\"", null), $SQLStat);
 	$melanieqy=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."wordfilter\"", null);
 	$melaniert=sql_query($melanieqy,$SQLStat);
-	$melanienm=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."wordfilter\"", null), $SQLStat);
 	$melanies=0;
 	while ($melanies < $melanienm) {
 	$melaniert_array = sql_fetch_assoc($melaniert);
@@ -298,9 +298,9 @@ if($_POST['act']=="signature"&&
 	sql_query($querynewskin,$SQLStat); } } }
 if($_GET['act']=="avatar") {
 if($_POST['update']!="now") {
+$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_SESSION['UserID'])), $SQLStat);
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_SESSION['UserID']));
 $result=sql_query($query,$SQLStat);
-$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_SESSION['UserID'])), $SQLStat);
 $result_array = sql_fetch_assoc($result);
 $YourID=$result_array['id'];
 $User1Avatar=$result_array['Avatar']; 
@@ -398,9 +398,9 @@ if($_POST['Avatar']!=null&&$_POST['AvatarSizeW']!=null&&$_POST['AvatarSizeH']!=n
 	sql_query($querynewskin,$SQLStat); } } } }
 if($_GET['act']=="settings") {
 if($_POST['update']!="now") {
+$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_SESSION['UserID'])), $SQLStat);
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_SESSION['UserID']));
 $result=sql_query($query,$SQLStat);
-$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_SESSION['UserID'])), $SQLStat);
 $result_array = sql_fetch_assoc($result);
 $YourID=$result_array['id'];
 $User1TimeZone=$result_array['TimeZone']; 
@@ -475,9 +475,9 @@ if ($handle = opendir($skindir)) { $dirnum = null;
    echo $themelist[$themei]."\n";
    ++$themei; } } }
 if($Settings['SQLThemes']=="on") {
+$sknum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."themes\" ORDER BY \"id\" ASC, \"Name\" ASC", null), $SQLStat);
 $sknquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."themes\" ORDER BY \"id\" ASC, \"Name\" ASC", null);
 $sknresult=sql_query($sknquery,$SQLStat);
-$sknum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."themes\" ORDER BY \"id\" ASC, \"Name\" ASC", null), $SQLStat);
 $skni=0;
 while ($skni < $sknum) {
 $sknresult_array = sql_fetch_assoc($sknresult);
@@ -559,9 +559,9 @@ if($_POST['act']=="settings"&&
 	sql_query($querynewskin,$SQLStat); } } }
 if($_GET['act']=="profile") {
 if($_POST['update']!="now") {
+$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_SESSION['UserID'])), $SQLStat);
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_SESSION['UserID']));
 $result=sql_query($query,$SQLStat);
-$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_SESSION['UserID'])), $SQLStat);
 $result_array = sql_fetch_assoc($result);
 $YourID=$result_array['id'];
 $User1Interests=$result_array['Interests']; 
@@ -730,9 +730,9 @@ if($_POST['act']=="profile"&&
 	//$_POST['Signature'] = remove_bad_entities($_POST['Signature']);
 	/*    <_<  iWordFilter  >_>      
     by Kazuki Przyborowski - Cool Dude 2k */
+	$melanienm=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."wordfilter\"", null), $SQLStat);
 	$melanieqy=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."wordfilter\"", null);
 	$melaniert=sql_query($melanieqy,$SQLStat);
-	$melanienm=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."wordfilter\"", null), $SQLStat);
 	$melanies=0;
 	while ($melanies < $melanienm) {
 	$melaniert_array = sql_fetch_assoc($melaniert);
@@ -805,9 +805,9 @@ if($_POST['act']=="profile"&&
 	sql_query($querynewprofile,$SQLStat); } } } }
 if($_GET['act']=="userinfo") {
 if($_POST['update']!="now") {
+$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_SESSION['UserID'])), $SQLStat);
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_SESSION['UserID']));
 $result=sql_query($query,$SQLStat);
-$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_SESSION['UserID'])), $SQLStat);
 $result_array = sql_fetch_assoc($result);
 $YourID=$result_array['id'];
 $User1Email=$result_array['Email']; 
@@ -867,9 +867,9 @@ $profiletitle = " ".$ThemeSet['TitleDivider']." User Info Editer";
 if($_POST['update']=="now") {
 if($_POST['act']=="userinfo"&&
 	$_SESSION['UserGroup']!=$Settings['GuestGroup']) {
+	$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_SESSION['UserID'])), $SQLStat);
 	$query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_SESSION['UserID']));
 	$result=sql_query($query,$SQLStat);
-	$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_SESSION['UserID'])), $SQLStat);
 	$result_array = sql_fetch_assoc($result);
 	$OldPassword=$result_array['UserPassword'];
 	$OldHashType=$result_array['HashType'];

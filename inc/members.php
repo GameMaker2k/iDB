@@ -73,12 +73,12 @@ if ($_GET['act'] == "list") {
     
     if (empty($_GET['groupid'])) {
         // Fetch all members that are not in the restricted group
-        $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"<>%i AND \"id\">=0 AND \"HiddenMember\"='no' ".$orderlist." ".$SQLimit, array($GGroup));
         $NumberMembers = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"<>%i AND \"id\">=0 AND \"HiddenMember\"='no'", array($GGroup)), $SQLStat);
+        $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"<>%i AND \"id\">=0 AND \"HiddenMember\"='no' ".$orderlist." ".$SQLimit, array($GGroup));
     } else {
         // Fetch members from a specific group
-        $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"=%i AND \"GroupID\"<>%i AND \"id\">=0 ".$orderlist." ".$SQLimit, array($_GET['groupid'], $GGroup));
         $NumberMembers = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"=%i AND \"GroupID\"<>%i AND \"id\">=0", array($_GET['groupid'], $GGroup)), $SQLStat);
+        $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"=%i AND \"GroupID\"<>%i AND \"id\">=0 ".$orderlist." ".$SQLimit, array($_GET['groupid'], $GGroup));
     }
 }
 
@@ -88,12 +88,12 @@ if ($_GET['act'] == "getactive") {
     
     if (empty($_GET['groupid'])) {
         // Fetch all active members
-        $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"<>%i AND \"id\">=0 AND \"HiddenMember\"='no' AND (\"LastActive\">=%i AND \"LastActive\"<=%i) ".$orderlist." ".$SQLimit, array($GGroup, $active_start, $active_end));
         $NumberMembers = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"<>%i AND \"id\">=0 AND \"HiddenMember\"='no' AND (\"LastActive\">=%i AND \"LastActive\"<=%i)", array($GGroup, $active_start, $active_end)), $SQLStat);
+        $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"<>%i AND \"id\">=0 AND \"HiddenMember\"='no' AND (\"LastActive\">=%i AND \"LastActive\"<=%i) ".$orderlist." ".$SQLimit, array($GGroup, $active_start, $active_end));
     } else {
         // Fetch active members from a specific group
-        $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"=%i AND \"GroupID\"<>%i AND \"id\">=0 AND (\"LastActive\">=%i AND \"LastActive\"<=%i) ".$orderlist." ".$SQLimit, array($_GET['groupid'], $GGroup, $active_start, $active_end));
         $NumberMembers = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"=%i AND \"GroupID\"<>%i AND \"id\">=0 AND (\"LastActive\">=%i AND \"LastActive\"<=%i)", array($_GET['groupid'], $GGroup, $active_start, $active_end)), $SQLStat);
+        $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"GroupID\"=%i AND \"GroupID\"<>%i AND \"id\">=0 AND (\"LastActive\">=%i AND \"LastActive\"<=%i) ".$orderlist." ".$SQLimit, array($_GET['groupid'], $GGroup, $active_start, $active_end));
     }
 }
 
@@ -304,39 +304,39 @@ $uoltime = $uolcuttime - ini_get("session.gc_maxlifetime");
 // Query based on the list type (members, guests, all)
 switch ($_GET['list']) {
     case "members":
-        $query = sql_pre_query(
-            "SELECT * FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"serialized_data\" NOT LIKE '%s' ORDER BY \"expires\" DESC ".$SQLimit, 
-            array($uoltime, "%UserGroup|s:".strlen($Settings['GuestGroup']).":\"".$Settings['GuestGroup']."\";%")
-        );
         $NumberMembers = sql_count_rows(
             sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"serialized_data\" NOT LIKE '%s'", 
             array($uoltime, "%UserGroup|s:".strlen($Settings['GuestGroup']).":\"".$Settings['GuestGroup']."\";%")), 
             $SQLStat
         );
+        $query = sql_pre_query(
+            "SELECT * FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"serialized_data\" NOT LIKE '%s' ORDER BY \"expires\" DESC ".$SQLimit, 
+            array($uoltime, "%UserGroup|s:".strlen($Settings['GuestGroup']).":\"".$Settings['GuestGroup']."\";%")
+        );
         break;
     
     case "guests":
-        $query = sql_pre_query(
-            "SELECT * FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"serialized_data\" LIKE '%s' ORDER BY \"expires\" DESC ".$SQLimit, 
-            array($uoltime, "%UserGroup|s:".strlen($Settings['GuestGroup']).":\"".$Settings['GuestGroup']."\";%")
-        );
         $NumberMembers = sql_count_rows(
             sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"serialized_data\" LIKE '%s'", 
             array($uoltime, "%UserGroup|s:".strlen($Settings['GuestGroup']).":\"".$Settings['GuestGroup']."\";%")), 
             $SQLStat
         );
+        $query = sql_pre_query(
+            "SELECT * FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"serialized_data\" LIKE '%s' ORDER BY \"expires\" DESC ".$SQLimit, 
+            array($uoltime, "%UserGroup|s:".strlen($Settings['GuestGroup']).":\"".$Settings['GuestGroup']."\";%")
+        );
         break;
 
     case "all":
     default:
-        $query = sql_pre_query(
-            "SELECT * FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i ORDER BY \"expires\" DESC ".$SQLimit, 
-            array($uoltime)
-        );
         $NumberMembers = sql_count_rows(
             sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i", 
             array($uoltime)), 
             $SQLStat
+        );
+        $query = sql_pre_query(
+            "SELECT * FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i ORDER BY \"expires\" DESC ".$SQLimit, 
+            array($uoltime)
         );
         break;
 }
@@ -482,9 +482,9 @@ if(!isset($session_ip_address)) {
 $ViewSessMem['Website'] = $Settings['idburl'];
 $opennew = null;
 if($UserSessInfo['UserGroup']!=$Settings['GuestGroup']) {
+//$sess_num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_GET['id'])), $SQLStat);
 $sess_query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_GET['id']));
 $sess_result=sql_query($sess_query,$SQLStat);
-$sess_num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_GET['id'])), $SQLStat);
 $sess_result_array = sql_fetch_assoc($sess_result);
 $ViewSessMem['ID']=$sess_result_array['id'];
 $ViewSessMem['Name']=$sess_result_array['Name'];
@@ -545,9 +545,9 @@ $PreExpPage = str_replace($qsep, "=", $PreExpPage);
 parse_str($PreExpPage,$ChkID);
 if($PreFileName==$exfile['topic'].$Settings['file_ext']) {
 if(isset($ChkID['id'])) { $ChkID = $ChkID['id']; 
+$prenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE \"id\"=%i LIMIT 1", array($ChkID)), $SQLStat);
 $prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"id\"=%i LIMIT 1", array($ChkID));
 $preresult=sql_query($prequery,$SQLStat);
-$prenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE \"id\"=%i LIMIT 1", array($ChkID)), $SQLStat);
 if($prenum>=1) {
 $preresult_array = sql_fetch_assoc($preresult);
 $TopicForumID=gsess_result_array["ForumID"];
@@ -571,9 +571,9 @@ if($PermissionInfo['CanViewForum'][$TopicForumID]=="no"||
 	$UserSessInfo['ViewingTitle'] = "Board index"; } } }
 if($PreFileName==$exfile['forum'].$Settings['file_ext']) {
 if(isset($ChkID['id'])) { $ChkID = $ChkID['id']; 
+$prenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($ChkID)), $SQLStat);
 $prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($ChkID));
 $preresult=sql_query($prequery,$SQLStat);
-$prenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($ChkID)), $SQLStat);
 $preresult_array = sql_fetch_assoc($preresult);
 $ForumCatID=gsess_result_array["CategoryID"];
 sql_free_result($preresult);
@@ -593,9 +593,9 @@ if($PermissionInfo['CanViewForum'][$ChkID]=="no"||
 	$UserSessInfo['ViewingTitle'] = "Board index"; } } }
 if($PreFileName==$exfile['subforum'].$Settings['file_ext']) {
 if(isset($ChkID['id'])) { $ChkID = $ChkID['id']; 
+$prenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($ChkID)), $SQLStat);
 $prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($ChkID));
 $preresult=sql_query($prequery,$SQLStat);
-$prenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($ChkID)), $SQLStat);
 $preresult_array = sql_fetch_assoc($preresult);
 $ForumCatID=gsess_result_array["CategoryID"];
 sql_free_result($preresult);
@@ -694,9 +694,9 @@ if($pagenum>1) {
 <div class="DivPageLinks">&#160;</div>
 <?php } }
 if($_GET['act']=="view") { 
+$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_GET['id'])), $SQLStat);
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_GET['id']));
 $result=sql_query($query,$SQLStat);
-$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_GET['id'])), $SQLStat);
 $i=0;
 if($num==0||$_GET['id']<=0) { redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
@@ -744,18 +744,18 @@ $viewmemcurtime = new DateTime();
 $viewmemcurtime->setTimezone(new DateTimeZone($ViewMem['TimeZone']));
 $ViewMem['IP']=$result_array['IP'];
 if($ViewMem['LevelID']!==null&&$ViewMem['LevelID']!=0) {
+$lnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."levels\" WHERE \"id\"=%i LIMIT 1", array($ViewMem['LevelID'])), $SQLStat);
 $lquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."levels\" WHERE \"id\"=%i LIMIT 1", array($ViewMem['LevelID']));
 $lresult=sql_query($lquery,$SQLStat);
-$lnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."levels\" WHERE \"id\"=%i LIMIT 1", array($ViewMem['LevelID'])), $SQLStat);
 if ($lresult !== false && $lnum > 0) {
 $lresult_array = sql_fetch_assoc($lresult);
 $ViewMem['Level']=$lresult_array['Name']; } else { $ViewMem['Level'] = ""; }
 sql_free_result($lresult); } else {
  $ViewMem['Level'] = ""; }
 if($ViewMem['RankID']!==null&&$ViewMem['RankID']!=0) {
+$rnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."ranks\" WHERE \"id\"=%i LIMIT 1", array($ViewMem['RankID'])), $SQLStat);
 $rquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."ranks\" WHERE \"id\"=%i LIMIT 1", array($ViewMem['RankID']));
 $rresult=sql_query($rquery,$SQLStat);
-$rnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."ranks\" WHERE \"id\"=%i LIMIT 1", array($ViewMem['RankID'])), $SQLStat);
 if ($rresult !== false && $rnum > 0) {
 $rresult_array = sql_fetch_assoc($rresult);
 $ViewMem['Rank']=$rresult_array['Name']; } else { $ViewMem['Rank'] = ""; }
@@ -1138,11 +1138,11 @@ $YourName = stripcslashes(htmlspecialchars($_POST['username'], ENT_QUOTES, $Sett
 $YourName = remove_spaces($YourName);
 $passtype="ODFH";
 if($_POST['loginemail']!="true") {
-$querylog = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s' LIMIT 1", array($YourName));
-$numlog=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s' LIMIT 1", array($YourName)), $SQLStat); }
+$numlog=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s' LIMIT 1", array($YourName)), $SQLStat);
+$querylog = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s' LIMIT 1", array($YourName)); }
 if($_POST['loginemail']=="true") {
-$querylog = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"Email\"='%s' LIMIT 1", array($YourName));
-$numlog=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"Email\"='%s' LIMIT 1", array($YourName)), $SQLStat); }
+$numlog=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"Email\"='%s' LIMIT 1", array($YourName)), $SQLStat);
+$querylog = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"Email\"='%s' LIMIT 1", array($YourName)); }
 $resultlog=sql_query($querylog,$SQLStat);
 if($numlog>=1) {
 $resultlog_array = sql_fetch_assoc($resultlog);
@@ -1610,9 +1610,9 @@ if($_POST['Avatar']=="") { $_POST['Avatar'] = "http://"; }
 $Name = stripcslashes(htmlspecialchars($_POST['Name'], ENT_QUOTES, $Settings['charset']));
 //$Name = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $Name);
 $Name = remove_spaces($Name);
+$lonewolfnm=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."restrictedwords\" WHERE \"RestrictedUserName\"='yes'", null), $SQLStat);
 $lonewolfqy=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."restrictedwords\" WHERE \"RestrictedUserName\"='yes'", null);
 $lonewolfrt=sql_query($lonewolfqy,$SQLStat);
-$lonewolfnm=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."restrictedwords\" WHERE \"RestrictedUserName\"='yes'", null), $SQLStat);
 $lonewolfs=0; $RMatches = null;
 while ($lonewolfs < $lonewolfnm) {
 $lonewolfrt_array = sql_fetch_assoc($lonewolfrt);
@@ -1651,11 +1651,15 @@ if($RCaseInsensitive=="yes"&&$RWholeWord!="yes") {
 $RMatches = preg_match("/".$RWord."/i", $Handle);
 	if($RMatches==true) { break 1; } }
 ++$lonewolfs; } sql_free_result($lonewolfrt);
-$sql_email_check = sql_query(sql_pre_query("SELECT \"Email\" FROM \"".$Settings['sqltable']."members\" WHERE \"Email\"='%s'", array($_POST['Email'])),$SQLStat);
-$sql_username_check = sql_query(sql_pre_query("SELECT \"Name\" FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s'", array($Name)),$SQLStat);
 $email_check = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"Email\"='%s'", array($_POST['Email'])), $SQLStat); 
 $username_check = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s'", array($Name)), $SQLStat);
 $handle_check = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"Handle\"='%s'", array($Handle)), $SQLStat);
+/*$sql_email_check = sql_query(sql_pre_query("SELECT \"Email\" FROM \"".$Settings['sqltable']."members\" WHERE \"Email\"='%s'", array($_POST['Email'])),$SQLStat);
+sql_free_result($sql_email_check);
+$sql_username_check = sql_query(sql_pre_query("SELECT \"Name\" FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s'", array($Name)),$SQLStat);
+sql_free_result($sql_username_check);
+$sql_handle_check = sql_query(sql_pre_query("SELECT \"Name\" FROM \"".$Settings['sqltable']."members\" WHERE \"Handle\"='%s'", array($Handle)),$SQLStat);
+sql_free_result($sql_handle_check);*/
 if ($_POST['TOS']!="Agree") { $Error="Yes";  ?>
 <tr>
 	<td><span class="TableMessage">
@@ -1798,9 +1802,9 @@ $query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."members\" (\"Name
 "('%s', '%s', '%s', '%s', '%s', '%s', 0, 0, '%s', '%s', %i, '%s', '%s', %i, %i, %i, '0', '0', '0', '0', '0', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %i, 0, 0, 10, 10, 10, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')", array($Name,$Handle,$NewPassword,$iDBHash,$_POST['Email'],$yourgroup,$ValidateStats,$HideMe,"0",$_POST['Interests'],$_POST['Title'],$_POST['Joined'],$_POST['LastActive'],$_POST['LastActive'],$NewSignature,'Your Notes','',$Avatar,"100x100",$Website,'',$_POST['YourGender'],$_POST['PostCount'],$_POST['YourOffSet'],$Settings['idb_date_format'],$Settings['idb_time_format'],$Settings['DefaultTheme'],$_POST['UserIP'],'','','',$HashSalt));
 sql_query($query,$SQLStat);
 $yourid = sql_get_next_id($Settings['sqltable'],"members",$SQLStat);
+$idnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s' AND \"UserPassword\"='%s' LIMIT 1", array($Name,$NewPassword)), $SQLStat);
 $idquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s' AND \"UserPassword\"='%s' LIMIT 1", array($Name,$NewPassword));
 $idresult=sql_query($idquery,$SQLStat);
-$idnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s' AND \"UserPassword\"='%s' LIMIT 1", array($Name,$NewPassword)), $SQLStat);
 $idcheck = $yourid;
 $idncheck = 0;
 if($idnum>=1) {
@@ -1813,9 +1817,9 @@ $query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."mempermissions\" 
 "(%i, %i, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %i, %i, '%s', '%s', '%s')", array($yourid, 0, "group", "group", "group", "group", "group", "group", "group", "group", "group", "group", "group", "group", "group", -1, -1, "group", "group", "group"));
 sql_query($query,$SQLStat);
 if(isset($_POST['referrerid'])&&is_numeric($_POST['referrerid'])) {
+	$rfidnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_POST['referrerid'])), $SQLStat);
 	$rfidquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_POST['referrerid']));
 	$rfidresult=sql_query($rfidquery,$SQLStat);
-	$rfidnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_POST['referrerid'])), $SQLStat);
 	if($rfidnum>=1) {
 		$rfidresult_array = sql_fetch_assoc($rfidresult);
 		$rfidKarma=$rfidresult_array['Karma'];
@@ -1824,9 +1828,9 @@ if(isset($_POST['referrerid'])&&is_numeric($_POST['referrerid'])) {
 		$rfidKarma = $rfidKarma + 1;
 		$querykup = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"Karma\"=%i WHERE \"id\"=%i", array($rfidKarma,$_POST['referrerid']));
 		sql_query($querykup,$SQLStat); } }
+$numlogr=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s' AND \"UserPassword\"='%s' LIMIT 1", array($Name,$NewPassword)), $SQLStat);
 $querylogr = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s' AND \"UserPassword\"='%s' LIMIT 1", array($Name,$NewPassword));
 $resultlogr=sql_query($querylogr,$SQLStat);
-$numlogr=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s' AND \"UserPassword\"='%s' LIMIT 1", array($Name,$NewPassword)), $SQLStat);
 if($numlogr>=1) {
 $resultlog_array = sql_fetch_assoc($resultlog);
 $YourIDMr=$resultlog_array['id'];

@@ -52,9 +52,9 @@ $Settings['GuestGroupID']=$ggidresult_array['id'];
 $MyPostCountChk = null; $MyKarmaCount = null;
 if(!isset($_SESSION['UserID'])) { $_SESSION['UserID'] = 0; }
 if($_SESSION['UserID']!=0&&$_SESSION['UserID']!=null) { $BanError = null;
+$numchkusr=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s' AND \"UserPassword\"='%s' AND \"id\"=%i LIMIT 1", array($_SESSION['MemberName'],$_SESSION['UserPass'],$_SESSION['UserID'])), $SQLStat);
 $kgbquerychkusr = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s' AND \"UserPassword\"='%s' AND \"id\"=%i LIMIT 1", array($_SESSION['MemberName'],$_SESSION['UserPass'],$_SESSION['UserID'])); 
 $resultchkusr=sql_query($kgbquerychkusr,$SQLStat);
-$numchkusr=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s' AND \"UserPassword\"='%s' AND \"id\"=%i LIMIT 1", array($_SESSION['MemberName'],$_SESSION['UserPass'],$_SESSION['UserID'])), $SQLStat);
 if($numchkusr==1) {
 $resultchkusr_array = sql_fetch_assoc($resultchkusr);
 $ChkUsrID=$resultchkusr_array['id'];
@@ -154,9 +154,9 @@ $levnum = 0;
 if($_SESSION['UserID']==0||$_SESSION['UserID']==null) {
  $levnum = 0; }
 if($_SESSION['UserID']!=0&&$_SESSION['UserID']!=null) {
+$levnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."levels\" WHERE \"id\"=%i LIMIT 1", array($ChkUsrLevelID)), $SQLStat);
 $levquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."levels\" WHERE \"id\"=%i LIMIT 1", array($ChkUsrLevelID));
 $levresult=sql_query($levquery,$SQLStat);
-$levnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."levels\" WHERE \"id\"=%i LIMIT 1", array($ChkUsrLevelID)), $SQLStat);
 /*if($levnum<=0) { $GruError = true; sql_free_result($levresult);
 header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 503;
 ob_clean(); echo "Sorry could not find level data in database.\nContact the board admin about error."; 
@@ -187,9 +187,9 @@ $rannum = 0;
 if($_SESSION['UserID']==0||$_SESSION['UserID']==null) {
  $rannum = 0; }
 if($_SESSION['UserID']!=0&&$_SESSION['UserID']!=null) {
+$rannum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."ranks\" WHERE \"id\"=%i LIMIT 1", array($ChkUsrRankID)), $SQLStat);
 $ranquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."ranks\" WHERE \"id\"=%i LIMIT 1", array($ChkUsrRankID));
 $ranresult=sql_query($ranquery,$SQLStat);
-$rannum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."ranks\" WHERE \"id\"=%i LIMIT 1", array($ChkUsrRankID)), $SQLStat);
 /*if($rannum<=0) { $GruError = true; sql_free_result($ranresult);
 header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 503;
 ob_clean(); echo "Sorry could not find ranel data in database.\nContact the board admin about error."; 
@@ -222,13 +222,13 @@ if(!isset($_SESSION['UserGroup'])) { $_SESSION['UserGroup'] = null; }
 if($_SESSION['UserGroup']==null) { 
 $_SESSION['UserGroup']=$Settings['GuestGroup']; } $GruError = null;
 if($_SESSION['UserID']!=0) {
+$grunum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."groups\" WHERE \"Name\"='%s' LIMIT 1", array($_SESSION['UserGroup'])), $SQLStat);
 $gruquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"Name\"='%s' LIMIT 1", array($_SESSION['UserGroup']));
-$gruresult=sql_query($gruquery,$SQLStat);
-$grunum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."groups\" WHERE \"Name\"='%s' LIMIT 1", array($_SESSION['UserGroup'])), $SQLStat); }
+$gruresult=sql_query($gruquery,$SQLStat); }
 if($_SESSION['UserID']==0) {
+$grunum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."groups\" WHERE \"Name\"='%s' LIMIT 1", array($Settings['GuestGroup'])), $SQLStat);
 $gruquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"Name\"='%s' LIMIT 1", array($Settings['GuestGroup']));
-$gruresult=sql_query($gruquery,$SQLStat);
-$grunum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."groups\" WHERE \"Name\"='%s' LIMIT 1", array($Settings['GuestGroup'])), $SQLStat); }
+$gruresult=sql_query($gruquery,$SQLStat); }
 if($grunum<=0) { $GruError = true; sql_free_result($gruresult);
 header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 503;
 ob_clean(); echo "Sorry could not find group data in database.\nContact the board admin about error."; 
@@ -236,9 +236,9 @@ gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die
 if($_SESSION['UserID']!=0) {
 $memprequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."mempermissions\" WHERE \"id\"=%i LIMIT 1", array($_SESSION['UserID'])); }
 if($_SESSION['UserID']==0) {
+$memprenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."mempermissions\" WHERE \"id\"=%i LIMIT 1", array(-1)), $SQLStat);
 $memprequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."mempermissions\" WHERE \"id\"=%i LIMIT 1", array(-1)); }
 $mempreresult=sql_query($memprequery,$SQLStat);
-$memprenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."mempermissions\" WHERE \"id\"=%i LIMIT 1", array(-1)), $SQLStat);
 if($grunum>=1) {
 $gruresult_array = sql_fetch_assoc($gruresult);
 $mempreresult_array = sql_fetch_assoc($mempreresult);
@@ -408,44 +408,44 @@ if($MyKarmaUpdate<$NewKarmaUpdate&&$MyPostCountChk>0) {
 	$Settings['KarmaBoostDays'] = $Settings['OldKarmaBoostDays'];
 if(isset($RankInfo)&&is_array($RankInfo)) {
 if($RankInfo['PromoteTo']!=0&&$MyPostCountChk>=$RankInfo['PromotePosts']&&$MyKarmaCount>=$RankInfo['PromoteKarma']) {
-	$sql_rank_check = sql_query(sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."ranks\" WHERE \"id\"=%i AND \"id\">0 LIMIT 1", array($RankInfo['PromoteTo'])),$SQLStat);
 	$rank_check = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."ranks\" WHERE \"id\"=%i AND \"id\">0 LIMIT 1", array($RankInfo['PromoteTo'])), $SQLStat);
+	$sql_rank_check = sql_query(sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."ranks\" WHERE \"id\"=%i AND \"id\">0 LIMIT 1", array($RankInfo['PromoteTo'])),$SQLStat);
 	sql_free_result($sql_rank_check);
 	if($rank_check > 0) {
 	$queryupgrade = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"RankID\"=%i WHERE \"id\"=%i", array($RankInfo['PromoteTo'],$_SESSION['UserID']));
 	sql_query($queryupgrade,$SQLStat); } }
 elseif($RankInfo['DemoteTo']!=0&&$MyPostCountChk<=$RankInfo['DemotePosts']&&$MyKarmaCount<=$RankInfo['DemoteKarma']) {
-	$sql_rank_check = sql_query(sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."ranks\" WHERE \"id\"=%i AND \"id\">0 LIMIT 1", array($RankInfo['DemoteTo'])),$SQLStat);
 	$rank_check = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."ranks\" WHERE \"id\"=%i AND \"id\">0 LIMIT 1", array($RankInfo['DemoteTo'])), $SQLStat);
+	$sql_rank_check = sql_query(sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."ranks\" WHERE \"id\"=%i AND \"id\">0 LIMIT 1", array($RankInfo['DemoteTo'])),$SQLStat);
 	sql_free_result($sql_rank_check);
 	if($rank_check > 0) {
 	$queryupgrade = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"RankID\"=%i WHERE \"id\"=%i", array($RankInfo['DemoteTo'],$_SESSION['UserID']));
 	sql_query($queryupgrade,$SQLStat); } } }
 if(isset($LevelInfo)&&is_array($LevelInfo)) {
 if($LevelInfo['PromoteTo']!=0&&$MyPostCountChk>=$LevelInfo['PromotePosts']&&$MyKarmaCount>=$LevelInfo['PromoteKarma']) {
-	$sql_level_check = sql_query(sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."levels\" WHERE \"id\"=%i AND \"id\">0 LIMIT 1", array($LevelInfo['PromoteTo'])),$SQLStat);
 	$level_check = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."levels\" WHERE \"id\"=%i AND \"id\">0 LIMIT 1", array($LevelInfo['PromoteTo'])), $SQLStat);
+	$sql_level_check = sql_query(sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."levels\" WHERE \"id\"=%i AND \"id\">0 LIMIT 1", array($LevelInfo['PromoteTo'])),$SQLStat);
 	sql_free_result($sql_level_check);
 	if($level_check > 0) {
 	$queryupgrade = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"LevelID\"=%i WHERE \"id\"=%i", array($LevelInfo['PromoteTo'],$_SESSION['UserID']));
 	sql_query($queryupgrade,$SQLStat); } }
 elseif($LevelInfo['DemoteTo']!=0&&$MyPostCountChk<=$LevelInfo['DemotePosts']&&$MyKarmaCount<=$LevelInfo['DemoteKarma']) {
-	$sql_level_check = sql_query(sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."levels\" WHERE \"id\"=%i AND \"id\">0 LIMIT 1", array($LevelInfo['DemoteTo'])),$SQLStat);
 	$level_check = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."levels\" WHERE \"id\"=%i AND \"id\">0 LIMIT 1", array($LevelInfo['DemoteTo'])), $SQLStat);
+	$sql_level_check = sql_query(sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."levels\" WHERE \"id\"=%i AND \"id\">0 LIMIT 1", array($LevelInfo['DemoteTo'])),$SQLStat);
 	sql_free_result($sql_level_check);
 	if($level_check > 0) {
 	$queryupgrade = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"LevelID\"=%i WHERE \"id\"=%i", array($LevelInfo['DemoteTo'],$_SESSION['UserID']));
 	sql_query($queryupgrade,$SQLStat); } } }
 if($GroupInfo['PromoteTo']!=0&&$MyPostCountChk>=$GroupInfo['PromotePosts']&&$MyKarmaCount>=$GroupInfo['PromoteKarma']) {
-	$sql_group_check = sql_query(sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i AND \"id\">0 LIMIT 1", array($GroupInfo['PromoteTo'])),$SQLStat);
 	$group_check = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i AND \"id\">0 LIMIT 1", array($GroupInfo['PromoteTo'])), $SQLStat);
+	$sql_group_check = sql_query(sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i AND \"id\">0 LIMIT 1", array($GroupInfo['PromoteTo'])),$SQLStat);
 	sql_free_result($sql_group_check);
 	if($group_check > 0) {
 	$queryupgrade = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"GroupID\"=%i WHERE \"id\"=%i", array($GroupInfo['PromoteTo'],$_SESSION['UserID']));
 	sql_query($queryupgrade,$SQLStat); } }
 if($GroupInfo['DemoteTo']!=0&&$MyPostCountChk<=$GroupInfo['DemotePosts']&&$MyKarmaCount<=$GroupInfo['DemoteKarma']) {
-	$sql_group_check = sql_query(sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i AND \"id\">0 LIMIT 1", array($GroupInfo['DemoteTo'])),$SQLStat);
 	$group_check = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i AND \"id\">0 LIMIT 1", array($GroupInfo['DemoteTo'])), $SQLStat);
+	$sql_group_check = sql_query(sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i AND \"id\">0 LIMIT 1", array($GroupInfo['DemoteTo'])),$SQLStat);
 	sql_free_result($sql_group_check);
 	if($group_check > 0) {
 	$queryupgrade = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"GroupID\"=%i WHERE \"id\"=%i", array($GroupInfo['DemoteTo'],$_SESSION['UserID']));
@@ -505,9 +505,9 @@ header("Content-Type: text/plain; charset=".$Settings['charset']);
 ob_clean(); echo "Sorry you can not view the board."; $urlstatus = 503;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
 // Member Group Permissions Setup
+$pernum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i ORDER BY \"ForumID\" ASC", array($GroupInfo['PermissionID'])), $SQLStat);
 $perquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i ORDER BY \"ForumID\" ASC", array($GroupInfo['PermissionID']));
 $peresult=sql_query($perquery,$SQLStat);
-$pernum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i ORDER BY \"ForumID\" ASC", array($GroupInfo['PermissionID'])), $SQLStat);
 $peri=0; $PerError = null;
 /*if($pernum<0) { $PerError = true; sql_free_result($peresult);
 header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 503;
@@ -621,9 +621,9 @@ header("Content-Type: text/plain; charset=".$Settings['charset']); sql_free_resu
 ob_clean(); echo "Sorry could not load all permission data in database.\nContact the board admin about error."; 
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); } }
 sql_free_result($peresult);
+$per2num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."catpermissions\" WHERE \"PermissionID\"=%i ORDER BY \"CategoryID\" ASC", array($GroupInfo['PermissionID'])), $SQLStat);
 $per2query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."catpermissions\" WHERE \"PermissionID\"=%i ORDER BY \"CategoryID\" ASC", array($GroupInfo['PermissionID']));
 $per2esult=sql_query($per2query,$SQLStat);
-$per2num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."catpermissions\" WHERE \"PermissionID\"=%i ORDER BY \"CategoryID\" ASC", array($GroupInfo['PermissionID'])), $SQLStat);
 $per2i=0; $Per2Error = null;
 /*if($per2num<=0) { $Per2Error = true; sql_free_result($per2esult);
 header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 503;

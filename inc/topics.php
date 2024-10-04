@@ -25,9 +25,9 @@ if(!is_numeric($_GET['id'])) { $_GET['id'] = null; }
 if(!is_numeric($_GET['page'])) { $_GET['page'] = 1; }
 if(!isset($_GET['st'])) { $_GET['st'] = 0; }
 if(!is_numeric($_GET['st'])) { $_GET['st'] = 0; }
+$prenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2." LIMIT 1", array($_GET['id'])), $SQLStat);
 $prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2." LIMIT 1", array($_GET['id']));
 $preresult=sql_query($prequery,$SQLStat);
-$prenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2." LIMIT 1", array($_GET['id'])), $SQLStat);
 if($prenum==0) { redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); sql_free_result($preresult);
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
@@ -83,9 +83,9 @@ redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"
 if($CategoryKarmaCountView!=0&&$MyKarmaCount<$CategoryKarmaCountView) {
 redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=".$viewvar,$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); } }
 if($InSubForum!="0") {
+$isfnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2." LIMIT 1", array($InSubForum)), $SQLStat);
 $isfquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2." LIMIT 1", array($InSubForum));
 $isfresult=sql_query($isfquery,$SQLStat);
-$isfnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2." LIMIT 1", array($InSubForum)), $SQLStat);
 if($isfnum>=1) {
 $isfresult_array = sql_fetch_assoc($isfresult);
 $isfForumID=$isfresult_array['id'];
@@ -215,6 +215,15 @@ $PageLimit = $_GET['st'] > 0 ? (int)$_GET['st'] : max(0, $Settings['max_topics']
 $SQLimit = getSQLLimitClause($Settings['sqltype'], $Settings['max_topics'], $PageLimit);
 $ExtraIgnores = $PermissionInfo['CanModForum'][$_GET['id']] == "no" ? " AND \"Closed\"<>3" : "";
 
+$num = sql_count_rows(sql_pre_query(
+    "SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" 
+    WHERE (\"ForumID\"=%i".$ExtraIgnores.$ForumIgnoreList4.") 
+    OR (\"OldForumID\"=%i".$ExtraIgnores.$ForumIgnoreList4.") 
+    OR (\"Pinned\"=2".$ExtraIgnores.$ForumIgnoreList4.") 
+    ORDER BY \"Pinned\" DESC, \"LastUpdate\" DESC", 
+    array($_GET['id'], $_GET['id'])
+), $SQLStat);
+
 $query = sql_pre_query(
     "SELECT * FROM \"".$Settings['sqltable']."topics\" 
     WHERE (\"ForumID\"=%i".$ExtraIgnores.$ForumIgnoreList4.") 
@@ -224,15 +233,6 @@ $query = sql_pre_query(
     array($_GET['id'], $_GET['id'])
 );
 $result = sql_query($query, $SQLStat);
-
-$num = sql_count_rows(sql_pre_query(
-    "SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" 
-    WHERE (\"ForumID\"=%i".$ExtraIgnores.$ForumIgnoreList4.") 
-    OR (\"OldForumID\"=%i".$ExtraIgnores.$ForumIgnoreList4.") 
-    OR (\"Pinned\"=2".$ExtraIgnores.$ForumIgnoreList4.") 
-    ORDER BY \"Pinned\" DESC, \"LastUpdate\" DESC", 
-    array($_GET['id'], $_GET['id'])
-), $SQLStat);
 
 // List Page Number Code Start
 $pagenum = count($Pages);
@@ -403,13 +403,13 @@ $TopicName=$result_array['TopicName'];
 $TopicDescription=$result_array['Description'];
 $PinnedTopic=$result_array['Pinned'];
 $TopicStat=$result_array['Closed'];
-$requery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($UsersID));
-$reresult=sql_query($requery,$SQLStat);
 $renum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($UsersID)), $SQLStat);
-if($renum<1) { $UsersID = -1;
 $requery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($UsersID));
 $reresult=sql_query($requery,$SQLStat);
-$renum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($UsersID)), $SQLStat); }
+if($renum<1) { $UsersID = -1;
+$renum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($UsersID)), $SQLStat);
+$requery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($UsersID));
+$reresult=sql_query($requery,$SQLStat); }
 $reresult_array = sql_fetch_assoc($reresult);
 if($renum<1) { 
 	$reresult_array = array('UserID' => -1,
@@ -454,9 +454,9 @@ if(isset($GroupNamePrefix)&&$GroupNamePrefix!=null) {
 if(isset($GroupNameSuffix)&&$GroupNameSuffix!=null) {
 	$UsersName = $UsersName.$GroupNameSuffix; }
 $LastReply = "&#160;<br />&#160;";
+$glrnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" DESC LIMIT 1", array($TopicID)), $SQLStat);
 $glrquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" DESC LIMIT 1", array($TopicID));
 $glrresult=sql_query($glrquery,$SQLStat);
-$glrnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."posts\" WHERE \"TopicID\"=%i ORDER BY \"TimeStamp\" DESC LIMIT 1", array($TopicID)), $SQLStat);
 if($glrnum>0){
 $glrresult_array = sql_fetch_assoc($glrresult);
 $ReplyID1=$glrresult_array['id'];
@@ -682,9 +682,9 @@ $_SESSION['UserFormID'] = $UFID;
 <td class="TableColumn3" style="width: 15%; vertical-align: middle; text-align: center;">
 <div style="width: 100%; height: 160px; overflow: auto;">
 <table style="width: 100%; text-align: center;"><?php
+$melanie_num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."smileys\" WHERE \"Display\"='yes'", null), $SQLStat);
 $melanie_query=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."smileys\" WHERE \"Display\"='yes'", null);
 $melanie_result=sql_query($melanie_query,$SQLStat);
-$melanie_num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."smileys\" WHERE \"Display\"='yes'", null), $SQLStat);
 $melanie_p=0; $SmileRow=0; $SmileCRow=0;
 while ($melanie_p < $melanie_num) { ++$SmileRow;
 $melanie_result_array = sql_fetch_assoc($melanie_result);
@@ -862,9 +862,9 @@ setcookie("GuestName", $_POST['GuestName'], time() + (7 * 86400), $cbasedir, $co
 $_SESSION['GuestName']=$_POST['GuestName']; } }
 /*    <_<  iWordFilter  >_>      
    by Kazuki Przyborowski - Cool Dude 2k */
+$melanienm=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."wordfilter\"", null), $SQLStat);
 $melanieqy=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."wordfilter\"", null);
 $melaniert=sql_query($melanieqy,$SQLStat);
-$melanienm=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."wordfilter\"", null), $SQLStat);
 $melanies=0;
 while ($melanies < $melanienm) {
 $melaniert_array = sql_fetch_assoc($melaniert);
@@ -892,9 +892,9 @@ if($CaseInsensitive=="yes"&&$WholeWord!="yes") {
 $_POST['TopicDesc'] = preg_replace("/".$Filter."/i", $Replace, $_POST['TopicDesc']); 
 $_POST['TopicPost'] = preg_replace("/".$Filter."/i", $Replace, $_POST['TopicPost']); }
 ++$melanies; } sql_free_result($melaniert);
+$lonewolfnm=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."restrictedwords\" WHERE \"RestrictedTopicName\"='yes' or \"RestrictedUserName\"='yes'", null), $SQLStat);
 $lonewolfqy=sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."restrictedwords\" WHERE \"RestrictedTopicName\"='yes' or \"RestrictedUserName\"='yes'", null);
 $lonewolfrt=sql_query($lonewolfqy,$SQLStat);
-$lonewolfnm=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."restrictedwords\" WHERE \"RestrictedTopicName\"='yes' or \"RestrictedUserName\"='yes'", null), $SQLStat);
 $lonewolfs=0; $RMatches = null; $RGMatches = null;
 while ($lonewolfs < $lonewolfnm) {
 $lonewolfs_array = sql_fetch_assoc($lonewolfs);
@@ -997,9 +997,9 @@ redirect("refresh",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"a
 	</span><br /></td>
 </tr>
 <?php } if ($Error!="Yes") { $LastActive = $utccurtime->getTimestamp();
+$renum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($MyUserID)), $SQLStat);
 $requery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($MyUserID));
 $reresult=sql_query($requery,$SQLStat);
-$renum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($MyUserID)), $SQLStat);
 $rei=0;
 while ($rei < $renum) {
 $User1ID=$MyUserID;
@@ -1069,12 +1069,12 @@ if($pstring!=null||($_GET['act']!="view"&&$_GET['act']!="lowview")||
 <?php } 
 $uviewlcuttime = $utccurtime->getTimestamp();
 $uviewltime = $uviewlcuttime - ini_get("session.gc_maxlifetime");
+$uviewlnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"session_id\"<>'%s' AND (\"serialized_data\" LIKE '%s' OR \"serialized_data\" LIKE '%s') ORDER BY \"expires\" DESC", array($uviewltime, session_id(), "%currentforumid:".$InSubForum.",".$ForumID.";%", "%currentforumid:0,".$ForumID.";")), $SQLStat);
 if($InSubForum==0) {
 $uviewlquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"session_id\"<>'%s' AND (\"serialized_data\" LIKE '%s' OR \"serialized_data\" LIKE '%s') ORDER BY \"expires\" DESC", array($uviewltime, session_id(), "%currentforumid:0,".$ForumID.";%", "%currentforumid:".$ForumID.",%")); }
 if($InSubForum!=0) {
 $uviewlquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"session_id\"<>'%s' AND (\"serialized_data\" LIKE '%s' OR \"serialized_data\" LIKE '%s') ORDER BY \"expires\" DESC", array($uviewltime, session_id(), "%currentforumid:".$InSubForum.",".$ForumID.";%", "%currentforumid:0,".$ForumID.";")); }
 $uviewlresult=sql_query($uviewlquery,$SQLStat);
-$uviewlnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"session_id\"<>'%s' AND (\"serialized_data\" LIKE '%s' OR \"serialized_data\" LIKE '%s') ORDER BY \"expires\" DESC", array($uviewltime, session_id(), "%currentforumid:".$InSubForum.",".$ForumID.";%", "%currentforumid:0,".$ForumID.";")), $SQLStat);
 $uviewli=0; $uviewlmn = 0; $uviewlgn = 0; $uviewlan = 0; $uviewlmbn = 0;
 $MembersViewList = null; $GuestsOnline = null;
 while ($uviewli < $uviewlnum) {
