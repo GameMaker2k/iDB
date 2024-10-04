@@ -707,7 +707,7 @@ if ($use_old_session == true) {
             $row = sql_fetch_assoc($rs);
             
             // Free the result after fetching
-            sql_query_free($rs);  
+            sql_free_result($rs);  
 
             return $row ? $row['session_data'] : '';
         }
@@ -787,7 +787,7 @@ if ($use_old_session == true) {
             $row = sql_fetch_assoc($rs);
 
             // Free the result after fetching
-            sql_query_free($rs); 
+            sql_free_result($rs); 
 
             return $row ? $row['session_data'] : '';
         }
