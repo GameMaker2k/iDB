@@ -23,7 +23,7 @@ if(!isset($SetupDir['convert'])) { $SetupDir['convert'] = "setup/convert/"; }
 ?>
 <tr class="TableRow3">
 <td class="TableColumn3">
-<form style="display: inline;" method="post" id="install" action="<?php echo url_maker("install",".php","act=Part2","&","=",null,null); ?>">
+<form style="display: inline;" method="post" id="install" action="<?php echo url_maker("install",".php","act=part2","&","=",null,null); ?>">
 <table style="text-align: left;">
 <tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="LicenseBox">License - Please read fully and check 'I agree' box ONLY if you agree to license</label><br />
@@ -36,7 +36,7 @@ if(!isset($SetupDir['convert'])) { $SetupDir['convert'] = "setup/convert/"; }
 <?php if($ConvertInfo['ConvertFile']==null) { ?>
 <input type="hidden" name="SetupType" value="install" style="display: none;" />
 <?php } ?>
-<input type="hidden" name="act" value="Part2" style="display: none;" />
+<input type="hidden" name="act" value="part2" style="display: none;" />
 <input type="submit" class="Button" value="Next Page" name="Install_Board" />
 <input type="reset" value="Reset Form" class="Button" name="Reset_Form" />
 </td></tr></table>

@@ -69,7 +69,7 @@ $fp = fopen("./settingsbak.php","w+");
 fwrite($fp, $BoardSettings);
 fclose($fp);
 ?>
-<form style="display: inline;" method="post" id="install" action="<?php echo url_maker("install",".php","act=Part4","&","=",null,null); ?>">
+<form style="display: inline;" method="post" id="install" action="<?php echo url_maker("install",".php","act=part4","&","=",null,null); ?>">
 <table style="text-align: left;">
 <tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="NewBoardName">Insert Board Name:</label></td>
@@ -305,7 +305,7 @@ if ($handle = opendir($skindir)) { $dirnum = null;
 <input type="hidden" name="charset" value="<?php echo $_POST['charset']; ?>" style="display: none;" />
 <input type="hidden" name="SetupType" value="install" style="display: none;" />
 <input type="hidden" name="DatabaseType" value="<?php echo $Settings['sqltype']; ?>" style="display: none;" />
-<input type="hidden" name="act" value="Part4" style="display: none;" />
+<input type="hidden" name="act" value="part4" style="display: none;" />
 <input type="submit" class="Button" value="Install Board" name="Install_Board" />
 <input type="reset" value="Reset Form" class="Button" name="Reset_Form" />
 </td></tr></table>

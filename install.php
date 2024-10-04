@@ -281,12 +281,12 @@ if(ini_get("register_globals")) {
 if(!isset($preact['idb'])) { $preact['idb'] = null; }
 if(!isset($_GET['act'])) { $_GET['act'] = null; }
 if(!isset($_POST['act'])) { $_POST['act'] = null; }
-if ($_GET['act']==null||$_GET['act']=="view") { $_GET['act']="Part1"; }
-if ($_POST['act']==null||$_POST['act']=="view") { $_POST['act']="Part1"; }
+if ($_GET['act']==null||$_GET['act']=="view") { $_GET['act']="part1"; }
+if ($_POST['act']==null||$_POST['act']=="view") { $_POST['act']="part1"; }
 $_TEG = array(null); $_TEG['part'] = preg_replace("/Part(1|2|3|4)/","\\1",$_GET['act']);
 $_GET['act'] = strtolower($_GET['act']); if(isset($_TEG['part'])) {
 if($_TEG['part']<=4&&$_TEG['part']>=1) { $_GET['act'] = "Part".$_TEG['part']; } }
-if ($_GET['act']!="Part4"&&$_POST['act']!="Part4") {
+if ($_GET['act']!="part4"&&$_POST['act']!="part4") {
 	$preact['idb'] = "installing";	}
 $SetupDir['setup'] = "setup/"; $ConvertDir['setup'] = $SetupDir['setup']; $SetupDir['sql'] = "setup/sql/"; 
 $SetupDir['convert'] = "setup/convert/"; $ConvertDir['convert'] = $SetupDir['convert']; $ConvertDir['sql'] = $SetupDir['sql'];
@@ -386,13 +386,13 @@ $title_html = htmlentities("Installing ".$VerInfo['iDB_Ver_Show'], ENT_QUOTES, $
 <div class="Table1Border">
 <?php if($ThemeSet['TableStyle']=="div") { ?>
 <div class="TableRow1">
-<span style="font-weight: bold; text-align: left;"><?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker("install",".php","act=Part1","&","=",null,null); ?>">Install <?php echo $VerInfo['iDB_Ver_Show']; ?> </a></span>
+<span style="font-weight: bold; text-align: left;"><?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker("install",".php","act=part1","&","=",null,null); ?>">Install <?php echo $VerInfo['iDB_Ver_Show']; ?> </a></span>
 </div>
 <?php } ?>
 <table class="Table1">
 <?php if($ThemeSet['TableStyle']=="table") { ?>
 <tr class="TableRow1">
-<td class="TableColumn1"><span style="font-weight: bold; text-align: left;"><?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker("install",".php","act=Part1","&","=",null,null); ?>">Install <?php echo $VerInfo['iDB_Ver_Show']; ?> </a></span>
+<td class="TableColumn1"><span style="font-weight: bold; text-align: left;"><?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker("install",".php","act=part1","&","=",null,null); ?>">Install <?php echo $VerInfo['iDB_Ver_Show']; ?> </a></span>
 </td>
 </tr><?php } ?>
 <tr class="TableRow2">
@@ -420,32 +420,32 @@ function sql_list_dbs() {
    while( $data = sql_fetch_row($result) ) {
        $array[] = $data[0];
    } return $array; }
-if ($_GET['act']=="Part1"&&$_POST['act']=="Part1") {
-if ($_GET['act']!="Part2"&&$_POST['act']!="Part2") {
-if ($_GET['act']!="Part3"&&$_POST['act']!="Part3") {
-if ($_GET['act']!="Part4"&&$_POST['act']!="Part4") {
+if ($_GET['act']=="part1"&&$_POST['act']=="part1") {
+if ($_GET['act']!="part2"&&$_POST['act']!="part2") {
+if ($_GET['act']!="part3"&&$_POST['act']!="part3") {
+if ($_GET['act']!="part4"&&$_POST['act']!="part4") {
    require($SetupDir['setup'].'license.php'); } } } }
-if ($_GET['act']!="Part1"&&$_POST['act']!="Part1") {
-if ($_GET['act']=="Part2"&&$_POST['act']=="Part2") {
-if ($_GET['act']!="Part3"&&$_POST['act']!="Part3") {
-if ($_GET['act']!="Part4"&&$_POST['act']!="Part4") {
+if ($_GET['act']!="part1"&&$_POST['act']!="part1") {
+if ($_GET['act']=="part2"&&$_POST['act']=="part2") {
+if ($_GET['act']!="part3"&&$_POST['act']!="part3") {
+if ($_GET['act']!="part4"&&$_POST['act']!="part4") {
    require($SetupDir['setup'].'presetup.php'); } } } }
 if($_POST['SetupType']=="convert") {
 	require($ConvertInfo['ConvertFile']); }
 if($_POST['SetupType']=="install") {
-if ($_GET['act']!="Part1"&&$_POST['act']!="Part1") {
-if ($_GET['act']!="Part2"&&$_POST['act']!="Part2") {
-if ($_GET['act']=="Part3"&&$_POST['act']=="Part3") {
-if ($_GET['act']!="Part4"&&$_POST['act']!="Part4") {
+if ($_GET['act']!="part1"&&$_POST['act']!="part1") {
+if ($_GET['act']!="part2"&&$_POST['act']!="part2") {
+if ($_GET['act']=="part3"&&$_POST['act']=="part3") {
+if ($_GET['act']!="part4"&&$_POST['act']!="part4") {
    require($SetupDir['setup'].'setup.php'); } } } } }
 if($_POST['SetupType']=="install") {
-if ($_GET['act']!="Part1"&&$_POST['act']!="Part1") {
-if ($_GET['act']!="Part2"&&$_POST['act']!="Part2") {
-if ($_GET['act']!="Part3"&&$_POST['act']!="Part3") {
-if ($_GET['act']=="Part4"&&$_POST['act']=="Part4") {
+if ($_GET['act']!="part1"&&$_POST['act']!="part1") {
+if ($_GET['act']!="part2"&&$_POST['act']!="part2") {
+if ($_GET['act']!="part3"&&$_POST['act']!="part3") {
+if ($_GET['act']=="part4"&&$_POST['act']=="part4") {
    require($SetupDir['setup'].'mkconfig.php'); } } } } }
 if ($Error=="Yes") { ?>
-<br />Install Failed with errors. <a href="<?php echo url_maker("install",".php","act=Part1","&","=",null,null); ?>">Click here</a> to restart install. &lt;_&lt;
+<br />Install Failed with errors. <a href="<?php echo url_maker("install",".php","act=part1","&","=",null,null); ?>">Click here</a> to restart install. &lt;_&lt;
 <br /><br />
 </td>
 </tr>

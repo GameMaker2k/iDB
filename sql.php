@@ -313,7 +313,7 @@ if(!isset($Settings['showverinfo'])) {
 	$Settings['showverinfo'] = "on"; }
 if(!isset($Settings['sqldb'])) {
 header("Content-Type: text/plain; charset=UTF-8");
-header('Location: install.php?act=Part1'); }
+header('Location: install.php?act=part1'); }
 if(!isset($Settings['fixpathinfo'])) {
 	$Settings['fixpathinfo'] = "off"; }
 if($Settings['fixpathinfo']=="off") {
@@ -367,7 +367,7 @@ if(!in_array("ini_set", $disfunc)) {
 @ini_set('default_charset', $Settings['charset']); }
 //session_save_path($SettDir['inc']."temp/");
 if(!isset($Settings['sqldb'])) { 
-if(file_exists("install.php")) { header('Location: install.php?act=Part1'); die(); } 
+if(file_exists("install.php")) { header('Location: install.php?act=part1'); die(); } 
 if(!file_exists("install.php")) { header("Content-Type: text/plain; charset=UTF-8");
 echo "403 Error: Sorry could not find install.php\nTry uploading files again and if that dose not work try download iDB again."; die(); } }
 if(isset($Settings['sqldb'])) { 

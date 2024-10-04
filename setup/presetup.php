@@ -30,7 +30,7 @@ if($Error!="Yes") {
 ?>
 <tr class="TableRow3">
 <td class="TableColumn3">
-<form style="display: inline;" method="post" id="install" action="<?php echo url_maker("install",".php","act=Part3","&","=",null,null); ?>">
+<form style="display: inline;" method="post" id="install" action="<?php echo url_maker("install",".php","act=part3","&","=",null,null); ?>">
 <table style="text-align: left;">
 <tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="DatabaseUserName">Insert Database User Name:</label></td>
@@ -116,7 +116,7 @@ if($Error!="Yes") {
 <?php if($ConvertInfo['ConvertFile']==null) { ?>
 <input type="hidden" name="SetupType" value="install" style="display: none;" />
 <?php } ?>
-<input type="hidden" name="act" value="Part3" style="display: none;" />
+<input type="hidden" name="act" value="part3" style="display: none;" />
 <input type="submit" class="Button" value="Next Page" name="Install_Board" />
 <input type="reset" value="Reset Form" class="Button" name="Reset_Form" />
 </td></tr></table>
