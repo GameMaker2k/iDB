@@ -154,7 +154,7 @@ function get_sql_function_prefix($sqllib) {
         'cubrid_prepare' => 'cubrid_prepare_func',
         'pdo_cubrid' => 'pdo_cubrid_func',
         'sqlsrv_prepare' => 'sqlsrv_prepare_func',
-        'sqlsrv' => 'sqlsrv_func'
+        'pdo_sqlsrv' => 'pdo_sqlsrv_func'
     );
     return isset($prefixes[$sqllib]) ? $prefixes[$sqllib] : null;
 }
