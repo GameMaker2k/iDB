@@ -106,7 +106,6 @@ function pdo_sqlsrv_func_num_rows($result) {
 }
 
 // Connect to SQL Server using PDO and set session options
-// Connect to SQL Server using PDO and set session options
 function pdo_sqlsrv_func_connect_db($server, $username = null, $password = null, $database = null, $new_link = false) {
     global $SQLStat;
 
