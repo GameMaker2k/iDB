@@ -253,10 +253,10 @@ function mysqli_func_get_num_rows($tablepre, $table, $link = null) {
 }
 
 
-// Fetch Number of Rows using COUNT in a single query (uses mysqli_prepare_func_fetch_assoc)
-function mysqli_prepare_func_count_rows($query, $link = null, $countname = "cnt") {
-    $result = mysqli_prepare_func_query($query, [], $link);  // Pass empty array for params
-    $row = mysqli_prepare_func_fetch_assoc($result);
+// Fetch Number of Rows using COUNT in a single query (uses mysqli_func_fetch_assoc)
+function mysqli_func_count_rows($query, $link = null, $countname = "cnt") {
+    $result = mysqli_func_query($query, [], $link);  // Pass empty array for params
+    $row = mysqli_func_fetch_assoc($result);
 
     if ($row === false) {
         return false;  // Handle case if no row is returned
@@ -265,14 +265,14 @@ function mysqli_prepare_func_count_rows($query, $link = null, $countname = "cnt"
     // Use the dynamic column name provided by $countname
     $count = isset($row[$countname]) ? $row[$countname] : 0;
 
-    @mysqli_prepare_func_free_result($result);
+    @mysqli_func_free_result($result);
     return $count;
 }
 
-// Alternative version using mysqli_prepare_func_fetch_assoc
-function mysqli_prepare_func_count_rows_alt($query, $link = null) {
-    $result = mysqli_prepare_func_query($query, [], $link);  // Pass empty array for params
-    $row = mysqli_prepare_func_fetch_assoc($result);
+// Alternative version using mysqli_func_fetch_assoc
+function mysqli_func_count_rows_alt($query, $link = null) {
+    $result = mysqli_func_query($query, [], $link);  // Pass empty array for params
+    $row = mysqli_func_fetch_assoc($result);
     
     if ($row === false) {
         return false;  // Handle case if no row is returned
@@ -281,7 +281,7 @@ function mysqli_prepare_func_count_rows_alt($query, $link = null) {
     // Return first column (assuming single column result like COUNT or similar)
     $count = reset($row);
 
-    @mysqli_prepare_func_free_result($result);
+    @mysqli_func_free_result($result);
     return $count;
 }
 ?>

@@ -661,7 +661,10 @@ $alt_temp_session_data = $alttemp_session_data;
 $alttemp_session_data = null;
 $SQLSType = $Settings['sqltype'];
 $use_old_session = true;
+
 if ($use_old_session == true) {
+    // Old Session Handling Functions
+
     // Session Open Function
     function sql_session_open($save_path, $session_name) {
         global $sess_save_path;
@@ -683,24 +686,29 @@ if ($use_old_session == true) {
     function sql_session_read($id) {
         global $sqltable, $SQLStat, $temp_user_ip, $temp_user_agent, $client_hints_json, $temp_session_data, $alt_temp_session_data;
 
-        // Select session
-        $rs = sql_query(sql_pre_query("SELECT * FROM \"" . $sqltable . "sessions\" WHERE \"session_id\" = '%s'", array($id)), $SQLStat);
+        // Check if session exists
         $checkQuery = sql_pre_query("SELECT COUNT(*) AS cnt FROM \"" . $sqltable . "sessions\" WHERE \"session_id\" = '%s'", array($id));
         $sessionExists = sql_count_rows($checkQuery, $SQLStat);
 
         if ($sessionExists == 0) {
-            // If session does not exist, delete previous sessions with same IP and User-Agent
+            // Delete old sessions with the same IP and user agent
             sql_query(sql_pre_query("DELETE FROM \"" . $sqltable . "sessions\" WHERE \"session_id\" <> '%s' AND \"ip_address\" = '%s' AND \"user_agent\" = '%s'", 
                 array($id, $temp_user_ip, $temp_user_agent)), $SQLStat);
 
-            // Insert new session
+            // Insert new session data
             $time = (new DateTime('now', new DateTimeZone("UTC")))->getTimestamp();
             sql_query(sql_pre_query("INSERT INTO \"" . $sqltable . "sessions\" (\"session_id\", \"session_data\", \"serialized_data\", \"user_agent\", \"client_hints\", \"ip_address\", \"expires\") VALUES ('%s', '%s', '%s', '%s', '%s', '%s', %i)", 
                 array($id, $temp_session_data, $alt_temp_session_data, $temp_user_agent, $client_hints_json, $temp_user_ip, $time)), $SQLStat);
             return '';
         } else {
-            // Fetch the session data if it exists
+            // Fetch the existing session data
+            $query = sql_pre_query("SELECT * FROM \"" . $sqltable . "sessions\" WHERE \"session_id\" = '%s'", array($id));
+            $rs = sql_query($query, $SQLStat);
             $row = sql_fetch_assoc($rs);
+            
+            // Free the result after fetching
+            sql_query_free($rs);  
+
             return $row ? $row['session_data'] : '';
         }
     }
@@ -714,11 +722,11 @@ if ($use_old_session == true) {
         $sessionExists = sql_count_rows($checkQuery, $SQLStat);
 
         if ($sessionExists == 0) {
-            // Insert new session
+            // Insert new session data
             sql_query(sql_pre_query("INSERT INTO \"" . $sqltable . "sessions\" (\"session_id\", \"session_data\", \"serialized_data\", \"user_agent\", \"client_hints\", \"ip_address\", \"expires\") VALUES ('%s', '%s', '%s', '%s', '%s', '%s', %i)", 
                 array($id, $data, serialize($_SESSION), $temp_user_agent, $client_hints_json, $temp_user_ip, $time)), $SQLStat);
         } else {
-            // Update existing session
+            // Update existing session data
             sql_query(sql_pre_query("UPDATE \"" . $sqltable . "sessions\" SET \"session_data\" = '%s', \"serialized_data\" = '%s', \"user_agent\" = '%s', \"client_hints\" = '%s', \"ip_address\" = '%s', \"expires\" = %i WHERE \"session_id\" = '%s'", 
                 array($data, serialize($_SESSION), $temp_user_agent, $client_hints_json, $temp_user_ip, $time, $id)), $SQLStat);
         }
@@ -745,7 +753,7 @@ if ($use_old_session == true) {
         session_destroy();
     }
 } else {
-    // Alternative session management logic
+    // New Session Handling Functions
 
     function sql_session_open($save_path, $session_name) {
         global $sess_save_path;
@@ -777,6 +785,10 @@ if ($use_old_session == true) {
             $query = sql_pre_query("SELECT * FROM \"" . $sqltable . "sessions\" WHERE \"session_id\" = '%s'", array($id));
             $rs = sql_query($query, $SQLStat);
             $row = sql_fetch_assoc($rs);
+
+            // Free the result after fetching
+            sql_query_free($rs); 
+
             return $row ? $row['session_data'] : '';
         }
     }
@@ -812,7 +824,16 @@ if ($use_old_session == true) {
         return true;
     }
 }
-session_set_save_handler("sql_session_open", "sql_session_close", "sql_session_read", "sql_session_write", "sql_session_destroy", "sql_session_gc");
+
+// Register session handler functions
+session_set_save_handler(
+    "sql_session_open", 
+    "sql_session_close", 
+    "sql_session_read", 
+    "sql_session_write", 
+    "sql_session_destroy", 
+    "sql_session_gc"
+);
 if($cookieDomain==null) {
 session_set_cookie_params(0, $cbasedir); }
 if($cookieDomain!=null) {
