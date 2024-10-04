@@ -241,14 +241,14 @@ function mysqli_prepare_func_set_charset($charset, $link = null) {
     // Fallback if mysqli_set_charset function does not exist
     if (function_exists('mysqli_set_charset') === false) {
         // If mysqli_set_charset does not exist, fall back to manual SQL queries
-        $result = $connection instanceof mysqli ? mysqli_prepare_func_query("SET CHARACTER SET ?", [$charset], $connection) : false;
+        $result = $connection instanceof mysqli ? mysqli_prepare_func_query("SET CHARACTER SET '%s'", [$charset], $connection) : false;
 
         if ($result === false) {
             output_error("SQL Error: " . mysqli_prepare_func_error($connection), E_USER_ERROR);
             return false;
         }
 
-        $result = $connection instanceof mysqli ? mysqli_prepare_func_query("SET NAMES ?", [$charset], $connection) : false;
+        $result = $connection instanceof mysqli ? mysqli_prepare_func_query("SET NAMES '%s'", [$charset], $connection) : false;
 
         if ($result === false) {
             output_error("SQL Error: " . mysqli_prepare_func_error($connection), E_USER_ERROR);
