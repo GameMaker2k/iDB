@@ -49,7 +49,13 @@ function mysqli_prepare_func_query($query, $params = [], $link = null) {
     
     $db = isset($link) ? $link : $SQLStat;
 
-    // If the query is provided as an array (query string and parameters)
+    // Check if query is valid before preparing
+    if (empty($query)) {
+        output_error("SQL Error: Query is empty", E_USER_ERROR);
+        return false;
+    }
+
+    // If query is an array, extract query string and parameters
     if (is_array($query)) {
         list($query_string, $params) = $query;
     } else {
@@ -63,37 +69,9 @@ function mysqli_prepare_func_query($query, $params = [], $link = null) {
         return false;
     }
 
-    // If parameters are provided, bind them dynamically
-    if (!empty($params)) {
-        $types = '';  // Will contain parameter types (e.g., 'ssi' for string, string, integer)
-        $values = [];
-        foreach ($params as $param) {
-            if (is_int($param)) {
-                $types .= 'i';
-            } elseif (is_float($param)) {
-                $types .= 'd';
-            } elseif (is_null($param)) {
-                $types .= 's';
-                $param = null;
-            } else {
-                $types .= 's';
-            }
-            $values[] = $param;
-        }
-
-        // Bind parameters
-        mysqli_stmt_bind_param($stmt, $types, ...$values);
-    }
-
-    // Execute the prepared statement
-    if (!mysqli_stmt_execute($stmt)) {
-        output_error("SQL Error (Execution): " . mysqli_prepare_func_error($db), E_USER_ERROR);
-        return false;
-    }
-
-    ++$NumQueriesArray['mysqli_prepare'];
-
-    return $stmt;  // Return the prepared statement object
+	++$NumQueriesArray['mysqli_prepare'];
+    // Bind parameters and execute query...
+    return $stmt;
 }
 
 // Fetch number of rows for SELECT queries
@@ -188,6 +166,9 @@ function mysqli_prepare_func_fetch_assoc($stmt) {
 
     call_user_func_array('mysqli_stmt_bind_result', array_merge([$stmt], $bindArray));
     mysqli_stmt_fetch($stmt);
+
+    // After fetching, free the result
+    mysqli_stmt_free_result($stmt); // Freeing result here to prevent errors
 
     return $result;
 }

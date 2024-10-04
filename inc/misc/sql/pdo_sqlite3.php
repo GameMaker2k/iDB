@@ -42,7 +42,7 @@ function pdo_sqlite3_func_query($query, $link = null) {
     global $NumQueriesArray, $SQLStat;
 
     // Use the appropriate PDO connection
-    $pdo = isset($link) ? $link : $SQLStat;
+    $pdo = isset($link) && $link instanceof PDO ? $link : $SQLStat;
 
     // If the query is an array (with query and parameters)
     if (is_array($query)) {
@@ -163,7 +163,7 @@ function pdo_sqlite3_func_escape_string($string, $link = null) {
     global $SQLStat;
     if (!isset($string)) return null;
 
-    $pdo = isset($link) ? $link : $SQLStat;
+    $pdo = isset($link) && $link instanceof PDO ? $link : $SQLStat;
     $escaped_string = $pdo->quote($string);
 
     if ($escaped_string === false) {
@@ -204,7 +204,7 @@ function pdo_sqlite3_func_pre_query($query_string, $query_vars = []) {
 // Fetch the next ID from the database
 function pdo_sqlite3_func_get_next_id($tablepre, $table, $link = null) {
     global $SQLStat;
-    $pdo = isset($link) ? $link : $SQLStat;
+    $pdo = isset($link) && $link instanceof PDO ? $link : $SQLStat;
     return $pdo->lastInsertId();
 }
 

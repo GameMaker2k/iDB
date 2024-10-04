@@ -661,7 +661,6 @@ $alt_temp_session_data = $alttemp_session_data;
 $alttemp_session_data = null;
 $SQLSType = $Settings['sqltype'];
 $use_old_session = true;
-
 if ($use_old_session == true) {
     // Old Session Handling Functions
 

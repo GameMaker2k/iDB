@@ -41,7 +41,7 @@ function pdo_cubrid_func_query($query, $link = null) {
     global $NumQueriesArray, $SQLStat;
 
     // Use the appropriate PDO connection
-    $pdo = isset($link) ? $link : $SQLStat;
+    $pdo = isset($link) && $link instanceof PDO ? $link : $SQLStat;
 
     // If the query is an array (with query and parameters)
     if (is_array($query)) {
@@ -174,7 +174,7 @@ function pdo_cubrid_func_escape_string($string, $link = null) {
     global $SQLStat;
     if (!isset($string)) return null;
 
-    $pdo = isset($link) ? $link : $SQLStat;
+    $pdo = isset($link) && $link instanceof PDO ? $link : $SQLStat;
     $escaped_string = $pdo->quote($string);
 
     if ($escaped_string === false) {

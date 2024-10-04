@@ -47,7 +47,7 @@ function pdo_sqlsrv_func_query($query, $link = null) {
     global $NumQueriesArray, $SQLStat;
 
     // Use the appropriate PDO connection
-    $pdo = isset($link) ? $link : $SQLStat;
+    $pdo = isset($link) && $link instanceof PDO ? $link : $SQLStat;
 
     // If the query is an array (with query and parameters)
     if (is_array($query)) {
@@ -214,7 +214,7 @@ function pdo_sqlsrv_func_client_info($link = null) {
 // Escape String
 function pdo_sqlsrv_func_escape_string($string, $link = null) {
     global $SQLStat;
-    $pdo = isset($link) ? $link : $SQLStat;
+    $pdo = isset($link) && $link instanceof PDO ? $link : $SQLStat;
     return $pdo->quote($string);
 }
 

@@ -233,10 +233,10 @@ if($grunum<=0) { $GruError = true; sql_free_result($gruresult);
 header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 503;
 ob_clean(); echo "Sorry could not find group data in database.\nContact the board admin about error."; 
 gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
+$memprenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."mempermissions\" WHERE \"id\"=%i LIMIT 1", array(-1)), $SQLStat);
 if($_SESSION['UserID']!=0) {
 $memprequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."mempermissions\" WHERE \"id\"=%i LIMIT 1", array($_SESSION['UserID'])); }
 if($_SESSION['UserID']==0) {
-$memprenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."mempermissions\" WHERE \"id\"=%i LIMIT 1", array(-1)), $SQLStat);
 $memprequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."mempermissions\" WHERE \"id\"=%i LIMIT 1", array(-1)); }
 $mempreresult=sql_query($memprequery,$SQLStat);
 if($grunum>=1) {
