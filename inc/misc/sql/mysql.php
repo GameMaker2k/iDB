@@ -23,18 +23,21 @@ if ($File3Name == "mysql.php" || $File3Name == "/mysql.php") {
 // MySQL Error handling functions
 function mysql_func_error($link = null) {
     global $SQLStat;
-    return isset($link) ? mysql_error($link) : mysql_error($SQLStat);
+    $connection = isset($link) ? $link : $SQLStat;
+    return $connection ? mysql_error($connection) : mysql_error();
 }
 
 function mysql_func_errno($link = null) {
     global $SQLStat;
-    return isset($link) ? mysql_errno($link) : mysql_errno($SQLStat);
+    $connection = isset($link) ? $link : $SQLStat;
+    return $connection ? mysql_errno($connection) : mysql_errno();
 }
 
 function mysql_func_errorno($link = null) {
     global $SQLStat;
-    $result = isset($link) ? mysql_func_error($link) : mysql_func_error($SQLStat);
-    $resultno = isset($link) ? mysql_func_errno($link) : mysql_func_errno($SQLStat);
+    $connection = isset($link) ? $link : $SQLStat;
+    $result = $connection ? mysql_func_error($connection) : mysql_func_error();
+    $resultno = $connection ? mysql_func_errno($connection) : mysql_func_errno();
 
     return ($result == "" && $resultno === 0) ? "" : "$resultno: $result";
 }
@@ -47,17 +50,16 @@ if (!isset($NumQueriesArray['mysql'])) {
 function mysql_func_query($query, $link = null) {
     global $NumQueriesArray, $SQLStat;
     
-    $result = isset($link) ? mysql_query($query, $link) : mysql_query($query, $SQLStat);
+    $connection = isset($link) ? $link : $SQLStat;
+    $result = $connection ? mysql_query($query, $connection) : mysql_query($query);
 
     if ($result === false) {
-        output_error("SQL Error: " . mysql_func_error(), E_USER_ERROR);
+        output_error("SQL Error: " . mysql_func_error($connection), E_USER_ERROR);
         return false;
     }
 
-    if ($result !== false) {
-        ++$NumQueriesArray['mysql'];
-        return $result;
-    }
+    ++$NumQueriesArray['mysql'];
+    return $result;
 }
 
 // Fetch Number of Rows
@@ -74,16 +76,16 @@ function mysql_func_num_rows($result) {
 
 // Connect to MySQL database
 function mysql_func_connect_db($server, $username, $password, $database = null, $new_link = false) {
-    $link = $new_link === true ? mysql_connect($server, $username, $password, $new_link) : mysql_connect($server, $username, $password);
+    $link = $new_link ? mysql_connect($server, $username, $password, true) : mysql_connect($server, $username, $password);
 
-    if ($link === false) {
+    if (!$link) {
         output_error("Not connected: " . mysql_func_error(), E_USER_ERROR);
         return false;
     }
 
     if ($database !== null) {
         $dlink = mysql_select_db($database, $link);
-        if ($dlink === false) {
+        if (!$dlink) {
             output_error("Can't use database $database: " . mysql_func_error(), E_USER_ERROR);
             return false;
         }
@@ -92,7 +94,7 @@ function mysql_func_connect_db($server, $username, $password, $database = null, 
     $result = mysql_func_query("SET SESSION SQL_MODE='ANSI,ANSI_QUOTES,TRADITIONAL,STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION,NO_AUTO_VALUE_ON_ZERO';", $link);
 
     if ($result === false) {
-        output_error("SQL Error: " . mysql_func_error(), E_USER_ERROR);
+        output_error("SQL Error: " . mysql_func_error($link), E_USER_ERROR);
         return false;
     }
 
@@ -100,7 +102,7 @@ function mysql_func_connect_db($server, $username, $password, $database = null, 
 }
 
 function mysql_func_disconnect_db($link = null) {
-    return mysql_close($link);
+    return isset($link) ? mysql_close($link) : mysql_close();
 }
 
 // Query Results
@@ -132,12 +134,10 @@ function mysql_func_fetch_array($result, $result_type = MYSQL_BOTH) {
     return mysql_fetch_array($result, $result_type);
 }
 
-// Fetch Results to Associative Array
 function mysql_func_fetch_assoc($result) {
     return mysql_fetch_assoc($result);
 }
 
-// Fetch Row Results
 function mysql_func_fetch_row($result) {
     return mysql_fetch_row($result);
 }
@@ -147,7 +147,6 @@ function mysql_func_server_info($link = null) {
     return isset($link) ? mysql_get_server_info($link) : mysql_get_server_info();
 }
 
-// Get Client Info
 function mysql_func_client_info($link = null) {
     return mysql_get_client_info();
 }
@@ -205,17 +204,17 @@ function mysql_func_pre_query($query_string, $query_vars) {
 // Set Charset
 function mysql_func_set_charset($charset, $link = null) {
     if (function_exists('mysql_set_charset') === false) {
-        $result = isset($link) ? mysql_func_query("SET CHARACTER SET '$charset'", $link) : mysql_func_query("SET CHARACTER SET '$charset'");
+        $connection = isset($link) ? $link : $SQLStat;
 
+        $result = mysql_func_query("SET CHARACTER SET '$charset'", $connection);
         if ($result === false) {
-            output_error("SQL Error: " . mysql_func_error(), E_USER_ERROR);
+            output_error("SQL Error: " . mysql_func_error($connection), E_USER_ERROR);
             return false;
         }
 
-        $result = isset($link) ? mysql_func_query("SET NAMES '$charset'", $link) : mysql_func_query("SET NAMES '$charset'");
-
+        $result = mysql_func_query("SET NAMES '$charset'", $connection);
         if ($result === false) {
-            output_error("SQL Error: " . mysql_func_error(), E_USER_ERROR);
+            output_error("SQL Error: " . mysql_func_error($connection), E_USER_ERROR);
             return false;
         }
 
@@ -225,7 +224,7 @@ function mysql_func_set_charset($charset, $link = null) {
     $result = isset($link) ? mysql_set_charset($charset, $link) : mysql_set_charset($charset);
 
     if ($result === false) {
-        output_error("SQL Error: " . mysql_func_error(), E_USER_ERROR);
+        output_error("SQL Error: " . mysql_func_error($link), E_USER_ERROR);
         return false;
     }
 
@@ -234,45 +233,45 @@ function mysql_func_set_charset($charset, $link = null) {
 
 // Get next id for stuff
 function mysql_func_get_next_id($tablepre, $table, $link = null) {
-    return mysql_insert_id($link);
+    $connection = isset($link) ? $link : $SQLStat;
+    return mysql_insert_id($connection);
 }
 
 // Get number of rows for table
 function mysql_func_get_num_rows($tablepre, $table, $link = null) {
     $getnextidq = mysql_func_pre_query("SHOW TABLE STATUS LIKE '$tablepre$table'", array());
-    $getnextidr = isset($link) ? mysql_func_query($getnextidq, $link) : mysql_func_query($getnextidq);
+    $connection = isset($link) ? $link : $SQLStat;
+    $getnextidr = mysql_func_query($getnextidq, $connection);
     $getnextid = mysql_func_fetch_assoc($getnextidr);
-    return $getnextid['Rows'];
+
+    return isset($getnextid['Rows']) ? $getnextid['Rows'] : 0;
     @mysql_free_result($getnextidr);
 }
 
-
-// Fetch Number of Rows using COUNT in a single query (uses mysql_func_fetch_assoc)
 function mysql_func_count_rows($query, $link = null, $countname = "cnt") {
-    $result = mysql_func_query($query, [], $link);  // Pass empty array for params
+    $connection = isset($link) ? $link : $SQLStat;
+    $result = mysql_func_query($query, $connection);
     $row = mysql_func_fetch_assoc($result);
 
     if ($row === false) {
-        return false;  // Handle case if no row is returned
+        return false;
     }
 
-    // Use the dynamic column name provided by $countname
     $count = isset($row[$countname]) ? $row[$countname] : 0;
 
     @mysql_func_free_result($result);
     return $count;
 }
 
-// Alternative version using mysql_func_fetch_assoc
 function mysql_func_count_rows_alt($query, $link = null) {
-    $result = mysql_func_query($query, [], $link);  // Pass empty array for params
+    $connection = isset($link) ? $link : $SQLStat;
+    $result = mysql_func_query($query, $connection);
     $row = mysql_func_fetch_assoc($result);
-    
+
     if ($row === false) {
-        return false;  // Handle case if no row is returned
+        return false;
     }
-    
-    // Return first column (assuming single column result like COUNT or similar)
+
     $count = reset($row);
 
     @mysql_func_free_result($result);

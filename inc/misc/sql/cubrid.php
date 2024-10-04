@@ -33,6 +33,7 @@ function cubrid_func_errorno($link = null) {
     return $result;
 }
 
+
 // Execute a query
 if (!isset($NumQueriesArray['cubrid'])) {
     $NumQueriesArray['cubrid'] = 0;
@@ -41,17 +42,22 @@ if (!isset($NumQueriesArray['cubrid'])) {
 function cubrid_func_query($query, $link = null) {
     global $NumQueriesArray, $SQLStat;
 
-    $result = isset($link) ? cubrid_query($query, $link) : cubrid_query($query, $SQLStat);
+    $connection = isset($link) ? $link : (isset($SQLStat) ? $SQLStat : null);
 
-    if ($result === false) {
-        output_error("SQL Error: " . cubrid_func_error(), E_USER_ERROR);
+    if (!$connection) {
+        output_error("SQL Error: No valid CUBRID connection.", E_USER_ERROR);
         return false;
     }
 
-    if ($result !== false) {
-        ++$NumQueriesArray['cubrid'];
-        return $result;
+    $result = cubrid_query($query, $connection);
+
+    if ($result === false) {
+        output_error("SQL Error: " . cubrid_func_error($connection), E_USER_ERROR);
+        return false;
     }
+
+    ++$NumQueriesArray['cubrid'];
+    return $result;
 }
 
 // Fetch number of rows
@@ -68,6 +74,7 @@ function cubrid_func_connect_db($server, $username, $password, $database = null,
     if (isset($hostex[1]) && !is_numeric($hostex[1])) {
         $hostex[1] = $myport;
     }
+
     if (isset($hostex[1])) {
         $server = $hostex[0];
         $myport = $hostex[1];
@@ -76,7 +83,7 @@ function cubrid_func_connect_db($server, $username, $password, $database = null,
     $link = cubrid_connect($server, $myport, $database, $username, $password);
     cubrid_set_autocommit($link, CUBRID_AUTOCOMMIT_TRUE);
 
-    if ($link === false) {
+    if (!$link) {
         output_error("Not connected: " . cubrid_func_error(), E_USER_ERROR);
         return false;
     }
@@ -85,7 +92,7 @@ function cubrid_func_connect_db($server, $username, $password, $database = null,
 }
 
 function cubrid_func_disconnect_db($link = null) {
-    return cubrid_disconnect($link);
+    return isset($link) ? cubrid_disconnect($link) : false;
 }
 
 // Query Results
@@ -116,12 +123,10 @@ function cubrid_func_fetch_array($result, $result_type = CUBRID_BOTH) {
     return cubrid_fetch_array($result, $result_type);
 }
 
-// Fetch Results to Associative Array
 function cubrid_func_fetch_assoc($result) {
     return cubrid_fetch_assoc($result);
 }
 
-// Fetch Row Results
 function cubrid_func_fetch_row($result) {
     return cubrid_fetch_row($result);
 }
@@ -131,14 +136,13 @@ function cubrid_func_server_info($link = null) {
     return isset($link) ? cubrid_get_server_info($link) : cubrid_get_server_info();
 }
 
-// Get Client Info
 function cubrid_func_client_info($link = null) {
     return cubrid_get_client_info();
 }
 
 // Escape String
 function cubrid_func_escape_string($string, $link = null) {
-	if (!isset($string)) return null;
+    if (!isset($string)) return null;
     return isset($link) ? cubrid_real_escape_string($string, $link) : cubrid_real_escape_string($string);
 }
 
@@ -188,7 +192,7 @@ function cubrid_func_pre_query($query_string, $query_vars) {
 
 // Set Charset (dummy function)
 function cubrid_func_set_charset($charset, $link = null) {
-    return true;
+    return true; // No need for charset setting in CUBRID like MySQL.
 }
 
 // Get next id for stuff
@@ -206,33 +210,28 @@ function cubrid_func_get_num_rows($tablepre, $table, $link = null) {
     return $getnextid['Rows'] ?? 0;
 }
 
-
-// Fetch Number of Rows using COUNT in a single query (uses cubrid_func_fetch_assoc)
 function cubrid_func_count_rows($query, $link = null, $countname = "cnt") {
     $result = cubrid_func_query($query, [], $link);  // Pass empty array for params
     $row = cubrid_func_fetch_assoc($result);
 
     if ($row === false) {
-        return false;  // Handle case if no row is returned
+        return false;
     }
 
-    // Use the dynamic column name provided by $countname
     $count = isset($row[$countname]) ? $row[$countname] : 0;
 
     @cubrid_func_free_result($result);
     return $count;
 }
 
-// Alternative version using cubrid_func_fetch_assoc
 function cubrid_func_count_rows_alt($query, $link = null) {
     $result = cubrid_func_query($query, [], $link);  // Pass empty array for params
     $row = cubrid_func_fetch_assoc($result);
-    
+
     if ($row === false) {
-        return false;  // Handle case if no row is returned
+        return false;
     }
-    
-    // Return first column (assuming single column result like COUNT or similar)
+
     $count = reset($row);
 
     @cubrid_func_free_result($result);

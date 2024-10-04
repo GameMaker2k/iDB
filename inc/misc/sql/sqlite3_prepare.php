@@ -23,19 +23,20 @@ if ($File3Name == "sqlite3_prepare.php" || $File3Name == "/sqlite3_prepare.php")
 // SQLite Functions
 function sqlite3_prepare_func_error($link = null) {
     global $SQLStat;
-    return isset($link) ? $link->lastErrorMsg() : $SQLStat->lastErrorMsg();
+    $connection = ($link instanceof SQLite3 ? $link : ($SQLStat instanceof SQLite3 ? $SQLStat : null));
+    return $connection ? $connection->lastErrorMsg() : "No valid SQLite3 connection.";
 }
 
 function sqlite3_prepare_func_errno($link = null) {
     global $SQLStat;
-    return isset($link) ? $link->lastErrorCode() : $SQLStat->lastErrorCode();
+    $connection = ($link instanceof SQLite3 ? $link : ($SQLStat instanceof SQLite3 ? $SQLStat : null));
+    return $connection ? $connection->lastErrorCode() : "No valid SQLite3 connection.";
 }
 
 function sqlite3_prepare_func_errorno($link = null) {
     global $SQLStat;
-    return isset($link)
-        ? $link->lastErrorCode() . ": " . $link->lastErrorMsg()
-        : $SQLStat->lastErrorCode() . ": " . $SQLStat->lastErrorMsg();
+    $connection = ($link instanceof SQLite3 ? $link : ($SQLStat instanceof SQLite3 ? $SQLStat : null));
+    return $connection ? $connection->lastErrorCode() . ": " . $connection->lastErrorMsg() : "No valid SQLite3 connection.";
 }
 
 // Execute a query
@@ -45,7 +46,12 @@ if (!isset($NumQueriesArray['sqlite3_prepare'])) {
 
 function sqlite3_prepare_func_query($query, $params = [], $link = null) {
     global $NumQueriesArray, $SQLStat;
-    $db = isset($link) ? $link : $SQLStat;
+    $db = ($link instanceof SQLite3 ? $link : ($SQLStat instanceof SQLite3 ? $SQLStat : null));
+
+    if (!$db) {
+        output_error("SQL Error: Invalid SQLite3 connection.", E_USER_ERROR);
+        return false;
+    }
 
     // Check if $query is an array returned from `sqlite3_prepare_func_pre_query()`
     if (is_array($query)) {
@@ -90,17 +96,17 @@ function sqlite3_prepare_func_query($query, $params = [], $link = null) {
 
 // Fetch Number of Rows
 function sqlite3_prepare_func_num_rows($result) {
+    if (!$result) {
+        output_error("SQL Error: Invalid result set.", E_USER_ERROR);
+        return false;
+    }
+
     $num = 0;
     $result->reset();
     while ($result->fetchArray()) {
         $num++;
     }
     $result->reset();
-
-    if ($num === false) {
-        output_error("SQL Error: " . sqlite3_prepare_func_error(), E_USER_ERROR);
-        return false;
-    }
 
     return $num;
 }
@@ -112,8 +118,8 @@ function sqlite3_prepare_func_connect_db($server, $username, $password, $databas
     }
 
     $link = new SQLite3($database, SQLITE3_OPEN_READWRITE | SQLITE3_OPEN_CREATE);
-    
-    if ($link === false) {
+
+    if (!$link) {
         output_error("Not connected: " . sqlite3_prepare_func_error($link), E_USER_ERROR);
         return false;
     }
@@ -122,11 +128,19 @@ function sqlite3_prepare_func_connect_db($server, $username, $password, $databas
 }
 
 function sqlite3_prepare_func_disconnect_db($link = null) {
-    return isset($link) ? $link->close() : $SQLStat->close();
+    global $SQLStat;
+    $connection = ($link instanceof SQLite3 ? $link : ($SQLStat instanceof SQLite3 ? $SQLStat : null));
+
+    return $connection ? $connection->close() : false;
 }
 
 // Query Results
 function sqlite3_prepare_func_result($result, $row, $field = 0) {
+    if (!$result) {
+        output_error("SQL Error: Invalid result set.", E_USER_ERROR);
+        return null;
+    }
+
     $num = 0;
     $result->reset();
 
@@ -146,17 +160,15 @@ function sqlite3_prepare_func_free_result($result) {
 
 // Fetch Results to Array
 function sqlite3_prepare_func_fetch_array($result, $result_type = SQLITE3_BOTH) {
-    return $result->fetchArray($result_type);
+    return $result ? $result->fetchArray($result_type) : false;
 }
 
-// Fetch Results to Associative Array
 function sqlite3_prepare_func_fetch_assoc($result) {
-    return $result->fetchArray(SQLITE3_ASSOC);
+    return $result ? $result->fetchArray(SQLITE3_ASSOC) : false;
 }
 
-// Fetch Row Results
 function sqlite3_prepare_func_fetch_row($result) {
-    return $result->fetchArray(SQLITE3_NUM);
+    return $result ? $result->fetchArray(SQLITE3_NUM) : false;
 }
 
 // Get Server Info
@@ -212,14 +224,13 @@ function sqlite3_prepare_func_set_charset($charset, $link = null) {
 // Get next id after insert
 function sqlite3_prepare_func_get_next_id($tablepre, $table, $link = null) {
     global $SQLStat;
-    $db = isset($link) ? $link : $SQLStat;
-    return $db->lastInsertRowID();
+    $db = ($link instanceof SQLite3 ? $link : ($SQLStat instanceof SQLite3 ? $SQLStat : null));
+
+    return $db ? $db->lastInsertRowID() : false;
 }
 
-
-// Fetch Number of Rows using COUNT in a single query (uses sqlite3_prepare_func_fetch_assoc)
 function sqlite3_prepare_func_count_rows($query, $link = null, $countname = "cnt") {
-    $result = sqlite3_prepare_func_query($query, [], $link);  // Pass empty array for params
+    $result = sqlite3_prepare_func_query($query, [], $link);  // Use prepared query
     $row = sqlite3_prepare_func_fetch_assoc($result);
 
     if ($row === false) {
@@ -233,15 +244,14 @@ function sqlite3_prepare_func_count_rows($query, $link = null, $countname = "cnt
     return $count;
 }
 
-// Alternative version using sqlite3_prepare_func_fetch_assoc
 function sqlite3_prepare_func_count_rows_alt($query, $link = null) {
-    $result = sqlite3_prepare_func_query($query, [], $link);  // Pass empty array for params
+    $result = sqlite3_prepare_func_query($query, [], $link);  // Use prepared query
     $row = sqlite3_prepare_func_fetch_assoc($result);
-    
+
     if ($row === false) {
         return false;  // Handle case if no row is returned
     }
-    
+
     // Return first column (assuming single column result like COUNT or similar)
     $count = reset($row);
 
