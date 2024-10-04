@@ -23,18 +23,21 @@ if ($File3Name == "mysqli_prepare.php" || $File3Name == "/mysqli_prepare.php") {
 // MySQLi Error handling functions
 function mysqli_prepare_func_error($link = null) {
     global $SQLStat;
-    return isset($link) ? mysqli_error($link) : mysqli_error($SQLStat);
+    $connection = ($link instanceof mysqli ? $link : $SQLStat);
+    return $connection instanceof mysqli ? mysqli_error($connection) : false;
 }
 
 function mysqli_prepare_func_errno($link = null) {
     global $SQLStat;
-    return isset($link) ? mysqli_errno($link) : mysqli_errno($SQLStat);
+    $connection = ($link instanceof mysqli ? $link : $SQLStat);
+    return $connection instanceof mysqli ? mysqli_errno($connection) : false;
 }
 
 function mysqli_prepare_func_errorno($link = null) {
     global $SQLStat;
-    $result = isset($link) ? mysqli_prepare_func_error($link) : mysqli_prepare_func_error();
-    $resultno = isset($link) ? mysqli_prepare_func_errno($link) : mysqli_prepare_func_errno();
+    $connection = ($link instanceof mysqli ? $link : $SQLStat);
+    $result = $connection instanceof mysqli ? mysqli_prepare_func_error($connection) : false;
+    $resultno = $connection instanceof mysqli ? mysqli_prepare_func_errno($connection) : false;
 
     return ($result == "" && $resultno === 0) ? "" : "$resultno: $result";
 }
@@ -46,8 +49,8 @@ if (!isset($NumQueriesArray['mysqli_prepare'])) {
 
 function mysqli_prepare_func_query($query, $params = [], $link = null) {
     global $NumQueriesArray, $SQLStat;
-    
-    $db = isset($link) ? $link : $SQLStat;
+
+    $connection = ($link instanceof mysqli ? $link : $SQLStat);
 
     // Check if query is valid before preparing
     if (empty($query)) {
@@ -63,14 +66,14 @@ function mysqli_prepare_func_query($query, $params = [], $link = null) {
     }
 
     // Prepare the statement
-    $stmt = mysqli_prepare($db, $query_string);
+    $stmt = $connection instanceof mysqli ? mysqli_prepare($connection, $query_string) : false;
+
     if (!$stmt) {
-        output_error("SQL Error (Prepare): " . mysqli_prepare_func_error($db), E_USER_ERROR);
+        output_error("SQL Error (Prepare): " . mysqli_prepare_func_error($connection), E_USER_ERROR);
         return false;
     }
 
-	++$NumQueriesArray['mysqli_prepare'];
-    // Bind parameters and execute query...
+    ++$NumQueriesArray['mysqli_prepare'];
     return $stmt;
 }
 
@@ -195,7 +198,8 @@ function mysqli_prepare_func_fetch_row($stmt) {
 function mysqli_prepare_func_escape_string($string, $link = null) {
     global $SQLStat;
     if (!isset($string)) return null;
-    return isset($link) ? mysqli_real_escape_string($link, $string) : mysqli_real_escape_string($SQLStat, $string);
+    $connection = ($link instanceof mysqli ? $link : $SQLStat);
+    return $connection instanceof mysqli ? mysqli_real_escape_string($connection, $string) : false;
 }
 
 // SafeSQL Lite with prepared statements and placeholders
@@ -227,9 +231,42 @@ function mysqli_prepare_func_pre_query($query_string, $query_vars) {
     return [$query_string, $query_vars];
 }
 
-// Set Charset
+// Set Charset using Prepared Statements
 function mysqli_prepare_func_set_charset($charset, $link = null) {
-    return isset($link) ? mysqli_set_charset($link, $charset) : mysqli_set_charset(null, $charset);
+    global $SQLStat;
+
+    // Determine which connection to use, link or global SQLStat
+    $connection = ($link instanceof mysqli ? $link : $SQLStat);
+
+    // Fallback if mysqli_set_charset function does not exist
+    if (function_exists('mysqli_set_charset') === false) {
+        // If mysqli_set_charset does not exist, fall back to manual SQL queries
+        $result = $connection instanceof mysqli ? mysqli_prepare_func_query("SET CHARACTER SET ?", [$charset], $connection) : false;
+
+        if ($result === false) {
+            output_error("SQL Error: " . mysqli_prepare_func_error($connection), E_USER_ERROR);
+            return false;
+        }
+
+        $result = $connection instanceof mysqli ? mysqli_prepare_func_query("SET NAMES ?", [$charset], $connection) : false;
+
+        if ($result === false) {
+            output_error("SQL Error: " . mysqli_prepare_func_error($connection), E_USER_ERROR);
+            return false;
+        }
+
+        return true;
+    }
+
+    // Use mysqli_set_charset if the function exists
+    $result = $connection instanceof mysqli ? mysqli_set_charset($connection, $charset) : false;
+
+    if ($result === false) {
+        output_error("SQL Error: " . mysqli_prepare_func_error($connection), E_USER_ERROR);
+        return false;
+    }
+
+    return true;
 }
 
 // Get next ID after an insert

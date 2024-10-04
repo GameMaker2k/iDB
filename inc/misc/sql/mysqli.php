@@ -23,18 +23,23 @@ if ($File3Name == "mysqli.php" || $File3Name == "/mysqli.php") {
 // MySQLi Error handling functions
 function mysqli_func_error($link = null) {
     global $SQLStat;
-    return isset($link) ? mysqli_error($link) : mysqli_error($SQLStat);
+    $connection = ($link instanceof mysqli ? $link : $SQLStat);
+    return $connection instanceof mysqli ? mysqli_error($connection) : false;
 }
 
 function mysqli_func_errno($link = null) {
     global $SQLStat;
-    return isset($link) ? mysqli_errno($link) : mysqli_errno($SQLStat);
+    $connection = ($link instanceof mysqli ? $link : $SQLStat);
+    return $connection instanceof mysqli ? mysqli_errno($connection) : false;
 }
 
 function mysqli_func_errorno($link = null) {
     global $SQLStat;
-    $result = isset($link) ? mysqli_func_error($link) : mysqli_func_error();
-    $resultno = isset($link) ? mysqli_func_errno($link) : mysqli_func_errno();
+
+    $connection = ($link instanceof mysqli ? $link : $SQLStat);
+    
+    $result = $connection instanceof mysqli ? mysqli_func_error($connection) : mysqli_func_error();
+    $resultno = $connection instanceof mysqli ? mysqli_func_errno($connection) : mysqli_func_errno();
 
     return ($result == "" && $resultno === 0) ? "" : "$resultno: $result";
 }
@@ -47,7 +52,7 @@ if (!isset($NumQueriesArray['mysqli'])) {
 function mysqli_func_query($query, $link = null) {
     global $NumQueriesArray, $SQLStat;
     
-    $result = isset($link) ? mysqli_query($link, $query) : mysqli_query($SQLStat, $query);
+    $result = ($link instanceof mysqli ? $link : $SQLStat) instanceof mysqli ? mysqli_query(($link instanceof mysqli ? $link : $SQLStat), $query) : false;
 
     if ($result === false) {
         output_error("SQL Error: " . mysqli_func_error(), E_USER_ERROR);
@@ -149,7 +154,9 @@ function mysqli_func_fetch_row($result) {
 
 // Get Server Info
 function mysqli_func_server_info($link = null) {
-    return isset($link) ? mysqli_get_server_info($link) : mysqli_get_server_info();
+    global $SQLStat;
+    $connection = ($link instanceof mysqli ? $link : $SQLStat);
+    return $connection instanceof mysqli ? mysqli_get_server_info($connection) : false;
 }
 
 // Get Client Info
@@ -160,8 +167,9 @@ function mysqli_func_client_info($link = null) {
 // Escape String
 function mysqli_func_escape_string($string, $link = null) {
     global $SQLStat;
-	if (!isset($string)) return null;
-    return isset($link) ? mysqli_real_escape_string($link, $string) : mysqli_real_escape_string($SQLStat, $string);
+    if (!isset($string)) return null;
+    $connection = ($link instanceof mysqli ? $link : $SQLStat);
+    return $connection instanceof mysqli ? mysqli_real_escape_string($connection, $string) : false;
 }
 
 // SafeSQL Lite Source Code by Cool Dude 2k
@@ -210,28 +218,35 @@ function mysqli_func_pre_query($query_string, $query_vars) {
 
 // Set Charset
 function mysqli_func_set_charset($charset, $link = null) {
+    global $SQLStat;
+
+    // Determine which connection to use, link or global SQLStat
+    $connection = ($link instanceof mysqli ? $link : $SQLStat);
+
+    // Fallback if mysqli_set_charset function does not exist
     if (function_exists('mysqli_set_charset') === false) {
-        $result = isset($link) ? mysqli_func_query("SET CHARACTER SET '$charset'", $link) : mysqli_func_query("SET CHARACTER SET '$charset'");
+        $result = $connection instanceof mysqli ? mysqli_func_query("SET CHARACTER SET '$charset'", $connection) : mysqli_func_query("SET CHARACTER SET '$charset'");
 
         if ($result === false) {
-            output_error("SQL Error: " . mysqli_func_error(), E_USER_ERROR);
+            output_error("SQL Error: " . mysqli_func_error($connection), E_USER_ERROR);
             return false;
         }
 
-        $result = isset($link) ? mysqli_func_query("SET NAMES '$charset'", $link) : mysqli_func_query("SET NAMES '$charset'");
+        $result = $connection instanceof mysqli ? mysqli_func_query("SET NAMES '$charset'", $connection) : mysqli_func_query("SET NAMES '$charset'");
 
         if ($result === false) {
-            output_error("SQL Error: " . mysqli_func_error(), E_USER_ERROR);
+            output_error("SQL Error: " . mysqli_func_error($connection), E_USER_ERROR);
             return false;
         }
 
         return true;
     }
 
-    $result = isset($link) ? mysqli_set_charset($link, $charset) : mysqli_set_charset(null, $charset);
+    // Use mysqli_set_charset if available
+    $result = $connection instanceof mysqli ? mysqli_set_charset($connection, $charset) : false;
 
     if ($result === false) {
-        output_error("SQL Error: " . mysqli_func_error(), E_USER_ERROR);
+        output_error("SQL Error: " . mysqli_func_error($connection), E_USER_ERROR);
         return false;
     }
 
@@ -245,13 +260,20 @@ function mysqli_func_get_next_id($tablepre, $table, $link = null) {
 
 // Get number of rows for table
 function mysqli_func_get_num_rows($tablepre, $table, $link = null) {
-    $getnextidq = mysqli_func_pre_query("SHOW TABLE STATUS LIKE '$tablepre$table'", array());
-    $getnextidr = isset($link) ? mysqli_func_query($getnextidq, $link) : mysqli_func_query($getnextidq);
-    $getnextid = mysqli_func_fetch_assoc($getnextidr);
-    return $getnextid['Rows'];
-    @mysqli_func_result($getnextidr);
-}
+    $connection = ($link instanceof mysqli ? $link : $SQLStat);
 
+    $getnextidq = mysqli_func_pre_query("SHOW TABLE STATUS LIKE '$tablepre$table'", array());
+    $getnextidr = $connection instanceof mysqli ? mysqli_func_query($getnextidq, $connection) : false;
+
+    if ($getnextidr === false) {
+        return false; // Handle query failure
+    }
+
+    $getnextid = mysqli_func_fetch_assoc($getnextidr);
+    @mysqli_func_free_result($getnextidr);
+
+    return $getnextid['Rows'] ?? 0;
+}
 
 // Fetch Number of Rows using COUNT in a single query (uses mysqli_func_fetch_assoc)
 function mysqli_func_count_rows($query, $link = null, $countname = "cnt") {
