@@ -213,19 +213,37 @@ function pdo_sqlite3_func_set_charset($charset, $link = null) {
     return true;
 }
 
-// Fetch Number of Rows using COUNT in a single query
-function pdo_sqlite3_func_count_rows($query, $link = null) {
-    $result = pdo_sqlite3_func_query($query, $link);
-    $row = pdo_sqlite3_func_result($result, 0, 'cnt');
+
+// Fetch Number of Rows using COUNT in a single query (uses pdo_sqlite3_func_fetch_assoc)
+function pdo_sqlite3_func_count_rows($query, $link = null, $countname = "cnt") {
+    $result = pdo_sqlite3_func_query($query, [], $link);  // Pass empty array for params
+    $row = pdo_sqlite3_func_fetch_assoc($result);
+
+    if ($row === false) {
+        return false;  // Handle case if no row is returned
+    }
+
+    // Use the dynamic column name provided by $countname
+    $count = isset($row[$countname]) ? $row[$countname] : 0;
+
     @pdo_sqlite3_func_free_result($result);
-    return $row;
+    return $count;
 }
 
+// Alternative version using pdo_sqlite3_func_fetch_assoc
 function pdo_sqlite3_func_count_rows_alt($query, $link = null) {
-    $result = pdo_sqlite3_func_query($query, $link);
-    $row = pdo_sqlite3_func_result($result, 0);
+    $result = pdo_sqlite3_func_query($query, [], $link);  // Pass empty array for params
+    $row = pdo_sqlite3_func_fetch_assoc($result);
+    
+    if ($row === false) {
+        return false;  // Handle case if no row is returned
+    }
+    
+    // Return first column (assuming single column result like COUNT or similar)
+    $count = reset($row);
+
     @pdo_sqlite3_func_free_result($result);
-    return $row;
+    return $count;
 }
 
 // Free Results

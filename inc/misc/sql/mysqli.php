@@ -252,18 +252,36 @@ function mysqli_func_get_num_rows($tablepre, $table, $link = null) {
     @mysqli_func_result($getnextidr);
 }
 
-// Fetch Number of Rows using COUNT in a single query
-function mysqli_func_count_rows($query, $link = null) {
-    $result = mysqli_func_query($query, $link);
-    $row = mysqli_func_result($result, 0, 'cnt');
-    @mysqli_func_free_result($result);
-    return $row;
+
+// Fetch Number of Rows using COUNT in a single query (uses mysqli_prepare_func_fetch_assoc)
+function mysqli_prepare_func_count_rows($query, $link = null, $countname = "cnt") {
+    $result = mysqli_prepare_func_query($query, [], $link);  // Pass empty array for params
+    $row = mysqli_prepare_func_fetch_assoc($result);
+
+    if ($row === false) {
+        return false;  // Handle case if no row is returned
+    }
+
+    // Use the dynamic column name provided by $countname
+    $count = isset($row[$countname]) ? $row[$countname] : 0;
+
+    @mysqli_prepare_func_free_result($result);
+    return $count;
 }
 
-function mysqli_func_count_rows_alt($query, $link = null) {
-    $result = mysqli_func_query($query, $link);
-    $row = mysqli_func_result($result, 0);
-    @mysqli_func_free_result($result);
-    return $row;
+// Alternative version using mysqli_prepare_func_fetch_assoc
+function mysqli_prepare_func_count_rows_alt($query, $link = null) {
+    $result = mysqli_prepare_func_query($query, [], $link);  // Pass empty array for params
+    $row = mysqli_prepare_func_fetch_assoc($result);
+    
+    if ($row === false) {
+        return false;  // Handle case if no row is returned
+    }
+    
+    // Return first column (assuming single column result like COUNT or similar)
+    $count = reset($row);
+
+    @mysqli_prepare_func_free_result($result);
+    return $count;
 }
 ?>
