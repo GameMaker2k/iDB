@@ -19,42 +19,45 @@ require_once('inc/misc/killglobals.php'); }
 *//* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
 $disfunc = @ini_get("disable_functions");
-$disfunc = @trim($disfunc);
-$disfunc = @preg_replace("/([\\s+|\\t+|\\n+|\\r+|\\0+|\\x0B+])/i", "", $disfunc);
-if($disfunc!="ini_set") { $disfunc = explode(",",$disfunc); }
-if($disfunc=="ini_set") { $disfunc = array("ini_set"); }
-if(!in_array("ini_set", $disfunc)) {
-@ini_set("html_errors", false);
-@ini_set("track_errors", false);
-@ini_set("display_errors", false);
-@ini_set("report_memleaks", false);
-@ini_set("display_startup_errors", false);
-//@ini_set("error_log","logs/error.log"); 
-//@ini_set("log_errors","On"); 
-@ini_set("docref_ext", "");
-@ini_set("docref_root", "http://php.net/"); }
-if(!defined("E_DEPRECATED")) { define("E_DEPRECATED", 0); }
+$disfunc = @preg_replace("/[\s\t\n\r\0\x0B]+/", "", $disfunc);
+$disfunc = $disfunc ? explode(",", $disfunc) : [];
+if (!in_array("ini_set", $disfunc)) {
+    @ini_set("html_errors", false);
+    @ini_set("track_errors", false);
+    @ini_set("display_errors", false);
+    @ini_set("report_memleaks", false);
+    @ini_set("display_startup_errors", false);
+    @ini_set("error_log","logs/error.log"); 
+    @ini_set("log_errors","On"); 
+    @ini_set("docref_ext", "");
+    @ini_set("docref_root", "http://php.net/");
+
+    /* Get rid of session id in URLs */
+    @ini_set("default_mimetype", "text/html");
+    @ini_set("zlib.output_compression", false);
+    @ini_set("zlib.output_compression_level", -1);
+    @ini_set("session.use_trans_sid", false);
+    @ini_set("session.use_cookies", true);
+    @ini_set("session.use_only_cookies", true);
+    @ini_set("url_rewriter.tags", "");
+    @ini_set('zend.ze1_compatibility_mode', 0);
+    @ini_set("ignore_user_abort", 1);
+
+    /* Change session garbage collection settings */
+    @ini_set("session.gc_probability", 1);
+    @ini_set("session.gc_divisor", 100);
+    @ini_set("session.gc_maxlifetime", 1440);
+
+    /* Change session hash type */
+    @ini_set("session.hash_function", 1);
+    @ini_set("session.hash_bits_per_character", 6);
+}
+if (!defined("E_DEPRECATED")) {
+    define("E_DEPRECATED", 0);
+}
 @error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
-/* Get rid of session id in urls */
-if(!in_array("ini_set", $disfunc)) {
-@ini_set("default_mimetype","text/html"); 
-@ini_set("zlib.output_compression", false);
-@ini_set("zlib.output_compression_level", -1);
-@ini_set("session.use_trans_sid", false);
-@ini_set("session.use_cookies", true);
-@ini_set("session.use_only_cookies", true);
-@ini_set("url_rewriter.tags",""); 
-@ini_set('zend.ze1_compatibility_mode', 0);
-@ini_set("ignore_user_abort", 1); }
-@set_time_limit(30); @ignore_user_abort(true);
-/* Change session garbage collection settings */
-if(!in_array("ini_set", $disfunc)) {
-@ini_set("session.gc_probability", 1);
-@ini_set("session.gc_divisor", 100);
-@ini_set("session.gc_maxlifetime", 1440);
-/* Change session hash type here */
-@ini_set("session.hash_function", 1);
-@ini_set("session.hash_bits_per_character", 6); }
+@set_time_limit(30);
+@ignore_user_abort(true);
 /* Do not change anything below this line unless you know what you are doing */
 if(file_exists('extrasettings.php')) {
 	require_once('extrasettings.php'); }

@@ -16,42 +16,45 @@
 /* Some ini setting changes uncomment if you need them. 
    Display PHP Errors */
 $disfunc = @ini_get("disable_functions");
-$disfunc = @trim($disfunc);
-$disfunc = @preg_replace("/([\\s+|\\t+|\\n+|\\r+|\\0+|\\x0B+])/i", "", $disfunc);
-if($disfunc!="ini_set") { $disfunc = explode(",",$disfunc); }
-if($disfunc=="ini_set") { $disfunc = array("ini_set"); }
-if(!in_array("ini_set", $disfunc)) {
-@ini_set("html_errors", true);
-@ini_set("track_errors", true);
-@ini_set("display_errors", true);
-@ini_set("report_memleaks", true);
-@ini_set("display_startup_errors", true);
-//@ini_set("error_log","logs/error.log"); 
-//@ini_set("log_errors","On"); 
-@ini_set("docref_ext", "");
-@ini_set("docref_root", "http://php.net/"); }
-if(!defined("E_DEPRECATED")) { define("E_DEPRECATED", 0); }
-@error_reporting(E_ALL);
-/* Get rid of session id in urls */
-if(!in_array("ini_set", $disfunc)) {
-@ini_set("default_mimetype","text/html"); 
-@ini_set("zlib.output_compression", false);
-@ini_set("zlib.output_compression_level", -1);
-@ini_set("session.use_trans_sid", false);
-@ini_set("session.use_cookies", true);
-@ini_set("session.use_only_cookies", true);
-@ini_set("url_rewriter.tags",""); 
-@ini_set('zend.ze1_compatibility_mode', 0);
-@ini_set("ignore_user_abort", 1); }
-@set_time_limit(30); @ignore_user_abort(true);
-/* Change session garbage collection settings */
-if(!in_array("ini_set", $disfunc)) {
-@ini_set("session.gc_probability", 1);
-@ini_set("session.gc_divisor", 100);
-@ini_set("session.gc_maxlifetime", 1440);
-/* Change session hash type here */
-@ini_set("session.hash_function", 1);
-@ini_set("session.hash_bits_per_character", 6); }
+$disfunc = @preg_replace("/[\s\t\n\r\0\x0B]+/", "", $disfunc);
+$disfunc = $disfunc ? explode(",", $disfunc) : [];
+if (!in_array("ini_set", $disfunc)) {
+    @ini_set("html_errors", false);
+    @ini_set("track_errors", false);
+    @ini_set("display_errors", false);
+    @ini_set("report_memleaks", false);
+    @ini_set("display_startup_errors", false);
+    @ini_set("error_log","logs/error.log"); 
+    @ini_set("log_errors","On"); 
+    @ini_set("docref_ext", "");
+    @ini_set("docref_root", "http://php.net/");
+
+    /* Get rid of session id in URLs */
+    @ini_set("default_mimetype", "text/html");
+    @ini_set("zlib.output_compression", false);
+    @ini_set("zlib.output_compression_level", -1);
+    @ini_set("session.use_trans_sid", false);
+    @ini_set("session.use_cookies", true);
+    @ini_set("session.use_only_cookies", true);
+    @ini_set("url_rewriter.tags", "");
+    @ini_set('zend.ze1_compatibility_mode', 0);
+    @ini_set("ignore_user_abort", 1);
+
+    /* Change session garbage collection settings */
+    @ini_set("session.gc_probability", 1);
+    @ini_set("session.gc_divisor", 100);
+    @ini_set("session.gc_maxlifetime", 1440);
+
+    /* Change session hash type */
+    @ini_set("session.hash_function", 1);
+    @ini_set("session.hash_bits_per_character", 6);
+}
+if (!defined("E_DEPRECATED")) {
+    define("E_DEPRECATED", 0);
+}
+@error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
+@set_time_limit(30);
+@ignore_user_abort(true);
 /* Do not change anything below this line unless you know what you are doing */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name=="sql.php"||$File3Name=="/sql.php") {
@@ -256,9 +259,9 @@ register_shutdown_function('shutdownHandler');
 set_exception_handler('customExceptionHandler');
 
 if(isset($Settings['qstr'])&&isset($Settings['qstr'])) {
-if(!in_array("ini_set", $disfunc)&&$Settings['qstr']!="/"&&$Settings['qstr']!="&") {
-ini_set("arg_separator.output",htmlentities($Settings['qstr'], ENT_QUOTES, $Settings['charset']));
-ini_set("arg_separator.input",$Settings['qstr']); } } }
+if (!in_array("ini_set", $disfunc) && $Settings['qstr'] !== "/" && $Settings['qstr'] !== "&") {
+    @ini_set("arg_separator.output", htmlentities($Settings['qstr'], ENT_QUOTES, $Settings['charset']));
+    @ini_set("arg_separator.input", $Settings['qstr']); } } }
 if(!isset($Settings['idburl'])) { $Settings['idburl'] = null; }
 if(isset($Settings['BoardUUID'])) { $Settings['BoardUUID'] = base64_decode($Settings['BoardUUID']); 
 header("Board-Unique-ID: ".$Settings['BoardUUID']); }
@@ -364,8 +367,8 @@ if($Settings['charset']!="ISO-8859-15"&&$Settings['charset']!="ISO-8859-1"&&
 	$Settings['charset']!="Shift_JIS"&&$Settings['charset']!="EUC-JP") {
 	$Settings['charset'] = "ISO-8859-15"; } }
 	$chkcharset = $Settings['charset'];
-if(!in_array("ini_set", $disfunc)) {
-@ini_set('default_charset', $Settings['charset']); }
+if (!in_array("ini_set", $disfunc)) {
+    @ini_set('default_charset', $Settings['charset']); }
 //session_save_path($SettDir['inc']."temp/");
 if(!isset($Settings['sqldb'])) { 
 if(file_exists("install.php")) { header('Location: install.php?act=part1'); die(); } 
@@ -478,8 +481,8 @@ if($cookieDomain=="localhost") { $cookieDomain = false; }
 if($Settings['enable_https']=="on") {
  if($URLsTest['scheme']=="https") { $cookieSecure = true; }
  if($URLsTest['scheme']!="https") { $cookieSecure = false; } } }
-if(!in_array("ini_set", $disfunc)) {
-@ini_set('default_charset', $Settings['charset']); }
+if (!in_array("ini_set", $disfunc)) {
+    @ini_set('default_charset', $Settings['charset']); }
 $File1Name = dirname($_SERVER['SCRIPT_NAME'])."/";
 $File2Name = $_SERVER['SCRIPT_NAME'];
 /*$File3Name=str_replace($File1Name, null, $File2Name);
@@ -870,7 +873,6 @@ session_start([
 if(!isset($_SESSION['UserFormID'])) { $_SESSION['UserFormID'] = null; }
 $iDBSessCloseDB = false;
 $_SESSION['ShowActHidden'] = "no";
-output_reset_rewrite_vars();
 require($SettDir['inc'].'prelogin.php'); 
 session_write_close(); } }
 session_set_save_handler("sql_session_open", "sql_session_close", "sql_session_read", "sql_session_write", "sql_session_destroy", "sql_session_gc");
@@ -892,44 +894,48 @@ $iDBSessCloseDB = true;
 output_reset_rewrite_vars();
 //@register_shutdown_function("session_write_close");
 //header("Set-Cookie: PHPSESSID=" . session_id() . "; path=".$cbasedir);
-if(!in_array("ini_set", $disfunc)) {
-// Set user agent if we can use ini_set and have to do any http requests. :P 
-$iverstring = "FR 0.0.0 ".$VER2[2]." 0";
-if($Settings['hideverinfohttp']=="off") {
-	$iverstring = $VER2[1]." ".$VER1[0].".".$VER1[1].".".$VER1[2]." ".$VER2[2]." ".$SubVerN; }
-if($Settings['hideverinfohttp']=="on") {
-	$iverstring = "FR 0.0.0 ".$VER2[2]." 0"; }
-$qstrtest = htmlentities($Settings['qstr'], ENT_QUOTES, $Settings['charset']);
-$qseptest = htmlentities($Settings['qsep'], ENT_QUOTES, $Settings['charset']);
-$isiteurl = $Settings['idburl'].url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index']);
-@ini_set("user_agent", "Mozilla/5.0 (compatible; ".$UserAgentName."/".$iverstring."; +".$isiteurl.")"); 
-if (function_exists("stream_context_create")) {
-$iopts = array(
-  'http' => array(
-    'method' => "GET",
-    'header' => "Accept-Language: *\r\n".
-                "User-Agent: Mozilla/5.0 (compatible; ".$UserAgentName."/".$iverstring."; +".$isiteurl.")\r\n".
-                "Accept: */*\r\n".
-                "Connection: keep-alive\r\n".
-                "Referer: ".$isiteurl."\r\n".
-                "From: ".$isiteurl."\r\n".
-                "Via: ".$_SERVER['REMOTE_ADDR']."\r\n".
-                "Forwarded: ".$_SERVER['REMOTE_ADDR']."\r\n".
-                "X-Real-IP: ".$_SERVER['REMOTE_ADDR']."\r\n".
-                "X-Forwarded-For: ".$_SERVER['REMOTE_ADDR']."\r\n".
-                "X-Forwarded-Host: ".$URLsTest['host']."\r\n".
-                "X-Forwarded-Proto: ".$URLsTest['scheme']."\r\n".
-                "Board-Unique-ID: ".$Settings['BoardUUID']."\r\n".
-                "Client-IP: ".$_SERVER['REMOTE_ADDR']."\r\n"
-  )
-);
-$icontext = stream_context_create($iopts); 
-function file_get_contents_alt($filename,$use_include_path=null,$offset=-1,$maxlen=null) {
-global $icontext;
-if($maxlen!==null) {
-return file_get_contents($filename,$use_include_path,$icontext,$offset,$maxlen); }
-if($maxlen===null) {
-return file_get_contents($filename,$use_include_path,$icontext,$offset); } } } }
+if (!in_array("ini_set", $disfunc)) {
+    // Set user agent if ini_set is available and HTTP requests are required.
+    $iverstring = $Settings['hideverinfohttp'] === "on" ? "FR 0.0.0 ".$VER2[2]." 0" : $VER2[1]." ".$VER1[0].".".$VER1[1].".".$VER1[2]." ".$VER2[2]." ".$SubVerN;
+    
+    $qstrtest = htmlentities($Settings['qstr'], ENT_QUOTES, $Settings['charset']);
+    $qseptest = htmlentities($Settings['qsep'], ENT_QUOTES, $Settings['charset']);
+    
+    $isiteurl = $Settings['idburl'] . url_maker($exfile['index'], $Settings['file_ext'], "act=view", $Settings['qstr'], $Settings['qsep'], $prexqstr['index'], $exqstr['index']);
+    
+    @ini_set("user_agent", "Mozilla/5.0 (compatible; ".$UserAgentName."/".$iverstring."; +".$isiteurl.")");
+    
+    if (function_exists("stream_context_create")) {
+        $iopts = array(
+            'http' => array(
+                'method' => "GET",
+                'header' => 
+                    "Accept-Language: *\r\n" .
+                    "User-Agent: Mozilla/5.0 (compatible; ".$UserAgentName."/".$iverstring."; +".$isiteurl.")\r\n" .
+                    "Accept: */*\r\n" .
+                    "Connection: keep-alive\r\n" .
+                    "Referer: ".$isiteurl."\r\n" .
+                    "From: ".$isiteurl."\r\n" .
+                    "Via: ".$_SERVER['REMOTE_ADDR']."\r\n" .
+                    "Forwarded: ".$_SERVER['REMOTE_ADDR']."\r\n" .
+                    "X-Real-IP: ".$_SERVER['REMOTE_ADDR']."\r\n" .
+                    "X-Forwarded-For: ".$_SERVER['REMOTE_ADDR']."\r\n" .
+                    "X-Forwarded-Host: ".$URLsTest['host']."\r\n" .
+                    "X-Forwarded-Proto: ".$URLsTest['scheme']."\r\n" .
+                    "Board-Unique-ID: ".$Settings['BoardUUID']."\r\n" .
+                    "Client-IP: ".$_SERVER['REMOTE_ADDR']."\r\n"
+            )
+        );
+        $icontext = stream_context_create($iopts);
+
+        function file_get_contents_alt($filename, $use_include_path = null, $offset = -1, $maxlen = null) {
+            global $icontext;
+            return $maxlen !== null 
+                ? file_get_contents($filename, $use_include_path, $icontext, $offset, $maxlen)
+                : file_get_contents($filename, $use_include_path, $icontext, $offset);
+        }
+    }
+}
 $iDBVerName = $VerCheckName."|".$VER2[1]."|".$VER1[0].".".$VER1[1].".".$VER1[2]."|".$VER2[2]."|".$SubVerN;
 /* 
 This way checks iDB version by sending the iDBVerName to the iDB Version Checker.

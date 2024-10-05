@@ -116,7 +116,9 @@ function change_title($new_title, $use_gzip = "off", $gzip_type = "gzip") {
     $output = preg_replace("/<meta itemprop=\"title\" property=\"twitter:title\" content=\"(.*?)\" \/>/i", "<meta itemprop=\"title\" property=\"twitter:title\" content=\"" . $meta_title . "\" />", $output);
     $output = preg_replace("/<meta name=\"title\" content=\"(.*?)\" \/>/i", "<meta name=\"title\" content=\"" . $meta_title . "\" />", $output);
     $output = clean_html_output($output);
-    send_output($output, $urlstatus, $gzip_type, $use_gzip);
+    send_output($output, $urlstatus, $gzip_type, $use_gzip);    
+    // Reset rewrite variables after sending output
+    output_reset_rewrite_vars();
 }
 
 // Fix amp => (&) to &amp; and gzip page
@@ -136,7 +138,9 @@ function fix_amp($use_gzip = "off", $gzip_type = "gzip") {
     $qstrcode = htmlentities($Settings['qstr'], ENT_QUOTES, $Settings['charset']);
     $output = str_replace($Settings['qstr'] . $SessName, $qstrcode . $SessName, $output);
     $output = clean_html_output($output);
-    send_output($output, $urlstatus, $gzip_type, $use_gzip);
+    send_output($output, $urlstatus, $gzip_type, $use_gzip);    
+    // Reset rewrite variables after sending output
+    output_reset_rewrite_vars();
 }
 
 // GZip page for faster download
@@ -149,7 +153,9 @@ function gzip_page($use_gzip = "off", $gzip_type = "gzip") {
     $gzip_type = in_array($gzip_type, ["gzip", "deflate", "brotli", "zstd"]) ? $gzip_type : "gzip";
     $output = trim(ob_get_clean());
     $output = clean_html_output($output);
-    send_output($output, $urlstatus, $gzip_type, $use_gzip);
+    send_output($output, $urlstatus, $gzip_type, $use_gzip);    
+    // Reset rewrite variables after sending output
+    output_reset_rewrite_vars();
 }
 
 $foo="bar"; $$foo="foo";
