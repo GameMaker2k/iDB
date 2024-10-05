@@ -178,8 +178,15 @@ function pgsql_prepare_func_escape_string($string, $link = null) {
     return isset($link) ? pg_escape_string($link, $string) : pg_escape_string($SQLStat, $string);
 }
 
+// Execute a query
+if (!isset($NumPreQueriesArray['pgsql_prepare'])) {
+    $NumPreQueriesArray['pgsql_prepare'] = 0;
+}
+
 // SafeSQL Lite with additional SafeSQL features for PostgreSQL
 function pgsql_prepare_func_pre_query($query_string, $query_vars) {
+    global $NumPreQueriesArray;
+
     if ($query_vars === null || !is_array($query_vars)) {
         $query_vars = [];
     }
@@ -199,6 +206,8 @@ function pgsql_prepare_func_pre_query($query_string, $query_vars) {
     $query_vars = array_filter($query_vars, function ($value) {
         return $value !== null;
     });
+
+    ++$NumPreQueriesArray['pgsql_prepare'];
 
     // Return the modified query string and the variables for further execution
     return [$query_string, $query_vars];

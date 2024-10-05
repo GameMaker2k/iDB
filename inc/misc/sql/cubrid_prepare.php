@@ -164,8 +164,15 @@ function cubrid_prepare_func_escape_string($string, $link = null) {
     return cubrid_real_escape_string($string, $link);
 }
 
+// Execute a query
+if (!isset($NumPreQueriesArray['cubrid_prepare'])) {
+    $NumPreQueriesArray['cubrid_prepare'] = 0;
+}
+
 // SafeSQL Lite with additional SafeSQL features
 function cubrid_prepare_func_pre_query($query_string, $query_vars) {
+    global $NumPreQueriesArray;
+
     if ($query_vars === null || !is_array($query_vars)) {
         $query_vars = [];
     }
@@ -188,6 +195,8 @@ function cubrid_prepare_func_pre_query($query_string, $query_vars) {
         output_error("SQL Placeholder Error: Mismatch between placeholders ($placeholder_count) and parameters ($params_count).", E_USER_ERROR);
         return false;
     }
+
+    ++$NumPreQueriesArray['cubrid_prepare'];
 
     // Return the query string and the array of variables
     return [$query_string, $query_vars];

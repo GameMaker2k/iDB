@@ -175,8 +175,15 @@ function sqlsrv_prepare_func_escape_string($string, $link = null) {
     return $string; // SQLSRV does not have a string escape function; use parameterized queries instead.
 }
 
+// Execute a query
+if (!isset($NumPreQueriesArray['sqlsrv_prepare'])) {
+    $NumPreQueriesArray['sqlsrv_prepare'] = 0;
+}
+
 // Pre-process Query for SQLSRV
 function sqlsrv_prepare_func_pre_query($query_string, $query_vars = []) {
+    global $NumPreQueriesArray;
+
     if ($query_vars === null || !is_array($query_vars)) {
         $query_vars = [];
     }
@@ -197,6 +204,8 @@ function sqlsrv_prepare_func_pre_query($query_string, $query_vars = []) {
         output_error("SQL Placeholder Error: Mismatch between placeholders ($placeholder_count) and parameters ($params_count).", E_USER_ERROR);
         return false;
     }
+
+    ++$NumPreQueriesArray['sqlsrv_prepare'];
 
     return [$query_string, $query_vars];
 }

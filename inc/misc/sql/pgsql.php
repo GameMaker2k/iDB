@@ -161,10 +161,17 @@ function pgsql_func_escape_string($string, $link = null) {
     return isset($link) ? pg_escape_string($link, $string) : pg_escape_string($SQLStat, $string);
 }
 
+// Execute a query
+if (!isset($NumPreQueriesArray['pgsql'])) {
+    $NumPreQueriesArray['pgsql'] = 0;
+}
+
 // SafeSQL Lite Source Code by Cool Dude 2k
 // Make SQL Query's safe
 // SafeSQL Lite with additional SafeSQL features
 function pgsql_func_pre_query($query_string, $query_vars) {
+    global $NumPreQueriesArray;
+
     // If no query variables are provided, initialize with a single element array containing null
     if ($query_vars == null) {
         $query_vars = array(null);
@@ -200,6 +207,8 @@ function pgsql_func_pre_query($query_string, $query_vars) {
 
     // Set the first element of the array to be the query string
     $query_val[0] = $query_string;
+
+    ++$NumPreQueriesArray['pgsql'];
 
     // Use sprintf to inject the variables into the query string safely
     return call_user_func_array("sprintf", $query_val);

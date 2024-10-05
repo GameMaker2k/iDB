@@ -87,6 +87,7 @@ function handle_conditional_parts(&$query_string, &$query_vars) {
 }
 
 $NumQueriesArray = array();
+$NumPreQueriesArray = array();
 if (file_exists($SettDir['sql'] . "mysql.php")&&function_exists("mysql_connect")) {
     require($SettDir['sql'] . "mysql.php");
 }
@@ -195,7 +196,7 @@ if (!isset($NumQueries)) {
     $NumQueries = 0;
 }
 if (!isset($NumQueriesArray['sql'])) {
-    $NumQueriesArray['sql'] = $NumQueries;
+    $NumQueriesArray['sql'] = 0;
 }
 
 function sql_query($query, $link = null, $sqllib = null) {
@@ -203,6 +204,7 @@ function sql_query($query, $link = null, $sqllib = null) {
     $returnval = call_sql_function('query', $sqllib, $query, $link);
     if ($returnval) {
         ++$NumQueries;
+		++$NumQueriesArray['sql'];
     }
     return $returnval;
 }
@@ -251,11 +253,26 @@ function sql_escape_string($string, $link = null, $sqllib = null) {
     return call_sql_function('escape_string', $sqllib, $string, $link);
 }
 
+if (!isset($NumQueries)) {
+    $NumPreQueries = 0;
+}
+if (!isset($NumQueriesArray['sql'])) {
+    $NumPreQueriesArray['sql'] = $NumQueries;
+}
+
 function sql_pre_query($query_string, $query_vars, $sqllib = null) {
+	global $NumPreQueries, $NumPreQueriesArray;
+
+    if ($returnval) {
+        ++$NumPreQueries;
+        ++$NumPreQueriesArray['sql'];
+    }
+
     return call_sql_function('pre_query', $sqllib, $query_string, $query_vars);
 }
 
 function sql_set_charset($charset, $link = null, $sqllib = null) {
+    global $NumPreQueries, $NumQueriesArray;
     return call_sql_function('set_charset', $sqllib, $charset, $link);
 }
 

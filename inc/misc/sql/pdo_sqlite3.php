@@ -173,8 +173,15 @@ function pdo_sqlite3_func_escape_string($string, $link = null) {
     return $escaped_string;
 }
 
+// Execute a query
+if (!isset($NumPreQueriesArray['pdo_sqlite3'])) {
+    $NumPreQueriesArray['pdo_sqlite3'] = 0;
+}
+
 // Pre-process query for SQLite with PDO support
 function pdo_sqlite3_func_pre_query($query_string, $query_vars = []) {
+    global $NumPreQueriesArray;
+
     if ($query_vars === null || !is_array($query_vars)) {
         $query_vars = [];
     }
@@ -196,6 +203,8 @@ function pdo_sqlite3_func_pre_query($query_string, $query_vars = []) {
         output_error("SQL Placeholder Error: Mismatch between placeholders ($placeholder_count) and parameters ($params_count).", E_USER_ERROR);
         return false;
     }
+
+    ++$NumPreQueriesArray['pdo_sqlite3'];
 
     // Return the query string and variables for further execution
     return [$query_string, $query_vars];

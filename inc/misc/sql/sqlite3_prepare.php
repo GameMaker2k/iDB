@@ -186,9 +186,16 @@ function sqlite3_prepare_func_escape_string($string, $link = null) {
     return SQLite3::escapeString($string);
 }
 
+// Execute a query
+if (!isset($NumPreQueriesArray['sqlite3_prepare'])) {
+    $NumPreQueriesArray['sqlite3_prepare'] = 0;
+}
+
 // SafeSQL Lite Source Code by Cool Dude 2k
 // Make SQL Query's safe
 function sqlite3_prepare_func_pre_query($query_string, $query_vars = []) {
+    global $NumPreQueriesArray;
+
     if ($query_vars === null || !is_array($query_vars)) {
         $query_vars = [];
     }
@@ -211,6 +218,8 @@ function sqlite3_prepare_func_pre_query($query_string, $query_vars = []) {
         output_error("SQL Placeholder Error: Mismatch between placeholders ($placeholder_count) and parameters ($params_count).", E_USER_ERROR);
         return false;
     }
+
+    ++$NumPreQueriesArray['sqlite3_prepare'];
 
     // Return the query string and the array of variables
     return [$query_string, $query_vars];

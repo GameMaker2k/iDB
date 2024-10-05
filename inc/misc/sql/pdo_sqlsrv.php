@@ -216,8 +216,15 @@ function pdo_sqlsrv_func_escape_string($string, $link = null) {
     return $pdo->quote($string);
 }
 
+// Execute a query
+if (!isset($NumPreQueriesArray['pdo_sqlsrv'])) {
+    $NumPreQueriesArray['pdo_sqlsrv'] = 0;
+}
+
 // Pre-process Query for SQLSRV
 function pdo_sqlsrv_func_pre_query($query_string, $query_vars = []) {
+    global $NumPreQueriesArray;
+
     if ($query_vars === null || !is_array($query_vars)) {
         $query_vars = [];
     }
@@ -239,6 +246,8 @@ function pdo_sqlsrv_func_pre_query($query_string, $query_vars = []) {
         output_error("SQL Placeholder Error: Mismatch between placeholders ($placeholder_count) and parameters ($params_count).", E_USER_ERROR);
         return false;
     }
+
+    ++$NumPreQueriesArray['pdo_sqlsrv'];
 
     // Return the query string and variables for further execution
     return [$query_string, $query_vars];

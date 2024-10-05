@@ -194,12 +194,24 @@ function mysqli_prepare_func_fetch_row($stmt) {
     return array_values($result);
 }
 
+// Execute a query
+if (!isset($NumPreQueriesArray['mysqli_prepare'])) {
+    $NumPreQueriesArray['mysqli_prepare'] = 0;
+}
+
 // Escape string
 function mysqli_prepare_func_escape_string($string, $link = null) {
+    global $NumPreQueriesArray;
+
     global $SQLStat;
     if (!isset($string)) return null;
     $connection = ($link instanceof mysqli ? $link : $SQLStat);
     return $connection instanceof mysqli ? mysqli_real_escape_string($connection, $string) : false;
+}
+
+// Execute a query
+if (!isset($NumPreQueriesArray['mysqli_prepare'])) {
+    $NumPreQueriesArray['mysqli_prepare'] = 0;
 }
 
 // SafeSQL Lite with prepared statements and placeholders
@@ -226,6 +238,8 @@ function mysqli_prepare_func_pre_query($query_string, $query_vars) {
         output_error("SQL Placeholder Error: Mismatch between placeholders ($placeholder_count) and parameters ($params_count).", E_USER_ERROR);
         return false;
     }
+
+        ++$NumPreQueriesArray['mysqli_prepare'];
 
     // Return the query string and the array of variables
     return [$query_string, $query_vars];
