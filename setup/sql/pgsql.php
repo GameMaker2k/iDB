@@ -111,8 +111,10 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."forums\" (\n".
 ");", null);
 sql_query($query,$SQLStat);
 if($_POST['startblank']=="no") {
+$cnum = 0;
+if($_POST['testdata']=="yes") { $cnum = 1; }
 $query = sql_pre_query("INSERT INTO \"".$_POST['tableprefix']."forums\" (\"CategoryID\", \"OrderID\", \"Name\", \"ShowForum\", \"ForumType\", \"InSubForum\", \"RedirectURL\", \"Redirects\", \"NumViews\", \"Description\", \"PostCountAdd\", \"PostCountView\", \"KarmaCountView\", \"CanHaveTopics\", \"HotTopicPosts\", \"NumPosts\", \"NumTopics\") VALUES\n".
-"(1, 1, 'A Test Forum', 'yes', 'forum', 0, 'http://', 0, 0, 'A test forum that may be removed at any time.', 'off', 0, 0, 'yes', 15, 1, 1);", null);
+"(1, 1, 'A Test Forum', 'yes', 'forum', 0, 'http://', 0, 0, 'A test forum that may be removed at any time.', 'off', 0, 0, 'yes', 15, %i, %i);", array($cnum, $cnum));
 sql_query($query,$SQLStat); }
 $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."groups\" (\n".
 "  \"id\" SERIAL PRIMARY KEY NOT NULL,\n".
