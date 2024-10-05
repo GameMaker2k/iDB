@@ -41,7 +41,10 @@ if (!isset($NumQueriesArray['sqlsrv_prepare'])) {
 }
 
 function sqlsrv_prepare_func_query($query, $params = [], $link = null) {
-    global $NumQueriesArray;
+    global $NumQueriesArray, $SQLStat;
+
+    // Check if $link is null, if so set to $SQLStat
+    $link = $link ?? $SQLStat;
 
     // If the query is provided as an array (query string and parameters)
     if (is_array($query)) {
