@@ -64,7 +64,8 @@ if(file_exists('extendsettings.php')) {
 // Configuration settings
 $errorDisplay = true;  // Set to true to display errors on the screen
 $errorLogFile = true;  // Set to true to log errors to a file
-$logFilePath = $SettDir['maindir'] . $SettDir['logs'] . '/php_error_log.txt';  // Define your log file path
+if(!isset($SettDir['logs'])) { $SettDir['logs'] = "./logs"; }
+$logFilePath = $SettDir['logs'] . 'php_error_log.txt';  // Define your log file path
 
 // Custom Error Handler Function
 function customErrorHandler($errno, $errstr, $errfile, $errline) {

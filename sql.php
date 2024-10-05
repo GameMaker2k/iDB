@@ -21,17 +21,17 @@ $disfunc = @preg_replace("/([\\s+|\\t+|\\n+|\\r+|\\0+|\\x0B+])/i", "", $disfunc)
 if($disfunc!="ini_set") { $disfunc = explode(",",$disfunc); }
 if($disfunc=="ini_set") { $disfunc = array("ini_set"); }
 if(!in_array("ini_set", $disfunc)) {
-@ini_set("html_errors", false);
-@ini_set("track_errors", false);
-@ini_set("display_errors", false);
-@ini_set("report_memleaks", false);
-@ini_set("display_startup_errors", false);
+@ini_set("html_errors", true);
+@ini_set("track_errors", true);
+@ini_set("display_errors", true);
+@ini_set("report_memleaks", true);
+@ini_set("display_startup_errors", true);
 //@ini_set("error_log","logs/error.log"); 
 //@ini_set("log_errors","On"); 
 @ini_set("docref_ext", "");
 @ini_set("docref_root", "http://php.net/"); }
 if(!defined("E_DEPRECATED")) { define("E_DEPRECATED", 0); }
-@error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
+@error_reporting(E_ALL);
 /* Get rid of session id in urls */
 if(!in_array("ini_set", $disfunc)) {
 @ini_set("default_mimetype","text/html"); 
@@ -67,7 +67,8 @@ if(file_exists('settings.php')) {
 // Configuration settings
 $errorDisplay = true;  // Set to true to display errors on the screen
 $errorLogFile = true;  // Set to true to log errors to a file
-$logFilePath = $SettDir['maindir'] . $SettDir['logs'] . '/php_error_log.txt';  // Define your log file path
+if(!isset($SettDir['logs'])) { $SettDir['logs'] = "./logs"; }
+$logFilePath = $SettDir['logs'] . 'php_error_log.txt';  // Define your log file path
 
 // Custom Error Handler Function
 function customErrorHandler($errno, $errstr, $errfile, $errline) {
