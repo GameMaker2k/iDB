@@ -73,9 +73,9 @@ $gresults=sql_query($gquerys,$SQLStat);
 $gresults_array = sql_fetch_assoc($gresults);
 $VGroupID=$gresults_array['id'];
 sql_free_result($gresults);
+$getmemidnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE (\"GroupID\"=%i AND \"id\"<>-1) OR (\"Validated\"='no' AND \"id\"<>-1)", array($VGroupID), $SQLStat);
 $getmemidq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE (\"GroupID\"=%i AND \"id\"<>-1) OR (\"Validated\"='no' AND \"id\"<>-1)", array($VGroupID));
 $getmemidr=sql_query($getmemidq,$SQLStat);
-$getmemidnum=sql_num_rows($getmemidr);
 $getmemidi = 0;
 if($getmemidnum<1) { ?>
 	<option value="0">None</option>
@@ -117,9 +117,9 @@ $gresults=sql_query($gquerys,$SQLStat);
 $gresults_array = sql_fetch_assoc($gresults);
 $VGroupID=$gresults_array['id'];
 sql_free_result($gresults);
+$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_POST['id']), $SQLStat);
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_POST['id']));
 $result=sql_query($query,$SQLStat);
-$num=sql_num_rows($result);
 $result_array = sql_fetch_assoc($result);
 $VMemName=$result_array['Name'];
 $VMemGroup=$result_array['GroupID'];
@@ -188,10 +188,10 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Deleting Members";
 <tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="id">Member to delete:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="id" id="id">
-<?php 
+<?php
+$getmemidnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE (\"id\"<>-1 AND \"id\"<>1)", null, $SQLStat);
 $getmemidq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE (\"id\"<>-1 AND \"id\"<>1)", null);
 $getmemidr=sql_query($getmemidq,$SQLStat);
-$getmemidnum=sql_num_rows($getmemidr);
 $getmemidi = 0;
 if($getmemidnum<1) { ?>
 	<option value="0">None</option>
@@ -311,10 +311,10 @@ $_POST['search'] = remove_spaces($_POST['search']);
 <tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="id">Member to edit:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="id" id="id">
-<?php 
+<?php
+$getmemidnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"Name\" LIKE '%s' AND (\"id\"<>-1)", array($_POST['search']), $SQLStat);
 $getmemidq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"Name\" LIKE '%s' AND (\"id\"<>-1)", array($_POST['search']));
 $getmemidr=sql_query($getmemidq,$SQLStat);
-$getmemidnum=sql_num_rows($getmemidr);
 $getmemidi = 0;
 if($getmemidnum<1) { ?>
 	<option value="0">None</option>
@@ -347,9 +347,9 @@ sql_free_result($getmemidr); ?>
 <?php } if($_POST['act']=="editmember"&&$_POST['update']!="now"&&$_GET['act']=="editmember"&&
 	($_POST['id']!="0"||$_POST['id']!="-1")) { 
 $admincptitle = " ".$ThemeSet['TitleDivider']." Editing Members";
+$num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_POST['id']), $SQLStat);
 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_POST['id']));
 $result=sql_query($query,$SQLStat);
-$num=sql_num_rows($result);
 if($num<1) {
 redirect("location",$rbasedir.url_maker($exfile['admin'],$Settings['file_ext'],"act=editmember",$Settings['qstr'],$Settings['qsep'],$prexqstr['admin'],$exqstr['admin'],false));
 ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
@@ -404,9 +404,9 @@ $EditMem['PostCount']=$result_array['PostCount'];
 $EditMem['Karma']=$result_array['Karma'];
 $EditMem['TimeZone']=$result_array['TimeZone'];
 $EditMem['IP']=$result_array['IP'];
+$mpnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."mempermissions\" WHERE \"id\"=%i LIMIT 1", array($_POST['id']), $SQLStat);
 $mpquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."mempermissions\" WHERE \"id\"=%i LIMIT 1", array($_POST['id']));
 $mpresult=sql_query($mpquery,$SQLStat);
-$mpnum=sql_num_rows($mpresult);
 $mpresult_array = sql_fetch_assoc($mpresult);
 $EditMemPerm['PermissionID'] = $mpresult_array['PermissionID'];
 $EditMemPerm['CanViewBoard'] = $mpresult_array['CanViewBoard'];
@@ -427,9 +427,9 @@ $EditMemPerm['HasAdminCP'] = $mpresult_array['HasAdminCP'];
 $EditMemPerm['ViewDBInfo'] = $mpresult_array['ViewDBInfo'];
 $MemIPList[0] = $EditMem['IP'];
 $MemIPArrayNum = 1;
+$mppnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."posts\" WHERE \"UserID\"=%i ORDER BY \"TimeStamp\" ASC ", array($EditMem['ID']), $SQLStat);
 $MemPostIP = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"UserID\"=%i ORDER BY \"TimeStamp\" ASC ", array($EditMem['ID']));
 $mppresult = sql_query($MemPostIP,$SQLStat);
-$mppnum = sql_num_rows($mppresult);
 $mppi = 0;
 while ($mppi < $mppnum) {
 $mppresult_array = sql_fetch_assoc($mppresult);
@@ -443,9 +443,9 @@ $MemIPList[$MemIPArrayNum] = $MemPostCheckEditIP;
 ++$MemIPArrayNum; }
 ++$mppi; }
 sql_free_result($mppresult);
+$mepnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."posts\" WHERE \"UserID\"=%i ORDER BY \"TimeStamp\" ASC ", array($EditMem['ID']), $SQLStat);
 $MemEventIP = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."posts\" WHERE \"UserID\"=%i ORDER BY \"TimeStamp\" ASC ", array($EditMem['ID']));
 $mepresult = sql_query($MemEventIP,$SQLStat);
-$mepnum = sql_num_rows($mepresult);
 $mepi = 0;
 while ($mepi < $mepnum) {
 $mepresult_array = sql_fetch_assoc($mepresult);
@@ -506,10 +506,10 @@ $fulliplist = $fulliplist." <a onclick=\"window.open(this.href);return false;\" 
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="gid">New Group for Member:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="gid" id="gid">
-<?php 
+<?php
+$getgrpidnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."groups\" WHERE (\"Name\"<>'%s' AND \"Name\"<>'%s')", array($Settings['GuestGroup'],$Settings['ValidateGroup']), $SQLStat);
 $getgrpidq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE (\"Name\"<>'%s' AND \"Name\"<>'%s')", array($Settings['GuestGroup'],$Settings['ValidateGroup']));
 $getgrpidr=sql_query($getgrpidq,$SQLStat);
-$getgrpidnum=sql_num_rows($getgrpidr);
 $getgrpidi = 0;
 if($getgrpidnum<1) { ?>
 	<option value="0">None</option>
@@ -530,10 +530,10 @@ sql_free_result($getgrpidr); ?>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="lid">New Level for Member:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="lid" id="lid">
-<?php 
+<?php
+$getlevidnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."levels\" WHERE (\"Name\"<>'%s' AND \"id\"<>%i)", array("Guest",-1), $SQLStat);
 $getlevidq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."levels\" WHERE (\"Name\"<>'%s' AND \"id\"<>%i)", array("Guest",-1));
 $getlevidr=sql_query($getlevidq,$SQLStat);
-$getlevidnum=sql_num_rows($getlevidr);
 $getlevidi = 0;
 if($getlevidnum<1) { ?>
 	<option value="0">None</option>
@@ -553,10 +553,10 @@ sql_free_result($getlevidr); ?>
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="rid">New Rank for Member:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="rid" id="rid">
-<?php 
+<?php
+$getranidnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."ranks\" WHERE (\"Name\"<>'%s' AND \"id\"<>%i)", array("Guest",-1), $SQLStat);
 $getranidq = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."ranks\" WHERE (\"Name\"<>'%s' AND \"id\"<>%i)", array("Guest",-1));
 $getranidr=sql_query($getranidq,$SQLStat);
-$getranidnum=sql_num_rows($getranidr);
 $getranidi = 0;
 if($getranidnum<1) { ?>
 	<option value="0">None</option>
@@ -610,20 +610,21 @@ if($Settings['sqltype']=="mysql"||
 	$Settings['sqltype']=="sqlite3"||
 	$Settings['sqltype']=="sqlite3_prepare"||
 	$Settings['sqltype']=="pdo_sqlite3") {
+$getperidnum = sql_count_rows(sql_pre_query("SELECT COUNT(DISTINCT \"PermissionID\") AS cnt FROM \"".$Settings['sqltable']."permissions\"", null), $SQLStat);
 $getperidq = sql_pre_query("SELECT DISTINCT \"PermissionID\" FROM \"".$Settings['sqltable']."permissions\"", null); }
 if($Settings['sqltype']=="cubrid"||
 	$Settings['sqltype']=="cubrid_prepare"||
 	$Settings['sqltype']=="pdo_cubrid") {
+$getperidnum = sql_count_rows(sql_pre_query("SELECT COUNT(DISTINCT \"permissionid\") AS cnt FROM \"".$Settings['sqltable']."permissions\"", null), $SQLStat);
 $getperidq = sql_pre_query("SELECT DISTINCT \"permissionid\" FROM \"".$Settings['sqltable']."permissions\"", null); }
 $getperidr=sql_query($getperidq,$SQLStat);
-$getperidnum=sql_num_rows($getperidr);
 $getperidi = 0;
 while ($getperidi < $getperidnum) {
 $getperidr_array = sql_fetch_assoc($getperidr);
 $getperidID=$getperidr_array['PermissionID'];
+$getperidnum2=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i ORDER BY \"PermissionID\" ASC", array($getperidID), $SQLStat);
 $getperidq2 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."permissions\" WHERE \"PermissionID\"=%i ORDER BY \"PermissionID\" ASC", array($getperidID));
 $getperidr2=sql_query($getperidq2,$SQLStat);
-$getperidnum2=sql_num_rows($getperidr2);
 $getperidr2_array = sql_fetch_assoc($getperidr2);
 $getperidName=$getperidr2_array['Name'];
 sql_free_result($getperidr2);
@@ -797,8 +798,8 @@ $r1query = sql_pre_query("UPDATE \"".$Settings['sqltable']."posts\" SET \"GuestN
 sql_query($r1query,$SQLStat);
 $r2query = sql_pre_query("UPDATE \"".$Settings['sqltable']."posts\" SET \"EditUserName\"='%s' WHERE \"EditUser\"=%i", array($_POST['MemName'],$_POST['id']));
 sql_query($r2query,$SQLStat);
+$username_check=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s'", array($_POST['MemName']), $SQLStat);
 $sql_username_check = sql_query(sql_pre_query("SELECT \"Name\" FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s'", array($_POST['MemName'])),$SQLStat);
-$username_check = sql_num_rows($sql_username_check);
 sql_free_result($sql_username_check); }
 if($_POST['MemHidden']!="yes"&&$_POST['MemHidden']!="no") {
 	$_POST['MemHidden'] = "no"; }
