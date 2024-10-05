@@ -107,7 +107,7 @@ while ($sli < $slnum) {
     $FullTable[$sli] = "CREATE TABLE \"" . $TableChCk[$sli] . "\" (";
     $tabsta = sql_query("SELECT * FROM information_schema.columns WHERE table_name='" . $TableChCk[$sli] . "';", $SQLStat);
     $zli = 0;
-    $zlnum = sql_num_rows($tabsta);
+    $zlnum = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM information_schema.columns WHERE table_name='" . $TableChCk[$sli] . "';", null), $SQLStat);
     $UniKeyRow = null;
 
     while ($zli < $zlnum) {
