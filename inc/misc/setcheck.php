@@ -29,14 +29,12 @@ $SQLimit = null;
 if(!isset($Settings['sqltype'])) {
 	$Settings['sqltype'] = "mysqli"; }
 $Settings['sqltype'] = strtolower($Settings['sqltype']);
-if($Settings['sqltype']!="mysql"&&
-	$Settings['sqltype']!="mysqli"&&
+if($Settings['sqltype']!="mysqli"&&
 	$Settings['sqltype']!="mysqli_prepare"&&
 	$Settings['sqltype']!="pdo_mysql"&&
 	$Settings['sqltype']!="pgsql"&&
 	$Settings['sqltype']!="pgsql_prepare"&&
 	$Settings['sqltype']!="pdo_pgsql"&&
-	$Settings['sqltype']!="sqlite"&&
 	$Settings['sqltype']!="sqlite3"&&
 	$Settings['sqltype']!="sqlite3_prepare"&&
 	$Settings['sqltype']!="pdo_sqlite3"&&

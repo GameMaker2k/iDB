@@ -67,14 +67,12 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Adding new Group";
 	<td style="width: 50%;"><select size="1" class="TextBox" name="GroupPerm" id="GroupPerm">
 	<option selected="selected" value="0">none</option>
 <?php 
-if($Settings['sqltype']=="mysql"||
-	$Settings['sqltype']=="mysqli"||
+if($Settings['sqltype']=="mysqli"||
 	$Settings['sqltype']=="mysqli_prepare"||
 	$Settings['sqltype']=="pdo_mysql"||
 	$Settings['sqltype']=="pgsql"||
 	$Settings['sqltype']=="pgsql_prepare"||
 	$Settings['sqltype']=="pdo_pgsql"||
-	$Settings['sqltype']=="sqlite"||
 	$Settings['sqltype']=="sqlite3"||
 	$Settings['sqltype']=="sqlite3_prepare"||
 	$Settings['sqltype']=="pdo_sqlite3"||

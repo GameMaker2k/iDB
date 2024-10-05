@@ -527,14 +527,12 @@ $query = sql_pre_query("INSERT INTO \"".$Settings['sqltable']."forums\" (\"id\",
 "(%i, %i, %i, '%s', '%s', '%s', %i, '%s', 0, 0, '%s', '%s', %i, %i, '%s', %i, 0, 0)", array($_POST['ForumID'],$_POST['ForumCatID'],$_POST['OrderID'],$_POST['ForumName'],$_POST['ShowForum'],$_POST['ForumType'],$_POST['InSubForum'],$_POST['RedirectURL'],$_POST['ForumDesc'],$_POST['PostCountAdd'],$_POST['NumPostView'],$_POST['NumKarmaView'],$_POST['CanHaveTopics'],$_POST['NumPostHotTopic']));
 sql_query($query,$SQLStat);
 if(!is_numeric($_POST['CPermissions'])) { $_POST['CPermissions'] = "0"; }
-if($Settings['sqltype']=="mysql"||
-	$Settings['sqltype']=="mysqli"||
+if($Settings['sqltype']=="mysqli"||
 	$Settings['sqltype']=="mysqli_prepare"||
 	$Settings['sqltype']=="pdo_mysql"||
 	$Settings['sqltype']=="pgsql"||
 	$Settings['sqltype']=="pgsql_prepare"||
 	$Settings['sqltype']=="pdo_pgsql"||
-	$Settings['sqltype']=="sqlite"||
 	$Settings['sqltype']=="sqlite3"||
 	$Settings['sqltype']=="sqlite3_prepare"||
 	$Settings['sqltype']=="pdo_sqlite3"||
@@ -549,14 +547,12 @@ $getperidnum = sql_count_rows(sql_pre_query("SELECT COUNT(DISTINCT \"permissioni
 $getperidq = sql_pre_query("SELECT DISTINCT \"permissionid\" FROM \"".$Settings['sqltable']."permissions\" ORDER BY \"PermissionID\" ASC", null); }
 $getperidr=sql_query($getperidq,$SQLStat);
 if($getperidnum==0) {
-if($Settings['sqltype']=="mysql"||
-	$Settings['sqltype']=="mysqli"||
+if($Settings['sqltype']=="mysqli"||
 	$Settings['sqltype']=="mysqli_prepare"||
 	$Settings['sqltype']=="pdo_mysql"||
 	$Settings['sqltype']=="pgsql"||
 	$Settings['sqltype']=="pgsql_prepare"||
 	$Settings['sqltype']=="pdo_pgsql"||
-	$Settings['sqltype']=="sqlite"||
 	$Settings['sqltype']=="sqlite3"||
 	$Settings['sqltype']=="sqlite3_prepare"||
 	$Settings['sqltype']=="pdo_sqlite3"||
@@ -1136,14 +1132,12 @@ if(!isset($_POST['id'])) {
 	<td style="width: 50%;"><label class="TextBoxLabel" for="id">Permission to view:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="id" id="id">
 <?php 
-if($Settings['sqltype']=="mysql"||
-	$Settings['sqltype']=="mysqli"||
+if($Settings['sqltype']=="mysqli"||
 	$Settings['sqltype']=="mysqli_prepare"||
 	$Settings['sqltype']=="pdo_mysql"||
 	$Settings['sqltype']=="pgsql"||
 	$Settings['sqltype']=="pgsql_prepare"||
 	$Settings['sqltype']=="pdo_pgsql"||
-	$Settings['sqltype']=="sqlite"||
 	$Settings['sqltype']=="sqlite3"||
 	$Settings['sqltype']=="sqlite3_prepare"||
 	$Settings['sqltype']=="pdo_sqlite3"||

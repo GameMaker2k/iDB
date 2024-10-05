@@ -84,16 +84,14 @@ $Settings['KBoostPercent'] = "6|10"; }
 if($Settings['html_type']=="html5") {
 $Settings['output_type'] = "html"; }
 if(!isset($Settings['sqltype'])) {
-	$Settings['sqltype'] = "mysql"; }
+	$Settings['sqltype'] = "mysqli"; }
 $Settings['sqltype'] = strtolower($Settings['sqltype']);
-if($Settings['sqltype']!="mysql"&&
-	$Settings['sqltype']!="mysqli"&&
+if($Settings['sqltype']!="mysqli"&&
 	$Settings['sqltype']!="mysqli_prepare"&&
 	$Settings['sqltype']!="pdo_mysql"&&
 	$Settings['sqltype']!="pgsql"&&
 	$Settings['sqltype']!="pgsql_prepare"&&
 	$Settings['sqltype']!="pdo_pgsql"&&
-	$Settings['sqltype']!="sqlite"&&
 	$Settings['sqltype']!="sqlite3"&&
 	$Settings['sqltype']!="sqlite3_prepare"&&
 	$Settings['sqltype']!="pdo_sqlite3"&&
@@ -102,7 +100,7 @@ if($Settings['sqltype']!="mysql"&&
 	$Settings['sqltype']!="pdo_cubrid"&&
 	$Settings['sqltype']!="sqlsrv_prepare"&&
 	$Settings['sqltype']!="pdo_sqlsrv") {
-	$Settings['sqltype'] = "mysql"; }
+	$Settings['sqltype'] = "mysqli"; }
 $DBType['Server'] = "";
 $DBType['Client'] = "";
 $DBType['PHP'] = "";
@@ -119,8 +117,7 @@ if($Settings['sqltype']=="mysqli_prepare"||
 	$Settings['sqltype']=="sqlite3_prepare"||
 	$Settings['sqltype']=="cubrid_prepare") {
 	$SQLString = "PDO "; }
-if($Settings['sqltype']=="mysql"||
-	$Settings['sqltype']=="mysqli"||
+if($Settings['sqltype']=="mysqli"||
 	$Settings['sqltype']=="mysqli_prepare"||
 	$Settings['sqltype']=="pdo_mysql") {
 $DBType['Server'] = "MySQL ".$SQLString.sql_server_info($SQLStat);
@@ -134,8 +131,7 @@ if($Settings['sqltype']=="pgsql"||
 	$Settings['sqltype']=="pdo_pgsql") {
 $DBType['Server'] = "Postgres ".$SQLString.sql_server_info($SQLStat);
 $DBType['Client'] = "Postgres ".$SQLString.sql_client_info($SQLStat); }
-if($Settings['sqltype']=="sqlite"||
-	$Settings['sqltype']=="sqlite3_prepare"||
+if($Settings['sqltype']=="sqlite3_prepare"||
 	$Settings['sqltype']=="sqlite3"||
 	$Settings['sqltype']=="pdo_sqlite3") {
 $DBType['Server'] = "SQLite ".$SQLString.sql_server_info($SQLStat);
@@ -363,8 +359,7 @@ echo "<option value=\"".$themelist[$it]."\">".$themelist[$it]."</option>\n"; }
 if($_GET['act']=="resyncthemes"&&$GroupInfo['ViewDBInfo']=="yes"&&$Settings['SQLThemes']=="on") {
 $time = $utccurtime->getTimestamp() - ini_get("session.gc_maxlifetime");
 //$sqlg = sql_pre_query('DELETE FROM \"'.$Settings['sqltable'].'sessions\" WHERE \"expires\" < UNIX_TIMESTAMP();', null);
-if($Settings['sqltype']=="mysql"||
-	$Settings['sqltype']=="mysqli"||
+if($Settings['sqltype']=="mysqli"||
 	$Settings['sqltype']=="mysqli_prepare"||
 	$Settings['sqltype']=="pdo_mysql"||
 	$Settings['sqltype']=="cubrid"||
@@ -381,8 +376,7 @@ $sqlgc = sql_pre_query("TRUNCATE TABLE \"".$Settings['sqltable']."themes\"", nul
 sql_query($sqlgc,$SQLStat);
 $sqlgc = sql_pre_query("SELECT setval('".$Settings['sqltable']."themes_id_seq', 1, false);", null);
 sql_query($sqlgc,$SQLStat); }
-if($Settings['sqltype']=="sqlite"||
-	$Settings['sqltype']=="sqlite3"||
+if($Settings['sqltype']=="sqlite3"||
 	$Settings['sqltype']=="sqlite3_prepare"||
 	$Settings['sqltype']=="pdo_sqlite3") {
 $sqlgc = sql_pre_query("DELETE FROM \"".$Settings['sqltable']."themes\";", null);
@@ -432,8 +426,7 @@ $TblOptimized = 0;
 while ($ti < $tcount) {
 if(isset($OptimizeAr['Msg_text'])) { unset($OptimizeAr['Msg_text']); }
 if(isset($OptimizeAr[3])) { unset($OptimizeAr[3]); }
-if($Settings['sqltype']=="mysql"||
-	$Settings['sqltype']=="mysqli"||
+if($Settings['sqltype']=="mysqli"||
 	$Settings['sqltype']=="mysqli_prepare"||
 	$Settings['sqltype']=="pdo_mysql") {
 if(isset($_GET['subact']) && $_GET['subact']=="repair") {
@@ -450,8 +443,7 @@ if($Settings['sqltype']=="pgsql"||
 	$Settings['sqltype']=="pgsql_prepare"||
 	$Settings['sqltype']=="pdo_pgsql") {
 $OptimizeTea = sql_query(sql_pre_query("VACUUM ANALYZE \"".$TableChCk[$ti]."\"", null),$SQLStat); }
-if($Settings['sqltype']=="mysql"||
-	$Settings['sqltype']=="mysqli"||
+if($Settings['sqltype']=="mysqli"||
 	$Settings['sqltype']=="mysqli_prepare"||
 	$Settings['sqltype']=="pdo_mysql"||
 	$Settings['sqltype']=="cubrid"||
@@ -462,21 +454,18 @@ if(!isset($OptimizeAr['Msg_text'])&&
 	isset($OptimizeAr[3])) { $OptimizeAr['Msg_text'] = $OptimizeAr[3]; }
 if($OptimizeAr['Msg_text']=="OK") { 
 	++$TblOptimized; } } ++$ti; }
-if($Settings['sqltype']=="sqlite"||
-	$Settings['sqltype']=="sqlite3"||
+if($Settings['sqltype']=="sqlite3"||
 	$Settings['sqltype']=="sqlite3_prepare"||
 	$Settings['sqltype']=="pdo_sqlite3") {
 sql_disconnect_db($SQLStat);
 $SQLStat = sql_connect_db($Settings['sqlhost'],$Settings['sqluser'],$Settings['sqlpass'],$Settings['sqldb']);
 $OptimizeTea = sql_query(sql_pre_query("VACUUM", null),$SQLStat); }
-if($Settings['sqltype']=="mysql"||
-	$Settings['sqltype']=="mysqli"||
+if($Settings['sqltype']=="mysqli"||
 	$Settings['sqltype']=="cubrid") {
 $OutPutLog = "MySQL Output: ".$TblOptimized." tables optimized."; }
 if($Settings['sqltype']=="pgsql") {
 $OutPutLog = "PGSQL Output: All tables optimized."; }
-if($Settings['sqltype']=="sqlite"||
-	$Settings['sqltype']=="sqlite3"||
+if($Settings['sqltype']=="sqlite3"||
 	$Settings['sqltype']=="sqlite3_prepare"||
 	$Settings['sqltype']=="pdo_sqlite3") {
 $OutPutLog = "SQLite Output: All tables optimized."; }
@@ -1165,8 +1154,7 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Database Manager";
 <tr style="text-align: left;">
 	<td style="width: 50%;"><span class="TextBoxLabel">Database Server:</span></td>
 	<td style="width: 50%;"><?php echo $DBType['Server']; ?></td>
-</tr><?php if($Settings['sqltype']=="mysql"||
-	$Settings['sqltype']=="mysqli"||
+</tr><?php if($Settings['sqltype']=="mysqli"||
 	$Settings['sqltype']=="mysqli_prepare"||
 	$Settings['sqltype']=="pdo_mysql"||
 	$Settings['sqltype']=="pgsql"||
@@ -1180,8 +1168,7 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Database Manager";
 ?><tr style="text-align: left;">
 	<td style="width: 50%;"><span class="TextBoxLabel">Database Client:</span></td>
 	<td style="width: 50%;"><?php echo $DBType['Client']; ?></td>
-</tr><?php } if($Settings['sqltype']=="sqlite"||
-	$Settings['sqltype']=="sqlite3"||
+</tr><?php } if($Settings['sqltype']=="sqlite3"||
 	$Settings['sqltype']=="sqlite3_prepare"||
 	$Settings['sqltype']=="pdo_sqlite3") { 
 ?><tr style="text-align: left;">
@@ -1196,8 +1183,7 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Database Manager";
 </tr><?php } if($Settings['sqltype']=="cubrid") { ?><tr style="text-align: left;">
 	<td style="width: 50%;"><span class="TextBoxLabel">CUBRID PHP:</span></td>
 	<td style="width: 50%;"><?php echo $DBType['PHP']; ?></td>
-</tr><?php } if($Settings['sqltype']!="sqlite"&&
-	$Settings['sqltype']!="sqlite3"&&
+</tr><?php } if($Settings['sqltype']!="sqlite3"&&
 	$Settings['sqltype']!="sqlite3_prepare"&&
 	$Settings['sqltype']!="pdo_sqlite3") {  ?><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="DatabaseUserName">Insert Database User Name:</label></td>
@@ -1214,8 +1200,7 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Database Manager";
 </tr><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="tableprefix">Insert Table Prefix:<br /></label></td>
 	<td style="width: 50%;"><input type="text" name="tableprefix" class="TextBox" id="tableprefix" size="20" value="<?php echo $Settings['sqltable']; ?>" /></td>
-</tr><?php } if($Settings['sqltype']=="sqlite"||
-	$Settings['sqltype']=="sqlite3"||
+</tr><?php } if($Settings['sqltype']=="sqlite3"||
 	$Settings['sqltype']=="sqlite3_prepare"||
 	$Settings['sqltype']=="pdo_sqlite3") {  ?><tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="DatabaseName">Insert Database FileName:</label></td>
@@ -1227,8 +1212,7 @@ $admincptitle = " ".$ThemeSet['TitleDivider']." Database Manager";
 <table style="text-align: left;">
 <tr style="text-align: left;">
 <td style="width: 100%;">
-<?php if($Settings['sqltype']=="sqlite"||
-	$Settings['sqltype']=="sqlite3"||
+<?php if($Settings['sqltype']=="sqlite3"||
 	$Settings['sqltype']=="sqlite3_prepare"||
 	$Settings['sqltype']=="pdo_sqlite3") {  ?>
 <input type="hidden" name="DatabaseUserName" class="TextBox" id="DatabaseUserName" size="20" value="<?php echo $Settings['sqluser']; ?>" />

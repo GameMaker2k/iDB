@@ -65,13 +65,11 @@ if(!isset($_POST['License'])) { $_POST['License'] = null; }
 if(isset($_POST['DatabaseType'])) { 
 	$Settings['sqltype'] = $_POST['DatabaseType']; }
 if(isset($Settings['sqltype'])) {
-if($Settings['sqltype']!="mysql"&&
-	$Settings['sqltype']!="mysqli"&&
+if($Settings['sqltype']!="mysqli"&&
 	$Settings['sqltype']!="mysqli_prepare"&&
     $Settings['sqltype']!="pdo_mysql"&&
 	$Settings['sqltype']!="pgsql"&&
 	$Settings['sqltype']!="pgsql_prepare"&&
-	$Settings['sqltype']!="sqlite"&&
 	$Settings['sqltype']!="sqlite3"&&
 	$Settings['sqltype']!="sqlite3_prepare"&&
     $Settings['sqltype']!="pdo_sqlite3"&&

@@ -88,9 +88,6 @@ function handle_conditional_parts(&$query_string, &$query_vars) {
 
 $NumQueriesArray = array();
 $NumPreQueriesArray = array();
-if (file_exists($SettDir['sql'] . "mysql.php")&&function_exists("mysql_connect")) {
-    require($SettDir['sql'] . "mysql.php");
-}
 if (file_exists($SettDir['sql'] . "pdo_mysql.php")&&extension_loaded("PDO")&&extension_loaded("PDO_MYSQL")) {
     require($SettDir['sql'] . "pdo_mysql.php");
 }
@@ -108,9 +105,6 @@ if (file_exists($SettDir['sql'] . "pgsql_prepare.php")&&function_exists("pg_conn
 }
 if(file_exists($SettDir['sql']."pdo_pgsql.php")&&extension_loaded("PDO")&&extension_loaded("PDO_PGSQL")) {
     require($SettDir['sql']."pdo_pgsql.php");
-}
-if (file_exists($SettDir['sql'] . "sqlite.php")&&function_exists("sqlite_open")) {
-    require($SettDir['sql'] . "sqlite.php");
 }
 if (file_exists($SettDir['sql'] . "sqlite3.php")&&class_exists('SQLite3')) {
     require($SettDir['sql'] . "sqlite3.php");
@@ -140,14 +134,12 @@ if (file_exists($SettDir['sql'] . "sqlsrv_prepare.php")&&function_exists("sqlsrv
 // Helper function to map SQL library to its function prefix
 function get_sql_function_prefix($sqllib) {
     $prefixes = array(
-        'mysql' => 'mysql_func',
         'mysqli_prepare' => 'mysqli_prepare_func',
         'mysqli' => 'mysqli_func',
         'pdo_mysql' => 'pdo_mysql_func',
         'pgsql' => 'pgsql_func',
         'pgsql_prepare' => 'pgsql_prepare_func',
         'pdo_pgsql' => 'pdo_pgsql_func',
-        'sqlite' => 'sqlite_func',
         'sqlite3_prepare' => 'sqlite3_prepare_func',
         'sqlite3' => 'sqlite3_func',
         'pdo_sqlite3' => 'pdo_sqlite3_func',
@@ -256,19 +248,19 @@ function sql_escape_string($string, $link = null, $sqllib = null) {
 if (!isset($NumQueries)) {
     $NumPreQueries = 0;
 }
-if (!isset($NumQueriesArray['sql'])) {
-    $NumPreQueriesArray['sql'] = $NumQueries;
+if (!isset($NumPreQueriesArray['sql'])) {
+    $NumPreQueriesArray['sql'] = 0;
 }
 
 function sql_pre_query($query_string, $query_vars, $sqllib = null) {
 	global $NumPreQueries, $NumPreQueriesArray;
 
+    $returnval = call_sql_function('pre_query', $sqllib, $query_string, $query_vars);
     if ($returnval) {
         ++$NumPreQueries;
         ++$NumPreQueriesArray['sql'];
     }
-
-    return call_sql_function('pre_query', $sqllib, $query_string, $query_vars);
+    return $returnval;
 }
 
 function sql_set_charset($charset, $link = null, $sqllib = null) {

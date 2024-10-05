@@ -25,8 +25,7 @@ require('sql.php');
 if($_GET['act']=="sqldumper"&&$Settings['sqltype']=="cubrid") { $_GET['act'] = "view"; }
 if($_GET['act']=="sqldumper"&&$_SESSION['UserGroup']!=$Settings['GuestGroup']&&
 	$GroupInfo['HasAdminCP']=="yes") { 
-	if($Settings['sqltype']=="mysql"||
-		$Settings['sqltype']=="mysqli"||
+	if($Settings['sqltype']=="mysqli"||
 		$Settings['sqltype']=="mysqli_prepare"||
 		$Settings['sqltype']=="pdo_mysql") {
 	require($SettDir['sqldumper'].'mysql.php'); }
@@ -34,8 +33,7 @@ if($_GET['act']=="sqldumper"&&$_SESSION['UserGroup']!=$Settings['GuestGroup']&&
 		$Settings['sqltype']=="pgsql_prepare"||
 		$Settings['sqltype']=="pdo_pgsql") {
 	require($SettDir['sqldumper'].'pgsql.php'); } 
-	if($Settings['sqltype']=="sqlite"||
-		$Settings['sqltype']=="sqlite3"||
+	if($Settings['sqltype']=="sqlite3"||
 		$Settings['sqltype']=="sqlite3_prepare"||
 		$Settings['sqltype']=="pdo_sqlite3") {
 	require($SettDir['sqldumper'].'sqlite.php'); } 

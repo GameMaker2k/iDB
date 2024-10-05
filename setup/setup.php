@@ -45,11 +45,21 @@ if (!is_writable($checkfile)) {
    chmod("settings.php",0755); $Error="Yes";
    chmod("settingsbak.php",0755);
 } else { /* settings.php is writable install iDB. ^_^ */ }
-if(!function_exists("mysql_connect")&&!function_exists("mysqli_connect")&&
-!function_exists("pg_connect")&&!function_exists("sqlite_open")&&!class_exists('SQLite3')&&
-!function_exists("cubrid_connect")) { $Error="Yes";
+if(!function_exists("mysqli_func_connect_db")&&
+		   !function_exists("pgsql_func_connect_db")&&
+		   !function_exists("sqlite3_func_connect_db")&&
+		   !function_exists("cubrid_prepare_func_connect_db")&&
+		   !function_exists("mysqli_prepare_func_connect_db")&&
+		   !function_exists("pgsql_prepare_func_connect_db")&&
+		   !function_exists("sqlite3_prepare_func_connect_db")&&
+		   !function_exists("sqlsrv_prepare_func_connect_db")&&
+		   !function_exists("pdo_cubrid_func_connect_db")&&
+		   !function_exists("pdo_mysql_func_connect_db")&&
+		   !function_exists("pdo_pgsql_func_connect_db")&&
+		   !function_exists("pdo_sqlite3_func_connect_db")&&
+		   !function_exists("pdo_sqlsrv_func_connect_db")) { $Error="Yes";
 echo "<span class=\"TableMessage\">You need to enbale a database php extension to install ".$VerInfo['iDB_Ver_Show']." on this server.<br />\n"; 
-echo "You can use MySQL, MySQLi, PostgreSQL, or SQLite</span>"; }
+echo "You can use MySQL, MySQLi, PostgreSQL, CUBRID, or SQLite 3</span>"; }
 if ($Error!="Yes") {
 $StatSQL = sql_connect_db($_POST['DatabaseHost'],$_POST['DatabaseUserName'],$_POST['DatabasePassword']);
 if(!$StatSQL) { $Error="Yes";
@@ -122,7 +132,7 @@ fclose($fp);
 	<option value="yes">Yes</option>
 	<option value="no">No</option>
 	</select></td>
-</tr><?php if($_POST['DatabaseType']=="mysql"||$_POST['DatabaseType']=="mysqli") { ?><tr>
+</tr><?php if($_POST['DatabaseType']=="pdo_mysql"||$_POST['DatabaseType']=="mysqli"||$_POST['DatabaseType']=="mysqli_prepare") { ?><tr>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="sqlcollate">MySQL Collate:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="sqlcollate" id="sqlcollate">
 	<?php if($_POST['charset']=="ISO-8859-1"||$_POST['charset']=="ISO-8859-15") { ?>

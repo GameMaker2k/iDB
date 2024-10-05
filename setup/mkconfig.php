@@ -350,8 +350,7 @@ if($csrand==3) { $gpass .= chr(rand(97,122)); }
 ++$i; } $GuestPassword = b64e_hmac($gpass,$YourDate,$GSalt,$_POST['usehashtype']);
 $url_this_dir = "http://".$_SERVER['HTTP_HOST'].$this_dir."index.php?act=view";
 $YourIP = $_SERVER['REMOTE_ADDR'];
-if($Settings['sqltype']=="mysql"||
-	$Settings['sqltype']=="mysqli"||
+if($Settings['sqltype']=="mysqli"||
 	$Settings['sqltype']=="mysqli_prepare"||
 	$Settings['sqltype']=="pdo_mysql") {
 require($SetupDir['sql'].'mysql.php'); }
@@ -359,8 +358,7 @@ if($Settings['sqltype']=="pgsql"||
 	$Settings['sqltype']=="pgsql_prepare"||
 	$Settings['sqltype']=="pdo_pgsql") {
 require($SetupDir['sql'].'pgsql.php'); }
-if($Settings['sqltype']=="sqlite"||
-	$Settings['sqltype']=="sqlite3"||
+if($Settings['sqltype']=="sqlite3"||
 	$Settings['sqltype']=="sqlite3_prepare"||
 	$Settings['sqltype']=="pdo_sqlite3") {
 require($SetupDir['sql'].'sqlite.php'); }
@@ -388,8 +386,7 @@ if ($handle = opendir($skindir)) { $dirnum = null;
    "('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');", array($themelist[$themei], $ThemeSet['ThemeName'], $ThemeSet['ThemeMaker'], $ThemeSet['ThemeVersion'], $ThemeSet['ThemeVersionType'], $ThemeSet['ThemeSubVersion'], $ThemeSet['MakerURL'], $ThemeSet['CopyRight'], $ThemeSet['WrapperString'], $ThemeSet['CSS'], $ThemeSet['CSSType'], $ThemeSet['FavIcon'], $ThemeSet['OpenGraph'], $ThemeSet['TableStyle'], $ThemeSet['MiniPageAltStyle'], $ThemeSet['PreLogo'], $ThemeSet['Logo'], $ThemeSet['LogoStyle'], $ThemeSet['SubLogo'], $ThemeSet['TopicIcon'], $ThemeSet['MovedTopicIcon'], $ThemeSet['HotTopic'], $ThemeSet['MovedHotTopic'], $ThemeSet['PinTopic'], $ThemeSet['AnnouncementTopic'], $ThemeSet['MovedPinTopic'], $ThemeSet['HotPinTopic'], $ThemeSet['MovedHotPinTopic'], $ThemeSet['ClosedTopic'], $ThemeSet['MovedClosedTopic'], $ThemeSet['HotClosedTopic'], $ThemeSet['MovedHotClosedTopic'], $ThemeSet['PinClosedTopic'], $ThemeSet['MovedPinClosedTopic'], $ThemeSet['HotPinClosedTopic'], $ThemeSet['MovedHotPinClosedTopic'], $ThemeSet['MessageRead'], $ThemeSet['MessageUnread'], $ThemeSet['Profile'], $ThemeSet['WWW'], $ThemeSet['PM'], $ThemeSet['TopicLayout'], $ThemeSet['AddReply'], $ThemeSet['FastReply'], $ThemeSet['NewTopic'], $ThemeSet['QuoteReply'], $ThemeSet['EditReply'], $ThemeSet['DeleteReply'], $ThemeSet['Report'], $ThemeSet['LineDivider'], $ThemeSet['ButtonDivider'], $ThemeSet['LineDividerTopic'], $ThemeSet['TitleDivider'], $ThemeSet['ForumStyle'], $ThemeSet['ForumIcon'], $ThemeSet['SubForumIcon'], $ThemeSet['RedirectIcon'], $ThemeSet['TitleIcon'], $ThemeSet['NavLinkIcon'], $ThemeSet['NavLinkDivider'], $ThemeSet['BoardStatsIcon'], $ThemeSet['MemberStatsIcon'], $ThemeSet['BirthdayStatsIcon'], $ThemeSet['EventStatsIcon'], $ThemeSet['OnlineStatsIcon'], $ThemeSet['NoAvatar'], $ThemeSet['NoAvatarSize']));
    sql_query($query,$SQLStat);
    ++$themei; } }
-if($Settings['sqltype']=="mysql"||
-	$Settings['sqltype']=="mysqli"||
+if($Settings['sqltype']=="mysqli"||
 	$Settings['sqltype']=="mysqli_prepare"||
 	$Settings['sqltype']=="pdo_mysql") {
 $OptimizeTea = sql_query(sql_pre_query("OPTIMIZE TABLE \"".$_POST['tableprefix']."themes\"", null),$SQLStat); }
@@ -397,8 +394,7 @@ if($Settings['sqltype']=="pgsql"||
 	$Settings['sqltype']=="pgsql_prepare"||
 	$Settings['sqltype']=="pdo_pgsql") {
 $OptimizeTea = sql_query(sql_pre_query("VACUUM ANALYZE \"".$_POST['tableprefix']."themes\"", null),$SQLStat); }
-if($Settings['sqltype']=="sqlite"||
-	$Settings['sqltype']=="sqlite3"||
+if($Settings['sqltype']=="sqlite3"||
 	$Settings['sqltype']=="sqlite3_prepare"||
 	$Settings['sqltype']=="pdo_sqlite3") {
 $OptimizeTea = sql_query(sql_pre_query("VACUUM", null),$SQLStat); }

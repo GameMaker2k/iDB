@@ -44,9 +44,7 @@ if($Error!="Yes") {
 </tr><tr>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="DatabaseType">Select Database Type:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="DatabaseType" id="DatabaseType">
-	<?php if(function_exists("mysql_func_connect_db")) { ?>
-	<option value="mysql">MySQL Database</option>
-	<?php } if(function_exists("mysqli_func_connect_db")) { ?>
+	<?php if(function_exists("mysqli_func_connect_db")) { ?>
 	<option value="mysqli">MySQLi Database</option>
 	<?php } if(function_exists("mysqli_prepare_func_connect_db")) { ?>
 	<option value="mysqli_prepare">MySQLi Alt Database</option>
@@ -58,8 +56,6 @@ if($Error!="Yes") {
 	<option value="pgsql_prepare">PostgreSQL Alt Database</option>
 	<?php } if(function_exists("pdo_pgsql_func_connect_db")) { ?>
 	<option value="pdo_pgsql">PDO PostgreSQL Database</option>
-	<?php } if(function_exists("sqlite_func_connect_db")) { ?>
-	<option value="sqlite">SQLite Database</option>
 	<?php } if(function_exists("sqlite3_func_connect_db")) { ?>
 	<option value="sqlite3">SQLite 3 Database</option>
 	<?php } if(function_exists("sqlite3_prepare_func_connect_db")) { ?>
@@ -76,10 +72,8 @@ if($Error!="Yes") {
 	<option value="sqlsrv_prepare">SQL Server Database</option>
 	<?php } if(function_exists("pdo_sqlsrv_func_connect_db")) { ?>
 	<option value="pdo_sqlsrv">PDO SQL Server Database</option>
-	<?php } if(!function_exists("mysql_func_connect_db")&&
-		   !function_exists("mysqli_func_connect_db")&&
+	<?php } if(!function_exists("mysqli_func_connect_db")&&
 		   !function_exists("pgsql_func_connect_db")&&
-		   !function_exists("sqlite_func_connect_db")&&
 		   !function_exists("sqlite3_func_connect_db")&&
 		   !function_exists("cubrid_prepare_func_connect_db")&&
 		   !function_exists("mysqli_prepare_func_connect_db")&&
