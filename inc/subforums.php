@@ -178,7 +178,7 @@ if($_GET['act']=="view") {
 <div style="padding: 10px; border: 1px solid gray;">
 <ul style="list-style-type: none;">
 <li style="font-weight: bold;"><a href="<?php echo url_maker($exfile[$ForumType],$Settings['file_ext'],"act=".$_GET['act']."&id=".$ForumID."&page=1",$Settings['qstr'],$Settings['qsep'],$prexqstr[$ForumType],$exqstr[$ForumType]); ?>"><?php echo $ForumName; ?></a></li><li>
-<?php } }
+<?php }
 while ($i < $num) {
 $result_array = sql_fetch_assoc($result);
 $ForumID=$result_array['id'];
@@ -225,7 +225,6 @@ if($_GET['act']=="lowview") {
 $shownum = null;
 if ($SubsForumType=="redirect") { $shownum = "(".$NumRedirects." redirects)"; }
 if ($SubsForumType!="redirect") { $shownum = "(".$NumsPosts." posts)"; }
-$sfurl = "<a href=\"";
 $sfurl = url_maker($exfile[$SubsForumType],$Settings['file_ext'],"act=".$_GET['act']."&id=".$SubsForumID.$ExStr,$Settings['qstr'],$Settings['qsep'],$prexqstr[$SubsForumType],$exqstr[$SubsForumType]);
 $sfurl = "<li><ul style=\"list-style-type: none;\"><li><a href=\"".$sfurl."\">".$SubsForumName."</a> <span style=\"color: gray; font-size: 10px;\">".$shownum."</span></li></ul></li>";
 if($apcl==1) {
@@ -379,7 +378,6 @@ if($_GET['act']=="view") { ?>
 $ForumCheck = "skip";
 if($_GET['act']=="lowview") {
 $ForumName = $SForumName; $ForumID = $SForumID; $InSubForum = $SFInSubForum; }
-if($_GET['act']!="lowview") {
 if($CanHaveTopics!="yes") { 
 $ForumName = $SForumName; $ForumID = $SForumID; $InSubForum = $SFInSubForum;
 $uviewlcuttime = $utccurtime->getTimestamp();
@@ -389,7 +387,7 @@ $uviewlnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settin
 $uviewlquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"session_id\"<>'%s' AND (\"serialized_data\" LIKE '%s' OR \"serialized_data\" LIKE '%s') ORDER BY \"expires\" DESC", array($uviewltime, session_id(), "%currentforumid:0,".$ForumID.";%", "%currentforumid:".$ForumID.",%")); }
 if($InSubForum!=0) {
 $uviewlnum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"session_id\"<>'%s' AND (\"serialized_data\" LIKE '%s' OR \"serialized_data\" LIKE '%s') ORDER BY \"expires\" DESC", array($uviewltime, session_id(), "%currentforumid:".$InSubForum.",".$ForumID.";%", "%currentforumid:0,".$ForumID.";")), $SQLStat);
-$uviewlquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"session_id\"<>'%s' AND (\"serialized_data\" LIKE '%s' OR \"serialized_data\" LIKE '%s') ORDER BY \"expires\" DESC", array($uviewltime, session_id(), "%currentforumid:".$InSubForum.",".$ForumID.";%", "%currentforumid:0,".$ForumID.";")); } }
+$uviewlquery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" >= %i AND \"session_id\"<>'%s' AND (\"serialized_data\" LIKE '%s' OR \"serialized_data\" LIKE '%s') ORDER BY \"expires\" DESC", array($uviewltime, session_id(), "%currentforumid:".$InSubForum.",".$ForumID.";%", "%currentforumid:0,".$ForumID.";")); }
 $uviewlresult=sql_query($uviewlquery,$SQLStat);
 $uviewli=0; $uviewlmn = 0; $uviewlgn = 0; $uviewlan = 0; $uviewlmbn = 0;
 $MembersViewList = null; $GuestsOnline = null;
@@ -520,7 +518,7 @@ $GuestsViewList = "<a".$uatitleadd." href=\"".url_maker($exfile['member'],$Setti
 </tr>
 </table></div>
 <div class="DivStats">&#160;</div>
-<?php } }
+<?php }
 if($CanHaveTopics!="no") {
 require($SettDir['inc'].'topics.php'); } }
 ?>

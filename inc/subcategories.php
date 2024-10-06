@@ -195,7 +195,6 @@ if($_GET['act']=="lowview") {
 $shownum = null;
 if ($SubsForumType=="redirect") { $shownum = "(".$NumRedirects." redirects)"; }
 if ($SubsForumType!="redirect") { $shownum = "(".$NumsPosts." posts)"; }
-$sfurl = "<a href=\"";
 $sfurl = url_maker($exfile[$SubsForumType],$Settings['file_ext'],"act=lowview&id=".$SubsForumID.$ExStr,$Settings['qstr'],$Settings['qsep'],$prexqstr[$SubsForumType],$exqstr[$SubsForumType]);
 $sfurl = "<li><ul style=\"list-style-type: none;\"><li><a href=\"".$sfurl."\">".$SubsForumName."</a> <span style=\"color: gray; font-size: 10px;\">".$shownum."</span></li></ul></li>";
 if($apcl==1) {
@@ -223,7 +222,6 @@ $SubsForumType=$apcresult_array['ForumType'];
 if(isset($PermissionInfo['CanViewForum'][$SubsForumID])&&
 	$PermissionInfo['CanViewForum'][$SubsForumID]=="yes") {
 if($_GET['act']=="view") {
-$sfurl = "<a href=\"";
 $sfurl = url_maker($exfile[$SubsForumType],$Settings['file_ext'],"act=".$viewvar."&id=".$SubsForumID.$ExStr,$Settings['qstr'],$Settings['qsep'],$prexqstr[$SubsForumType],$exqstr[$SubsForumType]);
 $sfurl = "<a href=\"".$sfurl."\">".$SubsForumName."</a>";
 if($apcl==1) {
@@ -364,7 +362,7 @@ if($_GET['act']=="view") {
 <td<?php echo $ForumClass[4]; ?>style="text-align: center;"><?php echo $NumPosts; ?></td>
 <td<?php echo $ForumClass[5]; ?>><?php echo $LastTopic; ?></td>
 </tr>
-<?php } } ++$i; } sql_free_result($result);
+<?php }
 if($num>=1) {
 if($_GET['act']=="view") {
 ?>
