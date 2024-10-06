@@ -885,30 +885,55 @@ function urlcheck($string) {
     // Return the found URL or the default Board URL
     return $urlcheck[0] ?? $BoardURL;
 }
-//Check to make sure theme exists
+
+// Check to make sure theme exists
 $BoardTheme = $Settings['DefaultTheme'];
 $ThemeDir = $SettDir['themes'];
+
 function chack_themes($theme) {
-global $BoardTheme,$ThemeDir;
-if(!isset($theme)) { $theme = null; }
-if(preg_match("/([a-zA-Z]+)\:/isU",$theme)) {
-	$theme = $BoardTheme; }
-if(!preg_match("/^[a-z0-9]+$/isU",$theme)) {
-	$theme = $BoardTheme; }
-require('settings.php');
-$ckskindir = dirname(realpath("settings.php"))."/".$ThemeDir;
-if ($handle = opendir($ckskindir)) { $dirnum = null;
-   while (false !== ($ckfile = readdir($handle))) {
-	   if ($dirnum==null) { $dirnum = 0; }
-	   if (is_dir($ckskindir.$ckfile)&&file_exists($ckskindir.$ckfile."/info.php")) {
-		   if ($ckfile != "." && $ckfile != "..") {
-	   //require($ckskindir.$ckfile."/info.php");
-       $cktheme[$dirnum] =  $ckfile;
-	   ++$dirnum; } } }
-   closedir($handle); asort($cktheme); }
-$theme=preg_replace("/(.*?)\.\/(.*?)/", $BoardTheme, $theme);
-if(!in_array($theme,$cktheme)||strlen($theme)>26) {
-	$theme = $BoardTheme; } return $theme; }
+    global $BoardTheme, $ThemeDir;
+
+    if (!isset($theme)) { 
+        $theme = null; 
+    }
+
+    if (preg_match("/([a-zA-Z]+)\:/isU", $theme)) {
+        $theme = $BoardTheme; 
+    }
+
+    if (!preg_match("/^[a-z0-9]+$/isU", $theme)) {
+        $theme = $BoardTheme; 
+    }
+
+    require('settings.php');
+    $ckskindir = dirname(realpath("settings.php")) . "/" . $ThemeDir;
+
+    if ($handle = opendir($ckskindir)) { 
+        $dirnum = null;
+        while (false !== ($ckfile = readdir($handle))) {
+            if ($dirnum == null) { 
+                $dirnum = 0; 
+            }
+            if (is_dir($ckskindir . $ckfile) && file_exists($ckskindir . $ckfile . "/info.php")) {
+                if ($ckfile != "." && $ckfile != "..") {
+                    //require($ckskindir.$ckfile."/info.php");
+                    $cktheme[$dirnum] = $ckfile;
+                    ++$dirnum; 
+                } 
+            } 
+        }
+        closedir($handle);
+        asort($cktheme); 
+    }
+
+    $theme = preg_replace("/(.*?)\.\/(.*?)/", $BoardTheme, $theme);
+
+    if (!in_array($theme, $cktheme) || strlen($theme) > 26) {
+        $theme = $BoardTheme; 
+    }
+
+    return $theme; 
+}
 
 // Move append_query() outside to avoid redeclaration error
 function append_query($queryStr, $qstr, $qsep, &$fileurl) {
@@ -969,18 +994,6 @@ function url_maker($file = "index", $ext = ".php", $qvarstr = null, $qstr = ";",
     return $fileurl;
 }
 
-// Get the Query String
-function GetQueryStrOld($qstr=";",$qsep="=",$fixhtml=true)
-{ $pregqstr = preg_quote($qstr,"/");
-$pregqsep = preg_quote($qsep,"/");
-$oqstr = $qstr; $oqsep = $qsep;
-if($fixhtml===true||$fixhtml==null) {
-$qstr = htmlentities($qstr, ENT_QUOTES, $icharset);
-$qsep = htmlentities($qsep, ENT_QUOTES, $icharset); }
-$OldBoardQuery = preg_replace("/".$pregqstr."/isxS", $qstr, $_SERVER['QUERY_STRING']);
-$OldBoardQuery = preg_replace("/".$pregqsep."/isxS", $qsep, $OldBoardQuery);
-$BoardQuery = "?".$OldBoardQuery;
-return $BoardQuery; }
 function GetQueryStr($qstr = ";", $qsep = "=", $fixhtml = true)
 {
     global $icharset;
