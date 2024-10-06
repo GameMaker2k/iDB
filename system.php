@@ -11,7 +11,7 @@
     Copyright 2004-2024 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2024 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: sql.php - Last Update: 8/26/2024 SVN 1048 - Author: cooldude2k $
+    $FileInfo: system.php - Last Update: 8/26/2024 SVN 1048 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them.
    Display PHP Errors */
@@ -57,7 +57,7 @@ if (!defined("E_DEPRECATED")) {
 @ignore_user_abort(true);
 /* Do not change anything below this line unless you know what you are doing */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
-if ($File3Name == "sql.php" || $File3Name == "/sql.php") {
+if ($File3Name == "system.php" || $File3Name == "/system.php") {
     header('Location: index.php');
     exit();
 }
@@ -634,11 +634,11 @@ if (!in_array("ini_set", $disfunc)) {
 $File1Name = dirname($_SERVER['SCRIPT_NAME'])."/";
 $File2Name = $_SERVER['SCRIPT_NAME'];
 /*$File3Name=str_replace($File1Name, null, $File2Name);
-if ($File3Name=="sql.php"||$File3Name=="/sql.php") {
+if ($File3Name=="system.php"||$File3Name=="/system.php") {
     header('Location: index.php');
     exit(); }*/
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
-if ($File3Name == "sql.php" || $File3Name == "/sql.php") {
+if ($File3Name == "system.php" || $File3Name == "/system.php") {
     header('Location: index.php');
     exit();
 }

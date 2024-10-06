@@ -22,7 +22,7 @@ if ($File3Name == "preindex.php" || $File3Name == "/preindex.php") {
     header('Location: index.php');
     exit();
 }
-require('sql.php');
+require('system.php');
 if ($_GET['act'] == "sqldumper" && $Settings['sqltype'] == "cubrid") {
     $_GET['act'] = "view";
 }

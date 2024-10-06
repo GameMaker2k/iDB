@@ -479,7 +479,7 @@ if ($_GET['act'] == "resyncthemes" && $GroupInfo['ViewDBInfo'] == "yes" && $Sett
         $sqlgc = sql_pre_query("DBCC CHECKIDENT ('".$Settings['sqltable']."themes', RESEED, 1);", null);
         sql_query($sqlgc, $SQLStat);
     }
-    $skindir = dirname(realpath("sql.php"))."/".$SettDir['themes'];
+    $skindir = dirname(realpath("system.php"))."/".$SettDir['themes'];
     if ($handle = opendir($skindir)) {
         $dirnum = null;
         while (false !== ($file = readdir($handle))) {

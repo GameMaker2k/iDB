@@ -20,7 +20,7 @@ $pretime = explode(" ", microtime());
 $utime = $pretime[0];
 $time = $pretime[1];
 $starttime = $utime + $time;
-require_once('sql.php');
+require('system.php');
 $idbactcheck = array("rss", "oldrss", "atom", "opml", "opensearch");
 /*if($Settings['enable_search']=="off"||$GroupInfo['CanSearch']=="no") {
 header("Content-Type: text/plain; charset=".$Settings['charset']);

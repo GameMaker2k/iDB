@@ -697,7 +697,7 @@ if ($Error != "Yes") {
         if ($_POST['SQLThemes'] == "on") {
             $OldThemeSet = $ThemeSet;
             $Settings['board_name'] = $_POST['NewBoardName'];
-            $skindir = dirname(realpath("sql.php"))."/".$SettDir['themes'];
+            $skindir = dirname(realpath("system.php"))."/".$SettDir['themes'];
             if ($handle = opendir($skindir)) {
                 $dirnum = null;
                 while (false !== ($file = readdir($handle))) {
