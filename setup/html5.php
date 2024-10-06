@@ -162,7 +162,21 @@ if(!isset($Settings['js_ext'])) { $Settings['js_ext'] = ".js"; }
 <meta name="Description" content="<?php echo $SettInfo['Description']; ?>" />
 <meta itemprop="description" property="og:description" content="<?php echo $SettInfo['Description']; ?>" />
 <meta itemprop="description" property="twitter:description" content="<?php echo $SettInfo['Description']; ?>" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" id="viewport" content="width=device-width, initial-scale=1.0">
+<style type="text/css">
+  /* Apply styles to devices without hover (touch devices like smartphones and tablets) */
+  @media (hover: none) and (orientation: portrait) {
+    body {
+      width: 200%; /* Make the body wider in portrait */
+    }
+  }
+
+  @media (hover: none) and (orientation: landscape) {
+    body {
+      width: 100%; /* Fit to the screen in landscape */
+    }
+  }
+</style>
 <meta name="HandheldFriendly" content="true" />
 <meta name="ROBOTS" content="Index, FOLLOW" />
 <meta name="GOOGLEBOT" content="Index, FOLLOW" />
