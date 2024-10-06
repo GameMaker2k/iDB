@@ -1259,6 +1259,7 @@ if($_GET['theme']==null&&$_SESSION['Theme']==null) {
 	$_SESSION['Theme'] = $Settings['DefaultTheme']; }
 if($_GET['theme']!=null) {
 $themequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."themes\" WHERE \"Name\"='%s'", array($_GET['theme'])); }
+$themenum = 0;
 if($_GET['theme']==null) { 
 if($_SESSION['Theme']!=null) {
 $themenum=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."themes\" WHERE \"Name\"='%s'", array($_SESSION['Theme'])), $SQLStat);
