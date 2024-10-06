@@ -29,7 +29,7 @@ function version_info($proname, $subver, $ver, $supver, $reltype, $svnver, $show
 }
 // Version number and date stuff. :P
 $VER1[0] = 0; $VER1[1] = 7; $VER1[2] = 8; $VERFull[1] = $VER1[0].".".$VER1[1].".".$VER1[2];
-$VER2[0] = "Alpha"; $VER2[1] = "Al"; $VER2[2] = "SVN"; $SubVerN = 1320; $GitRevPreN = '$Id$';
+$VER2[0] = "Alpha"; $VER2[1] = "Al"; $VER2[2] = "SVN"; $SubVerN = 1320; $GitRevPreN = '$Id: 57f7a0c20bd89982d31a2298a615978570725429 $';
 $GitRevN = getGitRevision($GitRevPreN);
 $SVNDay[0] = 10; $SVNDay[1] = 3; $SVNDay[2] = 2024; $SVNDay[3] = $SVNDay[0]."/".$SVNDay[1]."/".$SVNDay[2];
 $AltName = "DF2k"; $AltName2 = "DF2k"; $RName = "iDB"; $SFName = "IntDB";
