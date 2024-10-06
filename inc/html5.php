@@ -120,7 +120,7 @@ if($XHTML5===false) { ?>
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $Settings['charset']; ?>">
 <meta name="language" content="english">
-<meta name="viewport" id="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" id="viewport" content="width=device-width, initial-scale=0.5">
 <?php if($_GET['act']!="lowview") { ?>
 <style type="text/css">
   /* Apply styles to devices without hover (touch devices like smartphones and tablets) */
