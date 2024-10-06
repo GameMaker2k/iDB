@@ -1014,219 +1014,150 @@ function GetQueryStr($qstr = ";", $qsep = "=", $fixhtml = true)
 }
 
 function log_fix_quotes($logtxt) {
-	$logtxt = str_replace("\"", "\\\"", $logtxt);
-	$logtxt = str_replace("'", "", $logtxt);
-	return $logtxt; }
+    return str_replace(['"', "'"], ['\\\"', ''], $logtxt);
+}
+
 function get_server_values($matches) {
-	$return_text = "-";
-	if(isset($_SERVER[$matches[1]])) { $return_text = $_SERVER[$matches[1]]; }
-	if(!isset($_SERVER[$matches[1]])) { $return_text = "-"; }
-	return $return_text; }
+    return $_SERVER[$matches[1]] ?? "-";
+}
+
 function get_cookie_values($matches) {
-	$return_text = null;
-	if(isset($_COOKIE[$matches[1]])) { $return_text = $_COOKIE[$matches[1]]; }
-	if(!isset($_COOKIE[$matches[1]])) { $return_text = null; }
-	return $return_text; }
+    return $_COOKIE[$matches[1]] ?? null;
+}
+
 function get_env_values($matches) {
-	$return_text = getenv($matches[1]);
-	if(!isset($return_text)) { $return_text = "-"; }
-	return $return_text; }
+    return getenv($matches[1]) ?? "-";
+}
+
 function get_setting_values($matches) {
-	global $Settings;
-	$return_text = null;
-	$matches[1] = str_replace("sqlpass", "sqluser", $matches[1]);
-	if(isset($Settings[$matches[1]])) { $return_text = $Settings[$matches[1]]; }
-	if(!isset($Settings[$matches[1]])) { $return_text = null; }
-	return $return_text; }
+    global $Settings;
+    $key = str_replace("sqlpass", "sqluser", $matches[1]);
+    return $Settings[$key] ?? null;
+}
+
 function log_fix_get_server_values($matches) {
-	return log_fix_quotes(get_server_values($matches)); }
+    return log_fix_quotes(get_server_values($matches));
+}
+
 function log_fix_get_cookie_values($matches) {
-	return log_fix_quotes(get_cookie_values($matches)); }
+    return log_fix_quotes(get_cookie_values($matches));
+}
+
 function log_fix_get_env_values($matches) {
-	return log_fix_quotes(get_env_values($matches)); }
+    return log_fix_quotes(get_env_values($matches));
+}
+
 function log_fix_get_setting_values($matches) {
-	return log_fix_quotes(get_setting_values($matches)); }
+    return log_fix_quotes(get_setting_values($matches));
+}
+
 function get_time($matches) {
-	return date(convert_strftime($matches[1])); }
+    return date(convert_strftime($matches[1]));
+}
+
 function convert_strftime($strftime) {
-$strftime = str_replace("%%", "{percent\}p", $strftime);
-$strftime = str_replace("%a", "D", $strftime);
-$strftime = str_replace("%A", "l", $strftime);
-$strftime = str_replace("%d", "d", $strftime);
-$strftime = str_replace("%e", "j", $strftime);
-$strftime = str_replace("%j", "z", $strftime);
-$strftime = str_replace("%u", "w", $strftime);
-$strftime = str_replace("%w", "w", $strftime);
-$strftime = str_replace("%U", "W", $strftime);
-$strftime = str_replace("%V", "W", $strftime);
-$strftime = str_replace("%W", "W", $strftime);
-$strftime = str_replace("%b", "M", $strftime);
-$strftime = str_replace("%B", "F", $strftime);
-$strftime = str_replace("%h", "M", $strftime);
-$strftime = str_replace("%m", "m", $strftime);
-$strftime = str_replace("%g", "y", $strftime);
-$strftime = str_replace("%G", "Y", $strftime);
-$strftime = str_replace("%y", "y", $strftime);
-$strftime = str_replace("%Y", "Y", $strftime);
-$strftime = str_replace("%H", "H", $strftime);
-$strftime = str_replace("%I", "h", $strftime);
-$strftime = str_replace("%l", "g", $strftime);
-$strftime = str_replace("%M", "i", $strftime);
-$strftime = str_replace("%p", "A", $strftime);
-$strftime = str_replace("%P", "a", $strftime);
-$strftime = str_replace("%r", "h:i:s A", $strftime);
-$strftime = str_replace("%R", "H:i", $strftime);
-$strftime = str_replace("%S", "s", $strftime);
-$strftime = str_replace("%T", "H:i:s", $strftime);
-$strftime = str_replace("%X", "H:i:s", $strftime);
-$strftime = str_replace("%z", "O", $strftime);
-$strftime = str_replace("%Z", "O", $strftime);
-$strftime = str_replace("%c", "D M j H:i:s Y", $strftime);
-$strftime = str_replace("%D", "m/d/y", $strftime);
-$strftime = str_replace("%F", "Y-m-d", $strftime);
-$strftime = str_replace("%x", "m/d/y", $strftime);
-$strftime = str_replace("%n", "\n", $strftime);
-$strftime = str_replace("%t", "\t", $strftime);
-$strftime = preg_replace("/\{percent\}p/s", "%", $strftime);
-return $strftime; }
-function apache_log_maker($logtxt,$logfile=null,$status=200,$contentsize="-",$headersize=0) {
-global $Settings;
-if(isset($Settings['DefaultTimeZone'])) {
-$servtz = new DateTimeZone($Settings['DefaultTimeZone']); }
-if(!isset($Settings['DefaultTimeZone'])) {
-$servtz = new DateTimeZone(date_default_timezone_get()); }
-$servcurtime = new DateTime();
-$servcurtime->setTimezone($servtz);
-if(!isset($_SERVER['HTTP_REFERER'])) { $LOG_URL_REFERER = "-"; }
-if(isset($_SERVER['HTTP_REFERER'])) { $LOG_URL_REFERER = $_SERVER['HTTP_REFERER']; }
-if($LOG_URL_REFERER==""||$LOG_URL_REFERER==null) { $LOG_URL_REFERER = "-"; }
-if(trim($LOG_URL_REFERER, "\x00..\x1F") == "") { $LOG_URL_REFERER = "-"; }
-$LOG_URL_REFERER = log_fix_quotes($LOG_URL_REFERER);
-if(!isset($_SERVER['PHP_AUTH_USER'])) { $LOG_AUTH_USER = "-"; }
-if(isset($_SERVER['PHP_AUTH_USER'])) { $LOG_AUTH_USER = $_SERVER['PHP_AUTH_USER']; }
-if($LOG_AUTH_USER==""||$LOG_AUTH_USER==null) { $LOG_AUTH_USER = "-"; }
-if(trim($LOG_AUTH_USER, "\x00..\x1F") == "") { $LOG_AUTH_USER = "-"; }
-$LOG_AUTH_USER = log_fix_quotes($LOG_AUTH_USER);
-if(!isset($_SERVER['HTTP_USER_AGENT'])) { $LOG_USER_AGENT = "-"; }
-if(isset($_SERVER['HTTP_USER_AGENT'])) { $LOG_USER_AGENT = $_SERVER['HTTP_USER_AGENT']; }
-if($LOG_USER_AGENT==""||$LOG_USER_AGENT==null) { $LOG_USER_AGENT = "-"; }
-if(trim($LOG_USER_AGENT, "\x00..\x1F") == "") { $LOG_USER_AGENT = "-"; }
-$LOG_USER_AGENT = log_fix_quotes($LOG_USER_AGENT);
-$LogMemName = "-";
-if(!isset($_SESSION['MemberName'])) {
-	$_SESSION['MemberName'] = null; }
-if($_SESSION['MemberName']===null) {
-	$LogMemName = "-"; }
-if(isset($_SESSION['MemberName'])&&$_SESSION['MemberName']!==null) {
-	$LogMemName = $_SESSION['MemberName']; }
-if(trim($LogMemName, "\x00..\x1F") == "") { $LogMemName = "-"; }
-$LogMemName = log_fix_quotes($LogMemName);
-$LogMemID = "-";
-if(!isset($_SESSION['UserID'])) {
-	$_SESSION['UserID'] = 0; }
-if($_SESSION['UserID']===null||$_SESSION['UserID']===0) {
-	$LogMemID = "-"; }
-if(isset($_SESSION['UserID'])&&$_SESSION['UserID']!==null&&$_SESSION['UserID']!==0) {
-	$LogMemID = $_SESSION['UserID']; }
-if(trim($LogMemID, "\x00..\x1F") == "") { $LogMemID = "-"; }
-$LogMemID = log_fix_quotes($LogMemID);
-$LogGroupName = "-";
-if(!isset($_SESSION['UserGroup'])) {
-	$LogGroupName = "-"; }
-if(isset($_SESSION['UserGroup'])&&$_SESSION['UserGroup']===null) {
-	$LogGroupName = "-"; }
-if(isset($_SESSION['UserGroup'])&&$_SESSION['UserGroup']!==null) {
-	$LogGroupName = $_SESSION['UserGroup']; }
-if(trim($LogGroupName, "\x00..\x1F") == "") { $LogGroupName = "-"; }
-$LogGroupName = log_fix_quotes($LogGroupName);
-$LogGroupID = "-";
-if(!isset($_SESSION['UserGroupID'])) {
-	$LogGroupID = "-"; }
-if(isset($_SESSION['UserGroupID'])&&$_SESSION['UserGroupID']===null) {
-	$LogGroupID = "-"; }
-if(isset($_SESSION['UserGroupID'])&&$_SESSION['UserGroupID']!==null) {
-	$LogGroupID = $_SESSION['UserGroupID']; }
-if(trim($LogGroupID, "\x00..\x1F") == "") { $LogGroupID = "-"; }
-$LogGroupID = log_fix_quotes($LogGroupID);
-$LOG_QUERY_STRING = "";
-if($_SERVER['QUERY_STRING']!=="") {
-$LOG_QUERY_STRING = "?".$_SERVER['QUERY_STRING']; }
-if(trim($LOG_QUERY_STRING, "\x00..\x1F") == "") { $LOG_QUERY_STRING = ""; }
-$LOG_QUERY_STRING = log_fix_quotes($LOG_QUERY_STRING);
-$oldcontentsize = $contentsize;
-if($oldcontentsize=="-") { $oldcontentsize = 0; }
-if($contentsize===0) { $contentsize = "-"; }
-if($contentsize=="-"&&$headersize!==0) { $fullsitesize = $headersize; }
-if($contentsize!="-"&&$headersize!==0) { $fullsitesize = $contentsize + $headersize; }
-if($status=="302") { $contentsize = "-"; }
-$HTTP_REQUEST_LINE = $_SERVER['REQUEST_METHOD']." ".$_SERVER['REQUEST_URI']." ".$_SERVER['SERVER_PROTOCOL'];
-$HTTP_REQUEST_LINE = log_fix_quotes($HTTP_REQUEST_LINE);
-$logtxt = preg_replace("/%%/s", "{percent}p", $logtxt);
-$logtxt = preg_replace("/%([\<\>]*?)a/s", $_SERVER['REMOTE_ADDR'], $logtxt);
-$logtxt = preg_replace("/%([\<\>]*?)A/s", $_SERVER['SERVER_ADDR'], $logtxt);
-$logtxt = preg_replace("/%([\<\>]*?)B/s", $oldcontentsize, $logtxt);
-$logtxt = preg_replace("/%([\<\>]*?)b/s", $contentsize, $logtxt);
-$logtxt = preg_replace_callback("/%([\<\>]*?)\{([^\}]*)\}C/s", "get_cookie_values", $logtxt);
-$logtxt = preg_replace_callback("/%([\<\>]*?)\{([^\}]*)\}e/s", "get_env_values", $logtxt);
-$logtxt = preg_replace("/%([\<\>]*?)f/s", log_fix_quotes($_SERVER['SCRIPT_FILENAME']), $logtxt);
-$logtxt = preg_replace("/%([\<\>]*?)h/s", $_SERVER['REMOTE_ADDR'], $logtxt);
-$logtxt = preg_replace("/%([\<\>]*?)H/s", $_SERVER['SERVER_PROTOCOL'], $logtxt);
-$logtxt = preg_replace("/%([\<\>]*?)\{Referer\}i/s", $LOG_URL_REFERER, $logtxt);
-$logtxt = preg_replace("/%([\<\>]*?)\{User-Agent\}i/s", $LOG_USER_AGENT, $logtxt);
-$logtxt = preg_replace_callback("/%([\<\>]*?)\{([^\}]*)\}i/s", "get_server_values", $logtxt);
-$logtxt = preg_replace("/%([\<\>]*?)l/s", "-", $logtxt);
-$logtxt = preg_replace("/%([\<\>]*?)m/s", $_SERVER['REQUEST_METHOD'], $logtxt);
-$logtxt = preg_replace("/%([\<\>]*?)p/s", $_SERVER['SERVER_PORT'], $logtxt);
-$logtxt = preg_replace("/%([\<\>]*?)q/s", $LOG_QUERY_STRING, $logtxt);
-$logtxt = preg_replace("/%([\<\>]*?)r/s", $HTTP_REQUEST_LINE, $logtxt);
-$logtxt = preg_replace("/%([\<\>]*?)s/s", $status, $logtxt);
-$logtxt = preg_replace("/%([\<\>]*?)t/s", "[".$servcurtime->format("d/M/Y:H:i:s O")."]", $logtxt);
-$logtxt = preg_replace_callback("/%([\<\>]*?)\{([^\}]*)\}t/s", "get_time", $logtxt);
-$logtxt = preg_replace("/%([\<\>]*?)u/s", $LOG_AUTH_USER, $logtxt);
-$logtxt = preg_replace("/%([\<\>]*?)U/s", log_fix_quotes($_SERVER['PHP_SELF']), $logtxt);
-$logtxt = preg_replace("/%([\<\>]*?)v/s", $_SERVER['SERVER_NAME'], $logtxt);
-$logtxt = preg_replace("/%([\<\>]*?)V/s", $_SERVER['SERVER_NAME'], $logtxt);
-// Not what it should be but PHP dose not have variable to get Apache ServerName config value. :( 
-$logtxt = preg_replace("/%([\<\>]*?)O/s", $fullsitesize, $logtxt);
-$logtxt = preg_replace_callback("/%([\<\>]*?)\{([^\}]*)\}s/s", "get_setting_values", $logtxt);
-$logtxt = preg_replace("/\%\{UserName\}m/s", $LogMemName, $logtxt);
-$logtxt = preg_replace("/\%\{MemberName\}m/s", $LogMemName, $logtxt);
-$logtxt = preg_replace("/\%\{UserID\}m/s", $LogMemID, $logtxt);
-$logtxt = preg_replace("/\%\{MemberID\}m/s", $LogMemID, $logtxt);
-$logtxt = preg_replace("/\%\{UserGroup\}m/s", $LogGroupName, $logtxt);
-$logtxt = preg_replace("/\%\{MemberGroup\}m/s", $LogGroupName, $logtxt);
-$logtxt = preg_replace("/\%\{UserGroupID\}m/s", $LogGroupID, $logtxt);
-$logtxt = preg_replace("/\%\{MemberGroupID\}m/s", $LogGroupID, $logtxt);
-$logtxt = preg_replace("/\{percent\}p/s", "%", $logtxt);
-if(isset($logfile)&&$logfile!==null) {
-	$fp = fopen($logfile, "a+");
-	if (flock($fp, LOCK_EX)) {
-		$logtxtnew = $logtxt."\r\n";
-		fwrite($fp, $logtxtnew, strlen($logtxtnew)); 
-		flock($fp, LOCK_UN); }
-	fclose($fp); 
-	@chmod($logfile, 0666); }
-return $logtxt; }
-function idb_log_maker($status=200,$contentsize="-") {
-global $Settings,$SettDir;
-if(isset($Settings['DefaultTimeZone'])) {
-$servtz = new DateTimeZone($Settings['DefaultTimeZone']); }
-if(!isset($Settings['DefaultTimeZone'])) {
-$servtz = new DateTimeZone(date_default_timezone_get()); }
-$servcurtime = new DateTime();
-$servcurtime->setTimezone($servtz);
-if(!isset($Settings['log_http_request'])) {
-	$Settings['log_http_request'] = "off"; }
-if(!isset($Settings['log_config_format'])) {
-	$Settings['log_config_format'] = "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\""; }
-if(isset($Settings['log_http_request'])&&$Settings['log_http_request']=="on"&&
-	$Settings['log_http_request']!==null&&$Settings['log_http_request']!="off") {
-return apache_log_maker($Settings['log_config_format'], $SettDir['logs'].$Settings['sqltable'].$servcurtime->format("Ym").".log", $status, $contentsize, strlen(implode("\r\n",headers_list())."\r\n\r\n")); }
-if(isset($Settings['log_http_request'])&&$Settings['log_http_request']!="on"&&
-	$Settings['log_http_request']!==null&&$Settings['log_http_request']!="off") {
-$Settings['log_http_request'] = preg_replace_callback("/".preg_quote("%{", "/")."([^\}]*)".preg_quote("}t", "/")."/s", "get_time", $Settings['log_http_request']);
-$Settings['log_http_request'] = preg_replace_callback("/".preg_quote("%{", "/")."([^\}]*)".preg_quote("}s", "/")."/s", "get_setting_values", $Settings['log_http_request']);
-return apache_log_maker($Settings['log_config_format'], $SettDir['logs'].$Settings['log_http_request'], $status, $contentsize, strlen(implode("\r\n",headers_list())."\r\n\r\n")); } }
+    $replace_pairs = [
+        "%%" => "{percent\}p", "%a" => "D", "%A" => "l", "%d" => "d", "%e" => "j", 
+        "%j" => "z", "%u" => "w", "%w" => "w", "%U" => "W", "%V" => "W", "%W" => "W", 
+        "%b" => "M", "%B" => "F", "%h" => "M", "%m" => "m", "%g" => "y", "%G" => "Y", 
+        "%y" => "y", "%Y" => "Y", "%H" => "H", "%I" => "h", "%l" => "g", "%M" => "i", 
+        "%p" => "A", "%P" => "a", "%r" => "h:i:s A", "%R" => "H:i", "%S" => "s", 
+        "%T" => "H:i:s", "%X" => "H:i:s", "%z" => "O", "%Z" => "O", "%c" => "D M j H:i:s Y", 
+        "%D" => "m/d/y", "%F" => "Y-m-d", "%x" => "m/d/y", "%n" => "\n", "%t" => "\t"
+    ];
+    $strftime = strtr($strftime, $replace_pairs);
+    return str_replace("{percent\}p", "%", $strftime);
+}
+
+function apache_log_maker($logtxt, $logfile = null, $status = 200, $contentsize = "-", $headersize = 0) {
+    global $Settings;
+
+    $servtz = new DateTimeZone($Settings['DefaultTimeZone'] ?? date_default_timezone_get());
+    $servcurtime = new DateTime();
+    $servcurtime->setTimezone($servtz);
+
+    $LOG_URL_REFERER = log_fix_quotes($_SERVER['HTTP_REFERER'] ?? "-");
+    $LOG_AUTH_USER = log_fix_quotes($_SERVER['PHP_AUTH_USER'] ?? "-");
+    $LOG_USER_AGENT = log_fix_quotes($_SERVER['HTTP_USER_AGENT'] ?? "-");
+
+    $LogMemName = log_fix_quotes($_SESSION['MemberName'] ?? "-");
+    $LogMemID = log_fix_quotes($_SESSION['UserID'] ?? "-");
+    $LogGroupName = log_fix_quotes($_SESSION['UserGroup'] ?? "-");
+    $LogGroupID = log_fix_quotes($_SESSION['UserGroupID'] ?? "-");
+
+    $LOG_QUERY_STRING = log_fix_quotes($_SERVER['QUERY_STRING'] ? "?" . $_SERVER['QUERY_STRING'] : "");
+    
+    if ($contentsize === 0) {
+        $contentsize = "-";
+    }
+
+    $fullsitesize = ($contentsize !== "-" && $headersize !== 0) ? $contentsize + $headersize : $headersize;
+
+    $HTTP_REQUEST_LINE = log_fix_quotes($_SERVER['REQUEST_METHOD'] . " " . $_SERVER['REQUEST_URI'] . " " . $_SERVER['SERVER_PROTOCOL']);
+
+    $logtxt = preg_replace([
+        "/%%/s", "/%([\<\>]*?)a/s", "/%([\<\>]*?)A/s", "/%([\<\>]*?)B/s", "/%([\<\>]*?)b/s",
+        "/%([\<\>]*?)f/s", "/%([\<\>]*?)h/s", "/%([\<\>]*?)H/s", "/%([\<\>]*?)\{Referer\}i/s", 
+        "/%([\<\>]*?)\{User-Agent\}i/s", "/%([\<\>]*?)l/s", "/%([\<\>]*?)m/s", "/%([\<\>]*?)p/s", 
+        "/%([\<\>]*?)q/s", "/%([\<\>]*?)r/s", "/%([\<\>]*?)s/s", "/%([\<\>]*?)t/s", 
+        "/%([\<\>]*?)u/s", "/%([\<\>]*?)U/s", "/%([\<\>]*?)v/s", "/%([\<\>]*?)V/s", "/%([\<\>]*?)O/s"
+    ], [
+        "{percent}p", $_SERVER['REMOTE_ADDR'], $_SERVER['SERVER_ADDR'], $contentsize, $contentsize, 
+        log_fix_quotes($_SERVER['SCRIPT_FILENAME']), $_SERVER['REMOTE_ADDR'], $_SERVER['SERVER_PROTOCOL'], 
+        $LOG_URL_REFERER, $LOG_USER_AGENT, "-", $_SERVER['REQUEST_METHOD'], $_SERVER['SERVER_PORT'], 
+        $LOG_QUERY_STRING, $HTTP_REQUEST_LINE, $status, "[" . $servcurtime->format("d/M/Y:H:i:s O") . "]", 
+        $LOG_AUTH_USER, log_fix_quotes($_SERVER['PHP_SELF']), $_SERVER['SERVER_NAME'], $_SERVER['SERVER_NAME'], 
+        $fullsitesize
+    ], $logtxt);
+
+    $logtxt = preg_replace_callback("/%([\<\>]*?)\{([^\}]*)\}C/s", "get_cookie_values", $logtxt);
+    $logtxt = preg_replace_callback("/%([\<\>]*?)\{([^\}]*)\}e/s", "get_env_values", $logtxt);
+    $logtxt = preg_replace_callback("/%([\<\>]*?)\{([^\}]*)\}i/s", "get_server_values", $logtxt);
+    $logtxt = preg_replace_callback("/%([\<\>]*?)\{([^\}]*)\}t/s", "get_time", $logtxt);
+    $logtxt = preg_replace_callback("/%([\<\>]*?)\{([^\}]*)\}s/s", "get_setting_values", $logtxt);
+
+    $logtxt = preg_replace([
+        "/\%\{UserName\}m/s", "/\%\{MemberName\}m/s", "/\%\{UserID\}m/s", "/\%\{MemberID\}m/s", 
+        "/\%\{UserGroup\}m/s", "/\%\{MemberGroup\}m/s", "/\%\{UserGroupID\}m/s", "/\%\{MemberGroupID\}m/s"
+    ], [
+        $LogMemName, $LogMemName, $LogMemID, $LogMemID, $LogGroupName, $LogGroupName, 
+        $LogGroupID, $LogGroupID
+    ], $logtxt);
+
+    $logtxt = str_replace("{percent}p", "%", $logtxt);
+
+    if ($logfile) {
+        $fp = fopen($logfile, "a+");
+        if (flock($fp, LOCK_EX)) {
+            fwrite($fp, $logtxt . "\r\n");
+            flock($fp, LOCK_UN);
+        }
+        fclose($fp);
+        @chmod($logfile, 0666);
+    }
+    return $logtxt;
+}
+
+function idb_log_maker($status = 200, $contentsize = "-") {
+    global $Settings, $SettDir;
+
+    $servtz = new DateTimeZone($Settings['DefaultTimeZone'] ?? date_default_timezone_get());
+    $servcurtime = new DateTime();
+    $servcurtime->setTimezone($servtz);
+
+    $Settings['log_http_request'] = $Settings['log_http_request'] ?? "off";
+    $Settings['log_config_format'] = $Settings['log_config_format'] ?? "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"";
+
+    if ($Settings['log_http_request'] === "on") {
+        return apache_log_maker($Settings['log_config_format'], $SettDir['logs'] . $Settings['sqltable'] . $servcurtime->format("Ym") . ".log", $status, $contentsize, strlen(implode("\r\n", headers_list()) . "\r\n\r\n"));
+    }
+
+    if ($Settings['log_http_request'] !== "off") {
+        $Settings['log_http_request'] = preg_replace_callback("/" . preg_quote("%{", "/") . "([^\}]*)" . preg_quote("}t", "/") . "/s", "get_time", $Settings['log_http_request']);
+        $Settings['log_http_request'] = preg_replace_callback("/" . preg_quote("%{", "/") . "([^\}]*)" . preg_quote("}s", "/") . "/s", "get_setting_values", $Settings['log_http_request']);
+        return apache_log_maker($Settings['log_config_format'], $SettDir['logs'] . $Settings['log_http_request'], $status, $contentsize, strlen(implode("\r\n", headers_list()) . "\r\n\r\n"));
+    }
+}
 
 // Function to return the LIMIT and OFFSET clause in ANSI format or SQL Server-specific syntax
 function getSQLLimitClause($sqltype, $limit, $offset) {
