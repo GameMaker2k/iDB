@@ -230,12 +230,14 @@ if (!isset($Settings['js_ext'])) {
   @media (hover: none) and (orientation: portrait) {
     body {
       width: 200%; /* Make the body wider in portrait */
+      padding-right: 5%; /* Add padding to the right */
     }
   }
 
   @media (hover: none) and (orientation: landscape) {
     body {
       width: 100%; /* Fit to the screen in landscape */
+      padding-right: 5%; /* Add padding to the right */
     }
   }
 </style>
