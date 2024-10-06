@@ -120,8 +120,23 @@ if($XHTML5===false) { ?>
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $Settings['charset']; ?>">
 <meta name="language" content="english">
-<meta name="viewport" content="width=device-width initial-scale=1.0">
-<?php 
+<meta name="viewport" id="viewport" content="width=device-width, initial-scale=1.0">
+<?php if($_GET['act']!="lowview") { ?>
+<style type="text/css">
+  /* Apply styles to devices without hover (touch devices like smartphones and tablets) */
+  @media (hover: none) and (orientation: portrait) {
+    body {
+      width: 200%; /* Make the body wider in portrait */
+    }
+  }
+
+  @media (hover: none) and (orientation: landscape) {
+    body {
+      width: 100%; /* Fit to the screen in landscape */
+    }
+  }
+</style>
+<?php }
 if(!isset($_SERVER['HTTP_USER_AGENT'])) {
 	$_SERVER['HTTP_USER_AGENT'] = ""; }
 if(strpos($_SERVER['HTTP_USER_AGENT'], "msie") && 
