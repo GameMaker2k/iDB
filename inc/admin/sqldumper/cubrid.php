@@ -15,53 +15,61 @@
 */
 
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
-if ($File3Name=="cubrid.php"||$File3Name=="/cubrid.php") {
+if ($File3Name == "cubrid.php" || $File3Name == "/cubrid.php") {
     require('index.php');
     exit();
 }
 
-if($_SESSION['UserGroup']==$Settings['GuestGroup']||$GroupInfo['HasAdminCP']=="no") {
+if ($_SESSION['UserGroup'] == $Settings['GuestGroup'] || $GroupInfo['HasAdminCP'] == "no") {
     redirect("location", $rbasedir.url_maker($exfile['index'], $Settings['file_ext'], "act=view", $Settings['qstr'], $Settings['qsep'], $prexqstr['index'], $exqstr['index'], false));
-    ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
-    gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die();
+    ob_clean();
+    header("Content-Type: text/plain; charset=".$Settings['charset']);
+    gzip_page($Settings['use_gzip'], $GZipEncode['Type']);
+    session_write_close();
+    die();
 }
-if($Settings['sqltype']!="cubrid") {
+if ($Settings['sqltype'] != "cubrid") {
     redirect("location", $rbasedir.url_maker($exfile['index'], $Settings['file_ext'], "act=view", $Settings['qstr'], $Settings['qsep'], $prexqstr['index'], $exqstr['index'], false));
-    ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']);
-    gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die();
+    ob_clean();
+    header("Content-Type: text/plain; charset=".$Settings['charset']);
+    gzip_page($Settings['use_gzip'], $GZipEncode['Type']);
+    session_write_close();
+    die();
 }
 
-if(!isset($_GET['outtype'])) { $_GET['outtype'] = "UTF-8"; }
-header("Cache-Control: must-revalidate, post-check=0, pre-check=0"); 
-header("Cache-Control: private", false); 
+if (!isset($_GET['outtype'])) {
+    $_GET['outtype'] = "UTF-8";
+}
+header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+header("Cache-Control: private", false);
 header("Content-Description: File Transfer");
 
-if(!isset($_GET['compress'])) {
+if (!isset($_GET['compress'])) {
     $_GET['compress'] = "none";
 }
 
-if($_GET['compress']=="gzip") {
+if ($_GET['compress'] == "gzip") {
     $_GET['compress'] = "gzencode";
 }
 
-if($_GET['compress']=="bzip" || $_GET['compress']=="bzip2") {
+if ($_GET['compress'] == "bzip" || $_GET['compress'] == "bzip2") {
     $_GET['compress'] = "bzcompress";
 }
 
-if($_GET['compress']!="none" && $_GET['compress']!="gzencode" &&
-   $_GET['compress']!="gzcompress" && $_GET['compress']!="gzdeflate" &&
-   $_GET['compress']!="bzcompress") {
+if ($_GET['compress'] != "none" && $_GET['compress'] != "gzencode" &&
+   $_GET['compress'] != "gzcompress" && $_GET['compress'] != "gzdeflate" &&
+   $_GET['compress'] != "bzcompress") {
     $_GET['compress'] = "none";
 }
 
-if(!extension_loaded("zlib")) {
-    if($_GET['compress']=="gzencode" || $_GET['compress']=="gzcompress" || $_GET['compress']=="gzdeflate") {
+if (!extension_loaded("zlib")) {
+    if ($_GET['compress'] == "gzencode" || $_GET['compress'] == "gzcompress" || $_GET['compress'] == "gzdeflate") {
         $_GET['compress'] = "none";
     }
 }
 
-if(!extension_loaded("bz2")) {
-    if($_GET['compress']=="bzcompress") {
+if (!extension_loaded("bz2")) {
+    if ($_GET['compress'] == "bzcompress") {
         $_GET['compress'] = "none";
     }
 }
@@ -75,12 +83,12 @@ if (!$conn) {
 $TableChCk = array("categories", "catpermissions", "events", "forums", "groups", "levels", "members", "mempermissions", "messenger", "permissions", "polls", "posts", 'ranks', "restrictedwords", "sessions", "smileys", "themes", "topics", "wordfilter");
 
 $TablePreFix = $Settings['sqltable'];
-$TableChCk = array_map(function($table) use ($TablePreFix) {
+$TableChCk = array_map(function ($table) use ($TablePreFix) {
     return $TablePreFix . $table;
 }, $TableChCk);
 
 $fname = str_replace("_", "", $Settings['sqldb'])."_".str_replace("_", "", $Settings['sqltable']);
-switch($_GET['compress']) {
+switch ($_GET['compress']) {
     case 'none':
         $fname .= ".sql";
         break;
@@ -98,7 +106,8 @@ header("Content-Disposition: attachment; filename=".$fname);
 header("Content-Type: application/octet-stream");
 header("Content-Transfer-Encoding: binary");
 
-function getCreateTableSQL($conn, $tableName) {
+function getCreateTableSQL($conn, $tableName)
+{
     $sql = "SHOW CREATE TABLE " . $tableName;
     $result = cubrid_execute($conn, $sql);
 
@@ -117,19 +126,19 @@ $sqldump = "-- CUBRID SQL Dump\n\n";
 if ($tablesResult) {
     while ($table = cubrid_fetch_assoc($tablesResult)) {
         $tableName = $table['Name'];
-        
+
         // Only dump tables with the specified prefix
         if (in_array($tableName, $TableChCk)) {
             $createTableSQL = getCreateTableSQL($conn, $tableName);
             $sqldump .= "-- Table structure for table `".$tableName."`\n";
             $sqldump .= $createTableSQL . ";\n\n";
-            
+
             // Fetch and insert data for each table
             $rows = cubrid_execute($conn, "SELECT * FROM " . $tableName);
             if ($rows) {
                 $sqldump .= "-- Dumping data for table `".$tableName."`\n";
                 while ($row = cubrid_fetch_assoc($rows)) {
-                    $values = array_map(function($val) use ($conn) { return "'" . cubrid_real_escape_string($val, $conn) . "'"; }, $row);
+                    $values = array_map(function ($val) use ($conn) { return "'" . cubrid_real_escape_string($val, $conn) . "'"; }, $row);
                     $sqldump .= "INSERT INTO `".$tableName."` VALUES (" . implode(", ", $values) . ");\n";
                 }
                 cubrid_free_result($rows);
@@ -142,15 +151,14 @@ if ($tablesResult) {
 
 cubrid_disconnect($conn);
 
-if ($_GET['compress'] == "none") { 
-    echo $sqldump; 
-} elseif ($_GET['compress'] == "gzencode") { 
-    echo gzencode($sqldump, $_GET['comlevel']); 
-} elseif ($_GET['compress'] == "gzcompress") { 
-    echo gzcompress($sqldump, $_GET['comlevel']); 
-} elseif ($_GET['compress'] == "gzdeflate") { 
-    echo gzdeflate($sqldump, $_GET['comlevel']); 
-} elseif ($_GET['compress'] == "bzcompress") { 
-    echo bzcompress($sqldump, $_GET['comlevel']); 
+if ($_GET['compress'] == "none") {
+    echo $sqldump;
+} elseif ($_GET['compress'] == "gzencode") {
+    echo gzencode($sqldump, $_GET['comlevel']);
+} elseif ($_GET['compress'] == "gzcompress") {
+    echo gzcompress($sqldump, $_GET['comlevel']);
+} elseif ($_GET['compress'] == "gzdeflate") {
+    echo gzdeflate($sqldump, $_GET['comlevel']);
+} elseif ($_GET['compress'] == "bzcompress") {
+    echo bzcompress($sqldump, $_GET['comlevel']);
 }
-?>

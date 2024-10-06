@@ -14,16 +14,21 @@
     $FileInfo: function.php - Last Update: 8/30/2024 SVN 1058 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
-if ($File3Name=="function.php"||$File3Name=="/function.php") {
-	require('index.php');
-	exit(); }
+if ($File3Name == "function.php" || $File3Name == "/function.php") {
+    require('index.php');
+    exit();
+}
 require_once($SettDir['misc'].'functions.php');
 require_once($SettDir['misc'].'ibbcode.php');
 require_once($SettDir['misc'].'iuntar.php');
-/* In php 6 and up the function get_magic_quotes_gpc dose not exist. 
+/* In php 6 and up the function get_magic_quotes_gpc dose not exist.
    here we make a fake version that always sends false out. :P */
-if(!function_exists('get_magic_quotes_gpc')) {
-function get_magic_quotes_gpc() { return false; } }
+if (!function_exists('get_magic_quotes_gpc')) {
+    function get_magic_quotes_gpc()
+    {
+        return false;
+    }
+}
 /**
  * Undo the damage of magic_quotes_gpc if in effect
  * @return bool
@@ -31,16 +36,16 @@ function get_magic_quotes_gpc() { return false; } }
  */
 function fix_magic_quotes()
 {
-   if (get_magic_quotes_gpc()) {
-      $func = create_function(
-         '&$val, $key',
-         'if(!is_numeric($val)) {$val = stripslashes($val);}'
-      );
-      array_walk_recursive($_GET, $func);
-      array_walk_recursive($_POST, $func);
-      array_walk_recursive($_COOKIE, $func);
-   }
-   return true;
+    if (get_magic_quotes_gpc()) {
+        $func = create_function(
+            '&$val, $key',
+            'if(!is_numeric($val)) {$val = stripslashes($val);}'
+        );
+        array_walk_recursive($_GET, $func);
+        array_walk_recursive($_POST, $func);
+        array_walk_recursive($_COOKIE, $func);
+    }
+    return true;
 }
 fix_magic_quotes();
 /* Change Some PHP Settings Fix the & to &amp;
@@ -50,47 +55,57 @@ ini_set("arg_separator.input",$Settings['qstr']);
 ini_set("arg_separator",htmlentities($Settings['qstr'], ENT_QUOTES, $Settings['charset'])); }
 //$basepath = pathinfo($_SERVER['REQUEST_URI']);
 if(dirname($_SERVER['REQUEST_URI'])!="."||
-	dirname($_SERVER['REQUEST_URI'])!=null) {
+    dirname($_SERVER['REQUEST_URI'])!=null) {
 $basedir = dirname($_SERVER['REQUEST_URI'])."/"; }*/
 // Get the base dir name
 /*if(dirname($_SERVER['SCRIPT_NAME'])!="."||
-	dirname($_SERVER['SCRIPT_NAME'])!=null) {
+    dirname($_SERVER['SCRIPT_NAME'])!=null) {
 $basedir = dirname($_SERVER['SCRIPT_NAME'])."/"; }
 if($basedir==null||$basedir==".") {
 if(dirname($_SERVER['SCRIPT_NAME'])=="."||
-	dirname($_SERVER['SCRIPT_NAME'])==null) {
+    dirname($_SERVER['SCRIPT_NAME'])==null) {
 $basedir = dirname($_SERVER['PHP_SELF'])."/"; } }
 if($basedir=="\/") { $basedir="/"; }
 $basedir = str_replace("//", "/", $basedir);*/
-if($Settings['qstr']!="/") {
-$iDBURLCHK = $Settings['idburl']; }
-if($Settings['qstr']=="/") {
-$iDBURLCHK = preg_replace("/\/$/","",$Settings['idburl']); }
+if ($Settings['qstr'] != "/") {
+    $iDBURLCHK = $Settings['idburl'];
+}
+if ($Settings['qstr'] == "/") {
+    $iDBURLCHK = preg_replace("/\/$/", "", $Settings['idburl']);
+}
 $basecheck = parse_url($iDBURLCHK);
 $basedir = $basecheck['path'];
 $cbasedir = $basedir;
 $rbasedir = $basedir;
-if($Settings['fixbasedir']!=null&&$Settings['fixbasedir']!="off") {
-		$basedir = $Settings['fixbasedir']; }
-if($Settings['fixcookiedir']!=null&&$Settings['fixcookiedir']!="") {
-		$cbasedir = $Settings['fixcookiedir']; }
-if($Settings['fixredirectdir']!=null) {
-		$rbasedir = $Settings['fixredirectdir']; }
+if ($Settings['fixbasedir'] != null && $Settings['fixbasedir'] != "off") {
+    $basedir = $Settings['fixbasedir'];
+}
+if ($Settings['fixcookiedir'] != null && $Settings['fixcookiedir'] != "") {
+    $cbasedir = $Settings['fixcookiedir'];
+}
+if ($Settings['fixredirectdir'] != null) {
+    $rbasedir = $Settings['fixredirectdir'];
+}
 $BaseURL = $basedir;
 // Get our Host Name and Referer URL's Host Name
-if(!isset($_SERVER['HTTP_REFERER'])) {
- $REFERERurl = null;
- $_SERVER['HTTP_REFERER'] = null; }
-if(isset($_SERVER['HTTP_REFERER'])) {
- $REFERERurl = parse_url($_SERVER['HTTP_REFERER']); }
-if(!isset($REFERERurl['host'])) { $REFERERurl['host'] = null; }
+if (!isset($_SERVER['HTTP_REFERER'])) {
+    $REFERERurl = null;
+    $_SERVER['HTTP_REFERER'] = null;
+}
+if (isset($_SERVER['HTTP_REFERER'])) {
+    $REFERERurl = parse_url($_SERVER['HTTP_REFERER']);
+}
+if (!isset($REFERERurl['host'])) {
+    $REFERERurl['host'] = null;
+}
 $URL['REFERER'] = $REFERERurl['host'];
 $URL['HOST'] = $basecheck['host'];
 $REFERERurl = null;
 // Function made by Howard Yeend
 // http://php.net/manual/en/function.trigger-error.php#92016
 // http://www.puremango.co.uk/
-function output_error($message, $level = E_USER_ERROR) {
+function output_error($message, $level = E_USER_ERROR)
+{
     $backtrace = debug_backtrace();  // Capture the backtrace
     $caller = isset($backtrace[1]) ? $backtrace[1] : $backtrace[0];  // Get the caller info
 
@@ -106,34 +121,35 @@ function output_error($message, $level = E_USER_ERROR) {
 }
 // By s rotondo90 at gmail com at https://www.php.net/manual/en/function.random-int.php#119670
 if (!function_exists('random_int')) {
-    function random_int($min, $max) {
+    function random_int($min, $max)
+    {
         if (!function_exists('mcrypt_create_iv')) {
             trigger_error(
-                'mcrypt must be loaded for random_int to work', 
+                'mcrypt must be loaded for random_int to work',
                 E_USER_WARNING
             );
             return null;
         }
-        
+
         if (!is_int($min) || !is_int($max)) {
             trigger_error('$min and $max must be integer values', E_USER_NOTICE);
             $min = (int)$min;
             $max = (int)$max;
         }
-        
+
         if ($min > $max) {
             trigger_error('$max can\'t be lesser than $min', E_USER_WARNING);
             return null;
         }
-        
+
         $range = $counter = $max - $min;
         $bits = 1;
-        
+
         while ($counter >>= 1) {
             ++$bits;
         }
-        
-        $bytes = (int)max(ceil($bits/8), 1);
+
+        $bytes = (int)max(ceil($bits / 8), 1);
         $bitmask = pow(2, $bits) - 1;
 
         if ($bitmask >= PHP_INT_MAX) {
@@ -152,7 +168,8 @@ if (!function_exists('random_int')) {
     }
 }
 
-function uuid_new($uuidver = "v4", $rndty = "random_int", $namespace = null, $name = null) {
+function uuid_new($uuidver = "v4", $rndty = "random_int", $namespace = null, $name = null)
+{
     // Validate the UUID version, default to "v4" if invalid
     if (!in_array($uuidver, ["v1", "v2", "v3", "v4", "v5", "guid"])) {
         $uuidver = "v4";
@@ -164,7 +181,8 @@ function uuid_new($uuidver = "v4", $rndty = "random_int", $namespace = null, $na
         $time = microtime(true) * 10000000 + 0x01B21DD213814000;  // UUID epoch adjustment
         $timeHex = sprintf('%016x', $time);
 
-        return sprintf('%08s-%04s-%04x-%04x-%012x',
+        return sprintf(
+            '%08s-%04s-%04x-%04x-%012x',
             substr($timeHex, 0, 8),        // time_low
             substr($timeHex, 8, 4),        // time_mid
             (hexdec(substr($timeHex, 12, 4)) & 0x0fff) | 0x1000,  // time_hi_and_version
@@ -181,12 +199,16 @@ function uuid_new($uuidver = "v4", $rndty = "random_int", $namespace = null, $na
 
     // Version 4 UUID (Randomly Generated) or GUID
     if ($uuidver == "v4" || $uuidver == "guid") {
-        return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
-            $rndty(0, 0xffff), $rndty(0, 0xffff),
+        return sprintf(
+            '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+            $rndty(0, 0xffff),
+            $rndty(0, 0xffff),
             $rndty(0, 0xffff),
             $rndty(0, 0x0fff) | 0x4000,  // Set version 4
             $rndty(0, 0x3fff) | 0x8000,  // Set variant DCE 1.1
-            $rndty(0, 0xffff), $rndty(0, 0xffff), $rndty(0, 0xffff)
+            $rndty(0, 0xffff),
+            $rndty(0, 0xffff),
+            $rndty(0, 0xffff)
         );
     }
 
@@ -219,7 +241,8 @@ function uuid_new($uuidver = "v4", $rndty = "random_int", $namespace = null, $na
         }
 
         // Format the hash into the standard UUID structure
-        return sprintf('%08s-%04s-%04x-%04x-%12s',
+        return sprintf(
+            '%08s-%04s-%04x-%04x-%12s',
             substr($hash, 0, 8),    // time_low
             substr($hash, 8, 4),    // time_mid
             (hexdec(substr($hash, 12, 4)) & 0x0fff) | $uuidverid,  // time_hi_and_version
@@ -232,104 +255,124 @@ function uuid_new($uuidver = "v4", $rndty = "random_int", $namespace = null, $na
 }
 
 // Helper function to validate UUID format
-function uuid_is_valid($uuid) {
+function uuid_is_valid($uuid)
+{
     return preg_match('/^[a-f0-9]{8}-[a-f0-9]{4}-[1-5][a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i', $uuid);
 }
 
-class UUID {
-  
-  public static function v1() {
-    // Get current time and convert to the appropriate format
-    $time = microtime(true) * 10000000 + 0x01B21DD213814000;  // UUID epoch adjustment
-    $timeHex = sprintf('%016x', $time);
+class UUID
+{
+    public static function v1()
+    {
+        // Get current time and convert to the appropriate format
+        $time = microtime(true) * 10000000 + 0x01B21DD213814000;  // UUID epoch adjustment
+        $timeHex = sprintf('%016x', $time);
 
-    return sprintf('%08s-%04s-%04x-%04x-%012x',
-      substr($timeHex, 0, 8),        // time_low
-      substr($timeHex, 8, 4),        // time_mid
-      (hexdec(substr($timeHex, 12, 4)) & 0x0fff) | 0x1000,  // time_hi_and_version
-      mt_rand(0, 0x3fff) | 0x8000,   // clk_seq_hi_res + variant
-      mt_rand(0, 0xffffffffffff)     // node (random MAC or actual MAC address)
-    );
-  }
-
-  public static function v2() {
-    // Placeholder for UUID v2; DCE Security UUIDs typically involve POSIX UID/GID
-    // Often similar to UUID v1, so we can return a v1 UUID for simplicity
-    return self::v1();
-  }
-
-  public static function v3($namespace, $name) {
-    if (!self::is_valid($namespace)) return false;
-
-    // Get hexadecimal components of namespace
-    $nhex = str_replace(array('-', '{', '}'), '', $namespace);
-
-    // Binary Value
-    $nstr = '';
-
-    // Convert Namespace UUID to bits
-    for ($i = 0; $i < strlen($nhex); $i+=2) {
-      $nstr .= chr(hexdec($nhex[$i].$nhex[$i+1]));
+        return sprintf(
+            '%08s-%04s-%04x-%04x-%012x',
+            substr($timeHex, 0, 8),        // time_low
+            substr($timeHex, 8, 4),        // time_mid
+            (hexdec(substr($timeHex, 12, 4)) & 0x0fff) | 0x1000,  // time_hi_and_version
+            mt_rand(0, 0x3fff) | 0x8000,   // clk_seq_hi_res + variant
+            mt_rand(0, 0xffffffffffff)     // node (random MAC or actual MAC address)
+        );
     }
 
-    // Calculate hash value
-    $hash = md5($nstr . $name);
-
-    return sprintf('%08s-%04s-%04x-%04x-%12s',
-      substr($hash, 0, 8),    // time_low
-      substr($hash, 8, 4),    // time_mid
-      (hexdec(substr($hash, 12, 4)) & 0x0fff) | 0x3000,  // time_hi_and_version
-      (hexdec(substr($hash, 16, 4)) & 0x3fff) | 0x8000,  // clk_seq_hi_res + variant
-      substr($hash, 20, 12)   // node
-    );
-  }
-
-  public static function v4() {
-    return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
-      mt_rand(0, 0xffff), mt_rand(0, 0xffff),  // time_low
-      mt_rand(0, 0xffff),                      // time_mid
-      mt_rand(0, 0x0fff) | 0x4000,             // time_hi_and_version (v4)
-      mt_rand(0, 0x3fff) | 0x8000,             // clk_seq_hi_res + variant
-      mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)  // node
-    );
-  }
-
-  public static function v5($namespace, $name) {
-    if (!self::is_valid($namespace)) return false;
-
-    // Get hexadecimal components of namespace
-    $nhex = str_replace(array('-', '{', '}'), '', $namespace);
-
-    // Binary Value
-    $nstr = '';
-
-    // Convert Namespace UUID to bits
-    for ($i = 0; $i < strlen($nhex); $i+=2) {
-      $nstr .= chr(hexdec($nhex[$i].$nhex[$i+1]));
+    public static function v2()
+    {
+        // Placeholder for UUID v2; DCE Security UUIDs typically involve POSIX UID/GID
+        // Often similar to UUID v1, so we can return a v1 UUID for simplicity
+        return self::v1();
     }
 
-    // Calculate hash value
-    $hash = sha1($nstr . $name);
+    public static function v3($namespace, $name)
+    {
+        if (!self::is_valid($namespace)) {
+            return false;
+        }
 
-    return sprintf('%08s-%04s-%04x-%04x-%12s',
-      substr($hash, 0, 8),    // time_low
-      substr($hash, 8, 4),    // time_mid
-      (hexdec(substr($hash, 12, 4)) & 0x0fff) | 0x5000,  // time_hi_and_version
-      (hexdec(substr($hash, 16, 4)) & 0x3fff) | 0x8000,  // clk_seq_hi_res + variant
-      substr($hash, 20, 12)   // node
-    );
-  }
+        // Get hexadecimal components of namespace
+        $nhex = str_replace(array('-', '{', '}'), '', $namespace);
 
-  public static function guid() {
-    return self::v4();  // GUID follows the same structure as UUID v4
-  }
+        // Binary Value
+        $nstr = '';
 
-  public static function is_valid($uuid) {
-    return preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i', $uuid) === 1;
-  }
+        // Convert Namespace UUID to bits
+        for ($i = 0; $i < strlen($nhex); $i += 2) {
+            $nstr .= chr(hexdec($nhex[$i].$nhex[$i + 1]));
+        }
+
+        // Calculate hash value
+        $hash = md5($nstr . $name);
+
+        return sprintf(
+            '%08s-%04s-%04x-%04x-%12s',
+            substr($hash, 0, 8),    // time_low
+            substr($hash, 8, 4),    // time_mid
+            (hexdec(substr($hash, 12, 4)) & 0x0fff) | 0x3000,  // time_hi_and_version
+            (hexdec(substr($hash, 16, 4)) & 0x3fff) | 0x8000,  // clk_seq_hi_res + variant
+            substr($hash, 20, 12)   // node
+        );
+    }
+
+    public static function v4()
+    {
+        return sprintf(
+            '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0xffff),  // time_low
+            mt_rand(0, 0xffff),                      // time_mid
+            mt_rand(0, 0x0fff) | 0x4000,             // time_hi_and_version (v4)
+            mt_rand(0, 0x3fff) | 0x8000,             // clk_seq_hi_res + variant
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0xffff)  // node
+        );
+    }
+
+    public static function v5($namespace, $name)
+    {
+        if (!self::is_valid($namespace)) {
+            return false;
+        }
+
+        // Get hexadecimal components of namespace
+        $nhex = str_replace(array('-', '{', '}'), '', $namespace);
+
+        // Binary Value
+        $nstr = '';
+
+        // Convert Namespace UUID to bits
+        for ($i = 0; $i < strlen($nhex); $i += 2) {
+            $nstr .= chr(hexdec($nhex[$i].$nhex[$i + 1]));
+        }
+
+        // Calculate hash value
+        $hash = sha1($nstr . $name);
+
+        return sprintf(
+            '%08s-%04s-%04x-%04x-%12s',
+            substr($hash, 0, 8),    // time_low
+            substr($hash, 8, 4),    // time_mid
+            (hexdec(substr($hash, 12, 4)) & 0x0fff) | 0x5000,  // time_hi_and_version
+            (hexdec(substr($hash, 16, 4)) & 0x3fff) | 0x8000,  // clk_seq_hi_res + variant
+            substr($hash, 20, 12)   // node
+        );
+    }
+
+    public static function guid()
+    {
+        return self::v4();  // GUID follows the same structure as UUID v4
+    }
+
+    public static function is_valid($uuid)
+    {
+        return preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i', $uuid) === 1;
+    }
 }
 
-function uuid($uuidver = "v4", $rndty = "rand", $namespace = null, $name = null) {
+function uuid($uuidver = "v4", $rndty = "rand", $namespace = null, $name = null)
+{
     // Ensure the UUID version is valid, default to "v4"
     if (!in_array($uuidver, ["v1", "v2", "v3", "v4", "v5", "guid"])) {
         $uuidver = "v4";
@@ -360,13 +403,14 @@ function uuid($uuidver = "v4", $rndty = "rand", $namespace = null, $name = null)
     }
 }
 
-function rand_uuid($rndty = "rand", $namespace = null, $name = null) {
+function rand_uuid($rndty = "rand", $namespace = null, $name = null)
+{
     // Extend the random UUID version selection to include v1, v2, v3, v4, v5, and guid
     $rand_array = array(1 => "v1", 2 => "v2", 3 => "v3", 4 => "v4", 5 => "v5", 6 => "guid");
 
     // Ensure $name is not null by setting a default if necessary
-    if ($name === null) { 
-        $name = salt_hmac(); 
+    if ($name === null) {
+        $name = salt_hmac();
     }
 
     // Randomly select a UUID version from the array
@@ -417,7 +461,7 @@ function unserialize_session($data)
             // Extract and unserialize the previous value
             $valueText = substr($data, $lastOffset, $offset - $lastOffset);
             $unserializedValue = @unserialize($valueText);  // Suppress errors with @
-            
+
             // Handle unserialization failure (optional handling)
             if ($unserializedValue === false && $valueText !== 'b:0;') {
                 // b:0; is valid boolean false, so we avoid marking it as an error
@@ -435,7 +479,7 @@ function unserialize_session($data)
     // Unserialize the last value in the session data
     $valueText = substr($data, $lastOffset);
     $unserializedValue = @unserialize($valueText);
-    
+
     if ($unserializedValue === false && $valueText !== 'b:0;') {
         throw new Exception("Failed to unserialize session data for key: $currentKey");
     }
@@ -519,29 +563,47 @@ function qstring($qstr = ';', $qsep = '=')
 
     return true;
 }
-if($Settings['qstr']!="&"&&
-	$Settings['qstr']!="/") {
-qstring($Settings['qstr'],$Settings['qsep']); 
-if(!isset($_GET['page'])) { $_GET['page'] = null; }
-if(!isset($_GET['act'])) { $_GET['act'] = null; }
-if(!isset($_POST['act'])) { $_POST['act'] = null; }
-if(!isset($_GET['id'])) { $_GET['id'] = null; } 
-if(!isset($_GET['debug'])) { $_GET['debug'] = "false"; }
-if(!isset($_GET['post'])) { $_GET['post'] = null; }
-if(!isset($_POST['License'])) { $_POST['License'] = null; } }
-if(isset($_SERVER['PATH_INFO']) && $_SERVER['PATH_INFO']==null) {
-	if(getenv('PATH_INFO')!=null&&getenv('PATH_INFO')!="1") {
-$_SERVER['PATH_INFO'] = getenv('PATH_INFO'); }
-if(getenv('PATH_INFO')==null) {
-$myscript = $_SERVER['SCRIPT_NAME'];
-$myphpath = $_SERVER['PHP_SELF'];
-$mypathinfo = str_replace($myscript, "", $myphpath);
-@putenv("PATH_INFO=".$mypathinfo); } }
+if ($Settings['qstr'] != "&" &&
+    $Settings['qstr'] != "/") {
+    qstring($Settings['qstr'], $Settings['qsep']);
+    if (!isset($_GET['page'])) {
+        $_GET['page'] = null;
+    }
+    if (!isset($_GET['act'])) {
+        $_GET['act'] = null;
+    }
+    if (!isset($_POST['act'])) {
+        $_POST['act'] = null;
+    }
+    if (!isset($_GET['id'])) {
+        $_GET['id'] = null;
+    }
+    if (!isset($_GET['debug'])) {
+        $_GET['debug'] = "false";
+    }
+    if (!isset($_GET['post'])) {
+        $_GET['post'] = null;
+    }
+    if (!isset($_POST['License'])) {
+        $_POST['License'] = null;
+    }
+}
+if (isset($_SERVER['PATH_INFO']) && $_SERVER['PATH_INFO'] == null) {
+    if (getenv('PATH_INFO') != null && getenv('PATH_INFO') != "1") {
+        $_SERVER['PATH_INFO'] = getenv('PATH_INFO');
+    }
+    if (getenv('PATH_INFO') == null) {
+        $myscript = $_SERVER['SCRIPT_NAME'];
+        $myphpath = $_SERVER['PHP_SELF'];
+        $mypathinfo = str_replace($myscript, "", $myphpath);
+        @putenv("PATH_INFO=".$mypathinfo);
+    }
+}
 // Change raw post data to POST array
-// Not sure why I made but alwell. :P 
+// Not sure why I made but alwell. :P
 // Manually parse raw POST data from php://input and populate the $_POST array.
 // Useful for non-standard POST content types or when the default PHP POST handling is insufficient.
-// This function decodes URL-encoded data, replaces certain characters in the keys, 
+// This function decodes URL-encoded data, replaces certain characters in the keys,
 // and sanitizes the keys using killbadvars().
 function parse_post_data()
 {
@@ -591,7 +653,8 @@ function parse_post_data()
     return true;
 }
 // Change Path info to Get Vars :
-function mrstring() {
+function mrstring()
+{
     // Check if PATH_INFO exists
     if ($_SERVER['PATH_INFO'] != null) {
         $urlvar = explode('/', trim($_SERVER['PATH_INFO'], '/')); // Remove leading/trailing slashes
@@ -625,7 +688,8 @@ function mrstring() {
 }
 // Redirect to another file with ether timed or nontimed redirect
 // Redirect to another file with either a timed or immediate redirect
-function redirect($type, $file, $time = 0, $url = null, $dbsr = true) {
+function redirect($type, $file, $time = 0, $url = null, $dbsr = true)
+{
     // Validate type and default to "location"
     if ($type != "location" && $type != "refresh") {
         $type = "location";
@@ -657,7 +721,8 @@ function redirect($type, $file, $time = 0, $url = null, $dbsr = true) {
 }
 
 // Simplified redirect with logging
-function redirects($type, $url, $time = 0) {
+function redirects($type, $url, $time = 0)
+{
     // Validate type and default to "location"
     if ($type != "location" && $type != "refresh") {
         $type = "location";
@@ -715,7 +780,7 @@ function logWebAccess($logFile, $format = '%h %l %u %t "%r" %>s %b "%{Referer}i"
         if (flock($logFileHandle, LOCK_EX)) {
             // Write the log entry to the file
             fwrite($logFileHandle, $logEntry . PHP_EOL);
-            
+
             // Release the lock
             flock($logFileHandle, LOCK_UN);
         } else {
@@ -731,7 +796,8 @@ function logWebAccess($logFile, $format = '%h %l %u %t "%r" %>s %b "%{Referer}i"
     }
 }
 // Make xhtml tags
-function html_tag_make($name = "br", $emptytag = true, $attbvar = null, $attbval = null, $extratest = null) {
+function html_tag_make($name = "br", $emptytag = true, $attbvar = null, $attbval = null, $extratest = null)
+{
     // Check if both attributes and values are null or their counts mismatch
     if ($attbvar !== null && $attbval !== null && count($attbvar) !== count($attbval)) {
         trigger_error("Error: Number of attributes and values don't match!", E_USER_ERROR);
@@ -765,11 +831,12 @@ function html_tag_make($name = "br", $emptytag = true, $attbvar = null, $attbval
 }
 
 // Start a xml document
-function xml_tag_make($type, $attbs, $retval = false) {
+function xml_tag_make($type, $attbs, $retval = false)
+{
     // Split attributes string by & and then by = for name-value pairs
     $attblist = "";
     if (!empty($attbs)) {
-        $attributes = array_map(function($attb) {
+        $attributes = array_map(function ($attb) {
             list($key, $val) = explode("=", $attb);
             return $key . '="' . htmlspecialchars($val) . '"';
         }, explode("&", $attbs));
@@ -788,7 +855,8 @@ function xml_tag_make($type, $attbs, $retval = false) {
 }
 
 // Start a generic XML tag
-function xml_tag_make_alt($name, $attributes = null, $content = null, $emptytag = false) {
+function xml_tag_make_alt($name, $attributes = null, $content = null, $emptytag = false)
+{
     // Initialize the XML tag
     $tag = "<" . $name;
 
@@ -814,32 +882,36 @@ function xml_tag_make_alt($name, $attributes = null, $content = null, $emptytag 
 }
 
 // Start a xml document (wrapper for xml_tag_make)
-function xml_doc_start($ver, $encode, $retval = false) {
+function xml_doc_start($ver, $encode, $retval = false)
+{
     // Call the xml_tag_make function to generate the XML document declaration
     return xml_tag_make('xml', 'version=' . $ver . '&encoding=' . $encode, $retval);
 }
 
 $icharset = $Settings['charset'];
 $debug_on = false;
-if(isset($_GET['debug'])) {
-if($_GET['debug']=="true"||
-	$_GET['debug']=="on") {
-$debug_on = true; } }
+if (isset($_GET['debug'])) {
+    if ($_GET['debug'] == "true" ||
+        $_GET['debug'] == "on") {
+        $debug_on = true;
+    }
+}
 $BoardURL = $Settings['idburl'];
 // Change URLs to Links
-function pre_url2link($matches) {
+function pre_url2link($matches)
+{
     global $BoardURL;
-    
+
     // Parse the board URL and the matched URL
     $burlCHCK = parse_url($BoardURL);
     $urlCHCK = parse_url($matches[0]);
-    
+
     // Determine if the link should open in a new window
     $opennew = $urlCHCK['host'] !== $burlCHCK['host'];
-    
+
     // Rebuild the URL
     $outurl = $urlCHCK['scheme'] . "://";
-    
+
     // If user credentials exist, add them to the URL
     if (isset($urlCHCK['user'])) {
         $outurl .= $urlCHCK['user'];
@@ -852,7 +924,7 @@ function pre_url2link($matches) {
     // Add host and path
     $outurl .= $urlCHCK['host'] ?? '';
     $outurl .= $urlCHCK['path'] ?? '/';
-    
+
     // If query or fragment exists, append them
     if (isset($urlCHCK['query'])) {
         $outurl .= '?' . str_replace(' ', '+', $urlCHCK['query']);
@@ -863,11 +935,12 @@ function pre_url2link($matches) {
 
     // Generate the HTML anchor tag
     $outlink = "<a href=\"{$outurl}\"" . ($opennew ? " onclick=\"window.open(this.href); return false;\"" : "") . ">{$outurl}</a>";
-    
+
     return $outlink;
 }
 
-function url2link($string) {
+function url2link($string)
+{
     // Optimized regex for URL matching
     return preg_replace_callback(
         "/\b([a-zA-Z]+):\/\/([a-zA-Z0-9\-\.@\:]+)(\:[0-9]+)?(\/[A-Za-z0-9\.\/%\?\!\$\(\)\*\-_\:;,\+\@~]*)?(\?)?([A-Za-z0-9\.\/%&=\?\!\$\(\)\*\-_\:;,\+\@~]*)?(\#)?([A-Za-z0-9\.\/%&=\?\!\$\(\)\*\-_\:;,\+\@~]*)?/is",
@@ -876,12 +949,13 @@ function url2link($string) {
     );
 }
 
-function urlcheck($string) {
+function urlcheck($string)
+{
     global $BoardURL;
-    
+
     // Simplified regex for extracting the first URL
     preg_match("/\b([a-zA-Z]+):\/\/([a-zA-Z0-9\-\.@\:]+)(\:[0-9]+)?(\/[A-Za-z0-9\.\/%\?\!\$\(\)\*\-_\:;,\+\@~]*)?(\?)?([A-Za-z0-9\.\/%&=\?\!\$\(\)\*\-_\:;,\+\@~]*)?(\#)?([A-Za-z0-9\.\/%&=\?\!\$\(\)\*\-_\:;,\+\@~]*)?/is", $string, $urlcheck);
-    
+
     // Return the found URL or the default Board URL
     return $urlcheck[0] ?? $BoardURL;
 }
@@ -890,53 +964,55 @@ function urlcheck($string) {
 $BoardTheme = $Settings['DefaultTheme'];
 $ThemeDir = $SettDir['themes'];
 
-function chack_themes($theme) {
+function chack_themes($theme)
+{
     global $BoardTheme, $ThemeDir;
 
-    if (!isset($theme)) { 
-        $theme = null; 
+    if (!isset($theme)) {
+        $theme = null;
     }
 
     if (preg_match("/([a-zA-Z]+)\:/isU", $theme)) {
-        $theme = $BoardTheme; 
+        $theme = $BoardTheme;
     }
 
     if (!preg_match("/^[a-z0-9]+$/isU", $theme)) {
-        $theme = $BoardTheme; 
+        $theme = $BoardTheme;
     }
 
     require('settings.php');
     $ckskindir = dirname(realpath("settings.php")) . "/" . $ThemeDir;
 
-    if ($handle = opendir($ckskindir)) { 
+    if ($handle = opendir($ckskindir)) {
         $dirnum = null;
         while (false !== ($ckfile = readdir($handle))) {
-            if ($dirnum == null) { 
-                $dirnum = 0; 
+            if ($dirnum == null) {
+                $dirnum = 0;
             }
             if (is_dir($ckskindir . $ckfile) && file_exists($ckskindir . $ckfile . "/info.php")) {
                 if ($ckfile != "." && $ckfile != "..") {
                     //require($ckskindir.$ckfile."/info.php");
                     $cktheme[$dirnum] = $ckfile;
-                    ++$dirnum; 
-                } 
-            } 
+                    ++$dirnum;
+                }
+            }
         }
         closedir($handle);
-        asort($cktheme); 
+        asort($cktheme);
     }
 
     $theme = preg_replace("/(.*?)\.\/(.*?)/", $BoardTheme, $theme);
 
     if (!in_array($theme, $cktheme) || strlen($theme) > 26) {
-        $theme = $BoardTheme; 
+        $theme = $BoardTheme;
     }
 
-    return $theme; 
+    return $theme;
 }
 
 // Move append_query() outside to avoid redeclaration error
-function append_query($queryStr, $qstr, $qsep, &$fileurl) {
+function append_query($queryStr, $qstr, $qsep, &$fileurl)
+{
     if ($queryStr) {
         $params = explode("&", $queryStr);
         foreach ($params as $index => $param) {
@@ -952,7 +1028,8 @@ function append_query($queryStr, $qstr, $qsep, &$fileurl) {
 }
 
 // Now modify url_maker function
-function url_maker($file = "index", $ext = ".php", $qvarstr = null, $qstr = ";", $qsep = "=", $prexqstr = null, $exqstr = null, $fixhtml = true) {
+function url_maker($file = "index", $ext = ".php", $qvarstr = null, $qstr = ";", $qsep = "=", $prexqstr = null, $exqstr = null, $fixhtml = true)
+{
     global $sidurls, $icharset, $debug_on;
 
     // Handle the file extension
@@ -1026,63 +1103,75 @@ function GetQueryStr($qstr = ";", $qsep = "=", $fixhtml = true)
     return $BoardQuery;
 }
 
-function log_fix_quotes($logtxt) {
+function log_fix_quotes($logtxt)
+{
     return str_replace(['"', "'"], ['\\\"', ''], $logtxt);
 }
 
-function get_server_values($matches) {
+function get_server_values($matches)
+{
     return $_SERVER[$matches[1]] ?? "-";
 }
 
-function get_cookie_values($matches) {
+function get_cookie_values($matches)
+{
     return $_COOKIE[$matches[1]] ?? null;
 }
 
-function get_env_values($matches) {
+function get_env_values($matches)
+{
     return getenv($matches[1]) ?? "-";
 }
 
-function get_setting_values($matches) {
+function get_setting_values($matches)
+{
     global $Settings;
     $key = str_replace("sqlpass", "sqluser", $matches[1]);
     return $Settings[$key] ?? null;
 }
 
-function log_fix_get_server_values($matches) {
+function log_fix_get_server_values($matches)
+{
     return log_fix_quotes(get_server_values($matches));
 }
 
-function log_fix_get_cookie_values($matches) {
+function log_fix_get_cookie_values($matches)
+{
     return log_fix_quotes(get_cookie_values($matches));
 }
 
-function log_fix_get_env_values($matches) {
+function log_fix_get_env_values($matches)
+{
     return log_fix_quotes(get_env_values($matches));
 }
 
-function log_fix_get_setting_values($matches) {
+function log_fix_get_setting_values($matches)
+{
     return log_fix_quotes(get_setting_values($matches));
 }
 
-function get_time($matches) {
+function get_time($matches)
+{
     return date(convert_strftime($matches[1]));
 }
 
-function convert_strftime($strftime) {
+function convert_strftime($strftime)
+{
     $replace_pairs = [
-        "%%" => "{percent\}p", "%a" => "D", "%A" => "l", "%d" => "d", "%e" => "j", 
-        "%j" => "z", "%u" => "w", "%w" => "w", "%U" => "W", "%V" => "W", "%W" => "W", 
-        "%b" => "M", "%B" => "F", "%h" => "M", "%m" => "m", "%g" => "y", "%G" => "Y", 
-        "%y" => "y", "%Y" => "Y", "%H" => "H", "%I" => "h", "%l" => "g", "%M" => "i", 
-        "%p" => "A", "%P" => "a", "%r" => "h:i:s A", "%R" => "H:i", "%S" => "s", 
-        "%T" => "H:i:s", "%X" => "H:i:s", "%z" => "O", "%Z" => "O", "%c" => "D M j H:i:s Y", 
+        "%%" => "{percent\}p", "%a" => "D", "%A" => "l", "%d" => "d", "%e" => "j",
+        "%j" => "z", "%u" => "w", "%w" => "w", "%U" => "W", "%V" => "W", "%W" => "W",
+        "%b" => "M", "%B" => "F", "%h" => "M", "%m" => "m", "%g" => "y", "%G" => "Y",
+        "%y" => "y", "%Y" => "Y", "%H" => "H", "%I" => "h", "%l" => "g", "%M" => "i",
+        "%p" => "A", "%P" => "a", "%r" => "h:i:s A", "%R" => "H:i", "%S" => "s",
+        "%T" => "H:i:s", "%X" => "H:i:s", "%z" => "O", "%Z" => "O", "%c" => "D M j H:i:s Y",
         "%D" => "m/d/y", "%F" => "Y-m-d", "%x" => "m/d/y", "%n" => "\n", "%t" => "\t"
     ];
     $strftime = strtr($strftime, $replace_pairs);
     return str_replace("{percent\}p", "%", $strftime);
 }
 
-function apache_log_maker($logtxt, $logfile = null, $status = 200, $contentsize = "-", $headersize = 0) {
+function apache_log_maker($logtxt, $logfile = null, $status = 200, $contentsize = "-", $headersize = 0)
+{
     global $Settings;
 
     $servtz = new DateTimeZone($Settings['DefaultTimeZone'] ?? date_default_timezone_get());
@@ -1099,7 +1188,7 @@ function apache_log_maker($logtxt, $logfile = null, $status = 200, $contentsize 
     $LogGroupID = log_fix_quotes($_SESSION['UserGroupID'] ?? "-");
 
     $LOG_QUERY_STRING = log_fix_quotes($_SERVER['QUERY_STRING'] ? "?" . $_SERVER['QUERY_STRING'] : "");
-    
+
     if ($contentsize === 0) {
         $contentsize = "-";
     }
@@ -1110,16 +1199,16 @@ function apache_log_maker($logtxt, $logfile = null, $status = 200, $contentsize 
 
     $logtxt = preg_replace([
         "/%%/s", "/%([\<\>]*?)a/s", "/%([\<\>]*?)A/s", "/%([\<\>]*?)B/s", "/%([\<\>]*?)b/s",
-        "/%([\<\>]*?)f/s", "/%([\<\>]*?)h/s", "/%([\<\>]*?)H/s", "/%([\<\>]*?)\{Referer\}i/s", 
-        "/%([\<\>]*?)\{User-Agent\}i/s", "/%([\<\>]*?)l/s", "/%([\<\>]*?)m/s", "/%([\<\>]*?)p/s", 
-        "/%([\<\>]*?)q/s", "/%([\<\>]*?)r/s", "/%([\<\>]*?)s/s", "/%([\<\>]*?)t/s", 
+        "/%([\<\>]*?)f/s", "/%([\<\>]*?)h/s", "/%([\<\>]*?)H/s", "/%([\<\>]*?)\{Referer\}i/s",
+        "/%([\<\>]*?)\{User-Agent\}i/s", "/%([\<\>]*?)l/s", "/%([\<\>]*?)m/s", "/%([\<\>]*?)p/s",
+        "/%([\<\>]*?)q/s", "/%([\<\>]*?)r/s", "/%([\<\>]*?)s/s", "/%([\<\>]*?)t/s",
         "/%([\<\>]*?)u/s", "/%([\<\>]*?)U/s", "/%([\<\>]*?)v/s", "/%([\<\>]*?)V/s", "/%([\<\>]*?)O/s"
     ], [
-        "{percent}p", $_SERVER['REMOTE_ADDR'], $_SERVER['SERVER_ADDR'], $contentsize, $contentsize, 
-        log_fix_quotes($_SERVER['SCRIPT_FILENAME']), $_SERVER['REMOTE_ADDR'], $_SERVER['SERVER_PROTOCOL'], 
-        $LOG_URL_REFERER, $LOG_USER_AGENT, "-", $_SERVER['REQUEST_METHOD'], $_SERVER['SERVER_PORT'], 
-        $LOG_QUERY_STRING, $HTTP_REQUEST_LINE, $status, "[" . $servcurtime->format("d/M/Y:H:i:s O") . "]", 
-        $LOG_AUTH_USER, log_fix_quotes($_SERVER['PHP_SELF']), $_SERVER['SERVER_NAME'], $_SERVER['SERVER_NAME'], 
+        "{percent}p", $_SERVER['REMOTE_ADDR'], $_SERVER['SERVER_ADDR'], $contentsize, $contentsize,
+        log_fix_quotes($_SERVER['SCRIPT_FILENAME']), $_SERVER['REMOTE_ADDR'], $_SERVER['SERVER_PROTOCOL'],
+        $LOG_URL_REFERER, $LOG_USER_AGENT, "-", $_SERVER['REQUEST_METHOD'], $_SERVER['SERVER_PORT'],
+        $LOG_QUERY_STRING, $HTTP_REQUEST_LINE, $status, "[" . $servcurtime->format("d/M/Y:H:i:s O") . "]",
+        $LOG_AUTH_USER, log_fix_quotes($_SERVER['PHP_SELF']), $_SERVER['SERVER_NAME'], $_SERVER['SERVER_NAME'],
         $fullsitesize
     ], $logtxt);
 
@@ -1130,10 +1219,10 @@ function apache_log_maker($logtxt, $logfile = null, $status = 200, $contentsize 
     $logtxt = preg_replace_callback("/%([\<\>]*?)\{([^\}]*)\}s/s", "get_setting_values", $logtxt);
 
     $logtxt = preg_replace([
-        "/\%\{UserName\}m/s", "/\%\{MemberName\}m/s", "/\%\{UserID\}m/s", "/\%\{MemberID\}m/s", 
+        "/\%\{UserName\}m/s", "/\%\{MemberName\}m/s", "/\%\{UserID\}m/s", "/\%\{MemberID\}m/s",
         "/\%\{UserGroup\}m/s", "/\%\{MemberGroup\}m/s", "/\%\{UserGroupID\}m/s", "/\%\{MemberGroupID\}m/s"
     ], [
-        $LogMemName, $LogMemName, $LogMemID, $LogMemID, $LogGroupName, $LogGroupName, 
+        $LogMemName, $LogMemName, $LogMemID, $LogMemID, $LogGroupName, $LogGroupName,
         $LogGroupID, $LogGroupID
     ], $logtxt);
 
@@ -1151,7 +1240,8 @@ function apache_log_maker($logtxt, $logfile = null, $status = 200, $contentsize 
     return $logtxt;
 }
 
-function idb_log_maker($status = 200, $contentsize = "-") {
+function idb_log_maker($status = 200, $contentsize = "-")
+{
     global $Settings, $SettDir;
 
     $servtz = new DateTimeZone($Settings['DefaultTimeZone'] ?? date_default_timezone_get());
@@ -1173,23 +1263,24 @@ function idb_log_maker($status = 200, $contentsize = "-") {
 }
 
 // Function to return the LIMIT and OFFSET clause in ANSI format or SQL Server-specific syntax
-function getSQLLimitClause($sqltype, $limit, $offset) {
+function getSQLLimitClause($sqltype, $limit, $offset)
+{
     // Check if LIMIT and OFFSET are provided, set default values if necessary
     $limit = isset($limit) ? intval($limit) : 10; // Default limit value, e.g., 10
     $offset = isset($offset) ? intval($offset) : 0; // Default offset value, e.g., 0
 
     // Construct the LIMIT OFFSET clause based on the SQL type
-    if ($sqltype == "mysql"||
-		$sqltype == "mysqli"||
-		$sqltype == "mysqli_prepare"||
-		$sqltype == "pdo_mysql"||
-        $sqltype == "sqlite"||
-		$sqltype == "sqlite3"||
-		$sqltype == "sqlite3_prepare"||
-		$sqltype == "pdo_sqlite3"||
-        $sqltype == "cubrid"||
-        $sqltype == "cubrid_prepare"||
-		$sqltype == "pdo_cubrid") {
+    if ($sqltype == "mysql" ||
+        $sqltype == "mysqli" ||
+        $sqltype == "mysqli_prepare" ||
+        $sqltype == "pdo_mysql" ||
+        $sqltype == "sqlite" ||
+        $sqltype == "sqlite3" ||
+        $sqltype == "sqlite3_prepare" ||
+        $sqltype == "pdo_sqlite3" ||
+        $sqltype == "cubrid" ||
+        $sqltype == "cubrid_prepare" ||
+        $sqltype == "pdo_cubrid") {
         // MySQL, SQLite, and Cubrid support ANSI LIMIT x OFFSET y syntax
         return sprintf("LIMIT %d OFFSET %d", $limit, $offset);
     } elseif ($sqltype == "pgsql" || $sqltype == "pdo_pgsql") {
@@ -1203,4 +1294,3 @@ function getSQLLimitClause($sqltype, $limit, $offset) {
         return "";
     }
 }
-?>

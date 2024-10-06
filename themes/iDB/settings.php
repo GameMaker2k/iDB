@@ -80,4 +80,3 @@ $ThemeSet['EventStatsIcon'] = "<div style=\"text-align: center; font-size: 11px;
 $ThemeSet['OnlineStatsIcon'] = "<div style=\"text-align: center; font-size: 11px;\" title=\"Board Stats\">(S)</div> ";
 $ThemeSet['NoAvatar'] = "themes/iDB/noavatar.png";
 $ThemeSet['NoAvatarSize'] = "100x100";
-?>

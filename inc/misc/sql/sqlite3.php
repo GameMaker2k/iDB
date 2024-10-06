@@ -21,19 +21,22 @@ if ($File3Name == "sqlite3.php" || $File3Name == "/sqlite3.php") {
 }
 
 // SQLite Functions
-function sqlite3_func_error($link = null) {
+function sqlite3_func_error($link = null)
+{
     global $SQLStat;
     $connection = ($link instanceof SQLite3 ? $link : ($SQLStat instanceof SQLite3 ? $SQLStat : null));
     return $connection ? $connection->lastErrorMsg() : "No valid SQLite3 connection.";
 }
 
-function sqlite3_func_errno($link = null) {
+function sqlite3_func_errno($link = null)
+{
     global $SQLStat;
     $connection = ($link instanceof SQLite3 ? $link : ($SQLStat instanceof SQLite3 ? $SQLStat : null));
     return $connection ? $connection->lastErrorCode() : "No valid SQLite3 connection.";
 }
 
-function sqlite3_func_errorno($link = null) {
+function sqlite3_func_errorno($link = null)
+{
     global $SQLStat;
     $connection = ($link instanceof SQLite3 ? $link : ($SQLStat instanceof SQLite3 ? $SQLStat : null));
     return $connection ? $connection->lastErrorCode() . ": " . $connection->lastErrorMsg() : "No valid SQLite3 connection.";
@@ -44,7 +47,8 @@ if (!isset($NumQueriesArray['sqlite3'])) {
     $NumQueriesArray['sqlite3'] = 0;
 }
 
-function sqlite3_func_query($query, $link = null) {
+function sqlite3_func_query($query, $link = null)
+{
     global $NumQueriesArray, $SQLStat;
 
     // Ensure that the connection is a valid SQLite3 object
@@ -69,7 +73,8 @@ function sqlite3_func_query($query, $link = null) {
 }
 
 // Fetch Number of Rows
-function sqlite3_func_num_rows($result) {
+function sqlite3_func_num_rows($result)
+{
     $num = 0;
     if (!$result) {
         output_error("SQL Error: Invalid result set.", E_USER_ERROR);
@@ -87,13 +92,14 @@ function sqlite3_func_num_rows($result) {
 }
 
 // Connect to SQLite database
-function sqlite3_func_connect_db($server, $username, $password, $database = null, $new_link = false) {
+function sqlite3_func_connect_db($server, $username, $password, $database = null, $new_link = false)
+{
     if ($database === null) {
         return true;
     }
 
     $link = new SQLite3($database, SQLITE3_OPEN_READWRITE | SQLITE3_OPEN_CREATE);
-    
+
     if (!$link) {
         output_error("Not connected: " . $link->lastErrorMsg(), E_USER_ERROR);
         return false;
@@ -102,7 +108,8 @@ function sqlite3_func_connect_db($server, $username, $password, $database = null
     return $link;
 }
 
-function sqlite3_func_disconnect_db($link = null) {
+function sqlite3_func_disconnect_db($link = null)
+{
     global $SQLStat;
     $connection = ($link instanceof SQLite3 ? $link : ($SQLStat instanceof SQLite3 ? $SQLStat : null));
 
@@ -110,7 +117,8 @@ function sqlite3_func_disconnect_db($link = null) {
 }
 
 // Query Results
-function sqlite3_func_result($result, $row, $field = 0) {
+function sqlite3_func_result($result, $row, $field = 0)
+{
     if (!$result) {
         output_error("SQL Error: Invalid result set.", E_USER_ERROR);
         return null;
@@ -129,35 +137,44 @@ function sqlite3_func_result($result, $row, $field = 0) {
 }
 
 // Free Results
-function sqlite3_func_free_result($result) {
+function sqlite3_func_free_result($result)
+{
     return true;
 }
 
 // Fetch Results to Array
-function sqlite3_func_fetch_array($result, $result_type = SQLITE3_BOTH) {
+function sqlite3_func_fetch_array($result, $result_type = SQLITE3_BOTH)
+{
     return $result ? $result->fetchArray($result_type) : false;
 }
 
-function sqlite3_func_fetch_assoc($result) {
+function sqlite3_func_fetch_assoc($result)
+{
     return $result ? $result->fetchArray(SQLITE3_ASSOC) : false;
 }
 
-function sqlite3_func_fetch_row($result) {
+function sqlite3_func_fetch_row($result)
+{
     return $result ? $result->fetchArray(SQLITE3_NUM) : false;
 }
 
 // Get Server Info
-function sqlite3_func_server_info($link = null) {
+function sqlite3_func_server_info($link = null)
+{
     return SQLite3::version()['versionString'];
 }
 
 // Get Client Info
-function sqlite3_func_client_info($link = null) {
+function sqlite3_func_client_info($link = null)
+{
     return SQLite3::version()['versionString'];
 }
 
-function sqlite3_func_escape_string($string, $link = null) {
-	if (!isset($string)) return null;
+function sqlite3_func_escape_string($string, $link = null)
+{
+    if (!isset($string)) {
+        return null;
+    }
     return SQLite3::escapeString($string);
 }
 
@@ -169,7 +186,8 @@ if (!isset($NumPreQueriesArray['sqlite3'])) {
 // SafeSQL Lite Source Code by Cool Dude 2k
 // Make SQL Query's safe
 // SafeSQL Lite with additional SafeSQL features
-function sqlite3_func_pre_query($query_string, $query_vars) {
+function sqlite3_func_pre_query($query_string, $query_vars)
+{
     global $NumPreQueriesArray;
 
     // If no query variables are provided, initialize with a single element array containing null
@@ -182,7 +200,7 @@ function sqlite3_func_pre_query($query_string, $query_vars) {
         array("%i", "%I", "%F", "%S", "%c", "%l", "%q", "%n"),
         array("%d", "%d", "%f", "%s", "%s", "%s", "%s", "%s")
     );
-    
+
     // Replace custom placeholders with appropriate sprintf format specifiers
     $query_string = str_replace($query_array[0], $query_array[1], $query_string);
 
@@ -215,12 +233,14 @@ function sqlite3_func_pre_query($query_string, $query_vars) {
 }
 
 // Set Charset
-function sqlite3_func_set_charset($charset, $link = null) {
+function sqlite3_func_set_charset($charset, $link = null)
+{
     return true; // SQLite3 doesn't require charset setting like MySQL.
 }
 
 // Get next id for stuff
-function sqlite3_func_get_next_id($tablepre, $table, $link = null) {
+function sqlite3_func_get_next_id($tablepre, $table, $link = null)
+{
     global $SQLStat;
     $connection = ($link instanceof SQLite3 ? $link : ($SQLStat instanceof SQLite3 ? $SQLStat : null));
 
@@ -228,7 +248,8 @@ function sqlite3_func_get_next_id($tablepre, $table, $link = null) {
 }
 
 // Get number of rows for table
-function sqlite3_func_get_num_rows($tablepre, $table, $link = null) {
+function sqlite3_func_get_num_rows($tablepre, $table, $link = null)
+{
     $getnextidq = sqlite3_func_pre_query("SELECT COUNT(*) AS Rows FROM '" . $tablepre . $table . "'", array());
     $getnextidr = sqlite3_func_query($getnextidq, $link);
     $getnextid = sqlite3_func_fetch_assoc($getnextidr);
@@ -236,7 +257,8 @@ function sqlite3_func_get_num_rows($tablepre, $table, $link = null) {
     return $getnextid ? $getnextid['Rows'] : 0;
 }
 
-function sqlite3_func_count_rows($query, $link = null, $countname = "cnt") {
+function sqlite3_func_count_rows($query, $link = null, $countname = "cnt")
+{
     $result = sqlite3_func_query($query, $link);  // Use prepared query
     $row = sqlite3_func_fetch_assoc($result);
 
@@ -251,18 +273,18 @@ function sqlite3_func_count_rows($query, $link = null, $countname = "cnt") {
     return $count;
 }
 
-function sqlite3_func_count_rows_alt($query, $link = null) {
+function sqlite3_func_count_rows_alt($query, $link = null)
+{
     $result = sqlite3_func_query($query, $link);  // Use prepared query
     $row = sqlite3_func_fetch_assoc($result);
-    
+
     if ($row === false) {
         return false;  // Handle case if no row is returned
     }
-    
+
     // Return first column (assuming single column result like COUNT or similar)
     $count = reset($row);
 
     @sqlite3_func_free_result($result);
     return $count;
 }
-?>

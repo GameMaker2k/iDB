@@ -16,7 +16,7 @@
 *//*
 if(ini_get("register_globals")) {
 require_once('inc/misc/killglobals.php'); }
-*//* Some ini setting changes uncomment if you need them. 
+*//* Some ini setting changes uncomment if you need them.
    Display PHP Errors */
 $disfunc = @ini_get("disable_functions");
 $disfunc = @preg_replace("/[\s\t\n\r\0\x0B]+/", "", $disfunc);
@@ -27,8 +27,8 @@ if (!in_array("ini_set", $disfunc)) {
     @ini_set("display_errors", false);
     @ini_set("report_memleaks", false);
     @ini_set("display_startup_errors", false);
-    @ini_set("error_log","logs/error.log"); 
-    @ini_set("log_errors","On"); 
+    @ini_set("error_log", "logs/error.log");
+    @ini_set("log_errors", "On");
     @ini_set("docref_ext", "");
     @ini_set("docref_root", "http://php.net/");
 
@@ -59,21 +59,26 @@ if (!defined("E_DEPRECATED")) {
 @set_time_limit(30);
 @ignore_user_abort(true);
 /* Do not change anything below this line unless you know what you are doing */
-if(file_exists('extrasettings.php')) {
-	require_once('extrasettings.php'); }
-if(file_exists('extendsettings.php')) {
-	require_once('extendsettings.php'); }
+if (file_exists('extrasettings.php')) {
+    require_once('extrasettings.php');
+}
+if (file_exists('extendsettings.php')) {
+    require_once('extendsettings.php');
+}
 // Custom error handler for non-fatal errors
 // Configuration settings
 $errorDisplay = true;  // Set to true to display errors on the screen
 $errorLogFile = true;  // Set to true to log errors to a file
-if(!isset($SettDir['logs'])) { $SettDir['logs'] = "./logs"; }
+if (!isset($SettDir['logs'])) {
+    $SettDir['logs'] = "./logs";
+}
 $logFilePath = $SettDir['logs'] . 'php_error_log.txt';  // Define your log file path
 
 // Custom Error Handler Function
-function customErrorHandler($errno, $errstr, $errfile, $errline) {
+function customErrorHandler($errno, $errstr, $errfile, $errline)
+{
     global $errorDisplay, $errorLogFile, $logFilePath;
-    
+
     // List of error types we want to handle
     $errorTypes = [
         E_ERROR => 'Fatal Error',
@@ -134,7 +139,8 @@ function customErrorHandler($errno, $errstr, $errfile, $errline) {
 }
 
 // Custom Shutdown Handler Function
-function shutdownHandler() {
+function shutdownHandler()
+{
     global $errorDisplay, $errorLogFile, $logFilePath;
 
     $last_error = error_get_last();
@@ -143,7 +149,7 @@ function shutdownHandler() {
     if ($last_error !== null) {
         // Check if the error type is E_ERROR or E_PARSE (fatal errors)
         if ($last_error['type'] === E_ERROR || $last_error['type'] === E_PARSE || $last_error['type'] === E_CORE_ERROR || $last_error['type'] === E_COMPILE_ERROR) {
-            
+
             // Safely retrieve and clean the output buffer
             $output = '';
             if (ob_get_length()) {
@@ -177,7 +183,8 @@ function shutdownHandler() {
 
 // Custom Exception Handler Function
 // Custom Exception Handler Function
-function customExceptionHandler($exception) {
+function customExceptionHandler($exception)
+{
     global $errorDisplay, $errorLogFile, $logFilePath;
 
     // Safely retrieve and clean the output buffer
@@ -213,7 +220,8 @@ function customExceptionHandler($exception) {
 }
 
 // Function to Convert Backtrace Array to String for Display/Logging
-function getBacktraceAsString($backtrace) {
+function getBacktraceAsString($backtrace)
+{
     $backtraceMessage = "";
     foreach ($backtrace as $trace) {
         if (isset($trace['file'])) {
@@ -228,9 +236,10 @@ function getBacktraceAsString($backtrace) {
 }
 
 // Function to Log Errors to a File
-function logErrorToFile($logFile, $errorType, $errno, $errstr, $errfile, $errline, $backtrace) {
+function logErrorToFile($logFile, $errorType, $errno, $errstr, $errfile, $errline, $backtrace)
+{
     $logMessage = "[" . date('Y-m-d H:i:s') . "] {$errorType}: [{$errno}] {$errstr} in {$errfile} on line {$errline}\n";
-    
+
     // Append backtrace to the log
     foreach ($backtrace as $trace) {
         if (isset($trace['file'])) {
@@ -255,8 +264,12 @@ register_shutdown_function('shutdownHandler');
 // Set exception handler to catch uncaught exceptions
 set_exception_handler('customExceptionHandler');
 
-if(!isset($Settings['qstr'])) { $Settings['qstr'] = null; }
-if(!isset($Settings['send_pagesize'])) { $Settings['send_pagesize'] = "off"; }
+if (!isset($Settings['qstr'])) {
+    $Settings['qstr'] = null;
+}
+if (!isset($Settings['send_pagesize'])) {
+    $Settings['send_pagesize'] = "off";
+}
 $deftz = new DateTimeZone(date_default_timezone_get());
 $defcurtime = new DateTime();
 $defcurtime->setTimezone($deftz);
@@ -269,114 +282,200 @@ $servcurtime->setTimestamp($defcurtime->getTimestamp());
 $usercurtime = new DateTime();
 $usercurtime->setTimestamp($defcurtime->getTimestamp());
 /* Do not change anything below this line unless you know what you are doing */
-if(!isset($Settings['clean_ob'])) { $Settings['clean_ob'] = "off"; }
-function idb_output_handler($buffer) { return $buffer; }
-function idb_suboutput_handler($buffer) { return $buffer; }
-if($Settings['clean_ob']=="on") {
-/* Check for other output handlers/buffers are open
-   and close and get the contents in an array */
-$numob = count(ob_list_handlers()); $iob = 0; 
-while ($iob < $numob) { 
-	$old_ob_var[$iob] = ob_get_clean(); 
-	++$iob; } } ob_start("idb_output_handler");
-if(ini_get("register_globals")) { 
-	if(!isset($SettDir['misc'])) { $SettDir['misc'] = "inc/misc/"; }
-	require_once($SettDir['misc'].'killglobals.php'); }
-if(!isset($preact['idb'])) { $preact['idb'] = null; }
-if(!isset($_GET['act'])) { $_GET['act'] = null; }
-if(!isset($_POST['act'])) { $_POST['act'] = null; }
-if ($_GET['act']==null||$_GET['act']=="view") { $_GET['act']="part1"; }
-if ($_POST['act']==null||$_POST['act']=="view") { $_POST['act']="part1"; }
-$_TEG = array(null); $_TEG['part'] = preg_replace("/Part(1|2|3|4)/","\\1",$_GET['act']);
-$_GET['act'] = strtolower($_GET['act']); if(isset($_TEG['part'])) {
-if($_TEG['part']<=4&&$_TEG['part']>=1) { $_GET['act'] = "Part".$_TEG['part']; } }
-if ($_GET['act']!="part4"&&$_POST['act']!="part4") {
-	$preact['idb'] = "installing";	}
-$SetupDir['setup'] = "setup/"; $ConvertDir['setup'] = $SetupDir['setup']; $SetupDir['sql'] = "setup/sql/"; 
-$SetupDir['convert'] = "setup/convert/"; $ConvertDir['convert'] = $SetupDir['convert']; $ConvertDir['sql'] = $SetupDir['sql'];
-$Settings['output_type'] = "html"; $Settings['html_type'] = "html5";
-if(isset($iD)) {
-$Settings['board_name'] = $iDB; }
-if(!isset($Settings['charset'])) {
-	$Settings['charset'] = "ISO-8859-15"; 
-	header("Content-Type: text/html; charset=ISO-8859-15"); }
-if(isset($Settings['charset'])) {
-if($Settings['charset']!="ISO-8859-15"&&$Settings['charset']!="ISO-8859-1"&&
-	$Settings['charset']!="UTF-8"&&$Settings['charset']!="CP866"&&
-	$Settings['charset']!="Windows-1251"&&$Settings['charset']!="Windows-1252"&&
-	$Settings['charset']!="KOI8-R"&&$Settings['charset']!="BIG5"&&
-	$Settings['charset']!="GB2312"&&$Settings['charset']!="BIG5-HKSCS"&&
-	$Settings['charset']!="Shift_JIS"&&$Settings['charset']!="EUC-JP") {
-	$Settings['charset'] = "ISO-8859-15"; 
-	header("Content-Type: text/html; charset=ISO-8859-15"); } }
+if (!isset($Settings['clean_ob'])) {
+    $Settings['clean_ob'] = "off";
+}
+function idb_output_handler($buffer)
+{
+    return $buffer;
+}
+function idb_suboutput_handler($buffer)
+{
+    return $buffer;
+}
+if ($Settings['clean_ob'] == "on") {
+    /* Check for other output handlers/buffers are open
+       and close and get the contents in an array */
+    $numob = count(ob_list_handlers());
+    $iob = 0;
+    while ($iob < $numob) {
+        $old_ob_var[$iob] = ob_get_clean();
+        ++$iob;
+    }
+} ob_start("idb_output_handler");
+if (ini_get("register_globals")) {
+    if (!isset($SettDir['misc'])) {
+        $SettDir['misc'] = "inc/misc/";
+    }
+    require_once($SettDir['misc'].'killglobals.php');
+}
+if (!isset($preact['idb'])) {
+    $preact['idb'] = null;
+}
+if (!isset($_GET['act'])) {
+    $_GET['act'] = null;
+}
+if (!isset($_POST['act'])) {
+    $_POST['act'] = null;
+}
+if ($_GET['act'] == null || $_GET['act'] == "view") {
+    $_GET['act'] = "part1";
+}
+if ($_POST['act'] == null || $_POST['act'] == "view") {
+    $_POST['act'] = "part1";
+}
+$_TEG = array(null);
+$_TEG['part'] = preg_replace("/Part(1|2|3|4)/", "\\1", $_GET['act']);
+$_GET['act'] = strtolower($_GET['act']);
+if (isset($_TEG['part'])) {
+    if ($_TEG['part'] <= 4 && $_TEG['part'] >= 1) {
+        $_GET['act'] = "Part".$_TEG['part'];
+    }
+}
+if ($_GET['act'] != "part4" && $_POST['act'] != "part4") {
+    $preact['idb'] = "installing";
+}
+$SetupDir['setup'] = "setup/";
+$ConvertDir['setup'] = $SetupDir['setup'];
+$SetupDir['sql'] = "setup/sql/";
+$SetupDir['convert'] = "setup/convert/";
+$ConvertDir['convert'] = $SetupDir['convert'];
+$ConvertDir['sql'] = $SetupDir['sql'];
+$Settings['output_type'] = "html";
+$Settings['html_type'] = "html5";
+if (isset($iD)) {
+    $Settings['board_name'] = $iDB;
+}
+if (!isset($Settings['charset'])) {
+    $Settings['charset'] = "ISO-8859-15";
+    header("Content-Type: text/html; charset=ISO-8859-15");
+}
+if (isset($Settings['charset'])) {
+    if ($Settings['charset'] != "ISO-8859-15" && $Settings['charset'] != "ISO-8859-1" &&
+        $Settings['charset'] != "UTF-8" && $Settings['charset'] != "CP866" &&
+        $Settings['charset'] != "Windows-1251" && $Settings['charset'] != "Windows-1252" &&
+        $Settings['charset'] != "KOI8-R" && $Settings['charset'] != "BIG5" &&
+        $Settings['charset'] != "GB2312" && $Settings['charset'] != "BIG5-HKSCS" &&
+        $Settings['charset'] != "Shift_JIS" && $Settings['charset'] != "EUC-JP") {
+        $Settings['charset'] = "ISO-8859-15";
+        header("Content-Type: text/html; charset=ISO-8859-15");
+    }
+}
 $SQLCharset = "latin1";
-if(isset($_POST['charset'])) { 
-if($_POST['charset']=="ISO-8859-1") {
-	$SQLCharset = "latin1"; }
-if($_POST['charset']=="ISO-8859-15") {
-	$SQLCharset = "latin1"; }
-if($_POST['charset']=="UTF-8") {
-	$SQLCharset = "utf8"; }
-	$Settings['charset'] = $_POST['charset']; }
+if (isset($_POST['charset'])) {
+    if ($_POST['charset'] == "ISO-8859-1") {
+        $SQLCharset = "latin1";
+    }
+    if ($_POST['charset'] == "ISO-8859-15") {
+        $SQLCharset = "latin1";
+    }
+    if ($_POST['charset'] == "UTF-8") {
+        $SQLCharset = "utf8";
+    }
+    $Settings['charset'] = $_POST['charset'];
+}
 $ServHTTPS = "off";
-if(isset($_SERVER['HTTPS'])) { $ServHTTPS=="on"; }
-if(isset($_SERVER['HTTPS'])&&$_SERVER['HTTPS']=="on") { $ServHTTPS=="on"; }
-if(isset($_SERVER['HTTPS'])&&$_SERVER['HTTPS']=="off") { $ServHTTPS=="off"; }
-if(!isset($_SERVER['HTTPS'])) { $ServHTTPS=="off"; }
-if($ServHTTPS=="on") { $prehost = "https://"; }
-if($ServHTTPS=="off") { $prehost = "http://"; }
+if (isset($_SERVER['HTTPS'])) {
+    $ServHTTPS == "on";
+}
+if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") {
+    $ServHTTPS == "on";
+}
+if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "off") {
+    $ServHTTPS == "off";
+}
+if (!isset($_SERVER['HTTPS'])) {
+    $ServHTTPS == "off";
+}
+if ($ServHTTPS == "on") {
+    $prehost = "https://";
+}
+if ($ServHTTPS == "off") {
+    $prehost = "http://";
+}
 $this_dir = null;
-if(dirname($_SERVER['SCRIPT_NAME'])!="."||
-	dirname($_SERVER['SCRIPT_NAME'])!=null) {
-$this_dir = dirname($_SERVER['SCRIPT_NAME'])."/"; }
-if($this_dir==null||$this_dir==".") {
-if(dirname($_SERVER['SCRIPT_NAME'])=="."||
-	dirname($_SERVER['SCRIPT_NAME'])==null) {
-$this_dir = dirname($_SERVER['PHP_SELF'])."/"; } }
-if($this_dir=="\/") { $this_dir="/"; }
+if (dirname($_SERVER['SCRIPT_NAME']) != "." ||
+    dirname($_SERVER['SCRIPT_NAME']) != null) {
+    $this_dir = dirname($_SERVER['SCRIPT_NAME'])."/";
+}
+if ($this_dir == null || $this_dir == ".") {
+    if (dirname($_SERVER['SCRIPT_NAME']) == "." ||
+        dirname($_SERVER['SCRIPT_NAME']) == null) {
+        $this_dir = dirname($_SERVER['PHP_SELF'])."/";
+    }
+}
+if ($this_dir == "\/") {
+    $this_dir = "/";
+}
 $this_dir = str_replace("//", "/", $this_dir);
-$idbdir = addslashes(str_replace("\\","/",dirname(__FILE__)."/"));
-if(!isset($_POST['BoardURL'])) { 
-   $Settings['idburl'] = $prehost.$_SERVER['HTTP_HOST'].$this_dir; }
-if(isset($_POST['BoardURL'])) { 
-   $Settings['idburl'] = $_POST['BoardURL']; }
+$idbdir = addslashes(str_replace("\\", "/", dirname(__FILE__)."/"));
+if (!isset($_POST['BoardURL'])) {
+    $Settings['idburl'] = $prehost.$_SERVER['HTTP_HOST'].$this_dir;
+}
+if (isset($_POST['BoardURL'])) {
+    $Settings['idburl'] = $_POST['BoardURL'];
+}
 $Settings['qstr'] = "&";
 $Settings['qsep'] = "=";
 require($SetupDir['setup'].'preinstall.php');
 require_once($SettDir['misc'].'utf8.php');
 require_once($SettDir['inc'].'filename.php');
 require_once($SettDir['inc'].'function.php');
-if($_GET['act']=="README"||$_GET['act']=="ReadME") { $_GET['act']="readme"; }
-if($_GET['act']=="readme"||$_GET['act']=="ReadMe") {
-header("Content-Type: text/plain; charset=".$Settings['charset']);
-require("README"); fix_amp(null); die(); }
-if($_GET['act']=="LICENSE"||$_GET['act']=="License") { $_GET['act']="license"; }
-if($_GET['act']=="license"||$_GET['act']=="BSD") {
-header("Content-Type: text/plain; charset=".$Settings['charset']);
-require("LICENSE"); fix_amp(null); die(); }
-if($_GET['act']=="TOS"||$_GET['act']=="ToS") { $_GET['act']="tos"; }
-if($_GET['act']=="tos"||$_GET['act']=="terms") {
-header("Content-Type: text/plain; charset=".$Settings['charset']);
-require("TOS"); fix_amp(null); die(); }
+if ($_GET['act'] == "README" || $_GET['act'] == "ReadME") {
+    $_GET['act'] = "readme";
+}
+if ($_GET['act'] == "readme" || $_GET['act'] == "ReadMe") {
+    header("Content-Type: text/plain; charset=".$Settings['charset']);
+    require("README");
+    fix_amp(null);
+    die();
+}
+if ($_GET['act'] == "LICENSE" || $_GET['act'] == "License") {
+    $_GET['act'] = "license";
+}
+if ($_GET['act'] == "license" || $_GET['act'] == "BSD") {
+    header("Content-Type: text/plain; charset=".$Settings['charset']);
+    require("LICENSE");
+    fix_amp(null);
+    die();
+}
+if ($_GET['act'] == "TOS" || $_GET['act'] == "ToS") {
+    $_GET['act'] = "tos";
+}
+if ($_GET['act'] == "tos" || $_GET['act'] == "terms") {
+    header("Content-Type: text/plain; charset=".$Settings['charset']);
+    require("TOS");
+    fix_amp(null);
+    die();
+}
 $Settings['board_name'] = $RFullName;
-function get_theme_values($matches) {
-	global $ThemeSet;
-	$return_text = null;
-	if(isset($ThemeSet[$matches[1]])) { $return_text = $ThemeSet[$matches[1]]; }
-	if(!isset($ThemeSet[$matches[1]])) { $return_text = null; }
-	return $return_text; }
-foreach($ThemeSet AS $key => $value) {
-	if(isset($ThemeSet[$key])) {
-	$ThemeSet[$key] = preg_replace("/%%/s", "{percent}p", $ThemeSet[$key]);
-	$ThemeSet[$key] = preg_replace_callback("/%\{([^\}]*)\}T/s", "get_theme_values", $ThemeSet[$key]);
-	$ThemeSet[$key] = preg_replace_callback("/%\{([^\}]*)\}e/s", "get_env_values", $ThemeSet[$key]);
-	$ThemeSet[$key] = preg_replace_callback("/%\{([^\}]*)\}i/s", "get_server_values", $ThemeSet[$key]);
-	$ThemeSet[$key] = preg_replace_callback("/%\{([^\}]*)\}s/s", "get_setting_values", $ThemeSet[$key]);
-	$ThemeSet[$key] = preg_replace_callback("/%\{([^\}]*)\}t/s", "get_time", $ThemeSet[$key]); 
-	$ThemeSet[$key] = preg_replace("/\{percent\}p/s", "%", $ThemeSet[$key]); } }
+function get_theme_values($matches)
+{
+    global $ThemeSet;
+    $return_text = null;
+    if (isset($ThemeSet[$matches[1]])) {
+        $return_text = $ThemeSet[$matches[1]];
+    }
+    if (!isset($ThemeSet[$matches[1]])) {
+        $return_text = null;
+    }
+    return $return_text;
+}
+foreach ($ThemeSet as $key => $value) {
+    if (isset($ThemeSet[$key])) {
+        $ThemeSet[$key] = preg_replace("/%%/s", "{percent}p", $ThemeSet[$key]);
+        $ThemeSet[$key] = preg_replace_callback("/%\{([^\}]*)\}T/s", "get_theme_values", $ThemeSet[$key]);
+        $ThemeSet[$key] = preg_replace_callback("/%\{([^\}]*)\}e/s", "get_env_values", $ThemeSet[$key]);
+        $ThemeSet[$key] = preg_replace_callback("/%\{([^\}]*)\}i/s", "get_server_values", $ThemeSet[$key]);
+        $ThemeSet[$key] = preg_replace_callback("/%\{([^\}]*)\}s/s", "get_setting_values", $ThemeSet[$key]);
+        $ThemeSet[$key] = preg_replace_callback("/%\{([^\}]*)\}t/s", "get_time", $ThemeSet[$key]);
+        $ThemeSet[$key] = preg_replace("/\{percent\}p/s", "%", $ThemeSet[$key]);
+    }
+}
 require($SetupDir['convert'].'info.php');
 require($SetupDir['setup'].'html5.php');
-$Error = null; $_GET['time'] = false;
+$Error = null;
+$_GET['time'] = false;
 $title_html = htmlentities("Installing ".$VerInfo['iDB_Ver_Show'], ENT_QUOTES, $Settings['charset']);
 ?>
 <meta itemprop="title" property="og:title" content="<?php echo $title_html; ?>" />
@@ -388,15 +487,15 @@ $title_html = htmlentities("Installing ".$VerInfo['iDB_Ver_Show'], ENT_QUOTES, $
 <body>
 <?php require($SettDir['inc'].'navbar.php'); ?>
 <div class="Table1Border">
-<?php if($ThemeSet['TableStyle']=="div") { ?>
+<?php if ($ThemeSet['TableStyle'] == "div") { ?>
 <div class="TableRow1">
-<span style="font-weight: bold; text-align: left;"><?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker("install",".php","act=part1","&","=",null,null); ?>">Install <?php echo $VerInfo['iDB_Ver_Show']; ?> </a></span>
+<span style="font-weight: bold; text-align: left;"><?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker("install", ".php", "act=part1", "&", "=", null, null); ?>">Install <?php echo $VerInfo['iDB_Ver_Show']; ?> </a></span>
 </div>
 <?php } ?>
 <table class="Table1">
-<?php if($ThemeSet['TableStyle']=="table") { ?>
+<?php if ($ThemeSet['TableStyle'] == "table") { ?>
 <tr class="TableRow1">
-<td class="TableColumn1"><span style="font-weight: bold; text-align: left;"><?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker("install",".php","act=part1","&","=",null,null); ?>">Install <?php echo $VerInfo['iDB_Ver_Show']; ?> </a></span>
+<td class="TableColumn1"><span style="font-weight: bold; text-align: left;"><?php echo $ThemeSet['TitleIcon']; ?><a href="<?php echo url_maker("install", ".php", "act=part1", "&", "=", null, null); ?>">Install <?php echo $VerInfo['iDB_Ver_Show']; ?> </a></span>
 </td>
 </tr><?php } ?>
 <tr class="TableRow2">
@@ -406,61 +505,91 @@ $title_html = htmlentities("Installing ".$VerInfo['iDB_Ver_Show'], ENT_QUOTES, $
 </th>
 </tr>
 <?php
-if($ServHTTPS=="on") { $prehost = "https://"; }
-if($ServHTTPS!="on") { $prehost = "http://"; }
+if ($ServHTTPS == "on") {
+    $prehost = "https://";
+}
+if ($ServHTTPS != "on") {
+    $prehost = "http://";
+}
 $this_dir = null;
-if(dirname($_SERVER['SCRIPT_NAME'])!="."||
-	dirname($_SERVER['SCRIPT_NAME'])!=null) {
-$this_dir = dirname($_SERVER['SCRIPT_NAME'])."/"; }
-if($this_dir==null||$this_dir==".") {
-if(dirname($_SERVER['SCRIPT_NAME'])=="."||
-	dirname($_SERVER['SCRIPT_NAME'])==null) {
-$this_dir = dirname($_SERVER['PHP_SELF'])."/"; } }
-if($this_dir=="\/") { $this_dir="/"; }
+if (dirname($_SERVER['SCRIPT_NAME']) != "." ||
+    dirname($_SERVER['SCRIPT_NAME']) != null) {
+    $this_dir = dirname($_SERVER['SCRIPT_NAME'])."/";
+}
+if ($this_dir == null || $this_dir == ".") {
+    if (dirname($_SERVER['SCRIPT_NAME']) == "." ||
+        dirname($_SERVER['SCRIPT_NAME']) == null) {
+        $this_dir = dirname($_SERVER['PHP_SELF'])."/";
+    }
+}
+if ($this_dir == "\/") {
+    $this_dir = "/";
+}
 $this_dir = str_replace("//", "/", $this_dir);
-$idbdir = addslashes(str_replace("\\","/",dirname(__FILE__)."/"));
-function sql_list_dbs() {
-   $result = sql_query("SHOW DATABASES;",$SQLStat);
-   while( $data = sql_fetch_row($result) ) {
-       $array[] = $data[0];
-   } return $array; }
-if ($_GET['act']=="part1"&&$_POST['act']=="part1") {
-if ($_GET['act']!="part2"&&$_POST['act']!="part2") {
-if ($_GET['act']!="part3"&&$_POST['act']!="part3") {
-if ($_GET['act']!="part4"&&$_POST['act']!="part4") {
-   require($SetupDir['setup'].'license.php'); } } } }
-if ($_GET['act']!="part1"&&$_POST['act']!="part1") {
-if ($_GET['act']=="part2"&&$_POST['act']=="part2") {
-if ($_GET['act']!="part3"&&$_POST['act']!="part3") {
-if ($_GET['act']!="part4"&&$_POST['act']!="part4") {
-   require($SetupDir['setup'].'presetup.php'); } } } }
-if($_POST['SetupType']=="convert") {
-	require($ConvertInfo['ConvertFile']); }
-if($_POST['SetupType']=="install") {
-if ($_GET['act']!="part1"&&$_POST['act']!="part1") {
-if ($_GET['act']!="part2"&&$_POST['act']!="part2") {
-if ($_GET['act']=="part3"&&$_POST['act']=="part3") {
-if ($_GET['act']!="part4"&&$_POST['act']!="part4") {
-   require($SetupDir['setup'].'setup.php'); } } } } }
-if($_POST['SetupType']=="install") {
-if ($_GET['act']!="part1"&&$_POST['act']!="part1") {
-if ($_GET['act']!="part2"&&$_POST['act']!="part2") {
-if ($_GET['act']!="part3"&&$_POST['act']!="part3") {
-if ($_GET['act']=="part4"&&$_POST['act']=="part4") {
-   require($SetupDir['setup'].'mkconfig.php'); } } } } }
-if ($Error=="Yes") { ?>
-<br />Install Failed with errors. <a href="<?php echo url_maker("install",".php","act=part1","&","=",null,null); ?>">Click here</a> to restart install. &lt;_&lt;
+$idbdir = addslashes(str_replace("\\", "/", dirname(__FILE__)."/"));
+function sql_list_dbs()
+{
+    $result = sql_query("SHOW DATABASES;", $SQLStat);
+    while ($data = sql_fetch_row($result)) {
+        $array[] = $data[0];
+    } return $array;
+}
+if ($_GET['act'] == "part1" && $_POST['act'] == "part1") {
+    if ($_GET['act'] != "part2" && $_POST['act'] != "part2") {
+        if ($_GET['act'] != "part3" && $_POST['act'] != "part3") {
+            if ($_GET['act'] != "part4" && $_POST['act'] != "part4") {
+                require($SetupDir['setup'].'license.php');
+            }
+        }
+    }
+}
+if ($_GET['act'] != "part1" && $_POST['act'] != "part1") {
+    if ($_GET['act'] == "part2" && $_POST['act'] == "part2") {
+        if ($_GET['act'] != "part3" && $_POST['act'] != "part3") {
+            if ($_GET['act'] != "part4" && $_POST['act'] != "part4") {
+                require($SetupDir['setup'].'presetup.php');
+            }
+        }
+    }
+}
+if ($_POST['SetupType'] == "convert") {
+    require($ConvertInfo['ConvertFile']);
+}
+if ($_POST['SetupType'] == "install") {
+    if ($_GET['act'] != "part1" && $_POST['act'] != "part1") {
+        if ($_GET['act'] != "part2" && $_POST['act'] != "part2") {
+            if ($_GET['act'] == "part3" && $_POST['act'] == "part3") {
+                if ($_GET['act'] != "part4" && $_POST['act'] != "part4") {
+                    require($SetupDir['setup'].'setup.php');
+                }
+            }
+        }
+    }
+}
+if ($_POST['SetupType'] == "install") {
+    if ($_GET['act'] != "part1" && $_POST['act'] != "part1") {
+        if ($_GET['act'] != "part2" && $_POST['act'] != "part2") {
+            if ($_GET['act'] != "part3" && $_POST['act'] != "part3") {
+                if ($_GET['act'] == "part4" && $_POST['act'] == "part4") {
+                    require($SetupDir['setup'].'mkconfig.php');
+                }
+            }
+        }
+    }
+}
+if ($Error == "Yes") { ?>
+<br />Install Failed with errors. <a href="<?php echo url_maker("install", ".php", "act=part1", "&", "=", null, null); ?>">Click here</a> to restart install. &lt;_&lt;
 <br /><br />
 </td>
 </tr>
 <?php } ?>
 <tr class="TableRow4">
-<td class="TableColumn4">&#160;<a href="<?php echo url_maker("install",".php","act=ReadMe","&","=",null,null); ?>">Readme.txt</a>&#160;|&#160;<a href="<?php echo url_maker("install",".php","act=License","&","=",null,null); ?>">License.txt</a>&#160;</td>
+<td class="TableColumn4">&#160;<a href="<?php echo url_maker("install", ".php", "act=ReadMe", "&", "=", null, null); ?>">Readme.txt</a>&#160;|&#160;<a href="<?php echo url_maker("install", ".php", "act=License", "&", "=", null, null); ?>">License.txt</a>&#160;</td>
 </tr>
 </table></div>
 <div>&#160;</div>
-<?php 
-require($SettDir['inc'].'endpage.php'); 
+<?php
+require($SettDir['inc'].'endpage.php');
 ?>
 </body>
 </html>

@@ -22,15 +22,18 @@ if ($File3Name == "sqlsrv_prepare.php" || $File3Name == "/sqlsrv_prepare.php") {
 
 // SQLSRV Error handling functions
 // SQLSRV Error handling functions
-function sqlsrv_prepare_func_error($link = null) {
+function sqlsrv_prepare_func_error($link = null)
+{
     return sqlsrv_errors(SQLSRV_ERR_ERRORS);
 }
 
-function sqlsrv_prepare_func_errorno($link = null) {
+function sqlsrv_prepare_func_errorno($link = null)
+{
     return sqlsrv_errors(SQLSRV_ERR_ERRORS); // SQLSRV does not use separate error numbers.
 }
 
-function sqlsrv_prepare_func_errorno_full($link = null) {
+function sqlsrv_prepare_func_errorno_full($link = null)
+{
     $error = sqlsrv_prepare_func_error($link);
     return $error ? json_encode($error) : "";
 }
@@ -40,7 +43,8 @@ if (!isset($NumQueriesArray['sqlsrv_prepare'])) {
     $NumQueriesArray['sqlsrv_prepare'] = 0;
 }
 
-function sqlsrv_prepare_func_query($query, $params = [], $link = null) {
+function sqlsrv_prepare_func_query($query, $params = [], $link = null)
+{
     global $NumQueriesArray, $SQLStat;
 
     // Check if $link is null, if so set to $SQLStat
@@ -101,7 +105,8 @@ function sqlsrv_prepare_func_query($query, $params = [], $link = null) {
 }
 
 // Fetch number of rows for SELECT queries
-function sqlsrv_prepare_func_num_rows($stmt) {
+function sqlsrv_prepare_func_num_rows($stmt)
+{
     $num = sqlsrv_num_rows($stmt);
 
     if ($num === false) {
@@ -113,7 +118,8 @@ function sqlsrv_prepare_func_num_rows($stmt) {
 }
 
 // Connect to SQL Server database using sqlsrv
-function sqlsrv_prepare_func_connect_db($server, $username = null, $password = null, $database = null) {
+function sqlsrv_prepare_func_connect_db($server, $username = null, $password = null, $database = null)
+{
     // Set up default connection options
     $connectionInfo = [
         "CharacterSet" => "UTF-8",
@@ -142,12 +148,14 @@ function sqlsrv_prepare_func_connect_db($server, $username = null, $password = n
     return $link;  // Return the link resource
 }
 
-function sqlsrv_prepare_func_disconnect_db($link = null) {
+function sqlsrv_prepare_func_disconnect_db($link = null)
+{
     return sqlsrv_close($link);
 }
 
 // Query results fetching
-function sqlsrv_prepare_func_result($stmt, $row, $field = 0) {
+function sqlsrv_prepare_func_result($stmt, $row, $field = 0)
+{
     $data = [];
     while ($result = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_NUMERIC)) {
         $data[] = $result;
@@ -157,21 +165,25 @@ function sqlsrv_prepare_func_result($stmt, $row, $field = 0) {
 }
 
 // Free results
-function sqlsrv_prepare_func_free_result($stmt) {
+function sqlsrv_prepare_func_free_result($stmt)
+{
     return sqlsrv_free_stmt($stmt);
 }
 
 // Fetch results as associative array
-function sqlsrv_prepare_func_fetch_assoc($stmt) {
+function sqlsrv_prepare_func_fetch_assoc($stmt)
+{
     return sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
 }
 
-function sqlsrv_prepare_func_fetch_row($stmt) {
+function sqlsrv_prepare_func_fetch_row($stmt)
+{
     return sqlsrv_fetch_array($stmt, SQLSRV_FETCH_NUMERIC);
 }
 
 // Escape string - SQLSRV uses parameterized queries, so this is not needed.
-function sqlsrv_prepare_func_escape_string($string, $link = null) {
+function sqlsrv_prepare_func_escape_string($string, $link = null)
+{
     return $string; // SQLSRV does not have a string escape function; use parameterized queries instead.
 }
 
@@ -181,7 +193,8 @@ if (!isset($NumPreQueriesArray['sqlsrv_prepare'])) {
 }
 
 // Pre-process Query for SQLSRV
-function sqlsrv_prepare_func_pre_query($query_string, $query_vars = []) {
+function sqlsrv_prepare_func_pre_query($query_string, $query_vars = [])
+{
     global $NumPreQueriesArray;
 
     if ($query_vars === null || !is_array($query_vars)) {
@@ -211,13 +224,15 @@ function sqlsrv_prepare_func_pre_query($query_string, $query_vars = []) {
 }
 
 // Set Charset
-function sqlsrv_prepare_func_set_charset($charset, $link = null) {
+function sqlsrv_prepare_func_set_charset($charset, $link = null)
+{
     // Charset is set in the connection string in SQLSRV; this function is a placeholder.
     return true;
 }
 
 // Get next ID after an insert
-function sqlsrv_prepare_func_get_next_id($link = null) {
+function sqlsrv_prepare_func_get_next_id($link = null)
+{
     $stmt = sqlsrv_query($link, "SELECT SCOPE_IDENTITY()");
     if ($stmt) {
         $result = sqlsrv_fetch_array($stmt);
@@ -226,7 +241,8 @@ function sqlsrv_prepare_func_get_next_id($link = null) {
     return null;
 }
 
-function sqlsrv_prepare_func_count_rows($query, $link = null, $countname = "cnt") {
+function sqlsrv_prepare_func_count_rows($query, $link = null, $countname = "cnt")
+{
     $result = sqlsrv_prepare_func_query($query, [], $link);  // Pass empty array for params
     $row = sqlsrv_prepare_func_fetch_assoc($result);
 
@@ -240,7 +256,8 @@ function sqlsrv_prepare_func_count_rows($query, $link = null, $countname = "cnt"
     return $count;
 }
 
-function sqlsrv_prepare_func_count_rows_alt($query, $link = null) {
+function sqlsrv_prepare_func_count_rows_alt($query, $link = null)
+{
     $result = sqlsrv_prepare_func_query($query, [], $link);  // Pass empty array for params
     $row = sqlsrv_prepare_func_fetch_assoc($result);
 
@@ -253,4 +270,3 @@ function sqlsrv_prepare_func_count_rows_alt($query, $link = null) {
     @sqlsrv_prepare_func_free_result($result);
     return $count;
 }
-?>

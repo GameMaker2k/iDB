@@ -21,19 +21,22 @@ if ($File3Name == "mysqli_prepare.php" || $File3Name == "/mysqli_prepare.php") {
 }
 
 // MySQLi Error handling functions
-function mysqli_prepare_func_error($link = null) {
+function mysqli_prepare_func_error($link = null)
+{
     global $SQLStat;
     $connection = ($link instanceof mysqli ? $link : $SQLStat);
     return $connection instanceof mysqli ? mysqli_error($connection) : false;
 }
 
-function mysqli_prepare_func_errno($link = null) {
+function mysqli_prepare_func_errno($link = null)
+{
     global $SQLStat;
     $connection = ($link instanceof mysqli ? $link : $SQLStat);
     return $connection instanceof mysqli ? mysqli_errno($connection) : false;
 }
 
-function mysqli_prepare_func_errorno($link = null) {
+function mysqli_prepare_func_errorno($link = null)
+{
     global $SQLStat;
     $connection = ($link instanceof mysqli ? $link : $SQLStat);
     $result = $connection instanceof mysqli ? mysqli_prepare_func_error($connection) : false;
@@ -47,7 +50,8 @@ if (!isset($NumQueriesArray['mysqli_prepare'])) {
     $NumQueriesArray['mysqli_prepare'] = 0;
 }
 
-function mysqli_prepare_func_query($query, $params = [], $link = null) {
+function mysqli_prepare_func_query($query, $params = [], $link = null)
+{
     global $NumQueriesArray, $SQLStat;
 
     $connection = ($link instanceof mysqli ? $link : $SQLStat);
@@ -78,7 +82,8 @@ function mysqli_prepare_func_query($query, $params = [], $link = null) {
 }
 
 // Fetch number of rows for SELECT queries
-function mysqli_prepare_func_num_rows($stmt) {
+function mysqli_prepare_func_num_rows($stmt)
+{
     mysqli_stmt_store_result($stmt);  // Ensure results are stored for row counting
     $num = mysqli_stmt_num_rows($stmt);
 
@@ -91,14 +96,15 @@ function mysqli_prepare_func_num_rows($stmt) {
 }
 
 // Connect to MySQLi database
-function mysqli_prepare_func_connect_db($server, $username, $password, $database = null, $new_link = false) {
+function mysqli_prepare_func_connect_db($server, $username, $password, $database = null, $new_link = false)
+{
     $myport = "3306";
     $hostex = explode(":", $server);
-    
+
     if (isset($hostex[1]) && !is_numeric($hostex[1])) {
         $hostex[1] = $myport;
     }
-    
+
     if (isset($hostex[1])) {
         $server = $hostex[0];
         $myport = $hostex[1];
@@ -122,12 +128,14 @@ function mysqli_prepare_func_connect_db($server, $username, $password, $database
     return $link;
 }
 
-function mysqli_prepare_func_disconnect_db($link = null) {
+function mysqli_prepare_func_disconnect_db($link = null)
+{
     return mysqli_close($link);
 }
 
 // Query results fetching
-function mysqli_prepare_func_result($stmt, $row, $field = 0) {
+function mysqli_prepare_func_result($stmt, $row, $field = 0)
+{
     // Fetch all rows into an array
     mysqli_stmt_store_result($stmt);
     $meta = mysqli_stmt_result_metadata($stmt);
@@ -150,13 +158,15 @@ function mysqli_prepare_func_result($stmt, $row, $field = 0) {
 }
 
 // Free results
-function mysqli_prepare_func_free_result($stmt) {
+function mysqli_prepare_func_free_result($stmt)
+{
     mysqli_stmt_free_result($stmt);
     return true;
 }
 
 // Fetch results as associative array
-function mysqli_prepare_func_fetch_assoc($stmt) {
+function mysqli_prepare_func_fetch_assoc($stmt)
+{
     mysqli_stmt_store_result($stmt);
     $meta = mysqli_stmt_result_metadata($stmt);
     $fields = mysqli_fetch_fields($meta);
@@ -177,7 +187,8 @@ function mysqli_prepare_func_fetch_assoc($stmt) {
 }
 
 // Fetch row results as a numeric array
-function mysqli_prepare_func_fetch_row($stmt) {
+function mysqli_prepare_func_fetch_row($stmt)
+{
     mysqli_stmt_store_result($stmt);
     $meta = mysqli_stmt_result_metadata($stmt);
     $fields = mysqli_fetch_fields($meta);
@@ -200,11 +211,14 @@ if (!isset($NumPreQueriesArray['mysqli_prepare'])) {
 }
 
 // Escape string
-function mysqli_prepare_func_escape_string($string, $link = null) {
+function mysqli_prepare_func_escape_string($string, $link = null)
+{
     global $NumPreQueriesArray;
 
     global $SQLStat;
-    if (!isset($string)) return null;
+    if (!isset($string)) {
+        return null;
+    }
     $connection = ($link instanceof mysqli ? $link : $SQLStat);
     return $connection instanceof mysqli ? mysqli_real_escape_string($connection, $string) : false;
 }
@@ -215,7 +229,8 @@ if (!isset($NumPreQueriesArray['mysqli_prepare'])) {
 }
 
 // SafeSQL Lite with prepared statements and placeholders
-function mysqli_prepare_func_pre_query($query_string, $query_vars) {
+function mysqli_prepare_func_pre_query($query_string, $query_vars)
+{
     if ($query_vars === null || !is_array($query_vars)) {
         $query_vars = [];
     }
@@ -239,14 +254,15 @@ function mysqli_prepare_func_pre_query($query_string, $query_vars) {
         return false;
     }
 
-        ++$NumPreQueriesArray['mysqli_prepare'];
+    ++$NumPreQueriesArray['mysqli_prepare'];
 
     // Return the query string and the array of variables
     return [$query_string, $query_vars];
 }
 
 // Set Charset using Prepared Statements
-function mysqli_prepare_func_set_charset($charset, $link = null) {
+function mysqli_prepare_func_set_charset($charset, $link = null)
+{
     global $SQLStat;
 
     // Determine which connection to use, link or global SQLStat
@@ -284,12 +300,14 @@ function mysqli_prepare_func_set_charset($charset, $link = null) {
 }
 
 // Get next ID after an insert
-function mysqli_prepare_func_get_next_id($link = null) {
+function mysqli_prepare_func_get_next_id($link = null)
+{
     return mysqli_insert_id($link);
 }
 
 // Fetch Number of Rows using COUNT in a single query (uses mysqli_prepare_func_fetch_assoc)
-function mysqli_prepare_func_count_rows($query, $link = null, $countname = "cnt") {
+function mysqli_prepare_func_count_rows($query, $link = null, $countname = "cnt")
+{
     $result = mysqli_prepare_func_query($query, [], $link);  // Pass empty array for params
     $row = mysqli_prepare_func_fetch_assoc($result);
 
@@ -305,18 +323,18 @@ function mysqli_prepare_func_count_rows($query, $link = null, $countname = "cnt"
 }
 
 // Alternative version using mysqli_prepare_func_fetch_assoc
-function mysqli_prepare_func_count_rows_alt($query, $link = null) {
+function mysqli_prepare_func_count_rows_alt($query, $link = null)
+{
     $result = mysqli_prepare_func_query($query, [], $link);  // Pass empty array for params
     $row = mysqli_prepare_func_fetch_assoc($result);
-    
+
     if ($row === false) {
         return false;  // Handle case if no row is returned
     }
-    
+
     // Return first column (assuming single column result like COUNT or similar)
     $count = reset($row);
 
     @mysqli_prepare_func_free_result($result);
     return $count;
 }
-?>

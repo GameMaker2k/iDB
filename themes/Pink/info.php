@@ -21,4 +21,3 @@ $ThemeInfo['ThemeVersionType'] = "Alpha";
 $ThemeInfo['ThemeSubVersion'] = "SVN 961";
 $ThemeInfo['MakerURL'] = "http://idb.id.funpic.org/";
 $ThemeInfo['CopyRight'] = "%{ThemeName}T was made by <a href=\"%{MakerURL}T\" title=\"%{ThemeMaker}T\">%{ThemeMaker}T</a>";
-?>

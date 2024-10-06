@@ -13,11 +13,14 @@
 
     $FileInfo: calendar.php - Last Update: 8/23/2024 SVN 1023 - Author: cooldude2k $
 */
-if(ini_get("register_globals")) {
-require_once('inc/misc/killglobals.php'); }
+if (ini_get("register_globals")) {
+    require_once('inc/misc/killglobals.php');
+}
 require('preindex.php');
 $usefileext = $Settings['file_ext'];
-if($ext=="noext"||$ext=="no ext"||$ext=="no+ext") { $usefileext = ""; }
+if ($ext == "noext" || $ext == "no ext" || $ext == "no+ext") {
+    $usefileext = "";
+}
 $filewpath = $exfile['calendar'].$usefileext.$_SERVER['PATH_INFO'];
 $idbactcheck = array("view", "create");
 ?>
@@ -30,7 +33,7 @@ $title_html = htmlentities($Settings['board_name'].$idbpowertitle, ENT_QUOTES, $
 <meta itemprop="title" property="twitter:title" content="<?php echo $title_html; ?>" />
 <meta name="title" content="<?php echo $title_html; ?>" />
 <title> <?php echo $Settings['board_name'].$idbpowertitle; ?> </title>
-<?php $iWrappers['TITLETAG'] = ob_get_clean(); 
+<?php $iWrappers['TITLETAG'] = ob_get_clean();
 ob_start("idb_suboutput_handler"); ?>
 </head>
 <body>
@@ -39,17 +42,21 @@ ob_start("idb_suboutput_handler");
 require($SettDir['inc'].'navbar.php');
 $iWrappers['NAVBAR'] = ob_get_clean();
 ob_start("idb_suboutput_handler");
-if($_GET['act']==null) {
-$_GET['act']="view"; }
-if(!in_array($_GET['act'], $idbactcheck))
-{ $_GET['act']="view"; }
-if($_GET['act']=="view")
-{ require($SettDir['inc'].'calendars.php'); }
-if($_GET['act']=="create") 
-{ require($SettDir['inc'].'events.php'); }
+if ($_GET['act'] == null) {
+    $_GET['act'] = "view";
+}
+if (!in_array($_GET['act'], $idbactcheck)) {
+    $_GET['act'] = "view";
+}
+if ($_GET['act'] == "view") {
+    require($SettDir['inc'].'calendars.php');
+}
+if ($_GET['act'] == "create") {
+    require($SettDir['inc'].'events.php');
+}
 $iWrappers['CONTENT'] = ob_get_clean();
 ob_start("idb_suboutput_handler");
-require($SettDir['inc'].'endpage.php'); 
+require($SettDir['inc'].'endpage.php');
 $iWrappers['COPYRIGHT'] = ob_get_clean();
 ob_start("idb_suboutput_handler"); ?>
 </body>
@@ -57,8 +64,10 @@ ob_start("idb_suboutput_handler"); ?>
 <?php
 $iWrappers['HTMLEND'] = ob_get_clean();
 require($SettDir['inc'].'iwrapper.php');
-if($_GET['act']=="view") {
-change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." Viewing Calendar",$Settings['use_gzip'],$GZipEncode['Type']); }
-if($_GET['act']=="create") {
-change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." Making a Event",$Settings['use_gzip'],$GZipEncode['Type']); }
+if ($_GET['act'] == "view") {
+    change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." Viewing Calendar", $Settings['use_gzip'], $GZipEncode['Type']);
+}
+if ($_GET['act'] == "create") {
+    change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." Making a Event", $Settings['use_gzip'], $GZipEncode['Type']);
+}
 ?>

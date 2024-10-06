@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 /*
     This program is free software; you can redistribute it and/or modify
     it under the terms of the Revised BSD License.
@@ -11,7 +12,7 @@
     Copyright 2004-2024 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2024 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: versioninfo.php - Last Update: 10/4/2024 SVN 1333 - Author: cooldude2k $
+    $FileInfo: versioninfo.php - Last Update: 10/4/2024 SVN 1334 - Author: cooldude2k $
 */
 
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
@@ -23,7 +24,8 @@ if ($File3Name == "versioninfo.php" || $File3Name == "/versioninfo.php") {
 $rssurlon = "off";
 
 // Version info function
-function version_info($proname, $subver, $ver, $supver, $reltype, $svnver, $showsvn) {
+function version_info($proname, $subver, $ver, $supver, $reltype, $svnver, $showsvn)
+{
     $return_var = "$proname $reltype $subver.$ver.$supver";
     if ($showsvn) {
         $return_var .= is_bool($showsvn) ? " SVN $svnver" : " $showsvn $svnver";
@@ -36,7 +38,7 @@ $VER1 = [0, 7, 8];
 $VERFull[1] = $VER1[0] . "." . $VER1[1] . "." . $VER1[2];
 
 $VER2 = ["Alpha", "Al", "SVN"];
-$SubVerN = 1333;
+$SubVerN = 1334;
 $GitRevPreN = '$Id$';
 $GitRevN = getGitRevision($GitRevPreN);
 
@@ -362,5 +364,3 @@ if ($Settings['hideverinfohttp'] == "on") {
     header("X-Powered-By: ");
     header("Generator: ");
 }
-
-?>

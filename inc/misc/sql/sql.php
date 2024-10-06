@@ -21,7 +21,8 @@ if ($File3Name == "sql.php" || $File3Name == "/sql.php") {
 }
 
 // _convert_var handles additional variable types for different placeholders
-function _convert_var($var, $placeholder) {
+function _convert_var($var, $placeholder)
+{
     switch ($placeholder) {
         case '%i':
         case '%I':
@@ -62,9 +63,10 @@ function _convert_var($var, $placeholder) {
 }
 
 // Example for dropping parts of the query based on variables
-function handle_conditional_parts(&$query_string, &$query_vars) {
+function handle_conditional_parts(&$query_string, &$query_vars)
+{
     preg_match_all('/\[(.*?)\]/', $query_string, $matches, PREG_OFFSET_CAPTURE);
-    
+
     foreach ($matches[1] as $match) {
         // Check if all placeholders inside brackets correspond to non-empty values
         $optional_part = $match[0];
@@ -88,51 +90,52 @@ function handle_conditional_parts(&$query_string, &$query_vars) {
 
 $NumQueriesArray = array();
 $NumPreQueriesArray = array();
-if (file_exists($SettDir['sql'] . "pdo_mysql.php")&&extension_loaded("PDO")&&extension_loaded("PDO_MYSQL")) {
+if (file_exists($SettDir['sql'] . "pdo_mysql.php") && extension_loaded("PDO") && extension_loaded("PDO_MYSQL")) {
     require($SettDir['sql'] . "pdo_mysql.php");
 }
-if (file_exists($SettDir['sql'] . "mysqli.php")&&function_exists("mysqli_connect")) {
+if (file_exists($SettDir['sql'] . "mysqli.php") && function_exists("mysqli_connect")) {
     require($SettDir['sql'] . "mysqli.php");
 }
-if (file_exists($SettDir['sql'] . "mysqli_prepare.php")&&function_exists("mysqli_connect")) {
+if (file_exists($SettDir['sql'] . "mysqli_prepare.php") && function_exists("mysqli_connect")) {
     require($SettDir['sql'] . "mysqli_prepare.php");
 }
-if (file_exists($SettDir['sql'] . "pgsql.php")&&function_exists("pg_connect")) {
+if (file_exists($SettDir['sql'] . "pgsql.php") && function_exists("pg_connect")) {
     require($SettDir['sql'] . "pgsql.php");
 }
-if (file_exists($SettDir['sql'] . "pgsql_prepare.php")&&function_exists("pg_connect")) {
+if (file_exists($SettDir['sql'] . "pgsql_prepare.php") && function_exists("pg_connect")) {
     require($SettDir['sql'] . "pgsql_prepare.php");
 }
-if(file_exists($SettDir['sql']."pdo_pgsql.php")&&extension_loaded("PDO")&&extension_loaded("PDO_PGSQL")) {
+if (file_exists($SettDir['sql']."pdo_pgsql.php") && extension_loaded("PDO") && extension_loaded("PDO_PGSQL")) {
     require($SettDir['sql']."pdo_pgsql.php");
 }
-if (file_exists($SettDir['sql'] . "sqlite3.php")&&class_exists('SQLite3')) {
+if (file_exists($SettDir['sql'] . "sqlite3.php") && class_exists('SQLite3')) {
     require($SettDir['sql'] . "sqlite3.php");
 }
-if (file_exists($SettDir['sql'] . "sqlite3_prepare.php")&&class_exists('SQLite3')) {
+if (file_exists($SettDir['sql'] . "sqlite3_prepare.php") && class_exists('SQLite3')) {
     require($SettDir['sql'] . "sqlite3_prepare.php");
 }
-if (file_exists($SettDir['sql'] . "pdo_sqlite3.php")&&extension_loaded("PDO")&&extension_loaded("PDO_SQLITE")) {
+if (file_exists($SettDir['sql'] . "pdo_sqlite3.php") && extension_loaded("PDO") && extension_loaded("PDO_SQLITE")) {
     require($SettDir['sql'] . "pdo_sqlite3.php");
 }
-if (file_exists($SettDir['sql'] . "cubrid.php")&&function_exists("cubrid_connect")) {
+if (file_exists($SettDir['sql'] . "cubrid.php") && function_exists("cubrid_connect")) {
     require($SettDir['sql'] . "cubrid.php");
 }
-if (file_exists($SettDir['sql'] . "cubrid_prepare.php")&&function_exists("cubrid_connect")) {
+if (file_exists($SettDir['sql'] . "cubrid_prepare.php") && function_exists("cubrid_connect")) {
     require($SettDir['sql'] . "cubrid_prepare.php");
 }
-if(file_exists($SettDir['sql']."pdo_cubrid.php")&&extension_loaded("PDO")&&extension_loaded("PDO_CUBRID")) {
+if (file_exists($SettDir['sql']."pdo_cubrid.php") && extension_loaded("PDO") && extension_loaded("PDO_CUBRID")) {
     require($SettDir['sql']."pdo_cubrid.php");
 }
-if (file_exists($SettDir['sql'] . "pdo_sqlsrv.php")&&extension_loaded("PDO")&&extension_loaded("PDO_SQLSRV")) {
+if (file_exists($SettDir['sql'] . "pdo_sqlsrv.php") && extension_loaded("PDO") && extension_loaded("PDO_SQLSRV")) {
     require($SettDir['sql'] . "pdo_sqlsrv.php");
 }
-if (file_exists($SettDir['sql'] . "sqlsrv_prepare.php")&&function_exists("sqlsrv_connect")) {
+if (file_exists($SettDir['sql'] . "sqlsrv_prepare.php") && function_exists("sqlsrv_connect")) {
     require($SettDir['sql'] . "sqlsrv_prepare.php");
 }
 
 // Helper function to map SQL library to its function prefix
-function get_sql_function_prefix($sqllib) {
+function get_sql_function_prefix($sqllib)
+{
     $prefixes = array(
         'mysqli_prepare' => 'mysqli_prepare_func',
         'mysqli' => 'mysqli_func',
@@ -153,7 +156,8 @@ function get_sql_function_prefix($sqllib) {
 }
 
 // Function to dynamically call the appropriate function based on $sqllib
-function call_sql_function($func, $sqllib = null, ...$params) {
+function call_sql_function($func, $sqllib = null, ...$params)
+{
     if ($sqllib === null) {
         global $Settings;
         $sqllib = $Settings['sqltype'];
@@ -172,15 +176,18 @@ function call_sql_function($func, $sqllib = null, ...$params) {
 }
 
 // Wrapper functions
-function sql_error($link = null, $sqllib = null) {
+function sql_error($link = null, $sqllib = null)
+{
     return call_sql_function('error', $sqllib, $link);
 }
 
-function sql_errno($link = null, $sqllib = null) {
+function sql_errno($link = null, $sqllib = null)
+{
     return call_sql_function('errno', $sqllib, $link);
 }
 
-function sql_errorno($link = null, $sqllib = null) {
+function sql_errorno($link = null, $sqllib = null)
+{
     return call_sql_function('errorno', $sqllib, $link);
 }
 
@@ -191,57 +198,69 @@ if (!isset($NumQueriesArray['sql'])) {
     $NumQueriesArray['sql'] = 0;
 }
 
-function sql_query($query, $link = null, $sqllib = null) {
+function sql_query($query, $link = null, $sqllib = null)
+{
     global $NumQueries, $NumQueriesArray;
     $returnval = call_sql_function('query', $sqllib, $query, $link);
     if ($returnval) {
         ++$NumQueries;
-		++$NumQueriesArray['sql'];
+        ++$NumQueriesArray['sql'];
     }
     return $returnval;
 }
 
-function sql_num_rows($result, $sqllib = null) {
+function sql_num_rows($result, $sqllib = null)
+{
     return call_sql_function('num_rows', $sqllib, $result);
 }
 
-function sql_connect_db($server, $username, $password, $database = null, $new_link = false, $sqllib = null) {
+function sql_connect_db($server, $username, $password, $database = null, $new_link = false, $sqllib = null)
+{
     return call_sql_function('connect_db', $sqllib, $server, $username, $password, $database, $new_link);
 }
 
-function sql_result($result, $row, $field = 0, $sqllib = null) {
+function sql_result($result, $row, $field = 0, $sqllib = null)
+{
     return call_sql_function('result', $sqllib, $result, $row, $field);
 }
 
-function sql_disconnect_db($link = null, $sqllib = null) {
+function sql_disconnect_db($link = null, $sqllib = null)
+{
     return call_sql_function('disconnect_db', $sqllib, $link);
 }
 
-function sql_free_result($result, $sqllib = null) {
+function sql_free_result($result, $sqllib = null)
+{
     return call_sql_function('free_result', $sqllib, $result);
 }
 
-function sql_fetch_array($result, $result_type = null, $sqllib = null) {
+function sql_fetch_array($result, $result_type = null, $sqllib = null)
+{
     return call_sql_function('fetch_array', $sqllib, $result, $result_type);
 }
 
-function sql_fetch_assoc($result, $sqllib = null) {
+function sql_fetch_assoc($result, $sqllib = null)
+{
     return call_sql_function('fetch_assoc', $sqllib, $result);
 }
 
-function sql_fetch_row($result, $sqllib = null) {
+function sql_fetch_row($result, $sqllib = null)
+{
     return call_sql_function('fetch_row', $sqllib, $result);
 }
 
-function sql_server_info($link = null, $sqllib = null) {
+function sql_server_info($link = null, $sqllib = null)
+{
     return call_sql_function('server_info', $sqllib, $link);
 }
 
-function sql_client_info($link = null, $sqllib = null) {
+function sql_client_info($link = null, $sqllib = null)
+{
     return call_sql_function('client_info', $sqllib, $link);
 }
 
-function sql_escape_string($string, $link = null, $sqllib = null) {
+function sql_escape_string($string, $link = null, $sqllib = null)
+{
     return call_sql_function('escape_string', $sqllib, $string, $link);
 }
 
@@ -252,8 +271,9 @@ if (!isset($NumPreQueriesArray['sql'])) {
     $NumPreQueriesArray['sql'] = 0;
 }
 
-function sql_pre_query($query_string, $query_vars, $sqllib = null) {
-	global $NumPreQueries, $NumPreQueriesArray;
+function sql_pre_query($query_string, $query_vars, $sqllib = null)
+{
+    global $NumPreQueries, $NumPreQueriesArray;
 
     $returnval = call_sql_function('pre_query', $sqllib, $query_string, $query_vars);
     if ($returnval) {
@@ -263,24 +283,28 @@ function sql_pre_query($query_string, $query_vars, $sqllib = null) {
     return $returnval;
 }
 
-function sql_set_charset($charset, $link = null, $sqllib = null) {
+function sql_set_charset($charset, $link = null, $sqllib = null)
+{
     global $NumPreQueries, $NumQueriesArray;
     return call_sql_function('set_charset', $sqllib, $charset, $link);
 }
 
-function sql_get_next_id($tablepre, $table, $link = null, $sqllib = null) {
+function sql_get_next_id($tablepre, $table, $link = null, $sqllib = null)
+{
     return call_sql_function('get_next_id', $sqllib, $tablepre, $table, $link);
 }
 
-function sql_get_num_rows($tablepre, $table, $link = null, $sqllib = null) {
+function sql_get_num_rows($tablepre, $table, $link = null, $sqllib = null)
+{
     return call_sql_function('get_num_rows', $sqllib, $tablepre, $table, $link);
 }
 
-function sql_count_rows($query, $link = null, $countname = "cnt", $sqllib = null) {
+function sql_count_rows($query, $link = null, $countname = "cnt", $sqllib = null)
+{
     return call_sql_function('count_rows', $sqllib, $query, $link, $countname);
 }
 
-function sql_count_rows_alt($query, $link = null, $sqllib = null) {
+function sql_count_rows_alt($query, $link = null, $sqllib = null)
+{
     return call_sql_function('count_rows_alt', $sqllib, $query, $link);
 }
-?>

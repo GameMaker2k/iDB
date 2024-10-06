@@ -21,4 +21,3 @@ $ThemeInfo['ThemeVersionType'] = "Alpha";
 $ThemeInfo['ThemeSubVersion'] = "SVN 961";
 $ThemeInfo['MakerURL'] = "http://kazuki.homelinux.org/bbs/category.php?act=view&amp;id=2";
 $ThemeInfo['CopyRight'] = "%{ThemeName}T was made by <a href=\"%{MakerURL}T\" title=\"%{ThemeMaker}T\">%{ThemeMaker}T</a>";
-?>

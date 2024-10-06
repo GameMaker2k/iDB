@@ -13,23 +13,29 @@
 
     $FileInfo: subforum.php - Last Update: 8/23/2024 SVN 1023 - Author: cooldude2k $
 */
-if(ini_get("register_globals")) {
-require_once('inc/misc/killglobals.php'); }
+if (ini_get("register_globals")) {
+    require_once('inc/misc/killglobals.php');
+}
 $checklowview = true;
 require('preindex.php');
 $usefileext = $Settings['file_ext'];
-if($ext=="noext"||$ext=="no ext"||$ext=="no+ext") { $usefileext = ""; }
+if ($ext == "noext" || $ext == "no ext" || $ext == "no+ext") {
+    $usefileext = "";
+}
 $filewpath = $exfile['subforum'].$usefileext.$_SERVER['PATH_INFO'];
-if(!is_numeric($_GET['id'])) { $_GET['id']="1"; }
+if (!is_numeric($_GET['id'])) {
+    $_GET['id'] = "1";
+}
 $idbactcheck = array("view", "lowview", "oldrss", "rss", "atom", "opml");
 $iWrappers['EXTRALINKS'] = null;
-if($Settings['enable_rss']=="on") {
-ob_start("idb_suboutput_handler");
-?>
-<link rel="alternate" type="application/xml" title="SubForum Topics RSS 1.0 Feed" href="<?php echo url_maker($exfile['rss'],$Settings['rss_ext'],"act=rss&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['rss'],$exqstr['rss']); ?>" />
-<link rel="alternate" type="application/rss+xml" title="SubForum Topics RSS 2.0 Feed" href="<?php echo url_maker($exfile['rss'],$Settings['rss_ext'],"act=rss&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['rss'],$exqstr['rss']); ?>" />
-<link rel="alternate" type="application/atom+xml" title="SubForum Topics Atom Feed" href="<?php echo url_maker($exfile['rss'],$Settings['rss_ext'],"act=atom&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['rss'],$exqstr['rss']); ?>" />
-<?php $iWrappers['EXTRALINKS'] = ob_get_clean(); } ?>
+if ($Settings['enable_rss'] == "on") {
+    ob_start("idb_suboutput_handler");
+    ?>
+<link rel="alternate" type="application/xml" title="SubForum Topics RSS 1.0 Feed" href="<?php echo url_maker($exfile['rss'], $Settings['rss_ext'], "act=rss&id=".$_GET['id'], $Settings['qstr'], $Settings['qsep'], $prexqstr['rss'], $exqstr['rss']); ?>" />
+<link rel="alternate" type="application/rss+xml" title="SubForum Topics RSS 2.0 Feed" href="<?php echo url_maker($exfile['rss'], $Settings['rss_ext'], "act=rss&id=".$_GET['id'], $Settings['qstr'], $Settings['qsep'], $prexqstr['rss'], $exqstr['rss']); ?>" />
+<link rel="alternate" type="application/atom+xml" title="SubForum Topics Atom Feed" href="<?php echo url_maker($exfile['rss'], $Settings['rss_ext'], "act=atom&id=".$_GET['id'], $Settings['qstr'], $Settings['qsep'], $prexqstr['rss'], $exqstr['rss']); ?>" />
+<?php $iWrappers['EXTRALINKS'] = ob_get_clean();
+} ?>
 <?php ob_start("idb_suboutput_handler");
 $title_html = htmlentities($Settings['board_name'].$idbpowertitle, ENT_QUOTES, $Settings['charset']);
 ?>
@@ -38,40 +44,53 @@ $title_html = htmlentities($Settings['board_name'].$idbpowertitle, ENT_QUOTES, $
 <meta itemprop="title" property="twitter:title" content="<?php echo $title_html; ?>" />
 <meta name="title" content="<?php echo $title_html; ?>" />
 <title> <?php echo $Settings['board_name'].$idbpowertitle; ?> </title>
-<?php $iWrappers['TITLETAG'] = ob_get_clean(); 
+<?php $iWrappers['TITLETAG'] = ob_get_clean();
 ob_start("idb_suboutput_handler"); ?>
 </head>
 <body>
 <?php $iWrappers['BODYTAG'] = ob_get_clean();
 ob_start("idb_suboutput_handler");
-if($_GET['act']!="lowview") {
-require($SettDir['inc'].'navbar.php'); }
+if ($_GET['act'] != "lowview") {
+    require($SettDir['inc'].'navbar.php');
+}
 $iWrappers['NAVBAR'] = ob_get_clean();
 ob_start("idb_suboutput_handler");
 $ForumCheck = null;
-if($_GET['act']==null)
-{ $_GET['act']="view"; }
-if(!in_array($_GET['act'], $idbactcheck))
-{ $_GET['act']="view"; }
-if(!is_numeric($_GET['id'])) { $_GET['id']="1"; }
-if($_GET['act']=="view"||
-	$_GET['act']=="lowview")
-{ require($SettDir['inc'].'subforums.php'); }
-if($_GET['act']=="oldrss"||$_GET['act']=="rss"||$_GET['act']=="atom"||$_GET['act']=="opml") {
-redirect("location",$rbasedir.url_maker($exfile['rss'],$Settings['file_ext'],"act=".$_GET['act']."&id=".$_GET['id'],$Settings['qstr'],$Settings['qsep'],$prexqstr['rss'],$exqstr['rss'],FALSE));
-ob_clean(); header("Content-Type: text/plain; charset=".$Settings['charset']); $urlstatus = 302;
-gzip_page($Settings['use_gzip'],$GZipEncode['Type']); session_write_close(); die(); }
+if ($_GET['act'] == null) {
+    $_GET['act'] = "view";
+}
+if (!in_array($_GET['act'], $idbactcheck)) {
+    $_GET['act'] = "view";
+}
+if (!is_numeric($_GET['id'])) {
+    $_GET['id'] = "1";
+}
+if ($_GET['act'] == "view" ||
+    $_GET['act'] == "lowview") {
+    require($SettDir['inc'].'subforums.php');
+}
+if ($_GET['act'] == "oldrss" || $_GET['act'] == "rss" || $_GET['act'] == "atom" || $_GET['act'] == "opml") {
+    redirect("location", $rbasedir.url_maker($exfile['rss'], $Settings['file_ext'], "act=".$_GET['act']."&id=".$_GET['id'], $Settings['qstr'], $Settings['qsep'], $prexqstr['rss'], $exqstr['rss'], false));
+    ob_clean();
+    header("Content-Type: text/plain; charset=".$Settings['charset']);
+    $urlstatus = 302;
+    gzip_page($Settings['use_gzip'], $GZipEncode['Type']);
+    session_write_close();
+    die();
+}
 $iWrappers['CONTENT'] = ob_get_clean();
 ob_start("idb_suboutput_handler");
 require($SettDir['inc'].'endpage.php');
 $iWrappers['COPYRIGHT'] = ob_get_clean();
 ob_start("idb_suboutput_handler");
-if(!isset($ForumName)) { $ForumName = null; }
+if (!isset($ForumName)) {
+    $ForumName = null;
+}
 ?>
 </body>
 </html>
-<?php 
+<?php
 $iWrappers['HTMLEND'] = ob_get_clean();
 require($SettDir['inc'].'iwrapper.php');
-change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." ".$ForumName,$Settings['use_gzip'],$GZipEncode['Type']); 
+change_title($Settings['board_name']." ".$ThemeSet['TitleDivider']." ".$ForumName, $Settings['use_gzip'], $GZipEncode['Type']);
 ?>

@@ -21,15 +21,18 @@ if ($File3Name == "cubrid_prepare.php" || $File3Name == "/cubrid_prepare.php") {
 }
 
 // CUBRID Error handling functions
-function cubrid_prepare_func_error($link = null) {
+function cubrid_prepare_func_error($link = null)
+{
     return cubrid_error_msg();
 }
 
-function cubrid_prepare_func_errno($link = null) {
+function cubrid_prepare_func_errno($link = null)
+{
     return cubrid_error_code();
 }
 
-function cubrid_prepare_func_errorno($link = null) {
+function cubrid_prepare_func_errorno($link = null)
+{
     return cubrid_prepare_func_errno() . ": " . cubrid_prepare_func_error();
 }
 
@@ -38,7 +41,8 @@ if (!isset($NumQueriesArray['cubrid_prepare'])) {
     $NumQueriesArray['cubrid_prepare'] = 0;
 }
 
-function cubrid_prepare_func_query($query, $params = [], $link = null) {
+function cubrid_prepare_func_query($query, $params = [], $link = null)
+{
     global $NumQueriesArray, $SQLStat;
 
     $db = isset($link) ? $link : (isset($SQLStat) ? $SQLStat : null);
@@ -87,12 +91,14 @@ function cubrid_prepare_func_query($query, $params = [], $link = null) {
 }
 
 // Fetch number of rows
-function cubrid_prepare_func_num_rows($stmt) {
+function cubrid_prepare_func_num_rows($stmt)
+{
     return cubrid_num_rows($stmt);
 }
 
 // Connect to CUBRID database
-function cubrid_prepare_func_connect_db($server, $username, $password, $database = null, $new_link = false) {
+function cubrid_prepare_func_connect_db($server, $username, $password, $database = null, $new_link = false)
+{
     $myport = "30000";
     $hostex = explode(":", $server);
 
@@ -116,12 +122,14 @@ function cubrid_prepare_func_connect_db($server, $username, $password, $database
     return $link;
 }
 
-function cubrid_prepare_func_disconnect_db($link = null) {
+function cubrid_prepare_func_disconnect_db($link = null)
+{
     return cubrid_disconnect($link);
 }
 
 // Query Results
-function cubrid_prepare_func_result($stmt, $row, $field = 0) {
+function cubrid_prepare_func_result($stmt, $row, $field = 0)
+{
     if (isset($field) && !is_numeric($field)) {
         $field = strtolower($field);
     }
@@ -131,36 +139,45 @@ function cubrid_prepare_func_result($stmt, $row, $field = 0) {
 }
 
 // Free Results
-function cubrid_prepare_func_free_result($stmt) {
+function cubrid_prepare_func_free_result($stmt)
+{
     cubrid_close_request($stmt);
     return cubrid_free_result($stmt);
 }
 
 // Fetch Results to Array
-function cubrid_prepare_func_fetch_array($stmt, $result_type = CUBRID_BOTH) {
+function cubrid_prepare_func_fetch_array($stmt, $result_type = CUBRID_BOTH)
+{
     return cubrid_fetch($stmt, $result_type);
 }
 
-function cubrid_prepare_func_fetch_assoc($stmt) {
+function cubrid_prepare_func_fetch_assoc($stmt)
+{
     return cubrid_fetch($stmt, CUBRID_ASSOC);
 }
 
-function cubrid_prepare_func_fetch_row($stmt) {
+function cubrid_prepare_func_fetch_row($stmt)
+{
     return cubrid_fetch($stmt, CUBRID_NUM);
 }
 
 // Get Server Info
-function cubrid_prepare_func_server_info($link = null) {
+function cubrid_prepare_func_server_info($link = null)
+{
     return isset($link) ? cubrid_get_server_info($link) : cubrid_get_server_info();
 }
 
-function cubrid_prepare_func_client_info($link = null) {
+function cubrid_prepare_func_client_info($link = null)
+{
     return cubrid_get_client_info();
 }
 
 // Escape String
-function cubrid_prepare_func_escape_string($string, $link = null) {
-    if (!isset($string)) return null;
+function cubrid_prepare_func_escape_string($string, $link = null)
+{
+    if (!isset($string)) {
+        return null;
+    }
     return cubrid_real_escape_string($string, $link);
 }
 
@@ -170,7 +187,8 @@ if (!isset($NumPreQueriesArray['cubrid_prepare'])) {
 }
 
 // SafeSQL Lite with additional SafeSQL features
-function cubrid_prepare_func_pre_query($query_string, $query_vars) {
+function cubrid_prepare_func_pre_query($query_string, $query_vars)
+{
     global $NumPreQueriesArray;
 
     if ($query_vars === null || !is_array($query_vars)) {
@@ -203,13 +221,15 @@ function cubrid_prepare_func_pre_query($query_string, $query_vars) {
 }
 
 // Get next id for stuff
-function cubrid_prepare_func_get_next_id($tablepre, $table, $link = null) {
+function cubrid_prepare_func_get_next_id($tablepre, $table, $link = null)
+{
     $query = "SELECT " . $tablepre . $table . "_ai_id.current_value";
     $stmt = cubrid_prepare_func_query($query, [], $link);
     return cubrid_prepare_func_result($stmt, 0);
 }
 
-function cubrid_prepare_func_count_rows($query, $link = null, $countname = "cnt") {
+function cubrid_prepare_func_count_rows($query, $link = null, $countname = "cnt")
+{
     $result = cubrid_prepare_func_query($query, [], $link);  // Pass empty array for params
     $row = cubrid_prepare_func_fetch_assoc($result);
 
@@ -223,7 +243,8 @@ function cubrid_prepare_func_count_rows($query, $link = null, $countname = "cnt"
     return $count;
 }
 
-function cubrid_prepare_func_count_rows_alt($query, $link = null) {
+function cubrid_prepare_func_count_rows_alt($query, $link = null)
+{
     $result = cubrid_prepare_func_query($query, [], $link);  // Pass empty array for params
     $row = cubrid_prepare_func_fetch_assoc($result);
 
@@ -236,4 +257,3 @@ function cubrid_prepare_func_count_rows_alt($query, $link = null) {
     @cubrid_prepare_func_free_result($result);
     return $count;
 }
-?>

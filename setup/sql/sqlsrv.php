@@ -15,15 +15,23 @@
     $FileInfo: sqlsrv.php - Last Update: 8/30/2024 SVN 1064 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
-if ($File3Name=="mysql.php"||$File3Name=="/mysql.php") {
-	require('index.php');
-	exit(); }
-if(!isset($SetupDir['setup'])) { $SetupDir['setup'] = "setup/"; }
-if(!isset($SetupDir['convert'])) { $SetupDir['convert'] = "setup/convert/"; }
+if ($File3Name == "mysql.php" || $File3Name == "/mysql.php") {
+    require('index.php');
+    exit();
+}
+if (!isset($SetupDir['setup'])) {
+    $SetupDir['setup'] = "setup/";
+}
+if (!isset($SetupDir['convert'])) {
+    $SetupDir['convert'] = "setup/convert/";
+}
 $parsestr = parse_url($YourWebsite);
 if (!filter_var($parsestr['host'], FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6) || $parsestr['host'] == "localhost") {
-	$GuestLocalIP = gethostbyname($parsestr['host']); } else { $GuestLocalIP = $parsestr['host']; }
-$query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."categories\" (\n".
+    $GuestLocalIP = gethostbyname($parsestr['host']);
+} else {
+    $GuestLocalIP = $parsestr['host'];
+}
+$query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."categories\" (\n".
 "  \"id\" int(15) NOT NULL IDENTITY(1,1),\n".
 "  \"OrderID\" int(15) NOT NULL default '0',\n".
 "  \"Name\" nvarchar(150) NOT NULL default '',\n".
@@ -36,8 +44,8 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."cate
 "  \"Description\" nvarchar(max) NOT NULL,\n".
 "  PRIMARY KEY  (\"id\")\n".
 ");", null);
-sql_query($query,$SQLStat);
-$query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."catpermissions\" (\n".
+sql_query($query, $SQLStat);
+$query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."catpermissions\" (\n".
 "  \"id\" int(15) NOT NULL IDENTITY(1,1),\n".
 "  \"PermissionID\" int(15) NOT NULL default '0',\n".
 "  \"Name\" nvarchar(150) NOT NULL default '',\n".
@@ -45,8 +53,8 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."catp
 "  \"CanViewCategory\" nvarchar(5) NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\")\n".
 ");", null);
-sql_query($query,$SQLStat);
-$query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."events\" (\n".
+sql_query($query, $SQLStat);
+$query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."events\" (\n".
 "  \"id\" int(15) NOT NULL IDENTITY(1,1),\n".
 "  \"UserID\" int(15) NOT NULL default '0',\n".
 "  \"GuestName\" nvarchar(150) NOT NULL default '',\n".
@@ -63,8 +71,8 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."even
 "  \"IP\" nvarchar(64) NOT NULL default '',\n".
 "  CONSTRAINT UQ_E_Name UNIQUE (\"Name\")  (\"id\")\n".
 ");", null);
-sql_query($query,$SQLStat);
-$query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."forums\" (\n".
+sql_query($query, $SQLStat);
+$query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."forums\" (\n".
 "  \"id\" int(15) NOT NULL IDENTITY(1,1),\n".
 "  \"CategoryID\" int(15) NOT NULL default '0',\n".
 "  \"OrderID\" int(15) NOT NULL default '0',\n".
@@ -85,8 +93,8 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."foru
 "  \"NumTopics\" int(15) NOT NULL default '0',\n".
 "  CONSTRAINT UQ_F_Name UNIQUE (\"Name\")  (\"id\")\n".
 ");", null);
-sql_query($query,$SQLStat);
-$query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."groups\" (\n".
+sql_query($query, $SQLStat);
+$query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."groups\" (\n".
 "  \"id\" int(15) NOT NULL IDENTITY(1,1),\n".
 "  \"Name\" nvarchar(150) NOT NULL default '',\n".
 "  \"PermissionID\" int(15) NOT NULL default '0',\n".
@@ -119,8 +127,8 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."grou
 "  PRIMARY KEY  (\"id\"),\n".
 "  CONSTRAINT UQ_G_Name UNIQUE (\"Name\")\n".
 ");", null);
-sql_query($query,$SQLStat);
-$query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."ranks\" (\n".
+sql_query($query, $SQLStat);
+$query = sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."ranks\" (\n".
 "  \"id\" int(15) NOT NULL IDENTITY(1,1),\n".
 "  \"Name\" nvarchar(150) NOT NULL default '',\n".
 "  \"PromoteTo\" int(15) NOT NULL default '0',\n".
@@ -132,8 +140,8 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."ranks\" (\n".
 "  PRIMARY KEY  (\"id\"),\n".
 "  CONSTRAINT UQ_R_Name UNIQUE (\"Name\")\n".
 ");", null);
-sql_query($query,$SQLStat);
-$query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."levels\" (\n".
+sql_query($query, $SQLStat);
+$query = sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."levels\" (\n".
 "  \"id\" int(15) NOT NULL IDENTITY(1,1),\n".
 "  \"Name\" nvarchar(150) NOT NULL default '',\n".
 "  \"PromoteTo\" int(15) NOT NULL default '0',\n".
@@ -145,8 +153,8 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."levels\" (\n".
 "  PRIMARY KEY  (\"id\"),\n".
 "  CONSTRAINT UQ_L_Name UNIQUE (\"Name\")\n".
 ");", null);
-sql_query($query,$SQLStat);
-$query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."members\" (\n".
+sql_query($query, $SQLStat);
+$query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."members\" (\n".
 "  \"id\" int(15) NOT NULL IDENTITY(1,1),\n".
 "  \"Name\" nvarchar(150) NOT NULL default '',\n".
 "  \"Handle\" nvarchar(150) NOT NULL default '',\n".
@@ -197,8 +205,8 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."memb
 "  CONSTRAINT UQ_Handle UNIQUE (\"Handle\"),\n".
 "  CONSTRAINT UQ_Email UNIQUE (\"Email\")\n".
 ");", null);
-sql_query($query,$SQLStat);
-$query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."mempermissions\" (\n".
+sql_query($query, $SQLStat);
+$query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."mempermissions\" (\n".
 "  \"id\" int(15) NOT NULL IDENTITY(1,1),\n".
 "  \"PermissionID\" int(15) NOT NULL default '0',\n".
 "  \"CanViewBoard\" nvarchar(5) NOT NULL default '',\n".
@@ -221,8 +229,8 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."memp
 "  \"ViewDBInfo\" nvarchar(5) NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\")\n".
 ");", null);
-sql_query($query,$SQLStat);
-$query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."messenger\" (\n".
+sql_query($query, $SQLStat);
+$query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."messenger\" (\n".
 "  \"id\" int(15) NOT NULL IDENTITY(1,1),\n".
 "  \"DiscussionID\" int(15) NOT NULL default '0',\n".
 "  \"SenderID\" int(15) NOT NULL default '0',\n".
@@ -236,8 +244,8 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."mess
 "  \"IP\" nvarchar(64) NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\")\n".
 ");", null);
-sql_query($query,$SQLStat);
-$query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."permissions\" (\n".
+sql_query($query, $SQLStat);
+$query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."permissions\" (\n".
 "  \"id\" int(15) NOT NULL IDENTITY(1,1),\n".
 "  \"PermissionID\" int(15) NOT NULL default '0',\n".
 "  \"Name\" nvarchar(150) NOT NULL default '',\n".
@@ -270,8 +278,8 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."perm
 "  \"CanReportPost\" nvarchar(5) NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\")\n".
 ");", null);
-sql_query($query,$SQLStat);
-$query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."polls\" (\n".
+sql_query($query, $SQLStat);
+$query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."polls\" (\n".
 "  \"id\" int(15) NOT NULL IDENTITY(1,1),\n".
 "  \"UserID\" int(15) NOT NULL default '0',\n".
 "  \"GuestName\" nvarchar(150) NOT NULL default '',\n".
@@ -281,8 +289,8 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."poll
 "  \"IP\" nvarchar(64) NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\")\n".
 ");", null);
-sql_query($query,$SQLStat);
-$query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."posts\" (\n".
+sql_query($query, $SQLStat);
+$query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."posts\" (\n".
 "  \"id\" int(15) NOT NULL IDENTITY(1,1),\n".
 "  \"TopicID\" int(15) NOT NULL default '0',\n".
 "  \"ForumID\" int(15) NOT NULL default '0',\n".
@@ -300,8 +308,8 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."post
 "  \"EditIP\" nvarchar(64) NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\")\n".
 ");", null);
-sql_query($query,$SQLStat);
-$query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."restrictedwords\" (\n".
+sql_query($query, $SQLStat);
+$query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."restrictedwords\" (\n".
 "  \"id\" int(15) NOT NULL IDENTITY(1,1),\n".
 "  \"Word\" nvarchar(max) NOT NULL,\n".
 "  \"RestrictedUserName\" nvarchar(5) NOT NULL default '',\n".
@@ -312,8 +320,8 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."rest
 "  \"WholeWord\" nvarchar(5) NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\")\n".
 ");", null);
-sql_query($query,$SQLStat);
-$query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."sessions\" (\n".
+sql_query($query, $SQLStat);
+$query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."sessions\" (\n".
 "  \"session_id\" nvarchar(250) NOT NULL default '',\n".
 "  \"session_data\" nvarchar(max) NOT NULL,\n".
 "  \"serialized_data\" nvarchar(max) NOT NULL,\n".
@@ -323,8 +331,8 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."sess
 "  \"expires\" int(15) NOT NULL default '0',\n".
 "  PRIMARY KEY  (\"session_id\")\n".
 ");", null);
-sql_query($query,$SQLStat);
-$query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."smileys\" (\n".
+sql_query($query, $SQLStat);
+$query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."smileys\" (\n".
 "  \"id\" int(15) NOT NULL IDENTITY(1,1),\n".
 "  \"FileName\" nvarchar(max) NOT NULL,\n".
 "  \"SmileName\" nvarchar(max) NOT NULL,\n".
@@ -335,7 +343,7 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."smil
 "  \"ReplaceCI\" nvarchar(5) NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\")\n".
 ");", null);
-sql_query($query,$SQLStat);
+sql_query($query, $SQLStat);
 /*
 $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."tagboard\" (\n".
 "  \"id\" int(15) NOT NULL IDENTITY(1,1),\n".
@@ -348,7 +356,7 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."tagb
 ");", null);
 sql_query($query,$SQLStat);
 */
-$query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."themes\" (\n".
+$query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."themes\" (\n".
 "  \"id\" int(15) NOT NULL IDENTITY(1,1),\n".
 "  \"Name\" nvarchar(32) NOT NULL default '',\n".
 "  \"ThemeName\" nvarchar(150) NOT NULL default '',\n".
@@ -420,8 +428,8 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."them
 "  PRIMARY KEY  (\"id\"),\n".
 "  CONSTRAINT UQ_T_Name UNIQUE (\"Name\")\n".
 ");", null);
-sql_query($query,$SQLStat);
-$query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."topics\" (\n".
+sql_query($query, $SQLStat);
+$query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."topics\" (\n".
 "  \"id\" int(15) NOT NULL IDENTITY(1,1),\n".
 "  \"PollID\" int(15) NOT NULL default '0',\n".
 "  \"ForumID\" int(15) NOT NULL default '0',\n".
@@ -440,8 +448,8 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."topi
 "  \"Closed\" int(5) NOT NULL default '0',\n".
 "  PRIMARY KEY  (\"id\")\n".
 ");", null);
-sql_query($query,$SQLStat);
-$query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."wordfilter\" (\n".
+sql_query($query, $SQLStat);
+$query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."wordfilter\" (\n".
 "  \"id\" int(15) NOT NULL IDENTITY(1,1),\n".
 "  \"FilterWord\" nvarchar(max) NOT NULL,\n".
 "  \"Replacement\" nvarchar(max) NOT NULL,\n".
@@ -449,15 +457,18 @@ $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."word
 "  \"WholeWord\" nvarchar(5) NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\")\n".
 ");", null);
-sql_query($query,$SQLStat);
+sql_query($query, $SQLStat);
 $TableChCk = array("categories", "catpermissions", "events", "forums", "groups", "levels", "members", "mempermissions", "messenger", "permissions", "polls", "posts", "ranks", "restrictedwords", "sessions", "smileys", "themes", "topics", "wordfilter");
 $TablePreFix = $_POST['tableprefix'];
-function add_prefix($tarray) {
-global $TablePreFix;
-return $TablePreFix.$tarray; }
-$TableChCk = array_map("add_prefix",$TableChCk);
-$tcount = count($TableChCk); $ti = 0;
+function add_prefix($tarray)
+{
+    global $TablePreFix;
+    return $TablePreFix.$tarray;
+}
+$TableChCk = array_map("add_prefix", $TableChCk);
+$tcount = count($TableChCk);
+$ti = 0;
 while ($ti < $tcount) {
-$OptimizeTea = sql_query(sql_pre_query("ALTER INDEX ALL ON \"".$TableChCk[$ti]."\" REORGANIZE", null),$SQLStat);
-++$ti; }
-?>
+    $OptimizeTea = sql_query(sql_pre_query("ALTER INDEX ALL ON \"".$TableChCk[$ti]."\" REORGANIZE", null), $SQLStat);
+    ++$ti;
+}

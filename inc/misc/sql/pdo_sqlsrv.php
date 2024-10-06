@@ -20,19 +20,22 @@ if ($File3Name == "pdo_sqlsrv.php" || $File3Name == "/pdo_sqlsrv.php") {
 }
 
 // SQLSRV Error handling functions
-function pdo_sqlsrv_func_error($link = null) {
+function pdo_sqlsrv_func_error($link = null)
+{
     global $SQLStat;
     $result = isset($link) ? $link->errorInfo() : $SQLStat->errorInfo();
     return ($result == "") ? "" : $result;
 }
 
-function pdo_sqlsrv_func_errno($link = null) {
+function pdo_sqlsrv_func_errno($link = null)
+{
     global $SQLStat;
     $result = isset($link) ? $link->errorCode() : $SQLStat->errorCode();
     return ($result === 0) ? 0 : $result;
 }
 
-function pdo_sqlsrv_func_errorno($link = null) {
+function pdo_sqlsrv_func_errorno($link = null)
+{
     global $SQLStat;
     $result = isset($link) ? $link->errorCode() . ": " . $link->errorInfo() : $SQLStat->errorCode() . ": " . $SQLStat->errorInfo();
     return ($result == "") ? "" : $result;
@@ -43,7 +46,8 @@ if (!isset($NumQueriesArray['pdo_sqlsrv'])) {
     $NumQueriesArray['pdo_sqlsrv'] = 0;
 }
 
-function pdo_sqlsrv_func_query($query, $link = null) {
+function pdo_sqlsrv_func_query($query, $link = null)
+{
     global $NumQueriesArray, $SQLStat;
 
     // Use the appropriate PDO connection
@@ -97,7 +101,8 @@ function pdo_sqlsrv_func_query($query, $link = null) {
 }
 
 // Fetch number of rows for SELECT queries
-function pdo_sqlsrv_func_num_rows($result) {
+function pdo_sqlsrv_func_num_rows($result)
+{
     if ($result instanceof PDOStatement) {
         $num = $result->rowCount();
         return $num !== false ? $num : 0;
@@ -106,7 +111,8 @@ function pdo_sqlsrv_func_num_rows($result) {
 }
 
 // Connect to SQL Server using PDO and set session options
-function pdo_sqlsrv_func_connect_db($server, $username = null, $password = null, $database = null, $new_link = false) {
+function pdo_sqlsrv_func_connect_db($server, $username = null, $password = null, $database = null, $new_link = false)
+{
     global $SQLStat;
 
     // Set DSN (Data Source Name) for SQLSRV connection
@@ -150,7 +156,8 @@ function pdo_sqlsrv_func_connect_db($server, $username = null, $password = null,
     }
 }
 
-function pdo_sqlsrv_func_disconnect_db($link = null) {
+function pdo_sqlsrv_func_disconnect_db($link = null)
+{
     global $SQLStat;
     if (isset($link) && $link instanceof PDOStatement) {
         return $link->closeCursor();
@@ -165,7 +172,8 @@ function pdo_sqlsrv_func_disconnect_db($link = null) {
 }
 
 // Query Results
-function pdo_sqlsrv_func_result($result, $row = 0, $field = 0) {
+function pdo_sqlsrv_func_result($result, $row = 0, $field = 0)
+{
     if ($result instanceof PDOStatement) {
         $rows = $result->fetchAll(PDO::FETCH_BOTH);
 
@@ -179,38 +187,45 @@ function pdo_sqlsrv_func_result($result, $row = 0, $field = 0) {
 }
 
 // Free Results
-function pdo_sqlsrv_func_free_result($result) {
+function pdo_sqlsrv_func_free_result($result)
+{
     return true;
 }
 
 // Fetch Results to Array
-function pdo_sqlsrv_func_fetch_array($result, $result_type = PDO::FETCH_BOTH) {
+function pdo_sqlsrv_func_fetch_array($result, $result_type = PDO::FETCH_BOTH)
+{
     return $result->fetch($result_type);
 }
 
 // Fetch Results to Associative Array
-function pdo_sqlsrv_func_fetch_assoc($result) {
+function pdo_sqlsrv_func_fetch_assoc($result)
+{
     return $result->fetch(PDO::FETCH_ASSOC);
 }
 
 // Fetch Row Results
-function pdo_sqlsrv_func_fetch_row($result) {
+function pdo_sqlsrv_func_fetch_row($result)
+{
     return $result->fetch(PDO::FETCH_NUM);
 }
 
 // Get Server Info
-function pdo_sqlsrv_func_server_info($link = null) {
+function pdo_sqlsrv_func_server_info($link = null)
+{
     $result = $link->query('select @@version')->fetch()[0];
     return $result;
 }
 
 // Get Client Info for PDO SQLSRV
-function pdo_sqlsrv_func_client_info($link = null) {
+function pdo_sqlsrv_func_client_info($link = null)
+{
     return $link->getAttribute(PDO::ATTR_CLIENT_VERSION);
 }
 
 // Escape String
-function pdo_sqlsrv_func_escape_string($string, $link = null) {
+function pdo_sqlsrv_func_escape_string($string, $link = null)
+{
     global $SQLStat;
     $pdo = isset($link) && $link instanceof PDO ? $link : $SQLStat;
     return $pdo->quote($string);
@@ -222,7 +237,8 @@ if (!isset($NumPreQueriesArray['pdo_sqlsrv'])) {
 }
 
 // Pre-process Query for SQLSRV
-function pdo_sqlsrv_func_pre_query($query_string, $query_vars = []) {
+function pdo_sqlsrv_func_pre_query($query_string, $query_vars = [])
+{
     global $NumPreQueriesArray;
 
     if ($query_vars === null || !is_array($query_vars)) {
@@ -253,7 +269,8 @@ function pdo_sqlsrv_func_pre_query($query_string, $query_vars = []) {
     return [$query_string, $query_vars];
 }
 
-function pdo_sqlsrv_func_set_charset($charset, $pdo = null) {
+function pdo_sqlsrv_func_set_charset($charset, $pdo = null)
+{
     if (!isset($pdo) || !($pdo instanceof PDO)) {
         output_error("Invalid PDO instance provided.", E_USER_ERROR);
         return false;
@@ -282,13 +299,15 @@ function pdo_sqlsrv_func_set_charset($charset, $pdo = null) {
 }
 
 // Get next id for stuff
-function pdo_sqlsrv_func_get_next_id($tablepre, $table, $link = null) {
+function pdo_sqlsrv_func_get_next_id($tablepre, $table, $link = null)
+{
     global $SQLStat;
     return isset($link) ? $link->lastInsertId() : $SQLStat->lastInsertId();
 }
 
 // Get number of rows for table
-function pdo_sqlsrv_func_get_num_rows($tablepre, $table, $link = null) {
+function pdo_sqlsrv_func_get_num_rows($tablepre, $table, $link = null)
+{
     $query = pdo_sqlsrv_func_pre_query("SELECT COUNT(*) AS cnt FROM " . $tablepre . $table, []);
     $result = pdo_sqlsrv_func_query($query, $link);
     $row = pdo_sqlsrv_func_fetch_assoc($result);
@@ -297,7 +316,8 @@ function pdo_sqlsrv_func_get_num_rows($tablepre, $table, $link = null) {
 
 
 // Fetch Number of Rows using COUNT in a single query (uses pdo_sqlsrv_func_fetch_assoc)
-function pdo_sqlsrv_func_count_rows($query, $link = null, $countname = "cnt") {
+function pdo_sqlsrv_func_count_rows($query, $link = null, $countname = "cnt")
+{
     $result = pdo_sqlsrv_func_query($query, [], $link);  // Pass empty array for params
     $row = pdo_sqlsrv_func_fetch_assoc($result);
 
@@ -313,18 +333,18 @@ function pdo_sqlsrv_func_count_rows($query, $link = null, $countname = "cnt") {
 }
 
 // Alternative version using pdo_sqlsrv_func_fetch_assoc
-function pdo_sqlsrv_func_count_rows_alt($query, $link = null) {
+function pdo_sqlsrv_func_count_rows_alt($query, $link = null)
+{
     $result = pdo_sqlsrv_func_query($query, [], $link);  // Pass empty array for params
     $row = pdo_sqlsrv_func_fetch_assoc($result);
-    
+
     if ($row === false) {
         return false;  // Handle case if no row is returned
     }
-    
+
     // Return first column (assuming single column result like COUNT or similar)
     $count = reset($row);
 
     @pdo_sqlsrv_func_free_result($result);
     return $count;
 }
-?>

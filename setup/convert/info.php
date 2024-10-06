@@ -33,4 +33,3 @@ $ConvertInfo['ConvertPreVersion'] = null;
 // $ConvertInfo['ConvertFile'] = "setup/convert/convert.php";
 // $ConvertInfo['ConvertVersion'] = "1";
 // $ConvertInfo['ConvertPreVersion'] = "1";
-?>

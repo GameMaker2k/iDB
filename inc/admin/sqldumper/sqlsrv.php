@@ -48,7 +48,8 @@ header("Content-Description: File Transfer");
 $TablePreFix = $Settings['sqltable'];
 $TableChCk = array("categories", "catpermissions", "events", "forums", "groups", "levels", "members", "mempermissions", "messenger", "permissions", "polls", "posts", "ranks", "restrictedwords", "sessions", "smileys", "themes", "topics", "wordfilter");
 
-function add_prefix($tarray) {
+function add_prefix($tarray)
+{
     global $TablePreFix;
     return $TablePreFix . $tarray;
 }
@@ -90,7 +91,7 @@ foreach ($TableNames as $tableName) {
             FROM INFORMATION_SCHEMA.COLUMNS 
             WHERE TABLE_NAME = '$tableName'";
     $result = sql_query($sql, $SQLStat);
-    
+
     $sqldump .= "--\n-- Table structure for table \"$tableName\"\n--\n";
     $createTable = "CREATE TABLE \"$tableName\" (\n";
     while ($row = sql_fetch_assoc($result)) {
@@ -145,4 +146,3 @@ if ($_GET['compress'] == "none") {
 }
 
 fix_amp($Settings['use_gzip'], $GZipEncode['Type']);
-?>
