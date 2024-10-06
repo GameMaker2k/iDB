@@ -117,7 +117,7 @@ if($XHTML5===false) {
 <meta charset="<?php echo $Settings['charset']; ?>">
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $Settings['charset']; ?>">
 <meta name="language" content="english">
-<meta name="viewport" content="width=device-width initial-scale=1.0">
+<meta name="viewport" id="viewport" content="width=device-width, initial-scale=0.5">
 <?php 
 if(!isset($_SERVER['HTTP_USER_AGENT'])) {
 	$_SERVER['HTTP_USER_AGENT'] = ""; }
