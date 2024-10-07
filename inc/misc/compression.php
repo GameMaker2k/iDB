@@ -10,9 +10,7 @@
 
     Copyright 2004-2024 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2024 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
-    GZip and Zlib by Jean-loup Gailly (compression) and Mark Adler (decompression) http://www.zlib.net/
-    BZip2 and libbzip2 by Julian Seward http://www.bzip.org/
-
+    
     $FileInfo: compression.php - Last Update: 8/23/2024 SVN 1023 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
@@ -20,68 +18,86 @@ if ($File3Name == "compression.php" || $File3Name == "/compression.php") {
     require('index.php');
     exit();
 }
-//Check if zlib is loaded
+
+// Check if zlib is loaded
 if (extension_loaded("zlib")) {
     function gunzip($infile, $outfile)
     {
-        $string = null;
-        $zp = gzopen($infile, "r");
+        $zp = gzopen($infile, "rb");
+        if (!$zp) {
+            echo "Failed to open gzip file for reading.";
+            return false;
+        }
+        $outData = "";
         while (!gzeof($zp)) {
-            $string .= gzread($zp, 4096);
+            $outData .= gzread($zp, 8192); // Increase buffer size for performance
         }
         gzclose($zp);
-        $fp = fopen($outfile, "w");
-        fwrite($fp, $string, strlen($string));
-        fclose($fp);
+        file_put_contents($outfile, $outData); // Optimized file writing
+        return true;
     }
 
     function gunzip2($infile, $outfile)
     {
-        $string = implode("", gzfile($infile));
-        $fp = fopen($outfile, "w");
-        fwrite($fp, $string, strlen($string));
-        fclose($fp);
+        $outData = implode("", gzfile($infile)); // Efficiently gets content in one step
+        if ($outData === false) {
+            echo "Failed to read gzip file.";
+            return false;
+        }
+        file_put_contents($outfile, $outData); // Optimized file writing
+        return true;
     }
+
     function gzip($infile, $outfile, $param = 5)
     {
-        $fp = fopen($infile, "r");
-        $data = fread($fp, filesize($infile));
-        fclose($fp);
-        $zp = gzopen($outfile, "w".$param);
-        gzwrite($zp, $data);
+        $inData = file_get_contents($infile); // Optimized file reading
+        if ($inData === false) {
+            echo "Failed to read file for compression.";
+            return false;
+        }
+        $zp = gzopen($outfile, "wb" . $param); // Use binary-safe writing
+        if (!$zp) {
+            echo "Failed to open gzip file for writing.";
+            return false;
+        }
+        gzwrite($zp, $inData);
         gzclose($zp);
+        return true;
     }
 }
-//Check if bz2 is loaded
+
+// Check if bz2 is loaded
 if (extension_loaded("bz2")) {
     function bzip($infile, $outfile)
     {
-        $fp = fopen($infile, "r");
-        $data = fread($fp, filesize($infile));
-        fclose($fp);
+        $inData = file_get_contents($infile); // Optimized file reading
+        if ($inData === false) {
+            echo "Failed to read file for compression.";
+            return false;
+        }
         $zp = bzopen($outfile, "w");
-        bzwrite($zp, $data);
+        if (!$zp) {
+            echo "Failed to open bzip2 file for writing.";
+            return false;
+        }
+        bzwrite($zp, $inData);
         bzclose($zp);
+        return true;
     }
 
     function bunzip($infile, $outfile)
     {
-        $string = null;
         $zp = bzopen($infile, "r");
+        if (!$zp) {
+            echo "Failed to open bzip2 file for reading.";
+            return false;
+        }
+        $outData = "";
         while (!feof($zp)) {
-            $string .= bzread($zp, 4096);
+            $outData .= bzread($zp, 8192); // Increased buffer size for performance
         }
         bzclose($zp);
-        $fp = fopen($outfile, "w");
-        fwrite($fp, $string, strlen($string));
-        fclose($fp);
+        file_put_contents($outfile, $outData); // Optimized file writing
+        return true;
     }
-}
-//Check if zip is loaded
-if (extension_loaded("zip")) {
-    /* Nothing for now... :P */
-}
-//Check if rar is loaded
-if (extension_loaded("rar")) {
-    /* Nothing for now... :P */
 }
