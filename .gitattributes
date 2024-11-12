@@ -1,2 +1,3 @@
 *.php -ident
 inc/versioninfo.php ident
+* text eol=lf
