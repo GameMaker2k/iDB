@@ -11,7 +11,7 @@
     Copyright 2004-2024 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2024 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: system.php - Last Update: 8/26/2024 SVN 1048 - Author: cooldude2k $
+    $FileInfo: system.php - Last Update: 5/14/2025 SVN 1341 - Author: cooldude2k $
 */
 /* Some ini setting changes uncomment if you need them.
    Display PHP Errors */
@@ -894,21 +894,17 @@ $alt_temp_session_data = $alttemp_session_data;
 $alttemp_session_data = null;
 $SQLSType = $Settings['sqltype'];
 $use_old_session = true;
-if ($use_old_session == true) {
-    // Old Session Handling Functions
 
-    // Session Open Function
-    function sql_session_open($save_path, $session_name)
-    {
+// -------------------- OLD SESSION FUNCTION SET --------------------
+if ($use_old_session) {
+    function sql_session_open_old($save_path, $session_name) {
         global $sess_save_path;
         $sess_save_path = $save_path;
         return true;
     }
 
-    // Session Close Function
     $iDBSessCloseDB = true;
-    function sql_session_close()
-    {
+    function sql_session_close_old() {
         global $SQLStat, $iDBSessCloseDB;
         if ($iDBSessCloseDB === true) {
             sql_disconnect_db($SQLStat);
@@ -916,184 +912,165 @@ if ($use_old_session == true) {
         return true;
     }
 
-    // Session Read Function
-    function sql_session_read($id)
-    {
+    function sql_session_read_old($id) {
         global $sqltable, $SQLStat, $temp_user_ip, $temp_user_agent, $client_hints_json, $temp_session_data, $alt_temp_session_data;
-
-        // Check if session exists
-        $checkQuery = sql_pre_query("SELECT COUNT(*) AS cnt FROM \"" . $sqltable . "sessions\" WHERE \"session_id\" = '%s'", array($id));
+        $checkQuery = sql_pre_query("SELECT COUNT(*) AS cnt FROM \"$sqltable"."sessions\" WHERE \"session_id\" = '%s'", array($id));
         $sessionExists = sql_count_rows($checkQuery, $SQLStat);
-
         if ($sessionExists == 0) {
-            // Delete old sessions with the same IP and user agent
-            sql_query(sql_pre_query(
-                "DELETE FROM \"" . $sqltable . "sessions\" WHERE \"session_id\" <> '%s' AND \"ip_address\" = '%s' AND \"user_agent\" = '%s'",
-                array($id, $temp_user_ip, $temp_user_agent)
-            ), $SQLStat);
-
-            // Insert new session data
+            sql_query(sql_pre_query("DELETE FROM \"$sqltable"."sessions\" WHERE \"session_id\" <> '%s' AND \"ip_address\" = '%s' AND \"user_agent\" = '%s'", array($id, $temp_user_ip, $temp_user_agent)), $SQLStat);
             $time = (new DateTime('now', new DateTimeZone("UTC")))->getTimestamp();
-            sql_query(sql_pre_query(
-                "INSERT INTO \"" . $sqltable . "sessions\" (\"session_id\", \"session_data\", \"serialized_data\", \"user_agent\", \"client_hints\", \"ip_address\", \"expires\") VALUES ('%s', '%s', '%s', '%s', '%s', '%s', %i)",
-                array($id, $temp_session_data, $alt_temp_session_data, $temp_user_agent, $client_hints_json, $temp_user_ip, $time)
-            ), $SQLStat);
+            sql_query(sql_pre_query("INSERT INTO \"$sqltable"."sessions\" (\"session_id\", \"session_data\", \"serialized_data\", \"user_agent\", \"client_hints\", \"ip_address\", \"expires\") VALUES ('%s', '%s', '%s', '%s', '%s', '%s', %i)", array($id, $temp_session_data, $alt_temp_session_data, $temp_user_agent, $client_hints_json, $temp_user_ip, $time)), $SQLStat);
             return '';
         } else {
-            // Fetch the existing session data
-            $query = sql_pre_query("SELECT * FROM \"" . $sqltable . "sessions\" WHERE \"session_id\" = '%s'", array($id));
+            $query = sql_pre_query("SELECT * FROM \"$sqltable"."sessions\" WHERE \"session_id\" = '%s'", array($id));
             $rs = sql_query($query, $SQLStat);
             $row = sql_fetch_assoc($rs);
-
-            // Free the result after fetching
             sql_free_result($rs);
-
             return $row ? $row['session_data'] : '';
         }
     }
 
-    // Session Write Function
-    function sql_session_write($id, $data)
-    {
+    function sql_session_write_old($id, $data) {
         global $sqltable, $SQLStat, $temp_user_ip, $temp_user_agent, $client_hints_json;
-
         $time = (new DateTime('now', new DateTimeZone("UTC")))->getTimestamp();
-        $checkQuery = sql_pre_query("SELECT COUNT(*) AS cnt FROM \"" . $sqltable . "sessions\" WHERE \"session_id\" = '%s'", array($id));
+        $checkQuery = sql_pre_query("SELECT COUNT(*) AS cnt FROM \"$sqltable"."sessions\" WHERE \"session_id\" = '%s'", array($id));
         $sessionExists = sql_count_rows($checkQuery, $SQLStat);
-
         if ($sessionExists == 0) {
-            // Insert new session data
-            sql_query(sql_pre_query(
-                "INSERT INTO \"" . $sqltable . "sessions\" (\"session_id\", \"session_data\", \"serialized_data\", \"user_agent\", \"client_hints\", \"ip_address\", \"expires\") VALUES ('%s', '%s', '%s', '%s', '%s', '%s', %i)",
-                array($id, $data, serialize($_SESSION), $temp_user_agent, $client_hints_json, $temp_user_ip, $time)
-            ), $SQLStat);
+            sql_query(sql_pre_query("INSERT INTO \"$sqltable"."sessions\" (\"session_id\", \"session_data\", \"serialized_data\", \"user_agent\", \"client_hints\", \"ip_address\", \"expires\") VALUES ('%s', '%s', '%s', '%s', '%s', '%s', %i)", array($id, $data, serialize($_SESSION), $temp_user_agent, $client_hints_json, $temp_user_ip, $time)), $SQLStat);
         } else {
-            // Update existing session data
-            sql_query(sql_pre_query(
-                "UPDATE \"" . $sqltable . "sessions\" SET \"session_data\" = '%s', \"serialized_data\" = '%s', \"user_agent\" = '%s', \"client_hints\" = '%s', \"ip_address\" = '%s', \"expires\" = %i WHERE \"session_id\" = '%s'",
-                array($data, serialize($_SESSION), $temp_user_agent, $client_hints_json, $temp_user_ip, $time, $id)
-            ), $SQLStat);
+            sql_query(sql_pre_query("UPDATE \"$sqltable"."sessions\" SET \"session_data\" = '%s', \"serialized_data\" = '%s', \"user_agent\" = '%s', \"client_hints\" = '%s', \"ip_address\" = '%s', \"expires\" = %i WHERE \"session_id\" = '%s'", array($data, serialize($_SESSION), $temp_user_agent, $client_hints_json, $temp_user_ip, $time, $id)), $SQLStat);
         }
-
         return true;
     }
 
-    // Session Destroy Function
-    function sql_session_destroy($id)
-    {
+    function sql_session_destroy_old($id) {
         global $sqltable, $SQLStat;
-        sql_query(sql_pre_query("DELETE FROM \"" . $sqltable . "sessions\" WHERE \"session_id\" = '%s'", array($id)), $SQLStat);
+        sql_query(sql_pre_query("DELETE FROM \"$sqltable"."sessions\" WHERE \"session_id\" = '%s'", array($id)), $SQLStat);
         return true;
     }
 
-    // Session Garbage Collection Function
-    function sql_session_gc($maxlifetime)
-    {
+    function sql_session_gc_old($maxlifetime) {
         global $sqltable, $SQLStat;
         $time = (new DateTime('now', new DateTimeZone("UTC")))->getTimestamp() - $maxlifetime;
-        sql_query(sql_pre_query("DELETE FROM \"" . $sqltable . "sessions\" WHERE \"expires\" < %i", array($time)), $SQLStat);
+        sql_query(sql_pre_query("DELETE FROM \"$sqltable"."sessions\" WHERE \"expires\" < %i", array($time)), $SQLStat);
         return true;
     }
-
-    if (session_id()) {
-        session_destroy();
-    }
 } else {
-    // New Session Handling Functions
-
-    function sql_session_open($save_path, $session_name)
-    {
+// -------------------- NEW SESSION FUNCTION SET --------------------
+    function sql_session_open_new($save_path, $session_name) {
         global $sess_save_path;
         $sess_save_path = $save_path;
         return true;
     }
 
-    function sql_session_close()
-    {
+    function sql_session_close_new() {
         global $SQLStat;
         sql_disconnect_db($SQLStat);
         return true;
     }
 
-    function sql_session_read($id)
-    {
+    function sql_session_read_new($id) {
         global $sqltable, $SQLStat, $temp_user_ip, $temp_user_agent, $client_hints_json, $temp_session_data, $alt_temp_session_data;
-
-        $checkQuery = sql_pre_query("SELECT COUNT(*) AS cnt FROM \"" . $sqltable . "sessions\" WHERE \"session_id\" = '%s'", array($id));
+        $checkQuery = sql_pre_query("SELECT COUNT(*) AS cnt FROM \"$sqltable"."sessions\" WHERE \"session_id\" = '%s'", array($id));
         $sessionExists = sql_count_rows($checkQuery, $SQLStat);
-
         if ($sessionExists == 0) {
-            sql_query(sql_pre_query(
-                "DELETE FROM \"" . $sqltable . "sessions\" WHERE \"session_id\" <> '%s' AND \"ip_address\" = '%s' AND \"user_agent\" = '%s'",
-                array($id, $temp_user_ip, $temp_user_agent)
-            ), $SQLStat);
-
+            sql_query(sql_pre_query("DELETE FROM \"$sqltable"."sessions\" WHERE \"session_id\" <> '%s' AND \"ip_address\" = '%s' AND \"user_agent\" = '%s'", array($id, $temp_user_ip, $temp_user_agent)), $SQLStat);
             $time = (new DateTime('now', new DateTimeZone("UTC")))->getTimestamp();
-            sql_query(sql_pre_query(
-                "INSERT INTO \"" . $sqltable . "sessions\" (\"session_id\", \"session_data\", \"serialized_data\", \"user_agent\", \"client_hints\", \"ip_address\", \"expires\") VALUES ('%s', '%s', '%s', '%s', '%s', '%s', %i)",
-                array($id, $temp_session_data, $alt_temp_session_data, $temp_user_agent, $client_hints_json, $temp_user_ip, $time)
-            ), $SQLStat);
+            sql_query(sql_pre_query("INSERT INTO \"$sqltable"."sessions\" (\"session_id\", \"session_data\", \"serialized_data\", \"user_agent\", \"client_hints\", \"ip_address\", \"expires\") VALUES ('%s', '%s', '%s', '%s', '%s', '%s', %i)", array($id, $temp_session_data, $alt_temp_session_data, $temp_user_agent, $client_hints_json, $temp_user_ip, $time)), $SQLStat);
             return '';
         } else {
-            $query = sql_pre_query("SELECT * FROM \"" . $sqltable . "sessions\" WHERE \"session_id\" = '%s'", array($id));
+            $query = sql_pre_query("SELECT * FROM \"$sqltable"."sessions\" WHERE \"session_id\" = '%s'", array($id));
             $rs = sql_query($query, $SQLStat);
             $row = sql_fetch_assoc($rs);
-
-            // Free the result after fetching
             sql_free_result($rs);
-
             return $row ? $row['session_data'] : '';
         }
     }
 
-    function sql_session_write($id, $data)
-    {
+    function sql_session_write_new($id, $data) {
         global $sqltable, $SQLStat, $temp_user_ip, $temp_user_agent, $client_hints_json;
-
         $time = (new DateTime('now', new DateTimeZone("UTC")))->getTimestamp();
-        $checkQuery = sql_pre_query("SELECT COUNT(*) AS cnt FROM \"" . $sqltable . "sessions\" WHERE \"session_id\" = '%s'", array($id));
+        $checkQuery = sql_pre_query("SELECT COUNT(*) AS cnt FROM \"$sqltable"."sessions\" WHERE \"session_id\" = '%s'", array($id));
         $sessionExists = sql_count_rows($checkQuery, $SQLStat);
-
         if ($sessionExists == 0) {
-            sql_query(sql_pre_query(
-                "INSERT INTO \"" . $sqltable . "sessions\" (\"session_id\", \"session_data\", \"serialized_data\", \"user_agent\", \"client_hints\", \"ip_address\", \"expires\") VALUES ('%s', '%s', '%s', '%s', '%s', '%s', %i)",
-                array($id, $data, serialize($_SESSION), $temp_user_agent, $client_hints_json, $temp_user_ip, $time)
-            ), $SQLStat);
+            sql_query(sql_pre_query("INSERT INTO \"$sqltable"."sessions\" (\"session_id\", \"session_data\", \"serialized_data\", \"user_agent\", \"client_hints\", \"ip_address\", \"expires\") VALUES ('%s', '%s', '%s', '%s', '%s', '%s', %i)", array($id, $data, serialize($_SESSION), $temp_user_agent, $client_hints_json, $temp_user_ip, $time)), $SQLStat);
         } else {
-            sql_query(sql_pre_query(
-                "UPDATE \"" . $sqltable . "sessions\" SET \"session_data\" = '%s', \"serialized_data\" = '%s', \"user_agent\" = '%s', \"client_hints\" = '%s', \"ip_address\" = '%s', \"expires\" = %i WHERE \"session_id\" = '%s'",
-                array($data, serialize($_SESSION), $temp_user_agent, $client_hints_json, $temp_user_ip, $time, $id)
-            ), $SQLStat);
+            sql_query(sql_pre_query("UPDATE \"$sqltable"."sessions\" SET \"session_data\" = '%s', \"serialized_data\" = '%s', \"user_agent\" = '%s', \"client_hints\" = '%s', \"ip_address\" = '%s', \"expires\" = %i WHERE \"session_id\" = '%s'", array($data, serialize($_SESSION), $temp_user_agent, $client_hints_json, $temp_user_ip, $time, $id)), $SQLStat);
         }
-
         return true;
     }
 
-    function sql_session_destroy($id)
-    {
+    function sql_session_destroy_new($id) {
         global $sqltable, $SQLStat;
-        sql_query(sql_pre_query("DELETE FROM \"" . $sqltable . "sessions\" WHERE \"session_id\" = '%s'", array($id)), $SQLStat);
+        sql_query(sql_pre_query("DELETE FROM \"$sqltable"."sessions\" WHERE \"session_id\" = '%s'", array($id)), $SQLStat);
         return true;
     }
 
-    function sql_session_gc($maxlifetime)
-    {
+    function sql_session_gc_new($maxlifetime) {
         global $sqltable, $SQLStat;
         $time = (new DateTime('now', new DateTimeZone("UTC")))->getTimestamp() - $maxlifetime;
-        sql_query(sql_pre_query("DELETE FROM \"" . $sqltable . "sessions\" WHERE \"expires\" < %i", array($time)), $SQLStat);
+        sql_query(sql_pre_query("DELETE FROM \"$sqltable"."sessions\" WHERE \"expires\" < %i", array($time)), $SQLStat);
         return true;
     }
 }
 
+// -------------------- ACTIVE FUNCTION ALIASES --------------------
+if ($use_old_session) {
+    function sql_session_open(...$args) { return sql_session_open_old(...$args); }
+    function sql_session_close(...$args) { return sql_session_close_old(...$args); }
+    function sql_session_read(...$args) { return sql_session_read_old(...$args); }
+    function sql_session_write(...$args) { return sql_session_write_old(...$args); }
+    function sql_session_destroy(...$args) { return sql_session_destroy_old(...$args); }
+    function sql_session_gc(...$args) { return sql_session_gc_old(...$args); }
+} else {
+    function sql_session_open(...$args) { return sql_session_open_new(...$args); }
+    function sql_session_close(...$args) { return sql_session_close_new(...$args); }
+    function sql_session_read(...$args) { return sql_session_read_new(...$args); }
+    function sql_session_write(...$args) { return sql_session_write_new(...$args); }
+    function sql_session_destroy(...$args) { return sql_session_destroy_new(...$args); }
+    function sql_session_gc(...$args) { return sql_session_gc_new(...$args); }
+}
+
+// -------------------- SESSION HANDLER REGISTRATION --------------------
+class SQLSessionHandler implements SessionHandlerInterface {
+    public function open(string $path, string $name): bool {
+        return sql_session_open($path, $name);
+    }
+
+    public function close(): bool {
+        return sql_session_close();
+    }
+
+    public function read(string $id): string|false {
+        return sql_session_read($id);
+    }
+
+    public function write(string $id, string $data): bool {
+        return sql_session_write($id, $data);
+    }
+
+    public function destroy(string $id): bool {
+        return sql_session_destroy($id);
+    }
+
+    public function gc(int $max_lifetime): int|false {
+        return sql_session_gc($max_lifetime);
+    }
+}
+
 // Register session handler functions
-session_set_save_handler(
-    "sql_session_open",
-    "sql_session_close",
-    "sql_session_read",
-    "sql_session_write",
-    "sql_session_destroy",
-    "sql_session_gc"
-);
+if (PHP_VERSION_ID >= 80400) {
+    session_set_save_handler(new SQLSessionHandler(), true);
+} else {
+    session_set_save_handler(
+        'sql_session_open',
+        'sql_session_close',
+        'sql_session_read',
+        'sql_session_write',
+        'sql_session_destroy',
+        'sql_session_gc'
+    );
+}
 if ($cookieDomain == null) {
     session_set_cookie_params(0, $cbasedir);
 }
@@ -1118,7 +1095,18 @@ if (!isset($_COOKIE[$Settings['sqltable']."sess"])) {
 }
 if (!isset($_SESSION['CheckCookie'])) {
     if (isset($_COOKIE['SessPass']) && isset($_COOKIE['MemberName'])) {
-        session_set_save_handler("sql_session_open", "sql_session_close", "sql_session_read", "sql_session_write", "sql_session_destroy", "sql_session_gc");
+        if (PHP_VERSION_ID >= 80400) {
+			session_set_save_handler(new SQLSessionHandler(), true);
+		} else {
+			session_set_save_handler(
+				'sql_session_open',
+				'sql_session_close',
+				'sql_session_read',
+				'sql_session_write',
+				'sql_session_destroy',
+				'sql_session_gc'
+			);
+		}
         session_name($Settings['sqltable']."sess");
         if (version_compare(phpversion(), '7.0', '<')) {
             session_start();
@@ -1144,7 +1132,18 @@ if (!isset($_SESSION['CheckCookie'])) {
         session_write_close();
     }
 }
-session_set_save_handler("sql_session_open", "sql_session_close", "sql_session_read", "sql_session_write", "sql_session_destroy", "sql_session_gc");
+if (PHP_VERSION_ID >= 80400) {
+    session_set_save_handler(new SQLSessionHandler(), true);
+} else {
+    session_set_save_handler(
+        'sql_session_open',
+        'sql_session_close',
+        'sql_session_read',
+        'sql_session_write',
+        'sql_session_destroy',
+        'sql_session_gc'
+    );
+}
 session_name($Settings['sqltable']."sess");
 if (version_compare(phpversion(), '7.0', '<')) {
     session_start();
