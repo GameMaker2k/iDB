@@ -11,7 +11,7 @@
     Copyright 2004-2024 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2024 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: functions.php - Last Update: 8/26/2024 SVN 1048 - Author: cooldude2k $
+    $FileInfo: functions.php - Last Update: 5/23/2025 SVN 1342 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name == "functions.php" || $File3Name == "/functions.php") {
@@ -124,6 +124,7 @@ function change_title($new_title, $use_gzip = "off", $gzip_type = "gzip")
     $urlstatus = (isset($urlstatus) && is_numeric($urlstatus)) ? $urlstatus : 200;
     $gzip_type = in_array($gzip_type, ["gzip", "deflate", "brotli", "zstd"]) ? $gzip_type : "gzip";
     $output = trim(ob_get_clean());
+    $new_title = html_entity_decode($new_title, ENT_QUOTES, 'UTF-8');
     $output = preg_replace("/<title>(.*?)<\/title>/i", "<title>" . htmlentities($new_title, ENT_QUOTES, $Settings['charset']) . "</title>", $output);
     $meta_title = htmlentities($new_title, ENT_QUOTES, $Settings['charset']);
     $output = preg_replace("/<meta itemprop=\"title\" property=\"og:title\" content=\"(.*?)\" \/>/i", "<meta itemprop=\"title\" property=\"og:title\" content=\"" . $meta_title . "\" />", $output);
