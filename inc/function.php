@@ -795,6 +795,7 @@ function logWebAccess($logFile, $format = '%h %l %u %t "%r" %>s %b "%{Referer}i"
         error_log("Could not open the log file: " . $logFile);
     }
 }
+
 // Make xhtml tags
 function html_tag_make($name = "br", $emptytag = true, $attbvar = null, $attbval = null, $extratest = null)
 {
