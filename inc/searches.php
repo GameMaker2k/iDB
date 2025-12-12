@@ -11,7 +11,7 @@
     Copyright 2004-2024 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2024 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: searches.php - Last Update: 8/26/2024 SVN 1048 - Author: cooldude2k $
+    $FileInfo: searches.php - Last Update: 12/12/2025 SVN 1345 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name == "searches.php" || $File3Name == "/searches.php") {
@@ -213,7 +213,7 @@ if ($Settings['enable_search'] == "on" ||
                 $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\"='%s' AND \"GuestName\"='%s'".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($_GET['search'], $_GET['msearch']));
             }
         } elseif ($_GET['type'] === "wildcard") {
-            $NumberTopics = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\" LIKE '%s' AND \"UserID\"=%i".$ForumIgnoreList4."", array($_GET['search'], $_GET['msearch'])), $SQLStat);
+            $NumberTopics = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\" LIKE '%s' AND \"UserID\"=%i".$ForumIgnoreList4."", array($_GET['search'], $memsid)), $SQLStat);
             $query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\" LIKE '%s' AND \"UserID\"=%i".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($_GET['search'], $memsid));
             if ($memsid == -1) {
                 $NumberTopics = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE \"TopicName\" LIKE '%s' AND \"GuestName\"='%s'".$ForumIgnoreList4."", array($_GET['search'], $_GET['msearch'])), $SQLStat);
@@ -268,10 +268,18 @@ if ($Settings['enable_search'] == "on" ||
 
     // End Topic Page Code
     $SQLimit = getSQLLimitClause($Settings['sqltype'], $Settings['max_topics'], $PageLimit);
-    $num = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE (\"TimeStamp\">=%i AND \"TimeStamp\"<=%i) OR (\"LastUpdate\">=%i AND \"LastUpdate\"<=%i)".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($active_start, $active_end, $active_start, $active_end)), $SQLStat);
+	if($_GET['type'] == "getactive") {
+        $num = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."topics\" WHERE (\"TimeStamp\">=%i AND \"TimeStamp\"<=%i) OR (\"LastUpdate\">=%i AND \"LastUpdate\"<=%i)".$ForumIgnoreList4." ORDER BY \"LastUpdate\" DESC ".$SQLimit, array($active_start, $active_end, $active_start, $active_end)), $SQLStat);
+	}
+	elseif(isset($NumberTopics) && is_numeric($NumberTopics)) {
+	    $num = $NumberTopics;
+	}
+	else {
+		$num = 0;
+	}
 
     // Handle no results found
-    if ($num <= 0) {
+    /*if ($num <= 0) {
         redirect("location", $rbasedir . url_maker($exfile['search'], $Settings['file_ext'], "act=topics", $Settings['qstr'], $Settings['qsep'], $prexqstr['search'], $exqstr['search'], false));
         header("Content-Type: text/plain; charset=" . $Settings['charset']);
         $urlstatus = 302;
@@ -281,7 +289,7 @@ if ($Settings['enable_search'] == "on" ||
         gzip_page($Settings['use_gzip'], $GZipEncode['Type']);
         session_write_close();
         die();
-    }
+    }*/
 
     // Pagination display logic
     $pagenum = count($Pages);
