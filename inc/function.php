@@ -104,21 +104,29 @@ $REFERERurl = null;
 // Function made by Howard Yeend
 // http://php.net/manual/en/function.trigger-error.php#92016
 // http://www.puremango.co.uk/
-function output_error($message, $level = E_USER_ERROR)
+function output_error(string $message, int $level = E_USER_ERROR): void
 {
-    $backtrace = debug_backtrace();  // Capture the backtrace
-    $caller = isset($backtrace[1]) ? $backtrace[1] : $backtrace[0];  // Get the caller info
+    $bt = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3);
+    $caller = $bt[1] ?? $bt[0] ?? [];
 
-    $callerFunction = isset($caller['function']) ? $caller['function'] : '(unknown function)';
-    $callerFile = isset($caller['file']) ? $caller['file'] : '(unknown file)';
-    $callerLine = isset($caller['line']) ? $caller['line'] : '(unknown line)';
+    $callerFunction = $caller['function'] ?? '(unknown function)';
+    $callerFile     = $caller['file'] ?? '(unknown file)';
+    $callerLine     = $caller['line'] ?? '(unknown line)';
 
-    // Trigger an error with the detailed message
-    trigger_error(
-        $message . ' in <strong>' . $callerFunction . '</strong> called from <strong>' . $callerFile . '</strong> on line <strong>' . $callerLine . '</strong>' . "\n<br />error handler",
-        $level
-    );
+    $full = $message
+        . ' in ' . $callerFunction
+        . ' called from ' . $callerFile
+        . ' on line ' . $callerLine;
+
+    // PHP 8.4+: trigger_error(E_USER_ERROR) is deprecated.
+    if ($level === E_USER_ERROR) {
+        throw new RuntimeException($full);
+    }
+
+    // Keep trigger_error for non-fatal user-level problems
+    trigger_error($full, $level);
 }
+
 // By s rotondo90 at gmail com at https://www.php.net/manual/en/function.random-int.php#119670
 if (!function_exists('random_int')) {
     function random_int($min, $max)
