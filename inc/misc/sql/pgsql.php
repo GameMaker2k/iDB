@@ -53,7 +53,7 @@ function pgsql_func_query($query, $link = null)
 {
     global $NumQueriesArray, $SQLStat;
 
-    $result = isset($link) ? pg_query($link, $query) : pg_query(null, $query);
+    $result = isset($link) ? pg_query($link, $query) : pg_query($SQLStat, $query);
 
     if ($result === false) {
         output_error("SQL Error: " . pgsql_func_error(), E_USER_ERROR);
