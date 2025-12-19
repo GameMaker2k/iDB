@@ -20,6 +20,11 @@ if ($File3Name == "mysqli.php" || $File3Name == "/mysqli.php") {
     exit();
 }
 
+// Execute a query
+if (!isset($NumPreQueriesArray['mysqli'])) {
+    $NumPreQueriesArray['mysqli'] = 0;
+}
+
 // MySQLi Error handling functions
 function mysqli_func_error($link = null)
 {
@@ -149,6 +154,9 @@ function mysqli_func_free_result($result)
 // Fetch Results to Array
 function mysqli_func_fetch_array($result, $result_type = MYSQLI_BOTH)
 {
+	if($result_type==NULL) {
+		$result_type = CUBRID_BOTH;
+	}
     return mysqli_fetch_array($result, $result_type);
 }
 
@@ -187,11 +195,6 @@ function mysqli_func_escape_string($string, $link = null)
     }
     $connection = ($link instanceof mysqli ? $link : $SQLStat);
     return $connection instanceof mysqli ? mysqli_real_escape_string($connection, $string) : false;
-}
-
-// Execute a query
-if (!isset($NumPreQueriesArray['mysqli'])) {
-    $NumPreQueriesArray['mysqli'] = 0;
 }
 
 // SafeSQL Lite Source Code by Cool Dude 2k

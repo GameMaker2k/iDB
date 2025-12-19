@@ -20,6 +20,11 @@ if ($File3Name == "pgsql.php" || $File3Name == "/pgsql.php") {
     exit();
 }
 
+// Execute a query
+if (!isset($NumPreQueriesArray['pgsql'])) {
+    $NumPreQueriesArray['pgsql'] = 0;
+}
+
 // PostgreSQL Error handling functions
 function pgsql_func_error($link = null)
 {
@@ -139,6 +144,9 @@ function pgsql_func_free_result($result)
 // Fetch Results to Array
 function pgsql_func_fetch_array($result, $result_type = PGSQL_BOTH)
 {
+	if($result_type==NULL) {
+		$result_type = CUBRID_BOTH;
+	}
     return pg_fetch_array($result, $result_type);
 }
 
@@ -176,11 +184,6 @@ function pgsql_func_escape_string($string, $link = null)
         return null;
     }
     return isset($link) ? pg_escape_string($link, $string) : pg_escape_string($SQLStat, $string);
-}
-
-// Execute a query
-if (!isset($NumPreQueriesArray['pgsql'])) {
-    $NumPreQueriesArray['pgsql'] = 0;
 }
 
 // SafeSQL Lite Source Code by Cool Dude 2k

@@ -159,11 +159,11 @@ if ($Settings['sqltype'] == "mysqli_prepare" ||
     $Settings['sqltype'] == "cubrid_prepare") {
     $SQLString = "Prepared ";
 }
-if ($Settings['sqltype'] == "mysqli_prepare" ||
-    $Settings['sqltype'] == "sqlsrv_prepare" ||
-    $Settings['sqltype'] == "pgsql_prepare" ||
-    $Settings['sqltype'] == "sqlite3_prepare" ||
-    $Settings['sqltype'] == "cubrid_prepare") {
+if ($Settings['sqltype'] == "pdo_mysql" ||
+    $Settings['sqltype'] == "pdo_sqlsrv" ||
+    $Settings['sqltype'] == "pdo_pgsql" ||
+    $Settings['sqltype'] == "pdo_sqlite3" ||
+    $Settings['sqltype'] == "pdo_cubrid") {
     $SQLString = "PDO ";
 }
 if ($Settings['sqltype'] == "mysqli" ||

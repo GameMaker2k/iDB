@@ -19,6 +19,11 @@ if ($File3Name == "pdo_sqlsrv.php" || $File3Name == "/pdo_sqlsrv.php") {
     exit();
 }
 
+// Execute a query
+if (!isset($NumPreQueriesArray['pdo_sqlsrv'])) {
+    $NumPreQueriesArray['pdo_sqlsrv'] = 0;
+}
+
 // SQLSRV Error handling functions
 function pdo_sqlsrv_func_error($link = null)
 {
@@ -195,6 +200,9 @@ function pdo_sqlsrv_func_free_result($result)
 // Fetch Results to Array
 function pdo_sqlsrv_func_fetch_array($result, $result_type = PDO::FETCH_BOTH)
 {
+	if($result_type==NULL) {
+		$result_type = CUBRID_BOTH;
+	}
     return $result->fetch($result_type);
 }
 
@@ -229,11 +237,6 @@ function pdo_sqlsrv_func_escape_string($string, $link = null)
     global $SQLStat;
     $pdo = isset($link) && $link instanceof PDO ? $link : $SQLStat;
     return $pdo->quote($string);
-}
-
-// Execute a query
-if (!isset($NumPreQueriesArray['pdo_sqlsrv'])) {
-    $NumPreQueriesArray['pdo_sqlsrv'] = 0;
 }
 
 // Pre-process Query for SQLSRV

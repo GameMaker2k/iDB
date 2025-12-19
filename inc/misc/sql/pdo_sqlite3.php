@@ -19,6 +19,11 @@ if ($File3Name == "pdo_sqlite3.php" || $File3Name == "/pdo_sqlite3.php") {
     exit();
 }
 
+// Execute a query
+if (!isset($NumPreQueriesArray['pdo_sqlite3'])) {
+    $NumPreQueriesArray['pdo_sqlite3'] = 0;
+}
+
 // SQLite Error handling functions
 function pdo_sqlite3_func_error($link = null)
 {
@@ -153,6 +158,9 @@ function pdo_sqlite3_func_result($result, $row = 0, $field = 0)
 // Fetch row results as an array
 function pdo_sqlite3_func_fetch_array($result, $result_type = PDO::FETCH_BOTH)
 {
+	if($result_type==NULL) {
+		$result_type = CUBRID_BOTH;
+	}
     return $result->fetch($result_type);
 }
 
@@ -184,11 +192,6 @@ function pdo_sqlite3_func_escape_string($string, $link = null)
         return false;
     }
     return $escaped_string;
-}
-
-// Execute a query
-if (!isset($NumPreQueriesArray['pdo_sqlite3'])) {
-    $NumPreQueriesArray['pdo_sqlite3'] = 0;
 }
 
 // Pre-process query for SQLite with PDO support

@@ -19,6 +19,11 @@ if ($File3Name == "cubrid.php" || $File3Name == "/cubrid.php") {
     exit();
 }
 
+// Execute a query
+if (!isset($NumPreQueriesArray['cubrid'])) {
+    $NumPreQueriesArray['cubrid'] = 0;
+}
+
 // CUBRID Error handling functions
 function cubrid_func_error($link = null)
 {
@@ -130,6 +135,9 @@ function cubrid_func_free_result($result)
 // Fetch Results to Array
 function cubrid_func_fetch_array($result, $result_type = CUBRID_BOTH)
 {
+	if($result_type==NULL) {
+		$result_type = CUBRID_BOTH;
+	}
     return cubrid_fetch_array($result, $result_type);
 }
 
@@ -161,11 +169,6 @@ function cubrid_func_escape_string($string, $link = null)
         return null;
     }
     return isset($link) ? cubrid_real_escape_string($string, $link) : cubrid_real_escape_string($string);
-}
-
-// Execute a query
-if (!isset($NumPreQueriesArray['cubrid'])) {
-    $NumPreQueriesArray['cubrid'] = 0;
 }
 
 // SafeSQL Lite Source Code by Cool Dude 2k

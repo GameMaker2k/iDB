@@ -20,6 +20,17 @@ if ($File3Name == "sql.php" || $File3Name == "/sql.php") {
     exit();
 }
 
+$NumQueriesArray = array();
+$NumPreQueriesArray = array();
+
+if (!isset($NumQueries)) {
+    $NumPreQueries = 0;
+}
+
+if (!isset($NumPreQueriesArray['sql'])) {
+    $NumPreQueriesArray['sql'] = 0;
+}
+
 // _convert_var handles additional variable types for different placeholders
 function _convert_var($var, $placeholder)
 {
@@ -88,8 +99,6 @@ function handle_conditional_parts(&$query_string, &$query_vars)
     }
 }
 
-$NumQueriesArray = array();
-$NumPreQueriesArray = array();
 if (file_exists($SettDir['sql'] . "pdo_mysql.php") && extension_loaded("PDO") && extension_loaded("PDO_MYSQL")) {
     require($SettDir['sql'] . "pdo_mysql.php");
 }
@@ -262,13 +271,6 @@ function sql_client_info($link = null, $sqllib = null)
 function sql_escape_string($string, $link = null, $sqllib = null)
 {
     return call_sql_function('escape_string', $sqllib, $string, $link);
-}
-
-if (!isset($NumQueries)) {
-    $NumPreQueries = 0;
-}
-if (!isset($NumPreQueriesArray['sql'])) {
-    $NumPreQueriesArray['sql'] = 0;
 }
 
 function sql_pre_query($query_string, $query_vars, $sqllib = null)

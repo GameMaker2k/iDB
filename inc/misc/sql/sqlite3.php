@@ -20,6 +20,11 @@ if ($File3Name == "sqlite3.php" || $File3Name == "/sqlite3.php") {
     exit();
 }
 
+// Execute a query
+if (!isset($NumPreQueriesArray['sqlite3'])) {
+    $NumPreQueriesArray['sqlite3'] = 0;
+}
+
 // SQLite Functions
 function sqlite3_func_error($link = null)
 {
@@ -145,6 +150,9 @@ function sqlite3_func_free_result($result)
 // Fetch Results to Array
 function sqlite3_func_fetch_array($result, $result_type = SQLITE3_BOTH)
 {
+	if($result_type==NULL) {
+		$result_type = CUBRID_BOTH;
+	}
     return $result ? $result->fetchArray($result_type) : false;
 }
 
@@ -176,11 +184,6 @@ function sqlite3_func_escape_string($string, $link = null)
         return null;
     }
     return SQLite3::escapeString($string);
-}
-
-// Execute a query
-if (!isset($NumPreQueriesArray['sqlite3'])) {
-    $NumPreQueriesArray['sqlite3'] = 0;
 }
 
 // SafeSQL Lite Source Code by Cool Dude 2k

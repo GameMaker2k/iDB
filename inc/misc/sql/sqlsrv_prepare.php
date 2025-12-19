@@ -20,6 +20,11 @@ if ($File3Name == "sqlsrv_prepare.php" || $File3Name == "/sqlsrv_prepare.php") {
     exit();
 }
 
+// Execute a query
+if (!isset($NumPreQueriesArray['sqlsrv_prepare'])) {
+    $NumPreQueriesArray['sqlsrv_prepare'] = 0;
+}
+
 // SQLSRV Error handling functions
 // SQLSRV Error handling functions
 function sqlsrv_prepare_func_error($link = null)
@@ -185,11 +190,6 @@ function sqlsrv_prepare_func_fetch_row($stmt)
 function sqlsrv_prepare_func_escape_string($string, $link = null)
 {
     return $string; // SQLSRV does not have a string escape function; use parameterized queries instead.
-}
-
-// Execute a query
-if (!isset($NumPreQueriesArray['sqlsrv_prepare'])) {
-    $NumPreQueriesArray['sqlsrv_prepare'] = 0;
 }
 
 // Pre-process Query for SQLSRV

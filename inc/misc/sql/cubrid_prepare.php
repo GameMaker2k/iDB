@@ -20,6 +20,11 @@ if ($File3Name == "cubrid_prepare.php" || $File3Name == "/cubrid_prepare.php") {
     exit();
 }
 
+// Execute a query
+if (!isset($NumPreQueriesArray['cubrid_prepare'])) {
+    $NumPreQueriesArray['cubrid_prepare'] = 0;
+}
+
 // CUBRID Error handling functions
 function cubrid_prepare_func_error($link = null)
 {
@@ -148,6 +153,9 @@ function cubrid_prepare_func_free_result($stmt)
 // Fetch Results to Array
 function cubrid_prepare_func_fetch_array($stmt, $result_type = CUBRID_BOTH)
 {
+	if($result_type==NULL) {
+		$result_type = CUBRID_BOTH;
+	}
     return cubrid_fetch($stmt, $result_type);
 }
 
@@ -179,11 +187,6 @@ function cubrid_prepare_func_escape_string($string, $link = null)
         return null;
     }
     return cubrid_real_escape_string($string, $link);
-}
-
-// Execute a query
-if (!isset($NumPreQueriesArray['cubrid_prepare'])) {
-    $NumPreQueriesArray['cubrid_prepare'] = 0;
 }
 
 // SafeSQL Lite with additional SafeSQL features
