@@ -895,193 +895,194 @@ $alttemp_session_data = null;
 $SQLSType = $Settings['sqltype'];
 $use_old_session = true;
 
-// -------------------- OLD SESSION FUNCTION SET --------------------
-if ($use_old_session) {
-    function sql_session_open_old($save_path, $session_name) {
-        global $sess_save_path;
-        $sess_save_path = $save_path;
+// Optional toggles (keep behavior compatible with your current code)
+$iDBSessCloseDB        = $iDBSessCloseDB        ?? true;   // old behavior
+$enforceSinglePerIpUa  = $enforceSinglePerIpUa  ?? true;   // mirrors your DELETE ... ip+ua
+$storeSerializedData   = $storeSerializedData   ?? true;   // keeps serialized_data column updated
+
+final class SQLSessionHandler implements SessionHandlerInterface
+{
+    private ?string $lastId = null;
+    private ?bool $exists = null;
+
+    public function open(string $path, string $name): bool
+    {
+        // kept for compatibility with your existing globals
+        $GLOBALS['sess_save_path'] = $path;
         return true;
     }
 
-    $iDBSessCloseDB = true;
-    function sql_session_close_old() {
+    public function close(): bool
+    {
         global $SQLStat, $iDBSessCloseDB;
-        if ($iDBSessCloseDB === true) {
+        if ($iDBSessCloseDB) {
             sql_disconnect_db($SQLStat);
         }
         return true;
     }
 
-    function sql_session_read_old($id) {
-        global $sqltable, $SQLStat, $temp_user_ip, $temp_user_agent, $client_hints_json, $temp_session_data, $alt_temp_session_data;
-        $checkQuery = sql_pre_query("SELECT COUNT(*) AS cnt FROM \"$sqltable"."sessions\" WHERE \"session_id\" = '%s'", array($id));
-        $sessionExists = sql_count_rows($checkQuery, $SQLStat);
-        if ($sessionExists == 0) {
-            sql_query(sql_pre_query("DELETE FROM \"$sqltable"."sessions\" WHERE \"session_id\" <> '%s' AND \"ip_address\" = '%s' AND \"user_agent\" = '%s'", array($id, $temp_user_ip, $temp_user_agent)), $SQLStat);
-            $time = (new DateTime('now', new DateTimeZone("UTC")))->getTimestamp();
-            sql_query(sql_pre_query("INSERT INTO \"$sqltable"."sessions\" (\"session_id\", \"session_data\", \"serialized_data\", \"user_agent\", \"client_hints\", \"ip_address\", \"expires\") VALUES ('%s', '%s', '%s', '%s', '%s', '%s', %i)", array($id, $temp_session_data, $alt_temp_session_data, $temp_user_agent, $client_hints_json, $temp_user_ip, $time)), $SQLStat);
-            return '';
-        } else {
-            $query = sql_pre_query("SELECT * FROM \"$sqltable"."sessions\" WHERE \"session_id\" = '%s'", array($id));
-            $rs = sql_query($query, $SQLStat);
-            $row = sql_fetch_assoc($rs);
+    public function read(string $id): string
+    {
+        global $sqltable, $SQLStat;
+
+        $this->lastId = $id;
+        $this->exists = null;
+
+        // One query: fetch session_data directly
+        $q = sql_pre_query(
+            "SELECT \"session_data\" FROM \"{$sqltable}sessions\" WHERE \"session_id\" = '%s'",
+            array($id)
+        );
+
+        $rs  = sql_query($q, $SQLStat);
+        $row = $rs ? sql_fetch_assoc($rs) : null;
+        if ($rs) {
             sql_free_result($rs);
-            return $row ? $row['session_data'] : '';
         }
+
+        if ($row && array_key_exists('session_data', $row)) {
+            $this->exists = true;
+            return (string)$row['session_data'];
+        }
+
+        // No row exists: preserve your original behavior (optionally)
+        $this->exists = false;
+        $this->createFreshSessionRow($id);
+
+        // Returning empty string means “no session data”
+        return '';
     }
 
-    function sql_session_write_old($id, $data) {
+    public function write(string $id, string $data): bool
+    {
         global $sqltable, $SQLStat, $temp_user_ip, $temp_user_agent, $client_hints_json;
-        $time = (new DateTime('now', new DateTimeZone("UTC")))->getTimestamp();
-        $checkQuery = sql_pre_query("SELECT COUNT(*) AS cnt FROM \"$sqltable"."sessions\" WHERE \"session_id\" = '%s'", array($id));
-        $sessionExists = sql_count_rows($checkQuery, $SQLStat);
-        if ($sessionExists == 0) {
-            sql_query(sql_pre_query("INSERT INTO \"$sqltable"."sessions\" (\"session_id\", \"session_data\", \"serialized_data\", \"user_agent\", \"client_hints\", \"ip_address\", \"expires\") VALUES ('%s', '%s', '%s', '%s', '%s', '%s', %i)", array($id, $data, serialize($_SESSION), $temp_user_agent, $client_hints_json, $temp_user_ip, $time)), $SQLStat);
-        } else {
-            sql_query(sql_pre_query("UPDATE \"$sqltable"."sessions\" SET \"session_data\" = '%s', \"serialized_data\" = '%s', \"user_agent\" = '%s', \"client_hints\" = '%s', \"ip_address\" = '%s', \"expires\" = %i WHERE \"session_id\" = '%s'", array($data, serialize($_SESSION), $temp_user_agent, $client_hints_json, $temp_user_ip, $time, $id)), $SQLStat);
+        global $storeSerializedData;
+
+        // If something wrote a different ID than we read, forget cached existence
+        if ($this->lastId !== $id) {
+            $this->lastId = $id;
+            $this->exists = null;
         }
-        return true;
-    }
 
-    function sql_session_destroy_old($id) {
-        global $sqltable, $SQLStat;
-        sql_query(sql_pre_query("DELETE FROM \"$sqltable"."sessions\" WHERE \"session_id\" = '%s'", array($id)), $SQLStat);
-        return true;
-    }
+        $now = time();
+        $serialized = $storeSerializedData ? serialize($_SESSION ?? []) : '';
 
-    function sql_session_gc_old($maxlifetime) {
-        global $sqltable, $SQLStat;
-        $time = (new DateTime('now', new DateTimeZone("UTC")))->getTimestamp() - $maxlifetime;
-        sql_query(sql_pre_query("DELETE FROM \"$sqltable"."sessions\" WHERE \"expires\" < %i", array($time)), $SQLStat);
-        return true;
-    }
-} else {
-// -------------------- NEW SESSION FUNCTION SET --------------------
-    function sql_session_open_new($save_path, $session_name) {
-        global $sess_save_path;
-        $sess_save_path = $save_path;
-        return true;
-    }
-
-    function sql_session_close_new() {
-        global $SQLStat;
-        sql_disconnect_db($SQLStat);
-        return true;
-    }
-
-    function sql_session_read_new($id) {
-        global $sqltable, $SQLStat, $temp_user_ip, $temp_user_agent, $client_hints_json, $temp_session_data, $alt_temp_session_data;
-        $checkQuery = sql_pre_query("SELECT COUNT(*) AS cnt FROM \"$sqltable"."sessions\" WHERE \"session_id\" = '%s'", array($id));
-        $sessionExists = sql_count_rows($checkQuery, $SQLStat);
-        if ($sessionExists == 0) {
-            sql_query(sql_pre_query("DELETE FROM \"$sqltable"."sessions\" WHERE \"session_id\" <> '%s' AND \"ip_address\" = '%s' AND \"user_agent\" = '%s'", array($id, $temp_user_ip, $temp_user_agent)), $SQLStat);
-            $time = (new DateTime('now', new DateTimeZone("UTC")))->getTimestamp();
-            sql_query(sql_pre_query("INSERT INTO \"$sqltable"."sessions\" (\"session_id\", \"session_data\", \"serialized_data\", \"user_agent\", \"client_hints\", \"ip_address\", \"expires\") VALUES ('%s', '%s', '%s', '%s', '%s', '%s', %i)", array($id, $temp_session_data, $alt_temp_session_data, $temp_user_agent, $client_hints_json, $temp_user_ip, $time)), $SQLStat);
-            return '';
-        } else {
-            $query = sql_pre_query("SELECT * FROM \"$sqltable"."sessions\" WHERE \"session_id\" = '%s'", array($id));
-            $rs = sql_query($query, $SQLStat);
-            $row = sql_fetch_assoc($rs);
-            sql_free_result($rs);
-            return $row ? $row['session_data'] : '';
+        // If we don’t know if it exists (rare), fall back to COUNT
+        if ($this->exists === null) {
+            $check = sql_pre_query(
+                "SELECT COUNT(*) AS cnt FROM \"{$sqltable}sessions\" WHERE \"session_id\" = '%s'",
+                array($id)
+            );
+            $this->exists = (sql_count_rows($check, $SQLStat) > 0);
         }
+
+        if ($this->exists === false) {
+            $ok = sql_query(sql_pre_query(
+                "INSERT INTO \"{$sqltable}sessions\"
+                 (\"session_id\", \"session_data\", \"serialized_data\", \"user_agent\", \"client_hints\", \"ip_address\", \"expires\")
+                 VALUES ('%s','%s','%s','%s','%s','%s',%i)",
+                array($id, $data, $serialized, $temp_user_agent, $client_hints_json, $temp_user_ip, $now)
+            ), $SQLStat);
+
+            if ($ok) $this->exists = true;
+            return (bool)$ok;
+        }
+
+        $ok = sql_query(sql_pre_query(
+            "UPDATE \"{$sqltable}sessions\"
+             SET \"session_data\"='%s',
+                 \"serialized_data\"='%s',
+                 \"user_agent\"='%s',
+                 \"client_hints\"='%s',
+                 \"ip_address\"='%s',
+                 \"expires\"=%i
+             WHERE \"session_id\"='%s'",
+            array($data, $serialized, $temp_user_agent, $client_hints_json, $temp_user_ip, $now, $id)
+        ), $SQLStat);
+
+        return (bool)$ok;
     }
 
-    function sql_session_write_new($id, $data) {
+    public function destroy(string $id): bool
+    {
+        global $sqltable, $SQLStat;
+
+        $this->lastId = $id;
+        $this->exists = false;
+
+        return (bool)sql_query(sql_pre_query(
+            "DELETE FROM \"{$sqltable}sessions\" WHERE \"session_id\" = '%s'",
+            array($id)
+        ), $SQLStat);
+    }
+
+    public function gc(int $max_lifetime): int|false
+    {
+        global $sqltable, $SQLStat;
+
+        $cutoff = time() - $max_lifetime;
+        $ok = sql_query(sql_pre_query(
+            "DELETE FROM \"{$sqltable}sessions\" WHERE \"expires\" < %i",
+            array($cutoff)
+        ), $SQLStat);
+
+        // We can’t portably return “rows deleted” with your current wrapper API,
+        // so return 1 on success, false on failure (works with SessionHandlerInterface).
+        return $ok ? 1 : false;
+    }
+
+    private function createFreshSessionRow(string $id): void
+    {
         global $sqltable, $SQLStat, $temp_user_ip, $temp_user_agent, $client_hints_json;
-        $time = (new DateTime('now', new DateTimeZone("UTC")))->getTimestamp();
-        $checkQuery = sql_pre_query("SELECT COUNT(*) AS cnt FROM \"$sqltable"."sessions\" WHERE \"session_id\" = '%s'", array($id));
-        $sessionExists = sql_count_rows($checkQuery, $SQLStat);
-        if ($sessionExists == 0) {
-            sql_query(sql_pre_query("INSERT INTO \"$sqltable"."sessions\" (\"session_id\", \"session_data\", \"serialized_data\", \"user_agent\", \"client_hints\", \"ip_address\", \"expires\") VALUES ('%s', '%s', '%s', '%s', '%s', '%s', %i)", array($id, $data, serialize($_SESSION), $temp_user_agent, $client_hints_json, $temp_user_ip, $time)), $SQLStat);
-        } else {
-            sql_query(sql_pre_query("UPDATE \"$sqltable"."sessions\" SET \"session_data\" = '%s', \"serialized_data\" = '%s', \"user_agent\" = '%s', \"client_hints\" = '%s', \"ip_address\" = '%s', \"expires\" = %i WHERE \"session_id\" = '%s'", array($data, serialize($_SESSION), $temp_user_agent, $client_hints_json, $temp_user_ip, $time, $id)), $SQLStat);
+        global $temp_session_data, $alt_temp_session_data, $enforceSinglePerIpUa;
+
+        if ($enforceSinglePerIpUa) {
+            sql_query(sql_pre_query(
+                "DELETE FROM \"{$sqltable}sessions\"
+                 WHERE \"session_id\" <> '%s'
+                   AND \"ip_address\" = '%s'
+                   AND \"user_agent\" = '%s'",
+                array($id, $temp_user_ip, $temp_user_agent)
+            ), $SQLStat);
         }
-        return true;
-    }
 
-    function sql_session_destroy_new($id) {
-        global $sqltable, $SQLStat;
-        sql_query(sql_pre_query("DELETE FROM \"$sqltable"."sessions\" WHERE \"session_id\" = '%s'", array($id)), $SQLStat);
-        return true;
-    }
+        $now = time();
+        sql_query(sql_pre_query(
+            "INSERT INTO \"{$sqltable}sessions\"
+             (\"session_id\", \"session_data\", \"serialized_data\", \"user_agent\", \"client_hints\", \"ip_address\", \"expires\")
+             VALUES ('%s','%s','%s','%s','%s','%s',%i)",
+            array($id, $temp_session_data, $alt_temp_session_data, $temp_user_agent, $client_hints_json, $temp_user_ip, $now)
+        ), $SQLStat);
 
-    function sql_session_gc_new($maxlifetime) {
-        global $sqltable, $SQLStat;
-        $time = (new DateTime('now', new DateTimeZone("UTC")))->getTimestamp() - $maxlifetime;
-        sql_query(sql_pre_query("DELETE FROM \"$sqltable"."sessions\" WHERE \"expires\" < %i", array($time)), $SQLStat);
-        return true;
+        // After inserting a row in read(), future write() should UPDATE
+        $this->exists = true;
     }
 }
 
-// -------------------- ACTIVE FUNCTION ALIASES --------------------
-if ($use_old_session) {
-    function sql_session_open(...$args) { return sql_session_open_old(...$args); }
-    function sql_session_close(...$args) { return sql_session_close_old(...$args); }
-    function sql_session_read(...$args) { return sql_session_read_old(...$args); }
-    function sql_session_write(...$args) { return sql_session_write_old(...$args); }
-    function sql_session_destroy(...$args) { return sql_session_destroy_old(...$args); }
-    function sql_session_gc(...$args) { return sql_session_gc_old(...$args); }
-} else {
-    function sql_session_open(...$args) { return sql_session_open_new(...$args); }
-    function sql_session_close(...$args) { return sql_session_close_new(...$args); }
-    function sql_session_read(...$args) { return sql_session_read_new(...$args); }
-    function sql_session_write(...$args) { return sql_session_write_new(...$args); }
-    function sql_session_destroy(...$args) { return sql_session_destroy_new(...$args); }
-    function sql_session_gc(...$args) { return sql_session_gc_new(...$args); }
-}
+// Register handler (object style works on old PHP too; keep your version gate if you want)
+session_set_save_handler(new SQLSessionHandler(), true);
 
-// -------------------- SESSION HANDLER REGISTRATION --------------------
-class SQLSessionHandler implements SessionHandlerInterface {
-    public function open(string $path, string $name): bool {
-        return sql_session_open($path, $name);
-    }
-
-    public function close(): bool {
-        return sql_session_close();
-    }
-
-    public function read(string $id): string|false {
-        return sql_session_read($id);
-    }
-
-    public function write(string $id, string $data): bool {
-        return sql_session_write($id, $data);
-    }
-
-    public function destroy(string $id): bool {
-        return sql_session_destroy($id);
-    }
-
-    public function gc(int $max_lifetime): int|false {
-        return sql_session_gc($max_lifetime);
-    }
-}
-
-// Register session handler functions
-if (PHP_VERSION_ID >= 80400) {
-    session_set_save_handler(new SQLSessionHandler(), true);
-} else {
-    session_set_save_handler(
-        'sql_session_open',
-        'sql_session_close',
-        'sql_session_read',
-        'sql_session_write',
-        'sql_session_destroy',
-        'sql_session_gc'
+// Cookie params (modern style if available)
+if (PHP_VERSION_ID >= 70300) {
+    $params = array(
+        'lifetime' => 0,
+        'path'     => $cbasedir,
+        'domain'   => $cookieDomain ?? '',
+        'secure'   => (bool)($cookieSecure ?? false),
+        'httponly' => true,
+        'samesite' => 'Lax',
     );
-}
-if ($cookieDomain == null) {
-    session_set_cookie_params(0, $cbasedir);
-}
-if ($cookieDomain != null) {
-    if ($cookieSecure === true) {
-        session_set_cookie_params(0, $cbasedir, $cookieDomain, 1);
-    }
-    if ($cookieSecure === false) {
-        session_set_cookie_params(0, $cbasedir, $cookieDomain);
+    // If you truly want “no domain attribute” when null, set domain to '' as above.
+    session_set_cookie_params($params);
+} else {
+    // legacy signature
+    if ($cookieDomain == null) {
+        session_set_cookie_params(0, $cbasedir);
+    } else {
+        session_set_cookie_params(0, $cbasedir, $cookieDomain, (int)($cookieSecure === true));
     }
 }
+
 session_cache_limiter("private, no-cache, no-store, must-revalidate, pre-check=0, post-check=0, max-age=0");
 header("Cache-Control: private, no-cache, no-store, must-revalidate, pre-check=0, post-check=0, max-age=0");
 header("Pragma: private, no-cache, no-store, must-revalidate, pre-check=0, post-check=0, max-age=0");

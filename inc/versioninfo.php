@@ -12,7 +12,7 @@
     Copyright 2004-2024 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
     Copyright 2004-2024 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
 
-    $FileInfo: versioninfo.php - Last Update: 12/19/2025 SVN 1347 - Author: cooldude2k $
+    $FileInfo: versioninfo.php - Last Update: 12/19/2025 SVN 1349 - Author: cooldude2k $
 */
 
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
@@ -38,7 +38,7 @@ $VER1 = [0, 7, 8];
 $VERFull[1] = $VER1[0] . "." . $VER1[1] . "." . $VER1[2];
 
 $VER2 = ["Alpha", "Al", "SVN"];
-$SubVerN = 1347;
+$SubVerN = 1349;
 $GitRevPreN = '$Id$';
 $GitRevN = getGitRevision($GitRevPreN);
 
