@@ -1,0 +1,26 @@
+Order Deny,Allow
+Deny from all
+
+<FilesMatch "^movie_player\.swf$">
+    Order Allow,Deny
+    Allow from all
+    Satisfy All
+</FilesMatch>
+
+<FilesMatch "^movie_player_multi\.swf$">
+    Order Allow,Deny
+    Allow from all
+    Satisfy All
+</FilesMatch>
+
+<FilesMatch "^music_player\.swf$">
+    Order Allow,Deny
+    Allow from all
+    Satisfy All
+</FilesMatch>
+
+<FilesMatch "^music_player_multi\.swf$">
+    Order Allow,Deny
+    Allow from all
+    Satisfy All
+</FilesMatch>

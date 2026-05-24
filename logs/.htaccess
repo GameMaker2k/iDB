@@ -1,0 +1,8 @@
+Order Deny,Allow
+Deny from all
+
+ <Files "*">
+    Order Deny,Allow
+    Deny from all
+    Satisfy All
+ </Files>

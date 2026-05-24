@@ -1,0 +1,297 @@
+/*
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the Revised BSD License.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    Revised BSD License for more details.
+
+    Copyright 2004-2011 iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1
+    Copyright 2004-2011 Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2
+    $ThemeInfo - Name: iDB Gray - Author: cooldude2k $
+    $FileInfo: css.css - Last Update: 8/23/2024 SVN 1023 - Author: cooldude2k $
+*/
+
+html {
+font-family: verdana, arial, sans-serif;
+font-size: 11px;
+width: 100%;
+color: #ffffff;
+background-color: #000000;
+}
+
+body {
+font-family: verdana, arial, sans-serif;
+font-size: 11px;
+margin: 5px 30px 5px 30px;
+color: #ffffff;
+background-color: #000000;
+}
+
+a:link, a:visited, a:active {
+text-decoration: none;
+color: #404040;
+}
+
+a:hover {
+color: #606060;
+text-decoration: none;
+}
+
+.NavLinks {
+font-weight: bold;
+padding: 6px 0px 6px 0px;
+}
+
+.forumname {
+font-weight: bold;
+}
+
+.NavBar2 a:link, .NavBar2 a:visited, .NavBar2 a:active, .NavBar2 a:hover {
+text-decoration: none;
+color: #000000;
+font-family: verdana, arial, sans-serif;
+font-size: 40px;
+}
+
+.copyright {
+text-align: center;
+font-family: Sans-Serif;
+font-size: 12px;
+line-height: 11px;
+color: #ffffff;
+}
+
+.copyright a:link, .copyright a:visited, .copyright a:active {
+color: #dfdfdf;
+text-decoration: none;
+}
+
+.copyright a:hover {
+color: #fdfdfd;
+text-decoration: none;
+}
+
+.noborder {
+border: 0;
+}
+
+.CalDate, .CalDateCurrent {
+display: inline;
+}
+
+img {
+border: 0;
+vertical-align: middle;
+display: inline;
+}
+
+.NavBar {
+background-color: #b0b0b0;
+font-size: 11px;
+font-family: verdana, arial, sans-serif;
+color: #000000;
+width: 100%;
+border: 1px solid #606060;
+border-collapse: collapse;
+}
+
+.NavBarRow1, .NavBarColumn1 {
+background-color: #d8d8d8;
+font-size: 11px;
+text-align: center;
+border: 1px solid #606060;
+}
+
+.NavBarRow2, .NavBarColumn2 {
+background-color: #c8c8c8;
+font-size: 11px;
+text-align: left;
+border: 1px solid #606060;
+}
+
+.PageList {
+color: #FFFFFF;
+}
+
+.Table1, .CalTable1, .TableInfo1, .TableInfoMini1, .TableStats1, .TableSMenu, .TableMenu {
+background-color: #b0b0b0;
+font-size: 11px;
+font-family: verdana, arial, sans-serif;
+color: #000000;
+width: 100%;
+border: 1px solid #606060;
+border-collapse: collapse;
+border-width: 1px;
+border-spacing: 1px;
+}
+
+.Table2 {
+background-color: #000000;
+font-size: 11px;
+font-family: verdana, arial, sans-serif;
+color: #000000;
+width: 100%;
+}
+
+.Table2 a:link, .Table2 a:visited, .Table2 a:active {
+text-decoration: none;
+color: #7675b4;
+}
+
+.Table2 a:hover {
+color: #9695c4;
+text-decoration: none;
+}
+
+.Table3 {
+font-size: 11px;
+font-family: verdana, arial, sans-serif;
+color: #FFFFFF;
+width: 100%;
+}
+
+.TableRow1, .CalTableRow1, .CalTableColumn1, .TableColumn1, .TableInfoRow1,
+.TableInfoColumn1, .TableStatsRow1, .TableStatsColumn1, .TableInfoMiniRow1, 
+.TableInfoMiniColumn1, .TableSMenuRow1, .TableSMenuColumn1, .TableMenuRow1, 
+.TableMenuColumn1 {
+padding: 8px 0px 8px 5px;
+background-color: #d8d8d8;
+background-image: url(grad.png);
+border: 1px solid #606060;
+}
+
+.TableRow2, .CalTableRow2, .CalTableColumn2, .TableColumn2, .TableInfoRow2,
+.TableStatsRow2, .TableStatsColumn2, .TableInfoMiniRow2, .TableSMenuRow2, 
+.TableSMenuColumn2, .TableMenuRow2, .TableMenuColumn2 {
+padding: 7px;
+background-color: #c8c8c8;
+border: 1px solid #606060;
+}
+
+.TableInfoColumn2, .TableInfoMiniColumn2 {
+background-color: #c8c8c8;
+border: 1px solid #506070;
+}
+
+.TableRow3, .CalTableRow3, .CalTableColumn3, .TableColumn3, .TableInfoRow3, 
+.TableInfoColumn3, .TableStatsRow3, .TableStatsColumn3, .TableInfoMiniRow3, 
+.TableInfoMiniColumn3,.TableSMenuRow3, .TableSMenuColumn3, .TableMenuRow3, 
+.TableMenuColumn3 {
+background-color: #b0b0b0;
+border: 1px solid #606060;
+}
+
+.CalTableColumn3 {
+height: 100px;
+}
+
+.CalTableColumn3Current {
+height: 100px;
+}
+
+.CalTableColumn3Blank {
+height: 100px;
+}
+
+.TableRow4, .CalTableRow4, .CalTableColumn4 .TableColumn4, .TableInfoRow4, 
+.TableInfoColumn4, .TableStatsRow4, .TableStatsColumn4, .TableInfoMiniRow4, 
+.TableInfoMiniColumn4,.TableSMenuRow4, .TableSMenuColumn4, .TableMenuRow4, 
+.TableMenuColumn4 {
+background-color: #d8d8d8;
+border: 1px solid #606060;
+}
+
+.TextBox {
+background-color: #d8d8d8;
+font-size: 13px;
+font-family: Courier, Courier New, Verdana, Arial;
+color: #000000;
+border: 1px solid #606060;
+border-collapse: collapse;
+}
+
+.HiddenTextBox {
+display: none;
+}
+
+.QuoteTop {
+font-family: Verdana, Tahoma, Arial, sans-serif;
+font-size: 10px;
+color: #a0a0a0;
+}
+
+.QuoteBottom {
+font-family: Courier, Courier New, Verdana, Arial, serif;
+font-size: 12px;
+color: #c0c0c0;
+background-color: #000000;
+border: 1px solid #000;
+border-color: #808080;
+padding-top: 2px;
+padding-right: 2px;
+padding-bottom: 2px;
+padding-left: 2px;
+}
+
+.CodeTop {
+font-family: Verdana, Tahoma, Arial, sans-serif;
+font-size: 10px;
+color: #a0a0a0;
+}
+
+.CodeBottom {
+font-family: Courier, Courier New, Verdana, Arial;
+font-size: 12px;
+color: #c0c0c0;
+background-color: #000000;
+border: 1px solid #000;
+border-color: #808080;
+padding-top: 2px;
+padding-right: 2px;
+padding-bottom: 2px;
+padding-left: 2px;
+}
+
+.CodeBox {
+width: 500px;
+height: 100px;
+white-space: pre;
+overflow: auto;
+border: 3px outset #000000;
+font-family: Courier, Courier New, Verdana, Arial, serif;
+font-size: 15px;
+}
+
+.Button {
+background-color: #d8d8d8;
+font-size: 13px;
+font-family: Courier, Courier New, Verdana, Arial;
+color: #000000;
+border: 1px solid #606060;
+border-collapse: collapse;
+}
+
+.TextBoxLabel, label {
+color: #000000;
+font-weight: bold;
+cursor: pointer;
+font-size: 10px;
+}
+
+.EditReply {
+color: #000000;
+font-size: 9px;
+}
+
+.TableMessage {
+color: #000000;
+font-weight: bold;
+font-size: 10px;
+}
+
+.statsicon {
+text-align: center;
+vertical-align: middle;
+}
