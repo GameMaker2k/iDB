@@ -567,7 +567,12 @@ if (!function_exists('hash') || !function_exists('hash_algos')) {
     }
 }
 if ((function_exists('hash') && function_exists('hash_algos')) || function_exists('password_hash')) {
-    if (!in_array($Settings['use_hashtype'], hash_algos()) && $Settings['use_hashtype'] != "bcrypt") {
+    // BUGFIX: bcrypt, argon2i and argon2id are password_hash() algorithms and
+    // never appear in hash_algos(), so choosing any of them in the installer
+    // silently downgraded every password to SHA1 on the next page load.
+    $iDBPasswordAlgos = array("bcrypt", "argon2i", "argon2id");
+    if (!in_array($Settings['use_hashtype'], hash_algos())
+        && !in_array($Settings['use_hashtype'], $iDBPasswordAlgos, true)) {
         $Settings['use_hashtype'] = "sha1";
     }
     if ($Settings['use_hashtype'] != "md2" &&
@@ -1014,53 +1019,10 @@ if ($use_old_session) {
     }
 }
 
-// -------------------- ACTIVE FUNCTION ALIASES --------------------
-if ($use_old_session) {
-    function sql_session_open(...$args) { return sql_session_open_old(...$args); }
-    function sql_session_close(...$args) { return sql_session_close_old(...$args); }
-    function sql_session_read(...$args) { return sql_session_read_old(...$args); }
-    function sql_session_write(...$args) { return sql_session_write_old(...$args); }
-    function sql_session_destroy(...$args) { return sql_session_destroy_old(...$args); }
-    function sql_session_gc(...$args) { return sql_session_gc_old(...$args); }
-} else {
-    function sql_session_open(...$args) { return sql_session_open_new(...$args); }
-    function sql_session_close(...$args) { return sql_session_close_new(...$args); }
-    function sql_session_read(...$args) { return sql_session_read_new(...$args); }
-    function sql_session_write(...$args) { return sql_session_write_new(...$args); }
-    function sql_session_destroy(...$args) { return sql_session_destroy_new(...$args); }
-    function sql_session_gc(...$args) { return sql_session_gc_new(...$args); }
-}
-
-/*
-// -------------------- SESSION HANDLER REGISTRATION --------------------
-class SQLSessionHandler implements SessionHandlerInterface {
-    public function open($p, $n) { return sql_session_open($p, $n); }
-    public function close() { return sql_session_close(); }
-    public function read($id) { return sql_session_read($id); }
-    public function write($id, $data) { return sql_session_write($id, $data); }
-    public function destroy($id) { return sql_session_destroy($id); }
-    public function gc($t) { return sql_session_gc($t); }
-}
-*/
-
-if (PHP_VERSION_ID >= 80400) {
-    session_set_save_handler(new SQLSessionHandler(), true);
-} else {
-    session_set_save_handler(
-        'sql_session_open',
-        'sql_session_close',
-        'sql_session_read',
-        'sql_session_write',
-        'sql_session_destroy',
-        'sql_session_gc'
-    );
-}
-
-// Optional toggles (keep behavior compatible with your current code)
-$iDBSessCloseDB        = $iDBSessCloseDB        ?? true;   // old behavior
-$enforceSinglePerIpUa  = $enforceSinglePerIpUa  ?? true;   // mirrors your DELETE ... ip+ua
-$storeSerializedData   = $storeSerializedData   ?? true;   // keeps serialized_data column updated
-
+// BUGFIX: SQLSessionHandler was declared ~20 lines *after* the
+// session_set_save_handler(new SQLSessionHandler(), true) call that uses
+// it. PHP does not early-bind a class that implements an interface, so on
+// PHP 8.4+ this was a fatal "Class not found" before the board could load.
 final class SQLSessionHandler implements SessionHandlerInterface
 {
     private ?string $lastId = null;
@@ -1219,6 +1181,54 @@ final class SQLSessionHandler implements SessionHandlerInterface
         $this->exists = true;
     }
 }
+
+// -------------------- ACTIVE FUNCTION ALIASES --------------------
+if ($use_old_session) {
+    function sql_session_open(...$args) { return sql_session_open_old(...$args); }
+    function sql_session_close(...$args) { return sql_session_close_old(...$args); }
+    function sql_session_read(...$args) { return sql_session_read_old(...$args); }
+    function sql_session_write(...$args) { return sql_session_write_old(...$args); }
+    function sql_session_destroy(...$args) { return sql_session_destroy_old(...$args); }
+    function sql_session_gc(...$args) { return sql_session_gc_old(...$args); }
+} else {
+    function sql_session_open(...$args) { return sql_session_open_new(...$args); }
+    function sql_session_close(...$args) { return sql_session_close_new(...$args); }
+    function sql_session_read(...$args) { return sql_session_read_new(...$args); }
+    function sql_session_write(...$args) { return sql_session_write_new(...$args); }
+    function sql_session_destroy(...$args) { return sql_session_destroy_new(...$args); }
+    function sql_session_gc(...$args) { return sql_session_gc_new(...$args); }
+}
+
+/*
+// -------------------- SESSION HANDLER REGISTRATION --------------------
+class SQLSessionHandler implements SessionHandlerInterface {
+    public function open($p, $n) { return sql_session_open($p, $n); }
+    public function close() { return sql_session_close(); }
+    public function read($id) { return sql_session_read($id); }
+    public function write($id, $data) { return sql_session_write($id, $data); }
+    public function destroy($id) { return sql_session_destroy($id); }
+    public function gc($t) { return sql_session_gc($t); }
+}
+*/
+
+if (PHP_VERSION_ID >= 80400) {
+    session_set_save_handler(new SQLSessionHandler(), true);
+} else {
+    session_set_save_handler(
+        'sql_session_open',
+        'sql_session_close',
+        'sql_session_read',
+        'sql_session_write',
+        'sql_session_destroy',
+        'sql_session_gc'
+    );
+}
+
+// Optional toggles (keep behavior compatible with your current code)
+$iDBSessCloseDB        = $iDBSessCloseDB        ?? true;   // old behavior
+$enforceSinglePerIpUa  = $enforceSinglePerIpUa  ?? true;   // mirrors your DELETE ... ip+ua
+$storeSerializedData   = $storeSerializedData   ?? true;   // keeps serialized_data column updated
+
 
 // Register handler (object style works on old PHP too; keep your version gate if you want)
 session_set_save_handler(new SQLSessionHandler(), true);
@@ -1527,6 +1537,11 @@ if ($_GET['act'] == "status") {
         $_GET['status'] = 200; // Default to 200 OK
     } else {
         $_GET['status'] = (int)$_GET['status']; // Cast to int if valid
+    }
+    // BUGFIX: the page rendered "404 Not Found" but the response itself was
+    // still HTTP 200, so crawlers and clients treated every error as success.
+    if (function_exists('http_response_code')) {
+        http_response_code((int)$_GET['status']);
     }
     ?>
 <!DOCTYPE html>

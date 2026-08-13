@@ -70,7 +70,8 @@ if (file_exists('extendsettings.php')) {
 $errorDisplay = true;  // Set to true to display errors on the screen
 $errorLogFile = true;  // Set to true to log errors to a file
 if (!isset($SettDir['logs'])) {
-    $SettDir['logs'] = "./logs";
+    // BUGFIX: no trailing slash produced "./logsphp_error_log.txt".
+    $SettDir['logs'] = "./logs/";
 }
 $logFilePath = $SettDir['logs'] . 'php_error_log.txt';  // Define your log file path
 
@@ -329,7 +330,9 @@ $_TEG['part'] = preg_replace("/Part(1|2|3|4)/", "\\1", $_GET['act']);
 $_GET['act'] = strtolower($_GET['act']);
 if (isset($_TEG['part'])) {
     if ($_TEG['part'] <= 4 && $_TEG['part'] >= 1) {
-        $_GET['act'] = "Part".$_TEG['part'];
+        // BUGFIX: this rebuilt the action with a capital P ("Part2"), which
+        // then matched none of the lowercase "part2" comparisons below.
+        $_GET['act'] = "part".$_TEG['part'];
     }
 }
 if ($_GET['act'] != "part4" && $_POST['act'] != "part4") {
@@ -372,20 +375,23 @@ if (isset($_POST['charset'])) {
     if ($_POST['charset'] == "UTF-8") {
         $SQLCharset = "utf8";
     }
-    $Settings['charset'] = $_POST['charset'];
+    // BUGFIX: this assignment came *after* the charset whitelist above, so any
+    // value at all could be posted and then handed to header() and
+    // htmlentities() -- an unknown encoding is a ValueError on PHP 8.
+    if (in_array($_POST['charset'], array("ISO-8859-15", "ISO-8859-1", "UTF-8",
+        "CP866", "Windows-1251", "Windows-1252", "KOI8-R", "BIG5", "GB2312",
+        "BIG5-HKSCS", "Shift_JIS", "EUC-JP"), true)) {
+        $Settings['charset'] = $_POST['charset'];
+    } else {
+        $_POST['charset'] = $Settings['charset'];
+    }
 }
+// BUGFIX: these four lines used "==" (comparison) instead of "=", so
+// $ServHTTPS was never actually assigned and stayed "off" on every request.
+// The board URL was therefore always built with http:// even on HTTPS sites.
 $ServHTTPS = "off";
-if (isset($_SERVER['HTTPS'])) {
-    $ServHTTPS == "on";
-}
-if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") {
-    $ServHTTPS == "on";
-}
-if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "off") {
-    $ServHTTPS == "off";
-}
-if (!isset($_SERVER['HTTPS'])) {
-    $ServHTTPS == "off";
+if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== "" && strtolower($_SERVER['HTTPS']) !== "off") {
+    $ServHTTPS = "on";
 }
 if ($ServHTTPS == "on") {
     $prehost = "https://";
@@ -394,7 +400,8 @@ if ($ServHTTPS == "off") {
     $prehost = "http://";
 }
 $this_dir = null;
-if (dirname($_SERVER['SCRIPT_NAME']) != "." ||
+// BUGFIX: "||" here is always true (a value cannot be both "." and null).
+if (dirname($_SERVER['SCRIPT_NAME']) != "." &&
     dirname($_SERVER['SCRIPT_NAME']) != null) {
     $this_dir = dirname($_SERVER['SCRIPT_NAME'])."/";
 }
@@ -404,7 +411,8 @@ if ($this_dir == null || $this_dir == ".") {
         $this_dir = dirname($_SERVER['PHP_SELF'])."/";
     }
 }
-if ($this_dir == "\/") {
+// BUGFIX: "\/" is a literal backslash-slash in a double-quoted string.
+if ($this_dir == "/") {
     $this_dir = "/";
 }
 $this_dir = str_replace("//", "/", $this_dir);
@@ -512,7 +520,8 @@ if ($ServHTTPS != "on") {
     $prehost = "http://";
 }
 $this_dir = null;
-if (dirname($_SERVER['SCRIPT_NAME']) != "." ||
+// BUGFIX: "||" here is always true (a value cannot be both "." and null).
+if (dirname($_SERVER['SCRIPT_NAME']) != "." &&
     dirname($_SERVER['SCRIPT_NAME']) != null) {
     $this_dir = dirname($_SERVER['SCRIPT_NAME'])."/";
 }
@@ -522,17 +531,27 @@ if ($this_dir == null || $this_dir == ".") {
         $this_dir = dirname($_SERVER['PHP_SELF'])."/";
     }
 }
-if ($this_dir == "\/") {
+// BUGFIX: "\/" is a literal backslash-slash in a double-quoted string.
+if ($this_dir == "/") {
     $this_dir = "/";
 }
 $this_dir = str_replace("//", "/", $this_dir);
 $idbdir = addslashes(str_replace("\\", "/", dirname(__FILE__)."/"));
 function sql_list_dbs()
 {
+    // BUGFIX: $SQLStat was never imported into scope, and $array was undefined
+    // when the query returned nothing.
+    global $SQLStat;
+    $array = array();
     $result = sql_query("SHOW DATABASES;", $SQLStat);
+    if ($result === false) {
+        return $array;
+    }
     while ($data = sql_fetch_row($result)) {
         $array[] = $data[0];
-    } return $array;
+    }
+    sql_free_result($result);
+    return $array;
 }
 if ($_GET['act'] == "part1" && $_POST['act'] == "part1") {
     if ($_GET['act'] != "part2" && $_POST['act'] != "part2") {
