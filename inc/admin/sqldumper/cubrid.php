@@ -13,14 +13,13 @@
 
     $FileInfo: cubrid.php - Last Update: 8/30/2024 SVN 1063 - Author: cooldude2k $
 */
-
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name == "cubrid.php" || $File3Name == "/cubrid.php") {
     require('index.php');
     exit();
 }
 
-if ($_SESSION['UserGroup'] == $Settings['GuestGroup'] || $GroupInfo['HasAdminCP'] == "no") {
+if (!isset($_SESSION['UserGroup']) || $_SESSION['UserGroup'] == $Settings['GuestGroup'] || !isset($GroupInfo['HasAdminCP']) || $GroupInfo['HasAdminCP'] == "no") {
     redirect("location", $rbasedir.url_maker($exfile['index'], $Settings['file_ext'], "act=view", $Settings['qstr'], $Settings['qsep'], $prexqstr['index'], $exqstr['index'], false));
     ob_clean();
     header("Content-Type: text/plain; charset=".$Settings['charset']);
@@ -28,7 +27,8 @@ if ($_SESSION['UserGroup'] == $Settings['GuestGroup'] || $GroupInfo['HasAdminCP'
     session_write_close();
     die();
 }
-if ($Settings['sqltype'] != "cubrid") {
+// BUGFIX: the guard only allowed "cubrid", locking out cubrid_prepare and pdo_cubrid.
+if ($Settings['sqltype'] != "cubrid" && $Settings['sqltype'] != "cubrid_prepare" && $Settings['sqltype'] != "pdo_cubrid") {
     redirect("location", $rbasedir.url_maker($exfile['index'], $Settings['file_ext'], "act=view", $Settings['qstr'], $Settings['qsep'], $prexqstr['index'], $exqstr['index'], false));
     ob_clean();
     header("Content-Type: text/plain; charset=".$Settings['charset']);
@@ -37,61 +37,174 @@ if ($Settings['sqltype'] != "cubrid") {
     die();
 }
 
-if (!isset($_GET['outtype'])) {
-    $_GET['outtype'] = "UTF-8";
-}
-header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-header("Cache-Control: private", false);
-header("Content-Description: File Transfer");
+/* ------------------------------------------------------------------
+   Shared dump helpers (identical in every dumper).
+   ------------------------------------------------------------------ */
+if (!function_exists('sqldump_quote_ident')) {
+    function sqldump_quote_ident($name)
+    {
+        return '"' . str_replace('"', '""', (string)$name) . '"';
+    }
 
-if (!isset($_GET['compress'])) {
-    $_GET['compress'] = "none";
-}
+    function sqldump_target_charset()
+    {
+        $out = isset($_GET['outtype']) ? $_GET['outtype'] : 'UTF-8';
+        // BUGFIX: latin1 used to be mapped to ISO-8859-15.
+        $map = array('UTF-8' => 'UTF-8', 'latin1' => 'ISO-8859-1', 'latin15' => 'ISO-8859-15');
+        return isset($map[$out]) ? $map[$out] : 'UTF-8';
+    }
 
-if ($_GET['compress'] == "gzip") {
-    $_GET['compress'] = "gzencode";
-}
+    // BUGFIX: replaces utf8_encode(), deprecated in PHP 8.2 and removed in 9.
+    // It also only ever handled ISO-8859-1 -> UTF-8, and was applied *after*
+    // escaping, which can corrupt multi-byte escape sequences.
+    function sqldump_convert_charset($value)
+    {
+        global $Settings;
+        if (!is_string($value) || $value === '') {
+            return $value;
+        }
+        $from = (isset($Settings['charset']) && $Settings['charset'] != '') ? $Settings['charset'] : 'UTF-8';
+        $to = sqldump_target_charset();
+        if (strcasecmp($from, $to) === 0) {
+            return $value;
+        }
+        if (function_exists('mb_convert_encoding')) {
+            $converted = @mb_convert_encoding($value, $to, $from);
+            return ($converted === false) ? $value : $converted;
+        }
+        if (function_exists('iconv')) {
+            $converted = @iconv($from, $to . '//TRANSLIT', $value);
+            return ($converted === false) ? $value : $converted;
+        }
+        return $value;
+    }
 
-if ($_GET['compress'] == "bzip" || $_GET['compress'] == "bzip2") {
-    $_GET['compress'] = "bzcompress";
-}
+    // Does the active driver's escape function already add surrounding quotes?
+    // PDO::quote() does; mysqli_real_escape_string() and friends do not.
+    // BUGFIX: the dumpers used to append their own quotes unconditionally, so
+    // every PDO-backed dump came out double-quoted ("'value'" -> "''value''").
+    function sqldump_escape_adds_quotes()
+    {
+        static $adds = null;
+        if ($adds === null) {
+            global $SQLStat;
+            $test = sql_escape_string('x', $SQLStat);
+            $adds = (is_string($test) && strlen($test) > 1 && $test[0] === "'" && substr($test, -1) === "'");
+        }
+        return $adds;
+    }
 
-if ($_GET['compress'] != "none" && $_GET['compress'] != "gzencode" &&
-   $_GET['compress'] != "gzcompress" && $_GET['compress'] != "gzdeflate" &&
-   $_GET['compress'] != "bzcompress") {
-    $_GET['compress'] = "none";
-}
+    // BUGFIX: NULL columns used to be written as '' instead of NULL, and the
+    // is_numeric() test emitted values like "0123" unquoted, losing the
+    // leading zero on restore. Strings are always quoted now; SQL engines
+    // coerce '123' into numeric columns without trouble.
+    function sqldump_quote_value($value)
+    {
+        global $SQLStat;
+        if ($value === null) {
+            return 'NULL';
+        }
+        if (is_bool($value)) {
+            return $value ? '1' : '0';
+        }
+        if (is_int($value) || is_float($value)) {
+            return (string)$value;
+        }
+        $escaped = sql_escape_string((string)$value, $SQLStat);
+        if (!is_string($escaped)) {
+            return "'" . str_replace("'", "''", (string)$value) . "'";
+        }
+        return sqldump_escape_adds_quotes() ? $escaped : "'" . $escaped . "'";
+    }
 
-if (!extension_loaded("zlib")) {
-    if ($_GET['compress'] == "gzencode" || $_GET['compress'] == "gzcompress" || $_GET['compress'] == "gzdeflate") {
-        $_GET['compress'] = "none";
+    // BUGFIX: the old loop escaped the *column name* and then used the escaped
+    // string as the array key ($trownew[$trowrname]), so every value lookup
+    // missed as soon as escaping changed the name at all -- which it always
+    // does under PDO.
+    function sqldump_insert_row($table, $row)
+    {
+        $names = array();
+        $values = array();
+        foreach ($row as $name => $value) {
+            if (is_int($name)) {
+                continue; // skip the numeric half of a BOTH-style fetch
+            }
+            $names[] = sqldump_quote_ident($name);
+            $values[] = sqldump_quote_value(sqldump_convert_charset($value));
+        }
+        if (count($names) === 0) {
+            return '';
+        }
+        return "INSERT INTO " . sqldump_quote_ident($table) . " (" . implode(", ", $names) . ") VALUES\n("
+            . implode(", ", $values) . ");\n";
+    }
+
+    function sqldump_compress_output($sqldump)
+    {
+        $level = isset($_GET['comlevel']) ? (int)$_GET['comlevel'] : -1;
+        switch ($_GET['compress']) {
+            case 'gzencode':
+                return gzencode($sqldump, $level);
+            case 'gzcompress':
+                return gzcompress($sqldump, $level);
+            case 'gzdeflate':
+                return gzdeflate($sqldump, $level);
+            case 'bzcompress':
+                return bzcompress($sqldump, $level);
+        }
+        return $sqldump;
     }
 }
 
-if (!extension_loaded("bz2")) {
+/* ---------------- output type / compression options ---------------- */
+if (!isset($_GET['outtype']) || !in_array($_GET['outtype'], array("UTF-8", "latin1", "latin15"), true)) {
+    $_GET['outtype'] = "UTF-8";
+}
+if (!isset($_GET['compress'])) {
+    $_GET['compress'] = "none";
+}
+if ($_GET['compress'] == "gzip") {
+    $_GET['compress'] = "gzencode";
+}
+if ($_GET['compress'] == "bzip" || $_GET['compress'] == "bzip2") {
+    $_GET['compress'] = "bzcompress";
+}
+if (!in_array($_GET['compress'], array("none", "gzencode", "gzcompress", "gzdeflate", "bzcompress"), true)) {
+    $_GET['compress'] = "none";
+}
+// BUGFIX: this test used && between three comparisons of the same value, so it
+// could never be true and an unsupported method was never downgraded.
+if (!extension_loaded("zlib") || !function_exists("gzencode")) {
+    if (in_array($_GET['compress'], array("gzencode", "gzcompress", "gzdeflate"), true)) {
+        $_GET['compress'] = "none";
+    }
+}
+if (!extension_loaded("bz2") || !function_exists("bzcompress")) {
     if ($_GET['compress'] == "bzcompress") {
         $_GET['compress'] = "none";
     }
 }
-
-// Connect to CUBRID database
-$conn = cubrid_connect("localhost", 33000, $Settings['sqldb'], "dba", "");
-if (!$conn) {
-    die("Connection failed: " . cubrid_error_msg());
+if (!isset($_GET['comlevel']) || !is_numeric($_GET['comlevel'])) {
+    $_GET['comlevel'] = -1;
+}
+$_GET['comlevel'] = (int)$_GET['comlevel'];
+if ($_GET['comlevel'] > 9 || $_GET['comlevel'] < -1) {
+    $_GET['comlevel'] = -1;
+}
+if ($_GET['compress'] == "bzcompress" && ($_GET['comlevel'] > 9 || $_GET['comlevel'] < 1)) {
+    $_GET['comlevel'] = 4;
 }
 
-$TableChCk = array("categories", "catpermissions", "events", "forums", "groups", "levels", "members", "mempermissions", "messenger", "permissions", "polls", "posts", 'ranks', "restrictedwords", "sessions", "smileys", "themes", "topics", "wordfilter");
+header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+header("Cache-Control: private", false);
+header("Content-Description: File Transfer");
 
-$TablePreFix = $Settings['sqltable'];
-$TableChCk = array_map(function ($table) use ($TablePreFix) {
-    return $TablePreFix . $table;
-}, $TableChCk);
-
-$fname = str_replace("_", "", $Settings['sqldb'])."_".str_replace("_", "", $Settings['sqltable']);
+$fname = null;
+if (isset($Settings['sqldb']) && $Settings['sqldb'] != "") {
+    $fname = str_replace("_", "", $Settings['sqldb'])."_";
+}
+$fname .= str_replace("_", "", $Settings['sqltable']);
 switch ($_GET['compress']) {
-    case 'none':
-        $fname .= ".sql";
-        break;
     case 'gzencode':
     case 'gzcompress':
     case 'gzdeflate':
@@ -100,65 +213,125 @@ switch ($_GET['compress']) {
     case 'bzcompress':
         $fname .= ".sql.bz2";
         break;
+    default:
+        $fname .= ".sql";
 }
 
-header("Content-Disposition: attachment; filename=".$fname);
-header("Content-Type: application/octet-stream");
-header("Content-Transfer-Encoding: binary");
-
-function getCreateTableSQL($conn, $tableName)
-{
-    $sql = "SHOW CREATE TABLE " . $tableName;
-    $result = cubrid_execute($conn, $sql);
-
-    if ($result) {
-        $row = cubrid_fetch_assoc($result);
-        cubrid_free_result($result);
-        return $row['Create Table'] ?? null;
-    } else {
-        return null;
-    }
-}
-
-$tablesResult = cubrid_execute($conn, "SHOW TABLES");
-$sqldump = "-- CUBRID SQL Dump\n\n";
-
-if ($tablesResult) {
-    while ($table = cubrid_fetch_assoc($tablesResult)) {
-        $tableName = $table['Name'];
-
-        // Only dump tables with the specified prefix
-        if (in_array($tableName, $TableChCk)) {
-            $createTableSQL = getCreateTableSQL($conn, $tableName);
-            $sqldump .= "-- Table structure for table `".$tableName."`\n";
-            $sqldump .= $createTableSQL . ";\n\n";
-
-            // Fetch and insert data for each table
-            $rows = cubrid_execute($conn, "SELECT * FROM " . $tableName);
-            if ($rows) {
-                $sqldump .= "-- Dumping data for table `".$tableName."`\n";
-                while ($row = cubrid_fetch_assoc($rows)) {
-                    $values = array_map(function ($val) use ($conn) { return "'" . cubrid_real_escape_string($val, $conn) . "'"; }, $row);
-                    $sqldump .= "INSERT INTO `".$tableName."` VALUES (" . implode(", ", $values) . ");\n";
-                }
-                cubrid_free_result($rows);
-            }
-            $sqldump .= "\n-- --------------------------------------------------------\n\n";
-        }
-    }
-    cubrid_free_result($tablesResult);
-}
-
-cubrid_disconnect($conn);
-
+// BUGFIX: the originals sent Content-Type twice (octet-stream, then text/plain
+// further down), so the download headers were overridden.
+header("Content-Disposition: attachment; filename=\"".$fname."\"");
 if ($_GET['compress'] == "none") {
-    echo $sqldump;
-} elseif ($_GET['compress'] == "gzencode") {
-    echo gzencode($sqldump, $_GET['comlevel']);
-} elseif ($_GET['compress'] == "gzcompress") {
-    echo gzcompress($sqldump, $_GET['comlevel']);
-} elseif ($_GET['compress'] == "gzdeflate") {
-    echo gzdeflate($sqldump, $_GET['comlevel']);
-} elseif ($_GET['compress'] == "bzcompress") {
-    echo bzcompress($sqldump, $_GET['comlevel']);
+    header("Content-Type: text/plain; charset=".sqldump_target_charset());
+} else {
+    header("Content-Type: application/octet-stream");
+    header("Content-Transfer-Encoding: binary");
 }
+
+$SQLDumper = (isset($AltSQLDumper) && $AltSQLDumper !== null) ? $AltSQLDumper : "SQL Dumper";
+$OrgNameOut = isset($OrgName) ? $OrgName : "iDB";
+$VerOut = isset($VerInfo['iDB_Ver_SVN']) ? $VerInfo['iDB_Ver_SVN'] : "";
+$HomeOut = isset($iDBHome) ? $iDBHome : "";
+$GenTime = (isset($usercurtime) && is_object($usercurtime))
+    ? $usercurtime->format('F d, Y \a\t h:i A')
+    : date('F d, Y \a\t h:i A');
+
+$TablePreFix = $Settings['sqltable'];
+if (!function_exists('add_prefix')) {
+    function add_prefix($tarray)
+    {
+        global $TablePreFix;
+        return $TablePreFix.$tarray;
+    }
+}
+$TableChCk = array("categories", "catpermissions", "events", "forums", "groups", "levels", "members", "mempermissions", "messenger", "permissions", "polls", "posts", "ranks", "restrictedwords", "sessions", "smileys", "themes", "topics", "wordfilter");
+$TableChCk = array_map("add_prefix", $TableChCk);
+
+
+/* ---------------------------- table list ---------------------------- */
+// BUGFIX: this file used to call cubrid_connect()/cubrid_execute() directly
+// with a hard-coded host, port 33000, user "dba" and an empty password,
+// ignoring $Settings entirely and opening a second connection on every dump.
+// It now goes through the same sql_* abstraction as the other dumpers, so it
+// works for cubrid, cubrid_prepare and pdo_cubrid alike.
+$result = sql_query("SHOW TABLES", $SQLStat);
+if (!$result) {
+    echo "DB Error, could not list tables\n";
+    echo 'CUBRID Error: ' . sql_error($SQLStat);
+    exit;
+}
+
+// BUGFIX: the old code read $table['Name']; CUBRID returns the list in a
+// column called "Tables_in_<dbname>", so the key never matched. Reading the
+// first column positionally works regardless of the database name.
+$TableNames = array();
+while ($row = sql_fetch_row($result)) {
+    if (isset($row[0]) && in_array($row[0], $TableChCk, true)) {
+        $TableNames[] = $row[0];
+    }
+}
+sql_free_result($result);
+
+/* --------------------------- dump header --------------------------- */
+$sqldump  = "-- ".$OrgNameOut." ".$SQLDumper."\n";
+$sqldump .= "-- version ".$VerOut."\n";
+$sqldump .= "-- ".$HomeOut."support/\n";
+$sqldump .= "--\n";
+$sqldump .= "-- Host: ".$Settings['sqlhost']."\n";
+$sqldump .= "-- Generation Time: ".$GenTime."\n";
+$sqldump .= "-- CUBRID Server version: ".sql_server_info($SQLStat)."\n";
+$sqldump .= "-- PHP Version: ".phpversion()."\n\n";
+$sqldump .= "--\n";
+$sqldump .= "-- Database: \"".$Settings['sqldb']."\"\n";
+$sqldump .= "--\n\n";
+$sqldump .= "-- --------------------------------------------------------\n\n";
+
+/* ------------------------------- dump ------------------------------- */
+$num = count($TableNames);
+$melanie_p = 0;
+while ($melanie_p < $num) {
+    $tableName = $TableNames[$melanie_p];
+
+    // BUGFIX: getCreateTableSQL() read $row['Create Table'], which is the
+    // MySQL column name. CUBRID labels it differently, so fetch positionally.
+    $tabstaz = sql_query("SHOW CREATE TABLE ".sqldump_quote_ident($tableName), $SQLStat);
+    $createRow = $tabstaz ? sql_fetch_row($tabstaz) : false;
+    if ($tabstaz) {
+        sql_free_result($tabstaz);
+    }
+    $createTable = (is_array($createRow) && isset($createRow[1])) ? $createRow[1] : null;
+
+    if ($createTable === null) {
+        ++$melanie_p;
+        continue;
+    }
+
+    $sqldump .= "--\n";
+    $sqldump .= "-- Table structure for table \"".$tableName."\"\n";
+    $sqldump .= "--\n\n";
+    $sqldump .= "DROP TABLE IF EXISTS ".sqldump_quote_ident($tableName).";\n";
+    $sqldump .= $createTable.";\n\n";
+
+    $sqldump .= "--\n";
+    $sqldump .= "-- Dumping data for table \"".$tableName."\"\n";
+    $sqldump .= "--\n\n";
+
+    // BUGFIX: the old GetAllRows() buffered every row of every table into
+    // memory before emitting anything. Stream the rows instead.
+    $tresult = sql_query("SELECT * FROM ".sqldump_quote_ident($tableName), $SQLStat);
+    if ($tresult !== false) {
+        while ($trow = sql_fetch_assoc($tresult)) {
+            $sqldump .= sqldump_insert_row($tableName, $trow);
+        }
+        sql_free_result($tresult);
+    }
+
+    $sqldump .= "\n";
+    if ($melanie_p < $num - 1) {
+        $sqldump .= "-- --------------------------------------------------------\n\n";
+    }
+    ++$melanie_p;
+}
+
+echo sqldump_compress_output($sqldump);
+
+fix_amp($Settings['use_gzip'], $GZipEncode['Type']);

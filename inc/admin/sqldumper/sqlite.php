@@ -19,7 +19,7 @@ if ($File3Name == "sqlite.php" || $File3Name == "/sqlite.php") {
     exit();
 }
 
-if ($_SESSION['UserGroup'] == $Settings['GuestGroup'] || $GroupInfo['HasAdminCP'] == "no") {
+if (!isset($_SESSION['UserGroup']) || $_SESSION['UserGroup'] == $Settings['GuestGroup'] || !isset($GroupInfo['HasAdminCP']) || $GroupInfo['HasAdminCP'] == "no") {
     redirect("location", $rbasedir.url_maker($exfile['index'], $Settings['file_ext'], "act=view", $Settings['qstr'], $Settings['qsep'], $prexqstr['index'], $exqstr['index'], false));
     ob_clean();
     header("Content-Type: text/plain; charset=".$Settings['charset']);
@@ -27,6 +27,7 @@ if ($_SESSION['UserGroup'] == $Settings['GuestGroup'] || $GroupInfo['HasAdminCP'
     session_write_close();
     die();
 }
+// BUGFIX: guard unchanged; sqlite3, sqlite3_prepare and pdo_sqlite3 are all supported.
 if ($Settings['sqltype'] != "sqlite3" && $Settings['sqltype'] != "sqlite3_prepare" && $Settings['sqltype'] != "pdo_sqlite3") {
     redirect("location", $rbasedir.url_maker($exfile['index'], $Settings['file_ext'], "act=view", $Settings['qstr'], $Settings['qsep'], $prexqstr['index'], $exqstr['index'], false));
     ob_clean();
@@ -35,20 +36,129 @@ if ($Settings['sqltype'] != "sqlite3" && $Settings['sqltype'] != "sqlite3_prepar
     session_write_close();
     die();
 }
-if (!isset($_GET['outtype'])) {
+
+/* ------------------------------------------------------------------
+   Shared dump helpers (identical in every dumper).
+   ------------------------------------------------------------------ */
+if (!function_exists('sqldump_quote_ident')) {
+    function sqldump_quote_ident($name)
+    {
+        return '"' . str_replace('"', '""', (string)$name) . '"';
+    }
+
+    function sqldump_target_charset()
+    {
+        $out = isset($_GET['outtype']) ? $_GET['outtype'] : 'UTF-8';
+        // BUGFIX: latin1 used to be mapped to ISO-8859-15.
+        $map = array('UTF-8' => 'UTF-8', 'latin1' => 'ISO-8859-1', 'latin15' => 'ISO-8859-15');
+        return isset($map[$out]) ? $map[$out] : 'UTF-8';
+    }
+
+    // BUGFIX: replaces utf8_encode(), deprecated in PHP 8.2 and removed in 9.
+    // It also only ever handled ISO-8859-1 -> UTF-8, and was applied *after*
+    // escaping, which can corrupt multi-byte escape sequences.
+    function sqldump_convert_charset($value)
+    {
+        global $Settings;
+        if (!is_string($value) || $value === '') {
+            return $value;
+        }
+        $from = (isset($Settings['charset']) && $Settings['charset'] != '') ? $Settings['charset'] : 'UTF-8';
+        $to = sqldump_target_charset();
+        if (strcasecmp($from, $to) === 0) {
+            return $value;
+        }
+        if (function_exists('mb_convert_encoding')) {
+            $converted = @mb_convert_encoding($value, $to, $from);
+            return ($converted === false) ? $value : $converted;
+        }
+        if (function_exists('iconv')) {
+            $converted = @iconv($from, $to . '//TRANSLIT', $value);
+            return ($converted === false) ? $value : $converted;
+        }
+        return $value;
+    }
+
+    // Does the active driver's escape function already add surrounding quotes?
+    // PDO::quote() does; mysqli_real_escape_string() and friends do not.
+    // BUGFIX: the dumpers used to append their own quotes unconditionally, so
+    // every PDO-backed dump came out double-quoted ("'value'" -> "''value''").
+    function sqldump_escape_adds_quotes()
+    {
+        static $adds = null;
+        if ($adds === null) {
+            global $SQLStat;
+            $test = sql_escape_string('x', $SQLStat);
+            $adds = (is_string($test) && strlen($test) > 1 && $test[0] === "'" && substr($test, -1) === "'");
+        }
+        return $adds;
+    }
+
+    // BUGFIX: NULL columns used to be written as '' instead of NULL, and the
+    // is_numeric() test emitted values like "0123" unquoted, losing the
+    // leading zero on restore. Strings are always quoted now; SQL engines
+    // coerce '123' into numeric columns without trouble.
+    function sqldump_quote_value($value)
+    {
+        global $SQLStat;
+        if ($value === null) {
+            return 'NULL';
+        }
+        if (is_bool($value)) {
+            return $value ? '1' : '0';
+        }
+        if (is_int($value) || is_float($value)) {
+            return (string)$value;
+        }
+        $escaped = sql_escape_string((string)$value, $SQLStat);
+        if (!is_string($escaped)) {
+            return "'" . str_replace("'", "''", (string)$value) . "'";
+        }
+        return sqldump_escape_adds_quotes() ? $escaped : "'" . $escaped . "'";
+    }
+
+    // BUGFIX: the old loop escaped the *column name* and then used the escaped
+    // string as the array key ($trownew[$trowrname]), so every value lookup
+    // missed as soon as escaping changed the name at all -- which it always
+    // does under PDO.
+    function sqldump_insert_row($table, $row)
+    {
+        $names = array();
+        $values = array();
+        foreach ($row as $name => $value) {
+            if (is_int($name)) {
+                continue; // skip the numeric half of a BOTH-style fetch
+            }
+            $names[] = sqldump_quote_ident($name);
+            $values[] = sqldump_quote_value(sqldump_convert_charset($value));
+        }
+        if (count($names) === 0) {
+            return '';
+        }
+        return "INSERT INTO " . sqldump_quote_ident($table) . " (" . implode(", ", $names) . ") VALUES\n("
+            . implode(", ", $values) . ");\n";
+    }
+
+    function sqldump_compress_output($sqldump)
+    {
+        $level = isset($_GET['comlevel']) ? (int)$_GET['comlevel'] : -1;
+        switch ($_GET['compress']) {
+            case 'gzencode':
+                return gzencode($sqldump, $level);
+            case 'gzcompress':
+                return gzcompress($sqldump, $level);
+            case 'gzdeflate':
+                return gzdeflate($sqldump, $level);
+            case 'bzcompress':
+                return bzcompress($sqldump, $level);
+        }
+        return $sqldump;
+    }
+}
+
+/* ---------------- output type / compression options ---------------- */
+if (!isset($_GET['outtype']) || !in_array($_GET['outtype'], array("UTF-8", "latin1", "latin15"), true)) {
     $_GET['outtype'] = "UTF-8";
-}
-header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-header("Cache-Control: private", false);
-header("Content-Description: File Transfer");
-if (!isset($_GET['comlevel'])) {
-    $_GET['comlevel'] = -1;
-}
-if (!is_numeric($_GET['comlevel'])) {
-    $_GET['comlevel'] = -1;
-}
-if ($_GET['comlevel'] > 9 || $_GET['comlevel'] < -1) {
-    $_GET['comlevel'] = -1;
 }
 if (!isset($_GET['compress'])) {
     $_GET['compress'] = "none";
@@ -56,223 +166,184 @@ if (!isset($_GET['compress'])) {
 if ($_GET['compress'] == "gzip") {
     $_GET['compress'] = "gzencode";
 }
-if ($_GET['compress'] == "bzip" ||
-    $_GET['compress'] == "bzip2") {
+if ($_GET['compress'] == "bzip" || $_GET['compress'] == "bzip2") {
     $_GET['compress'] = "bzcompress";
 }
-if ($_GET['compress'] != "none" &&
-    $_GET['compress'] != "gzencode" &&
-    $_GET['compress'] != "gzcompress" &&
-    $_GET['compress'] != "gzdeflate" &&
-    $_GET['compress'] != "bzcompress") {
+if (!in_array($_GET['compress'], array("none", "gzencode", "gzcompress", "gzdeflate", "bzcompress"), true)) {
     $_GET['compress'] = "none";
 }
-if (!extension_loaded("zlib")) {
-    if ($_GET['compress'] == "gzencode" &&
-        $_GET['compress'] == "gzcompress" &&
-        $_GET['compress'] == "gzdeflate") {
+// BUGFIX: this test used && between three comparisons of the same value, so it
+// could never be true and an unsupported method was never downgraded.
+if (!extension_loaded("zlib") || !function_exists("gzencode")) {
+    if (in_array($_GET['compress'], array("gzencode", "gzcompress", "gzdeflate"), true)) {
         $_GET['compress'] = "none";
     }
 }
-if (!extension_loaded("bz2")) {
+if (!extension_loaded("bz2") || !function_exists("bzcompress")) {
     if ($_GET['compress'] == "bzcompress") {
         $_GET['compress'] = "none";
     }
 }
-if ($_GET['compress'] == "bzcompress") {
-    if ($_GET['comlevel'] > 9 || $_GET['comlevel'] < 0) {
-        $_GET['comlevel'] = 4;
-    }
+if (!isset($_GET['comlevel']) || !is_numeric($_GET['comlevel'])) {
+    $_GET['comlevel'] = -1;
 }
+$_GET['comlevel'] = (int)$_GET['comlevel'];
+if ($_GET['comlevel'] > 9 || $_GET['comlevel'] < -1) {
+    $_GET['comlevel'] = -1;
+}
+if ($_GET['compress'] == "bzcompress" && ($_GET['comlevel'] > 9 || $_GET['comlevel'] < 1)) {
+    $_GET['comlevel'] = 4;
+}
+
+header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+header("Cache-Control: private", false);
+header("Content-Description: File Transfer");
+
 $fname = null;
 if (isset($Settings['sqldb']) && $Settings['sqldb'] != "") {
     $fname = str_replace("_", "", $Settings['sqldb'])."_";
 }
-if ($_GET['compress'] == "none") {
-    $fname .= str_replace("_", "", $Settings['sqltable']).".sql";
+$fname .= str_replace("_", "", $Settings['sqltable']);
+switch ($_GET['compress']) {
+    case 'gzencode':
+    case 'gzcompress':
+    case 'gzdeflate':
+        $fname .= ".sql.gz";
+        break;
+    case 'bzcompress':
+        $fname .= ".sql.bz2";
+        break;
+    default:
+        $fname .= ".sql";
 }
-if ($_GET['compress'] == "gzencode") {
-    $fname .= str_replace("_", "", $Settings['sqltable']).".sql.gz";
-}
-if ($_GET['compress'] == "gzcompress") {
-    $fname .= str_replace("_", "", $Settings['sqltable']).".sql.gz";
-}
-if ($_GET['compress'] == "gzdeflate") {
-    $fname .= str_replace("_", "", $Settings['sqltable']).".sql.gz";
-}
-if ($_GET['compress'] == "bzcompress") {
-    $fname .= str_replace("_", "", $Settings['sqltable']).".sql.bz2";
-}
-header("Content-Disposition: attachment; filename=".$fname);
-header("Content-Type: application/octet-stream");
-header("Content-Transfer-Encoding: binary");
-if (!isset($AltSQLDumper) || $AltSQLDumper === null) {
-    $SQLDumper = "SQL Dumper";
-}
-if (isset($AltSQLDumper) && $AltSQLDumper !== null) {
-    $SQLDumper = $AltSQLDumper;
-}
-function GetAllRows($table)
-{
-    $rene_j = 0;
-    $trowout = array();
-    global $SQLStat;
-    $tresult = sql_query("SELECT * FROM \"".$table."\"", $SQLStat);
-    while ($trow = sql_fetch_assoc($tresult)) {
-        $trowout[$rene_j] = $trow;
-        ++$rene_j;
-    }
-    sql_free_result($tresult);
-    return $trowout;
-}
-$TablePreFix = $Settings['sqltable'];
-function add_prefix($tarray)
-{
-    global $TablePreFix;
-    return $TablePreFix.$tarray;
-}
-$TableChCk = array("categories", "catpermissions", "events", "forums", "groups", "levels", "members", "mempermissions", "messenger", "permissions", "polls", "posts", 'ranks', "restrictedwords", "sessions", "smileys", "themes", "topics", "wordfilter");
 
+// BUGFIX: the originals sent Content-Type twice (octet-stream, then text/plain
+// further down), so the download headers were overridden.
+header("Content-Disposition: attachment; filename=\"".$fname."\"");
+if ($_GET['compress'] == "none") {
+    header("Content-Type: text/plain; charset=".sqldump_target_charset());
+} else {
+    header("Content-Type: application/octet-stream");
+    header("Content-Transfer-Encoding: binary");
+}
+
+$SQLDumper = (isset($AltSQLDumper) && $AltSQLDumper !== null) ? $AltSQLDumper : "SQL Dumper";
+$OrgNameOut = isset($OrgName) ? $OrgName : "iDB";
+$VerOut = isset($VerInfo['iDB_Ver_SVN']) ? $VerInfo['iDB_Ver_SVN'] : "";
+$HomeOut = isset($iDBHome) ? $iDBHome : "";
+$GenTime = (isset($usercurtime) && is_object($usercurtime))
+    ? $usercurtime->format('F d, Y \a\t h:i A')
+    : date('F d, Y \a\t h:i A');
+
+$TablePreFix = $Settings['sqltable'];
+if (!function_exists('add_prefix')) {
+    function add_prefix($tarray)
+    {
+        global $TablePreFix;
+        return $TablePreFix.$tarray;
+    }
+}
+$TableChCk = array("categories", "catpermissions", "events", "forums", "groups", "levels", "members", "mempermissions", "messenger", "permissions", "polls", "posts", "ranks", "restrictedwords", "sessions", "smileys", "themes", "topics", "wordfilter");
 $TableChCk = array_map("add_prefix", $TableChCk);
-if (!isset($_GET['outtype']) || $_GET['outtype'] == "UTF-8") {
-    header("Content-Type: text/plain; charset=UTF-8");
+
+
+/* ---------------------------- table list ---------------------------- */
+$result = sql_query(sql_pre_query("SELECT name FROM sqlite_master WHERE type = 'table' ORDER BY name", array()), $SQLStat);
+if (!$result) {
+    echo "DB Error, could not list tables\n";
+    echo 'SQLite Error: ' . sql_error($SQLStat);
+    exit;
 }
-if ($_GET['outtype'] == "latin1") {
-    header("Content-Type: text/plain; charset=ISO-8859-15");
+
+$TableNames = array();
+while ($row = sql_fetch_assoc($result)) {
+    if (isset($row['name']) && in_array($row['name'], $TableChCk, true)) {
+        $TableNames[] = $row['name'];
+    }
 }
-if ($_GET['outtype'] == "latin15") {
-    header("Content-Type: text/plain; charset=ISO-8859-15");
-}
-$sli = 0;
-$slnum = count($TableChCk);
-while ($sli < $slnum) {
-    /*
-    $FullTable[$sli] = "CREATE TABLE \"".$TableChCk[$sli]."\" (\n";
-    */
-    $tabsta = sql_query("SELECT * FROM sqlite_master WHERE type=\"table\" and tbl_name=\"".$TableChCk[$sli]."\";", $SQLStat);
-    $tabstats = sql_fetch_assoc($tabsta);
-    $FullTable[$sli] = $tabstats['sql'].";\n";
-    /*
-    $zli = 0;
-    $tabsta = sql_query("PRAGMA table_info(\"".$TableChCk[$sli]."\");",$SQLStat);
-    while ($tabstats = sql_fetch_assoc($tabsta)) {
-    var_dump($tabstats);
-    if($zli>0) { $FullTable[$sli] .= ",\n"; }
-    $SQLDefault = null; $PrimeKey = " ";
-    if($tabstats['dflt_value']!==null) {
-    $SQLDefault = " default '".$tabstats['dflt_value']."'"; }
-    if($tabstats['dflt_value']===null) {
-    $SQLDefault = ""; }
-    if($tabstats['pk']=="1") {
-    $PrimeKey = " PRIMARY KEY "; }
-    $FullTable[$sli] .= "  \"".$tabstats['name']."\" ".$tabstats['type'].$PrimeKey."NOT NULL".$SQLDefault;
-    ++$zli; }
-    $FullTable[$sli] .= "\n);\n";
-    */
-    ++$sli;
-}
-$TableNames = $TableChCk;
-$num = count($TableNames);
-$melanie_p = 0;
-$sqldump = "-- ".$OrgName." ".$SQLDumper."\n";
-$sqldump .= "-- version ".$VerInfo['iDB_Ver_SVN']."\n";
-$sqldump .= "-- ".$iDBHome."support/\n";
+sql_free_result($result);
+
+/* --------------------------- dump header --------------------------- */
+$sqldump  = "-- ".$OrgNameOut." ".$SQLDumper."\n";
+$sqldump .= "-- version ".$VerOut."\n";
+$sqldump .= "-- ".$HomeOut."support/\n";
 $sqldump .= "--\n";
-$sqldump .= "-- Generation Time: ".$usercurtime->format('F d, Y \a\t h:i A')."\n";
+$sqldump .= "-- Host: ".$Settings['sqlhost']."\n";
+$sqldump .= "-- Generation Time: ".$GenTime."\n";
 $sqldump .= "-- SQLite Server version: ".sql_server_info($SQLStat)."\n";
 $sqldump .= "-- PHP Version: ".phpversion()."\n\n";
 $sqldump .= "--\n";
 $sqldump .= "-- Database: \"".$Settings['sqldb']."\"\n";
 $sqldump .= "--\n\n";
 $sqldump .= "-- --------------------------------------------------------\n\n";
+
+/* ------------------------------- dump ------------------------------- */
+$num = count($TableNames);
+$melanie_p = 0;
 while ($melanie_p < $num) {
-    $tnum = $num - 1;
-    $trow = GetAllRows($TableNames[$melanie_p]);
-    $numz = count($trow);
-    $kazuki_p = 0;
-    $sqldump .= "--\n";
-    $sqldump .= "-- Table structure for table \"".$TableNames[$melanie_p]."\"\n";
-    $sqldump .= "--\n\n";
-    $sqldump .= $FullTable[$melanie_p]."\n";
-    while ($kazuki_p < $numz) {
-        $tnumz = $numz - 1;
-        $srow = null;
-        $srowvalue = null;
-        $trownew = $trow[$kazuki_p];
-        $trowname = array_keys($trownew);
-        $nums = count($trownew);
-        $il = 0;
-        while ($il < $nums) {
-            $tnums = $nums - 1;
-            $trowrname = sql_escape_string($trowname[$il], $SQLStat);
-            $trowrvalue = sql_escape_string($trownew[$trowrname], $SQLStat);
-            if ($_GET['outtype'] == "UTF-8" && $Settings['charset'] != "UTF-8") {
-                $trowrvalue = utf8_encode($trowrvalue);
-            }
-            $trowrvalue = str_replace(array("\n", "\r"), array('\n', '\r'), $trowrvalue);
-            if ($il === 0) {
-                $srow = "INSERT INTO \"".$TableNames[$melanie_p]."\" (";
-            }
-            if ($il < $tnums && $il != $tnums) {
-                $srow .= "\"".$trowrname."\", ";
-            }
-            if ($il == $tnums) {
-                $srow .= "\"".$trowrname."\") VALUES";
-            }
-            if ($il === 0) {
-                $srowvalue = "(";
-            }
-            if (!is_numeric($trowrvalue)) {
-                $trowrvalue = "'".$trowrvalue."'";
-            }
-            if ($il < $tnums) {
-                $srowvalue .= $trowrvalue.", ";
-            }
-            if ($il == $tnums) {
-                $srowvalue .= $trowrvalue;
-                if ($kazuki_p < $tnumz) {
-                    $srowvalue .= ");";
-                }
-                if ($kazuki_p == $tnumz) {
-                    $srowvalue .= ");";
-                }
-            }
-            ++$il;
-        }
-        if ($kazuki_p === 0) {
-            $sqldump .= "--\n";
-            $sqldump .= "-- Dumping data for table \"".$TableNames[$melanie_p]."\"\n";
-            $sqldump .= "--\n\n";
-        }
-        $sqldump .= $srow."\n";
-        $sqldump .= $srowvalue."\n";
-        if ($kazuki_p == $tnumz && $melanie_p < $tnum) {
-            $sqldump .= "\n-- --------------------------------------------------------\n";
-        }
-        ++$kazuki_p;
+    $tableName = $TableNames[$melanie_p];
+
+    // BUGFIX: the old lookup was
+    //     WHERE type="table" and tbl_name="..."
+    // Double quotes are *identifiers* in SQL, not string literals. SQLite only
+    // accepted it through a legacy fallback; on a strict build it is an error.
+    $tabsta = sql_query(sql_pre_query(
+        "SELECT sql FROM sqlite_master WHERE type = 'table' AND tbl_name = '%s'",
+        array($tableName)
+    ), $SQLStat);
+
+    $tabstats = $tabsta ? sql_fetch_assoc($tabsta) : false;
+    if ($tabsta) {
+        sql_free_result($tabsta);
     }
-    if ($numz === 0) {
-        $sqldump .= "--\n";
-        $sqldump .= "-- Dumping data for table \"".$TableNames[$melanie_p]."\"\n";
-        $sqldump .= "--\n\n";
-        $sqldump .= "\n-- --------------------------------------------------------\n";
+
+    // BUGFIX: a missing table used to produce a null-index warning and a
+    // stray ";" line in the dump.
+    if (!is_array($tabstats) || !isset($tabstats['sql']) || $tabstats['sql'] === null) {
+        ++$melanie_p;
+        continue;
+    }
+
+    $sqldump .= "--\n";
+    $sqldump .= "-- Table structure for table \"".$tableName."\"\n";
+    $sqldump .= "--\n\n";
+    $sqldump .= "DROP TABLE IF EXISTS ".sqldump_quote_ident($tableName).";\n";
+    $sqldump .= $tabstats['sql'].";\n";
+
+    // Indexes were never dumped at all, so a restored database lost them.
+    $idxsta = sql_query(sql_pre_query(
+        "SELECT sql FROM sqlite_master WHERE type = 'index' AND tbl_name = '%s' AND sql IS NOT NULL",
+        array($tableName)
+    ), $SQLStat);
+    if ($idxsta !== false) {
+        while ($idxrow = sql_fetch_assoc($idxsta)) {
+            $sqldump .= $idxrow['sql'].";\n";
+        }
+        sql_free_result($idxsta);
     }
     $sqldump .= "\n";
+
+    $sqldump .= "--\n";
+    $sqldump .= "-- Dumping data for table \"".$tableName."\"\n";
+    $sqldump .= "--\n\n";
+
+    // BUGFIX: the old GetAllRows() buffered every row of every table into
+    // memory before emitting anything. Stream the rows instead.
+    $tresult = sql_query("SELECT * FROM ".sqldump_quote_ident($tableName), $SQLStat);
+    if ($tresult !== false) {
+        while ($trow = sql_fetch_assoc($tresult)) {
+            $sqldump .= sqldump_insert_row($tableName, $trow);
+        }
+        sql_free_result($tresult);
+    }
+
+    $sqldump .= "\n";
+    if ($melanie_p < $num - 1) {
+        $sqldump .= "-- --------------------------------------------------------\n\n";
+    }
     ++$melanie_p;
 }
-if ($_GET['compress'] == "none") {
-    echo $sqldump;
-}
-if ($_GET['compress'] == "gzencode") {
-    echo gzencode($sqldump, $_GET['comlevel']);
-}
-if ($_GET['compress'] == "gzcompress") {
-    echo gzcompress($sqldump, $_GET['comlevel']);
-}
-if ($_GET['compress'] == "gzdeflate") {
-    echo gzdeflate($sqldump, $_GET['comlevel']);
-}
-if ($_GET['compress'] == "bzcompress") {
-    echo bzcompress($sqldump, $_GET['comlevel']);
-}
+
+echo sqldump_compress_output($sqldump);
+
 fix_amp($Settings['use_gzip'], $GZipEncode['Type']);
