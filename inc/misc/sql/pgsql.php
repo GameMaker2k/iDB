@@ -20,88 +20,148 @@ if ($File3Name == "pgsql.php" || $File3Name == "/pgsql.php") {
     exit();
 }
 
-// Execute a query
-if (!isset($NumPreQueriesArray['pgsql'])) {
-    $NumPreQueriesArray['pgsql'] = 0;
+if (!isset($GLOBALS['NumPreQueriesArray']['pgsql'])) {
+    $GLOBALS['NumPreQueriesArray']['pgsql'] = 0;
+}
+if (!isset($GLOBALS['NumQueriesArray']['pgsql'])) {
+    $GLOBALS['NumQueriesArray']['pgsql'] = 0;
+}
+
+// pg_connect() returns a resource before PHP 8.1 and a PgSql\Connection after.
+function pgsql_func_is_conn($conn)
+{
+    if (is_resource($conn)) {
+        return true;
+    }
+    return is_object($conn) && (get_class($conn) === 'PgSql\\Connection');
+}
+
+function pgsql_func_conn($link = null)
+{
+    if (pgsql_func_is_conn($link)) {
+        return $link;
+    }
+    if (isset($GLOBALS['SQLStat']) && pgsql_func_is_conn($GLOBALS['SQLStat'])) {
+        return $GLOBALS['SQLStat'];
+    }
+    return null;
+}
+
+function pgsql_func_is_result($result)
+{
+    if (is_resource($result)) {
+        return true;
+    }
+    return is_object($result) && (get_class($result) === 'PgSql\\Result');
 }
 
 // PostgreSQL Error handling functions
 function pgsql_func_error($link = null)
 {
-    global $SQLStat;
-    return isset($link) ? pg_last_error($link) : pg_last_error($SQLStat);
+    $connection = pgsql_func_conn($link);
+    return $connection ? pg_last_error($connection) : "No valid PostgreSQL connection.";
 }
 
+// PostgreSQL has no numeric error codes; the SQLSTATE is the closest match.
 function pgsql_func_errno($link = null)
 {
-    global $SQLStat;
-    return isset($link) ? pg_last_error($link) : pg_last_error($SQLStat);
+    $connection = pgsql_func_conn($link);
+    if (!$connection) {
+        return 0;
+    }
+    $message = pg_last_error($connection);
+    return ($message === '') ? 0 : $message;
 }
 
 function pgsql_func_errorno($link = null)
 {
-    global $SQLStat;
-    return isset($link) ? pg_last_error($link) : pg_last_error($SQLStat);
+    $connection = pgsql_func_conn($link);
+    if (!$connection) {
+        return "No valid PostgreSQL connection.";
+    }
+    $message = pg_last_error($connection);
+    return ($message === '') ? "" : $message;
 }
 
-// Execute a query
-if (!isset($NumQueriesArray['pgsql'])) {
-    $NumQueriesArray['pgsql'] = 0;
-}
-
-function pgsql_func_query($query, $link = null)
+function pgsql_func_query($query, $params_or_link = null, $maybe_link = null)
 {
-    global $NumQueriesArray, $SQLStat;
+    list($sql, $params, $link) = sql_resolve_query_args($query, $params_or_link, $maybe_link);
 
-    $result = isset($link) ? pg_query($link, $query) : pg_query($SQLStat, $query);
-
-    if ($result === false) {
-        output_error("SQL Error: " . pgsql_func_error(), E_USER_ERROR);
+    $connection = pgsql_func_conn($link);
+    if (!$connection) {
+        output_error("SQL Error: No valid PostgreSQL connection.", E_USER_ERROR);
         return false;
     }
 
-    if ($result !== false) {
-        ++$NumQueriesArray['pgsql'];
-        return $result;
+    if (!is_string($sql) || trim($sql) === '') {
+        output_error("SQL Error: Query is empty.", E_USER_ERROR);
+        return false;
     }
+
+    // If params came in from a prepared-style pre_query, run them through
+    // pg_query_params so this driver stays call-compatible.
+    if (!empty($params)) {
+        $result = @pg_query_params($connection, $sql, pgsql_func_normalize_params($params));
+    } else {
+        $result = @pg_query($connection, $sql);
+    }
+
+    if ($result === false) {
+        output_error("SQL Error: " . pgsql_func_error($connection), E_USER_ERROR);
+        return false;
+    }
+
+    ++$GLOBALS['NumQueriesArray']['pgsql'];
+    return $result;
+}
+
+// pg_* wants scalars/strings; booleans have to be sent as t/f.
+function pgsql_func_normalize_params($params)
+{
+    $out = array();
+    foreach ($params as $value) {
+        if (is_bool($value)) {
+            $out[] = $value ? 't' : 'f';
+        } elseif ($value === null) {
+            $out[] = null;
+        } else {
+            $out[] = (string)$value;
+        }
+    }
+    return $out;
 }
 
 // Fetch Number of Rows
 function pgsql_func_num_rows($result)
 {
-    $num = pg_num_rows($result);
-
-    if ($num === false) {
-        output_error("SQL Error: " . pgsql_func_error(), E_USER_ERROR);
+    if (!pgsql_func_is_result($result)) {
         return false;
     }
-
-    return $num;
+    $num = pg_num_rows($result);
+    return ($num === false) ? false : $num;
 }
 
 // Connect to PostgreSQL database
 function pgsql_func_connect_db($server, $username, $password, $database = null, $new_link = false)
 {
-    $pgport = "5432";
+    $pgport = 5432;
     $hostex = explode(":", $server);
-
-    if (isset($hostex[1]) && !is_numeric($hostex[1])) {
-        $hostex[1] = $pgport;
-    }
 
     if (isset($hostex[1])) {
         $server = $hostex[0];
-        $pgport = $hostex[1];
+        $pgport = is_numeric($hostex[1]) ? (int)$hostex[1] : $pgport;
     }
 
     $pgstring = $database === null
         ? "host=$server port=$pgport user=$username password=$password"
         : "host=$server port=$pgport dbname=$database user=$username password=$password";
 
-    $link = pg_connect($pgstring);
+    $link = $new_link
+        ? @pg_connect($pgstring, PGSQL_CONNECT_FORCE_NEW)
+        : @pg_connect($pgstring);
 
     if ($link === false) {
-        output_error("Not connected: " . pgsql_func_error(), E_USER_ERROR);
+        output_error("Not connected: " . (function_exists('pg_last_error') ? @pg_last_error() : "connection failed"), E_USER_ERROR);
         return false;
     }
 
@@ -110,186 +170,176 @@ function pgsql_func_connect_db($server, $username, $password, $database = null, 
 
 function pgsql_func_disconnect_db($link = null)
 {
-    return pg_close($link);
+    $connection = pgsql_func_conn($link);
+    return $connection ? pg_close($connection) : false;
 }
 
 // Query Results
+// BUGFIX: the field name used to be wrapped in literal double quotes before
+// being handed to pg_fetch_result(), which made every named lookup fail.
 function pgsql_func_result($result, $row, $field = 0)
 {
-    $value = is_numeric($field)
-        ? pg_fetch_result($result, $row, $field)
-        : pg_fetch_result($result, $row, "\"$field\"");
-
-    if ($value === false) {
-        output_error("SQL Error: " . pgsql_func_error(), E_USER_ERROR);
-        return false;
+    if (!pgsql_func_is_result($result)) {
+        return null;
     }
 
-    return $value;
+    $value = @pg_fetch_result($result, $row, $field);
+    return ($value === false) ? null : $value;
 }
 
 // Free Results
 function pgsql_func_free_result($result)
 {
-    $fresult = pg_free_result($result);
-
-    if ($fresult === false) {
-        output_error("SQL Error: " . pgsql_func_error(), E_USER_ERROR);
-        return false;
+    if (pgsql_func_is_result($result)) {
+        @pg_free_result($result);
     }
-
     return true;
 }
 
 // Fetch Results to Array
+// BUGFIX: the null default fell back to CUBRID_BOTH.
 function pgsql_func_fetch_array($result, $result_type = PGSQL_BOTH)
 {
-	if($result_type==NULL) {
-		$result_type = CUBRID_BOTH;
-	}
-    return pg_fetch_array($result, $result_type);
+    if ($result_type === null) {
+        $result_type = PGSQL_BOTH;
+    }
+    return pgsql_func_is_result($result) ? pg_fetch_array($result, null, $result_type) : false;
 }
 
-// Fetch Results to Associative Array
 function pgsql_func_fetch_assoc($result)
 {
-    return pg_fetch_assoc($result);
+    return pgsql_func_is_result($result) ? pg_fetch_assoc($result) : false;
 }
 
-// Fetch Row Results
 function pgsql_func_fetch_row($result)
 {
-    return pg_fetch_row($result);
+    return pgsql_func_is_result($result) ? pg_fetch_row($result) : false;
 }
 
 // Get Server Info
 function pgsql_func_server_info($link = null)
 {
-    $result = isset($link) ? pg_version($link) : pg_version();
-    return $result['server'];
+    $connection = pgsql_func_conn($link);
+    if (!$connection) {
+        return false;
+    }
+    $result = pg_version($connection);
+    return isset($result['server']) ? $result['server'] : false;
 }
 
 // Get Client Info
 function pgsql_func_client_info($link = null)
 {
-    $result = isset($link) ? pg_version($link) : pg_version();
-    return $result['client'];
+    $connection = pgsql_func_conn($link);
+    if (!$connection) {
+        return false;
+    }
+    $result = pg_version($connection);
+    return isset($result['client']) ? $result['client'] : false;
 }
 
 // Escape String
 function pgsql_func_escape_string($string, $link = null)
 {
-    global $SQLStat;
-    if (!isset($string)) {
+    if ($string === null) {
         return null;
     }
-    return isset($link) ? pg_escape_string($link, $string) : pg_escape_string($SQLStat, $string);
+    $connection = pgsql_func_conn($link);
+    return $connection
+        ? pg_escape_string($connection, (string)$string)
+        : pg_escape_string((string)$string);
 }
 
 // SafeSQL Lite Source Code by Cool Dude 2k
-// Make SQL Query's safe
-// SafeSQL Lite with additional SafeSQL features
-function pgsql_func_pre_query($query_string, $query_vars)
+function pgsql_func_pre_query($query_string, $query_vars = array())
 {
-    global $NumPreQueriesArray;
+    $result = sql_safe_pre_query($query_string, $query_vars, function ($value) {
+        return pgsql_func_escape_string($value);
+    });
 
-    // If no query variables are provided, initialize with a single element array containing null
-    if ($query_vars == null) {
-        $query_vars = array(null);
+    if ($result === false) {
+        return false;
     }
 
-    // Add support for multiple variable types like %c (comma-separated integers), %l (comma-separated strings), etc.
-    $query_array = array(
-        array("%i", "%I", "%F", "%S", "%c", "%l", "%q", "%n"),
-        array("%d", "%d", "%f", "%s", "%s", "%s", "%s", "%s")
-    );
-
-    // Replace custom placeholders with appropriate sprintf format specifiers
-    $query_string = str_replace($query_array[0], $query_array[1], $query_string);
-
-    // Handle magic quotes if enabled (for backward compatibility with older PHP versions)
-    if (get_magic_quotes_gpc()) {
-        $query_vars = array_map("stripslashes", $query_vars);
-    }
-
-    // Escape each variable using sqlite_func_escape_string
-    $query_vars = array_map("pgsql_func_escape_string", $query_vars);
-
-    // Prepare the variables for sprintf
-    $query_val = $query_vars;
-    $query_num = count($query_val);
-    $query_i = 0;
-
-    // Replace variables in reverse order to avoid string position issues
-    while ($query_i < $query_num) {
-        $query_val[$query_i + 1] = _convert_var($query_vars[$query_i], $query_string);
-        ++$query_i;
-    }
-
-    // Set the first element of the array to be the query string
-    $query_val[0] = $query_string;
-
-    ++$NumPreQueriesArray['pgsql'];
-
-    // Use sprintf to inject the variables into the query string safely
-    return call_user_func_array("sprintf", $query_val);
+    ++$GLOBALS['NumPreQueriesArray']['pgsql'];
+    return $result;
 }
 
 // Set Charset
 function pgsql_func_set_charset($charset, $link = null)
 {
-    return true;
+    $connection = pgsql_func_conn($link);
+    if (!$connection) {
+        return true;
+    }
+    return (pg_set_client_encoding($connection, $charset) === 0);
 }
 
 // Get next id for stuff
 function pgsql_func_get_next_id($tablepre, $table, $link = null)
 {
-    $getnextidq = pgsql_func_pre_query("SELECT currval('" . $tablepre . $table . "_id_seq');", array());
-    $getnextidr = isset($link) ? pgsql_func_query($getnextidq, $link) : pgsql_func_query($getnextidq);
-    return pgsql_func_result($getnextidr, 0);
+    $connection = pgsql_func_conn($link);
+    if (!$connection) {
+        return false;
+    }
+
+    $sequence = pg_escape_string($connection, $tablepre . $table . "_id_seq");
+    $result = pgsql_func_query("SELECT currval('" . $sequence . "') AS cnt;", $connection);
+    if ($result === false) {
+        return false;
+    }
+
+    $value = pgsql_func_result($result, 0, 0);
+    pgsql_func_free_result($result);
+    return $value;
 }
 
 // Get number of rows for table
+// BUGFIX: this used MySQL's "SHOW TABLE STATUS", which is not valid on
+// PostgreSQL, and had unreachable code after the return statement.
 function pgsql_func_get_num_rows($tablepre, $table, $link = null)
 {
-    $getnextidq = pgsql_func_pre_query("SHOW TABLE STATUS LIKE '" . $tablepre . $table . "'", array());
-    $getnextidr = isset($link) ? pgsql_func_query($getnextidq, $link) : pgsql_func_query($getnextidq);
-    $getnextid = pgsql_func_fetch_assoc($getnextidr);
-    return $getnextid['Rows'];
-    @pgsql_func_result($getnextidr);
-}
-
-
-// Fetch Number of Rows using COUNT in a single query (uses pgsql_func_fetch_assoc)
-function pgsql_func_count_rows($query, $link = null, $countname = "cnt")
-{
-    $result = pgsql_func_query($query, [], $link);  // Pass empty array for params
-    $row = pgsql_func_fetch_assoc($result);
-
-    if ($row === false) {
-        return false;  // Handle case if no row is returned
+    $connection = pgsql_func_conn($link);
+    if (!$connection) {
+        return false;
     }
 
-    // Use the dynamic column name provided by $countname
-    $count = isset($row[$countname]) ? $row[$countname] : 0;
+    $sql = "SELECT COUNT(*) AS cnt FROM " . sql_quote_identifier($tablepre . $table, 'double');
+    $result = pgsql_func_query($sql, $connection);
+    if ($result === false) {
+        return false;
+    }
 
-    @pgsql_func_free_result($result);
+    $row = pgsql_func_fetch_assoc($result);
+    pgsql_func_free_result($result);
+
+    return (is_array($row) && isset($row['cnt'])) ? (int)$row['cnt'] : 0;
+}
+
+function pgsql_func_count_rows($query, $link = null, $countname = "cnt")
+{
+    $result = pgsql_func_query($query, $link);
+    if ($result === false) {
+        return false;
+    }
+
+    $row = pgsql_func_fetch_assoc($result);
+    $count = (is_array($row) && isset($row[$countname])) ? $row[$countname] : 0;
+
+    pgsql_func_free_result($result);
     return $count;
 }
 
-// Alternative version using pgsql_func_fetch_assoc
 function pgsql_func_count_rows_alt($query, $link = null)
 {
-    $result = pgsql_func_query($query, [], $link);  // Pass empty array for params
-    $row = pgsql_func_fetch_assoc($result);
-
-    if ($row === false) {
-        return false;  // Handle case if no row is returned
+    $result = pgsql_func_query($query, $link);
+    if ($result === false) {
+        return false;
     }
 
-    // Return first column (assuming single column result like COUNT or similar)
-    $count = reset($row);
+    $row = pgsql_func_fetch_assoc($result);
+    $count = is_array($row) ? reset($row) : 0;
 
-    @pgsql_func_free_result($result);
+    pgsql_func_free_result($result);
     return $count;
 }

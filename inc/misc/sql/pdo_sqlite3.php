@@ -13,226 +13,218 @@
 
     $FileInfo: pdo_sqlite3.php - Last Update: 8/30/2024 SVN 1063 - Author: cooldude2k $
 */
+
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name == "pdo_sqlite3.php" || $File3Name == "/pdo_sqlite3.php") {
     @header('Location: index.php');
     exit();
 }
 
-// Execute a query
-if (!isset($NumPreQueriesArray['pdo_sqlite3'])) {
-    $NumPreQueriesArray['pdo_sqlite3'] = 0;
+if (!isset($GLOBALS['NumPreQueriesArray']['pdo_sqlite3'])) {
+    $GLOBALS['NumPreQueriesArray']['pdo_sqlite3'] = 0;
+}
+if (!isset($GLOBALS['NumQueriesArray']['pdo_sqlite3'])) {
+    $GLOBALS['NumQueriesArray']['pdo_sqlite3'] = 0;
+}
+
+function pdo_sqlite3_func_conn($link = null)
+{
+    if ($link instanceof PDO) {
+        return $link;
+    }
+    if (isset($GLOBALS['SQLStat']) && $GLOBALS['SQLStat'] instanceof PDO) {
+        return $GLOBALS['SQLStat'];
+    }
+    return null;
 }
 
 // SQLite Error handling functions
 function pdo_sqlite3_func_error($link = null)
 {
-    global $SQLStat;
-    $result = isset($link) ? $link->errorInfo() : $SQLStat->errorInfo();
-    return ($result == "") ? "" : $result;
+    $pdo = pdo_sqlite3_func_conn($link);
+    if (!$pdo) {
+        return "No valid PDO connection.";
+    }
+    $info = $pdo->errorInfo();
+    return isset($info[2]) ? (string)$info[2] : "";
 }
 
 function pdo_sqlite3_func_errno($link = null)
 {
-    global $SQLStat;
-    $result = isset($link) ? $link->errorCode() : $SQLStat->errorCode();
-    return ($result === 0) ? 0 : $result;
+    $pdo = pdo_sqlite3_func_conn($link);
+    if (!$pdo) {
+        return 0;
+    }
+    $code = $pdo->errorCode();
+    return ($code === null) ? 0 : $code;
 }
 
-// Execute a query
-if (!isset($NumQueriesArray['pdo_sqlite3'])) {
-    $NumQueriesArray['pdo_sqlite3'] = 0;
-}
-
-// Execute a query with PDO, with support for positional and named placeholders
-function pdo_sqlite3_func_query($query, $link = null)
+// Was missing entirely, so sql_errorno() threw for this driver.
+function pdo_sqlite3_func_errorno($link = null)
 {
-    global $NumQueriesArray, $SQLStat;
+    $pdo = pdo_sqlite3_func_conn($link);
+    if (!$pdo) {
+        return "No valid PDO connection.";
+    }
+    $code = pdo_sqlite3_func_errno($pdo);
+    $message = pdo_sqlite3_func_error($pdo);
+    return ($message === "" && ($code === 0 || $code === '00000')) ? "" : "$code: $message";
+}
 
-    // Use the appropriate PDO connection
-    $pdo = isset($link) && $link instanceof PDO ? $link : $SQLStat;
+function pdo_sqlite3_func_query($query, $params_or_link = null, $maybe_link = null)
+{
+    list($sql, $params, $link) = sql_resolve_query_args($query, $params_or_link, $maybe_link);
 
-    // If the query is an array (with query and parameters)
-    if (is_array($query)) {
-        list($query_string, $params) = $query;
-        $stmt = $pdo->prepare($query_string);
+    $pdo = pdo_sqlite3_func_conn($link);
+    if (!$pdo) {
+        output_error("SQL Error: No valid PDO connection.", E_USER_ERROR);
+        return false;
+    }
 
-        // Bind parameters dynamically based on their type
-        foreach ($params as $key => $value) {
-            $paramKey = is_int($key) ? $key + 1 : $key;  // For positional keys, shift index to start at 1
-            if (is_int($value)) {
-                $stmt->bindValue($paramKey, $value, PDO::PARAM_INT);
-            } elseif (is_bool($value)) {
-                $stmt->bindValue($paramKey, $value, PDO::PARAM_BOOL);
-            } elseif (is_null($value)) {
-                $stmt->bindValue($paramKey, $value, PDO::PARAM_NULL);
-            } else {
-                $stmt->bindValue($paramKey, $value, PDO::PARAM_STR);
+    if (!is_string($sql) || trim($sql) === '') {
+        output_error("SQL Error: Query is empty.", E_USER_ERROR);
+        return false;
+    }
+
+    try {
+        if (count($params) > 0) {
+            $stmt = $pdo->prepare($sql);
+            if ($stmt === false) {
+                output_error("SQL Error: " . pdo_sqlite3_func_error($pdo), E_USER_ERROR);
+                return false;
             }
+
+            foreach ($params as $key => $value) {
+                sql_pdo_bind_value($stmt, is_int($key) ? $key + 1 : $key, $value);
+            }
+
+            if ($stmt->execute() === false) {
+                output_error("SQL Error: " . pdo_sqlite3_func_error($pdo), E_USER_ERROR);
+                return false;
+            }
+
+            ++$GLOBALS['NumQueriesArray']['pdo_sqlite3'];
+            return $stmt;
         }
 
-        // Execute the prepared statement with bound parameters
-        $result = $stmt->execute();
-
-        // Error handling
+        $result = $pdo->query($sql);
         if ($result === false) {
-            $errorInfo = $pdo->errorInfo();
-            output_error("SQL Error: " . $errorInfo[2], E_USER_ERROR);
+            output_error("SQL Error: " . pdo_sqlite3_func_error($pdo), E_USER_ERROR);
             return false;
         }
 
-        ++$NumQueriesArray['pdo_sqlite3'];
-        return $stmt;  // Return the statement for SELECT or data-fetching queries
-    } else {
-        // For direct queries without parameters
-        $result = $pdo->query($query);
-
-        // Error handling
-        if ($result === false) {
-            $errorInfo = $pdo->errorInfo();
-            output_error("SQL Error: " . $errorInfo[2], E_USER_ERROR);
-            return false;
-        }
-
-        ++$NumQueriesArray['pdo_sqlite3'];
+        ++$GLOBALS['NumQueriesArray']['pdo_sqlite3'];
         return $result;
+    } catch (PDOException $e) {
+        output_error("SQL Error: " . $e->getMessage(), E_USER_ERROR);
+        return false;
     }
 }
 
 // Fetch number of rows for SELECT queries
 function pdo_sqlite3_func_num_rows($result)
 {
-    if ($result instanceof PDOStatement) {
-        $num = $result->rowCount();
-        return $num !== false ? $num : 0;
-    }
-    return false;
+    return sql_pdo_num_rows($result);
 }
 
 // Connect to SQLite3 database
+// BUGFIX: the old version never set ERRMODE (so the rest of the driver's error
+// handling was inconsistent with the other PDO drivers) and called
+// pdo_sqlite3_func_error() on a failure path where no connection existed.
 function pdo_sqlite3_func_connect_db($server, $username, $password, $database = null, $new_link = false)
 {
     if ($database === null) {
         return true;
     }
 
-    $link = new PDO("sqlite:" . $database);
-    if ($link === false) {
-        output_error("Not connected: " . pdo_sqlite3_func_error(), E_USER_ERROR);
+    try {
+        $link = new PDO("sqlite:" . $database, null, null, array(
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_PERSISTENT => (bool)$new_link
+        ));
+
+        $GLOBALS['SQLStat'] = $link;
+        return $link;
+    } catch (PDOException $e) {
+        output_error("Not connected: " . $e->getMessage(), E_USER_ERROR);
         return false;
     }
-
-    return $link;
 }
 
 function pdo_sqlite3_func_disconnect_db($link = null)
 {
-    global $SQLStat;
-    if (isset($link) && $link instanceof PDOStatement) {
-        return $link->closeCursor();
+    if ($link instanceof PDOStatement) {
+        return sql_pdo_free($link);
     }
 
-    if (!isset($link) && isset($SQLStat)) {
-        $SQLStat = null;
+    if ($link instanceof PDO) {
+        if (isset($GLOBALS['SQLStat']) && $GLOBALS['SQLStat'] === $link) {
+            $GLOBALS['SQLStat'] = null;
+        }
+        return true;
+    }
+
+    if ($link === null && isset($GLOBALS['SQLStat'])) {
+        $GLOBALS['SQLStat'] = null;
         return true;
     }
 
     return false;
 }
 
-// Query result fetching for both associative and numeric arrays
+// Query result fetching
 function pdo_sqlite3_func_result($result, $row = 0, $field = 0)
 {
-    if ($result instanceof PDOStatement) {
-        $rows = $result->fetchAll(PDO::FETCH_BOTH);
-
-        if (!isset($rows[$row])) {
-            return null;
-        }
-
-        return $rows[$row][$field] ?? null;
-    }
-    return false;
+    return sql_pdo_result($result, $row, $field);
 }
 
-// Fetch row results as an array
+function pdo_sqlite3_func_free_result($result)
+{
+    return sql_pdo_free($result);
+}
+
+// BUGFIX: the null default fell back to CUBRID_BOTH.
 function pdo_sqlite3_func_fetch_array($result, $result_type = PDO::FETCH_BOTH)
 {
-	if($result_type==NULL) {
-		$result_type = CUBRID_BOTH;
-	}
-    return $result->fetch($result_type);
+    if ($result_type === null) {
+        $result_type = PDO::FETCH_BOTH;
+    }
+    return sql_pdo_fetch($result, $result_type);
 }
 
-// Fetch row results as an associative array
 function pdo_sqlite3_func_fetch_assoc($result)
 {
-    return $result->fetch(PDO::FETCH_ASSOC);
+    return sql_pdo_fetch($result, PDO::FETCH_ASSOC);
 }
 
-// Fetch row results as a numeric array
 function pdo_sqlite3_func_fetch_row($result)
 {
-    return $result->fetch(PDO::FETCH_NUM);
+    return sql_pdo_fetch($result, PDO::FETCH_NUM);
 }
 
 // Escape a string for SQLite queries
 function pdo_sqlite3_func_escape_string($string, $link = null)
 {
-    global $SQLStat;
-    if (!isset($string)) {
+    if ($string === null) {
         return null;
     }
-
-    $pdo = isset($link) && $link instanceof PDO ? $link : $SQLStat;
-    $escaped_string = $pdo->quote($string);
-
-    if ($escaped_string === false) {
-        output_error("SQL Error: " . pdo_sqlite3_func_error(), E_USER_ERROR);
+    $pdo = pdo_sqlite3_func_conn($link);
+    if (!$pdo) {
         return false;
     }
-    return $escaped_string;
+    return $pdo->quote((string)$string);
 }
 
 // Pre-process query for SQLite with PDO support
-function pdo_sqlite3_func_pre_query($query_string, $query_vars = [])
+function pdo_sqlite3_func_pre_query($query_string, $query_vars = array())
 {
-    global $NumPreQueriesArray;
-
-    if ($query_vars === null || !is_array($query_vars)) {
-        $query_vars = [];
-    }
-
-    // Handle placeholders like %s, %d, %i, %f and convert them to PDO's positional placeholders (?)
-    $query_string = str_replace(["'%s'", '%d', '%i', '%f'], ['?', '?', '?', '?'], $query_string);
-
-    // If the query contains named placeholders (e.g., :name), we won't replace those
-    // Filter out null values in $query_vars array
-    $query_vars = array_filter($query_vars, function ($value) {
-        return $value !== null;
-    });
-
-    // Check for mismatch between placeholders and variables
-    $placeholder_count = substr_count($query_string, '?');
-    $params_count = count($query_vars);
-
-    if ($placeholder_count !== $params_count) {
-        output_error("SQL Placeholder Error: Mismatch between placeholders ($placeholder_count) and parameters ($params_count).", E_USER_ERROR);
+    $result = sql_prepared_pre_query($query_string, $query_vars, 'qmark');
+    if ($result === false) {
         return false;
     }
 
-    ++$NumPreQueriesArray['pdo_sqlite3'];
-
-    // Return the query string and variables for further execution
-    return [$query_string, $query_vars];
-}
-
-// Fetch the next ID from the database
-function pdo_sqlite3_func_get_next_id($tablepre, $table, $link = null)
-{
-    global $SQLStat;
-    $pdo = isset($link) && $link instanceof PDO ? $link : $SQLStat;
-    return $pdo->lastInsertId();
+    ++$GLOBALS['NumPreQueriesArray']['pdo_sqlite3'];
+    return $result;
 }
 
 // Set Charset (dummy function)
@@ -241,66 +233,80 @@ function pdo_sqlite3_func_set_charset($charset, $link = null)
     return true;
 }
 
-
-// Fetch Number of Rows using COUNT in a single query (uses pdo_sqlite3_func_fetch_assoc)
-function pdo_sqlite3_func_count_rows($query, $link = null, $countname = "cnt")
+// Fetch the next ID from the database
+function pdo_sqlite3_func_get_next_id($tablepre, $table, $link = null)
 {
-    $result = pdo_sqlite3_func_query($query, [], $link);  // Pass empty array for params
-    $row = pdo_sqlite3_func_fetch_assoc($result);
-
-    if ($row === false) {
-        return false;  // Handle case if no row is returned
-    }
-
-    // Use the dynamic column name provided by $countname
-    $count = isset($row[$countname]) ? $row[$countname] : 0;
-
-    @pdo_sqlite3_func_free_result($result);
-    return $count;
-}
-
-// Alternative version using pdo_sqlite3_func_fetch_assoc
-function pdo_sqlite3_func_count_rows_alt($query, $link = null)
-{
-    $result = pdo_sqlite3_func_query($query, [], $link);  // Pass empty array for params
-    $row = pdo_sqlite3_func_fetch_assoc($result);
-
-    if ($row === false) {
-        return false;  // Handle case if no row is returned
-    }
-
-    // Return first column (assuming single column result like COUNT or similar)
-    $count = reset($row);
-
-    @pdo_sqlite3_func_free_result($result);
-    return $count;
-}
-
-// Free Results
-function pdo_sqlite3_func_free_result($result)
-{
-    return true;
+    $pdo = pdo_sqlite3_func_conn($link);
+    return $pdo ? $pdo->lastInsertId() : false;
 }
 
 // Fetch number of rows from a table
 function pdo_sqlite3_func_get_num_rows($tablepre, $table, $link = null)
 {
-    $query = pdo_sqlite3_func_pre_query("SELECT COUNT(*) as cnt FROM " . $tablepre . $table);
-    $result = pdo_sqlite3_func_query($query, $link);
+    $sql = "SELECT COUNT(*) AS cnt FROM " . sql_quote_identifier($tablepre . $table, 'double');
+    $result = pdo_sqlite3_func_query($sql, $link);
+    if ($result === false) {
+        return false;
+    }
+
     $row = pdo_sqlite3_func_fetch_assoc($result);
-    return $row['cnt'] ?? 0;
+    pdo_sqlite3_func_free_result($result);
+
+    return (is_array($row) && isset($row['cnt'])) ? (int)$row['cnt'] : 0;
 }
 
-// Get Server Info for PDO SQLite3
+// Get Server Info
 function pdo_sqlite3_func_server_info($link = null)
 {
-    $result = $link->query('SELECT sqlite_version()')->fetch(PDO::FETCH_COLUMN);
-    return $result;
+    $pdo = pdo_sqlite3_func_conn($link);
+    if (!$pdo) {
+        return false;
+    }
+    try {
+        return $pdo->getAttribute(PDO::ATTR_SERVER_VERSION);
+    } catch (PDOException $e) {
+        return false;
+    }
 }
 
-// Get Client Info for PDO SQLite3
+// Get Client Info
 function pdo_sqlite3_func_client_info($link = null)
 {
-    $result = $link->query('SELECT sqlite_version()')->fetch(PDO::FETCH_COLUMN);
-    return $result;
+    $pdo = pdo_sqlite3_func_conn($link);
+    if (!$pdo) {
+        return false;
+    }
+    try {
+        return $pdo->getAttribute(PDO::ATTR_CLIENT_VERSION);
+    } catch (PDOException $e) {
+        return false;
+    }
+}
+
+function pdo_sqlite3_func_count_rows($query, $link = null, $countname = "cnt")
+{
+    $result = pdo_sqlite3_func_query($query, $link);
+    if ($result === false) {
+        return false;
+    }
+
+    $row = pdo_sqlite3_func_fetch_assoc($result);
+    $count = (is_array($row) && isset($row[$countname])) ? $row[$countname] : 0;
+
+    pdo_sqlite3_func_free_result($result);
+    return $count;
+}
+
+function pdo_sqlite3_func_count_rows_alt($query, $link = null)
+{
+    $result = pdo_sqlite3_func_query($query, $link);
+    if ($result === false) {
+        return false;
+    }
+
+    $row = pdo_sqlite3_func_fetch_assoc($result);
+    $count = is_array($row) ? reset($row) : 0;
+
+    pdo_sqlite3_func_free_result($result);
+    return $count;
 }

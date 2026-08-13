@@ -20,106 +20,81 @@ if ($File3Name == "mysqli_prepare.php" || $File3Name == "/mysqli_prepare.php") {
     exit();
 }
 
-// Execute a query
-if (!isset($NumPreQueriesArray['mysqli_prepare'])) {
-    $NumPreQueriesArray['mysqli_prepare'] = 0;
+if (!isset($GLOBALS['NumPreQueriesArray']['mysqli_prepare'])) {
+    $GLOBALS['NumPreQueriesArray']['mysqli_prepare'] = 0;
+}
+if (!isset($GLOBALS['NumQueriesArray']['mysqli_prepare'])) {
+    $GLOBALS['NumQueriesArray']['mysqli_prepare'] = 0;
+}
+
+function mysqli_prepare_func_conn($link = null)
+{
+    if ($link instanceof mysqli) {
+        return $link;
+    }
+    if (isset($GLOBALS['SQLStat']) && $GLOBALS['SQLStat'] instanceof mysqli) {
+        return $GLOBALS['SQLStat'];
+    }
+    return null;
 }
 
 // MySQLi Error handling functions
 function mysqli_prepare_func_error($link = null)
 {
-    global $SQLStat;
-    $connection = ($link instanceof mysqli ? $link : $SQLStat);
-    return $connection instanceof mysqli ? mysqli_error($connection) : false;
+    $connection = mysqli_prepare_func_conn($link);
+    return $connection ? mysqli_error($connection) : "No valid MySQLi connection.";
 }
 
 function mysqli_prepare_func_errno($link = null)
 {
-    global $SQLStat;
-    $connection = ($link instanceof mysqli ? $link : $SQLStat);
-    return $connection instanceof mysqli ? mysqli_errno($connection) : false;
+    $connection = mysqli_prepare_func_conn($link);
+    return $connection ? mysqli_errno($connection) : 0;
 }
 
 function mysqli_prepare_func_errorno($link = null)
 {
-    global $SQLStat;
-    $connection = ($link instanceof mysqli ? $link : $SQLStat);
-    $result = $connection instanceof mysqli ? mysqli_prepare_func_error($connection) : false;
-    $resultno = $connection instanceof mysqli ? mysqli_prepare_func_errno($connection) : false;
-
-    return ($result == "" && $resultno === 0) ? "" : "$resultno: $result";
+    $connection = mysqli_prepare_func_conn($link);
+    if (!$connection) {
+        return "No valid MySQLi connection.";
+    }
+    $result = mysqli_error($connection);
+    $resultno = mysqli_errno($connection);
+    return ($result == "" && (int)$resultno === 0) ? "" : "$resultno: $result";
 }
 
-// Execute a query using prepared statements
-if (!isset($NumQueriesArray['mysqli_prepare'])) {
-    $NumQueriesArray['mysqli_prepare'] = 0;
-}
-
+// Execute a query using prepared statements.
+// Returns a mysqli_result for statements that produce a result set, true for
+// everything else, so the fetch_* helpers behave exactly like the non-prepared
+// driver.
 function mysqli_prepare_func_query($query, $params_or_link = null, $maybe_link = null)
 {
-    global $NumQueriesArray, $SQLStat;
+    list($sql, $params, $link) = sql_resolve_query_args($query, $params_or_link, $maybe_link);
 
-    if (!isset($NumQueriesArray['mysqli_prepare'])) {
-        $NumQueriesArray['mysqli_prepare'] = 0;
-    }
-
-    // Detect call style
-    // Style A: func_query($query, $link)
-    // Style B: func_query($query, $params, $link)
-    $params = [];
-    $link = null;
-
-    if ($maybe_link !== null) {
-        // 3-arg style
-        $params = is_array($params_or_link) ? $params_or_link : [];
-        $link = $maybe_link;
-    } else {
-        // 2-arg style
-        if ($params_or_link instanceof mysqli) {
-            $link = $params_or_link;
-        } else {
-            // if someone passes params as 2nd arg without link
-            $params = is_array($params_or_link) ? $params_or_link : [];
-        }
-    }
-
-    $connection = ($link instanceof mysqli ? $link : $SQLStat);
-    if (!($connection instanceof mysqli)) {
-        output_error("SQL Error: No valid MySQLi connection in mysqli_prepare_func_query", E_USER_ERROR);
+    $connection = mysqli_prepare_func_conn($link);
+    if (!$connection) {
+        output_error("SQL Error: No valid MySQLi connection.", E_USER_ERROR);
         return false;
     }
 
-    // Support keyed format too: ['sql'=>..., 'params'=>...]
-    if (is_array($query) && isset($query['sql'])) {
-        $query = [$query['sql'], $query['params'] ?? []];
+    if (!is_string($sql) || trim($sql) === '') {
+        output_error("SQL Error: Query is empty.", E_USER_ERROR);
+        return false;
     }
 
-    // Direct query (string)
-    if (!is_array($query)) {
-        if (!is_string($query) || trim($query) === '') {
-            output_error("SQL Error: Query is empty", E_USER_ERROR);
-            return false;
-        }
+    if (function_exists('mysqli_report')) {
+        @mysqli_report(MYSQLI_REPORT_OFF);
+    }
 
-        $result = mysqli_query($connection, $query);
+    // No parameters: a plain query is cheaper and returns the same shape.
+    if (count($params) === 0 && strpos($sql, '?') === false) {
+        $result = mysqli_query($connection, $sql);
         if ($result === false) {
             output_error("SQL Error: " . mysqli_error($connection), E_USER_ERROR);
             return false;
         }
-
-        ++$NumQueriesArray['mysqli_prepare'];
+        ++$GLOBALS['NumQueriesArray']['mysqli_prepare'];
         return $result;
     }
-
-    // Prepared: [$sql, $params]
-    $sql = $query[0] ?? null;
-    $params = $query[1] ?? $params;
-
-    if (!is_string($sql) || trim($sql) === '') {
-        output_error("SQL Error: Query is empty", E_USER_ERROR);
-        return false;
-    }
-    if (!is_array($params)) $params = [];
 
     $stmt = mysqli_prepare($connection, $sql);
     if (!$stmt) {
@@ -129,28 +104,36 @@ function mysqli_prepare_func_query($query, $params_or_link = null, $maybe_link =
 
     if (count($params) > 0) {
         $types = '';
-        $bind = [];
+        $bind = array();
 
-        foreach ($params as $v) {
-            if (is_int($v))       $types .= 'i';
-            elseif (is_float($v)) $types .= 'd';
-            else                  $types .= 's';
-            $bind[] = $v;
+        foreach ($params as $value) {
+            if (is_int($value)) {
+                $types .= 'i';
+            } elseif (is_float($value)) {
+                $types .= 'd';
+            } elseif (is_bool($value)) {
+                $types .= 'i';
+                $value = $value ? 1 : 0;
+            } else {
+                $types .= 's';
+            }
+            $bind[] = $value;
         }
 
-        $refs = [];
-        foreach ($bind as $k => $v) {
-            $refs[$k] = &$bind[$k];
+        $refs = array();
+        foreach ($bind as $key => $value) {
+            $refs[$key] = &$bind[$key];
         }
         array_unshift($refs, $types);
 
-        if (!call_user_func_array([$stmt, 'bind_param'], $refs)) {
+        if (!call_user_func_array(array($stmt, 'bind_param'), $refs)) {
             $err = mysqli_stmt_error($stmt);
             mysqli_stmt_close($stmt);
             output_error("SQL Error (Bind): " . $err, E_USER_ERROR);
             return false;
         }
     }
+
     if (!mysqli_stmt_execute($stmt)) {
         $err = mysqli_stmt_error($stmt);
         mysqli_stmt_close($stmt);
@@ -158,71 +141,73 @@ function mysqli_prepare_func_query($query, $params_or_link = null, $maybe_link =
         return false;
     }
 
-    ++$NumQueriesArray['mysqli_prepare'];
+    // BUGFIX: the counter used to be incremented two or three times per query.
+    ++$GLOBALS['NumQueriesArray']['mysqli_prepare'];
 
+    if (mysqli_stmt_field_count($stmt) > 0) {
+        $res = function_exists('mysqli_stmt_get_result') ? mysqli_stmt_get_result($stmt) : false;
+        $err = mysqli_stmt_error($stmt);
+        mysqli_stmt_close($stmt);
 
-	// If this statement produces a result set (SELECT/SHOW/etc), return mysqli_result
-	if (mysqli_stmt_field_count($stmt) > 0) {
-		$res = mysqli_stmt_get_result($stmt);  // mysqlnd required (you have it)
-		$err = mysqli_stmt_error($stmt);
-		mysqli_stmt_close($stmt);              // close stmt ASAP
+        if ($res === false) {
+            output_error("SQL Error (Get Result): " . ($err !== '' ? $err : "mysqlnd is required for buffered results."), E_USER_ERROR);
+            return false;
+        }
 
-		if ($res === false) {
-			output_error("SQL Error (Get Result): " . $err, E_USER_ERROR);
-			return false;
-		}
+        return $res;
+    }
 
-		++$NumQueriesArray['mysqli_prepare'];
-		return $res; // <-- behaves like mysqli_query()
-	}
-
-	// Non-SELECT query: close stmt and return true
-	mysqli_stmt_close($stmt);
-	++$NumQueriesArray['mysqli_prepare'];
-	return $stmt;
+    // BUGFIX: this used to return the statement *after* closing it.
+    mysqli_stmt_close($stmt);
+    return true;
 }
 
 // Fetch number of rows for SELECT queries
-function mysqli_prepare_func_num_rows($stmt)
+function mysqli_prepare_func_num_rows($result)
 {
-    mysqli_stmt_store_result($stmt);  // Ensure results are stored for row counting
-    $num = mysqli_stmt_num_rows($stmt);
-
-    if ($num === false) {
-        output_error("SQL Error: " . mysqli_prepare_func_error(), E_USER_ERROR);
-        return false;
+    if ($result instanceof mysqli_result) {
+        return mysqli_num_rows($result);
     }
-
-    return $num;
+    if ($result instanceof mysqli_stmt) {
+        mysqli_stmt_store_result($result);
+        return mysqli_stmt_num_rows($result);
+    }
+    return false;
 }
 
 // Connect to MySQLi database
 function mysqli_prepare_func_connect_db($server, $username, $password, $database = null, $new_link = false)
 {
-    $myport = "3306";
+    $myport = 3306;
     $hostex = explode(":", $server);
-
-    if (isset($hostex[1]) && !is_numeric($hostex[1])) {
-        $hostex[1] = $myport;
-    }
 
     if (isset($hostex[1])) {
         $server = $hostex[0];
-        $myport = $hostex[1];
+        $myport = is_numeric($hostex[1]) ? (int)$hostex[1] : $myport;
     }
 
-    $link = $database === null ? mysqli_connect($server, $username, $password, null, $myport) : mysqli_connect($server, $username, $password, $database, $myport);
+    if (function_exists('mysqli_report')) {
+        @mysqli_report(MYSQLI_REPORT_OFF);
+    }
 
-    if ($link === false) {
+    try {
+        $link = ($database === null)
+            ? @mysqli_connect($server, $username, $password, null, $myport)
+            : @mysqli_connect($server, $username, $password, $database, $myport);
+    } catch (Exception $e) {
+        output_error("MySQLi Error: " . $e->getMessage(), E_USER_ERROR);
+        return false;
+    }
+
+    if (!$link) {
         output_error("MySQLi Error " . mysqli_connect_errno() . ": " . mysqli_connect_error(), E_USER_ERROR);
         return false;
     }
 
-    // Set MySQL session settings
-    $result = mysqli_prepare_func_query("SET SESSION SQL_MODE='ANSI,ANSI_QUOTES,TRADITIONAL,STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION,NO_AUTO_VALUE_ON_ZERO';", [], $link);
+    $result = mysqli_prepare_func_query("SET SESSION SQL_MODE='ANSI,ANSI_QUOTES,TRADITIONAL,STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION,NO_AUTO_VALUE_ON_ZERO';", array(), $link);
 
     if ($result === false) {
-        output_error("SQL Error: " . mysqli_prepare_func_error(), E_USER_ERROR);
+        output_error("SQL Error: " . mysqli_prepare_func_error($link), E_USER_ERROR);
         return false;
     }
 
@@ -231,77 +216,110 @@ function mysqli_prepare_func_connect_db($server, $username, $password, $database
 
 function mysqli_prepare_func_disconnect_db($link = null)
 {
-    return mysqli_close($link);
+    $connection = mysqli_prepare_func_conn($link);
+    return $connection ? mysqli_close($connection) : false;
 }
 
 // Query results fetching
 function mysqli_prepare_func_result($result, $row, $field = 0)
 {
-    // If we already have a normal mysqli_result, behave like mysqli_func_result
     if ($result instanceof mysqli_result) {
-        $check = mysqli_data_seek($result, $row);
-        if ($check === false) {
-            output_error("SQL Error: " . mysqli_prepare_func_error(), E_USER_ERROR);
-            return false;
+        if (mysqli_data_seek($result, $row) === false) {
+            return null;
         }
         $trow = mysqli_fetch_array($result, MYSQLI_BOTH);
-        return $trow[$field] ?? null;
+        if (!is_array($trow)) {
+            return null;
+        }
+        return isset($trow[$field]) ? $trow[$field] : null;
     }
 
-    // Otherwise, fall back to old stmt-based behavior
     if (!($result instanceof mysqli_stmt)) {
         return null;
     }
 
     mysqli_stmt_store_result($result);
     $meta = mysqli_stmt_result_metadata($result);
+    if (!$meta) {
+        return null;
+    }
     $fields = mysqli_fetch_fields($meta);
 
-    $bound = [];
-    $rowData = [];
+    $bound = array();
+    $rowData = array();
     foreach ($fields as $f) {
         $rowData[$f->name] = null;
         $bound[] = &$rowData[$f->name];
     }
-    call_user_func_array('mysqli_stmt_bind_result', array_merge([$result], $bound));
+    call_user_func_array('mysqli_stmt_bind_result', array_merge(array($result), $bound));
 
-    for ($i = 0; $i <= $row; $i++) {
-        if (!mysqli_stmt_fetch($result)) {
-            return null;
-        }
+    mysqli_stmt_data_seek($result, $row);
+    if (!mysqli_stmt_fetch($result)) {
+        return null;
     }
 
-    $name = $fields[$field]->name ?? null;
-    return $name !== null ? ($rowData[$name] ?? null) : null;
+    if (is_int($field)) {
+        $name = isset($fields[$field]) ? $fields[$field]->name : null;
+    } else {
+        $name = $field;
+    }
+
+    return ($name !== null && array_key_exists($name, $rowData)) ? $rowData[$name] : null;
 }
 
 // Free results
-function mysqli_prepare_func_free_result($result) {
-    return ($result instanceof mysqli_result) ? mysqli_free_result($result) : true;
+function mysqli_prepare_func_free_result($result)
+{
+    if ($result instanceof mysqli_result) {
+        mysqli_free_result($result);
+    } elseif ($result instanceof mysqli_stmt) {
+        mysqli_stmt_free_result($result);
+    }
+    return true;
 }
 
-// Fetch results like mysqli_fetch_array() for prepared statements
-function mysqli_prepare_func_fetch_array($result, $type = MYSQLI_BOTH) {
-    if ($type === null) $type = MYSQLI_BOTH;
-    return ($result instanceof mysqli_result) ? mysqli_fetch_array($result, $type) : null;
+// Fetch results
+function mysqli_prepare_func_fetch_array($result, $result_type = MYSQLI_BOTH)
+{
+    if ($result_type === null) {
+        $result_type = MYSQLI_BOTH;
+    }
+    return ($result instanceof mysqli_result) ? mysqli_fetch_array($result, $result_type) : false;
 }
 
+function mysqli_prepare_func_fetch_assoc($result)
+{
+    return ($result instanceof mysqli_result) ? mysqli_fetch_assoc($result) : false;
+}
+
+function mysqli_prepare_func_fetch_row($result)
+{
+    return ($result instanceof mysqli_result) ? mysqli_fetch_row($result) : false;
+}
+
+// Bound-result fetch, kept for callers that hold a mysqli_stmt directly.
 function mysqli_prepare_func_fetch_assoc_bind($stmt)
 {
-    static $cache = [];
+    static $cache = array();
 
-    $id = spl_object_id($stmt);
+    if (!($stmt instanceof mysqli_stmt)) {
+        return null;
+    }
+
+    $id = function_exists('spl_object_id') ? spl_object_id($stmt) : spl_object_hash($stmt);
 
     if (!isset($cache[$id])) {
         mysqli_stmt_store_result($stmt);
         $meta = mysqli_stmt_result_metadata($stmt);
-        if (!$meta) return null;
+        if (!$meta) {
+            return null;
+        }
 
         $fields = mysqli_fetch_fields($meta);
 
-        $row = [];
-        $bind = [];
-        $keys = [];
+        $row = array();
+        $bind = array();
+        $keys = array();
 
         foreach ($fields as $f) {
             $keys[] = $f->name;
@@ -309,40 +327,29 @@ function mysqli_prepare_func_fetch_assoc_bind($stmt)
             $bind[] = &$row[$f->name];
         }
 
-        call_user_func_array('mysqli_stmt_bind_result', array_merge([$stmt], $bind));
+        call_user_func_array('mysqli_stmt_bind_result', array_merge(array($stmt), $bind));
 
-        $cache[$id] = [$row, $keys];
+        // Keep the referenced row array alive in the cache.
+        $cache[$id] = array('row' => &$row, 'keys' => $keys);
     }
 
     if (!mysqli_stmt_fetch($stmt)) {
         return null;
     }
 
-    [$row, $keys] = $cache[$id];
-
-    // copy values (bound vars are by reference)
-    $out = [];
-    foreach ($keys as $k) $out[$k] = $row[$k];
+    $out = array();
+    foreach ($cache[$id]['keys'] as $key) {
+        $out[$key] = $cache[$id]['row'][$key];
+    }
 
     return $out;
-}
-
-// Fetch results as associative array
-function mysqli_prepare_func_fetch_assoc($result) {
-    return ($result instanceof mysqli_result) ? mysqli_fetch_assoc($result) : null;
-}
-
-// Fetch row results as a numeric array
-function mysqli_prepare_func_fetch_row($result) {
-    return ($result instanceof mysqli_result) ? mysqli_fetch_row($result) : null;
 }
 
 // Get Server Info
 function mysqli_prepare_func_server_info($link = null)
 {
-    global $SQLStat;
-    $connection = ($link instanceof mysqli ? $link : $SQLStat);
-    return $connection instanceof mysqli ? mysqli_get_server_info($connection) : false;
+    $connection = mysqli_prepare_func_conn($link);
+    return $connection ? mysqli_get_server_info($connection) : false;
 }
 
 // Get Client Info
@@ -354,94 +361,91 @@ function mysqli_prepare_func_client_info($link = null)
 // Escape string
 function mysqli_prepare_func_escape_string($string, $link = null)
 {
-    global $NumPreQueriesArray;
-
-    global $SQLStat;
-    if (!isset($string)) {
+    if ($string === null) {
         return null;
     }
-    $connection = ($link instanceof mysqli ? $link : $SQLStat);
-    return $connection instanceof mysqli ? mysqli_real_escape_string($connection, $string) : false;
-}
-
-// Execute a query
-if (!isset($NumPreQueriesArray['mysqli_prepare'])) {
-    $NumPreQueriesArray['mysqli_prepare'] = 0;
+    $connection = mysqli_prepare_func_conn($link);
+    if (!$connection) {
+        return false;
+    }
+    return mysqli_real_escape_string($connection, (string)$string);
 }
 
 // SafeSQL Lite with prepared statements and placeholders
-function mysqli_prepare_func_pre_query($query_string, $query_vars = [])
+function mysqli_prepare_func_pre_query($query_string, $query_vars = array())
 {
-    global $NumPreQueriesArray;
-
-    if (!isset($NumPreQueriesArray['mysqli_prepare'])) {
-        $NumPreQueriesArray['mysqli_prepare'] = 0;
-    }
-
-    if ($query_vars === null || !is_array($query_vars)) {
-        $query_vars = [];
-    }
-
-    // Convert SafeSQL placeholders to positional placeholders
-    // Keep behavior similar to your PDO pre_query
-    $query_string = str_replace(["'%s'", "%s", "%d", "%i", "%f"], ["?", "?", "?", "?", "?"], $query_string);
-
-    // IMPORTANT: Do not remove NULLs (prepared statements can bind NULL)
-    ++$NumPreQueriesArray['mysqli_prepare'];
-
-    return [$query_string, $query_vars];
-}
-
-// Set Charset using Prepared Statements
-function mysqli_prepare_func_set_charset($charset, $link = null)
-{
-    global $SQLStat;
-
-    // Determine which connection to use, link or global SQLStat
-    $connection = ($link instanceof mysqli ? $link : $SQLStat);
-
-    // Fallback if mysqli_set_charset function does not exist
-    if (function_exists('mysqli_set_charset') === false) {
-        // If mysqli_set_charset does not exist, fall back to manual SQL queries
-        $result = $connection instanceof mysqli ? mysqli_prepare_func_query("SET CHARACTER SET '%s'", [$charset], $connection) : false;
-
-        if ($result === false) {
-            output_error("SQL Error: " . mysqli_prepare_func_error($connection), E_USER_ERROR);
-            return false;
-        }
-
-        $result = $connection instanceof mysqli ? mysqli_prepare_func_query("SET NAMES '%s'", [$charset], $connection) : false;
-
-        if ($result === false) {
-            output_error("SQL Error: " . mysqli_prepare_func_error($connection), E_USER_ERROR);
-            return false;
-        }
-
-        return true;
-    }
-
-    // Use mysqli_set_charset if the function exists
-    $result = $connection instanceof mysqli ? mysqli_set_charset($connection, $charset) : false;
-
+    $result = sql_prepared_pre_query($query_string, $query_vars, 'qmark');
     if ($result === false) {
-        output_error("SQL Error: " . mysqli_prepare_func_error($connection), E_USER_ERROR);
         return false;
     }
 
+    ++$GLOBALS['NumPreQueriesArray']['mysqli_prepare'];
+    return $result;
+}
+
+// Set Charset
+function mysqli_prepare_func_set_charset($charset, $link = null)
+{
+    $connection = mysqli_prepare_func_conn($link);
+    if (!$connection) {
+        output_error("SQL Error: No valid MySQLi connection.", E_USER_ERROR);
+        return false;
+    }
+
+    if (function_exists('mysqli_set_charset')) {
+        if (mysqli_set_charset($connection, $charset) === false) {
+            output_error("SQL Error: " . mysqli_prepare_func_error($connection), E_USER_ERROR);
+            return false;
+        }
+        return true;
+    }
+
+    // SET NAMES/CHARACTER SET do not accept bound parameters, so escape inline.
+    $escaped = mysqli_real_escape_string($connection, $charset);
+    if (mysqli_prepare_func_query("SET CHARACTER SET '$escaped'", array(), $connection) === false) {
+        return false;
+    }
+    if (mysqli_prepare_func_query("SET NAMES '$escaped'", array(), $connection) === false) {
+        return false;
+    }
     return true;
 }
 
 // Get next ID after an insert
-function mysqli_prepare_func_get_next_id($link = null)
+// BUGFIX: the signature was ($link = null) but sql_get_next_id() always calls
+// it with ($tablepre, $table, $link), so $link received the table prefix.
+function mysqli_prepare_func_get_next_id($tablepre, $table, $link = null)
 {
-    return mysqli_insert_id($link);
+    $connection = mysqli_prepare_func_conn($link);
+    return $connection ? mysqli_insert_id($connection) : false;
 }
 
-// Fetch Number of Rows using COUNT in a single query (uses mysqli_prepare_func_fetch_assoc)
+// Get number of rows for table (was missing entirely)
+function mysqli_prepare_func_get_num_rows($tablepre, $table, $link = null)
+{
+    $connection = mysqli_prepare_func_conn($link);
+    if (!$connection) {
+        return false;
+    }
+
+    $sql = "SELECT COUNT(*) AS cnt FROM " . sql_quote_identifier($tablepre . $table, 'backtick');
+    $result = mysqli_prepare_func_query($sql, array(), $connection);
+    if ($result === false) {
+        return false;
+    }
+
+    $row = mysqli_prepare_func_fetch_assoc($result);
+    mysqli_prepare_func_free_result($result);
+
+    return (is_array($row) && isset($row['cnt'])) ? (int)$row['cnt'] : 0;
+}
+
 function mysqli_prepare_func_count_rows($query, $link = null, $countname = "cnt")
 {
     $result = mysqli_prepare_func_query($query, $link);
-    if ($result === false) return false;
+    if ($result === false) {
+        return false;
+    }
 
     $row = mysqli_prepare_func_fetch_assoc($result);
     $count = (is_array($row) && isset($row[$countname])) ? (int)$row[$countname] : 0;
@@ -450,19 +454,16 @@ function mysqli_prepare_func_count_rows($query, $link = null, $countname = "cnt"
     return $count;
 }
 
-// Alternative version using mysqli_prepare_func_fetch_assoc
 function mysqli_prepare_func_count_rows_alt($query, $link = null)
 {
-    $result = mysqli_prepare_func_query($query, [], $link);  // Pass empty array for params
-    $row = mysqli_prepare_func_fetch_assoc($result);
-
-    if ($row === false) {
-        return false;  // Handle case if no row is returned
+    $result = mysqli_prepare_func_query($query, $link);
+    if ($result === false) {
+        return false;
     }
 
-    // Return first column (assuming single column result like COUNT or similar)
-    $count = reset($row);
+    $row = mysqli_prepare_func_fetch_assoc($result);
+    $count = is_array($row) ? reset($row) : 0;
 
-    @mysqli_prepare_func_free_result($result);
+    mysqli_prepare_func_free_result($result);
     return $count;
 }

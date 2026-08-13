@@ -20,102 +20,151 @@ if ($File3Name == "sqlsrv_prepare.php" || $File3Name == "/sqlsrv_prepare.php") {
     exit();
 }
 
-// Execute a query
-if (!isset($NumPreQueriesArray['sqlsrv_prepare'])) {
-    $NumPreQueriesArray['sqlsrv_prepare'] = 0;
+if (!isset($GLOBALS['NumPreQueriesArray']['sqlsrv_prepare'])) {
+    $GLOBALS['NumPreQueriesArray']['sqlsrv_prepare'] = 0;
+}
+if (!isset($GLOBALS['NumQueriesArray']['sqlsrv_prepare'])) {
+    $GLOBALS['NumQueriesArray']['sqlsrv_prepare'] = 0;
+}
+// Keeps the bound parameter variables alive: sqlsrv_prepare() binds by
+// reference, so the array must not be garbage collected before execute().
+if (!isset($GLOBALS['SqlSrvParamKeep']) || !is_array($GLOBALS['SqlSrvParamKeep'])) {
+    $GLOBALS['SqlSrvParamKeep'] = array();
+}
+
+function sqlsrv_prepare_func_conn($link = null)
+{
+    if ($link !== null && $link !== false) {
+        return $link;
+    }
+    if (isset($GLOBALS['SQLStat']) && $GLOBALS['SQLStat']) {
+        return $GLOBALS['SQLStat'];
+    }
+    return null;
+}
+
+// Flatten sqlsrv_errors() into a readable string so this driver returns the
+// same kind of value as every other one.
+function sqlsrv_prepare_func_format_errors($errors)
+{
+    if (!is_array($errors) || count($errors) === 0) {
+        return "";
+    }
+
+    $parts = array();
+    foreach ($errors as $error) {
+        $code = isset($error['code']) ? $error['code'] : '0';
+        $message = isset($error['message']) ? $error['message'] : '';
+        $parts[] = $code . ": " . $message;
+    }
+    return implode(" | ", $parts);
 }
 
 // SQLSRV Error handling functions
-// SQLSRV Error handling functions
 function sqlsrv_prepare_func_error($link = null)
 {
-    return sqlsrv_errors(SQLSRV_ERR_ERRORS);
+    return sqlsrv_prepare_func_format_errors(sqlsrv_errors(SQLSRV_ERR_ERRORS));
+}
+
+// Was missing entirely, so sql_errno() threw for this driver.
+function sqlsrv_prepare_func_errno($link = null)
+{
+    $errors = sqlsrv_errors(SQLSRV_ERR_ERRORS);
+    if (!is_array($errors) || count($errors) === 0) {
+        return 0;
+    }
+    return isset($errors[0]['code']) ? $errors[0]['code'] : 0;
 }
 
 function sqlsrv_prepare_func_errorno($link = null)
 {
-    return sqlsrv_errors(SQLSRV_ERR_ERRORS); // SQLSRV does not use separate error numbers.
+    return sqlsrv_prepare_func_error($link);
 }
 
 function sqlsrv_prepare_func_errorno_full($link = null)
 {
-    $error = sqlsrv_prepare_func_error($link);
-    return $error ? json_encode($error) : "";
+    $errors = sqlsrv_errors(SQLSRV_ERR_ERRORS);
+    return $errors ? json_encode($errors) : "";
 }
 
-// Execute a query using prepared statements
-if (!isset($NumQueriesArray['sqlsrv_prepare'])) {
-    $NumQueriesArray['sqlsrv_prepare'] = 0;
-}
-
-function sqlsrv_prepare_func_query($query, $params = [], $link = null)
+// Execute a query using prepared statements.
+//
+// BUGFIX: the old version called sqlsrv_prepare() twice (leaking the first
+// statement) and built the typed parameter array *after* the first prepare.
+// It also never requested a scrollable cursor, so sqlsrv_num_rows() and
+// row-addressed result() could not work.
+function sqlsrv_prepare_func_query($query, $params_or_link = null, $maybe_link = null)
 {
-    global $NumQueriesArray, $SQLStat;
+    list($sql, $params, $link) = sql_resolve_query_args($query, $params_or_link, $maybe_link);
 
-    // Check if $link is null, if so set to $SQLStat
-    $link = $link ?? $SQLStat;
-
-    // If the query is provided as an array (query string and parameters)
-    if (is_array($query)) {
-        list($query_string, $params) = $query;
-    } else {
-        $query_string = $query;
-    }
-
-    // Validate the connection
-    if (!$link) {
+    $connection = sqlsrv_prepare_func_conn($link);
+    if (!$connection) {
         output_error("SQL Error: Invalid SQLSRV connection.", E_USER_ERROR);
         return false;
     }
 
-    // Prepare the statement
-    $stmt = sqlsrv_prepare($link, $query_string, $params);
+    if (!is_string($sql) || trim($sql) === '') {
+        output_error("SQL Error: Query is empty.", E_USER_ERROR);
+        return false;
+    }
+
+    // Build the typed parameter array first, keeping references alive.
+    $bind = array();
+    $values = array();
+    foreach ($params as $key => $value) {
+        $values[$key] = $value;
+        if (is_int($value)) {
+            $bind[] = array(&$values[$key], SQLSRV_PARAM_IN, null, SQLSRV_SQLTYPE_INT);
+        } elseif (is_float($value)) {
+            $bind[] = array(&$values[$key], SQLSRV_PARAM_IN, null, SQLSRV_SQLTYPE_FLOAT);
+        } elseif (is_bool($value)) {
+            $values[$key] = $value ? 1 : 0;
+            $bind[] = array(&$values[$key], SQLSRV_PARAM_IN, null, SQLSRV_SQLTYPE_INT);
+        } elseif (is_null($value)) {
+            $bind[] = array(&$values[$key], SQLSRV_PARAM_IN, null, SQLSRV_SQLTYPE_VARCHAR('max'));
+        } else {
+            $values[$key] = (string)$value;
+            $bind[] = array(&$values[$key], SQLSRV_PARAM_IN, null, SQLSRV_SQLTYPE_VARCHAR('max'));
+        }
+    }
+
+    // A static cursor lets sqlsrv_num_rows() and absolute row seeks work.
+    $options = array();
+    if (preg_match('/^\s*(\(|SELECT|WITH|SHOW|EXEC)/i', $sql)) {
+        $options["Scrollable"] = SQLSRV_CURSOR_STATIC;
+    }
+
+    $stmt = sqlsrv_prepare($connection, $sql, $bind, $options);
     if (!$stmt) {
-        output_error("SQL Error (Prepare): " . print_r(sqlsrv_prepare_func_error($link), true), E_USER_ERROR);
+        output_error("SQL Error (Prepare): " . sqlsrv_prepare_func_error($connection), E_USER_ERROR);
         return false;
     }
 
-    // Bind parameters dynamically, if parameters are provided
-    if (!empty($params)) {
-        foreach ($params as $key => $value) {
-            if (is_int($value)) {
-                $params[$key] = [$value, SQLSRV_PARAM_IN, null, SQLSRV_SQLTYPE_INT];
-            } elseif (is_float($value)) {
-                $params[$key] = [$value, SQLSRV_PARAM_IN, null, SQLSRV_SQLTYPE_FLOAT];
-            } elseif (is_null($value)) {
-                $params[$key] = [null, SQLSRV_PARAM_IN, null, SQLSRV_SQLTYPE_NULL];
-            } else {
-                $params[$key] = [$value, SQLSRV_PARAM_IN, null, SQLSRV_SQLTYPE_VARCHAR('max')];
-            }
-        }
-
-        // Prepare the statement again with bound parameters
-        $stmt = sqlsrv_prepare($link, $query_string, $params);
-        if (!$stmt) {
-            output_error("SQL Error (Prepare with Params): " . print_r(sqlsrv_prepare_func_error($link), true), E_USER_ERROR);
-            return false;
-        }
-    }
-
-    // Execute the prepared statement
     if (!sqlsrv_execute($stmt)) {
-        output_error("SQL Error (Execution): " . print_r(sqlsrv_prepare_func_error($link), true), E_USER_ERROR);
+        output_error("SQL Error (Execution): " . sqlsrv_prepare_func_error($connection), E_USER_ERROR);
+        sqlsrv_free_stmt($stmt);
         return false;
     }
 
-    // Increment the query counter
-    ++$NumQueriesArray['sqlsrv_prepare'];
+    // Hold the bound values until the statement is freed.
+    $GLOBALS['SqlSrvParamKeep'][(string)(int)$stmt] = $values;
 
-    return $stmt;  // Return the prepared statement object, without freeing it immediately
+    ++$GLOBALS['NumQueriesArray']['sqlsrv_prepare'];
+
+    return $stmt;
 }
 
 // Fetch number of rows for SELECT queries
 function sqlsrv_prepare_func_num_rows($stmt)
 {
-    $num = sqlsrv_num_rows($stmt);
+    if (!$stmt) {
+        return false;
+    }
+
+    $num = @sqlsrv_num_rows($stmt);
 
     if ($num === false) {
-        output_error("SQL Error: " . print_r(sqlsrv_prepare_func_error(), true), E_USER_ERROR);
+        output_error("SQL Error: " . sqlsrv_prepare_func_error(), E_USER_ERROR);
         return false;
     }
 
@@ -123,150 +172,201 @@ function sqlsrv_prepare_func_num_rows($stmt)
 }
 
 // Connect to SQL Server database using sqlsrv
-function sqlsrv_prepare_func_connect_db($server, $username = null, $password = null, $database = null)
+function sqlsrv_prepare_func_connect_db($server, $username = null, $password = null, $database = null, $new_link = false)
 {
-    // Set up default connection options
-    $connectionInfo = [
+    $connectionInfo = array(
         "CharacterSet" => "UTF-8",
         "TrustServerCertificate" => true
-    ];
+    );
 
-    // If username and password are provided, use SQL Server Authentication
-    if (!empty($username) && !empty($password)) {
+    if (!empty($username)) {
         $connectionInfo["UID"] = $username;
         $connectionInfo["PWD"] = $password;
     }
 
-    // If a database is specified, add it to the connection options
     if ($database !== null) {
         $connectionInfo["Database"] = $database;
     }
 
-    // Establish the connection
+    if ($new_link) {
+        $connectionInfo["ConnectionPooling"] = 0;
+    }
+
     $link = sqlsrv_connect($server, $connectionInfo);
 
     if ($link === false) {
-        output_error("SQLSRV Error: " . print_r(sqlsrv_errors(), true), E_USER_ERROR);
+        output_error("SQLSRV Error: " . sqlsrv_prepare_func_format_errors(sqlsrv_errors()), E_USER_ERROR);
         return false;
     }
 
-    return $link;  // Return the link resource
+    return $link;
 }
 
 function sqlsrv_prepare_func_disconnect_db($link = null)
 {
-    return sqlsrv_close($link);
+    $connection = sqlsrv_prepare_func_conn($link);
+    return $connection ? sqlsrv_close($connection) : false;
 }
 
 // Query results fetching
+// BUGFIX: the old version drained the whole statement into an array on every
+// call, so the second call always returned null.
 function sqlsrv_prepare_func_result($stmt, $row, $field = 0)
 {
-    $data = [];
-    while ($result = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_NUMERIC)) {
-        $data[] = $result;
+    if (!$stmt) {
+        return null;
     }
 
-    return $data[$row][$field] ?? null;
+    $data = @sqlsrv_fetch_array($stmt, SQLSRV_FETCH_BOTH, SQLSRV_SCROLL_ABSOLUTE, $row);
+
+    if (!is_array($data)) {
+        return null;
+    }
+
+    return isset($data[$field]) ? $data[$field] : null;
 }
 
 // Free results
 function sqlsrv_prepare_func_free_result($stmt)
 {
+    if (!$stmt) {
+        return true;
+    }
+    unset($GLOBALS['SqlSrvParamKeep'][(string)(int)$stmt]);
     return sqlsrv_free_stmt($stmt);
 }
 
-// Fetch results as associative array
+// Fetch results (fetch_array was missing entirely)
+function sqlsrv_prepare_func_fetch_array($stmt, $result_type = SQLSRV_FETCH_BOTH)
+{
+    if ($result_type === null) {
+        $result_type = SQLSRV_FETCH_BOTH;
+    }
+    return $stmt ? sqlsrv_fetch_array($stmt, $result_type) : false;
+}
+
 function sqlsrv_prepare_func_fetch_assoc($stmt)
 {
-    return sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
+    return $stmt ? sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC) : false;
 }
 
 function sqlsrv_prepare_func_fetch_row($stmt)
 {
-    return sqlsrv_fetch_array($stmt, SQLSRV_FETCH_NUMERIC);
+    return $stmt ? sqlsrv_fetch_array($stmt, SQLSRV_FETCH_NUMERIC) : false;
 }
 
-// Escape string - SQLSRV uses parameterized queries, so this is not needed.
+// Get Server Info (was missing entirely)
+function sqlsrv_prepare_func_server_info($link = null)
+{
+    $connection = sqlsrv_prepare_func_conn($link);
+    if (!$connection) {
+        return false;
+    }
+    $info = sqlsrv_server_info($connection);
+    return isset($info['SQLServerVersion']) ? $info['SQLServerVersion'] : false;
+}
+
+// Get Client Info (was missing entirely)
+function sqlsrv_prepare_func_client_info($link = null)
+{
+    $info = sqlsrv_client_info(sqlsrv_prepare_func_conn($link));
+    return isset($info['DriverVer']) ? $info['DriverVer'] : false;
+}
+
+// Escape string - SQLSRV uses parameterized queries.
 function sqlsrv_prepare_func_escape_string($string, $link = null)
 {
-    return $string; // SQLSRV does not have a string escape function; use parameterized queries instead.
+    if ($string === null) {
+        return null;
+    }
+    // There is no sqlsrv escape function; doubling quotes is the safe minimum
+    // for the rare inline case. Prefer bound parameters.
+    return str_replace("'", "''", (string)$string);
 }
 
 // Pre-process Query for SQLSRV
-function sqlsrv_prepare_func_pre_query($query_string, $query_vars = [])
+function sqlsrv_prepare_func_pre_query($query_string, $query_vars = array())
 {
-    global $NumPreQueriesArray;
-
-    if ($query_vars === null || !is_array($query_vars)) {
-        $query_vars = [];
-    }
-
-    // Replace placeholders like '%s', '%d', '%i', '%f' with positional placeholders '?'
-    $query_string = str_replace(["'%s'", '%d', '%i', '%f'], ['?', '?', '?', '?'], $query_string);
-
-    // Filter out null values from the query_vars array
-    $query_vars = array_filter($query_vars, function ($value) {
-        return $value !== null;
-    });
-
-    // Check for mismatch between placeholders and variables
-    $placeholder_count = substr_count($query_string, '?');
-    $params_count = count($query_vars);
-
-    if ($placeholder_count !== $params_count) {
-        output_error("SQL Placeholder Error: Mismatch between placeholders ($placeholder_count) and parameters ($params_count).", E_USER_ERROR);
+    $result = sql_prepared_pre_query($query_string, $query_vars, 'qmark');
+    if ($result === false) {
         return false;
     }
 
-    ++$NumPreQueriesArray['sqlsrv_prepare'];
-
-    return [$query_string, $query_vars];
+    ++$GLOBALS['NumPreQueriesArray']['sqlsrv_prepare'];
+    return $result;
 }
 
-// Set Charset
+// Set Charset (set in the connection string for SQLSRV)
 function sqlsrv_prepare_func_set_charset($charset, $link = null)
 {
-    // Charset is set in the connection string in SQLSRV; this function is a placeholder.
     return true;
 }
 
 // Get next ID after an insert
-function sqlsrv_prepare_func_get_next_id($link = null)
+// BUGFIX: the signature was ($link = null) but sql_get_next_id() always calls
+// it with ($tablepre, $table, $link).
+function sqlsrv_prepare_func_get_next_id($tablepre, $table, $link = null)
 {
-    $stmt = sqlsrv_query($link, "SELECT SCOPE_IDENTITY()");
-    if ($stmt) {
-        $result = sqlsrv_fetch_array($stmt);
-        return $result[0] ?? null;
+    $connection = sqlsrv_prepare_func_conn($link);
+    if (!$connection) {
+        return false;
     }
-    return null;
+
+    $stmt = sqlsrv_query($connection, "SELECT SCOPE_IDENTITY() AS cnt");
+    if (!$stmt) {
+        return null;
+    }
+
+    $result = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_NUMERIC);
+    sqlsrv_free_stmt($stmt);
+
+    return isset($result[0]) ? $result[0] : null;
+}
+
+// Get number of rows for table (was missing entirely)
+function sqlsrv_prepare_func_get_num_rows($tablepre, $table, $link = null)
+{
+    $connection = sqlsrv_prepare_func_conn($link);
+    if (!$connection) {
+        return false;
+    }
+
+    $sql = "SELECT COUNT(*) AS cnt FROM " . sql_quote_identifier($tablepre . $table, 'bracket');
+    $stmt = sqlsrv_prepare_func_query($sql, array(), $connection);
+    if ($stmt === false) {
+        return false;
+    }
+
+    $row = sqlsrv_prepare_func_fetch_assoc($stmt);
+    sqlsrv_prepare_func_free_result($stmt);
+
+    return (is_array($row) && isset($row['cnt'])) ? (int)$row['cnt'] : 0;
 }
 
 function sqlsrv_prepare_func_count_rows($query, $link = null, $countname = "cnt")
 {
-    $result = sqlsrv_prepare_func_query($query, [], $link);  // Pass empty array for params
-    $row = sqlsrv_prepare_func_fetch_assoc($result);
-
-    if ($row === false) {
+    $result = sqlsrv_prepare_func_query($query, $link);
+    if ($result === false) {
         return false;
     }
 
-    $count = isset($row[$countname]) ? $row[$countname] : 0;
+    $row = sqlsrv_prepare_func_fetch_assoc($result);
+    $count = (is_array($row) && isset($row[$countname])) ? $row[$countname] : 0;
 
-    @sqlsrv_prepare_func_free_result($result);
+    sqlsrv_prepare_func_free_result($result);
     return $count;
 }
 
 function sqlsrv_prepare_func_count_rows_alt($query, $link = null)
 {
-    $result = sqlsrv_prepare_func_query($query, [], $link);  // Pass empty array for params
-    $row = sqlsrv_prepare_func_fetch_assoc($result);
-
-    if ($row === false) {
+    $result = sqlsrv_prepare_func_query($query, $link);
+    if ($result === false) {
         return false;
     }
 
-    $count = reset($row);
+    $row = sqlsrv_prepare_func_fetch_assoc($result);
+    $count = is_array($row) ? reset($row) : 0;
 
-    @sqlsrv_prepare_func_free_result($result);
+    sqlsrv_prepare_func_free_result($result);
     return $count;
 }

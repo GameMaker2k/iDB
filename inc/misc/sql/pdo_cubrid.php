@@ -13,124 +13,149 @@
 
     $FileInfo: pdo_cubrid.php - Last Update: 8/30/2024 SVN 1063 - Author: cooldude2k $
 */
+
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name == "pdo_cubrid.php" || $File3Name == "/pdo_cubrid.php") {
     @header('Location: index.php');
     exit();
 }
 
-// Execute a query
-if (!isset($NumPreQueriesArray['pdo_cubrid'])) {
-    $NumPreQueriesArray['pdo_cubrid'] = 0;
+if (!isset($GLOBALS['NumPreQueriesArray']['pdo_cubrid'])) {
+    $GLOBALS['NumPreQueriesArray']['pdo_cubrid'] = 0;
+}
+if (!isset($GLOBALS['NumQueriesArray']['pdo_cubrid'])) {
+    $GLOBALS['NumQueriesArray']['pdo_cubrid'] = 0;
+}
+
+function pdo_cubrid_func_conn($link = null)
+{
+    if ($link instanceof PDO) {
+        return $link;
+    }
+    if (isset($GLOBALS['SQLStat']) && $GLOBALS['SQLStat'] instanceof PDO) {
+        return $GLOBALS['SQLStat'];
+    }
+    return null;
 }
 
 // CUBRID Error handling functions
 function pdo_cubrid_func_error($link = null)
 {
-    global $SQLStat;
-    $result = isset($link) ? $link->errorInfo() : $SQLStat->errorInfo();
-    return ($result == "") ? "" : $result;
+    $pdo = pdo_cubrid_func_conn($link);
+    if (!$pdo) {
+        return "No valid PDO connection.";
+    }
+    $info = $pdo->errorInfo();
+    return isset($info[2]) ? (string)$info[2] : "";
 }
 
 function pdo_cubrid_func_errno($link = null)
 {
-    global $SQLStat;
-    $result = isset($link) ? $link->errorCode() : $SQLStat->errorCode();
-    return ($result === 0) ? 0 : $result;
+    $pdo = pdo_cubrid_func_conn($link);
+    if (!$pdo) {
+        return 0;
+    }
+    $code = $pdo->errorCode();
+    return ($code === null) ? 0 : $code;
 }
 
-// Execute a query
-if (!isset($NumQueriesArray['pdo_cubrid'])) {
-    $NumQueriesArray['pdo_cubrid'] = 0;
-}
-
-function pdo_cubrid_func_query($query, $link = null)
+// Was missing entirely, so sql_errorno() threw for this driver.
+function pdo_cubrid_func_errorno($link = null)
 {
-    global $NumQueriesArray, $SQLStat;
+    $pdo = pdo_cubrid_func_conn($link);
+    if (!$pdo) {
+        return "No valid PDO connection.";
+    }
+    $code = pdo_cubrid_func_errno($pdo);
+    $message = pdo_cubrid_func_error($pdo);
+    return ($message === "" && ($code === 0 || $code === '00000')) ? "" : "$code: $message";
+}
 
-    // Use the appropriate PDO connection
-    $pdo = isset($link) && $link instanceof PDO ? $link : $SQLStat;
+function pdo_cubrid_func_query($query, $params_or_link = null, $maybe_link = null)
+{
+    list($sql, $params, $link) = sql_resolve_query_args($query, $params_or_link, $maybe_link);
 
-    // If the query is an array (with query and parameters)
-    if (is_array($query)) {
-        list($query_string, $params) = $query;
-        $stmt = $pdo->prepare($query_string);
+    $pdo = pdo_cubrid_func_conn($link);
+    if (!$pdo) {
+        output_error("SQL Error: No valid PDO connection.", E_USER_ERROR);
+        return false;
+    }
 
-        // Bind parameters dynamically based on their type
-        foreach ($params as $key => $value) {
-            $paramKey = is_int($key) ? $key + 1 : $key;  // For positional keys, shift index to start at 1
-            if (is_int($value)) {
-                $stmt->bindValue($paramKey, $value, PDO::PARAM_INT);
-            } elseif (is_bool($value)) {
-                $stmt->bindValue($paramKey, $value, PDO::PARAM_BOOL);
-            } elseif (is_null($value)) {
-                $stmt->bindValue($paramKey, $value, PDO::PARAM_NULL);
-            } else {
-                $stmt->bindValue($paramKey, $value, PDO::PARAM_STR);
+    if (!is_string($sql) || trim($sql) === '') {
+        output_error("SQL Error: Query is empty.", E_USER_ERROR);
+        return false;
+    }
+
+    try {
+        if (count($params) > 0) {
+            $stmt = $pdo->prepare($sql);
+            if ($stmt === false) {
+                output_error("SQL Error: " . pdo_cubrid_func_error($pdo), E_USER_ERROR);
+                return false;
             }
+
+            foreach ($params as $key => $value) {
+                sql_pdo_bind_value($stmt, is_int($key) ? $key + 1 : $key, $value);
+            }
+
+            if ($stmt->execute() === false) {
+                output_error("SQL Error: " . pdo_cubrid_func_error($pdo), E_USER_ERROR);
+                return false;
+            }
+
+            ++$GLOBALS['NumQueriesArray']['pdo_cubrid'];
+            return $stmt;
         }
 
-        // Execute the prepared statement with bound parameters
-        $result = $stmt->execute();
-
-        // Error handling
+        $result = $pdo->query($sql);
         if ($result === false) {
-            $errorInfo = $pdo->errorInfo();
-            output_error("SQL Error: " . $errorInfo[2], E_USER_ERROR);
+            output_error("SQL Error: " . pdo_cubrid_func_error($pdo), E_USER_ERROR);
             return false;
         }
 
-        ++$NumQueriesArray['pdo_cubrid'];
-        return $stmt;  // Return the statement for SELECT or data-fetching queries
-    } else {
-        // For direct queries without parameters
-        $result = $pdo->query($query);
-
-        // Error handling
-        if ($result === false) {
-            $errorInfo = $pdo->errorInfo();
-            output_error("SQL Error: " . $errorInfo[2], E_USER_ERROR);
-            return false;
-        }
-
-        ++$NumQueriesArray['pdo_cubrid'];
+        ++$GLOBALS['NumQueriesArray']['pdo_cubrid'];
         return $result;
+    } catch (PDOException $e) {
+        output_error("SQL Error: " . $e->getMessage(), E_USER_ERROR);
+        return false;
     }
 }
 
 // Fetch number of rows for SELECT queries
 function pdo_cubrid_func_num_rows($result)
 {
-    if ($result instanceof PDOStatement) {
-        $num = $result->rowCount();
-        return $num !== false ? $num : 0;
-    }
-    return false;
+    return sql_pdo_num_rows($result);
 }
 
 // Connect to CUBRID database
 function pdo_cubrid_func_connect_db($server, $username, $password, $database = null, $new_link = false)
 {
-    global $SQLStat;
-    $dsn = "cubrid:host=$server";
+    $myport = null;
+    $hostex = explode(":", $server);
+    if (isset($hostex[1]) && is_numeric($hostex[1])) {
+        $server = $hostex[0];
+        $myport = (int)$hostex[1];
+    } elseif (isset($hostex[1])) {
+        $server = $hostex[0];
+    }
 
-    // If a database is specified, include it in the DSN
+    $dsn = "cubrid:host=$server";
+    if ($myport !== null) {
+        $dsn .= ";port=$myport";
+    }
     if ($database !== null) {
         $dsn .= ";dbname=$database";
     }
 
     try {
-        // Create a new PDO instance with the DSN, username, and password
-        $SQLStat = new PDO($dsn, $username, $password, [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, // Set error mode to exceptions
-            PDO::ATTR_PERSISTENT => $new_link            // Use persistent connections if requested
-        ]);
+        $link = new PDO($dsn, $username, $password, array(
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_PERSISTENT => (bool)$new_link
+        ));
 
-        // Return the PDO instance (CUBRID connection)
-        return $SQLStat;
-
+        $GLOBALS['SQLStat'] = $link;
+        return $link;
     } catch (PDOException $e) {
-        // Output error if connection fails
         output_error("Connection failed: " . $e->getMessage(), E_USER_ERROR);
         return false;
     }
@@ -138,113 +163,79 @@ function pdo_cubrid_func_connect_db($server, $username, $password, $database = n
 
 function pdo_cubrid_func_disconnect_db($link = null)
 {
-    global $SQLStat;
-    if (isset($link) && $link instanceof PDOStatement) {
-        return $link->closeCursor();
+    if ($link instanceof PDOStatement) {
+        return sql_pdo_free($link);
     }
 
-    if (!isset($link) && isset($SQLStat)) {
-        $SQLStat = null;
+    if ($link instanceof PDO) {
+        if (isset($GLOBALS['SQLStat']) && $GLOBALS['SQLStat'] === $link) {
+            $GLOBALS['SQLStat'] = null;
+        }
+        return true;
+    }
+
+    if ($link === null && isset($GLOBALS['SQLStat'])) {
+        $GLOBALS['SQLStat'] = null;
         return true;
     }
 
     return false;
 }
 
-// Query result fetching for both associative and numeric arrays
+// Query result fetching
 function pdo_cubrid_func_result($result, $row = 0, $field = 0)
 {
-    if ($result instanceof PDOStatement) {
-        $rows = $result->fetchAll(PDO::FETCH_BOTH);
-
-        if (!isset($rows[$row])) {
-            return null;
-        }
-
-        return $rows[$row][$field] ?? null;
-    }
-    return false;
+    return sql_pdo_result($result, $row, $field);
 }
 
-// Fetch row results as an array
+function pdo_cubrid_func_free_result($result)
+{
+    return sql_pdo_free($result);
+}
+
+// BUGFIX: the null default fell back to CUBRID_BOTH, which is a constant from
+// the procedural CUBRID extension and is not a valid PDO fetch mode.
 function pdo_cubrid_func_fetch_array($result, $result_type = PDO::FETCH_BOTH)
 {
-	if($result_type==NULL) {
-		$result_type = CUBRID_BOTH;
-	}
-    return $result->fetch($result_type);
+    if ($result_type === null) {
+        $result_type = PDO::FETCH_BOTH;
+    }
+    return sql_pdo_fetch($result, $result_type);
 }
 
-// Fetch row results as an associative array
 function pdo_cubrid_func_fetch_assoc($result)
 {
-    return $result->fetch(PDO::FETCH_ASSOC);
+    return sql_pdo_fetch($result, PDO::FETCH_ASSOC);
 }
 
-// Fetch row results as a numeric array
 function pdo_cubrid_func_fetch_row($result)
 {
-    return $result->fetch(PDO::FETCH_NUM);
+    return sql_pdo_fetch($result, PDO::FETCH_NUM);
 }
 
 // Escape a string for CUBRID queries
 function pdo_cubrid_func_escape_string($string, $link = null)
 {
-    global $SQLStat;
-    if (!isset($string)) {
+    if ($string === null) {
         return null;
     }
-
-    $pdo = isset($link) && $link instanceof PDO ? $link : $SQLStat;
-    $escaped_string = $pdo->quote($string);
-
-    if ($escaped_string === false) {
-        output_error("SQL Error: " . pdo_cubrid_func_error(), E_USER_ERROR);
+    $pdo = pdo_cubrid_func_conn($link);
+    if (!$pdo) {
         return false;
     }
-    return $escaped_string;
+    return $pdo->quote((string)$string);
 }
 
 // Pre-process query for CUBRID
-function pdo_cubrid_func_pre_query($query_string, $query_vars = [])
+function pdo_cubrid_func_pre_query($query_string, $query_vars = array())
 {
-    global $NumPreQueriesArray;
-
-    if ($query_vars === null || !is_array($query_vars)) {
-        $query_vars = [];
-    }
-
-    // Handle placeholders like %s, %d, %i, %f and convert them to PDO's positional placeholders (?)
-    $query_string = str_replace(["'%s'", '%d', '%i', '%f'], ['?', '?', '?', '?'], $query_string);
-
-    // If the query contains named placeholders (e.g., :name), we won't replace those
-    // Filter out null values in $query_vars array
-    $query_vars = array_filter($query_vars, function ($value) {
-        return $value !== null;
-    });
-
-    // Check for mismatch between placeholders and variables
-    $placeholder_count = substr_count($query_string, '?');
-    $params_count = count($query_vars);
-
-    if ($placeholder_count !== $params_count) {
-        output_error("SQL Placeholder Error: Mismatch between placeholders ($placeholder_count) and parameters ($params_count).", E_USER_ERROR);
+    $result = sql_prepared_pre_query($query_string, $query_vars, 'qmark');
+    if ($result === false) {
         return false;
     }
 
-    ++$NumPreQueriesArray['pdo_cubrid'];
-
-    // Return the query string and variables for further execution
-    return [$query_string, $query_vars];
-}
-
-// Fetch the next ID from the sequence
-function pdo_cubrid_func_get_next_id($tablepre, $table, $link = null)
-{
-    $query = pdo_cubrid_func_pre_query("SELECT auto_increment_value FROM db_serial WHERE class_name = '" . $tablepre . $table . "'", []);
-    $result = pdo_cubrid_func_query($query, $link);
-    $row = pdo_cubrid_func_fetch_assoc($result);
-    return $row['auto_increment_value'] ?? 0;
+    ++$GLOBALS['NumPreQueriesArray']['pdo_cubrid'];
+    return $result;
 }
 
 // Set Charset (dummy function)
@@ -253,64 +244,92 @@ function pdo_cubrid_func_set_charset($charset, $link = null)
     return true;
 }
 
+// Fetch the next ID from the sequence
+function pdo_cubrid_func_get_next_id($tablepre, $table, $link = null)
+{
+    $result = pdo_cubrid_func_query(
+        "SELECT current_val AS cnt FROM db_serial WHERE name = ?",
+        array($tablepre . $table . "_ai_id"),
+        $link
+    );
+
+    if ($result === false) {
+        return false;
+    }
+
+    $row = pdo_cubrid_func_fetch_assoc($result);
+    pdo_cubrid_func_free_result($result);
+
+    return (is_array($row) && isset($row['cnt'])) ? $row['cnt'] : 0;
+}
+
 // Fetch number of rows from a table using COUNT
 function pdo_cubrid_func_get_num_rows($tablepre, $table, $link = null)
 {
-    $query = pdo_cubrid_func_pre_query("SELECT COUNT(*) as cnt FROM " . $tablepre . $table, []);
-    $result = pdo_cubrid_func_query($query, $link);
-    $row = pdo_cubrid_func_fetch_assoc($result);
-    return $row['cnt'] ?? 0;
-}
-
-
-// Fetch Number of Rows using COUNT in a single query (uses pdo_cubrid_func_fetch_assoc)
-function pdo_cubrid_func_count_rows($query, $link = null, $countname = "cnt")
-{
-    $result = pdo_cubrid_func_query($query, [], $link);  // Pass empty array for params
-    $row = pdo_cubrid_func_fetch_assoc($result);
-
-    if ($row === false) {
-        return false;  // Handle case if no row is returned
+    $sql = "SELECT COUNT(*) AS cnt FROM " . sql_quote_identifier($tablepre . $table, 'double');
+    $result = pdo_cubrid_func_query($sql, $link);
+    if ($result === false) {
+        return false;
     }
 
-    // Use the dynamic column name provided by $countname
-    $count = isset($row[$countname]) ? $row[$countname] : 0;
-
-    @pdo_cubrid_func_free_result($result);
-    return $count;
-}
-
-// Alternative version using pdo_cubrid_func_fetch_assoc
-function pdo_cubrid_func_count_rows_alt($query, $link = null)
-{
-    $result = pdo_cubrid_func_query($query, [], $link);  // Pass empty array for params
     $row = pdo_cubrid_func_fetch_assoc($result);
+    pdo_cubrid_func_free_result($result);
 
-    if ($row === false) {
-        return false;  // Handle case if no row is returned
-    }
-
-    // Return first column (assuming single column result like COUNT or similar)
-    $count = reset($row);
-
-    @pdo_cubrid_func_free_result($result);
-    return $count;
-}
-
-function pdo_cubrid_func_free_result($result)
-{
-    return true;
+    return (is_array($row) && isset($row['cnt'])) ? (int)$row['cnt'] : 0;
 }
 
 // Get Server Info for PDO CUBRID
 function pdo_cubrid_func_server_info($link = null)
 {
-    $result = $link->query('SELECT cubrid_version()')->fetch(PDO::FETCH_COLUMN);
-    return $result;
+    $pdo = pdo_cubrid_func_conn($link);
+    if (!$pdo) {
+        return false;
+    }
+    try {
+        return $pdo->getAttribute(PDO::ATTR_SERVER_VERSION);
+    } catch (PDOException $e) {
+        return false;
+    }
 }
 
 // Get Client Info for PDO CUBRID
 function pdo_cubrid_func_client_info($link = null)
 {
-    return $link->getAttribute(PDO::ATTR_CLIENT_VERSION);
+    $pdo = pdo_cubrid_func_conn($link);
+    if (!$pdo) {
+        return false;
+    }
+    try {
+        return $pdo->getAttribute(PDO::ATTR_CLIENT_VERSION);
+    } catch (PDOException $e) {
+        return false;
+    }
+}
+
+function pdo_cubrid_func_count_rows($query, $link = null, $countname = "cnt")
+{
+    $result = pdo_cubrid_func_query($query, $link);
+    if ($result === false) {
+        return false;
+    }
+
+    $row = pdo_cubrid_func_fetch_assoc($result);
+    $count = (is_array($row) && isset($row[$countname])) ? $row[$countname] : 0;
+
+    pdo_cubrid_func_free_result($result);
+    return $count;
+}
+
+function pdo_cubrid_func_count_rows_alt($query, $link = null)
+{
+    $result = pdo_cubrid_func_query($query, $link);
+    if ($result === false) {
+        return false;
+    }
+
+    $row = pdo_cubrid_func_fetch_assoc($result);
+    $count = is_array($row) ? reset($row) : 0;
+
+    pdo_cubrid_func_free_result($result);
+    return $count;
 }

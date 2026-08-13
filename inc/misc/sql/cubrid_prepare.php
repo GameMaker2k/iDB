@@ -20,9 +20,22 @@ if ($File3Name == "cubrid_prepare.php" || $File3Name == "/cubrid_prepare.php") {
     exit();
 }
 
-// Execute a query
-if (!isset($NumPreQueriesArray['cubrid_prepare'])) {
-    $NumPreQueriesArray['cubrid_prepare'] = 0;
+if (!isset($GLOBALS['NumPreQueriesArray']['cubrid_prepare'])) {
+    $GLOBALS['NumPreQueriesArray']['cubrid_prepare'] = 0;
+}
+if (!isset($GLOBALS['NumQueriesArray']['cubrid_prepare'])) {
+    $GLOBALS['NumQueriesArray']['cubrid_prepare'] = 0;
+}
+
+function cubrid_prepare_func_conn($link = null)
+{
+    if ($link !== null && $link !== false) {
+        return $link;
+    }
+    if (isset($GLOBALS['SQLStat']) && $GLOBALS['SQLStat']) {
+        return $GLOBALS['SQLStat'];
+    }
+    return null;
 }
 
 // CUBRID Error handling functions
@@ -38,141 +51,169 @@ function cubrid_prepare_func_errno($link = null)
 
 function cubrid_prepare_func_errorno($link = null)
 {
-    return cubrid_prepare_func_errno() . ": " . cubrid_prepare_func_error();
+    return cubrid_prepare_func_errno($link) . ": " . cubrid_prepare_func_error($link);
 }
 
-// Execute a prepared query
-if (!isset($NumQueriesArray['cubrid_prepare'])) {
-    $NumQueriesArray['cubrid_prepare'] = 0;
-}
-
-function cubrid_prepare_func_query($query, $params = [], $link = null)
+function cubrid_prepare_func_query($query, $params_or_link = null, $maybe_link = null)
 {
-    global $NumQueriesArray, $SQLStat;
+    list($sql, $params, $link) = sql_resolve_query_args($query, $params_or_link, $maybe_link);
 
-    $db = isset($link) ? $link : (isset($SQLStat) ? $SQLStat : null);
+    $db = cubrid_prepare_func_conn($link);
 
     if (!$db) {
         output_error("SQL Error: No valid CUBRID connection.", E_USER_ERROR);
         return false;
     }
 
-    // Check if the query is an array (query string and parameters)
-    if (is_array($query)) {
-        list($query_string, $params) = $query;
-    } else {
-        $query_string = $query;
+    if (!is_string($sql) || trim($sql) === '') {
+        output_error("SQL Error: Query is empty.", E_USER_ERROR);
+        return false;
     }
 
-    // Prepare the query
-    $stmt = cubrid_prepare($db, $query_string);
+    $stmt = @cubrid_prepare($db, $sql);
     if ($stmt === false) {
-        output_error("SQL Error (Prepare): " . cubrid_prepare_func_error(), E_USER_ERROR);
+        output_error("SQL Error (Prepare): " . cubrid_prepare_func_error($db), E_USER_ERROR);
         return false;
     }
 
-    // Bind parameters dynamically
-    foreach ($params as $key => $value) {
-        $paramKey = $key + 1; // CUBRID uses 1-based indexing for bind parameters
+    // Bind parameters dynamically.
+    // BUGFIX: cubrid_bind() takes a *string* type name ("int", "string", ...),
+    // not the CUBRID_INTEGER / CUBRID_BOOL / CUBRID_NULL constants that were
+    // being passed before.
+    $index = 1;
+    foreach ($params as $value) {
         if (is_int($value)) {
-            cubrid_bind($stmt, $paramKey, $value, CUBRID_INTEGER);
+            $ok = @cubrid_bind($stmt, $index, $value, 'int');
+        } elseif (is_float($value)) {
+            $ok = @cubrid_bind($stmt, $index, $value, 'double');
         } elseif (is_bool($value)) {
-            cubrid_bind($stmt, $paramKey, $value, CUBRID_BOOL);
+            $ok = @cubrid_bind($stmt, $index, $value ? 1 : 0, 'int');
         } elseif (is_null($value)) {
-            cubrid_bind($stmt, $paramKey, $value, CUBRID_NULL);
+            $ok = @cubrid_bind($stmt, $index, null, 'null');
         } else {
-            cubrid_bind($stmt, $paramKey, $value, CUBRID_STRING);
+            $ok = @cubrid_bind($stmt, $index, (string)$value, 'string');
         }
+
+        if ($ok === false) {
+            output_error("SQL Error (Bind): " . cubrid_prepare_func_error($db), E_USER_ERROR);
+            @cubrid_close_request($stmt);
+            return false;
+        }
+
+        $index++;
     }
 
-    // Execute the query
-    if (!cubrid_execute($stmt)) {
-        output_error("SQL Error (Execution): " . cubrid_prepare_func_error(), E_USER_ERROR);
+    if (!@cubrid_execute($stmt)) {
+        output_error("SQL Error (Execution): " . cubrid_prepare_func_error($db), E_USER_ERROR);
+        @cubrid_close_request($stmt);
         return false;
     }
 
-    ++$NumQueriesArray['cubrid_prepare'];
+    ++$GLOBALS['NumQueriesArray']['cubrid_prepare'];
     return $stmt;
 }
 
 // Fetch number of rows
 function cubrid_prepare_func_num_rows($stmt)
 {
-    return cubrid_num_rows($stmt);
+    if (!$stmt) {
+        return false;
+    }
+    $num = @cubrid_num_rows($stmt);
+    return ($num === false) ? false : $num;
 }
 
 // Connect to CUBRID database
 function cubrid_prepare_func_connect_db($server, $username, $password, $database = null, $new_link = false)
 {
-    $myport = "30000";
+    $myport = 30000;
     $hostex = explode(":", $server);
-
-    if (isset($hostex[1]) && !is_numeric($hostex[1])) {
-        $hostex[1] = $myport;
-    }
 
     if (isset($hostex[1])) {
         $server = $hostex[0];
-        $myport = $hostex[1];
+        $myport = is_numeric($hostex[1]) ? (int)$hostex[1] : $myport;
     }
 
-    $link = cubrid_connect($server, $myport, $database, $username, $password);
-    cubrid_set_autocommit($link, CUBRID_AUTOCOMMIT_TRUE);
+    $link = @cubrid_connect($server, $myport, $database, $username, $password);
 
-    if ($link === false) {
+    if (!$link) {
         output_error("Not connected: " . cubrid_prepare_func_error(), E_USER_ERROR);
         return false;
     }
+
+    @cubrid_set_autocommit($link, CUBRID_AUTOCOMMIT_TRUE);
 
     return $link;
 }
 
 function cubrid_prepare_func_disconnect_db($link = null)
 {
-    return cubrid_disconnect($link);
+    $connection = cubrid_prepare_func_conn($link);
+    return $connection ? cubrid_disconnect($connection) : false;
 }
 
 // Query Results
+// BUGFIX: the old version fetched whatever row the cursor happened to be on
+// and ignored $row entirely, and fetched with CUBRID_NUM while allowing a
+// column name for $field.
 function cubrid_prepare_func_result($stmt, $row, $field = 0)
 {
-    if (isset($field) && !is_numeric($field)) {
+    if (!$stmt) {
+        return null;
+    }
+
+    if ($field !== null && !is_numeric($field)) {
         $field = strtolower($field);
     }
 
-    $value = cubrid_fetch($stmt, CUBRID_NUM);
-    return ($value === false) ? false : $value[$field];
+    // Move the cursor to the requested row (CUBRID rows are 1-based).
+    if (!@cubrid_move_cursor($stmt, $row + 1, CUBRID_CURSOR_FIRST)) {
+        return null;
+    }
+
+    $value = @cubrid_fetch($stmt, CUBRID_BOTH);
+    if (!is_array($value)) {
+        return null;
+    }
+
+    return isset($value[$field]) ? $value[$field] : null;
 }
 
 // Free Results
+// BUGFIX: was calling both cubrid_close_request() and cubrid_free_result().
 function cubrid_prepare_func_free_result($stmt)
 {
-    cubrid_close_request($stmt);
-    return cubrid_free_result($stmt);
+    if (!$stmt) {
+        return true;
+    }
+    @cubrid_close_request($stmt);
+    return true;
 }
 
 // Fetch Results to Array
 function cubrid_prepare_func_fetch_array($stmt, $result_type = CUBRID_BOTH)
 {
-	if($result_type==NULL) {
-		$result_type = CUBRID_BOTH;
-	}
-    return cubrid_fetch($stmt, $result_type);
+    if ($result_type === null) {
+        $result_type = CUBRID_BOTH;
+    }
+    return $stmt ? cubrid_fetch($stmt, $result_type) : false;
 }
 
 function cubrid_prepare_func_fetch_assoc($stmt)
 {
-    return cubrid_fetch($stmt, CUBRID_ASSOC);
+    return $stmt ? cubrid_fetch($stmt, CUBRID_ASSOC) : false;
 }
 
 function cubrid_prepare_func_fetch_row($stmt)
 {
-    return cubrid_fetch($stmt, CUBRID_NUM);
+    return $stmt ? cubrid_fetch($stmt, CUBRID_NUM) : false;
 }
 
 // Get Server Info
 function cubrid_prepare_func_server_info($link = null)
 {
-    return isset($link) ? cubrid_get_server_info($link) : cubrid_get_server_info();
+    $connection = cubrid_prepare_func_conn($link);
+    return $connection ? cubrid_get_server_info($connection) : cubrid_get_server_info();
 }
 
 function cubrid_prepare_func_client_info($link = null)
@@ -183,80 +224,96 @@ function cubrid_prepare_func_client_info($link = null)
 // Escape String
 function cubrid_prepare_func_escape_string($string, $link = null)
 {
-    if (!isset($string)) {
+    if ($string === null) {
         return null;
     }
-    return cubrid_real_escape_string($string, $link);
+    $connection = cubrid_prepare_func_conn($link);
+    return $connection
+        ? cubrid_real_escape_string((string)$string, $connection)
+        : cubrid_real_escape_string((string)$string);
 }
 
 // SafeSQL Lite with additional SafeSQL features
-function cubrid_prepare_func_pre_query($query_string, $query_vars)
+function cubrid_prepare_func_pre_query($query_string, $query_vars = array())
 {
-    global $NumPreQueriesArray;
-
-    if ($query_vars === null || !is_array($query_vars)) {
-        $query_vars = [];
-    }
-
-    // SQLite only supports `?` or named placeholders like `:param`
-    // Replace complex placeholders with `?`
-    $query_string = str_replace(["'%s'", '%d', '%i', '%f'], ['?', '?', '?', '?'], $query_string);
-
-    // Filter out null values in the query_vars array
-    $query_vars = array_filter($query_vars, function ($value) {
-        return $value !== null;
-    });
-
-    // Count the number of `?` placeholders
-    $placeholder_count = substr_count($query_string, '?');
-    $params_count = count($query_vars);
-
-    // Check for mismatch between placeholders and parameters
-    if ($placeholder_count !== $params_count) {
-        output_error("SQL Placeholder Error: Mismatch between placeholders ($placeholder_count) and parameters ($params_count).", E_USER_ERROR);
+    $result = sql_prepared_pre_query($query_string, $query_vars, 'qmark');
+    if ($result === false) {
         return false;
     }
 
-    ++$NumPreQueriesArray['cubrid_prepare'];
+    ++$GLOBALS['NumPreQueriesArray']['cubrid_prepare'];
+    return $result;
+}
 
-    // Return the query string and the array of variables
-    return [$query_string, $query_vars];
+// Set Charset (was missing entirely; no-op like the non-prepared driver)
+function cubrid_prepare_func_set_charset($charset, $link = null)
+{
+    return true;
 }
 
 // Get next id for stuff
 function cubrid_prepare_func_get_next_id($tablepre, $table, $link = null)
 {
-    $query = "SELECT " . $tablepre . $table . "_ai_id.current_value";
-    $stmt = cubrid_prepare_func_query($query, [], $link);
-    return cubrid_prepare_func_result($stmt, 0);
+    $connection = cubrid_prepare_func_conn($link);
+    if (!$connection) {
+        return false;
+    }
+
+    $sql = "SELECT " . sql_quote_identifier($tablepre . $table . "_ai_id", 'double') . ".current_value AS cnt";
+    $stmt = cubrid_prepare_func_query($sql, array(), $connection);
+    if ($stmt === false) {
+        return false;
+    }
+
+    $value = cubrid_prepare_func_result($stmt, 0, 0);
+    cubrid_prepare_func_free_result($stmt);
+    return $value;
+}
+
+// Get number of rows for table (was missing entirely)
+function cubrid_prepare_func_get_num_rows($tablepre, $table, $link = null)
+{
+    $connection = cubrid_prepare_func_conn($link);
+    if (!$connection) {
+        return false;
+    }
+
+    $sql = "SELECT COUNT(*) AS cnt FROM " . sql_quote_identifier($tablepre . $table, 'double');
+    $stmt = cubrid_prepare_func_query($sql, array(), $connection);
+    if ($stmt === false) {
+        return false;
+    }
+
+    $row = cubrid_prepare_func_fetch_assoc($stmt);
+    cubrid_prepare_func_free_result($stmt);
+
+    return (is_array($row) && isset($row['cnt'])) ? (int)$row['cnt'] : 0;
 }
 
 function cubrid_prepare_func_count_rows($query, $link = null, $countname = "cnt")
 {
-    $result = cubrid_prepare_func_query($query, [], $link);  // Pass empty array for params
-    $row = cubrid_prepare_func_fetch_assoc($result);
-
-    if ($row === false) {
+    $result = cubrid_prepare_func_query($query, $link);
+    if ($result === false) {
         return false;
     }
 
-    $count = isset($row[$countname]) ? $row[$countname] : 0;
+    $row = cubrid_prepare_func_fetch_assoc($result);
+    $count = (is_array($row) && isset($row[$countname])) ? $row[$countname] : 0;
 
-    @cubrid_prepare_func_free_result($result);
+    cubrid_prepare_func_free_result($result);
     return $count;
 }
 
 function cubrid_prepare_func_count_rows_alt($query, $link = null)
 {
-    $result = cubrid_prepare_func_query($query, [], $link);  // Pass empty array for params
-    $row = cubrid_prepare_func_fetch_assoc($result);
-
-    if ($row === false) {
+    $result = cubrid_prepare_func_query($query, $link);
+    if ($result === false) {
         return false;
     }
 
-    $count = reset($row);
+    $row = cubrid_prepare_func_fetch_assoc($result);
+    $count = is_array($row) ? reset($row) : 0;
 
-    @cubrid_prepare_func_free_result($result);
+    cubrid_prepare_func_free_result($result);
     return $count;
 }

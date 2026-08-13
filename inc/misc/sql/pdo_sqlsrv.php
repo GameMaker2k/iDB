@@ -13,148 +13,151 @@
 
     $FileInfo: pdo_sqlsrv.php - Last Update: 8/30/2024 SVN 1063 - Author: cooldude2k $
 */
+
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
 if ($File3Name == "pdo_sqlsrv.php" || $File3Name == "/pdo_sqlsrv.php") {
     @header('Location: index.php');
     exit();
 }
 
-// Execute a query
-if (!isset($NumPreQueriesArray['pdo_sqlsrv'])) {
-    $NumPreQueriesArray['pdo_sqlsrv'] = 0;
+if (!isset($GLOBALS['NumPreQueriesArray']['pdo_sqlsrv'])) {
+    $GLOBALS['NumPreQueriesArray']['pdo_sqlsrv'] = 0;
+}
+if (!isset($GLOBALS['NumQueriesArray']['pdo_sqlsrv'])) {
+    $GLOBALS['NumQueriesArray']['pdo_sqlsrv'] = 0;
+}
+
+function pdo_sqlsrv_func_conn($link = null)
+{
+    if ($link instanceof PDO) {
+        return $link;
+    }
+    if (isset($GLOBALS['SQLStat']) && $GLOBALS['SQLStat'] instanceof PDO) {
+        return $GLOBALS['SQLStat'];
+    }
+    return null;
 }
 
 // SQLSRV Error handling functions
 function pdo_sqlsrv_func_error($link = null)
 {
-    global $SQLStat;
-    $result = isset($link) ? $link->errorInfo() : $SQLStat->errorInfo();
-    return ($result == "") ? "" : $result;
+    $pdo = pdo_sqlsrv_func_conn($link);
+    if (!$pdo) {
+        return "No valid PDO connection.";
+    }
+    $info = $pdo->errorInfo();
+    return isset($info[2]) ? (string)$info[2] : "";
 }
 
 function pdo_sqlsrv_func_errno($link = null)
 {
-    global $SQLStat;
-    $result = isset($link) ? $link->errorCode() : $SQLStat->errorCode();
-    return ($result === 0) ? 0 : $result;
+    $pdo = pdo_sqlsrv_func_conn($link);
+    if (!$pdo) {
+        return 0;
+    }
+    $code = $pdo->errorCode();
+    return ($code === null) ? 0 : $code;
 }
 
+// BUGFIX: errorInfo() returns an array, so the old version produced
+// "HY000: Array".
 function pdo_sqlsrv_func_errorno($link = null)
 {
-    global $SQLStat;
-    $result = isset($link) ? $link->errorCode() . ": " . $link->errorInfo() : $SQLStat->errorCode() . ": " . $SQLStat->errorInfo();
-    return ($result == "") ? "" : $result;
+    $pdo = pdo_sqlsrv_func_conn($link);
+    if (!$pdo) {
+        return "No valid PDO connection.";
+    }
+    $code = pdo_sqlsrv_func_errno($pdo);
+    $message = pdo_sqlsrv_func_error($pdo);
+    return ($message === "" && ($code === 0 || $code === '00000')) ? "" : "$code: $message";
 }
 
-// Execute a query
-if (!isset($NumQueriesArray['pdo_sqlsrv'])) {
-    $NumQueriesArray['pdo_sqlsrv'] = 0;
-}
-
-function pdo_sqlsrv_func_query($query, $link = null)
+function pdo_sqlsrv_func_query($query, $params_or_link = null, $maybe_link = null)
 {
-    global $NumQueriesArray, $SQLStat;
+    list($sql, $params, $link) = sql_resolve_query_args($query, $params_or_link, $maybe_link);
 
-    // Use the appropriate PDO connection
-    $pdo = isset($link) && $link instanceof PDO ? $link : $SQLStat;
+    $pdo = pdo_sqlsrv_func_conn($link);
+    if (!$pdo) {
+        output_error("SQL Error: No valid PDO connection.", E_USER_ERROR);
+        return false;
+    }
 
-    // If the query is an array (with query and parameters)
-    if (is_array($query)) {
-        list($query_string, $params) = $query;
-        $stmt = $pdo->prepare($query_string);
+    if (!is_string($sql) || trim($sql) === '') {
+        output_error("SQL Error: Query is empty.", E_USER_ERROR);
+        return false;
+    }
 
-        // Bind parameters dynamically based on their type
-        foreach ($params as $key => $value) {
-            $paramKey = is_int($key) ? $key + 1 : $key;  // For positional keys, shift index to start at 1
-            if (is_int($value)) {
-                $stmt->bindValue($paramKey, $value, PDO::PARAM_INT);
-            } elseif (is_bool($value)) {
-                $stmt->bindValue($paramKey, $value, PDO::PARAM_BOOL);
-            } elseif (is_null($value)) {
-                $stmt->bindValue($paramKey, $value, PDO::PARAM_NULL);
-            } else {
-                $stmt->bindValue($paramKey, $value, PDO::PARAM_STR);
+    try {
+        if (count($params) > 0) {
+            $stmt = $pdo->prepare($sql);
+            if ($stmt === false) {
+                output_error("SQL Error: " . pdo_sqlsrv_func_error($pdo), E_USER_ERROR);
+                return false;
             }
+
+            foreach ($params as $key => $value) {
+                sql_pdo_bind_value($stmt, is_int($key) ? $key + 1 : $key, $value);
+            }
+
+            if ($stmt->execute() === false) {
+                output_error("SQL Error: " . pdo_sqlsrv_func_error($pdo), E_USER_ERROR);
+                return false;
+            }
+
+            ++$GLOBALS['NumQueriesArray']['pdo_sqlsrv'];
+            return $stmt;
         }
 
-        // Execute the prepared statement with bound parameters
-        $result = $stmt->execute();
-
-        // Error handling
+        $result = $pdo->query($sql);
         if ($result === false) {
-            $errorInfo = $pdo->errorInfo();
-            output_error("SQL Error: " . $errorInfo[2], E_USER_ERROR);
+            output_error("SQL Error: " . pdo_sqlsrv_func_error($pdo), E_USER_ERROR);
             return false;
         }
 
-        ++$NumQueriesArray['pdo_sqlsrv'];
-        return $stmt;  // Return the statement for SELECT or data-fetching queries
-    } else {
-        // For direct queries without parameters
-        $result = $pdo->query($query);
-
-        // Error handling
-        if ($result === false) {
-            $errorInfo = $pdo->errorInfo();
-            output_error("SQL Error: " . $errorInfo[2], E_USER_ERROR);
-            return false;
-        }
-
-        ++$NumQueriesArray['pdo_sqlsrv'];
+        ++$GLOBALS['NumQueriesArray']['pdo_sqlsrv'];
         return $result;
+    } catch (PDOException $e) {
+        output_error("SQL Error: " . $e->getMessage(), E_USER_ERROR);
+        return false;
     }
 }
 
 // Fetch number of rows for SELECT queries
 function pdo_sqlsrv_func_num_rows($result)
 {
-    if ($result instanceof PDOStatement) {
-        $num = $result->rowCount();
-        return $num !== false ? $num : 0;
-    }
-    return false;
+    return sql_pdo_num_rows($result);
 }
 
-// Connect to SQL Server using PDO and set session options
+// Connect to SQL Server using PDO
 function pdo_sqlsrv_func_connect_db($server, $username = null, $password = null, $database = null, $new_link = false)
 {
-    global $SQLStat;
-
-    // Set DSN (Data Source Name) for SQLSRV connection
     $dsn = "sqlsrv:Server=$server";
 
-    // If a database is specified, include it in the DSN
     if ($database !== null) {
         $dsn .= ";Database=$database";
     }
 
     try {
-        // Connection options for SQL Authentication
-        $options = [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,  // Set error mode to exceptions
-            PDO::ATTR_PERSISTENT => $new_link             // Use persistent connections if requested
-        ];
+        $options = array(
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_PERSISTENT => (bool)$new_link
+        );
 
-        // Check if PDO::SQLSRV_ATTR_TRUST_SERVER_CERTIFICATE is supported and set it
         if (defined('PDO::SQLSRV_ATTR_TRUST_SERVER_CERTIFICATE')) {
-            $options[PDO::SQLSRV_ATTR_TRUST_SERVER_CERTIFICATE] = true; // Trust server certificate if available
+            $options[PDO::SQLSRV_ATTR_TRUST_SERVER_CERTIFICATE] = true;
         }
 
-        // Check if PDO::SQLSRV_ATTR_ENCODING is supported and set it to UTF-8
         if (defined('PDO::SQLSRV_ATTR_ENCODING')) {
-            $options[PDO::SQLSRV_ATTR_ENCODING] = PDO::SQLSRV_ENCODING_UTF8; // Set UTF-8 encoding if available
+            $options[PDO::SQLSRV_ATTR_ENCODING] = PDO::SQLSRV_ENCODING_UTF8;
         }
 
-        // Use SQL Authentication if username and password are provided
-        if (!empty($username) && !empty($password)) {
-            $SQLStat = new PDO($dsn, $username, $password, $options);
-        } else {
-            // Use Windows Authentication (omit username and password)
-            $SQLStat = new PDO($dsn, null, null, $options);
-        }
+        // Empty username means Windows Authentication.
+        $link = (!empty($username))
+            ? new PDO($dsn, $username, $password, $options)
+            : new PDO($dsn, null, null, $options);
 
-        return $SQLStat;
-
+        $GLOBALS['SQLStat'] = $link;
+        return $link;
     } catch (PDOException $e) {
         output_error("Connection failed: " . $e->getMessage(), E_USER_ERROR);
         return false;
@@ -163,13 +166,19 @@ function pdo_sqlsrv_func_connect_db($server, $username = null, $password = null,
 
 function pdo_sqlsrv_func_disconnect_db($link = null)
 {
-    global $SQLStat;
-    if (isset($link) && $link instanceof PDOStatement) {
-        return $link->closeCursor();
+    if ($link instanceof PDOStatement) {
+        return sql_pdo_free($link);
     }
 
-    if (!isset($link) && isset($SQLStat)) {
-        $SQLStat = null;
+    if ($link instanceof PDO) {
+        if (isset($GLOBALS['SQLStat']) && $GLOBALS['SQLStat'] === $link) {
+            $GLOBALS['SQLStat'] = null;
+        }
+        return true;
+    }
+
+    if ($link === null && isset($GLOBALS['SQLStat'])) {
+        $GLOBALS['SQLStat'] = null;
         return true;
     }
 
@@ -179,175 +188,142 @@ function pdo_sqlsrv_func_disconnect_db($link = null)
 // Query Results
 function pdo_sqlsrv_func_result($result, $row = 0, $field = 0)
 {
-    if ($result instanceof PDOStatement) {
-        $rows = $result->fetchAll(PDO::FETCH_BOTH);
-
-        if (!isset($rows[$row])) {
-            return null;
-        }
-
-        return $rows[$row][$field] ?? null;
-    }
-    return false;
+    return sql_pdo_result($result, $row, $field);
 }
 
 // Free Results
 function pdo_sqlsrv_func_free_result($result)
 {
-    return true;
+    return sql_pdo_free($result);
 }
 
-// Fetch Results to Array
+// BUGFIX: the null default fell back to CUBRID_BOTH.
 function pdo_sqlsrv_func_fetch_array($result, $result_type = PDO::FETCH_BOTH)
 {
-	if($result_type==NULL) {
-		$result_type = CUBRID_BOTH;
-	}
-    return $result->fetch($result_type);
+    if ($result_type === null) {
+        $result_type = PDO::FETCH_BOTH;
+    }
+    return sql_pdo_fetch($result, $result_type);
 }
 
-// Fetch Results to Associative Array
 function pdo_sqlsrv_func_fetch_assoc($result)
 {
-    return $result->fetch(PDO::FETCH_ASSOC);
+    return sql_pdo_fetch($result, PDO::FETCH_ASSOC);
 }
 
-// Fetch Row Results
 function pdo_sqlsrv_func_fetch_row($result)
 {
-    return $result->fetch(PDO::FETCH_NUM);
+    return sql_pdo_fetch($result, PDO::FETCH_NUM);
 }
 
 // Get Server Info
 function pdo_sqlsrv_func_server_info($link = null)
 {
-    $result = $link->query('select @@version')->fetch()[0];
-    return $result;
+    $pdo = pdo_sqlsrv_func_conn($link);
+    if (!$pdo) {
+        return false;
+    }
+    try {
+        return $pdo->getAttribute(PDO::ATTR_SERVER_VERSION);
+    } catch (PDOException $e) {
+        return false;
+    }
 }
 
-// Get Client Info for PDO SQLSRV
+// Get Client Info
 function pdo_sqlsrv_func_client_info($link = null)
 {
-    return $link->getAttribute(PDO::ATTR_CLIENT_VERSION);
+    $pdo = pdo_sqlsrv_func_conn($link);
+    if (!$pdo) {
+        return false;
+    }
+    try {
+        return $pdo->getAttribute(PDO::ATTR_CLIENT_VERSION);
+    } catch (PDOException $e) {
+        return false;
+    }
 }
 
 // Escape String
 function pdo_sqlsrv_func_escape_string($string, $link = null)
 {
-    global $SQLStat;
-    $pdo = isset($link) && $link instanceof PDO ? $link : $SQLStat;
-    return $pdo->quote($string);
+    if ($string === null) {
+        return null;
+    }
+    $pdo = pdo_sqlsrv_func_conn($link);
+    if (!$pdo) {
+        return false;
+    }
+    return $pdo->quote((string)$string);
 }
 
 // Pre-process Query for SQLSRV
-function pdo_sqlsrv_func_pre_query($query_string, $query_vars = [])
+function pdo_sqlsrv_func_pre_query($query_string, $query_vars = array())
 {
-    global $NumPreQueriesArray;
-
-    if ($query_vars === null || !is_array($query_vars)) {
-        $query_vars = [];
-    }
-
-    // Handle placeholders like %s, %d, %i, %f and convert them to PDO's positional placeholders (?)
-    $query_string = str_replace(["'%s'", '%d', '%i', '%f'], ['?', '?', '?', '?'], $query_string);
-
-    // If the query contains named placeholders (e.g., :name), we won't replace those
-    // Filter out null values in $query_vars array
-    $query_vars = array_filter($query_vars, function ($value) {
-        return $value !== null;
-    });
-
-    // Check for mismatch between placeholders and variables
-    $placeholder_count = substr_count($query_string, '?');
-    $params_count = count($query_vars);
-
-    if ($placeholder_count !== $params_count) {
-        output_error("SQL Placeholder Error: Mismatch between placeholders ($placeholder_count) and parameters ($params_count).", E_USER_ERROR);
+    $result = sql_prepared_pre_query($query_string, $query_vars, 'qmark');
+    if ($result === false) {
         return false;
     }
 
-    ++$NumPreQueriesArray['pdo_sqlsrv'];
-
-    // Return the query string and variables for further execution
-    return [$query_string, $query_vars];
+    ++$GLOBALS['NumPreQueriesArray']['pdo_sqlsrv'];
+    return $result;
 }
 
-function pdo_sqlsrv_func_set_charset($charset, $pdo = null)
+// Set Charset
+// BUGFIX: this ran MySQL's "SET NAMES" / "SET CHARACTER SET", neither of which
+// exists in T-SQL, so it always errored. The encoding is a connection
+// attribute for this driver.
+function pdo_sqlsrv_func_set_charset($charset, $link = null)
 {
-    if (!isset($pdo) || !($pdo instanceof PDO)) {
-        output_error("Invalid PDO instance provided.", E_USER_ERROR);
-        return false;
-    }
-
-    try {
-        $result = $pdo->exec("SET NAMES '" . $charset . "'");
-        if ($result === false) {
-            $errorInfo = $pdo->errorInfo();
-            output_error("SQL Error: " . $errorInfo[2], E_USER_ERROR);
-            return false;
-        }
-
-        $result = $pdo->exec("SET CHARACTER SET '" . $charset . "'");
-        if ($result === false) {
-            $errorInfo = $pdo->errorInfo();
-            output_error("SQL Error: " . $errorInfo[2], E_USER_ERROR);
-            return false;
-        }
-
-        return true;
-    } catch (PDOException $e) {
-        output_error("PDO Exception: " . $e->getMessage(), E_USER_ERROR);
-        return false;
-    }
+    return true;
 }
 
 // Get next id for stuff
 function pdo_sqlsrv_func_get_next_id($tablepre, $table, $link = null)
 {
-    global $SQLStat;
-    return isset($link) ? $link->lastInsertId() : $SQLStat->lastInsertId();
+    $pdo = pdo_sqlsrv_func_conn($link);
+    return $pdo ? $pdo->lastInsertId() : false;
 }
 
 // Get number of rows for table
 function pdo_sqlsrv_func_get_num_rows($tablepre, $table, $link = null)
 {
-    $query = pdo_sqlsrv_func_pre_query("SELECT COUNT(*) AS cnt FROM " . $tablepre . $table, []);
-    $result = pdo_sqlsrv_func_query($query, $link);
-    $row = pdo_sqlsrv_func_fetch_assoc($result);
-    return $row['cnt'] ?? 0;
-}
-
-
-// Fetch Number of Rows using COUNT in a single query (uses pdo_sqlsrv_func_fetch_assoc)
-function pdo_sqlsrv_func_count_rows($query, $link = null, $countname = "cnt")
-{
-    $result = pdo_sqlsrv_func_query($query, [], $link);  // Pass empty array for params
-    $row = pdo_sqlsrv_func_fetch_assoc($result);
-
-    if ($row === false) {
-        return false;  // Handle case if no row is returned
+    $sql = "SELECT COUNT(*) AS cnt FROM " . sql_quote_identifier($tablepre . $table, 'bracket');
+    $result = pdo_sqlsrv_func_query($sql, $link);
+    if ($result === false) {
+        return false;
     }
 
-    // Use the dynamic column name provided by $countname
-    $count = isset($row[$countname]) ? $row[$countname] : 0;
+    $row = pdo_sqlsrv_func_fetch_assoc($result);
+    pdo_sqlsrv_func_free_result($result);
 
-    @pdo_sqlsrv_func_free_result($result);
+    return (is_array($row) && isset($row['cnt'])) ? (int)$row['cnt'] : 0;
+}
+
+function pdo_sqlsrv_func_count_rows($query, $link = null, $countname = "cnt")
+{
+    $result = pdo_sqlsrv_func_query($query, $link);
+    if ($result === false) {
+        return false;
+    }
+
+    $row = pdo_sqlsrv_func_fetch_assoc($result);
+    $count = (is_array($row) && isset($row[$countname])) ? $row[$countname] : 0;
+
+    pdo_sqlsrv_func_free_result($result);
     return $count;
 }
 
-// Alternative version using pdo_sqlsrv_func_fetch_assoc
 function pdo_sqlsrv_func_count_rows_alt($query, $link = null)
 {
-    $result = pdo_sqlsrv_func_query($query, [], $link);  // Pass empty array for params
-    $row = pdo_sqlsrv_func_fetch_assoc($result);
-
-    if ($row === false) {
-        return false;  // Handle case if no row is returned
+    $result = pdo_sqlsrv_func_query($query, $link);
+    if ($result === false) {
+        return false;
     }
 
-    // Return first column (assuming single column result like COUNT or similar)
-    $count = reset($row);
+    $row = pdo_sqlsrv_func_fetch_assoc($result);
+    $count = is_array($row) ? reset($row) : 0;
 
-    @pdo_sqlsrv_func_free_result($result);
+    pdo_sqlsrv_func_free_result($result);
     return $count;
 }
