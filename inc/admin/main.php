@@ -1738,7 +1738,7 @@ if ($Settings['SQLThemes'] == "off") {
     if ($_POST['board_name'] != $Settings['board_name'] &&
         $Settings['SQLThemes'] == "on") {
         $logoquery = sql_pre_query("UPDATE \"".$Settings['sqltable']."themes\" SET \"Logo\"='%s' WHERE \"Logo\"='%s'", array($_POST['board_name'],$Settings['board_name']));
-        sql_query($logo, $SQLStat);
+        sql_query($logoquery, $SQLStat);
     }
     $_POST['Author'] = htmlspecialchars($_POST['Author'], ENT_QUOTES, $Settings['charset']);
     $_POST['Author'] = fixbamps($_POST['Author']);
