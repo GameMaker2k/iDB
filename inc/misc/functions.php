@@ -718,12 +718,50 @@ function cp($infile, $outfile, $mode = "w")
     return ($written !== false);
 }
 
+// BUGFIX: password_hash() picks a fresh random salt on every call, so the
+// value this returns is different each time for the same password. The login
+// code recomputes it and compares with hash_equals(), which can therefore
+// NEVER match -- bcrypt and argon2 accounts were completely unable to log in.
+// Use neo_b64e_verify() to check a stored value instead of recomputing.
+//
+// BUGFIX: the $hash argument was ignored and PASSWORD_BCRYPT was always used,
+// so boards configured for argon2i/argon2id silently produced bcrypt hashes.
+function neo_b64e_algo($hash)
+{
+    $hash = strtolower((string)$hash);
+    if ($hash === 'argon2i' && defined('PASSWORD_ARGON2I')) {
+        return PASSWORD_ARGON2I;
+    }
+    if ($hash === 'argon2id' && defined('PASSWORD_ARGON2ID')) {
+        return PASSWORD_ARGON2ID;
+    }
+    return PASSWORD_BCRYPT;
+}
+
+// Verify a stored neo_b64e_* value. password_verify() reads the algorithm and
+// salt out of the stored hash, so this keeps working for values that were
+// written as bcrypt while the board was configured for argon2.
+function neo_b64e_verify($data, $key, $extdata, $stored)
+{
+    if (!is_string($stored) || $stored === '') {
+        return false;
+    }
+    $decoded = base64_decode($stored, true);
+    if ($decoded === false || $decoded === '') {
+        return false;
+    }
+    return password_verify($data.$extdata, $decoded);
+}
+
+function neo_b64e_rot13_verify($data, $key, $extdata, $stored)
+{
+    return neo_b64e_verify(str_rot13($data), $key, $extdata, $stored);
+}
+
 // b64hmac hash function
 function neo_b64e_hmac($data, $key, $extdata, $hash = 'sha1', $blocksize = 64)
 {
-    $extdata2 = hexdec($extdata);
-    $key = $key.$extdata2;
-    return base64_encode(password_hash($data.$extdata, PASSWORD_BCRYPT));
+    return base64_encode(password_hash($data.$extdata, neo_b64e_algo($hash)));
 }
 
 function neo_b64e_bcrypt_hmac($data, $key, $extdata, $hash = 'sha1', $blocksize = 64)
@@ -733,16 +771,12 @@ function neo_b64e_bcrypt_hmac($data, $key, $extdata, $hash = 'sha1', $blocksize 
 
 function neo_b64e_argon2i_hmac($data, $key, $extdata, $hash = 'sha1', $blocksize = 64)
 {
-    $extdata2 = hexdec($extdata);
-    $key = $key.$extdata2;
-    return base64_encode(password_hash($data.$extdata, PASSWORD_ARGON2I));
+    return neo_b64e_hmac($data, $key, $extdata, 'argon2i', $blocksize);
 }
 
 function neo_b64e_argon2id_hmac($data, $key, $extdata, $hash = 'sha1', $blocksize = 64)
 {
-    $extdata2 = hexdec($extdata);
-    $key = $key.$extdata2;
-    return base64_encode(password_hash($data.$extdata, PASSWORD_ARGON2ID));
+    return neo_b64e_hmac($data, $key, $extdata, 'argon2id', $blocksize);
 }
 
 // b64hmac rot13 hash function
