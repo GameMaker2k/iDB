@@ -13,8 +13,16 @@
 
     $FileInfo: javascript.php - Last Update: 8/23/2024 SVN 1023 - Author: cooldude2k $
 */
+// BUGFIX: this file emits JavaScript but never sent a Content-Type, so served
+// as .php it inherited text/html. The board also sends
+// "X-Content-Type-Options: nosniff", which makes browsers *refuse* to execute
+// a script delivered as text/html -- so none of the functions below loaded.
+if (!isset($Settings['charset']) || $Settings['charset'] == "") {
+    $Settings['charset'] = "UTF-8";
+}
+header("Content-Type: text/javascript; charset=".$Settings['charset']);
 header("Content-Language: en");
-header("Vary: Accept");
+header("Vary: Accept, Accept-Encoding");
 ?>
 // Utility function to fetch a DOM element by ID
 function getid(id) {
@@ -39,7 +47,10 @@ function bgchange(id, color) {
 
 // Change the inner HTML of elements with a specific tag name
 function innerchange(tag, text1, text2) {
-    const elements = document.getElementsByTagName(tag);
+    // BUGFIX: getElementsByTagName() returns a *live* collection. Rewriting
+    // innerHTML while iterating it can add or remove matching elements
+    // mid-loop, so entries were skipped. Snapshot it first.
+    const elements = Array.from(document.getElementsByTagName(tag));
     for (const element of elements) {
         if (element.innerHTML === text1) {
             element.innerHTML = text2;
@@ -97,4 +108,14 @@ function GetUserTimeZone() {
     return false;
 }
 
-<?php gzip_page($Settings['use_gzip']); ?>
+<?php
+// BUGFIX: every other caller passes the negotiated encoding as the second
+// argument. Omitting it here made gzip_page() fall back to "gzip" even when
+// the client had not offered it.
+if (!isset($Settings['use_gzip'])) {
+    $Settings['use_gzip'] = "off";
+}
+if (!isset($GZipEncode['Type'])) {
+    $GZipEncode = array("Type" => "none");
+}
+gzip_page($Settings['use_gzip'], $GZipEncode['Type']); ?>

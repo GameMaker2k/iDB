@@ -18,6 +18,17 @@ if ($File3Name == "filename.php" || $File3Name == "/filename.php") {
     require('index.php');
     exit();
 }
+// BUGFIX: these were all read without isset(), warning on a settings.php that
+// predates any of them.
+foreach (array('fixbasedir', 'fixcookiedir', 'idburl', 'rssurl') as $iDBFileKey) {
+    if (!isset($Settings[$iDBFileKey])) {
+        $Settings[$iDBFileKey] = null;
+    }
+}
+unset($iDBFileKey);
+if (!isset($_SERVER['HTTP_HOST'])) {
+    $_SERVER['HTTP_HOST'] = "localhost";
+}
 // Check and set stuff
 if (dirname($_SERVER['SCRIPT_NAME']) != ".") {
     $basedir = dirname($_SERVER['SCRIPT_NAME'])."/";
@@ -25,7 +36,9 @@ if (dirname($_SERVER['SCRIPT_NAME']) != ".") {
 if (dirname($_SERVER['SCRIPT_NAME']) == ".") {
     $basedir = dirname($_SERVER['PHP_SELF'])."/";
 }
-if ($basedir == "\/") {
+// BUGFIX: "\/" in a double-quoted string is a literal backslash-slash, so
+// this normalisation never fired.
+if ($basedir == "/") {
     $basedir = "/";
 }
 $basedir = str_replace("//", "/", $basedir);
@@ -46,6 +59,21 @@ if ($_SERVER['HTTPS'] == "on") {
 if ($_SERVER['HTTPS'] != "on") {
     $prehost = "http://";
 }
+// NOTE: versioninfo.php calls getGitRevision(), and this file require_once()s
+// versioninfo.php a few lines below -- so this declaration has to stay above
+// that include.
+function getGitRevision($GitRevN)
+{
+    // Use a regular expression to extract the revision number
+    if (preg_match('/\$Id:\s+([a-f0-9]{40})\s+\$/', $GitRevN, $matches)) {
+        return $matches[1];
+    }
+    return null; // Return null if no match is found
+}
+require_once($SettDir['inc'].'versioninfo.php');
+// BUGFIX: this block used to sit *above* the require_once() line. versioninfo.php
+// opens with `$rssurlon = "off";`, so every "on" set here was immediately
+// discarded and a custom RSS URL never took effect. Run it after the include.
 if ($Settings['idburl'] == "localhost" || $Settings['idburl'] == null) {
     $rssurl = $prehost.$_SERVER['HTTP_HOST'].$BaseURL;
 }
@@ -57,20 +85,20 @@ if ($Settings['rssurl'] != null && $Settings['rssurl'] != "") {
     $rssurlon = "on";
     $rssurl = $Settings['rssurl'];
 }
-function getGitRevision($GitRevN)
-{
-    // Use a regular expression to extract the revision number
-    if (preg_match('/\$Id:\s+([a-f0-9]{40})\s+\$/', $GitRevN, $matches)) {
-        return $matches[1];
-    }
-    return null; // Return null if no match is found
-}
-require_once($SettDir['inc'].'versioninfo.php');
+
 //File naming stuff. <_<
 $exfile = array();
 $exfilerss = array();
 $exqstr = array();
 $exqstrrss = array();
+// BUGFIX: only four of the nine collections were initialised; the rest were
+// created by auto-vivification, which breaks if a caller ever reads one before
+// this file has run.
+$prexqstr = array();
+$prexqstrrss = array();
+$exfilejs = array();
+$prexqstrjs = array();
+$exqstrjs = array();
 $exfile['calendar'] = 'calendar';
 $prexqstr['calendar'] = null;
 $exqstr['calendar'] = null;
