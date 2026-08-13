@@ -29,6 +29,45 @@ if (!isset($SetupDir['sql'])) {
 if (!isset($SetupDir['convert'])) {
     $SetupDir['convert'] = "setup/convert/";
 }
+
+/* ------------------------------------------------------------------
+   Installer output helpers.
+   ------------------------------------------------------------------ */
+if (!function_exists('idb_php_value')) {
+    // BUGFIX: every value was written into settings.php inside a single-quoted
+    // PHP string with no escaping whatsoever. A database password (or board
+    // name, or admin user) containing an apostrophe produced a settings.php
+    // that PHP could not parse, and anything reaching the installer could
+    // inject arbitrary PHP into the generated config.
+    function idb_php_value($value)
+    {
+        return "'" . str_replace(array('\\', "'"), array('\\\\', "\\'"), (string)$value) . "'";
+    }
+
+    // BUGFIX: fopen() failures were never checked. On PHP 8 a failed open made
+    // fwrite(false, ...) a fatal TypeError, and the installer reported success
+    // regardless of whether anything was written.
+    function idb_write_file($path, $data)
+    {
+        $fp = @fopen($path, "w+");
+        if ($fp === false) {
+            return false;
+        }
+        $written = fwrite($fp, $data);
+        fclose($fp);
+        if ($written === false) {
+            return false;
+        }
+        // settings.php holds the database password: never world-writable.
+        @chmod($path, 0644);
+        return true;
+    }
+}
+if (!isset($Error)) {
+    // BUGFIX: $Error was read with "if ($Error != ...)" before ever being set.
+    $Error = "No";
+}
+
 $_POST['DatabaseHost'] = $Settings['sqlhost'];
 $_POST['DatabaseUserName'] = $Settings['sqluser'];
 $_POST['DatabasePassword'] = $Settings['sqlpass'];
@@ -77,13 +116,17 @@ if ($_POST['sessprefix'] == null || $_POST['sessprefix'] == "_") {
     $_POST['sessprefix'] = "idb_";
 }
 $checkfile = "settings.php";
-@chmod("settings.php", 0766);
-@chmod("settingsbak.php", 0766);
+// BUGFIX: 0766 left settings.php -- which stores the database password --
+// world-writable. 0644 is enough for the installer to rewrite it.
+@chmod("settings.php", 0644);
+@chmod("settingsbak.php", 0644);
 if (!is_writable($checkfile)) {
     echo "<br />Settings is not writable.";
-    @chmod("settings.php", 0766);
+    // BUGFIX: 0766 left settings.php -- which stores the database password --
+// world-writable. 0644 is enough for the installer to rewrite it.
+@chmod("settings.php", 0644);
     $Error = "Yes";
-    @chmod("settingsbak.php", 0766);
+    @chmod("settingsbak.php", 0644);
 } else { /* settings.php is writable install iDB. ^_^ */
 }
 if (session_id()) {
@@ -109,12 +152,12 @@ function unparse_url($parsed_url)
 $OrgBoardURL = $_POST['BoardURL'];
 $PreBestURL = parse_url($_POST['BoardURL']);
 $PreServURL = parse_url((isset($_SERVER['HTTPS']) ? "https" : "http") . "://".$_SERVER['HTTP_HOST'].substr($_SERVER['REQUEST_URI'], 0, strrpos($_SERVER['REQUEST_URI'], '/') + 1));
-if ($PreBestURL['host'] == "localhost.url" && str_replace("/", "", $PreBestURL['path']) == "localpath") {
+if (isset($PreBestURL['host']) && $PreBestURL['host'] == "localhost.url" && str_replace("/", "", $PreBestURL['path']) == "localpath") {
     $PreBestURL['host'] = $PreServURL['host'];
     $PreBestURL['path'] = $PreServURL['path'];
     $_POST['BoardURL'] = unparse_url($PreBestURL);
 }
-if ($PreBestURL['host'] == "localhost.url" && str_replace("/", "", $PreBestURL['path']) != "localpath") {
+if (isset($PreBestURL['host']) && $PreBestURL['host'] == "localhost.url" && str_replace("/", "", $PreBestURL['path']) != "localpath") {
     $PreBestURL['host'] = $PreServURL['host'];
     $_POST['BoardURL'] = unparse_url($PreBestURL);
 }
@@ -248,10 +291,10 @@ if ($_POST['HTMLType'] == "xhtml5") {
 }
 $_POST['BoardURL'] = htmlentities($_POST['BoardURL'], ENT_QUOTES, $Settings['charset']);
 $_POST['BoardURL'] = remove_spaces($_POST['BoardURL']);
-$_POST['BoardURL'] = addslashes($_POST['BoardURL']);
+// BUGFIX: addslashes() is not correct escaping for either HTML or SQL;
+// settings.php output is escaped properly by idb_php_value() instead.
 $OrgBoardURL = htmlentities($OrgBoardURL, ENT_QUOTES, $Settings['charset']);
 $OrgBoardURL = remove_spaces($OrgBoardURL);
-$OrgBoardURL = addslashes($OrgBoardURL);
 $YourDate = $utccurtime->getTimestamp();
 $YourEditDate = $YourDate + $dayconv['minute'];
 $GSalt = salt_hmac();
@@ -273,7 +316,11 @@ if (!function_exists('hash') && !function_exists('hash_algos')) {
     }
 }
 if (function_exists('hash') && function_exists('hash_algos')) {
-    if (!in_array($_POST['usehashtype'], hash_algos())) {
+    // BUGFIX: bcrypt/argon2i/argon2id are password_hash() algorithms and are
+    // never listed by hash_algos(), so picking one in the installer form was
+    // silently downgraded to SHA1 before it was ever saved.
+    if (!in_array($_POST['usehashtype'], hash_algos())
+        && !in_array($_POST['usehashtype'], array("bcrypt", "argon2i", "argon2id"), true)) {
         $_POST['usehashtype'] = "sha1";
     }
     if ($_POST['usehashtype'] != "md2" &&
@@ -760,35 +807,35 @@ if ($Error != "Yes") {
     $pretext2 = array("/*   Board Setting Section Begins   */\n\$Settings = array();","/*   Board Setting Section Ends  \n     Board Info Section Begins   */\n\$SettInfo = array();","/*   Board Setting Section Ends   \n     Board Dir Section Begins   */\n\$SettDir = array();","/*   Board Dir Section Ends   */");
     $settcheck = "\$File3Name = basename(\$_SERVER['SCRIPT_NAME']);\nif (\$File3Name==\"settings.php\"||\$File3Name==\"/settings.php\"||\n    \$File3Name==\"settingsbak.php\"||\$File3Name==\"/settingsbak.php\") {\n    header('Location: index.php');\n    exit(); }\n";
     $BoardSettings = $pretext2[0]."\n".
-    "\$Settings['sqlhost'] = '".$_POST['DatabaseHost']."';\n".
-    "\$Settings['sqldb'] = '".$_POST['DatabaseName']."';\n".
-    "\$Settings['sqltable'] = '".$_POST['tableprefix']."';\n".
-    "\$Settings['sqluser'] = '".$_POST['DatabaseUserName']."';\n".
-    "\$Settings['sqlpass'] = '".$_POST['DatabasePassword']."';\n".
-    "\$Settings['sqltype'] = '".$_POST['DatabaseType']."';\n".
-    "\$Settings['board_name'] = '".$_POST['NewBoardName']."';\n".
-    "\$Settings['idbdir'] = '".$idbdir."';\n".
-    "\$Settings['idburl'] = '".$OrgBoardURL."';\n".
-    "\$Settings['enable_https'] = '".$Settings['enable_https']."';\n".
-    "\$Settings['weburl'] = '".$OrgWebSiteURL."';\n".
-    "\$Settings['SQLThemes'] = '".$_POST['SQLThemes']."';\n".
-    "\$Settings['use_gzip'] = '".$_POST['GZip']."';\n".
-    "\$Settings['html_type'] = '".$_POST['HTMLType']."';\n".
-    "\$Settings['output_type'] = '".$_POST['OutPutType']."';\n".
+    "\$Settings['sqlhost'] = ".idb_php_value($_POST['DatabaseHost']).";\n".
+    "\$Settings['sqldb'] = ".idb_php_value($_POST['DatabaseName']).";\n".
+    "\$Settings['sqltable'] = ".idb_php_value($_POST['tableprefix']).";\n".
+    "\$Settings['sqluser'] = ".idb_php_value($_POST['DatabaseUserName']).";\n".
+    "\$Settings['sqlpass'] = ".idb_php_value($_POST['DatabasePassword']).";\n".
+    "\$Settings['sqltype'] = ".idb_php_value($_POST['DatabaseType']).";\n".
+    "\$Settings['board_name'] = ".idb_php_value($_POST['NewBoardName']).";\n".
+    "\$Settings['idbdir'] = ".idb_php_value($idbdir).";\n".
+    "\$Settings['idburl'] = ".idb_php_value($OrgBoardURL).";\n".
+    "\$Settings['enable_https'] = ".idb_php_value($Settings['enable_https']).";\n".
+    "\$Settings['weburl'] = ".idb_php_value($OrgWebSiteURL).";\n".
+    "\$Settings['SQLThemes'] = ".idb_php_value($_POST['SQLThemes']).";\n".
+    "\$Settings['use_gzip'] = ".idb_php_value($_POST['GZip']).";\n".
+    "\$Settings['html_type'] = ".idb_php_value($_POST['HTMLType']).";\n".
+    "\$Settings['output_type'] = ".idb_php_value($_POST['OutPutType']).";\n".
     "\$Settings['GuestGroup'] = 'Guest';\n".
     "\$Settings['MemberGroup'] = 'Member';\n".
     "\$Settings['ValidateGroup'] = 'Validate';\n".
     "\$Settings['AdminValidate'] = 'off';\n".
-    "\$Settings['TestReferer'] = '".$_POST['TestReferer']."';\n".
-    "\$Settings['DefaultTheme'] = '".$_POST['DefaultTheme']."';\n".
-    "\$Settings['DefaultTimeZone'] = '".$_POST['YourOffSet']."';\n".
+    "\$Settings['TestReferer'] = ".idb_php_value($_POST['TestReferer']).";\n".
+    "\$Settings['DefaultTheme'] = ".idb_php_value($_POST['DefaultTheme']).";\n".
+    "\$Settings['DefaultTimeZone'] = ".idb_php_value($_POST['YourOffSet']).";\n".
     "\$Settings['start_date'] = ".$YourDate.";\n".
-    "\$Settings['idb_time_format'] = '".$Settings['idb_time_format']."';\n".
-    "\$Settings['idb_date_format'] = '".$Settings['idb_date_format']."';\n".
-    "\$Settings['use_hashtype'] = '".$_POST['usehashtype']."';\n".
-    "\$Settings['charset'] = '".$Settings['charset']."';\n".
-    "\$Settings['sql_collate'] = '".$Settings['sql_collate']."';\n".
-    "\$Settings['sql_charset'] = '".$Settings['sql_charset']."';\n".
+    "\$Settings['idb_time_format'] = ".idb_php_value($Settings['idb_time_format']).";\n".
+    "\$Settings['idb_date_format'] = ".idb_php_value($Settings['idb_date_format']).";\n".
+    "\$Settings['use_hashtype'] = ".idb_php_value($_POST['usehashtype']).";\n".
+    "\$Settings['charset'] = ".idb_php_value($Settings['charset']).";\n".
+    "\$Settings['sql_collate'] = ".idb_php_value($Settings['sql_collate']).";\n".
+    "\$Settings['sql_charset'] = ".idb_php_value($Settings['sql_charset']).";\n".
     "\$Settings['add_power_by'] = 'off';\n".
     "\$Settings['send_pagesize'] = 'off';\n".
     "\$Settings['max_posts'] = '10';\n".
@@ -815,16 +862,16 @@ if ($Error != "Yes") {
     "\$Settings['board_offline'] = 'off';\n".
     "\$Settings['VerCheckURL'] = '';\n".
     "\$Settings['IPCheckURL'] = '';\n".
-    "\$Settings['log_http_request'] = '".$_POST['iDBHTTPLogger']."';\n".
-    "\$Settings['log_config_format'] = '".$_POST['iDBLoggerFormat']."';\n".
-    "\$Settings['BoardUUID'] = '".base64_encode($ServerUUID)."';\n".
-    "\$Settings['KarmaBoostDays'] = '".$KarmaBoostDay."';\n".
+    "\$Settings['log_http_request'] = ".idb_php_value($_POST['iDBHTTPLogger']).";\n".
+    "\$Settings['log_config_format'] = ".idb_php_value($_POST['iDBLoggerFormat']).";\n".
+    "\$Settings['BoardUUID'] = ".idb_php_value(base64_encode($ServerUUID)).";\n".
+    "\$Settings['KarmaBoostDays'] = ".idb_php_value($KarmaBoostDay).";\n".
     "\$Settings['KBoostPercent'] = '6|10';\n".$pretext2[1]."\n".
-    "\$SettInfo['board_name'] = '".$_POST['NewBoardName']."';\n".
-    "\$SettInfo['Author'] = '".$_POST['AdminUser']."';\n".
-    "\$SettInfo['Keywords'] = '".$_POST['NewBoardName'].",".$_POST['AdminUser']."';\n".
-    "\$SettInfo['Description'] = '".$_POST['NewBoardName'].",".$_POST['AdminUser']."';\n".$pretext2[2]."\n".
-    "\$SettDir['maindir'] = '".$idbdir."';\n".
+    "\$SettInfo['board_name'] = ".idb_php_value($_POST['NewBoardName']).";\n".
+    "\$SettInfo['Author'] = ".idb_php_value($_POST['AdminUser']).";\n".
+    "\$SettInfo['Keywords'] = ".idb_php_value($_POST['NewBoardName'].",".$_POST['AdminUser']).";\n".
+    "\$SettInfo['Description'] = ".idb_php_value($_POST['NewBoardName'].",".$_POST['AdminUser']).";\n".$pretext2[2]."\n".
+    "\$SettDir['maindir'] = ".idb_php_value($idbdir).";\n".
     "\$SettDir['inc'] = 'inc/';\n".
     "\$SettDir['logs'] = 'logs/';\n".
     "\$SettDir['archive'] = 'archive/';\n".
@@ -837,13 +884,10 @@ if ($Error != "Yes") {
     "\$SettDir['themes'] = 'themes/';\n".$pretext2[3]."\n?>";
     $BoardSettingsBak = $pretext.$settcheck.$BoardSettings;
     $BoardSettings = $pretext.$settcheck.$BoardSettings;
-    $fp = fopen("settings.php", "w+");
-    fwrite($fp, $BoardSettings);
-    fclose($fp);
-    //	cp("settings.php","settingsbak.php");
-    $fp = fopen("settingsbak.php", "w+");
-    fwrite($fp, $BoardSettingsBak);
-    fclose($fp);
+    if (!idb_write_file("settings.php", $BoardSettings) || !idb_write_file("settingsbak.php", $BoardSettingsBak)) {
+        echo "<br />Settings is not writable.";
+        $Error = "Yes";
+    }
     if ($_POST['storecookie'] == "true") {
         if ($URLsTest['host'] != "localhost.url") {
             setcookie("MemberName", $_POST['AdminUser'], time() + (7 * 86400), $this_dir, $URLsTest['host']);

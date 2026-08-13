@@ -19,6 +19,18 @@ if ($File3Name == "html5.php" || $File3Name == "/html5.php") {
     exit();
 }
 $XHTML5 = false;
+// BUGFIX: these superglobals were read without isset(); on PHP 8.1+ passing
+// null to stristr()/strpos() is deprecated, and a missing Accept or
+// User-Agent header raised undefined-key warnings on every request.
+if (!isset($_SERVER['HTTP_ACCEPT'])) {
+    $_SERVER['HTTP_ACCEPT'] = "";
+}
+if (!isset($_SERVER['HTTP_USER_AGENT'])) {
+    $_SERVER['HTTP_USER_AGENT'] = "";
+}
+if (!isset($_GET['act'])) {
+    $_GET['act'] = null;
+}
 // Check to see if we serv the file as html or xhtml
 // if we do xhtml we also check to see if user's browser
 // can dispay if or else fallback to html
@@ -73,6 +85,9 @@ if ($checklowview === true && $_GET['act'] == "lowview") {
     $ThemeInfo['MakerURL'] = $ThemeSet['MakerURL'];
     $ThemeInfo['CopyRight'] = $ThemeSet['CopyRight'];
 }
+if (!isset($ThemeSet['CSSType'])) {
+    $ThemeSet['CSSType'] = "import";
+}
 if ($ThemeSet['CSSType'] != "import" &&
    $ThemeSet['CSSType'] != "link" &&
    $ThemeSet['CSSType'] != "lowview" &&
@@ -117,12 +132,8 @@ header("Referrer-Policy: no-referrer-when-downgrade");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("X-Content-Type-Options: nosniff");
 header("Vary: Accept-Language, Accept-Encoding, User-Agent, Cookie, Referer, X-Requested-With");
-header("Accept-CH: Accept-CH: Sec-CH-UA, Sec-CH-UA-Platform, Sec-CH-UA-Mobile, Sec-CH-UA-Full-Version, Sec-CH-UA-Full-Version-List, Sec-CH-UA-Platform-Version, Sec-CH-UA-Arch, Sec-CH-UA-Bitness, Sec-CH-UA-Model, Sec-CH-Viewport-Width, Sec-CH-Viewport-Height, Sec-CH-Lang, Sec-CH-Save-Data, Sec-CH-Width, Sec-CH-DPR, Sec-CH-Device-Memory, Sec-CH-RTT, Sec-CH-Downlink, Sec-CH-ECT, Sec-CH-Prefers-Color-Scheme, Sec-CH-Prefers-Reduced-Motion, Sec-CH-Prefers-Reduced-Transparency, Sec-CH-Prefers-Contrast, Sec-CH-Forced-Colors");
+header("Accept-CH: Sec-CH-UA, Sec-CH-UA-Platform, Sec-CH-UA-Mobile, Sec-CH-UA-Full-Version, Sec-CH-UA-Full-Version-List, Sec-CH-UA-Platform-Version, Sec-CH-UA-Arch, Sec-CH-UA-Bitness, Sec-CH-UA-Model, Sec-CH-Viewport-Width, Sec-CH-Viewport-Height, Sec-CH-Lang, Sec-CH-Save-Data, Sec-CH-Width, Sec-CH-DPR, Sec-CH-Device-Memory, Sec-CH-RTT, Sec-CH-Downlink, Sec-CH-ECT, Sec-CH-Prefers-Color-Scheme, Sec-CH-Prefers-Reduced-Motion, Sec-CH-Prefers-Reduced-Transparency, Sec-CH-Prefers-Contrast, Sec-CH-Forced-Colors");
 // Check if we are on a secure HTTP connection
-if (isset($_SERVER['HTTPS'])) {
-    $prehost = "https://";
-    ;
-}
 if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") {
     $prehost = "https://";
 }
@@ -165,30 +176,29 @@ if ($XHTML5 === false) {
 <meta charset="<?php echo $Settings['charset']; ?>">
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $Settings['charset']; ?>">
 <meta name="language" content="english">
-<meta name="viewport" id="viewport" content="width=device-width, initial-scale=0.5">
 <?php
 if (!isset($_SERVER['HTTP_USER_AGENT'])) {
     $_SERVER['HTTP_USER_AGENT'] = "";
 }
-    if (strpos($_SERVER['HTTP_USER_AGENT'], "msie") &&
-        !strpos($_SERVER['HTTP_USER_AGENT'], "opera")) { ?>
+    if (stripos($_SERVER['HTTP_USER_AGENT'], "msie") !== false &&
+        stripos($_SERVER['HTTP_USER_AGENT'], "opera") === false) { ?>
 <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-<?php } if (strpos($_SERVER['HTTP_USER_AGENT'], "chromeframe")) { ?>
+<?php } if (stripos($_SERVER['HTTP_USER_AGENT'], "chromeframe") !== false) { ?>
 <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
 <?php }
 } if ($XHTML5 === true) { ?>
 <meta charset="<?php echo $Settings['charset']; ?>" />
-<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta http-equiv="X-Content-Type-Options" content="nosniff" />
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $Settings['charset']; ?>" />
 <meta name="language" content="english" />
 <?php
 if (!isset($_SERVER['HTTP_USER_AGENT'])) {
     $_SERVER['HTTP_USER_AGENT'] = "";
 }
-    if (strpos($_SERVER['HTTP_USER_AGENT'], "msie") &&
-        !strpos($_SERVER['HTTP_USER_AGENT'], "opera")) { ?>
+    if (stripos($_SERVER['HTTP_USER_AGENT'], "msie") !== false &&
+        stripos($_SERVER['HTTP_USER_AGENT'], "opera") === false) { ?>
 <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-<?php } if (strpos($_SERVER['HTTP_USER_AGENT'], "chromeframe")) { ?>
+<?php } if (stripos($_SERVER['HTTP_USER_AGENT'], "chromeframe") !== false) { ?>
 <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
 <?php }
 } ?>

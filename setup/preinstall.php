@@ -24,6 +24,11 @@ if ($File3Name == "preinstall.php" || $File3Name == "/preinstall.php") {
 
 header("Cache-Control: private, no-cache, no-store, must-revalidate, pre-check=0, post-check=0, max-age=0");
 header("Pragma: private, no-cache, no-store, must-revalidate, pre-check=0, post-check=0, max-age=0");
+// BUGFIX: $utccurtime is not guaranteed to exist this early; a missing one
+// made these three header() calls fatal.
+if (!isset($utccurtime) || !is_object($utccurtime)) {
+    $utccurtime = new DateTime("now", new DateTimeZone("UTC"));
+}
 header("Date: ".$utccurtime->format("D, d M Y H:i:s")." GMT");
 header("Last-Modified: ".$utccurtime->format("D, d M Y H:i:s")." GMT");
 header("Expires: ".$utccurtime->format("D, d M Y H:i:s")." GMT");
@@ -114,6 +119,9 @@ if (!isset($_POST['License'])) {
 if (isset($_POST['DatabaseType'])) {
     $Settings['sqltype'] = $_POST['DatabaseType'];
 }
+if (!isset($Settings['sqltype']) || $Settings['sqltype'] === null) {
+    $Settings['sqltype'] = "mysqli";
+}
 if (isset($Settings['sqltype'])) {
     if ($Settings['sqltype'] != "mysqli" &&
         $Settings['sqltype'] != "mysqli_prepare" &&
@@ -128,7 +136,19 @@ if (isset($Settings['sqltype'])) {
         $Settings['sqltype'] != "pdo_cubrid" &&
         $Settings['sqltype'] != "sqlsrv_prepare" &&
         $Settings['sqltype'] != "pdo_sqlsrv") {
+        // BUGFIX: this fell back to mysqli even when the mysqli extension was
+        // not available. Pick the first driver that actually loaded.
         $Settings['sqltype'] = "mysqli";
+        $iDBSQLFallback = array("mysqli", "mysqli_prepare", "pdo_mysql", "pgsql",
+            "pgsql_prepare", "pdo_pgsql", "sqlite3", "sqlite3_prepare",
+            "pdo_sqlite3", "cubrid", "cubrid_prepare", "pdo_cubrid",
+            "sqlsrv_prepare", "pdo_sqlsrv");
+        foreach ($iDBSQLFallback as $iDBSQLTry) {
+            if (function_exists($iDBSQLTry."_func_connect_db")) {
+                $Settings['sqltype'] = $iDBSQLTry;
+                break;
+            }
+        }
     }
 }
 $Settings['idb_time_format'] = "g:i A";

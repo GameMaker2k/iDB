@@ -25,12 +25,18 @@ if (!isset($SetupDir['setup'])) {
 if (!isset($SetupDir['convert'])) {
     $SetupDir['convert'] = "setup/convert/";
 }
-if ($_POST['License'] != "Agree") {
+if (!isset($Error)) {
+    // BUGFIX: $Error was read below without ever being initialised.
+    $Error = "No";
+}
+if (!isset($_POST['License']) || $_POST['License'] != "Agree") {
     $Error = "Yes";  ?>
 <tr class="TableRow3">
 <td class="TableColumn3">
 <span class="TableMessage">
-<br />You need to  agree to the tos.<br /></span>
+<br />You need to agree to the TOS.<br /></span>
+</td>
+</tr>
 <?php }
 if ($Error != "Yes") {
     ?>
@@ -81,6 +87,7 @@ if ($Error != "Yes") {
 	<?php } if (!function_exists("mysqli_func_connect_db") &&
                !function_exists("pgsql_func_connect_db") &&
                !function_exists("sqlite3_func_connect_db") &&
+               !function_exists("cubrid_func_connect_db") &&
                !function_exists("cubrid_prepare_func_connect_db") &&
                !function_exists("mysqli_prepare_func_connect_db") &&
                !function_exists("pgsql_prepare_func_connect_db") &&
@@ -101,7 +108,7 @@ if ($Error != "Yes") {
 	<option value="ISO-8859-15">Latin-9 (ISO-8859-15)</option>
 	<option value="ISO-8859-1">Latin-1 (ISO-8859-1)</option>
 	</select></td>
-	<?php if ($ConvertInfo['ConvertFile'] != null) { ?>
+	<?php if (isset($ConvertInfo['ConvertFile']) && $ConvertInfo['ConvertFile'] != null) { ?>
 </tr><tr>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="SetupType">Type of install to do:</label></td>
 	<td style="width: 50%;"><select size="1" class="TextBox" name="SetupType" id="SetupType">
@@ -113,7 +120,7 @@ if ($Error != "Yes") {
 <table style="text-align: left;">
 <tr style="text-align: left;">
 <td style="width: 100%;">
-<?php if ($ConvertInfo['ConvertFile'] == null) { ?>
+<?php if (!isset($ConvertInfo['ConvertFile']) || $ConvertInfo['ConvertFile'] == null) { ?>
 <input type="hidden" name="SetupType" value="install" style="display: none;" />
 <?php } ?>
 <input type="hidden" name="act" value="part3" style="display: none;" />

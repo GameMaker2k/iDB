@@ -25,6 +25,44 @@ if (!isset($SetupDir['setup'])) {
 if (!isset($SetupDir['convert'])) {
     $SetupDir['convert'] = "setup/convert/";
 }
+
+/* ------------------------------------------------------------------
+   Installer output helpers.
+   ------------------------------------------------------------------ */
+if (!function_exists('idb_php_value')) {
+    // BUGFIX: every value was written into settings.php inside a single-quoted
+    // PHP string with no escaping whatsoever. A database password (or board
+    // name, or admin user) containing an apostrophe produced a settings.php
+    // that PHP could not parse, and anything reaching the installer could
+    // inject arbitrary PHP into the generated config.
+    function idb_php_value($value)
+    {
+        return "'" . str_replace(array('\\', "'"), array('\\\\', "\\'"), (string)$value) . "'";
+    }
+
+    // BUGFIX: fopen() failures were never checked. On PHP 8 a failed open made
+    // fwrite(false, ...) a fatal TypeError, and the installer reported success
+    // regardless of whether anything was written.
+    function idb_write_file($path, $data)
+    {
+        $fp = @fopen($path, "w+");
+        if ($fp === false) {
+            return false;
+        }
+        $written = fwrite($fp, $data);
+        fclose($fp);
+        if ($written === false) {
+            return false;
+        }
+        // settings.php holds the database password: never world-writable.
+        @chmod($path, 0644);
+        return true;
+    }
+}
+if (!isset($Error)) {
+    // BUGFIX: $Error was read with "if ($Error != ...)" before ever being set.
+    $Error = "No";
+}
 ?>
 <tr class="TableRow3">
 <td class="TableColumn3">
@@ -38,23 +76,21 @@ $pretext2 = array("/*   Board Setting Section Begins   */\n\$Settings = array();
 $settcheck = "\$File3Name = basename(\$_SERVER['SCRIPT_NAME']);\nif (\$File3Name==\"settings.php\"||\$File3Name==\"/settings.php\"||\n    \$File3Name==\"settingsbak.php\"||\$File3Name==\"/settingsbak.php\") {\n    header('Location: index.php');\n    exit(); }\n";
 $BoardSettingsBak = $pretext.$settcheck;
 $BoardSettings = $pretext.$settcheck;
-$fp = fopen("settings.php", "w+");
-fwrite($fp, $BoardSettings);
-fclose($fp);
-//	cp("settings.php","settingsbak.php");
-$fp = fopen("settingsbak.php", "w+");
-fwrite($fp, $BoardSettingsBak);
-fclose($fp);
-if (!is_writable($checkfile)) {
+// BUGFIX: the files were written first and only then tested for writability,
+// so a read-only settings.php produced two unchecked fwrite() calls (a fatal
+// TypeError on PHP 8) before the check could report anything.
+if (!idb_write_file("settings.php", $BoardSettings) || !idb_write_file("settingsbak.php", $BoardSettingsBak)) {
     echo "<br />Settings is not writable.";
-    chmod("settings.php", 0755);
     $Error = "Yes";
-    chmod("settingsbak.php", 0755);
-} else { /* settings.php is writable install iDB. ^_^ */
+} elseif (!is_writable($checkfile)) {
+    echo "<br />Settings is not writable.";
+    $Error = "Yes";
 }
+// BUGFIX: cubrid_func_connect_db was missing from this list.
 if (!function_exists("mysqli_func_connect_db") &&
            !function_exists("pgsql_func_connect_db") &&
            !function_exists("sqlite3_func_connect_db") &&
+           !function_exists("cubrid_func_connect_db") &&
            !function_exists("cubrid_prepare_func_connect_db") &&
            !function_exists("mysqli_prepare_func_connect_db") &&
            !function_exists("pgsql_prepare_func_connect_db") &&
@@ -82,14 +118,17 @@ if ($Error != "Yes") {
     $iDBRSVN = $VER2[2]." ".$SubVerN;
     $LastUpdateS = "Last Update: ".$iDBRDate." ".$iDBRSVN;
     $pretext = "<?php\n/*\n    This program is free software; you can redistribute it and/or modify\n    it under the terms of the GNU General Public License as published by\n    the Free Software Foundation; either version 2 of the License, or\n    (at your option) any later version.\n\n    This program is distributed in the hope that it will be useful,\n    but WITHOUT ANY WARRANTY; without even the implied warranty of\n    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n    Revised BSD License for more details.\n\n    Copyright 2004-".$SVNDay[2]." iDB Support - https://idb.osdn.jp/support/category.php?act=view&id=1\n    Copyright 2004-".$SVNDay[2]." Game Maker 2k - https://idb.osdn.jp/support/category.php?act=view&id=2\n    iDB Installer made by Game Maker 2k - http://idb.berlios.net/\n\n    \$FileInfo: settings.php & settingsbak.php - ".$LastUpdateS." - Author: cooldude2k \$\n*/\n";
-    $BoardSettings = $pretext."\$Settings = array();\n\$Settings['sqlhost'] = '".$_POST['DatabaseHost']."';\n\$Settings['sqluser'] = '".$_POST['DatabaseUserName']."';\n\$Settings['sqlpass'] = '".$_POST['DatabasePassword']."';\n?>";
-    $fp = fopen("./settings.php", "w+");
-    fwrite($fp, $BoardSettings);
-    fclose($fp);
-    //	cp("settings.php","settingsbak.php");
-    $fp = fopen("./settingsbak.php", "w+");
-    fwrite($fp, $BoardSettings);
-    fclose($fp);
+    // BUGFIX: the credentials were interpolated straight into single-quoted
+    // PHP strings, and this second write dropped the $settcheck direct-access
+    // guard that the first write had included.
+    $BoardSettings = $pretext.$settcheck."\$Settings = array();\n".
+    "\$Settings['sqlhost'] = ".idb_php_value($_POST['DatabaseHost']).";\n".
+    "\$Settings['sqluser'] = ".idb_php_value($_POST['DatabaseUserName']).";\n".
+    "\$Settings['sqlpass'] = ".idb_php_value($_POST['DatabasePassword']).";\n?>";
+    if (!idb_write_file("./settings.php", $BoardSettings) || !idb_write_file("./settingsbak.php", $BoardSettings)) {
+        echo "<br />Settings is not writable.";
+        $Error = "Yes";
+    }
     ?>
 <form style="display: inline;" method="post" id="install" action="<?php echo url_maker("install", ".php", "act=part4", "&", "=", null, null); ?>">
 <table style="text-align: left;">
@@ -291,6 +330,7 @@ if (!function_exists('hash') && !function_exists('hash_algos')) { ?>
 	<td style="width: 50%;"><label class="TextBoxLabel" for="DefaultTheme">Default Theme</label></td>
 	<td style="width: 50%;"><select id="DefaultTheme" name="DefaultTheme" class="TextBox"><?php
 $skindir = dirname(realpath("settings.php"))."/".$SettDir['themes'];
+    $themelist = array();
     if ($handle = opendir($skindir)) {
         $dirnum = null;
         while (false !== ($file = readdir($handle))) {
@@ -336,7 +376,7 @@ $skindir = dirname(realpath("settings.php"))."/".$SettDir['themes'];
 <table style="text-align: left;">
 <tr style="text-align: left;">
 <td style="width: 100%;">
-<input type="hidden" name="charset" value="<?php echo $_POST['charset']; ?>" style="display: none;" />
+<input type="hidden" name="charset" value="<?php echo htmlspecialchars(isset($_POST['charset']) ? $_POST['charset'] : "UTF-8", ENT_QUOTES); ?>" style="display: none;" />
 <input type="hidden" name="SetupType" value="install" style="display: none;" />
 <input type="hidden" name="DatabaseType" value="<?php echo $Settings['sqltype']; ?>" style="display: none;" />
 <input type="hidden" name="act" value="part4" style="display: none;" />

@@ -15,7 +15,9 @@
     $FileInfo: license.php - Last Update: 8/23/2024 SVN 1023 - Author: cooldude2k $
 */
 $File3Name = basename($_SERVER['SCRIPT_NAME']);
-if ($File3Name == "presetup.php" || $File3Name == "/presetup.php") {
+// BUGFIX: this guard tested for "presetup.php", so license.php could be
+// requested directly without being routed through index.php.
+if ($File3Name == "license.php" || $File3Name == "/license.php") {
     require('index.php');
     exit();
 }
@@ -32,13 +34,22 @@ if (!isset($SetupDir['convert'])) {
 <table style="text-align: left;">
 <tr style="text-align: left;">
 	<td style="width: 50%;"><label class="TextBoxLabel" for="LicenseBox">License - Please read fully and check 'I agree' box ONLY if you agree to license</label><br />
-	<textarea rows="34" id="LicenseBox" name="LicenseBox" class="TextBox" cols="79" readonly="readonly" accesskey="L"><?php echo stripcslashes(htmlspecialchars(file_get_contents("LICENSE"), ENT_QUOTES, $Settings['charset'])); ?></textarea><br />
+	<textarea rows="34" id="LicenseBox" name="LicenseBox" class="TextBox" cols="79" readonly="readonly" accesskey="L"><?php
+    // BUGFIX: file_get_contents() returns false when LICENSE is missing, and
+    // passing that to htmlspecialchars() is deprecated on PHP 8.1+. The
+    // stripcslashes() also ran *after* escaping, which could undo it.
+    $LicenseText = @file_get_contents("LICENSE");
+    if ($LicenseText === false) {
+        $LicenseText = "The LICENSE file could not be read.";
+    }
+    echo htmlspecialchars($LicenseText, ENT_QUOTES, $Settings['charset']);
+?></textarea><br />
 	<input type="checkbox" class="TextBox" name="License" value="Agree" id="License" /><label class="TextBoxLabel" for="License">I Agree</label><br/></td>
 </tr></table>
 <table style="text-align: left;">
 <tr style="text-align: left;">
 <td style="width: 100%;">
-<?php if ($ConvertInfo['ConvertFile'] == null) { ?>
+<?php if (!isset($ConvertInfo['ConvertFile']) || $ConvertInfo['ConvertFile'] == null) { ?>
 <input type="hidden" name="SetupType" value="install" style="display: none;" />
 <?php } ?>
 <input type="hidden" name="act" value="part2" style="display: none;" />
