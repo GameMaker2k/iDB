@@ -25,17 +25,65 @@ if (!isset($SetupDir['setup'])) {
 if (!isset($SetupDir['convert'])) {
     $SetupDir['convert'] = "setup/convert/";
 }
+
+/* ------------------------------------------------------------------
+   Installer safety helpers (identical in every installer).
+   ------------------------------------------------------------------ */
+if (!isset($GLOBALS['InstallErrors']) || !is_array($GLOBALS['InstallErrors'])) {
+    $GLOBALS['InstallErrors'] = array();
+}
+if (!function_exists('install_valid_identifier')) {
+    // BUGFIX: $_POST['tableprefix'] and $_POST['DatabaseName'] were dropped
+    // straight into DDL with no validation at all, so anything that could
+    // reach the installer could inject arbitrary SQL. Restrict them to plain
+    // identifier characters.
+    function install_valid_identifier($name)
+    {
+        return (is_string($name) && preg_match('/^[A-Za-z0-9_]+$/', $name) === 1);
+    }
+
+    // BUGFIX: every sql_query() call in the installers threw away its return
+    // value, so a failed CREATE TABLE produced a silently broken install that
+    // looked like it had succeeded. Failures are now collected in
+    // $GLOBALS['InstallErrors'] so the caller can report them.
+    function install_sql_query($query, $link = null)
+    {
+        if ($query === false) {
+            $GLOBALS['InstallErrors'][] = "Installer query could not be prepared.";
+            return false;
+        }
+        $result = sql_query($query, $link);
+        if ($result === false) {
+            $GLOBALS['InstallErrors'][] = sql_error($link);
+        }
+        return $result;
+    }
+}
+
+if (!isset($_POST['tableprefix'])) {
+    $_POST['tableprefix'] = "";
+}
+if ($_POST['tableprefix'] !== "" && !install_valid_identifier($_POST['tableprefix'])) {
+    $GLOBALS['InstallErrors'][] = "Invalid table prefix: only letters, numbers and underscores are allowed.";
+    return;
+}
+
 /*
 $query=sql_pre_query("ALTER DATABASE \"".$_POST['DatabaseName']."\" DEFAULT CHARACTER SET ".$SQLCharset." COLLATE ".$SQLCollate.";", null);
 sql_query($query,$SQLStat);
 */
 $parsestr = parse_url($YourWebsite);
+// BUGFIX: parse_url() returns false on a malformed URL and omits 'host' for a
+// bare path, so $parsestr['host'] could raise an undefined-key error.
+if (!is_array($parsestr) || !isset($parsestr['host']) || $parsestr['host'] === "") {
+    $parsestr = array('host' => 'localhost');
+}
 if (!filter_var($parsestr['host'], FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6) || $parsestr['host'] == "localhost") {
     $GuestLocalIP = gethostbyname($parsestr['host']);
 } else {
     $GuestLocalIP = $parsestr['host'];
 }
-$query = sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."categories\" (\n".
+$query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."categories\" (\n".
 "  \"id\" SERIAL PRIMARY KEY NOT NULL,\n".
 "  \"OrderID\" numeric(15) NOT NULL default '0',\n".
 "  \"Name\" varchar(150) NOT NULL default '',\n".
@@ -47,16 +95,16 @@ $query = sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."categories\" (\n
 "  \"KarmaCountView\" numeric(15) NOT NULL default '0',\n".
 "  \"Description\" text NOT NULL\n".
 ");", null);
-sql_query($query, $SQLStat);
-$query = sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."catpermissions\" (\n".
+install_sql_query($query, $SQLStat);
+$query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."catpermissions\" (\n".
 "  \"id\" SERIAL PRIMARY KEY NOT NULL,\n".
 "  \"PermissionID\" numeric(15) NOT NULL default '0',\n".
 "  \"Name\" varchar(150) NOT NULL default '',\n".
 "  \"CategoryID\" numeric(15) NOT NULL default '0',\n".
 "  \"CanViewCategory\" varchar(5) NOT NULL default ''\n".
 ");", null);
-sql_query($query, $SQLStat);
-$query = sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."events\" (\n".
+install_sql_query($query, $SQLStat);
+$query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."events\" (\n".
 "  \"id\" SERIAL PRIMARY KEY NOT NULL,\n".
 "  \"UserID\" numeric(15) NOT NULL default '0',\n".
 "  \"GuestName\" varchar(150) NOT NULL default '',\n".
@@ -72,8 +120,8 @@ $query = sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."events\" (\n".
 "  \"EventYearEnd\" numeric(5) NOT NULL default '0',\n".
 "  \"IP\" varchar(64) NOT NULL default ''\n".
 ");", null);
-sql_query($query, $SQLStat);
-$query = sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."forums\" (\n".
+install_sql_query($query, $SQLStat);
+$query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."forums\" (\n".
 "  \"id\" SERIAL PRIMARY KEY NOT NULL,\n".
 "  \"CategoryID\" numeric(15) NOT NULL default '0',\n".
 "  \"OrderID\" numeric(15) NOT NULL default '0',\n".
@@ -93,8 +141,8 @@ $query = sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."forums\" (\n".
 "  \"NumPosts\" numeric(15) NOT NULL default '0',\n".
 "  \"NumTopics\" numeric(15) NOT NULL default '0'\n".
 ");", null);
-sql_query($query, $SQLStat);
-$query = sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."groups\" (\n".
+install_sql_query($query, $SQLStat);
+$query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."groups\" (\n".
 "  \"id\" SERIAL PRIMARY KEY NOT NULL,\n".
 "  \"Name\" varchar(150) NOT NULL default '',\n".
 "  \"PermissionID\" numeric(15) NOT NULL default '0',\n".
@@ -126,8 +174,8 @@ $query = sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."groups\" (\n".
 "  \"ViewDBInfo\" varchar(5) NOT NULL default '',\n".
 "  UNIQUE (\"Name\")\n".
 ");", null);
-sql_query($query, $SQLStat);
-$query = sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."ranks\" (\n".
+install_sql_query($query, $SQLStat);
+$query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."ranks\" (\n".
 "  \"id\" SERIAL PRIMARY KEY NOT NULL,\n".
 "  \"Name\" varchar(150) NOT NULL default '',\n".
 "  \"PromoteTo\" numeric(15) NOT NULL default '0',\n".
@@ -138,8 +186,8 @@ $query = sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."ranks\" (\n".
 "  \"DemoteKarma\" numeric(15) NOT NULL default '0',\n".
 "  UNIQUE (\"Name\")\n".
 ");", null);
-sql_query($query, $SQLStat);
-$query = sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."levels\" (\n".
+install_sql_query($query, $SQLStat);
+$query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."levels\" (\n".
 "  \"id\" SERIAL PRIMARY KEY NOT NULL,\n".
 "  \"Name\" varchar(150) NOT NULL default '',\n".
 "  \"PromoteTo\" numeric(15) NOT NULL default '0',\n".
@@ -150,8 +198,8 @@ $query = sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."levels\" (\n".
 "  \"DemoteKarma\" numeric(15) NOT NULL default '0',\n".
 "  UNIQUE (\"Name\")\n".
 ");", null);
-sql_query($query, $SQLStat);
-$query = sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."members\" (\n".
+install_sql_query($query, $SQLStat);
+$query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."members\" (\n".
 "  \"id\" SERIAL PRIMARY KEY NOT NULL,\n".
 "  \"Name\" varchar(150) NOT NULL default '',\n".
 "  \"Handle\" varchar(150) NOT NULL default '',\n".
@@ -201,8 +249,8 @@ $query = sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."members\" (\n".
 "  UNIQUE (\"Handle\"),\n".
 "  UNIQUE (\"Email\")\n".
 ");", null);
-sql_query($query, $SQLStat);
-$query = sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."mempermissions\" (\n".
+install_sql_query($query, $SQLStat);
+$query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."mempermissions\" (\n".
 "  \"id\" SERIAL PRIMARY KEY NOT NULL,\n".
 "  \"PermissionID\" numeric(15) NOT NULL default '0',\n".
 "  \"CanViewBoard\" varchar(5) NOT NULL default '',\n".
@@ -224,8 +272,8 @@ $query = sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."mempermissions\"
 "  \"HasAdminCP\" varchar(5) NOT NULL default '',\n".
 "  \"ViewDBInfo\" varchar(5) NOT NULL default ''\n".
 ");", null);
-sql_query($query, $SQLStat);
-$query = sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."messenger\" (\n".
+install_sql_query($query, $SQLStat);
+$query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."messenger\" (\n".
 "  \"id\" SERIAL PRIMARY KEY NOT NULL,\n".
 "  \"DiscussionID\" numeric(15) NOT NULL default '0',\n".
 "  \"SenderID\" numeric(15) NOT NULL default '0',\n".
@@ -238,8 +286,8 @@ $query = sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."messenger\" (\n"
 "  \"Read\" numeric(5) NOT NULL default '0',\n".
 "  \"IP\" varchar(64) NOT NULL default ''\n".
 ");", null);
-sql_query($query, $SQLStat);
-$query = sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."permissions\" (\n".
+install_sql_query($query, $SQLStat);
+$query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."permissions\" (\n".
 "  \"id\" SERIAL PRIMARY KEY NOT NULL,\n".
 "  \"PermissionID\" numeric(15) NOT NULL default '0',\n".
 "  \"Name\" varchar(150) NOT NULL default '',\n".
@@ -271,8 +319,8 @@ $query = sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."permissions\" (\
 "  \"CanModForum\" varchar(5) NOT NULL default '',\n".
 "  \"CanReportPost\" varchar(5) NOT NULL default ''\n".
 ");", null);
-sql_query($query, $SQLStat);
-$query = sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."polls\" (\n".
+install_sql_query($query, $SQLStat);
+$query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."polls\" (\n".
 "  \"id\" SERIAL PRIMARY KEY NOT NULL,\n".
 "  \"UserID\" numeric(15) NOT NULL default '0',\n".
 "  \"GuestName\" varchar(150) NOT NULL default '',\n".
@@ -281,8 +329,8 @@ $query = sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."polls\" (\n".
 "  \"UsersVoted\" text NOT NULL,\n".
 "  \"IP\" varchar(64) NOT NULL default ''\n".
 ");", null);
-sql_query($query, $SQLStat);
-$query = sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."posts\" (\n".
+install_sql_query($query, $SQLStat);
+$query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."posts\" (\n".
 "  \"id\" SERIAL PRIMARY KEY NOT NULL,\n".
 "  \"TopicID\" numeric(15) NOT NULL default '0',\n".
 "  \"ForumID\" numeric(15) NOT NULL default '0',\n".
@@ -299,8 +347,8 @@ $query = sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."posts\" (\n".
 "  \"IP\" varchar(64) NOT NULL default '',\n".
 "  \"EditIP\" varchar(64) NOT NULL default ''\n".
 ");", null);
-sql_query($query, $SQLStat);
-$query = sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."restrictedwords\" (\n".
+install_sql_query($query, $SQLStat);
+$query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."restrictedwords\" (\n".
 "  \"id\" SERIAL PRIMARY KEY NOT NULL,\n".
 "  \"Word\" text NOT NULL,\n".
 "  \"RestrictedUserName\" varchar(5) NOT NULL default '',\n".
@@ -310,8 +358,8 @@ $query = sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."restrictedwords\
 "  \"CaseInsensitive\" varchar(5) NOT NULL default '',\n".
 "  \"WholeWord\" varchar(5) NOT NULL default ''\n".
 ");", null);
-sql_query($query, $SQLStat);
-$query = sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."sessions\" (\n".
+install_sql_query($query, $SQLStat);
+$query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."sessions\" (\n".
 "  \"session_id\" varchar(250) PRIMARY KEY NOT NULL default '',\n".
 "  \"session_data\" text NOT NULL,\n".
 "  \"serialized_data\" text NOT NULL,\n".
@@ -320,8 +368,8 @@ $query = sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."sessions\" (\n".
 "  \"ip_address\" varchar(64) NOT NULL default '',\n".
 "  \"expires\" numeric(15) NOT NULL default '0'\n".
 ");", null);
-sql_query($query, $SQLStat);
-$query = sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."smileys\" (\n".
+install_sql_query($query, $SQLStat);
+$query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."smileys\" (\n".
 "  \"id\" SERIAL PRIMARY KEY NOT NULL,\n".
 "  \"FileName\" text NOT NULL,\n".
 "  \"SmileName\" text NOT NULL,\n".
@@ -331,9 +379,9 @@ $query = sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."smileys\" (\n".
 "  \"Display\" varchar(5) NOT NULL default '',\n".
 "  \"ReplaceCI\" varchar(5) NOT NULL default ''\n".
 ");", null);
-sql_query($query, $SQLStat);
+install_sql_query($query, $SQLStat);
 /*
-$query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."tagboard\" (\n".
+$query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."tagboard\" (\n".
 "  \"id\" SERIAL PRIMARY KEY NOT NULL,\n".
 "  \"UserID\" numeric(15) NOT NULL default '0',\n".
 "  \"GuestName\" varchar(150) NOT NULL default '',\n".
@@ -343,7 +391,7 @@ $query=sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."tagboard\" (\n".
 ");", null);
 sql_query($query,$SQLStat);
 */
-$query = sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."themes\" (\n".
+$query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."themes\" (\n".
 "  \"id\" SERIAL PRIMARY KEY NOT NULL,\n".
 "  \"Name\" varchar(32) NOT NULL default '',\n".
 "  \"ThemeName\" varchar(32) NOT NULL default '',\n".
@@ -414,8 +462,8 @@ $query = sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."themes\" (\n".
 "  \"NoAvatarSize\" varchar(150) NOT NULL default '',\n".
 "  UNIQUE (\"Name\")\n".
 ");", null);
-sql_query($query, $SQLStat);
-$query = sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."topics\" (\n".
+install_sql_query($query, $SQLStat);
+$query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."topics\" (\n".
 "  \"id\" SERIAL PRIMARY KEY NOT NULL,\n".
 "  \"PollID\" numeric(15) NOT NULL default '0',\n".
 "  \"ForumID\" numeric(15) NOT NULL default '0',\n".
@@ -433,21 +481,25 @@ $query = sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."topics\" (\n".
 "  \"Pinned\" numeric(5) NOT NULL default '0',\n".
 "  \"Closed\" numeric(5) NOT NULL default '0'\n".
 ");", null);
-sql_query($query, $SQLStat);
-$query = sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."wordfilter\" (\n".
+install_sql_query($query, $SQLStat);
+$query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."wordfilter\" (\n".
 "  \"id\" SERIAL PRIMARY KEY NOT NULL,\n".
 "  \"FilterWord\" text NOT NULL,\n".
 "  \"Replacement\" text NOT NULL,\n".
 "  \"CaseInsensitive\" varchar(5) NOT NULL default '',\n".
 "  \"WholeWord\" varchar(5) NOT NULL default ''\n".
 ");", null);
-sql_query($query, $SQLStat);
+install_sql_query($query, $SQLStat);
 $TableChCk = array("categories", "catpermissions", "events", "forums", "groups", "levels", "members", "mempermissions", "messenger", "permissions", "polls", "posts", "ranks", "restrictedwords", "sessions", "smileys", "themes", "topics", "wordfilter");
 $TablePreFix = $_POST['tableprefix'];
-function add_prefix($tarray)
-{
-    global $TablePreFix;
-    return $TablePreFix.$tarray;
+// BUGFIX: a bare function declaration here is a fatal redeclare error if more
+// than one installer is loaded in the same request.
+if (!function_exists('add_prefix')) {
+    function add_prefix($tarray)
+    {
+        global $TablePreFix;
+        return $TablePreFix.$tarray;
+    }
 }
 $TableChCk = array_map("add_prefix", $TableChCk);
 $tcount = count($TableChCk);

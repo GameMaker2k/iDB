@@ -25,8 +25,55 @@ if (!isset($SetupDir['setup'])) {
 if (!isset($SetupDir['convert'])) {
     $SetupDir['convert'] = "setup/convert/";
 }
-$query = sql_pre_query("ALTER DATABASE \"".$_POST['DatabaseName']."\" DEFAULT CHARACTER SET ".$Settings['sql_charset']." COLLATE ".$Settings['sql_collate'].";", null);
-sql_query($query, $SQLStat);
+
+/* ------------------------------------------------------------------
+   Installer safety helpers (identical in every installer).
+   ------------------------------------------------------------------ */
+if (!isset($GLOBALS['InstallErrors']) || !is_array($GLOBALS['InstallErrors'])) {
+    $GLOBALS['InstallErrors'] = array();
+}
+if (!function_exists('install_valid_identifier')) {
+    // BUGFIX: $_POST['tableprefix'] and $_POST['DatabaseName'] were dropped
+    // straight into DDL with no validation at all, so anything that could
+    // reach the installer could inject arbitrary SQL. Restrict them to plain
+    // identifier characters.
+    function install_valid_identifier($name)
+    {
+        return (is_string($name) && preg_match('/^[A-Za-z0-9_]+$/', $name) === 1);
+    }
+
+    // BUGFIX: every sql_query() call in the installers threw away its return
+    // value, so a failed CREATE TABLE produced a silently broken install that
+    // looked like it had succeeded. Failures are now collected in
+    // $GLOBALS['InstallErrors'] so the caller can report them.
+    function install_sql_query($query, $link = null)
+    {
+        if ($query === false) {
+            $GLOBALS['InstallErrors'][] = "Installer query could not be prepared.";
+            return false;
+        }
+        $result = sql_query($query, $link);
+        if ($result === false) {
+            $GLOBALS['InstallErrors'][] = sql_error($link);
+        }
+        return $result;
+    }
+}
+
+if (!isset($_POST['tableprefix'])) {
+    $_POST['tableprefix'] = "";
+}
+if ($_POST['tableprefix'] !== "" && !install_valid_identifier($_POST['tableprefix'])) {
+    $GLOBALS['InstallErrors'][] = "Invalid table prefix: only letters, numbers and underscores are allowed.";
+    return;
+}
+
+// BUGFIX: the database name was interpolated unvalidated, and the statement
+// ran even when no DatabaseName had been posted.
+if (isset($_POST['DatabaseName']) && install_valid_identifier($_POST['DatabaseName'])) {
+    $query = sql_pre_query("ALTER DATABASE \"".$_POST['DatabaseName']."\" DEFAULT CHARACTER SET ".$Settings['sql_charset']." COLLATE ".$Settings['sql_collate'].";", null);
+    install_sql_query($query, $SQLStat);
+}
 if (isset($Settings['sql_storage_engine'])) {
     // Execute the query to get the list of engines
     $result = sql_query(sql_pre_query("SHOW ENGINES;", null), $SQLStat);
@@ -38,13 +85,15 @@ if (isset($Settings['sql_storage_engine'])) {
     // Count the number of rows
     $num = count($engines);
     // Process the results
-    $SQLEngines = null;
+    $SQLEngines = array();
     for ($i = 0; $i < $num; ++$i) {
         $SQLEngines[$i] = $engines[$i]['Engine'];
     }
     // Free the result set
     sql_free_result($result);
-    if (!in_array($Settings['sql_storage_engine'], $SQLEngines)) {
+    // BUGFIX: $SQLEngines stayed null when SHOW ENGINES returned no rows,
+    // and in_array(..., null) is a TypeError on PHP 8.
+    if (count($SQLEngines) > 0 && !in_array($Settings['sql_storage_engine'], $SQLEngines)) {
         $Settings['sql_storage_engine'] = "InnoDB";
     }
 }
@@ -68,6 +117,11 @@ if ($Settings['sql_storage_engine'] == "InnoDB") {
     $SQLStorageEngine = "InnoDB";
 }
 $parsestr = parse_url($YourWebsite);
+// BUGFIX: parse_url() returns false on a malformed URL and omits 'host' for a
+// bare path, so $parsestr['host'] could raise an undefined-key error.
+if (!is_array($parsestr) || !isset($parsestr['host']) || $parsestr['host'] === "") {
+    $parsestr = array('host' => 'localhost');
+}
 if (!filter_var($parsestr['host'], FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6) || $parsestr['host'] == "localhost") {
     $GuestLocalIP = gethostbyname($parsestr['host']);
 } else {
@@ -86,7 +140,7 @@ $query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."ca
 "  \"Description\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
 "  PRIMARY KEY  (\"id\")\n".
 ") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$Settings['sql_charset']." COLLATE=".$Settings['sql_collate'].";", null);
-sql_query($query, $SQLStat);
+install_sql_query($query, $SQLStat);
 $query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."catpermissions\" (\n".
 "  \"id\" int(15) NOT NULL auto_increment,\n".
 "  \"PermissionID\" int(15) NOT NULL default '0',\n".
@@ -95,7 +149,7 @@ $query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."ca
 "  \"CanViewCategory\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\")\n".
 ") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$Settings['sql_charset']." COLLATE=".$Settings['sql_collate'].";", null);
-sql_query($query, $SQLStat);
+install_sql_query($query, $SQLStat);
 $query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."events\" (\n".
 "  \"id\" int(15) NOT NULL auto_increment,\n".
 "  \"UserID\" int(15) NOT NULL default '0',\n".
@@ -113,7 +167,7 @@ $query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."ev
 "  \"IP\" varchar(64) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\")\n".
 ") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$Settings['sql_charset']." COLLATE=".$Settings['sql_collate'].";", null);
-sql_query($query, $SQLStat);
+install_sql_query($query, $SQLStat);
 $query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."forums\" (\n".
 "  \"id\" int(15) NOT NULL auto_increment,\n".
 "  \"CategoryID\" int(15) NOT NULL default '0',\n".
@@ -135,7 +189,7 @@ $query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."fo
 "  \"NumTopics\" int(15) NOT NULL default '0',\n".
 "  PRIMARY KEY  (\"id\")\n".
 ") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$Settings['sql_charset']." COLLATE=".$Settings['sql_collate'].";", null);
-sql_query($query, $SQLStat);
+install_sql_query($query, $SQLStat);
 $query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."groups\" (\n".
 "  \"id\" int(15) NOT NULL auto_increment,\n".
 "  \"Name\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
@@ -169,8 +223,8 @@ $query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."gr
 "  PRIMARY KEY  (\"id\"),\n".
 "  UNIQUE KEY \"Name\" (\"Name\")\n".
 ") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$Settings['sql_charset']." COLLATE=".$Settings['sql_collate'].";", null);
-sql_query($query, $SQLStat);
-$query = sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."ranks\" (\n".
+install_sql_query($query, $SQLStat);
+$query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."ranks\" (\n".
 "  \"id\" int(15) NOT NULL auto_increment,\n".
 "  \"Name\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"PromoteTo\" int(15) NOT NULL default '0',\n".
@@ -182,8 +236,8 @@ $query = sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."ranks\" (\n".
 "  PRIMARY KEY  (\"id\"),\n".
 "  UNIQUE KEY \"Name\" (\"Name\")\n".
 ") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$Settings['sql_charset']." COLLATE=".$Settings['sql_collate'].";", null);
-sql_query($query, $SQLStat);
-$query = sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."levels\" (\n".
+install_sql_query($query, $SQLStat);
+$query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."levels\" (\n".
 "  \"id\" int(15) NOT NULL auto_increment,\n".
 "  \"Name\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"PromoteTo\" int(15) NOT NULL default '0',\n".
@@ -195,7 +249,7 @@ $query = sql_pre_query("CREATE TABLE \"".$_POST['tableprefix']."levels\" (\n".
 "  PRIMARY KEY  (\"id\"),\n".
 "  UNIQUE KEY \"Name\" (\"Name\")\n".
 ") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$Settings['sql_charset']." COLLATE=".$Settings['sql_collate'].";", null);
-sql_query($query, $SQLStat);
+install_sql_query($query, $SQLStat);
 $query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."members\" (\n".
 "  \"id\" int(15) NOT NULL auto_increment,\n".
 "  \"Name\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
@@ -209,7 +263,7 @@ $query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."me
 "  \"Validated\" varchar(20) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"HiddenMember\" varchar(20) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"WarnLevel\" int(15) NOT NULL default '0',\n".
-"  \"Interests\" text COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
+"  \"Interests\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
 "  \"Title\" varchar(150) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"Joined\" int(15) NOT NULL default '0',\n".
 "  \"LastActive\" int(15) NOT NULL default '0',\n".
@@ -244,10 +298,10 @@ $query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."me
 "  \"Salt\" varchar(50) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\"),\n".
 "  UNIQUE KEY \"Name\" (\"Name\"),\n".
-"  UNIQUE KEY \"Handle\" (\"Name\"),\n".
+"  UNIQUE KEY \"Handle\" (\"Handle\"),\n".
 "  UNIQUE KEY \"Email\" (\"Email\")\n".
 ") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$Settings['sql_charset']." COLLATE=".$Settings['sql_collate'].";", null);
-sql_query($query, $SQLStat);
+install_sql_query($query, $SQLStat);
 $query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."mempermissions\" (\n".
 "  \"id\" int(15) NOT NULL auto_increment,\n".
 "  \"PermissionID\" int(15) NOT NULL default '0',\n".
@@ -271,7 +325,7 @@ $query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."me
 "  \"ViewDBInfo\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\")\n".
 ") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$Settings['sql_charset']." COLLATE=".$Settings['sql_collate'].";", null);
-sql_query($query, $SQLStat);
+install_sql_query($query, $SQLStat);
 $query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."messenger\" (\n".
 "  \"id\" int(15) NOT NULL auto_increment,\n".
 "  \"DiscussionID\" int(15) NOT NULL default '0',\n".
@@ -286,7 +340,7 @@ $query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."me
 "  \"IP\" varchar(64) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\")\n".
 ") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$Settings['sql_charset']." COLLATE=".$Settings['sql_collate'].";", null);
-sql_query($query, $SQLStat);
+install_sql_query($query, $SQLStat);
 $query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."permissions\" (\n".
 "  \"id\" int(15) NOT NULL auto_increment,\n".
 "  \"PermissionID\" int(15) NOT NULL default '0',\n".
@@ -320,7 +374,7 @@ $query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."pe
 "  \"CanReportPost\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\")\n".
 ") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$Settings['sql_charset']." COLLATE=".$Settings['sql_collate'].";", null);
-sql_query($query, $SQLStat);
+install_sql_query($query, $SQLStat);
 $query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."polls\" (\n".
 "  \"id\" int(15) NOT NULL auto_increment,\n".
 "  \"UserID\" int(15) NOT NULL default '0',\n".
@@ -331,7 +385,7 @@ $query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."po
 "  \"IP\" varchar(64) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\")\n".
 ") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$Settings['sql_charset']." COLLATE=".$Settings['sql_collate'].";", null);
-sql_query($query, $SQLStat);
+install_sql_query($query, $SQLStat);
 $query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."posts\" (\n".
 "  \"id\" int(15) NOT NULL auto_increment,\n".
 "  \"TopicID\" int(15) NOT NULL default '0',\n".
@@ -349,7 +403,7 @@ $query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."po
 "  \"EditIP\" varchar(64) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\")\n".
 ") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$Settings['sql_charset']." COLLATE=".$Settings['sql_collate'].";", null);
-sql_query($query, $SQLStat);
+install_sql_query($query, $SQLStat);
 $query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."restrictedwords\" (\n".
 "  \"id\" int(15) NOT NULL auto_increment,\n".
 "  \"Word\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
@@ -361,7 +415,7 @@ $query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."re
 "  \"WholeWord\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\")\n".
 ") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$Settings['sql_charset']." COLLATE=".$Settings['sql_collate'].";", null);
-sql_query($query, $SQLStat);
+install_sql_query($query, $SQLStat);
 $query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."sessions\" (\n".
 "  \"session_id\" varchar(250) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  \"session_data\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
@@ -372,7 +426,7 @@ $query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."se
 "  \"expires\" int(15) NOT NULL default '0',\n".
 "  PRIMARY KEY  (\"session_id\")\n".
 ") ENGINE=".$SQLStorageEngine." DEFAULT CHARSET=".$Settings['sql_charset']." COLLATE=".$Settings['sql_collate'].";", null);
-sql_query($query, $SQLStat);
+install_sql_query($query, $SQLStat);
 $query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."smileys\" (\n".
 "  \"id\" int(15) NOT NULL auto_increment,\n".
 "  \"FileName\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
@@ -384,7 +438,7 @@ $query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."sm
 "  \"ReplaceCI\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\")\n".
 ") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$Settings['sql_charset']." COLLATE=".$Settings['sql_collate'].";", null);
-sql_query($query, $SQLStat);
+install_sql_query($query, $SQLStat);
 /*
 $query=sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."tagboard\" (\n".
 "  \"id\" int(15) NOT NULL auto_increment,\n".
@@ -469,7 +523,7 @@ $query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."th
 "  PRIMARY KEY  (\"id\"),\n".
 "  UNIQUE KEY \"Name\" (\"Name\")\n".
 ") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$Settings['sql_charset']." COLLATE=".$Settings['sql_collate'].";", null);
-sql_query($query, $SQLStat);
+install_sql_query($query, $SQLStat);
 $query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."topics\" (\n".
 "  \"id\" int(15) NOT NULL auto_increment,\n".
 "  \"PollID\" int(15) NOT NULL default '0',\n".
@@ -489,7 +543,7 @@ $query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."to
 "  \"Closed\" int(5) NOT NULL default '0',\n".
 "  PRIMARY KEY  (\"id\")\n".
 ") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$Settings['sql_charset']." COLLATE=".$Settings['sql_collate'].";", null);
-sql_query($query, $SQLStat);
+install_sql_query($query, $SQLStat);
 $query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."wordfilter\" (\n".
 "  \"id\" int(15) NOT NULL auto_increment,\n".
 "  \"FilterWord\" text COLLATE ".$Settings['sql_collate']." NOT NULL,\n".
@@ -498,13 +552,17 @@ $query = sql_pre_query("CREATE TABLE IF NOT EXISTS \"".$_POST['tableprefix']."wo
 "  \"WholeWord\" varchar(5) COLLATE ".$Settings['sql_collate']." NOT NULL default '',\n".
 "  PRIMARY KEY  (\"id\")\n".
 ") ENGINE=".$SQLStorageEngine."  DEFAULT CHARSET=".$Settings['sql_charset']." COLLATE=".$Settings['sql_collate'].";", null);
-sql_query($query, $SQLStat);
+install_sql_query($query, $SQLStat);
 $TableChCk = array("categories", "catpermissions", "events", "forums", "groups", "levels", "members", "mempermissions", "messenger", "permissions", "polls", "posts", "ranks", "restrictedwords", "sessions", "smileys", "themes", "topics", "wordfilter");
 $TablePreFix = $_POST['tableprefix'];
-function add_prefix($tarray)
-{
-    global $TablePreFix;
-    return $TablePreFix.$tarray;
+// BUGFIX: a bare function declaration here is a fatal redeclare error if more
+// than one installer is loaded in the same request.
+if (!function_exists('add_prefix')) {
+    function add_prefix($tarray)
+    {
+        global $TablePreFix;
+        return $TablePreFix.$tarray;
+    }
 }
 $TableChCk = array_map("add_prefix", $TableChCk);
 $tcount = count($TableChCk);
