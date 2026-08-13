@@ -994,6 +994,11 @@ function chack_themes($theme)
     require('settings.php');
     $ckskindir = dirname(realpath("settings.php")) . "/" . $ThemeDir;
 
+    // BUGFIX: $cktheme was only created inside the opendir() branch, so an
+    // unreadable theme directory made the in_array() below a TypeError on
+    // PHP 8 instead of falling back to the board theme.
+    $cktheme = array();
+
     if ($handle = opendir($ckskindir)) {
         $dirnum = null;
         while (false !== ($ckfile = readdir($handle))) {

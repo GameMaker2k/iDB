@@ -26,58 +26,59 @@ $iWrappers['WrapperString'] = $ThemeSet['WrapperString'];
 if (!isset($iWrappers['HTMLSTART'])) {
     $iWrappers['HTMLSTART'] = "";
 }
-$iWrappers['WrapperString'] = preg_replace("/\<% HTMLSTART %\>/is", trim($iWrappers['HTMLSTART']), $iWrappers['WrapperString']);
+$iWrappers['WrapperString'] = str_ireplace("<% HTMLSTART %>", trim($iWrappers['HTMLSTART']), $iWrappers['WrapperString']);
 if (!isset($iWrappers['HTTPEQUIV'])) {
     $iWrappers['HTTPEQUIV'] = "";
 }
-$iWrappers['WrapperString'] = preg_replace("/\<% HTTPEQUIV %\>/is", trim($iWrappers['HTTPEQUIV']), $iWrappers['WrapperString']);
+$iWrappers['WrapperString'] = str_ireplace("<% HTTPEQUIV %>", trim($iWrappers['HTTPEQUIV']), $iWrappers['WrapperString']);
 if (!isset($iWrappers['METATAGS'])) {
     $iWrappers['METATAGS'] = "";
 }
-$iWrappers['WrapperString'] = preg_replace("/\<% METATAGS %\>/is", trim($iWrappers['METATAGS']), $iWrappers['WrapperString']);
+$iWrappers['WrapperString'] = str_ireplace("<% METATAGS %>", trim($iWrappers['METATAGS']), $iWrappers['WrapperString']);
 if (!isset($iWrappers['JAVASCRIPT'])) {
     $iWrappers['JAVASCRIPT'] = "";
 }
-$iWrappers['WrapperString'] = preg_replace("/\<% JAVASCRIPT %\>/is", trim($iWrappers['JAVASCRIPT']), $iWrappers['WrapperString']);
+$iWrappers['WrapperString'] = str_ireplace("<% JAVASCRIPT %>", trim($iWrappers['JAVASCRIPT']), $iWrappers['WrapperString']);
 if (!isset($iWrappers['LINKTAGS'])) {
     $iWrappers['LINKTAGS'] = "";
 }
-$iWrappers['WrapperString'] = preg_replace("/\<% LINKTAGS %\>/is", trim($iWrappers['LINKTAGS']), $iWrappers['WrapperString']);
+$iWrappers['WrapperString'] = str_ireplace("<% LINKTAGS %>", trim($iWrappers['LINKTAGS']), $iWrappers['WrapperString']);
 if (!isset($iWrappers['CSSTHEME'])) {
     $iWrappers['CSSTHEME'] = "";
 }
-$iWrappers['WrapperString'] = preg_replace("/\<% CSSTHEME %\>/is", trim($iWrappers['CSSTHEME']), $iWrappers['WrapperString']);
+$iWrappers['WrapperString'] = str_ireplace("<% CSSTHEME %>", trim($iWrappers['CSSTHEME']), $iWrappers['WrapperString']);
 if (!isset($iWrappers['FAVICON'])) {
     $iWrappers['FAVICON'] = "";
 }
-$iWrappers['WrapperString'] = preg_replace("/\<% FAVICON %\>/is", trim($iWrappers['FAVICON']), $iWrappers['WrapperString']);
+$iWrappers['WrapperString'] = str_ireplace("<% FAVICON %>", trim($iWrappers['FAVICON']), $iWrappers['WrapperString']);
 if (!isset($iWrappers['EXTRALINKS'])) {
     $iWrappers['EXTRALINKS'] = "";
 }
-$iWrappers['WrapperString'] = preg_replace("/\<% EXTRALINKS %\>/is", trim($iWrappers['EXTRALINKS']), $iWrappers['WrapperString']);
+$iWrappers['WrapperString'] = str_ireplace("<% EXTRALINKS %>", trim($iWrappers['EXTRALINKS']), $iWrappers['WrapperString']);
 if (!isset($iWrappers['TITLETAG'])) {
     $iWrappers['TITLETAG'] = "";
 }
-$iWrappers['WrapperString'] = preg_replace("/\<% TITLETAG %\>/is", trim($iWrappers['TITLETAG']), $iWrappers['WrapperString']);
+$iWrappers['WrapperString'] = str_ireplace("<% TITLETAG %>", trim($iWrappers['TITLETAG']), $iWrappers['WrapperString']);
 if (!isset($iWrappers['BODYTAG'])) {
     $iWrappers['BODYTAG'] = "";
 }
-$iWrappers['WrapperString'] = preg_replace("/\<% BODYTAG %\>/is", trim($iWrappers['BODYTAG']), $iWrappers['WrapperString']);
+$iWrappers['WrapperString'] = str_ireplace("<% BODYTAG %>", trim($iWrappers['BODYTAG']), $iWrappers['WrapperString']);
 if (!isset($iWrappers['NAVBAR'])) {
     $iWrappers['NAVBAR'] = "";
 }
-$iWrappers['WrapperString'] = preg_replace("/\<% NAVBAR %\>/is", trim($iWrappers['NAVBAR']), $iWrappers['WrapperString']);
+$iWrappers['WrapperString'] = str_ireplace("<% NAVBAR %>", trim($iWrappers['NAVBAR']), $iWrappers['WrapperString']);
 if (!isset($iWrappers['CONTENT'])) {
     $iWrappers['CONTENT'] = "";
 }
-$iWrappers['WrapperString'] = preg_replace("/\<% CONTENT %\>/is", trim($iWrappers['CONTENT']), $iWrappers['WrapperString']);
+$iWrappers['WrapperString'] = str_ireplace("<% CONTENT %>", trim($iWrappers['CONTENT']), $iWrappers['WrapperString']);
 if (!isset($iWrappers['COPYRIGHT'])) {
     $iWrappers['COPYRIGHT'] = "";
 }
-$iWrappers['WrapperString'] = preg_replace("/\<% COPYRIGHT %\>/is", trim($iWrappers['COPYRIGHT']), $iWrappers['WrapperString']);
+$iWrappers['WrapperString'] = str_ireplace("<% COPYRIGHT %>", trim($iWrappers['COPYRIGHT']), $iWrappers['WrapperString']);
 if (!isset($iWrappers['HTMLEND'])) {
     $iWrappers['HTMLEND'] = "";
 }
-$iWrappers['WrapperString'] = preg_replace("/\<% HTMLEND %\>/is", trim($iWrappers['HTMLEND']), $iWrappers['WrapperString']);
+$iWrappers['WrapperString'] = str_ireplace("<% HTMLEND %>", trim($iWrappers['HTMLEND']), $iWrappers['WrapperString']);
 echo $iWrappers['WrapperString'];
-$iWrappers = array(null);
+// BUGFIX: array(null) leaves an element behind; array() actually clears it.
+$iWrappers = array();
