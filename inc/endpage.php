@@ -21,7 +21,17 @@ if ($File3Name == "endpage.php" || $File3Name == "/endpage.php") {
 if (!isset($_GET['time'])) {
     $_GET['time'] = true;
 }
-if ($_GET['time'] == "show" || $_GET['time'] == true) {
+// BUGFIX: "$_GET['time'] == true" is a loose comparison, and every non-empty
+// string is loosely equal to true -- so ?time=hide and ?time=off still showed
+// the clock and there was no way to turn it off.
+if ($_GET['time'] === true || $_GET['time'] === "show"
+    || $_GET['time'] === "true" || $_GET['time'] === "on" || $_GET['time'] === "1") {
+    if (!isset($_SESSION['iDBTimeFormat'])) {
+        $_SESSION['iDBTimeFormat'] = "g:i A";
+    }
+    if (!isset($_SESSION['iDBDateFormat'])) {
+        $_SESSION['iDBDateFormat'] = "M jS Y";
+    }
     $MyDST = $usercurtime->format("P");
     $MyTimeNow = $usercurtime->format($_SESSION['iDBTimeFormat']);
     $MyFullTimeNow = $usercurtime->format($_SESSION['iDBDateFormat'].", ".$_SESSION['iDBTimeFormat']);
@@ -38,13 +48,20 @@ if (function_exists("bcsub") == false) {
         return sprintf("%0.".$scale."f", $lof - $rof);
     }
 }
-function execution_time($starttime)
-{
-    list($uetime, $etime) = explode(" ", microtime());
-    $endtime = $uetime + $etime;
-    return bcsub($endtime, $starttime, 4);
+if (!function_exists('execution_time')) {
+    // BUGFIX: a bare declaration is a fatal redeclare if endpage.php is
+    // included more than once in a request.
+    function execution_time($starttime)
+    {
+        list($uetime, $etime) = explode(" ", microtime());
+        $endtime = $uetime + $etime;
+        return bcsub($endtime, $starttime, 4);
+    }
 }
-if ($_GET['debug'] == "true" || $_GET['debug'] == "on") {
+if (!isset($_GET['debug'])) {
+    $_GET['debug'] = null;
+}
+if ($_GET['debug'] === "true" || $_GET['debug'] === "on") {
     $endpagevar = $endpagevar."<br />\nNumber of Queries: ".$NumQueries." ".$ThemeSet['LineDivider']." Execution Time: ".execution_time($starttime).$ThemeSet['LineDivider']."<a href=\"http://validator.w3.org/check/referer?verbose=1\" title=\"Validate HTML\" onclick=\"window.open(this.href);return false;\">HTML</a>".$ThemeSet['LineDivider']."<a href=\"http://jigsaw.w3.org/css-validator/check/referer?profile=css3\" title=\"Validate CSS\" onclick=\"window.open(this.href);return false;\">CSS</a>";
 }
 $endpagevar = $endpagevar."</div><div class=\"DivEndPage\">&#160;</div>\n";

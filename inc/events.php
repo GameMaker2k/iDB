@@ -787,13 +787,25 @@ if (PhpCaptcha::Validate($_POST['signcode'])) {
 </tr>
 <?php }
     }
-    $_POST['EventName'] = stripcslashes(htmlspecialchars($_POST['EventName'], ENT_QUOTES, $Settings['charset']));
+    // BUGFIX: stripcslashes() ran *after* htmlspecialchars(), so an input
+    // written with C escapes (\x22) passed through the escaper untouched and
+    // was then decoded back into raw quotes -- a stored XSS bypass. Decode
+    // first, then escape.
+    $_POST['EventName'] = htmlspecialchars(stripcslashes($_POST['EventName']), ENT_QUOTES, $Settings['charset']);
     //$_POST['EventName'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['EventName']);
     $_POST['EventName'] = remove_spaces($_POST['EventName']);
-    $_POST['GuestName'] = stripcslashes(htmlspecialchars($_POST['GuestName'], ENT_QUOTES, $Settings['charset']));
+    // BUGFIX: stripcslashes() ran *after* htmlspecialchars(), so an input
+    // written with C escapes (\x22) passed through the escaper untouched and
+    // was then decoded back into raw quotes -- a stored XSS bypass. Decode
+    // first, then escape.
+    $_POST['GuestName'] = htmlspecialchars(stripcslashes($_POST['GuestName']), ENT_QUOTES, $Settings['charset']);
     //$_POST['GuestName'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['GuestName']);
     $_POST['GuestName'] = remove_spaces($_POST['GuestName']);
-    $_POST['EventText'] = stripcslashes(htmlspecialchars($_POST['EventText'], ENT_QUOTES, $Settings['charset']));
+    // BUGFIX: stripcslashes() ran *after* htmlspecialchars(), so an input
+    // written with C escapes (\x22) passed through the escaper untouched and
+    // was then decoded back into raw quotes -- a stored XSS bypass. Decode
+    // first, then escape.
+    $_POST['EventText'] = htmlspecialchars(stripcslashes($_POST['EventText']), ENT_QUOTES, $Settings['charset']);
     //$_POST['EventText'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['EventText']);
     $_POST['EventText'] = remove_bad_entities($_POST['EventText']);
     //$_POST['EventText'] = remove_spaces($_POST['EventText']);
@@ -830,7 +842,10 @@ if (PhpCaptcha::Validate($_POST['signcode'])) {
         if ($CaseInsensitive == "off") {
             $CaseInsensitive = "no";
         }
-        if ($CaseInsensitive != "yes" || $CaseInsensitive != "no") {
+        // BUGFIX: "|| " here is always true (a value cannot differ from both
+        // "yes" and "no" only when it equals one of them), so this reset ran on
+        // every pass and forced the setting to "no".
+        if ($CaseInsensitive != "yes" && $CaseInsensitive != "no") {
             $CaseInsensitive = "no";
         }
         $WholeWord = $melaniert_array['WholeWord'];
@@ -874,7 +889,10 @@ if (PhpCaptcha::Validate($_POST['signcode'])) {
         if ($RCaseInsensitive == "off") {
             $RCaseInsensitive = "no";
         }
-        if ($RCaseInsensitive != "yes" || $RCaseInsensitive != "no") {
+        // BUGFIX: "|| " here is always true (a value cannot differ from both
+        // "yes" and "no" only when it equals one of them), so this reset ran on
+        // every pass and forced the setting to "no".
+        if ($RCaseInsensitive != "yes" && $RCaseInsensitive != "no") {
             $RCaseInsensitive = "no";
         }
         $RWholeWord = $lonewolfrt_array['WholeWord'];
@@ -884,7 +902,10 @@ if (PhpCaptcha::Validate($_POST['signcode'])) {
         if ($RWholeWord == "off") {
             $RWholeWord = "no";
         }
-        if ($RWholeWord != "yes" || $RWholeWord != "no") {
+        // BUGFIX: "|| " here is always true (a value cannot differ from both
+        // "yes" and "no" only when it equals one of them), so this reset ran on
+        // every pass and forced the setting to "no".
+        if ($RWholeWord != "yes" && $RWholeWord != "no") {
             $RWholeWord = "no";
         }
         $RestrictedEventName = $lonewolfrt_array['RestrictedEventName'];
@@ -894,7 +915,10 @@ if (PhpCaptcha::Validate($_POST['signcode'])) {
         if ($RestrictedEventName == "off") {
             $RestrictedEventName = "no";
         }
-        if ($RestrictedEventName != "yes" || $RestrictedEventName != "no") {
+        // BUGFIX: "|| " here is always true (a value cannot differ from both
+        // "yes" and "no" only when it equals one of them), so this reset ran on
+        // every pass and forced the setting to "no".
+        if ($RestrictedEventName != "yes" && $RestrictedEventName != "no") {
             $RestrictedEventName = "no";
         }
         $RestrictedUserName = $lonewolfrt_array['RestrictedUserName'];
@@ -904,7 +928,10 @@ if (PhpCaptcha::Validate($_POST['signcode'])) {
         if ($RestrictedUserName == "off") {
             $RestrictedUserName = "no";
         }
-        if ($RestrictedUserName != "yes" || $RestrictedUserName != "no") {
+        // BUGFIX: "|| " here is always true (a value cannot differ from both
+        // "yes" and "no" only when it equals one of them), so this reset ran on
+        // every pass and forced the setting to "no".
+        if ($RestrictedUserName != "yes" && $RestrictedUserName != "no") {
             $RestrictedUserName = "no";
         }
         $RWord = preg_quote($RWord, "/");

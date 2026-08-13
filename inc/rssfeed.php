@@ -21,12 +21,17 @@ if ($File3Name == "rssfeed.php" || $File3Name == "/rssfeed.php") {
 if (!isset($_GET['debug'])) {
     $_GET['debug'] = null;
 }
-if (!is_numeric($_GET['id'])) {
+if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     $_GET['id'] = null;
 }
 $boardsname = htmlentities($Settings['board_name'], ENT_QUOTES, $Settings['charset']);
 $boardsname = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $boardsname);
-$_GET['feedtype'] = strtolower($_GET['feedtype']);
+// BUGFIX: feedtype was lowercased before anything checked it existed --
+// an undefined-key warning, and strtolower(null) is deprecated on PHP 8.1+.
+if (!isset($_GET['feedtype'])) {
+    $_GET['feedtype'] = "rss";
+}
+$_GET['feedtype'] = strtolower((string)$_GET['feedtype']);
 if ($_GET['feedtype'] != "rss" && $_GET['feedtype'] != "atom" && $_GET['feedtype'] != "oldrss" &&
     $_GET['feedtype'] != "opml" && $_GET['feedtype'] != "opensearch") {
     $_GET['feedtype'] = "rss";
@@ -35,7 +40,8 @@ if ($_GET['feedtype'] != "rss" && $_GET['feedtype'] != "atom" && $_GET['feedtype
 /*if(dirname($_SERVER['REQUEST_URI'])!="."||
     dirname($_SERVER['REQUEST_URI'])!=null) {
 $basedir = dirname($_SERVER['REQUEST_URI'])."/"; }*/
-if (dirname($_SERVER['SCRIPT_NAME']) != "." ||
+// BUGFIX: "||" is always true here (a value cannot be both "." and null).
+if (dirname($_SERVER['SCRIPT_NAME']) != "." &&
     dirname($_SERVER['SCRIPT_NAME']) != null) {
     $basedir = dirname($_SERVER['SCRIPT_NAME'])."/";
 }
@@ -45,10 +51,14 @@ if ($basedir == null || $basedir == ".") {
         $basedir = dirname($_SERVER['PHP_SELF'])."/";
     }
 }
-if ($basedir == "\/") {
+// BUGFIX: "\/" in a double-quoted string is a literal backslash-slash.
+if ($basedir == "/") {
     $basedir = "/";
 }
 $basedir = str_replace("//", "/", $basedir);
+if (!isset($Settings['fixpathinfo'])) {
+    $Settings['fixpathinfo'] = null;
+}
 if ($Settings['fixpathinfo'] != "on" &&
     $Settings['fixpathinfo'] != "off" &&
     $Settings['fixpathinfo'] !== null) {
@@ -299,6 +309,7 @@ if ($_GET['feedtype'] == "oldrss" || $_GET['feedtype'] == "rss" || $_GET['feedty
             if (isset($GroupNameSuffix) && $GroupNameSuffix != null) {
                 $UsersName = $UsersName.$GroupNameSuffix;
             }
+            $UsersName = htmlspecialchars((string)$UsersName, ENT_QUOTES, $Settings['charset'], false);
             $TheTime = $result_array['TimeStamp'];
             $atomcurtime = new DateTime();
             $atomcurtime->setTimestamp($TheTime);
@@ -307,23 +318,36 @@ if ($_GET['feedtype'] == "oldrss" || $_GET['feedtype'] == "rss" || $_GET['feedty
             //$OldRSSTime=$atomcurtime->format("Y-m-d\TH:i:s+0:00");
             $OldRSSTime = $AtomTime;
             $TheTime = $atomcurtime->format("D, j M Y G:i:s \G\M\T");
-            $TopicName = $result_array['TopicName'];
+            // BUGFIX: these go straight into XML element text. A legacy row with a
+            // raw "&" or "<" makes the whole feed malformed and unparseable.
+            // double_encode=false repairs those without double-escaping rows that
+            // are already entity-encoded.
+            $TopicName = htmlspecialchars((string)$result_array['TopicName'], ENT_QUOTES, $Settings['charset'], false);
             $ForumDescription = $result_array['Description'];
             if (isset($PermissionInfo['CanViewForum'][$ForumID]) &&
                 $PermissionInfo['CanViewForum'][$ForumID] == "yes" &&
                 isset($CatPermissionInfo['CanViewCategory'][$CategoryID]) &&
                 $CatPermissionInfo['CanViewCategory'][$CategoryID] == "yes") {
                 if ($_GET['feedtype'] == "atom") {
-                    $CDataDescription = "<![CDATA[\n".$MyDescription."\n]]>";
+                    // BUGFIX: a CDATA section ends at the first "]]>", so a post containing
+                    // that sequence closed the block early and injected raw markup into
+                    // the feed. Split the sequence across two CDATA sections.
+                    $CDataDescription = "<![CDATA[\n".str_replace("]]>", "]]]]><![CDATA[>", (string)$MyDescription)."\n]]>";
                     $Atom .= '<entry>'."\n".'<title>'.$TopicName.'</title>'."\n".'<summary>'.$CDataDescription.'</summary>'."\n".'<link rel="alternate" href="'.$BoardURL.url_maker($exfilerss['topic'], $Settings['file_ext'], "act=view&id=".$TopicID."&page=1", $Settings['qstr'], $Settings['qsep'], $prexqstrrss['topic'], $exqstrrss['topic']).'" />'."\n".'<id>'.$BoardURL.url_maker($exfilerss['topic'], $Settings['file_ext'], "act=view&id=".$TopicID."&page=1", $Settings['qstr'], $Settings['qsep'], $prexqstrrss['topic'], $exqstrrss['topic']).'</id>'."\n".'<author>'."\n".'<name>'.$UsersName.'</name>'."\n".'</author>'."\n".'<updated>'.$AtomTime.'</updated>'."\n".'</entry>'."\n";
                 }
                 if ($_GET['feedtype'] == "oldrss") {
-                    $CDataDescription = "<![CDATA[\n".$MyDescription."\n]]>";
+                    // BUGFIX: a CDATA section ends at the first "]]>", so a post containing
+                    // that sequence closed the block early and injected raw markup into
+                    // the feed. Split the sequence across two CDATA sections.
+                    $CDataDescription = "<![CDATA[\n".str_replace("]]>", "]]]]><![CDATA[>", (string)$MyDescription)."\n]]>";
                     $PreRSS .= '      <rdf:li rdf:resource="'.$BoardURL.url_maker($exfilerss['topic'], $Settings['file_ext'], "act=view&id=".$TopicID."&page=1", $Settings['qstr'], $Settings['qsep'], $prexqstrrss['topic'], $exqstrrss['topic']).'" />'."\n";
                     $RSS .= '<item rdf:about="'.$BoardURL.url_maker($exfilerss['topic'], $Settings['file_ext'], "act=view&id=".$TopicID."&page=1", $Settings['qstr'], $Settings['qsep'], $prexqstrrss['topic'], $exqstrrss['topic']).'">'."\n".'<title>'.$TopicName.'</title>'."\n".'<description>'.$CDataDescription.'</description>'."\n".'<dc:publisher>'.$UsersName.'</dc:publisher>'."\n".'<dc:creator>'.$UsersName.'</dc:creator>'."\n".'<dc:date>'.$OldRSSTime.'</dc:date>'."\n".'</item>'."\n";
                 }
                 if ($_GET['feedtype'] == "rss") {
-                    $CDataDescription = "<![CDATA[\n".$MyDescription."\n]]>";
+                    // BUGFIX: a CDATA section ends at the first "]]>", so a post containing
+                    // that sequence closed the block early and injected raw markup into
+                    // the feed. Split the sequence across two CDATA sections.
+                    $CDataDescription = "<![CDATA[\n".str_replace("]]>", "]]]]><![CDATA[>", (string)$MyDescription)."\n]]>";
                     $RSS .= '<item>'."\n".'<pubDate>'.$TheTime.'</pubDate>'."\n".'<author>'.$UsersName.'</author>'."\n".'<title>'.$TopicName.'</title>'."\n".'<description>'.$CDataDescription.'</description>'."\n".'<link>'.$BoardURL.url_maker($exfilerss['topic'], $Settings['file_ext'], "act=view&id=".$TopicID."&page=1", $Settings['qstr'], $Settings['qsep'], $prexqstrrss['topic'], $exqstrrss['topic']).'</link>'."\n".'<guid>'.$BoardURL.url_maker($exfilerss['topic'], $Settings['file_ext'], "act=view&id=".$TopicID."&page=1", $Settings['qstr'], $Settings['qsep'], $prexqstrrss['topic'], $exqstrrss['topic']).'</guid>'."\n".'</item>'."\n";
                 }
             }

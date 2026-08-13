@@ -18,6 +18,28 @@ if ($File3Name == "navbar.php" || $File3Name == "/navbar.php") {
     require('index.php');
     exit();
 }
+// BUGFIX: these were read without isset(), warning on every guest page view.
+if (!isset($GroupInfo['CanPM'])) {
+    $GroupInfo['CanPM'] = "no";
+}
+if (!isset($GroupInfo['CanSearch'])) {
+    $GroupInfo['CanSearch'] = "no";
+}
+if (!isset($GroupInfo['CanEditProfile'])) {
+    $GroupInfo['CanEditProfile'] = "no";
+}
+if (!isset($GroupInfo['HasAdminCP'])) {
+    $GroupInfo['HasAdminCP'] = "no";
+}
+if (!isset($Settings['enable_search'])) {
+    $Settings['enable_search'] = "off";
+}
+if (!isset($AmIHidden)) {
+    $AmIHidden = "no";
+}
+if (!isset($PMNumber)) {
+    $PMNumber = 0;
+}
 if (isset($Settings['sqldb']) && ($_SESSION['UserGroup'] != $Settings['GuestGroup'] || $GroupInfo['CanPM'] == "yes")) {
     $PMNumber = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."messenger\" WHERE \"ReciverID\"=%i AND \"Read\"=0", array($_SESSION['UserID'])), $SQLStat);
     $pmquery1 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."messenger\" WHERE \"ReciverID\"=%i AND \"Read\"=0", array($_SESSION['UserID']));
@@ -52,7 +74,7 @@ if (!isset($idbpowertitle)) {
 <div class="NavBarRow1">
 <span class="NavBarSpan1">
 <?php echo $ThemeSet['PreLogo']; ?>
-<a <?php echo $logostyle; ?>title="<?php echo $Settings['board_name'].$idbpowertitle; ?>" href="<?php echo url_maker($exfile['index'], $Settings['file_ext'], "act=view", $Settings['qstr'], $Settings['qsep'], $prexqstr['index'], $exqstr['index']); ?>">
+<a <?php echo $logostyle; ?>title="<?php echo htmlspecialchars($Settings['board_name'].$idbpowertitle, ENT_QUOTES, $Settings['charset'], false); ?>" href="<?php echo url_maker($exfile['index'], $Settings['file_ext'], "act=view", $Settings['qstr'], $Settings['qsep'], $prexqstr['index'], $exqstr['index']); ?>">
 <?php echo $ThemeSet['Logo']; ?></a>
 <?php echo $ThemeSet['SubLogo']; ?>
 </span></div>
@@ -61,7 +83,7 @@ if (!isset($idbpowertitle)) {
 <?php if ($ThemeSet['TableStyle'] == "table") { ?>
 <tr class="NavBarRow1">
 <td id="NavBarLogo" class="NavBarColumn1"><?php echo $ThemeSet['PreLogo']; ?>
-<a <?php echo $logostyle; ?>title="<?php echo $Settings['board_name'].$idbpowertitle; ?>" href="<?php echo url_maker($exfile['index'], $Settings['file_ext'], "act=view", $Settings['qstr'], $Settings['qsep'], $prexqstr['index'], $exqstr['index']); ?>">
+<a <?php echo $logostyle; ?>title="<?php echo htmlspecialchars($Settings['board_name'].$idbpowertitle, ENT_QUOTES, $Settings['charset'], false); ?>" href="<?php echo url_maker($exfile['index'], $Settings['file_ext'], "act=view", $Settings['qstr'], $Settings['qsep'], $prexqstr['index'], $exqstr['index']); ?>">
 <?php echo $ThemeSet['Logo']; ?></a>
 <?php echo $ThemeSet['SubLogo']; ?></td>
 </tr><?php } ?>
@@ -69,11 +91,11 @@ if (!isset($idbpowertitle)) {
 <td id="NavBarLinks" class="NavBarColumn2">
 <span style="float: left;">&#160;<?php if (isset($Settings['sqldb']) && $_SESSION['UserGroup'] == $Settings['GuestGroup']) {
     if (!isset($_SESSION['GuestName'])) { ?>Welcome Guest
-<?php } if (isset($_SESSION['GuestName'])) { ?>Welcome <?php echo $_SESSION['GuestName'];
+<?php } if (isset($_SESSION['GuestName'])) { ?>Welcome <?php echo htmlspecialchars((string)$_SESSION['GuestName'], ENT_QUOTES, $Settings['charset'], false);
 } ?> ( <a href="<?php echo url_maker($exfile['member'], $Settings['file_ext'], "act=login", $Settings['qstr'], $Settings['qsep'], $prexqstr['member'], $exqstr['member']); ?>">Log in</a><?php echo $ThemeSet['LineDivider']; ?><a href="<?php echo url_maker($exfile['member'], $Settings['file_ext'], "act=signup", $Settings['qstr'], $Settings['qsep'], $prexqstr['member'], $exqstr['member']); ?>">Register</a> )
 <?php } if (isset($Settings['sqldb']) && $_SESSION['UserGroup'] != $Settings['GuestGroup']) { ?>Logged as: <?php if ($_SESSION['UserID'] > 0 && $AmIHidden == "no") { ?><a href="<?php echo url_maker($exfile['member'], $Settings['file_ext'], "act=view&id=".$_SESSION['UserID'], $Settings['qstr'], $Settings['qsep'], $prexqstr['member'], $exqstr['member']); ?>"><?php } if ($_SESSION['UserID'] < 0 || $AmIHidden == "yes") {
     echo "<span>";
-} echo $_SESSION['MemberName']; ?><?php if ($_SESSION['UserID'] > 0 && $AmIHidden == "no") { ?></a><?php } if ($_SESSION['UserID'] < 0 || $AmIHidden == "yes") {
+} echo htmlspecialchars((string)$_SESSION['MemberName'], ENT_QUOTES, $Settings['charset'], false); ?><?php if ($_SESSION['UserID'] > 0 && $AmIHidden == "no") { ?></a><?php } if ($_SESSION['UserID'] < 0 || $AmIHidden == "yes") {
     echo "</span>";
 } ?> ( <a href="<?php echo url_maker($exfile['member'], $Settings['file_ext'], "act=logout", $Settings['qstr'], $Settings['qsep'], $prexqstr['member'], $exqstr['member']); ?>">Log out</a><?php if ($GroupInfo['HasAdminCP'] == "yes") { ?><?php echo $ThemeSet['LineDivider']; ?><a href="<?php echo url_maker($exfile['admin'], $Settings['file_ext'], "act=view&menu=main", $Settings['qstr'], $Settings['qsep'], $prexqstr['admin'], $exqstr['admin']); ?>">Admin CP</a><?php } ?> )<?php } ?></span>
 <span style="float: right;">
@@ -92,7 +114,7 @@ if (isset($Settings['sqldb']) && $_SESSION['UserGroup'] != $Settings['GuestGroup
 <a href="<?php echo url_maker($exfile['member'], $Settings['file_ext'], "act=list&page=1", $Settings['qstr'], $Settings['qsep'], $prexqstr['member'], $exqstr['member']); ?>">Members</a><?php echo $ThemeSet['LineDivider']; ?>
 <a href="<?php echo url_maker($exfile['calendar'], $Settings['file_ext'], "act=view&caldate=".$NavBarCurDate, $Settings['qstr'], $Settings['qsep'], $prexqstr['calendar'], $exqstr['calendar']); ?>">Calendar</a><?php if (isset($Settings['weburl'])) {
     echo $ThemeSet['LineDivider']; ?>
-<a href="<?php echo $Settings['weburl']; ?>">Homepage</a><?php }
+<a href="<?php echo htmlspecialchars((string)$Settings['weburl'], ENT_QUOTES, $Settings['charset'], false); ?>">Homepage</a><?php }
 } ?>&#160;</span>
 </td></tr>
 </table></div>

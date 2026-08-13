@@ -151,7 +151,11 @@ if ($prenum >= 1) {
     $CategoryPostCountView = $catresult_array['PostCountView'];
     $CategoryKarmaCountView = $catresult_array['KarmaCountView'];
     sql_free_result($catresult);
-    if ($GroupInfo['HasAdminCP'] != "yes" || $GroupInfo['HasModCP'] != "yes") {
+    // BUGFIX: "||" is always true unless the user is both an admin and a mod,
+    // so administrators and moderators were also subjected to the post-count
+    // and karma minimums this block enforces -- and redirected out of forums
+    // they are supposed to be able to see. Only gate users who are neither.
+    if ($GroupInfo['HasAdminCP'] != "yes" && $GroupInfo['HasModCP'] != "yes") {
         if ($MyPostCountChk == null) {
             $MyPostCountChk = 0;
         }
@@ -935,7 +939,11 @@ if ($User1ID > 0 && $User1Hidden == "no" && isset($ThemeSet['PM']) && $ThemeSet[
 </table></div>
 <div class="DivMkReply">&#160;</div>
 <?php } if ($_GET['act'] == "create") {
-    if ($GroupInfo['HasAdminCP'] != "yes" || $GroupInfo['HasModCP'] != "yes") {
+    // BUGFIX: "||" is always true unless the user is both an admin and a mod,
+    // so administrators and moderators were also subjected to the post-count
+    // and karma minimums this block enforces -- and redirected out of forums
+    // they are supposed to be able to see. Only gate users who are neither.
+    if ($GroupInfo['HasAdminCP'] != "yes" && $GroupInfo['HasModCP'] != "yes") {
         if ($ForumPostCountView != 0 && $MyPostCountChk < $ForumPostCountView) {
             redirect("location", $rbasedir.url_maker($exfile['index'], $Settings['file_ext'], "act=".$viewvar, $Settings['qstr'], $Settings['qsep'], $prexqstr['index'], $exqstr['index'], false));
         }
@@ -1010,7 +1018,10 @@ if ($User1ID > 0 && $User1Hidden == "no" && isset($ThemeSet['PM']) && $ThemeSet[
                     $QuoteUserName = "Guest";
                 }
             }
-            $QuoteUserName = stripcslashes(htmlspecialchars($QuoteUserName, ENT_QUOTES, $Settings['charset']));
+            // BUGFIX: stripcslashes() ran *after* htmlspecialchars(), so input
+            // written with C escapes (\x22) slipped past the escaper untouched and
+            // was then decoded back into raw quotes -- a stored XSS bypass.
+            $QuoteUserName = htmlspecialchars(stripcslashes($QuoteUserName), ENT_QUOTES, $Settings['charset']);
             //$QuoteUserName = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $QuoteUserName);
             $QuoteUserName = remove_spaces($QuoteUserName);
             /*$QuoteReply = stripcslashes(htmlspecialchars($QuoteReply, ENT_QUOTES, $Settings['charset']));
@@ -1036,7 +1047,11 @@ if ($User1ID > 0 && $User1Hidden == "no" && isset($ThemeSet['PM']) && $ThemeSet[
             }
         }
     }
-    if ($GroupInfo['HasAdminCP'] != "yes" || $GroupInfo['HasModCP'] != "yes") {
+    // BUGFIX: "||" is always true unless the user is both an admin and a mod,
+    // so administrators and moderators were also subjected to the post-count
+    // and karma minimums this block enforces -- and redirected out of forums
+    // they are supposed to be able to see. Only gate users who are neither.
+    if ($GroupInfo['HasAdminCP'] != "yes" && $GroupInfo['HasModCP'] != "yes") {
         if ($_GET['post'] != null && $num >= 1) {
             $rforumcheck = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i".$ForumIgnoreList2."  LIMIT 1", array($QuoteReplyFID));
             $rfmckresult = sql_query($rforumcheck, $SQLStat);
@@ -1173,7 +1188,11 @@ if ($User1ID > 0 && $User1Hidden == "no" && isset($ThemeSet['PM']) && $ThemeSet[
 </table></div>
 <div class="DivMkReply">&#160;</div>
 <?php } if ($_GET['act'] == "makereply" && $_POST['act'] == "makereplies") {
-    if ($GroupInfo['HasAdminCP'] != "yes" || $GroupInfo['HasModCP'] != "yes") {
+    // BUGFIX: "||" is always true unless the user is both an admin and a mod,
+    // so administrators and moderators were also subjected to the post-count
+    // and karma minimums this block enforces -- and redirected out of forums
+    // they are supposed to be able to see. Only gate users who are neither.
+    if ($GroupInfo['HasAdminCP'] != "yes" && $GroupInfo['HasModCP'] != "yes") {
         if ($ForumPostCountView != 0 && $MyPostCountChk < $ForumPostCountView) {
             redirect("location", $rbasedir.url_maker($exfile['index'], $Settings['file_ext'], "act=".$viewvar, $Settings['qstr'], $Settings['qsep'], $prexqstr['index'], $exqstr['index'], false));
         }
@@ -1295,13 +1314,22 @@ if (PhpCaptcha::Validate($_POST['signcode'])) {
 </tr>
 <?php }
     }
-    $_POST['ReplyDesc'] = stripcslashes(htmlspecialchars($_POST['ReplyDesc'], ENT_QUOTES, $Settings['charset']));
+    // BUGFIX: stripcslashes() ran *after* htmlspecialchars(), so input
+    // written with C escapes (\x22) slipped past the escaper untouched and
+    // was then decoded back into raw quotes -- a stored XSS bypass.
+    $_POST['ReplyDesc'] = htmlspecialchars(stripcslashes($_POST['ReplyDesc']), ENT_QUOTES, $Settings['charset']);
     //$_POST['ReplyDesc'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['ReplyDesc']);
     $_POST['ReplyDesc'] = remove_spaces($_POST['ReplyDesc']);
-    $_POST['GuestName'] = stripcslashes(htmlspecialchars($_POST['GuestName'], ENT_QUOTES, $Settings['charset']));
+    // BUGFIX: stripcslashes() ran *after* htmlspecialchars(), so input
+    // written with C escapes (\x22) slipped past the escaper untouched and
+    // was then decoded back into raw quotes -- a stored XSS bypass.
+    $_POST['GuestName'] = htmlspecialchars(stripcslashes($_POST['GuestName']), ENT_QUOTES, $Settings['charset']);
     //$_POST['GuestName'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['GuestName']);
     $_POST['GuestName'] = remove_spaces($_POST['GuestName']);
-    $_POST['ReplyPost'] = stripcslashes(htmlspecialchars($_POST['ReplyPost'], ENT_QUOTES, $Settings['charset']));
+    // BUGFIX: stripcslashes() ran *after* htmlspecialchars(), so input
+    // written with C escapes (\x22) slipped past the escaper untouched and
+    // was then decoded back into raw quotes -- a stored XSS bypass.
+    $_POST['ReplyPost'] = htmlspecialchars(stripcslashes($_POST['ReplyPost']), ENT_QUOTES, $Settings['charset']);
     //$_POST['ReplyPost'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['ReplyPost']);
     //$_POST['ReplyPost'] = remove_spaces($_POST['ReplyPost']);
     $_POST['ReplyPost'] = remove_bad_entities($_POST['ReplyPost']);
@@ -1326,6 +1354,16 @@ if (PhpCaptcha::Validate($_POST['signcode'])) {
     $melanienm = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."wordfilter\"", null), $SQLStat);
     $melanieqy = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."wordfilter\"", null);
     $melaniert = sql_query($melanieqy, $SQLStat);
+// BUGFIX: $Replace is the substitute word from the word-filter table and was
+// passed straight to preg_replace(), which reads $1/\1 in a replacement as
+// backreferences -- so a replacement containing those sequences was mangled or
+// spliced matched text back into the post. ($Filter is already preg_quote()d.)
+if (!function_exists('idb_preg_replacement')) {
+    function idb_preg_replacement($replacement)
+    {
+        return str_replace(array('\\', '$'), array('\\\\', '\\$'), (string)$replacement);
+    }
+}
     $melanies = 0;
     while ($melanies < $melanienm) {
         $melaniert_array = sql_fetch_assoc($melaniert);
@@ -1338,7 +1376,10 @@ if (PhpCaptcha::Validate($_POST['signcode'])) {
         if ($CaseInsensitive == "off") {
             $CaseInsensitive = "no";
         }
-        if ($CaseInsensitive != "yes" || $CaseInsensitive != "no") {
+        // BUGFIX: "||" is always true here (a value cannot differ from both
+        // "yes" and "no"), so this reset fired every time and forced "no",
+        // permanently disabling the setting. The sibling checks use "&&".
+        if ($CaseInsensitive != "yes" && $CaseInsensitive != "no") {
             $CaseInsensitive = "no";
         }
         $WholeWord = $melaniert_array['WholeWord'];
@@ -1353,20 +1394,20 @@ if (PhpCaptcha::Validate($_POST['signcode'])) {
         }
         $Filter = preg_quote($Filter, "/");
         if ($CaseInsensitive != "yes" && $WholeWord == "yes") {
-            $_POST['ReplyDesc'] = preg_replace("/\b(".$Filter.")\b/", $Replace, $_POST['ReplyDesc']);
-            $_POST['ReplyPost'] = preg_replace("/\b(".$Filter.")\b/", $Replace, $_POST['ReplyPost']);
+            $_POST['ReplyDesc'] = preg_replace("/\b(".$Filter.")\b/", idb_preg_replacement($Replace), $_POST['ReplyDesc']);
+            $_POST['ReplyPost'] = preg_replace("/\b(".$Filter.")\b/", idb_preg_replacement($Replace), $_POST['ReplyPost']);
         }
         if ($CaseInsensitive == "yes" && $WholeWord == "yes") {
-            $_POST['ReplyDesc'] = preg_replace("/\b(".$Filter.")\b/i", $Replace, $_POST['ReplyDesc']);
-            $_POST['ReplyPost'] = preg_replace("/\b(".$Filter.")\b/i", $Replace, $_POST['ReplyPost']);
+            $_POST['ReplyDesc'] = preg_replace("/\b(".$Filter.")\b/i", idb_preg_replacement($Replace), $_POST['ReplyDesc']);
+            $_POST['ReplyPost'] = preg_replace("/\b(".$Filter.")\b/i", idb_preg_replacement($Replace), $_POST['ReplyPost']);
         }
         if ($CaseInsensitive != "yes" && $WholeWord != "yes") {
-            $_POST['ReplyDesc'] = preg_replace("/".$Filter."/", $Replace, $_POST['ReplyDesc']);
-            $_POST['ReplyPost'] = preg_replace("/".$Filter."/", $Replace, $_POST['ReplyPost']);
+            $_POST['ReplyDesc'] = preg_replace("/".$Filter."/", idb_preg_replacement($Replace), $_POST['ReplyDesc']);
+            $_POST['ReplyPost'] = preg_replace("/".$Filter."/", idb_preg_replacement($Replace), $_POST['ReplyPost']);
         }
         if ($CaseInsensitive == "yes" && $WholeWord != "yes") {
-            $_POST['ReplyDesc'] = preg_replace("/".$Filter."/i", $Replace, $_POST['ReplyDesc']);
-            $_POST['ReplyPost'] = preg_replace("/".$Filter."/i", $Replace, $_POST['ReplyPost']);
+            $_POST['ReplyDesc'] = preg_replace("/".$Filter."/i", idb_preg_replacement($Replace), $_POST['ReplyDesc']);
+            $_POST['ReplyPost'] = preg_replace("/".$Filter."/i", idb_preg_replacement($Replace), $_POST['ReplyPost']);
         }
         ++$melanies;
     } sql_free_result($melaniert);
@@ -2445,17 +2486,29 @@ if (PhpCaptcha::Validate($_POST['signcode'])) {
 </tr>
 <?php }
     }
-    $_POST['ReplyDesc'] = stripcslashes(htmlspecialchars($_POST['ReplyDesc'], ENT_QUOTES, $Settings['charset']));
+    // BUGFIX: stripcslashes() ran *after* htmlspecialchars(), so input
+    // written with C escapes (\x22) slipped past the escaper untouched and
+    // was then decoded back into raw quotes -- a stored XSS bypass.
+    $_POST['ReplyDesc'] = htmlspecialchars(stripcslashes($_POST['ReplyDesc']), ENT_QUOTES, $Settings['charset']);
     //$_POST['ReplyDesc'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['ReplyDesc']);
     $_POST['ReplyDesc'] = remove_spaces($_POST['ReplyDesc']);
-    $_POST['GuestName'] = stripcslashes(htmlspecialchars($_POST['GuestName'], ENT_QUOTES, $Settings['charset']));
+    // BUGFIX: stripcslashes() ran *after* htmlspecialchars(), so input
+    // written with C escapes (\x22) slipped past the escaper untouched and
+    // was then decoded back into raw quotes -- a stored XSS bypass.
+    $_POST['GuestName'] = htmlspecialchars(stripcslashes($_POST['GuestName']), ENT_QUOTES, $Settings['charset']);
     //$_POST['GuestName'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['GuestName']);
     $_POST['GuestName'] = remove_spaces($_POST['GuestName']);
-    $_POST['ReplyPost'] = stripcslashes(htmlspecialchars($_POST['ReplyPost'], ENT_QUOTES, $Settings['charset']));
+    // BUGFIX: stripcslashes() ran *after* htmlspecialchars(), so input
+    // written with C escapes (\x22) slipped past the escaper untouched and
+    // was then decoded back into raw quotes -- a stored XSS bypass.
+    $_POST['ReplyPost'] = htmlspecialchars(stripcslashes($_POST['ReplyPost']), ENT_QUOTES, $Settings['charset']);
     //$_POST['ReplyPost'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['ReplyPost']);
     $_POST['ReplyPost'] = remove_bad_entities($_POST['ReplyPost']);
     if ($ShowEditTopic === true) {
-        $_POST['TopicName'] = stripcslashes(htmlspecialchars($_POST['TopicName'], ENT_QUOTES, $Settings['charset']));
+        // BUGFIX: stripcslashes() ran *after* htmlspecialchars(), so input
+        // written with C escapes (\x22) slipped past the escaper untouched and
+        // was then decoded back into raw quotes -- a stored XSS bypass.
+        $_POST['TopicName'] = htmlspecialchars(stripcslashes($_POST['TopicName']), ENT_QUOTES, $Settings['charset']);
         //$_POST['TopicName'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['TopicName']);
         $_POST['TopicName'] = remove_spaces($_POST['TopicName']);
     }
@@ -2476,7 +2529,10 @@ if (PhpCaptcha::Validate($_POST['signcode'])) {
         if ($CaseInsensitive == "off") {
             $CaseInsensitive = "no";
         }
-        if ($CaseInsensitive != "yes" || $CaseInsensitive != "no") {
+        // BUGFIX: "||" is always true here (a value cannot differ from both
+        // "yes" and "no"), so this reset fired every time and forced "no",
+        // permanently disabling the setting. The sibling checks use "&&".
+        if ($CaseInsensitive != "yes" && $CaseInsensitive != "no") {
             $CaseInsensitive = "no";
         }
         $WholeWord = $melaniert_array['WholeWord'];
@@ -2491,20 +2547,20 @@ if (PhpCaptcha::Validate($_POST['signcode'])) {
         }
         $Filter = preg_quote($Filter, "/");
         if ($CaseInsensitive != "yes" && $WholeWord == "yes") {
-            $_POST['ReplyDesc'] = preg_replace("/\b(".$Filter.")\b/", $Replace, $_POST['ReplyDesc']);
-            $_POST['ReplyPost'] = preg_replace("/\b(".$Filter.")\b/", $Replace, $_POST['ReplyPost']);
+            $_POST['ReplyDesc'] = preg_replace("/\b(".$Filter.")\b/", idb_preg_replacement($Replace), $_POST['ReplyDesc']);
+            $_POST['ReplyPost'] = preg_replace("/\b(".$Filter.")\b/", idb_preg_replacement($Replace), $_POST['ReplyPost']);
         }
         if ($CaseInsensitive == "yes" && $WholeWord == "yes") {
-            $_POST['ReplyDesc'] = preg_replace("/\b(".$Filter.")\b/i", $Replace, $_POST['ReplyDesc']);
-            $_POST['ReplyPost'] = preg_replace("/\b(".$Filter.")\b/i", $Replace, $_POST['ReplyPost']);
+            $_POST['ReplyDesc'] = preg_replace("/\b(".$Filter.")\b/i", idb_preg_replacement($Replace), $_POST['ReplyDesc']);
+            $_POST['ReplyPost'] = preg_replace("/\b(".$Filter.")\b/i", idb_preg_replacement($Replace), $_POST['ReplyPost']);
         }
         if ($CaseInsensitive != "yes" && $WholeWord != "yes") {
-            $_POST['ReplyDesc'] = preg_replace("/".$Filter."/", $Replace, $_POST['ReplyDesc']);
-            $_POST['ReplyPost'] = preg_replace("/".$Filter."/", $Replace, $_POST['ReplyPost']);
+            $_POST['ReplyDesc'] = preg_replace("/".$Filter."/", idb_preg_replacement($Replace), $_POST['ReplyDesc']);
+            $_POST['ReplyPost'] = preg_replace("/".$Filter."/", idb_preg_replacement($Replace), $_POST['ReplyPost']);
         }
         if ($CaseInsensitive == "yes" && $WholeWord != "yes") {
-            $_POST['ReplyDesc'] = preg_replace("/".$Filter."/i", $Replace, $_POST['ReplyDesc']);
-            $_POST['ReplyPost'] = preg_replace("/".$Filter."/i", $Replace, $_POST['ReplyPost']);
+            $_POST['ReplyDesc'] = preg_replace("/".$Filter."/i", idb_preg_replacement($Replace), $_POST['ReplyDesc']);
+            $_POST['ReplyPost'] = preg_replace("/".$Filter."/i", idb_preg_replacement($Replace), $_POST['ReplyPost']);
         }
         ++$melanies;
     } sql_free_result($melaniert);
@@ -2524,7 +2580,10 @@ if (PhpCaptcha::Validate($_POST['signcode'])) {
         if ($RCaseInsensitive == "off") {
             $RCaseInsensitive = "no";
         }
-        if ($RCaseInsensitive != "yes" || $RCaseInsensitive != "no") {
+        // BUGFIX: "||" is always true here (a value cannot differ from both
+        // "yes" and "no"), so this reset fired every time and forced "no",
+        // permanently disabling the setting. The sibling checks use "&&".
+        if ($RCaseInsensitive != "yes" && $RCaseInsensitive != "no") {
             $RCaseInsensitive = "no";
         }
         $RWholeWord = $lonewolfrt_array['WholeWord'];
@@ -2534,7 +2593,10 @@ if (PhpCaptcha::Validate($_POST['signcode'])) {
         if ($RWholeWord == "off") {
             $RWholeWord = "no";
         }
-        if ($RWholeWord != "yes" || $RWholeWord != "no") {
+        // BUGFIX: "||" is always true here (a value cannot differ from both
+        // "yes" and "no"), so this reset fired every time and forced "no",
+        // permanently disabling the setting. The sibling checks use "&&".
+        if ($RWholeWord != "yes" && $RWholeWord != "no") {
             $RWholeWord = "no";
         }
         $RestrictedTopicName = $lonewolfrt_array['RestrictedTopicName'];
@@ -2544,7 +2606,10 @@ if (PhpCaptcha::Validate($_POST['signcode'])) {
         if ($RestrictedTopicName == "off") {
             $RestrictedTopicName = "no";
         }
-        if ($RestrictedTopicName != "yes" || $RestrictedTopicName != "no") {
+        // BUGFIX: "||" is always true here (a value cannot differ from both
+        // "yes" and "no"), so this reset fired every time and forced "no",
+        // permanently disabling the setting. The sibling checks use "&&".
+        if ($RestrictedTopicName != "yes" && $RestrictedTopicName != "no") {
             $RestrictedTopicName = "no";
         }
         $RestrictedUserName = $lonewolfrt_array['RestrictedUserName'];
@@ -2554,7 +2619,10 @@ if (PhpCaptcha::Validate($_POST['signcode'])) {
         if ($RestrictedUserName == "off") {
             $RestrictedUserName = "no";
         }
-        if ($RestrictedUserName != "yes" || $RestrictedUserName != "no") {
+        // BUGFIX: "||" is always true here (a value cannot differ from both
+        // "yes" and "no"), so this reset fired every time and forced "no",
+        // permanently disabling the setting. The sibling checks use "&&".
+        if ($RestrictedUserName != "yes" && $RestrictedUserName != "no") {
             $RestrictedUserName = "no";
         }
         $RWord = preg_quote($RWord, "/");

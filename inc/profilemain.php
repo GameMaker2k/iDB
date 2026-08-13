@@ -252,7 +252,9 @@ $_SESSION['ExtraData'] = "currentact:".$_GET['act']."; currentcategoryid:0; curr
                 if ($CaseInsensitive == "off") {
                     $CaseInsensitive = "no";
                 }
-                if ($CaseInsensitive != "yes" || $CaseInsensitive != "no") {
+                // BUGFIX: "||" is always true here, so this reset fired every time
+                // and forced "no", permanently disabling the setting.
+                if ($CaseInsensitive != "yes" && $CaseInsensitive != "no") {
                     $CaseInsensitive = "no";
                 }
                 $WholeWord = $melaniert_array['WholeWord'];
@@ -265,18 +267,27 @@ $_SESSION['ExtraData'] = "currentact:".$_GET['act']."; currentcategoryid:0; curr
                 if ($WholeWord != "yes" && $WholeWord != "no") {
                     $WholeWord = "no";
                 }
+// BUGFIX: $Replace is the substitute word from the word-filter table and was
+// passed straight to preg_replace(), which reads $1/\1 in a replacement as a
+// backreference -- so the filter could reinsert the very text it censors.
+if (!function_exists('idb_preg_replacement')) {
+    function idb_preg_replacement($replacement)
+    {
+        return str_replace(array('\\', '$'), array('\\\\', '\\$'), (string)$replacement);
+    }
+}
                 $Filter = preg_quote($Filter, "/");
                 if ($CaseInsensitive != "yes" && $WholeWord == "yes") {
-                    $_POST['NotePad'] = preg_replace("/\b(".$Filter.")\b/", $Replace, $_POST['NotePad']);
+                    $_POST['NotePad'] = preg_replace("/\b(".$Filter.")\b/", idb_preg_replacement($Replace), $_POST['NotePad']);
                 }
                 if ($CaseInsensitive == "yes" && $WholeWord == "yes") {
-                    $_POST['NotePad'] = preg_replace("/\b(".$Filter.")\b/i", $Replace, $_POST['NotePad']);
+                    $_POST['NotePad'] = preg_replace("/\b(".$Filter.")\b/i", idb_preg_replacement($Replace), $_POST['NotePad']);
                 }
                 if ($CaseInsensitive != "yes" && $WholeWord != "yes") {
-                    $_POST['NotePad'] = preg_replace("/".$Filter."/", $Replace, $_POST['NotePad']);
+                    $_POST['NotePad'] = preg_replace("/".$Filter."/", idb_preg_replacement($Replace), $_POST['NotePad']);
                 }
                 if ($CaseInsensitive == "yes" && $WholeWord != "yes") {
-                    $_POST['NotePad'] = preg_replace("/".$Filter."/i", $Replace, $_POST['NotePad']);
+                    $_POST['NotePad'] = preg_replace("/".$Filter."/i", idb_preg_replacement($Replace), $_POST['NotePad']);
                 }
                 ++$melanies;
             } sql_free_result($melaniert);
@@ -335,7 +346,9 @@ if ($_GET['act'] == "signature") {
     if ($_POST['update'] == "now") {
         if ($_POST['act'] == "signature" &&
             $_SESSION['UserGroup'] != $Settings['GuestGroup']) {
-            $_POST['Signature'] = stripcslashes(htmlspecialchars($_POST['Signature'], ENT_QUOTES));
+            // BUGFIX: stripcslashes() ran after htmlspecialchars(), so C-escaped
+            // input slipped past the escaper and was decoded back into raw quotes.
+            $_POST['Signature'] = htmlspecialchars(stripcslashes($_POST['Signature']), ENT_QUOTES);
             //$_POST['Signature'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['Signature']);
             //$_POST['Signature'] = remove_spaces($_POST['Signature']);
             $_POST['Signature'] = remove_bad_entities($_POST['Signature']);
@@ -356,7 +369,9 @@ if ($_GET['act'] == "signature") {
                 if ($CaseInsensitive == "off") {
                     $CaseInsensitive = "no";
                 }
-                if ($CaseInsensitive != "yes" || $CaseInsensitive != "no") {
+                // BUGFIX: "||" is always true here, so this reset fired every time
+                // and forced "no", permanently disabling the setting.
+                if ($CaseInsensitive != "yes" && $CaseInsensitive != "no") {
                     $CaseInsensitive = "no";
                 }
                 $WholeWord = $melaniert_array['WholeWord'];
@@ -371,16 +386,16 @@ if ($_GET['act'] == "signature") {
                 }
                 $Filter = preg_quote($Filter, "/");
                 if ($CaseInsensitive != "yes" && $WholeWord == "yes") {
-                    $_POST['Signature'] = preg_replace("/\b(".$Filter.")\b/", $Replace, $_POST['Signature']);
+                    $_POST['Signature'] = preg_replace("/\b(".$Filter.")\b/", idb_preg_replacement($Replace), $_POST['Signature']);
                 }
                 if ($CaseInsensitive == "yes" && $WholeWord == "yes") {
-                    $_POST['Signature'] = preg_replace("/\b(".$Filter.")\b/i", $Replace, $_POST['Signature']);
+                    $_POST['Signature'] = preg_replace("/\b(".$Filter.")\b/i", idb_preg_replacement($Replace), $_POST['Signature']);
                 }
                 if ($CaseInsensitive != "yes" && $WholeWord != "yes") {
-                    $_POST['Signature'] = preg_replace("/".$Filter."/", $Replace, $_POST['Signature']);
+                    $_POST['Signature'] = preg_replace("/".$Filter."/", idb_preg_replacement($Replace), $_POST['Signature']);
                 }
                 if ($CaseInsensitive == "yes" && $WholeWord != "yes") {
-                    $_POST['Signature'] = preg_replace("/".$Filter."/i", $Replace, $_POST['Signature']);
+                    $_POST['Signature'] = preg_replace("/".$Filter."/i", idb_preg_replacement($Replace), $_POST['Signature']);
                 }
                 ++$melanies;
             } sql_free_result($melaniert);
@@ -914,7 +929,9 @@ if ($_GET['act'] == "profile") {
                 if ($CaseInsensitive == "off") {
                     $CaseInsensitive = "no";
                 }
-                if ($CaseInsensitive != "yes" || $CaseInsensitive != "no") {
+                // BUGFIX: "||" is always true here, so this reset fired every time
+                // and forced "no", permanently disabling the setting.
+                if ($CaseInsensitive != "yes" && $CaseInsensitive != "no") {
                     $CaseInsensitive = "no";
                 }
                 $WholeWord = $melaniert_array['WholeWord'];
@@ -929,20 +946,20 @@ if ($_GET['act'] == "profile") {
                 }
                 $Filter = preg_quote($Filter, "/");
                 if ($CaseInsensitive != "yes" && $WholeWord == "yes") {
-                    $_POST['Interests'] = preg_replace("/\b(".$Filter.")\b/", $Replace, $_POST['Interests']);
-                    $_POST['Title'] = preg_replace("/\b(".$Filter.")\b/", $Replace, $_POST['Title']);
+                    $_POST['Interests'] = preg_replace("/\b(".$Filter.")\b/", idb_preg_replacement($Replace), $_POST['Interests']);
+                    $_POST['Title'] = preg_replace("/\b(".$Filter.")\b/", idb_preg_replacement($Replace), $_POST['Title']);
                 }
                 if ($CaseInsensitive == "yes" && $WholeWord == "yes") {
-                    $_POST['Interests'] = preg_replace("/\b(".$Filter.")\b/i", $Replace, $_POST['Interests']);
-                    $_POST['Title'] = preg_replace("/\b(".$Filter.")\b/i", $Replace, $_POST['Title']);
+                    $_POST['Interests'] = preg_replace("/\b(".$Filter.")\b/i", idb_preg_replacement($Replace), $_POST['Interests']);
+                    $_POST['Title'] = preg_replace("/\b(".$Filter.")\b/i", idb_preg_replacement($Replace), $_POST['Title']);
                 }
                 if ($CaseInsensitive != "yes" && $WholeWord != "yes") {
-                    $_POST['Interests'] = preg_replace("/".$Filter."/", $Replace, $_POST['Interests']);
-                    $_POST['Title'] = preg_replace("/".$Filter."/", $Replace, $_POST['Title']);
+                    $_POST['Interests'] = preg_replace("/".$Filter."/", idb_preg_replacement($Replace), $_POST['Interests']);
+                    $_POST['Title'] = preg_replace("/".$Filter."/", idb_preg_replacement($Replace), $_POST['Title']);
                 }
                 if ($CaseInsensitive == "yes" && $WholeWord != "yes") {
-                    $_POST['Interests'] = preg_replace("/".$Filter."/i", $Replace, $_POST['Interests']);
-                    $_POST['Title'] = preg_replace("/".$Filter."/i", $Replace, $_POST['Title']);
+                    $_POST['Interests'] = preg_replace("/".$Filter."/i", idb_preg_replacement($Replace), $_POST['Interests']);
+                    $_POST['Title'] = preg_replace("/".$Filter."/i", idb_preg_replacement($Replace), $_POST['Title']);
                 }
                 ++$melanies;
             } sql_free_result($melaniert);

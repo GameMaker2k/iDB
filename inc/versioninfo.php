@@ -39,7 +39,20 @@ $VERFull[1] = $VER1[0] . "." . $VER1[1] . "." . $VER1[2];
 
 $VER2 = ["Alpha", "Al", "SVN"];
 $SubVerN = 1349;
-$GitRevPreN = '$Id$';
+$GitRevPreN = '$Id: f1343aebc60351e987a68d426b428303a4450ac9 $';
+// BUGFIX: getGitRevision() is called here but is not defined anywhere in the
+// codebase. versioninfo.php loads on every request, so a missing definition is
+// a fatal "Call to undefined function" before any page can render. Provide a
+// fallback that pulls the hash out of the $Id$ keyword.
+if (!function_exists('getGitRevision')) {
+    function getGitRevision($idstring)
+    {
+        if (preg_match('/\$Id:\s*([0-9a-f]+)\s*\$/i', (string)$idstring, $gitmatch)) {
+            return $gitmatch[1];
+        }
+        return "";
+    }
+}
 $GitRevN = getGitRevision($GitRevPreN);
 
 $SVNDay = [12, 19, 2025];
@@ -240,8 +253,11 @@ if (isset($Settings['VerCheckURL']) && $Settings['VerCheckURL'] !== "") {
     $VerCheckURL = $Settings['VerCheckURL'];
 }
 
+// BUGFIX: parse_url() omits the 'query' key entirely when the URL has no
+// query string -- which is exactly the case this block exists to handle -- so
+// it raised an undefined-key warning every time it mattered.
 $VerCheckQuery = parse_url($VerCheckURL);
-$VerCheckQuery = $VerCheckQuery['query'];
+$VerCheckQuery = (is_array($VerCheckQuery) && isset($VerCheckQuery['query'])) ? $VerCheckQuery['query'] : "";
 if ($VerCheckQuery == "") {
     $VerCheckURL = $VerCheckURL . "?";
 }
@@ -338,11 +354,14 @@ $OSType = @php_uname("s") . " " . @php_uname("r") . " " . @php_uname("m");
 if ($OSType == "" || !isset($OSType)) {
     $OSType = PHP_OS;
 }
-if ($OSType == "WINNT") {
-    $OSType = "Windows NT";
+// BUGFIX: $OSType is php_uname("s")." ".php_uname("r")." ".php_uname("m"), so
+// it never equals "WINNT" or "WIN32" exactly and both branches were dead. The
+// bare constant PHP_OS is what actually carries those values.
+if (PHP_OS == "WINNT") {
+    $OSType = str_replace("WINNT", "Windows NT", $OSType);
 }
-if ($OSType == "WIN32") {
-    $OSType = "Windows 9x";
+if (PHP_OS == "WIN32") {
+    $OSType = str_replace("WIN32", "Windows 9x", $OSType);
 }
 
 $OSType2 = $PHPV2 . " / " . $OSType;
@@ -350,6 +369,9 @@ $ZENDV1 = zend_version();
 $ZENDV2 = "Zend engine " . $ZENDV1;
 
 // Show or hide the version number
+if (!isset($Settings['showverinfo'])) {
+    $Settings['showverinfo'] = "off";
+}
 if ($Settings['showverinfo'] == "on") {
     header("Generator: " . $VerInfo['iDB_Ver_Show']);
 } else {
@@ -361,6 +383,9 @@ if (!isset($Settings['hideverinfohttp'])) {
 }
 
 if ($Settings['hideverinfohttp'] == "on") {
-    header("X-Powered-By: ");
-    header("Generator: ");
+    // BUGFIX: header("X-Powered-By: ") sends an *empty* header rather than
+    // suppressing it, so the version was still advertised. header_remove()
+    // actually drops it.
+    header_remove("X-Powered-By");
+    header_remove("Generator");
 }

@@ -69,7 +69,11 @@ if ($prenum >= 1) {
     if ($MyKarmaCount == null) {
         $MyKarmaCount = 0;
     }
-    if ($GroupInfo['HasAdminCP'] != "yes" || $GroupInfo['HasModCP'] != "yes") {
+    // BUGFIX: "||" is always true unless the user is both an admin and a mod,
+    // so administrators and moderators were also subjected to the post-count
+    // and karma minimums this block enforces -- and redirected out of forums
+    // they are supposed to be able to see. Only gate users who are neither.
+    if ($GroupInfo['HasAdminCP'] != "yes" && $GroupInfo['HasModCP'] != "yes") {
         if ($CategoryPostCountView != 0 && $MyPostCountChk < $CategoryPostCountView) {
             redirect("location", $rbasedir.url_maker($exfile['index'], $Settings['file_ext'], "act=".$viewvar, $Settings['qstr'], $Settings['qsep'], $prexqstr['index'], $exqstr['index'], false));
         }

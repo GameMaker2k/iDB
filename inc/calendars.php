@@ -106,6 +106,21 @@ if (!isset($_GET['calmadd'])) {
 if (!is_numeric($_GET['calmadd'])) {
     $_GET['calmadd'] = 0;
 }
+// BUGFIX: calmadd is the iteration count for the two month-walking loops
+// below, and was accepted unbounded -- ?calmadd=999999999 kept the request
+// spinning until it timed out. Clamp it to a century either way.
+$_GET['calmadd'] = (int)$_GET['calmadd'];
+if ($_GET['calmadd'] > 1200) {
+    $_GET['calmadd'] = 1200;
+}
+if ($_GET['calmadd'] < -1200) {
+    $_GET['calmadd'] = -1200;
+}
+// BUGFIX: HighlightDay was never validated before being compared to the day
+// counter and echoed into the loop below.
+if ($_GET['HighlightDay'] !== null && !is_numeric($_GET['HighlightDay'])) {
+    $_GET['HighlightDay'] = null;
+}
 if ((!isset($_GET['calmonth']) && !isset($_GET['calyear'])) &&
 isset($_GET['caldate']) && strlen($_GET['caldate']) == 2) {
     $_GET['caldate'] = $_GET['caldate'].$calcurtime->format("Y");
@@ -129,7 +144,10 @@ $nextcalm = $_GET['calmadd'] + 1;
 $backcalm = $_GET['calmadd'] - 1;
 $calmcount = abs($_GET['calmadd']);
 $getcurmonth = $usercurtime->format("m");
-$getcuryear = $usercurtime->format("y");
+// BUGFIX: format("y") is a two-digit year. mktime() maps 0-69 to 2000-2069
+// and 70-99 to 1970-1999, so this silently breaks in 2070 and cannot address
+// any other century. Use the full year.
+$getcuryear = $usercurtime->format("Y");
 $getcurtmsp = mktime(0, 0, 0, $getcurmonth, 1, $getcuryear);
 $getnextmsp = mktime(0, 0, 0, ($getcurmonth + $nextcalm), 1, $getcuryear);
 $nexmonthnum = date("m", $getnextmsp);
@@ -180,6 +198,17 @@ $MyRealYear = $usercurtime->format("Y");
 // Count the Days in this month
 if (!isset($calmounthaddd)) {
     $calmounthaddd = 0;
+}
+// BUGFIX: calmonth/calyear are only set when caldate is 2 or 6 characters
+// long, yet setDate() below reads them unconditionally -- a caldate such as
+// "123" left them undefined and produced setDate(null, null, 1).
+if (!isset($_GET['calmonth']) || !is_numeric($_GET['calmonth'])
+    || (int)$_GET['calmonth'] < 1 || (int)$_GET['calmonth'] > 12) {
+    $_GET['calmonth'] = $calcurtime->format("m");
+}
+if (!isset($_GET['calyear']) || !is_numeric($_GET['calyear'])
+    || (int)$_GET['calyear'] < 1000 || (int)$_GET['calyear'] > 9999) {
+    $_GET['calyear'] = $calcurtime->format("Y");
 }
 $MyTimeStamp = $utccurtime->getTimestamp() + $calmounthaddd;
 //$calcurtime->setTimestamp($defcurtime->getTimestamp()+$calmounthaddd);
@@ -239,7 +268,10 @@ while ($is < $num) {
     if ($EventMonth < $MyMonth) {
         $EventDay = 1;
     }
-    $oldeventname = $EventName;
+    // BUGFIX: this is interpolated into title="..." below. Rows stored before
+    // the events.php escaping fix can contain raw quotes; double_encode=false
+    // escapes those without double-encoding already-escaped values.
+    $oldeventname = htmlspecialchars($EventName, ENT_QUOTES, $Settings['charset'], false);
     $EventName1 = pre_substr($EventName, 0, 20);
     if (pre_strlen($EventName) > 20) {
         $EventName1 = $EventName1."...";
@@ -285,7 +317,7 @@ while ($bdi < $bdnum) {
     $BirthMonth = $bdresult_array['BirthMonth'];
     $BirthYear = $bdresult_array['BirthYear'];
     $UserCurAge = $MyYear - $BirthYear;
-    $oldusername = $UserNamebd;
+    $oldusername = htmlspecialchars($UserNamebd, ENT_QUOTES, $Settings['charset'], false);
     $UserNamebd1 = pre_substr($UserNamebd, 0, 20);
     if (pre_strlen($UserNamebd) > 20) {
         $UserNamebd1 = $UserNamebd1."...";
@@ -325,19 +357,23 @@ for ($i; $i <= ($CountDays + $FirstDayThisMonth) ;$i++) {
     } else {
         $Extra = 'CalTableColumn3';
     }
-    if ($Day_i != $_GET['HighlightDay']) {
-        if (!isset($EventsName[$Day_i])) {
-            $EventsName[$Day_i] = null;
-        }
-        if ($EventsName[$Day_i] != null) {
-            $EventsName[$Day_i] = "&#160;( ".$EventsName[$Day_i]." )";
-        }
-        if ($Day_i != $MyCurDay) {
-            $WeekDays .= '<td class="'.$Extra.'" style="vertical-align: top;"><div class="CalDate">' . $Day_i . '</div>' . $EventsName[$Day_i] . '</td>'."\r\n";
-        }
+    // BUGFIX: when HighlightDay matched a day that was not today, neither
+    // branch emitted a <td>, so the cell vanished and every following day in
+    // the month shifted one column left. $EventsName[$Day_i] was also read
+    // without being initialised when the highlighted day *was* today.
+    if (!isset($EventsName[$Day_i])) {
+        $EventsName[$Day_i] = null;
+    }
+    if ($EventsName[$Day_i] != null) {
+        $EventsName[$Day_i] = "&#160;( ".$EventsName[$Day_i]." )";
+    }
+    if ($_GET['HighlightDay'] !== null && $Day_i == $_GET['HighlightDay']) {
+        $Extra = 'CalTableColumn3Current';
     }
     if ($Day_i == $MyCurDay) {
         $WeekDays .= '<td class="'.$Extra.'" style="vertical-align: top;"><div class="CalDateCurrent">' . $Day_i  . '</div>' . $EventsName[$Day_i] . '</td>'."\r\n";
+    } else {
+        $WeekDays .= '<td class="'.$Extra.'" style="vertical-align: top;"><div class="CalDate">' . $Day_i . '</div>' . $EventsName[$Day_i] . '</td>'."\r\n";
     }
     $Day_i++;
     $ii++;

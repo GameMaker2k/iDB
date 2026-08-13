@@ -1202,19 +1202,34 @@ if (PhpCaptcha::Validate($_POST['signcode'])) {
         }
         sql_free_result($resultchckm);
     }
-    $_POST['MessageName'] = stripcslashes(htmlspecialchars($_POST['MessageName'], ENT_QUOTES, $Settings['charset']));
+    // BUGFIX: stripcslashes() ran *after* htmlspecialchars(), so input
+    // written with C escapes (\x22) slipped past the escaper untouched and
+    // was then decoded back into raw quotes -- a stored XSS bypass.
+    $_POST['MessageName'] = htmlspecialchars(stripcslashes($_POST['MessageName']), ENT_QUOTES, $Settings['charset']);
     //$_POST['MessageName'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['MessageName']);
     $_POST['MessageName'] = remove_spaces($_POST['MessageName']);
-    $_POST['MessageDesc'] = stripcslashes(htmlspecialchars($_POST['MessageDesc'], ENT_QUOTES, $Settings['charset']));
+    // BUGFIX: stripcslashes() ran *after* htmlspecialchars(), so input
+    // written with C escapes (\x22) slipped past the escaper untouched and
+    // was then decoded back into raw quotes -- a stored XSS bypass.
+    $_POST['MessageDesc'] = htmlspecialchars(stripcslashes($_POST['MessageDesc']), ENT_QUOTES, $Settings['charset']);
     //$_POST['MessageDesc'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['MessageDesc']);
     $_POST['MessageDesc'] = remove_spaces($_POST['MessageDesc']);
-    $_POST['SendMessageTo'] = stripcslashes(htmlspecialchars($_POST['SendMessageTo'], ENT_QUOTES, $Settings['charset']));
+    // BUGFIX: stripcslashes() ran *after* htmlspecialchars(), so input
+    // written with C escapes (\x22) slipped past the escaper untouched and
+    // was then decoded back into raw quotes -- a stored XSS bypass.
+    $_POST['SendMessageTo'] = htmlspecialchars(stripcslashes($_POST['SendMessageTo']), ENT_QUOTES, $Settings['charset']);
     //$_POST['SendMessageTo'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['SendMessageTo']);
     $_POST['SendMessageTo'] = remove_spaces($_POST['SendMessageTo']);
-    $_POST['GuestName'] = stripcslashes(htmlspecialchars($_POST['GuestName'], ENT_QUOTES, $Settings['charset']));
+    // BUGFIX: stripcslashes() ran *after* htmlspecialchars(), so input
+    // written with C escapes (\x22) slipped past the escaper untouched and
+    // was then decoded back into raw quotes -- a stored XSS bypass.
+    $_POST['GuestName'] = htmlspecialchars(stripcslashes($_POST['GuestName']), ENT_QUOTES, $Settings['charset']);
     //$_POST['GuestName'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['GuestName']);
     $_POST['GuestName'] = remove_spaces($_POST['GuestName']);
-    $_POST['Message'] = stripcslashes(htmlspecialchars($_POST['Message'], ENT_QUOTES, $Settings['charset']));
+    // BUGFIX: stripcslashes() ran *after* htmlspecialchars(), so input
+    // written with C escapes (\x22) slipped past the escaper untouched and
+    // was then decoded back into raw quotes -- a stored XSS bypass.
+    $_POST['Message'] = htmlspecialchars(stripcslashes($_POST['Message']), ENT_QUOTES, $Settings['charset']);
     //$_POST['Message'] = preg_replace("/&amp;#(x[a-f0-9]+|[0-9]+);/i", "&#$1;", $_POST['Message']);
     //$_POST['Message'] = remove_spaces($_POST['Message']);
     $_POST['Message'] = remove_bad_entities($_POST['Message']);
@@ -1239,6 +1254,16 @@ if (PhpCaptcha::Validate($_POST['signcode'])) {
     $melanienm = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."wordfilter\"", null), $SQLStat);
     $melanieqy = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."wordfilter\"", null);
     $melaniert = sql_query($melanieqy, $SQLStat);
+// BUGFIX: $Replace is the substitute word from the word-filter table and was
+// passed straight to preg_replace(), which reads $1/\1 in a replacement as
+// backreferences -- so a replacement containing those sequences was mangled or
+// spliced matched text back into the post. ($Filter is already preg_quote()d.)
+if (!function_exists('idb_preg_replacement')) {
+    function idb_preg_replacement($replacement)
+    {
+        return str_replace(array('\\', '$'), array('\\\\', '\\$'), (string)$replacement);
+    }
+}
     $melanies = 0;
     while ($melanies < $melanienm) {
         $melaniert_array = sql_fetch_assoc($melaniert);
@@ -1251,7 +1276,10 @@ if (PhpCaptcha::Validate($_POST['signcode'])) {
         if ($CaseInsensitive == "off") {
             $CaseInsensitive = "no";
         }
-        if ($CaseInsensitive != "yes" || $CaseInsensitive != "no") {
+        // BUGFIX: "||" is always true here (a value cannot differ from both
+        // "yes" and "no"), so this reset fired every time and forced "no",
+        // permanently disabling the setting. The sibling checks use "&&".
+        if ($CaseInsensitive != "yes" && $CaseInsensitive != "no") {
             $CaseInsensitive = "no";
         }
         $WholeWord = $melaniert_array['WholeWord'];
@@ -1266,20 +1294,20 @@ if (PhpCaptcha::Validate($_POST['signcode'])) {
         }
         $Filter = preg_quote($Filter, "/");
         if ($CaseInsensitive != "yes" && $WholeWord == "yes") {
-            $_POST['Message'] = preg_replace("/\b(".$Filter.")\b/", $Replace, $_POST['Message']);
-            $_POST['MessageDesc'] = preg_replace("/\b(".$Filter.")\b/", $Replace, $_POST['MessageDesc']);
+            $_POST['Message'] = preg_replace("/\b(".$Filter.")\b/", idb_preg_replacement($Replace), $_POST['Message']);
+            $_POST['MessageDesc'] = preg_replace("/\b(".$Filter.")\b/", idb_preg_replacement($Replace), $_POST['MessageDesc']);
         }
         if ($CaseInsensitive == "yes" && $WholeWord == "yes") {
-            $_POST['Message'] = preg_replace("/\b(".$Filter.")\b/i", $Replace, $_POST['Message']);
-            $_POST['MessageDesc'] = preg_replace("/\b(".$Filter.")\b/i", $Replace, $_POST['MessageDesc']);
+            $_POST['Message'] = preg_replace("/\b(".$Filter.")\b/i", idb_preg_replacement($Replace), $_POST['Message']);
+            $_POST['MessageDesc'] = preg_replace("/\b(".$Filter.")\b/i", idb_preg_replacement($Replace), $_POST['MessageDesc']);
         }
         if ($CaseInsensitive != "yes" && $WholeWord != "yes") {
-            $_POST['Message'] = preg_replace("/".$Filter."/", $Replace, $_POST['Message']);
-            $_POST['MessageDesc'] = preg_replace("/".$Filter."/", $Replace, $_POST['MessageDesc']);
+            $_POST['Message'] = preg_replace("/".$Filter."/", idb_preg_replacement($Replace), $_POST['Message']);
+            $_POST['MessageDesc'] = preg_replace("/".$Filter."/", idb_preg_replacement($Replace), $_POST['MessageDesc']);
         }
         if ($CaseInsensitive == "yes" && $WholeWord != "yes") {
-            $_POST['Message'] = preg_replace("/".$Filter."/i", $Replace, $_POST['Message']);
-            $_POST['MessageDesc'] = preg_replace("/".$Filter."/i", $Replace, $_POST['MessageDesc']);
+            $_POST['Message'] = preg_replace("/".$Filter."/i", idb_preg_replacement($Replace), $_POST['Message']);
+            $_POST['MessageDesc'] = preg_replace("/".$Filter."/i", idb_preg_replacement($Replace), $_POST['MessageDesc']);
         }
         ++$melanies;
     } sql_free_result($melaniert);
@@ -1299,7 +1327,10 @@ if (PhpCaptcha::Validate($_POST['signcode'])) {
         if ($RCaseInsensitive == "off") {
             $RCaseInsensitive = "no";
         }
-        if ($RCaseInsensitive != "yes" || $RCaseInsensitive != "no") {
+        // BUGFIX: "||" is always true here (a value cannot differ from both
+        // "yes" and "no"), so this reset fired every time and forced "no",
+        // permanently disabling the setting. The sibling checks use "&&".
+        if ($RCaseInsensitive != "yes" && $RCaseInsensitive != "no") {
             $RCaseInsensitive = "no";
         }
         $RWholeWord = $lonewolfrt_array['WholeWord'];
@@ -1309,7 +1340,10 @@ if (PhpCaptcha::Validate($_POST['signcode'])) {
         if ($RWholeWord == "off") {
             $RWholeWord = "no";
         }
-        if ($RWholeWord != "yes" || $RWholeWord != "no") {
+        // BUGFIX: "||" is always true here (a value cannot differ from both
+        // "yes" and "no"), so this reset fired every time and forced "no",
+        // permanently disabling the setting. The sibling checks use "&&".
+        if ($RWholeWord != "yes" && $RWholeWord != "no") {
             $RWholeWord = "no";
         }
         $RestrictedMessageName = $lonewolfrt_array['RestrictedMessageName'];
@@ -1319,7 +1353,10 @@ if (PhpCaptcha::Validate($_POST['signcode'])) {
         if ($RestrictedMessageName == "off") {
             $RestrictedMessageName = "no";
         }
-        if ($RestrictedMessageName != "yes" || $RestrictedMessageName != "no") {
+        // BUGFIX: "||" is always true here (a value cannot differ from both
+        // "yes" and "no"), so this reset fired every time and forced "no",
+        // permanently disabling the setting. The sibling checks use "&&".
+        if ($RestrictedMessageName != "yes" && $RestrictedMessageName != "no") {
             $RestrictedMessageName = "no";
         }
         $RestrictedUserName = $lonewolfrt_array['RestrictedUserName'];
@@ -1329,7 +1366,10 @@ if (PhpCaptcha::Validate($_POST['signcode'])) {
         if ($RestrictedUserName == "off") {
             $RestrictedUserName = "no";
         }
-        if ($RestrictedUserName != "yes" || $RestrictedUserName != "no") {
+        // BUGFIX: "||" is always true here (a value cannot differ from both
+        // "yes" and "no"), so this reset fired every time and forced "no",
+        // permanently disabling the setting. The sibling checks use "&&".
+        if ($RestrictedUserName != "yes" && $RestrictedUserName != "no") {
             $RestrictedUserName = "no";
         }
         $RWord = preg_quote($RWord, "/");
