@@ -18,11 +18,30 @@ if ($File3Name == "setcheck.php" || $File3Name == "/setcheck.php") {
     require('index.php');
     exit();
 }
+// BUGFIX: the checks further down read these keys with "== null" rather than
+// isset(), so a settings.php that predates any of them raised an
+// undefined-key warning on every request.
+$iDBSettingDefaults = array(
+    'showverinfo' => "on", 'enable_rss' => "on", 'TestReferer' => "off",
+    'charset' => "iso-8859-15", 'qstr' => "&", 'qsep' => "=",
+    'DefaultTheme' => "iDB", 'DefaultTimeZone' => null,
+    'GuestGroup' => "Guest", 'MemberGroup' => "Member",
+    'ValidateGroup' => null, 'AdminValidate' => "off",
+    'html_type' => "html5", 'board_offline' => "off",
+);
+foreach ($iDBSettingDefaults as $iDBSettingKey => $iDBSettingValue) {
+    if (!isset($Settings[$iDBSettingKey])) {
+        $Settings[$iDBSettingKey] = $iDBSettingValue;
+    }
+}
+unset($iDBSettingKey, $iDBSettingValue);
 if (!isset($Settings['showverinfo'])) {
     $Settings['showverinfo'] = "on";
 }
 if (!isset($_GET['debug'])) {
-    $_GET['debug'] = false;
+    // BUGFIX: this set a boolean while the second copy of the same check
+    // further down set the string "false".
+    $_GET['debug'] = "false";
 }
 if (!isset($GZipEncode)) {
     $GZipEncode = array("Type" => "none");
@@ -70,7 +89,9 @@ if ($Settings['enable_pathinfo'] != "on" &&
     $Settings['enable_pathinfo'] != "off") {
     $Settings['enable_pathinfo'] = "off";
 }
-$Settings['sessionid_in_urls'] = "off";
+// BUGFIX: this unconditional assignment sat directly above the isset()/value
+// checks for the same key, so the setting could never be anything but "off"
+// and the three checks below were dead code.
 if (!isset($Settings['sessionid_in_urls'])) {
     $Settings['sessionid_in_urls'] = "off";
 }
@@ -136,8 +157,10 @@ if ($Settings['captcha_clean'] != "on" &&
     $Settings['captcha_clean'] != "off") {
     $Settings['captcha_clean'] = "off";
 }
+// BUGFIX: the second comparison repeated "on"; it was meant to be "off", so
+// any value other than "on" (including a valid "off") fell into the branch.
 if ($Settings['enable_rss'] != "on" &&
-    $Settings['enable_rss'] != "on") {
+    $Settings['enable_rss'] != "off") {
     $Settings['enable_rss'] = "off";
 }
 if ($Settings['enable_rss'] == "on") {
@@ -308,22 +331,43 @@ if ($_GET['act'] == "LowView" || $_GET['act'] == "loview") {
 }
 if ($_GET['act'] == "iDBInfo") {
     header('Location: http://sourceforge.net/projects/intdb/');
+    $urlstatus = 302;
+    session_write_close();
+    die();
 }
 if ($_GET['act'] == "iDBSite") {
     header('Location: http://intdb.sourceforge.net/');
+    $urlstatus = 302;
+    session_write_close();
+    die();
 }
 if ($_GET['act'] == "OldiDBInfo") {
     header('Location: http://developer.berlios.de/projects/idb/');
+    $urlstatus = 302;
+    session_write_close();
+    die();
 }
 if ($_GET['act'] == "OldiDBSite") {
     header('Location: https://idb.osdn.jp/');
+    $urlstatus = 302;
+    session_write_close();
+    die();
 }
 if ($_GET['act'] == "DF2kInfo") {
     header('Location: http://developer.berlios.de/projects/df2k/');
+    $urlstatus = 302;
+    session_write_close();
+    die();
 }
 if ($_GET['act'] == "DF2kSite") {
     header('Location: http://df2k.berlios.de/');
+    $urlstatus = 302;
+    session_write_close();
+    die();
 }
 if ($_GET['act'] == "GM2kSite") {
     header('Location: https://idb.osdn.jp/');
+    $urlstatus = 302;
+    session_write_close();
+    die();
 }

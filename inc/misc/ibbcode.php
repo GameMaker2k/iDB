@@ -119,9 +119,15 @@ function bbcode_parser($text)
     $text = preg_replace("/\[HR\]/is", "<hr />", $text);
     $text = preg_replace("/\[SUP\](.*?)\[\/SUP\]/is", "<sup>\\1</sup>", $text);
     $text = preg_replace("/\[SUB\](.*?)\[\/SUB\]/is", "<sub>\\1</sub>", $text);
-    $text = preg_replace("/\[BoardName\]/is", $Settings['board_name'], $text);
-    $text = preg_replace("/\[BoardURL\]/is", $Settings['idburl'], $text);
-    $text = preg_replace("/\[WebSiteURL\]/is", $Settings['weburl'], $text);
+    // BUGFIX: preg_replace() interprets $1/\1 in the replacement, so a board
+// name or URL containing those sequences was mangled. Replace literally.
+$text = str_ireplace("[BoardName]", $Settings['board_name'], $text);
+    // BUGFIX: preg_replace() interprets $1/\1 in the replacement, so a board
+// name or URL containing those sequences was mangled. Replace literally.
+$text = str_ireplace("[BoardURL]", $Settings['idburl'], $text);
+    // BUGFIX: preg_replace() interprets $1/\1 in the replacement, so a board
+// name or URL containing those sequences was mangled. Replace literally.
+$text = str_ireplace("[WebSiteURL]", $Settings['weburl'], $text);
     $text = preg_replace("/\{BoardName\}/is", $Settings['board_name'], $text);
     $text = preg_replace("/\{BoardURL\}/is", $Settings['idburl'], $text);
     $text = preg_replace("/\{WebSiteURL\}/is", $Settings['weburl'], $text);

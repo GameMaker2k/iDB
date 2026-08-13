@@ -619,23 +619,37 @@ function b64e_rot13_hmac($data, $key, $extdata, $hash = 'sha1', $blocksize = 64)
 // salt hmac hash function
 function salt_hmac($size1 = 6, $size2 = 12)
 {
-    $hprand = rand($size1, $size2);
+    // BUGFIX: this built password salts with rand(), which is not a
+    // cryptographically secure generator -- its output is predictable from a
+    // handful of observed values, and salts are generated at account creation
+    // when an attacker can often trigger and observe them.
+    //
+    // The alphabet ([0-9a-f]) and length range are deliberately unchanged, so
+    // salts stay the same shape and existing stored hashes keep verifying.
+    $idb_rand = function ($min, $max) {
+        if (function_exists('random_int')) {
+            try {
+                return random_int($min, $max);
+            } catch (Exception $e) {
+                // fall through to the weaker generator below
+            }
+        }
+        return mt_rand($min, $max);
+    };
+
+    $hprand = $idb_rand($size1, $size2);
     $i = 0;
     $hpass = "";
     while ($i < $hprand) {
-        $hspsrand = rand(1, 2);
-        if ($hspsrand != 1 && $hspsrand != 2) {
-            $hspsrand = 1;
-        }
+        $hspsrand = $idb_rand(1, 2);
         if ($hspsrand == 1) {
-            $hpass .= chr(rand(48, 57));
-        }
-        /* if($hspsrand==2) { $hpass .= chr(rand(65,70)); } */
-        if ($hspsrand == 2) {
-            $hpass .= chr(rand(97, 102));
+            $hpass .= chr($idb_rand(48, 57));
+        } else {
+            $hpass .= chr($idb_rand(97, 102));
         }
         ++$i;
-    } return $hpass;
+    }
+    return $hpass;
 }
 /* is_empty by M at http://us2.php.net/manual/en/function.empty.php#74093 */
 function is_empty($var)
@@ -689,11 +703,19 @@ function PassHash2x2($data, $key, $extdata, $blocksize = 64)
 }
 function cp($infile, $outfile, $mode = "w")
 {
-    $contents = file_get_contents($infile);
-    $cpfp = fopen($outfile, $mode);
-    fwrite($cpfp, $contents);
+    // BUGFIX: every step here was unchecked and the function always returned
+    // true. On PHP 8 a failed fopen() made fwrite(false, ...) a TypeError.
+    $contents = @file_get_contents($infile);
+    if ($contents === false) {
+        return false;
+    }
+    $cpfp = @fopen($outfile, $mode);
+    if ($cpfp === false) {
+        return false;
+    }
+    $written = fwrite($cpfp, $contents);
     fclose($cpfp);
-    return true;
+    return ($written !== false);
 }
 
 // b64hmac hash function
@@ -837,8 +859,12 @@ if (!function_exists('str_ireplace')) {
         foreach ($search as $key => $value) {
             // Escape special regex characters in the search value
             $pattern = '/' . preg_quote($value, '/') . '/i';
-            // Perform the replacement
-            $subject = preg_replace($pattern, $replace[$key], $subject);
+            // BUGFIX: the replacement was passed to preg_replace() unescaped,
+            // so a replacement containing $1 or \1 was treated as a
+            // backreference instead of literal text.
+            $subject = preg_replace($pattern,
+                str_replace(array('\\', '$'), array('\\\\', '\\$'), $replace[$key]),
+                $subject);
         }
         return $subject;
     }
