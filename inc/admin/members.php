@@ -841,7 +841,7 @@ if ($Settings['sqltype'] == "mysqli" ||
 <tr style="text-align: left;">
 <td style="width: 100%;">
 <input type="hidden" name="act" value="editmember" style="display: none;" />
-<input type="hidden" name="id" value="<?php echo $_POST['id']; ?>" style="display: none;" />
+<input type="hidden" name="id" value="<?php echo htmlspecialchars((string)(isset($_POST['id']) ? $_POST['id'] : ''), ENT_QUOTES); ?>" style="display: none;" />
 <input type="hidden" name="update" value="now" style="display: none;" />
 <input type="submit" class="Button" value="Edit Member" name="Apply_Changes" />
 <input type="reset" value="Reset Form" class="Button" name="Reset_Form" />

@@ -1421,7 +1421,7 @@ Permissions for <?php echo $InForumName; ?> are set: <br />
 Permissions for <?php echo $InForumName; ?> are not set: <br />
 <input type="hidden" name="act" value="fpermissions" style="display: none;" />
 <input type="hidden" name="subact" value="create" style="display: none;" />
-<input type="hidden" name="permid" value="<?php echo $_POST['id']; ?>" style="display: none;" />
+<input type="hidden" name="permid" value="<?php echo htmlspecialchars((string)(isset($_POST['id']) ? $_POST['id'] : ''), ENT_QUOTES); ?>" style="display: none;" />
 <input type="hidden" name="id" value="<?php echo $InForumID; ?>" style="display: none;" />
 <input type="submit" class="Button" value="Create Permissions" name="Apply_Changes" />
 <?php } ?>
@@ -1918,8 +1918,8 @@ Permissions for <?php echo $InForumName; ?> are not set: <br />
 <td style="width: 100%;">
 <input type="hidden" name="act" value="fpermissions" style="display: none;" />
 <input type="hidden" name="subact" value="makenow" style="display: none;" />
-<input type="hidden" name="id" value="<?php echo $_POST['id']; ?>" style="display: none;" />
-<input type="hidden" name="permid" value="<?php echo $_POST['permid']; ?>" style="display: none;" />
+<input type="hidden" name="id" value="<?php echo htmlspecialchars((string)(isset($_POST['id']) ? $_POST['id'] : ''), ENT_QUOTES); ?>" style="display: none;" />
+<input type="hidden" name="permid" value="<?php echo htmlspecialchars((string)(isset($_POST['permid']) ? $_POST['permid'] : ''), ENT_QUOTES); ?>" style="display: none;" />
 <input type="submit" class="Button" value="Create Permissions" name="Apply_Changes" />
 <input type="reset" value="Reset Form" class="Button" name="Reset_Form" />
 </td></tr></table>

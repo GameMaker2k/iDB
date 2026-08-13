@@ -18,6 +18,18 @@ if ($File3Name == "table.php" || $File3Name == "/table.php") {
     require('index.php');
     exit();
 }
+// BUGFIX: $AdminMenu and $_GET['menu'] were read in five conditionals each
+// without ever being initialised, producing undefined-variable and
+// undefined-key warnings on every admin page load.
+if (!isset($AdminMenu)) {
+    $AdminMenu = null;
+}
+if (!isset($_GET['menu'])) {
+    $_GET['menu'] = null;
+}
+if (!isset($GroupInfo['ViewDBInfo'])) {
+    $GroupInfo['ViewDBInfo'] = "no";
+}
 ?>
 <div class="TableSMenuBorder">
 <?php if ($ThemeSet['TableStyle'] == "div") { ?>
@@ -38,7 +50,7 @@ if ($File3Name == "table.php" || $File3Name == "/table.php") {
 </tr><tr class="TableSMenuRow3">
 <td class="TableSMenuColumn3"><a href="<?php echo url_maker($exfile['admin'], $Settings['file_ext'], "act=view&menu=forums", $Settings['qstr'], $Settings['qsep'], $prexqstr['admin'], $exqstr['admin']); ?>">Forum Menu</a></td>
 </tr><tr class="TableSMenuRow3">
-<td class="TableSMenuColumn3"><a href="<?php echo url_maker($exfile['admin'], $Settings['file_ext'], "act=view&menu=members", $Settings['qstr'], $Settings['qsep'], $prexqstr['admin'], $exqstr['admin']); ?>">Memeber Menu</a></td>
+<td class="TableSMenuColumn3"><a href="<?php echo url_maker($exfile['admin'], $Settings['file_ext'], "act=view&menu=members", $Settings['qstr'], $Settings['qsep'], $prexqstr['admin'], $exqstr['admin']); ?>">Member Menu</a></td>
 </tr><tr class="TableSMenuRow3">
 <td class="TableSMenuColumn3"><a href="<?php echo url_maker($exfile['admin'], $Settings['file_ext'], "act=view&menu=groups", $Settings['qstr'], $Settings['qsep'], $prexqstr['admin'], $exqstr['admin']); ?>">Group Menu</a></td>
 </tr><tr class="TableSMenuRow4">
@@ -151,12 +163,12 @@ if ($File3Name == "table.php" || $File3Name == "/table.php") {
 <div class="TableSMenuBorder">
 <?php if ($ThemeSet['TableStyle'] == "div") { ?>
 <div class="TableSMenuRow1">
-<?php echo $ThemeSet['TitleIcon']; ?>Memeber Menu</div>
+<?php echo $ThemeSet['TitleIcon']; ?>Member Menu</div>
 <?php } ?>
 <table id="MemberMenu" class="TableSMenu" style="width: 100%; text-align: left; vertical-align: top;">
 <?php if ($ThemeSet['TableStyle'] == "table") { ?>
 <tr class="TableSMenuRow1">
-<td class="TableSMenuColumn1"><?php echo $ThemeSet['TitleIcon']; ?>Memeber Menu</td>
+<td class="TableSMenuColumn1"><?php echo $ThemeSet['TitleIcon']; ?>Member Menu</td>
 </tr><?php } ?><tr class="TableSMenuRow2">
 <td class="TableSMenuColumn2">&#160;</td>
 </tr><tr class="TableSMenuRow3">

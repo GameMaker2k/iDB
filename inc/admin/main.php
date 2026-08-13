@@ -62,8 +62,11 @@ if (!isset($_POST['update'])) {
 }
 function bool_string($boolean)
 {
+    // BUGFIX: a non-boolean was returned verbatim and unquoted, so writing
+    // e.g. the string "on" produced `$Settings['x'] = on;` -- an undefined
+    // constant, which is an Error on PHP 8. Fall back to null_string().
     if (!is_bool($boolean)) {
-        return $boolean;
+        return null_string($boolean);
     }
     if (is_bool($boolean)) {
         if ($boolean == 0 || $boolean === false) {
@@ -76,9 +79,14 @@ function bool_string($boolean)
 }
 function null_string($string)
 {
+    // BUGFIX: this only wrapped the value in quotes -- it never escaped it.
+    // Every one of the ~300 call sites writes into settings.php, so a board
+    // name of "Bob's Forum" generated a settings.php with a fatal parse error
+    // (taking the whole board down), and a crafted value could inject
+    // arbitrary PHP into the generated config.
     $strtype = strtolower(gettype($string));
     if ($strtype == "string") {
-        return "'".$string."'";
+        return "'" . str_replace(array('\\', "'"), array('\\\\', "\\'"), $string) . "'";
     }
     if ($strtype == "null") {
         return "null";
@@ -86,7 +94,39 @@ function null_string($string)
     if ($strtype == "integer") {
         return $string;
     }
+    if ($strtype == "double") {
+        // BUGFIX: floats used to fall through and be written as the bare
+        // word "null", silently discarding the value.
+        return (string)($string + 0);
+    }
+    if ($strtype == "boolean") {
+        return $string ? "true" : "false";
+    }
+    if ($strtype == "array") {
+        return var_export($string, true);
+    }
     return "null";
+}
+
+// BUGFIX: the settings files were written with unchecked fopen()/fwrite().
+// On PHP 8 a failed open makes fwrite(false, ...) a fatal TypeError, and the
+// admin CP reported the save as successful either way.
+if (!function_exists('idb_write_settings_file')) {
+    function idb_write_settings_file($path, $data)
+    {
+        $fp = @fopen($path, "w+");
+        if ($fp === false) {
+            return false;
+        }
+        $written = fwrite($fp, $data);
+        fclose($fp);
+        if ($written === false) {
+            return false;
+        }
+        // settings.php holds the database password.
+        @chmod($path, 0644);
+        return true;
+    }
 }
 function rsq($string)
 {
@@ -351,13 +391,15 @@ if ($_GET['act'] == "enablesthemes" && $GroupInfo['ViewDBInfo'] == "yes" && $Set
     "\$SettDir['themes'] = ".null_string($SettDir['themes']).";\n".$pretext2[3]."\n?>";
     $BoardSettingsBak = $pretext.$settcheck.$BoardSettings;
     $BoardSettings = $pretext.$settcheck.$BoardSettings;
-    $fp = fopen("settings.php", "w+");
-    fwrite($fp, $BoardSettings);
-    fclose($fp);
+    if (!idb_write_settings_file("settings.php", $BoardSettings)) {
+        $Error = "Yes";
+        $errorstr = "settings.php is not writable.";
+    }
     //	cp("settings.php","settingsbak.php");
-    $fp = fopen("settingsbak.php", "w+");
-    fwrite($fp, $BoardSettingsBak);
-    fclose($fp);
+    if (!idb_write_settings_file("settingsbak.php", $BoardSettingsBak)) {
+        $Error = "Yes";
+        $errorstr = "settingsbak.php is not writable.";
+    }
     $Settings['SQLThemes'] = "on";
     $_POST['update'] = "now";
     $_GET['act'] = "resyncthemes";
@@ -1400,13 +1442,15 @@ if ($Settings['SQLThemes'] == "off") {
     "\$SettDir['themes'] = ".null_string($SettDir['themes']).";\n".$pretext2[3]."\n?>";
     $BoardSettingsBak = $pretext.$settcheck.$BoardSettings;
     $BoardSettings = $pretext.$settcheck.$BoardSettings;
-    $fp = fopen("settings.php", "w+");
-    fwrite($fp, $BoardSettings);
-    fclose($fp);
+    if (!idb_write_settings_file("settings.php", $BoardSettings)) {
+        $Error = "Yes";
+        $errorstr = "settings.php is not writable.";
+    }
     //	cp("settings.php","settingsbak.php");
-    $fp = fopen("settingsbak.php", "w+");
-    fwrite($fp, $BoardSettingsBak);
-    fclose($fp);
+    if (!idb_write_settings_file("settingsbak.php", $BoardSettingsBak)) {
+        $Error = "Yes";
+        $errorstr = "settingsbak.php is not writable.";
+    }
 } if ($_GET['act'] == "sql" && $_POST['update'] != "now" && $GroupInfo['ViewDBInfo'] == "yes") {
     $admincptitle = " ".$ThemeSet['TitleDivider']." Database Manager";
     ?>
@@ -1618,13 +1662,15 @@ if ($Settings['SQLThemes'] == "off") {
     "\$SettDir['themes'] = ".null_string($SettDir['themes']).";\n".$pretext2[3]."\n?>";
     $BoardSettingsBak = $pretext.$settcheck.$BoardSettings;
     $BoardSettings = $pretext.$settcheck.$BoardSettings;
-    $fp = fopen("settings.php", "w+");
-    fwrite($fp, $BoardSettings);
-    fclose($fp);
+    if (!idb_write_settings_file("settings.php", $BoardSettings)) {
+        $Error = "Yes";
+        $errorstr = "settings.php is not writable.";
+    }
     //	cp("settings.php","settingsbak.php");
-    $fp = fopen("settingsbak.php", "w+");
-    fwrite($fp, $BoardSettingsBak);
-    fclose($fp);
+    if (!idb_write_settings_file("settingsbak.php", $BoardSettingsBak)) {
+        $Error = "Yes";
+        $errorstr = "settingsbak.php is not writable.";
+    }
 } if ($_GET['act'] == "info" && $_POST['update'] != "now") {
     $admincptitle = " ".$ThemeSet['TitleDivider']." Board Info Manager";
     ?>
@@ -1784,13 +1830,15 @@ if ($Settings['SQLThemes'] == "off") {
     "\$SettDir['themes'] = ".null_string($SettDir['themes']).";\n".$pretext2[3]."\n?>";
     $BoardSettingsBak = $pretext.$settcheck.$BoardSettings;
     $BoardSettings = $pretext.$settcheck.$BoardSettings;
-    $fp = fopen("settings.php", "w+");
-    fwrite($fp, $BoardSettings);
-    fclose($fp);
+    if (!idb_write_settings_file("settings.php", $BoardSettings)) {
+        $Error = "Yes";
+        $errorstr = "settings.php is not writable.";
+    }
     //	cp("settings.php","settingsbak.php");
-    $fp = fopen("settingsbak.php", "w+");
-    fwrite($fp, $BoardSettingsBak);
-    fclose($fp);
+    if (!idb_write_settings_file("settingsbak.php", $BoardSettingsBak)) {
+        $Error = "Yes";
+        $errorstr = "settingsbak.php is not writable.";
+    }
 } if ($_POST['update'] == "now" && $_GET['act'] != null) {
     $profiletitle = " ".$ThemeSet['TitleDivider']." Updating Settings"; ?>
 </td></tr>
