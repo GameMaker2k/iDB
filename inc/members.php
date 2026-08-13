@@ -604,19 +604,6 @@ while ($i < $num) {
         $PreAmIHiddenUser = GetUserName($UserSessInfo['UserID'], $Settings['sqltable'], $SQLStat);
         $AmIHiddenUser = $PreAmIHiddenUser['Hidden'];
     }
-    if ($UserSessInfo['UserGroup'] == $Settings['GuestGroup']) {
-        //$sess_num=sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_GET['id'])), $SQLStat);
-        $sess_query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"id\"=%i LIMIT 1", array($_GET['id']));
-        $sess_result = sql_query($sess_query, $SQLStat);
-        $sess_result_array = sql_fetch_assoc($sess_result);
-        $ViewSessMem['GroupID'] = $sess_result_array['GroupID'];
-        $gsess_query = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."groups\" WHERE \"id\"=%i LIMIT 1", array($ViewSessMem['GroupID']));
-        $gsess_result = sql_query($gsess_query, $SQLStat);
-        $gsess_result_array = sql_fetch_assoc($gsess_result);
-        $ViewSessMem['Group'] = $sess_result_array['Name'];
-        $PreAmIHiddenUser = GetUserName($UserSessInfo['UserID'], $Settings['sqltable'], $SQLStat);
-        $AmIHiddenUser = $PreAmIHiddenUser['Hidden'];
-    }
     if (!isset($AmIHiddenUser)) {
         $AmIHiddenUser = "no";
     }
@@ -689,14 +676,9 @@ while ($i < $num) {
             $prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($ChkID['id']));
             $preresult = sql_query($prequery, $SQLStat);
             $preresult_array = sql_fetch_assoc($preresult);
-            if(isset($gsess_result_array["CategoryID"])) {
-                $ForumCatID = $gsess_result_array["CategoryID"];
-            }
-            else {
-                $ForumCatID = null;
-            }
+            $ForumCatID = $gsess_result_array["CategoryID"];
             sql_free_result($preresult);
-            if ($ForumCatID==null || $CatPermissionInfo['CanViewCategory'][$ForumCatID] == "no" ||
+            if ($CatPermissionInfo['CanViewCategory'][$ForumCatID] == "no" ||
                 $CatPermissionInfo['CanViewCategory'][$ForumCatID] != "yes") {
                 $PreFileName = $exfile['index'].$Settings['file_ext'];
                 $PreExpPage = "act=view";
@@ -704,8 +686,8 @@ while ($i < $num) {
                 $UserSessInfo['PreViewingTitle'] = "Viewing";
                 $UserSessInfo['ViewingTitle'] = "Board index";
             }
-            if ($PermissionInfo['CanViewForum'][$ChkID['id']] == "no" ||
-                $PermissionInfo['CanViewForum'][$ChkID['id']] != "yes") {
+            if ($PermissionInfo['CanViewForum'][$ChkID] == "no" ||
+                $PermissionInfo['CanViewForum'][$ChkID] != "yes") {
                 $PreFileName = $exfile['index'].$Settings['file_ext'];
                 $PreExpPage = "act=view";
                 $UserSessInfo['ViewingPage'] = url_maker($exfile['index'], $Settings['file_ext'], "act=view", $Settings['qstr'], $Settings['qsep'], $prexqstr['index'], $exqstr['index']);
@@ -716,11 +698,12 @@ while ($i < $num) {
     }
     if ($PreFileName == $exfile['subforum'].$Settings['file_ext']) {
         if (isset($ChkID['id'])) {
-            $prenum = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($ChkID['id'])), $SQLStat);
-            $prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($ChkID['id']));
+            $ChkID = $ChkID['id'];
+            $prenum = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($ChkID)), $SQLStat);
+            $prequery = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."forums\" WHERE \"id\"=%i LIMIT 1", array($ChkID));
             $preresult = sql_query($prequery, $SQLStat);
             $preresult_array = sql_fetch_assoc($preresult);
-            $ForumCatID = $gsess_result_array["CategoryID"];
+            $ForumCatID = gsess_result_array["CategoryID"];
             sql_free_result($preresult);
             if ($CatPermissionInfo['CanViewCategory'][$ForumCatID] == "no" ||
                 $CatPermissionInfo['CanViewCategory'][$ForumCatID] != "yes") {
@@ -742,6 +725,7 @@ while ($i < $num) {
     }
     if ($PreFileName == $exfile['category'].$Settings['file_ext']) {
         if (isset($ChkID['id'])) {
+            $ChkID = $ChkID['id'];
             if ($CatPermissionInfo['CanViewCategory'][$ChkID] == "no" ||
                 $CatPermissionInfo['CanViewCategory'][$ChkID] != "yes") {
                 $PreFileName = $exfile['index'].$Settings['file_ext'];
@@ -754,6 +738,7 @@ while ($i < $num) {
     }
     if ($PreFileName == $exfile['subcategory'].$Settings['file_ext']) {
         if (isset($ChkID['id'])) {
+            $ChkID = $ChkID['id'];
             if ($CatPermissionInfo['CanViewCategory'][$ChkID] == "no" ||
                 $CatPermissionInfo['CanViewCategory'][$ChkID] != "yes") {
                 $PreFileName = $exfile['index'].$Settings['file_ext'];
