@@ -1170,13 +1170,25 @@ if ($_GET['act'] == "userinfo") {
                 $YourPassword = b64e_hmac($_POST['OldPass'], $OldJoined, $OldSalt, "ripemd320");
             }
             if ($OldHashType == "iDBCRYPT") {
-                $YourPassword = neo_b64e_hmac($_POST['OldPass'], $OldJoined, $OldSalt, "bcrypt");
+                // BUGFIX: see members.php -- recomputing a password_hash() value
+                // never matches. Verify the stored hash instead.
+                $YourPassword = neo_b64e_verify($_POST['OldPass'], $OldJoined, $OldSalt, $OldPassword)
+                    ? $OldPassword
+                    : neo_b64e_hmac($_POST['OldPass'], $OldJoined, $OldSalt, "bcrypt");
             }
             if ($OldHashType == "iDBARGON2I") {
-                $YourPassword = neo_b64e_hmac($_POST['OldPass'], $OldJoined, $OldSalt, "argon2i");
+                // BUGFIX: see members.php -- recomputing a password_hash() value
+                // never matches. Verify the stored hash instead.
+                $YourPassword = neo_b64e_verify($_POST['OldPass'], $OldJoined, $OldSalt, $OldPassword)
+                    ? $OldPassword
+                    : neo_b64e_hmac($_POST['OldPass'], $OldJoined, $OldSalt, "argon2i");
             }
             if ($OldHashType == "iDBARGON2ID") {
-                $YourPassword = neo_b64e_hmac($_POST['OldPass'], $OldJoined, $OldSalt, "argon2id");
+                // BUGFIX: see members.php -- recomputing a password_hash() value
+                // never matches. Verify the stored hash instead.
+                $YourPassword = neo_b64e_verify($_POST['OldPass'], $OldJoined, $OldSalt, $OldPassword)
+                    ? $OldPassword
+                    : neo_b64e_hmac($_POST['OldPass'], $OldJoined, $OldSalt, "argon2id");
             }
             if ($YourPassword != $OldPassword) {
                 $Error = "Yes"; ?>

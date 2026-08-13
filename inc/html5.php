@@ -19,6 +19,23 @@ if ($File3Name == "html5.php" || $File3Name == "/html5.php") {
     exit();
 }
 $XHTML5 = false;
+// BUGFIX: these were read without isset(); passing null to stristr() is
+// deprecated on PHP 8.1+ and a missing header warned on every request.
+if (!isset($_SERVER['HTTP_ACCEPT'])) {
+    $_SERVER['HTTP_ACCEPT'] = "";
+}
+if (!isset($_SERVER['HTTP_USER_AGENT'])) {
+    $_SERVER['HTTP_USER_AGENT'] = "";
+}
+if (!isset($_SERVER['HTTPS'])) {
+    $_SERVER['HTTPS'] = "off";
+}
+if (!isset($_GET['act'])) {
+    $_GET['act'] = null;
+}
+if (!isset($ThemeSet['CSSType'])) {
+    $ThemeSet['CSSType'] = "import";
+}
 // Check to see if we serv the file as html or xhtml
 // if we do xhtml we also check to see if user's browser
 // can dispay if or else fallback to html
@@ -117,7 +134,7 @@ header("Referrer-Policy: no-referrer-when-downgrade");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("X-Content-Type-Options: nosniff");
 header("Vary: Accept-Language, Accept-Encoding, User-Agent, Cookie, Referer, X-Requested-With");
-header("Accept-CH: Accept-CH: Sec-CH-UA, Sec-CH-UA-Platform, Sec-CH-UA-Mobile, Sec-CH-UA-Full-Version, Sec-CH-UA-Full-Version-List, Sec-CH-UA-Platform-Version, Sec-CH-UA-Arch, Sec-CH-UA-Bitness, Sec-CH-UA-Model, Sec-CH-Viewport-Width, Sec-CH-Viewport-Height, Sec-CH-Lang, Sec-CH-Save-Data, Sec-CH-Width, Sec-CH-DPR, Sec-CH-Device-Memory, Sec-CH-RTT, Sec-CH-Downlink, Sec-CH-ECT, Sec-CH-Prefers-Color-Scheme, Sec-CH-Prefers-Reduced-Motion, Sec-CH-Prefers-Reduced-Transparency, Sec-CH-Prefers-Contrast, Sec-CH-Forced-Colors");
+header("Accept-CH: Sec-CH-UA, Sec-CH-UA-Platform, Sec-CH-UA-Mobile, Sec-CH-UA-Full-Version, Sec-CH-UA-Full-Version-List, Sec-CH-UA-Platform-Version, Sec-CH-UA-Arch, Sec-CH-UA-Bitness, Sec-CH-UA-Model, Sec-CH-Viewport-Width, Sec-CH-Viewport-Height, Sec-CH-Lang, Sec-CH-Save-Data, Sec-CH-Width, Sec-CH-DPR, Sec-CH-Device-Memory, Sec-CH-RTT, Sec-CH-Downlink, Sec-CH-ECT, Sec-CH-Prefers-Color-Scheme, Sec-CH-Prefers-Reduced-Motion, Sec-CH-Prefers-Reduced-Transparency, Sec-CH-Prefers-Contrast, Sec-CH-Forced-Colors");
 // Check if we are on a secure HTTP connection
 if ($_SERVER['HTTPS'] == "on") {
     $prehost = "https://";
@@ -162,7 +179,6 @@ if ($XHTML5 === false) { ?>
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $Settings['charset']; ?>">
 <meta name="language" content="english">
-<meta name="viewport" id="viewport" content="width=device-width, initial-scale=0.5">
 <?php if ($_GET['act'] != "lowview") { ?>
 <style type="text/css">
   /* Apply styles to devices without hover (touch devices like smartphones and tablets) */
@@ -176,7 +192,7 @@ if ($XHTML5 === false) { ?>
   @media (hover: none) and (orientation: landscape) {
     body {
       width: 100%; /* Fit to the screen in landscape */
-      padding-right: %; /* Add padding to the right */
+      padding-right: 5%; /* Add padding to the right */
     }
   }
 </style>
@@ -184,10 +200,10 @@ if ($XHTML5 === false) { ?>
 if (!isset($_SERVER['HTTP_USER_AGENT'])) {
     $_SERVER['HTTP_USER_AGENT'] = "";
 }
-    if (strpos($_SERVER['HTTP_USER_AGENT'], "msie") &&
-        !strpos($_SERVER['HTTP_USER_AGENT'], "opera")) { ?>
+    if (stripos($_SERVER['HTTP_USER_AGENT'], "msie") !== false &&
+        stripos($_SERVER['HTTP_USER_AGENT'], "opera") === false) { ?>
 <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-<?php } if (strpos($_SERVER['HTTP_USER_AGENT'], "chromeframe")) { ?>
+<?php } if (stripos($_SERVER['HTTP_USER_AGENT'], "chromeframe") !== false) { ?>
 <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
 <?php }
 } if ($XHTML5 === true) { ?>
@@ -198,10 +214,10 @@ if (!isset($_SERVER['HTTP_USER_AGENT'])) {
 if (!isset($_SERVER['HTTP_USER_AGENT'])) {
     $_SERVER['HTTP_USER_AGENT'] = "";
 }
-    if (strpos($_SERVER['HTTP_USER_AGENT'], "msie") &&
-        !strpos($_SERVER['HTTP_USER_AGENT'], "opera")) { ?>
+    if (stripos($_SERVER['HTTP_USER_AGENT'], "msie") !== false &&
+        stripos($_SERVER['HTTP_USER_AGENT'], "opera") === false) { ?>
 <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-<?php } if (strpos($_SERVER['HTTP_USER_AGENT'], "chromeframe")) { ?>
+<?php } if (stripos($_SERVER['HTTP_USER_AGENT'], "chromeframe") !== false) { ?>
 <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
 <?php }
 } $iWrappers['HTTPEQUIV'] = ob_get_clean();

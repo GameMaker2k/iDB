@@ -1613,13 +1613,25 @@ if (!isset($_POST['loginemail'])) {
                         $YourPassword = b64e_hmac($_POST['userpass'], $JoinedPass, $HashSalt, "ripemd320");
                     }
                     if ($HashType == "iDBCRYPT") {
-                        $YourPassword = neo_b64e_hmac($_POST['userpass'], $JoinedPass, $HashSalt, "bcrypt");
+                        // BUGFIX: recomputing a password_hash() value and comparing it
+                        // can never match -- the salt is random per call. Verify instead.
+                        $YourPassword = neo_b64e_verify($_POST['userpass'], $JoinedPass, $HashSalt, $YourPassTry)
+                            ? $YourPassTry
+                            : neo_b64e_hmac($_POST['userpass'], $JoinedPass, $HashSalt, "bcrypt");
                     }
                     if ($HashType == "iDBARGON2I") {
-                        $YourPassword = neo_b64e_hmac($_POST['userpass'], $JoinedPass, $HashSalt, "argon2i");
+                        // BUGFIX: recomputing a password_hash() value and comparing it
+                        // can never match -- the salt is random per call. Verify instead.
+                        $YourPassword = neo_b64e_verify($_POST['userpass'], $JoinedPass, $HashSalt, $YourPassTry)
+                            ? $YourPassTry
+                            : neo_b64e_hmac($_POST['userpass'], $JoinedPass, $HashSalt, "argon2i");
                     }
                     if ($HashType == "iDBARGON2ID") {
-                        $YourPassword = neo_b64e_hmac($_POST['userpass'], $JoinedPass, $HashSalt, "argon2id");
+                        // BUGFIX: recomputing a password_hash() value and comparing it
+                        // can never match -- the salt is random per call. Verify instead.
+                        $YourPassword = neo_b64e_verify($_POST['userpass'], $JoinedPass, $HashSalt, $YourPassTry)
+                            ? $YourPassTry
+                            : neo_b64e_hmac($_POST['userpass'], $JoinedPass, $HashSalt, "argon2id");
                     }
                     if ($HashType == "NoPass") {
                         $YourPassword = "iDB";
@@ -2499,11 +2511,14 @@ if (PhpCaptcha::Validate($_POST['signcode'])) {
     }
     if ($Settings['use_hashtype'] == "argon2i") {
         $iDBHash = "iDBARGON2I";
-        $NewPassword = neo_b64e_hmac($_POST['Password'], $JoinedPass, $NewHashSalt, "argon2i");
+        // BUGFIX: this used $JoinedPass/$NewHashSalt while the INSERT below
+        // stores $HashSalt, so the salt bound into the hash was never saved and
+        // the account could never authenticate.
+        $NewPassword = neo_b64e_hmac($_POST['Password'], $_POST['Joined'], $HashSalt, "argon2i");
     }
     if ($Settings['use_hashtype'] == "argon2id") {
         $iDBHash = "iDBARGON2ID";
-        $NewPassword = neo_b64e_hmac($_POST['Password'], $JoinedPass, $NewHashSalt, "argon2id");
+        $NewPassword = neo_b64e_hmac($_POST['Password'], $_POST['Joined'], $HashSalt, "argon2id");
     }
     $_GET['YourPost'] = $_POST['Signature'];
     //require( './'.$SettDir['misc'].'HTMLTags.php');

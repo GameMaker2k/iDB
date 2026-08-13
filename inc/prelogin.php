@@ -22,6 +22,20 @@ $_SESSION['CheckCookie'] = "done";
 if (!isset($_COOKIE['UserID'])) {
     $_COOKIE['UserID'] = 0;
 }
+// BUGFIX: only UserID was defaulted, but MemberName and SessPass are read
+// straight into the query below.
+if (!isset($_COOKIE['MemberName'])) {
+    $_COOKIE['MemberName'] = "";
+}
+if (!isset($_COOKIE['SessPass'])) {
+    $_COOKIE['SessPass'] = "";
+}
+// BUGFIX: $BanError, $resultlog2 and $gresult were only ever created inside
+// the "$numlog2 == 1" branch, yet the failure branch at the bottom reads
+// $BanError and calls sql_free_result() on both -- undefined on PHP 8.
+$BanError = null;
+$resultlog2 = null;
+$gresult = null;
 if ($_COOKIE['UserID'] != 0 && $_COOKIE['UserID'] != null) {
     $numlog2 = sql_count_rows(sql_pre_query("SELECT COUNT(*) AS cnt FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s' AND \"UserPassword\"='%s' AND \"id\"=%i LIMIT 1", array($_COOKIE['MemberName'],$_COOKIE['SessPass'],$_COOKIE['UserID'])), $SQLStat);
     $querylog2 = sql_pre_query("SELECT * FROM \"".$Settings['sqltable']."members\" WHERE \"Name\"='%s' AND \"UserPassword\"='%s' AND \"id\"=%i LIMIT 1", array($_COOKIE['MemberName'],$_COOKIE['SessPass'],$_COOKIE['UserID']));
@@ -60,7 +74,15 @@ if ($numlog2 == 1) {
     $NewDay = $utccurtime->getTimestamp();
     $NewIP = $_SERVER['REMOTE_ADDR'];
     if ($BanError != "yes") {
+        // BUGFIX: this query was built and then never executed, so LastActive
+        // and IP were never refreshed for cookie-based logins.
         $queryup = sql_pre_query("UPDATE \"".$Settings['sqltable']."members\" SET \"LastActive\"=%i,\"IP\"='%s' WHERE \"id\"=%i", array($NewDay,$NewIP,$YourIDAM));
+        sql_query($queryup, $SQLStat);
+        // BUGFIX: the session ID was reused across the anonymous -> logged-in
+        // transition, leaving the login open to session fixation.
+        if (function_exists('session_regenerate_id') && session_status() === PHP_SESSION_ACTIVE) {
+            @session_regenerate_id(true);
+        }
         $_SESSION['Theme'] = $UseThemeAM;
         $_SESSION['MemberName'] = $_COOKIE['MemberName'];
         if (isset($_COOKIE['AnonymousLogin'])) {
@@ -78,18 +100,21 @@ if ($numlog2 == 1) {
         if ($cookieDomain == null) {
             setcookie("MemberName", $YourNameAM, time() + (7 * 86400), $cbasedir);
             setcookie("UserID", $YourIDAM, time() + (7 * 86400), $cbasedir);
-            setcookie("SessPass", $YourPassAM, time() + (7 * 86400), $cbasedir);
+            // BUGFIX: SessPass holds the stored password hash and is accepted as a
+        // login credential, but was set without HttpOnly -- any XSS could read
+        // it and log in as the user indefinitely.
+        setcookie("SessPass", $YourPassAM, time() + (7 * 86400), $cbasedir, "", false, true);
         }
         if ($cookieDomain != null) {
             if ($cookieSecure === true) {
                 setcookie("MemberName", $YourNameAM, time() + (7 * 86400), $cbasedir, $cookieDomain, 1);
                 setcookie("UserID", $YourIDAM, time() + (7 * 86400), $cbasedir, $cookieDomain, 1);
-                setcookie("SessPass", $YourPassAM, time() + (7 * 86400), $cbasedir, $cookieDomain, 1);
+                setcookie("SessPass", $YourPassAM, time() + (7 * 86400), $cbasedir, $cookieDomain, true, true);
             }
             if ($cookieSecure === false) {
                 setcookie("MemberName", $YourNameAM, time() + (7 * 86400), $cbasedir, $cookieDomain, 0);
                 setcookie("UserID", $YourIDAM, time() + (7 * 86400), $cbasedir, $cookieDomain, 0);
-                setcookie("SessPass", $YourPassAM, time() + (7 * 86400), $cbasedir, $cookieDomain, 0);
+                setcookie("SessPass", $YourPassAM, time() + (7 * 86400), $cbasedir, $cookieDomain, false, true);
             }
         }
         /*redirect("location",$rbasedir.url_maker($exfile['index'],$Settings['file_ext'],"act=view",$Settings['qstr'],$Settings['qsep'],$prexqstr['index'],$exqstr['index'],false)); $urlstatus = 302;
@@ -132,8 +157,12 @@ if ($numlog2 == 1) {
     $exptime = $utccurtime->getTimestamp() - ini_get("session.gc_maxlifetime");
     sql_query(sql_pre_query("DELETE FROM \"".$Settings['sqltable']."sessions\" WHERE \"expires\" < %i OR ip_address='%s'", array($exptime,$temp_user_ip)), $SQLStat);
     redirect("location", $rbasedir.url_maker($exfile['member'], $Settings['file_ext'], "act=login", $Settings['qstr'], $Settings['qsep'], $prexqstr['member'], $exqstr['member'], false));
-    sql_free_result($resultlog2);
-    sql_free_result($gresult);
+    if ($resultlog2 !== null) {
+        sql_free_result($resultlog2);
+    }
+    if ($gresult !== null) {
+        sql_free_result($gresult);
+    }
     ob_clean();
     header("Content-Type: text/plain; charset=".$Settings['charset']);
     $urlstatus = 302;

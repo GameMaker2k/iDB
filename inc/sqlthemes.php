@@ -21,6 +21,32 @@ if ($File3Name == "sqlthemes.php" || $File3Name == "/sqlthemes.php") {
 // Change SQLThemes to iDB Themes Settings
 $ThemeSet = array();
 $themeresult_array = sql_fetch_assoc($themeresult);
+// BUGFIX: sql_fetch_assoc() returns false when the theme row is missing, and
+// the ~60 lookups below then each raised "Trying to access array offset on
+// value of type bool". Normalising to an array keeps the null defaults.
+if (!is_array($themeresult_array)) {
+    $themeresult_array = array();
+}
+foreach (array('ThemeName','ThemeMaker','ThemeVersion','ThemeVersionType',
+    'ThemeSubVersion','MakerURL','CopyRight','WrapperString','CSS','CSSType',
+    'FavIcon','OpenGraph','TableStyle','MiniPageAltStyle','PreLogo','Logo',
+    'LogoStyle','SubLogo','TopicIcon','MovedTopicIcon','HotTopic',
+    'MovedHotTopic','PinTopic','AnnouncementTopic','MovedPinTopic',
+    'HotPinTopic','MovedHotPinTopic','ClosedTopic','MovedClosedTopic',
+    'HotClosedTopic','MovedHotClosedTopic','PinClosedTopic',
+    'MovedPinClosedTopic','HotPinClosedTopic','MovedHotPinClosedTopic',
+    'MessageRead','MessageUnread','Profile','WWW','PM','TopicLayout',
+    'AddReply','FastReply','NewTopic','QuoteReply','EditReply','DeleteReply',
+    'Report','LineDivider','ButtonDivider','LineDividerTopic','TitleDivider',
+    'ForumStyle','ForumIcon','SubForumIcon','RedirectIcon','TitleIcon',
+    'NavLinkIcon','NavLinkDivider','BoardStatsIcon','MemberStatsIcon',
+    'BirthdayStatsIcon','EventStatsIcon','OnlineStatsIcon','NoAvatar',
+    'NoAvatarSize') as $iDBThemeKey) {
+    if (!isset($themeresult_array[$iDBThemeKey])) {
+        $themeresult_array[$iDBThemeKey] = "";
+    }
+}
+unset($iDBThemeKey);
 $ThemeSet['ThemeName'] = $themeresult_array['ThemeName'];
 if ($ThemeSet['ThemeName'] == "") {
     $ThemeSet['ThemeName'] = null;
